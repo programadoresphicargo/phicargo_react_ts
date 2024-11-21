@@ -1,0 +1,15 @@
+@font-face {
+  font-family: 'MyCustomFont';
+  src: url('../assets/fonts/ProductSans-Regular.ttf') format('woff2'),
+      url('../assets/fonts/ProductSans-Regular.ttf') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.swal2-container {
+  z-index: 20000 !important;
+}
