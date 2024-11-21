@@ -1,17 +1,17 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import MonthSelector from '../../../mes';
-import Example2 from '../maniobras/modal';
-import { ThemeProvider } from '@mui/material/styles';
-import customFontTheme from '../../../theme';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Box from '@mui/material/Box';
-
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
+import React, { useEffect, useMemo, useState } from 'react';
+
+import Box from '@mui/material/Box';
+import Example2 from '../maniobras/modal';
 import ManiobrasNavBar from '../Navbar';
+import MonthSelector from '../../../mes';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
+import { ThemeProvider } from '@mui/material/styles';
+import customFontTheme from '../../../theme';
 
 const CartasPorte = () => {
 

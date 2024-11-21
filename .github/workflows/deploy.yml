@@ -25,6 +25,7 @@ jobs:
         run: npm run build
         env:
           VITE_ODOO_API_URL: 'http://127.0.0.1:8000'
+          VITE_PHIDES_API_URL: 'https://phides.phicargo-sistemas.online/phicargo'
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
