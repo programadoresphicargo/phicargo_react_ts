@@ -1,0 +1,16 @@
+services:
+  phicargo-react:
+    build:
+      context: .
+    image: phicargo-react:latest
+    container_name: phicargo-react
+    expose:
+      - 80
+    networks:
+      - nginx-proxy-network
+      - default
+
+
+networks:
+  nginx-proxy-network:
+    external: true

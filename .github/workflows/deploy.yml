@@ -1,0 +1,74 @@
+name: Desplegar en VPS (Producción)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+        env:
+          VITE_ODOO_API_URL: 'http://127.0.0.1:8000'
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build Docker Image
+        run: docker build -f Dockerfile.prod -t phicargo-react:latest .
+
+      - name: Save Docker Image as tar file
+        run: docker save phicargo-react:latest -o phicargo-react-image.tar
+
+      - name: Compress Docker Image tar file
+        run: gzip -9 phicargo-react-image.tar
+
+      - name: Copy Docker image to VPS
+        uses: srueda99/scp-action@v12
+        with:
+          port: 22
+          host: ${{ secrets.VPS_HOST }}
+          origin: "./phicargo-react-image.tar.gz"
+          destination: "~/workspace/phicargo-react/phicargo-react-image.tar.gz"
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_PRIVATE_KEY }}
+
+      - name: Copy Docker Compose file to VPS
+        uses: srueda99/scp-action@v12
+        with:
+          port: 22
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          origin: "./docker-compose.prod.yml"
+          destination: "~/workspace/phicargo-react/docker-compose.prod.yml"
+          key: ${{ secrets.VPS_PRIVATE_KEY }}
+
+      - name: SSH to VPS and load Docker Image
+        uses: appleboy/ssh-action@v1.0.2
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_PRIVATE_KEY }}
+          port: 22
+          script: |
+            gunzip ~/workspace/phicargo-react/phicargo-react-image.tar.gz
+            docker load -i ~/workspace/phicargo-react/phicargo-react-image.tar
+            rm ~/workspace/phicargo-react/phicargo-react-image.tar
+            cd ~/workspace/phicargo-react
+            docker compose -f docker-compose.prod.yml down || exit 1
+            docker compose -f docker-compose.prod.yml up -d || docker compose -f docker-compose.prod.yml down

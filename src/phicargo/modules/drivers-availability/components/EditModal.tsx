@@ -1,25 +1,23 @@
-import { SubmitHandler, useForm } from 'react-hook-form';
-
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import { DriverEdit } from '../models/driver-model';
 import Modal from '@mui/material/Modal';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { useDriverQueries } from '../hooks/useDriverQueries';
 import { useMemo } from 'react';
-import { useVehicleQueries } from '../hooks/useVehicleQueries';
+
+// import { useVehicleQueries } from '../hooks/useVehicleQueries';
 
 interface Props {
   onClose: () => void;
   driverId: number;
 }
 
-const initialState: DriverEdit = {
-  available: true,
-  reason: '',
-  vehicleId: 0,
-}
+// const initialState: DriverEdit = {
+//   available: true,
+//   reason: '',
+//   vehicleId: 0,
+// }
 
 const style = {
   position: 'absolute',
@@ -34,23 +32,23 @@ const style = {
 };
 
 const EditModal = ({ onClose, driverId }: Props) => {
-  const { control, handleSubmit } = useForm<DriverEdit>({
-    defaultValues: initialState,
-  });
+  // const { control, handleSubmit } = useForm<DriverEdit>({
+  //   defaultValues: initialState,
+  // });
 
   const { drivers } = useDriverQueries();
-  const { 
-    vehiclesReadQuery: { isFetching },
-    vehiclesOptions 
-  } = useVehicleQueries();
+  // const { 
+  //   vehiclesReadQuery: { isFetching },
+  //   vehiclesOptions 
+  // } = useVehicleQueries();
 
   const driver = useMemo(
     () => drivers.find((d) => d.id === driverId),
     [drivers, driverId]
   );
 
-  const onSubmit: SubmitHandler<DriverEdit> = (data) => {
-    console.log(data);
+  const onSubmit = () => {
+    console.log('data');
   };
 
   return (
@@ -95,7 +93,7 @@ const EditModal = ({ onClose, driverId }: Props) => {
           )}
 
           {/* Formulario */}
-          <form onSubmit={handleSubmit(onSubmit)} noValidate>
+          <form onSubmit={onSubmit} noValidate>
             <Stack spacing={2}>
               {/* <AutocompleteElement
                 control={control}
