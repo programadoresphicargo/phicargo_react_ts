@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box';
 import type { Driver } from '../../models/driver-model';
-import EditModal from '../EditModal';
+import DriverModal from '../DriverModal';
 import IconButton from '@mui/material/IconButton';
 import MaterialTableBase from './MaterialTableBase';
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -57,7 +57,7 @@ const DriverTable = () => {
     ),
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 180px)',
+        maxHeight: 'calc(100vh - 195px)',
       },
     },
   });
@@ -66,9 +66,9 @@ const DriverTable = () => {
     <>
       <MaterialTableBase table={table} />
       {editId && (
-        <EditModal 
-          onClose={() => setEditId(null)}
-          driverId={editId}
+        <DriverModal 
+          driverId={editId} 
+          onOpenChange={() => setEditId(null)}
         />
       )}
     </>

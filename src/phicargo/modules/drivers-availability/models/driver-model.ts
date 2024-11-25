@@ -6,6 +6,7 @@ export type Status = 'viaje' | 'disponible' | 'maniobra' | 'SIN ASIGNAR';
 export interface Driver {
   readonly id: number,
   readonly name: string,
+  readonly jobId: number,
   readonly job: Job,
   isActive: boolean,
   readonly company: string,
@@ -24,9 +25,11 @@ export interface Driver {
   vehicleActive: boolean
 }
 
+
 export interface DriverEdit {
-  available: boolean,
-  reason: string,
-  vehicleId: number,
-  modality?: Modality
+  jobId?: number;
+  driverLicenseId?: string;
+  driverLicenseType?: string;
+  modality?: Modality;
+  isDangerous?: 'SI' | 'NO';
 }
