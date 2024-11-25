@@ -52,17 +52,13 @@ const CartasPorte = () => {
     setLoading(true);
     try {
 
-      const response = await fetch(VITE_PHIDES_API_URL + '/modulo_maniobras/programacion/get_registros.php',
-        {
-          month,
-          selectedTab
+      const response = await fetch(VITE_PHIDES_API_URL + '/modulo_maniobras/programacion/get_registros.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+        body: JSON.stringify({ month, selectedTab }), 
+      });
 
       const jsonData = await response.json();
       console.log('Datos recibidos:', jsonData);
