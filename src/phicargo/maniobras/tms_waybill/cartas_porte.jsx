@@ -12,6 +12,7 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import { ThemeProvider } from '@mui/material/styles';
 import customFontTheme from '../../../theme';
+const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const CartasPorte = () => {
 
@@ -50,13 +51,18 @@ const CartasPorte = () => {
     if (!month || selectedTab === undefined) return;
     setLoading(true);
     try {
-      const response = await fetch('/phicargo/modulo_maniobras/programacion/get_registros.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+
+      const response = await fetch(VITE_PHIDES_API_URL + '/modulo_maniobras/programacion/get_registros.php',
+        {
+          month,
+          selectedTab
         },
-        body: JSON.stringify({ month, selectedTab }), // Enviamos month y selectedTab
-      });
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
 
       const jsonData = await response.json();
       console.log('Datos recibidos:', jsonData);
