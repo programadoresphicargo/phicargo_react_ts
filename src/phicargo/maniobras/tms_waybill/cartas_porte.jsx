@@ -199,6 +199,7 @@ const CartasPorte = () => {
 
   return (
     <div>
+      <h1>Maniobras</h1>
       <ManiobrasNavBar />
       <Box display="flex" alignItems="center" m={2}>
         <Box sx={{ flexGrow: 1, mr: 2 }}>
