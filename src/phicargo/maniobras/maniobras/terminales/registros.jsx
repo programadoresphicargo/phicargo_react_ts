@@ -3,6 +3,7 @@ import { MaterialReactTable, useMaterialReactTable } from 'material-react-table'
 import Button from '@mui/material/Button';
 import FormularioTerminales from './informacion';
 import ManiobrasNavBar from '../../Navbar';
+import axios from 'axios';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const Terminales = () => {
@@ -25,8 +26,8 @@ const Terminales = () => {
     const fetchData = useCallback(async () => {
         try {
             setILoading(true);
-            const response = await fetch(VITE_PHIDES_API_URL + '/modulo_maniobras/terminales/getTerminales.php');
-            const jsonData = await response.json();
+            const response = await axios.post(VITE_PHIDES_API_URL + '/modulo_maniobras/terminales/getTerminales.php');
+            const jsonData = response.data; // Aquí accedes a los datos con `response.data`
             setData(jsonData);
             setILoading(false);
         } catch (error) {

@@ -52,7 +52,7 @@ const CartasPorte = () => {
     setLoading(true);
     try {
 
-      const response = await fetch(VITE_PHIDES_API_URL + '/modulo_maniobras/programacion/get_registros.php', {
+      const response = await fetch('/phicargo/modulo_maniobras/programacion/get_registros.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
