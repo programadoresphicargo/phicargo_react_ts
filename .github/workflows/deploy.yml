@@ -1,9 +1,7 @@
 name: Desplegar en VPS (Producción)
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
   deploy:
