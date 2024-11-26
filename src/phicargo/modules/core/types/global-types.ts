@@ -40,3 +40,8 @@ export interface UpdatebleItem<T> {
   id: number;
   updatedItem: T;
 }
+
+export interface SimpleData {
+  id: number;
+  name: string;
+}
