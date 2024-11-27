@@ -1,4 +1,4 @@
-import { Vehicle, VehicleWithTravelRef } from '../models/vehicle-model';
+import { Vehicle, VehicleWithDriver, VehicleWithTravelRef } from '../models/vehicle-model';
 
 import VehicleServiceApi from '../services/vehicle-service';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
@@ -22,8 +22,17 @@ export const useVehicleQueries = () => {
     placeholderData: keepPreviousData<Vehicle[]>
   });
 
+  const vehicleWithDriverQuery = useQuery<VehicleWithDriver[]>({
+    queryKey: [mainKey, 'with_driver'],
+    queryFn: VehicleServiceApi.getVehiclesWithDriver,
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 5,
+    placeholderData: keepPreviousData<VehicleWithDriver[]>
+  })
+
   return {
     vehiclesWithTravelRefQuery,
+    vehicleWithDriverQuery,
     vehicleQuery,
   };
 };

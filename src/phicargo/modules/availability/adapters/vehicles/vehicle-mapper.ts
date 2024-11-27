@@ -1,13 +1,17 @@
 import type {
   Vehicle,
   VehicleRead,
+  VehicleWithDriver,
   VehicleWithTravelRef,
 } from '../../models/vehicle-model';
 import type {
   VehicleApi,
   VehicleReadApi,
+  VehicleWithDriverApi,
   VehicleWithTravelRefApi,
 } from '../../models/api/vehicle-model-api';
+
+import { driverSimpleToLocal } from '../drivers/driver-mapper';
 
 export const vehicleWithTravelRefToLocal = (
   vehicle: VehicleWithTravelRefApi,
@@ -66,3 +70,23 @@ export const vehicleToLocal = (vehicle: VehicleApi): Vehicle => ({
       : null,
 });
 
+export const vehicleWithDriverToLocal = (
+  vehicle: VehicleWithDriverApi,
+): VehicleWithDriver => ({
+  id: vehicle.id,
+  name: vehicle.name2,
+  licensePlate: vehicle.license_plate || 'SIN ASIGNAR',
+  serialNumber: vehicle.serial_number || 'SIN ASIGNAR',
+  fleetType: vehicle.fleet_type || 'SIN ASIGNAR',
+  status: vehicle.x_status,
+  vehicleType: vehicle.x_tipo_vehiculo || 'SIN ASIGNAR',
+  modality: vehicle.x_modalidad || 'SIN ASIGNAR',
+  loadType: vehicle.x_tipo_carga || 'SIN ASIGNAR',
+  driverId: vehicle.x_operador_asignado || 0,
+  state: vehicle.state,
+  category: vehicle.category || null,
+  brand: vehicle.brand || null,
+  branch: vehicle.res_store || null,
+  company: vehicle.res_company || null,
+  driver: vehicle.driver ? driverSimpleToLocal(vehicle.driver) : null,
+});

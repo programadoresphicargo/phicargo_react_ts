@@ -1,7 +1,26 @@
+import { CompanySimple } from "../../core/models";
+import { VehicleSimple } from "./vehicle-model";
 
 export type Job = 'OPERADOR' | 'MOVEDOR' | 'OPERADOR POSTURERO';
 export type Modality = 'full' | 'single' | 'SIN ASIGNAR';
 export type Status = 'viaje' | 'disponible' | 'maniobra' | 'SIN ASIGNAR';
+
+type JobSimple = {
+  id: number;
+  name: Job;
+}
+
+
+interface DriverBase {
+  readonly id: number;
+  readonly name: string;
+  licenseType: string;
+  licenseId: string;
+  modality: Modality;
+  job: JobSimple | null;  
+}
+
+export type DriverSimple = DriverBase;
 
 export interface Driver {
   readonly id: number,
@@ -32,4 +51,16 @@ export interface DriverEdit {
   driverLicenseType?: string;
   modality?: Modality;
   isDangerous?: 'SI' | 'NO';
+}
+
+export interface DriverSimple2 {
+  readonly id: number;
+  readonly name: string;
+  liceseType: string;
+  licenseId: string;
+  modality: Modality;
+
+  job: JobSimple | null;
+  company: CompanySimple | null;
+  vehicle: VehicleSimple | null;
 }

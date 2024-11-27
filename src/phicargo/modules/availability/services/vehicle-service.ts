@@ -1,16 +1,19 @@
 import type {
   Vehicle,
   VehicleRead,
+  VehicleWithDriver,
   VehicleWithTravelRef,
 } from '../models/vehicle-model';
 import type {
   VehicleApi,
   VehicleReadApi,
+  VehicleWithDriverApi,
   VehicleWithTravelRefApi,
 } from '../models/api/vehicle-model-api';
 import {
   vehicleReadToLocal,
   vehicleToLocal,
+  vehicleWithDriverToLocal,
   vehicleWithTravelRefToLocal,
 } from '../adapters/vehicles/vehicle-mapper';
 
@@ -52,6 +55,21 @@ class VehicleServiceApi {
         '/vehicles/available',
       );
       return response.data.map(vehicleReadToLocal);
+    } catch (error) {
+      console.error(error);
+      if (error instanceof AxiosError) {
+        throw new Error(error.response?.data?.message || 'An error occurred');
+      }
+      throw new Error('An error occurred');
+    }
+  }
+
+  static async getVehiclesWithDriver(): Promise<VehicleWithDriver[]> {
+    try {
+      const response = await odooApi.get<VehicleWithDriverApi[]>(
+        `/vehicles/with_driver`,
+      );
+      return response.data.map(vehicleWithDriverToLocal);
     } catch (error) {
       console.error(error);
       if (error instanceof AxiosError) {

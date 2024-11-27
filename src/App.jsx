@@ -13,7 +13,7 @@ import AccesoForm from './phicargo/accesos/formulario';
 import Accesos from './phicargo/accesos/Accesos';
 import App from './phicargo/maniobras/control/control';
 import AsignacionUnidades from './phicargo/reportes/asignacion_unidades';
-import BaseLayout from './phicargo/modules/availability/layout/BaseLayout';
+import AvailabilityLayout from './phicargo/modules/availability/layout/AvailabilityLayout';
 import CartasPorte from './phicargo/maniobras/tms_waybill/cartas_porte';
 import ControlUsuarios from './phicargo/usuarios/ControlUsuarios';
 import ControlViajesActivos from './phicargo/viajes/viajes/control';
@@ -24,6 +24,7 @@ import DetencionesTable from './phicargo/reportes/llegadas_tarde/llegadas_tarde'
 import Disponibilidad_unidades from './phicargo/disponiblidad/equipos/equipos';
 import EntregaMonitoreo from './phicargo/monitoreo/monitoreo';
 import { LoadingPage } from './phicargo/modules/core/pages/LoadingPage';
+import LoginPage from './phicargo/modules/auth/pages/LoginPage';
 import Menu from './phicargo/menu/menu';
 import Nominas from './phicargo/maniobras/pagos/pagos';
 import PersistentDrawer from './phicargo/monitoreo/Eventos';
@@ -39,6 +40,7 @@ import { toast } from 'react-toastify';
 // Lazy loading pages
 const TrackAvailabilityPage = lazy(() => import('./phicargo/modules/availability/pages/TrackAvailabilityPage'));
 const DriverAvailabilityPage = lazy(() => import('./phicargo/modules/availability/pages/DriverAvailabilityPage'));
+const NotAssignedPage = lazy(() => import('./phicargo/modules/availability/pages/NotAssignedPage'));
 
 
 function Example() {
@@ -90,6 +92,10 @@ function Example() {
       <ToastContainer />
       <Router>
         <Routes>
+          {/* Auth routes */}
+          <Route path='/login' element={<LoginPage />} />
+
+
           {/* Ruta predeterminada */}
 
           <Route path="/menu" element={<Menu />} />
@@ -128,7 +134,7 @@ function Example() {
 
           <Route path="/usuarios" element={<ControlUsuarios />} />
 
-          <Route path="/disponibilidad" element={<BaseLayout />}>
+          <Route path="/disponibilidad" element={<AvailabilityLayout />}>
             <Route
               index
               element={<Navigate to="/disponibilidad/unidades" replace />}
@@ -156,7 +162,15 @@ function Example() {
                   <SummaryPage />
                 </Suspense>
               }
-            /> 
+            />
+            <Route 
+              path='sin-asignar'
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <NotAssignedPage />
+                </Suspense>
+              }
+            />
           </Route>
 
           {/* Ruta para manejar rutas no válidas */}

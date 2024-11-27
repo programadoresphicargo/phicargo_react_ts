@@ -1,11 +1,12 @@
-import { Driver, DriverEdit } from '../models/driver-model';
+import { Driver, DriverEdit, DriverSimple2 } from '../models/driver-model';
+import { DriverApi, DriverSimple2Api } from '../models/api/driver-model-api';
 import {
+  driverSimple2ToLocal,
   driverToLocal,
   driverUpdateToApi,
 } from '../adapters/drivers/driver-mapper';
 
 import { AxiosError } from 'axios';
-import { DriverApi } from '../models/api/driver-model-api';
 import { UpdatebleItem } from '../../core/types/global-types';
 import odooApi from '../../core/api/odoo-api';
 
@@ -42,6 +43,21 @@ class DriverServiceApi {
         );
       }
       throw new Error('Error updating driver');
+    }
+  }
+
+  static async getDrivers(): Promise<DriverSimple2[]> {
+    try {
+      const response = await odooApi.get<DriverSimple2Api[]>('/drivers/all/all');
+      return response.data.map(driverSimple2ToLocal);
+    } catch (error) {
+      console.log(error);
+      if (error instanceof AxiosError) {
+        throw new Error(
+          error.response?.data?.message || 'Error getting drivers',
+        );
+      }
+      throw new Error('Error getting drivers');
     }
   }
 }

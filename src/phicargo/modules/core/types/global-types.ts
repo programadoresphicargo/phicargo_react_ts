@@ -45,3 +45,9 @@ export interface SimpleData {
   id: number;
   name: string;
 }
+
+
+export type MenuItemType = {
+  name: string;
+  path: string;
+};

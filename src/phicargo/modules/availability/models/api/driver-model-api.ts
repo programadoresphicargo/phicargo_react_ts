@@ -1,5 +1,24 @@
 import type { Job, Modality, Status } from '../driver-model';
 
+import { CompanySimple } from '../../../core/models';
+import { VehicleSimpleApi } from './vehicle-model-api';
+
+type JobSimple = {
+  id: number;
+  name: Job;
+}
+
+interface DriverBaseApi {
+  readonly id: number;
+  readonly name: string;
+  tms_driver_license_type: string | null;
+  tms_driver_license_id: string | null;
+  x_modalidad: Modality;
+  job: JobSimple | null;  
+}
+
+export type DriverSimpleApi = DriverBaseApi;
+
 export interface DriverApi {
   id: number;
   name: string;
@@ -28,4 +47,16 @@ export interface DriverEditApi {
   tms_driver_license_type?: string | null;
   x_modalidad?: Modality | null;
   x_peligroso_lic?: 'SI' | 'NO' | null;
+}
+
+export interface DriverSimple2Api {
+  readonly id: number;
+  readonly name: string;
+  tms_driver_license_type: string | null;
+  tms_driver_license_id: string | null;
+  x_modalidad: Modality | null;
+
+  job: JobSimple | null;
+  res_company: CompanySimple | null;
+  vehicle: VehicleSimpleApi[];
 }

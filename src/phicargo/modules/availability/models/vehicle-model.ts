@@ -5,6 +5,7 @@ import type {
   TravelSimple,
 } from '../../core/models';
 
+import { DriverSimple } from './driver-model';
 import { MaintenanceRecordSimple } from '../../maintenance/models';
 
 interface SimpleData {
@@ -39,14 +40,28 @@ interface VehicleBase {
   modality: string;
   loadType: string;
   driverId: number;
-}
 
-export interface Vehicle extends VehicleBase {
   state: VehicleState;
   category: VehicleCategory | null;
   brand: VehicleBrand | null;
   branch: BranchSimple | null;
   company: CompanySimple | null;
+}
+
+export interface VehicleWithDriver extends VehicleBase {
+  driver: DriverSimple | null;
+}
+
+export interface VehicleSimple {
+  readonly id: number;
+  readonly name: string;
+  fleetType: string;
+  status: string;
+  modality: string;
+  loadType: string;
+}
+
+export interface Vehicle extends VehicleBase {
   travel: TravelSimple | null;
   maneuver: ManeuverSimple | null;
   maintenanceRecord: MaintenanceRecordSimple | null;

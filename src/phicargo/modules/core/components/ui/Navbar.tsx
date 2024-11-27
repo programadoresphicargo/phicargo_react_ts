@@ -15,16 +15,20 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 
-// const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['PERFIL', 'SALIR'];
 
-const pages = [
-  { name: 'Unidades', path: '/disponibilidad/unidades' },
-  { name: 'Operadores', path: '/disponibilidad/operadores' },
-  { name: 'Resumen', path: '/disponibilidad/resumen' },
-];
+type MenuItemType = {
+  name: string;
+  path: string;
+};
 
-const Navbar = () => {
+interface Props {
+  pages: MenuItemType[];
+}
+
+const Navbar = (props: Props) => {
+  const { pages } = props;
+
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
@@ -136,9 +140,10 @@ const Navbar = () => {
                   to={page.path}
                   sx={{
                     fontSize: '1.1rem',
-                    fontWeight: isActive ? '700' : '500', // Bold si está activo
+                    fontFamily: 'Inter',
+                    fontWeight: isActive ? '700' : '500',
                     textTransform: 'uppercase',
-                    color: isActive ? '#222222' : '#333333', // Gris más oscuro si está activo
+                    color: isActive ? '#222222' : '#333333',
                     textDecoration: 'none',
                     position: 'relative',
                     padding: '0.5rem 1rem',
