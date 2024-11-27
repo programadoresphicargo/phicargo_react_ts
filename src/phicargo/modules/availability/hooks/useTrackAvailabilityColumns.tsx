@@ -44,11 +44,11 @@ export const useTrackAvailabilityColumns = () => {
         },
       },
       {
-        accessorKey: 'travelReference',
+        accessorFn: (row) => row.travel ? row.travel.name : 'N/A',
         header: 'Viaje',
       },
       {
-        accessorKey: 'maneuver',
+        accessorFn: (row) => row.maneuver ? row.maneuver.type : 'N/A',
         header: 'Maniobra',
       },
     ],

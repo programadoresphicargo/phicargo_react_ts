@@ -1,4 +1,4 @@
-import Chip from '@mui/material/Chip';
+import { Chip } from '@nextui-org/react';
 import { Modality } from '../../models/driver-model';
 
 interface Props {
@@ -19,7 +19,11 @@ const getModalityColor = (modality: Modality) => {
 };
 
 const ModalityChip = ({ modality }: Props) => {
-  return <Chip label={modality} color={getModalityColor(modality)} size='small' />;
+  return (
+    <Chip color={getModalityColor(modality)} size="sm">
+      {modality}
+    </Chip>
+  );
 };
 
 export default ModalityChip;

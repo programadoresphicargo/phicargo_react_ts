@@ -36,7 +36,7 @@ const driverBaseToLocal = (driver: DriverBaseApi): DriverBase => ({
  */
 export const driverToLocal = (driver: DriverApi): Driver => ({
   ...driverBaseToLocal(driver),
-  vehicle: driver.vehicle
+  vehicle: driver.vehicle.length > 0
     ? {
         id: driver.vehicle[0].id,
         name: driver.vehicle[0].name2,

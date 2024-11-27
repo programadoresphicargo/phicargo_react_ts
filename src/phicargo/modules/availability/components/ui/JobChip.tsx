@@ -1,4 +1,4 @@
-import Chip from '@mui/material/Chip';
+import { Chip } from '@nextui-org/react';
 import type { Job } from '../../models/driver-model';
 
 interface Props {
@@ -12,14 +12,18 @@ const getJobColor = (job: Job) => {
     case 'MOVEDOR':
       return 'secondary';
     case 'OPERADOR POSTURERO':
-      return 'info';
+      return 'warning';
     default:
       return 'default';
   }
 };
 
 const JobChip = ({ job }: Props) => {
-  return <Chip label={job} color={getJobColor(job)} size='small' />;
+  return (
+    <Chip color={getJobColor(job)} size="sm">
+      {job}
+    </Chip>
+  );
 };
 
 export default JobChip;

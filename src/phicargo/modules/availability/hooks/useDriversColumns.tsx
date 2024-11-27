@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { type MRT_ColumnDef } from 'material-react-table';
 import ModalityChip from '../components/ui/ModalityChip';
 import StatusChip from '../components/ui/StatusChip';
-import type { Driver, Job, Modality, Status } from '../models/driver-model';
+import type { Driver, Modality, Status } from '../models/driver-model';
 import JobChip from '../components/ui/JobChip';
 
 export const useDriversColumns = () => {
@@ -10,29 +10,41 @@ export const useDriversColumns = () => {
     () => [
       { accessorKey: 'name', header: 'Operador' },
       {
-        accessorKey: 'job',
+        accessorFn: (row) => row.job ? row.job.name : 'N/A',
         header: 'Tipo',
-        Cell: ({ cell }) => <JobChip job={cell.getValue<Job>()} />,
+        Cell: ({ row }) => <JobChip job={row.original.job.name} />,
       },
-      { accessorKey: 'vehicleName', header: 'Unidad' },
-      { accessorKey: 'driverLicenseId', header: 'Licencia' },
-      { accessorKey: 'driverLicenseType', header: 'Tipo Licencia' },
+      { accessorKey: 'vehicle.name', header: 'Unidad' },
+      { accessorKey: 'licenseId', header: 'Licencia' },
+      { accessorKey: 'licenseType', header: 'Tipo Licencia' },
       {
-        accessorKey: 'modality',
+        accessorFn: (row) => row.modality,
         header: 'Modalidad',
         Cell: ({ cell }) => (
           <ModalityChip modality={cell.getValue<Modality>()} />
         ),
       },
-      { accessorKey: 'isDangerous', header: 'Peligroso' },
+      { 
+        accessorFn: (row) => row.isDangerous, 
+        header: 'Peligroso' 
+      },
       {
-        accessorKey: 'status',
+        accessorFn: (row) => row.status,
         header: 'Estado',
         Cell: ({ cell }) => <StatusChip status={cell.getValue<Status>()} />,
       },
-      { accessorKey: 'viaje', header: 'Viaje' },
-      { accessorKey: 'maniobra', header: 'Maniobra' },
-      { accessorKey: 'company', header: 'Compañia' },
+      { 
+        accessorFn: (row) => row.travelId, 
+        header: 'Viaje' 
+      },
+      { 
+        accessorFn: (row) => row.maneuverId, 
+        header: 'Maniobra' 
+      },
+      { 
+        accessorFn: (row) => row.company ? row.company.name : 'N/A', 
+        header: 'Compañia' 
+      },
     ],
     [],
   );

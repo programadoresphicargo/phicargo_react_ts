@@ -30,7 +30,6 @@ import Nominas from './phicargo/maniobras/pagos/pagos';
 import PersistentDrawer from './phicargo/monitoreo/Eventos';
 import Precios_maniobras from './phicargo/maniobras/precios/precios';
 import ReporteCumplimiento from './phicargo/reportes/cumplimiento';
-import SummaryPage from './phicargo/modules/availability/pages/SummaryPage';
 import Terminales from './phicargo/maniobras/maniobras/terminales/registros';
 import {ThreeDots} from '@agney/react-loading';
 import { ToastContainer } from 'react-toastify';
@@ -41,6 +40,7 @@ import { toast } from 'react-toastify';
 const TrackAvailabilityPage = lazy(() => import('./phicargo/modules/availability/pages/TrackAvailabilityPage'));
 const DriverAvailabilityPage = lazy(() => import('./phicargo/modules/availability/pages/DriverAvailabilityPage'));
 const NotAssignedPage = lazy(() => import('./phicargo/modules/availability/pages/NotAssignedPage'));
+const SummaryPage = lazy(() => import('./phicargo/modules/availability/pages/SummaryPage'));
 
 
 function Example() {
