@@ -8,7 +8,7 @@ import { useVehicleQueries } from '../hooks/useVehicleQueries';
 
 const NotAssignedPage = () => {
   const {
-    vehicleWithDriverQuery: { data: vehiclesWithDriver },
+    vehicleQuery: { data: vehiclesWithDriver },
   } = useVehicleQueries();
 
   const {

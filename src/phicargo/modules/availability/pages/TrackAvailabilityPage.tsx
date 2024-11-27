@@ -1,12 +1,12 @@
 import {
-    Button,
-    CircularProgress,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    MenuItem,
-    Select,
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  MenuItem,
+  Select,
 } from '@mui/material';
 import {
   MRT_Row,
@@ -14,7 +14,7 @@ import {
   useMaterialReactTable,
 } from 'material-react-table';
 
-import { VehicleWithTravelRef } from '../models/vehicle-model';
+import type { Vehicle } from '../models/vehicle-model';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
 import { useTrackAvailabilityColumns } from '../hooks/useTrackAvailabilityColumns';
@@ -22,17 +22,17 @@ import { useVehicleQueries } from '../hooks/useVehicleQueries';
 
 const TrackAvailabilityPage = () => {
   const [openDialog, setOpenDialog] = useState(false);
-  const [selectedRow, setSelectedRow] = useState<VehicleWithTravelRef | null>(null);
+  const [selectedRow, setSelectedRow] = useState<Vehicle | null>(null);
   const [estado, setStatus] = useState<string>('');
   const [isUpdating, setIsUpdating] = useState(false);
 
   const {
-    vehiclesWithTravelRefQuery: { data: vehiclesWithTravelRef, isFetching },
+    vehicleQuery: { data: vehiclesWithTravelRef, isFetching },
   } = useVehicleQueries();
 
   const { columns } = useTrackAvailabilityColumns();
 
-  const handleRowClick = (row: MRT_Row<VehicleWithTravelRef>) => {
+  const handleRowClick = (row: MRT_Row<Vehicle>) => {
     setSelectedRow(row.original);
     setStatus(row.original.status);
     setOpenDialog(true);
@@ -70,7 +70,7 @@ const TrackAvailabilityPage = () => {
     }
   };
 
-  const table = useMaterialReactTable<VehicleWithTravelRef>({
+  const table = useMaterialReactTable<Vehicle>({
     columns,
     data: vehiclesWithTravelRef || [],
     enableGrouping: true,

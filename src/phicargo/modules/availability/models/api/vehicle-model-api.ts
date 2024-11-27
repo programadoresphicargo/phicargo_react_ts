@@ -1,26 +1,19 @@
-import { ManeuverSimpleApi, TravelSimpleApi } from "../../../core/models";
+import type {
+  BranchSimple,
+  CompanySimple,
+  ManeuverSimpleApi,
+  TravelSimpleApi,
+} from '../../../core/models';
+import type {
+  VehicleBrand,
+  VehicleCategory,
+  VehicleState,
+} from '../vehicle-model';
 
-import { DriverSimpleApi } from "./driver-model-api";
-import { MaintenanceRecordSimpleApi } from "../../../maintenance/models";
-import { SimpleData } from "../../../core/types/global-types";
+import type { DriverSimpleApi } from './driver-model-api';
+import type { MaintenanceRecordSimpleApi } from '../../../maintenance/models';
 
-export interface VehicleWithTravelRefApi {
-  id: number;
-  name: string;
-  serial_number: string | null;
-  licence_plate: string | null;
-  fleet_type: string | null;
-  status: string;
-  referencia_viaje: string | null;
-  maniobra: string | null;
-}
-
-export interface VehicleReadApi {
-  readonly id: number;
-  readonly name: string;
-}
-
-interface VehicleBaseApi {
+export interface VehicleBaseApi {
   id: number;
   name2: string;
   license_plate: string | null;
@@ -30,22 +23,18 @@ interface VehicleBaseApi {
   x_tipo_vehiculo: string | null;
   x_modalidad: string | null;
   x_tipo_carga: string | null;
-  x_operador_asignado:number | null;
 
-  state: SimpleData;
-  category: SimpleData | null;
-  brand: SimpleData | null; 
-  res_store: SimpleData | null;
-  res_company: SimpleData | null;
+  state: VehicleState;
+  category: VehicleCategory | null;
+  brand: VehicleBrand | null;
+  res_store: BranchSimple | null;
+  res_company: CompanySimple | null;
 }
 
 export interface VehicleApi extends VehicleBaseApi {
   tms_travel: TravelSimpleApi | null;
   maniobra: ManeuverSimpleApi | null;
   maintenance_records: MaintenanceRecordSimpleApi[];
-}
-
-export interface VehicleWithDriverApi extends VehicleBaseApi {
   driver: DriverSimpleApi | null;
 }
 
@@ -57,3 +46,4 @@ export interface VehicleSimpleApi {
   x_modalidad: string | null;
   x_tipo_carga: string | null;
 }
+

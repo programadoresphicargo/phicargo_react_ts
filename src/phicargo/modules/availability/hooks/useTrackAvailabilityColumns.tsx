@@ -1,9 +1,9 @@
 import type { MRT_ColumnDef } from 'material-react-table';
-import type { VehicleWithTravelRef } from '../models/vehicle-model';
+import type { Vehicle } from '../models/vehicle-model';
 import { useMemo } from 'react';
 
 export const useTrackAvailabilityColumns = () => {
-  const columns = useMemo<MRT_ColumnDef<VehicleWithTravelRef>[]>(
+  const columns = useMemo<MRT_ColumnDef<Vehicle>[]>(
     () => [
       {
         accessorKey: 'name',
