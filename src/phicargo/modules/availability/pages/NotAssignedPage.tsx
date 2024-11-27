@@ -12,7 +12,7 @@ const NotAssignedPage = () => {
   } = useVehicleQueries();
 
   const {
-    allDriversQuery: { data: drivers },
+    driversQuery: { data: drivers },
   } = useDriverQueries();
 
   const stats = useMemo(() => {

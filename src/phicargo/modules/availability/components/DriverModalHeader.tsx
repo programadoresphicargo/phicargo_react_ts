@@ -19,17 +19,17 @@ const DriverModalHeader = (props: Props) => {
             </p>
             <p>
               <span className="font-semibold text-gray-900">Compañía:</span>{' '}
-              {driver.company}
+              {driver.company?.name}
             </p>
             <p>
               <span className="font-semibold text-gray-900">
                 Tipo Licencia:
               </span>{' '}
-              {driver.driverLicenseType}
+              {driver.licenseType}
             </p>
             <p>
               <span className="font-semibold text-gray-900">No. Licencia:</span>{' '}
-              {driver.driverLicenseId}
+              {driver.licenseId}
             </p>
             <p>
               <span className="font-semibold text-gray-900">Modalidad:</span>{' '}
@@ -37,7 +37,7 @@ const DriverModalHeader = (props: Props) => {
             </p>
             <p>
               <span className="font-semibold text-gray-900">Puesto:</span>{' '}
-              {driver.job}
+              {driver.job.name}
             </p>
             <p className="col-span-2 flex items-center">
               <span className="font-semibold text-gray-900">Estatus:</span>

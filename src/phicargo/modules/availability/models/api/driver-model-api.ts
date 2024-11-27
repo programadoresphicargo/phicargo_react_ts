@@ -1,62 +1,49 @@
-import type { Job, Modality, Status } from '../driver-model';
+import type { IsDangerous, Job, Modality, Status } from '../driver-model';
 
-import { CompanySimple } from '../../../core/models';
-import { VehicleSimpleApi } from './vehicle-model-api';
+import type { CompanySimple } from '../../../core/models';
+import type { VehicleSimpleApi } from './vehicle-model-api';
 
 type JobSimple = {
   id: number;
   name: Job;
-}
+};
 
-interface DriverBaseApi {
-  readonly id: number;
-  readonly name: string;
-  tms_driver_license_type: string | null;
-  tms_driver_license_id: string | null;
-  x_modalidad: Modality;
-  job: JobSimple | null;  
-}
-
-export type DriverSimpleApi = DriverBaseApi;
-
-export interface DriverApi {
+export interface DriverBaseApi {
   id: number;
   name: string;
-  job_id: number;
-  job: Job;
   active: boolean;
-  company: string;
   tms_driver_license_id: string | null;
   tms_driver_license_type: string | null;
-  tms_driver_license_expiration: string | null;
-  is_driver: boolean | null;
-  no_license: string | null;
+  no_licencia: string | null;
   x_modalidad: Modality | null;
-  x_peligroso_lic: string | null;
+  x_peligroso_lic: IsDangerous | null;
   x_status: Status | null;
   x_viaje: number | null;
   x_maniobra: number | null;
-  vehicle_id: number | null;
-  vehicle_name: string | null;
-  vehicle_active: boolean | null;
+
+  job: JobSimple;
+  res_company: CompanySimple | null;
+}
+
+export type DriverSimpleApi = Pick<
+  DriverBaseApi,
+  | 'id'
+  | 'name'
+  | 'tms_driver_license_type'
+  | 'tms_driver_license_id'
+  | 'x_modalidad'
+  | 'x_status'
+  | 'job'
+>;
+
+export interface DriverApi extends DriverBaseApi {
+  vehicle: VehicleSimpleApi[];
 }
 
 export interface DriverEditApi {
-  job_id?: number; 
+  job_id?: number;
   tms_driver_license_id?: string | null;
   tms_driver_license_type?: string | null;
   x_modalidad?: Modality | null;
   x_peligroso_lic?: 'SI' | 'NO' | null;
-}
-
-export interface DriverSimple2Api {
-  readonly id: number;
-  readonly name: string;
-  tms_driver_license_type: string | null;
-  tms_driver_license_id: string | null;
-  x_modalidad: Modality | null;
-
-  job: JobSimple | null;
-  res_company: CompanySimple | null;
-  vehicle: VehicleSimpleApi[];
 }

@@ -1,64 +1,80 @@
-import type { Driver, DriverEdit, DriverSimple, DriverSimple2 } from "../../models/driver-model";
-import type { DriverApi, DriverEditApi, DriverSimple2Api, DriverSimpleApi } from "../../models/api/driver-model-api";
+import type { Driver, DriverEdit, DriverSimple } from '../../models/driver-model';
+import type {
+  DriverApi,
+  DriverBaseApi,
+  DriverEditApi,
+  DriverSimpleApi,
+} from '../../models/api/driver-model-api';
 
-export const driverToLocal = (driver: DriverApi): Driver => ({
+import type { DriverBase } from '../../models/driver-model';
+
+/**
+ * Mapper function to convert a DriverBaseApi object to a DriverBase object
+ * @param driver Driver object from the API
+ * @returns DriverBase object for the local state
+ */
+const driverBaseToLocal = (driver: DriverBaseApi): DriverBase => ({
   id: driver.id,
   name: driver.name,
-  jobId: driver.job_id,
-  job: driver.job,
   isActive: driver.active,
-  company: driver.company,
-  driverLicenseId: driver.tms_driver_license_id || 'SIN ASIGNAR',
-  driverLicenseType: driver.tms_driver_license_type || 'SIN ASIGNAR',
-  driverLicenseExpiration: driver.tms_driver_license_expiration
-    ? new Date(driver.tms_driver_license_expiration)
-    : null,
-  isDriver: driver.is_driver || false,
-  noLicense: driver.no_license || 'SIN ASIGNAR',
+  licenseId: driver.tms_driver_license_id || 'SIN ASIGNAR',
+  licenseType: driver.tms_driver_license_type || 'SIN ASIGNAR',
+  noLicense: driver.no_licencia || 'SIN ASIGNAR',
   modality: driver.x_modalidad || 'SIN ASIGNAR',
   isDangerous: driver.x_peligroso_lic || 'SIN ASIGNAR',
   status: driver.x_status || 'SIN ASIGNAR',
-  viaje: driver.x_viaje || 0,
-  maniobra: driver.x_maniobra || 0,
-  vehicleId: driver.vehicle_id || 0,
-  vehicleName: driver.vehicle_name || 'SIN ASIGNAR',
-  vehicleActive: driver.vehicle_active || false,
+  travelId: driver.x_viaje,
+  maneuverId: driver.x_maniobra,
+  job: driver.job,
+  company: driver.res_company,
 });
 
+/**
+ * Mapper function to convert a DriverApi object to a Driver object
+ * @param driver Object from the API
+ * @returns Driver object for the local state
+ */
+export const driverToLocal = (driver: DriverApi): Driver => ({
+  ...driverBaseToLocal(driver),
+  vehicle: driver.vehicle
+    ? {
+        id: driver.vehicle[0].id,
+        name: driver.vehicle[0].name2,
+        fleetType: driver.vehicle[0].fleet_type || 'SIN ASIGNAR',
+        status: driver.vehicle[0].x_status,
+        modality: driver.vehicle[0].x_modalidad || 'SIN ASIGNAR',
+        loadType: driver.vehicle[0].x_tipo_carga || 'SIN ASIGNAR',
+      }
+    : null,
+});
+
+/**
+ * Mapper function to convert a DriverSimpleApi object to a DriverSimple object
+ * @param driver DriverSimpleApi object from the API
+ * @returns DriverSimple object for the local state
+ */
+export const driverSimpleToLocal = (driver: DriverSimpleApi): DriverSimple => ({
+  id: driver.id,
+  name: driver.name,
+  licenseId: driver.tms_driver_license_id || 'SIN ASIGNAR',
+  licenseType: driver.tms_driver_license_type || 'SIN ASIGNAR',
+  modality: driver.x_modalidad || 'SIN ASIGNAR',
+  status: driver.x_status || 'SIN ASIGNAR',
+  job: driver.job,
+});
+
+/**
+ * Mapper function to convert a DriverEdit object to a DriverEditApi object   
+ * @param driver DriverEdit object from the local state
+ * @returns DriverEditApi object to send to the API
+ */
 export const driverUpdateToApi = (driver: DriverEdit): DriverEditApi => ({
   job_id: driver.jobId,
   tms_driver_license_id: driver.driverLicenseId,
   tms_driver_license_type: driver.driverLicenseType,
   x_modalidad: driver.modality,
-  x_peligroso_lic: driver.isDangerous,
+  x_peligroso_lic:
+    driver.isDangerous === 'SI' || driver.isDangerous === 'NO'
+      ? driver.isDangerous
+      : null,
 });
-
-
-export const driverSimpleToLocal = (driver: DriverSimpleApi): DriverSimple => ({
-  id: driver.id,
-  name: driver.name,
-  licenseType: driver.tms_driver_license_type || 'SIN ASIGNAR',
-  licenseId: driver.tms_driver_license_id || 'SIN ASIGNAR',
-  modality: driver.x_modalidad || 'SIN ASIGNAR',
-  job: driver.job || null,
-});
-
-
-export const driverSimple2ToLocal = (driver: DriverSimple2Api): DriverSimple2 => ({
-  id: driver.id,
-  name: driver.name,
-  liceseType: driver.tms_driver_license_type || 'SIN ASIGNAR',
-  licenseId: driver.tms_driver_license_id || 'SIN ASIGNAR',
-  modality: driver.x_modalidad || 'SIN ASIGNAR',
-  job: driver.job || null,
-  company: driver.res_company || null,
-  vehicle: driver.vehicle?.length > 0 
-    ? {
-      id: driver.vehicle[0].id,
-      name: driver.vehicle[0].name2,
-      fleetType: driver.vehicle[0].fleet_type || 'SIN ASIGNAR',
-      status: driver.vehicle[0].x_status,
-      modality: driver.vehicle[0].x_modalidad || 'SIN ASIGNAR',
-      loadType: driver.vehicle[0].x_tipo_carga || 'SIN ASIGNAR',
-    } : null,
-})

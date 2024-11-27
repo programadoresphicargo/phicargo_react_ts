@@ -1,12 +1,12 @@
 import { BsBusFrontFill } from 'react-icons/bs';
-import { DriverSimple2 } from '../models/driver-model';
+import type { Driver } from '../models/driver-model';
 import { FaRegUser } from 'react-icons/fa';
 import { FaTruckLoading } from 'react-icons/fa';
 import { GrLicense } from 'react-icons/gr';
 import { MdOutlineWork } from 'react-icons/md';
 
 interface Props {
-  driver: DriverSimple2;
+  driver: Driver;
 }
 
 const DriverMiniCard = ({ driver }: Props) => {

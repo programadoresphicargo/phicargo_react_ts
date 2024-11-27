@@ -1,9 +1,9 @@
-import type { DriverSimple2 } from '../models/driver-model';
+import type { Driver } from '../models/driver-model';
 import type { VehicleWithDriver } from '../models/vehicle-model';
 
 type NotAssignedTypes = {
   vehicles: VehicleWithDriver[];
-  drivers: DriverSimple2[];
+  drivers: Driver[];
   vehiclesAssigned: VehicleWithDriver[];
 };
 
@@ -13,14 +13,14 @@ type NotAssignedTypes = {
 class NotAssignedStats {
   constructor(
     private readonly vehicles: VehicleWithDriver[],
-    private readonly drivers: DriverSimple2[],
+    private readonly drivers: Driver[],
   ) {}
 
   private getVehiclesWithoutDriver(): VehicleWithDriver[] {
     return this.vehicles.filter((vehicle) => !vehicle.driver);
   }
 
-  private getDriversWithoutVehicle(): DriverSimple2[] {
+  private getDriversWithoutVehicle(): Driver[] {
     return this.drivers.filter((driver) => !driver.vehicle);
   }
 
