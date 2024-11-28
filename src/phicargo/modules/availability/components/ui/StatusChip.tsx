@@ -1,4 +1,4 @@
-import Chip from '@mui/material/Chip';
+import { Chip } from '@nextui-org/react';
 import { Status } from '../../models/driver-model';
 
 interface Props {
@@ -14,14 +14,18 @@ const getStatusColor = (status: Status) => {
     case 'maniobra':
       return 'warning';
     case 'SIN ASIGNAR':
-      return 'error';
+      return 'danger';
     default:
       return 'default';
   }
 };
 
 const StatusChip = ({ status }: Props) => {
-  return <Chip label={status} color={getStatusColor(status)} size='small' />;
+  return (
+    <Chip className="uppercase" color={getStatusColor(status)} size="sm">
+      {status}
+    </Chip>
+  );
 };
 
 export default StatusChip;

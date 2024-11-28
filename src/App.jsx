@@ -7,7 +7,7 @@ import {
   HashRouter as Router,
   Routes,
 } from 'react-router-dom';
-import React, { Suspense, lazy, useEffect, useState } from 'react';
+import { Suspense, lazy, useEffect, useState } from 'react';
 
 import AccesoForm from './phicargo/accesos/formulario';
 import Accesos from './phicargo/accesos/Accesos';
@@ -21,7 +21,6 @@ import ControlViajesFinalizados from './phicargo/viajes/viajes/finalizados';
 import ControlViajesProgramados from './phicargo/viajes/viajes/programacion';
 import CorreosElectronicos from './phicargo/correos_electronicos/correos_electronicos';
 import DetencionesTable from './phicargo/reportes/llegadas_tarde/llegadas_tarde';
-import Disponibilidad_unidades from './phicargo/disponiblidad/equipos/equipos';
 import EntregaMonitoreo from './phicargo/monitoreo/monitoreo';
 import { LoadingPage } from './phicargo/modules/core/pages/LoadingPage';
 import LoginPage from './phicargo/modules/auth/pages/LoginPage';
@@ -31,19 +30,19 @@ import PersistentDrawer from './phicargo/monitoreo/Eventos';
 import Precios_maniobras from './phicargo/maniobras/precios/precios';
 import ReporteCumplimiento from './phicargo/reportes/cumplimiento';
 import Terminales from './phicargo/maniobras/maniobras/terminales/registros';
-import {ThreeDots} from '@agney/react-loading';
 import { ToastContainer } from 'react-toastify';
 import { Toaster } from 'react-hot-toast';
-import { toast } from 'react-toastify';
 
 // Lazy loading pages
-const TrackAvailabilityPage = lazy(() => import('./phicargo/modules/availability/pages/TrackAvailabilityPage'));
+// Availability Pages and Outlets
+const VehicleAvailabilityPage = lazy(() => import('./phicargo/modules/availability/pages/VehicleAvailabilityPage'));
+const VehicleInfo = lazy(() => import('./phicargo/modules/availability/outlets/VehicleInfo'));
 const DriverAvailabilityPage = lazy(() => import('./phicargo/modules/availability/pages/DriverAvailabilityPage'));
 const NotAssignedPage = lazy(() => import('./phicargo/modules/availability/pages/NotAssignedPage'));
 const SummaryPage = lazy(() => import('./phicargo/modules/availability/pages/SummaryPage'));
 
 
-function Example() {
+const AppRouter = () => {
   useEffect(() => {
     const checkSession = async () => {
       const response = await fetch('/phicargo/login/inicio/check_session.php');
@@ -61,30 +60,30 @@ function Example() {
     return () => clearInterval(intervalId);
   }, []);
 
-  const [messages, setMessages] = useState([]);
+  // const [messages, setMessages] = useState([]);
 
-  useEffect(() => {
-    const socket = new WebSocket('ws://localhost:8082/ws');
+  // useEffect(() => {
+  //   const socket = new WebSocket('ws://localhost:8082/ws');
 
-    socket.onmessage = (event) => {
-      toast.success('Mensaje recibido: ' + event.data);
+  //   socket.onmessage = (event) => {
+  //     toast.success('Mensaje recibido: ' + event.data);
 
-      const utterance = new SpeechSynthesisUtterance(event.data);
-      const voices = speechSynthesis.getVoices();
+  //     const utterance = new SpeechSynthesisUtterance(event.data);
+  //     const voices = speechSynthesis.getVoices();
 
-      const maleVoice = voices.find((voice) =>
-        voice.name.toLowerCase().includes('male'),
-      );
+  //     const maleVoice = voices.find((voice) =>
+  //       voice.name.toLowerCase().includes('male'),
+  //     );
 
-      if (maleVoice) {
-        utterance.voice = maleVoice;
-      }
+  //     if (maleVoice) {
+  //       utterance.voice = maleVoice;
+  //     }
 
-      speechSynthesis.speak(utterance);
-    };
+  //     speechSynthesis.speak(utterance);
+  //   };
 
-    return () => socket.close();
-  }, []);
+  //   return () => socket.close();
+  // }, []);
 
   return (
     <div>
@@ -143,10 +142,19 @@ function Example() {
               path="unidades" 
               element={
                 <Suspense fallback={<LoadingPage />}> 
-                  <TrackAvailabilityPage />
+                  <VehicleAvailabilityPage />
                 </Suspense>
               } 
-            />
+            >
+              <Route 
+                path='detalles/:id' 
+                element={
+                  <Suspense fallback={<LoadingPage />}> 
+                    <VehicleInfo />
+                  </Suspense>
+                } 
+              />
+            </Route>
             <Route 
               path="operadores" 
               element={
@@ -181,5 +189,5 @@ function Example() {
   );
 }
 
-export default Example;
+export default AppRouter;
 

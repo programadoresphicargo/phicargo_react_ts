@@ -24,6 +24,7 @@ const DriverAvailabilityPage = () => {
     data: drivers || [],
     enableStickyHeader: true,
     // PAGINATION, FILTERS, SORTING
+    enableGrouping: true,
     enableDensityToggle: false,
     enableFullScreenToggle: false,
     columnFilterDisplayMode: 'subheader',
@@ -36,9 +37,6 @@ const DriverAvailabilityPage = () => {
     state: {
       isLoading: isFetching,
     },
-    // ACTIONS
-    enableRowActions: true,
-    positionActionsColumn: 'first',
     // CUSTOMIZATIONS
     muiTableBodyRowProps: ({ row }) => ({
       onDoubleClick: () => setEditId(row.original.id),

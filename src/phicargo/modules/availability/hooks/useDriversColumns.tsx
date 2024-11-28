@@ -8,13 +8,28 @@ import JobChip from '../components/ui/JobChip';
 export const useDriversColumns = () => {
   const columns = useMemo<MRT_ColumnDef<Driver>[]>(
     () => [
-      { accessorKey: 'name', header: 'Operador' },
+      { 
+        accessorKey: 'name', 
+        header: 'Operador',
+        Cell: ({ cell }) => (
+          <span className='font-bold text-medium'>{cell.getValue<string>()}</span>
+        )
+      },
       {
         accessorFn: (row) => row.job ? row.job.name : 'N/A',
         header: 'Tipo',
         Cell: ({ row }) => <JobChip job={row.original.job.name} />,
       },
-      { accessorKey: 'vehicle.name', header: 'Unidad' },
+      { 
+        accessorFn: (row) => row.vehicle ? row.vehicle.name : 'SIN ASIGNAR', 
+        header: 'Unidad',
+        Cell: ({ cell }) => {
+          const value = cell.getValue<string>();
+          return value === 'SIN ASIGNAR' 
+            ? <span className='text-gray-400 text-sm'>{cell.getValue<string>()}</span>
+            : <span className='font-bold'>{cell.getValue<string>()}</span>
+        } 
+      },
       { accessorKey: 'licenseId', header: 'Licencia' },
       { accessorKey: 'licenseType', header: 'Tipo Licencia' },
       {
@@ -35,11 +50,23 @@ export const useDriversColumns = () => {
       },
       { 
         accessorFn: (row) => row.travelId, 
-        header: 'Viaje' 
+        header: 'Viaje',
+        Cell: ({ cell }) => {
+          const value = cell.getValue<number | null>();
+          return !value 
+            ? <span className='text-gray-400 text-sm'>{'SIN ASIGNAR'}</span>
+            : <span className='font-bold'>{cell.getValue<string>()}</span>
+        } 
       },
       { 
         accessorFn: (row) => row.maneuverId, 
-        header: 'Maniobra' 
+        header: 'Maniobra',
+        Cell: ({ cell }) => {
+          const value = cell.getValue<number | null>();
+          return !value 
+            ? <span className='text-gray-400 text-sm'>{'SIN ASIGNAR'}</span>
+            : <span className='font-bold'>{cell.getValue<string>()}</span>
+        } 
       },
       { 
         accessorFn: (row) => row.company ? row.company.name : 'N/A', 

@@ -28,17 +28,19 @@ export const useUnavailabilityQueries = (options: Options) => {
 
   const driverUnavailabilityMutation = useMutation({
     mutationFn: DriverUnavailabilityServiceApi.createDriverUnavailability,
-    onSuccess: () => {
-      toast.success("Creado con éxito");
-      queryClient.invalidateQueries({ queryKey: [mainKey] });
+    onSuccess: (newItem) => {
+      queryClient.setQueryData([mainKey], (prev?: DriverUnavailable[]) =>
+        prev ? [newItem, ...prev] : [newItem],
+      );
+      toast.success('Creado con éxito');
     },
     onError: (error: Error) => {
       toast.error(error.message);
-    }
+    },
   });
 
   return {
     driverUnavailabilityQuery,
-    driverUnavailabilityMutation
+    driverUnavailabilityMutation,
   };
 };

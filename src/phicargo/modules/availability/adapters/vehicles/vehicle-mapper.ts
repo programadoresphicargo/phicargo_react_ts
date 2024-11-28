@@ -1,7 +1,8 @@
-import type { Vehicle, VehicleBase } from '../../models/vehicle-model';
+import type { Vehicle, VehicleBase, VehicleUpdate } from '../../models/vehicle-model';
 import type {
   VehicleApi,
   VehicleBaseApi,
+  VehicleUpdateApi,
 } from '../../models/api/vehicle-model-api';
 
 import { driverSimpleToLocal } from '../drivers/driver-mapper';
@@ -58,4 +59,45 @@ export const vehicleToLocal = (vehicle: VehicleApi): Vehicle => ({
       : null,
   driver: vehicle.driver ? driverSimpleToLocal(vehicle.driver) : null,
 });
+
+/**
+ * Mapper function to convert a VehicleUpdateApi object to a VehicleUpdate object
+ * @param vehicle Vehicle object
+ * @returns VehicleUpdate object to be used in the form
+ */
+export const vehicleUpdateToApi = (vehicle: VehicleUpdate): VehicleUpdateApi => {
+
+  const vehicleApi: VehicleUpdateApi = {};
+
+  if (vehicle.companyId){
+    vehicleApi.company_id = vehicle.companyId;
+  }
+
+  if (vehicle.branchId){
+    vehicleApi.x_sucursal = vehicle.branchId;
+  }
+
+  if (vehicle.stateId){
+    vehicleApi.state_id = vehicle.stateId;
+  }
+
+  if (vehicle.driverId){
+    vehicleApi.x_operador_asignado = vehicle.driverId;
+  }
+
+  if (vehicle.vehicleType){
+    vehicleApi.fleet_type = vehicle.vehicleType;
+  }
+
+  if (vehicle.modality){
+    vehicleApi.x_modalidad = vehicle.modality;
+  }
+
+  if (vehicle.typeLoad){
+    vehicleApi.x_tipo_carga = vehicle.typeLoad;
+  }
+
+  return vehicleApi;
+
+}
 

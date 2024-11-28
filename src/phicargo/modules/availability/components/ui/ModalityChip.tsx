@@ -9,7 +9,7 @@ const getModalityColor = (modality: Modality) => {
   switch (modality) {
     case 'full':
       return 'primary';
-    case 'single':
+    case 'sencillo':
       return 'secondary';
     case 'SIN ASIGNAR':
       return 'warning';
@@ -20,7 +20,11 @@ const getModalityColor = (modality: Modality) => {
 
 const ModalityChip = ({ modality }: Props) => {
   return (
-    <Chip color={getModalityColor(modality)} size="sm">
+    <Chip 
+      color={getModalityColor(modality)} 
+      size="sm"
+      className='uppercase'
+    >
       {modality}
     </Chip>
   );

@@ -11,7 +11,15 @@ import { AxiosError } from 'axios';
 import type { DriverUnavailableApi } from '../models/api/driver-unavailability-api';
 import odooApi from '../../core/api/odoo-api';
 
+/**
+ * Service class to manage driver unavailabilities
+ */
 class DriverUnavailabilityServiceApi {
+  /**
+   * Method to get driver unavailabilities by driver ID
+   * @param driverId ID of the driver
+   * @returns Array of driver unavailabilities
+   */
   static async getDriverUnavailabilitiesById(
     driverId: number,
   ): Promise<DriverUnavailable[]> {
@@ -32,11 +40,18 @@ class DriverUnavailabilityServiceApi {
     }
   }
 
-  static async createDriverUnavailability(newItem: DriverUnavailabilityCreate) {
+  /**
+   * Method to create a new driver unavailability
+   * @param newItem Object with the data to create a new driver unavailability
+   */
+  static async createDriverUnavailability(
+    newItem: DriverUnavailabilityCreate,
+  ): Promise<DriverUnavailable> {
     const data = driverUnavailabilityToApi(newItem);
 
     try {
-      await odooApi.post('/drivers/unavailability', data);
+      const response = await odooApi.post<DriverUnavailableApi>('/drivers/unavailability', data);
+      return driverUnavailabilityToLocal(response.data);
     } catch (error) {
       console.log(error);
       if (error instanceof AxiosError) {

@@ -4,8 +4,8 @@ import type {
   ManeuverSimple,
   TravelSimple,
 } from '../../core/models';
+import type { DriverSimple, Modality } from './driver-model';
 
-import type { DriverSimple } from './driver-model';
 import type { MaintenanceRecordSimple } from '../../maintenance/models';
 import type { SimpleData } from '../../core/types/global-types';
 
@@ -21,7 +21,7 @@ export interface VehicleBase {
   fleetType: string;
   status: string;
   vehicleType: string;
-  modality: string;
+  modality: Modality;
   loadType: string;
 
   state: VehicleState;
@@ -45,6 +45,16 @@ export interface VehicleSimple {
   status: string;
   modality: string;
   loadType: string;
+}
+
+export interface VehicleUpdate {
+  companyId?: number | null;
+  branchId?: number | null;
+  stateId?: number | null;
+  driverId?: number | null;
+  vehicleType?: string | null;
+  modality?: Modality | null;
+  typeLoad?: string | null;
 }
 
 export type VehicleRealStatus =

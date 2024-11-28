@@ -2,7 +2,9 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { Driver } from '../models/driver-model';
 import DriverServiceApi from '../services/driver-service';
+import { SelectItem } from '../../core/types/global-types';
 import toast from 'react-hot-toast';
+import { useMemo } from 'react';
 
 const mainKey = 'drivers';
 
@@ -24,8 +26,17 @@ export const useDriverQueries = () => {
     },
   });
 
+  const AvailableDrivers = useMemo<SelectItem[]>(() => {
+    return (driversQuery.data || [])
+      .map((d) => ({
+        key: d.id,
+        value: d.name,
+      }));
+  }, [driversQuery.data]);
+
   return {
     drivers: driversQuery.data || [],
+    AvailableDrivers,
     driversQuery,
     driverUpdateMutattion,
   };

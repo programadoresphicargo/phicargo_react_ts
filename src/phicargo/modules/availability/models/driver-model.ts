@@ -1,7 +1,7 @@
 import { CompanySimple } from '../../core/models';
 import { VehicleSimple } from './vehicle-model';
 
-export type Modality = 'full' | 'single' | 'SIN ASIGNAR';
+export type Modality = 'full' | 'sencillo' | 'SIN ASIGNAR';
 export type IsDangerous = 'SI' | 'NO' | 'SIN ASIGNAR';
 export type Job = 'OPERADOR' | 'MOVEDOR' | 'OPERADOR POSTURERO';
 export type Status = 'viaje' | 'disponible' | 'maniobra' | 'SIN ASIGNAR';
