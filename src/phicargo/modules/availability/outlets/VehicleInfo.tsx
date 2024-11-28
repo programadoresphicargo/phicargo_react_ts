@@ -3,31 +3,63 @@ import {
   ModalBody,
   ModalContent,
   ModalHeader,
+  Spinner,
   Tab,
   Tabs,
 } from '@nextui-org/react';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 
+import { BsBusFrontFill } from 'react-icons/bs';
+import { FaCircle } from 'react-icons/fa6';
 import PostureForm from '../components/PostureForm';
 import VehicleForm from '../components/VehicleForm';
-import { useNavigate } from 'react-router-dom';
+import { useMemo } from 'react';
+import { useVehicleQueries } from '../hooks/useVehicleQueries';
 
 const VehicleInfo = () => {
   const navigate = useNavigate();
+  const { id } = useParams();
+
+  const { vehicles } = useVehicleQueries();
+
+  const vehicle = useMemo(
+    () => vehicles.find((vehicle) => vehicle.id === Number(id)),
+    [vehicles, id],
+  );
 
   const onClose = () => {
     navigate('/disponibilidad/unidades');
   };
 
+  if (!id) {
+    return <Navigate to="/disponibilidad/unidades" />;
+  }
+
   return (
-    <Modal isOpen={true} onOpenChange={onClose} size="5xl">
+    <Modal isOpen={true} onOpenChange={onClose} size="4xl">
       <ModalContent>
         {() => (
           <>
-            <ModalHeader className="flex flex-col pb-1 bg-gray-100 gap-1">
-              <h3 className="font-bold text-center text-2xl">
-                Información del Vehiculo
+            <ModalHeader className="flex flex-col pb-2 bg-[#dadfeb]">
+              <h3 className="font-bold text-xl text-center text-gray-800 uppercase">
+                Información del Vehículo
               </h3>
+              <div className="flex justify-center gap-2">
+                <div className="flex items-center text-medium">
+                  <BsBusFrontFill className="text-blue-500 mr-2" />
+                  <span className="font-semibold text-gray-800">Unidad:</span>
+                  <span className="ml-1 text-gray-700">{vehicle?.name}</span>
+                </div>
+                <div className="flex items-center text-medium">
+                  <FaCircle className="text-green-500 mr-2" />
+                  <span className="text-gray-800">Estado:</span>
+                  <span className="ml-1 text-gray-700">
+                    {vehicle?.state.name}
+                  </span>
+                </div>
+              </div>
             </ModalHeader>
+
             <ModalBody>
               <div className="flex w-full flex-col">
                 <Tabs
@@ -36,10 +68,10 @@ const VehicleInfo = () => {
                   variant="bordered"
                 >
                   <Tab key="vehicle-data" title="Datos Vehiculo">
-                    <VehicleForm />
+                    {vehicle ? <VehicleForm vehicle={vehicle} /> : <Spinner />}
                   </Tab>
                   <Tab key="posture-data" title="Posturas">
-                    <PostureForm />
+                    {vehicle ? <PostureForm vehicle={vehicle} /> : <Spinner />}
                   </Tab>
                 </Tabs>
               </div>

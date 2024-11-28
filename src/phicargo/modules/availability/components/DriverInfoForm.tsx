@@ -5,10 +5,11 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { SelectInput } from '../../core/components/inputs/SelectInput';
 import { TextInput } from '../../core/components/inputs/TextInput';
 import { useDriverQueries } from '../hooks/useDriverQueries';
+import { useMemo } from 'react';
 
 const initialStateForm: DriverEdit = {
-  driverLicenseId: '',
-  driverLicenseType: '',
+  licenseId: '',
+  licenseType: '',
   jobId: undefined,
   modality: 'full',
   isDangerous: 'NO',
@@ -18,18 +19,33 @@ interface Props {
   driver?: Driver;
 }
 
+const transformDriverToForm = (driver: Driver): DriverEdit => ({
+  licenseId: driver.licenseId,
+  licenseType: driver.licenseType,
+  jobId: driver.job.id,
+  modality: driver.modality,
+  isDangerous: driver.isDangerous ? 'SI' : 'NO',
+});
+
 const disabled = false;
 
 const DriverInfoForm = (props: Props) => {
   const { driver } = props;
 
-  const { control, handleSubmit } = useForm<DriverEdit>({
-    defaultValues: driver ? (driver as DriverEdit) : initialStateForm,
-  });
-
   const {
     driverUpdateMutattion: { mutate: updateDriver, isPending },
   } = useDriverQueries();
+
+  const formData = useMemo(() => {
+    if (!driver) {
+      return initialStateForm;
+    }
+    return transformDriverToForm(driver);
+  }, [driver]);
+
+  const { control, handleSubmit } = useForm<DriverEdit>({
+    defaultValues: formData,
+  });
 
   const onSubmit: SubmitHandler<DriverEdit> = (data) => {
     if (!driver) return;
@@ -45,13 +61,13 @@ const DriverInfoForm = (props: Props) => {
         <form className="flex flex-col gap-2">
           <TextInput
             control={control}
-            name="driverLicenseId"
+            name="licenseId"
             label="No. Licencia"
             isDisabled={disabled}
             />
           <TextInput
             control={control}
-            name="driverLicenseType"
+            name="licenseType"
             label="Tipo Licencia"
             isDisabled={disabled}
             />

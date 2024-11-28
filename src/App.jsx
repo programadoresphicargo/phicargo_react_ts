@@ -38,6 +38,7 @@ import { Toaster } from 'react-hot-toast';
 const VehicleAvailabilityPage = lazy(() => import('./phicargo/modules/availability/pages/VehicleAvailabilityPage'));
 const VehicleInfo = lazy(() => import('./phicargo/modules/availability/outlets/VehicleInfo'));
 const DriverAvailabilityPage = lazy(() => import('./phicargo/modules/availability/pages/DriverAvailabilityPage'));
+const DriverInfo = lazy(() => import('./phicargo/modules/availability/outlets/DriverInfo'));
 const NotAssignedPage = lazy(() => import('./phicargo/modules/availability/pages/NotAssignedPage'));
 const SummaryPage = lazy(() => import('./phicargo/modules/availability/pages/SummaryPage'));
 
@@ -162,7 +163,16 @@ const AppRouter = () => {
                   <DriverAvailabilityPage />
                 </Suspense>
               } 
-            />
+            >
+              <Route 
+                path='detalles/:id' 
+                element={
+                  <Suspense fallback={<LoadingPage />}> 
+                    <DriverInfo />
+                  </Suspense>
+                } 
+              />
+            </Route>
             <Route 
               path='resumen' 
               element={

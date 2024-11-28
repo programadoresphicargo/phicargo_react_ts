@@ -70,8 +70,8 @@ export const driverSimpleToLocal = (driver: DriverSimpleApi): DriverSimple => ({
  */
 export const driverUpdateToApi = (driver: DriverEdit): DriverEditApi => ({
   job_id: driver.jobId,
-  tms_driver_license_id: driver.driverLicenseId,
-  tms_driver_license_type: driver.driverLicenseType,
+  tms_driver_license_id: driver.licenseId,
+  tms_driver_license_type: driver.licenseType,
   x_modalidad: driver.modality,
   x_peligroso_lic:
     driver.isDangerous === 'SI' || driver.isDangerous === 'NO'

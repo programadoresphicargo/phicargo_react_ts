@@ -1,6 +1,9 @@
+import { SubmitHandler, useForm } from 'react-hook-form';
+
+import { Button } from '@nextui-org/react';
 import { SelectInput } from '../../core/components/inputs/SelectInput';
 import { TextInput } from '../../core/components/inputs/TextInput';
-import { useForm } from 'react-hook-form';
+import { Vehicle } from '../models/vehicle-model';
 
 interface PostureCreate {
   driverId: number;
@@ -14,10 +17,20 @@ const initialState: PostureCreate = {
   reason: '',
 };
 
-const PostureForm = () => {
-  const { control } = useForm<PostureCreate>({
+interface Props {
+  vehicle: Vehicle;
+}
+
+const PostureForm = (props: Props) => {
+  const { vehicle } = props;
+
+  const { control, handleSubmit } = useForm<PostureCreate>({
     defaultValues: initialState,
   });
+
+  const onSubmit: SubmitHandler<PostureCreate> = (data) => {
+    console.log(data, vehicle);
+  };
 
   return (
     <div>
@@ -37,6 +50,10 @@ const PostureForm = () => {
         label="Motivo de postura"
         rules={{ required: 'Este campo es requerido' }}
       />
+
+      <Button onClick={handleSubmit(onSubmit)} type="submit">
+        Guardar
+      </Button>
     </div>
   );
 };

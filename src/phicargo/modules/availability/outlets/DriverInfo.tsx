@@ -1,30 +1,41 @@
 import { Modal, ModalBody, ModalContent, ModalHeader } from '@nextui-org/react';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useMemo, useState } from 'react';
 
-import DriverInfoForm from './DriverInfoForm';
-import DriverModalHeader from './DriverModalHeader';
-import DriverPermissions from './DriverPermissions';
-import UnavailiabilityCreateModal from './UnavailiabilityCreateModal';
+import DriverInfoForm from '../components/DriverInfoForm';
+import DriverModalHeader from '../components/DriverModalHeader';
+import DriverPermissions from '../components/DriverPermissions';
+import UnavailiabilityCreateModal from '../components/UnavailiabilityCreateModal';
 import { useDriverQueries } from '../hooks/useDriverQueries';
 
-interface Props {
-  onOpenChange: () => void;
-  driverId: number;
-}
+const DriverInfo = () => {
 
-const DriverModal = (props: Props) => {
-  const { onOpenChange, driverId } = props;
+  const { id } = useParams();
+  const navigate = useNavigate();
+
   const [isOpen, setIsOpen] = useState(false);
 
   const { drivers } = useDriverQueries();
   const driver = useMemo(
-    () => drivers.find((d) => d.id === driverId),
-    [drivers, driverId],
+    () => drivers.find((d) => d.id === Number(id)),
+    [drivers, id],
   );
+
+  const onClose = () => {
+    navigate('/disponibilidad/operadores');
+  }
+
+  if (!id) {
+    return <Navigate to="/disponibilidad/operadores" />;
+  }
 
   return (
     <>
-      <Modal isOpen={true} onOpenChange={onOpenChange} size="2xl">
+      <Modal 
+        isOpen={true} 
+        onOpenChange={onClose} 
+        size="2xl"
+      >
         <ModalContent>
           {() => (
             <>
@@ -33,7 +44,7 @@ const DriverModal = (props: Props) => {
               </ModalHeader>
               <ModalBody className="flex flex-col md:flex-row bg-gray-400 p-4 gap-4">
                 <div className="w-full md:w-1/2">
-                  <DriverPermissions driverId={driverId} />
+                  <DriverPermissions driverId={Number(id)} />
                 </div>
                 <div className="w-full md:w-1/2">
                   <DriverInfoForm driver={driver} />
@@ -44,7 +55,7 @@ const DriverModal = (props: Props) => {
         </ModalContent>
       </Modal>
       <UnavailiabilityCreateModal
-        driverId={driverId}
+        driverId={Number(id)}
         isOpen={isOpen}
         onOpenChange={() => setIsOpen(!isOpen)}
       />
@@ -52,4 +63,4 @@ const DriverModal = (props: Props) => {
   );
 };
 
-export default DriverModal;
+export default DriverInfo;

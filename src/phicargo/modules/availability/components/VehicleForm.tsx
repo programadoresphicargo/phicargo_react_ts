@@ -1,4 +1,3 @@
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Vehicle, VehicleUpdate } from '../models/vehicle-model';
 
@@ -6,6 +5,7 @@ import { Button } from '@nextui-org/react';
 import { SelectInput } from '../../core/components/inputs/SelectInput';
 import { useDriverQueries } from '../hooks/useDriverQueries';
 import { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useVehicleQueries } from '../hooks/useVehicleQueries';
 
 const initialState: VehicleUpdate = {
@@ -28,23 +28,24 @@ const transformVehicleToForm = (vehicle: Vehicle): VehicleUpdate => ({
   typeLoad: vehicle.loadType,
 });
 
-const VehicleForm = () => {
-  const { id } = useParams();
+interface Props {
+  vehicle: Vehicle;
+}
+
+const VehicleForm = (props: Props) => {
+
+  const { vehicle } = props;
+
   const navigate = useNavigate();
 
   const { 
-    vehicles,
     vehicleUpdateMutation: { mutate: updateVehicle, isPending }, 
   } = useVehicleQueries();
+
   const {
     driversQuery: { isFetching },
     AvailableDrivers,
   } = useDriverQueries();
-
-  const vehicle = useMemo(
-    () => vehicles.find((vehicle) => vehicle.id === Number(id)),
-    [vehicles, id],
-  );
 
   const formData = useMemo(() => {
     if (!vehicle) {
@@ -61,16 +62,12 @@ const VehicleForm = () => {
 
   const onSubmit: SubmitHandler<VehicleUpdate> = (data) => {
     updateVehicle({
-      id: Number(id),
+      id: vehicle.id,
       updatedItem: data,
     }, {
       onSettled: () => navigate('/disponibilidad/unidades'),
     });
   };
-
-  if (!id) {
-    return <Navigate to="/disponibilidad/unidades" />;
-  }
 
   return (
     <form>

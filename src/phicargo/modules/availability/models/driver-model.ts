@@ -39,8 +39,8 @@ export type DriverSimple = Pick<
 
 export interface DriverEdit {
   jobId?: number;
-  driverLicenseId?: string;
-  driverLicenseType?: string;
+  licenseId?: string;
+  licenseType?: string;
   modality?: Modality;
   isDangerous?: IsDangerous;
 }

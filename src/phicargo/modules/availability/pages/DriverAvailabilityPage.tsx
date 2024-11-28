@@ -1,20 +1,19 @@
 import { Box, IconButton, Tooltip } from '@mui/material';
+import { Outlet, useNavigate } from 'react-router-dom';
 
 import { Driver } from '../models/driver-model';
-import DriverModal from '../components/DriverModal';
 import MaterialTableBase from '../../core/components/tables/MaterialTableBase';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { useDriverQueries } from '../hooks/useDriverQueries';
 import { useDriversColumns } from '../hooks/useDriversColumns';
 import { useMaterialReactTable } from 'material-react-table';
-import { useState } from 'react';
 
 const DriverAvailabilityPage = () => {
+  const navigate = useNavigate();
+
   const {
     driversQuery: { data: drivers, isFetching, refetch },
   } = useDriverQueries();
-
-  const [editId, setEditId] = useState<number | null>(null);
 
   const { columns } = useDriversColumns();
 
@@ -39,7 +38,8 @@ const DriverAvailabilityPage = () => {
     },
     // CUSTOMIZATIONS
     muiTableBodyRowProps: ({ row }) => ({
-      onDoubleClick: () => setEditId(row.original.id),
+      onDoubleClick: () =>
+        navigate(`/disponibilidad/operadores/detalles/${row.original.id}`),
       sx: { cursor: 'pointer' },
     }),
     renderTopToolbarCustomActions: () => (
@@ -61,9 +61,7 @@ const DriverAvailabilityPage = () => {
   return (
     <>
       <MaterialTableBase table={table} />
-      {editId && (
-        <DriverModal driverId={editId} onOpenChange={() => setEditId(null)} />
-      )}
+      <Outlet />
     </>
   );
 };
