@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { Driver } from '../models/driver-model';
 import DriverServiceApi from '../services/driver-service';
@@ -9,6 +9,7 @@ import { useMemo } from 'react';
 const mainKey = 'drivers';
 
 export const useDriverQueries = () => {
+  const queryClient = useQueryClient();
   const driversQuery = useQuery<Driver[]>({
     queryKey: [mainKey],
     queryFn: DriverServiceApi.getAllDrivers,
@@ -18,7 +19,10 @@ export const useDriverQueries = () => {
 
   const driverUpdateMutattion = useMutation({
     mutationFn: DriverServiceApi.updateDriver,
-    onSuccess: () => {
+    onSuccess: (item) => {
+      queryClient.setQueryData([mainKey], (prev?: Driver[]) =>
+        prev?.map((d) => (d.id === item.id ? item : d)),
+      );
       toast.success('Actualizado con éxito');
     },
     onError: (error: Error) => {
