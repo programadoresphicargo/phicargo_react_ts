@@ -1,12 +1,18 @@
 import type { Vehicle } from '../models/vehicle-model';
 
 import VehicleServiceApi from '../services/vehicle-service';
-import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query';
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 
 const mainKey = 'vehicles';
 
 export const useVehicleQueries = () => {
+  const queryClient = useQueryClient();
   const vehicleQuery = useQuery<Vehicle[]>({
     queryKey: [mainKey],
     queryFn: VehicleServiceApi.getVehicles,
@@ -17,7 +23,10 @@ export const useVehicleQueries = () => {
 
   const vehicleUpdateMutation = useMutation({
     mutationFn: VehicleServiceApi.updateVehicle,
-    onSuccess: () => {
+    onSuccess: (item) => {
+      queryClient.setQueryData([mainKey], (prev?: Vehicle[]) =>
+        prev?.map((d) => (d.id === item.id ? item : d)),
+      );
       toast.success('Actualizado con éxito');
     },
     onError: (error: Error) => {
@@ -28,7 +37,7 @@ export const useVehicleQueries = () => {
   return {
     vehicles: vehicleQuery.data || [],
     vehicleQuery,
-    vehicleUpdateMutation
+    vehicleUpdateMutation,
   };
 };
 
