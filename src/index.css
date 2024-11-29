@@ -1,3 +1,9 @@
+
+@font-face {
+  font-family: "ProductSans-Thin";
+  src: local("ProductSans-Thin"), url('/src/assets/fonts/ProductSans-Thin.ttf') format('truetype');
+}
+
 @font-face {
   font-family: 'MyCustomFont';
   src: url('../assets/fonts/ProductSans-Regular.ttf') format('woff2'),
@@ -12,4 +18,26 @@
 
 .swal2-container {
   z-index: 20000 !important;
+}
+
+/* Estilo minimalista para la scrollbar */
+::-webkit-scrollbar {
+  width: 12px; /* Ancho de la scrollbar */
+  height: 12px; /* Alto de la scrollbar horizontal */
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; /* Fondo del track transparente */
+  margin: 2px; /* Margen alrededor del track para separación */
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2); /* Thumb oscuro pero translúcido */
+  border-radius: 10px; /* Bordes redondeados */
+  border: 2px solid transparent; /* Espacio alrededor del thumb */
+  background-clip: padding-box; /* Clip para crear separación */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.4); /* Thumb un poco más oscuro al pasar el mouse */
 }
