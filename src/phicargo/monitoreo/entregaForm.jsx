@@ -1,16 +1,18 @@
-import React, { useState, useEffect, useContext, useMemo } from 'react';
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/react";
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure } from "@nextui-org/react";
-import axios from 'axios';
+import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react";
+import { Card, CardBody, CardFooter, CardHeader, Divider, Image, Link } from "@nextui-org/react";
+import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@nextui-org/react";
+
 import Autocomplete from '@mui/material/Autocomplete';
 import Grid from '@mui/material/Grid';
-import { Card, CardHeader, CardBody, CardFooter, Divider, Link, Image } from "@nextui-org/react";
-import { toast } from 'react-toastify';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
+import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import { useAuthContext } from '../modules/auth/hooks';
 
 const EntregaForm2 = ({ id_entrega, onClose }) => {
 
@@ -22,6 +24,8 @@ const EntregaForm2 = ({ id_entrega, onClose }) => {
         tipo_evento: ''
     };
 
+    const { session } = useAuthContext();
+
     const [formData, setFormData] = useState(initialFormData);
 
     useEffect(() => {
@@ -32,7 +36,7 @@ const EntregaForm2 = ({ id_entrega, onClose }) => {
 
     const fetchTipoEvento = () => {
         const baseUrl = '/phicargo/monitoreo/entrega_turno/getTipoEvento.php';
-
+        const userId = session.user.id;
         axios.get(baseUrl)
             .then(response => {
                 const data = response.data.map(item => ({
