@@ -81,7 +81,7 @@ export const PrivateRoutes = () => {
       <Route path="/ViajesFinalizados" element={<ControlViajesFinalizados />} />
       <Route path="/ViajesProgramados" element={<ControlViajesProgramados />} />
 
-      <Route path="/CorreosElectronicos" element={<CorreosElectronicos />} />
+      <Route path="/CorreosElectronicos" element={<CorreosElectronicos estado={undefined} />} />
 
       <Route path="/cumplimiento" element={<ReporteCumplimiento />} />
 
