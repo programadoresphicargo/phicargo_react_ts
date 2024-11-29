@@ -1,22 +1,22 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import Slide from '@mui/material/Slide';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
 import { Box, Button } from '@mui/material';
-
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
+import React, { useEffect, useMemo, useState } from 'react';
+
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 import MonitoreoNavbar from '../monitoreo/Navbar';
+import Slide from '@mui/material/Slide';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const CorreosElectronicos = ({ estado }) => {
+const CorreosElectronicos = () => {
 
   const [open, setOpen] = React.useState(false);
   const [id_acceso, setIDAcceso] = useState(0);

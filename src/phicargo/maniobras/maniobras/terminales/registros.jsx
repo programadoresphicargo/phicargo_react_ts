@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+
 import Button from '@mui/material/Button';
 import FormularioTerminales from './informacion';
 import ManiobrasNavBar from '../../Navbar';
