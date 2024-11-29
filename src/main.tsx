@@ -2,7 +2,9 @@ import './index.css';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-import AppRouter from './App';
+import { AppRouter } from './router/AppRouter';
+// import AppRouter from './App';
+import { AuthProvider } from './phicargo/modules/auth/context';
 import { NextUIProvider } from '@nextui-org/react';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { StrictMode } from 'react';
@@ -12,12 +14,17 @@ const queryClient = new QueryClient();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <NextUIProvider locale="es-MX">
-        <AppRouter />
-      </NextUIProvider>
-      <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" />
-    </QueryClientProvider>
+    <AuthProvider>
+      <QueryClientProvider client={queryClient}>
+        <NextUIProvider locale="es-MX">
+          <AppRouter />
+        </NextUIProvider>
+        <ReactQueryDevtools
+          initialIsOpen={false}
+          buttonPosition="bottom-left"
+        />
+      </QueryClientProvider>
+    </AuthProvider>
   </StrictMode>,
 );
 
