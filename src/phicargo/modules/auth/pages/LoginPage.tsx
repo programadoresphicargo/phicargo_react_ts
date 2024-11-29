@@ -1,88 +1,84 @@
+import { Button, Image } from '@nextui-org/react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+
+import { PasswordInput } from '../../core/components/inputs/PasswordInput';
+import { TextInput } from '../../core/components/inputs/TextInput';
+import { UserLogin } from '../models';
+import logo from '../../../../assets/img/phicargo_logo_white.png';
+import tractScania from '../../../../assets/img/tract_scannia.jpg';
+import { useLoginMutation } from '../hooks';
+
+const initialForm: UserLogin = {
+  username: '',
+  password: '',
+};
+
 const LoginPage = () => {
+  const { control, handleSubmit } = useForm<UserLogin>({
+    defaultValues: initialForm,
+  });
+
+  const {
+    loginMutation: { mutate: login, isPending },
+  } = useLoginMutation();
+
+  const onSubmit: SubmitHandler<UserLogin> = (data) => {
+    login(data);
+  }
+
   return (
-    <>
-      <div className="h-screen flex">
-        <div className="flex w-1/2 bg-gradient-to-tr from-[#5e0e0d] to-[#a50b08] i justify-around items-center">
-          <div>
-            <h1 className="text-white font-bold text-4xl font-sans">
-              Phicargo
-            </h1>
-            <p className="text-white mt-1">
-              Iniciar Sesión
-            </p>
-            <button
-              type="submit"
-              className="block w-28 bg-white text-indigo-800 mt-4 py-2 rounded-2xl font-bold mb-2"
-            >
-              Read More
-            </button>
-          </div>
-        </div>
-        <div className="flex w-1/2 justify-center items-center bg-white">
-          <form className="bg-white">
-            <h1 className="text-gray-800 font-bold text-2xl mb-1">
-              Hola de Nuevo
-            </h1>
-            <p className="text-sm font-normal text-gray-600 mb-7">
-              Inicia Sesión
-            </p>
-            <div className="flex items-center border-2 py-2 px-3 rounded-2xl mb-4">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 text-gray-400"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"
-                />
-              </svg>
-              <input
-                className="pl-2 outline-none border-none"
-                type="text"
-                name=""
-                id=""
-                placeholder="Email Address"
-              />
-            </div>
-            <div className="flex items-center border-2 py-2 px-3 rounded-2xl">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 text-gray-400"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-              <input
-                className="pl-2 outline-none border-none"
-                type="text"
-                name=""
-                id=""
-                placeholder="Password"
-              />
-            </div>
-            <button
-              type="submit"
-              className="block w-full bg-indigo-600 mt-4 py-2 rounded-2xl text-white font-semibold mb-2"
-            >
-              Login
-            </button>
-            <span className="text-sm ml-2 hover:text-blue-500 cursor-pointer">
-              Forgot Password ?
-            </span>
-          </form>
+    <div className="bg-[#17566d] flex h-screen">
+      <div className="relative w-3/5 h-full hidden lg:block">
+        <img
+          src={tractScania}
+          alt="Tract Scania"
+          className="object-cover w-full h-full"
+        />
+        <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <h2 className="text-6xl font-extrabold text-transparent bg-clip-text text-white p-4 shadow-lg rounded-xl">
+            Bienvenido
+          </h2>
         </div>
       </div>
-    </>
+
+      {/* Sección del formulario */}
+      <div className="lg:p-36 md:p-52 sm:p-20 p-8 w-full lg:w-2/5 flex flex-col justify-center items-center">
+        {/* Logo centrado */}
+        <div className="flex justify-center mb-8">
+          <Image width={300} alt="phicargo logo" src={logo} />
+        </div>
+
+        {/* Formulario */}
+        <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
+          <div className="mb-6">
+            <TextInput
+              control={control}
+              name="username"
+              label="Usuario"
+              placeholder="Username"
+              rules={{ required: 'El usuario es requerido' }}
+            />
+          </div>
+          <div className="mb-6">
+            <PasswordInput
+              control={control}
+              name="password"
+              label="Password"
+              placeholder="Password"
+              rules={{ required: 'La contraseña es requerida' }}
+            />
+          </div>
+          <Button
+            color="primary"
+            className="w-full mb-4  bg-[#5e0e0d] font-bold uppercase text-medium transform transition-transform duration-300 hover:scale-105"
+            type="submit"
+            isLoading={isPending}
+          >
+            Iniciar Sesión
+          </Button>
+        </form>
+      </div>
+    </div>
   );
 };
 
