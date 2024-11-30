@@ -12,6 +12,7 @@ import CardMedia from '@mui/material/CardMedia';
 import React, { useState, useCallback, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { toast } from 'react-toastify';
+const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const CustomCard = styled(Card)(({ isSelected }) => ({
     backgroundColor: isSelected ? '#b3e5fc' : '#ffffff',
@@ -34,7 +35,7 @@ export default function PanelEstatus({ id_maniobra, open, handleClose }) {
     };
 
     useEffect(() => {
-        axios.get('/phicargo/modulo_maniobras/panel_envio/getEstatus.php')
+        axios.get(VITE_PHIDES_API_URL + '/modulo_maniobras/panel_envio/getEstatus.php')
             .then((response) => {
                 setData(response.data);
             })

@@ -8,7 +8,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 import { Box, Card, Grid } from '@mui/material';
 import { Button } from '@nextui-org/button';
-import NavbarViajes from '../../navbar';
+import NavbarViajes from '../../../navbar';
 import {
   MaterialReactTable,
   useMaterialReactTable,

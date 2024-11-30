@@ -7,6 +7,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const CancelarManiobraDialog = ({ open, handleClose, id_maniobra }) => {
     const [loading, setLoading] = useState(false);
@@ -14,7 +15,7 @@ const CancelarManiobraDialog = ({ open, handleClose, id_maniobra }) => {
     const cancelarManiobra = () => {
         setLoading(true); // Mostrar un estado de carga mientras se realiza la solicitud
 
-        axios.post(`/phicargo/modulo_maniobras/maniobra/cancelar_maniobra.php?id_maniobra=${id_maniobra}`)
+        axios.post(VITE_PHIDES_API_URL + `/modulo_maniobras/maniobra/cancelar_maniobra.php?id_maniobra=${id_maniobra}`)
             .then((response) => {
                 setLoading(false);
                 if (response.data === 1) {

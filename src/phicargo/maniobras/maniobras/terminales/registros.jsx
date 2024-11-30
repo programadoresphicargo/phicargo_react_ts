@@ -3,6 +3,7 @@ import { MaterialReactTable, useMaterialReactTable } from 'material-react-table'
 import Button from '@mui/material/Button';
 import FormularioTerminales from './informacion';
 import ManiobrasNavBar from '../../Navbar';
+const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const Terminales = () => {
 
@@ -18,24 +19,24 @@ const Terminales = () => {
         fetchData();
     };
 
-    const [isLoading2, setILoading] = useState(false); 
+    const [isLoading2, setILoading] = useState(false);
     const [data, setData] = useState([]);
 
     const fetchData = useCallback(async () => {
         try {
             setILoading(true);
-            const response = await fetch('/phicargo/modulo_maniobras/terminales/getTerminales.php');
+            const response = await fetch(VITE_PHIDES_API_URL + '/modulo_maniobras/terminales/getTerminales.php');
             const jsonData = await response.json();
             setData(jsonData);
             setILoading(false);
         } catch (error) {
             console.error('Error al obtener los datos:', error);
-            setILoading(false); 
+            setILoading(false);
         }
-    }, []); 
+    }, []);
 
     useEffect(() => {
-        fetchData(); 
+        fetchData();
     }, [fetchData]);
 
     const columns = useMemo(

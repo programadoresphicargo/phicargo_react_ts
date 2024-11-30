@@ -8,6 +8,7 @@ import {
   useMaterialReactTable,
 } from 'material-react-table';
 import ManiobrasNavBar from '../Navbar';
+const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const Nominas = () => {
 
@@ -45,7 +46,7 @@ const Nominas = () => {
       const formData = new FormData();
       formData.append('operador_id', '1070');
 
-      const response = await fetch('/phicargo/modulo_maniobras/pagos/getPagos.php', {
+      const response = await fetch(VITE_PHIDES_API_URL + '/modulo_maniobras/pagos/getPagos.php', {
         method: 'POST',
         body: formData,
       });

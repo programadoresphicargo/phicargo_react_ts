@@ -6,6 +6,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 import { Box } from '@mui/material';
+const { VITE_PHIDES_API_URL } = import.meta.env;
 
 import {
   MaterialReactTable,
@@ -51,7 +52,7 @@ const Maniobras = ({ estado_maniobra }) => {
 
     try {
       setLoading(true);
-      const response = await fetch('/phicargo/modulo_maniobras/control/tabla.php?estado_maniobra=' + estado_maniobra);
+      const response = await fetch(VITE_PHIDES_API_URL + '/modulo_maniobras/control/tabla.php?estado_maniobra=' + estado_maniobra);
       const jsonData = await response.json();
       setData(jsonData);
       setLoading(false);

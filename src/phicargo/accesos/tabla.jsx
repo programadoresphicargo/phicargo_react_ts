@@ -13,7 +13,6 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
-import { TransitionProps } from '@mui/material/transitions';
 import AccesoCompo from './AccesoCompo';
 import AccesoForm from './formulario';
 

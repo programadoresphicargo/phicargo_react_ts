@@ -1,21 +1,30 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import MonthSelector from '../../../mes';
-import Example2 from '../maniobras/modal';
 import { ThemeProvider } from '@mui/material/styles';
 import customFontTheme from '../../../theme';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
-
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import ManiobrasNavBar from '../Navbar';
 
-const CartasPorte = () => {
+const ContenedoresCambio = ({ setSelectedItems, onClose }) => {
+
+  const handleRowClick = (id, contenedor) => {
+    const newItem = { id_cp: id, contenedor: contenedor };
+    setSelectedItems((prevItems) => {
+      const exists = prevItems.some((item) => item.id === id);
+      if (!exists) {
+        return [...prevItems, newItem];
+      }
+      return prevItems;
+    });
+    onClose();
+  };
 
   const [selectedTab, setSelectedTab] = useState('carta');
 
@@ -32,24 +41,9 @@ const CartasPorte = () => {
     setSelectedMonth(event.target.value);
   };
 
-  const [modalShow, setModalShow] = useState(false);
-  const [modalContent, setModalContent] = useState('');
-  const [x_reference, setXreferenceContent] = useState('');
-  const [partner_id, setPartenerid] = useState('');
-
-  const handleShowModal = (id_cp, x_reference, partner_id) => {
-    setModalContent(id_cp);
-    setXreferenceContent(x_reference);
-    setModalShow(true);
-    setPartenerid(partner_id);
-  };
-
-  const handleCloseModal = () => setModalShow(false);
-
-  const [data, setData] = useState([]); // Estado para almacenar los datos
+  const [data, setData] = useState([]);
 
   const fetchData = async (month, selectedTab) => {
-
     if (!month || selectedTab === undefined) return;
     setLoading(true);
     try {
@@ -112,36 +106,6 @@ const CartasPorte = () => {
         header: 'Contenedor',
         size: 150,
       },
-      {
-        accessorKey: 'x_status_bel',
-        header: 'Estatus',
-        size: 150,
-        Cell: ({ cell }) => {
-          const value = cell.getValue();
-
-          let variant = 'secondary';
-          let text = '';
-          if (value === 'Ing') {
-            variant = 'success';
-            text = 'Ingresado';
-          } else if (value === 'P') {
-            variant = 'primary';
-            text = 'Patio';
-          } else if (value === 'local') {
-            variant = 'danger';
-            text = 'Local';
-          } else {
-            variant = 'danger';
-            text = value;
-          }
-
-          return (
-            <span className={`badge bg-${variant} rounded-pill`} style={{ width: '100px' }}>
-              {text}
-            </span>
-          );
-        },
-      },
     ],
     [],
   );
@@ -171,9 +135,8 @@ const CartasPorte = () => {
     },
     muiTableBodyRowProps: ({ row }) => ({
       onClick: () => {
-        if (row.subRows?.length) {
-        } else {
-          handleShowModal(row.original.id, row.original.x_reference, row.original.partner_id[0]);
+        if (!row.subRows?.length) {
+          handleRowClick(row.original.id, row.original.x_reference);
         }
       },
       style: {
@@ -200,7 +163,6 @@ const CartasPorte = () => {
 
   return (
     <div>
-      <ManiobrasNavBar />
       <Box display="flex" alignItems="center" m={2}>
         <Box sx={{ flexGrow: 1, mr: 2 }}>
           <MonthSelector
@@ -215,18 +177,11 @@ const CartasPorte = () => {
           </Tabs>
         </Box>
       </Box>
-      <Example2
-        show={modalShow}
-        handleClose={handleCloseModal}
-        id_cp={modalContent}
-        x_reference={x_reference}
-        id_cliente={partner_id} />
       <ThemeProvider theme={customFontTheme}>
-        {/* Agrega una key basada en selectedTab para forzar la reconstrucción */}
         <MaterialReactTable key={selectedTab} table={table} />
       </ThemeProvider>
     </div >
   );
 };
 
-export default CartasPorte;
+export default ContenedoresCambio;

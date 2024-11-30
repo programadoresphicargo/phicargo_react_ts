@@ -13,7 +13,6 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
-import { TransitionProps } from '@mui/material/transitions';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -21,6 +20,7 @@ import PersistentDrawerRight from './Eventos';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { Box } from '@mui/material';
+const { VITE_PHIDES_API_URL } = import.meta.env;
 
 import {
   MaterialReactTable,
@@ -51,7 +51,7 @@ const Entregas = ({ fecha }) => {
 
     try {
       setLoading(true);
-      const response = await fetch('/phicargo/monitoreo/entrega_turno/getEntregas.php?fecha=' + fecha);
+      const response = await fetch(VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/getEntregas.php?fecha=' + fecha);
       const jsonData = await response.json();
       setData(jsonData);
       setLoading(false);
@@ -62,7 +62,7 @@ const Entregas = ({ fecha }) => {
 
   const NuevaEntrega = async () => {
     try {
-      const response = await fetch('/phicargo/monitoreo/entrega_turno/abrirEntrega.php');
+      const response = await fetch(VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/abrirEntrega.php');
       toast.success(response);
       handleClose();
     } catch (error) {
@@ -72,7 +72,7 @@ const Entregas = ({ fecha }) => {
 
   const ComprobarEntrega = async () => {
     try {
-      const response = await axios.get('/phicargo/monitoreo/entrega_turno/comprobarEntrega.php');
+      const response = await axios.get(VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/comprobarEntrega.php');
       const data = response.data;
 
       if (data.status === 1) {

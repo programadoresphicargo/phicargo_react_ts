@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Autocomplete } from '@mui/material';
 import TextField from '@mui/material/TextField';
+const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const MyComponent = ({ label, id, name, onChange, value, tipo, disabled, error_flota }) => {
     const [options, setOptions] = useState([]);
@@ -9,7 +10,7 @@ const MyComponent = ({ label, id, name, onChange, value, tipo, disabled, error_f
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const baseUrl = '/phicargo/modulo_maniobras/data/get_flota.php';
+        const baseUrl = VITE_PHIDES_API_URL + '/modulo_maniobras/data/get_flota.php';
 
         axios.get(`${baseUrl}?fleet_type=${tipo}`)
             .then(response => {

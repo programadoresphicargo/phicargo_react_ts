@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { AccesoContext } from "./context";
 import axios from 'axios';
 import { toast } from "react-toastify";
+const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const AccesoCompo = ({ children }) => {
     const [id_acceso, setAcceso] = useState([]);
@@ -16,7 +17,7 @@ const AccesoCompo = ({ children }) => {
     const AñadirVehiculo = (id_vehiculo) => {
         const vehiculoData = { id_vehiculo };
 
-        axios.post("/phicargo/accesos/vehiculos/getVehiculo.php", vehiculoData)
+        axios.post(VITE_PHIDES_API_URL + "/accesos/vehiculos/getVehiculo.php", vehiculoData)
             .then(response => {
                 const data = response.data[0];
                 const nuevoVehiculo = {

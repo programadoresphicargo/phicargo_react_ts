@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Autocomplete } from '@mui/material';
 import TextField from '@mui/material/TextField';
+const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const SelectOperador = ({ label, id, name, onChange, value, disabled, error_operador }) => {
     const [options, setOptions] = useState([]);
@@ -9,7 +10,7 @@ const SelectOperador = ({ label, id, name, onChange, value, disabled, error_oper
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const baseUrl = '/phicargo/modulo_maniobras/data/get_operadores.php';
+        const baseUrl = VITE_PHIDES_API_URL + '/modulo_maniobras/data/get_operadores.php';
 
         axios.get(`${baseUrl}`)
             .then(response => {

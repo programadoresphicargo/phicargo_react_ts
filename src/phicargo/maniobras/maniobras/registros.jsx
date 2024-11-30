@@ -3,6 +3,7 @@ import Formulariomaniobra from './formulario_maniobra';
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 import Button from '@mui/material/Button';
 import { format, isValid } from 'date-fns';
+const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const Registromaniobras = ({ id_cp, id_cliente }) => {
     const [isLoading2, setILoading] = useState();
@@ -14,7 +15,7 @@ const Registromaniobras = ({ id_cp, id_cliente }) => {
     const fetchData = useCallback(async () => {
         try {
             setILoading(true);
-            const response = await fetch('/phicargo/modulo_maniobras/maniobra/registros.php?id_cp=' + id_cp);
+            const response = await fetch(VITE_PHIDES_API_URL + '/modulo_maniobras/maniobra/registros.php?id_cp=' + id_cp);
             const jsonData = await response.json();
             setData(jsonData);
             setILoading(false);

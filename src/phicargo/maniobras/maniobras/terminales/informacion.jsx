@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
+const { VITE_PHIDES_API_URL } = import.meta.env;
 
 function FormularioTerminales({ open, onClose, id_terminal }) {
 
@@ -13,7 +14,7 @@ function FormularioTerminales({ open, onClose, id_terminal }) {
     useEffect(() => {
         const fetchVehiculoData = async () => {
             try {
-                const response = await axios.get('/phicargo/modulo_maniobras/terminales/getTerminal.php?id_terminal=' + id_terminal);
+                const response = await axios.get(VITE_PHIDES_API_URL + '/modulo_maniobras/terminales/getTerminal.php?id_terminal=' + id_terminal);
                 const data = response.data[0];
                 setFormData(prevState => ({
                     ...prevState,
@@ -51,7 +52,7 @@ function FormularioTerminales({ open, onClose, id_terminal }) {
 
     const registrar = () => {
         console.log(formData);
-        axios.post('/phicargo/modulo_maniobras/terminales/registrar_terminal.php', formData)
+        axios.post(VITE_PHIDES_API_URL + '/modulo_maniobras/terminales/registrar_terminal.php', formData)
             .then(response => {
                 var data = response.data;
                 if (data.success) {

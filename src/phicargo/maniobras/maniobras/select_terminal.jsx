@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Autocomplete } from '@mui/material';
 import TextField from '@mui/material/TextField';
+const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const SelectTerminal = ({ label, id, name, onChange, value, disabled, error_terminal }) => {
     const [options, setOptions] = useState([]);
 
     useEffect(() => {
-        const baseUrl = '/phicargo/modulo_maniobras/terminales/getTerminales.php';
+        const baseUrl = VITE_PHIDES_API_URL + '/modulo_maniobras/terminales/getTerminales.php';
 
         axios.get(`${baseUrl}`)
             .then(response => {
@@ -40,7 +41,7 @@ const SelectTerminal = ({ label, id, name, onChange, value, disabled, error_term
                         {...params}
                         label={label}
                         variant="outlined"
-                        disabled={disabled} 
+                        disabled={disabled}
                         error={error_terminal}
                         helperText={error_terminal}
                     />

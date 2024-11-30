@@ -29,6 +29,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import PanelEstatus from './envio_estatus/panel';
+const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const fieldValidations = {
     id_terminal: { required: true, message: 'El campo Terminal es requerido' },
@@ -60,7 +61,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
 
     const cargarHistorial = useCallback(() => {
         axios
-            .post("/phicargo/modulo_maniobras/panel_envio/historial/historial.php?id_maniobra=" + id_maniobra, { signal: controller.signal })
+            .post(VITE_PHIDES_API_URL + "/modulo_maniobras/panel_envio/historial/historial.php?id_maniobra=" + id_maniobra, { signal: controller.signal })
             .then((response) => {
                 setHtmlContent(response.data);
             })
@@ -187,7 +188,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
         if (id_maniobra) {
             setFormDisabled(true);
             validarCampos();
-            axios.get(`/phicargo/modulo_maniobras/maniobra/get_maniobra.php?id_maniobra=${id_maniobra}`)
+            axios.get(VITE_PHIDES_API_URL + `/modulo_maniobras/maniobra/get_maniobra.php?id_maniobra=${id_maniobra}`)
                 .then((response) => {
                     const data = response.data[0];
                     console.log('datos de maniobra');
