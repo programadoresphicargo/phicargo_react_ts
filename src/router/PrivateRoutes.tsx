@@ -24,6 +24,7 @@ import PersistentDrawer from '../phicargo/monitoreo/Eventos';
 import Precios_maniobras from '../phicargo/maniobras/precios/precios';
 import ReporteCumplimiento from '../phicargo/reportes/cumplimiento';
 import Terminales from '../phicargo/maniobras/maniobras/terminales/registros';
+import ControlOperadores from '../phicargo/operadores/ControlUsuarios';
 
 // Lazy loading pages
 // Availability Pages and Outlets
@@ -94,6 +95,7 @@ export const PrivateRoutes = () => {
       <Route path="/asignacion" element={<AsignacionUnidades />} />
 
       <Route path="/usuarios" element={<ControlUsuarios />} />
+      <Route path="/controloperadores" element={<ControlOperadores />} />
 
       <Route path="/disponibilidad" element={<AvailabilityLayout children={undefined} />}>
         <Route
