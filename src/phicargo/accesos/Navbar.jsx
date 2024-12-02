@@ -5,11 +5,13 @@ import Toolbar from '@mui/material/Toolbar';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useNavigate } from 'react-router-dom';
 
 function ResponsiveAppBar() {
+    const navigate = useNavigate();
 
     const handleBackClick = () => {
-        window.location.href = "https://phides.phicargo-sistemas.online/phicargo/menu/principal/index.php"; 
+        navigate("/menu");
     };
 
     return (
@@ -17,25 +19,23 @@ function ResponsiveAppBar() {
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
 
-                    {/* Botón de retroceso */}
-                    <IconButton 
-                        edge="start" 
-                        color="inherit" 
-                        aria-label="back" 
-                        onClick={handleBackClick} 
+                    <IconButton
+                        edge="start"
+                        color="inherit"
+                        aria-label="back"
+                        onClick={handleBackClick}
                         sx={{ mr: 2 }}
                     >
                         <ArrowBackIcon />
                     </IconButton>
 
-                    {/* Logo de la empresa */}
                     <img className='m-2'
                         src="https://phi-cargo.com/wp-content/uploads/2021/05/logo-phicargo-vertical.png"
                         alt="Descripción de la imagen"
                         style={{
-                            width: '200px',
-                            height: '70px',
-                            filter: 'brightness(0) invert(1)' // Esto hará que la imagen sea blanca
+                            width: '170px',
+                            height: '60px',
+                            filter: 'brightness(0) invert(1)' 
                         }}
                     />
                 </Toolbar>

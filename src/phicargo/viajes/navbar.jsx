@@ -10,7 +10,7 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
 import Badge from '@mui/material/Badge';
 import MailIcon from '@mui/icons-material/Mail';
@@ -27,7 +27,7 @@ const pages = [
 
 function NavbarViajes() {
 
-
+    const navigate = useNavigate();
     const [anchorElNav, setAnchorElNav] = React.useState(null);
 
     const handleOpenNavMenu = (event) => {
@@ -52,7 +52,7 @@ function NavbarViajes() {
     };
 
     const handleBackClick = () => {
-        window.location.href = "https://phides.phicargo-sistemas.online/phicargo/menu/principal/index.php";
+        navigate("/menu");
     };
 
     return (

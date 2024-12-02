@@ -93,7 +93,6 @@ const AppRouter = () => {
       <Router>
         <Routes>
           {/* Auth routes */}
-          <Route path='/login' element={<LoginPage />} />
 
 
           {/* Ruta predeterminada */}

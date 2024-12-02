@@ -34,7 +34,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import ModuloVehiculo from './vehiculos/modulo_vehiculo';
 import { AccesoContext } from './context';
 import AccesoCompo from './AccesoCompo';
-
+const { VITE_PHIDES_API_URL } = import.meta.env;
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
@@ -140,7 +140,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
 
     const AñadirEmpresa = async (nombreEmpresa) => {
         try {
-            const response = await axios.get('/phicargo/accesos/empresas/registrar_empresa.php', {
+            const response = await axios.get(VITE_PHIDES_API_URL + '/accesos/empresas/registrar_empresa.php', {
                 params: { nombre_empresa: nombreEmpresa },
             });
             if (response.data.success) {
@@ -162,7 +162,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
         };
 
         try {
-            const response = await axios.post('/phicargo/accesos/visitantes/ingresar.php', dataToSend);
+            const response = await axios.post(VITE_PHIDES_API_URL + '/accesos/visitantes/ingresar.php', dataToSend);
 
             if (response.data.success) {
                 toast.success(response.data.message);
@@ -183,7 +183,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
     const getAcceso = async () => {
         try {
             setFormOptions(true);
-            const baseUrl = `/phicargo/accesos/accesos/getAcceso.php?id_acceso=${id_acceso}`;
+            const baseUrl = VITE_PHIDES_API_URL + `/accesos/accesos/getAcceso.php?id_acceso=${id_acceso}`;
             const response = await axios.get(baseUrl);
             const data = response.data[0];
             if (data) {
@@ -233,7 +233,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
     }, [id_acceso]);
 
     const getVisitantesAccceso = () => {
-        const baseUrl = '/phicargo/accesos/accesos/getVisitantes.php?id_acceso=' + id_acceso;
+        const baseUrl = VITE_PHIDES_API_URL + '/accesos/accesos/getVisitantes.php?id_acceso=' + id_acceso;
 
         axios.get(baseUrl)
             .then(response => {
@@ -249,7 +249,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
     };
 
     const fetchEmpresas = () => {
-        const baseUrl = '/phicargo/accesos/empresas/getEmpresas.php';
+        const baseUrl = VITE_PHIDES_API_URL + '/accesos/empresas/getEmpresas.php';
 
         axios.get(baseUrl)
             .then(response => {
@@ -265,7 +265,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
     };
 
     const fetchEmpresasVisitada = () => {
-        const baseUrl = '/phicargo/accesos/empresas/getEmpresasVisitadas.php';
+        const baseUrl = VITE_PHIDES_API_URL + '/accesos/empresas/getEmpresasVisitadas.php';
 
         axios.get(baseUrl)
             .then(response => {
@@ -286,7 +286,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
     const [removedVisitors, setRemovedVisitors] = useState([]);
 
     const fetchVisitantes = () => {
-        const baseUrl = '/phicargo/accesos/visitantes/getVisitantes.php?id_empresa=' + formData.id_empresa;
+        const baseUrl = VITE_PHIDES_API_URL + '/accesos/visitantes/getVisitantes.php?id_empresa=' + formData.id_empresa;
 
         axios.get(baseUrl)
             .then(response => {
@@ -349,7 +349,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
             };
 
             try {
-                const response = await axios.post('/phicargo/accesos/acceso/registrar.php', dataToSend);
+                const response = await axios.post(VITE_PHIDES_API_URL + '/phicargo/accesos/acceso/registrar.php', dataToSend);
                 console.log('Respuesta del servidor:', response.data);
                 if (response.data.status === 1) {
                     toast.success(`Acceso registrado correctamente.`);
@@ -377,7 +377,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
         };
 
         try {
-            const response = await axios.post('/phicargo/accesos/acceso/actualizar.php', dataToSend);
+            const response = await axios.post(VITE_PHIDES_API_URL + '/accesos/acceso/actualizar.php', dataToSend);
             console.log('Respuesta del servidor:', response.data);
             if (response.data.status === 1) {
                 toast.success(`Acceso A-${response.data.id_insertado} actualizado correctamente.`);

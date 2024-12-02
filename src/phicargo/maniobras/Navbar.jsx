@@ -12,6 +12,7 @@ import MenuItem from '@mui/material/MenuItem';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
+import { useNavigate } from "react-router-dom";
 
 const pages = [
     { name: 'CONTENEDORES', path: '/contenedores' },
@@ -36,6 +37,7 @@ const useStyles = makeStyles((theme) => ({
 
 function ManiobrasNavBar() {
     const classes = useStyles();
+    const navigate = useNavigate();
 
     const [anchorElNav, setAnchorElNav] = React.useState(null);
 
@@ -48,7 +50,7 @@ function ManiobrasNavBar() {
     };
 
     const handleBackClick = () => {
-        window.location.href = "https://phides.phicargo-sistemas.online/phicargo/menu/principal/index.php";
+        navigate("/menu");
     };
 
     return (

@@ -9,7 +9,7 @@ import {
 } from 'material-react-table';
 import { DialogContent } from '@mui/material';
 import { AccesoContext } from '../context';
-
+const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const RegistroVehiculos = ({ onClose }) => {
   const { AñadirVehiculo } = useContext(AccesoContext);
@@ -31,7 +31,7 @@ const RegistroVehiculos = ({ onClose }) => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/phicargo/accesos/vehiculos/getVehiculos.php');
+      const response = await fetch(VITE_PHIDES_API_URL + '/accesos/vehiculos/getVehiculos.php');
       const jsonData = await response.json();
       setData(jsonData);
       setLoading(false);
@@ -148,8 +148,8 @@ const RegistroVehiculos = ({ onClose }) => {
       </DialogContent>
     </Dialog>
 
-      <button className="btn btn-success" onClick={NuevoVehiculo}>Nuevo vehiculo</button>
-      <MaterialReactTable table={table} />
+    <button className="btn btn-success" onClick={NuevoVehiculo}>Nuevo vehiculo</button>
+    <MaterialReactTable table={table} />
   </>
   );
 

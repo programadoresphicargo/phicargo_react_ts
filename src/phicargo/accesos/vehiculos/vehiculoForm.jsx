@@ -2,6 +2,7 @@ import { useState } from "react";
 import { TextField, Button, MenuItem, Select, InputLabel, FormControl, Grid } from "@mui/material";
 import axios from "axios";
 import { toast } from 'react-toastify';
+const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const VehiculoForm = ({ onClose }) => {
     const [marca, setMarca] = useState("");
@@ -58,7 +59,7 @@ const VehiculoForm = ({ onClose }) => {
         };
 
         try {
-            const response = await axios.post("/phicargo/accesos/vehiculos/registrar_vehiculo.php", vehiculoData);
+            const response = await axios.post(VITE_PHIDES_API_URL + "/accesos/vehiculos/registrar_vehiculo.php", vehiculoData);
             if (response.data.mensaje) {
                 toast.success(response.data.mensaje);
                 onClose();

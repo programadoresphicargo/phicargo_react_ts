@@ -54,7 +54,7 @@ const AccesoCompo = ({ children }) => {
 
     const getVehiculos = (id_acceso) => {
 
-        axios.post("/phicargo/accesos/accesos/getVehiculos.php?id_acceso=" + id_acceso)
+        axios.post(VITE_PHIDES_API_URL + "/accesos/accesos/getVehiculos.php?id_acceso=" + id_acceso)
             .then(response => {
                 const nuevosVehiculos = response.data.map(data => ({
                     value: data.id_vehiculo,
