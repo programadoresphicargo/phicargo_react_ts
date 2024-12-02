@@ -30,6 +30,9 @@ const Transition = forwardRef(function Transition(props, ref) {
 
 const Entregas = ({ fecha }) => {
 
+  const { session } = useAuthContext();
+
+
   const [open, setOpen] = React.useState(false);
   const [id_entrega, setIDEntrega] = useState(0);
   const handleClickOpen = () => {
@@ -56,6 +59,7 @@ const Entregas = ({ fecha }) => {
       console.error('Error al obtener los datos:', error);
     }
   };
+
 
   const NuevaEntrega = async () => {
     try {

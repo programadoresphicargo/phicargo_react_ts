@@ -50,7 +50,7 @@ const Maniobras = ({ estado_maniobra }) => {
 
     try {
       setLoading(true);
-      const response = await fetch('/phicargo/accesos/accesos/getAccesos.php?estado_acceso=' + estado_maniobra);
+      const response = await fetch(VITE_PHIDES_API_URL + '/accesos/accesos/getAccesos.php?estado_acceso=' + estado_maniobra);
       const jsonData = await response.json();
       setData(jsonData);
       setLoading(false);
