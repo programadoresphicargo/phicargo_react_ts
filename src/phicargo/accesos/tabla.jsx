@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React, { useState, useEffect, useMemo } from 'react';
 import { TextField } from '@mui/material';
 import dayjs from 'dayjs';
@@ -17,8 +16,6 @@ import Slide from '@mui/material/Slide';
 import AccesoCompo from './AccesoCompo';
 import AccesoForm from './formulario';
 
-=======
->>>>>>> 1db81680e302db9bb7358425150a5ccd541652b4
 import {
   MaterialReactTable,
   useMaterialReactTable,
