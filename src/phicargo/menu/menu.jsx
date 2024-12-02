@@ -1,6 +1,7 @@
-import React from "react";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+
 import MenuItem from "./menuitem";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React from "react";
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const menuItems = [
