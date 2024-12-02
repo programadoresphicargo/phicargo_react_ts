@@ -31,7 +31,7 @@ const MenuItem = ({ icon, label, link }) => {
         >
             <div style={{ fontSize: "40px", marginBottom: "10px" }}>
                 <img
-                    src={VITE_PHIDES_API_URL + `/img/menu/${icon}`}
+                    src={`${icon}`}
                     alt={label}
                     style={{ width: "100px", height: "100px", marginBottom: "5px" }}
                 />

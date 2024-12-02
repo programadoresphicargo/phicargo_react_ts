@@ -5,11 +5,13 @@ import Toolbar from '@mui/material/Toolbar';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useNavigate } from 'react-router-dom';
 
 function ResponsiveAppBar() {
+    const navigate = useNavigate();
 
     const handleBackClick = () => {
-        window.location.href = "https://phides.phicargo-sistemas.online/phicargo/menu/principal/index.php"; 
+        navigate('/menu');
     };
 
     return (
@@ -18,11 +20,11 @@ function ResponsiveAppBar() {
                 <Toolbar disableGutters>
 
                     {/* Botón de retroceso */}
-                    <IconButton 
-                        edge="start" 
-                        color="inherit" 
-                        aria-label="back" 
-                        onClick={handleBackClick} 
+                    <IconButton
+                        edge="start"
+                        color="inherit"
+                        aria-label="back"
+                        onClick={handleBackClick}
                         sx={{ mr: 2 }}
                     >
                         <ArrowBackIcon />
