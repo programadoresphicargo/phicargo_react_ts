@@ -14,14 +14,17 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { toast } from 'react-toastify';
+import { useAuthContext } from "../../modules/auth/hooks";
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 export default function ReporteOperador({ id_reporte, open, onClose }) {
 
+    const { session } = useAuthContext();
     const [isLoading, setLoading] = useState(false);
 
     const [formData, setFormData] = useState({
         id_reporte: "",
+        id_usuario: session.user.id,
         atendido: "",
         fecha_creacion: "",
         referencia: "",

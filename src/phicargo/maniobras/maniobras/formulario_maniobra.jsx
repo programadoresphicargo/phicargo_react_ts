@@ -29,6 +29,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import PanelEstatus from './envio_estatus/panel';
+import { useAuthContext } from '../../modules/auth/hooks';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const fieldValidations = {
@@ -44,6 +45,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente }) => {
 
+    const { session } = useAuthContext();
     const [formDisabled, setFormDisabled] = useState(true);
     const [htmlContent, setHtmlContent] = useState('');
     const [values, setValues] = useState({ addedValues: [], removedValues: [] });
@@ -166,6 +168,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
 
     const [formData, setFormData] = useState({
         id_maniobra: id_maniobra,
+        id_usuario: session.user.id,
         id_cp: id_cp,
         id_cliente: id_cliente,
         id_terminal: '',
@@ -222,6 +225,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
         } else {
             setFormDisabled(false);
             setFormData({
+                id_usuario: session.user.id,
                 id_cp: id_cp,
                 id_terminal: '',
                 id_cliente: '',
@@ -346,7 +350,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
 
     const registrar_maniobra = () => {
         setLoading(true);
-        axios.post('/phicargo/modulo_maniobras/maniobra/registrar_maniobra.php', formData)
+        axios.post(VITE_PHIDES_API_URL + '/modulo_maniobras/maniobra/registrar_maniobra.php', formData)
             .then((response) => {
                 const data = response.data;
                 setLoading(false);
@@ -374,7 +378,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
 
     const actualizar_maniobra = () => {
         setLoading(true);
-        axios.post('/phicargo/modulo_maniobras/maniobra/actualizar_maniobra.php', formData)
+        axios.post(VITE_PHIDES_API_URL + '/modulo_maniobras/maniobra/actualizar_maniobra.php', formData)
             .then((response) => {
                 const data = response.data;
                 setLoading(false);
@@ -402,7 +406,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
 
     const reactivar_maniobra = () => {
         console.log(id_maniobra);
-        axios.post('/phicargo/modulo_maniobras/maniobra/reactivar_maniobra.php', formData)
+        axios.post(VITE_PHIDES_API_URL + '/modulo_maniobras/maniobra/reactivar_maniobra.php', formData)
             .then((response) => {
                 if (response.data === 1) {
                     toast.success('El registro ha sido exitoso.');
@@ -425,7 +429,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
     };
 
     const comprobar_equipo = () => {
-        axios.post('/phicargo/modulo_maniobras/codigos/comprobar_disponibilidad.php?id_maniobra=' + id_maniobra)
+        axios.post(VITE_PHIDES_API_URL + '/modulo_maniobras/codigos/comprobar_disponibilidad.php?id_maniobra=' + id_maniobra)
             .then((response) => {
                 const datos = response.data;
                 if (Array.isArray(datos) && datos.length > 0) {
@@ -518,7 +522,14 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
-                axios.post('/phicargo/modulo_maniobras/maniobra/finalizar_maniobra.php?id_maniobra=' + id_maniobra)
+                // Crear los datos que se enviarán en la solicitud
+                const datos = new URLSearchParams({
+                    id_maniobra: id_maniobra,
+                    id_usuario: session.user.id
+                });
+
+                // Realizar la solicitud POST
+                axios.post(VITE_PHIDES_API_URL + '/modulo_maniobras/maniobra/finalizar_maniobra.php', datos)
                     .then((response) => {
                         const data = response.data;
                         if (data.success) {
@@ -539,9 +550,10 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                         }
                     })
                     .catch((error) => {
+                        console.error(error);
                         Swal.fire(
                             'Error',
-                            'Hubo un problema al eliminar el registro.',
+                            'Hubo un problema al finalizar la maniobra.',
                             'error'
                         );
                     });
@@ -557,7 +569,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
 
         try {
             toast.success('Enviando correo espere...');
-            const response = await axios.post('/phicargo/modulo_maniobras/correos/envio_correo.php', formData, {
+            const response = await axios.post(VITE_PHIDES_API_URL + '/modulo_maniobras/correos/envio_correo.php', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

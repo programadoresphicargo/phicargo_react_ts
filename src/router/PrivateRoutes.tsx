@@ -28,6 +28,8 @@ import ControlOperadores from '../phicargo/operadores/ControlUsuarios';
 import { ToastContainer } from 'react-toastify';
 import { Toaster } from 'react-hot-toast';
 import ControlEstatusOperativos from '../phicargo/control_estatus/ControlEstatusOperativos';
+import control_maniobras from '../phicargo/maniobras/control/control';
+import ControlManiobras from '../phicargo/maniobras/control/control';
 
 // Lazy loading pages
 // Availability Pages and Outlets
@@ -79,7 +81,7 @@ export const PrivateRoutes = () => {
         <Route path="/menu" element={<Menu />} />
 
         <Route path="/cartas-porte" element={<CartasPorte />} />
-        <Route path="/control_maniobras" element={<App />} />
+        <Route path="/control_maniobras" element={<ControlManiobras></ControlManiobras>} />
         <Route path="/nominas" element={<Nominas />} />
         <Route path="/precios" element={<Precios_maniobras />} />
         <Route path="/terminales" element={<Terminales />} />

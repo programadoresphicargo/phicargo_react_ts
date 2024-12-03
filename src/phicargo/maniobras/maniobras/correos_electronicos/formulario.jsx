@@ -8,6 +8,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import axios from 'axios';
+const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const FormularioCorreo = ({ open, handleClose, id_cliente }) => {
     // Estados para cada campo del formulario
@@ -28,7 +29,7 @@ const FormularioCorreo = ({ open, handleClose, id_cliente }) => {
 
         try {
             // Usar axios para enviar una solicitud POST con los datos de FormData
-            const response = await axios.post('/phicargo/gestion_viajes/banco/consultas/ingresar_correo.php', formData, {
+            const response = await axios.post(VITE_PHIDES_API_URL + '/gestion_viajes/banco/consultas/ingresar_correo.php', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

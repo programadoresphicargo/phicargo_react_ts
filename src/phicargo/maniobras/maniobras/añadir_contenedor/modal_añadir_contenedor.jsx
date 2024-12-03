@@ -11,6 +11,7 @@ import {
     useMaterialReactTable,
 } from 'material-react-table';
 import { toast } from 'react-toastify';
+const { VITE_PHIDES_API_URL } = import.meta.env;
 
 
 const months = [
@@ -49,7 +50,7 @@ const AñadirContenedor = ({ show, handleClose, id_maniobra }) => {
 
             try {
                 setILoading(true);
-                const response = await fetch('/phicargo/modulo_maniobras/programacion/get_registros2.php', {
+                const response = await fetch(VITE_PHIDES_API_URL + '/modulo_maniobras/programacion/get_registros2.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -69,7 +70,7 @@ const AñadirContenedor = ({ show, handleClose, id_maniobra }) => {
     }, [selectedMonth]);
 
     const añadir_contenedor = (id_cp) => {
-        axios.post('/phicargo/modulo_maniobras/maniobra/añadir_contenedor.php?id_maniobra=' + id_maniobra + '&id_cp=' + id_cp,)
+        axios.post(VITE_PHIDES_API_URL + '/modulo_maniobras/maniobra/añadir_contenedor.php?id_maniobra=' + id_maniobra + '&id_cp=' + id_cp,)
             .then((response) => {
                 const data = response.data;
                 if (data.success) {

@@ -12,6 +12,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { toast } from 'react-toastify';
+const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const ManiobraContenedores = ({ id_maniobra }) => {
     const [modalShow, setModalShow] = useState(false);
@@ -21,7 +22,7 @@ const ManiobraContenedores = ({ id_maniobra }) => {
 
     const fetchData = useCallback(async () => {
         try {
-            const response = await fetch('/phicargo/modulo_maniobras/maniobra/get_maniobra_contenedores.php?id_maniobra=' + id_maniobra);
+            const response = await fetch(VITE_PHIDES_API_URL + '/modulo_maniobras/maniobra/get_maniobra_contenedores.php?id_maniobra=' + id_maniobra);
             const jsonData = await response.json();
             setData(jsonData);
         } catch (error) {
@@ -54,7 +55,7 @@ const ManiobraContenedores = ({ id_maniobra }) => {
 
     const confirmarBorrado = () => {
         if (selectedId) {
-            axios.post('/phicargo/modulo_maniobras/maniobra/borrar_contenedor.php?id=' + selectedId)
+            axios.post(VITE_PHIDES_API_URL + '/modulo_maniobras/maniobra/borrar_contenedor.php?id=' + selectedId)
                 .then((response) => {
                     const data = response.data;
                     if (data.success) {
