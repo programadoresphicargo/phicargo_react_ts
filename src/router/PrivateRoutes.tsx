@@ -71,6 +71,7 @@ const PERMISSIONS = {
   'cumplimiento estatus': 196,
 };
 
+
 export const PrivateRoutes = () => {
   useEffect(() => {
     const checkSession = async () => {
