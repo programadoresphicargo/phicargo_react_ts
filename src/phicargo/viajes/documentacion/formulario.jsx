@@ -6,6 +6,7 @@ import { Select, SelectItem } from "@nextui-org/react";
 import Slide from '@mui/material/Slide';
 import { InboxOutlined } from '@ant-design/icons';
 import { message, Upload } from 'antd';
+import { useAuthContext } from '../../modules/auth/hooks';
 const { Dragger } = Upload;
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
@@ -15,6 +16,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const FormularioDocumentacion = ({ onClose }) => {
 
+  const { session } = useAuthContext();
   const { id_viaje, viaje, getViaje, loading, error, setIDViaje, isLoading } = useContext(ViajeContext);
   const [tipo_doc, setSelectedValue] = useState('');
   const [fileList, setFileList] = useState([]);
@@ -39,6 +41,7 @@ const FormularioDocumentacion = ({ onClose }) => {
     const formData = new FormData();
     formData.append('id_viaje', id_viaje);
     formData.append('tipo_doc', tipo_doc);
+    formData.append('id_usuario', session.user.id);
     fileList.forEach((file) => {
       formData.append('files[]', file);
     });

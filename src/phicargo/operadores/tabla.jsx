@@ -6,6 +6,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Box, Button } from '@mui/material';
 import OperadorForm from './OperadorForm';
+const { VITE_PHIDES_API_URL } = import.meta.env;
 
 import {
   MaterialReactTable,
@@ -35,7 +36,7 @@ const Operadores = ({ estado }) => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/phicargo/operadores/getCuentas.php');
+      const response = await fetch(VITE_PHIDES_API_URL + '/operadores/getCuentas.php');
       const jsonData = await response.json();
       setData(jsonData);
       setLoading(false);

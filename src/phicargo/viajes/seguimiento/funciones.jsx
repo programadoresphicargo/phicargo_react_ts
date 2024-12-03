@@ -3,10 +3,12 @@ import Swal from 'sweetalert2';
 import toast, { Toaster } from 'react-hot-toast';
 import { ViajeContext } from '../context/viajeContext';
 import axios from "axios";
+import { useAuthContext } from '../../modules/auth/hooks';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 export const useJourneyDialogs = () => {
 
+    const { session } = useAuthContext();
     const { id_viaje, getHistorialEstatus, getViaje } = useContext(ViajeContext);
 
     const iniciar_viaje = () => {
@@ -110,6 +112,7 @@ export const useJourneyDialogs = () => {
             data.append('id_viaje', id_viaje);
             data.append('id_estatus', id_estatus);
             data.append('comentarios', comentarios);
+            data.append('id_usuario', session.user.id);
             archivos.forEach((file) => {
                 data.append('files[]', file);
             });
@@ -143,6 +146,7 @@ export const useJourneyDialogs = () => {
             data.append('id_reporte', id_reporte);
             data.append('id_estatus', id_estatus);
             data.append('comentarios', comentarios);
+            data.append('id_usuario', session.user.id);
             archivos.forEach((file) => {
                 data.append('files[]', file);
             });

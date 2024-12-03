@@ -27,6 +27,7 @@ import Terminales from '../phicargo/maniobras/maniobras/terminales/registros';
 import ControlOperadores from '../phicargo/operadores/ControlUsuarios';
 import { ToastContainer } from 'react-toastify';
 import { Toaster } from 'react-hot-toast';
+import ControlEstatusOperativos from '../phicargo/control_estatus/ControlEstatusOperativos';
 
 // Lazy loading pages
 // Availability Pages and Outlets
@@ -86,6 +87,7 @@ export const PrivateRoutes = () => {
         <Route path="/Viajes" element={<ControlViajesActivos />} />
         <Route path="/ViajesFinalizados" element={<ControlViajesFinalizados />} />
         <Route path="/ViajesProgramados" element={<ControlViajesProgramados />} />
+        <Route path="/controlestatus" element={<ControlEstatusOperativos />} />
 
         <Route path="/CorreosElectronicos" element={<CorreosElectronicos estado={undefined} />} />
 
