@@ -51,7 +51,7 @@ class UsersServiceApi {
       console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
-          error.response?.data.message || 'Error al actualizar el usuario',
+          error.response?.data.detail || 'Error al actualizar el usuario',
         );
       }
       throw new Error('Error al actualizar el usuario');

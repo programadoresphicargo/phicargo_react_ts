@@ -28,7 +28,7 @@ class PermissionsServiceApi {
     } catch (error) {
       if (error instanceof AxiosError) {
         throw new Error(
-          error.response?.data?.message || 'Error al obtener los permisos',
+          error.response?.data?.detail || 'Error al obtener los permisos',
         );
       }
       throw new Error('Error al obtener los permisos');
@@ -51,7 +51,7 @@ class PermissionsServiceApi {
       console.log(error);
       if (error instanceof AxiosError) {
         throw new Error(
-          error.response?.data?.message ||
+          error.response?.data?.detail ||
             'Error al obtener los permisos del usuario',
         );
       }
@@ -71,7 +71,7 @@ class PermissionsServiceApi {
     } catch (error) {
       if (error instanceof AxiosError) {
         throw new Error(
-          error.response?.data?.message || 'Error al agregar los permisos',
+          error.response?.data?.detail || 'Error al agregar los permisos',
         );
       }
       throw new Error('Error al agregar los permisos');
