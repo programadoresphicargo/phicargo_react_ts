@@ -20,6 +20,7 @@ import Menu from '../phicargo/menu/menu';
 import Nominas from '../phicargo/maniobras/pagos/pagos';
 import PersistentDrawer from '../phicargo/monitoreo/Eventos';
 import Precios_maniobras from '../phicargo/maniobras/precios/precios';
+import ProtectedRoute from './ProtectedRoute';
 import ReporteCumplimiento from '../phicargo/reportes/cumplimiento';
 import ShiftsLayout from '../phicargo/modules/shifts/layouts/ShiftsLayout';
 import ShiftsRoutes from '../phicargo/modules/shifts/routes/ShiftsRoutes';
@@ -27,9 +28,47 @@ import Terminales from '../phicargo/maniobras/maniobras/terminales/registros';
 import UsersManagementLayout from '../phicargo/modules/users-management/layouts/UsersManagementLayout';
 import UsersManagementRoutes from '../phicargo/modules/users-management/routes/UsersManagementRoutes';
 import { useEffect } from 'react';
+
 // import '../theme.min.css';
 
-
+const PERMISSIONS = {
+  'Módulo trafico': 1,
+  'Módulo ajustes': 2,
+  'Módulo bonos': 3,
+  'Módulo reportes': 4,
+  'Módulo usuarios': 5,
+  'Módulo operadores': 7,
+  'Modulo turnos': 8,
+  'Ingresar incidencia asesor legal': 9,
+  'Ingresar incidencia mantenimiento': 10,
+  'Ingresar incidencia th': 11,
+  'Ingresar incidencia operaciones': 12,
+  'Ingresar incidencia calidad': 13,
+  'modulo maniobras': 38,
+  'modulo comunicados': 39,
+  'modulo monitoreo': 40,
+  'cuentas operadores': 41,
+  viajes: 101,
+  finalizados: 102,
+  'banco de correos': 103,
+  detenciones: 104,
+  'pestañas viajes': 105,
+  retorno: 106,
+  'modulo informe': 120,
+  'informe empresa phicargo': 121,
+  'informe empresa servicontainer': 122,
+  'informe empresa tankcontainer': 123,
+  'informe empresa ometra': 124,
+  'informe empresa transportes belchez': 125,
+  'modulo accesos': 126,
+  'modulo ti': 127,
+  'reporte gerencial': 190,
+  'reporte ingresos': 191,
+  'numero de viajes': 192,
+  'inicios de ruta y llegada a planta': 193,
+  estadias: 195,
+  'cumplimiento estatus': 196,
+};
 
 export const PrivateRoutes = () => {
   useEffect(() => {
@@ -65,29 +104,51 @@ export const PrivateRoutes = () => {
       <Route path="/ViajesFinalizados" element={<ControlViajesFinalizados />} />
       <Route path="/ViajesProgramados" element={<ControlViajesProgramados />} />
 
-      <Route path="/CorreosElectronicos" element={<CorreosElectronicos estado={undefined} />} />
+      <Route
+        path="/CorreosElectronicos"
+        element={<CorreosElectronicos estado={undefined} />}
+      />
 
       <Route path="/cumplimiento" element={<ReporteCumplimiento />} />
 
       <Route path="/Accesos" element={<Accesos />} />
-      <Route path="/AccesoForm" element={<AccesoForm id_acceso={undefined} onClose={undefined} />} />
+      <Route
+        path="/AccesoForm"
+        element={<AccesoForm id_acceso={undefined} onClose={undefined} />}
+      />
       <Route path="/Monitoreo" element={<EntregaMonitoreo />} />
-      <Route path="/Monitorista" element={<PersistentDrawer id_entrega={undefined} onClose={undefined} />} />
+      <Route
+        path="/Monitorista"
+        element={
+          <PersistentDrawer id_entrega={undefined} onClose={undefined} />
+        }
+      />
 
       <Route path="/detenciones" element={<DetencionesTable />} />
       <Route path="/asignacion" element={<AsignacionUnidades />} />
 
       <Route path="/controloperadores" element={<ControlOperadores />} />
 
-      <Route path="/control-usuarios" element={<UsersManagementLayout children={undefined}  />}>
+      <Route
+        path="/control-usuarios"
+        element={
+          <ProtectedRoute
+            element={<UsersManagementLayout children={undefined} />}
+            requiredPermissionId={PERMISSIONS['Módulo usuarios']}
+          />
+        }
+      >
         {UsersManagementRoutes()}
       </Route>
 
-      <Route path="/disponibilidad" element={<AvailabilityLayout children={undefined} />}>
+      <Route
+        path="/disponibilidad"
+        element={<AvailabilityLayout children={undefined} />}
+      >
         {AvailabilityRoutes()}
       </Route>
 
-      <Route path='/turnos' element={<ShiftsLayout children={undefined} />}>
+      <Route path="/turnos" element={<ShiftsLayout children={undefined} />}>
         {ShiftsRoutes()}
       </Route>
 
