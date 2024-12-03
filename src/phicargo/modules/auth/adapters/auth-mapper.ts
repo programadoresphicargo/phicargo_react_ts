@@ -1,12 +1,13 @@
 import type { Session, SessionApi, Token, TokenApi, User, UserApi } from '../models';
 
-const userToLocal = (user: UserApi): User => ({
+export const userToLocal = (user: UserApi): User => ({
   id: user.id_usuario,
   username: user.usuario,
   name: user.nombre,
   email: user.correo,
   role: user.tipo,
   isActive: user.estado === 'Activo',
+  permissions: user.permissions_user_ids,
 });
 
 const tokenToLocal = (token: TokenApi): Token => ({

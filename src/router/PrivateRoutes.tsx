@@ -1,5 +1,4 @@
 import 'react-toastify/dist/ReactToastify.css';
-import '../theme.min.css';
 
 import { Navigate, Route, Routes } from 'react-router-dom';
 
@@ -10,7 +9,7 @@ import AsignacionUnidades from '../phicargo/reportes/asignacion_unidades';
 import AvailabilityLayout from '../phicargo/modules/availability/layout/AvailabilityLayout';
 import AvailabilityRoutes from '../phicargo/modules/availability/routes/AvailabilityRoutes';
 import CartasPorte from '../phicargo/maniobras/tms_waybill/cartas_porte';
-import ControlUsuarios from '../phicargo/usuarios/ControlUsuarios';
+import ControlOperadores from '../phicargo/operadores/ControlUsuarios';
 import ControlViajesActivos from '../phicargo/viajes/control';
 import ControlViajesFinalizados from '../phicargo/viajes/finalizados';
 import ControlViajesProgramados from '../phicargo/viajes/programacion';
@@ -25,7 +24,12 @@ import ReporteCumplimiento from '../phicargo/reportes/cumplimiento';
 import ShiftsLayout from '../phicargo/modules/shifts/layouts/ShiftsLayout';
 import ShiftsRoutes from '../phicargo/modules/shifts/routes/ShiftsRoutes';
 import Terminales from '../phicargo/maniobras/maniobras/terminales/registros';
+import UsersManagementLayout from '../phicargo/modules/users-management/layouts/UsersManagementLayout';
+import UsersManagementRoutes from '../phicargo/modules/users-management/routes/UsersManagementRoutes';
 import { useEffect } from 'react';
+// import '../theme.min.css';
+
+
 
 export const PrivateRoutes = () => {
   useEffect(() => {
@@ -73,7 +77,11 @@ export const PrivateRoutes = () => {
       <Route path="/detenciones" element={<DetencionesTable />} />
       <Route path="/asignacion" element={<AsignacionUnidades />} />
 
-      <Route path="/usuarios" element={<ControlUsuarios />} />
+      <Route path="/controloperadores" element={<ControlOperadores />} />
+
+      <Route path="/control-usuarios" element={<UsersManagementLayout children={undefined}  />}>
+        {UsersManagementRoutes()}
+      </Route>
 
       <Route path="/disponibilidad" element={<AvailabilityLayout children={undefined} />}>
         {AvailabilityRoutes()}

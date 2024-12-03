@@ -15,6 +15,7 @@ interface UserBaseApi {
 
 export interface UserApi extends UserBaseApi {
   id_usuario: number;
+  permissions_user_ids: number[];
 }
 
 export interface SessionApi {
