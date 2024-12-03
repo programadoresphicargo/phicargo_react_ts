@@ -32,7 +32,7 @@ class DriverUnavailabilityServiceApi {
       console.log(error);
       if (error instanceof AxiosError) {
         throw new Error(
-          error.response?.data?.message ||
+          error.response?.data?.detail ||
             'Error getting driver unavailabilities',
         );
       }
@@ -56,7 +56,7 @@ class DriverUnavailabilityServiceApi {
       console.log(error);
       if (error instanceof AxiosError) {
         throw new Error(
-          error.response?.data?.message ||
+          error.response?.data?.detail ||
             'Error creating driver unavailability',
         );
       }
