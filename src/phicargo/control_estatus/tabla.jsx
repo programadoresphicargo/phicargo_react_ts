@@ -6,13 +6,12 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Box, Button } from '@mui/material';
 import { Checkbox } from '@mui/material';
+const { VITE_PHIDES_API_URL } = import.meta.env;
 
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import UsuarioForm from './UsuarioForm';
-import TabBar from './Detalle';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -43,7 +42,7 @@ const EstatusOperativos = ({ estado }) => {
 
     try {
       setLoading(true);
-      const response = await fetch('/phicargo/control_estatus/getEstatus.php');
+      const response = await fetch(VITE_PHIDES_API_URL + '/control_estatus/getEstatus.php');
       const jsonData = await response.json();
       setData(jsonData);
       setLoading(false);
@@ -55,7 +54,7 @@ const EstatusOperativos = ({ estado }) => {
   const cambiarPermiso = async (id_estatus, columna, estado) => {
     try {
       setLoading(true);
-      const response = await fetch('/phicargo/control_estatus/cambiarPermiso.php', {
+      const response = await fetch(VITE_PHIDES_API_URL + '/control_estatus/cambiarPermiso.php', {
         method: 'POST',
         body: new URLSearchParams({
           id_estatus: id_estatus,
@@ -90,7 +89,7 @@ const EstatusOperativos = ({ estado }) => {
             <img
               height={50}
               width={50}
-              src={`/phicargo/img/status/${imagen}`} />
+              src={VITE_PHIDES_API_URL + `/img/status/${imagen}`} />
           );
         },
       },

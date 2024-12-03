@@ -34,11 +34,15 @@ import DialogTitle from '@mui/material/DialogTitle';
 import ModuloVehiculo from './vehiculos/modulo_vehiculo';
 import { AccesoContext } from './context';
 import AccesoCompo from './AccesoCompo';
+import { useAuthContext } from '../modules/auth/hooks';
 const { VITE_PHIDES_API_URL } = import.meta.env;
+
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 const AccesoForm = ({ id_acceso, onClose }) => {
+
+    const { session } = useAuthContext();
 
     const { ActualizarIDAacceso, selectVehiculos, vehiculosAñadidos, vehiculosEliminados } = useContext(AccesoContext);
 
@@ -78,6 +82,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
 
     const [formData, setFormData] = useState({
         id_acceso: id_acceso,
+        id_usuario: session.user.id,
         estado_acceso: '',
         id_empresa: '',
         id_empresa_visitada: '',
@@ -157,6 +162,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
 
     const handleAddNewVisitante = async (newValue) => {
         const dataToSend = {
+            id_usuario: session.user.id,
             id_empresa: formData.id_empresa,
             nombre_visitante: newValue,
         };
@@ -349,7 +355,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
             };
 
             try {
-                const response = await axios.post(VITE_PHIDES_API_URL + '/phicargo/accesos/acceso/registrar.php', dataToSend);
+                const response = await axios.post(VITE_PHIDES_API_URL + '/accesos/acceso/registrar.php', dataToSend);
                 console.log('Respuesta del servidor:', response.data);
                 if (response.data.status === 1) {
                     toast.success(`Acceso registrado correctamente.`);

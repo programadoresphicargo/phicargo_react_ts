@@ -17,17 +17,25 @@ import ajustes_img from '../../assets/menu/ajustes.png';
 
 const menuItems = [
     { icon: turnos_img, label: "Turnos", link: "/terminales" },
-    { icon: viajes_img, label: "Control de viajes", link: "/viajes" },
+    { icon: viajes_img, label: "Viajes", link: "/viajes" },
     { icon: maniobras_img, label: "Maniobras", link: "/cartas-porte" },
     { icon: monitoreo_img, label: "Monitoreo", link: "/monitoreo" },
     { icon: accesos_img, label: "Accesos", link: "/accesos" },
     { icon: bonos_img, label: "Bonos", link: "/bonos" },
     { icon: usuarios_img, label: "Usuarios", link: "/usuarios" },
     { icon: operadores_img, label: "Operadores", link: "/controloperadores" },
-    { icon: ajustes_img, label: "Usuarios", link: "/ajustes" },
+    { icon: ajustes_img, label: "Ajustes", link: "/ajustes" },
 ];
 
 const Menu = () => {
+
+    const value = sessionStorage.getItem('session');
+    if (value) {
+        console.log('Valor obtenido:', value);
+    } else {
+        console.log('No se encontró el valor en sessionStorage.');
+    }
+
     return (
 
         <main id="content" role="main" class="main">
@@ -59,7 +67,6 @@ const Menu = () => {
                     alignItems: 'center',
                     height: '100vh', // Ocupa toda la altura de la pantalla
                     width: '100vw', // Ocupa todo el ancho de la pantalla
-                    border: '2px solid red',
                 }}
             >
                 <div className="container">

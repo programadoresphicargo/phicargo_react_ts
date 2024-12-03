@@ -3,6 +3,7 @@ import { TextField, Button, MenuItem, Select, InputLabel, FormControl, Grid } fr
 import axios from "axios";
 import { toast } from 'react-toastify';
 import Stack from '@mui/material/Stack';
+const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const OperadorForm = ({ id_operador, onClose }) => {
     const [nombre_operador, setNombreOperador] = useState("");
@@ -10,7 +11,7 @@ const OperadorForm = ({ id_operador, onClose }) => {
 
     const actualizarOperador = async () => {
         try {
-            const response = await fetch("/phicargo/operadores/actualizar.php", {
+            const response = await fetch(VITE_PHIDES_API_URL + "/operadores/actualizar.php", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -40,7 +41,7 @@ const OperadorForm = ({ id_operador, onClose }) => {
 
     const getUsuario = async () => {
         try {
-            const response = await fetch("/phicargo/operadores/getOperador.php", {
+            const response = await fetch(VITE_PHIDES_API_URL + "/operadores/getOperador.php", {
                 method: 'POST',
                 body: new URLSearchParams({
                     'id_operador': id_operador

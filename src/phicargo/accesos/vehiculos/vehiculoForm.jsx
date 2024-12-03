@@ -2,9 +2,11 @@ import { useState } from "react";
 import { TextField, Button, MenuItem, Select, InputLabel, FormControl, Grid } from "@mui/material";
 import axios from "axios";
 import { toast } from 'react-toastify';
+import { useAuthContext } from "../../modules/auth/hooks";
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const VehiculoForm = ({ onClose }) => {
+    const { session } = useAuthContext();
     const [marca, setMarca] = useState("");
     const [modelo, setModelo] = useState("");
     const [placas, setPlacas] = useState("");
@@ -49,6 +51,7 @@ const VehiculoForm = ({ onClose }) => {
         if (hasError) return;
 
         const vehiculoData = {
+            id_usuario: session.user.id,
             marca,
             modelo,
             placas,

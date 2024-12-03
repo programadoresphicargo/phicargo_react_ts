@@ -24,9 +24,12 @@ import TimelineOppositeContent, {
 import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
 import CircularProgress from '@mui/material/CircularProgress';
+import { useAuthContext } from "../modules/auth/hooks";
+const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const DetalleForm = ({ id_evento, onClose }) => {
 
+    const { session } = useAuthContext();
     const [comentario, setComentario] = useState('');
     const [comentarios, setComentarios] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -37,6 +40,7 @@ const DetalleForm = ({ id_evento, onClose }) => {
 
     const initialFormData = {
         id_evento: id_evento,
+        id_usuario: session.user.id,
         titulo: '',
         descripcion: '',
         sucursal: '',
@@ -69,11 +73,12 @@ const DetalleForm = ({ id_evento, onClose }) => {
 
     const GuardarComentario = () => {
         const data = {
+            id_usuario: session.user.id,
             id_evento: id_evento,
             comentario: comentario,
         };
 
-        axios.post('/phicargo/monitoreo/entrega_turno/guardar_comentario.php', data)
+        axios.post(VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/guardar_comentario.php', data)
             .then((response) => {
                 console.log('Respuesta exitosa:', response.data);
                 setComentario('');
@@ -85,7 +90,7 @@ const DetalleForm = ({ id_evento, onClose }) => {
     };
 
     const fetchTipoEvento = () => {
-        const baseUrl = '/phicargo/monitoreo/entrega_turno/getTipoEvento.php';
+        const baseUrl = VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/getTipoEvento.php';
 
         axios.get(baseUrl)
             .then(response => {
@@ -102,13 +107,14 @@ const DetalleForm = ({ id_evento, onClose }) => {
 
     const obtenerEvento = () => {
         setIsLoading(true);
-        const baseUrl = '/phicargo/monitoreo/entrega_turno/getEvento.php?id_evento=' + id_evento;
+        const baseUrl = VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/getEvento.php?id_evento=' + id_evento;
 
         axios.get(baseUrl)
             .then(response => {
                 const evento = response.data[0];
                 setFormData({
                     id_evento: id_evento,
+                    id_usuario: session.user.id,
                     titulo: evento.titulo || '',
                     descripcion: evento.descripcion || '',
                     sucursal: evento.sucursal || '',
@@ -126,7 +132,7 @@ const DetalleForm = ({ id_evento, onClose }) => {
 
     const actualizarEvento = () => {
         setIsLoading(true);
-        axios.post('/phicargo/monitoreo/entrega_turno/actualizarEvento.php', formData)
+        axios.post(VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/actualizarEvento.php', formData)
             .then(response => {
                 console.log("Datos enviados exitosamente:", response.data);
                 onClose();
@@ -140,7 +146,7 @@ const DetalleForm = ({ id_evento, onClose }) => {
 
     const atenderEvento = () => {
         setIsLoading(true);
-        axios.post('/phicargo/monitoreo/entrega_turno/atenderEvento.php', formData)
+        axios.post(VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/atenderEvento.php', formData)
             .then(response => {
                 console.log("Datos enviados exitosamente:", response.data);
                 onClose();
@@ -153,7 +159,7 @@ const DetalleForm = ({ id_evento, onClose }) => {
     };
 
     const obtenerComentarios = () => {
-        const baseUrl = '/phicargo/monitoreo/entrega_turno/getComentarios.php?id_evento=' + id_evento;
+        const baseUrl = VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/getComentarios.php?id_evento=' + id_evento;
 
         axios.get(baseUrl)
             .then(response => {

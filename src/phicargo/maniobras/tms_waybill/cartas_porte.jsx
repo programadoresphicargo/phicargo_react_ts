@@ -6,7 +6,6 @@ import customFontTheme from '../../../theme';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
-
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 import {

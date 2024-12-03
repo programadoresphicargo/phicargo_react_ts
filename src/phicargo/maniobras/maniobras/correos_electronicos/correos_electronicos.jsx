@@ -6,6 +6,7 @@ import Avatar from '@mui/material/Avatar';
 import Chip from '@mui/material/Chip';
 import Button from '@mui/material/Button';
 import FormularioCorreo from './formulario';
+const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const AutocompleteManager = ({ onValuesChange, id_maniobra, id_cliente, disabled }) => {
     const [options, setOptions] = useState([]);
@@ -20,7 +21,7 @@ const AutocompleteManager = ({ onValuesChange, id_maniobra, id_cliente, disabled
     };
 
     const fetchCorreos = () => {
-        const baseUrl = `/phicargo/modulo_maniobras/correos/correos_disponibles.php?id_cliente=${id_cliente}`;
+        const baseUrl = VITE_PHIDES_API_URL + `/modulo_maniobras/correos/correos_disponibles.php?id_cliente=${id_cliente}`;
 
         axios.get(baseUrl)
             .then(response => {
@@ -45,7 +46,7 @@ const AutocompleteManager = ({ onValuesChange, id_maniobra, id_cliente, disabled
     }, [id_cliente]);
 
     useEffect(() => {
-        const baseUrl = `/phicargo/modulo_maniobras/correos/correos_ligados.php?id_maniobra=${id_maniobra}`;
+        const baseUrl = VITE_PHIDES_API_URL + `/modulo_maniobras/correos/correos_ligados.php?id_maniobra=${id_maniobra}`;
 
         axios.get(baseUrl)
             .then(response => {

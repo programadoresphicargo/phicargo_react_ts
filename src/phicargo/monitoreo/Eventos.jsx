@@ -40,6 +40,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import DetalleForm from './DetalleEvento';
 import EntregaForm2 from './entregaForm';
+const { VITE_PHIDES_API_URL } = import.meta.env;
 const drawerWidth = 650;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
@@ -133,7 +134,7 @@ export default function PersistentDrawerRight({ id_entrega, onClose }) {
 
     const getEntrega = async () => {
         try {
-            const response = await fetch('/phicargo/monitoreo/entrega_turno/getEntrega.php?id_entrega=' + id_entrega);
+            const response = await fetch(VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/getEntrega.php?id_entrega=' + id_entrega);
             const jsonData = await response.json();
             setDataEntrega(jsonData);
         } catch (error) {
@@ -144,7 +145,7 @@ export default function PersistentDrawerRight({ id_entrega, onClose }) {
     const getEventos = async () => {
         try {
             setLoading(true);
-            const response = await fetch('/phicargo/monitoreo/entrega_turno/getEventos.php?id_entrega=' + id_entrega);
+            const response = await fetch(VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/getEventos.php?id_entrega=' + id_entrega);
             const jsonData = await response.json();
             setEventos(jsonData);
             setLoading(false);
@@ -275,7 +276,7 @@ export default function PersistentDrawerRight({ id_entrega, onClose }) {
             });
 
             if (result.isConfirmed) {
-                const response = await axios.post('/phicargo/monitoreo/entrega_turno/cerrarEntrega.php', formData);
+                const response = await axios.post(VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/cerrarEntrega.php', formData);
                 const data = response.data;
 
                 if (data.status === 1) {

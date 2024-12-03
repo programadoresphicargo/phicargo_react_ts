@@ -3,7 +3,7 @@ import { Tabs, Tab, Card, CardBody } from "@nextui-org/react";
 import Maniobras from "./tabla";
 import ManiobrasNavBar from "../Navbar";
 
-export default function control_maniobras() {
+export default function ControlManiobras() {
     return (
         <div>
             <ManiobrasNavBar />

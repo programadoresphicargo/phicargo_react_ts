@@ -1,7 +1,6 @@
 import React from "react";
 import { Tabs, Tab, Card, CardBody } from "@nextui-org/react";
 import Maniobras from "./tabla";
-import ResponsiveAppBar from "./Navbar";
 import Typography from '@mui/material/Typography';
 import NavbarViajes from "../viajes/navbar";
 
