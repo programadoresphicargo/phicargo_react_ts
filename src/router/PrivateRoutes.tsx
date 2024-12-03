@@ -6,10 +6,12 @@ import { Suspense, lazy, useEffect } from 'react';
 
 import AccesoForm from '../phicargo/accesos/formulario';
 import Accesos from '../phicargo/accesos/Accesos';
-import App from '../App';
 import AsignacionUnidades from '../phicargo/reportes/asignacion_unidades';
 import AvailabilityLayout from '../phicargo/modules/availability/layout/AvailabilityLayout';
 import CartasPorte from '../phicargo/maniobras/tms_waybill/cartas_porte';
+import ControlEstatusOperativos from '../phicargo/control_estatus/ControlEstatusOperativos';
+import ControlManiobras from '../phicargo/maniobras/control/control';
+import ControlOperadores from '../phicargo/operadores/ControlUsuarios';
 import ControlUsuarios from '../phicargo/usuarios/ControlUsuarios';
 import ControlViajesActivos from '../phicargo/viajes/control';
 import ControlViajesFinalizados from '../phicargo/viajes/finalizados';
@@ -24,12 +26,8 @@ import PersistentDrawer from '../phicargo/monitoreo/Eventos';
 import Precios_maniobras from '../phicargo/maniobras/precios/precios';
 import ReporteCumplimiento from '../phicargo/reportes/cumplimiento';
 import Terminales from '../phicargo/maniobras/maniobras/terminales/registros';
-import ControlOperadores from '../phicargo/operadores/ControlUsuarios';
 import { ToastContainer } from 'react-toastify';
 import { Toaster } from 'react-hot-toast';
-import ControlEstatusOperativos from '../phicargo/control_estatus/ControlEstatusOperativos';
-import control_maniobras from '../phicargo/maniobras/control/control';
-import ControlManiobras from '../phicargo/maniobras/control/control';
 
 // Lazy loading pages
 // Availability Pages and Outlets
