@@ -114,6 +114,7 @@ const DetalleForm = ({ id_evento, onClose }) => {
                 const evento = response.data[0];
                 setFormData({
                     id_evento: id_evento,
+                    id_usuario: session.user.id,
                     titulo: evento.titulo || '',
                     descripcion: evento.descripcion || '',
                     sucursal: evento.sucursal || '',

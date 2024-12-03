@@ -1,6 +1,4 @@
 import 'react-toastify/dist/ReactToastify.css';
-import './theme.min.css';
-
 import {
   Navigate,
   Route,
@@ -8,7 +6,6 @@ import {
   Routes,
 } from 'react-router-dom';
 import { Suspense, lazy, useEffect, useState } from 'react';
-
 import AccesoForm from './phicargo/accesos/formulario';
 import Accesos from './phicargo/accesos/Accesos';
 import App from './phicargo/maniobras/control/control';

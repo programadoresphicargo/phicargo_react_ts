@@ -25,6 +25,8 @@ import Precios_maniobras from '../phicargo/maniobras/precios/precios';
 import ReporteCumplimiento from '../phicargo/reportes/cumplimiento';
 import Terminales from '../phicargo/maniobras/maniobras/terminales/registros';
 import ControlOperadores from '../phicargo/operadores/ControlUsuarios';
+import { ToastContainer } from 'react-toastify';
+import { Toaster } from 'react-hot-toast';
 
 // Lazy loading pages
 // Availability Pages and Outlets
@@ -66,97 +68,101 @@ export const PrivateRoutes = () => {
   }, []);
 
   return (
-    <Routes>
-      {/* Ruta predeterminada */}
-      <Route path="/" element={<Navigate to="/menu" />} />
+    <>
+      <Toaster></Toaster>
+      <ToastContainer></ToastContainer>
+      <Routes>
+        {/* Ruta predeterminada */}
+        <Route path="/" element={<Navigate to="/menu" />} />
 
-      <Route path="/menu" element={<Menu />} />
+        <Route path="/menu" element={<Menu />} />
 
-      <Route path="/cartas-porte" element={<CartasPorte />} />
-      <Route path="/control_maniobras" element={<App />} />
-      <Route path="/nominas" element={<Nominas />} />
-      <Route path="/precios" element={<Precios_maniobras />} />
-      <Route path="/terminales" element={<Terminales />} />
+        <Route path="/cartas-porte" element={<CartasPorte />} />
+        <Route path="/control_maniobras" element={<App />} />
+        <Route path="/nominas" element={<Nominas />} />
+        <Route path="/precios" element={<Precios_maniobras />} />
+        <Route path="/terminales" element={<Terminales />} />
 
-      <Route path="/Viajes" element={<ControlViajesActivos />} />
-      <Route path="/ViajesFinalizados" element={<ControlViajesFinalizados />} />
-      <Route path="/ViajesProgramados" element={<ControlViajesProgramados />} />
+        <Route path="/Viajes" element={<ControlViajesActivos />} />
+        <Route path="/ViajesFinalizados" element={<ControlViajesFinalizados />} />
+        <Route path="/ViajesProgramados" element={<ControlViajesProgramados />} />
 
-      <Route path="/CorreosElectronicos" element={<CorreosElectronicos estado={undefined} />} />
+        <Route path="/CorreosElectronicos" element={<CorreosElectronicos estado={undefined} />} />
 
-      <Route path="/cumplimiento" element={<ReporteCumplimiento />} />
+        <Route path="/cumplimiento" element={<ReporteCumplimiento />} />
 
-      <Route path="/Accesos" element={<Accesos />} />
-      <Route path="/AccesoForm" element={<AccesoForm id_acceso={undefined} onClose={undefined} />} />
-      <Route path="/Monitoreo" element={<EntregaMonitoreo />} />
-      <Route path="/Monitorista" element={<PersistentDrawer id_entrega={undefined} onClose={undefined} />} />
+        <Route path="/Accesos" element={<Accesos />} />
+        <Route path="/AccesoForm" element={<AccesoForm id_acceso={undefined} onClose={undefined} />} />
+        <Route path="/Monitoreo" element={<EntregaMonitoreo />} />
+        <Route path="/Monitorista" element={<PersistentDrawer id_entrega={undefined} onClose={undefined} />} />
 
-      <Route path="/detenciones" element={<DetencionesTable />} />
-      <Route path="/asignacion" element={<AsignacionUnidades />} />
+        <Route path="/detenciones" element={<DetencionesTable />} />
+        <Route path="/asignacion" element={<AsignacionUnidades />} />
 
-      <Route path="/usuarios" element={<ControlUsuarios />} />
-      <Route path="/controloperadores" element={<ControlOperadores />} />
+        <Route path="/usuarios" element={<ControlUsuarios />} />
+        <Route path="/controloperadores" element={<ControlOperadores />} />
 
-      <Route path="/disponibilidad" element={<AvailabilityLayout children={undefined} />}>
-        <Route
-          index
-          element={<Navigate to="/disponibilidad/unidades" replace />}
-        />
-        <Route
-          path="unidades"
-          element={
-            <Suspense fallback={<LoadingPage />}>
-              <VehicleAvailabilityPage />
-            </Suspense>
-          }
-        >
+        <Route path="/disponibilidad" element={<AvailabilityLayout children={undefined} />}>
           <Route
-            path="detalles/:id"
+            index
+            element={<Navigate to="/disponibilidad/unidades" replace />}
+          />
+          <Route
+            path="unidades"
             element={
               <Suspense fallback={<LoadingPage />}>
-                <VehicleInfo />
+                <VehicleAvailabilityPage />
+              </Suspense>
+            }
+          >
+            <Route
+              path="detalles/:id"
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <VehicleInfo />
+                </Suspense>
+              }
+            />
+          </Route>
+          <Route
+            path="operadores"
+            element={
+              <Suspense fallback={<LoadingPage />}>
+                <DriverAvailabilityPage />
+              </Suspense>
+            }
+          >
+            <Route
+              path="detalles/:id"
+              element={
+                <Suspense fallback={<LoadingPage />}>
+                  <DriverInfo />
+                </Suspense>
+              }
+            />
+          </Route>
+          <Route
+            path="resumen"
+            element={
+              <Suspense fallback={<LoadingPage />}>
+                <SummaryPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="sin-asignar"
+            element={
+              <Suspense fallback={<LoadingPage />}>
+                <NotAssignedPage />
               </Suspense>
             }
           />
         </Route>
-        <Route
-          path="operadores"
-          element={
-            <Suspense fallback={<LoadingPage />}>
-              <DriverAvailabilityPage />
-            </Suspense>
-          }
-        >
-          <Route
-            path="detalles/:id"
-            element={
-              <Suspense fallback={<LoadingPage />}>
-                <DriverInfo />
-              </Suspense>
-            }
-          />
-        </Route>
-        <Route
-          path="resumen"
-          element={
-            <Suspense fallback={<LoadingPage />}>
-              <SummaryPage />
-            </Suspense>
-          }
-        />
-        <Route
-          path="sin-asignar"
-          element={
-            <Suspense fallback={<LoadingPage />}>
-              <NotAssignedPage />
-            </Suspense>
-          }
-        />
-      </Route>
 
-      {/* Ruta para manejar rutas no válidas */}
-      <Route path="*" element={<Navigate to="/" />} />
-    </Routes>
+        {/* Ruta para manejar rutas no válidas */}
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </>
   );
 };
 
