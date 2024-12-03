@@ -18,7 +18,7 @@ class DriverServiceApi {
       console.log(error);
       if (error instanceof AxiosError) {
         throw new Error(
-          error.response?.data?.message || 'Error getting drivers',
+          error.response?.data?.detail || 'Error getting drivers',
         );
       }
       throw new Error('Error getting drivers');
@@ -38,7 +38,7 @@ class DriverServiceApi {
       console.log(error);
       if (error instanceof AxiosError) {
         throw new Error(
-          error.response?.data?.message || 'Error updating driver',
+          error.response?.data?.detail || 'Error updating driver',
         );
       }
       throw new Error('Error updating driver');

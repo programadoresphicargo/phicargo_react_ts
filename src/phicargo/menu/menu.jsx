@@ -2,18 +2,19 @@ import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 import MenuItem from "./menuitem";
 import React from "react";
-const { VITE_PHIDES_API_URL } = import.meta.env;
+import accesos_img from '../../assets/menu/accesos.png'
+import ajustes_img from '../../assets/menu/ajustes.png';
+import bonos_img from '../../assets/menu/bonos.png';
 import imglogo from '../../assets/img/tract_scannia.jpg';
-import zIndex from "@mui/material/styles/zIndex";
-import turnos_img from '../../assets/menu/turnos.png';
-import viajes_img from '../../assets/menu/viajes.png';
 import maniobras_img from '../../assets/menu/maniobras.png';
 import monitoreo_img from '../../assets/menu/monitoreo.png';
-import accesos_img from '../../assets/menu/accesos.png'
-import bonos_img from '../../assets/menu/bonos.png';
-import usuarios_img from '../../assets/menu/usuarios.png';
 import operadores_img from '../../assets/menu/operadores.png';
-import ajustes_img from '../../assets/menu/ajustes.png';
+import turnos_img from '../../assets/menu/turnos.png';
+import usuarios_img from '../../assets/menu/usuarios.png';
+import viajes_img from '../../assets/menu/viajes.png';
+import zIndex from "@mui/material/styles/zIndex";
+
+const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const menuItems = [
     { icon: turnos_img, label: "Turnos", link: "/terminales" },
@@ -22,9 +23,10 @@ const menuItems = [
     { icon: monitoreo_img, label: "Monitoreo", link: "/monitoreo" },
     { icon: accesos_img, label: "Accesos", link: "/accesos" },
     { icon: bonos_img, label: "Bonos", link: "/bonos" },
-    { icon: usuarios_img, label: "Usuarios", link: "/usuarios" },
+    { icon: usuarios_img, label: "Usuarios", link: "/control-usuarios" },
     { icon: operadores_img, label: "Operadores", link: "/controloperadores" },
-    { icon: ajustes_img, label: "Ajustes", link: "/ajustes" },
+    { icon: ajustes_img, label: "Usuarios", link: "/ajustes" },
+    { icon: viajes_img, label: "Disponibilidad", link: "/disponibilidad" },
 ];
 
 const Menu = () => {

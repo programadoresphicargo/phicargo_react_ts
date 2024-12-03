@@ -1,7 +1,8 @@
-import { ErrorBoundary } from "../utilities/error-boundary";
-import Navbar from "../components/ui/Navbar";
-import { Outlet } from "react-router-dom"
-import type { ReactNode } from "react"
+import { ErrorBoundary } from '../utilities/error-boundary';
+import Navbar from '../components/ui/Navbar';
+import { Outlet } from 'react-router-dom';
+import type { ReactNode } from 'react';
+import { Toaster } from 'react-hot-toast';
 
 type MenuItemType = {
   name: string;
@@ -10,12 +11,13 @@ type MenuItemType = {
 
 interface Props {
   pages: MenuItemType[];
-  children: ReactNode
+  children: ReactNode;
 }
 
-const BaseLayout = ({children, pages}: Props) => {
+const BaseLayout = ({ children, pages }: Props) => {
   return (
     <>
+      <Toaster position="top-center" reverseOrder={false} />
       <Navbar pages={pages} />
       <main className="flex-grow w-full p-2">
         <ErrorBoundary>
@@ -24,7 +26,7 @@ const BaseLayout = ({children, pages}: Props) => {
         </ErrorBoundary>
       </main>
     </>
-  )
-}
+  );
+};
 
-export default BaseLayout
+export default BaseLayout;

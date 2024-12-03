@@ -31,6 +31,7 @@ interface UserBase {
 
 export interface User extends UserBase {
   id: number;
+  permissions: number[];
 }
 
 export interface Session {
