@@ -15,7 +15,7 @@ import operadores_img from '../../assets/menu/operadores.png';
 import ajustes_img from '../../assets/menu/ajustes.png';
 
 const menuItems = [
-    { icon: turnos_img, label: "Turnos", link: "/terminales" },
+    { icon: turnos_img, label: "Turnos", link: "/turnos" },
     { icon: viajes_img, label: "Viajes", link: "/viajes" },
     { icon: maniobras_img, label: "Maniobras", link: "/cartas-porte" },
     { icon: monitoreo_img, label: "Monitoreo", link: "/monitoreo" },
@@ -27,13 +27,6 @@ const menuItems = [
 ];
 
 const Menu = () => {
-
-    const value = sessionStorage.getItem('session');
-    if (value) {
-        console.log('Valor obtenido:', value);
-    } else {
-        console.log('No se encontró el valor en sessionStorage.');
-    }
 
     return (
 

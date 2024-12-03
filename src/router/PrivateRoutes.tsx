@@ -6,7 +6,6 @@ import { Suspense, lazy, useEffect } from 'react';
 
 import AccesoForm from '../phicargo/accesos/formulario';
 import Accesos from '../phicargo/accesos/Accesos';
-import App from '../App';
 import AsignacionUnidades from '../phicargo/reportes/asignacion_unidades';
 import AvailabilityLayout from '../phicargo/modules/availability/layout/AvailabilityLayout';
 import CartasPorte from '../phicargo/maniobras/tms_waybill/cartas_porte';
@@ -30,6 +29,7 @@ import { Toaster } from 'react-hot-toast';
 import ControlEstatusOperativos from '../phicargo/control_estatus/ControlEstatusOperativos';
 import control_maniobras from '../phicargo/maniobras/control/control';
 import ControlManiobras from '../phicargo/maniobras/control/control';
+import ControlTurnos from '../phicargo/turnos/ControlTurnos';
 
 // Lazy loading pages
 // Availability Pages and Outlets
@@ -79,6 +79,7 @@ export const PrivateRoutes = () => {
         <Route path="/" element={<Navigate to="/menu" />} />
 
         <Route path="/menu" element={<Menu />} />
+        <Route path="/turnos" element={<ControlTurnos />} />
 
         <Route path="/cartas-porte" element={<CartasPorte />} />
         <Route path="/control_maniobras" element={<ControlManiobras></ControlManiobras>} />
