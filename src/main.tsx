@@ -3,7 +3,6 @@ import './index.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { AppRouter } from './router/AppRouter';
-// import AppRouter from './App';
 import { AuthProvider } from './phicargo/modules/auth/context';
 import { NextUIProvider } from '@nextui-org/react';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';

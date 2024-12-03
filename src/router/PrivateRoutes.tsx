@@ -30,7 +30,6 @@ import ControlEstatusOperativos from '../phicargo/control_estatus/ControlEstatus
 import control_maniobras from '../phicargo/maniobras/control/control';
 import ControlManiobras from '../phicargo/maniobras/control/control';
 import ControlTurnos from '../phicargo/turnos/ControlTurnos';
-import PermanentDrawerLeft from '../phicargo/ajustes';
 
 // Lazy loading pages
 // Availability Pages and Outlets
@@ -107,7 +106,6 @@ export const PrivateRoutes = () => {
 
         <Route path="/usuarios" element={<ControlUsuarios />} />
         <Route path="/controloperadores" element={<ControlOperadores />} />
-        <Route path="/ajustes" element={<PermanentDrawerLeft />} />
 
         <Route path="/disponibilidad" element={<AvailabilityLayout children={undefined} />}>
           <Route

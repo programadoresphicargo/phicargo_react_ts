@@ -39,7 +39,7 @@ const DriverInfo = () => {
         <ModalContent>
           {() => (
             <>
-              <ModalHeader className="flex items-center justify-around bg-[#dadfeb] pb-0">
+              <ModalHeader className="flex items-center justify-around bg-[#dadfeb] pb-2">
                 <DriverModalHeader driver={driver} />
               </ModalHeader>
               <ModalBody className="flex flex-col md:flex-row bg-gray-400 p-4 gap-4">

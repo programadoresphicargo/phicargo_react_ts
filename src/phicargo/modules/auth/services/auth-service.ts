@@ -24,7 +24,7 @@ class AuthServiceApi {
       console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
-          error.response?.data?.message || 'Error al iniciar sesión',
+          error.response?.data?.detail || 'Error al iniciar sesión',
         );
       }
       throw new Error('Error al iniciar sesión');

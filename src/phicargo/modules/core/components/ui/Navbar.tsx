@@ -1,4 +1,4 @@
-import { Link as RouterLink, useLocation } from 'react-router-dom';
+import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 
 import AppBar from '@mui/material/AppBar';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -24,6 +24,8 @@ interface Props {
 
 const Navbar = (props: Props) => {
   const { pages } = props;
+
+  const navigate = useNavigate();
 
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
 
@@ -52,6 +54,7 @@ const Navbar = (props: Props) => {
             edge="start"
             color="inherit"
             aria-label="back"
+            onClick={() => navigate('/manu')}
             sx={{
               mr: 1,
               color: '#333333',

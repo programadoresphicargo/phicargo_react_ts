@@ -17,7 +17,7 @@ class VehicleServiceApi {
     } catch (error) {
       console.error(error);
       if (error instanceof AxiosError) {
-        throw new Error(error.response?.data?.message || 'An error occurred');
+        throw new Error(error.response?.data?.detail || 'An error occurred');
       }
       throw new Error('An error occurred');
     }
@@ -35,7 +35,7 @@ class VehicleServiceApi {
     } catch (error) {
       console.error(error);
       if (error instanceof AxiosError) {
-        throw new Error(error.response?.data?.message || 'An error occurred');
+        throw new Error(error.response?.data?.detail || 'An error occurred');
       }
       throw new Error('An error occurred');
     }

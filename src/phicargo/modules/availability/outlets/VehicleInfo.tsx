@@ -66,11 +66,20 @@ const VehicleInfo = () => {
                   aria-label="vehicle-forms"
                   color="primary"
                   variant="bordered"
+                  className='flex flex-col flex-1'
                 >
-                  <Tab key="vehicle-data" title="Datos Vehiculo">
+                  <Tab 
+                    key="vehicle-data" 
+                    className='text-medium font-bold uppercase' 
+                    title="Datos Vehiculo"
+                  >
                     {vehicle ? <VehicleForm vehicle={vehicle} /> : <Spinner />}
                   </Tab>
-                  <Tab key="posture-data" title="Posturas">
+                  <Tab 
+                    key="posture-data" 
+                    className='text-medium font-bold uppercase' 
+                    title="Posturas"
+                  >
                     {vehicle ? <PostureForm vehicle={vehicle} /> : <Spinner />}
                   </Tab>
                 </Tabs>

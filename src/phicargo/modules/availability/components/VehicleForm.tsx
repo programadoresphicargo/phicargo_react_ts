@@ -33,13 +33,12 @@ interface Props {
 }
 
 const VehicleForm = (props: Props) => {
-
   const { vehicle } = props;
 
   const navigate = useNavigate();
 
-  const { 
-    vehicleUpdateMutation: { mutate: updateVehicle, isPending }, 
+  const {
+    vehicleUpdateMutation: { mutate: updateVehicle, isPending },
   } = useVehicleQueries();
 
   const {
@@ -61,18 +60,21 @@ const VehicleForm = (props: Props) => {
   const stateId = watch('stateId');
 
   const onSubmit: SubmitHandler<VehicleUpdate> = (data) => {
-    updateVehicle({
-      id: vehicle.id,
-      updatedItem: data,
-    }, {
-      onSettled: () => navigate('/disponibilidad/unidades'),
-    });
+    updateVehicle(
+      {
+        id: vehicle.id,
+        updatedItem: data,
+      },
+      {
+        onSettled: () => navigate('/disponibilidad/unidades'),
+      },
+    );
   };
 
   return (
     <form>
-      <div className="row">
-        <div className="col-4 mb-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="mb-3">
           <SelectInput
             control={control}
             name="companyId"
@@ -84,7 +86,7 @@ const VehicleForm = (props: Props) => {
           />
         </div>
 
-        <div className="col-4 mb-3">
+        <div className="mb-3">
           <SelectInput
             control={control}
             name="branchId"
@@ -97,7 +99,7 @@ const VehicleForm = (props: Props) => {
           />
         </div>
 
-        <div className="col-4 mb-3">
+        <div className="mb-3">
           <SelectInput
             control={control}
             name="stateId"
@@ -109,15 +111,15 @@ const VehicleForm = (props: Props) => {
               { key: 2, value: 'BAJA POR VENTA' },
               { key: 3, value: 'BAJA POR PERDIDA TOTAL' },
               { key: 4, value: 'EN REPARACION POR SINIESTRO' },
-              { key: 5, value: 'EN REPARACIÓN POR FALLAS MECÁNICAS' },
+              { key: 5, value: 'EN REPARACION POR FALLAS MECANICAS' },
               { key: 6, value: 'ESTATUS PGJ' },
               { key: 7, value: 'ESTATUS OCRA' },
-              { key: 8, value: 'TERMINACIÓN DE ARRENDAMIENTO' },
+              { key: 8, value: 'TERMINACION DE ARRENDAMIENTO' },
             ]}
           />
         </div>
 
-        <div className="col-6 mb-3">
+        <div className="mb-3">
           <SelectInput
             control={control}
             isLoading={isFetching}
@@ -127,7 +129,7 @@ const VehicleForm = (props: Props) => {
           />
         </div>
 
-        <div className="col-6 mb-3">
+        <div className="mb-3">
           <SelectInput
             control={control}
             name="vehicleType"
@@ -139,7 +141,7 @@ const VehicleForm = (props: Props) => {
           />
         </div>
 
-        <div className="col-6 mb-3">
+        <div className="mb-3">
           <SelectInput
             control={control}
             name="modality"
@@ -151,7 +153,7 @@ const VehicleForm = (props: Props) => {
           />
         </div>
 
-        <div className="col-6 mb-3">
+        <div className="mb-3">
           <SelectInput
             control={control}
             name="typeLoad"
@@ -164,9 +166,9 @@ const VehicleForm = (props: Props) => {
         </div>
       </div>
 
-      <div className="d-flex justify-content-end">
-        <Button 
-          color="primary" 
+      <div className="flex justify-end mt-4">
+        <Button
+          color="primary"
           onClick={handleSubmit(onSubmit)}
           isLoading={isPending}
         >
