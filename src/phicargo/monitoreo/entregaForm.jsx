@@ -2,7 +2,6 @@ import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDi
 import { Card, CardBody, CardFooter, CardHeader, Divider, Image, Link } from "@nextui-org/react";
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@nextui-org/react";
-
 import Autocomplete from '@mui/material/Autocomplete';
 import Grid from '@mui/material/Grid';
 import MenuItem from '@mui/material/MenuItem';
@@ -13,18 +12,20 @@ import Typography from '@mui/material/Typography';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useAuthContext } from '../modules/auth/hooks';
+const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const EntregaForm2 = ({ id_entrega, onClose }) => {
 
+    const { session } = useAuthContext();
+
     const initialFormData = {
         id_entrega: id_entrega,
+        id_usuario: session.user.id,
         titulo: '',
         descripcion: '',
         sucursal: '',
         tipo_evento: ''
     };
-
-    const { session } = useAuthContext();
 
     const [formData, setFormData] = useState(initialFormData);
 
@@ -35,7 +36,7 @@ const EntregaForm2 = ({ id_entrega, onClose }) => {
     const [tipo_eventos, setTipoEventos] = useState([]);
 
     const fetchTipoEvento = () => {
-        const baseUrl = '/phicargo/monitoreo/entrega_turno/getTipoEvento.php';
+        const baseUrl = VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/getTipoEvento.php';
         const userId = session.user.id;
         axios.get(baseUrl)
             .then(response => {
@@ -68,7 +69,7 @@ const EntregaForm2 = ({ id_entrega, onClose }) => {
         console.log(formData);
 
         try {
-            const response = await axios.post('/phicargo/monitoreo/entrega_turno/registrarEvento.php', formData);
+            const response = await axios.post(VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/registrarEvento.php', formData);
             const data = response.data;
 
             if (data.status === 'success') {
@@ -112,7 +113,7 @@ const EntregaForm2 = ({ id_entrega, onClose }) => {
                         name="sucursal"
                         label="Sucursal"
                         value={formData.sucursal}
-                        onChange={handleChange} 
+                        onChange={handleChange}
                         fullWidth={true}
                         size='small'
                     >
@@ -133,7 +134,7 @@ const EntregaForm2 = ({ id_entrega, onClose }) => {
                                 ...formData,
                                 tipo_evento: newValue ? newValue.value : ''
                             });
-                        }} 
+                        }}
                         getOptionLabel={(option) => option.label}
                         isOptionEqualToValue={(option, value) => option.value === value.value}
                         options={tipo_eventos}

@@ -27,6 +27,14 @@ const menuItems = [
 ];
 
 const Menu = () => {
+
+    const value = sessionStorage.getItem('session');
+    if (value) {
+        console.log('Valor obtenido:', value);
+    } else {
+        console.log('No se encontró el valor en sessionStorage.');
+    }
+
     return (
 
         <main id="content" role="main" class="main">

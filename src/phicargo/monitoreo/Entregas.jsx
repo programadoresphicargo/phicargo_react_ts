@@ -36,7 +36,6 @@ const Entregas = ({ fecha }) => {
 
   const { session } = useAuthContext();
 
-
   const [open, setOpen] = React.useState(false);
   const [id_entrega, setIDEntrega] = useState(0);
   const handleClickOpen = () => {
@@ -67,7 +66,8 @@ const Entregas = ({ fecha }) => {
 
   const NuevaEntrega = async () => {
     try {
-      const response = await fetch(VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/abrirEntrega.php');
+      const response = await axios.post(VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/abrirEntrega.php',
+        new URLSearchParams({ id_usuario: session.user.id }));
       toast.success(response);
       handleClose();
     } catch (error) {
@@ -77,7 +77,8 @@ const Entregas = ({ fecha }) => {
 
   const ComprobarEntrega = async () => {
     try {
-      const response = await axios.get(VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/comprobarEntrega.php');
+      const response = await axios.post(VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/comprobarEntrega.php',
+        new URLSearchParams({ id_usuario: session.user.id }));
       const data = response.data;
 
       if (data.status === 1) {

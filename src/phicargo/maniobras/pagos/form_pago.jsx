@@ -18,7 +18,7 @@ import Button from '@mui/material/Button';
 import { ToastContainer, toast } from 'react-toastify';
 import Formulariomaniobra from '../maniobras/formulario_maniobra';
 import * as XLSX from 'xlsx';
-
+const { VITE_PHIDES_API_URL } = import.meta.env;
 import {
     MaterialReactTable,
     useMaterialReactTable,
@@ -80,7 +80,7 @@ const Nomina_form = ({ show, handleClose, id_pago, id_operador, fecha_inicio, fe
 
     const registrar_pago = () => {
         toast.success('Registrando pagos, espere...');
-        axios.post('/phicargo/modulo_maniobras/pagos/registrar_pago.php', form)
+        axios.post(VITE_PHIDES_API_URL + '/modulo_maniobras/pagos/registrar_pago.php', form)
             .then((response) => {
                 var data = response.data;
                 if (data.mensaje) {
@@ -124,7 +124,7 @@ const Nomina_form = ({ show, handleClose, id_pago, id_operador, fecha_inicio, fe
 
     const fetchData = () => {
         setLoading(true);
-        axios.post('/phicargo/modulo_maniobras/pagos/getManiobras.php', form)
+        axios.post(VITE_PHIDES_API_URL + '/modulo_maniobras/pagos/getManiobras.php', form)
             .then((response) => {
                 var data = response.data;
                 setData(data);

@@ -32,6 +32,7 @@ import ReporteCumplimiento from './phicargo/reportes/cumplimiento';
 import Terminales from './phicargo/maniobras/maniobras/terminales/registros';
 import { ToastContainer } from 'react-toastify';
 import { Toaster } from 'react-hot-toast';
+import ControlEstatusOperativos from './phicargo/control_estatus/ControlEstatusOperativos';
 
 // Lazy loading pages
 // Availability Pages and Outlets
@@ -44,22 +45,6 @@ const SummaryPage = lazy(() => import('./phicargo/modules/availability/pages/Sum
 
 
 const AppRouter = () => {
-  useEffect(() => {
-    const checkSession = async () => {
-      const response = await fetch('/phicargo/login/inicio/check_session.php');
-      const data = await response.json();
-
-      if (data.status === 'success') {
-      } else {
-        window.location.href =
-          'https://phides.phicargo-sistemas.online/phicargo/login/inicio/index.php';
-      }
-    };
-
-    checkSession();
-    const intervalId = setInterval(checkSession, 60000);
-    return () => clearInterval(intervalId);
-  }, []);
 
   // const [messages, setMessages] = useState([]);
 
@@ -115,6 +100,10 @@ const AppRouter = () => {
             path="/ViajesProgramados"
             element={<ControlViajesProgramados />}
           />
+          <Route
+            path="/controlestatus"
+            element={<ControlEstatusOperativos />}
+          />
 
           <Route
             path="/CorreosElectronicos"
@@ -138,49 +127,49 @@ const AppRouter = () => {
               index
               element={<Navigate to="/disponibilidad/unidades" replace />}
             />
-            <Route 
-              path="unidades" 
+            <Route
+              path="unidades"
               element={
-                <Suspense fallback={<LoadingPage />}> 
+                <Suspense fallback={<LoadingPage />}>
                   <VehicleAvailabilityPage />
                 </Suspense>
-              } 
+              }
             >
-              <Route 
-                path='detalles/:id' 
+              <Route
+                path='detalles/:id'
                 element={
-                  <Suspense fallback={<LoadingPage />}> 
+                  <Suspense fallback={<LoadingPage />}>
                     <VehicleInfo />
                   </Suspense>
-                } 
+                }
               />
             </Route>
-            <Route 
-              path="operadores" 
+            <Route
+              path="operadores"
               element={
-                <Suspense fallback={<LoadingPage />}> 
+                <Suspense fallback={<LoadingPage />}>
                   <DriverAvailabilityPage />
                 </Suspense>
-              } 
+              }
             >
-              <Route 
-                path='detalles/:id' 
+              <Route
+                path='detalles/:id'
                 element={
-                  <Suspense fallback={<LoadingPage />}> 
+                  <Suspense fallback={<LoadingPage />}>
                     <DriverInfo />
                   </Suspense>
-                } 
+                }
               />
             </Route>
-            <Route 
-              path='resumen' 
+            <Route
+              path='resumen'
               element={
                 <Suspense fallback={<LoadingPage />}>
                   <SummaryPage />
                 </Suspense>
               }
             />
-            <Route 
+            <Route
               path='sin-asignar'
               element={
                 <Suspense fallback={<LoadingPage />}>

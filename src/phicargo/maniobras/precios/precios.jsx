@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import customFontTheme from '../../../theme';
+const { VITE_PHIDES_API_URL } = import.meta.env;
 
 import {
   MaterialReactTable,
@@ -37,7 +38,7 @@ const Precios_maniobras = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await fetch('/phicargo/modulo_maniobras/nominas/precios/get_precios.php');
+        const response = await fetch(VITE_PHIDES_API_URL + '/modulo_maniobras/nominas/precios/get_precios.php');
 
         const jsonData = await response.json();
         setData(jsonData);

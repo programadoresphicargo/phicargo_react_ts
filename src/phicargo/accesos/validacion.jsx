@@ -8,6 +8,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const Validador = ({ id_acceso, estado_acceso, open, handleClose }) => {
 
@@ -27,7 +28,7 @@ const Validador = ({ id_acceso, estado_acceso, open, handleClose }) => {
         }
 
         try {
-            const baseUrl = '/phicargo/accesos/vigilancia/validacion.php';
+            const baseUrl = VITE_PHIDES_API_URL + '/accesos/vigilancia/validacion.php';
             const response = await axios.get(baseUrl, {
                 params: {
                     pin: pin,
@@ -52,9 +53,9 @@ const Validador = ({ id_acceso, estado_acceso, open, handleClose }) => {
         try {
             var baseUrl = '';
             if (estado_acceso == 'espera') {
-                baseUrl = '/phicargo/accesos/acceso/validar.php';
+                baseUrl = VITE_PHIDES_API_URL + '/accesos/acceso/validar.php';
             } else if (estado_acceso == 'validado') {
-                baseUrl = '/phicargo/accesos/acceso/archivar.php';
+                baseUrl = VITE_PHIDES_API_URL + '/accesos/acceso/archivar.php';
             }
             const response = await axios.get(baseUrl, {
                 params: {

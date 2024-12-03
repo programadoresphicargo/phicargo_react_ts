@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Tabs, Tab, Box, Typography } from '@mui/material';
 import UsuarioForm from './UsuarioForm';
-import Permisos from './Permisos';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;

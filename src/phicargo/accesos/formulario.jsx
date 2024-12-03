@@ -35,6 +35,7 @@ import ModuloVehiculo from './vehiculos/modulo_vehiculo';
 import { AccesoContext } from './context';
 import AccesoCompo from './AccesoCompo';
 const { VITE_PHIDES_API_URL } = import.meta.env;
+
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
@@ -349,7 +350,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
             };
 
             try {
-                const response = await axios.post(VITE_PHIDES_API_URL + '/phicargo/accesos/acceso/registrar.php', dataToSend);
+                const response = await axios.post(VITE_PHIDES_API_URL + '/accesos/acceso/registrar.php', dataToSend);
                 console.log('Respuesta del servidor:', response.data);
                 if (response.data.status === 1) {
                     toast.success(`Acceso registrado correctamente.`);
