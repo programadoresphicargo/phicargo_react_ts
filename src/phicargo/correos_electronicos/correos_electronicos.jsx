@@ -11,10 +11,7 @@ import {
   useMaterialReactTable,
 } from 'material-react-table';
 import MonitoreoNavbar from '../monitoreo/Navbar';
-
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+import odooApi from '../modules/core/api/odoo-api';
 
 const CorreosElectronicos = ({ estado }) => {
 
@@ -41,9 +38,9 @@ const CorreosElectronicos = ({ estado }) => {
 
     try {
       setLoading(true);
-      const response = await fetch('/phicargo/modulo_correos/getCorreos.php');
-      const jsonData = await response.json();
-      setData(jsonData);
+      const response = await odooApi.get('/correos/');
+      console.log(response);
+      setData(response.data);
       setLoading(false);
     } catch (error) {
       console.error('Error al obtener los datos:', error);
@@ -61,12 +58,16 @@ const CorreosElectronicos = ({ estado }) => {
         header: 'ID Correo',
       },
       {
+        accessorFn: (row) => row.cliente?.name,
+        header: 'Cliente',
+      },
+      {
         accessorKey: 'correo',
         header: 'Correo Electronico',
       },
       {
-        accessorKey: 'nombre',
-        header: 'Cliente',
+        accessorKey: 'tipo',
+        header: 'Tipo',
       },
     ],
     [],
@@ -119,7 +120,6 @@ const CorreosElectronicos = ({ estado }) => {
         fontSize: '14px',
       },
     },
-    muiTableContainerProps: { sx: { maxHeight: '5px' } },
     renderTopToolbarCustomActions: ({ table }) => (
       <Box
         sx={{
@@ -131,7 +131,6 @@ const CorreosElectronicos = ({ estado }) => {
       >
         <Button
           variant='contained'
-          disabled={table.getPrePaginationRowModel().rows.length === 0}
           onClick={() =>
             NuevoAcceso()
           }
@@ -143,18 +142,24 @@ const CorreosElectronicos = ({ estado }) => {
   });
 
   return (<>
-    <div>
-      <MonitoreoNavbar />
-      <div
-        style={{
-          overflowX: 'scroll', // Siempre mostrar la barra de desplazamiento horizontal
-          height: '100%',
-          width: '100%', // Asegurarse de que el contenedor ocupe todo el ancho disponible
-        }}
-      >
-        <MaterialReactTable table={table} />
-      </div>
-    </div>
+    <MonitoreoNavbar />
+    <MaterialReactTable table={table} />
+
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogContent>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose}>Disagree</Button>
+        <Button onClick={handleClose} autoFocus>
+          Agree
+        </Button>
+      </DialogActions>
+    </Dialog>
   </>
   );
 
