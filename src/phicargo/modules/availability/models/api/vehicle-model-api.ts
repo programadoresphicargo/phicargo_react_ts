@@ -25,7 +25,7 @@ export interface VehicleBaseApi {
   x_modalidad: Modality | null;
   x_tipo_carga: string | null;
 
-  state: VehicleState;
+  state: VehicleState | null;
   category: VehicleCategory | null;
   brand: VehicleBrand | null;
   res_store: BranchSimple | null;

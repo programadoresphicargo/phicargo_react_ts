@@ -63,18 +63,7 @@ const Navbar = (props: Props) => {
             <ArrowBackIcon />
           </IconButton>
 
-          <img
-            className=""
-            src="https://phi-cargo.com/wp-content/uploads/2021/05/logo-phicargo-vertical.png"
-            alt="logo phicargo"
-            style={{
-              width: '175px',
-              height: '60px',
-              // filter: 'brightness(0) invert(1)'
-            }}
-          />
-
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -111,6 +100,17 @@ const Navbar = (props: Props) => {
             </Menu>
           </Box>
 
+          <img
+            className=""
+            src="https://phi-cargo.com/wp-content/uploads/2021/05/logo-phicargo-vertical.png"
+            alt="logo phicargo"
+            style={{
+              width: '175px',
+              height: '60px',
+              // filter: 'brightness(0) invert(1)'
+            }}
+          />
+
           {/* Desktop version */}
           <Box
             sx={{
@@ -129,31 +129,20 @@ const Navbar = (props: Props) => {
                   component={RouterLink}
                   to={page.path}
                   sx={{
-                    fontSize: '1.1rem',
+                    fontSize: '1rem',
                     fontFamily: 'Inter',
                     fontWeight: isActive ? '700' : '500',
                     textTransform: 'uppercase',
-                    color: isActive ? '#222222' : '#333333',
+                    color: isActive ? '#fff' : '#333333',
                     textDecoration: 'none',
                     position: 'relative',
-                    padding: '0.5rem 1rem',
-                    transition: 'color 0.3s ease, font-weight 0.3s ease',
+                    padding: '0.3rem 1.3rem',
+                    borderRadius: '8px',
+                    transition: 'all 0.3s ease',
+                    backgroundColor: isActive ? '#222222' : 'transparent', // Fondo para el activo
                     '&:hover': {
-                      color: '#555555',
-                    },
-                    '&:after': {
-                      content: '""',
-                      position: 'absolute',
-                      bottom: 0,
-                      left: '50%',
-                      transform: 'translateX(-50%)',
-                      width: isActive ? '100%' : '0%', // Subrayado completo si está activo
-                      height: '2px',
-                      backgroundColor: isActive ? '#222222' : '#333333',
-                      transition: 'width 0.3s ease',
-                    },
-                    '&:hover:after': {
-                      width: '100%',
+                      backgroundColor: '#fff',
+                      color: '#222222',
                     },
                   }}
                 >
@@ -163,7 +152,9 @@ const Navbar = (props: Props) => {
             })}
           </Box>
 
-          <Box sx={{ flexGrow: 0 }}>
+          <Box
+            sx={{ flexGrow: 0, display: 'flex', justifyContent: 'flex-end' }}
+          >
             <AvatarProfile />
           </Box>
         </Toolbar>

@@ -1,6 +1,7 @@
+import type { CompanySimple, ManeuverSimpleApi, TravelSimpleApi } from '../../../core/models';
 import type { IsDangerous, Job, Modality, Status } from '../driver-model';
 
-import type { CompanySimple } from '../../../core/models';
+import type { DriverPermissionSimpleApi } from './driver-unavailability-api';
 import type { VehicleSimpleApi } from './vehicle-model-api';
 
 type JobSimple = {
@@ -38,6 +39,10 @@ export type DriverSimpleApi = Pick<
 
 export interface DriverApi extends DriverBaseApi {
   vehicle: VehicleSimpleApi[];
+  permissions: DriverPermissionSimpleApi[];
+
+  tms_travel: TravelSimpleApi | null;
+  maniobra: ManeuverSimpleApi | null;
 }
 
 export interface DriverEditApi {

@@ -7,6 +7,7 @@ import type {
 } from '../../models/api/driver-model-api';
 
 import type { DriverBase } from '../../models/driver-model';
+import { driverPermissionSimpleToLocal } from './driver-unavailability-mapper';
 
 /**
  * Mapper function to convert a DriverBaseApi object to a DriverBase object
@@ -44,6 +45,21 @@ export const driverToLocal = (driver: DriverApi): Driver => ({
         status: driver.vehicle[0].x_status,
         modality: driver.vehicle[0].x_modalidad || 'SIN ASIGNAR',
         loadType: driver.vehicle[0].x_tipo_carga || 'SIN ASIGNAR',
+      }
+    : null,
+  permissions: driver.permissions.map(driverPermissionSimpleToLocal),
+  travel: driver.tms_travel
+    ? {
+        id: driver.tms_travel.id,
+        name: driver.tms_travel.name,
+        status: driver.tms_travel.x_status_viaje || 'SIN ASIGNAR',
+      }
+    : null,
+  maneuver: driver.maniobra
+    ? {
+        id: driver.maniobra.id_maniobra,
+        type: driver.maniobra.tipo_maniobra,
+        status: driver.maniobra.estado_maniobra,
       }
     : null,
 });

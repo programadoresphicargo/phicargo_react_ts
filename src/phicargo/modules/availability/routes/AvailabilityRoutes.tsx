@@ -13,6 +13,7 @@ const DriverAvailabilityPage = lazy(
 const DriverInfo = lazy(() => import('../outlets/DriverInfo'));
 const NotAssignedPage = lazy(() => import('../pages/NotAssignedPage'));
 const SummaryPage = lazy(() => import('../pages/SummaryPage'));
+const DriverSummaryPage = lazy(() => import('../pages/DriverSummaryPage'));
 
 const AvailabilityRoutes = () => {
   return (
@@ -56,10 +57,18 @@ const AvailabilityRoutes = () => {
         />
       </Route>
       <Route
-        path="resumen"
+        path="resumen-unidades"
         element={
           <Suspense fallback={<LoadingPage />}>
             <SummaryPage />
+          </Suspense>
+        }
+      />
+      <Route
+        path="resumen-operadores"
+        element={
+          <Suspense fallback={<LoadingPage />}>
+            <DriverSummaryPage />
           </Suspense>
         }
       />

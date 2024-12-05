@@ -24,7 +24,7 @@ export interface VehicleBase {
   modality: Modality;
   loadType: string;
 
-  state: VehicleState;
+  state: VehicleState | null;
   category: VehicleCategory | null;
   brand: VehicleBrand | null;
   branch: BranchSimple | null;

@@ -8,13 +8,13 @@ import type {
  * Utility function to determine the real status of a vehicle.
  */
 const determineRealStatus = (vehicle: Vehicle): VehicleRealStatus => {
-  if (vehicle.status === 'disponible' && vehicle.state.id === 1) {
+  if (vehicle.status === 'disponible' && vehicle?.state?.id === 1) {
     return 'available';
   }
 
   if (
     vehicle.status === 'viaje' &&
-    vehicle.state.id === 1 &&
+    vehicle?.state?.id === 1 &&
     vehicle.travel &&
     vehicle.travel.status !== 'finalizado'
   ) {
@@ -23,7 +23,7 @@ const determineRealStatus = (vehicle: Vehicle): VehicleRealStatus => {
 
   if (
     vehicle.status === 'maniobra' &&
-    vehicle.state.id === 1 &&
+    vehicle?.state?.id === 1 &&
     vehicle.maneuver &&
     vehicle.maneuver.status === 'activa'
   ) {
@@ -32,18 +32,18 @@ const determineRealStatus = (vehicle: Vehicle): VehicleRealStatus => {
 
   if (
     vehicle.status === 'maniobra' &&
-    vehicle.state.id === 1 &&
+    vehicle?.state?.id === 1 &&
     vehicle.maneuver &&
     vehicle.maneuver.status === 'borrador'
   ) {
     return 'draftManeuver';
   }
 
-  if (vehicle.state.id === 5) {
+  if (vehicle?.state?.id === 5) {
     return 'maintenance';
   }
 
-  if (vehicle.state.id === 4) {
+  if (vehicle?.state?.id === 4) {
     return 'sinister';
   }
 

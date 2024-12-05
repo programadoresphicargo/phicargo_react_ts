@@ -1,5 +1,7 @@
-import { CompanySimple } from '../../core/models';
-import { VehicleSimple } from './vehicle-model';
+import type { CompanySimple, ManeuverSimple, TravelSimple } from '../../core/models';
+
+import type { DriverPermissionSimple } from './driver-unavailability';
+import type { VehicleSimple } from './vehicle-model';
 
 export type Modality = 'full' | 'sencillo' | 'SIN ASIGNAR';
 export type IsDangerous = 'SI' | 'NO' | 'SIN ASIGNAR';
@@ -30,6 +32,10 @@ export interface DriverBase {
 
 export interface Driver extends DriverBase {
   readonly vehicle: VehicleSimple | null;
+  readonly permissions: DriverPermissionSimple[];
+
+  travel: TravelSimple | null;
+  maneuver: ManeuverSimple | null;
 }
 
 export type DriverSimple = Pick<
@@ -43,4 +49,8 @@ export interface DriverEdit {
   licenseType?: string;
   modality?: Modality;
   isDangerous?: IsDangerous;
+}
+
+export interface DriverWithRealStatus extends Driver {
+  readonly realStatus: string;
 }
