@@ -5,15 +5,15 @@ import React from 'react';
 import accesos_img from '../../assets/menu/accesos.png';
 import ajustes_img from '../../assets/menu/ajustes.png';
 import bonos_img from '../../assets/menu/bonos.png';
+import correo_img from '../../assets/menu/correo.png'
 import imglogo from '../../assets/img/tract_scannia.jpg';
 import maniobras_img from '../../assets/menu/maniobras.png';
 import monitoreo_img from '../../assets/menu/monitoreo.png';
 import operadores_img from '../../assets/menu/operadores.png';
+import reportesImg from '../../assets/menu/reportes.png'
 import turnos_img from '../../assets/menu/turnos.png';
 import usuarios_img from '../../assets/menu/usuarios.png';
 import viajes_img from '../../assets/menu/viajes.png';
-import correo_img from '../../assets/menu/correo.png'
-import zIndex from '@mui/material/styles/zIndex';
 
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
@@ -28,6 +28,7 @@ const menuItems = [
   { icon: operadores_img, label: 'Operadores', link: '/controloperadores' },
   { icon: viajes_img, label: 'Disponibilidad', link: '/disponibilidad' },
   { icon: correo_img, label: 'Correos electronicos', link: '/CorreosElectronicos' },
+  { icon: reportesImg, label: 'Reportes', link: '/reportes' },
 ];
 
 const Menu = () => {
@@ -66,7 +67,7 @@ const Menu = () => {
               />
             </div>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-5">
             {menuItems.map((item, index) => (
               <div
                 key={index}

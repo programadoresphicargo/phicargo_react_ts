@@ -1,5 +1,7 @@
 import { Control, FieldValues, Path, RegisterOptions } from "react-hook-form";
 
+import { ReactNode } from "react";
+
 export type OnError = {
   error: string | null;
 }
@@ -24,7 +26,7 @@ export interface CustomInputProps<T extends FieldValues> {
   control: Control<T, any>;
   name: Path<T>;
   className?: string;
-  label: string;
+  label: ReactNode;
   placeholder?: string;
   rules?: Omit<RegisterOptions<T, Path<T>>, "valueAsNumber" | "valueAsDate" | "setValueAs" | "disabled">;
   isDisabled?: boolean;

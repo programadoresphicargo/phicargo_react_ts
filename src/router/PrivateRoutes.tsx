@@ -17,12 +17,14 @@ import ControlViajesProgramados from '../phicargo/viajes/programacion';
 import CorreosElectronicos from '../phicargo/correos_electronicos/correos_electronicos';
 import DetencionesTable from '../phicargo/reportes/llegadas_tarde/llegadas_tarde';
 import EntregaMonitoreo from '../phicargo/monitoreo/monitoreo';
+import MaintenanceReportRoutes from '../phicargo/modules/maintenance/routes/MaintenanceReportRoutes';
 import Menu from '../phicargo/menu/menu';
 import Nominas from '../phicargo/maniobras/pagos/pagos';
 import PersistentDrawer from '../phicargo/monitoreo/Eventos';
 import Precios_maniobras from '../phicargo/maniobras/precios/precios';
 import ProtectedRoute from './ProtectedRoute';
 import ReporteCumplimiento from '../phicargo/reportes/cumplimiento';
+import ReportsMenuPage from '../phicargo/modules/core/pages/ReportsMenuPage';
 import ShiftsLayout from '../phicargo/modules/shifts/layouts/ShiftsLayout';
 import ShiftsRoutes from '../phicargo/modules/shifts/routes/ShiftsRoutes';
 import Terminales from '../phicargo/maniobras/maniobras/terminales/registros';
@@ -70,7 +72,6 @@ const PERMISSIONS = {
   estadias: 195,
   'cumplimiento estatus': 196,
 };
-
 
 export const PrivateRoutes = () => {
   useEffect(() => {
@@ -140,6 +141,9 @@ export const PrivateRoutes = () => {
         <Route path="/asignacion" element={<AsignacionUnidades />} />
 
         <Route path="/controloperadores" element={<ControlOperadores />} />
+
+        <Route path="/reportes" element={<ReportsMenuPage />} />
+        <Route path="/reportes/mantenimiento/*" element={<MaintenanceReportRoutes />} />
 
         <Route
           path="/control-usuarios"
