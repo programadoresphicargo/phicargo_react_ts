@@ -30,6 +30,7 @@ export interface CustomInputProps<T extends FieldValues> {
   placeholder?: string;
   rules?: Omit<RegisterOptions<T, Path<T>>, "valueAsNumber" | "valueAsDate" | "setValueAs" | "disabled">;
   isDisabled?: boolean;
+  isUpperCase?: boolean;
 }
 
 export type StatusColor<T extends string> = {

@@ -42,7 +42,6 @@ const CompleteDialog = (props: CompleteDialogProps) => {
   });
 
   const onSubmit: SubmitHandler<RegisterDetailForm> = (data) => {
-    console.log(data, itemId);
     editRegister({
       id: itemId,
       updatedItem: { status: data.status, checkOut: data.checkOut },
@@ -54,8 +53,10 @@ const CompleteDialog = (props: CompleteDialogProps) => {
       <ModalContent>
         {() => (
           <>
-            <ModalHeader className="flex flex-col gap-1">
-              <h4 className="text-lg font-semibold">Completar Registro</h4>
+            <ModalHeader className="flex flex-col pb-2 bg-[#dadfeb]">
+              <h3 className="font-bold text-xl text-center text-gray-800 uppercase">
+                Completar Registro
+              </h3>
             </ModalHeader>
             <ModalBody>
               <div className="flex flex-col gap-2">
@@ -64,9 +65,9 @@ const CompleteDialog = (props: CompleteDialogProps) => {
                   name="status"
                   label="Estatus"
                   items={[
-                    { key: 'Completado', value: 'completed' },
-                    { key: 'Pendiente', value: 'pending' },
-                    { key: 'Cancelado', value: 'cancelled' },
+                    { value: 'Completado', key: 'completed' },
+                    { value: 'Pendiente', key: 'pending' },
+                    { value: 'Cancelado', key: 'cancelled' },
                   ]}
                   rules={{ required: 'Este campo es requerido' }}
                 />

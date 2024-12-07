@@ -41,8 +41,10 @@ const AddWorkshop = (props: AddWorkshopProps) => {
         <ModalContent>
           {() => (
             <>
-              <ModalHeader className="flex flex-col gap-1">
-                <h4 className="text-lg font-semibold">Crear Nuevo Taller</h4>
+              <ModalHeader className="flex flex-col pb-2 bg-[#dadfeb]">
+                <h3 className="font-bold text-xl text-center text-gray-800 uppercase">
+                  Crear Nuevo Taller
+                </h3>
               </ModalHeader>
               <ModalBody>
                 <TextInput
@@ -50,7 +52,7 @@ const AddWorkshop = (props: AddWorkshopProps) => {
                   name="name"
                   label="Nombre del Taller"
                   rules={{ required: 'Este campo es requerido' }}
-                  // isUpperCase
+                  isUpperCase
                 />
               </ModalBody>
               <ModalFooter>

@@ -63,14 +63,8 @@ export const useMaintenanceRecord = (
 
   const addRecordCommentMutation = useMutation({
     mutationFn: MaintenanceRecordServiceApi.addComment,
-    onMutate: async () => {
-      await queryClient.cancelQueries({ queryKey: [mainKey, status] });
-    },
-    onSuccess: (newComment) => {
-      queryClient.setQueryData(
-        [mainKey, status],
-        (prev: MaintenanceRecord[]) => [newComment, ...prev],
-      );
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [mainKey], exact: false });
       toast.success('Comentario creado correctamente');
     },
     onError: () => {

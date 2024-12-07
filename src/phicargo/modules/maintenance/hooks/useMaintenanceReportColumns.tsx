@@ -28,7 +28,7 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
                 style={{ cursor: 'pointer' }}
                 onDoubleClick={() =>
                   navigate(
-                    `/reporte-mantenimiento/tractos/detalles/${row.original.id}`,
+                    `/reportes/mantenimiento/detalles/${row.original.id}`,
                   )
                 }
               >
@@ -81,7 +81,6 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
           variant: 'outlined',
           size: 'small',
           type: 'date',
-          // value: cell.getValue<Dayjs>()?.format("YYYY-MM-DD"),
         }),
       },
       {
@@ -106,7 +105,7 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
       },
       {
         accessorFn: (originalRow) =>
-          originalRow?.workshop?.name || 'Sin Asignar',
+          originalRow?.workshop?.id || 'Sin Asignar',
         id: 'workshop',
         header: 'Taller',
         filterVariant: 'select',
@@ -123,6 +122,9 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
           select: true,
           defaultValue: row.original.workshop.id,
         }),
+        Cell: ({ row }) => {
+          return row.original?.workshop?.name || 'Sin Asignar';
+        },
       },
       {
         accessorFn: (originalRow) => originalRow.failType,
@@ -195,7 +197,6 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
         header: 'Supervisor',
         filterVariant: 'select',
         filterSelectOptions: [
-          { value: 'ZACARIAS COMI AZUCENA', label: 'ZACARIAS COMI AZUCENA' },
           {
             value: 'CONTRERAS HERNANDEZ ANDRES',
             label: 'CONTRERAS HERNANDEZ ANDRES',
@@ -211,7 +212,6 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
         ],
         editVariant: 'select',
         editSelectOptions: [
-          { value: 'ZACARIAS COMI AZUCENA', label: 'ZACARIAS COMI AZUCENA' },
           {
             value: 'CONTRERAS HERNANDEZ ANDRES',
             label: 'CONTRERAS HERNANDEZ ANDRES',

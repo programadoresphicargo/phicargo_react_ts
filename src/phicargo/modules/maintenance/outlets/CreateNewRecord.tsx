@@ -19,9 +19,10 @@ import { SelectInput } from '../../core/components/inputs/SelectInput';
 import { TextInput } from '../../core/components/inputs/TextInput';
 import { TextareaInput } from '../../core/components/inputs/TextareaInput';
 import { Tooltip } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const initialFormState: MaintenanceRecordCreate = {
-  workshopId: null as unknown as number,
+  workshopId: '' as unknown as number,
   failType: 'MC',
   checkIn: null as unknown as Dayjs,
   status: 'pending',
@@ -29,10 +30,11 @@ const initialFormState: MaintenanceRecordCreate = {
   supervisor: '',
   comments: '',
   order: '',
-  vehicleId: 0,
+  vehicleId: '' as unknown as number,
 };
 
 const CreateNewRecord = () => {
+  const navigate = useNavigate();
   const [addWorkshop, setAddWorkshop] = useState(false);
 
   const {
@@ -63,16 +65,20 @@ const CreateNewRecord = () => {
     addRegister(data);
   };
 
-  const onClose = () => {};
+  const onClose = () => {
+    navigate('/reportes/mantenimiento');
+  };
 
   return (
     <>
-      <Modal isOpen={true} size={'md'} onClose={onClose}>
+      <Modal isOpen={true} size={'xl'} onClose={onClose}>
         <ModalContent>
           {() => (
             <>
-              <ModalHeader className="flex flex-col gap-1">
-                <h4>Registro de Falla</h4>
+              <ModalHeader className="flex flex-col pb-2 bg-[#dadfeb]">
+                <h3 className="font-bold text-xl text-center text-gray-800 uppercase">
+                  Crear Nuevo Registro
+                </h3>
               </ModalHeader>
               <ModalBody className="overflow-hidden">
                 <form className="space-y-6">
@@ -155,27 +161,11 @@ const CreateNewRecord = () => {
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <div>
+                    <div className="flex flex-row">
                       <SelectInput
                         control={control}
                         name="workshopId"
-                        label={
-                          <span className="flex items-center">
-                            Taller
-                            <Tooltip
-                              title="Agregar Taller"
-                              placement="top-start"
-                            >
-                              <button
-                                type="button"
-                                onClick={() => setAddWorkshop(true)}
-                                className="ml-2 text-blue-500 hover:text-blue-700"
-                              >
-                                <AddCircleOutlineIcon />
-                              </button>
-                            </Tooltip>
-                          </span>
-                        }
+                        label="Taller"
                         isLoading={loadingWorkshops}
                         items={(workshops || []).map((w) => ({
                           key: w.id,
@@ -183,12 +173,22 @@ const CreateNewRecord = () => {
                         }))}
                         rules={{ required: 'Este campo es requerido' }}
                       />
+                      <Tooltip title="Agregar Taller" placement="top-start">
+                        <button
+                          type="button"
+                          onClick={() => setAddWorkshop(true)}
+                          className="ml-2 text-blue-500 hover:text-blue-700"
+                        >
+                          <AddCircleOutlineIcon />
+                        </button>
+                      </Tooltip>
                     </div>
                     <div>
                       <TextInput
                         control={control}
                         name="order"
                         label="Orden de Servicio"
+                        isUpperCase
                         rules={{ required: 'Este campo es requerido' }}
                       />
                     </div>
@@ -199,8 +199,9 @@ const CreateNewRecord = () => {
                       control={control}
                       name="comments"
                       label="Comentarios de Falla"
-                      // isUpperCase
+                      isUpperCase
                       className="w-full"
+                      rules={{ required: 'Este campo es requerido' }}
                     />
                   </div>
                 </form>

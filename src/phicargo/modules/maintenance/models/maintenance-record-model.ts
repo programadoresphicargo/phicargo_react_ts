@@ -60,7 +60,6 @@ export interface RecordCommentCreate {
 export interface RecordStats {
   pending: number;
   completed: number;
-  cancelled: number;
 }
 
 export interface MaintenanceRecordSimpleApi {

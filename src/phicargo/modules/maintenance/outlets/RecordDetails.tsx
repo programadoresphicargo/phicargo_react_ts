@@ -3,17 +3,21 @@ import {
   Modal,
   ModalBody,
   ModalContent,
-  ModalFooter,
   ModalHeader,
+  Spinner,
 } from '@nextui-org/react';
-import { Navigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useGetComments, useMaintenanceRecord } from '../hooks';
 import { useMemo, useState } from 'react';
 
 import AddButton from '../../core/components/ui/AddButton';
+import { BsBusFrontFill } from 'react-icons/bs';
 import CheckIcon from '@mui/icons-material/Check';
 import CompleteDialog from '../components/CompleteDialog';
+import { FaRegUserCircle } from 'react-icons/fa';
+import { FaWarehouse } from 'react-icons/fa';
+import { MdOutlineSmsFailed } from 'react-icons/md';
 import NotesTimeline from '../components/NotesTimeline';
 import { TextareaInput } from '../../core/components/inputs/TextareaInput';
 
@@ -27,6 +31,7 @@ const initialFormValues: RegisterDetailForm = {
 
 const RecordDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [completeModal, setCompleteModal] = useState(false);
 
@@ -59,82 +64,104 @@ const RecordDetails = () => {
     });
   };
 
-  const onClose = () => {};
+  const onClose = () => {
+    navigate('/reportes/mantenimiento');
+  };
 
   if (!id) {
-    return <Navigate to="/mantenimiento" />;
+    return <Navigate to="/reportes/mantenimiento" />;
   }
 
   return (
     <>
-      <Modal isOpen={true} size={'lg'} onClose={onClose}>
+      <Modal isOpen={true} size={'3xl'} onClose={onClose}>
         <ModalContent>
           {() => (
             <>
-              <ModalHeader className="flex flex-col gap-1">
-                <h4>Detalles del registro</h4>
-                <div style={{ flex: '1', marginRight: '20px' }}>
-                  <div style={{ marginBottom: '15px', fontSize: '16px' }}>
-                    <strong>Unidad:</strong> {record?.vehicle.name}
-                  </div>
-                  <div style={{ marginBottom: '15px', fontSize: '16px' }}>
-                    <strong>Workshop:</strong> {record?.workshop.name}
-                  </div>
-                  <div style={{ marginBottom: '15px', fontSize: '16px' }}>
-                    <strong>Tipo de Falla:</strong> {record?.failType}
-                  </div>
-                  <div style={{ marginBottom: '15px', fontSize: '16px' }}>
-                    <strong>Supervisor:</strong> {record?.supervisor}
-                  </div>
-                  <div style={{ marginBottom: '15px', fontSize: '16px' }}>
-                    <strong>Comentarios:</strong> {record?.comments}
-                  </div>
-                </div>
+              <ModalHeader className="flex flex-col pb-2 bg-[#dadfeb]">
+                <h3 className="font-bold text-xl text-center text-gray-800 uppercase">
+                  Detalles del registro
+                </h3>
               </ModalHeader>
               <ModalBody>
-                <div>
-                  <div style={{ marginBottom: '15px' }}>
+                <div className="flex flex-row justify-between">
+                  <div className="flex flex-col justify-center gap-2">
+                    <div className="flex items-center text-medium">
+                      <BsBusFrontFill className="text-blue-500 mr-2" />
+                      <span className="font-semibold text-gray-800">
+                        Unidad:
+                      </span>
+                      <span className="ml-1 text-gray-700">
+                        {record?.vehicle.name}
+                      </span>
+                    </div>
+                    <div className="flex items-center text-medium">
+                      <FaWarehouse className="text-green-500 mr-2" />
+                      <span className="text-gray-800">Taller:</span>
+                      <span className="ml-1 text-gray-700">
+                        {record?.workshop.name || 'Sin estado'}
+                      </span>
+                    </div>
+                    <div className="flex items-center text-medium">
+                      <MdOutlineSmsFailed className="text-yellow-400 mr-2" />
+                      <span className="text-gray-800">Tipo de Falla:</span>
+                      <span className="ml-1 text-gray-700">
+                        {record?.failType || 'Sin estado'}
+                      </span>
+                    </div>
+                    <div className="flex items-center text-medium">
+                      <FaRegUserCircle className="text-blue-950 mr-2" />
+                      <span className="text-gray-800">Supervisor:</span>
+                      <span className="ml-1 text-gray-700">
+                        {record?.supervisor || 'Sin estado'}
+                      </span>
+                    </div>
+                  </div>
+                  <div>
                     <TextareaInput
                       control={control}
                       name="comment"
                       label="Comentario de Avance"
-                      // isUpperCase
+                      isUpperCase
                     />
-                  </div>
-                  <div style={{ display: 'flex', gap: '10px' }}>
-                    <AddButton
-                      label="Agregar Avance"
-                      className="flex-1"
-                      color="primary"
-                      isLoading={isPending}
-                      onClick={handleSubmit(onSubmit)}
-                    />
-
-                    <Button
-                      color="success"
-                      variant="faded"
-                      className="font-bold px-2 flex-1"
-                      startContent={
-                        <CheckIcon width={'1.5em'} height={'1.5em'} />
-                      }
-                    >
-                      Finalizar
-                    </Button>
+                    <div className="flex gap-2 mt-2">
+                      <AddButton
+                        label="Agregar Avance"
+                        className="w-2/3"
+                        color="primary"
+                        isLoading={isPending}
+                        onClick={handleSubmit(onSubmit)}
+                      />
+                      <Button
+                        color="success"
+                        variant="faded"
+                        className="font-bold"
+                        startContent={
+                          <CheckIcon width={'1.5em'} height={'1.5em'} />
+                        }
+                        onClick={() => setCompleteModal(true)}
+                      >
+                        Finalizar
+                      </Button>
+                    </div>
                   </div>
                 </div>
-                <div style={{ marginTop: '20px' }}>
+                <div className="my-4 max-h-[340px] overflow-y-auto">
                   {!comments && isFetching && (
-                    <p>Cargando comentarios de avance...</p>
+                    <div className="flex justify-center items-center h-full">
+                      <Spinner color="primary" />
+                    </div>
                   )}
                   {comments && comments.length === 0 && (
-                    <p>No hay comentarios de avance</p>
+                    <p className="text-center text-gray-600 font-semibold text-lg">
+                      No hay comentarios de avance
+                    </p>
                   )}
                   {comments && comments.length > 0 && (
                     <NotesTimeline comments={comments} />
                   )}
                 </div>
               </ModalBody>
-              <ModalFooter></ModalFooter>
             </>
           )}
         </ModalContent>

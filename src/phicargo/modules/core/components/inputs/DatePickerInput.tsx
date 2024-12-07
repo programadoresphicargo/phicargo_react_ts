@@ -42,7 +42,7 @@ export const DatePickerInput = <T extends FieldValues>(
           <DatePicker
             className={className}
             label={label}
-            variant="faded"
+            variant="flat"
             hideTimeZone={hideTimeZone || true}
             showMonthAndYearPickers
             size="sm"

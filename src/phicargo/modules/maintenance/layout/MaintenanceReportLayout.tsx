@@ -1,4 +1,4 @@
-import ErrorBoundary from 'antd/es/alert/ErrorBoundary';
+import { ErrorBoundary } from '../../core/utilities/error-boundary';
 import Header from '../components/Header';
 import { MaintenanceRecordStatus } from '../models';
 import { Outlet } from 'react-router-dom';

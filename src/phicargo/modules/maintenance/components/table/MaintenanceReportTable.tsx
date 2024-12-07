@@ -100,7 +100,7 @@ const MaintenanceReportTable = (props: MaintenanceReportTableProps) => {
       <MenuItem
         key="details"
         onClick={() =>
-          navigate(`/reporte-mantenimiento/tractos/detalles/${row.original.id}`)
+          navigate(`/reportes/mantenimiento/detalles/${row.original.id}`)
         }
         sx={{ m: 0 }}
       >

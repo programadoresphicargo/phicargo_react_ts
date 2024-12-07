@@ -88,7 +88,7 @@ class MaintenanceRecordServiceApi {
     const newRecord = maintenanceRecordUpdateToApi(updatedItem);
     const url = `/maintenance-record/${id}`;
     try {
-      const response = await odooApi.put<MaintenanceRecordApi>(url, newRecord);
+      const response = await odooApi.patch<MaintenanceRecordApi>(url, newRecord);
       return maintenanceRecordToLocal(response.data);
     } catch (error) {
       console.log(error);
@@ -160,7 +160,7 @@ class MaintenanceRecordServiceApi {
    * @returns Object with the count of registers
    */
   public static async getRecordsCount(): Promise<RecordStats> {
-    const url = '/get_registers_counts.php';
+    const url = '/maintenance-record/count/all';
     try {
       const response = await odooApi.get<RecordStats>(url);
       return response.data;

@@ -5,6 +5,7 @@ import { Button } from '@nextui-org/react';
 import Card from './Card';
 import { MaintenanceRecordStatus } from '../models';
 import { useMaintenanceRecord } from '../hooks';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
   status: MaintenanceRecordStatus;
@@ -30,6 +31,9 @@ const BRANCH_IDS = {
 
 const Header = (props: Props) => {
   const { status } = props;
+
+  const navigate = useNavigate();
+
   const [branchCount, setBranchCount] =
     useState<BranchCount>(defaultBranchCount);
 
@@ -67,7 +71,12 @@ const Header = (props: Props) => {
       }}
     >
       <div className="flex justify-between items-center flex-wrap">
-        <Button isIconOnly aria-label="back">
+        <Button 
+          isIconOnly 
+          aria-label="back"
+          onClick={() => navigate('/reportes')}
+          className='bg-gray-100 rounded-full p-2 shadow-md hover:bg-gray-200 transition'
+        >
           <ArrowBackIcon />
         </Button>
 
