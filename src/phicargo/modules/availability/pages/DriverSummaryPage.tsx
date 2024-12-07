@@ -49,23 +49,9 @@ const DriverSummaryPage = () => {
         </Tooltip>
       </Box>
     ),
-    // muiTableHeadCellProps: {
-    //   sx: {
-    //     fontFamily: 'Inter',
-    //     fontWeight: 'Bold',
-    //     fontSize: '14px',
-    //   },
-    // },
-    // muiTableBodyCellProps: {
-    //   sx: {
-    //     fontFamily: 'Inter',
-    //     fontWeight: 'normal',
-    //     fontSize: '14px',
-    //   },
-    // },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 195px)',
+        maxHeight: 'calc(100vh - 180px)',
       },
     },
   });
