@@ -142,8 +142,21 @@ export const PrivateRoutes = () => {
 
         <Route path="/controloperadores" element={<ControlOperadores />} />
 
-        <Route path="/reportes" element={<ReportsMenuPage />} />
-        <Route path="/reportes/mantenimiento/*" element={<MaintenanceReportRoutes />} />
+        <Route 
+          path="/reportes" 
+          element={
+            <ProtectedRoute 
+              element={<ReportsMenuPage />}
+              requiredPermissionId={PERMISSIONS['Módulo reportes']}
+            />
+          } 
+        />
+        <Route 
+          path="/reportes/mantenimiento/*" 
+          element={
+            <MaintenanceReportRoutes />
+          } 
+        />
 
         <Route
           path="/control-usuarios"
