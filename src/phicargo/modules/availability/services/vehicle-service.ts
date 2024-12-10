@@ -28,7 +28,7 @@ class VehicleServiceApi {
     updatedItem,
   }: UpdatableItem<VehicleUpdate>): Promise<Vehicle> {
     const data = vehicleUpdateToApi(updatedItem);
-
+    console.log(data);
     try {
       const response = await odooApi.patch<VehicleApi>(`/vehicles/${id}`, data);
       return vehicleToLocal(response.data);

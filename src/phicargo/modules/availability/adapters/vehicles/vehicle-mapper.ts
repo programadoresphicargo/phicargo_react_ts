@@ -86,7 +86,7 @@ export const vehicleUpdateToApi = (vehicle: VehicleUpdate): VehicleUpdateApi => 
   }
 
   if (vehicle.vehicleType){
-    vehicleApi.fleet_type = vehicle.vehicleType;
+    vehicleApi.x_tipo_vehiculo = vehicle.vehicleType;
   }
 
   if (vehicle.modality){
