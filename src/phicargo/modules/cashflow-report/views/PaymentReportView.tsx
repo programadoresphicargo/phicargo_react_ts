@@ -15,7 +15,7 @@ const PaymentReportView = () => {
           paddingTop: '10px',
         }}
       >
-        <PaymentTable createFn={() => setNewRegister(true)} />
+        <PaymentTable />
       </div>
 
       {newRegister && (

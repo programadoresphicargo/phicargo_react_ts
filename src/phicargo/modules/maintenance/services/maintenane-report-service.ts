@@ -18,7 +18,7 @@ import {
 } from '../adapters/mappers/register-mapper';
 
 import { AxiosError } from 'axios';
-import { UpdatebleItem } from '../../core/types/global-types';
+import { UpdatableItem } from '../../core/types/global-types';
 import odooApi from '../../core/api/odoo-api';
 
 /**
@@ -84,7 +84,7 @@ class MaintenanceRecordServiceApi {
   public static async editRecord({
     id,
     updatedItem,
-  }: UpdatebleItem<MaintenanceRecordUpdate>): Promise<MaintenanceRecord> {
+  }: UpdatableItem<MaintenanceRecordUpdate>): Promise<MaintenanceRecord> {
     const newRecord = maintenanceRecordUpdateToApi(updatedItem);
     const url = `/maintenance-record/${id}`;
     try {

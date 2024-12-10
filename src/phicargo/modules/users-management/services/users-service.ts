@@ -1,7 +1,7 @@
 import type { User, UserApi } from '../../auth/models';
 
 import { AxiosError } from 'axios';
-import { UpdatebleItem } from '../../core/types/global-types';
+import { UpdatableItem } from '../../core/types/global-types';
 import { UserUpdate } from '../models';
 import odooApi from '../../core/api/odoo-api';
 import { userToLocal } from '../../auth/adapters';
@@ -38,7 +38,7 @@ class UsersServiceApi {
   static async updateUser({
     id,
     updatedItem,
-  }: UpdatebleItem<UserUpdate>): Promise<User> {
+  }: UpdatableItem<UserUpdate>): Promise<User> {
     const data = userUpdateToApi(updatedItem);
 
     try {

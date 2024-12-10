@@ -1,5 +1,6 @@
 import { Chip } from '@nextui-org/react';
 import type { DriverWithRealStatus } from '../models/driver-model';
+import JobChip from '../components/ui/JobChip';
 import type { MRT_ColumnDef } from 'material-react-table';
 import { getDriverRealStatusConf } from '../utilities/get-driver-real-status-conf';
 import { getValidPermission } from '../utilities';
@@ -18,6 +19,11 @@ export const useDriversSummaryColumns = () => {
         Cell: ({ cell }) => (
           <span className='font-bold text-medium'>{cell.getValue<string>()}</span>
         ) 
+      },
+      {
+        accessorFn: (row) => row.job ? row.job.name : 'N/A',
+        header: 'Tipo',
+        Cell: ({ row }) => <JobChip job={row.original.job.name} />,
       },
       {
         accessorKey: 'realStatus',

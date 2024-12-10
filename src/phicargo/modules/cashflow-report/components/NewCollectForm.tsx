@@ -3,8 +3,9 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useCollectRegisters, useWeekContext } from "../hooks";
 
 import toast from 'react-hot-toast';
-import { useClients } from "../hooks/useClients";
-import { useMemo } from "react";
+
+// import { useClients } from "../hooks/useClients";
+// import { useMemo } from "react";
 
 interface OptionsSelection {
   clientId: string | number;
@@ -12,14 +13,14 @@ interface OptionsSelection {
   day: "monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday";  
 }
 
-const daysSelection = [
-  { label: "Lunes", value: "monday" },
-  { label: "Martes", value: "tuesday" },
-  { label: "Miercoles", value: "wednesday" },
-  { label: "Jueves", value: "thursday" },
-  { label: "Viernes", value: "friday" },
-  { label: "Sabado", value: "saturday" },
-]
+// const daysSelection = [
+//   { label: "Lunes", value: "monday" },
+//   { label: "Martes", value: "tuesday" },
+//   { label: "Miercoles", value: "wednesday" },
+//   { label: "Jueves", value: "thursday" },
+//   { label: "Viernes", value: "friday" },
+//   { label: "Sabado", value: "saturday" },
+// ]
 
 const initialFormState: OptionsSelection = {
   clientId: "",
@@ -36,13 +37,13 @@ const NewCollectForm = (props: NewCollectFormProps) => {
 
   const { activeWeekId } = useWeekContext();
 
-  const { control, handleSubmit } = useForm({
+  const { handleSubmit } = useForm({
     defaultValues: initialFormState,
   });
 
-  const {
-    clientsQuery: { data: clients, isFetching, isError },
-  } = useClients();
+  // const {
+  //   clientsQuery: { data: clients, isFetching, isError },
+  // } = useClients();
 
   const {
     createCollectRegisterMutation: { mutate: createRegister },
@@ -60,10 +61,10 @@ const NewCollectForm = (props: NewCollectFormProps) => {
     });
   }
 
-  const data = useMemo(() => {
-    if (isFetching || isError) return [];
-    return clients?.map((item) => ({ label: item.name, value: item.id }));
-  }, [clients, isError, isFetching]);
+  // const data = useMemo(() => {
+  //   if (isFetching || isError) return [];
+  //   return clients?.map((item) => ({ label: item.name, value: item.id }));
+  // }, [clients, isError, isFetching]);
 
   return (
     <Modal 

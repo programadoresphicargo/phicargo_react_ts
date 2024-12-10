@@ -30,7 +30,13 @@ const CollectionTable = () => {
 
   const handleSaveRegisters: MRT_TableOptions<CollectRegister>['onEditingRowSave'] =
     async ({ values, table, row }) => {
-      updateRegister({ ...values, id: Number(row.id) });
+      // updateRegister({ ...values, id: Number(row.id) });
+      updateRegister(
+        {
+          id: Number(row.id),
+          updatedItem: { ...values },
+        }
+      )
       table.setEditingRow(null);
     };
 

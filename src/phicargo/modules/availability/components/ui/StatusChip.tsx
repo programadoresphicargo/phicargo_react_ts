@@ -13,8 +13,6 @@ const getStatusColor = (status: Status) => {
       return 'secondary';
     case 'maniobra':
       return 'warning';
-    case 'SIN ASIGNAR':
-      return 'danger';
     default:
       return 'default';
   }

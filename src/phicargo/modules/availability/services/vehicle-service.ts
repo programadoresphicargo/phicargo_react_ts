@@ -5,7 +5,7 @@ import {
 } from '../adapters/vehicles/vehicle-mapper';
 
 import { AxiosError } from 'axios';
-import { UpdatebleItem } from '../../core/types/global-types';
+import { UpdatableItem } from '../../core/types/global-types';
 import type { VehicleApi } from '../models/api/vehicle-model-api';
 import odooApi from '../../core/api/odoo-api';
 
@@ -26,7 +26,7 @@ class VehicleServiceApi {
   static async updateVehicle({
     id,
     updatedItem,
-  }: UpdatebleItem<VehicleUpdate>): Promise<Vehicle> {
+  }: UpdatableItem<VehicleUpdate>): Promise<Vehicle> {
     const data = vehicleUpdateToApi(updatedItem);
 
     try {

@@ -15,7 +15,7 @@ const CollectReportView = () => {
           paddingTop: '10px',
         }}
       >
-        <CollectionTable createFn={() => setNewRegister(true)} />
+        <CollectionTable  />
       </div>
 
       {newRegister && (

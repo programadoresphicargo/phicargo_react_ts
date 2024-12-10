@@ -31,6 +31,7 @@ const SummaryPage = () => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
+    columnFilterDisplayMode: 'popover',
     // STATE
     initialState: {
       density: 'compact',

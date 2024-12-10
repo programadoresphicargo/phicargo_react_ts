@@ -3,8 +3,9 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { usePayments, useWeekContext } from "../hooks";
 
 import toast from 'react-hot-toast';
-import { useMemo } from "react";
-import { useProviders } from "../hooks/useProviders";
+
+// import { useMemo } from "react";
+// import { useProviders } from "../hooks/useProviders";
 
 interface OptionsSelection {
   providerId: string | number;
@@ -13,14 +14,14 @@ interface OptionsSelection {
   day: "monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday"; 
 }
 
-const daysSelection = [
-  { label: "Lunes", value: "monday" },
-  { label: "Martes", value: "tuesday" },
-  { label: "Miercoles", value: "wednesday" },
-  { label: "Jueves", value: "thursday" },
-  { label: "Viernes", value: "friday" },
-  { label: "Sabado", value: "saturday" },
-]
+// const daysSelection = [
+//   { label: "Lunes", value: "monday" },
+//   { label: "Martes", value: "tuesday" },
+//   { label: "Miercoles", value: "wednesday" },
+//   { label: "Jueves", value: "thursday" },
+//   { label: "Viernes", value: "friday" },
+//   { label: "Sabado", value: "saturday" },
+// ]
 
 const initialFormState: OptionsSelection = {
   providerId: "",
@@ -38,13 +39,13 @@ const NewPaymentForm = (props: NewPaymentFormProps) => {
 
   const { activeWeekId } = useWeekContext();
 
-  const { control, handleSubmit } = useForm({
+  const { handleSubmit } = useForm({
     defaultValues: initialFormState,
   });
 
-  const {
-    providersQuery: { data: providers, isFetching, isError },
-  } = useProviders();
+  // const {
+  //   providersQuery: { data: providers, isFetching, isError },
+  // } = useProviders();
 
   const {
     createPaymentMutation: { mutate: createRegister },
@@ -57,7 +58,7 @@ const NewPaymentForm = (props: NewPaymentFormProps) => {
     const newPayment = {
       weekId: Number(activeWeekId),
       providerId: Number(data.providerId),
-      providerName: providers?.find((item) => item.id === data.providerId)?.name || "",
+      // providerName: providers?.find((item) => item.id === data.providerId)?.name || "",
       concept: data.concept,
       day: data.day,
       amount: Number(data.amount),
@@ -66,10 +67,10 @@ const NewPaymentForm = (props: NewPaymentFormProps) => {
     createRegister(newPayment);
   }
 
-  const data = useMemo(() => {
-    if (isFetching || isError) return [];
-    return providers?.map((item) => ({ label: item.name, value: item.id }));
-  }, [providers, isError, isFetching]);
+  // const data = useMemo(() => {
+  //   if (isFetching || isError) return [];
+  //   return providers?.map((item) => ({ label: item.name, value: item.id }));
+  // }, [providers, isError, isFetching]);
 
   return (
     <Modal 

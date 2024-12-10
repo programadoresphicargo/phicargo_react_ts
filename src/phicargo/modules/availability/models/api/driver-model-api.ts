@@ -46,7 +46,7 @@ export interface DriverApi extends DriverBaseApi {
 }
 
 export interface DriverEditApi {
-  job_id?: number;
+  job_id?: number | null;
   tms_driver_license_id?: string | null;
   tms_driver_license_type?: string | null;
   x_modalidad?: Modality | null;

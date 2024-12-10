@@ -29,7 +29,7 @@ const DriverAvailabilityPage = () => {
     columnFilterDisplayMode: 'subheader',
     // STATE
     initialState: {
-      showColumnFilters: false,
+      showColumnFilters: true,
       density: 'compact',
       pagination: { pageSize: 100, pageIndex: 0 },
     },

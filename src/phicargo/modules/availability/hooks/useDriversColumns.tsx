@@ -15,6 +15,10 @@ export const useDriversColumns = () => {
           <span className='font-bold text-medium'>{cell.getValue<string>()}</span>
         )
       },
+      { 
+        accessorKey: 'company.name', 
+        header: 'Compañia',
+      },
       {
         accessorFn: (row) => row.job ? row.job.name : 'N/A',
         header: 'Tipo',

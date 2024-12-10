@@ -50,7 +50,7 @@ export const useVehicleColumns = () => {
         accessorKey: 'vehicleType',
         header: 'Tipo de vehículo',
         Cell: ({ cell }) => (
-          <VehicleTypeChip fleetType={cell.getValue<string>()} />
+          <VehicleTypeChip fleetType={cell.getValue<string>() || 'SIN ASIGNAR'} />
         )
       },
       { 
@@ -58,8 +58,8 @@ export const useVehicleColumns = () => {
         header: 'Tipo de carga',
         Cell: ({ cell }) => {
           const value = cell.getValue<string>();
-          return value === 'SIN ASIGNAR' 
-            ? <span className='text-gray-400 text-sm'>{cell.getValue<string>()}</span>
+          return !value
+            ? <span className='text-gray-400 text-sm'>{'SIN ASIGNAR'}</span>
             : <span className='font-bold uppercase'>{cell.getValue<string>()}</span>
         } 
       },
@@ -68,8 +68,8 @@ export const useVehicleColumns = () => {
         header: 'Modalidad',
         Cell: ({ cell }) => {
           const value = cell.getValue<string>();
-          return value === 'SIN ASIGNAR' 
-            ? <span className='text-gray-400 text-sm'>{cell.getValue<string>()}</span>
+          return !value
+            ? <span className='text-gray-400 text-sm'>{'SIN ASIGNAR'}</span>
             : <ModalityChip modality={cell.getValue<Modality>()} />
         } 
       },
