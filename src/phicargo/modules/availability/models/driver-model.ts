@@ -1,10 +1,12 @@
-import { CompanySimple } from '../../core/models';
-import { VehicleSimple } from './vehicle-model';
+import type { CompanySimple, ManeuverSimple, TravelSimple } from '../../core/models';
 
-export type Modality = 'full' | 'sencillo' | 'SIN ASIGNAR';
-export type IsDangerous = 'SI' | 'NO' | 'SIN ASIGNAR';
+import type { DriverPermissionSimple } from './driver-unavailability';
+import type { VehicleSimple } from './vehicle-model';
+
+export type Modality = 'full' | 'sencillo';
+export type IsDangerous = 'SI' | 'NO';
 export type Job = 'OPERADOR' | 'MOVEDOR' | 'OPERADOR POSTURERO';
-export type Status = 'viaje' | 'disponible' | 'maniobra' | 'SIN ASIGNAR';
+export type Status = 'viaje' | 'disponible' | 'maniobra';
 
 type JobSimple = {
   id: number;
@@ -15,12 +17,12 @@ export interface DriverBase {
   readonly id: number;
   readonly name: string;
   readonly isActive: boolean;
-  licenseType: string;
-  licenseId: string;
-  noLicense: string;
-  modality: Modality;
-  isDangerous: IsDangerous;
-  readonly status: Status;
+  licenseType: string | null;
+  licenseId: string | null;
+  noLicense: string | null;
+  modality: Modality | null;
+  isDangerous: IsDangerous | null;
+  readonly status: Status | null;
   readonly travelId: number | null;
   readonly maneuverId: number | null;
 
@@ -30,6 +32,10 @@ export interface DriverBase {
 
 export interface Driver extends DriverBase {
   readonly vehicle: VehicleSimple | null;
+  readonly permissions: DriverPermissionSimple[];
+
+  travel: TravelSimple | null;
+  maneuver: ManeuverSimple | null;
 }
 
 export type DriverSimple = Pick<
@@ -38,9 +44,13 @@ export type DriverSimple = Pick<
 >;
 
 export interface DriverEdit {
-  jobId?: number;
-  licenseId?: string;
-  licenseType?: string;
-  modality?: Modality;
-  isDangerous?: IsDangerous;
+  jobId?: number | null;
+  licenseId?: string | null;
+  licenseType?: string | null;
+  modality?: Modality | null;
+  isDangerous?: IsDangerous | null;
+}
+
+export interface DriverWithRealStatus extends Driver {
+  readonly realStatus: string;
 }

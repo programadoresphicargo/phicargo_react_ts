@@ -6,7 +6,7 @@ import {
 
 import { AxiosError } from 'axios';
 import type { DriverApi } from '../models/api/driver-model-api';
-import { UpdatebleItem } from '../../core/types/global-types';
+import { UpdatableItem } from '../../core/types/global-types';
 import odooApi from '../../core/api/odoo-api';
 
 class DriverServiceApi {
@@ -28,7 +28,7 @@ class DriverServiceApi {
   static async updateDriver({
     id,
     updatedItem,
-  }: UpdatebleItem<DriverEdit>): Promise<Driver> {
+  }: UpdatableItem<DriverEdit>): Promise<Driver> {
     const driver = driverUpdateToApi(updatedItem);
 
     try {

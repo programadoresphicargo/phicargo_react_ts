@@ -13,3 +13,8 @@ export type DriverUnavailabilityCreate = DriverUnavailabilityBase;
 export interface DriverUnavailable extends DriverUnavailabilityBase {
   readonly id: number;
 }
+
+export type DriverPermissionSimple = Pick<
+  DriverUnavailabilityBase,
+  'startDate' | 'endDate' | 'reasonType' | 'description'
+>;

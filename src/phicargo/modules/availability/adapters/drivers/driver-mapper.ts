@@ -7,6 +7,7 @@ import type {
 } from '../../models/api/driver-model-api';
 
 import type { DriverBase } from '../../models/driver-model';
+import { driverPermissionSimpleToLocal } from './driver-unavailability-mapper';
 
 /**
  * Mapper function to convert a DriverBaseApi object to a DriverBase object
@@ -17,12 +18,12 @@ const driverBaseToLocal = (driver: DriverBaseApi): DriverBase => ({
   id: driver.id,
   name: driver.name,
   isActive: driver.active,
-  licenseId: driver.tms_driver_license_id || 'SIN ASIGNAR',
-  licenseType: driver.tms_driver_license_type || 'SIN ASIGNAR',
-  noLicense: driver.no_licencia || 'SIN ASIGNAR',
-  modality: driver.x_modalidad || 'SIN ASIGNAR',
-  isDangerous: driver.x_peligroso_lic || 'SIN ASIGNAR',
-  status: driver.x_status || 'SIN ASIGNAR',
+  licenseId: driver.tms_driver_license_id,
+  licenseType: driver.tms_driver_license_type,
+  noLicense: driver.no_licencia,
+  modality: driver.x_modalidad,
+  isDangerous: driver.x_peligroso_lic,
+  status: driver.x_status,
   travelId: driver.x_viaje,
   maneuverId: driver.x_maniobra,
   job: driver.job,
@@ -46,6 +47,21 @@ export const driverToLocal = (driver: DriverApi): Driver => ({
         loadType: driver.vehicle[0].x_tipo_carga || 'SIN ASIGNAR',
       }
     : null,
+  permissions: driver.permissions.map(driverPermissionSimpleToLocal),
+  travel: driver.tms_travel
+    ? {
+        id: driver.tms_travel.id,
+        name: driver.tms_travel.name,
+        status: driver.tms_travel.x_status_viaje || 'SIN ASIGNAR',
+      }
+    : null,
+  maneuver: driver.maniobra
+    ? {
+        id: driver.maniobra.id_maniobra,
+        type: driver.maniobra.tipo_maniobra,
+        status: driver.maniobra.estado_maniobra,
+      }
+    : null,
 });
 
 /**
@@ -58,8 +74,8 @@ export const driverSimpleToLocal = (driver: DriverSimpleApi): DriverSimple => ({
   name: driver.name,
   licenseId: driver.tms_driver_license_id || 'SIN ASIGNAR',
   licenseType: driver.tms_driver_license_type || 'SIN ASIGNAR',
-  modality: driver.x_modalidad || 'SIN ASIGNAR',
-  status: driver.x_status || 'SIN ASIGNAR',
+  modality: driver.x_modalidad,
+  status: driver.x_status,
   job: driver.job,
 });
 

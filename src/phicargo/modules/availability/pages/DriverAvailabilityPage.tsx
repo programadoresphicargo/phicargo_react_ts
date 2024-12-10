@@ -29,7 +29,7 @@ const DriverAvailabilityPage = () => {
     columnFilterDisplayMode: 'subheader',
     // STATE
     initialState: {
-      showColumnFilters: false,
+      showColumnFilters: true,
       density: 'compact',
       pagination: { pageSize: 100, pageIndex: 0 },
     },
@@ -53,7 +53,7 @@ const DriverAvailabilityPage = () => {
     ),
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 195px)',
+        maxHeight: 'calc(100vh - 180px)',
       },
     },
   });

@@ -16,15 +16,15 @@ export type VehicleBrand = SimpleData;
 export interface VehicleBase {
   readonly id: number;
   readonly name: string;
-  licensePlate: string;
-  serialNumber: string;
-  fleetType: string;
+  licensePlate: string | null;
+  serialNumber: string | null;  
+  fleetType: string | null;
   status: string;
-  vehicleType: string;
-  modality: Modality;
-  loadType: string;
+  vehicleType: string | null;
+  modality: Modality | null;
+  loadType: string | null;
 
-  state: VehicleState;
+  state: VehicleState | null;
   category: VehicleCategory | null;
   brand: VehicleBrand | null;
   branch: BranchSimple | null;

@@ -54,7 +54,7 @@ const VehicleInfo = () => {
                   <FaCircle className="text-green-500 mr-2" />
                   <span className="text-gray-800">Estado:</span>
                   <span className="ml-1 text-gray-700">
-                    {vehicle?.state.name}
+                    {vehicle?.state?.name || 'Sin estado'}
                   </span>
                 </div>
               </div>

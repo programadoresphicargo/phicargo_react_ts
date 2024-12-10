@@ -5,7 +5,8 @@ import { ReactNode } from 'react';
 const pages: MenuItemType[] = [
   { name: 'Unidades', path: '/disponibilidad/unidades' },
   { name: 'Operadores', path: '/disponibilidad/operadores' },
-  { name: 'Resumen', path: '/disponibilidad/resumen' },
+  { name: 'Resumen Unidades', path: '/disponibilidad/resumen-unidades' },
+  { name: 'Resumen Operadores', path: '/disponibilidad/resumen-operadores' },
   { name: 'Sin asignar', path: '/disponibilidad/sin-asignar' }
 ];
 

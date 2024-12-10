@@ -5,12 +5,23 @@ import type { MRT_ColumnDef } from 'material-react-table';
 import { getRealStatusConf } from '../utilities/get-real-status-conf';
 import { useMemo } from 'react';
 
+/**
+ * Custom hook to get the columns for the vehicles summary table
+ * @returns Columns for the summary table
+ */
 export const useSummaryColumns = () => {
   const columns = useMemo<MRT_ColumnDef<VehicleWithRealStatus>[]>(
     () => [
       { 
         accessorKey: 'name', 
         header: 'Unidad',
+        Cell: ({ cell }) => (
+          <span className='font-bold text-medium'>{cell.getValue<string>()}</span>
+        ) 
+      },
+      { 
+        accessorKey: 'company.name', 
+        header: 'Empresa',
         Cell: ({ cell }) => (
           <span className='font-bold text-medium'>{cell.getValue<string>()}</span>
         ) 

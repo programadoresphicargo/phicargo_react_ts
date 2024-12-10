@@ -17,7 +17,7 @@ export const useVehicleQueries = () => {
     queryKey: [mainKey],
     queryFn: VehicleServiceApi.getVehicles,
     refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5,
+    staleTime: 1000 * 60 * 10,
     placeholderData: keepPreviousData<Vehicle[]>,
   });
 

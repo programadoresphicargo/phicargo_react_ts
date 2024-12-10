@@ -39,7 +39,7 @@ const AsignacionUnidades = () => {
     positionToolbarAlertBanner: 'bottom',
     // STATE
     initialState: {
-      showColumnFilters: false,
+      showColumnFilters: true,
       density: 'compact',
       pagination: { pageSize: 100, pageIndex: 0 },
     },
@@ -62,7 +62,7 @@ const AsignacionUnidades = () => {
     ),
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 195px)',
+        maxHeight: 'calc(100vh - 180px)',
       },
     },
   });

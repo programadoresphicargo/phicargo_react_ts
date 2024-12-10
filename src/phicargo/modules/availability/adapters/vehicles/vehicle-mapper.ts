@@ -15,13 +15,13 @@ import { driverSimpleToLocal } from '../drivers/driver-mapper';
 const vehicleBaseToLocal = (vehicle: VehicleBaseApi): VehicleBase => ({
   id: vehicle.id,
   name: vehicle.name2,
-  licensePlate: vehicle.license_plate || 'SIN ASIGNAR',
-  serialNumber: vehicle.serial_number || 'SIN ASIGNAR',
-  fleetType: vehicle.fleet_type || 'SIN ASIGNAR',
+  licensePlate: vehicle.license_plate,
+  serialNumber: vehicle.serial_number,
+  fleetType: vehicle.fleet_type,
   status: vehicle.x_status,
-  vehicleType: vehicle.x_tipo_vehiculo || 'SIN ASIGNAR',
-  modality: vehicle.x_modalidad || 'SIN ASIGNAR',
-  loadType: vehicle.x_tipo_carga || 'SIN ASIGNAR',
+  vehicleType: vehicle.x_tipo_vehiculo,
+  modality: vehicle.x_modalidad,
+  loadType: vehicle.x_tipo_carga,
   state: vehicle.state,
   category: vehicle.category || null,
   brand: vehicle.brand || null,
@@ -86,7 +86,7 @@ export const vehicleUpdateToApi = (vehicle: VehicleUpdate): VehicleUpdateApi => 
   }
 
   if (vehicle.vehicleType){
-    vehicleApi.fleet_type = vehicle.vehicleType;
+    vehicleApi.x_tipo_vehiculo = vehicle.vehicleType;
   }
 
   if (vehicle.modality){
