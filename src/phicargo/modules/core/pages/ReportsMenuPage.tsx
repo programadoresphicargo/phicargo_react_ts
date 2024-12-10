@@ -10,6 +10,11 @@ const reports = [
     path: '/reportes/mantenimiento',
     icon: maintenanceIcon,
   },
+  {
+    label: 'Balance',
+    path: '/reportes/balance',
+    icon: maintenanceIcon,
+  },
 ];
 
 const ReportsMenuPage = () => {

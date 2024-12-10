@@ -39,7 +39,7 @@ export type StatusColor<T extends string> = {
   color: "warning" | "success" | "primary" | "default" | "secondary" | "danger";
 }
 
-export interface UpdatebleItem<T> {
+export interface UpdatableItem<T> {
   id: number;
   updatedItem: T;
 }

@@ -8,6 +8,7 @@ import AsignacionUnidades from '../phicargo/reportes/asignacion_unidades';
 import AvailabilityLayout from '../phicargo/modules/availability/layout/AvailabilityLayout';
 import AvailabilityRoutes from '../phicargo/modules/availability/routes/AvailabilityRoutes';
 import CartasPorte from '../phicargo/maniobras/tms_waybill/cartas_porte';
+import CashflowReportRoutes from '../phicargo/modules/cashflow-report/routes/CashflowReportRoutes';
 import ControlEstatusOperativos from '../phicargo/control_estatus/ControlEstatusOperativos';
 import ControlManiobras from '../phicargo/maniobras/control/control';
 import ControlOperadores from '../phicargo/operadores/ControlUsuarios';
@@ -155,6 +156,12 @@ export const PrivateRoutes = () => {
           path="/reportes/mantenimiento/*" 
           element={
             <MaintenanceReportRoutes />
+          } 
+        />
+        <Route 
+          path="/reportes/balance/*" 
+          element={
+            <CashflowReportRoutes />
           } 
         />
 
