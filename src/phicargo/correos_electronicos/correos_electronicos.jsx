@@ -120,6 +120,11 @@ const CorreosElectronicos = ({ estado }) => {
         fontSize: '14px',
       },
     },
+    muiTableContainerProps: {
+      sx: {
+        maxHeight: 'calc(100vh - 195px)',
+      },
+    },
     renderTopToolbarCustomActions: ({ table }) => (
       <Box
         sx={{

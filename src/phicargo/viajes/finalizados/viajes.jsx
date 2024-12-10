@@ -181,7 +181,6 @@ const ViajesFinalizados = ({ }) => {
     columnResizeMode: "onEnd",
     initialState: {
       density: 'compact',
-      showColumnFilters: true,
       pagination: { pageSize: 80 },
     },
     muiTablePaperProps: {
@@ -211,6 +210,11 @@ const ViajesFinalizados = ({ }) => {
         fontFamily: 'Inter',
         fontWeight: 'normal',
         fontSize: '14px',
+      },
+    },
+    muiTableContainerProps: {
+      sx: {
+        maxHeight: 'calc(100vh - 230px)',
       },
     },
     renderTopToolbarCustomActions: ({ table }) => (
@@ -252,20 +256,10 @@ const ViajesFinalizados = ({ }) => {
 
   return (
     <>
-      <div
-        style={{
-          display: 'block', // Asegura que sea un contenedor bloque
-          overflowX: 'scroll', // Fuerza la barra de desplazamiento horizontal
-          overflowY: 'hidden', // Opcional, elimina el desplazamiento vertical
-          width: '100%', // Asegura que ocupe todo el ancho disponible
-        }}
-      >
-        <NavbarViajes />
-        <MaterialReactTable
-          table={table}
-          enableStickyHeader={true} // Opcional: si deseas un encabezado fijo
-        />
-      </div>
+      <NavbarViajes />
+      <MaterialReactTable
+        table={table}
+      />
 
       <Dialog
         fullScreen

@@ -56,6 +56,10 @@ const Operadores = ({ estado }) => {
         header: 'ID Usuario',
       },
       {
+        accessorKey: 'company_id',
+        header: 'Empresa',
+      },
+      {
         accessorKey: 'name',
         header: 'Operador',
       },

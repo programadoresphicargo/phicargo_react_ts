@@ -27,10 +27,9 @@ import ControlOperadores from '../phicargo/operadores/ControlUsuarios';
 import { ToastContainer } from 'react-toastify';
 import { Toaster } from 'react-hot-toast';
 import ControlEstatusOperativos from '../phicargo/control_estatus/ControlEstatusOperativos';
-import control_maniobras from '../phicargo/maniobras/control/control';
 import ControlManiobras from '../phicargo/maniobras/control/control';
 import ControlTurnos from '../phicargo/turnos/ControlTurnos';
-
+const { VITE_PHIDES_API_URL } = import.meta.env;
 // Lazy loading pages
 // Availability Pages and Outlets
 const VehicleAvailabilityPage = lazy(
@@ -56,12 +55,12 @@ const SummaryPage = lazy(
 export const PrivateRoutes = () => {
   useEffect(() => {
     const checkSession = async () => {
-      const response = await fetch('/phicargo/login/inicio/check_session.php');
+      const response = await fetch(VITE_PHIDES_API_URL + '/login/inicio/check_session.php');
       const data = await response.json();
 
       if (data.status !== 'success') {
-        window.location.href =
-          'https://phides.phicargo-sistemas.online/phicargo/login/inicio/index.php';
+        //window.location.href =
+          'https://phides-client.phicargo-sistemas.online';
       }
     };
 

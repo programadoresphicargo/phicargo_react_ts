@@ -186,6 +186,11 @@ const CartasPorte = () => {
         fontSize: '14px',
       },
     },
+    muiTableContainerProps: {
+      sx: {
+        maxHeight: 'calc(100vh - 195px)',
+      },
+    },
     muiTableBodyCellProps: ({ row }) => ({
       sx: {
         backgroundColor: row.subRows?.length ? '#1184e8' : '#FFFFFF',
