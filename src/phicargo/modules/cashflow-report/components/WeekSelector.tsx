@@ -1,14 +1,12 @@
-import 'rsuite/dist/rsuite-no-reset.min.css'
+import 'rsuite/dist/rsuite-no-reset.min.css';
+
+import { useEffect, useState } from 'react';
 
 import { DateRange } from 'rsuite/esm/DateRangePicker';
 import { DateRangePicker } from 'rsuite';
-import { useState } from 'react';
+import { getWeekRange } from '../utils/get-week-range';
 import { useWeek } from '../hooks/useWeek';
 import { useWeekContext } from '../hooks';
-
-// import { getWeekRange } from '../utils/get-week-range';
-
-
 
 const WeekSelector = () => {
   const [value, setValue] = useState<DateRange | null>(null);
@@ -19,16 +17,16 @@ const WeekSelector = () => {
     changeWeekMutation: { mutate },
   } = useWeek();
 
-  // useEffect(() => {
-  //   const [startOfWeek, endOfWeek] = getWeekRange();
-  //   setValue([startOfWeek, endOfWeek]);
-  //   onSetWeekSelected([startOfWeek, endOfWeek]);
-  //   mutate({
-  //     startDate: startOfWeek,
-  //     endDate: endOfWeek,
-  //   });
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+  useEffect(() => {
+    const [startOfWeek, endOfWeek] = getWeekRange();
+    setValue([startOfWeek, endOfWeek]);
+    onSetWeekSelected([startOfWeek, endOfWeek]);
+    mutate({
+      startDate: startOfWeek,
+      endDate: endOfWeek,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const onChangeWeek = (week: DateRange | null) => {
     if (!week) return;

@@ -79,7 +79,6 @@ export const PrivateRoutes = () => {
     const checkSession = async () => {
       const response = await fetch('/phicargo/login/inicio/check_session.php');
       const data = await response.json();
-
       if (data.status !== 'success') {
         window.location.href =
           'https://phides.phicargo-sistemas.online/phicargo/login/inicio/index.php';

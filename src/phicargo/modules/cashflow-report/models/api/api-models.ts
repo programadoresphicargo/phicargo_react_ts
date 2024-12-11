@@ -30,6 +30,7 @@ export interface PaymentApi {
   friday_amount: AmountApi;
   saturday_amount: AmountApi;
   provider_id: number;
+  provider_name: string;
   week_id: number;
   observations: string;
   concept: string;

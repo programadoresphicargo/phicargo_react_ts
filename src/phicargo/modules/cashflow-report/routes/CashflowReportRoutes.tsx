@@ -5,7 +5,9 @@ import CashflowLayout from '../Layout/CashflowLayout';
 import { LoadingPage } from '../../core/pages/LoadingPage';
 
 const CollectView = lazy(() => import('../outlets/CollectView'));
+const NewCollectForm = lazy(() => import('../outlets/NewCollectForm'));
 const PaymentView = lazy(() => import('../outlets/PaymentView'));
+const NewPaymentForm = lazy(() => import('../outlets/NewPaymentForm'));
 
 const CashflowReportRoutes = () => {
   return (
@@ -18,7 +20,16 @@ const CashflowReportRoutes = () => {
               <CollectView />
             </Suspense>
           }
-        ></Route>
+        >
+          <Route
+            path="add"
+            element={
+              <Suspense fallback={null}>
+                <NewCollectForm />
+              </Suspense>
+            }
+          />
+        </Route>
         <Route
           path="payment"
           element={
@@ -26,7 +37,16 @@ const CashflowReportRoutes = () => {
               <PaymentView />
             </Suspense>
           }
-        ></Route>
+        >
+          <Route
+            path="add"
+            element={
+              <Suspense fallback={null}>
+                <NewPaymentForm />
+              </Suspense>
+            }
+          />
+        </Route>
       </Route>
     </Routes>
   );

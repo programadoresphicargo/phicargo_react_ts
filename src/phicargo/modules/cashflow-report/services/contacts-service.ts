@@ -43,6 +43,26 @@ class ContactsServiceApi {
       throw new Error('Error inesperado con el servidor');
     }
   }
+
+  /**
+   * Method to search contacts by name
+   * @param name Name of the contact to search
+   * @returns Array of contacts that match the name
+   */
+  public static async searhContactByName(name: string): Promise<Contact[]> {
+    try {
+      const response = await odooApi.get<Contact[]>(`/contacts/search-by-name/${name}`);
+      return response.data;
+    } catch(error) {
+      console.error(error);
+      if (error instanceof AxiosError) {
+        throw new Error(
+          error.response?.data.details || 'Error al buscar contacto',
+        );
+      }
+      throw new Error('Error inesperado con el servidor');
+    }
+  }
 }
 
 export default ContactsServiceApi;

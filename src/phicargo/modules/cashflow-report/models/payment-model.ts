@@ -7,9 +7,9 @@ import { WeekBase } from './week-model';
 export interface Payment extends WeekBase {
   id: number;
   observations: string;
-
   weekId: number;
   providerId: number;
+  providerName: string;
   concept: string;
 }
 

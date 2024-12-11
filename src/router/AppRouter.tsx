@@ -16,7 +16,11 @@ export const AppRouter = () => {
   }
 
   return (
-    <HashRouter>
+    <HashRouter
+      future={{
+        v7_relativeSplatPath: true,
+      }}
+    >
       {authStatus === 'authenticated' ? <PrivateRoutes /> : <PublicRoutes />}
     </HashRouter>
   );

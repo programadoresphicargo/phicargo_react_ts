@@ -17,8 +17,8 @@ export const usePaymentTableColumns = (data: Payment[]) => {
     return [
       {
         header: 'Proveedor',
-        accessorFn: (originalRow) => originalRow.providerId,
-        id: 'providerId',
+        accessorFn: (originalRow) => originalRow.providerName,
+        id: 'providerName',
         enableEditing: false,
         Cell: ({ cell, row }) => (
           <span

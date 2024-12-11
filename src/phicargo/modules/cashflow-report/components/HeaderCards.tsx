@@ -1,8 +1,7 @@
+import { formatCurrency, getProjection } from '../utils';
 import { useCollectRegisters, usePayments } from '../hooks';
 
 import Card from './Card';
-import { formatCurrency } from '../utils/format-currency';
-import { getProjection } from '../utils/get-projection';
 
 const HeaderCards = () => {
   const {

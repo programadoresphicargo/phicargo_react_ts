@@ -21,10 +21,11 @@ export const paymentToLocal = (payment: PaymentApi): Payment => ({
   friday: amountToLocal(payment.friday_amount),
   saturday: amountToLocal(payment.saturday_amount),
   providerId: payment.provider_id,
+  providerName: payment.provider_name,
   weekId: payment.week_id,
   observations: payment.observations,
   concept: payment.concept,
-  totalConfirmed: payment.total_confirmed_amount,
+  totalConfirmed: Number(payment.total_confirmed_amount),
   migratedFromWeekId: payment?.migrated_from_week_id,
 });
 

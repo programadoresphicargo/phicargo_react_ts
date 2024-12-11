@@ -1,9 +1,19 @@
-import { Button, Form, Modal } from "rsuite";
-import { DaysOfWeek, WeekBase } from "../models";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { useCollectRegisters, usePayments } from "../hooks";
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+} from '@nextui-org/react';
+import type { DaysOfWeek, WeekBase } from '../models';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { useCollectRegisters, usePayments } from '../hooks';
 
-import { CheckboxInput } from "../../core/components/inputs/CheckboxInput";
+import { CheckboxInput } from '../../core/components/inputs/CheckboxInput';
+import { FaCheck } from 'react-icons/fa';
+import { IoIosAlert } from 'react-icons/io';
+import NumberInput from '../../core/components/inputs/NumberInput';
 
 interface Confirmation {
   totalAmount: boolean;
@@ -18,8 +28,8 @@ const formInitialState: Confirmation = {
 interface ConfirmDialogProps {
   onClose: () => void;
   item: WeekBase & { id: number };
-  type: "collect" | "payment";
-  dayOfWeek: DaysOfWeek
+  type: 'collect' | 'payment';
+  dayOfWeek: DaysOfWeek;
 }
 
 const ConfirmDialog = (props: ConfirmDialogProps) => {
@@ -33,21 +43,21 @@ const ConfirmDialog = (props: ConfirmDialogProps) => {
     confirmPaymentMutation: { mutate: confirmPayment },
   } = usePayments();
 
-  const { control, handleSubmit } = useForm<Confirmation>({
+  const { control, handleSubmit, watch } = useForm<Confirmation>({
     defaultValues: formInitialState,
   });
 
-  // const totalAmount = watch("totalAmount");
+  const totalAmount = watch('totalAmount');
 
-  const onConfirm: SubmitHandler<Confirmation> = (data) => {
+  const onSubmit: SubmitHandler<Confirmation> = (data) => {
     const confirmation = {
       itemId: item.id,
       dayOfWeek: dayOfWeek,
       confirmed: true,
       amount: data.totalAmount ? item[dayOfWeek].amount : data.realAmount,
-    }
+    };
 
-    if(type === "collect"){
+    if (type === 'collect') {
       confirmCollect(confirmation);
     } else {
       confirmPayment(confirmation);
@@ -57,76 +67,56 @@ const ConfirmDialog = (props: ConfirmDialogProps) => {
 
   return (
     <>
-      <Modal 
-        role="alertdialog" 
-        open={true} 
-        onClose={onClose} 
-        size="300px"
-      >
-        <Modal.Body
-          style={{
-            overflow: "hidden",
-            height: "175px",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            {/* <RemindIcon
-              style={{ color: "#ffb300", fontSize: 24, marginRight: "8px" }}
-            /> */}
-            <h4>¿Confirmar Pago?</h4>
-          </div>
-
-          <Form>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                height: "100%",
-                marginTop: "10px",
-              }}
-            >
-              <CheckboxInput
-                control={control}
-                name="totalAmount"
-                label="Monto Total"
-                // defaultChecked
-              />
-            </div>
-
-            {/* <NumberInput
-              control={control}
-              name="realAmount"
-              label="Monto a Confirmar"
-              rules={
-                totalAmount
-                  ? {}
-                  : {
-                      min: {
-                        value: 1,
-                        message: "La cantidad debe de ser mayor a 0",
-                      },
-                    }
-              }
-              style={{ maxWidth: "100%" }}
-              isDisabled={totalAmount}
-            /> */}
-          </Form>
-        </Modal.Body>
-
-        <Modal.Footer>
-          <Button onClick={handleSubmit(onConfirm)} appearance="primary">
-            Confirmar
-          </Button>
-          <Button onClick={onClose} appearance="subtle">
-            Cancelar
-          </Button>
-        </Modal.Footer>
+      <Modal isOpen={true} size="xs" onClose={onClose}>
+        <ModalContent>
+          {() => (
+            <>
+              <ModalHeader className="flex items-center gap-2 pb-2 bg-[#dadfeb]">
+                <IoIosAlert className="text-4xl text-yellow-500" />
+                <h3 className="font-bold text-xl text-gray-800 uppercase">
+                  Confirmar
+                </h3>
+              </ModalHeader>
+              <ModalBody className="flex flex-col gap-4">
+                <div className="flex items-center justify-center">
+                  <CheckboxInput
+                    control={control}
+                    name="totalAmount"
+                    label="Monto Total"
+                  />
+                </div>
+                <NumberInput
+                  control={control}
+                  name="realAmount"
+                  label="Monto a Confirmar"
+                  rules={
+                    totalAmount
+                      ? {}
+                      : {
+                          min: {
+                            value: 1,
+                            message: 'La cantidad debe de ser mayor a 0',
+                          },
+                        }
+                  }
+                  isDisabled={totalAmount}
+                />
+              </ModalBody>
+              <ModalFooter className="flex justify-end">
+                <Button
+                  color="primary"
+                  onClick={handleSubmit(onSubmit)}
+                  size="sm"
+                  className="uppercase font-bold"
+                  startContent={<FaCheck />}
+                  // isLoading={isPending}
+                >
+                  Completar
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
       </Modal>
     </>
   );
