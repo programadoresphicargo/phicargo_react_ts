@@ -16,6 +16,7 @@ export const collectRegisterToApi = (register: CollectRegisterCreate) => {
   return {
     week_id: register.weekId,
     client_id: register.clientId,
+    company_id: register.companyId,
     [`${register.day}_amount`]: register.mount,
   };
 };
@@ -29,6 +30,8 @@ export const collectRegisterToApiFull = (register: CollectRegister) => ({
   id: register.id,
   client_id: register.clientId,
   client_name: register.clientName,
+  company_id: register.companyId,
+  company_name: register.companyName,
   week_id: register.weekId,
   monday_amount: Number(register.monday),
   tuesday_amount: Number(register.tuesday),
@@ -50,6 +53,8 @@ export const collectRegisterToLocal = (
   id: Number(data.id),
   clientId: Number(data.client_id),
   clientName: data.client_name,
+  companyId: Number(data.company_id),
+  companyName: data.company_name, 
   weekId: Number(data.week_id),
   monday: amountToLocal(data.monday_amount),
   tuesday: amountToLocal(data.tuesday_amount),

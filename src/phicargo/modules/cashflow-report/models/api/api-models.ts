@@ -9,6 +9,8 @@ export interface CollectRegisterApi {
   id: number;
   client_id: number;
   client_name: string;
+  company_id: number;
+  company_name: string;
   week_id: number;
   monday_amount: AmountApi;
   tuesday_amount: AmountApi;
@@ -31,6 +33,8 @@ export interface PaymentApi {
   saturday_amount: AmountApi;
   provider_id: number;
   provider_name: string;
+  company_id: number;
+  company_name: string;
   week_id: number;
   observations: string;
   concept: string;

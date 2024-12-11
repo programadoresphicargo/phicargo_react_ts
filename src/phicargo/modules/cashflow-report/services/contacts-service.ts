@@ -18,7 +18,7 @@ class ContactsServiceApi {
       console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
-          error.response?.data.details || 'Error al obtener clientes',
+          error.response?.data.detail || 'Error al obtener clientes',
         );
       }
       throw new Error('Error inesperado con el servidor');
@@ -37,7 +37,7 @@ class ContactsServiceApi {
       console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
-          error.response?.data.details || 'Error al obtener proveedores',
+          error.response?.data.detail || 'Error al obtener proveedores',
         );
       }
       throw new Error('Error inesperado con el servidor');
@@ -57,7 +57,7 @@ class ContactsServiceApi {
       console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
-          error.response?.data.details || 'Error al buscar contacto',
+          error.response?.data.detail || 'Error al buscar contacto',
         );
       }
       throw new Error('Error inesperado con el servidor');

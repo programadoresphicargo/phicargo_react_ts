@@ -13,7 +13,7 @@ const HeaderCards = () => {
   } = usePayments();
 
   return (
-    <>
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
       <Card
         title="Total Cobrado"
         content={
@@ -66,7 +66,7 @@ const HeaderCards = () => {
               )
         }
       />
-    </>
+    </div>
   );
 };
 

@@ -11,6 +11,8 @@ export interface Payment extends WeekBase {
   providerId: number;
   providerName: string;
   concept: string;
+  companyId: number;
+  companyName: string;
 }
 
 export interface PaymentCreate {
@@ -19,4 +21,5 @@ export interface PaymentCreate {
   concept: string;
   amount: number;
   day: DaysOfWeek;
+  companyId: number;
 }

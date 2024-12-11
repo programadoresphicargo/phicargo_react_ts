@@ -133,7 +133,7 @@ const PaymentTable = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 225px)',
+        height: 'calc(100vh - 225px)',
       },
     },
   });

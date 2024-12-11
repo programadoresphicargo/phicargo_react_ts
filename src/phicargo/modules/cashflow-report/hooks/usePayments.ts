@@ -15,21 +15,21 @@ const mainKey = 'payments';
 export const usePayments = () => {
   const queryClient = useQueryClient();
 
-  const { activeWeekId } = useWeekContext();
+  const { activeWeekId, companySelected } = useWeekContext();
 
   const paymentsQuery = useQuery({
-    queryKey: [mainKey, 'weekId', activeWeekId],
-    queryFn: () => PaymentServiceApi.getRegisterByWeekId(activeWeekId || 6),
+    queryKey: [mainKey, 'weekId', activeWeekId, 'company', companySelected],
+    queryFn: () => PaymentServiceApi.getRegisterByWeekId(activeWeekId || 0, companySelected || 0),
     refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5,
-    enabled: !!activeWeekId,
+    staleTime: 1000 * 60 * 10,
+    enabled: !!activeWeekId && !!companySelected,
   });
 
   const createPaymentMutation = useMutation({
     mutationFn: PaymentServiceApi.createRegister,
     onMutate(newPayment) {
       queryClient.cancelQueries({
-        queryKey: [mainKey, 'weekId', activeWeekId],
+        queryKey: [mainKey, 'weekId', activeWeekId, 'company', companySelected],
       });
       const previousPayments = queryClient.getQueryData([
         mainKey,
@@ -38,7 +38,7 @@ export const usePayments = () => {
       ]);
       const tempId = Math.random() + 1;
       queryClient.setQueryData<Payment[]>(
-        [mainKey, 'weekId', activeWeekId],
+        [mainKey, 'weekId', activeWeekId, 'company', companySelected],
         (prev) => [
           { ...getDefaultPayment(tempId, newPayment) },
           ...(prev || []),
@@ -48,7 +48,7 @@ export const usePayments = () => {
     },
     onSuccess: (newRegister, _variables, context) => {
       queryClient.setQueryData(
-        [mainKey, 'weekId', activeWeekId],
+        [mainKey, 'weekId', activeWeekId, 'company', companySelected],
         (prev: Payment[]) =>
           prev?.map((r) => (r.id === context.tempId ? newRegister : r)),
       );
@@ -56,7 +56,7 @@ export const usePayments = () => {
     },
     onError: (err, _newRegister, context) => {
       queryClient.setQueryData(
-        [mainKey, 'weekId', activeWeekId],
+        [mainKey, 'weekId', activeWeekId, 'company', companySelected],
         context?.previousPayments,
       );
       toast.error(err.message);
@@ -67,7 +67,7 @@ export const usePayments = () => {
     mutationFn: PaymentServiceApi.updateRegister,
     onMutate: async () => {
       await queryClient.cancelQueries({
-        queryKey: [mainKey, 'weekId', activeWeekId],
+        queryKey: [mainKey, 'weekId', activeWeekId, 'company', companySelected],
       });
       const previousPayments = queryClient.getQueryData([
         mainKey,
@@ -78,7 +78,7 @@ export const usePayments = () => {
     },
     onSuccess: (newRegister) => {
       queryClient.setQueryData(
-        [mainKey, 'weekId', activeWeekId],
+        [mainKey, 'weekId', activeWeekId, 'company', companySelected],
         (prev: Payment[]) =>
           prev?.map((r) => (r.id === newRegister.id ? newRegister : r)),
       );
@@ -86,7 +86,7 @@ export const usePayments = () => {
     },
     onError: (err, _newRegister, context) => {
       queryClient.setQueryData(
-        [mainKey, 'weekId', activeWeekId],
+        [mainKey, 'weekId', activeWeekId, 'company', companySelected],
         context?.previousPayments,
       );
       toast.error(err.message);
@@ -97,7 +97,7 @@ export const usePayments = () => {
     mutationFn: PaymentServiceApi.deleteRegister,
     onMutate: async (id) => {
       await queryClient.cancelQueries({
-        queryKey: [mainKey, 'weekId', activeWeekId],
+        queryKey: [mainKey, 'weekId', activeWeekId, 'company', companySelected],
       });
       const previousPayments = queryClient.getQueryData([
         mainKey,
@@ -105,7 +105,7 @@ export const usePayments = () => {
         activeWeekId,
       ]);
       queryClient.setQueryData(
-        [mainKey, 'weekId', activeWeekId],
+        [mainKey, 'weekId', activeWeekId, 'company', companySelected],
         (prev: Payment[]) => prev?.filter((r) => r.id !== id),
       );
       return { previousPayments };
@@ -115,7 +115,7 @@ export const usePayments = () => {
     },
     onError: (err, _variables, context) => {
       queryClient.setQueryData(
-        [mainKey, 'weekId', activeWeekId],
+        [mainKey, 'weekId', activeWeekId, 'company', companySelected],
         context?.previousPayments,
       );
       toast.error(err.message);
@@ -126,7 +126,7 @@ export const usePayments = () => {
     mutationFn: PaymentServiceApi.confirmPayment,
     onMutate: async () => {
       await queryClient.cancelQueries({
-        queryKey: [mainKey, 'weekId', activeWeekId],
+        queryKey: [mainKey, 'weekId', activeWeekId, 'company', companySelected],
       });
       const previousPayments = queryClient.getQueryData([
         mainKey,
@@ -137,7 +137,7 @@ export const usePayments = () => {
     },
     onSuccess: (newRegister) => {
       queryClient.setQueryData(
-        [mainKey, 'weekId', activeWeekId],
+        [mainKey, 'weekId', activeWeekId, 'company', companySelected],
         (prev: Payment[]) =>
           prev?.map((r) => (r.id === newRegister.id ? newRegister : r)),
       );
@@ -145,7 +145,7 @@ export const usePayments = () => {
     },
     onError: (err, _newRegister, context) => {
       queryClient.setQueryData(
-        [mainKey, 'weekId', activeWeekId],
+        [mainKey, 'weekId', activeWeekId, 'company', companySelected],
         context?.previousPayments,
       );
       toast.error(err.message);
@@ -162,7 +162,7 @@ export const usePayments = () => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: [mainKey, 'weekId', activeWeekId],
+        queryKey: [mainKey, 'weekId', activeWeekId, 'company', companySelected],
       });
     },
   });

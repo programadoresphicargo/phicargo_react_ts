@@ -135,7 +135,7 @@ const CollectionTable = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 225px)',
+        height: 'calc(100vh - 225px)',
       },
     },
   });
@@ -143,40 +143,6 @@ const CollectionTable = () => {
   return (
     <>
       <MaterialReactTable table={table} />
-      {/* <MaterialTable
-
-        renderRowActions={({ row, table }) => (
-          <div
-            style={{
-              display: 'flex',
-              gap: '5px',
-              alignItems: 'center',
-              padding: '2px 0px',
-            }}
-          >
-            <IconButton
-              circle
-              icon={<EditIcon />}
-              appearance="primary"
-              size="xs"
-              style={{ padding: '5px' }}
-              onClick={() => table.setEditingRow(row)}
-              // disabled={!isGOEWeek(weekSelected!)}
-            />
-            <IconButton
-              circle
-              icon={<DeleteIcon />}
-              appearance="primary"
-              size="xs"
-              onClick={() => setDeleteId(Number(row.original.id))}
-              color="red"
-              stye={{ padding: '1px' }}
-              disabled={!isGOEWeek(weekSelected!)}
-            />
-          </div>
-        )}
-       
-      /> */}
       {deleteId && (
         <AlertDialog
           alert="Eliminar Registro"

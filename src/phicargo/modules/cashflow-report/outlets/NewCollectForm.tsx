@@ -33,7 +33,7 @@ const initialFormState: OptionsSelection = {
 
 const NewCollectForm = () => {
   const navigate = useNavigate();
-  const { activeWeekId } = useWeekContext();
+  const { activeWeekId, companySelected } = useWeekContext();
 
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
@@ -51,20 +51,26 @@ const NewCollectForm = () => {
     createCollectRegisterMutation: { mutate: createRegister, isPending },
   } = useCollectRegisters();
 
-  const onSubmit: SubmitHandler<OptionsSelection> = (data) => {
-    if (!activeWeekId) {
-      toast.error('No hay una semana activa');
-    }
-    createRegister({
-      weekId: Number(activeWeekId),
-      clientId: Number(data.clientId),
-      mount: Number(data.mount),
-      day: data.day,
-    });
-  };
-
   const onClose = () => {
     navigate('/reportes/balance/collect');
+  };
+
+  const onSubmit: SubmitHandler<OptionsSelection> = (data) => {
+    if (!activeWeekId || !companySelected) {
+      toast.error('No hay una semana activa');
+    }
+    createRegister(
+      {
+        weekId: Number(activeWeekId),
+        clientId: Number(data.clientId),
+        mount: Number(data.mount),
+        day: data.day,
+        companyId: companySelected,
+      },
+      {
+        onSuccess: () => onClose(),
+      },
+    );
   };
 
   return (

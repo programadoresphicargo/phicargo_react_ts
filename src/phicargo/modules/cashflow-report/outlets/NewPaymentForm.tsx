@@ -36,7 +36,7 @@ const initialFormState: OptionsSelection = {
 
 const NewPaymentForm = () => {
   const navigate = useNavigate();
-  const { activeWeekId } = useWeekContext();
+  const { activeWeekId, companySelected } = useWeekContext();
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
@@ -58,7 +58,7 @@ const NewPaymentForm = () => {
   };
 
   const onSubmit: SubmitHandler<OptionsSelection> = (data) => {
-    if (!activeWeekId) {
+    if (!activeWeekId || !companySelected) {
       toast.error('No hay una semana activa');
     }
     const newPayment = {
@@ -67,6 +67,7 @@ const NewPaymentForm = () => {
       concept: data.concept,
       day: data.day,
       amount: Number(data.amount),
+      companyId: companySelected,
     };
     createRegister(newPayment, {
       onSuccess: () => onClose(),

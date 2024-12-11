@@ -24,17 +24,17 @@ class PaymentServiceApi {
    * @param weekId ID of the week to get the payment registers
    * @returns Array of Payment Registers
    */
-  public static async getRegisterByWeekId(weekId: number): Promise<Payment[]> {
+  public static async getRegisterByWeekId(weekId: number, companyId: number): Promise<Payment[]> {
     try {
       const response = await odooApi.get<PaymentApi[]>(
-        `/accounting_report/payments?week_id=${weekId}`,
+        `/accounting_report/payments?week_id=${weekId}&company_id=${companyId}`,
       );
       return response.data.map(paymentToLocal);
     } catch (error) {
       console.log(error);
       if (error instanceof AxiosError) {
         throw new Error(
-          error.response?.data.details || 'Error al obtener registros',
+          error.response?.data.detail || 'Error al obtener registros',
         );
       }
       throw new Error('Error inesperado con el servidor');
@@ -60,7 +60,7 @@ class PaymentServiceApi {
       console.log(error);
       if (error instanceof AxiosError) {
         throw new Error(
-          error.response?.data.details || 'Error al crear registro',
+          error.response?.data.detail || 'Error al crear registro',
         );
       }
       throw new Error('Error inesperado con el servidor');
@@ -87,7 +87,7 @@ class PaymentServiceApi {
       console.log(error);
       if (error instanceof AxiosError) {
         throw new Error(
-          error.response?.data.details || 'Error al actualizar registro',
+          error.response?.data.detail || 'Error al actualizar registro',
         );
       }
       throw new Error('Error inesperado con el servidor');
@@ -107,7 +107,7 @@ class PaymentServiceApi {
       console.log(error);
       if (error instanceof AxiosError) {
         throw new Error(
-          error.response?.data.details || 'Error al eliminar registro',
+          error.response?.data.detail || 'Error al eliminar registro',
         );
       }
       throw new Error('Error inesperado con el servidor');
@@ -133,7 +133,7 @@ class PaymentServiceApi {
       console.log(error);
       if (error instanceof AxiosError) {
         throw new Error(
-          error.response?.data.details || 'Error al confirmar pago',
+          error.response?.data.detail || 'Error al confirmar pago',
         );
       }
       throw new Error('Error inesperado con el servidor');
@@ -148,20 +148,22 @@ class PaymentServiceApi {
   public static async loadPreviousWeek({
     previousWeekId,
     activeWeekId,
+    companyId,
   }: {
     previousWeekId: number;
     activeWeekId: number;
+    companyId: number;
   }): Promise<number> {
     try {
       const response = await odooApi.post<number>(
-        `/accounting_report/payments/load_previous/payments?previous_week_id=${previousWeekId}&new_week_id=${activeWeekId}`,
+        `/accounting_report/payments/load_previous/payments?previous_week_id=${previousWeekId}&new_week_id=${activeWeekId}&company_id=${companyId}`,
       );
       return response.data;
     } catch (error) {
       console.log(error);
       if (error instanceof AxiosError) {
         throw new Error(
-          error.response?.data.details || 'Error al cargar registros',
+          error.response?.data.detail || 'Error al cargar registros',
         );
       }
       throw new Error('Error inesperado con el servidor');
