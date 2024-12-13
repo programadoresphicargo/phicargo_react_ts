@@ -1,12 +1,6 @@
-import { Box, IconButton, Tooltip } from '@mui/material';
-import {
-  MaterialReactTable,
-  useMaterialReactTable,
-} from 'material-react-table';
-
-import RefreshIcon from '@mui/icons-material/Refresh';
-import type { VehicleWithRealStatus } from '../models/vehicle-model';
+import { MaterialReactTable } from 'material-react-table';
 import VehiclesWithRealStatus from '../utilities/get-vehicles-real-status';
+import { useBaseTable } from '../../core/hooks/useBaseTable';
 import { useMemo } from 'react';
 import { useSummaryColumns } from '../hooks/useSummaryColumns';
 import { useTableState } from '../../core/hooks/useTableState';
@@ -17,16 +11,7 @@ const SummaryPage = () => {
     vehicleQuery: { data: vehicles, isFetching, refetch },
   } = useVehicleQueries();
 
-  const {
-    columnFilters,
-    globalFilter,
-    sorting,
-    grouping,
-    setColumnFilters,
-    setGlobalFilter,
-    setSorting,
-    setGrouping,
-  } = useTableState({
+  const state = useTableState({
     tableId: 'availability-summary-vehicles-table',
   });
 
@@ -37,50 +22,12 @@ const SummaryPage = () => {
     return vehiclesTransformr.getVehiclesWithRealStatus();
   }, [vehicles]);
 
-  const table = useMaterialReactTable<VehicleWithRealStatus>({
-    // DATA
+  const table = useBaseTable({
     columns,
     data: vehiclesWithStatus || [],
-    enableStickyHeader: true,
-    // PAGINATION, FILTERS, SORTING
-    enableDensityToggle: false,
-    enableFullScreenToggle: false,
-    enableGrouping: true,
-    enableGlobalFilter: true,
-    enableFilters: true,
-    positionToolbarAlertBanner: 'bottom',
-    onColumnFiltersChange: setColumnFilters,
-    onGlobalFilterChange: setGlobalFilter,
-    onSortingChange: setSorting,
-    onGroupingChange: setGrouping,
-    // STATE
-    initialState: {
-      density: 'compact',
-      pagination: { pageSize: 100, pageIndex: 0 },
-      showColumnFilters: true,
-      showGlobalFilter: true
-    },
-    state: { 
-      isLoading: isFetching,
-      columnFilters,
-      globalFilter,
-      sorting,
-      grouping, 
-    },
-    renderTopToolbarCustomActions: () => (
-      <Box>
-        <Tooltip arrow title="Refrescar">
-          <IconButton onClick={() => refetch()}>
-            <RefreshIcon />
-          </IconButton>
-        </Tooltip>
-      </Box>
-    ),
-    muiTableContainerProps: {
-      sx: {
-        height: 'calc(100vh - 180px)',
-      },
-    },
+    state,
+    isLoading: isFetching,
+    refetch,
   });
 
   return <MaterialReactTable table={table} />;
