@@ -1,8 +1,7 @@
+import { formatCurrency, getProjection } from '../utils';
 import { useCollectRegisters, usePayments } from '../hooks';
 
 import Card from './Card';
-import { formatCurrency } from '../utils/format-currency';
-import { getProjection } from '../utils/get-projection';
 
 const HeaderCards = () => {
   const {
@@ -14,7 +13,7 @@ const HeaderCards = () => {
   } = usePayments();
 
   return (
-    <>
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
       <Card
         title="Total Cobrado"
         content={
@@ -67,7 +66,7 @@ const HeaderCards = () => {
               )
         }
       />
-    </>
+    </div>
   );
 };
 

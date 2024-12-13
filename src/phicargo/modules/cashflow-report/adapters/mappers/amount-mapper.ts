@@ -6,7 +6,7 @@ import type { Amount, AmountApi } from '../../models';
  * @returns Object converted
  */
 export const amountToLocal = (amount: AmountApi): Amount => ({
-  amount: amount.amount,
+  amount: Number(amount.amount),
   confirmed: amount.confirmed,
-  realAmount: amount.real_amount,
+  realAmount: Number(amount.real_amount),
 });

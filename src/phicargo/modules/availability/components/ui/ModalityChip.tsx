@@ -11,6 +11,8 @@ const getModalityColor = (modality: Modality) => {
       return 'primary';
     case 'sencillo':
       return 'secondary';
+    case 'single':
+      return 'secondary';
     default:
       return 'warning';
   }

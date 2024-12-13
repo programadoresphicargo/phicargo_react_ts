@@ -10,11 +10,25 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import { useDriverQueries } from '../hooks/useDriverQueries';
 import { useDriversSummaryColumns } from '../hooks/useDriversSummaryColumns';
 import { useMemo } from 'react';
+import { useTableState } from '../../core/hooks/useTableState';
 
 const DriverSummaryPage = () => {
   const {
     driversQuery: { data: drivers, isFetching, refetch },
   } = useDriverQueries();
+
+  const {
+    columnFilters,
+    globalFilter,
+    sorting,
+    grouping,
+    setColumnFilters,
+    setGlobalFilter,
+    setSorting,
+    setGrouping,
+  } = useTableState({
+    tableId: 'availability-summary-drivers-table',
+  });
 
   const { columns } = useDriversSummaryColumns();
 
@@ -34,13 +48,24 @@ const DriverSummaryPage = () => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
-    columnFilterDisplayMode: 'popover',
+    positionToolbarAlertBanner: 'bottom',
+    onColumnFiltersChange: setColumnFilters,
+    onGlobalFilterChange: setGlobalFilter,
+    onSortingChange: setSorting,
+    onGroupingChange: setGrouping,
     // STATE
     initialState: {
       density: 'compact',
       pagination: { pageSize: 100, pageIndex: 0 },
+      showColumnFilters: true,
     },
-    state: { isLoading: isFetching },
+    state: { 
+      isLoading: isFetching,
+      columnFilters,
+      globalFilter,
+      sorting,
+      grouping 
+    },
     renderTopToolbarCustomActions: () => (
       <Box>
         <Tooltip arrow title="Refrescar">
@@ -52,7 +77,7 @@ const DriverSummaryPage = () => {
     ),
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 180px)',
+        height: 'calc(100vh - 180px)',
       },
     },
   });

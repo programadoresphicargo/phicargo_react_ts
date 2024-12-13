@@ -4,6 +4,8 @@ import ModalityChip from '../components/ui/ModalityChip';
 import StatusChip from '../components/ui/StatusChip';
 import type { Driver, Modality, Status } from '../models/driver-model';
 import JobChip from '../components/ui/JobChip';
+import { ManeuverCell } from '../components/ui/ManeuverCell';
+import { TravelCell } from '../components/ui/TravelCell';
 
 export const useDriversColumns = () => {
   const columns = useMemo<MRT_ColumnDef<Driver>[]>(
@@ -18,10 +20,36 @@ export const useDriversColumns = () => {
       { 
         accessorKey: 'company.name', 
         header: 'Compañia',
+        filterVariant: 'select',
+        filterSelectOptions: [
+          {
+            value: 'TRANSPORTES BELCHEZ',
+            label: 'TRANSPORTES BELCHEZ',
+          },
+          {
+            value: 'PHI-CARGO',
+            label: 'PHI-CARGO',
+          },
+        ],
       },
       {
-        accessorFn: (row) => row.job ? row.job.name : 'N/A',
+        accessorFn: (row) => row.job ? row.job.name : 'SIN ASIGNAR',
         header: 'Tipo',
+        filterVariant: 'select',
+        filterSelectOptions: [
+          {
+            value: 'OPERADOR',
+            label: 'OPERADOR',
+          },
+          {
+            value: 'OPERADOR POSTURERO',
+            label: 'OPERADOR POSTURERO',
+          },
+          {
+            value: 'MOVEDOR',
+            label: 'MOVEDOR',
+          },
+        ],
         Cell: ({ row }) => <JobChip job={row.original.job.name} />,
       },
       { 
@@ -39,13 +67,35 @@ export const useDriversColumns = () => {
       {
         accessorFn: (row) => row.modality,
         header: 'Modalidad',
+        filterVariant: 'select',
+        filterSelectOptions: [
+          {
+            value: 'full',
+            label: 'FULL',
+          },
+          {
+            value: 'single',
+            label: 'SENCILLO',
+          },
+        ],
         Cell: ({ cell }) => (
           <ModalityChip modality={cell.getValue<Modality>()} />
         ),
       },
       { 
         accessorFn: (row) => row.isDangerous, 
-        header: 'Peligroso' 
+        header: 'Peligroso',
+        filterVariant: 'select',
+        filterSelectOptions: [
+          {
+            value: 'SI',
+            label: 'SI',
+          },
+          {
+            value: 'NO',
+            label: 'NO',
+          },
+        ], 
       },
       {
         accessorFn: (row) => row.status,
@@ -53,28 +103,24 @@ export const useDriversColumns = () => {
         Cell: ({ cell }) => <StatusChip status={cell.getValue<Status>()} />,
       },
       { 
-        accessorFn: (row) => row.travelId, 
+        accessorFn: (row) => row.travel ? row.travel.name : null, 
         header: 'Viaje',
-        Cell: ({ cell }) => {
+        Cell: ({ cell, row }) => {
           const value = cell.getValue<number | null>();
           return !value 
             ? <span className='text-gray-400 text-sm'>{'SIN ASIGNAR'}</span>
-            : <span className='font-bold'>{cell.getValue<string>()}</span>
+            : <TravelCell travel={row.original.travel} />
         } 
       },
       { 
-        accessorFn: (row) => row.maneuverId, 
+        accessorFn: (row) => row.maneuverId || null, 
         header: 'Maniobra',
-        Cell: ({ cell }) => {
+        Cell: ({ cell, row }) => {
           const value = cell.getValue<number | null>();
           return !value 
             ? <span className='text-gray-400 text-sm'>{'SIN ASIGNAR'}</span>
-            : <span className='font-bold'>{cell.getValue<string>()}</span>
+            : <ManeuverCell maneuver={row.original.maneuver} />
         } 
-      },
-      { 
-        accessorFn: (row) => row.company ? row.company.name : 'N/A', 
-        header: 'Compañia' 
       },
     ],
     [],

@@ -21,10 +21,13 @@ export const paymentToLocal = (payment: PaymentApi): Payment => ({
   friday: amountToLocal(payment.friday_amount),
   saturday: amountToLocal(payment.saturday_amount),
   providerId: payment.provider_id,
+  providerName: payment.provider_name,
+  companyId: payment.company_id,
+  companyName: payment.company_name,
   weekId: payment.week_id,
   observations: payment.observations,
   concept: payment.concept,
-  totalConfirmed: payment.total_confirmed_amount,
+  totalConfirmed: Number(payment.total_confirmed_amount),
   migratedFromWeekId: payment?.migrated_from_week_id,
 });
 
@@ -37,6 +40,7 @@ export const paymentToApi = (payment: PaymentCreate) => ({
   week_id: payment.weekId,
   provider_id: payment.providerId,
   concept: payment.concept,
+  company_id: payment.companyId,
   [`${payment.day}_amount`]: payment.amount,
 });
 
@@ -55,6 +59,7 @@ export const paymentToApiFull = (payment: Payment) => ({
   saturday_amount: payment.saturday,
   provider_id: payment.providerId,
   week_id: payment.weekId,
+  company_id: payment.companyId,
   observations: payment.observations,
   concept: payment.concept,
   total_confirmed_amount: payment.totalConfirmed,

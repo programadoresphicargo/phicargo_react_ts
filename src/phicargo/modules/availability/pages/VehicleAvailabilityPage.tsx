@@ -8,11 +8,25 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { Vehicle } from '../models/vehicle-model';
+import { useTableState } from '../../core/hooks/useTableState';
 import { useVehicleColumns } from '../hooks/useVehicleColumns';
 import { useVehicleQueries } from '../hooks/useVehicleQueries';
 
 const AsignacionUnidades = () => {
   const navigate = useNavigate();
+
+  const {
+    columnFilters,
+    globalFilter,
+    sorting,
+    grouping,
+    setColumnFilters,
+    setGlobalFilter,
+    setSorting,
+    setGrouping,
+  } = useTableState({
+    tableId: 'availability-vehicles-table',
+  })
 
   const { columns } = useVehicleColumns();
 
@@ -32,11 +46,13 @@ const AsignacionUnidades = () => {
     // PAGINATION, FILTERS, SORTING
     enableGrouping: true,
     enableDensityToggle: false,
-    enableFullScreenToggle: false,
+    enableFullScreenToggle: true,
     columnFilterDisplayMode: 'subheader',
-    // enableRowSelection: true,
-    paginationDisplayMode: 'pages',
     positionToolbarAlertBanner: 'bottom',
+    onColumnFiltersChange: setColumnFilters,
+    onGlobalFilterChange: setGlobalFilter,
+    onSortingChange: setSorting,
+    onGroupingChange: setGrouping,
     // STATE
     initialState: {
       showColumnFilters: true,
@@ -45,6 +61,10 @@ const AsignacionUnidades = () => {
     },
     state: {
       isLoading: isFetching,
+      columnFilters,
+      globalFilter,
+      sorting,
+      grouping,
     },
     // CUSTOMIZATIONS
     muiTableBodyRowProps: ({ row }) => ({
@@ -62,7 +82,7 @@ const AsignacionUnidades = () => {
     ),
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 180px)',
+        height: 'calc(100vh - 180px)',
       },
     },
   });

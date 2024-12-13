@@ -15,22 +15,22 @@ const registersKey = 'registers';
 export const useCollectRegisters = () => {
   const queryClient = useQueryClient();
 
-  const { activeWeekId } = useWeekContext();
+  const { activeWeekId, companySelected } = useWeekContext();
 
   const collectRegisterQuery = useQuery({
-    queryKey: [registersKey, 'weekId', activeWeekId],
+    queryKey: [registersKey, 'weekId', activeWeekId, 'company', companySelected],
     queryFn: () =>
-      CollectServiceApi.getCollectRegisterByWeekId(activeWeekId || 0),
+      CollectServiceApi.getCollectRegisterByWeekId(activeWeekId || 0, companySelected),
     refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5,
-    enabled: !!activeWeekId,
+    staleTime: 1000 * 60 * 10,
+    enabled: !!activeWeekId && !!companySelected,
   });
 
   const createCollectRegisterMutation = useMutation({
     mutationFn: CollectServiceApi.createRegister,
     onMutate: async (newRegister) => {
       await queryClient.cancelQueries({
-        queryKey: [registersKey, 'weekId', activeWeekId],
+        queryKey: [registersKey, 'weekId', activeWeekId, 'company', companySelected],
       });
       const previousRegisters = queryClient.getQueryData<CollectRegister[]>([
         registersKey,
@@ -39,7 +39,7 @@ export const useCollectRegisters = () => {
       ]);
       const tempId = Math.random() + 1;
       queryClient.setQueryData<CollectRegister[]>(
-        [registersKey, 'weekId', activeWeekId],
+        [registersKey, 'weekId', activeWeekId, 'company', companySelected],
         (prev) => [
           { ...getDefaultCollectRegister(tempId, newRegister) },
           ...(prev || []),
@@ -49,7 +49,7 @@ export const useCollectRegisters = () => {
     },
     onSuccess: (newRegister, _variables, context) => {
       queryClient.setQueryData(
-        [registersKey, 'weekId', activeWeekId],
+        [registersKey, 'weekId', activeWeekId, 'company', companySelected],
         (prev: CollectRegister[]) =>
           prev?.map((r) => (r.id === context.tempId ? newRegister : r)),
       );
@@ -57,7 +57,7 @@ export const useCollectRegisters = () => {
     },
     onError: (err, _newRegister, context) => {
       queryClient.setQueryData(
-        [registersKey, 'weekId', activeWeekId],
+        [registersKey, 'weekId', activeWeekId, 'company', companySelected],
         context?.previousRegisters,
       );
       toast.error(err.message);
@@ -68,7 +68,7 @@ export const useCollectRegisters = () => {
     mutationFn: CollectServiceApi.updateRegister,
     onMutate: async () => {
       await queryClient.cancelQueries({
-        queryKey: [registersKey, 'weekId', activeWeekId],
+        queryKey: [registersKey, 'weekId', activeWeekId, 'company', companySelected],
       });
       const previousRegisters = queryClient.getQueryData<CollectRegister[]>([
         registersKey,
@@ -79,7 +79,7 @@ export const useCollectRegisters = () => {
     },
     onSuccess: (newRegister) => {
       queryClient.setQueryData(
-        [registersKey, 'weekId', activeWeekId],
+        [registersKey, 'weekId', activeWeekId, 'company', companySelected],
         (prev: CollectRegister[]) =>
           prev?.map((r) => (r.id === newRegister.id ? newRegister : r)),
       );
@@ -87,7 +87,7 @@ export const useCollectRegisters = () => {
     },
     onError: (err, _newRegister, context) => {
       queryClient.setQueryData(
-        [registersKey, 'weekId', activeWeekId],
+        [registersKey, 'weekId', activeWeekId, 'company', companySelected],
         context?.previousRegisters,
       );
       toast.error(err.message);
@@ -98,7 +98,7 @@ export const useCollectRegisters = () => {
     mutationFn: CollectServiceApi.deleteRegister,
     onMutate: async (id) => {
       await queryClient.cancelQueries({
-        queryKey: [registersKey, 'weekId', activeWeekId],
+        queryKey: [registersKey, 'weekId', activeWeekId, 'company', companySelected],
       });
       const previousRegisters = queryClient.getQueryData<CollectRegister[]>([
         registersKey,
@@ -106,7 +106,7 @@ export const useCollectRegisters = () => {
         activeWeekId,
       ]);
       queryClient.setQueryData(
-        [registersKey, 'weekId', activeWeekId],
+        [registersKey, 'weekId', activeWeekId, 'company', companySelected],
         (prev: CollectRegister[]) => prev?.filter((r) => r.id !== id),
       );
       return { previousRegisters };
@@ -116,7 +116,7 @@ export const useCollectRegisters = () => {
     },
     onError: (err, _variables, context) => {
       queryClient.setQueryData(
-        [registersKey, 'weekId', activeWeekId],
+        [registersKey, 'weekId', activeWeekId, 'company', companySelected],
         context?.previousRegisters,
       );
       toast.error(err.message);
@@ -127,7 +127,7 @@ export const useCollectRegisters = () => {
     mutationFn: CollectServiceApi.confirmCollect,
     onMutate: async () => {
       await queryClient.cancelQueries({
-        queryKey: [registersKey, 'weekId', activeWeekId],
+        queryKey: [registersKey, 'weekId', activeWeekId, 'company', companySelected],
       });
       const previousRegisters = queryClient.getQueryData<CollectRegister[]>([
         registersKey,
@@ -138,7 +138,7 @@ export const useCollectRegisters = () => {
     },
     onSuccess: (newRegister) => {
       queryClient.setQueryData(
-        [registersKey, 'weekId', activeWeekId],
+        [registersKey, 'weekId', activeWeekId, 'company', companySelected],
         (prev: CollectRegister[]) =>
           prev?.map((r) => (r.id === newRegister.id ? newRegister : r)),
       );
@@ -146,7 +146,7 @@ export const useCollectRegisters = () => {
     },
     onError: (err, _newRegister, context) => {
       queryClient.setQueryData(
-        [registersKey, 'weekId', activeWeekId],
+        [registersKey, 'weekId', activeWeekId, 'company', companySelected],
         context?.previousRegisters,
       );
       toast.error(err.message);
@@ -163,7 +163,7 @@ export const useCollectRegisters = () => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: [registersKey, 'weekId', activeWeekId],
+        queryKey: [registersKey, 'weekId', activeWeekId, 'company', companySelected],
       });
     },
   });

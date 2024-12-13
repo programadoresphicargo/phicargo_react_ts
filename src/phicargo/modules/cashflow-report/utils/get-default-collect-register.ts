@@ -22,6 +22,8 @@ export const getDefaultCollectRegister = (
     id: tempId,
     clientId: clientId,
     clientName: 'Pending...',
+    companyId: 0,
+    companyName: 'Pending...',
     weekId: weekId,
     monday: getFakeAmount(day === 'monday' ? mount : 0),
     tuesday: getFakeAmount(day === 'tuesday' ? mount : 0),

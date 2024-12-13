@@ -1,6 +1,12 @@
+import { Button, Spinner, Tooltip } from '@nextui-org/react';
 import { useEffect, useState } from 'react';
 
-import { Spinner } from '@nextui-org/react';
+import { IconButton } from '@mui/material';
+import { Permission } from '../models';
+import { PermissionsList } from './PermissionsList';
+import { PermissionsSearchBar } from './PermissionsSearchBar';
+import { RiCheckboxFill } from 'react-icons/ri';
+import { RiCheckboxIndeterminateFill } from 'react-icons/ri';
 import type { User } from '../../auth/models';
 import { usePermissionsQueries } from '../hooks/usePermissionsQueries';
 
@@ -18,6 +24,9 @@ const UserPermissions = ({ user }: Props) => {
     addUserPermissionsMutation: { mutate: addUserPermissions, isPending },
   } = usePermissionsQueries({ userId: user?.id });
 
+  const [allPermissions, setAllPermissions] = useState<Permission[]>(
+    permissions || [],
+  );
   const [selectedPermissions, setSelectedPermissions] = useState<number[]>([]);
 
   const togglePermission = (id: number) => {
@@ -32,13 +41,13 @@ const UserPermissions = ({ user }: Props) => {
   const deselectAll = () => setSelectedPermissions([]);
 
   const onSubmit = () => {
-    if(!user || isPending) return;
+    if (!user || isPending) return;
 
     addUserPermissions({
       userId: user.id,
       permissionIds: selectedPermissions,
     });
-  }
+  };
 
   useEffect(() => {
     if (!userPermissions) return;
@@ -46,61 +55,61 @@ const UserPermissions = ({ user }: Props) => {
   }, [userPermissions]);
 
   return (
-    <div>
-      <div className="flex justify-between mb-4">
-        <button
-          onClick={selectAll}
-          className="text-medium text-blue-500 hover:underline"
-        >
-          Seleccionar todos
-        </button>
-        <button
-          onClick={deselectAll}
-          className="text-medium text-blue-500 hover:underline"
-        >
-          Deseleccionar todos
-        </button>
+    <>
+      <div className="flex justify-between items-center mb-4">
+        <div className="flex space-x-4">
+          <div className="bg-blue-100 rounded-full hover:bg-blue-600">
+            <Tooltip
+              content="Marcar Todo"
+              placement="top"
+              color="primary"
+              showArrow
+            >
+              <IconButton aria-label="select-all" onClick={selectAll}>
+                <RiCheckboxFill className="text-blue-500" />
+              </IconButton>
+            </Tooltip>
+          </div>
+
+          <div className="bg-blue-100 rounded-full hover:bg-blue-600">
+            <Tooltip
+              content="Marcar Todo"
+              placement="top"
+              color="warning"
+              showArrow
+            >
+              <IconButton aria-label="unselect-all" onClick={deselectAll}>
+                <RiCheckboxIndeterminateFill className="text-orange-400" />
+              </IconButton>
+            </Tooltip>
+          </div>
+        </div>
+        <PermissionsSearchBar
+          permissions={permissions || []}
+          setAllPermissions={setAllPermissions}
+        />
       </div>
 
-      <ul className="space-y-2 max-h-96 min-h-96 overflow-y-auto">
-        {(isFetchingPermissions || !permissions) 
-         || ( isFetchingUserPermissions || !userPermissions ) ? (
-          <div className="flex justify-center items-center h-full">
+      <div className="flex justify-center items-center transition-all duration-300 ease-in-out">
+        {isFetchingPermissions || isFetchingUserPermissions ? (
+          <div className="min-h-[383px]">
             <Spinner />
           </div>
         ) : (
-          permissions?.map((perm) => (
-            <li key={perm.id} className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                id={`perm-${perm.id}`}
-                checked={selectedPermissions.includes(perm.id)}
-                onChange={() => togglePermission(perm.id)}
-                className="h-4 w-4"
-              />
-              <label htmlFor={`perm-${perm.id}`} className="text-sm">
-                <span className="font-medium text-gray-800">{perm.name}</span>
-                {perm.description && (
-                  <span className="text-gray-700 text-xs">
-                    {' '}
-                    - {perm.description}
-                  </span>
-                )}
-              </label>
-            </li>
-          ))
+          <PermissionsList
+            permissionsList={allPermissions}
+            selectedPermissions={selectedPermissions}
+            togglePermission={togglePermission}
+          />
         )}
-      </ul>
+      </div>
 
       <div className=" flex justify-end">
-        <button
-          onClick={onSubmit}
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-        >
+        <Button color="primary" onPress={onSubmit}>
           Guardar
-        </button>
+        </Button>
       </div>
-    </div>
+    </>
   );
 };
 

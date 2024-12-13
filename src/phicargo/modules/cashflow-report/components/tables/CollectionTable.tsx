@@ -1,18 +1,24 @@
-import { Button, IconButton } from 'rsuite';
+import { IconButton, Tooltip } from '@mui/material';
+import {
+  MRT_TableOptions,
+  MaterialReactTable,
+  useMaterialReactTable,
+} from 'material-react-table';
 import { useCollectRegisters, useWeekContext } from '../../hooks';
 
+import AddButton from '../../../core/components/ui/AddButton';
 import AlertDialog from '../AlertDialog';
-import { CollectRegister } from '../../models';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-import { MRT_TableOptions } from 'material-react-table';
-import MaterialTable from './MaterialTable';
+import type { CollectRegister } from '../../models';
+import { FaRegEdit } from 'react-icons/fa';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import { RiDeleteRow } from "react-icons/ri";
 import { isGOEWeek } from '../../utils';
 import { useCollectTableColumns } from '../../hooks/useCollectTableColumns';
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
 const CollectionTable = () => {
+  const navigate = useNavigate();
   const [deleteId, setDeleteId] = useState<number | null>(null);
 
   const { weekSelected } = useWeekContext();
@@ -30,93 +36,113 @@ const CollectionTable = () => {
 
   const handleSaveRegisters: MRT_TableOptions<CollectRegister>['onEditingRowSave'] =
     async ({ values, table, row }) => {
-      // updateRegister({ ...values, id: Number(row.id) });
-      updateRegister(
-        {
-          id: Number(row.id),
-          updatedItem: { ...values },
-        }
-      )
+      updateRegister({
+        id: Number(row.id),
+        updatedItem: { ...values },
+      });
       table.setEditingRow(null);
     };
 
+  const table = useMaterialReactTable<CollectRegister>({
+    // DATA
+    columns,
+    data: registers || [],
+    enableStickyHeader: true,
+    enableStickyFooter: true,
+    // PAGINATION, FILTERS, SORTING
+    enableGrouping: true,
+    enableGlobalFilter: true,
+    enableFilters: true,
+    enableDensityToggle: false,
+    getRowId: (row) => row.id as unknown as string,
+    editDisplayMode: 'row',
+    enableEditing: true,
+    onEditingRowSave: handleSaveRegisters,
+    enableRowActions: true,
+    positionActionsColumn: 'first',
+    enableCellActions: true,
+    // STATE
+    state: {
+      isLoading: isFetching,
+      isSaving: isSaving,
+    },
+    initialState: {
+      density: 'compact',
+      pagination: { pageSize: 100, pageIndex: 0 },
+      columnPinning: {
+        right: ['mrt-row-actions'],
+      },
+    },
+    // CUSTOMIZATIONS
+    renderRowActions: ({ row, table }) => (
+      <div className="flex items-center gap-1 py-0.5">
+        <IconButton 
+          color="primary" 
+          aria-label="edit-action" 
+          size='small'
+          onClick={() => table.setEditingRow(row)}
+          disabled={!isGOEWeek(weekSelected!)}
+        >
+          <FaRegEdit />
+        </IconButton>
+        <IconButton 
+          color="error" 
+          aria-label="delete-action" 
+          size='small'
+          onClick={() => setDeleteId(Number(row.id))}
+          disabled={!isGOEWeek(weekSelected!)}
+        >
+          <RiDeleteRow />
+        </IconButton>
+      </div>
+    ),
+    renderTopToolbarCustomActions: () => (
+      <div className="flex flex-row gap-2">
+        <div className="flex flex-row items-center rounded-xl">
+          <Tooltip arrow title="Refrescar">
+            <IconButton onClick={() => refetch()}>
+              <RefreshIcon />
+            </IconButton>
+          </Tooltip>
+        </div>
+        <div className="flex flex-row items-center">
+          <AddButton
+            label="Añadir"
+            onPress={() => navigate('/reportes/balance/collect/add')}
+          />
+        </div>
+      </div>
+    ),
+    muiTablePaperProps: {
+      elevation: 0,
+      sx: {
+        borderRadius: '0',
+      },
+    },
+    muiTableHeadCellProps: {
+      sx: {
+        fontFamily: 'Inter',
+        fontWeight: 'Bold',
+        fontSize: '14px',
+      },
+    },
+    muiTableBodyCellProps: {
+      sx: {
+        fontFamily: 'Inter',
+        fontWeight: 'normal',
+        fontSize: '14px',
+      },
+    },
+    muiTableContainerProps: {
+      sx: {
+        height: 'calc(100vh - 225px)',
+      },
+    },
+  });
+
   return (
     <>
-      <MaterialTable
-        data={registers || []}
-        columns={columns}
-        initialState={{
-          columnPinning: {
-            right: ['mrt-row-actions'],
-          },
-          density: 'compact',
-          pagination: { pageIndex: 0, pageSize: 50 },
-        }}
-        state={{
-          isLoading: isFetching,
-          isSaving,
-        }}
-        enableCellActions={true}
-        enableRowActions={true}
-        editDisplayMode={'row'}
-        enableEditing={true}
-        getRowId={(row) => row.id as unknown as string}
-        onEditingRowSave={handleSaveRegisters}
-        renderRowActions={({ row, table }) => (
-          <div
-            style={{
-              display: 'flex',
-              gap: '5px',
-              alignItems: 'center',
-              padding: '2px 0px',
-            }}
-          >
-            <IconButton
-              circle
-              icon={<EditIcon />}
-              appearance="primary"
-              size="xs"
-              style={{ padding: '5px' }}
-              onClick={() => table.setEditingRow(row)}
-              // disabled={!isGOEWeek(weekSelected!)}
-            />
-            <IconButton
-              circle
-              icon={<DeleteIcon />}
-              appearance="primary"
-              size="xs"
-              onClick={() => setDeleteId(Number(row.original.id))}
-              color="red"
-              stye={{ padding: '1px' }}
-              disabled={!isGOEWeek(weekSelected!)}
-            />
-          </div>
-        )}
-        renderTopToolbarCustomActions={() => (
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              gap: '1rem',
-            }}
-          >
-            <IconButton
-              appearance="primary"
-              icon={<RefreshIcon />}
-              style={{ padding: '7px' }}
-              onClick={() => refetch()}
-            />
-            <Button
-              appearance="primary"
-              // onClick={createFn}
-              // disabled={!isGOEWeek(weekSelected!)}
-            >
-              Crear Nuevo Registro
-            </Button>
-          </div>
-        )}
-      />
+      <MaterialReactTable table={table} />
       {deleteId && (
         <AlertDialog
           alert="Eliminar Registro"

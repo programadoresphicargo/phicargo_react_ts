@@ -7,6 +7,7 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import { useDriverQueries } from '../hooks/useDriverQueries';
 import { useDriversColumns } from '../hooks/useDriversColumns';
 import { useMaterialReactTable } from 'material-react-table';
+import { useTableState } from '../../core/hooks/useTableState';
 
 const DriverAvailabilityPage = () => {
   const navigate = useNavigate();
@@ -15,6 +16,19 @@ const DriverAvailabilityPage = () => {
     driversQuery: { data: drivers, isFetching, refetch },
   } = useDriverQueries();
 
+  const {
+    columnFilters,
+    globalFilter,
+    sorting,
+    grouping,
+    setColumnFilters,
+    setGlobalFilter,
+    setSorting,
+    setGrouping,
+  } = useTableState({
+    tableId: 'availability-drivers-table',
+  });
+
   const { columns } = useDriversColumns();
 
   const table = useMaterialReactTable<Driver>({
@@ -22,11 +36,17 @@ const DriverAvailabilityPage = () => {
     columns,
     data: drivers || [],
     enableStickyHeader: true,
+    memoMode: 'cells',
     // PAGINATION, FILTERS, SORTING
     enableGrouping: true,
     enableDensityToggle: false,
     enableFullScreenToggle: false,
     columnFilterDisplayMode: 'subheader',
+    positionToolbarAlertBanner: 'bottom',
+    onColumnFiltersChange: setColumnFilters,
+    onGlobalFilterChange: setGlobalFilter,
+    onSortingChange: setSorting,
+    onGroupingChange: setGrouping,
     // STATE
     initialState: {
       showColumnFilters: true,
@@ -35,6 +55,10 @@ const DriverAvailabilityPage = () => {
     },
     state: {
       isLoading: isFetching,
+      columnFilters,
+      globalFilter,
+      sorting,
+      grouping,
     },
     // CUSTOMIZATIONS
     muiTableBodyRowProps: ({ row }) => ({
@@ -53,7 +77,7 @@ const DriverAvailabilityPage = () => {
     ),
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 180px)',
+        height: 'calc(100vh - 180px)',
       },
     },
   });

@@ -7,9 +7,11 @@ import {
   ModalHeader,
 } from '@nextui-org/react';
 
+import { IoIosAlert } from 'react-icons/io';
+
 interface AlertDialogProps {
   alert: string;
-  description: string;
+  description?: string;
   onConfirm: () => void;
   onClose: () => void;
 }
@@ -23,17 +25,22 @@ const AlertDialog = (props: AlertDialogProps) => {
         <ModalContent>
           {() => (
             <>
-              <ModalHeader className="flex flex-col pb-2 bg-[#dadfeb]">
-                <h3 className="font-bold text-xl text-center text-gray-800 uppercase">
-                  Completar Registro
+              <ModalHeader className="flex items-center gap-2 pb-2 bg-[#dadfeb]">
+                <IoIosAlert className="text-4xl text-yellow-500" />
+                <h3 className="font-bold text-xl text-gray-800 uppercase">
+                  {alert}
                 </h3>
               </ModalHeader>
               <ModalBody>
-                <h2>{alert}</h2>
-                <p>{description}</p>
+                <p>{description || "¿Seguro de completar esta acción?"}</p>
               </ModalBody>
               <ModalFooter>
-                <Button color="primary" onClick={onConfirm}>
+                <Button 
+                  color="warning" 
+                  onPress={onConfirm}
+                  size="sm"
+                  className='uppercase font-bold text-gray-800'
+                >
                   Completar
                 </Button>
               </ModalFooter>
@@ -41,48 +48,6 @@ const AlertDialog = (props: AlertDialogProps) => {
           )}
         </ModalContent>
       </Modal>
-      {/* <Modal role="alertdialog" open={true} onClose={onClose} size="300px">
-        <Modal.Body
-          style={{
-            overflow: "hidden",
-            height: "175px",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <RemindIcon
-              style={{ color: "#ffb300", fontSize: 24, marginRight: "8px" }}
-            />
-            <h4>{alert}</h4>
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginTop: "15px",
-              height: "100%",
-              textAlign: "center",
-              fontSize: "20px",
-            }}
-          >
-            <p>{description}</p>
-          </div>
-        </Modal.Body>
-
-        <Modal.Footer>
-          <Button onClick={onConfirm} appearance="primary">
-            Confirmar
-          </Button>
-          <Button onClick={onClose} appearance="subtle">
-            Cancelar
-          </Button>
-        </Modal.Footer>
-      </Modal> */}
     </>
   );
 };

@@ -9,9 +9,14 @@ import dayjs from 'dayjs';
 export const getValidPermission = (driver: Driver) => {
   const today = dayjs();
 
-  const validPermissions = driver.permissions.filter(
-    (p) => p.endDate.isSame(today, 'day') || p.endDate.isAfter(today, 'day'),
-  );
+  const validPermissions = driver.permissions
+    .filter(
+      (p) =>
+        p.endDate && 
+        dayjs(p.endDate).isValid() && 
+        (dayjs(p.endDate).isSame(today, 'day') || dayjs(p.endDate).isAfter(today, 'day')),
+    )
+    .sort((a, b) => dayjs(a.endDate).diff(dayjs(b.endDate)));
 
-  return validPermissions.length > 0 ? validPermissions[0] : undefined;
+  return validPermissions[0];
 };

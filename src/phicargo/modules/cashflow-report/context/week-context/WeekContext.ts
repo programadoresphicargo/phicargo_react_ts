@@ -6,6 +6,9 @@ export interface WeekContextProps {
   onChangeWeek: (weekId: number) => void;
   weekSelected: DateRange | null;
   onSetWeekSelected: (week: DateRange) => void;
+
+  companySelected: number;
+  onCompanyChange: (companyId: number) => void;
 }
 
 export const WeekContext = createContext<WeekContextProps>(
