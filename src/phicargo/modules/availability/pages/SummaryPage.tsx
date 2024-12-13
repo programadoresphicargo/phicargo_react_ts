@@ -58,6 +58,7 @@ const SummaryPage = () => {
       density: 'compact',
       pagination: { pageSize: 100, pageIndex: 0 },
       showColumnFilters: true,
+      showGlobalFilter: true
     },
     state: { 
       isLoading: isFetching,

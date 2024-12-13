@@ -58,6 +58,7 @@ const AsignacionUnidades = () => {
       showColumnFilters: true,
       density: 'compact',
       pagination: { pageSize: 100, pageIndex: 0 },
+      showGlobalFilter: true
     },
     state: {
       isLoading: isFetching,
