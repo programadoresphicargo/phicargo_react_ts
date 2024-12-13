@@ -1,39 +1,67 @@
 import 'react-toastify/dist/ReactToastify.css';
 
 import { Navigate, Route, Routes } from 'react-router-dom';
+import { Suspense, lazy } from 'react';
 
 import AccesoForm from '../phicargo/accesos/formulario';
-import Accesos from '../phicargo/accesos/Accesos';
-import AsignacionUnidades from '../phicargo/reportes/asignacion_unidades';
 import AvailabilityLayout from '../phicargo/modules/availability/layout/AvailabilityLayout';
 import AvailabilityRoutes from '../phicargo/modules/availability/routes/AvailabilityRoutes';
-import CartasPorte from '../phicargo/maniobras/tms_waybill/cartas_porte';
 import CashflowReportRoutes from '../phicargo/modules/cashflow-report/routes/CashflowReportRoutes';
-import ControlEstatusOperativos from '../phicargo/control_estatus/ControlEstatusOperativos';
-import ControlManiobras from '../phicargo/maniobras/control/control';
-import ControlOperadores from '../phicargo/operadores/ControlUsuarios';
-import ControlViajesActivos from '../phicargo/viajes/control';
-import ControlViajesFinalizados from '../phicargo/viajes/finalizados';
-import ControlViajesProgramados from '../phicargo/viajes/programacion';
-import CorreosElectronicos from '../phicargo/correos_electronicos/correos_electronicos';
-import DetencionesTable from '../phicargo/reportes/llegadas_tarde/llegadas_tarde';
-import EntregaMonitoreo from '../phicargo/monitoreo/monitoreo';
+import { LoadingPage } from '../phicargo/modules/core/pages/LoadingPage';
 import MaintenanceReportRoutes from '../phicargo/modules/maintenance/routes/MaintenanceReportRoutes';
 import Menu from '../phicargo/menu/menu';
-import Nominas from '../phicargo/maniobras/pagos/pagos';
 import PersistentDrawer from '../phicargo/monitoreo/Eventos';
-import Precios_maniobras from '../phicargo/maniobras/precios/precios';
 import ProtectedRoute from './ProtectedRoute';
-import ReporteCumplimiento from '../phicargo/reportes/cumplimiento';
 import ReportsMenuPage from '../phicargo/modules/core/pages/ReportsMenuPage';
 import ShiftsLayout from '../phicargo/modules/shifts/layouts/ShiftsLayout';
 import ShiftsRoutes from '../phicargo/modules/shifts/routes/ShiftsRoutes';
-import Terminales from '../phicargo/maniobras/maniobras/terminales/registros';
 import { ToastContainer } from 'react-toastify';
 import { Toaster } from 'react-hot-toast';
 import UsersManagementLayout from '../phicargo/modules/users-management/layouts/UsersManagementLayout';
 import UsersManagementRoutes from '../phicargo/modules/users-management/routes/UsersManagementRoutes';
-import { useEffect } from 'react';
+
+// Lazy load the components
+const CartasPorte = lazy(
+  () => import('../phicargo/maniobras/tms_waybill/cartas_porte'),
+);
+const ControlManiobras = lazy(
+  () => import('../phicargo/maniobras/control/control'),
+);
+const Nominas = lazy(() => import('../phicargo/maniobras/pagos/pagos'));
+const PreciosManiobras = lazy(
+  () => import('../phicargo/maniobras/precios/precios'),
+);
+const Terminales = lazy(
+  () => import('../phicargo/maniobras/maniobras/terminales/registros'),
+);
+const ControlViajesActivos = lazy(() => import('../phicargo/viajes/control'));
+const ControlViajesProgramados = lazy(
+  () => import('../phicargo/viajes/programacion'),
+);
+const ControlViajesFinalizados = lazy(
+  () => import('../phicargo/viajes/finalizados'),
+);
+const ControlEstatusOperativos = lazy(
+  () => import('../phicargo/control_estatus/ControlEstatusOperativos'),
+);
+const CorreosElectronicos = lazy(
+  () => import('../phicargo/correos_electronicos/correos_electronicos'),
+);
+const ReporteCumplimiento = lazy(
+  () => import('../phicargo/reportes/cumplimiento'),
+);
+const Accesos = lazy(() => import('../phicargo/accesos/Accesos'));
+const EntregaMonitoreo = lazy(() => import('../phicargo/monitoreo/monitoreo'));
+
+const DetencionesTable = lazy(
+  () => import('../phicargo/reportes/llegadas_tarde/llegadas_tarde'),
+);
+const AsignacionUnidades = lazy(
+  () => import('../phicargo/reportes/asignacion_unidades'),
+);
+const ControlOperadores = lazy(
+  () => import('../phicargo/operadores/ControlUsuarios'),
+);
 
 const PERMISSIONS = {
   'Módulo trafico': 1,
@@ -75,21 +103,6 @@ const PERMISSIONS = {
 };
 
 export const PrivateRoutes = () => {
-  useEffect(() => {
-    const checkSession = async () => {
-      const response = await fetch('/phicargo/login/inicio/check_session.php');
-      const data = await response.json();
-      if (data.status !== 'success') {
-        window.location.href =
-          'https://phides.phicargo-sistemas.online/phicargo/login/inicio/index.php';
-      }
-    };
-
-    checkSession();
-    const intervalId = setInterval(checkSession, 60000);
-    return () => clearInterval(intervalId);
-  }, []);
-
   return (
     <>
       <Toaster></Toaster>
@@ -100,36 +113,118 @@ export const PrivateRoutes = () => {
 
         <Route path="/menu" element={<Menu />} />
 
-        <Route path="/cartas-porte" element={<CartasPorte />} />
-        <Route path="/control_maniobras" element={<ControlManiobras />} />
-        <Route path="/nominas" element={<Nominas />} />
-        <Route path="/precios" element={<Precios_maniobras />} />
-        <Route path="/terminales" element={<Terminales />} />
+        <Route
+          path="/cartas-porte"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <CartasPorte />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/control_maniobras"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <ControlManiobras />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/nominas"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <Nominas />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/precios"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <PreciosManiobras />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/terminales"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <Terminales />
+            </Suspense>
+          }
+        />
 
-        <Route path="/Viajes" element={<ControlViajesActivos />} />
+        <Route
+          path="/Viajes"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <ControlViajesActivos />
+            </Suspense>
+          }
+        />
         <Route
           path="/ViajesFinalizados"
-          element={<ControlViajesFinalizados />}
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <ControlViajesFinalizados />
+            </Suspense>
+          }
         />
         <Route
           path="/ViajesProgramados"
-          element={<ControlViajesProgramados />}
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <ControlViajesProgramados />
+            </Suspense>
+          }
         />
-        <Route path="/controlestatus" element={<ControlEstatusOperativos />} />
+        <Route
+          path="/controlestatus"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <ControlEstatusOperativos />
+            </Suspense>
+          }
+        />
 
         <Route
           path="/CorreosElectronicos"
-          element={<CorreosElectronicos estado={undefined} />}
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <CorreosElectronicos estado={undefined} />
+            </Suspense>
+          }
         />
 
-        <Route path="/cumplimiento" element={<ReporteCumplimiento />} />
+        <Route
+          path="/cumplimiento"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <ReporteCumplimiento />
+            </Suspense>
+          }
+        />
 
-        <Route path="/Accesos" element={<Accesos />} />
+        <Route
+          path="/Accesos"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <Accesos />
+            </Suspense>
+          }
+        />
         <Route
           path="/AccesoForm"
           element={<AccesoForm id_acceso={undefined} onClose={undefined} />}
         />
-        <Route path="/Monitoreo" element={<EntregaMonitoreo />} />
+        <Route
+          path="/Monitoreo"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <EntregaMonitoreo />
+            </Suspense>
+          }
+        />
         <Route
           path="/Monitorista"
           element={
@@ -137,32 +232,46 @@ export const PrivateRoutes = () => {
           }
         />
 
-        <Route path="/detenciones" element={<DetencionesTable />} />
-        <Route path="/asignacion" element={<AsignacionUnidades />} />
-
-        <Route path="/controloperadores" element={<ControlOperadores />} />
-
-        <Route 
-          path="/reportes" 
+        <Route
+          path="/detenciones"
           element={
-            <ProtectedRoute 
+            <Suspense fallback={<LoadingPage />}>
+              <DetencionesTable />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/asignacion"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <AsignacionUnidades />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/controloperadores"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <ControlOperadores />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/reportes"
+          element={
+            <ProtectedRoute
               element={<ReportsMenuPage />}
               requiredPermissionId={PERMISSIONS['Módulo reportes']}
             />
-          } 
+          }
         />
-        <Route 
-          path="/reportes/mantenimiento/*" 
-          element={
-            <MaintenanceReportRoutes />
-          } 
+        <Route
+          path="/reportes/mantenimiento/"
+          element={<MaintenanceReportRoutes />}
         />
-        <Route 
-          path="/reportes/balance/*" 
-          element={
-            <CashflowReportRoutes />
-          } 
-        />
+        <Route path="/reportes/balance/*" element={<CashflowReportRoutes />} />
 
         <Route
           path="/control-usuarios"

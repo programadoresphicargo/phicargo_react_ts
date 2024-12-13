@@ -22,6 +22,7 @@ const DriverAvailabilityPage = () => {
     columns,
     data: drivers || [],
     enableStickyHeader: true,
+    memoMode: 'cells',
     // PAGINATION, FILTERS, SORTING
     enableGrouping: true,
     enableDensityToggle: false,
@@ -53,7 +54,7 @@ const DriverAvailabilityPage = () => {
     ),
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 180px)',
+        height: 'calc(100vh - 180px)',
       },
     },
   });

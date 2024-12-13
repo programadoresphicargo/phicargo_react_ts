@@ -34,11 +34,11 @@ const DriverSummaryPage = () => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
-    columnFilterDisplayMode: 'popover',
     // STATE
     initialState: {
       density: 'compact',
       pagination: { pageSize: 100, pageIndex: 0 },
+      showColumnFilters: true,
     },
     state: { isLoading: isFetching },
     renderTopToolbarCustomActions: () => (
@@ -52,7 +52,7 @@ const DriverSummaryPage = () => {
     ),
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 180px)',
+        height: 'calc(100vh - 180px)',
       },
     },
   });

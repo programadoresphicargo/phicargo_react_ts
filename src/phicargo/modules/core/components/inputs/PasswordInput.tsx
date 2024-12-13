@@ -13,7 +13,9 @@ interface PasswordInputProps<T extends FieldValues>
 export const PasswordInput = <T extends FieldValues>({
   control,
   name,
-  required,
+  className,
+  rules,
+  label = 'Contraseña',
 }: PasswordInputProps<T>) => {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -23,17 +25,20 @@ export const PasswordInput = <T extends FieldValues>({
     <Controller
       name={name}
       control={control}
-      rules={
-        required
-          ? {
-              required: 'Por favor, ingresa tu contraseña.',
-            }
-          : undefined
-      }
+      rules={rules}
+        // required
+        //   ? {
+        //       required: 'Por favor, ingresa tu contraseña.',
+        //       minLength: {
+        //         value: 6,
+        //         message: 'Debe tener al menos 8 caracteres',
+        //       },
+        //     }
+        //   : undefined
       render={({ field: { value, name, onChange }, fieldState }) => {
         return (
           <Input
-            label="Contraseña"
+            label={label}
             size="sm"
             name={name}
             value={value}
@@ -54,7 +59,7 @@ export const PasswordInput = <T extends FieldValues>({
               </button>
             }
             type={isVisible ? 'text' : 'password'}
-            className="input-light-base"
+            className={className}
             isInvalid={fieldState.invalid}
             errorMessage={fieldState.error ? fieldState.error.message : null}
           />

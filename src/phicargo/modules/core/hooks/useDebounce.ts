@@ -11,7 +11,7 @@ export const useDebounce = (value: string, delay: number = 300) => {
   const timerRef = useRef<number>();
 
   useEffect(() => {
-    timerRef.current = setTimeout(() => setDebouncedValue(value), delay);
+    timerRef.current = setTimeout(() => setDebouncedValue(value), delay) as unknown as number;
 
     return () => {
       clearTimeout(timerRef.current);

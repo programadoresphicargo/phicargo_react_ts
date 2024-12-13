@@ -42,7 +42,7 @@ const UnavailiabilityCreateModal = (props: Props) => {
 
   const {
     driverUnavailabilityMutation: { mutate, isPending },
-  } = useUnavailabilityQueries({});
+  } = useUnavailabilityQueries({ driverId: driverId });
 
   const { control, handleSubmit } = useForm<DriverUnavailabilityCreate>({
     defaultValues: initialValues,

@@ -16,7 +16,7 @@ export const useUnavailabilityQueries = (options: Options) => {
   const { driverId } = options;
 
   const driverUnavailabilityQuery = useQuery<DriverUnavailable[]>({
-    queryKey: [mainKey],
+    queryKey: [mainKey, driverId],
     queryFn: () =>
       DriverUnavailabilityServiceApi.getDriverUnavailabilitiesById(
         driverId as number,
@@ -29,7 +29,7 @@ export const useUnavailabilityQueries = (options: Options) => {
   const driverUnavailabilityMutation = useMutation({
     mutationFn: DriverUnavailabilityServiceApi.createDriverUnavailability,
     onSuccess: (newItem) => {
-      queryClient.setQueryData([mainKey], (prev?: DriverUnavailable[]) =>
+      queryClient.setQueryData([mainKey, driverId], (prev?: DriverUnavailable[]) =>
         prev ? [newItem, ...prev] : [newItem],
       );
       toast.success('Creado con éxito');

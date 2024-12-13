@@ -1,6 +1,7 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Button } from '@nextui-org/react';
 import ReportMenuItem from '../components/ui/ReportMenuItem';
+import balanceIcon from '../../../../assets/menu/balanceIcon.png';
 import maintenanceIcon from '../../../../assets/menu/maintenanceIcon.png';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,7 +14,7 @@ const reports = [
   {
     label: 'Balance',
     path: '/reportes/balance',
-    icon: maintenanceIcon,
+    icon: balanceIcon,
   },
 ];
 

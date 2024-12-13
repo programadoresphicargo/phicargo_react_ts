@@ -1,19 +1,24 @@
 import { Navigate, Route } from 'react-router-dom';
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, memo } from 'react';
 
 import { LoadingPage } from '../../core/pages/LoadingPage';
 
-const VehicleAvailabilityPage = lazy(
-  () => import('../pages/VehicleAvailabilityPage'),
-);
+const VehicleAvailabilityPage = lazy(() => import('../pages/VehicleAvailabilityPage').then(module => ({
+  default: memo(module.default),
+})));
+
 const VehicleInfo = lazy(() => import('../outlets/VehicleInfo'));
-const DriverAvailabilityPage = lazy(
-  () => import('../pages/DriverAvailabilityPage'),
-);
+const DriverAvailabilityPage = lazy(() => import('../pages/DriverAvailabilityPage').then(module => ({
+  default: memo(module.default),
+})));
 const DriverInfo = lazy(() => import('../outlets/DriverInfo'));
 const NotAssignedPage = lazy(() => import('../pages/NotAssignedPage'));
-const SummaryPage = lazy(() => import('../pages/SummaryPage'));
-const DriverSummaryPage = lazy(() => import('../pages/DriverSummaryPage'));
+const SummaryPage = lazy(() => import('../pages/SummaryPage').then(module => ({
+  default: memo(module.default),
+})));
+const DriverSummaryPage = lazy(() => import('../pages/DriverSummaryPage').then(module => ({
+  default: memo(module.default),
+})));
 
 const AvailabilityRoutes = () => {
   return (

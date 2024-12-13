@@ -32,10 +32,9 @@ const AsignacionUnidades = () => {
     // PAGINATION, FILTERS, SORTING
     enableGrouping: true,
     enableDensityToggle: false,
-    enableFullScreenToggle: false,
+    enableFullScreenToggle: true,
     columnFilterDisplayMode: 'subheader',
     // enableRowSelection: true,
-    paginationDisplayMode: 'pages',
     positionToolbarAlertBanner: 'bottom',
     // STATE
     initialState: {
@@ -62,7 +61,7 @@ const AsignacionUnidades = () => {
     ),
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 180px)',
+        height: 'calc(100vh - 180px)',
       },
     },
   });
