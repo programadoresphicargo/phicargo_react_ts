@@ -2,6 +2,7 @@ import { ReactNode, createContext, useEffect, useState } from 'react';
 
 import { Session } from '../models';
 import odooApi from '../../core/api/odoo-api';
+import { useQueryClient } from '@tanstack/react-query';
 
 export type AuthStatus = 'loading' | 'authenticated' | 'unauthenticated';
 
@@ -33,6 +34,8 @@ const AuthContext = createContext<AuthState>(initialAuthState);
  * @param Object with children property
  */
 export const AuthProvider = ({ children }: ProviderProps) => {
+  const queryClient = useQueryClient();
+
   const [session, setSession] = useState<Session | null>(
     JSON.parse(sessionStorage.getItem('session') || 'null')
   );
@@ -40,8 +43,10 @@ export const AuthProvider = ({ children }: ProviderProps) => {
 
   const onLogout = () => {
     setSession(null);
+    sessionStorage.removeItem('session');
     setAuthStatus('unauthenticated');
     delete odooApi.defaults.headers.common['Authorization'];
+    queryClient.clear();
   }
 
   useEffect(() => {

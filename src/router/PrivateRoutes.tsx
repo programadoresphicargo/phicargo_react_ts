@@ -8,8 +8,8 @@ import AvailabilityLayout from '../phicargo/modules/availability/layout/Availabi
 import AvailabilityRoutes from '../phicargo/modules/availability/routes/AvailabilityRoutes';
 import CashflowReportRoutes from '../phicargo/modules/cashflow-report/routes/CashflowReportRoutes';
 import { LoadingPage } from '../phicargo/modules/core/pages/LoadingPage';
+import MainMenuPage from '@/phicargo/menu/MainManuPage';
 import MaintenanceReportRoutes from '../phicargo/modules/maintenance/routes/MaintenanceReportRoutes';
-import Menu from '../phicargo/menu/menu';
 import PersistentDrawer from '../phicargo/monitoreo/Eventos';
 import ProtectedRoute from './ProtectedRoute';
 import ReportsMenuPage from '../phicargo/modules/core/pages/ReportsMenuPage';
@@ -71,6 +71,7 @@ const PERMISSIONS = {
   'Módulo usuarios': 5,
   'Módulo operadores': 7,
   'Modulo turnos': 8,
+  'Modulo disponibilidad': 200,
   'Ingresar incidencia asesor legal': 9,
   'Ingresar incidencia mantenimiento': 10,
   'Ingresar incidencia th': 11,
@@ -111,7 +112,7 @@ export const PrivateRoutes = () => {
         {/* Ruta predeterminada */}
         <Route path="/" element={<Navigate to="/menu" />} />
 
-        <Route path="/menu" element={<Menu />} />
+        <Route path="/menu" element={<MainMenuPage />} />
 
         <Route
           path="/cartas-porte"
@@ -287,7 +288,12 @@ export const PrivateRoutes = () => {
 
         <Route
           path="/disponibilidad"
-          element={<AvailabilityLayout children={undefined} />}
+          element={
+            <ProtectedRoute 
+              element={<AvailabilityLayout children={undefined} />}
+              requiredPermissionId={PERMISSIONS['Modulo disponibilidad']}
+            />
+          }
         >
           {AvailabilityRoutes()}
         </Route>

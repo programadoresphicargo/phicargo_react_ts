@@ -12,7 +12,7 @@ export const useUsersQueries = () => {
     queryKey: [mainKey],
     queryFn: UsersServiceApi.getAllUsers,
     refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5,
+    staleTime: 1000 * 60 * 10,
   });
 
   const userCreateMutation = useMutation({

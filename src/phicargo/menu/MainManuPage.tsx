@@ -1,39 +1,55 @@
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-
-import MenuItem from './menuitem';
-import React from 'react';
+import MenuItem from './MenuItem';
 import accesos_img from '../../assets/menu/accesos.png';
-import ajustes_img from '../../assets/menu/ajustes.png';
 import bonos_img from '../../assets/menu/bonos.png';
-import correo_img from '../../assets/menu/correo.png'
-import imglogo from '../../assets/img/tract_scannia.jpg';
+import correo_img from '../../assets/menu/correo.png';
 import maniobras_img from '../../assets/menu/maniobras.png';
 import monitoreo_img from '../../assets/menu/monitoreo.png';
 import operadores_img from '../../assets/menu/operadores.png';
-import reportesImg from '../../assets/menu/reportes.png'
+import reportesImg from '../../assets/menu/reportes.png';
 import turnos_img from '../../assets/menu/turnos.png';
+import { useAuthContext } from '../modules/auth/hooks';
+import { useMemo } from 'react';
 import usuarios_img from '../../assets/menu/usuarios.png';
 import viajes_img from '../../assets/menu/viajes.png';
 
-const { VITE_PHIDES_API_URL } = import.meta.env;
+type MenuItemType = {
+  icon: string;
+  label: string;
+  link: string;
+  requiredPermissions: number[];
+}
 
-const menuItems = [
-  { icon: turnos_img, label: 'Turnos', link: '/terminales' },
-  { icon: viajes_img, label: 'Control de viajes', link: '/viajes' },
-  { icon: maniobras_img, label: 'Maniobras', link: '/cartas-porte' },
-  { icon: monitoreo_img, label: 'Monitoreo', link: '/monitoreo' },
-  { icon: accesos_img, label: 'Accesos', link: '/accesos' },
-  { icon: bonos_img, label: 'Bonos', link: '/bonos' },
-  { icon: usuarios_img, label: 'Usuarios', link: '/control-usuarios' },
-  { icon: operadores_img, label: 'Operadores', link: '/controloperadores' },
-  { icon: viajes_img, label: 'Disponibilidad', link: '/disponibilidad' },
-  { icon: correo_img, label: 'Correos electronicos', link: '/CorreosElectronicos' },
-  { icon: reportesImg, label: 'Reportes', link: '/reportes' },
+const menuItems: MenuItemType[] = [
+  { icon: turnos_img, label: 'Turnos', link: '/terminales', requiredPermissions: [8] },
+  { icon: viajes_img, label: 'Control de viajes', link: '/viajes', requiredPermissions: [1,101,102] },
+  { icon: maniobras_img, label: 'Maniobras', link: '/cartas-porte', requiredPermissions: [38] },
+  { icon: monitoreo_img, label: 'Monitoreo', link: '/monitoreo', requiredPermissions: [40] },
+  { icon: accesos_img, label: 'Accesos', link: '/accesos', requiredPermissions: [126] },
+  { icon: bonos_img, label: 'Bonos', link: '/bonos', requiredPermissions: [3] },
+  { icon: usuarios_img, label: 'Usuarios', link: '/control-usuarios', requiredPermissions: [5] },
+  { icon: operadores_img, label: 'Operadores', link: '/controloperadores', requiredPermissions: [7] },
+  { icon: viajes_img, label: 'Disponibilidad', link: '/disponibilidad', requiredPermissions: [200] },
+  {
+    icon: correo_img,
+    label: 'Correos electronicos',
+    link: '/CorreosElectronicos',
+    requiredPermissions: []
+  },
+  { icon: reportesImg, label: 'Reportes', link: '/reportes', requiredPermissions: [4] },
 ];
 
-const Menu = () => {
+const MainMenuPage = () => {
+
+  const { session } = useAuthContext();
+
+  const filteredMenuItems = useMemo(() => menuItems.filter((item) =>
+    item.requiredPermissions.every((permission) =>
+      session?.user?.permissions?.includes(permission)
+    )
+  ),[session]);
+
   return (
-    <main id="content" role="main" className="main">
+    <main className="main">
       <div
         className="fixed top-0 left-0 right-0 bg-cover bg-no-repeat"
         style={{
@@ -54,7 +70,7 @@ const Menu = () => {
         </div>
       </div>
 
-      <div className="flex justify-center items-center h-screen w-screen border-2 border-red-500">
+      <div className="flex justify-center items-center h-screen w-screen border-2">
         <div className="container mx-auto">
           <div className="flex justify-center items-center mb-5">
             <div className="flex justify-center">
@@ -68,18 +84,13 @@ const Menu = () => {
             </div>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-5">
-            {menuItems.map((item, index) => (
-              <div
+            {filteredMenuItems.map((item, index) => (
+              <MenuItem
                 key={index}
-                className="flex justify-center items-center"
-                style={{ zIndex: '10000' }}
-              >
-                <MenuItem
-                  icon={item.icon}
-                  label={item.label}
-                  link={item.link}
-                />
-              </div>
+                icon={item.icon}
+                label={item.label}
+                link={item.link}
+              />
             ))}
           </div>
         </div>
@@ -88,5 +99,5 @@ const Menu = () => {
   );
 };
 
-export default Menu;
+export default MainMenuPage;
 
