@@ -7,4 +7,15 @@ export interface UserUpdateApi {
   tipo?: Role | null;
   estado?: string | null;
   passwoord?: string | null;
+  pin?: string | null;
+}
+
+export interface UserCreateApi {
+  usuario: string;
+  nombre: string;
+  correo: string;
+  tipo: Role;
+  estado: 'Activo' | 'Inactivo';
+  passwoord: string;
+  pin?: string | null;
 }

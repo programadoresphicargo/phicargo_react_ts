@@ -25,9 +25,9 @@ class CollectServiceApi {
    * @returns Array of Collect Registers
    */
   public static async getCollectRegisterByWeekId(
-    weekId: number,
+    weekId: number, companyId: number,
   ): Promise<CollectRegister[]> {
-    const url = `/accounting_report/collects?week_id=${weekId}`;
+    const url = `/accounting_report/collects?week_id=${weekId}&company_id=${companyId}`;
     try {
       const response = await odooApi<CollectRegisterApi[]>(url);
       return response.data.map(collectRegisterToLocal);
@@ -35,7 +35,7 @@ class CollectServiceApi {
       console.log(error);
       if (error instanceof AxiosError) {
         throw new Error(
-          error.response?.data.details || 'Error al obtener registros',
+          error.response?.data.detail || 'Error al obtener registros',
         );
       }
       throw new Error('Error inesperado con el servidor');
@@ -61,7 +61,7 @@ class CollectServiceApi {
       console.log(error);
       if (error instanceof AxiosError) {
         throw new Error(
-          error.response?.data.details || 'Error al crear registro',
+          error.response?.data.detail || 'Error al crear registro',
         );
       }
       throw new Error('Error inesperado con el servidor');
@@ -88,7 +88,7 @@ class CollectServiceApi {
       console.log(error);
       if (error instanceof AxiosError) {
         throw new Error(
-          error.response?.data.details || 'Error al actualizar registro',
+          error.response?.data.detail || 'Error al actualizar registro',
         );
       }
       throw new Error('Error inesperado con el servidor');
@@ -108,7 +108,7 @@ class CollectServiceApi {
       console.log(error);
       if (error instanceof AxiosError) {
         throw new Error(
-          error.response?.data.details || 'Error al eliminar registro',
+          error.response?.data.detail || 'Error al eliminar registro',
         );
       }
       throw new Error('Error inesperado con el servidor');
@@ -134,7 +134,7 @@ class CollectServiceApi {
       console.log(error);
       if (error instanceof AxiosError) {
         throw new Error(
-          error.response?.data.details || 'Error al eliminar registro',
+          error.response?.data.detail || 'Error al eliminar registro',
         );
       }
       throw new Error('Error inesperado con el servidor');
@@ -149,20 +149,22 @@ class CollectServiceApi {
   public static async loadPreviousWeek({
     previousWeekId,
     activeWeekId,
+    companyId
   }: {
     previousWeekId: number;
     activeWeekId: number;
+    companyId: number;
   }): Promise<boolean> {
     try {
       await odooApi.post<number>(
-        `/accounting_report/collects/load_previous/collects?previous_week_id=${previousWeekId}&new_week_id=${activeWeekId}`,
+        `/accounting_report/collects/load_previous/collects?previous_week_id=${previousWeekId}&new_week_id=${activeWeekId}&company_id=${companyId}`,
       );
       return true;
     } catch (error) {
       console.log(error);
       if (error instanceof AxiosError) {
         throw new Error(
-          error.response?.data.details || 'Error al cargar registros',
+          error.response?.data.detail || 'Error al cargar registros',
         );
       }
       throw new Error('Error inesperado con el servidor');

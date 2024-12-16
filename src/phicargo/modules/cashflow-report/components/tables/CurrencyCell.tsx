@@ -1,21 +1,9 @@
-import { CSSProperties, useState } from "react";
-import { DaysOfWeek, WeekBase } from "../../models";
+import type { DaysOfWeek, WeekBase } from '../../models';
 
-import AmountDetailDialog from "../AmountDetailDialog";
-import ConfirmDialog from "../ConfirmDialog";
-import { formatCurrency } from "../../utils";
-
-const style: CSSProperties = {
-  display: "inline-block",
-  padding: "4px 8px",
-  borderRadius: "4px",
-  color: "#333",
-  fontSize: "14px",
-  fontWeight: "bold",
-  textAlign: "right",
-  userSelect: "none",
-  cursor: "pointer",
-};
+import AmountDetailDialog from '../AmountDetailDialog';
+import ConfirmDialog from '../ConfirmDialog';
+import { formatCurrency } from '../../utils';
+import { useState } from 'react';
 
 interface CurrencyCellProps {
   value: number | string;
@@ -30,7 +18,6 @@ const CurrencyCell = (props: CurrencyCellProps) => {
   const { value, customColor, type, dayOfWeek, item } = props;
 
   const [open, setOpen] = useState(false);
-
   const [openDetails, setOpenDetails] = useState(false);
 
   const handleDoubleClick = (e: React.MouseEvent) => {
@@ -40,7 +27,7 @@ const CurrencyCell = (props: CurrencyCellProps) => {
     if (item[dayOfWeek].confirmed) {
       setOpenDetails(true);
       return;
-    };
+    }
 
     if (!props.confirmationRequired) return;
     setOpen(true);
@@ -48,28 +35,26 @@ const CurrencyCell = (props: CurrencyCellProps) => {
 
   return (
     <>
-      <span 
-        style={{
-          ...style,
-          backgroundColor: customColor || "#f0f8ff",
-        }} 
+      <span
+        className={`inline-block py-0.5 px-1 rounded text-sm font-bold text-right select-none cursor-pointer`}
+        style={{ backgroundColor: customColor || "#f0f8ff", color: "#333" }}
         onDoubleClick={handleDoubleClick}
       >
         {formatCurrency(value || 0)}
       </span>
 
       {open && item && type && dayOfWeek && (
-        <ConfirmDialog 
-          onClose={() => setOpen(false)} 
-          item={item} 
+        <ConfirmDialog
+          onClose={() => setOpen(false)}
+          item={item}
           type={type}
           dayOfWeek={dayOfWeek}
         />
       )}
 
       {openDetails && item && dayOfWeek && (
-        <AmountDetailDialog 
-          onClose={() => setOpenDetails(false)} 
+        <AmountDetailDialog
+          onClose={() => setOpenDetails(false)}
           amount={item[dayOfWeek]}
         />
       )}
@@ -78,3 +63,4 @@ const CurrencyCell = (props: CurrencyCellProps) => {
 };
 
 export default CurrencyCell;
+

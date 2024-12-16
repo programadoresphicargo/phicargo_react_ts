@@ -24,7 +24,10 @@
 
     /* Soporte para JavaScript */
     "allowJs": true, // Permitir archivos .js
-    "checkJs": false // Opcional: Validar errores en .js
+    "checkJs": false, // Opcional: Validar errores en .js
+
+    "baseUrl": ".",
+    "paths": { "@/*": ["./src/*"] },
   },
   "include": ["src"]
 }

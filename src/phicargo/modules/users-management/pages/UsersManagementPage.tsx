@@ -5,15 +5,19 @@ import {
 } from 'material-react-table';
 import { Outlet, useNavigate } from 'react-router-dom';
 
-import AddButton from '../../core/components/ui/AddButton';
+import AddButton from '@/phicargo/modules/core/components/ui/AddButton';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { User } from '../../auth/models';
+import { UserCreateForm } from '../components/UserCreateForm';
+import { useState } from 'react';
 import { useUsersColums } from '../hooks/useUsersColumns';
 import { useUsersQueries } from '../hooks/useUsersQueries';
 
 const UsersManagementPage = () => {
   const navigate = useNavigate();
   const { columns } = useUsersColums();
+  const [ createModal, setCreateModal ] = useState(false);
+
   const {
     usersQuery: { data: users, isFetching, refetch },
   } = useUsersQueries();
@@ -51,7 +55,7 @@ const UsersManagementPage = () => {
           </Tooltip>
         </div>
         <div className="flex flex-row items-center">
-          <AddButton label="Crear Usuario" />
+          <AddButton label="Crear Usuario" onPress={() => setCreateModal(true)} />
         </div>
       </div>
     ),
@@ -85,6 +89,7 @@ const UsersManagementPage = () => {
   return (
     <>
       <MaterialReactTable table={table} />
+      <UserCreateForm open={createModal} onClose={() => setCreateModal(false)} />
       <Outlet />
     </>
   );

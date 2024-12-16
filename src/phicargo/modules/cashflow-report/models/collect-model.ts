@@ -5,6 +5,8 @@ export interface CollectRegister extends WeekBase {
   id: number;
   clientId: number;
   clientName: string;
+  companyId: number;
+  companyName: string;
   weekId: number;
   observations: string;
   totalConfirmed: number;
@@ -15,4 +17,5 @@ export interface CollectRegisterCreate {
   clientId: number;
   day: DaysOfWeek;
   mount: number;
+  companyId: number;
 }

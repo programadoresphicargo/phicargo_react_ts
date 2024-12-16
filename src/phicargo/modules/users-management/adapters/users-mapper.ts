@@ -1,4 +1,4 @@
-import type { UserUpdate, UserUpdateApi } from '../models';
+import type { UserCreate, UserCreateApi, UserUpdate, UserUpdateApi } from '../models';
 
 /**
  * Mapper que convierte un objeto con la información del usuario en el formato de la API
@@ -24,7 +24,7 @@ export const userUpdateToApi = (user: UserUpdate): UserUpdateApi => {
     userApi.tipo = user.role;
   }
 
-  if (user.isActive) {
+  if (typeof user?.isActive === 'boolean') {
     userApi.estado = user.isActive ? 'Activo' : 'Inactivo';
   }
 
@@ -32,6 +32,24 @@ export const userUpdateToApi = (user: UserUpdate): UserUpdateApi => {
     userApi.passwoord = user.password;
   }
 
+  if (user.pin) {
+    userApi.pin = user.pin;
+  }
+
   return userApi;
 };
 
+/**
+ * Mapper that converts an object with the user information to the API format
+ * @param user Object with the user information
+ * @returns Object with the user information in the API format
+ */
+export const userToApi = (user: UserCreate): UserCreateApi => ({
+  usuario: user.username,
+  nombre: user.name,
+  correo: user.email,
+  tipo: user.role,
+  estado: user.isActive ? 'Activo' : 'Inactivo',
+  passwoord: user.password,
+  pin: user.pin,
+});

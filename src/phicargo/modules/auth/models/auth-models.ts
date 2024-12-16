@@ -1,14 +1,14 @@
 export type Role =
-  | 'Desarrollador'
-  | 'Vigilancia'
-  | 'Administrador'
-  | 'Invitado'
-  | 'Supervisor'
   | 'Contabilidad'
-  | 'Monitorista'
+  | 'Desarrollador'
   | 'Dirección'
   | 'Ejecutivo'
-  | '';
+  | 'Invitado'
+  | 'Monitorista'
+  | 'Sistema'
+  | 'Supervisor'
+  | 'Vigilancia'
+  | 'Administrador'
 
 
 export interface UserLogin {
@@ -32,6 +32,11 @@ interface UserBase {
 export interface User extends UserBase {
   id: number;
   permissions: number[];
+}
+
+export interface FullUser extends User {
+  password: string;
+  pin: string;
 }
 
 export interface Session {

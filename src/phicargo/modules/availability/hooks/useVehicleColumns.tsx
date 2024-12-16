@@ -11,6 +11,21 @@ export const useVehicleColumns = () => {
       {
         accessorFn: (row) => (row.company ? row.company.name : 'N/A'),
         header: 'Empresa',
+        filterVariant: 'select',
+        filterSelectOptions: [
+          {
+            value: 'TRANSPORTES BELCHEZ',
+            label: 'TRANSPORTES BELCHEZ',
+          },
+          {
+            value: 'PHI-CARGO',
+            label: 'PHI-CARGO',
+          },
+          {
+            value: 'N/A',
+            label: 'N/A',
+          }
+        ],
         Cell: ({ cell }) => {
           const value = cell.getValue<string>();
           return value === 'N/A' 
@@ -21,6 +36,21 @@ export const useVehicleColumns = () => {
       {
         accessorFn: (row) => (row.branch ? row.branch.name : 'N/A'),
         header: 'Sucursal',
+        filterVariant: 'select',
+        filterSelectOptions: [
+          {
+            value: 'Veracruz (Matriz)',
+            label: 'Veracruz (Matriz)',
+          },
+          {
+            value: 'Manzanillo (Sucursal)',
+            label: 'Manzanillo (Sucursal)',
+          },
+          {
+            value: 'N/A',
+            label: 'N/A',
+          }
+        ],
         Cell: ({ cell }) => {
           const value = cell.getValue<string>();
           return value === 'N/A' 
@@ -49,28 +79,69 @@ export const useVehicleColumns = () => {
       {
         accessorKey: 'vehicleType',
         header: 'Tipo de vehículo',
+        filterVariant: 'select',
+        filterSelectOptions: [
+          {
+            value: 'carretera',
+            label: 'carretera',
+          },
+          {
+            value: 'local',
+            label: 'local',
+          },
+        ],
         Cell: ({ cell }) => (
           <VehicleTypeChip fleetType={cell.getValue<string>() || 'SIN ASIGNAR'} />
         )
       },
       { 
-        accessorKey: 'loadType', 
+        accessorFn: (row) => (row.loadType || 'SIN ASIGNAR'),
         header: 'Tipo de carga',
+        filterVariant: 'select',
+        filterSelectOptions: [
+          {
+            value: 'imo',
+            label: 'IMO',
+          },
+          {
+            value: 'general',
+            label: 'GENERAL',
+          },
+          {
+            value: 'SIN ASIGNAR',
+            label: 'SIN ASIGNAR',
+          },
+        ],
         Cell: ({ cell }) => {
           const value = cell.getValue<string>();
-          return !value
-            ? <span className='text-gray-400 text-sm'>{'SIN ASIGNAR'}</span>
-            : <span className='font-bold uppercase'>{cell.getValue<string>()}</span>
+          return value === 'SIN ASIGNAR'
+            ? <span className='text-gray-400 text-sm'>{value}</span>
+            : <span className='font-bold uppercase'>{value}</span>
         } 
       },
       {
-        accessorKey: 'modality',
+        accessorFn: (row) => (row.modality || 'SIN ASIGNAR'),
         header: 'Modalidad',
+        filterVariant: 'select',
+        filterSelectOptions: [
+          {
+            value: 'full',
+            label: 'FULL',
+          },
+          {
+            value: 'sencillo',
+            label: 'SENCILLO',
+          },
+          {
+            value: 'SIN ASIGNAR',
+            label: 'SIN ASIGNAR',
+          },
+        ],
         Cell: ({ cell }) => {
           const value = cell.getValue<string>();
-          return !value
-            ? <span className='text-gray-400 text-sm'>{'SIN ASIGNAR'}</span>
-            : <ModalityChip modality={cell.getValue<Modality>()} />
+          return value === 'SIN ASIGNAR'
+            ? <span className='text-gray-400 text-sm'>{value}</span>
+            : <ModalityChip modality={value as Modality} />
         } 
       },
       {

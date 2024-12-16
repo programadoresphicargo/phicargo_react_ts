@@ -3,9 +3,9 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { Button } from '@nextui-org/react';
 import { CheckboxInput } from '../../core/components/inputs/CheckboxInput';
 import { EmailInput } from '../../core/components/inputs/EmailInput';
+import type { FullUser } from '../../auth/models';
 import { PasswordInput } from '../../core/components/inputs/PasswordInput';
 import { TextInput } from '../../core/components/inputs/TextInput';
-import type { User } from '../../auth/models';
 import type { UserUpdate } from '../models';
 import { useUsersQueries } from '../hooks/useUsersQueries';
 
@@ -16,10 +16,11 @@ const initialState: UserUpdate = {
   role: 'Invitado',
   isActive: true,
   password: '',
+  pin: '',
 };
 
 interface Props {
-  user?: User;
+  user?: FullUser;
 }
 
 const UserForm = (props: Props) => {
@@ -37,12 +38,12 @@ const UserForm = (props: Props) => {
     if (!user) {
       return;
     }
-
+    // console.log(data);
     updateUser({
       id: user?.id,
       updatedItem: data,
     });
-  }
+  };
 
   return (
     <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
@@ -80,6 +81,13 @@ const UserForm = (props: Props) => {
         </div>
 
         <div className="flex items-center space-x-2">
+          <PasswordInput
+            control={control}
+            name="pin"
+            label="Pin"
+            rules={!user ? { required: 'Este campo es requerido' } : {}}
+            className='w-1/3'
+          />
           <CheckboxInput control={control} name="isActive" label="Activo" />
         </div>
       </div>

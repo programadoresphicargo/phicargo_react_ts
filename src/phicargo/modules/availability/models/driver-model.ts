@@ -3,7 +3,7 @@ import type { CompanySimple, ManeuverSimple, TravelSimple } from '../../core/mod
 import type { DriverPermissionSimple } from './driver-unavailability';
 import type { VehicleSimple } from './vehicle-model';
 
-export type Modality = 'full' | 'sencillo';
+export type Modality = 'full' | 'sencillo' | 'single';
 export type IsDangerous = 'SI' | 'NO';
 export type Job = 'OPERADOR' | 'MOVEDOR' | 'OPERADOR POSTURERO';
 export type Status = 'viaje' | 'disponible' | 'maniobra';

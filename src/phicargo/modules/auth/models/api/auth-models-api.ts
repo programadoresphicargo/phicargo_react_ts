@@ -18,6 +18,11 @@ export interface UserApi extends UserBaseApi {
   permissions_user_ids: number[];
 }
 
+export interface FullUserApi extends UserApi {
+  passwoord: string;
+  pin: string;
+}
+
 export interface SessionApi {
   user: UserApi;
   token: TokenApi;

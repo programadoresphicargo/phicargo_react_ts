@@ -24,4 +24,3 @@ export const availableStatus: Status[] = [
 export const getRealStatusConf = (key: VehicleRealStatus) => {
   return availableStatus.find((s) => s.key === key) || availableStatus[0];
 };
-

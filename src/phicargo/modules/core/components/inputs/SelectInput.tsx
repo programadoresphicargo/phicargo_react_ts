@@ -6,6 +6,7 @@ interface SelectInputProps<T extends FieldValues> extends CustomInputProps<T> {
   items: SelectItem[];
   isLoading?: boolean;
   disabledKeys?: string[];
+  isVirtualized?: boolean;
 }
 
 export const SelectInput = <T extends FieldValues>(
@@ -22,6 +23,7 @@ export const SelectInput = <T extends FieldValues>(
     placeholder,
     isLoading,
     disabledKeys,
+    isVirtualized,
   } = props;
 
   const handleSelectChange = (value: string) => {
@@ -42,6 +44,7 @@ export const SelectInput = <T extends FieldValues>(
         rules={rules}
         render={({ field: { name, value, onChange }, fieldState }) => (
           <Select
+            isVirtualized={isVirtualized}
             className={className}
             label={label}
             isLoading={isLoading}

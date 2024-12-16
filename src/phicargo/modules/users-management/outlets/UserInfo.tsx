@@ -11,19 +11,13 @@ import { Navigate, useNavigate, useParams } from 'react-router-dom';
 
 import UserForm from '../components/UserForm';
 import UserPermissions from '../components/UserPermissions';
-import { useMemo } from 'react';
-import { useUsersQueries } from '../hooks/useUsersQueries';
+import { useGetUserQuery } from '../hooks/useGetUserQuery';
 
 const UserInfo = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const { users } = useUsersQueries();
-
-  const user = useMemo(
-    () => users.find((user) => user.id === Number(id)),
-    [id, users],
-  );
+  const { data: user } = useGetUserQuery(Number(id));
 
   const onClose = () => {
     navigate(`/control-usuarios/usuarios`);

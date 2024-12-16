@@ -28,7 +28,7 @@ class WeekServiceApi {
       console.log(error);
       if (error instanceof AxiosError) {
         throw new Error(
-          error.response?.data.details || 'Error al cambiar semana',
+          error.response?.data.detail || 'Error al cambiar semana',
         );
       }
       throw new Error('Error inesperado con el servidor');
