@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
 
 import AuthServiceApi from '../services/auth-service';
 import toast from 'react-hot-toast';
@@ -15,23 +16,25 @@ export const useLoginMutation = () => {
   const { setAuthStatus, setSession } = useAuthContext();
 
   const sessionPhp = async (id: number) => {
+
     try {
-      if (!id || isNaN(id)) {
-        throw new Error('ID inválido');
+      const response = await axios.post(
+        `${VITE_PHIDES_API_URL}/login/inicio/validar2.php`, // Cambia a la URL de tu servidor
+        { userID: id },
+        { withCredentials: true } // Habilita las cookies para la sesión
+      );
+
+      if (response.data.status === "success") {
+        toast.success(`Session created for userID: ${response.data.userID}`);
+      } else {
+        toast.error("Failed to create session.");
       }
-
-      const response = await fetch(`${VITE_PHIDES_API_URL}/login/inicio/validar2.php?id_usuario=${id}`);
-
-      if (!response.ok) {
-        throw new Error(`Error en la solicitud: ${response.status} - ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      return data;
     } catch (error) {
-      throw error;
+      console.error("Error creating session:", error);
+      toast.error("An error occurred.");
     }
   };
+
   const loginMutation = useMutation({
     mutationFn: AuthServiceApi.login,
     onMutate: async () => {

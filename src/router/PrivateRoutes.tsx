@@ -34,6 +34,7 @@ import { Toaster } from 'react-hot-toast';
 import UsersManagementLayout from '../phicargo/modules/users-management/layouts/UsersManagementLayout';
 import UsersManagementRoutes from '../phicargo/modules/users-management/routes/UsersManagementRoutes';
 import { useEffect } from 'react';
+const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const PERMISSIONS = {
   'Módulo trafico': 1,
@@ -75,21 +76,6 @@ const PERMISSIONS = {
 };
 
 export const PrivateRoutes = () => {
-  useEffect(() => {
-    const checkSession = async () => {
-      const response = await fetch(VITE_PHIDES_API_URL + '/login/inicio/check_session.php');
-      const data = await response.json();
-
-      if (data.status !== 'success') {
-        //window.location.href =
-          'https://phides-client.phicargo-sistemas.online';
-      }
-    };
-
-    checkSession();
-    const intervalId = setInterval(checkSession, 60000);
-    return () => clearInterval(intervalId);
-  }, []);
 
   return (
     <>

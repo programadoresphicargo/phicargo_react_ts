@@ -14,7 +14,19 @@ import reportesImg from '../../assets/menu/reportes.png'
 import turnos_img from '../../assets/menu/turnos.png';
 import usuarios_img from '../../assets/menu/usuarios.png';
 import viajes_img from '../../assets/menu/viajes.png';
-
+import { useEffect } from 'react';
+import axios from 'axios';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import Switch from '@mui/material/Switch';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormGroup from '@mui/material/FormGroup';
+import AvatarProfile from '../modules/core/components/ui/AvatarProfile';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const menuItems = [
@@ -32,8 +44,52 @@ const menuItems = [
 ];
 
 const Menu = () => {
+
+  const startSession = async () => {
+    try {
+      const response = await fetch(VITE_PHIDES_API_URL + '/login/inicio/start_session.php', {
+        method: "POST",
+        credentials: "include", // Habilitar envío de cookies
+      });
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error("Error starting session:", error);
+    }
+  };
+
+  const getSession = async () => {
+    try {
+      const response = await fetch(VITE_PHIDES_API_URL + '/login/inicio/get_user.php', {
+        method: "GET",
+        credentials: "include", // Habilitar envío de cookies
+      });
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error("Error getting session:", error);
+    }
+  };
+
+  startSession();
+  getSession();
+
   return (
     <main id="content" role="main" className="main">
+
+      <AppBar
+        position="absolute"
+        elevation={0}
+        sx={{ backgroundColor: 'transparent', boxShadow: 'none' }}
+      >
+        <Toolbar>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Menú
+          </Typography>
+          <AvatarProfile></AvatarProfile>
+        </Toolbar>
+      </AppBar>
+
       <div
         className="fixed top-0 left-0 right-0 bg-cover bg-no-repeat"
         style={{
@@ -54,7 +110,7 @@ const Menu = () => {
         </div>
       </div>
 
-      <div className="flex justify-center items-center h-screen w-screen border-2 border-red-500">
+      <div className="flex justify-center items-center h-screen w-screen">
         <div className="container mx-auto">
           <div className="flex justify-center items-center mb-5">
             <div className="flex justify-center">

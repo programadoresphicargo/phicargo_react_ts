@@ -6,6 +6,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Box, Button } from '@mui/material';
 import OperadorForm from './OperadorForm';
+import odooApi from '../modules/core/api/odoo-api';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 import {
@@ -36,12 +37,12 @@ const Operadores = ({ estado }) => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await fetch(VITE_PHIDES_API_URL + '/operadores/getCuentas.php');
-      const jsonData = await response.json();
-      setData(jsonData);
+      const response = await odooApi.get('/drivers/');
+      setData(response.data);
       setLoading(false);
     } catch (error) {
       console.error('Error al obtener los datos:', error);
+      setLoading(false);
     }
   };
 
@@ -56,7 +57,7 @@ const Operadores = ({ estado }) => {
         header: 'ID Usuario',
       },
       {
-        accessorKey: 'company_id',
+        accessorFn: (row) => row.res_company?.name,
         header: 'Empresa',
       },
       {
