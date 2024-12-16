@@ -14,12 +14,8 @@ import viajes_img from '../../assets/menu/viajes.png';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
 import AvatarProfile from '../modules/core/components/ui/AvatarProfile';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
@@ -37,7 +33,7 @@ const menuItems: MenuItemType[] = [
   { icon: maniobras_img, label: 'Maniobras', link: '/cartas-porte', requiredPermissions: [38] },
   { icon: monitoreo_img, label: 'Monitoreo', link: '/monitoreo', requiredPermissions: [40] },
   { icon: accesos_img, label: 'Accesos', link: '/accesos', requiredPermissions: [126] },
-  { icon: bonos_img, label: 'Bonos', link: '/bonos', requiredPermissions: [3] },
+  { icon: bonos_img, label: 'Bonos',  requiredPermissions: [3], link: VITE_PHIDES_API_URL + '/bonos/vista/index.php', isExternal: true },
   { icon: usuarios_img, label: 'Usuarios', link: '/control-usuarios', requiredPermissions: [5] },
   { icon: operadores_img, label: 'Operadores', link: '/controloperadores', requiredPermissions: [7] },
   { icon: viajes_img, label: 'Disponibilidad', link: '/disponibilidad', requiredPermissions: [200] },
@@ -52,7 +48,7 @@ const menuItems: MenuItemType[] = [
 
 const MainMenuPage = () => {
 
-  const { session } = useAuthContext();
+  const { session, onLogout } = useAuthContext();
 
   const filteredMenuItems = useMemo(() => menuItems.filter((item) =>
     item.requiredPermissions.every((permission) =>
@@ -80,6 +76,7 @@ const MainMenuPage = () => {
         toast.success(`Sesión activa para el usuario con ID: ${data.userID}`);
       } else {
         toast.error(data.message || "No se encontró sesión activa.");
+        onLogout();
       }
     } catch (error: any) {
       // Manejo de errores
