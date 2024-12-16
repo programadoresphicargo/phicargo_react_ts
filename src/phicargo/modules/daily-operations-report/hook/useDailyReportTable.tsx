@@ -1,6 +1,7 @@
 import type { Record } from '../models/record-model';
 import { type MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
+import { CommentCell } from '../components/tables/CommentCell';
 
 export const useDailyReportColumns = () => {
   const columns = useMemo<MRT_ColumnDef<Record>[]>(
@@ -124,6 +125,15 @@ export const useDailyReportColumns = () => {
         muiEditTextFieldProps: {
           type: 'number',
         },
+        Cell: ({ row }) => (
+          <CommentCell
+            value={row.original.unloadingUnits}
+            date={row.original.date}
+            recordId={row.original.id}
+            recordColumn='unloading'
+            comment={row.original.comments.unloading}
+          />
+        ),
       },
       {
         accessorFn: (row) => row.longTripUnits,
@@ -135,6 +145,15 @@ export const useDailyReportColumns = () => {
         muiEditTextFieldProps: {
           type: 'number',
         },
+        Cell: ({ row }) => (
+          <CommentCell
+            value={row.original.longTripUnits}
+            date={row.original.date}
+            recordId={row.original.id}
+            recordColumn='long'
+            comment={row.original.comments.long}
+          />
+        ),
       },
       {
         accessorFn: (row) => row.unitsInMaintenance,
@@ -151,6 +170,15 @@ export const useDailyReportColumns = () => {
         enableEditing: false,
         enableSorting: false,
         enableColumnFilter: false,
+        Cell: ({ row }) => (
+          <CommentCell
+            value={row.original.unitsNoOperator}
+            date={row.original.date}
+            recordId={row.original.id}
+            recordColumn='no_operator'
+            comment={row.original.comments.noOperator}
+          />
+        ),
       },
       {
         accessorFn: (row) => row.totalUnits,

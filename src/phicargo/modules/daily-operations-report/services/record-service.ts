@@ -1,9 +1,19 @@
-import type { Record, RecordUpdate } from '../models/record-model';
-import { recordToLocal, recordUpdateToApi } from '../adapters/record-adapter';
+import type {
+  Record,
+  RecordComment,
+  RecordCommentCreate,
+  RecordUpdate,
+} from '../models/record-model';
+import type { RecordApi, RecordCommentApi } from '../models/api/record-model';
+import {
+  recordCommentToApi,
+  recordCommentToLocal,
+  recordToLocal,
+  recordUpdateToApi,
+} from '../adapters/record-adapter';
 
 import { AxiosError } from 'axios';
 import { DateRange } from 'rsuite/esm/DateRangePicker';
-import type { RecordApi } from '../models/api/record-model';
 import type { UpdatableItem } from '../../core/types/global-types';
 import dayjs from 'dayjs';
 import odooApi from '../../core/api/odoo-api';
@@ -52,6 +62,7 @@ class RecordService implements IRecordService {
   }: UpdatableItem<RecordUpdate>): Promise<Record> {
     const newRecord = recordUpdateToApi(updatedItem);
     const url = `/daily_operations_report/${id}`;
+
     try {
       const response = await odooApi.put<RecordApi>(url, newRecord);
       return recordToLocal(response.data);
@@ -85,6 +96,31 @@ class RecordService implements IRecordService {
         );
       }
       throw new Error('Error al editar el registro');
+    }
+  }
+
+  public async editComment({
+    id,
+    comment,
+  }: {
+    id: number;
+    comment: RecordCommentCreate;
+  }): Promise<RecordComment> {
+    const url = `/daily_operations_report/${id}/comment`;
+
+    const data = recordCommentToApi(comment);
+
+    try {
+      const response = await odooApi.put<RecordCommentApi>(url, data);
+      return recordCommentToLocal(response.data);
+    } catch (error) {
+      console.error(error);
+      if (error instanceof AxiosError) {
+        throw new Error(
+          error.response?.data?.detail || 'Error al crear el comentario',
+        );
+      }
+      throw new Error('Error al crear el comentario');
     }
   }
 }

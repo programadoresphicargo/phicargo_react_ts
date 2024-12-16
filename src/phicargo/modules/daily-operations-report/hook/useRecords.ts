@@ -2,6 +2,7 @@ import type { Record, RecordUpdate } from '../models/record-model';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import RecordService from '../services/record-service';
+import { editRecordComment } from '../utilities/edit-record-comment';
 import toast from 'react-hot-toast';
 import { useGlobalContext } from './useGlobalContext';
 import { useUpdateMutation } from './useUpdateMutation';
@@ -37,8 +38,22 @@ export const useRecords = () => {
     },
   });
 
+  const editCommentMutation = useMutation({
+    mutationFn: recordService.editComment,
+    onSuccess: (comment, { id }) => {
+      queryClient.setQueryData([mainKey, month, branchId], (data: Record[]) => {
+        return editRecordComment(data, id, comment);
+      });
+      toast.success('Comentario actualizado con éxito');
+    },
+    onError: (err) => {
+      toast.error(err.message);
+    }
+  });
+
   return {
     updateRecordMutation,
     updateRecordDataMutation,
+    editCommentMutation
   };
 };

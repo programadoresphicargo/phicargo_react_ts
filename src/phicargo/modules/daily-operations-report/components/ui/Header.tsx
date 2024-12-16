@@ -46,8 +46,8 @@ const Header = () => {
         </Button>
 
         <div className="mx-4">
-          <h1 className="m-0 p-0 text-xl text-gray-800 font-bold">
-            Información sobre las operaciones diarias.
+          <h1 className="m-0 p-0 text-xl text-gray-800 font-bold uppercase">
+            Información sobre las operaciones diarias
           </h1>
           <p className="my-1 text-sm text-gray-600">
             {'Día: ' + dayjs().format('DD/MM/YYYY')}

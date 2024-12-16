@@ -11,7 +11,7 @@ export const useRecordsQuery = (month: DateRange, branchId: number) => {
     queryKey: [mainKey, month, branchId],
     queryFn: () => recordService.getRecords(month, branchId),
     refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5,
+    staleTime: 1000 * 60 * 10,
     placeholderData: [],
     enabled: !!month && !!branchId,
   });

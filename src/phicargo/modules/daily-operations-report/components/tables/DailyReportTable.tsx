@@ -7,7 +7,6 @@ import {
   type MRT_TableOptions,
 } from 'material-react-table';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import { IconButton as RsuiteIconButton } from 'rsuite';
 import dayjs from 'dayjs';
 import { useEffect } from 'react';
 import { useGlobalContext } from '../../hook/useGlobalContext';
@@ -44,8 +43,8 @@ const DailyReportTable = () => {
     table.setEditingRow(null);
   };
 
-  const onUpdateRecordData = (id: number) => {
-    updateRecordData(id);
+  const onUpdateRecordData = (record: Record) => {
+    updateRecordData({ branchId, date: record.date.format('YYYY-MM-DD') });
   };
 
   const { columns } = useDailyReportColumns();
@@ -57,27 +56,28 @@ const DailyReportTable = () => {
   }, [isError, error]);
 
   const table = useMaterialReactTable({
+    // DATA
     data: records || [],
     columns: columns,
-    enableRowPinning: true,
     enableStickyHeader: true,
+    enableRowPinning: true,
     keepPinnedRows: false,
-
+    enableDensityToggle: false,
+    enableFullScreenToggle: true,
+    // PAGINATION, FILTERS, SORTING
+    columnFilterDisplayMode: 'popover',
+    enableEditing: true,
+    editDisplayMode: 'row',
+    onEditingRowSave: handleSave,
+    // STATE
     initialState: {
+      density: 'compact',
       pagination: { pageSize: 50, pageIndex: 0 },
     },
     state: {
       isLoading: isFetching,
-      density: 'compact',
       isSaving: isPending,
     },
-    enableDensityToggle: false,
-    enableFullScreenToggle: false,
-    columnFilterDisplayMode: 'popover',
-    // EDITING
-    enableEditing: true,
-    editDisplayMode: 'row',
-    onEditingRowSave: handleSave,
     // ACTIONS
     enableRowActions: true,
     positionActionsColumn: 'first',
@@ -88,7 +88,7 @@ const DailyReportTable = () => {
             <IconButton
               color="default"
               disabled={!row.original?.date.isSame(dayjs(), 'day')}
-              onClick={() => onUpdateRecordData(row.original.id)}
+              onClick={() => onUpdateRecordData(row.original)}
             >
               <RefreshIcon />
             </IconButton>
@@ -109,27 +109,17 @@ const DailyReportTable = () => {
     ),
     // CUSTOMIZATIONS
     renderTopToolbarCustomActions: () => (
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          gap: '1rem',
-        }}
-      >
-        <RsuiteIconButton
-          appearance="primary"
-          icon={<RefreshIcon />}
-          style={{ padding: '5px', backgroundColor: '#2B303A' }}
-          onClick={() => refetch()}
-        />
+      <div className="flex flex-row gap-2">
+        <div className="flex flex-row items-center rounded-xl">
+          <Tooltip arrow title="Refrescar">
+            <IconButton onClick={() => refetch()}>
+              <RefreshIcon />
+            </IconButton>
+          </Tooltip>
+        </div>
+        <div className="flex flex-row items-center"></div>
       </div>
     ),
-    muiTableContainerProps: {
-      sx: {
-        maxHeight: 'calc(100vh - 265px)',
-      },
-    },
     displayColumnDefOptions: {
       'mrt-row-actions': {
         header: '',
@@ -153,32 +143,23 @@ const DailyReportTable = () => {
         },
       };
     },
-    renderEmptyRowsFallback: () => {
-      return (
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '20rem',
-          }}
-        >
-          <p
-            style={{
-              fontSize: '1.125rem',
-              fontWeight: 'bold',
-              color: '#6B7280',
-            }}
-          >
-            No se encontraron registros
-          </p>
-        </div>
-      );
+    muiTableHeadCellProps: {
+      sx: {
+        fontFamily: 'Inter',
+        fontWeight: 'Bold',
+        fontSize: '14px',
+      },
     },
-    muiTablePaperProps: {
-      style: {
-        borderRadius: '1em',
+    muiTableBodyCellProps: {
+      sx: {
+        fontFamily: 'Inter',
+        fontWeight: 'normal',
+        fontSize: '14px',
+      },
+    },
+    muiTableContainerProps: {
+      sx: {
+        maxHeight: 'calc(100vh - 225px)',
       },
     },
   });

@@ -1,5 +1,7 @@
+import type { RecordColumnComment } from '../record-model';
+
 interface RecordApiBase {
-  date: string;
+  record_date: string;
   simple_load: number;
   full_load: number;
   total: number;
@@ -13,6 +15,7 @@ interface RecordApiBase {
   units_no_operator: number;
   total_units: number;
   observations: string;
+  comments: RecordCommentApi[];
 }
 
 export interface RecordApi extends RecordApiBase {
@@ -35,3 +38,14 @@ export type RecordApiUpdate = Partial<
     | 'observations'
   >
 >;
+
+interface RecordCommentBaseApi {
+  record_column: RecordColumnComment;
+  comment: string;
+}
+
+export interface RecordCommentApi extends RecordCommentBaseApi {
+  id: number;
+}
+
+export type RecordCommentCreateApi = RecordCommentBaseApi;

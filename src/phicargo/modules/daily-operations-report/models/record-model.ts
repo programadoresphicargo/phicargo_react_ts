@@ -15,6 +15,7 @@ interface RecordBase {
   unitsNoOperator: number;
   totalUnits: number;
   observations: string;
+  comments: RecordComments;
 }
 
 export interface Record extends RecordBase {
@@ -35,3 +36,23 @@ export type RecordUpdate = Partial<
     | 'observations'
   >
 >;
+
+
+export type RecordColumnComment = 'unloading' | 'long' | 'no_operator';
+
+interface RecordCommentBase {
+  recordColumn: RecordColumnComment;
+  comment: string;
+}
+
+export interface RecordComment extends RecordCommentBase {
+  id: number;
+}
+
+export type RecordCommentCreate = RecordCommentBase;
+
+export interface RecordComments {
+  unloading: RecordComment | null;
+  long: RecordComment | null;
+  noOperator: RecordComment | null;
+}

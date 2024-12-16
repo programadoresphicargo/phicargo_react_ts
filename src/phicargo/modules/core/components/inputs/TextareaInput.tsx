@@ -3,10 +3,28 @@ import { Controller, FieldValues } from 'react-hook-form';
 import { CustomInputProps } from '../../types/global-types';
 import { Textarea } from '@nextui-org/react';
 
+interface TextareaInputProps<T extends FieldValues>
+  extends CustomInputProps<T> {
+  maxRows?: number;
+  minRows?: number;
+  isReadOnly?: boolean;
+}
+
 export const TextareaInput = <T extends FieldValues>(
-  props: CustomInputProps<T>,
+  props: TextareaInputProps<T>,
 ) => {
-  const { control, name, className, label, rules, isUpperCase } = props;
+  const {
+    control,
+    name,
+    className,
+    label,
+    rules,
+    isUpperCase,
+    maxRows,
+    minRows,
+    isReadOnly,
+    isDisabled
+  } = props;
 
   return (
     <>
@@ -22,6 +40,10 @@ export const TextareaInput = <T extends FieldValues>(
             placeholder="Escribe alguna observacion"
             size="sm"
             variant="flat"
+            maxRows={maxRows}
+            minRows={minRows}
+            isReadOnly={isReadOnly}
+            isDisabled={isDisabled}
             onValueChange={(newValue) => {
               const transformedValue = isUpperCase
                 ? newValue.toUpperCase()
