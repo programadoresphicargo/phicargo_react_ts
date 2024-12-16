@@ -3,6 +3,7 @@ import AvatarProfile from '../components/ui/AvatarProfile';
 import { Button } from '@nextui-org/react';
 import ReportMenuItem from '../components/ui/ReportMenuItem';
 import balanceIcon from '../../../../assets/menu/balanceIcon.png';
+import dailyOpIcon from '../../../../assets/menu/dailyOpIcon.png';
 import maintenanceIcon from '../../../../assets/menu/maintenanceIcon.png';
 import { useAuthContext } from '../../auth/hooks';
 import { useMemo } from 'react';
@@ -27,6 +28,12 @@ const reports: MenuItemType[] = [
     path: '/reportes/balance',
     icon: balanceIcon,
     requiredPermissions: [197],
+  },
+  {
+    label: 'Operaciones Diarias',
+    path: '/reportes/operaciones',
+    icon: dailyOpIcon,
+    requiredPermissions: [201],
   },
 ];
 

@@ -7,6 +7,7 @@ import AccesoForm from '../phicargo/accesos/formulario';
 import AvailabilityLayout from '../phicargo/modules/availability/layout/AvailabilityLayout';
 import AvailabilityRoutes from '../phicargo/modules/availability/routes/AvailabilityRoutes';
 import CashflowReportRoutes from '../phicargo/modules/cashflow-report/routes/CashflowReportRoutes';
+import DailyOperationsPage from '@/phicargo/modules/daily-operations-report/pages/DailyOperationsPage';
 import { LoadingPage } from '../phicargo/modules/core/pages/LoadingPage';
 import MainMenuPage from '@/phicargo/menu/MainManuPage';
 import MaintenanceReportRoutes from '../phicargo/modules/maintenance/routes/MaintenanceReportRoutes';
@@ -104,8 +105,6 @@ const PERMISSIONS = {
 };
 
 export const PrivateRoutes = () => {
-
-
   return (
     <>
       <Toaster></Toaster>
@@ -275,6 +274,15 @@ export const PrivateRoutes = () => {
           element={<MaintenanceReportRoutes />}
         />
         <Route path="/reportes/balance/*" element={<CashflowReportRoutes />} />
+        <Route
+          path="/reportes/operaciones"
+          element={
+            <ProtectedRoute
+              element={<DailyOperationsPage />}
+              requiredPermissionId={201}
+            />
+          }
+        />
 
         <Route
           path="/control-usuarios"
@@ -291,7 +299,7 @@ export const PrivateRoutes = () => {
         <Route
           path="/disponibilidad"
           element={
-            <ProtectedRoute 
+            <ProtectedRoute
               element={<AvailabilityLayout children={undefined} />}
               requiredPermissionId={PERMISSIONS['Modulo disponibilidad']}
             />
