@@ -4,13 +4,18 @@ interface Props {
   icon: string;
   label: string;
   link: string;
+  isExternal?: boolean;
 }
 
-const MenuItem = ({ icon, label, link }: Props) => {
+const MenuItem = ({ icon, label, link, isExternal = false }: Props) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(link);
+    if (isExternal) {
+      window.open(link, '_blank', 'noopener,noreferrer');
+    } else {
+      navigate(link);
+    }
   };
 
   return (
@@ -43,4 +48,3 @@ const MenuItem = ({ icon, label, link }: Props) => {
 };
 
 export default MenuItem;
-

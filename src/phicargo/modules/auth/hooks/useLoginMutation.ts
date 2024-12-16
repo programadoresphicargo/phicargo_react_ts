@@ -15,25 +15,25 @@ export const useLoginMutation = () => {
 
   const { setAuthStatus, setSession } = useAuthContext();
 
-  const sessionPhp = async (id: number) => {
-
+  const startSession = async (userID: number) => {
     try {
       const response = await axios.post(
-        `${VITE_PHIDES_API_URL}/login/inicio/validar2.php`, // Cambia a la URL de tu servidor
-        { userID: id },
-        { withCredentials: true } // Habilita las cookies para la sesión
+        `${VITE_PHIDES_API_URL}/login/inicio/start_session.php`,
+        { userID: userID }, // Envía el userID en el cuerpo
+        { withCredentials: true } // Habilita cookies y credenciales
       );
 
-      if (response.data.status === "success") {
-        toast.success(`Session created for userID: ${response.data.userID}`);
+      if (response.data.success) {
+        toast.success("Éxito: " + response.data.message);
       } else {
-        toast.error("Failed to create session.");
+        toast.error("Error lógico: " + response.data.message);
       }
     } catch (error) {
-      console.error("Error creating session:", error);
-      toast.error("An error occurred.");
+      console.error("Error al iniciar la sesión:", error);
+      toast.error("Error al comunicarse con el servidor.");
     }
   };
+
 
   const loginMutation = useMutation({
     mutationFn: AuthServiceApi.login,
@@ -46,7 +46,7 @@ export const useLoginMutation = () => {
       setSession(session);
       sessionStorage.setItem('session', JSON.stringify(session));
       toast.success('Actualizado con éxito');
-      sessionPhp(session.user.id);
+      startSession(session.user.id);
     },
     onError: (error: Error) => {
       setAuthStatus('unauthenticated');

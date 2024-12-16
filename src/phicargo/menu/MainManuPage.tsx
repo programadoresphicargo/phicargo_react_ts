@@ -11,17 +11,29 @@ import { useAuthContext } from '../modules/auth/hooks';
 import { useMemo } from 'react';
 import usuarios_img from '../../assets/menu/usuarios.png';
 import viajes_img from '../../assets/menu/viajes.png';
+import toast from 'react-hot-toast';
+import axios from 'axios';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import AvatarProfile from '../modules/core/components/ui/AvatarProfile';
+const { VITE_PHIDES_API_URL } = import.meta.env;
 
 type MenuItemType = {
   icon: string;
   label: string;
   link: string;
   requiredPermissions: number[];
+  isExternal?: boolean;
 }
 
 const menuItems: MenuItemType[] = [
-  { icon: turnos_img, label: 'Turnos', link: '/terminales', requiredPermissions: [8] },
-  { icon: viajes_img, label: 'Control de viajes', link: '/viajes', requiredPermissions: [1,101,102] },
+  { icon: turnos_img, label: 'Turnos', requiredPermissions: [8], link: VITE_PHIDES_API_URL + '/turnos/vista/index.php?sucursal=veracruz', isExternal: true },
+  { icon: viajes_img, label: 'Control de viajes', link: '/viajes', requiredPermissions: [1, 101, 102] },
   { icon: maniobras_img, label: 'Maniobras', link: '/cartas-porte', requiredPermissions: [38] },
   { icon: monitoreo_img, label: 'Monitoreo', link: '/monitoreo', requiredPermissions: [40] },
   { icon: accesos_img, label: 'Accesos', link: '/accesos', requiredPermissions: [126] },
@@ -46,10 +58,55 @@ const MainMenuPage = () => {
     item.requiredPermissions.every((permission) =>
       session?.user?.permissions?.includes(permission)
     )
-  ),[session]);
+  ), [session]);
+
+  const checkSession = async () => {
+    try {
+      const response = await axios.post(
+        `${VITE_PHIDES_API_URL}/login/inicio/get_user.php`,
+        { userID: session?.user.id }, // Datos enviados en el cuerpo
+        {
+          withCredentials: true, // Habilitar envío de cookies/sesión
+          headers: {
+            'Content-Type': 'application/json', // Asegurar tipo de contenido
+          },
+        }
+      );
+
+      const data = response.data;
+
+      // Manejar respuesta basada en el servidor PHP
+      if (data.status === "success") {
+        toast.success(`Sesión activa para el usuario con ID: ${data.userID}`);
+      } else {
+        toast.error(data.message || "No se encontró sesión activa.");
+      }
+    } catch (error: any) {
+      // Manejo de errores
+      if (error.response) {
+        console.error("Error en el servidor:", error.response.data);
+        toast.error(`Error en el servidor: ${error.response.data.message || "Error desconocido."}`);
+      } else {
+        console.error("Error en la red:", error.message);
+        toast.error("Error de red: " + error.message);
+      }
+    }
+  };
+
+  checkSession();
 
   return (
     <main className="main">
+
+      <AppBar position="absolute" elevation={0}>
+        <Toolbar >
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Menú principal
+          </Typography>
+          <AvatarProfile />
+        </Toolbar>
+      </AppBar>
+
       <div
         className="fixed top-0 left-0 right-0 bg-cover bg-no-repeat"
         style={{
@@ -90,6 +147,7 @@ const MainMenuPage = () => {
                 icon={item.icon}
                 label={item.label}
                 link={item.link}
+                isExternal={item.isExternal}
               />
             ))}
           </div>
