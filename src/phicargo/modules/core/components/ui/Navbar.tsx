@@ -54,7 +54,7 @@ const Navbar = (props: Props) => {
             edge="start"
             color="inherit"
             aria-label="back"
-            onClick={() => navigate('/manu')}
+            onClick={() => navigate('/menu')}
             sx={{
               mr: 1,
               color: '#333333',
