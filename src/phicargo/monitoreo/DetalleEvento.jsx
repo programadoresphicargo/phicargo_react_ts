@@ -24,12 +24,10 @@ import TimelineOppositeContent, {
 import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
 import CircularProgress from '@mui/material/CircularProgress';
-import { useAuthContext } from "../modules/auth/hooks";
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const DetalleForm = ({ id_evento, onClose }) => {
 
-    const { session } = useAuthContext();
     const [comentario, setComentario] = useState('');
     const [comentarios, setComentarios] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -40,7 +38,6 @@ const DetalleForm = ({ id_evento, onClose }) => {
 
     const initialFormData = {
         id_evento: id_evento,
-        id_usuario: session.user.id,
         titulo: '',
         descripcion: '',
         sucursal: '',
@@ -73,7 +70,6 @@ const DetalleForm = ({ id_evento, onClose }) => {
 
     const GuardarComentario = () => {
         const data = {
-            id_usuario: session.user.id,
             id_evento: id_evento,
             comentario: comentario,
         };
@@ -114,7 +110,6 @@ const DetalleForm = ({ id_evento, onClose }) => {
                 const evento = response.data[0];
                 setFormData({
                     id_evento: id_evento,
-                    id_usuario: session.user.id,
                     titulo: evento.titulo || '',
                     descripcion: evento.descripcion || '',
                     sucursal: evento.sucursal || '',

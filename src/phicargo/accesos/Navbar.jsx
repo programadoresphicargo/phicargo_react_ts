@@ -8,6 +8,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
 
 function ResponsiveAppBar() {
+
     const navigate = useNavigate();
 
     const handleBackClick = () => {
@@ -19,6 +20,7 @@ function ResponsiveAppBar() {
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
 
+                    {/* Botón de retroceso */}
                     <IconButton
                         edge="start"
                         color="inherit"
@@ -29,13 +31,14 @@ function ResponsiveAppBar() {
                         <ArrowBackIcon />
                     </IconButton>
 
+                    {/* Logo de la empresa */}
                     <img className='m-2'
                         src="https://phi-cargo.com/wp-content/uploads/2021/05/logo-phicargo-vertical.png"
                         alt="Descripción de la imagen"
                         style={{
-                            width: '170px',
-                            height: '60px',
-                            filter: 'brightness(0) invert(1)' 
+                            width: '200px',
+                            height: '70px',
+                            filter: 'brightness(0) invert(1)' // Esto hará que la imagen sea blanca
                         }}
                     />
                 </Toolbar>

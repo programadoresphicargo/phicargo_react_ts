@@ -8,8 +8,9 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
 
 function MonitoreoNavbar() {
-    const navigate = useNavigate();
 
+    const navigate = useNavigate();
+    
     const handleBackClick = () => {
         navigate("/menu");
     };

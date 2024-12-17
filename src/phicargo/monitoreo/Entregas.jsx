@@ -1,36 +1,37 @@
-import { forwardRef, useEffect, useMemo, useState } from 'react';
-
-import AppBar from '@mui/material/AppBar';
-import { Box } from '@mui/material';
+import React, { useState, useEffect, useMemo } from 'react';
+import { DialogContent } from '@mui/material';
+import dayjs from 'dayjs';
 import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemButton from '@mui/material/ListItemButton';
+import List from '@mui/material/List';
+import Divider from '@mui/material/Divider';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import CloseIcon from '@mui/icons-material/Close';
+import Slide from '@mui/material/Slide';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import CloseIcon from '@mui/icons-material/Close';
-import Dialog from '@mui/material/Dialog';
-import { DialogContent } from '@mui/material';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
 import PersistentDrawerRight from './Eventos';
-import Slide from '@mui/material/Slide';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import axios from 'axios';
-import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
-
+import axios from 'axios';
+import { Box } from '@mui/material';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
-const Transition = forwardRef(function Transition(props, ref) {
+import {
+  MaterialReactTable,
+  useMaterialReactTable,
+} from 'material-react-table';
+
+const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 const Entregas = ({ fecha }) => {
-
-  const { session } = useAuthContext();
 
   const [open, setOpen] = React.useState(false);
   const [id_entrega, setIDEntrega] = useState(0);
@@ -59,11 +60,9 @@ const Entregas = ({ fecha }) => {
     }
   };
 
-
   const NuevaEntrega = async () => {
     try {
-      const response = await axios.post(VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/abrirEntrega.php',
-        new URLSearchParams({ id_usuario: session.user.id }));
+      const response = await fetch(VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/abrirEntrega.php');
       toast.success(response);
       handleClose();
     } catch (error) {
@@ -73,8 +72,7 @@ const Entregas = ({ fecha }) => {
 
   const ComprobarEntrega = async () => {
     try {
-      const response = await axios.post(VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/comprobarEntrega.php',
-        new URLSearchParams({ id_usuario: session.user.id }));
+      const response = await axios.get(VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/comprobarEntrega.php');
       const data = response.data;
 
       if (data.status === 1) {

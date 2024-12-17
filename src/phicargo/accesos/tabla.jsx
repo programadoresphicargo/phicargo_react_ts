@@ -1,27 +1,31 @@
+import React, { useState, useEffect, useMemo } from 'react';
+import { TextField } from '@mui/material';
+import dayjs from 'dayjs';
+import { Button } from '@nextui-org/button';
+import Dialog from '@mui/material/Dialog';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemButton from '@mui/material/ListItemButton';
+import List from '@mui/material/List';
+import Divider from '@mui/material/Divider';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import CloseIcon from '@mui/icons-material/Close';
+import Slide from '@mui/material/Slide';
+import AccesoCompo from './AccesoCompo';
+import AccesoForm from './formulario';
+import { Box } from '@mui/material';
+import { Chip } from '@nextui-org/react';
+const { VITE_PHIDES_API_URL } = import.meta.env;
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import { forwardRef, useEffect, useMemo, useState } from 'react';
+import { width } from '@mui/system';
+import { button } from '@nextui-org/theme';
 
-import AccesoCompo from './AccesoCompo';
-import AccesoForm from './formulario';
-import AppBar from '@mui/material/AppBar';
-import Button from '@mui/material/Button';
-import CloseIcon from '@mui/icons-material/Close';
-import Dialog from '@mui/material/Dialog';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import Slide from '@mui/material/Slide';
-import { TextField } from '@mui/material';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import dayjs from 'dayjs';
-
-const Transition = forwardRef(function Transition(props, ref) {
+const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
@@ -79,20 +83,20 @@ const Maniobras = ({ estado_maniobra }) => {
         header: 'Tipo de movimiento',
         Cell: ({ cell }) => {
           const tipoMovimiento = cell.getValue();
-          let badgeClass = 'badge rounded-pill ';
+          let badgeClass = '';
 
           if (tipoMovimiento === 'entrada') {
-            badgeClass += 'bg-success';
+            badgeClass += 'success';
           } else if (tipoMovimiento === 'salida') {
-            badgeClass += 'bg-danger';
+            badgeClass += 'danger';
           } else {
-            badgeClass += 'bg-primary';
+            badgeClass += 'primary';
           }
 
           return (
-            <span className={badgeClass} style={{ width: '130px' }}>
+            <Chip color={badgeClass} content="5" style={{ width: '130px' }}>
               {tipoMovimiento.charAt(0).toUpperCase() + tipoMovimiento.slice(1)}
-            </span>
+            </Chip>
           );
         },
       },
@@ -120,22 +124,22 @@ const Maniobras = ({ estado_maniobra }) => {
         header: 'Estado del acceso',
         Cell: ({ cell }) => {
           const tipoMovimiento = cell.getValue();
-          let badgeClass = 'badge rounded-pill ';
+          let badgeClass = '';
 
           if (tipoMovimiento === 'espera') {
-            badgeClass += 'bg-secondary';
+            badgeClass += 'secondary';
           } else if (tipoMovimiento === 'validado') {
-            badgeClass += 'bg-success';
+            badgeClass += 'success';
           } else {
-            badgeClass += 'bg-primary';
+            badgeClass += 'primary';
           }
 
           const displayText = tipoMovimiento === 'espera' ? 'En espera de validación' : tipoMovimiento.charAt(0).toUpperCase() + tipoMovimiento.slice(1);
 
           return (
-            <span className={badgeClass} style={{ width: '130px' }}>
+            <Chip className={badgeClass} style={{ width: '150px' }}>
               {displayText}
-            </span>
+            </Chip>
           );
         },
       },
@@ -193,6 +197,25 @@ const Maniobras = ({ estado_maniobra }) => {
         fontSize: '14px',
       },
     },
+    renderTopToolbarCustomActions: ({ table }) => (
+      <Box
+        sx={{
+          display: 'flex',
+          gap: '16px',
+          padding: '8px',
+          flexWrap: 'wrap',
+        }}
+      >
+        <Button
+          color='primary'
+          onClick={() =>
+            NuevoAcceso()
+          }
+        >
+          Nuevo registro
+        </Button>
+      </Box>
+    ),
   });
 
   return (<>
@@ -228,8 +251,6 @@ const Maniobras = ({ estado_maniobra }) => {
     </Dialog>
 
     <div>
-      <button className="btn btn-success" onClick={NuevoAcceso}>Nuevo registro</button>
-
       <div className="table-striped">
         <MaterialReactTable table={table} />
       </div>

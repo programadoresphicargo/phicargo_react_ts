@@ -9,7 +9,7 @@ export default function Accesos() {
         <div>
             <ResponsiveAppBar></ResponsiveAppBar>
 
-            <h2 className="p-2 text-primary">Modulo de entradas y salidas</h2>
+            <h1 className="p-2 text-primary">Modulo de entradas y salidas a las instalaciones</h1>
 
             <div className="m-1">
                 <Tabs aria-label="Options" color={'primary'} size="lg">
