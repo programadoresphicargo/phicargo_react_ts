@@ -271,7 +271,7 @@ export const PrivateRoutes = () => {
           }
         />
         <Route
-          path="/reportes/mantenimiento/"
+          path="/reportes/mantenimiento/*"
           element={<MaintenanceReportRoutes />}
         />
         <Route path="/reportes/balance/*" element={<CashflowReportRoutes />} />
