@@ -77,7 +77,7 @@ function EstatusHistorial() {
                         <Card className="mb-2 w-full" isPressable onClick={() => handleClickOpen(step.id_reportes_agrupados, "body")}>
                             <CardHeader className="justify-between">
                                 <div className="flex gap-5">
-                                    <Badge color="danger" content={step.registros} placement="top-right" isInvisible={step.registros > 1 ? true : false}>
+                                    <Badge color="danger" content={step.registros} placement="top-right" isInvisible={step.registros > 1 ? false : true}>
                                         <Avatar
                                             color={`${getBadgeClass()}`}
                                             isBordered
