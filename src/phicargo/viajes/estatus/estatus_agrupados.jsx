@@ -150,7 +150,7 @@ function EstatusHistorialAgrupado({ registros_agrupados }) {
                                 />
                             }
                         >
-                            <Card className="max-w-full m-4">
+                            <Card className="max-w-full m-3">
                                 <CardHeader className="justify-between">
                                     <div className="flex gap-5">
                                         <Avatar
@@ -168,13 +168,16 @@ function EstatusHistorialAgrupado({ registros_agrupados }) {
                                     {tiempoTranscurrido(step.fecha_hora)}
                                 </CardHeader>
                                 <CardBody className="text-small text-default-500">
-                                    <span className="pt-1">Referencia reporte: {step.id_reporte}</span>
-                                    <span className="pt-1">Placas: {step.placas}</span>
-                                    <span className="pt-1">Coordenadas: {step.latitud},{step.longitud}</span>
-                                    <span className="pt-1">Localidad: {step.localidad}</span>
-                                    <span className="pt-1">Sublocalidad: {step.sublocalidad}</span>
-                                    <span className="pt-1">Calle: {step.calle}</span>
-                                    <span className="pt-1">Codigo postal: {step.codigo_postal}</span>
+                                    <span>Referencia reporte: {step.id_reporte}</span>
+                                    <span>Placas: {step.placas}</span>
+                                    <span>Coordenadas: {step.latitud},{step.longitud}</span>
+                                    <span>Localidad: {step.localidad}</span>
+                                    <span>Sublocalidad: {step.sublocalidad}</span>
+                                    <span>Calle: {step.calle}</span>
+                                    <span>Codigo postal: {step.codigo_postal}</span>
+
+                                    < ArchivosAdjuntos id_reporte={step.id_reporte} ></ArchivosAdjuntos>
+
                                 </CardBody>
                                 <CardFooter className="gap-3">
                                     <Button color="success" className='text-white me-2' variant="solid" onClick={() => handleClickOpen(step.id_reporte)}>
@@ -244,8 +247,6 @@ function EstatusHistorialAgrupado({ registros_agrupados }) {
                                         </div>
                                     </CardFooter>
                                 </Card>) : (null)}
-
-                            < ArchivosAdjuntos id_reporte={step.id_reporte} ></ArchivosAdjuntos>
 
                         </AccordionItem>
                     ))}
