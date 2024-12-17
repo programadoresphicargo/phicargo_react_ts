@@ -9,6 +9,7 @@ import EstatusHistorialAgrupado from './estatus_agrupados';
 import { tiempoTranscurrido } from '../../funciones/tiempo';
 import { Card, CardHeader } from '@nextui-org/react';
 import { Avatar } from '@nextui-org/react';
+import { Badge } from '@nextui-org/react';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -76,13 +77,15 @@ function EstatusHistorial() {
                         <Card className="mb-2 w-full" isPressable onClick={() => handleClickOpen(step.id_reportes_agrupados, "body")}>
                             <CardHeader className="justify-between">
                                 <div className="flex gap-5">
-                                    <Avatar
-                                        color={`${getBadgeClass()}`}
-                                        isBordered
-                                        radius="full"
-                                        size="md"
-                                        src={VITE_PHIDES_API_URL + `/img/status/${step.imagen}`}
-                                    />
+                                    <Badge color="danger" content={step.registros} placement="top-right" isInvisible={step.registros > 1 ? true : false}>
+                                        <Avatar
+                                            color={`${getBadgeClass()}`}
+                                            isBordered
+                                            radius="full"
+                                            size="md"
+                                            src={VITE_PHIDES_API_URL + `/img/status/${step.imagen}`}
+                                        />
+                                    </Badge>
                                     <div className="flex flex-col gap-1 items-start justify-center">
                                         <h4 className="text-small font-semibold leading-none text-default-600">{step.nombre_estatus}</h4>
                                         <h5 className="text-small tracking-tight text-default-400">{step.name || step.nombre}</h5>
