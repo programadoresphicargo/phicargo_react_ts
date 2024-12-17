@@ -41,7 +41,7 @@ function FormularioTerminales({ open, onClose, id_terminal }) {
 
     const actualizar = () => {
         console.log(formData);
-        axios.post('/phicargo/modulo_maniobras/terminales/actualizar_terminal.php', formData)
+        axios.post(VITE_PHIDES_API_URL + '/modulo_maniobras/terminales/actualizar_terminal.php', formData)
             .then(response => {
                 console.log('Respuesta del servidor:', response.data);
             })

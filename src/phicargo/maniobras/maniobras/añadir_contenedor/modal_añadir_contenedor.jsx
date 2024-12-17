@@ -5,13 +5,13 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
+const { VITE_PHIDES_API_URL } = import.meta.env;
 
 import {
     MaterialReactTable,
     useMaterialReactTable,
 } from 'material-react-table';
 import { toast } from 'react-toastify';
-const { VITE_PHIDES_API_URL } = import.meta.env;
 
 
 const months = [
@@ -95,24 +95,16 @@ const AñadirContenedor = ({ show, handleClose, id_maniobra }) => {
     const columns = useMemo(
         () => [
             {
-                accessorKey: 'store_id',
+                accessorKey: 'sucursal',
                 header: 'Sucursal',
-                Cell: ({ cell }) => {
-                    const partnerData = cell.getValue();
-                    return partnerData[1];
-                }
             },
             {
-                accessorKey: 'name',
+                accessorKey: 'carta_porte',
                 header: 'Carta porte',
             },
             {
-                accessorKey: 'partner_id',
+                accessorKey: 'cliente',
                 header: 'Cliente',
-                Cell: ({ cell }) => {
-                    const partnerData = cell.getValue();
-                    return partnerData[1];
-                }
             }, {
                 accessorKey: 'x_ejecutivo_viaje_bel',
                 header: 'Ejecutivo de viaje',
@@ -169,11 +161,16 @@ const AñadirContenedor = ({ show, handleClose, id_maniobra }) => {
         },
         renderRowActions: ({ row }) => (
             <Box>
-                <Button variant="contained" onClick={() => añadir_contenedor(row.original.id)}>
+                <Button variant="contained" onClick={() => añadir_contenedor(row.original.id_cp)}>
                     Añadir
                 </Button>
             </Box>
         ),
+        muiTableContainerProps: {
+            sx: {
+                maxHeight: 'calc(100vh - 385px)',
+            },
+        },
         muiTableBodyRowProps: ({ row }) => ({
             sx: {
                 fontWeight: 'normal',

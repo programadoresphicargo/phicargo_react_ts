@@ -29,7 +29,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import PanelEstatus from './envio_estatus/panel';
-import { useAuthContext } from '../../modules/auth/hooks';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const fieldValidations = {
@@ -45,7 +44,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente }) => {
 
-    const { session } = useAuthContext();
     const [formDisabled, setFormDisabled] = useState(true);
     const [htmlContent, setHtmlContent] = useState('');
     const [values, setValues] = useState({ addedValues: [], removedValues: [] });
@@ -168,7 +166,6 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
 
     const [formData, setFormData] = useState({
         id_maniobra: id_maniobra,
-        id_usuario: session.user.id,
         id_cp: id_cp,
         id_cliente: id_cliente,
         id_terminal: '',
@@ -225,7 +222,6 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
         } else {
             setFormDisabled(false);
             setFormData({
-                id_usuario: session.user.id,
                 id_cp: id_cp,
                 id_terminal: '',
                 id_cliente: '',
@@ -478,7 +474,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
         }).then((result) => {
             setLoading(true);
             if (result.isConfirmed) {
-                axios.post('/phicargo/modulo_maniobras/maniobra/activar_maniobra.php?id_maniobra=' + id_maniobra)
+                axios.post(VITE_PHIDES_API_URL + '/modulo_maniobras/maniobra/activar_maniobra.php?id_maniobra=' + id_maniobra)
                     .then((response) => {
                         setLoading(false);
                         const data = response.data;
@@ -522,14 +518,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
-                // Crear los datos que se enviarán en la solicitud
-                const datos = new URLSearchParams({
-                    id_maniobra: id_maniobra,
-                    id_usuario: session.user.id
-                });
-
-                // Realizar la solicitud POST
-                axios.post(VITE_PHIDES_API_URL + '/modulo_maniobras/maniobra/finalizar_maniobra.php', datos)
+                axios.post(VITE_PHIDES_API_URL + '/modulo_maniobras/maniobra/finalizar_maniobra.php?id_maniobra=' + id_maniobra)
                     .then((response) => {
                         const data = response.data;
                         if (data.success) {
@@ -550,10 +539,9 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                         }
                     })
                     .catch((error) => {
-                        console.error(error);
                         Swal.fire(
                             'Error',
-                            'Hubo un problema al finalizar la maniobra.',
+                            'Hubo un problema al eliminar el registro.',
                             'error'
                         );
                     });
@@ -621,7 +609,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                     <AppBar sx={{ position: 'relative' }} elevation={0}>
                         <Toolbar>
                             <Typography sx={{ flex: 1 }} variant="h6" component="div">
-                                Maniobra M-{id_maniobra}
+                                Maniobra M-{id_maniobra} / {id_cp}
                             </Typography>
                             <Button autoFocus color="inherit" onClick={handleClose}>
                                 Cerrar

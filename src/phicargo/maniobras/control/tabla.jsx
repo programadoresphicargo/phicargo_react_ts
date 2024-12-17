@@ -6,13 +6,12 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 import { Box } from '@mui/material';
-const { VITE_PHIDES_API_URL } = import.meta.env;
-
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
 import { width } from '@mui/system';
+const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const Maniobras = ({ estado_maniobra }) => {
 
@@ -211,6 +210,11 @@ const Maniobras = ({ estado_maniobra }) => {
       elevation: 0,
       sx: {
         borderRadius: '0',
+      },
+    },
+    muiTableContainerProps: {
+      sx: {
+        maxHeight: 'calc(100vh - 190px)',
       },
     },
     muiTableBodyRowProps: ({ row }) => ({

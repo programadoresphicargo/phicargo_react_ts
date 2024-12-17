@@ -78,7 +78,7 @@ export default function PanelEstatus({ id_maniobra, open, handleClose }) {
 
         try {
             toast.success('Enviando correo espere...');
-            const response = await axios.post('/phicargo/modulo_maniobras/panel_envio/guardar_estatus.php', formData, {
+            const response = await axios.post(VITE_PHIDES_API_URL + '/modulo_maniobras/panel_envio/guardar_estatus.php', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

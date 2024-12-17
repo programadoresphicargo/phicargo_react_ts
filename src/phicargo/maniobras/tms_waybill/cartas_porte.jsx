@@ -7,7 +7,6 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 const { VITE_PHIDES_API_URL } = import.meta.env;
-
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -48,7 +47,6 @@ const CartasPorte = () => {
   const [data, setData] = useState([]); // Estado para almacenar los datos
 
   const fetchData = async (month, selectedTab) => {
-
     if (!month || selectedTab === undefined) return;
     setLoading(true);
     try {
@@ -77,29 +75,24 @@ const CartasPorte = () => {
   const columns = useMemo(
     () => [
       {
-        accessorKey: 'store_id',
+        accessorKey: 'empresa',
+        header: 'Empresa',
+      },
+      {
+        accessorKey: 'sucursal',
         header: 'Sucursal',
-        Cell: ({ cell }) => {
-          const partnerData = cell.getValue();
-          return partnerData[1];
-        }
       },
       {
         accessorKey: 'date_order',
         header: 'Fecha',
-        size: 150,
       },
       {
-        accessorKey: 'name',
+        accessorKey: 'carta_porte',
         header: 'Carta porte',
       },
       {
-        accessorKey: 'partner_id',
+        accessorKey: 'cliente',
         header: 'Cliente',
-        Cell: ({ cell }) => {
-          const partnerData = cell.getValue();
-          return partnerData[1];
-        }
       },
       {
         accessorKey: 'x_ejecutivo_viaje_bel',
@@ -153,7 +146,7 @@ const CartasPorte = () => {
     enableFilters: true,
     initialState: {
       showColumnFilters: true,
-      grouping: ['store_id'],
+      grouping: ['sucursal'],
       density: 'compact',
       pagination: { pageSize: 80 },
       showGlobalFilter: false,
@@ -172,7 +165,7 @@ const CartasPorte = () => {
       onClick: () => {
         if (row.subRows?.length) {
         } else {
-          handleShowModal(row.original.id, row.original.x_reference, row.original.partner_id[0]);
+          handleShowModal(row.original.id_cp, row.original.x_reference, row.original.id_cliente);
         }
       },
       style: {
@@ -188,7 +181,7 @@ const CartasPorte = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 195px)',
+        maxHeight: 'calc(100vh - 285px)',
       },
     },
     muiTableBodyCellProps: ({ row }) => ({
