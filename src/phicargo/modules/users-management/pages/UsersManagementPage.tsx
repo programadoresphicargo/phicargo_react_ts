@@ -40,6 +40,8 @@ const UsersManagementPage = () => {
     initialState: {
       density: 'compact',
       pagination: { pageSize: 100, pageIndex: 0 },
+      showGlobalFilter: true,
+      showColumnFilters: true,
     },
     muiTableBodyRowProps: ({ row }) => ({
       onDoubleClick: () => navigate(`/control-usuarios/usuarios/detalles/${row.original.id}`),

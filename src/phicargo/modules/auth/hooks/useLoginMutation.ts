@@ -1,9 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
 
 import AuthServiceApi from '../services/auth-service';
+import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useAuthContext } from './useAuthContext';
+
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 /**
@@ -45,7 +46,6 @@ export const useLoginMutation = () => {
       setAuthStatus('authenticated');
       setSession(session);
       sessionStorage.setItem('session', JSON.stringify(session));
-      toast.success('Actualizado con éxito');
       startSession(session.user.id);
     },
     onError: (error: Error) => {
