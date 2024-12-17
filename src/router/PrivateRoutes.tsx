@@ -7,9 +7,11 @@ import AccesoForm from '../phicargo/accesos/formulario';
 import AvailabilityLayout from '../phicargo/modules/availability/layout/AvailabilityLayout';
 import AvailabilityRoutes from '../phicargo/modules/availability/routes/AvailabilityRoutes';
 import CashflowReportRoutes from '../phicargo/modules/cashflow-report/routes/CashflowReportRoutes';
+import DOReportRoutes from '@/phicargo/modules/daily-operations-report/routes/DOReportRoutes';
 import { LoadingPage } from '../phicargo/modules/core/pages/LoadingPage';
 import MainMenuPage from '@/phicargo/menu/MainManuPage';
 import MaintenanceReportRoutes from '../phicargo/modules/maintenance/routes/MaintenanceReportRoutes';
+import NotFoundPage from '@/phicargo/modules/core/pages/NotFoundPage';
 import PersistentDrawer from '../phicargo/monitoreo/Eventos';
 import ProtectedRoute from './ProtectedRoute';
 import ReportsMenuPage from '../phicargo/modules/core/pages/ReportsMenuPage';
@@ -104,7 +106,6 @@ const PERMISSIONS = {
 };
 
 export const PrivateRoutes = () => {
-
   return (
     <>
       <Toaster></Toaster>
@@ -274,6 +275,10 @@ export const PrivateRoutes = () => {
           element={<MaintenanceReportRoutes />}
         />
         <Route path="/reportes/balance/*" element={<CashflowReportRoutes />} />
+        <Route
+          path="/reportes/operaciones"
+          element={<DOReportRoutes />}
+        />
 
         <Route
           path="/control-usuarios"
@@ -290,7 +295,7 @@ export const PrivateRoutes = () => {
         <Route
           path="/disponibilidad"
           element={
-            <ProtectedRoute 
+            <ProtectedRoute
               element={<AvailabilityLayout children={undefined} />}
               requiredPermissionId={PERMISSIONS['Modulo disponibilidad']}
             />
@@ -304,7 +309,7 @@ export const PrivateRoutes = () => {
         </Route>
 
         {/* Ruta para manejar rutas no válidas */}
-        <Route path="*" element={<Navigate to="/" />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </>
   );
