@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { DialogContent } from '@mui/material';
 import dayjs from 'dayjs';
-import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -20,6 +19,7 @@ import PersistentDrawerRight from './Eventos';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { Box } from '@mui/material';
+import { Button } from '@nextui-org/react';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 import {
@@ -188,7 +188,7 @@ const Entregas = ({ fecha }) => {
           flexWrap: 'wrap',
         }}
       >
-        <button className="btn btn-primary" onClick={ComprobarEntrega}>Abrir nueva entrega</button>
+        <Button color='primary' onClick={ComprobarEntrega}>Nueva entrega</Button>
       </Box>
     ),
   });
