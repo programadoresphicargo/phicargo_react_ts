@@ -11,6 +11,7 @@ import Viaje from '../viaje';
 import { Box } from '@mui/material';
 import { Image } from 'antd';
 const { VITE_PHIDES_API_URL } = import.meta.env;
+import { Chip } from '@nextui-org/react';
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -78,7 +79,7 @@ const ViajesActivos = ({ }) => {
         header: 'Estado',
         Cell: ({ cell }) => {
           const tipoMovimiento = cell.getValue();
-          let badgeClass = 'badge rounded-pill ';
+          let badgeClass = 'badge rounded-pill text-white ';
 
           if (tipoMovimiento === 'ruta') {
             badgeClass += 'bg-primary';
@@ -91,9 +92,9 @@ const ViajesActivos = ({ }) => {
           }
 
           return (
-            <span className={badgeClass} style={{ width: '80px' }}>
+            <Chip className={badgeClass} size='sm'>
               {tipoMovimiento.charAt(0).toUpperCase() + tipoMovimiento.slice(1)}
-            </span>
+            </Chip>
           );
         },
       },
@@ -145,9 +146,9 @@ const ViajesActivos = ({ }) => {
           }, [row.original.codigo_postal, row.original.id_sucursal]);
 
           return (
-            <span className="badge rounded-pill bg-success" style={{ width: '150px' }}>
+            <Chip className="text-white" color='success' size='sm' style={{ width: '150px' }}>
               {distancia !== null ? distancia : 'Cargando...'}
-            </span>
+            </Chip>
           );
         },
       },
@@ -177,7 +178,7 @@ const ViajesActivos = ({ }) => {
         header: 'Armado',
         Cell: ({ cell }) => {
           const tipoMovimiento = cell.getValue() || '';
-          let badgeClass = 'badge rounded-pill ';
+          let badgeClass = 'badge rounded-pill text-white ';
 
           if (tipoMovimiento === 'single') {
             badgeClass += 'bg-success';
@@ -188,9 +189,9 @@ const ViajesActivos = ({ }) => {
           }
 
           return (
-            <span className={badgeClass} style={{ width: '60px' }}>
+            <Chip className={badgeClass} style={{ width: '60px' }}>
               {tipoMovimiento.charAt(0).toUpperCase() + tipoMovimiento.slice(1)}
-            </span>
+            </Chip>
           );
         },
       },
@@ -199,7 +200,7 @@ const ViajesActivos = ({ }) => {
         header: 'Modalidad',
         Cell: ({ cell }) => {
           const tipoMovimiento = cell.getValue() || '';
-          let badgeClass = 'badge rounded-pill ';
+          let badgeClass = 'badge rounded-pill text-white ';
 
           if (tipoMovimiento === 'imp') {
             badgeClass += 'bg-warning';
@@ -210,9 +211,9 @@ const ViajesActivos = ({ }) => {
           }
 
           return (
-            <span className={badgeClass} style={{ width: '60px' }}>
+            <Chip className={badgeClass} style={{ width: '60px' }}>
               {tipoMovimiento.charAt(0).toUpperCase() + tipoMovimiento.slice(1)}
-            </span>
+            </Chip>
           );
         },
       },
