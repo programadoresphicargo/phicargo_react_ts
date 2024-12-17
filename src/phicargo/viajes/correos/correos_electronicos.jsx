@@ -162,11 +162,8 @@ const CorreosElectronicosViaje = ({ openCorreos }) => {
               </div>
               <Button
                 onClick={() => enlazarCorreo(correosCliente.id_correo)}
-                className="border-small mr-0.5 font-medium shadow-small"
-                radius="full"
                 color='primary'
                 size="sm"
-                variant="bordered"
               >
                 Ligar
               </Button>

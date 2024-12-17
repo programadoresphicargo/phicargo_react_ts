@@ -10,6 +10,7 @@ import Slide from '@mui/material/Slide';
 import Viaje from '../viaje';
 import { Box } from '@mui/material';
 import { Image } from 'antd';
+import { Avatar } from '@nextui-org/react';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 import { Chip } from '@nextui-org/react';
 import {
@@ -99,6 +100,28 @@ const ViajesActivos = ({ }) => {
         },
       },
       {
+        accessorKey: 'tipo',
+        header: 'Modalidad',
+        Cell: ({ cell }) => {
+          const tipoMovimiento = cell.getValue() || '';
+          let badgeClass = 'badge rounded-pill text-white ';
+
+          if (tipoMovimiento === 'imp') {
+            badgeClass += 'bg-warning';
+          } else if (tipoMovimiento === 'exp') {
+            badgeClass += 'bg-danger';
+          } else {
+            badgeClass += 'bg-primary';
+          }
+
+          return (
+            <Chip className={badgeClass} style={{ width: '60px' }} size='sm'>
+              {tipoMovimiento.charAt(0).toUpperCase() + tipoMovimiento.slice(1)}
+            </Chip>
+          );
+        },
+      },
+      {
         accessorKey: 'ultimo_estatus_enviado',
         header: 'Último estatus',
       },
@@ -159,6 +182,16 @@ const ViajesActivos = ({ }) => {
       {
         accessorKey: 'operador',
         header: 'Operador',
+        Cell: ({ cell }) => {
+          const tipoMovimiento = cell.getValue();
+          let badgeClass = 'text-white bg-primary';
+
+          return (
+            <Chip className={badgeClass} size='sm'>
+              {tipoMovimiento.charAt(0).toUpperCase() + tipoMovimiento.slice(1)}
+            </Chip>
+          );
+        },
       },
       {
         accessorKey: 'ejecutivo',
@@ -189,29 +222,7 @@ const ViajesActivos = ({ }) => {
           }
 
           return (
-            <Chip className={badgeClass} style={{ width: '60px' }}>
-              {tipoMovimiento.charAt(0).toUpperCase() + tipoMovimiento.slice(1)}
-            </Chip>
-          );
-        },
-      },
-      {
-        accessorKey: 'tipo',
-        header: 'Modalidad',
-        Cell: ({ cell }) => {
-          const tipoMovimiento = cell.getValue() || '';
-          let badgeClass = 'badge rounded-pill text-white ';
-
-          if (tipoMovimiento === 'imp') {
-            badgeClass += 'bg-warning';
-          } else if (tipoMovimiento === 'exp') {
-            badgeClass += 'bg-danger';
-          } else {
-            badgeClass += 'bg-primary';
-          }
-
-          return (
-            <Chip className={badgeClass} style={{ width: '60px' }}>
+            <Chip className={badgeClass} size='sm'>
               {tipoMovimiento.charAt(0).toUpperCase() + tipoMovimiento.slice(1)}
             </Chip>
           );

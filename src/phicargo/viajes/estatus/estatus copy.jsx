@@ -7,8 +7,6 @@ import Slide from '@mui/material/Slide';
 import { Button } from '@nextui-org/button';
 import EstatusHistorialAgrupado from './estatus_agrupados';
 import { tiempoTranscurrido } from '../../funciones/tiempo';
-import { Card, CardHeader } from '@nextui-org/react';
-import { Avatar } from '@nextui-org/react';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -67,31 +65,37 @@ function EstatusHistorial() {
                 {estatusHistorial.map((step, index) => {
 
                     const getBadgeClass = () => {
-                        if (step.id_usuario == 172 || step.id_usuario == 8) return "primary";
-                        if ([5, 6].includes(step.department_id)) return "success";
-                        return "secondary";
+                        if (step.id_usuario == 172 || step.id_usuario == 8) return "bg-primary";
+                        if ([5, 6].includes(step.department_id)) return "bg-success";
+                        return "bg-morado";
                     };
 
                     return (
-                        <Card className="mb-2 w-full" isPressable onClick={() => handleClickOpen(step.id_reportes_agrupados, "body")}>
-                            <CardHeader className="justify-between">
-                                <div className="flex gap-5">
-                                    <Avatar
-                                        color={`${getBadgeClass()}`}
-                                        isBordered
-                                        radius="full"
-                                        size="md"
+                        <li className="step-item mb-3" onClick={() => handleClickOpen(step.id_reportes_agrupados, "body")} key={index}>
+                            <div className="step-content-wrapper">
+                                <div className="step-avatar">
+                                    <img
                                         src={VITE_PHIDES_API_URL + `/img/status/${step.imagen}`}
+                                        alt="Image Description"
                                     />
-                                    <div className="flex flex-col gap-1 items-start justify-center">
-                                        <h4 className="text-small font-semibold leading-none text-default-600">{step.nombre_estatus}</h4>
-                                        <h5 className="text-small tracking-tight text-default-400">{step.name || step.nombre}</h5>
+                                </div>
+                                <div className="step-content">
+                                    <div className="items-center justify-between p-3 bg-white border border-gray-200 rounded-lg shadow-sm sm:flex dark:bg-gray-700 dark:border-gray-600">
+                                        <span className={`${getBadgeClass()} badge rounded-pill`}>
+                                            {step.nombre_estatus}
+                                            {step.registros > 1 && (
+                                                <span className="bg-danger badge rounded-pill">{step.registros}</span>
+                                            )}
+                                        </span>
+
+                                        <time className="mb-1 text-xs font-normal text-gray-700 sm:order-last sm:mb-0">
+                                            {step.name || step.nombre}
+                                            | {tiempoTranscurrido(step.ultima_fecha_envio)}
+                                        </time>
                                     </div>
                                 </div>
-
-                                {tiempoTranscurrido(step.ultima_fecha_envio)}
-                            </CardHeader>
-                        </Card>
+                            </div>
+                        </li>
                     );
                 })}
             </ol>
