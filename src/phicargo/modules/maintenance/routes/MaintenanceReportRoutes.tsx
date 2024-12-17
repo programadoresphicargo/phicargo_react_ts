@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
 
 import { LoadingPage } from '../../core/pages/LoadingPage';
+import ProtectedRoute from '@/router/ProtectedRoute';
 
 const MaintenanceReportPage = lazy(
   () => import('../pages/MaintenanceReportPage'),
@@ -15,9 +16,14 @@ const MaintenanceReportRoutes = () => {
       <Route
         path="/"
         element={
-          <Suspense fallback={<LoadingPage />}>
-            <MaintenanceReportPage />
-          </Suspense>
+          <ProtectedRoute 
+            element={
+              <Suspense fallback={<LoadingPage />}>
+              <MaintenanceReportPage />
+            </Suspense>
+            }
+            requiredPermissionId={198}
+          />
         }
       >
         <Route

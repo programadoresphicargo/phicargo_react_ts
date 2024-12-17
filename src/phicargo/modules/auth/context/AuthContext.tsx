@@ -8,11 +8,13 @@ export type AuthStatus = 'loading' | 'authenticated' | 'unauthenticated';
 
 interface AuthState {
   session: Session | null;
-  setSession: (session: Session | null) => void;
   authStatus: AuthStatus;
+  redirectTo: string;
+  
   setAuthStatus: (authStatus: AuthStatus) => void;
-
+  setSession: (session: Session | null) => void;
   onLogout: () => void;
+  setRedirectTo: (redirectTo: string) => void;
 }
 
 interface ProviderProps {
@@ -22,9 +24,11 @@ interface ProviderProps {
 const initialAuthState: AuthState = {
   session: null,
   authStatus: 'unauthenticated',
+  redirectTo: '/',
   setSession: () => {},
   setAuthStatus: () => {},
   onLogout: () => {},
+  setRedirectTo: () => {},
 };
 
 const AuthContext = createContext<AuthState>(initialAuthState);
@@ -40,6 +44,7 @@ export const AuthProvider = ({ children }: ProviderProps) => {
     JSON.parse(sessionStorage.getItem('session') || 'null')
   );
   const [authStatus, setAuthStatus] = useState<AuthStatus>('loading');
+  const [redirectTo, setRedirectTo] = useState('/');
 
   const onLogout = () => {
     setSession(null);
@@ -47,6 +52,7 @@ export const AuthProvider = ({ children }: ProviderProps) => {
     setAuthStatus('unauthenticated');
     delete odooApi.defaults.headers.common['Authorization'];
     queryClient.clear();
+    setRedirectTo('/');
   }
 
   useEffect(() => {
@@ -67,6 +73,8 @@ export const AuthProvider = ({ children }: ProviderProps) => {
         authStatus,
         setAuthStatus,
         onLogout,
+        redirectTo,
+        setRedirectTo,
       }}
     >
       {children}

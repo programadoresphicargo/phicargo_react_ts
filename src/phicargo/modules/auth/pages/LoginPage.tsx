@@ -1,5 +1,6 @@
 import { Button, Image } from '@nextui-org/react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useAuthContext, useLoginMutation } from '../hooks';
 
 import { PasswordInput } from '../../core/components/inputs/PasswordInput';
 import { TextInput } from '../../core/components/inputs/TextInput';
@@ -7,7 +8,7 @@ import { Toaster } from 'react-hot-toast';
 import { UserLogin } from '../models';
 import logo from '../../../../assets/img/phicargo_logo_white.png';
 import tractScania from '../../../../assets/img/tract_scannia.jpg';
-import { useLoginMutation } from '../hooks';
+import { useNavigate } from 'react-router-dom';
 
 const initialForm: UserLogin = {
   username: '',
@@ -15,6 +16,9 @@ const initialForm: UserLogin = {
 };
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+  const { redirectTo } = useAuthContext();
+
   const { control, handleSubmit } = useForm<UserLogin>({
     defaultValues: initialForm,
   });
@@ -24,7 +28,11 @@ const LoginPage = () => {
   } = useLoginMutation();
 
   const onSubmit: SubmitHandler<UserLogin> = (data) => {
-    login(data);
+    login(data, {
+      onSuccess: () => {
+        navigate(redirectTo || '/');
+      }
+    });
   };
 
   return (

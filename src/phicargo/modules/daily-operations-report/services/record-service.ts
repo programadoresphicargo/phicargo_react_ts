@@ -29,7 +29,7 @@ export interface IRecordService {
    * @param updateItem Objeto con el id del registro a editar y los datos a actualizar
    * @returns Objeto con los datos del registro editado
    */
-  editRecord: (updateItem: UpdatableItem<RecordUpdate>) => Promise<Record>;
+  editRecord: (updateItem: UpdatableItem<RecordUpdate>) => Promise<Record[]>;
 }
 
 class RecordService implements IRecordService {
@@ -59,13 +59,13 @@ class RecordService implements IRecordService {
   public async editRecord({
     id,
     updatedItem,
-  }: UpdatableItem<RecordUpdate>): Promise<Record> {
+  }: UpdatableItem<RecordUpdate>): Promise<Record[]> {
     const newRecord = recordUpdateToApi(updatedItem);
     const url = `/daily_operations_report/${id}`;
 
     try {
-      const response = await odooApi.put<RecordApi>(url, newRecord);
-      return recordToLocal(response.data);
+      const response = await odooApi.put<RecordApi[]>(url, newRecord);
+      return response.data.map(recordToLocal);
     } catch (error) {
       console.error(error);
       if (error instanceof AxiosError) {
@@ -83,11 +83,11 @@ class RecordService implements IRecordService {
   }: {
     branchId: number;
     date: string;
-  }): Promise<Record> {
+  }): Promise<Record[]> {
     const url = `/daily_operations_report/update_units/${branchId}?record_date=${date}`;
     try {
-      const response = await odooApi.put<RecordApi>(url);
-      return recordToLocal(response.data);
+      const response = await odooApi.put<RecordApi[]>(url);
+      return response.data.map(recordToLocal);
     } catch (error) {
       console.error(error);
       if (error instanceof AxiosError) {

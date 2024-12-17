@@ -54,6 +54,21 @@ const Header = () => {
           </p>
         </div>
 
+        <div className="flex gap-2 flex-1">
+          <Card
+            title="Total de Viajes"
+            content={isFetching ? '...' : dayRecord?.total || 0}
+          />
+          <Card
+            title="Meta"
+            content={isFetching ? '...' : dayRecord?.meta || 0}
+          />
+          <Card
+            title="Diferencia"
+            content={isFetching ? '...' : dayRecord?.difference || 0}
+          />
+        </div>
+
         <div className="flex flex-col gap-3">
           <div className="flex flex-row gap-2 bg-gray-700 py-1.5 px-2 rounded-xl">
             <Checkbox
@@ -78,21 +93,6 @@ const Header = () => {
               MEX
             </Checkbox>
           </div>
-        </div>
-
-        <div className="flex gap-2 flex-1">
-          <Card
-            title="Total de Viajes"
-            content={isFetching ? '...' : dayRecord?.total || 0}
-          />
-          <Card
-            title="Meta"
-            content={isFetching ? '...' : dayRecord?.meta || 0}
-          />
-          <Card
-            title="Diferencia"
-            content={isFetching ? '...' : dayRecord?.difference || 0}
-          />
         </div>
 
         <div>
