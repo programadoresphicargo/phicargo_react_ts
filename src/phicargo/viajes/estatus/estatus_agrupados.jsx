@@ -15,6 +15,7 @@ import { CircularProgress } from "@nextui-org/react";
 import ArchivosAdjuntos from './archivos_adjuntos';
 import axios from 'axios';
 import { tiempoTranscurrido } from '../../funciones/tiempo';
+import { Card, CardHeader, CardBody, CardFooter } from '@nextui-org/react';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 function EstatusHistorialAgrupado({ registros_agrupados }) {
@@ -149,92 +150,102 @@ function EstatusHistorialAgrupado({ registros_agrupados }) {
                                 />
                             }
                         >
-                            <ul class="step">
-                                <li class="step-item">
-                                    <div class="step-content-wrapper">
-
-                                        <span class="step-avatar">
-                                            <img class="step-avatar-img" src={VITE_PHIDES_API_URL + "/img/operador.png"} alt="Image Description" />
-                                        </span>
-
-                                        <div class="step-content">
-                                            <h5 class="mb-1">Enviado por</h5>
-
-                                            <p class="fs-5 mb-1">{step.name}</p>
-
-                                            <ul class="list-group list-group-sm">
-                                                <li class="list-group-item list-group-item-light">
-                                                    <div class="row">
-                                                        <div class="col-12">
-                                                            <span class="d-block fs-5 text-dark text-truncate">Referencia reporte: <span class="text-muted">{step.id_reporte}</span></span>
-                                                            <span class="d-block fs-5 text-dark text-truncate">Placas: <span class="text-muted">{step.placas}</span></span>
-                                                            <span class="d-block fs-5 text-dark text-truncate">Coordenadas: <span class="text-muted">{step.latitud},{step.longitud}</span></span>
-                                                            <span class="d-block fs-5 text-dark">Localidad: <span class="text-muted">{step.localidad}</span></span>
-                                                            <span class="d-block fs-5 text-dark">Sublocalidad: <span class="text-muted">{step.sublocalidad}</span></span>
-                                                            <span class="d-block fs-5 text-dark">Calle: <span class="text-muted">{step.calle}</span></span>
-                                                            <span class="d-block fs-5 text-dark">Codigo postal: <span class="text-muted">{step.codigo_postal}</span></span>
-                                                            <span class="d-block fs-5 text-dark text-truncate">Fecha y Hora: <span class="text-muted">{tiempoTranscurrido(step.fecha_hora)}</span></span>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            </ul>
-
-                                            {step.comentarios_estatus != '' ? (
-                                                <li class="step-item mt-3">
-                                                    <div class="step-content-wrapper">
-                                                        <div class="step-avatar">
-                                                            <img class="step-avatar-img" src={VITE_PHIDES_API_URL + "/img/operador.png"} alt="Image Description" />
-                                                        </div>
-
-                                                        <div class="step-content">
-
-                                                            <p class="fs-5 mb-1">Se añadio un comentario:</p>
-
-                                                            <ul class="list-group list-group-sm">
-                                                                <li class="list-group-item list-group-item-light">
-                                                                    <div class="row gx-1">
-                                                                        <div class="col">
-                                                                            <p class="text-body fs-5">{step.comentarios_estatus}</p>
-                                                                        </div>
-                                                                    </div>
-                                                                </li>
-                                                            </ul>
-
-                                                            <span class="small text-muted text-uppercase">{step.fecha_envio}</span>
-                                                        </div>
-                                                    </div>
-                                                </li>) : (null)}
-
-                                            < ArchivosAdjuntos id_reporte={step.id_reporte} ></ArchivosAdjuntos>
-
-                                            {step.id_reenvio !== null ? (
-                                                <ul class="list-group list-group-sm mt-2">
-                                                    <li class="list-group-item list-group-item-light">
-                                                        <div class="row">
-                                                            <div class="col-12">
-                                                                <span class="d-block fs-5 text-dark text-truncate">Referencia reenvio: <span class="text-muted">{step.id_reenvio}</span></span>
-                                                                <span class="d-block fs-5 text-dark text-truncate">Reenviado por: <span class="text-muted">{step.usuario_reenvio}</span></span>
-                                                                <span class="d-block fs-5 text-dark">Fecha reenvio: <span class="text-muted">{tiempoTranscurrido(step.fecha_reenvio)}</span></span>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>) : (null)}
-
+                            <Card className="max-w-full m-4">
+                                <CardHeader className="justify-between">
+                                    <div className="flex gap-5">
+                                        <Avatar
+                                            isBordered
+                                            radius="full"
+                                            size="md"
+                                            src={VITE_PHIDES_API_URL + "/img/operador.png"}
+                                        />
+                                        <div className="flex flex-col gap-1 items-start justify-center">
+                                            <h4 className="text-small font-semibold leading-none text-default-600">Enviado por</h4>
+                                            <h5 className="text-small tracking-tight text-default-400">{step.name}</h5>
                                         </div>
                                     </div>
 
-                                    <div className="d-flex justify-content-end mt-3">
-                                        <Button color="success" className='text-white me-2' variant="solid" onClick={() => handleClickOpen(step.id_reporte)}>
-                                            <i class="bi bi-reply"></i>
-                                            Reenviar
-                                        </Button>
+                                    {tiempoTranscurrido(step.fecha_hora)}
+                                </CardHeader>
+                                <CardBody className="text-small text-default-500">
+                                    <span className="pt-1">Referencia reporte: {step.id_reporte}</span>
+                                    <span className="pt-1">Placas: {step.placas}</span>
+                                    <span className="pt-1">Coordenadas: {step.latitud},{step.longitud}</span>
+                                    <span className="pt-1">Localidad: {step.localidad}</span>
+                                    <span className="pt-1">Sublocalidad: {step.sublocalidad}</span>
+                                    <span className="pt-1">Calle: {step.calle}</span>
+                                    <span className="pt-1">Codigo postal: {step.codigo_postal}</span>
+                                </CardBody>
+                                <CardFooter className="gap-3">
+                                    <Button color="success" className='text-white me-2' variant="solid" onClick={() => handleClickOpen(step.id_reporte)}>
+                                        <i class="bi bi-reply"></i>
+                                        Reenviar
+                                    </Button>
 
-                                        <BotonMapa latitud={step.latitud} longitud={step.longitud}></BotonMapa>
-                                        <BotonDistanciaMapa></BotonDistanciaMapa>
-                                    </div>
+                                    <BotonMapa latitud={step.latitud} longitud={step.longitud}></BotonMapa>
+                                    <BotonDistanciaMapa></BotonDistanciaMapa>
+                                </CardFooter>
+                            </Card>
 
-                                </li>
-                            </ul>
+                            {step.comentarios_estatus != '' ? (
+                                <Card className="max-w-full m-4">
+                                    <CardHeader className="justify-between">
+                                        <div className="flex gap-5">
+                                            <Avatar
+                                                isBordered
+                                                radius="full"
+                                                size="md"
+                                                src={VITE_PHIDES_API_URL + "/img/operador.png"}
+                                            />
+                                            <div className="flex flex-col gap-1 items-start justify-center">
+                                                <h4 className="text-small font-semibold leading-none text-default-600">Añadio un comentario</h4>
+                                                <h5 className="text-small tracking-tight text-default-400">{step.name}</h5>
+                                            </div>
+                                        </div>
+
+                                        {tiempoTranscurrido(step.fecha_hora)}
+                                    </CardHeader>
+                                    <CardBody className="text-small text-default-500">
+                                        {step.comentarios_estatus}
+                                    </CardBody>
+                                    <CardFooter className="gap-3">
+                                        <div className="flex gap-1">
+                                            <p className=" text-default-400 text-small">{step.fecha_envio}</p>
+                                        </div>
+                                    </CardFooter>
+                                </Card>) : (null)}
+
+                            {step.id_reenvio !== null ? (
+                                <Card className="max-w-full m-4">
+                                    <CardHeader className="justify-between">
+                                        <div className="flex gap-5">
+                                            <Avatar
+                                                isBordered
+                                                radius="full"
+                                                size="md"
+                                                src={VITE_PHIDES_API_URL + "/img/operador.png"}
+                                            />
+                                            <div className="flex flex-col gap-1 items-start justify-center">
+                                                <h4 className="text-small font-semibold leading-none text-default-600">Enviado por</h4>
+                                                <h5 className="text-small tracking-tight text-default-400">{step.name}</h5>
+                                            </div>
+                                        </div>
+
+                                        {tiempoTranscurrido(step.fecha_hora)}
+                                    </CardHeader>
+                                    <CardBody className="text-small text-default-500">
+                                        <span class="d-block fs-5 text-dark text-truncate">Referencia reenvio: <span class="text-muted">{step.id_reenvio}</span></span>
+                                        <span class="d-block fs-5 text-dark text-truncate">Reenviado por: <span class="text-muted">{step.usuario_reenvio}</span></span>
+                                        <span class="d-block fs-5 text-dark">Fecha reenvio: <span class="text-muted">{tiempoTranscurrido(step.fecha_reenvio)}</span></span>
+                                    </CardBody>
+                                    <CardFooter className="gap-3">
+                                        <div className="flex gap-1">
+                                            <p className=" text-default-400 text-small">Fecha y Hora: {tiempoTranscurrido(step.fecha_hora)}</p>
+                                        </div>
+                                    </CardFooter>
+                                </Card>) : (null)}
+
+                            < ArchivosAdjuntos id_reporte={step.id_reporte} ></ArchivosAdjuntos>
 
                         </AccordionItem>
                     ))}
