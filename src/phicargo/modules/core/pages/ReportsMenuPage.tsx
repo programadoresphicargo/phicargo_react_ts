@@ -35,6 +35,18 @@ const reports: MenuItemType[] = [
     icon: dailyOpIcon,
     requiredPermissions: [201],
   },
+  {
+    label: 'Reporte gerencial',
+    path: '',
+    icon: '',
+    requiredPermissions: [],
+  },
+  {
+    label: 'Cumplimiento operadores',
+    path: '',
+    icon: '',
+    requiredPermissions: [],
+  },
 ];
 
 const ReportsMenuPage = () => {
