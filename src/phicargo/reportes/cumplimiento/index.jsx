@@ -7,6 +7,7 @@ import MonitoreoNavbar from '../../monitoreo/Navbar';
 import Box from '@mui/material/Box';
 import { Button } from '@mui/material';
 import { DatePicker } from 'antd';
+const { VITE_PHIDES_API_URL } = import.meta.env;
 const { RangePicker } = DatePicker;
 
 const ReporteCumplimiento = () => {
@@ -24,7 +25,7 @@ const ReporteCumplimiento = () => {
             const startDate = dates[0].format('YYYY-MM-DD');
             const endDate = dates[1].format('YYYY-MM-DD');
             try {
-                const response = await fetch('/phicargo/viajes/reportes/reporte_cumplimiento_operador.php', {
+                const response = await fetch(VITE_PHIDES_API_URL + '/viajes/reportes/reporte_cumplimiento_operador.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
@@ -45,7 +46,7 @@ const ReporteCumplimiento = () => {
 
     const columns = useMemo(
         () => [
-            { accessorKey: 'referencia', header: 'Sucursal' },
+            { accessorKey: 'referencia', header: 'Referencia' },
             { accessorKey: 'name', header: 'Operador', size: 150 },
             { accessorKey: 'fecha_inicio', header: 'Fecha inicio', size: 150 },
             { accessorKey: 'estatus_enviados', header: 'Estatus enviados', size: 150 },

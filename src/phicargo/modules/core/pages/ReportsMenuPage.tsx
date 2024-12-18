@@ -4,7 +4,11 @@ import { Button } from '@nextui-org/react';
 import ReportMenuItem from '../components/ui/ReportMenuItem';
 import balanceIcon from '../../../../assets/menu/balanceIcon.png';
 import dailyOpIcon from '../../../../assets/menu/dailyOpIcon.png';
+import reportIcon from '../../../../assets/menu/reportes.png';
 import maintenanceIcon from '../../../../assets/menu/maintenanceIcon.png';
+import clockIcon from '../../../../assets/menu/clock.png';
+import phoneIcon from '../../../../assets/menu/app.png';
+import truckIcon from '../../../../assets/menu/viajes.png'
 import { useAuthContext } from '../../auth/hooks';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -17,6 +21,12 @@ type MenuItemType = {
 };
 
 const reports: MenuItemType[] = [
+  {
+    label: 'Reporte gerencial',
+    path: '/reportes/mantenimiento',
+    icon: reportIcon,
+    requiredPermissions: [198],
+  },
   {
     label: 'Mantenimiento',
     path: '/reportes/mantenimiento',
@@ -36,15 +46,21 @@ const reports: MenuItemType[] = [
     requiredPermissions: [201],
   },
   {
-    label: 'Reporte gerencial',
+    label: 'Tiempos de salidas y llegadas',
     path: '',
-    icon: '',
+    icon: clockIcon,
     requiredPermissions: [],
   },
   {
-    label: 'Cumplimiento operadores',
+    label: 'Cumplimiento estatus',
+    path: '/cumplimiento',
+    icon: phoneIcon,
+    requiredPermissions: [],
+  },
+  {
+    label: 'Asignación de unidades',
     path: '',
-    icon: '',
+    icon: truckIcon,
     requiredPermissions: [],
   },
 ];
