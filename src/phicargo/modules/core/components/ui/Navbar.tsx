@@ -1,12 +1,11 @@
+import { IconButton, Link } from '@mui/material';
 import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 
 import AppBar from '@mui/material/AppBar';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AvatarProfile from './AvatarProfile';
 import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import IconButton from '@mui/material/IconButton';
-import { Link } from '@mui/material';
+import { Button } from '@nextui-org/react';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -48,20 +47,16 @@ const Navbar = (props: Props) => {
         backgroundPosition: 'center',
       }}
     >
-      <Container maxWidth="xl">
+      <div className="max-w-full px-4 text-white flex flex-col">
         <Toolbar disableGutters>
-          <IconButton
-            edge="start"
-            color="inherit"
+          <Button
+            isIconOnly
             aria-label="back"
-            onClick={() => navigate('/menu')}
-            sx={{
-              mr: 1,
-              color: '#333333',
-            }}
+            onPress={() => navigate('/menu')}
+            className="bg-gray-100 rounded-full p-2 shadow-md hover:bg-gray-200 transition"
           >
             <ArrowBackIcon />
-          </IconButton>
+          </Button>
 
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <IconButton
@@ -101,13 +96,12 @@ const Navbar = (props: Props) => {
           </Box>
 
           <img
-            className=""
+            className="ml-4"
             src="https://phi-cargo.com/wp-content/uploads/2021/05/logo-phicargo-vertical.png"
             alt="logo phicargo"
             style={{
               width: '175px',
               height: '60px',
-              // filter: 'brightness(0) invert(1)'
             }}
           />
 
@@ -139,7 +133,7 @@ const Navbar = (props: Props) => {
                     padding: '0.3rem 1.3rem',
                     borderRadius: '8px',
                     transition: 'all 0.3s ease',
-                    backgroundColor: isActive ? '#222222' : 'transparent', // Fondo para el activo
+                    backgroundColor: isActive ? '#222222' : 'transparent',
                     '&:hover': {
                       backgroundColor: '#fff',
                       color: '#222222',
@@ -152,13 +146,11 @@ const Navbar = (props: Props) => {
             })}
           </Box>
 
-          <Box
-            sx={{ flexGrow: 0, display: 'flex', justifyContent: 'flex-end' }}
-          >
+          <div className="ml-auto">
             <AvatarProfile />
-          </Box>
+          </div>
         </Toolbar>
-      </Container>
+      </div>
     </AppBar>
   );
 };

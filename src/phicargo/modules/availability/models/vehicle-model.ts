@@ -41,10 +41,10 @@ export interface Vehicle extends VehicleBase {
 export interface VehicleSimple {
   readonly id: number;
   readonly name: string;
-  fleetType: string;
+  fleetType: string | null;
   status: string;
-  modality: string;
-  loadType: string;
+  modality: string | null;
+  loadType: string | null;
 }
 
 export interface VehicleUpdate {

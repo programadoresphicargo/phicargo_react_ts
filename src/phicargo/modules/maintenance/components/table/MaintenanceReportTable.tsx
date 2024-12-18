@@ -98,7 +98,7 @@ const MaintenanceReportTable = (props: MaintenanceReportTableProps) => {
     // CUSTOMIZATIONS
     renderRowActionMenuItems: ({ row, closeMenu }) => [
       <MenuItem
-        key="details"
+        key="record-details"
         onClick={() =>
           navigate(`/reportes/mantenimiento/detalles/${row.original.id}`)
         }
@@ -110,7 +110,7 @@ const MaintenanceReportTable = (props: MaintenanceReportTableProps) => {
         Detalles
       </MenuItem>,
       <MenuItem
-        key="complete"
+        key="record-complete"
         onClick={() => {
           setRegisterToFinishId(Number(row.original.id));
           setCompleteModal(true);
@@ -135,8 +135,8 @@ const MaintenanceReportTable = (props: MaintenanceReportTableProps) => {
         </div>
         <div className="flex flex-row items-center">
           <AddButton
-            label="Añadir Registro"
-            onClick={() => navigate('/reportes/mantenimiento/nuevo')}
+            label="Añadir Servicio"
+            onPress={() => navigate('/reportes/mantenimiento/nuevo')}
           />
         </div>
       </div>
@@ -163,7 +163,7 @@ const MaintenanceReportTable = (props: MaintenanceReportTableProps) => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 225px)',
+        height: 'calc(100vh - 225px)',
       },
     },
   });
