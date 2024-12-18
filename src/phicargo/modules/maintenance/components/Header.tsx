@@ -74,7 +74,7 @@ const Header = (props: Props) => {
         <Button 
           isIconOnly 
           aria-label="back"
-          onClick={() => navigate('/reportes')}
+          onPress={() => navigate('/reportes')}
           className='bg-gray-100 rounded-full p-2 shadow-md hover:bg-gray-200 transition'
         >
           <ArrowBackIcon />

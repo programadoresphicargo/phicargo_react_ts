@@ -40,7 +40,7 @@ export const vehicleToLocal = (vehicle: VehicleApi): Vehicle => ({
     ? {
         id: vehicle.tms_travel.id,
         name: vehicle.tms_travel.name,
-        status: vehicle.tms_travel.x_status_viaje || 'SIN ASIGNAR',
+        status: vehicle.tms_travel.x_status_viaje,
       }
     : null,
   maneuver: vehicle.maniobra
@@ -54,7 +54,7 @@ export const vehicleToLocal = (vehicle: VehicleApi): Vehicle => ({
     vehicle.maintenance_records.length > 0
       ? {
           id: vehicle.maintenance_records[0].id,
-          orderService: vehicle.maintenance_records[0].order_service || 'N/A',
+          orderService: vehicle.maintenance_records[0].order_service,
         }
       : null,
   driver: vehicle.driver ? driverSimpleToLocal(vehicle.driver) : null,

@@ -1,7 +1,7 @@
 export interface TravelSimple {
   id: number;
   name: string;
-  status: string;
+  status: string | null;
 }
 
 export interface TravelSimpleApi {

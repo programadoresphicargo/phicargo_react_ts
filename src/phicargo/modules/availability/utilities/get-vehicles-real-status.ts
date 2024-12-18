@@ -47,7 +47,15 @@ const determineRealStatus = (vehicle: Vehicle): VehicleRealStatus => {
     return 'sinister';
   }
 
-  return 'unknown'; // Default case
+  if (vehicle?.state?.id === 2) {
+    return 'sale';
+  }
+
+  if (vehicle?.state?.id === 3) {
+    return 'totalLoss';
+  }
+
+  return 'unknown';
 }
 
 /**

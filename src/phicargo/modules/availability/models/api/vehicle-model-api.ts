@@ -48,7 +48,6 @@ export interface VehicleSimpleApi {
   x_tipo_carga: string | null;
 }
 
-
 export interface VehicleUpdateApi {
   company_id?: number | null;
   x_sucursal?: number | null;
@@ -58,3 +57,4 @@ export interface VehicleUpdateApi {
   x_modalidad?: Modality | null;
   x_tipo_carga?: string | null;
 }
+

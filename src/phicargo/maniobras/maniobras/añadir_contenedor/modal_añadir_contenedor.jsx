@@ -1,17 +1,18 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import axios from 'axios';
-import { Box } from '@mui/material';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-const { VITE_PHIDES_API_URL } = import.meta.env;
-
 import {
     MaterialReactTable,
     useMaterialReactTable,
 } from 'material-react-table';
+import React, { useEffect, useMemo, useState } from 'react';
+
+import { Box } from '@mui/material';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import axios from 'axios';
 import { toast } from 'react-toastify';
+const { VITE_PHIDES_API_URL } = import.meta.env;
+
 
 
 const months = [
@@ -169,6 +170,7 @@ const AñadirContenedor = ({ show, handleClose, id_maniobra }) => {
         muiTableContainerProps: {
             sx: {
                 maxHeight: 'calc(100vh - 385px)',
+                boxShadow: 'none',
             },
         },
         muiTableBodyRowProps: ({ row }) => ({
@@ -182,11 +184,6 @@ const AñadirContenedor = ({ show, handleClose, id_maniobra }) => {
                 cursor: 'pointer', // Cambia el cursor al pasar sobre la fila
             },
         }),
-        muiTableContainerProps: {
-            sx: {
-                boxShadow: 'none', // Quita la sombra alrededor de la tabla
-            },
-        },
     });
 
     return (
