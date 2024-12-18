@@ -69,6 +69,6 @@ export interface MaintenanceRecordSimpleApi {
 
 export interface MaintenanceRecordSimple {
   id: number;
-  orderService: string;
+  orderService: string | null;
 }
 

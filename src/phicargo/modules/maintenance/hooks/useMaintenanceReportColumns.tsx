@@ -25,7 +25,7 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
           return (
             <>
               <span
-                style={{ cursor: 'pointer' }}
+                className='bg-blue-500 text-white font-bold px-2 py-1 rounded-md cursor-pointer hover:bg-blue-600'
                 onDoubleClick={() =>
                   navigate(
                     `/reportes/mantenimiento/detalles/${row.original.id}`,

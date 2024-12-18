@@ -41,10 +41,10 @@ export const driverToLocal = (driver: DriverApi): Driver => ({
     ? {
         id: driver.vehicle[0].id,
         name: driver.vehicle[0].name2,
-        fleetType: driver.vehicle[0].fleet_type || 'SIN ASIGNAR',
+        fleetType: driver.vehicle[0].fleet_type,
         status: driver.vehicle[0].x_status,
-        modality: driver.vehicle[0].x_modalidad || 'SIN ASIGNAR',
-        loadType: driver.vehicle[0].x_tipo_carga || 'SIN ASIGNAR',
+        modality: driver.vehicle[0].x_modalidad,
+        loadType: driver.vehicle[0].x_tipo_carga,
       }
     : null,
   permissions: driver.permissions.map(driverPermissionSimpleToLocal),
@@ -52,7 +52,7 @@ export const driverToLocal = (driver: DriverApi): Driver => ({
     ? {
         id: driver.tms_travel.id,
         name: driver.tms_travel.name,
-        status: driver.tms_travel.x_status_viaje || 'SIN ASIGNAR',
+        status: driver.tms_travel.x_status_viaje,
       }
     : null,
   maneuver: driver.maniobra
@@ -72,8 +72,8 @@ export const driverToLocal = (driver: DriverApi): Driver => ({
 export const driverSimpleToLocal = (driver: DriverSimpleApi): DriverSimple => ({
   id: driver.id,
   name: driver.name,
-  licenseId: driver.tms_driver_license_id || 'SIN ASIGNAR',
-  licenseType: driver.tms_driver_license_type || 'SIN ASIGNAR',
+  licenseId: driver.tms_driver_license_id,
+  licenseType: driver.tms_driver_license_type,
   modality: driver.x_modalidad,
   status: driver.x_status,
   job: driver.job,
