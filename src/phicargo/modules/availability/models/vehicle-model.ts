@@ -64,6 +64,8 @@ export type VehicleRealStatus =
   | 'draftManeuver'
   | 'maintenance'
   | 'sinister'
+  | 'sale'
+  | 'totalLoss'
   | 'unknown';
 
 export interface VehicleWithRealStatus extends Vehicle {

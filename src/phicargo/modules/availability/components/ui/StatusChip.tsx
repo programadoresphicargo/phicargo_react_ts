@@ -21,7 +21,7 @@ const getStatusColor = (status: Status) => {
 const StatusChip = ({ status }: Props) => {
   return (
     <Chip className="uppercase" color={getStatusColor(status)} size="sm">
-      {status}
+      {status || 'Desconocido'}
     </Chip>
   );
 };

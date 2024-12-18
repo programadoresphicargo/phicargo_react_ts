@@ -17,7 +17,7 @@ export const useDriversSummaryColumns = () => {
     () => [
       {
         accessorKey: 'name',
-        header: 'Unidad',
+        header: 'Operador',
         Cell: ({ cell }) => (
           <span className="font-bold text-medium">
             {cell.getValue<string>()}

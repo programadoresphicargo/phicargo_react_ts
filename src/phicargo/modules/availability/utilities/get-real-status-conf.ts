@@ -13,6 +13,8 @@ export const availableStatus: Status[] = [
   { key: 'draftManeuver', label: 'MANIOBRA BORRADOR', color: 'default' },
   { key: 'maintenance', label: 'MANTENIMIENTO', color: 'warning' },
   { key: 'sinister', label: 'SINIESTRADA', color: 'danger' },
+  { key: 'sale', label: 'BAJA POR VENTA', color: 'default' },
+  { key: 'totalLoss', label: 'BAJA POR PERDIDA TOTAL', color: 'danger' },
   { key: 'unknown', label: 'DESCONOCIDO', color: 'default' },
 ];
 
