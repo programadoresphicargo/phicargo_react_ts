@@ -112,8 +112,6 @@ const MainMenuPage = () => {
     [session],
   );
 
-  const [sessionStatus, setSessionStatus] = useState(null);
-
   useEffect(() => {
     // Definir la función que verifica la sesión
     const checkSession = async () => {
@@ -125,8 +123,6 @@ const MainMenuPage = () => {
           }
         );
         const data = await response.json();
-        setSessionStatus(data);
-
         // Mostrar respuesta en Toast
         if (data.status === "success") {
           toast.success(`Sesión activa: UserID ${data.userID}`, {
