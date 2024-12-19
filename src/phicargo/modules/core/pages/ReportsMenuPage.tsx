@@ -47,7 +47,7 @@ const reports: MenuItemType[] = [
   },
   {
     label: 'Tiempos de salidas y llegadas',
-    path: '',
+    path: '/detenciones',
     icon: clockIcon,
     requiredPermissions: [],
   },
@@ -59,7 +59,7 @@ const reports: MenuItemType[] = [
   },
   {
     label: 'Asignación de unidades',
-    path: '',
+    path: '/asignacion',
     icon: truckIcon,
     requiredPermissions: [],
   },

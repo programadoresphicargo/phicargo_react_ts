@@ -16,7 +16,7 @@ const WebSocketWithToast = () => {
                 utterance.voice = selectedVoice;
             }
 
-            window.speechSynthesis.speak(utterance);
+            //window.speechSynthesis.speak(utterance);
         } else {
             console.warn("La API SpeechSynthesis no es compatible con este navegador.");
         }
@@ -113,7 +113,6 @@ const WebSocketWithToast = () => {
         };
 
         return () => {
-            alert();
             webSocket.close();
         };
     }, [selectedVoice]);
