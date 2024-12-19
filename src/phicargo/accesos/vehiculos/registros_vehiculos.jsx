@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext, useMemo } from 'react';
-import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import VehiculoForm from './vehiculoForm';
 import Box from '@mui/material/Box';
+import { Button } from '@nextui-org/react';
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -101,11 +101,14 @@ const RegistroVehiculos = ({ onClose }) => {
     enableRowActions: true,
     renderRowActions: ({ row }) => (
       <Box>
-        <Button onClick={() => {
-          AñadirVehiculo(row.original.id_vehiculo);
-          onClose();
-        }} variant="contained">
-          Añadir
+        <Button
+          color="primary"
+          size='sm'
+          onClick={() => {
+            AñadirVehiculo(row.original.id_vehiculo);
+            onClose();
+          }}>
+          Seleccionar
         </Button>
       </Box >
     ),
@@ -148,7 +151,7 @@ const RegistroVehiculos = ({ onClose }) => {
       </DialogContent>
     </Dialog>
 
-    <button className="btn btn-success" onClick={NuevoVehiculo}>Nuevo vehiculo</button>
+    <Button color='primary' onClick={NuevoVehiculo}>Nuevo vehiculo</Button>
     <MaterialReactTable table={table} />
   </>
   );

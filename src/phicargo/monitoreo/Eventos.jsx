@@ -40,6 +40,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import DetalleForm from './DetalleEvento';
 import EntregaForm2 from './entregaForm';
+import { Chip } from '@nextui-org/react';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 const drawerWidth = 650;
 
@@ -164,14 +165,14 @@ export default function PersistentDrawerRight({ id_entrega, onClose }) {
                     let className;
 
                     if (value === 'VERACRUZ') {
-                        className = 'badge bg-success rounded-pill';
+                        className = 'badge bg-success text-white';
                     } else if (value === 'MANZANILLO') {
-                        className = 'badge bg-warning rounded-pill';
+                        className = 'badge bg-warning text-white';
                     } else {
-                        className = 'badge bg-primary rounded-pill';
+                        className = 'badge bg-primary text-white';
                     }
 
-                    return <span className={className} style={{ width: ' 100px' }}>{value}</span>;
+                    return <Chip className={className}>{value}</Chip>;
                 },
             },
             {
@@ -197,10 +198,10 @@ export default function PersistentDrawerRight({ id_entrega, onClose }) {
                     let className;
 
                     if (value === 'atendido') {
-                        className = 'badge bg-success rounded-pill';
+                        className = 'badge bg-success rounded-pill text-white';
                     }
 
-                    return <span className={className} style={{ width: ' 100px' }}>{value}</span>;
+                    return <Chip className={className} style={{ width: ' 100px' }}>{value}</Chip>;
                 },
             },
         ],

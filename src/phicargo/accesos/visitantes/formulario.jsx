@@ -8,9 +8,12 @@ import DialogTitle from '@mui/material/DialogTitle';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { AccesoContext } from '../context';
+import { useAuthContext } from '@/phicargo/modules/auth/hooks';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 export default function FormVisitante({ open, handleClose }) {
+
+    const { session } = useAuthContext();
     const [nombreVisitante, setNombreVisitante] = useState('');
     const { formData, setVisitantes } = useContext(AccesoContext);
 
@@ -31,6 +34,7 @@ export default function FormVisitante({ open, handleClose }) {
         }
 
         const dataToSend = {
+            id_usuario: session.user.id,
             id_empresa: formData.id_empresa,
             nombre_visitante: nombreVisitante.trim(),
         };

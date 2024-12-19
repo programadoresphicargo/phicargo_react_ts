@@ -4,8 +4,9 @@ import TextField from '@mui/material/TextField';
 import axios from 'axios';
 import Avatar from '@mui/material/Avatar';
 import Chip from '@mui/material/Chip';
-import Button from '@mui/material/Button';
 import FormularioCorreo from './formulario';
+import { Card, CardBody } from '@nextui-org/react';
+import { Button } from '@nextui-org/react';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const AutocompleteManager = ({ onValuesChange, id_maniobra, id_cliente, disabled }) => {
@@ -80,33 +81,37 @@ const AutocompleteManager = ({ onValuesChange, id_maniobra, id_cliente, disabled
     };
 
     return (<>
-        <div className='mb-5'>
-            <h2>Correos electronicos</h2>
-            <Button variant="contained" onClick={handleClickOpen2} disableElevation>Registrar nuevo correo</Button>
-        </div>
-        <FormularioCorreo open={open2} handleClose={handleClose2} id_cliente={id_cliente}></FormularioCorreo>
-        <Autocomplete
-            multiple
-            options={options}
-            getOptionLabel={(option) => option.title}
-            value={addedValues}
-            renderInput={(params) => <TextField {...params} label="Seleccionar correos" variant="outlined" />}
-            onChange={handleAdd}
-            isOptionEqualToValue={(option, value) => option.value === value.value}
-            filterSelectedOptions
-            disabled={disabled}
-            renderTags={(value, getTagProps) => (
-                value.map((option, index) => (
-                    <Chip
-                        color="primary"
-                        key={option.title}
-                        label={option.title}
-                        avatar={<Avatar alt={option.title} src={option.avatar} />}
-                        {...getTagProps({ index })}
-                    />
-                ))
-            )}
-        />    </>
+        <Card>
+            <CardBody>
+                <div className='mb-5'>
+                    <Button color='primary' onClick={handleClickOpen2}>Nuevo correo</Button>
+                </div>
+                <FormularioCorreo open={open2} handleClose={handleClose2} id_cliente={id_cliente}></FormularioCorreo>
+                <Autocomplete
+                    multiple
+                    options={options}
+                    getOptionLabel={(option) => option.title}
+                    value={addedValues}
+                    renderInput={(params) => <TextField {...params} label="Seleccionar correos" variant="outlined" />}
+                    onChange={handleAdd}
+                    isOptionEqualToValue={(option, value) => option.value === value.value}
+                    filterSelectedOptions
+                    disabled={disabled}
+                    renderTags={(value, getTagProps) => (
+                        value.map((option, index) => (
+                            <Chip
+                                color="primary"
+                                key={option.title}
+                                label={option.title}
+                                avatar={<Avatar alt={option.title} src={option.avatar} />}
+                                {...getTagProps({ index })}
+                            />
+                        ))
+                    )}
+                />
+            </CardBody>
+        </Card>
+    </>
     );
 };
 

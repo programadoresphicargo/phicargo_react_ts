@@ -20,12 +20,15 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import { Box } from '@mui/material';
 import { Button } from '@nextui-org/react';
+import { Chip } from '@nextui-org/react';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
+import AuthContext from '../modules/auth/context/AuthContext';
+import { useAuthContext } from '../modules/auth/hooks';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -33,6 +36,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const Entregas = ({ fecha }) => {
 
+  const { session } = useAuthContext();
   const [open, setOpen] = React.useState(false);
   const [id_entrega, setIDEntrega] = useState(0);
   const handleClickOpen = () => {
@@ -62,7 +66,12 @@ const Entregas = ({ fecha }) => {
 
   const NuevaEntrega = async () => {
     try {
-      const response = await fetch(VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/abrirEntrega.php');
+      const response = await fetch(VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/abrirEntrega.php', {
+        method: 'POST',
+        body: new URLSearchParams({
+          'id_usuario': session.user.id
+        })
+      });
       toast.success(response);
       handleClose();
     } catch (error) {
@@ -72,7 +81,11 @@ const Entregas = ({ fecha }) => {
 
   const ComprobarEntrega = async () => {
     try {
-      const response = await axios.get(VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/comprobarEntrega.php');
+      const params = new URLSearchParams();
+      params.append('id_usuario', session.user.id);
+
+      const response = await axios.post(VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/comprobarEntrega.php', params);
+
       const data = response.data;
 
       if (data.status === 1) {
@@ -88,6 +101,7 @@ const Entregas = ({ fecha }) => {
       console.error('Error al obtener los datos:', error);
     }
   };
+
 
   useEffect(() => {
     fetchData();
@@ -111,14 +125,13 @@ const Entregas = ({ fecha }) => {
         accessorKey: 'total_eventos',
         header: 'Eventos',
         Cell: ({ cell }) => {
-
           const value = cell.getValue();
           if (value != 0) {
             let variant = 'danger';
             return (
-              <span className={`badge bg-${variant} rounded-pill`} style={{ width: '20px' }}>
+              <Chip className={`badge bg-${variant} rounded-pill text-white`} style={{ width: '20px' }}>
                 {value}
-              </span>
+              </Chip>
             );
           }
 

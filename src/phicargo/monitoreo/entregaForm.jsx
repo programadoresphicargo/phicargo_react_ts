@@ -11,12 +11,16 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
+import { useAuthContext } from '../modules/auth/hooks';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const EntregaForm2 = ({ id_entrega, onClose }) => {
 
+    const { session } = useAuthContext();
+
     const initialFormData = {
         id_entrega: id_entrega,
+        id_usuario: session.user.id,
         titulo: '',
         descripcion: '',
         sucursal: '',

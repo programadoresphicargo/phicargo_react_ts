@@ -2,9 +2,11 @@ import React, { useState, useEffect } from "react";
 import { AccesoContext } from "./context";
 import axios from 'axios';
 import { toast } from "react-toastify";
+import { useAuthContext } from "../modules/auth/hooks";
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const AccesoCompo = ({ children }) => {
+    const { session } = useAuthContext();
     const [id_acceso, setAcceso] = useState([]);
     const [disabledFom, setFormOptions] = useState(false);
 
@@ -12,6 +14,7 @@ const AccesoCompo = ({ children }) => {
 
     const [formData, setFormData] = useState({
         id_acceso: id_acceso,
+        id_usuario: session.user.id,
         estado_acceso: '',
         id_empresa: '',
         nombre_empresa: '',

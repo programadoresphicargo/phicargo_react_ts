@@ -6,6 +6,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 import { Box } from '@mui/material';
+import { Chip } from '@nextui-org/react';
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -106,24 +107,18 @@ const Maniobras = ({ estado_maniobra }) => {
           const value = cell.getValue();
 
           let variant = 'secondary';
-          let text = '';
           if (value === 'retiro') {
             variant = 'success';
-            text = 'Retiro';
           } else if (value === 'ingreso') {
             variant = 'primary';
-            text = 'Ingreso';
           } else if (value === 'local') {
             variant = 'danger';
-            text = 'Local';
-          } else {
-            text = value;
           }
 
           return (
-            <span className={`badge bg-${variant} rounded-pill`} style={{ width: '120px' }}>
-              {text}
-            </span>
+            <Chip className={`badge bg-${variant} rounded-pill text-white`} size='sm'>
+              {value}
+            </Chip>
           );
         },
 
@@ -163,9 +158,9 @@ const Maniobras = ({ estado_maniobra }) => {
         Cell: ({ cell }) => {
           const value = cell.getValue();
           return (
-            <span className={`badge bg-success rounded-pill`} style={{ width: '120px' }}>
+            <Chip className={`badge bg-success rounded-pill text-white`} style={{ width: '120px' }}>
               {value}
-            </span>
+            </Chip>
           );
         },
       },
@@ -214,7 +209,7 @@ const Maniobras = ({ estado_maniobra }) => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 190px)',
+        maxHeight: 'calc(100vh - 240px)',
       },
     },
     muiTableBodyRowProps: ({ row }) => ({

@@ -12,9 +12,10 @@ import MenuItem from '@mui/material/MenuItem';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Link, useNavigate } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
+import { Navigate } from 'react-router-dom';
 
 const pages = [
-    { name: 'CONTENEDORES', path: '/contenedores' },
+    { name: 'CONTENEDORES', path: '/cartas-porte' },
     { name: 'CONTROL DE MANIOBRAS', path: '/control_maniobras' },
     { name: 'NOMINAS', path: '/nominas' },
     { name: 'TERMINALES', path: '/terminales' },
@@ -36,8 +37,8 @@ const useStyles = makeStyles((theme) => ({
 
 function ManiobrasNavBar() {
     const classes = useStyles();
-    const navegate = useNavigate();
-
+    const navigate = useNavigate();
+    
     const [anchorElNav, setAnchorElNav] = React.useState(null);
 
     const handleOpenNavMenu = (event) => {

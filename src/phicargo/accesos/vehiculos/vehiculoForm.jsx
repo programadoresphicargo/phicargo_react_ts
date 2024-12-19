@@ -1,10 +1,13 @@
 import { useState } from "react";
-import { TextField, Button, MenuItem, Select, InputLabel, FormControl, Grid } from "@mui/material";
+import { TextField, MenuItem, Select, InputLabel, FormControl, Grid } from "@mui/material";
 import axios from "axios";
 import { toast } from 'react-toastify';
+import { Button } from "@nextui-org/react";
+import { useAuthContext } from "@/phicargo/modules/auth/hooks";
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const VehiculoForm = ({ onClose }) => {
+    const { session } = useAuthContext();
     const [marca, setMarca] = useState("");
     const [modelo, setModelo] = useState("");
     const [placas, setPlacas] = useState("");
@@ -49,6 +52,7 @@ const VehiculoForm = ({ onClose }) => {
         if (hasError) return;
 
         const vehiculoData = {
+            id_usuario: session.user.id,
             marca,
             modelo,
             placas,
@@ -74,7 +78,7 @@ const VehiculoForm = ({ onClose }) => {
     return (<>
         <Grid container spacing={2} className="mb-5">
             <Grid item xs={12}>
-                <Button variant="contained" color="primary" onClick={registrar_vehiculo}>
+                <Button color="primary" onClick={registrar_vehiculo}>
                     Registrar vehículo
                 </Button>
             </Grid>

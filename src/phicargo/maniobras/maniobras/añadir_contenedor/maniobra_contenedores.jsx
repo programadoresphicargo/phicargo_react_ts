@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 import AñadirContenedor from './modal_añadir_contenedor';
 import axios from 'axios';
-import Button from '@mui/material/Button';
+import { Button } from '@nextui-org/react';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -12,6 +12,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { toast } from 'react-toastify';
+import { Card, CardBody } from '@nextui-org/react';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const ManiobraContenedores = ({ id_maniobra }) => {
@@ -143,37 +144,43 @@ const ManiobraContenedores = ({ id_maniobra }) => {
     });
 
     return (
-        <div>
-            <Button variant="contained" onClick={handleShowModal}>
-                Añadir contenedor
-            </Button>
-            <AñadirContenedor
-                show={modalShow}
-                handleClose={handleCloseModal}
-                id_maniobra={id_maniobra}
-            />
-            <MaterialReactTable table={table} />
+        <>
+            <Card>
+                <CardBody>
+                    <div>
+                        <Button color='primary' onClick={handleShowModal}>
+                            Añadir contenedor
+                        </Button>
+                        <AñadirContenedor
+                            show={modalShow}
+                            handleClose={handleCloseModal}
+                            id_maniobra={id_maniobra}
+                        />
+                        <MaterialReactTable table={table} />
 
-            <Dialog
-                open={openDialog}
-                onClose={handleCloseDialog}
-            >
-                <DialogTitle>¿Estás seguro?</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        No podrás revertir esto!
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleCloseDialog} color="primary">
-                        Cancelar
-                    </Button>
-                    <Button onClick={confirmarBorrado} color="secondary">
-                        Sí, bórralo!
-                    </Button>
-                </DialogActions>
-            </Dialog>
-        </div>
+                        <Dialog
+                            open={openDialog}
+                            onClose={handleCloseDialog}
+                        >
+                            <DialogTitle>¿Estás seguro?</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText>
+                                    No podrás revertir esto!
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={handleCloseDialog} color="primary">
+                                    Cancelar
+                                </Button>
+                                <Button onClick={confirmarBorrado} color="secondary">
+                                    Sí, bórralo!
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+                    </div>
+                </CardBody>
+            </Card>
+        </>
     );
 };
 

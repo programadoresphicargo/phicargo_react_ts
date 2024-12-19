@@ -94,7 +94,7 @@ const Maniobras = ({ estado_maniobra }) => {
           }
 
           return (
-            <Chip color={badgeClass} content="5" style={{ width: '130px' }}>
+            <Chip color={badgeClass} size="sm" className={"text-white"}>
               {tipoMovimiento.charAt(0).toUpperCase() + tipoMovimiento.slice(1)}
             </Chip>
           );
@@ -127,17 +127,17 @@ const Maniobras = ({ estado_maniobra }) => {
           let badgeClass = '';
 
           if (tipoMovimiento === 'espera') {
-            badgeClass += 'secondary';
+            badgeClass += 'bg-secondary text-white';
           } else if (tipoMovimiento === 'validado') {
-            badgeClass += 'success';
+            badgeClass += 'bg-success text-white';
           } else {
-            badgeClass += 'primary';
+            badgeClass += 'bg-primary text-white';
           }
 
           const displayText = tipoMovimiento === 'espera' ? 'En espera de validación' : tipoMovimiento.charAt(0).toUpperCase() + tipoMovimiento.slice(1);
 
           return (
-            <Chip className={badgeClass} style={{ width: '150px' }}>
+            <Chip className={badgeClass} size='sm' style={{ width: '150px' }}>
               {displayText}
             </Chip>
           );

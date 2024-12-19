@@ -4,8 +4,6 @@ import axios from 'axios';
 import SelectOperador from './select_operador';
 import ManiobraContenedores from './añadir_contenedor/maniobra_contenedores';
 import { User } from "@nextui-org/react";
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Dialog from '@mui/material/Dialog';
@@ -18,7 +16,7 @@ import { Button } from '@nextui-org/react';
 import AutocompleteManager from './correos_electronicos/correos_electronicos';
 import CancelarManiobraDialog from './cancelar_maniobra';
 import { toast } from 'react-toastify';
-
+import { Card, CardBody } from '@nextui-org/react';
 import SelectTerminal from './select_terminal';
 import { Autocomplete, Container, filledInputClasses } from '@mui/material';
 import LinearProgress from '@mui/material/LinearProgress';
@@ -29,6 +27,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import PanelEstatus from './envio_estatus/panel';
+import { useAuthContext } from '@/phicargo/modules/auth/hooks';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const fieldValidations = {
@@ -44,6 +43,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente }) => {
 
+    const { session } = useAuthContext();
     const [formDisabled, setFormDisabled] = useState(true);
     const [htmlContent, setHtmlContent] = useState('');
     const [values, setValues] = useState({ addedValues: [], removedValues: [] });
@@ -166,6 +166,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
 
     const [formData, setFormData] = useState({
         id_maniobra: id_maniobra,
+        id_usuario: session.user.id,
         id_cp: id_cp,
         id_cliente: id_cliente,
         id_terminal: '',
@@ -223,6 +224,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
             setFormDisabled(false);
             setFormData({
                 id_cp: id_cp,
+                id_usuario: session.user.id,
                 id_terminal: '',
                 id_cliente: '',
                 tipo_maniobra: '',
@@ -638,8 +640,8 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                         )}
 
                         <Grid lg={6} xs={12} p={1}>
-                            <Card elevation={0}>
-                                <CardContent>
+                            <Card>
+                                <CardBody>
                                     <form>
                                         <Grid container spacing={3} p={1}>
                                             <Grid item xs={12} lg={6}>
@@ -782,23 +784,21 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                             </Grid>
                                         </Grid>
                                     </form>
-                                </CardContent>
+                                </CardBody>
                             </Card>
 
                             {id_maniobra != null ? (
-                                <Card elevation={0}>
-                                    <CardContent>
-                                        <ManiobraContenedores
-                                            id_maniobra={id_maniobra} />
-                                    </CardContent>
-                                </Card>) : ''}
+                                <div className='mt-4'>
+                                    <ManiobraContenedores
+                                        id_maniobra={id_maniobra} />
+                                </div>
+                            ) : ''}
                         </Grid>
 
                         <Grid xs={12} lg={6} p={1}>
                             {formData.estado_maniobra != null ? (
                                 <Card elevation={0}>
-                                    <CardContent>
-
+                                    <CardBody>
                                         <div className='mb-3'>
                                             {formData.usuario_activo !== '' && (
                                                 <User
@@ -835,12 +835,12 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                                 />
                                             )}
                                         </div>
-                                    </CardContent>
-                                    <CardContent>
+                                    </CardBody>
+                                    <CardBody>
                                         <div
                                             dangerouslySetInnerHTML={{ __html: htmlContent }}
                                         />
-                                    </CardContent>
+                                    </CardBody>
                                 </Card>
                             ) : ''}
                         </Grid>

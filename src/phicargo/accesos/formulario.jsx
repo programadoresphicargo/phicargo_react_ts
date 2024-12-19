@@ -239,7 +239,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                     toast.error("Error al actualizar los datos.");
                 }
             } catch (error) {
-                console.error('Error al enviar los datos:', error);
+                toast.error('Error al enviar los datos:' + error);
             }
         } else {
             setErrors(validationErrors);

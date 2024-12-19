@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import Formulariomaniobra from './formulario_maniobra';
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
-import Button from '@mui/material/Button';
 import { format, isValid } from 'date-fns';
+import { Button } from '@nextui-org/react';
+import { Chip } from '@nextui-org/react';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const Registromaniobras = ({ id_cp, id_cliente }) => {
@@ -94,7 +95,7 @@ const Registromaniobras = ({ id_cp, id_cliente }) => {
                         variant = 'bg-danger';
                     }
 
-                    return <span className={`badge ${variant}`}>{value}</span>;
+                    return <Chip className={`badge ${variant} text-white`} size='sm'>{value}</Chip>;
                 },
             },
         ],
@@ -154,7 +155,7 @@ const Registromaniobras = ({ id_cp, id_cliente }) => {
     return (
         <div>
             <div className="flex flex-wrap gap-2 items-center">
-                <Button onClick={abrir_nueva} variant="contained">
+                <Button onClick={abrir_nueva} color='primary'>
                     Ingresar maniobra
                 </Button>
             </div>
