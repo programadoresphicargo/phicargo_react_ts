@@ -13,7 +13,6 @@ import { useMemo } from 'react';
 import usuarios_img from '../../assets/menu/usuarios.png';
 import viajes_img from '../../assets/menu/viajes.png';
 import AppBar from '@mui/material/AppBar';
-import Typography from '@mui/material/Typography';
 import Toolbar from '@mui/material/Toolbar';
 import { Grid } from '@mui/system';
 const { VITE_PHIDES_API_URL } = import.meta.env;
