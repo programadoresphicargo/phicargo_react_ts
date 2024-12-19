@@ -113,6 +113,7 @@ const WebSocketWithToast = () => {
         };
 
         return () => {
+            alert();
             webSocket.close();
         };
     }, [selectedVoice]);

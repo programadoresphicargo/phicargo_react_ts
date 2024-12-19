@@ -12,6 +12,10 @@ import { useAuthContext } from '../modules/auth/hooks';
 import { useMemo } from 'react';
 import usuarios_img from '../../assets/menu/usuarios.png';
 import viajes_img from '../../assets/menu/viajes.png';
+import AppBar from '@mui/material/AppBar';
+import Typography from '@mui/material/Typography';
+import Toolbar from '@mui/material/Toolbar';
+import { Grid } from '@mui/system';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 type MenuItemType = {
@@ -107,47 +111,57 @@ const MainMenuPage = () => {
   );
 
   return (
-    <div
-      className="min-h-screen bg-gray-100 p-4 flex flex-col justify-between relative"
-      style={{
-        backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 400"><rect width="1920" height="400" fill="%23D9DEEA" /><mask id="mask0" mask-type="alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="1920" height="400"><rect width="1920" height="400" fill="%23D9DEEA" /></mask><g mask="url(%23mask0)"><path d="M1059.48 308.024C1152.75 57.0319 927.003 -103.239 802.47 -152.001L1805.22 -495.637L2095.53 351.501L1321.23 616.846C1195.12 618.485 966.213 559.015 1059.48 308.024Z" fill="%23C0CBDD" /><path d="M1333.22 220.032C1468.66 -144.445 1140.84 -377.182 960 -447.991L2416.14 -947L2837.71 283.168L1713.32 668.487C1530.19 670.868 1197.78 584.509 1333.22 220.032Z" fill="%238192B0" /></g></svg>')`,
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
-        backgroundPosition: 'top',
-      }}
-    >
-      <div className="flex items-center mb-8 sm:mb-12 px-4 relative z-10">
-        <div className="flex-grow flex justify-center items-center">
-          <img
-            src="https://phi-cargo.com/wp-content/uploads/2021/05/logo-phicargo-vertical.png"
-            alt="Logo Phi Cargo"
-            className="w-40 sm:w-60 md:w-80 lg:w-[400px] h-auto object-contain"
-          />
-        </div>
-
-        <div className="ml-auto">
+    <>
+      <AppBar position="static" style={{ backgroundColor: 'rgb(129, 146, 176)' }} elevation={0}>
+        <Toolbar>
+          <Grid sx={{ flexGrow: 1 }}></Grid>
           <AvatarProfile />
-        </div>
-      </div>
+        </Toolbar>
+      </AppBar>
 
-      <div className="flex-grow flex items-center relative lg:mx-12 z-10 -mt-10 sm:-mt-14 md:-mt-20">
-        <div className="w-full">
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-2">
-            {filteredMenuItems.map((item, index) => (
-              <MenuItem
-                key={index}
-                icon={item.icon}
-                label={item.label}
-                link={item.link}
-                isExternal={item.isExternal}
-              />
-            ))}
+      <div
+        className=""
+        style={{
+          backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 400"><rect width="1920" height="400" fill="%23D9DEEA" /><mask id="mask0" mask-type="alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="1920" height="400"><rect width="1920" height="400" fill="%23D9DEEA" /></mask><g mask="url(%23mask0)"><path d="M1059.48 308.024C1152.75 57.0319 927.003 -103.239 802.47 -152.001L1805.22 -495.637L2095.53 351.501L1321.23 616.846C1195.12 618.485 966.213 559.015 1059.48 308.024Z" fill="%23C0CBDD" /><path d="M1333.22 220.032C1468.66 -144.445 1140.84 -377.182 960 -447.991L2416.14 -947L2837.71 283.168L1713.32 668.487C1530.19 670.868 1197.78 584.509 1333.22 220.032Z" fill="%238192B0" /></g></svg>')`,
+          backgroundSize: 'contain',
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'top',
+        }}
+      >
+        {/* Contenedor 1 */}
+        <div className="flex items-center justify-center mb-8 sm:mb-12 px-4 relative z-10" style={{ minHeight: '30vh' }}>
+          <div className="flex justify-center items-center">
+            <img
+              src="https://phi-cargo.com/wp-content/uploads/2021/05/logo-phicargo-vertical.png"
+              alt="Logo Phi Cargo"
+              className="w-40 sm:w-60 md:w-80 lg:w-[400px] h-auto object-contain"
+            />
+          </div>
+        </div>
+
+
+        {/* Agregar margen abajo para separar los contenedores */}
+        <div className="mb-8" /> {/* Esto agrega el margen entre contenedores */}
+
+        {/* Contenedor 2 */}
+        <div className="flex-grow flex items-center relative lg:mx-12 z-10 -mt-10 sm:-mt-14 md:-mt-20">
+          <div className="w-full">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-2">
+              {filteredMenuItems.map((item, index) => (
+                <MenuItem
+                  key={index}
+                  icon={item.icon}
+                  label={item.label}
+                  link={item.link}
+                  isExternal={item.isExternal}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
 export default MainMenuPage;
-
