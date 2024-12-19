@@ -1,3 +1,4 @@
+import React, { useState, useEffect, useContext, useMemo } from 'react';
 import AvatarProfile from '../modules/core/components/ui/AvatarProfile';
 import MenuItem from './MenuItem';
 import accesos_img from '../../assets/menu/accesos.png';
@@ -9,12 +10,12 @@ import operadores_img from '../../assets/menu/operadores.png';
 import reportesImg from '../../assets/menu/reportes.png';
 import turnos_img from '../../assets/menu/turnos.png';
 import { useAuthContext } from '../modules/auth/hooks';
-import { useMemo } from 'react';
 import usuarios_img from '../../assets/menu/usuarios.png';
 import viajes_img from '../../assets/menu/viajes.png';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import { Grid } from '@mui/system';
+import { toast } from 'react-toastify';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 type MenuItemType = {
@@ -24,6 +25,8 @@ type MenuItemType = {
   requiredPermissions: number[];
   isExternal?: boolean;
 };
+
+
 
 const menuItems: MenuItemType[] = [
   {
@@ -97,7 +100,7 @@ const menuItems: MenuItemType[] = [
 ];
 
 const MainMenuPage = () => {
-  const { session } = useAuthContext();
+  const { session, onLogout } = useAuthContext();
 
   const filteredMenuItems = useMemo(
     () =>
@@ -108,6 +111,51 @@ const MainMenuPage = () => {
       ),
     [session],
   );
+
+  const [sessionStatus, setSessionStatus] = useState(null);
+
+  useEffect(() => {
+    // Definir la función que verifica la sesión
+    const checkSession = async () => {
+      try {
+        const response = await fetch(
+          VITE_PHIDES_API_URL + "/login/inicio/get_user.php",
+          {
+            credentials: "include", // Incluir cookies para CORS
+          }
+        );
+        const data = await response.json();
+        setSessionStatus(data);
+
+        // Mostrar respuesta en Toast
+        if (data.status === "success") {
+          toast.success(`Sesión activa: UserID ${data.userID}`, {
+            position: "top-right",
+            autoClose: 3000, // Cierra automáticamente después de 3 segundos
+          });
+        } else {
+          toast.error(data.message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+          onLogout();
+        }
+      } catch (error) {
+        console.error("Error checking session:", error);
+        toast.error("Error al verificar la sesión", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
+    };
+
+    // Ejecutar cada minuto
+    checkSession(); // Llamada inicial
+    const intervalId = setInterval(checkSession, 60000); // 60000 ms = 1 minuto
+
+    // Limpiar el intervalo al desmontar el componente
+    return () => clearInterval(intervalId);
+  }, []);
 
   return (
     <>
