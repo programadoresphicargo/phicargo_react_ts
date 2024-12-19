@@ -197,6 +197,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                     console.log(data.estado_maniobra);
                     setFormData({
                         id_maniobra: data.id_maniobra || '',
+                        id_usuario: session.user.id,
                         id_cp: data.id_cp || '',
                         id_terminal: data.id_terminal || '',
                         tipo_maniobra: data.tipo_maniobra || '',
@@ -476,7 +477,12 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
         }).then((result) => {
             setLoading(true);
             if (result.isConfirmed) {
-                axios.post(VITE_PHIDES_API_URL + '/modulo_maniobras/maniobra/activar_maniobra.php?id_maniobra=' + id_maniobra)
+                // Crear las variables con URLSearchParams
+                const postData = new URLSearchParams();
+                postData.append('id_maniobra', id_maniobra);
+                postData.append('id_usuario', session.user.id);
+
+                axios.post(VITE_PHIDES_API_URL + '/modulo_maniobras/maniobra/activar_maniobra.php', postData)
                     .then((response) => {
                         setLoading(false);
                         const data = response.data;
@@ -509,6 +515,11 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
     };
 
     const finalizar_maniobra = () => {
+
+        const postData = new URLSearchParams();
+        postData.append('id_maniobra', id_maniobra);
+        postData.append('id_usuario', session.user.id);
+
         Swal.fire({
             title: 'Finalizar maniobra',
             text: "¿Realmente deseas finalizar esta maniobra?",
@@ -520,7 +531,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
-                axios.post(VITE_PHIDES_API_URL + '/modulo_maniobras/maniobra/finalizar_maniobra.php?id_maniobra=' + id_maniobra)
+                axios.post(VITE_PHIDES_API_URL + '/modulo_maniobras/maniobra/finalizar_maniobra.php', postData)
                     .then((response) => {
                         const data = response.data;
                         if (data.success) {

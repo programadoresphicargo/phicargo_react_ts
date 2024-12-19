@@ -12,6 +12,7 @@ import CardMedia from '@mui/material/CardMedia';
 import React, { useState, useCallback, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { toast } from 'react-toastify';
+import { useAuthContext } from '@/phicargo/modules/auth/hooks';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const CustomCard = styled(Card)(({ isSelected }) => ({
@@ -25,6 +26,7 @@ const CustomCard = styled(Card)(({ isSelected }) => ({
 
 export default function PanelEstatus({ id_maniobra, open, handleClose }) {
 
+    const { session } = useAuthContext();
     const [data, setData] = useState([]);
     const [selectedCard, setSelectedCard] = useState(null);
     const [comentarios, setComentarios] = useState('');
@@ -71,6 +73,7 @@ export default function PanelEstatus({ id_maniobra, open, handleClose }) {
         }
 
         const formData = new FormData();
+        formData.append('id_usuario', session.user.id);
         formData.append('id_maniobra', id_maniobra);
         formData.append('id_estatus', selectedCard);
         formData.append('comentarios', comentarios);
