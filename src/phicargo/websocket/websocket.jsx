@@ -16,7 +16,7 @@ const WebSocketWithToast = () => {
                 utterance.voice = selectedVoice;
             }
 
-            //window.speechSynthesis.speak(utterance);
+            window.speechSynthesis.speak(utterance);
         } else {
             console.warn("La API SpeechSynthesis no es compatible con este navegador.");
         }
@@ -59,7 +59,7 @@ const WebSocketWithToast = () => {
         window.speechSynthesis.onvoiceschanged = loadVoices;
         loadVoices();
 
-        const webSocket = new WebSocket("ws://67.205.179.112:8082");
+        const webSocket = new WebSocket("wss://websocket.phicargo-sistemas.online/ws");
         webSocketRef.current = webSocket;
 
         // Evento cuando el WebSocket se conecta
