@@ -2,8 +2,8 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { Vehicle, VehicleUpdate } from '../models/vehicle-model';
 
 import { Button } from '@nextui-org/react';
+import { DriverSearchInput } from '../../core/components/inputs/DriverSearchInput';
 import { SelectInput } from '../../core/components/inputs/SelectInput';
-import { useDriverQueries } from '../hooks/useDriverQueries';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useVehicleQueries } from '../hooks/useVehicleQueries';
@@ -41,11 +41,6 @@ const VehicleForm = (props: Props) => {
     vehicleUpdateMutation: { mutate: updateVehicle, isPending },
   } = useVehicleQueries();
 
-  const {
-    driversQuery: { isFetching },
-    AvailableDrivers,
-  } = useDriverQueries();
-
   const formData = useMemo(() => {
     if (!vehicle) {
       return initialState;
@@ -58,8 +53,10 @@ const VehicleForm = (props: Props) => {
   });
 
   const stateId = watch('stateId');
+  const driverId = watch('driverId');
 
   const onSubmit: SubmitHandler<VehicleUpdate> = (data) => {
+    console.log(data);
     updateVehicle(
       {
         id: vehicle.id,
@@ -119,13 +116,12 @@ const VehicleForm = (props: Props) => {
           />
         </div>
 
-        <div className="mb-3">
-          <SelectInput
-            control={control}
-            isLoading={isFetching}
+        <div className="flex-1 mb-3">
+          <DriverSearchInput 
+            control={control} 
             name="driverId"
-            label="Operador asignado"
-            items={AvailableDrivers}
+            driverId={driverId}
+            required={false}
           />
         </div>
 

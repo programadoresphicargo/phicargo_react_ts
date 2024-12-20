@@ -15,7 +15,6 @@ import NotFoundPage from '@/phicargo/modules/core/pages/NotFoundPage';
 import PersistentDrawer from '../phicargo/monitoreo/Eventos';
 import ProtectedRoute from './ProtectedRoute';
 import ReportsMenuPage from '../phicargo/modules/core/pages/ReportsMenuPage';
-import ShiftsLayout from '../phicargo/modules/shifts/layouts/ShiftsLayout';
 import ShiftsRoutes from '../phicargo/modules/shifts/routes/ShiftsRoutes';
 import { ToastContainer } from 'react-toastify';
 import { Toaster } from 'react-hot-toast';
@@ -275,10 +274,7 @@ export const PrivateRoutes = () => {
           element={<MaintenanceReportRoutes />}
         />
         <Route path="/reportes/balance/*" element={<CashflowReportRoutes />} />
-        <Route
-          path="/reportes/operaciones"
-          element={<DOReportRoutes />}
-        />
+        <Route path="/reportes/operaciones" element={<DOReportRoutes />} />
 
         <Route
           path="/control-usuarios"
@@ -304,9 +300,7 @@ export const PrivateRoutes = () => {
           {AvailabilityRoutes()}
         </Route>
 
-        <Route path="/turnos" element={<ShiftsLayout children={undefined} />}>
-          {ShiftsRoutes()}
-        </Route>
+        <Route path="/turnos/*" element={<ShiftsRoutes />}></Route>
 
         {/* Ruta para manejar rutas no válidas */}
         <Route path="*" element={<NotFoundPage />} />
