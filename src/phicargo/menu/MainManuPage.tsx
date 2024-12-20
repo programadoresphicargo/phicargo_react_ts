@@ -127,17 +127,10 @@ const MainMenuPage = () => {
         if (data.status === "success") {
           console.log(`Sesión activa: UserID ${data.userID}`);
         } else {
-          toast.error(data.message, {
-            position: "top-right",
-            autoClose: 3000,
-          });
+          console.error(`Error: ${data.message}`);
         }
       } catch (error) {
         console.error("Error checking session:", error);
-        toast.error("Error al verificar la sesión", {
-          position: "top-right",
-          autoClose: 3000,
-        });
       }
     };
 
