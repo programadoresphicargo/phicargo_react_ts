@@ -1,4 +1,4 @@
-import { Navigate, Route } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
 
 import { LoadingPage } from '../../core/pages/LoadingPage';
@@ -7,20 +7,16 @@ const ShiftsPage = lazy(() => import('../pages/ShiftsPage'));
 
 const ShiftsRoutes = () => {
   return (
-    <>
+    <Routes>
       <Route
-        index
-        element={<Navigate to="/turnos/lista" replace />}
-      />
-      <Route
-        path="lista"
+        path="/"
         element={
           <Suspense fallback={<LoadingPage />}>
             <ShiftsPage />
           </Suspense>
         }
       />
-    </>
+    </Routes>
   );
 };
 

@@ -1,16 +1,73 @@
 import { useMemo } from 'react';
 import { type MRT_ColumnDef } from 'material-react-table';
 import { Shift } from '../models';
+import { Chip } from '@nextui-org/react';
 
 export const useShiftColumns = () => {
   const columns = useMemo<MRT_ColumnDef<Shift>[]>(
     () => [
-      { accessorKey: 'shift', header: 'Turno' },
-      { accessorKey: 'driver.name', header: 'Operador' },
-      { accessorKey: 'driver.name', header: 'Operador' },
-      { accessorKey: 'driver.license', header: 'Licencia' },
-      { accessorKey: 'driver.isDangerous', header: 'Peligroso' },
-      { accessorKey: 'driver.isDangerous', header: 'Peligroso' },
+      {
+        accessorFn: (row) => row.shift,
+        header: 'Turno',
+        maxSize: 50,
+        Cell: ({ cell }) => (
+          <span className="bg-blue-300 text-blue-900 font-semibold rounded-full w-8 h-8 m-0 flex items-center justify-center">
+            {`#${cell.getValue<string>()}`}
+          </span>
+        ),
+      },
+      {
+        accessorFn: (row) => row.driver.name,
+        header: 'Operador',
+        Cell: ({ cell }) => (
+          <span className="text-sm font-semibold">
+            {cell.getValue<string>()}
+          </span>
+        ),
+      },
+      {
+        accessorFn: (row) => row.driver.modality || 'SIN ASIGNAR',
+        header: 'Licencia',
+        maxSize: 50,
+        Cell: ({ cell }) => {
+          const value = cell.getValue<string>();
+          return (
+            <Chip color={value === 'full' ? 'primary' : 'warning'} size="sm">
+              {cell.getValue<string>()}
+            </Chip>
+          );
+        },
+      },
+      {
+        accessorFn: (row) => row.driver.isDangerous,
+        header: 'Peligroso',
+        maxSize: 50,
+        Cell: ({ row }) => {
+          const value = row.original.driver.isDangerous;
+          return !value ? (
+            <span className="text-gray-400 text-sm">
+              NO
+            </span>
+          ) : (
+            <Chip color="primary" size="sm">
+              SI
+            </Chip>
+          );
+        },
+      },
+      {
+        accessorFn: (row) => row.vehicle.name,
+        header: 'Unidad',
+        Cell: ({ cell }) => (
+          <span className="text-sm font-semibold text-blue-600">
+            {cell.getValue<string>()}
+          </span>
+        ),
+      },
+      {
+        accessorFn: (row) => row.arrivalAt.format('DD/MM/YYYY HH:mm'),
+        header: 'Llegada',
+      },
     ],
     [],
   );
@@ -19,3 +76,4 @@ export const useShiftColumns = () => {
     columns,
   };
 };
+
