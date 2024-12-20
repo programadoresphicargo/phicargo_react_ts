@@ -100,7 +100,7 @@ const menuItems: MenuItemType[] = [
 ];
 
 const MainMenuPage = () => {
-  const { session, onLogout } = useAuthContext();
+  const { session } = useAuthContext();
 
   const filteredMenuItems = useMemo(
     () =>
