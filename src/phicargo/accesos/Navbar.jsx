@@ -36,8 +36,8 @@ function ResponsiveAppBar() {
                         src="https://phi-cargo.com/wp-content/uploads/2021/05/logo-phicargo-vertical.png"
                         alt="Descripción de la imagen"
                         style={{
-                            width: '200px',
-                            height: '70px',
+                            width: '170px',
+                            height: '60px',
                             filter: 'brightness(0) invert(1)' // Esto hará que la imagen sea blanca
                         }}
                     />

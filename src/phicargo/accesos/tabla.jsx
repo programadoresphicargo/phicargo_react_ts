@@ -197,6 +197,11 @@ const Maniobras = ({ estado_maniobra }) => {
         fontSize: '14px',
       },
     },
+    muiTableContainerProps: {
+      sx: {
+        maxHeight: 'calc(100vh - 310px)',
+      },
+    },
     renderTopToolbarCustomActions: ({ table }) => (
       <Box
         sx={{
@@ -250,11 +255,7 @@ const Maniobras = ({ estado_maniobra }) => {
       </AccesoCompo>
     </Dialog>
 
-    <div>
-      <div className="table-striped">
-        <MaterialReactTable table={table} />
-      </div>
-    </div >
+    <MaterialReactTable table={table} />
   </>
   );
 

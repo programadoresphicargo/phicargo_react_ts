@@ -278,7 +278,7 @@ const ViajesActivos = ({ }) => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 200px)',
+        maxHeight: 'calc(100vh - 190px)',
       },
     },
     renderTopToolbarCustomActions: ({ table }) => (
