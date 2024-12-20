@@ -1,17 +1,27 @@
-import BaseLayout from '../../core/layouts/BaseLayout';
-import { MenuItemType } from '../../core/types/global-types';
+import { ErrorBoundary } from '../../core/utilities/error-boundary';
+import { Header } from '../components/ui/Header';
+import { Outlet } from 'react-router-dom';
 import { ReactNode } from 'react';
-
-const pages: MenuItemType[] = [
-  { name: 'Turnos', path: '/turnos' },
-];
+import { Toaster } from 'react-hot-toast';
 
 interface Props {
   children: ReactNode;
 }
 
 const ShiftsLayout = ({ children }: Props) => {
-  return <BaseLayout pages={pages}>{children}</BaseLayout>;
+  return (
+    <>
+      <Toaster position="top-center" reverseOrder={false} />
+      <Header />
+      <main className="flex-grow w-full">
+        <ErrorBoundary>
+          {children}
+          <Outlet />
+        </ErrorBoundary>
+      </main>
+    </>
+  );
 };
 
 export default ShiftsLayout;
+
