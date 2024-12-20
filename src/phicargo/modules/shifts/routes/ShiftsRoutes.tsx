@@ -4,6 +4,7 @@ import { Suspense, lazy } from 'react';
 import { LoadingPage } from '../../core/pages/LoadingPage';
 
 const ShiftsPage = lazy(() => import('../pages/ShiftsPage'));
+const ShiftDetail = lazy(() => import('../outlets/ShiftDetail'));
 
 const ShiftsRoutes = () => {
   return (
@@ -15,7 +16,16 @@ const ShiftsRoutes = () => {
             <ShiftsPage />
           </Suspense>
         }
-      />
+      >
+        <Route
+          path="detalles/:id"
+          element={
+            <Suspense fallback={null}>
+              <ShiftDetail />
+            </Suspense>
+          }
+        />
+      </Route>
     </Routes>
   );
 };

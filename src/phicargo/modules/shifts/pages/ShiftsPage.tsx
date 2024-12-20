@@ -1,13 +1,13 @@
 import { IconButton, Tooltip } from '@mui/material';
 import { MRT_Row, useMaterialReactTable } from 'material-react-table';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 import AddButton from '../../core/components/ui/AddButton';
 import { Button } from '@nextui-org/react';
 import ExportExcelButton from '../../core/components/ui/ExportExcelButton';
-import { HiQueueList } from "react-icons/hi2";
+import { HiQueueList } from 'react-icons/hi2';
 import MaterialTableBase from '../../core/components/tables/MaterialTableBase';
-import { Outlet } from 'react-router-dom';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import type { Shift } from '../models/shift-model';
 import ShiftsLayout from '../layouts/ShiftsLayout';
@@ -15,7 +15,7 @@ import { useShiftColumns } from '../hooks/useShiftColumns';
 import { useShiftQueries } from '../hooks/useShiftQueries';
 
 const ShiftsPage = () => {
-
+  const navigate = useNavigate();
   const { columns } = useShiftColumns();
   const { shiftQuery } = useShiftQueries({ branchId: 1 });
   const [data, setData] = useState<Shift[]>(shiftQuery.data || []);
@@ -47,16 +47,15 @@ const ShiftsPage = () => {
       isLoading: shiftQuery.isFetching,
     },
     // CUSTOMIZATIONS
-    // muiTableBodyRowProps: ({ row }) => ({
-    //   onDoubleClick: () =>
-    //     navigate(`/disponibilidad/operadores/detalles/${row.original.id}`),
-    //   sx: { cursor: 'pointer' },
-    // }),
+    muiTableBodyRowProps: ({ row }) => ({
+      onDoubleClick: () => navigate(`/turnos/detalles/${row.original.id}`),
+      sx: { cursor: 'pointer' },
+    }),
     muiRowDragHandleProps: ({ table, row }) => ({
       disabled: row.original.locked,
       onDragEnd: () => {
         const { draggingRow, hoveredRow } = table.getState();
-        
+
         if (hoveredRow && draggingRow) {
           data.splice(
             (hoveredRow as MRT_Row<Shift>).index,
@@ -68,23 +67,23 @@ const ShiftsPage = () => {
       },
     }),
     renderTopToolbarCustomActions: () => (
-      <div className='flex items-center gap-4'>
+      <div className="flex items-center gap-4">
         <Tooltip arrow title="Refrescar">
           <IconButton onClick={() => shiftQuery.refetch()}>
             <RefreshIcon />
           </IconButton>
         </Tooltip>
-          <AddButton size='sm' label='Ingresar turno'/>
-          <Button 
-            size='sm'
-            variant='faded'
-            color='warning'
-            className='font-bold'
-            startContent={<HiQueueList />}
-          >
-            Operadores En Cola
-          </Button>
-          <ExportExcelButton size='sm' label='Exportar'/>
+        <AddButton size="sm" label="Ingresar turno" />
+        <Button
+          size="sm"
+          variant="faded"
+          color="warning"
+          className="font-bold"
+          startContent={<HiQueueList />}
+        >
+          Operadores En Cola
+        </Button>
+        <ExportExcelButton size="sm" label="Exportar" />
       </div>
     ),
     muiTableContainerProps: {
@@ -92,19 +91,13 @@ const ShiftsPage = () => {
         height: 'calc(100vh - 195px)',
       },
     },
-    muiTableBodyRowProps: {
-      sx: {
-        cursor: 'pointer',
-        borderBottom: 'none',
-      },
-    },
     defaultColumn: {
       muiTableBodyCellProps: {
         sx: {
           padding: '2px',
         },
-      }
-    }
+      },
+    },
   });
 
   return (
