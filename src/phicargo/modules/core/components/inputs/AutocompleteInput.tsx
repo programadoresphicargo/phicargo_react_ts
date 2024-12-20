@@ -62,6 +62,7 @@ export const AutocompleteInput = <T extends FieldValues>(
             onInputChange={setSearchInput}
             isDisabled={isDisabled}
             placeholder={placeholder}
+            selectedKey={value ? String(value) : ''}
             onSelectionChange={(key) => onChange(handleSelectChange(key as string))}
             isInvalid={fieldState.invalid}
             errorMessage={fieldState.error ? fieldState.error.message : null}

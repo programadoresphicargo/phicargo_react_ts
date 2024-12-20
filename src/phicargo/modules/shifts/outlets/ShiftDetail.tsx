@@ -3,9 +3,9 @@ import { Navigate, useNavigate, useParams } from 'react-router-dom';
 
 import { DatePickerInput } from '../../core/components/inputs/DatePickerInput';
 import { Dayjs } from 'dayjs';
-import { DriverSearchInput } from '../components/inputs/DriverSearchInput';
+import { DriverSearchInput } from '../../core/components/inputs/DriverSearchInput';
 import { TextareaInput } from '../../core/components/inputs/TextareaInput';
-import { VehicleSearchInput } from '../components/inputs/VehicleSearchInput';
+import { VehicleSearchInput } from '../../core/components/inputs/VehicleSearchInput';
 import { useForm } from 'react-hook-form';
 import { useMemo } from 'react';
 import { useShiftQueries } from '../hooks/useShiftQueries';

@@ -1,5 +1,5 @@
 import { Control, FieldValues, Path } from 'react-hook-form';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { AutocompleteInput } from '@/phicargo/modules/core/components/inputs/AutocompleteInput';
 import { Driver } from '@/phicargo/modules/availability/models/driver-model';
@@ -22,10 +22,12 @@ interface Props<T extends FieldValues> {
   control: Control<T, any>;
   name: Path<T>;
   label?: string;
+  required?: boolean;
+  driverId?: number | null;
 }
 
 export const DriverSearchInput = <T extends FieldValues>(props: Props<T>) => {
-  const { control, name, label } = props;
+  const { control, name, label, driverId, required } = props;
 
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
@@ -33,6 +35,11 @@ export const DriverSearchInput = <T extends FieldValues>(props: Props<T>) => {
   const [data, setData] = useState<SelectItem[]>([]);
 
   const { driversQuery } = useDriverQueries();
+
+  const driver = useMemo(
+    () => (driverId ? driversQuery.data?.find((v) => v.id === driverId) : null),
+    [driverId, driversQuery.data],
+  );
 
   useEffect(() => {
     if (debouncedSearchTerm !== '') {
@@ -53,9 +60,9 @@ export const DriverSearchInput = <T extends FieldValues>(props: Props<T>) => {
       label={label || 'Operador'}
       items={data}
       isLoading={driversQuery.isFetching}
-      searchInput={searchTerm}
+      searchInput={searchTerm ? searchTerm : driver?.name || ''}
       setSearchInput={setSearchTerm}
-      rules={{ required: 'Operador obligatorio' }}
+      rules={ required ? { required: 'Operador obligatorio' } : {} }
     />
   );
 };
