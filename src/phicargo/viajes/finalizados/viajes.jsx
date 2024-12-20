@@ -27,8 +27,11 @@ const ViajesFinalizados = ({ }) => {
   const [open, setOpen] = React.useState(false);
   const { id_viaje, viaje, getViaje, loading, error, ActualizarIDViaje } = useContext(ViajeContext);
 
-  const [mes, setMes] = useState('11');
-  const [año, setAño] = useState('2024');
+  const mesActual = String(new Date().getMonth() + 1).padStart(2, '0');
+  const [mes, setMes] = useState(mesActual);
+  
+  const añoActual = String(new Date().getFullYear());
+  const [año, setAño] = useState(añoActual);
 
   const handleChangeAño = (e) => {
     setAño(e.target.value);
