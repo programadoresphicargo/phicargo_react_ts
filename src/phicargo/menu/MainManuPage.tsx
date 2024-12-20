@@ -145,12 +145,16 @@ const MainMenuPage = () => {
       }
     };
 
-    // Ejecutar cada minuto
-    checkSession(); // Llamada inicial
-    const intervalId = setInterval(checkSession, 60000); // 60000 ms = 1 minuto
+    // Temporizador para ejecutar checkSession después de 1 minuto
+    const timeoutId = setTimeout(() => {
+      checkSession(); // Llamada inicial después de 1 minuto
+      const intervalId = setInterval(checkSession, 60000); // Ejecutar cada minuto
+      // Limpiar intervalo al desmontar el componente
+      return () => clearInterval(intervalId);
+    }, 60000); // 60000 ms = 1 minuto
 
-    // Limpiar el intervalo al desmontar el componente
-    return () => clearInterval(intervalId);
+    // Limpiar timeout al desmontar el componente
+    return () => clearTimeout(timeoutId);
   }, []);
 
   return (
