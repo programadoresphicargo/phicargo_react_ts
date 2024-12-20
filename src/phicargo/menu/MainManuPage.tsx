@@ -134,7 +134,6 @@ const MainMenuPage = () => {
             position: "top-right",
             autoClose: 3000,
           });
-          onLogout();
         }
       } catch (error) {
         console.error("Error checking session:", error);
