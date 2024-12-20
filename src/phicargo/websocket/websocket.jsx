@@ -14,7 +14,7 @@ const WebSocketWithToast = () => {
             if (selectedVoice) {
                 utterance.voice = selectedVoice;
             }
-            window.speechSynthesis.speak(utterance);
+            //window.speechSynthesis.speak(utterance);
         } else {
             console.warn("La API SpeechSynthesis no es compatible con este navegador.");
         }
@@ -68,7 +68,7 @@ const WebSocketWithToast = () => {
         webSocket.onmessage = (event) => {
             try {
                 const data = JSON.parse(event.data);
-                if (data.type === "pong") {
+                if (data.type === "pong" || data.type === 'ping') {
                     console.log("Pong recibido del servidor.");
                     return; // Ignorar el mensaje si es una respuesta al ping
                 }

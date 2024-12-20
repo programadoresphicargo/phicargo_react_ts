@@ -3,6 +3,7 @@ import { TextField, Button, MenuItem, Select, InputLabel, FormControl, Grid } fr
 import axios from "axios";
 import { toast } from 'react-toastify';
 import Stack from '@mui/material/Stack';
+import odooApi from "../modules/core/api/odoo-api";
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const OperadorForm = ({ id_operador, onClose }) => {
@@ -41,12 +42,7 @@ const OperadorForm = ({ id_operador, onClose }) => {
 
     const getUsuario = async () => {
         try {
-            const response = await fetch(VITE_PHIDES_API_URL + "/operadores/getOperador.php", {
-                method: 'POST',
-                body: new URLSearchParams({
-                    'id_operador': id_operador
-                }),
-            });
+            const response = odooApi.get('/drivers/' + id_operador);
             const jsonData = await response.json();
             const data = await jsonData[0];
             setNombreOperador(data.name);
