@@ -85,15 +85,7 @@ const WebSocketWithToast = () => {
                     audioRef.current.play();
                 }
             } catch (error) {
-                const message = `Mensaje recibido catch: ${event.data}`;
                 console.error("Error al procesar el mensaje:", error);
-                toast.info(message, { autoClose: 5000 });
-                speakMessage(message);
-                showPushNotification("Mensaje recibido", message);
-
-                if (audioRef.current) {
-                    audioRef.current.play();
-                }
             }
         };
 
