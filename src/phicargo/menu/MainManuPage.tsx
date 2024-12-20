@@ -125,10 +125,7 @@ const MainMenuPage = () => {
         const data = await response.json();
         // Mostrar respuesta en Toast
         if (data.status === "success") {
-          toast.success(`Sesión activa: UserID ${data.userID}`, {
-            position: "top-right",
-            autoClose: 3000, // Cierra automáticamente después de 3 segundos
-          });
+          console.log(`Sesión activa: UserID ${data.userID}`);
         } else {
           toast.error(data.message, {
             position: "top-right",
