@@ -15,7 +15,6 @@ import viajes_img from '../../assets/menu/viajes.png';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import { Grid } from '@mui/system';
-import { toast } from 'react-toastify';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 type MenuItemType = {
