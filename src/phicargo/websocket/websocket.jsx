@@ -68,11 +68,14 @@ const WebSocketWithToast = () => {
         webSocket.onmessage = (event) => {
             try {
                 const data = JSON.parse(event.data);
+
+                // Manejar mensajes de tipo 'ping' o 'pong'
                 if (data.type === "pong" || data.type === 'ping') {
-                    console.log("Pong recibido del servidor.");
+                    console.log(`Mensaje ${data.type} recibido del servidor.`);
                     return; // Ignorar el mensaje si es una respuesta al ping
                 }
 
+                // Procesar otros mensajes
                 const message = data.message || "Nuevo mensaje recibido";
                 toast.success(`Notificación: ${message}`, { autoClose: 5000 });
                 speakMessage(message);
@@ -81,8 +84,9 @@ const WebSocketWithToast = () => {
                 if (audioRef.current) {
                     audioRef.current.play();
                 }
-            } catch {
+            } catch (error) {
                 const message = `Mensaje recibido: ${event.data}`;
+                console.error("Error al procesar el mensaje:", error);
                 toast.info(message, { autoClose: 5000 });
                 speakMessage(message);
                 showPushNotification("Mensaje recibido", message);
