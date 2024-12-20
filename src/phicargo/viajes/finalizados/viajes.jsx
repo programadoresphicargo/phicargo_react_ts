@@ -9,14 +9,14 @@ import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 import Viaje from '../viaje';
 import { Box } from '@mui/material';
-const { VITE_PHIDES_API_URL } = import.meta.env;
-
+import { Chip } from '@nextui-org/react';
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
 import { ViajeContext } from '../context/viajeContext';
 import NavbarViajes from '../navbar';
+const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -91,6 +91,10 @@ const ViajesFinalizados = ({ }) => {
         header: 'Referencia',
       },
       {
+        accessorKey: 'cartas_porte',
+        header: 'Cartas porte',
+      },
+      {
         accessorKey: 'vehiculo',
         header: 'Vehiculo',
       },
@@ -102,11 +106,14 @@ const ViajesFinalizados = ({ }) => {
         accessorKey: 'pod_enviado',
         header: 'POD',
         Cell: ({ cell }) => {
-          return cell.getValue() !== null ? (
-            <span className="badge bg-success rounded-pill" style={{ width: '60px' }}>
-              Enviado
-            </span>
-          ) : null;
+          var valor = cell.getValue();
+          var bg = valor === 'enviado' ? 'bg-success' : 'bg-primary';
+
+          return (
+            <Chip className={`badge ${bg} rounded-pill text-white`} style={{ width: '80px' }}>
+              {valor}
+            </Chip>
+          );
         },
       },
       {
@@ -126,7 +133,7 @@ const ViajesFinalizados = ({ }) => {
         header: 'Armado',
         Cell: ({ cell }) => {
           const tipoMovimiento = cell.getValue();
-          let badgeClass = 'badge rounded-pill ';
+          let badgeClass = 'badge rounded-pill text-white ';
 
           if (tipoMovimiento === 'single') {
             badgeClass += 'bg-success';
@@ -137,9 +144,9 @@ const ViajesFinalizados = ({ }) => {
           }
 
           return (
-            <span className={badgeClass} style={{ width: '60px' }}>
+            <Chip className={badgeClass} style={{ width: '60px' }}>
               {tipoMovimiento}
-            </span>
+            </Chip>
           );
         },
       },
@@ -148,7 +155,7 @@ const ViajesFinalizados = ({ }) => {
         header: 'Modalidad',
         Cell: ({ cell }) => {
           const tipoMovimiento = cell.getValue();
-          let badgeClass = 'badge rounded-pill ';
+          let badgeClass = 'badge rounded-pill text-white ';
 
           if (tipoMovimiento === 'imp') {
             badgeClass += 'bg-warning';
@@ -159,9 +166,9 @@ const ViajesFinalizados = ({ }) => {
           }
 
           return (
-            <span className={badgeClass} style={{ width: '60px' }}>
+            <Chip className={badgeClass} style={{ width: '60px' }}>
               {tipoMovimiento}
-            </span>
+            </Chip>
           );
         },
       },
@@ -181,6 +188,7 @@ const ViajesFinalizados = ({ }) => {
     columnResizeMode: "onEnd",
     initialState: {
       density: 'compact',
+      showColumnFilters: true,
       pagination: { pageSize: 80 },
     },
     muiTablePaperProps: {
@@ -214,7 +222,7 @@ const ViajesFinalizados = ({ }) => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 230px)',
+        maxHeight: 'calc(100vh - 190px)',
       },
     },
     renderTopToolbarCustomActions: ({ table }) => (
@@ -259,6 +267,7 @@ const ViajesFinalizados = ({ }) => {
       <NavbarViajes />
       <MaterialReactTable
         table={table}
+        enableStickyHeader={true} // Opcional: si deseas un encabezado fijo
       />
 
       <Dialog

@@ -9,7 +9,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 import Viaje from '../viaje';
 import { Box } from '@mui/material';
-
+import { Chip } from '@nextui-org/react';
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -112,18 +112,18 @@ const ViajesProgramados = ({ }) => {
         header: 'Correos ligados',
         Cell: ({ cell }) => {
           const value = cell.getValue();
-          let badgeClass = 'badge rounded-pill ';
+          let badgeClass = 'badge rounded-pill text-white ';
 
           if (value === 'Correos ligados') {
-            badgeClass += 'bg-primary';
+            badgeClass += 'bg-primary text-white';
           } else {
-            badgeClass += 'bg-secondary';
+            badgeClass += 'bg-secondary text-white';
           }
 
           return (
-            <span className={badgeClass} style={{ width: '100px' }}>
+            <Chip className={badgeClass} style={{ width: '100px' }}>
               {value}
-            </span>
+            </Chip>
           );
         },
       },
@@ -225,6 +225,11 @@ const ViajesProgramados = ({ }) => {
         fontFamily: 'Inter',
         fontWeight: 'normal',
         fontSize: '14px',
+      },
+    },
+    muiTableContainerProps: {
+      sx: {
+        maxHeight: 'calc(100vh - 190px)',
       },
     },
     renderTopToolbarCustomActions: ({ table }) => (
