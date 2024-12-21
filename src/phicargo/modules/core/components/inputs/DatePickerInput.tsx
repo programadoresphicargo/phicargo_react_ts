@@ -22,7 +22,8 @@ export const DatePickerInput = <T extends FieldValues>(
     label, 
     rules, 
     hideTimeZone, 
-    initialValue 
+    initialValue,
+    isDisabled
   } = props;
 
   const initial = useMemo(() => {
@@ -45,6 +46,7 @@ export const DatePickerInput = <T extends FieldValues>(
             variant="flat"
             hideTimeZone={hideTimeZone || true}
             showMonthAndYearPickers
+            isDisabled={isDisabled}
             size="sm"
             name={name}
             defaultValue={initial}

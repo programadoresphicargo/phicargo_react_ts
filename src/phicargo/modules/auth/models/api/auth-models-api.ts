@@ -27,3 +27,8 @@ export interface SessionApi {
   user: UserApi;
   token: TokenApi;
 }
+
+export interface UserBasicApi {
+  id_usuario: number;
+  usuario: string;
+}

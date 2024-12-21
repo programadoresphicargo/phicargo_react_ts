@@ -5,6 +5,7 @@ import { LoadingPage } from '../../core/pages/LoadingPage';
 
 const ShiftsPage = lazy(() => import('../pages/ShiftsPage'));
 const ShiftDetail = lazy(() => import('../outlets/ShiftDetail'));
+const CreateShift = lazy(() => import('../outlets/CreateShift'));
 
 const ShiftsRoutes = () => {
   return (
@@ -22,6 +23,14 @@ const ShiftsRoutes = () => {
           element={
             <Suspense fallback={null}>
               <ShiftDetail />
+            </Suspense>
+          }
+        />
+        <Route
+          path="crear"
+          element={
+            <Suspense fallback={null}>
+              <CreateShift />
             </Suspense>
           }
         />

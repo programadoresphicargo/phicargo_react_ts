@@ -73,7 +73,11 @@ const ShiftsPage = () => {
             <RefreshIcon />
           </IconButton>
         </Tooltip>
-        <AddButton size="sm" label="Ingresar turno" />
+        <AddButton 
+          size="sm" 
+          label="Ingresar turno" 
+          onPress={() => navigate('/turnos/crear')}
+        />
         <Button
           size="sm"
           variant="faded"

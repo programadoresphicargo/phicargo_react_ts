@@ -44,3 +44,8 @@ export interface Session {
   token: Token;
 }
 
+export interface UserBasic {
+  id: number;
+  username: string;
+}
+
