@@ -27,7 +27,7 @@ const reports: MenuItemType[] = [
     label: 'Reporte gerencial',
     path: VITE_PHIDES_API_URL + '/informe_seguimiento/informe/index.php',
     icon: reportIcon,
-    requiredPermissions: [198],
+    requiredPermissions: [],
     isExternal: true
   },
   {
