@@ -125,8 +125,10 @@ export const useJourneyDialogs = () => {
                 getViaje(id_viaje);
                 if (id_estatus == 1) {
                     cambiar_estado_equipo('viaje');
+                    cambiar_estado_operador('viaje');
                 } else if (id_estatus == 103) {
                     cambiar_estado_equipo('disponible');
+                    cambiar_estado_operador('disponible');
                 }
 
             } else {
@@ -157,13 +159,6 @@ export const useJourneyDialogs = () => {
                 toast.success('Proceso correcto.', { id: loadingToast });
                 getHistorialEstatus();
                 getViaje(id_viaje);
-                if (id_estatus == 1) {
-                    cambiar_estado_equipo('viaje');
-                    cambiar_estado_operador('viaje');
-                } else if (id_estatus == 103) {
-                    cambiar_estado_equipo('disponible');
-                    cambiar_estado_operador('disponible');
-                }
 
             } else {
                 toast.error('Error: ' + response.data, { id: loadingToast });
