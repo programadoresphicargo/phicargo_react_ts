@@ -54,7 +54,6 @@ const ReporteCumplimiento = lazy(
 );
 const Accesos = lazy(() => import('../phicargo/accesos/Accesos'));
 const EntregaMonitoreo = lazy(() => import('../phicargo/monitoreo/monitoreo'));
-const EventosMonitoreo = lazy(() => import('../phicargo/monitoreo/Eventos_pendientes'));
 
 const DetencionesTable = lazy(
   () => import('../phicargo/reportes/llegadas_tarde/llegadas_tarde'),
