@@ -35,7 +35,7 @@ const CreateShift = () => {
     defaultValues: initialValues,
   });
 
-  const { createShift } = useShiftQueries({ branchId: 1 });
+  const { createShift } = useShiftQueries();
 
   const driverId = watch('driverId');
   const vehicleId = watch('vehicleId');

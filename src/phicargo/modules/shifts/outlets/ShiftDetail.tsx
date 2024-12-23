@@ -17,6 +17,7 @@ import { ManeuverTimeline } from '../components/ManeuverTimeline';
 import { MdOutlineArchive } from 'react-icons/md';
 import { MdOutlineLock } from 'react-icons/md';
 import { MdOutlineLockOpen } from 'react-icons/md';
+import { QueueDialog } from '../components/QueueDialog';
 import { useShiftQueries } from '../hooks/useShiftQueries';
 
 const ShiftDetail = () => {
@@ -24,10 +25,9 @@ const ShiftDetail = () => {
   const { id } = useParams();
   const [formEnabled, setFormEnabled] = useState(false);
   const [archiveDialogOpen, setArchiveDialogOpen] = useState(false);
+  const [queueDialogOpen, setQueueDialogOpen] = useState(false);
 
-  const { shiftQuery, editShift } = useShiftQueries({
-    branchId: 1,
-  });
+  const { shiftQuery, editShift } = useShiftQueries();
 
   const shift = useMemo(
     () => (shiftQuery.data || []).find((s) => s.id === Number(id)),
@@ -118,6 +118,7 @@ const ShiftDetail = () => {
                     startContent={
                       <HiQueueList style={{ transform: 'rotate(180deg)' }} />
                     }
+                    onPress={() => setQueueDialogOpen(true)}
                   >
                     Enviar a la cola
                   </Button>
@@ -128,7 +129,7 @@ const ShiftDetail = () => {
                   </div>
 
                   <div className="w-7/12 border-2 rounded-lg p-3 max-h-[445px] overflow-y-auto">
-                    <ManeuverTimeline />
+                    {shift && <ManeuverTimeline driverId={shift.driver.id} />}
                   </div>
                 </div>
               </ModalBody>
@@ -140,6 +141,13 @@ const ShiftDetail = () => {
         <ArchiveDialog
           isOpen={archiveDialogOpen}
           onClose={() => setArchiveDialogOpen(false)}
+          shiftId={shift.id}
+        />
+      )}
+      {shift && (
+        <QueueDialog
+          isOpen={queueDialogOpen}
+          onClose={() => setQueueDialogOpen(false)}
           shiftId={shift.id}
         />
       )}

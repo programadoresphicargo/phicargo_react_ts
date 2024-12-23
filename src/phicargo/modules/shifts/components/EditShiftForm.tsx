@@ -36,7 +36,7 @@ export const EditShiftForm = ({ shift, enabled }: Props) => {
   const driverId = watch('driverId');
   const vehicleId = watch('vehicleId');
 
-  const { editShift } = useShiftQueries({ branchId: 1 });
+  const { editShift } = useShiftQueries();
 
   const onSubmit: SubmitHandler<ShiftEdit> = (data) => {
     if (!shift) {

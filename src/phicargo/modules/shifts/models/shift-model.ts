@@ -42,6 +42,8 @@ export interface Shift extends ShiftBase {
   registerUser: UserBasic;
 }
 
+export type ShiftSimple = Pick<Shift, 'id' | 'shift' | 'arrivalAt' | 'driver'>;
+
 export interface ShiftCreate {
   branchId: number;
   vehicleId: number;

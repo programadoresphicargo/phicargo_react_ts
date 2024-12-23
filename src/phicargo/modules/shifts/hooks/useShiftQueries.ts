@@ -3,15 +3,13 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { Shift } from '../models';
 import ShiftServiceApi from '../services/shifts-service';
 import toast from 'react-hot-toast';
+import { useShiftsContext } from './useShiftsContext';
 
 const mainKey = 'shifts';
 
-interface Options {
-  branchId?: number;
-}
-
-export const useShiftQueries = ({ branchId }: Options) => {
+export const useShiftQueries = () => {
   const queryClient = useQueryClient();
+  const { branchId } = useShiftsContext();
 
   const shiftQuery = useQuery<Shift[]>({
     queryKey: [mainKey, branchId],

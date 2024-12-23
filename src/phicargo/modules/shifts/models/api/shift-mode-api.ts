@@ -41,6 +41,8 @@ export interface ShiftApi extends ShiftBaseApi {
   register_user: UserBasicApi;
 }
 
+export type ShiftSimpleApi = Pick<ShiftApi, 'id' | 'shift' | 'arrival_at' | 'driver'>;
+
 export interface ShiftCreateApi {
   branch_id: number;
   vehicle_id: number;

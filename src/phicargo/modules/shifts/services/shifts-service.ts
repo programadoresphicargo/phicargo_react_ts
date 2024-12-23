@@ -1,4 +1,7 @@
+import { Maneuver, ManeuverApi } from '../../core/models';
 import type {
+  Queue,
+  QueueCreate,
   Shift,
   ShiftApi,
   ShiftArchive,
@@ -10,9 +13,15 @@ import {
   shiftEditToApi,
   shiftToLocal,
 } from '../adapters/shift-adapter';
+import {
+  shiftQueueCreateToApi,
+  shiftQueueToLocal,
+} from '../adapters/shift-queue-adapter';
 
 import { AxiosError } from 'axios';
-import { UpdatableItem } from '../../core/types/global-types';
+import { QueueApi } from '../models/api/shift-queue-model-api';
+import type { UpdatableItem } from '../../core/types/global-types';
+import { maneuverToLocal } from '../../core/adapters/maneuver-adapters';
 import odooApi from '../../core/api/odoo-api';
 
 /**
@@ -113,6 +122,99 @@ class ShiftServiceApi {
         );
       }
       throw new Error('Error al crear el turno');
+    }
+  }
+
+  /**
+   * Method to get all the queues
+   * @returns List of queues
+   */
+  public static async getAllQueues(branchId: number = 1): Promise<Queue[]> {
+    const url = `/shifts/queue/all?branch_id=${branchId}`;
+
+    try {
+      const response = await odooApi.get<QueueApi[]>(url);
+      return response.data.map(shiftQueueToLocal);
+    } catch (error) {
+      console.log(error);
+      if (error instanceof AxiosError) {
+        throw new Error(
+          error.response?.data?.detail || 'Error al obtener las colas',
+        );
+      }
+      throw new Error('Error al obtener las colas');
+    }
+  }
+
+  /**
+   * Method to create a new queue
+   * @param param0 Object with the data to create a new queue
+   * @returns Object with the data of the new queue
+   */
+  public static async createShiftQueue({
+    shiftId,
+    queueData,
+  }: {
+    shiftId: number;
+    queueData: QueueCreate;
+  }): Promise<Queue> {
+    const url = `/shifts/${shiftId}/queue`;
+    const data = shiftQueueCreateToApi(queueData);
+    try {
+      const response = await odooApi.post(url, data);
+      return shiftQueueToLocal(response.data);
+    } catch (error) {
+      console.log(error);
+      if (error instanceof AxiosError) {
+        throw new Error(
+          error.response?.data?.detail || 'Error al encolar el turno',
+        );
+      }
+      throw new Error('Error al encolar el turno');
+    }
+  }
+
+  /**
+   * Method to release a queue
+   * @param queueId ID for the queue to release
+   */
+  public static async releaseQueue(queueId: number): Promise<void> {
+    const url = `/shifts/queue/${queueId}/release`;
+
+    try {
+      await odooApi.put(url);
+    } catch (error) {
+      console.log(error);
+      if (error instanceof AxiosError) {
+        throw new Error(
+          error.response?.data?.detail || 'Error al liberar el turno',
+        );
+      }
+      throw new Error('Error al liberar el turno');
+    }
+  }
+
+  /**
+   * Method to get the maneuvers of a driver
+   * @param driverId ID of the driver to get the maneuvers
+   * @returns Array of maneuvers
+   */
+  public static async getManeuversByDriverId(
+    driverId: number,
+  ): Promise<Maneuver[]> {
+    const url = `/maneuvers/by_driver/${driverId}`;
+
+    try {
+      const response = await odooApi.get<ManeuverApi[]>(url);
+      return response.data.map(maneuverToLocal);
+    } catch (error) {
+      console.log(error);
+      if (error instanceof AxiosError) {
+        throw new Error(
+          error.response?.data?.detail || 'Error al obtener los maniobras',
+        );
+      }
+      throw new Error('Error al obtener los maniobras');
     }
   }
 }

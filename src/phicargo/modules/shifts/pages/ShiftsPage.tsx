@@ -17,7 +17,7 @@ import { useShiftQueries } from '../hooks/useShiftQueries';
 const ShiftsPage = () => {
   const navigate = useNavigate();
   const { columns } = useShiftColumns();
-  const { shiftQuery } = useShiftQueries({ branchId: 1 });
+  const { shiftQuery } = useShiftQueries();
   const [data, setData] = useState<Shift[]>(shiftQuery.data || []);
 
   useEffect(() => {
@@ -84,6 +84,7 @@ const ShiftsPage = () => {
           color="warning"
           className="font-bold"
           startContent={<HiQueueList />}
+          onPress={() => navigate('/turnos/cola')}
         >
           Operadores En Cola
         </Button>

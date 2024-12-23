@@ -23,7 +23,7 @@ const initialState: ShiftArchive = {
 };
 
 export const ArchiveDialog = ({ isOpen, onClose, shiftId }: Props) => {
-  const { archiveShift } = useShiftQueries({ branchId: 1 });
+  const { archiveShift } = useShiftQueries();
 
   const { control, handleSubmit } = useForm({
     defaultValues: initialState,

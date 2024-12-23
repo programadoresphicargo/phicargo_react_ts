@@ -7,6 +7,8 @@ import type {
   ShiftCreateApi,
   ShiftEdit,
   ShiftEditApi,
+  ShiftSimple,
+  ShiftSimpleApi,
   VehicleInfo,
   VehicleInfoApi,
 } from '../models';
@@ -59,6 +61,18 @@ export const shiftToLocal = (shift: ShiftApi): Shift => ({
   vehicle: vehicleInfoToLocal(shift.vehicle),
   branch: shift.res_store,
   registerUser: userBasicToLocal(shift.register_user),
+});
+
+/**
+ * Mapper to convert the data of a shift from the API to the local model
+ * @param shift Object with the data of the shift
+ * @returns Object with the data of the shift
+ */
+export const shiftSimpleToLocal = (shift: ShiftSimpleApi): ShiftSimple => ({
+  id: shift.id,
+  shift: shift.shift,
+  arrivalAt: dayjs(shift.arrival_at),
+  driver: driverInfoToLocal(shift.driver),
 });
 
 /**
