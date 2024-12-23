@@ -2,8 +2,6 @@ import { Navigate, Route } from 'react-router-dom';
 import { Suspense, lazy, memo } from 'react';
 
 import { LoadingPage } from '../../core/pages/LoadingPage';
-import Disponibilidad_unidades from '../../../disponiblidad/equipos/equipos';
-
 const VehicleAvailabilityPage = lazy(() => import('../pages/VehicleAvailabilityPage').then(module => ({
   default: memo(module.default),
 })));
