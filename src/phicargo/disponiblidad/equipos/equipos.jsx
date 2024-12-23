@@ -17,6 +17,8 @@ import {
 } from 'material-react-table';
 import { toast } from 'react-toastify';
 import ManiobrasNavBar from '../../maniobras/Navbar';
+import { Chip } from '@nextui-org/react';
+const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const Disponibilidad_unidades = () => {
     const [isLoading2, setLoading] = useState();
@@ -29,7 +31,7 @@ const Disponibilidad_unidades = () => {
     const fetchData = async () => {
         setLoading(true);
         try {
-            const response = await fetch('/phicargo/disponibilidad/equipos/getEquipos.php');
+            const response = await fetch(VITE_PHIDES_API_URL + '/disponibilidad/equipos/getEquipos.php');
             const jsonData = await response.json();
             setData(jsonData);
             setLoading(false);
@@ -65,7 +67,7 @@ const Disponibilidad_unidades = () => {
                 header: 'Estado',
                 Cell: ({ cell }) => {
                     const estado = cell.getValue() || 'desconocido';
-                    let badgeClass = 'badge rounded-pill ';
+                    let badgeClass = 'badge rounded-pill text-white ';
 
                     if (estado === 'viaje') {
                         badgeClass += 'bg-primary';
@@ -76,9 +78,9 @@ const Disponibilidad_unidades = () => {
                     }
 
                     return (
-                        <span className={badgeClass} style={{ width: '100px' }}>
+                        <Chip className={badgeClass} style={{ width: '100px' }}>
                             {estado} {/* Cambiado {{ estado }} a {estado} */}
-                        </span>
+                        </Chip>
                     );
                 },
             },
@@ -103,7 +105,7 @@ const Disponibilidad_unidades = () => {
     const handleUpdateStatus = async () => {
         setIsUpdating(true);
         try {
-            const response = await fetch('/phicargo/disponibilidad/equipos/guardar_cambios.php', {
+            const response = await fetch(VITE_PHIDES_API_URL + '/disponibilidad/equipos/guardar_cambios.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -159,6 +161,11 @@ const Disponibilidad_unidades = () => {
                 fontFamily: 'Inter',
                 fontWeight: 'normal',
                 fontSize: '14px',
+            },
+        },
+        muiTableContainerProps: {
+            sx: {
+                maxHeight: 'calc(100vh - 176px)',
             },
         },
     });
