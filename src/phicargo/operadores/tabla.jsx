@@ -64,10 +64,6 @@ const Operadores = ({ estado }) => {
         accessorKey: 'name',
         header: 'Operador',
       },
-      {
-        accessorKey: 'password',
-        header: 'Contraseña app',
-      },
     ],
     [],
   );
