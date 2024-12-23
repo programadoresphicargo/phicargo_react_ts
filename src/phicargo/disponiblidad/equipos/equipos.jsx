@@ -165,7 +165,6 @@ const Disponibilidad_unidades = () => {
 
     return (
         <div>
-            <ManiobrasNavBar />
             <ThemeProvider theme={customFontTheme}>
                 <MaterialReactTable table={table} />
             </ThemeProvider>
