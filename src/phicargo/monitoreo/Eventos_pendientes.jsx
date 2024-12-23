@@ -21,6 +21,7 @@ import axios from 'axios';
 import { Box } from '@mui/material';
 import { Button } from '@nextui-org/react';
 import { Chip } from '@nextui-org/react';
+import odooApi from '../modules/core/api/odoo-api';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 import {
@@ -29,12 +30,13 @@ import {
 } from 'material-react-table';
 import AuthContext from '../modules/auth/context/AuthContext';
 import { useAuthContext } from '../modules/auth/hooks';
+import MonitoreoNavbar from './Navbar';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const Entregas = ({ fecha }) => {
+const EventosPendientes = () => {
 
   const { session } = useAuthContext();
   const [open, setOpen] = React.useState(false);
@@ -55,9 +57,8 @@ const Entregas = ({ fecha }) => {
 
     try {
       setLoading(true);
-      const response = await fetch(VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/getEntregas.php?fecha=' + fecha);
-      const jsonData = await response.json();
-      setData(jsonData);
+      const response = await odooApi.get('/eventos/eventos_no_atendidos/');
+      setData(response.data);
       setLoading(false);
     } catch (error) {
       console.error('Error al obtener los datos:', error);
@@ -105,29 +106,21 @@ const Entregas = ({ fecha }) => {
 
   useEffect(() => {
     fetchData();
-  }, [fecha]);
+  }, []);
 
   const columns = useMemo(
     () => [
       {
-        accessorKey: 'id_entrega',
-        header: 'ID Entrega',
+        accessorKey: 'id_evento',
+        header: 'ID Evento',
       },
       {
-        accessorKey: 'abierto',
-        header: 'Fecha',
-      },
-      {
-        accessorKey: 'nombre_usuario',
-        header: 'Monitorista',
-      },
-      {
-        accessorKey: 'total_eventos',
-        header: 'Eventos',
+        accessorKey: 'sucursal',
+        header: 'Sucursal',
         Cell: ({ cell }) => {
           const value = cell.getValue();
           if (value != 0) {
-            let variant = 'danger';
+            let variant = 'primary';
             return (
               <Chip className={`badge bg-${variant} rounded-pill text-white`} style={{ width: '20px' }}>
                 {value}
@@ -138,8 +131,32 @@ const Entregas = ({ fecha }) => {
         },
       },
       {
-        accessorKey: 'estado',
-        header: 'Estado',
+        accessorKey: 'titulo',
+        header: 'Nombre',
+      },
+      {
+        accessorFn: (row) => row.usuario?.nombre,
+        header: 'Monitorista',
+      },
+      {
+        accessorKey: 'tipo_evento',
+        header: 'Tipo evento',
+        Cell: ({ cell }) => {
+          const value = cell.getValue();
+          if (value != 0) {
+            let variant = 'primary';
+            return (
+              <Chip className={`badge bg-${variant} rounded-pill text-white`} style={{ width: '20px' }}>
+                {value}
+              </Chip>
+            );
+          }
+
+        },
+      },
+      {
+        accessorKey: 'fecha_creacion',
+        header: 'fecha_creacion',
       },
     ],
     [],
@@ -201,7 +218,6 @@ const Entregas = ({ fecha }) => {
           flexWrap: 'wrap',
         }}
       >
-        <Button color='primary' onClick={ComprobarEntrega}>Nueva entrega</Button>
       </Box>
     ),
   });
@@ -236,14 +252,11 @@ const Entregas = ({ fecha }) => {
 
     </Dialog>
 
-    <Card>
-      <CardContent>
-        <MaterialReactTable table={table} />
-      </CardContent>
-    </Card>
+    <MonitoreoNavbar></MonitoreoNavbar>
+    <MaterialReactTable table={table} />
   </>
   );
 
 };
 
-export default Entregas;
+export default EventosPendientes;
