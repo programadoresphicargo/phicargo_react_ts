@@ -159,8 +159,10 @@ export const useJourneyDialogs = () => {
                 getViaje(id_viaje);
                 if (id_estatus == 1) {
                     cambiar_estado_equipo('viaje');
+                    cambiar_estado_operador('viaje');
                 } else if (id_estatus == 103) {
                     cambiar_estado_equipo('disponible');
+                    cambiar_estado_operador('disponible');
                 }
 
             } else {
@@ -234,6 +236,25 @@ export const useJourneyDialogs = () => {
             data.append('id_viaje', id_viaje);
             data.append('estado', estado);
             const response = await axios.post(VITE_PHIDES_API_URL + '/viajes/disponibilidad/cambiar_estados.php', data);
+            if (response.data.success) {
+                toast.success(response.data.message);
+            } else {
+                toast.error(response.data.message);
+            }
+
+        } catch (error) {
+            console.error('Error:', error);
+            toast.error('Error activando el viaje');
+            throw error;
+        }
+    };
+
+    const cambiar_estado_operador = async (estado) => {
+        try {
+            const data = new URLSearchParams();
+            data.append('id_viaje', id_viaje);
+            data.append('estado', estado);
+            const response = await axios.post(VITE_PHIDES_API_URL + '/viajes/disponibilidad/cambiar_estado_operador.php', data);
             if (response.data.success) {
                 toast.success(response.data.message);
             } else {
