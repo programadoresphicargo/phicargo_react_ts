@@ -49,6 +49,7 @@ export interface DriverEdit {
   licenseType?: string | null;
   modality?: Modality | null;
   isDangerous?: IsDangerous | null;
+  isActive?: boolean | null;
 }
 
 export interface DriverWithRealStatus extends Driver {

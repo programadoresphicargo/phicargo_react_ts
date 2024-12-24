@@ -1,4 +1,8 @@
-import type { Driver, DriverEdit, DriverSimple } from '../../models/driver-model';
+import type {
+  Driver,
+  DriverEdit,
+  DriverSimple,
+} from '../../models/driver-model';
 import type {
   DriverApi,
   DriverBaseApi,
@@ -37,16 +41,17 @@ const driverBaseToLocal = (driver: DriverBaseApi): DriverBase => ({
  */
 export const driverToLocal = (driver: DriverApi): Driver => ({
   ...driverBaseToLocal(driver),
-  vehicle: driver.vehicle.length > 0
-    ? {
-        id: driver.vehicle[0].id,
-        name: driver.vehicle[0].name2,
-        fleetType: driver.vehicle[0].fleet_type,
-        status: driver.vehicle[0].x_status,
-        modality: driver.vehicle[0].x_modalidad,
-        loadType: driver.vehicle[0].x_tipo_carga,
-      }
-    : null,
+  vehicle:
+    driver.vehicle.length > 0
+      ? {
+          id: driver.vehicle[0].id,
+          name: driver.vehicle[0].name2,
+          fleetType: driver.vehicle[0].fleet_type,
+          status: driver.vehicle[0].x_status,
+          modality: driver.vehicle[0].x_modalidad,
+          loadType: driver.vehicle[0].x_tipo_carga,
+        }
+      : null,
   permissions: driver.permissions.map(driverPermissionSimpleToLocal),
   travel: driver.tms_travel
     ? {
@@ -80,17 +85,36 @@ export const driverSimpleToLocal = (driver: DriverSimpleApi): DriverSimple => ({
 });
 
 /**
- * Mapper function to convert a DriverEdit object to a DriverEditApi object   
+ * Mapper function to convert a DriverEdit object to a DriverEditApi object
  * @param driver DriverEdit object from the local state
  * @returns DriverEditApi object to send to the API
  */
-export const driverUpdateToApi = (driver: DriverEdit): DriverEditApi => ({
-  job_id: driver.jobId,
-  tms_driver_license_id: driver.licenseId,
-  tms_driver_license_type: driver.licenseType,
-  x_modalidad: driver.modality,
-  x_peligroso_lic:
-    driver.isDangerous === 'SI' || driver.isDangerous === 'NO'
-      ? driver.isDangerous
-      : null,
-});
+export const driverUpdateToApi = (driver: DriverEdit): DriverEditApi => {
+  const driverApi: DriverEditApi = {};
+
+  if (driver.jobId) {
+    driverApi.job_id = driver.jobId;
+  }
+
+  if (driver.licenseId) {
+    driverApi.tms_driver_license_id = driver.licenseId;
+  }
+
+  if (driver.licenseType) {
+    driverApi.tms_driver_license_type = driver.licenseType;
+  }
+
+  if (driver.modality) {
+    driverApi.x_modalidad = driver.modality;
+  }
+
+  if (driver.isDangerous !== null || driver.isDangerous !== undefined) {
+    driverApi.x_peligroso_lic = driver.isDangerous ? 'SI' : 'NO';
+  }
+
+  if (driver.isActive !== null || driver.isActive !== undefined) {
+    driverApi.active = driver.isActive;
+  }
+
+  return driverApi;
+};
