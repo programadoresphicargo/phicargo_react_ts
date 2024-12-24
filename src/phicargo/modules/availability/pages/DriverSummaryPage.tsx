@@ -5,6 +5,24 @@ import { useDriverQueries } from '../hooks/useDriverQueries';
 import { useDriversSummaryColumns } from '../hooks/useDriversSummaryColumns';
 import { useMemo } from 'react';
 import { useTableState } from '../../core/hooks/useTableState';
+import type { DriverWithRealStatus } from '../models/driver-model';
+import { type ExportConfig, ExportToExcel } from '../../core/utilities/export-to-excel';
+
+const exportConf: ExportConfig<DriverWithRealStatus> = {
+  fileName: 'Resumen Operadores',
+  withDate: true,
+  sheetName: 'Resumen Operadores',
+  columns: [
+    { accessorFn: (data) => data.name, header: 'OPERADOR' },
+    { accessorFn: (data) => data.job.name, header: 'TIPO' },
+    { accessorFn: (data) => data.realStatus, header: 'ESTATUS REAL' },
+    { accessorFn: (data) => data.travel?.name, header: 'VIAJE' },
+    { accessorFn: (data) => data.maneuver?.type, header: 'MANIOBRA' },
+    { accessorFn: (data) => data.maneuver?.id, header: 'ID MANIOBRA' },
+  ],
+};
+
+const toExcel = new ExportToExcel(exportConf);
 
 const DriverSummaryPage = () => {
   const {
@@ -29,6 +47,7 @@ const DriverSummaryPage = () => {
     isLoading: isFetching,
     refetch,
     memoMode: 'cells',
+    onExportExcel: (data) => toExcel.exportData(data),
   });
 
   return <MaterialReactTable table={table} />;

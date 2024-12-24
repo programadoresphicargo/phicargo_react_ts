@@ -1,4 +1,4 @@
-import { Box, IconButton, Tooltip } from '@mui/material';
+import { IconButton, Tooltip } from '@mui/material';
 import {
   type MRT_ColumnDef,
   type MRT_RowData,
@@ -8,6 +8,7 @@ import {
 
 import RefreshIcon from '@mui/icons-material/Refresh';
 import type { TableState } from '../types/global-types';
+import ExportExcelButton from '../components/ui/ExportExcelButton';
 
 interface UseTableConfig<T extends MRT_RowData> {
   columns: MRT_ColumnDef<T>[];
@@ -20,6 +21,7 @@ interface UseTableConfig<T extends MRT_RowData> {
   customActions?: React.ReactNode;
   containerHeight?: string;
   memoMode?: 'cells' | 'rows' | undefined;
+  onExportExcel?: (data: T[]) => void;
 }
 
 export const useBaseTable = <T extends MRT_RowData>({
@@ -38,6 +40,7 @@ export const useBaseTable = <T extends MRT_RowData>({
   customActions,
   containerHeight = 'calc(100vh - 180px)',
   memoMode,
+  onExportExcel
 }: UseTableConfig<T>) => {
   return useMaterialReactTable<T>({
     // DATA
@@ -76,15 +79,24 @@ export const useBaseTable = <T extends MRT_RowData>({
           sx: { cursor: 'pointer' },
         })
       : undefined,
-    renderTopToolbarCustomActions: () => (
-      <Box>
+    renderTopToolbarCustomActions: ({ table }) => (
+      <div className="flex items-center gap-4">
         <Tooltip arrow title="Refrescar">
           <IconButton onClick={refetch}>
             <RefreshIcon />
           </IconButton>
         </Tooltip>
+        {onExportExcel && (
+          <ExportExcelButton 
+            label={"Exportar"} 
+            size='sm' 
+            variant='faded'
+            isDisabled={data.length === 0}
+            onPress={() => onExportExcel(table.getRowModel().rows.map((row) => row.original))}
+          />
+        )}
         {customActions}
-      </Box>
+      </div>
     ),
     muiTableContainerProps: {
       sx: {
