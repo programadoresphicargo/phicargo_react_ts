@@ -42,15 +42,15 @@ const OperadorForm = ({ id_operador, onClose }) => {
 
     const getUsuario = async () => {
         try {
-            const response = odooApi.get('/drivers/' + id_operador);
-            const jsonData = await response.json();
-            const data = await jsonData[0];
-            setNombreOperador(data.name);
-            setPassword(data.password);
+            const response = await odooApi.get('/drivers/' + id_operador);
+            setNombreOperador(response.data.name);
+            setPassword(response.data.password);
+
         } catch (error) {
             toast.error("Error enviando los datos: " + error);
         }
     };
+
 
     useEffect(() => {
         getUsuario();
@@ -89,7 +89,6 @@ const OperadorForm = ({ id_operador, onClose }) => {
                     <TextField
                         fullWidth
                         variant="outlined"
-                        type="password"
                         label="Contraseña"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}

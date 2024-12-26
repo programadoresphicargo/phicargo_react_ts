@@ -21,6 +21,7 @@ import { ToastContainer } from 'react-toastify';
 import { Toaster } from 'react-hot-toast';
 import UsersManagementLayout from '../phicargo/modules/users-management/layouts/UsersManagementLayout';
 import UsersManagementRoutes from '../phicargo/modules/users-management/routes/UsersManagementRoutes';
+import EventosPendientes from '@/phicargo/monitoreo/Eventos_pendientes';
 
 // Lazy load the components
 const CartasPorte = lazy(
@@ -229,6 +230,14 @@ export const PrivateRoutes = () => {
           }
         />
         <Route
+          path="/EventosPendientes"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <EventosPendientes />
+            </Suspense>
+          }
+        />
+        <Route
           path="/Monitorista"
           element={
             <PersistentDrawer id_entrega={undefined} onClose={undefined} />
@@ -307,7 +316,7 @@ export const PrivateRoutes = () => {
 
         {/* Ruta para manejar rutas no válidas */}
         <Route path="*" element={<NotFoundPage />} />
-      </Routes>
+      </Routes >
     </>
   );
 };

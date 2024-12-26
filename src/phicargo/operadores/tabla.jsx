@@ -64,10 +64,6 @@ const Operadores = ({ estado }) => {
         accessorKey: 'name',
         header: 'Operador',
       },
-      {
-        accessorKey: 'password',
-        header: 'Contraseña app',
-      },
     ],
     [],
   );
@@ -118,6 +114,11 @@ const Operadores = ({ estado }) => {
         fontFamily: 'Inter',
         fontWeight: 'normal',
         fontSize: '14px',
+      },
+    },
+    muiTableContainerProps: {
+      sx: {
+        maxHeight: 'calc(100vh - 200px)',
       },
     },
     renderTopToolbarCustomActions: ({ table }) => (

@@ -2,7 +2,6 @@ import { Navigate, Route } from 'react-router-dom';
 import { Suspense, lazy, memo } from 'react';
 
 import { LoadingPage } from '../../core/pages/LoadingPage';
-
 const VehicleAvailabilityPage = lazy(() => import('../pages/VehicleAvailabilityPage').then(module => ({
   default: memo(module.default),
 })));
@@ -19,6 +18,7 @@ const SummaryPage = lazy(() => import('../pages/SummaryPage').then(module => ({
 const DriverSummaryPage = lazy(() => import('../pages/DriverSummaryPage').then(module => ({
   default: memo(module.default),
 })));
+const AllEquipo = lazy(() => import('../../../disponiblidad/equipos/equipos'));
 
 const AvailabilityRoutes = () => {
   return (
@@ -82,6 +82,14 @@ const AvailabilityRoutes = () => {
         element={
           <Suspense fallback={<LoadingPage />}>
             <NotAssignedPage />
+          </Suspense>
+        }
+      />
+      <Route
+        path="allvehicles"
+        element={
+          <Suspense fallback={<LoadingPage />}>
+            <AllEquipo></AllEquipo>
           </Suspense>
         }
       />

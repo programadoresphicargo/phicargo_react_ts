@@ -28,3 +28,14 @@
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 0, 0, 0.4); /* Thumb un poco más oscuro al pasar el mouse */
 }
+
+.ant-image-preview-wrap {
+  z-index: 200000 !important;
+  position: relative;
+  /* O un valor superior según el contexto */
+}
+
+.ant-image-preview-mask {
+  z-index: 200000 !important;
+  position: relative;
+}

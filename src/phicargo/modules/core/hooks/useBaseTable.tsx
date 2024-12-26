@@ -73,11 +73,25 @@ export const useBaseTable = <T extends MRT_RowData>({
       columnPinning: state.columnPinning,
       columnOrder: state.columnOrdering,
     },
+    muiTableHeadCellProps: {
+      sx: {
+        fontFamily: 'Inter',
+        fontWeight: 'Bold',
+        fontSize: '14px',
+      },
+    },
+    muiTableBodyCellProps: {
+      sx: {
+        fontFamily: 'Inter',
+        fontWeight: 'normal',
+        fontSize: '14px',
+      },
+    },
     muiTableBodyRowProps: onDoubleClickFn
       ? ({ row }) => ({
-          onDoubleClick: () => onDoubleClickFn(row.original.id),
-          sx: { cursor: 'pointer' },
-        })
+        onDoubleClick: () => onDoubleClickFn(row.original.id),
+        sx: { cursor: 'pointer' },
+      })
       : undefined,
     renderTopToolbarCustomActions: ({ table }) => (
       <div className="flex items-center gap-4">

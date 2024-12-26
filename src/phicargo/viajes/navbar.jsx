@@ -17,6 +17,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import Notificaciones from './panel_notificaciones/panel';
 import ProblemasOperadores from './problemas_operadores/panel';
+import AppsIcon from '@mui/icons-material/Apps';
 
 const pages = [
     { name: 'ACTIVOS', path: '/viajes' },
@@ -69,7 +70,7 @@ function NavbarViajes() {
                             onClick={handleBackClick}
                             sx={{ mr: 2 }}
                         >
-                            <ArrowBackIcon />
+                            <AppsIcon></AppsIcon>
                         </IconButton>
 
                         <img className='m-2'

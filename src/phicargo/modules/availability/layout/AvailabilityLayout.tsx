@@ -7,7 +7,8 @@ const pages: MenuItemType[] = [
   { name: 'Operadores', path: '/disponibilidad/operadores' },
   { name: 'Resumen Unidades', path: '/disponibilidad/resumen-unidades' },
   { name: 'Resumen Operadores', path: '/disponibilidad/resumen-operadores' },
-  { name: 'Sin asignar', path: '/disponibilidad/sin-asignar' }
+  { name: 'Sin asignar', path: '/disponibilidad/sin-asignar' },
+  { name: 'Todos', path: '/disponibilidad/allvehicles' }
 ];
 
 interface Props {
