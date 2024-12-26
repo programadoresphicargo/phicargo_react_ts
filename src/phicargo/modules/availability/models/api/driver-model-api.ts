@@ -51,4 +51,5 @@ export interface DriverEditApi {
   tms_driver_license_type?: string | null;
   x_modalidad?: Modality | null;
   x_peligroso_lic?: 'SI' | 'NO' | null;
+  active?: boolean | null;
 }

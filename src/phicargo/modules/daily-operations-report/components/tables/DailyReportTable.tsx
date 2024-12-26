@@ -159,7 +159,7 @@ const DailyReportTable = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 225px)',
+        maxHeight: 'calc(100vh - 200px)',
       },
     },
   });

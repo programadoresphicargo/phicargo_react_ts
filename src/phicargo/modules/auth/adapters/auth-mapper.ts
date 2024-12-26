@@ -7,6 +7,8 @@ import type {
   TokenApi,
   User,
   UserApi,
+  UserBasic,
+  UserBasicApi,
 } from '../models';
 
 /**
@@ -53,5 +55,15 @@ const tokenToLocal = (token: TokenApi): Token => ({
 export const sessionToLocal = (session: SessionApi): Session => ({
   user: userToLocal(session.user),
   token: tokenToLocal(session.token),
+});
+
+/**
+ * Mapper to convert user data from local model to API
+ * @param user User object to convert
+ * @returns Object with user data
+ */
+export const userBasicToLocal = (user: UserBasicApi): UserBasic => ({
+  id: user.id_usuario,
+  username: user.usuario,
 });
 
