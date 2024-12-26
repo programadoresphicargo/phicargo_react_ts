@@ -8,6 +8,7 @@ import AvailabilityLayout from '../phicargo/modules/availability/layout/Availabi
 import AvailabilityRoutes from '../phicargo/modules/availability/routes/AvailabilityRoutes';
 import CashflowReportRoutes from '../phicargo/modules/cashflow-report/routes/CashflowReportRoutes';
 import DOReportRoutes from '@/phicargo/modules/daily-operations-report/routes/DOReportRoutes';
+import DashboardsRoutes from '@/phicargo/modules/dashboards/routes/DashboardRoutes';
 import { LoadingPage } from '../phicargo/modules/core/pages/LoadingPage';
 import MainMenuPage from '@/phicargo/menu/MainManuPage';
 import MaintenanceReportRoutes from '../phicargo/modules/maintenance/routes/MaintenanceReportRoutes';
@@ -275,6 +276,8 @@ export const PrivateRoutes = () => {
         />
         <Route path="/reportes/balance/*" element={<CashflowReportRoutes />} />
         <Route path="/reportes/operaciones" element={<DOReportRoutes />} />
+
+        <Route path="/dashboards/*" element={<DashboardsRoutes />} />
 
         <Route
           path="/control-usuarios"
