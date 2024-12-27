@@ -8,7 +8,6 @@ import reportIcon from '../../../../assets/menu/reportes.png';
 import maintenanceIcon from '../../../../assets/menu/maintenanceIcon.png';
 import clockIcon from '../../../../assets/menu/clock.png';
 import phoneIcon from '../../../../assets/menu/app.png';
-import truckIcon from '../../../../assets/menu/viajes.png'
 import { useAuthContext } from '../../auth/hooks';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
