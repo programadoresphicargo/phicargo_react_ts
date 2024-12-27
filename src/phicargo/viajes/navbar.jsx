@@ -58,7 +58,7 @@ function NavbarViajes() {
 
     return (
         <>
-            <AppBar elevation={0} position="static">
+            <AppBar elevation={0} position="static" sx={{ backgroundColor: '#353535' }}>
                 <Container maxWidth="xl">
                     <Toolbar disableGutters>
 
