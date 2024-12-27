@@ -24,8 +24,7 @@ const MenuItem = ({ icon, label, link, isExternal = false }: Props) => {
       const input = document.createElement('input');
       input.type = 'hidden';
       input.name = 'id_usuario'; // Nombre del campo que deseas enviar
-      //input.value = String(session?.user.id);   // Valor de la variable
-      input.value = '123';   // Valor de la variable
+      input.value = String(session?.user.id);   // Valor de la variable
       form.appendChild(input);
 
       // Enviar el formulario
