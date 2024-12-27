@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
-import { TextField, Button, MenuItem, Select, InputLabel, FormControl, Grid } from "@mui/material";
+import { TextField, MenuItem, InputLabel, FormControl, Grid } from "@mui/material";
+import { Button } from "@nextui-org/react";
 import axios from "axios";
 import { toast } from 'react-toastify';
 import Stack from '@mui/material/Stack';
 import Autocomplete from '@mui/material/Autocomplete';
-import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
@@ -25,7 +24,11 @@ import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useAuthContext } from "../modules/auth/hooks";
-const { VITE_PHIDES_API_URL } = import.meta.env;
+import { Input } from "@nextui-org/react";
+import { Card, CardHeader, CardFooter, CardBody, Divider } from "@nextui-org/react";
+import { Textarea } from "@nextui-org/react";
+import odooApi from "../modules/core/api/odoo-api";
+import { Select } from "@mui/material"
 
 const DetalleForm = ({ id_evento, onClose }) => {
 
@@ -50,6 +53,12 @@ const DetalleForm = ({ id_evento, onClose }) => {
         fecha_atencion: ''
     };
 
+    const sucursales = [
+        { key: "veracruz", label: "Veracruz" },
+        { key: "manzanillo", label: "Manzanillo" },
+        { key: "mexico", label: "México" }, ,
+    ];
+
     const [formData, setFormData] = useState(initialFormData);
 
     const handleChange = (event) => {
@@ -73,26 +82,25 @@ const DetalleForm = ({ id_evento, onClose }) => {
 
     const GuardarComentario = () => {
         const data = {
-            id_usuario: session.user.id,
             id_evento: id_evento,
             comentario: comentario,
         };
 
-        axios.post(VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/guardar_comentario.php', data)
+        odooApi.post('/comentarios/crear_comentario/', data)
             .then((response) => {
                 console.log('Respuesta exitosa:', response.data);
                 setComentario('');
                 obtenerComentarios();
             })
             .catch((error) => {
-                console.error('Error al enviar el comentario:', error);
+                toast.error('Error al enviar el comentario:' + error);
             });
     };
 
     const fetchTipoEvento = () => {
-        const baseUrl = VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/getTipoEvento.php';
+        const baseUrl = '/tipos_eventos_monitoreo/';
 
-        axios.get(baseUrl)
+        odooApi.get(baseUrl)
             .then(response => {
                 const data = response.data.map(item => ({
                     value: item.id_tipo_evento,
@@ -101,27 +109,28 @@ const DetalleForm = ({ id_evento, onClose }) => {
                 setTipoEventos(data);
             })
             .catch(err => {
-                console.error('Error al obtener la flota:', err);
+                console.error('Error al obtener api:', err);
             });
     };
 
     const obtenerEvento = () => {
         setIsLoading(true);
-        const baseUrl = VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/getEvento.php?id_evento=' + id_evento;
+        const baseUrl = '/eventos/evento_by_id/' + id_evento;
 
-        axios.get(baseUrl)
+        odooApi.get(baseUrl)
             .then(response => {
-                const evento = response.data[0];
+                const evento = response.data;
                 setFormData({
                     id_evento: id_evento,
+                    id_entrega: evento.id_entrega,
                     id_usuario: session.user.id,
                     titulo: evento.titulo || '',
                     descripcion: evento.descripcion || '',
                     sucursal: evento.sucursal || '',
-                    id_tipo_evento: evento.id_tipo_evento || '',
+                    id_tipo_evento: evento.tipoEvento.id_tipo_evento || '',
                     estado: evento.estado || '',
                     usuario_atendio: evento.usuario_atendio || '',
-                    fecha_atencion: evento.fecha_atencion || ''
+                    fecha_atencion: evento.fecha_atencion || null
                 });
                 setIsLoading(false);
             })
@@ -132,21 +141,21 @@ const DetalleForm = ({ id_evento, onClose }) => {
 
     const actualizarEvento = () => {
         setIsLoading(true);
-        axios.post(VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/actualizarEvento.php', formData)
+        odooApi.post('/eventos/actualizar_evento/' + id_evento, formData)
             .then(response => {
-                console.log("Datos enviados exitosamente:", response.data);
+                toast.success("Datos enviados exitosamente:", response.data);
                 onClose();
                 setIsLoading(false);
             })
             .catch(err => {
-                console.error("Error al enviar los datos:", err);
+                toast.error("Error al enviar los datos:", err);
                 setIsLoading(false);
             });
     };
 
     const atenderEvento = () => {
         setIsLoading(true);
-        axios.post(VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/atenderEvento.php', formData)
+        odooApi.get('/eventos/atender_evento/' + formData.id_evento)
             .then(response => {
                 console.log("Datos enviados exitosamente:", response.data);
                 onClose();
@@ -159,9 +168,9 @@ const DetalleForm = ({ id_evento, onClose }) => {
     };
 
     const obtenerComentarios = () => {
-        const baseUrl = VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/getComentarios.php?id_evento=' + id_evento;
+        const baseUrl = '/comentarios/comentarios_by_evento_id/' + id_evento;
 
-        axios.get(baseUrl)
+        odooApi.get(baseUrl)
             .then(response => {
                 const evento = response.data;
                 setComentarios(evento);
@@ -182,82 +191,81 @@ const DetalleForm = ({ id_evento, onClose }) => {
         <Grid container spacing={2} p={3}>
 
             <Grid item xs={12} sm={12} md={12}>
-                <Stack spacing={2} direction="row">
-                    <h1>Evento E-{id_evento}</h1>
-                    <Button variant="contained" onClick={actualizarEvento}>Actualizar</Button>
-                    <Button variant="contained" onClick={atenderEvento} disabled={formData.estado == 'atendido' ? true : false}>Atender</Button>
-                </Stack>
-            </Grid>
+                <Card>
 
-            <Grid item xs={12} sm={12} md={12}>
-                <TextField
-                    label="Titulo del evento"
-                    placeholder="Ingresa el titulo"
-                    id="titulo"
-                    name="titulo"
-                    value={formData.titulo}
-                    onChange={handleChange} // Aquí
-                    fullWidth={true}
-                    size='small'
-                />
-            </Grid>
+                    <CardHeader className="flex gap-3">
+                        <h1>Evento E-{id_evento}</h1>
+                        <Button color="primary" onClick={actualizarEvento}>Actualizar</Button>
+                        <Button color="success" className="text-white" onClick={atenderEvento} isDisabled={formData.estado == 'atendido' ? true : false}>{formData.estado == 'atendido' ? 'atendido' : 'atender'}</Button>
+                    </CardHeader>
+                    <Divider />
 
-            <Grid item xs={12} sm={12} md={6}>
-                <Select
-                    labelId="sucursal"
-                    id="sucursal"
-                    name="sucursal"
-                    label="Sucursal"
-                    value={formData.sucursal}
-                    onChange={handleChange} // Aquí
-                    fullWidth={true}
-                    size='small'
-                >
-                    <MenuItem value={'VERACRUZ'}>Veracruz</MenuItem>
-                    <MenuItem value={'MANZANILLO'}>Manzanillo</MenuItem>
-                    <MenuItem value={'MEXICO'}>México</MenuItem>
-                </Select>
-            </Grid>
+                    <CardBody>
 
-            <Grid item xs={12} sm={6} md={6}>
-                <Autocomplete
-                    id="id_tipo_evento"
-                    name="id_tipo_evento"
-                    size='small'
-                    value={tipo_eventos.find(option => option.value === formData.id_tipo_evento) || null}
-                    onChange={(event, newValue) => {
-                        setFormData({
-                            ...formData,
-                            id_tipo_evento: newValue ? newValue.value : ''
-                        });
-                    }} // Aquí
-                    getOptionLabel={(option) => option.label}
-                    isOptionEqualToValue={(option, value) => option.value === value.value}
-                    options={tipo_eventos}
-                    renderInput={(params) => (
-                        <TextField
-                            {...params}
-                            label="Tipo de evento"
-                            variant="outlined"
+                        <Input
+                            id="titulo"
+                            name="titulo"
+                            label="Titulo del evento"
+                            className="mb-2"
+                            value={formData.titulo}
+                            onChange={handleChange}
+                            variant="bordered"
+                            type="email" />
+
+
+                        <Select
+                            labelId="sucursal"
+                            id="sucursal"
+                            name="sucursal"
+                            label="Sucursal"
+                            value={formData.sucursal}
+                            onChange={handleChange}
                             fullWidth={true}
+                            size='small'
+                            className="mb-4"
+                        >
+                            <MenuItem value={'veracruz'}>Veracruz</MenuItem>
+                            <MenuItem value={'manzanillo'}>Manzanillo</MenuItem>
+                            <MenuItem value={'mexico'}>México</MenuItem>
+                        </Select>
+
+                        <Autocomplete
+                            id="id_tipo_evento"
+                            name="id_tipo_evento"
+                            size='small'
+                            value={tipo_eventos.find(option => option.value === formData.id_tipo_evento) || null}
+                            onChange={(event, newValue) => {
+                                setFormData({
+                                    ...formData,
+                                    id_tipo_evento: newValue ? newValue.value : ''
+                                });
+                            }} // Aquí
+                            getOptionLabel={(option) => option.label}
+                            isOptionEqualToValue={(option, value) => option.value === value.value}
+                            options={tipo_eventos}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    label="Tipo de evento"
+                                    variant="outlined"
+                                    fullWidth={true}
+                                />
+                            )}
                         />
-                    )}
-                />
-            </Grid>
 
-            <Grid item xs={12} sm={12} md={12}>
-                <TextField
-                    label="Descripcion"
-                    placeholder="Ingresa detalles acerca del evento"
-                    multiline={true}
-                    rows={4}
-                    name="descripcion"
-                    value={formData.descripcion}
-                    onChange={handleChange} // Aquí
-                    fullWidth={true}
-                />
+                        <Textarea
+                            value={formData.descripcion}
+                            onChange={handleChange}
+                            className="col-span-12 md:col-span-6 mb-6 md:mb-0"
+                            label="Descripción del evento"
+                            name="descripcion"
+                            labelPlacement="outside"
+                            placeholder="Ingresa detalles acerca del evento"
+                            variant={"bordered"}
+                        />
+                    </CardBody>
+                </Card>
             </Grid>
-
 
             <Grid item xs={12} sm={12} md={12}>
                 <h1>Seguimiento</h1>
@@ -283,20 +291,30 @@ const DetalleForm = ({ id_evento, onClose }) => {
                                     <TimelineConnector />
                                 </TimelineSeparator>
                                 <TimelineContent>
-                                    <Paper style={{ padding: "20px 20px 0px 20px", marginTop: 10 }} variant="outlined">
-                                        <Grid container spacing={2}>
-                                            <Grid item>
-                                                <Avatar alt={comentario.nombre} sx={{ bgcolor: green[500] }} src="/broken-image.jpg" />
-                                            </Grid>
-                                            <Grid justifyContent="left" item>
-                                                <h4 style={{ margin: 0, textAlign: "left" }}>
-                                                    ({comentario.id_usuario}) {comentario.nombre}
-                                                </h4>
-                                                <p style={{ textAlign: "left" }}>{comentario.comentario}</p>
-                                                <p style={{ textAlign: "left", color: "gray" }}>{comentario.fecha_creacion}</p>
-                                            </Grid>
-                                        </Grid>
-                                    </Paper>
+
+                                    <Card>
+                                        <CardHeader className="justify-between">
+                                            <div className="flex gap-5">
+                                                <Avatar
+                                                    radius="full"
+                                                    size="md"
+                                                    src="/broken-image.jpg"
+                                                />
+                                                <div className="flex flex-col gap-1 items-start justify-center">
+                                                    <h4 className="text-small font-semibold leading-none text-default-600"> ({comentario.usuario.id_usuario}) {comentario.usuario.nombre}</h4>
+                                                </div>
+                                            </div>
+                                        </CardHeader>
+                                        <CardBody className="px-3 py-0 text-small text-default-400">
+                                            <p>{comentario.comentario}</p>
+                                        </CardBody>
+                                        <CardFooter className="gap-3">
+                                            <div className="flex gap-1">
+                                                <p className=" text-default-400 text-small">{comentario.fecha_creacion}</p>
+                                            </div>
+                                        </CardFooter>
+                                    </Card>
+
                                 </TimelineContent>
                             </TimelineItem>
                         </Timeline>
@@ -305,7 +323,7 @@ const DetalleForm = ({ id_evento, onClose }) => {
             </Grid>
 
             <Grid item xs={12} sm={12} md={12}>
-                <Card variant="outlined">
+                <Card>
                     <CardContent>
                         <Grid container spacing={2}>
                             <Grid item>
@@ -313,26 +331,26 @@ const DetalleForm = ({ id_evento, onClose }) => {
                             </Grid>
 
                             <Grid item xs>
-                                <TextField
-                                    id="outlined-multiline-static"
-                                    label="Comentarios"
-                                    fullWidth={true}
-                                    multiline
-                                    rows={4}
+                                <Textarea
                                     value={comentario}
                                     onChange={handleComentarioChange}
+                                    className="col-span-12 md:col-span-6 mb-6 md:mb-0"
+                                    label="Comentarios"
+                                    labelPlacement="outside"
+                                    placeholder="Ingresa tu comentario"
+                                    variant={"bordered"}
                                 />
                             </Grid>
 
                             <Grid item>
-                                <Button variant="contained" onClick={GuardarComentario}>Guardar</Button>
+                                <Button color="primary" onClick={GuardarComentario}>Guardar comentario</Button>
                             </Grid>
                         </Grid>
                     </CardContent>
                 </Card>
             </Grid>
 
-        </Grid>
+        </Grid >
     </>
     );
 };

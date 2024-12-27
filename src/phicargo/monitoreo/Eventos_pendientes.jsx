@@ -12,7 +12,7 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
-import Card from '@mui/material/Card';
+import { Card, CardBody } from '@nextui-org/react';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import PersistentDrawerRight from './Eventos';
@@ -22,7 +22,7 @@ import { Box } from '@mui/material';
 import { Button } from '@nextui-org/react';
 import { Chip } from '@nextui-org/react';
 import odooApi from '../modules/core/api/odoo-api';
-const { VITE_PHIDES_API_URL } = import.meta.env;
+import DetalleForm from './DetalleEvento';
 
 import {
   MaterialReactTable,
@@ -40,7 +40,7 @@ const EventosPendientes = () => {
 
   const { session } = useAuthContext();
   const [open, setOpen] = React.useState(false);
-  const [id_entrega, setIDEntrega] = useState(0);
+  const [id_evento, setIDEntrega] = useState(0);
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -64,45 +64,6 @@ const EventosPendientes = () => {
       console.error('Error al obtener los datos:', error);
     }
   };
-
-  const NuevaEntrega = async () => {
-    try {
-      const response = await fetch(VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/abrirEntrega.php', {
-        method: 'POST',
-        body: new URLSearchParams({
-          'id_usuario': session.user.id
-        })
-      });
-      toast.success(response);
-      handleClose();
-    } catch (error) {
-      console.error('Error al obtener los datos:', error);
-    }
-  };
-
-  const ComprobarEntrega = async () => {
-    try {
-      const params = new URLSearchParams();
-      params.append('id_usuario', session.user.id);
-
-      const response = await axios.post(VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/comprobarEntrega.php', params);
-
-      const data = response.data;
-
-      if (data.status === 1) {
-        NuevaEntrega();
-      } else if (data.status === 0) {
-        toast.error(
-          data.message
-          + ' Entrega: ' + data.id_entrega
-          + ' Fecha: ' + data.fecha_inicio
-        );
-      }
-    } catch (error) {
-      console.error('Error al obtener los datos:', error);
-    }
-  };
-
 
   useEffect(() => {
     fetchData();
@@ -139,7 +100,7 @@ const EventosPendientes = () => {
         header: 'Monitorista',
       },
       {
-        accessorKey: 'tipo_evento',
+        accessorFn: (row) => row.tipoEvento?.nombre_evento,
         header: 'Tipo evento',
         Cell: ({ cell }) => {
           const value = cell.getValue();
@@ -188,7 +149,7 @@ const EventosPendientes = () => {
         if (row.subRows?.length) {
         } else {
           handleClickOpen();
-          setIDEntrega(row.original.id_entrega);
+          setIDEntrega(row.original.id_evento);
         }
       },
       style: {
@@ -225,10 +186,10 @@ const EventosPendientes = () => {
   return (<>
 
     <Dialog
-      fullScreen
       open={open}
       onClose={handleClose}
       TransitionComponent={Transition}
+      scroll='body'
     >
       <AppBar sx={{ position: 'relative' }} elevation={0}>
         <Toolbar>
@@ -241,19 +202,23 @@ const EventosPendientes = () => {
             <CloseIcon />
           </IconButton>
           <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-            Entrega E-{id_entrega}
+            Evento E-{id_evento}
           </Typography>
           <Button autoFocus color="inherit" onClick={handleClose}>
             Cerrar
           </Button>
         </Toolbar>
       </AppBar>
-      <PersistentDrawerRight id_entrega={id_entrega} onClose={handleClose}></PersistentDrawerRight>
+      <DetalleForm id_evento={id_evento} onClose={handleClose}></DetalleForm>
 
     </Dialog>
 
     <MonitoreoNavbar></MonitoreoNavbar>
-    <MaterialReactTable table={table} />
+    <Card className='m-5'>
+      <CardBody>
+        <MaterialReactTable table={table} />
+      </CardBody>
+    </Card>
   </>
   );
 

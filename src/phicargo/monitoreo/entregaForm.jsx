@@ -12,7 +12,7 @@ import Stack from '@mui/material/Stack';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import { useAuthContext } from '../modules/auth/hooks';
-const { VITE_PHIDES_API_URL } = import.meta.env;
+import odooApi from '../modules/core/api/odoo-api';
 
 const EntregaForm2 = ({ id_entrega, onClose }) => {
 
@@ -24,7 +24,10 @@ const EntregaForm2 = ({ id_entrega, onClose }) => {
         titulo: '',
         descripcion: '',
         sucursal: '',
-        tipo_evento: ''
+        id_tipo_evento: '',
+        estado: 'pendiente',
+        id_usuario_atendio: null,
+        fecha_atencion: null
     };
 
     const [formData, setFormData] = useState(initialFormData);
@@ -36,9 +39,9 @@ const EntregaForm2 = ({ id_entrega, onClose }) => {
     const [tipo_eventos, setTipoEventos] = useState([]);
 
     const fetchTipoEvento = () => {
-        const baseUrl = VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/getTipoEvento.php';
+        const baseUrl = '/tipos_eventos_monitoreo/';
 
-        axios.get(baseUrl)
+        odooApi.get(baseUrl)
             .then(response => {
                 const data = response.data.map(item => ({
                     value: item.id_tipo_evento,
@@ -59,9 +62,9 @@ const EntregaForm2 = ({ id_entrega, onClose }) => {
         });
     };
 
-    const registrar_acceso = async (e) => {
+    const registrar_evento = async (e) => {
 
-        if (!formData.titulo || !formData.sucursal || !formData.tipo_evento || !formData.descripcion) {
+        if (!formData.titulo || !formData.sucursal || !formData.id_tipo_evento || !formData.descripcion) {
             toast.error('Todos los campos son obligatorios');
             return;
         }
@@ -69,11 +72,10 @@ const EntregaForm2 = ({ id_entrega, onClose }) => {
         console.log(formData);
 
         try {
-            const response = await axios.post(VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/registrarEvento.php', formData);
-            const data = response.data;
+            const response = await odooApi.post('/eventos/crear_evento/', formData);
 
-            if (data.status === 'success') {
-                toast.success(data.message);
+            if (response.data.mensaje) {
+                toast.success(response.data.mensaje);
                 setFormData(initialFormData);
                 onClose();
             } else {
@@ -90,7 +92,7 @@ const EntregaForm2 = ({ id_entrega, onClose }) => {
         <>
             <Grid container spacing={2}>
                 <Stack spacing={2} direction="row" style={{ padding: '20px' }}>
-                    <Button onClick={registrar_acceso} style={{ marginTop: '20px' }} color='primary'>Guardar evento</Button>
+                    <Button onClick={registrar_evento} style={{ marginTop: '20px' }} color='primary'>Guardar evento</Button>
                 </Stack>
 
                 <Grid item xs={12} sm={12} md={12}>
@@ -117,22 +119,22 @@ const EntregaForm2 = ({ id_entrega, onClose }) => {
                         fullWidth={true}
                         size='small'
                     >
-                        <MenuItem value={'VERACRUZ'}>Veracruz</MenuItem>
-                        <MenuItem value={'MANZANILLO'}>Manzanillo</MenuItem>
-                        <MenuItem value={'MEXICO'}>México</MenuItem>
+                        <MenuItem value={'veracruz'}>Veracruz</MenuItem>
+                        <MenuItem value={'manzanillo'}>Manzanillo</MenuItem>
+                        <MenuItem value={'mexico'}>México</MenuItem>
                     </Select>
                 </Grid>
 
                 <Grid item xs={12} sm={6} md={6}>
                     <Autocomplete
-                        id="tipo_evento"
-                        name="tipo_evento"
+                        id="id_tipo_evento"
+                        name="id_tipo_evento"
                         size='small'
-                        value={tipo_eventos.find(option => option.value === formData.tipo_evento) || null}
+                        value={tipo_eventos.find(option => option.value === formData.id_tipo_evento) || null}
                         onChange={(event, newValue) => {
                             setFormData({
                                 ...formData,
-                                tipo_evento: newValue ? newValue.value : ''
+                                id_tipo_evento: newValue ? newValue.value : ''
                             });
                         }}
                         getOptionLabel={(option) => option.label}

@@ -41,7 +41,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DetalleForm from './DetalleEvento';
 import EntregaForm2 from './entregaForm';
 import { Chip } from '@nextui-org/react';
-const { VITE_PHIDES_API_URL } = import.meta.env;
+import odooApi from '../modules/core/api/odoo-api';
 const drawerWidth = 650;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
@@ -135,9 +135,8 @@ export default function PersistentDrawerRight({ id_entrega, onClose }) {
 
     const getEntrega = async () => {
         try {
-            const response = await fetch(VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/getEntrega.php?id_entrega=' + id_entrega);
-            const jsonData = await response.json();
-            setDataEntrega(jsonData);
+            const response = await odooApi.get('/entregas/get_by_entrega_id/' + id_entrega);
+            setDataEntrega(response.data);
         } catch (error) {
             console.error('Error al obtener los datos:', error);
         }
@@ -146,9 +145,8 @@ export default function PersistentDrawerRight({ id_entrega, onClose }) {
     const getEventos = async () => {
         try {
             setLoading(true);
-            const response = await fetch(VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/getEventos.php?id_entrega=' + id_entrega);
-            const jsonData = await response.json();
-            setEventos(jsonData);
+            const response = await odooApi.get('/eventos/eventos_by_entrega_id/' + id_entrega);
+            setEventos(response.data);
             setLoading(false);
         } catch (error) {
             console.error('Error al obtener los datos:', error);
@@ -164,9 +162,9 @@ export default function PersistentDrawerRight({ id_entrega, onClose }) {
                     const value = cell.getValue();
                     let className;
 
-                    if (value === 'VERACRUZ') {
+                    if (value === 'veracruz') {
                         className = 'badge bg-success text-white';
-                    } else if (value === 'MANZANILLO') {
+                    } else if (value === 'manzanillo') {
                         className = 'badge bg-warning text-white';
                     } else {
                         className = 'badge bg-primary text-white';
@@ -180,7 +178,7 @@ export default function PersistentDrawerRight({ id_entrega, onClose }) {
                 header: 'Titulo',
             },
             {
-                accessorKey: 'nombre_evento',
+                accessorFn: (row) => row.tipoEvento?.nombre_evento,
                 header: 'Clasificación',
             },
             {
@@ -189,7 +187,7 @@ export default function PersistentDrawerRight({ id_entrega, onClose }) {
             },
             {
                 accessorKey: 'estado',
-                header: 'Estado',
+                header: 'Estado del evento',
                 minSize: 10,
                 maxSize: 10,
                 size: 10,
@@ -201,7 +199,7 @@ export default function PersistentDrawerRight({ id_entrega, onClose }) {
                         className = 'badge bg-success rounded-pill text-white';
                     }
 
-                    return <Chip className={className} style={{ width: ' 100px' }}>{value}</Chip>;
+                    return <Chip className={className}>{value}</Chip>;
                 },
             },
         ],
@@ -277,10 +275,10 @@ export default function PersistentDrawerRight({ id_entrega, onClose }) {
             });
 
             if (result.isConfirmed) {
-                const response = await axios.post(VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/cerrarEntrega.php', formData);
+                const response = await odooApi.get('/entregas/cerrar_entrega/' + id_entrega);
                 const data = response.data;
 
-                if (data.status === 1) {
+                if (data === 1) {
                     toast.success(data.message);
                     onClose();
                 } else {
@@ -307,7 +305,13 @@ export default function PersistentDrawerRight({ id_entrega, onClose }) {
                     )}
 
                 </Stack>
-                <MaterialReactTable table={table} />
+
+                <Card className='mt-3'>
+                    <CardBody>
+                        <MaterialReactTable table={table} />
+                    </CardBody>
+                </Card>
+
             </Main>
             <Drawer
                 sx={{

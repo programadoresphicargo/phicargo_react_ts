@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { useAuthContext } from '../modules/auth/hooks';
 
 interface Props {
   icon: string;
@@ -9,14 +10,33 @@ interface Props {
 
 const MenuItem = ({ icon, label, link, isExternal = false }: Props) => {
   const navigate = useNavigate();
+  const { session } = useAuthContext();
 
   const handleClick = () => {
     if (isExternal) {
-      window.open(link, '_blank', 'noopener,noreferrer');
+      // Crear un formulario dinámico
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = link;
+      form.target = '_blank';
+
+      // Añadir una variable al formulario
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = 'id_usuario'; // Nombre del campo que deseas enviar
+      //input.value = String(session?.user.id);   // Valor de la variable
+      input.value = '123';   // Valor de la variable
+      form.appendChild(input);
+
+      // Enviar el formulario
+      document.body.appendChild(form);
+      form.submit();
+      document.body.removeChild(form);
     } else {
       navigate(link);
     }
   };
+
 
   return (
     <div

@@ -12,16 +12,14 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
-import Card from '@mui/material/Card';
+import { Card, CardBody, CardHeader } from '@nextui-org/react';
 import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
 import PersistentDrawerRight from './Eventos';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { Box } from '@mui/material';
 import { Button } from '@nextui-org/react';
 import { Chip } from '@nextui-org/react';
-const { VITE_PHIDES_API_URL } = import.meta.env;
 
 import {
   MaterialReactTable,
@@ -29,6 +27,7 @@ import {
 } from 'material-react-table';
 import AuthContext from '../modules/auth/context/AuthContext';
 import { useAuthContext } from '../modules/auth/hooks';
+import odooApi from '../modules/core/api/odoo-api';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -55,9 +54,8 @@ const Entregas = ({ fecha }) => {
 
     try {
       setLoading(true);
-      const response = await fetch(VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/getEntregas.php?fecha=' + fecha);
-      const jsonData = await response.json();
-      setData(jsonData);
+      const response = await odooApi.get('/entregas/');
+      setData(response.data);
       setLoading(false);
     } catch (error) {
       console.error('Error al obtener los datos:', error);
@@ -66,12 +64,7 @@ const Entregas = ({ fecha }) => {
 
   const NuevaEntrega = async () => {
     try {
-      const response = await fetch(VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/abrirEntrega.php', {
-        method: 'POST',
-        body: new URLSearchParams({
-          'id_usuario': session.user.id
-        })
-      });
+      const response = await odooApi.get('/entregas/abrir_entrega/');
       toast.success(response);
       handleClose();
     } catch (error) {
@@ -81,24 +74,24 @@ const Entregas = ({ fecha }) => {
 
   const ComprobarEntrega = async () => {
     try {
-      const params = new URLSearchParams();
-      params.append('id_usuario', session.user.id);
 
-      const response = await axios.post(VITE_PHIDES_API_URL + '/monitoreo/entrega_turno/comprobarEntrega.php', params);
-
+      const response = await odooApi.get('/entregas/comprobar_entrega/');
       const data = response.data;
 
-      if (data.status === 1) {
-        NuevaEntrega();
-      } else if (data.status === 0) {
-        toast.error(
-          data.message
-          + ' Entrega: ' + data.id_entrega
-          + ' Fecha: ' + data.fecha_inicio
-        );
+      if (Array.isArray(data)) {
+        if (data.length > 0) {
+          console.log('El arreglo contiene al menos un registro.');
+          toast.error(
+            'Tienes una entrega de turno abierta: ' + ' Entrega: ' + data[0].id_entrega + ' Fecha: ' + data[0].abierto
+          );
+        } else {
+          console.log('El arreglo está vacío.');
+          NuevaEntrega();
+        }
       }
+
     } catch (error) {
-      console.error('Error al obtener los datos:', error);
+      toast.error('Error al obtener los datos:', error);
     }
   };
 
@@ -118,7 +111,7 @@ const Entregas = ({ fecha }) => {
         header: 'Fecha',
       },
       {
-        accessorKey: 'nombre_usuario',
+        accessorFn: (row) => row.usuario?.nombre,
         header: 'Monitorista',
       },
       {
@@ -237,9 +230,9 @@ const Entregas = ({ fecha }) => {
     </Dialog>
 
     <Card>
-      <CardContent>
+      <CardBody>
         <MaterialReactTable table={table} />
-      </CardContent>
+      </CardBody>
     </Card>
   </>
   );
