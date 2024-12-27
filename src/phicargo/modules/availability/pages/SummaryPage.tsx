@@ -5,6 +5,25 @@ import { useMemo } from 'react';
 import { useSummaryColumns } from '../hooks/useSummaryColumns';
 import { useTableState } from '../../core/hooks/useTableState';
 import { useVehicleQueries } from '../hooks/useVehicleQueries';
+import { ExportToExcel, type ExportConfig } from '../../core/utilities/export-to-excel';
+import type { VehicleWithRealStatus } from '../models/vehicle-model';
+
+const exportConf: ExportConfig<VehicleWithRealStatus> = {
+  fileName: 'Resumen Unidades',
+  withDate: true,
+  sheetName: 'Resument Unidades',
+  columns: [
+    { accessorFn: (data) => data.name, header: 'UNIDAD' },
+    { accessorFn: (data) => data.company?.name, header: 'EMPRESA' },
+    { accessorFn: (data) => data.realStatus, header: 'ESTATUS REAL' },
+    { accessorFn: (data) => data.travel?.name, header: 'VIAJE' },
+    { accessorFn: (data) => data.maneuver?.type, header: 'MANIOBRA' },
+    { accessorFn: (data) => data.maneuver?.id, header: 'ID MANIOBRA' },
+    { accessorFn: (data) => data.maintenanceRecord?.orderService, header: 'ORDEN DE SERVICIO' },
+  ]
+}
+
+const toExcel = new ExportToExcel(exportConf);
 
 const SummaryPage = () => {
   const {
@@ -28,6 +47,7 @@ const SummaryPage = () => {
     state,
     isLoading: isFetching,
     refetch,
+    onExportExcel: (data) => toExcel.exportData(data),
   });
 
   return <MaterialReactTable table={table} />;

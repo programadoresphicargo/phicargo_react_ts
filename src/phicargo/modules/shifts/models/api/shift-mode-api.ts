@@ -1,4 +1,5 @@
 import type { BranchSimple } from '../../../core/models';
+import type { UserBasicApi } from '@/phicargo/modules/auth/models';
 
 export interface DriverInfoApi {
   id: number;
@@ -21,7 +22,6 @@ export interface VehicleInfoApi {
 export interface ShiftBaseApi {
   shift: number;
   arrival_at: string;
-  register_user_id: number;
   locked: boolean;
   maneuver1: string | null;
   maneuver2: string | null;
@@ -38,5 +38,29 @@ export interface ShiftApi extends ShiftBaseApi {
   res_store: BranchSimple;
   driver: DriverInfoApi;
   vehicle: VehicleInfoApi;
+  register_user: UserBasicApi;
+}
+
+export type ShiftSimpleApi = Pick<ShiftApi, 'id' | 'shift' | 'arrival_at' | 'driver'>;
+
+export interface ShiftCreateApi {
+  branch_id: number;
+  vehicle_id: number;
+  driver_id: number;
+  arrival_at: string;
+  comments: string;
+  maneuver1: string | null;
+  maneuver2: string | null;
+}
+
+export interface ShiftEditApi {
+  vehicle_id?: number | null;
+  arrival_at?: string | null;
+  driver_id?: number | null;
+  comments?: string | null;
+  queue?: boolean | null;
+  maneuver1?: string | null;
+  maneuver2?: string | null;
+  locked?: boolean | null;
 }
 

@@ -65,8 +65,12 @@ export const useShiftColumns = () => {
         ),
       },
       {
-        accessorFn: (row) => row.arrivalAt.format('DD/MM/YYYY HH:mm'),
+        accessorFn: (row) => row.arrivalAt.format('DD/MM/YYYY hh:mm A'),
         header: 'Llegada',
+      },
+      {
+        accessorFn: (row) => row.comments,
+        header: 'Comentarios',
       },
     ],
     [],

@@ -19,6 +19,7 @@ import { SelectInput } from '../../core/components/inputs/SelectInput';
 import { TextInput } from '../../core/components/inputs/TextInput';
 import { TextareaInput } from '../../core/components/inputs/TextareaInput';
 import { Tooltip } from '@mui/material';
+import { VehicleSearchInput } from '../../core/components/inputs/VehicleSearchInput';
 import { useNavigate } from 'react-router-dom';
 
 const initialFormState: MaintenanceRecordCreate = {
@@ -38,8 +39,7 @@ const CreateNewRecord = () => {
   const [addWorkshop, setAddWorkshop] = useState(false);
 
   const {
-    vehicleQuery: { data: vehicles, isFetching: loadingTracts },
-    VehicleSelectOptions,
+    vehicleQuery: { data: vehicles },
   } = useVehicles();
 
   const {
@@ -84,13 +84,13 @@ const CreateNewRecord = () => {
                 <form className="space-y-6">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
-                      <SelectInput
+                      <VehicleSearchInput
                         control={control}
-                        label="Vehículo"
                         name="vehicleId"
-                        isLoading={loadingTracts}
-                        items={VehicleSelectOptions}
-                        rules={{ required: 'Este campo es requerido' }}
+                        label="Vehículo"
+                        required
+                        vehicleId={vehicleId}
+                        isDisabled={false}
                       />
                     </div>
                     {vehicle && (

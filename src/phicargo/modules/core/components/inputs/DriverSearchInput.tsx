@@ -24,10 +24,11 @@ interface Props<T extends FieldValues> {
   label?: string;
   required?: boolean;
   driverId?: number | null;
+  isDisabled?: boolean;
 }
 
 export const DriverSearchInput = <T extends FieldValues>(props: Props<T>) => {
-  const { control, name, label, driverId, required } = props;
+  const { control, name, label, driverId, required, isDisabled } = props;
 
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
@@ -63,6 +64,7 @@ export const DriverSearchInput = <T extends FieldValues>(props: Props<T>) => {
       searchInput={searchTerm ? searchTerm : driver?.name || ''}
       setSearchInput={setSearchTerm}
       rules={ required ? { required: 'Operador obligatorio' } : {} }
+      isDisabled={isDisabled}
     />
   );
 };

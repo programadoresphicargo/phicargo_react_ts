@@ -23,7 +23,8 @@ export const TextareaInput = <T extends FieldValues>(
     maxRows,
     minRows,
     isReadOnly,
-    isDisabled
+    isDisabled,
+    placeholder
   } = props;
 
   return (
@@ -37,7 +38,7 @@ export const TextareaInput = <T extends FieldValues>(
             className={className}
             label={label}
             name={name}
-            placeholder="Escribe alguna observacion"
+            placeholder={placeholder}
             size="sm"
             variant="flat"
             maxRows={maxRows}

@@ -17,7 +17,7 @@ import { useShiftQueries } from '../hooks/useShiftQueries';
 const ShiftsPage = () => {
   const navigate = useNavigate();
   const { columns } = useShiftColumns();
-  const { shiftQuery } = useShiftQueries({ branchId: 1 });
+  const { shiftQuery } = useShiftQueries();
   const [data, setData] = useState<Shift[]>(shiftQuery.data || []);
 
   useEffect(() => {
@@ -73,13 +73,18 @@ const ShiftsPage = () => {
             <RefreshIcon />
           </IconButton>
         </Tooltip>
-        <AddButton size="sm" label="Ingresar turno" />
+        <AddButton 
+          size="sm" 
+          label="Ingresar turno" 
+          onPress={() => navigate('/turnos/crear')}
+        />
         <Button
           size="sm"
           variant="faded"
           color="warning"
           className="font-bold"
           startContent={<HiQueueList />}
+          onPress={() => navigate('/turnos/cola')}
         >
           Operadores En Cola
         </Button>

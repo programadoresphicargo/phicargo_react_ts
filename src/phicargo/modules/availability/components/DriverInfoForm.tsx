@@ -2,6 +2,7 @@ import { Button, Card, CardBody, CardFooter, CardHeader } from '@nextui-org/reac
 import { Driver, DriverEdit } from '../models/driver-model';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
+import { CheckboxInput } from '../../core/components/inputs/CheckboxInput';
 import { SelectInput } from '../../core/components/inputs/SelectInput';
 import { TextInput } from '../../core/components/inputs/TextInput';
 import { useDriverQueries } from '../hooks/useDriverQueries';
@@ -25,6 +26,7 @@ const transformDriverToForm = (driver: Driver): DriverEdit => ({
   jobId: driver.job.id,
   modality: driver.modality,
   isDangerous: driver.isDangerous ? 'SI' : 'NO',
+  isActive: driver.isActive,
 });
 
 const disabled = false;
@@ -101,6 +103,12 @@ const DriverInfoForm = (props: Props) => {
               { value: 'SI', key: 'SI' },
               { value: 'NO', key: 'NO' },
             ]}
+          />
+          <CheckboxInput 
+            control={control}
+            name="isActive"
+            label="Activo"
+            isDisabled={disabled}
           />
         </form>
       </CardBody>
