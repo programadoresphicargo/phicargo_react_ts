@@ -50,7 +50,7 @@ const menuItems: MenuItemType[] = [
   {
     icon: monitoreo_img,
     label: 'Monitoreo',
-    link: '/monitoreo',
+    link: '/EventosPendientes',
     requiredPermissions: [40],
   },
   {

@@ -50,7 +50,8 @@ const DetalleForm = ({ id_evento, onClose }) => {
         id_tipo_evento: '',
         estado: '',
         usuario_atendio: '',
-        fecha_atencion: ''
+        fecha_atencion: '',
+        usuario_creacion: ''
     };
 
     const sucursales = [
@@ -127,6 +128,7 @@ const DetalleForm = ({ id_evento, onClose }) => {
                     titulo: evento.titulo || '',
                     descripcion: evento.descripcion || '',
                     sucursal: evento.sucursal || '',
+                    usuario_creacion: evento.usuario_creacion || '',
                     id_tipo_evento: evento.tipoEvento.id_tipo_evento || '',
                     estado: evento.estado || '',
                     usuario_atendio: evento.usuario_atendio || '',
@@ -195,7 +197,7 @@ const DetalleForm = ({ id_evento, onClose }) => {
 
                     <CardHeader className="flex gap-3">
                         <h1>Evento E-{id_evento}</h1>
-                        <Button color="primary" onClick={actualizarEvento}>Actualizar</Button>
+                        <Button color="primary" onClick={actualizarEvento} isDisabled={formData.usuario_creacion == session.user.id ? false : true}>Actualizar</Button>
                         <Button color="success" className="text-white" onClick={atenderEvento} isDisabled={formData.estado == 'atendido' ? true : false}>{formData.estado == 'atendido' ? 'atendido' : 'atender'}</Button>
                     </CardHeader>
                     <Divider />
@@ -210,6 +212,7 @@ const DetalleForm = ({ id_evento, onClose }) => {
                             value={formData.titulo}
                             onChange={handleChange}
                             variant="bordered"
+                            isDisabled={formData.usuario_creacion == session.user.id ? false : true}
                             type="email" />
 
 
@@ -220,6 +223,7 @@ const DetalleForm = ({ id_evento, onClose }) => {
                             label="Sucursal"
                             value={formData.sucursal}
                             onChange={handleChange}
+                            disabled={formData.usuario_creacion == session.user.id ? false : true}
                             fullWidth={true}
                             size='small'
                             className="mb-4"
@@ -230,6 +234,7 @@ const DetalleForm = ({ id_evento, onClose }) => {
                         </Select>
 
                         <Autocomplete
+                            disabled={formData.usuario_creacion == session.user.id ? false : true}
                             id="id_tipo_evento"
                             name="id_tipo_evento"
                             size='small'
@@ -261,6 +266,7 @@ const DetalleForm = ({ id_evento, onClose }) => {
                             name="descripcion"
                             labelPlacement="outside"
                             placeholder="Ingresa detalles acerca del evento"
+                            isDisabled={formData.usuario_creacion == session.user.id ? false : true}
                             variant={"bordered"}
                         />
                     </CardBody>

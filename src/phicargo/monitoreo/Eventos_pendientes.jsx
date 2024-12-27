@@ -80,24 +80,22 @@ const EventosPendientes = () => {
         header: 'Sucursal',
         Cell: ({ cell }) => {
           const value = cell.getValue();
-          if (value != 0) {
-            let variant = 'primary';
-            return (
-              <Chip className={`badge bg-${variant} rounded-pill text-white`} style={{ width: '20px' }}>
-                {value}
-              </Chip>
-            );
+          let className;
+
+          if (value === 'veracruz') {
+            className = 'badge bg-success text-white';
+          } else if (value === 'manzanillo') {
+            className = 'badge bg-warning text-white';
+          } else {
+            className = 'badge bg-primary text-white';
           }
 
+          return <Chip className={className}>{value}</Chip>;
         },
       },
       {
         accessorKey: 'titulo',
-        header: 'Nombre',
-      },
-      {
-        accessorFn: (row) => row.usuario?.nombre,
-        header: 'Monitorista',
+        header: 'Nombre del evento',
       },
       {
         accessorFn: (row) => row.tipoEvento?.nombre_evento,
@@ -112,8 +110,11 @@ const EventosPendientes = () => {
               </Chip>
             );
           }
-
         },
+      },
+      {
+        accessorFn: (row) => row.usuario?.nombre,
+        header: 'Monitorista',
       },
       {
         accessorKey: 'fecha_creacion',
@@ -134,6 +135,8 @@ const EventosPendientes = () => {
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
     initialState: {
+      expanded: true,
+      grouping: ['sucursal'],
       density: 'compact',
       pagination: { pageSize: 80 },
     },
@@ -170,6 +173,15 @@ const EventosPendientes = () => {
         fontSize: '14px',
       },
     },
+    muiTableBodyCellProps: ({ row }) => ({
+      sx: {
+        backgroundColor: row.subRows?.length ? '#b3b3b3' : '#FFFFFF',
+        fontFamily: 'Inter',
+        fontWeight: 'normal',
+        fontSize: '14px',
+        color: row.subRows?.length ? '#FFFFFF' : '#000000',
+      },
+    }),
     renderTopToolbarCustomActions: ({ table }) => (
       <Box
         sx={{
