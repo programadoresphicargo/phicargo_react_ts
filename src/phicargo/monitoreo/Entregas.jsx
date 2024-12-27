@@ -54,7 +54,7 @@ const Entregas = ({ fecha }) => {
 
     try {
       setLoading(true);
-      const response = await odooApi.get('/entregas/');
+      const response = await odooApi.get('/entregas/get_by_entrega_fecha_abierto/'+fecha);
       setData(response.data);
       setLoading(false);
     } catch (error) {
