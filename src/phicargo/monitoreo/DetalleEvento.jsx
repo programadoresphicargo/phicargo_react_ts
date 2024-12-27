@@ -213,7 +213,7 @@ const DetalleForm = ({ id_evento, onClose }) => {
                             onChange={handleChange}
                             variant="bordered"
                             isDisabled={formData.usuario_creacion == session.user.id ? false : true}
-                            type="email" />
+                        />
 
 
                         <Select
@@ -244,7 +244,7 @@ const DetalleForm = ({ id_evento, onClose }) => {
                                     ...formData,
                                     id_tipo_evento: newValue ? newValue.value : ''
                                 });
-                            }} // Aquí
+                            }}
                             getOptionLabel={(option) => option.label}
                             isOptionEqualToValue={(option, value) => option.value === value.value}
                             options={tipo_eventos}

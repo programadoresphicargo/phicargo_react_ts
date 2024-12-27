@@ -66,13 +66,6 @@ const reports: MenuItemType[] = [
     isExternal: false
 
   },
-  {
-    label: 'Asignación de unidades',
-    path: '/asignacion',
-    icon: truckIcon,
-    requiredPermissions: [],
-    isExternal: false
-  },
 ];
 
 const ReportsMenuPage = () => {
