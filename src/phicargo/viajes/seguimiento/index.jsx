@@ -18,7 +18,7 @@ import CumplimientoOperador from "../cumplimiento_operador/cumplimiento";
 import { CardBody, CardHeader, Snippet } from "@nextui-org/react";
 import { fontFamily } from "@mui/system";
 import Grid from '@mui/material/Grid2';
-import { Card } from "@nextui-org/react";
+import { Card, Chip, Divider } from "@nextui-org/react";
 
 export default function BasicButtons2() {
 
@@ -78,7 +78,7 @@ export default function BasicButtons2() {
 
                         <Card>
                             <CardHeader>
-                                <p>Información del viaje</p>
+                                <Chip color='primary' size='lg' radius='md'>Información del viaje</Chip>
                             </CardHeader>
                             <CardBody>
                                 <ul class="list-unstyled list-py-2 text-dark mb-0">

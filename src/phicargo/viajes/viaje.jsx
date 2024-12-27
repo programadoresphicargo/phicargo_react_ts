@@ -20,6 +20,7 @@ import IndexCambioEquipo from './cambio_equipo/documentacion';
 import Map from './mapa/mapa';
 import Notificaciones from './panel_notificaciones/panel';
 import Checklist from './checklist/checklist';
+import { Chip } from '@nextui-org/react';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -61,9 +62,9 @@ const Viaje = ({ }) => {
       <div className="flex items-center justify-between p-3">
         <div className="min-w-0 flex-1">
           <h1 className="h1">
-            {viaje.name}
+            <Chip color='primary' size='lg' radius='md'>{viaje.name}</Chip>
           </h1>
-          <div className="sm:space-x-3">
+          <div className="sm:space-x-3 mt-3">
             <span>
               {viaje.vehiculo}
             </span>

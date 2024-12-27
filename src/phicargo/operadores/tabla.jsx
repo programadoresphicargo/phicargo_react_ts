@@ -145,7 +145,7 @@ const Operadores = ({ estado }) => {
       maxWidth="sm"
     >
       <DialogTitle id="alert-dialog-title">
-        {"Operador"}
+        {"Cuenta del operador"}
       </DialogTitle>
       <DialogContent>
         <OperadorForm id_operador={id_operador}></OperadorForm>

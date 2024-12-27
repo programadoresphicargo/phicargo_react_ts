@@ -130,6 +130,24 @@ const ViajesActivos = ({ }) => {
         header: 'Último estatus',
       },
       {
+        accessorKey: 'vehiculo',
+        header: 'Vehiculo',
+      },
+      {
+        accessorKey: 'operador',
+        header: 'Operador',
+        Cell: ({ cell }) => {
+          const tipoMovimiento = cell.getValue();
+          let badgeClass = 'text-white bg-primary';
+
+          return (
+            <Chip className={badgeClass} size='sm'>
+              {tipoMovimiento.charAt(0).toUpperCase() + tipoMovimiento.slice(1)}
+            </Chip>
+          );
+        },
+      },
+      {
         accessorKey: 'codigo_postal',
         header: 'Distancia con cliente',
         Cell: ({ row }) => {
@@ -175,24 +193,6 @@ const ViajesActivos = ({ }) => {
           return (
             <Chip className="text-white" color='success' size='sm' style={{ width: '150px' }}>
               {distancia !== null ? distancia : 'Cargando...'}
-            </Chip>
-          );
-        },
-      },
-      {
-        accessorKey: 'vehiculo',
-        header: 'Vehiculo',
-      },
-      {
-        accessorKey: 'operador',
-        header: 'Operador',
-        Cell: ({ cell }) => {
-          const tipoMovimiento = cell.getValue();
-          let badgeClass = 'text-white bg-primary';
-
-          return (
-            <Chip className={badgeClass} size='sm'>
-              {tipoMovimiento.charAt(0).toUpperCase() + tipoMovimiento.slice(1)}
             </Chip>
           );
         },

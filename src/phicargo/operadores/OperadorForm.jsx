@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import { TextField, Button, MenuItem, Select, InputLabel, FormControl, Grid } from "@mui/material";
+import { TextField, MenuItem, Select, InputLabel, FormControl, Grid } from "@mui/material";
 import axios from "axios";
 import { toast } from 'react-toastify';
 import Stack from '@mui/material/Stack';
 import odooApi from "../modules/core/api/odoo-api";
+import { Input } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const OperadorForm = ({ id_operador, onClose }) => {
@@ -61,15 +63,14 @@ const OperadorForm = ({ id_operador, onClose }) => {
             <Grid container spacing={2} className="mb-5">
                 <Grid item xs={12} md={12}>
                     <Stack spacing={2} direction="row">
-                        <Button variant="contained" color="primary" onClick={actualizarOperador}>
+                        <Button color="primary" onClick={actualizarOperador}>
                             Actualizar
                         </Button>
                     </Stack>
                 </Grid>
 
                 <Grid item xs={12} md={12}>
-                    <TextField
-                        fullWidth
+                    <Input
                         variant="outlined"
                         label="Usuario"
                         value={id_operador}
@@ -77,8 +78,7 @@ const OperadorForm = ({ id_operador, onClose }) => {
                     />
                 </Grid>
                 <Grid item xs={12} md={12}>
-                    <TextField
-                        fullWidth
+                    <Input
                         variant="outlined"
                         label="Nombre"
                         value={nombre_operador}
@@ -86,7 +86,7 @@ const OperadorForm = ({ id_operador, onClose }) => {
                     />
                 </Grid>
                 <Grid item xs={12} md={12}>
-                    <TextField
+                    <Input
                         fullWidth
                         variant="outlined"
                         label="Contraseña"

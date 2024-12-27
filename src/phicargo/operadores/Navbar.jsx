@@ -19,7 +19,6 @@ function ResponsiveAppBar() {
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
 
-                    {/* Botón de retroceso */}
                     <IconButton
                         edge="start"
                         color="inherit"
@@ -30,7 +29,6 @@ function ResponsiveAppBar() {
                         <ArrowBackIcon />
                     </IconButton>
 
-                    {/* Logo de la empresa */}
                     <img className='m-2'
                         src="https://phi-cargo.com/wp-content/uploads/2021/05/logo-phicargo-vertical.png"
                         alt="Descripción de la imagen"
