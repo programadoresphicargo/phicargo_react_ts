@@ -1,3 +1,7 @@
+import {
+  ExportConfig,
+  ExportToExcel,
+} from '@/phicargo/modules/core/utilities/export-to-excel';
 import { IconButton, Tooltip } from '@mui/material';
 import {
   MRT_TableOptions,
@@ -8,14 +12,60 @@ import { usePayments, useWeekContext } from '../../hooks';
 
 import AddButton from '../../../core/components/ui/AddButton';
 import AlertDialog from '../AlertDialog';
+import ExportExcelButton from '@/phicargo/modules/core/components/ui/ExportExcelButton';
 import { FaRegEdit } from 'react-icons/fa';
 import { Payment } from '../../models';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import { RiDeleteRow } from "react-icons/ri";
+import { RiDeleteRow } from 'react-icons/ri';
 import { isGOEWeek } from '../../utils';
 import { useNavigate } from 'react-router-dom';
 import { usePaymentTableColumns } from '../../hooks/usePaymentTableColumns';
 import { useState } from 'react';
+
+const exportConf: ExportConfig<Payment> = {
+  fileName: 'Cuantas por Pagar',
+  withDate: true,
+  columns: [
+    { accessorFn: (data) => data.providerName, header: 'Proveedor' },
+    { accessorFn: (data) => data.totalConfirmed, header: 'Confirmado' },
+    { accessorFn: (data) => data.monday.amount, header: 'Lunes Proyección' },
+    { accessorFn: (data) => data.tuesday.amount, header: 'Martes Proyección' },
+    {
+      accessorFn: (data) => data.wednesday.amount,
+      header: 'Miercoles Proyección',
+    },
+    { accessorFn: (data) => data.thursday.amount, header: 'Jueves Proyección' },
+    { accessorFn: (data) => data.friday.amount, header: 'Viernes Proyección' },
+    { accessorFn: (data) => data.saturday.amount, header: 'Sabado Proyección' },
+    {
+      accessorFn: (data) => data.monday.realAmount,
+      header: 'Lunes Confirmado',
+    },
+    {
+      accessorFn: (data) => data.tuesday.realAmount,
+      header: 'Martes Confirmado',
+    },
+    {
+      accessorFn: (data) => data.wednesday.realAmount,
+      header: 'Miercoles Confirmado',
+    },
+    {
+      accessorFn: (data) => data.thursday.realAmount,
+      header: 'Jueves Confirmado',
+    },
+    {
+      accessorFn: (data) => data.friday.realAmount,
+      header: 'Viernes Confirmado',
+    },
+    {
+      accessorFn: (data) => data.saturday.realAmount,
+      header: 'Sabado Confirmado',
+    },
+    { accessorFn: (data) => data.observations, header: 'Comentarios' },
+  ],
+};
+
+const exportTo = new ExportToExcel(exportConf);
 
 const PaymentTable = () => {
   const navigate = useNavigate();
@@ -103,12 +153,14 @@ const PaymentTable = () => {
             </IconButton>
           </Tooltip>
         </div>
-        <div className="flex flex-row items-center">
-          <AddButton
-            label="Añadir"
-            onPress={() => navigate('/reportes/balance/payment/add')}
-          />
-        </div>
+        <AddButton
+          label="Añadir"
+          onPress={() => navigate('/reportes/balance/payment/add')}
+        />
+        <ExportExcelButton
+          label="Exportar"
+          onPress={() => exportTo.exportData(payments || [])}
+        />
       </div>
     ),
     muiTablePaperProps: {
