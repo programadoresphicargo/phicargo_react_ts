@@ -7,10 +7,12 @@ import type {
   ShiftArchive,
   ShiftCreate,
   ShiftEdit,
+  ShiftReorder,
 } from '../models';
 import {
   shiftCreateToApi,
   shiftEditToApi,
+  shiftReorderToApi,
   shiftToLocal,
 } from '../adapters/shift-adapter';
 import {
@@ -97,6 +99,28 @@ class ShiftServiceApi {
         );
       }
       throw new Error('Error al archivar el turno');
+    }
+  }
+
+  /**
+   * Method to reorder the shifts
+   * @param shifts List of shifts to reorder
+   */
+  public static async reorderShifts(shifts: ShiftReorder[]) {
+
+    const data = shifts.map(shiftReorderToApi);
+
+    try {
+      const response = await odooApi.patch('/shifts/shifts/reorder', data);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      if (error instanceof AxiosError) {
+        throw new Error(
+          error.response?.data?.detail || 'Error al reordenar los turnos',
+        );
+      }
+      throw new Error('Error al reordenar los turnos');
     }
   }
 

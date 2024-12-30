@@ -64,3 +64,8 @@ export interface ShiftEditApi {
   locked?: boolean | null;
 }
 
+
+export interface ShiftReorderApi {
+  shift_id: number;
+  shift: number;
+}

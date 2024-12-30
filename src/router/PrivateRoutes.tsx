@@ -9,6 +9,7 @@ import AvailabilityRoutes from '../phicargo/modules/availability/routes/Availabi
 import CashflowReportRoutes from '../phicargo/modules/cashflow-report/routes/CashflowReportRoutes';
 import DOReportRoutes from '@/phicargo/modules/daily-operations-report/routes/DOReportRoutes';
 import DashboardsRoutes from '@/phicargo/modules/dashboards/routes/DashboardRoutes';
+import EventosPendientes from '@/phicargo/monitoreo/Eventos_pendientes';
 import { LoadingPage } from '../phicargo/modules/core/pages/LoadingPage';
 import MainMenuPage from '@/phicargo/menu/MainManuPage';
 import MaintenanceReportRoutes from '../phicargo/modules/maintenance/routes/MaintenanceReportRoutes';
@@ -21,7 +22,6 @@ import { ToastContainer } from 'react-toastify';
 import { Toaster } from 'react-hot-toast';
 import UsersManagementLayout from '../phicargo/modules/users-management/layouts/UsersManagementLayout';
 import UsersManagementRoutes from '../phicargo/modules/users-management/routes/UsersManagementRoutes';
-import EventosPendientes from '@/phicargo/monitoreo/Eventos_pendientes';
 
 // Lazy load the components
 const CartasPorte = lazy(
@@ -312,7 +312,7 @@ export const PrivateRoutes = () => {
           {AvailabilityRoutes()}
         </Route>
 
-        <Route path="/turnos/*" element={<ShiftsRoutes />}></Route>
+        <Route path="/turnos/*" element={<ShiftsRoutes />}/>
 
         {/* Ruta para manejar rutas no válidas */}
         <Route path="*" element={<NotFoundPage />} />

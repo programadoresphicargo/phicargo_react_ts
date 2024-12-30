@@ -107,6 +107,7 @@ const ShiftDetail = () => {
                     variant="flat"
                     color="danger"
                     startContent={<FiAlertCircle />}
+                    onPress={() => navigate(`/turnos/incidencias/crear/${id}`)}
                   >
                     Registrar Incidencia
                   </Button>
