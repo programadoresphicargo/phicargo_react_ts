@@ -6,7 +6,7 @@ import { ShiftsProvider } from '../context/ShiftsContext';
 import { Toaster } from 'react-hot-toast';
 
 interface Props {
-  children: ReactNode;
+  children?: ReactNode;
 }
 
 const ShiftsLayout = ({ children }: Props) => {

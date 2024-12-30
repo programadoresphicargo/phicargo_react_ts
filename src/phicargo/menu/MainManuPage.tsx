@@ -103,6 +103,12 @@ const menuItems: MenuItemType[] = [
     link: '/dashboards',
     requiredPermissions: [],
   },
+  {
+    icon: turnos_img,
+    label: 'Turnos',
+    requiredPermissions: [8],
+    link: '/turnos',
+  },
 ];
 
 const MainMenuPage = () => {

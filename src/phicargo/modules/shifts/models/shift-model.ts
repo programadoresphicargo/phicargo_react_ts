@@ -69,3 +69,7 @@ export interface ShiftArchive {
   reason: string;
 }
 
+export interface ShiftReorder {
+  shiftId: number;
+  shift: number;
+}

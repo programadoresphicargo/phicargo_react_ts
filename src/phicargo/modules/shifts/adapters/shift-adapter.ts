@@ -7,6 +7,8 @@ import type {
   ShiftCreateApi,
   ShiftEdit,
   ShiftEditApi,
+  ShiftReorder,
+  ShiftReorderApi,
   ShiftSimple,
   ShiftSimpleApi,
   VehicleInfo,
@@ -132,4 +134,14 @@ export const shiftEditToApi = (shift: ShiftEdit): ShiftEditApi => {
 
   return shiftApi;
 };
+
+/**
+ * Mapper to convert the data of a shift from the local model to the API
+ * @param shift Object with the data of the shift
+ * @returns Object with the data of the shift
+ */
+export const shiftReorderToApi = (shift: ShiftReorder): ShiftReorderApi => ({
+  shift_id: shift.shiftId,
+  shift: shift.shift,
+});
 
