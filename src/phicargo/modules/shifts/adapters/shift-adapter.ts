@@ -49,6 +49,7 @@ const vehicleInfoToLocal = (vehicle: VehicleInfoApi): VehicleInfo => ({
 export const shiftToLocal = (shift: ShiftApi): Shift => ({
   id: shift.id,
   shift: shift.shift,
+  phoneNumber: null,
   arrivalAt: dayjs(shift.arrival_at),
   locked: shift.locked,
   maneuver1: shift.maneuver1,

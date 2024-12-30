@@ -36,6 +36,7 @@ export interface ShiftBase {
 
 export interface Shift extends ShiftBase {
   id: number;
+  phoneNumber: string | null;
   branch: BranchSimple;
   driver: DriverInfo;
   vehicle: VehicleInfo;
