@@ -10,6 +10,7 @@ const CreateShift = lazy(() => import('../outlets/CreateShift'));
 const ShiftQueues = lazy(() => import('../outlets/ShiftQueues'));
 const CreateIncidence = lazy(() => import('../outlets/CreateIncidence'));
 const IncidencesList = lazy(() => import('../outlets/IncidencesList'));
+const TravelsNearToBranch = lazy(() => import('../outlets/TravelsNearToBranch'));
 
 const ShiftsRoutes = () => {
   return (
@@ -60,6 +61,14 @@ const ShiftsRoutes = () => {
             element={
               <Suspense fallback={null}>
                 <CreateIncidence />
+              </Suspense>
+            }
+          />
+          <Route
+            path="unidades-bajando"
+            element={
+              <Suspense fallback={null}>
+                <TravelsNearToBranch />
               </Suspense>
             }
           />

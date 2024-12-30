@@ -17,6 +17,7 @@ import { useReorderShifts } from '../hooks/useReorderShifts';
 import { useShiftColumns } from '../hooks/useShiftColumns';
 import { useShiftQueries } from '../hooks/useShiftQueries';
 import { getRowActionMenuItems } from '../components/RowActionsList';
+import { TbTruckReturn } from "react-icons/tb";
 
 const exportConf: ExportConfig<Shift> = {
   fileName: 'Turnos',
@@ -129,6 +130,16 @@ const ShiftsPage = () => {
           onPress={() => navigate('/turnos/incidencias')}
         >
           Conteo de Incidencias
+        </Button>
+        <Button
+          size="sm"
+          variant="faded"
+          color="warning"
+          className="font-bold"
+          startContent={<TbTruckReturn />}
+          onPress={() => navigate('/turnos/unidades-bajando')}
+        >
+          Unidades Bajando
         </Button>
         <ExportExcelButton
           size="sm"
