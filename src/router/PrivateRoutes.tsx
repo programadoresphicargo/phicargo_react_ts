@@ -22,6 +22,7 @@ import { Toaster } from 'react-hot-toast';
 import UsersManagementLayout from '../phicargo/modules/users-management/layouts/UsersManagementLayout';
 import UsersManagementRoutes from '../phicargo/modules/users-management/routes/UsersManagementRoutes';
 import EventosPendientes from '@/phicargo/monitoreo/Eventos_pendientes';
+import Saldos from '@/phicargo/saldos_contabilidad/ControlUsuarios';
 
 // Lazy load the components
 const CartasPorte = lazy(
@@ -285,6 +286,7 @@ export const PrivateRoutes = () => {
         />
         <Route path="/reportes/balance/*" element={<CashflowReportRoutes />} />
         <Route path="/reportes/operaciones" element={<DOReportRoutes />} />
+        <Route path="/reportes/saldos/" element={<Saldos />} />
 
         <Route path="/dashboards/*" element={<DashboardsRoutes />} />
 
