@@ -29,7 +29,7 @@ const AñadirContenedor = ({ show, handleClose, id_maniobra }) => {
     };
 
     const currentYear = new Date().getFullYear();
-    const [selectedYear, setSelectedYear] = useState([currentYear]);
+    const [selectedYear, setSelectedYear] = useState(currentYear);
 
     const handleChangeYear = (event) => {
         setSelectedYear(event.target.value);
@@ -37,7 +37,7 @@ const AñadirContenedor = ({ show, handleClose, id_maniobra }) => {
 
     useEffect(() => {
         const fetchData = async (month, year,) => {
-            if (!selectedMonth || !selectedYear) return; // Asegúrate de que ambos valores estén presentes
+            if (!selectedMonth || !selectedYear) return; 
 
             try {
                 setILoading(true);
@@ -46,7 +46,7 @@ const AñadirContenedor = ({ show, handleClose, id_maniobra }) => {
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ month, year }), // Convertir el objeto a una cadena JSON
+                    body: JSON.stringify({ month, year }), 
                 });
 
                 if (!response.ok) {

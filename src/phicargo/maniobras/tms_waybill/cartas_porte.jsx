@@ -47,11 +47,11 @@ const CartasPorte = () => {
 
   const [data, setData] = useState([]);
 
-  const currentYear = new Date().getFullYear(); 
-  const [selectedYear, setSelectedYear] = useState([currentYear]); 
+  const currentYear = String(new Date().getFullYear());
+  const [selectedYear, setSelectedYear] = useState(currentYear);
 
   const handleChangeYear = (event) => {
-    setSelectedYear(event.target.value); 
+    setSelectedYear(event.target.value);
   };
 
   const fetchData = async (month, year, selectedTab) => {
