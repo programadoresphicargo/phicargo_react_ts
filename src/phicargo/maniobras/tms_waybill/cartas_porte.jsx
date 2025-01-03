@@ -12,9 +12,11 @@ import {
   useMaterialReactTable,
 } from 'material-react-table';
 import ManiobrasNavBar from '../Navbar';
+import { Button, Select, SelectItem } from '@nextui-org/react';
+import YearSelector from '@/año';
 
 const CartasPorte = () => {
-
+  const [isLoading2, setLoading] = useState();
   const [selectedTab, setSelectedTab] = useState('carta');
 
   const handleTabChange = (event, newValue) => {
@@ -24,7 +26,6 @@ const CartasPorte = () => {
 
   const currentMonth = String(new Date().getMonth() + 1).padStart(2, '0');
   const [selectedMonth, setSelectedMonth] = useState(currentMonth);
-  const [isLoading2, setLoading] = useState();
 
   const handleChange = (event) => {
     setSelectedMonth(event.target.value);
@@ -44,9 +45,16 @@ const CartasPorte = () => {
 
   const handleCloseModal = () => setModalShow(false);
 
-  const [data, setData] = useState([]); // Estado para almacenar los datos
+  const [data, setData] = useState([]);
 
-  const fetchData = async (month, selectedTab) => {
+  const currentYear = new Date().getFullYear(); 
+  const [selectedYear, setSelectedYear] = useState([currentYear]); 
+
+  const handleChangeYear = (event) => {
+    setSelectedYear(event.target.value); 
+  };
+
+  const fetchData = async (month, year, selectedTab) => {
     if (!month || selectedTab === undefined) return;
     setLoading(true);
     try {
@@ -55,7 +63,7 @@ const CartasPorte = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ month, selectedTab }), // Enviamos month y selectedTab
+        body: JSON.stringify({ month, year, selectedTab }),
       });
 
       const jsonData = await response.json();
@@ -69,8 +77,8 @@ const CartasPorte = () => {
   };
 
   useEffect(() => {
-    fetchData(selectedMonth, selectedTab);
-  }, [selectedMonth, selectedTab]);
+    fetchData(selectedMonth, selectedYear, selectedTab);
+  }, [selectedMonth, selectedYear, selectedTab]);
 
   const columns = useMemo(
     () => [
@@ -193,11 +201,7 @@ const CartasPorte = () => {
         color: row.subRows?.length ? '#FFFFFF' : '#000000',
       },
     }),
-  });
-
-  return (
-    <div>
-      <ManiobrasNavBar />
+    renderTopToolbarCustomActions: ({ table }) => (
       <Box display="flex" alignItems="center" m={2}>
         <Box sx={{ flexGrow: 1, mr: 2 }}>
           <MonthSelector
@@ -205,6 +209,17 @@ const CartasPorte = () => {
             handleChange={handleChange}
           />
         </Box>
+        <Box sx={{ flexGrow: 1, mr: 2 }}>
+          <YearSelector selectedYear={selectedYear} handleChange={handleChangeYear}></YearSelector>
+        </Box>
+      </Box>
+    ),
+  });
+
+  return (
+    <div>
+      <ManiobrasNavBar />
+      <Box display="flex" alignItems="center" m={2}>
         <Box sx={{ flexGrow: 1, mr: 2 }}>
           <Tabs value={selectedTab} onChange={handleTabChange} aria-label="Tabs">
             <Tab value="carta" label="Carta porte" />
@@ -219,7 +234,6 @@ const CartasPorte = () => {
         x_reference={x_reference}
         id_cliente={partner_id} />
       <ThemeProvider theme={customFontTheme}>
-        {/* Agrega una key basada en selectedTab para forzar la reconstrucción */}
         <MaterialReactTable key={selectedTab} table={table} />
       </ThemeProvider>
     </div >

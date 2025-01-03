@@ -10,6 +10,9 @@ const MonthSelector = ({ selectedMonth, handleChange }) => {
         className="max-w-xs"
         onChange={handleChange}
         value={selectedMonth}
+        selectedKeys={selectedMonth}
+        style={{ minWidth: "200px" }}
+        variant='bordered'
       >
         <SelectItem key={1}>Enero</SelectItem>
         <SelectItem key={2}>Febrero</SelectItem>

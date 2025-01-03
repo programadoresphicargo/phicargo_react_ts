@@ -11,43 +11,33 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { Select, SelectItem } from '@nextui-org/react';
+import MonthSelector from '@/mes';
+import YearSelector from '@/año';
 const { VITE_PHIDES_API_URL } = import.meta.env;
-
-
-
-const months = [
-    { value: '01', name: 'Enero' },
-    { value: '02', name: 'Febrero' },
-    { value: '03', name: 'Marzo' },
-    { value: '04', name: 'Abril' },
-    { value: '05', name: 'Mayo' },
-    { value: '06', name: 'Junio' },
-    { value: '07', name: 'Julio' },
-    { value: '08', name: 'Agosto' },
-    { value: '09', name: 'Septiembre' },
-    { value: '10', name: 'Octubre' },
-    { value: '11', name: 'Noviembre' },
-    { value: '12', name: 'Diciembre' }
-];
 
 const AñadirContenedor = ({ show, handleClose, id_maniobra }) => {
 
-    const [data, setData] = useState([]); // Estado para almacenar los datos
+    const [data, setData] = useState([]);
     const [isLoading2, setILoading] = useState();
-    const currentMonth = new Date().toLocaleDateString('es-MX', { month: '2-digit' });
-    const [selectedMonth, setSelectedMonth] = useState('');
 
-    useEffect(() => {
-        setSelectedMonth(currentMonth);
-    }, [currentMonth]);
+    const currentMonth = String(new Date().getMonth() + 1).padStart(2, '0');
+    const [selectedMonth, setSelectedMonth] = useState(currentMonth);
 
     const handleChange = (event) => {
         setSelectedMonth(event.target.value);
     };
 
+    const currentYear = new Date().getFullYear();
+    const [selectedYear, setSelectedYear] = useState([currentYear]);
+
+    const handleChangeYear = (event) => {
+        setSelectedYear(event.target.value);
+    };
+
     useEffect(() => {
-        const fetchData = async () => {
-            if (!selectedMonth) return;
+        const fetchData = async (month, year,) => {
+            if (!selectedMonth || !selectedYear) return; // Asegúrate de que ambos valores estén presentes
 
             try {
                 setILoading(true);
@@ -56,19 +46,24 @@ const AñadirContenedor = ({ show, handleClose, id_maniobra }) => {
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ month: selectedMonth }), // Convertir el objeto a una cadena JSON
+                    body: JSON.stringify({ month, year }), // Convertir el objeto a una cadena JSON
                 });
+
+                if (!response.ok) {
+                    throw new Error('Error en la respuesta de la API');
+                }
 
                 const jsonData = await response.json();
                 setData(jsonData); // Actualiza el estado con los datos obtenidos
-                setILoading(false);
             } catch (error) {
                 console.error('Error al obtener los datos:', error);
+            } finally {
+                setILoading(false); // Asegúrate de que setILoading se ejecute siempre
             }
         };
 
-        fetchData();
-    }, [selectedMonth]);
+        fetchData(selectedMonth, selectedYear);
+    }, [selectedMonth, selectedYear]);
 
     const añadir_contenedor = (id_cp) => {
         axios.post(VITE_PHIDES_API_URL + '/modulo_maniobras/maniobra/añadir_contenedor.php?id_maniobra=' + id_maniobra + '&id_cp=' + id_cp,)
@@ -184,6 +179,19 @@ const AñadirContenedor = ({ show, handleClose, id_maniobra }) => {
                 cursor: 'pointer', // Cambia el cursor al pasar sobre la fila
             },
         }),
+        renderTopToolbarCustomActions: ({ table }) => (
+            <Box display="flex" alignItems="center" m={2}>
+                <Box sx={{ flexGrow: 1, mr: 2 }}>
+                    <MonthSelector
+                        selectedMonth={selectedMonth}
+                        handleChange={handleChange}
+                    />
+                </Box>
+                <Box sx={{ flexGrow: 1, mr: 2 }}>
+                    <YearSelector selectedYear={selectedYear} handleChange={handleChangeYear}></YearSelector>
+                </Box>
+            </Box>
+        ),
     });
 
     return (
@@ -198,14 +206,6 @@ const AñadirContenedor = ({ show, handleClose, id_maniobra }) => {
                     Contenedores
                 </DialogTitle>
                 <DialogContent>
-                    <select value={selectedMonth} onChange={handleChange} className="form-control">
-                        <option value="" disabled>Selecciona un mes</option>
-                        {months.map((month) => (
-                            <option key={month.value} value={month.value}>
-                                {month.name}
-                            </option>
-                        ))}
-                    </select>
                     <MaterialReactTable table={table} />
                 </DialogContent>
             </Dialog>
