@@ -8,53 +8,70 @@ import reportIcon from '../../../../assets/menu/reportes.png';
 import maintenanceIcon from '../../../../assets/menu/maintenanceIcon.png';
 import clockIcon from '../../../../assets/menu/clock.png';
 import phoneIcon from '../../../../assets/menu/app.png';
+import truckIcon from '../../../../assets/menu/viajes.png'
 import { useAuthContext } from '../../auth/hooks';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+const { VITE_PHIDES_API_URL } = import.meta.env;
 
 type MenuItemType = {
   icon: string;
   label: string;
   path: string;
   requiredPermissions: number[];
+  isExternal: boolean;
 };
 
 const reports: MenuItemType[] = [
   {
     label: 'Reporte gerencial',
-    path: '/reportes/saldos/',
+    path: VITE_PHIDES_API_URL + '/informe_seguimiento/informe/index.php',
     icon: reportIcon,
-    requiredPermissions: [],
+    requiredPermissions: [198],
+    isExternal: true
   },
   {
     label: 'Mantenimiento',
     path: '/reportes/mantenimiento',
     icon: maintenanceIcon,
     requiredPermissions: [198],
+    isExternal: false
   },
   {
     label: 'Balance',
     path: '/reportes/balance',
     icon: balanceIcon,
     requiredPermissions: [197],
+    isExternal: false
   },
   {
     label: 'Operaciones Diarias',
     path: '/reportes/operaciones',
     icon: dailyOpIcon,
     requiredPermissions: [201],
+    isExternal: false
   },
   {
     label: 'Tiempos de salidas y llegadas',
     path: '/detenciones',
     icon: clockIcon,
     requiredPermissions: [],
+    isExternal: false
   },
   {
     label: 'Cumplimiento estatus',
     path: '/cumplimiento',
     icon: phoneIcon,
     requiredPermissions: [],
+    isExternal: false
+
+  },
+  {
+    label: 'Asignación de unidades',
+    path: '/asignacion',
+    icon: truckIcon,
+    requiredPermissions: [],
+    isExternal: false
   },
 ];
 
@@ -113,6 +130,7 @@ const ReportsMenuPage = () => {
                 icon={item.icon}
                 label={item.label}
                 path={item.path}
+                isExternal={item.isExternal}
               />
             ))}
           </div>
@@ -123,4 +141,3 @@ const ReportsMenuPage = () => {
 };
 
 export default ReportsMenuPage;
-
