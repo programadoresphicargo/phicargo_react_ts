@@ -172,7 +172,7 @@ const Cuentas = ({ estado }) => {
           Nueva cuenta
         </ModalHeader>
         <ModalBody>
-          <CuentaForm id_cuenta={id_cuenta}></CuentaForm>
+          <CuentaForm id_cuenta={id_cuenta} onClose={handleClose}></CuentaForm>
         </ModalBody>
       </ModalContent>
     </Modal>

@@ -112,7 +112,7 @@ const Operadores = ({ estado }) => {
               cursor: 'pointer',
             }}
           >
-            Acción
+            <i class="bi bi-pen"></i>
           </button>)
       },
     ],

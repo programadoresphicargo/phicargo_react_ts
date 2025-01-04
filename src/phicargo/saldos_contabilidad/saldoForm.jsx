@@ -7,10 +7,10 @@ import odooApi from "../modules/core/api/odoo-api";
 import { Input } from "@nextui-org/react";
 import { Button } from "@nextui-org/react";
 import { DatePicker } from "@nextui-org/react";
-import {parseDate, getLocalTimeZone} from "@internationalized/date";
+import { parseDate, getLocalTimeZone } from "@internationalized/date";
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
-const SaldoForm = ({ id_operador, onClose }) => {
+const SaldoForm = ({ id_cuenta, onClose }) => {
     const fechaActual = new Date().toISOString().split('T')[0];
     const [value, setValue] = React.useState(parseDate(fechaActual));
 
@@ -47,9 +47,9 @@ const SaldoForm = ({ id_operador, onClose }) => {
         }
     };
 
-    const getUsuario = async () => {
+    const getSaldoCuentaByFecha = async () => {
         try {
-            const response = await odooApi.get('/drivers/' + id_operador);
+            const response = await odooApi.get(`/saldos/id_cuenta_fecha/${id_cuenta}/${value}`);
             setNombreOperador(response.data.name);
             setPassword(response.data.password);
 
@@ -60,7 +60,7 @@ const SaldoForm = ({ id_operador, onClose }) => {
 
 
     useEffect(() => {
-        getUsuario();
+        getSaldoCuentaByFecha();
     }, []);
 
     return (
