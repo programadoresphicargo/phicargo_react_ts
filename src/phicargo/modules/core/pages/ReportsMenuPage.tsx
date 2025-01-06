@@ -133,4 +133,3 @@ const ReportsMenuPage = () => {
 };
 
 export default ReportsMenuPage;
-

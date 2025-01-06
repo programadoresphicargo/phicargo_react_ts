@@ -17,6 +17,7 @@ import NotFoundPage from '@/phicargo/modules/core/pages/NotFoundPage';
 import PersistentDrawer from '../phicargo/monitoreo/Eventos';
 import ProtectedRoute from './ProtectedRoute';
 import ReportsMenuPage from '../phicargo/modules/core/pages/ReportsMenuPage';
+import Saldos from '@/phicargo/saldos_contabilidad/ControlUsuarios';
 import ShiftsRoutes from '../phicargo/modules/shifts/routes/ShiftsRoutes';
 import { ToastContainer } from 'react-toastify';
 import { Toaster } from 'react-hot-toast';
@@ -285,6 +286,7 @@ export const PrivateRoutes = () => {
         />
         <Route path="/reportes/balance/*" element={<CashflowReportRoutes />} />
         <Route path="/reportes/operaciones" element={<DOReportRoutes />} />
+        <Route path="/reportes/saldos/" element={<Saldos />} />
 
         <Route path="/dashboards/*" element={<DashboardsRoutes />} />
 
