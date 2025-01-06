@@ -35,7 +35,7 @@ export interface VehicleBaseApi {
 export interface VehicleApi extends VehicleBaseApi {
   tms_travel: TravelSimpleApi | null;
   maniobra: ManeuverSimpleApi | null;
-  maintenance_records: MaintenanceRecordSimpleApi[];
+  maintenance_records: MaintenanceRecordSimpleApi | null;
   driver: DriverSimpleApi | null;
 }
 

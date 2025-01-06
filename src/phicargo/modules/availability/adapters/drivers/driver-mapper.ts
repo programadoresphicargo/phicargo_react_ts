@@ -41,18 +41,19 @@ const driverBaseToLocal = (driver: DriverBaseApi): DriverBase => ({
  */
 export const driverToLocal = (driver: DriverApi): Driver => ({
   ...driverBaseToLocal(driver),
-  vehicle:
-    driver.vehicle.length > 0
-      ? {
-          id: driver.vehicle[0].id,
-          name: driver.vehicle[0].name2,
-          fleetType: driver.vehicle[0].fleet_type,
-          status: driver.vehicle[0].x_status,
-          modality: driver.vehicle[0].x_modalidad,
-          loadType: driver.vehicle[0].x_tipo_carga,
-        }
-      : null,
-  permissions: driver.permissions.map(driverPermissionSimpleToLocal),
+  vehicle: driver.vehicle
+    ? {
+        id: driver.vehicle.id,
+        name: driver.vehicle.name2,
+        fleetType: driver.vehicle.fleet_type,
+        status: driver.vehicle.x_status,
+        modality: driver.vehicle.x_modalidad,
+        loadType: driver.vehicle.x_tipo_carga,
+      }
+    : null,
+  permissions: driver.permissions
+    ? driverPermissionSimpleToLocal(driver.permissions)
+    : null,
   travel: driver.tms_travel
     ? {
         id: driver.tms_travel.id,
