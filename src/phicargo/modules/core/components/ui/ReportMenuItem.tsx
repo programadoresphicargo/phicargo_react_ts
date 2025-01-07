@@ -4,18 +4,13 @@ interface MenuItemProps {
   icon: string;
   label: string;
   path: string;
-  isExternal: boolean;
 }
 
-const ReportMenuItem = ({ icon, label, path, isExternal }: MenuItemProps) => {
+const ReportMenuItem = ({ icon, label, path}: MenuItemProps) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    if (isExternal) {
-      window.open(path, '_blank', 'noopener,noreferrer');
-    } else {
       navigate(path);
-    }
   };
 
   return (

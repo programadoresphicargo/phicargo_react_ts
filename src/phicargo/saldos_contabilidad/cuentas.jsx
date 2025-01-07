@@ -64,7 +64,7 @@ const Cuentas = ({ estado }) => {
         header: 'Cuenta',
       },
       {
-        accessorFn: (row) => row.bancos?.banco,
+        accessorKey: 'banco',
         header: 'Banco',
       },
       {

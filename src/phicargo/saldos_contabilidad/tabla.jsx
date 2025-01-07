@@ -23,6 +23,8 @@ import Cuentas from './cuentas';
 import SaldoForm from './saldoForm';
 
 const Operadores = ({ estado }) => {
+  const [id_cuenta, setCuenta] = React.useState(0);
+  const [referencia, setReferencia] = React.useState(0);
 
   const fechaActual = new Date().toISOString().split('T')[0];
   const [value, setValue] = React.useState(parseDate(fechaActual));
@@ -39,8 +41,10 @@ const Operadores = ({ estado }) => {
     setOpen(true);
   };
 
-  const abrirForm = () => {
+  const abrirForm = (id_cuenta, referencia) => {
     setOpen2(true);
+    setCuenta(id_cuenta);
+    setReferencia(referencia);
   };
 
   const handleClose = () => {
@@ -50,6 +54,7 @@ const Operadores = ({ estado }) => {
 
   const handleClose2 = () => {
     setOpen2(false);
+    fetchData();
   };
 
   const [data, setData] = useState([]);
@@ -91,18 +96,18 @@ const Operadores = ({ estado }) => {
       },
       {
         accessorKey: 'saldo_anterior',
-        header: 'Saldo anterior - ' + formattedValueMenosUnDia,
+        header: 'Saldo anterior',
       },
       {
         accessorKey: 'saldo_actual',
-        header: 'Saldo actual - ' + value,
+        header: 'Saldo actual',
       },
       {
         accessorKey: 'id_saldo',
         header: 'Acción',
         Cell: ({ row }) => (
           <button
-            onClick={() => abrirForm(row.original)}
+            onClick={() => abrirForm(row.original.id_cuenta, row.original.referencia)}
             style={{
               backgroundColor: '#4CAF50',
               color: 'white',
@@ -224,7 +229,7 @@ const Operadores = ({ estado }) => {
           Registro de saldo
         </ModalHeader>
         <ModalBody>
-          <SaldoForm></SaldoForm>
+          <SaldoForm id_cuenta={id_cuenta} referencia={referencia} onClose={handleClose}></SaldoForm>
         </ModalBody>
       </ModalContent>
     </Modal>

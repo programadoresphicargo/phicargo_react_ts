@@ -1,97 +1,129 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { TextField, MenuItem, Select, InputLabel, FormControl, Grid, Grid2 } from "@mui/material";
-import axios from "axios";
-import { toast } from 'react-toastify';
-import Stack from '@mui/material/Stack';
+import React, { useState, useEffect } from "react";
+import { Grid, Stack } from "@mui/material";
+import { toast } from "react-toastify";
 import odooApi from "../modules/core/api/odoo-api";
-import { Input } from "@nextui-org/react";
-import { Button } from "@nextui-org/react";
-import { DatePicker } from "@nextui-org/react";
-import { parseDate, getLocalTimeZone } from "@internationalized/date";
-const { VITE_PHIDES_API_URL } = import.meta.env;
+import { Input, Button, DateInput, DatePicker } from "@nextui-org/react";
+import { useDateFormatter } from "@react-aria/i18n";
+import { parseDate, getLocalTimeZone, today } from "@internationalized/date";
 
-const SaldoForm = ({ id_cuenta, onClose }) => {
-    const fechaActual = new Date().toISOString().split('T')[0];
-    const [value, setValue] = React.useState(parseDate(fechaActual));
+const SaldoForm = ({ id_cuenta, referencia, onClose }) => {
+    const currentDate = today(getLocalTimeZone());
+    const [value, setValue] = useState(currentDate);
+    const [formData, setFormData] = useState({
+        id_saldo: "",
+        id_cuenta: id_cuenta || "",
+        fecha: value.toString(),
+        saldo: 0,
+        id_usuario: "",
+        disponible: 0,
+        utilizado: 0,
+    });
 
-    const [nombre_operador, setNombreOperador] = useState("");
-    const [password, setPassword] = useState("");
+    let formatter = useDateFormatter({ dateStyle: "full" });
 
-    const actualizarOperador = async () => {
+    const actualizarSaldo = async () => {
         try {
-            const response = await fetch(VITE_PHIDES_API_URL + "/operadores/actualizar.php", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: new URLSearchParams({
-                    'id_operador': id_operador,
-                    'password': password,
-                }),
-            });
-
-            if (!response.ok) {
-                throw new Error(`Error HTTP: ${response.status}`);
-            }
-
-            const data = await response.json();
-
-            if (data.status === "success") {
-                toast.success(data.message);
-            } else if (data.status === "error") {
-                toast.error(data.message);
+            const response = await odooApi.post(`/saldos/actualizar_saldo/`, formData);
+            const data = response.data || response;
+            if (data.mensaje === "Saldo actualizado exitosamente") {
+                toast.success(data.mensaje);
+            } else {
+                toast.error(data.mensaje);
             }
         } catch (error) {
             toast.error("Error de conexión: " + error.message);
-            console.error(error);
         }
     };
 
     const getSaldoCuentaByFecha = async () => {
         try {
-            const response = await odooApi.get(`/saldos/id_cuenta_fecha/${id_cuenta}/${value}`);
-            setNombreOperador(response.data.name);
-            setPassword(response.data.password);
-
+            const response = await odooApi.get(
+                `/saldos/get_saldo_by_cuenta_and_fecha/${id_cuenta}/${value.toString()}`
+            );
+            if (response.data && response.data.length > 0) {
+                const saldoData = response.data[0];
+                setFormData({
+                    id_saldo: saldoData.id_saldo,
+                    id_cuenta: saldoData.id_cuenta,
+                    fecha: saldoData.fecha,
+                    saldo: saldoData.saldo,
+                    id_usuario: saldoData.id_usuario,
+                    disponible: saldoData.disponible,
+                    utilizado: saldoData.utilizado,
+                });
+                toast.success("Datos cargados correctamente.");
+            } else {
+                setFormData({
+                    id_saldo: "",
+                    id_cuenta: id_cuenta || "",
+                    fecha: value.toString(),
+                    saldo: 0,
+                    id_usuario: "",
+                    disponible: 0,
+                    utilizado: 0,
+                });
+                toast.warn("No se encontraron datos para la cuenta y fecha especificadas.");
+            }
         } catch (error) {
-            toast.error("Error enviando los datos: " + error);
+            toast.error("Error al obtener los datos: " + error.message);
         }
     };
 
-
     useEffect(() => {
-        getSaldoCuentaByFecha();
-    }, []);
+        if (id_cuenta) {
+            getSaldoCuentaByFecha();
+        }
+    }, [id_cuenta, value]);
 
     return (
-        <>
-            <Grid container spacing={2} className="mb-5">
-                <Grid item xs={12} md={12}>
-                    <DatePicker label={"Fecha del saldo"} variant="bordered" value={value} onChange={setValue} />
-                </Grid>
-                <Grid item xs={12} md={12}>
-                    <Input
-                        label="Nuevo saldo"
-                        variant="bordered"
-                        type="number"
-                    />
-                </Grid>
-                <Grid item xs={12} md={12}>
-                    <Input
-                        variant="bordered"
-                        label="Disponible"
-                        type="number"
-                    />
-                </Grid>
-                <Grid item xs={12} md={12}>
-                    <Stack spacing={2} direction="row">
-                        <Button color="primary" onClick={actualizarOperador}>
-                            Actualizar
-                        </Button>
-                    </Stack>
-                </Grid>
+        <Grid container spacing={2} className="mb-5">
+            <Grid item xs={12}>
+                <h1>{referencia}</h1>
             </Grid>
-        </>
+            <Grid item xs={12}>
+                <DatePicker
+                    label="Fecha del saldo"
+                    variant="bordered"
+                    value={value}
+                    onChange={(newValue) => {
+                        setValue(newValue);
+                        setFormData({ ...formData, fecha: newValue.toString() });
+                    }}
+                />
+                <p className="text-default-500 text-sm">
+                    Fecha seleccionada: {value ? formatter.format(value.toDate(getLocalTimeZone())) : "--"}
+                </p>
+            </Grid>
+            <Grid item xs={12}>
+                <Input
+                    label="Nuevo saldo"
+                    variant="bordered"
+                    type="number"
+                    value={formData.saldo}
+                    onChange={(e) =>
+                        setFormData({ ...formData, saldo: e.target.value })
+                    }
+                />
+            </Grid>
+            <Grid item xs={12}>
+                <Input
+                    variant="bordered"
+                    label="Disponible"
+                    type="number"
+                    value={formData.disponible}
+                    onChange={(e) =>
+                        setFormData({ ...formData, disponible: e.target.value })
+                    }
+                />
+            </Grid>
+            <Grid item xs={12}>
+                <Stack spacing={2} direction="row">
+                    <Button color="primary" onClick={actualizarSaldo}>
+                        Actualizar
+                    </Button>
+                </Stack>
+            </Grid>
+        </Grid>
     );
 };
 
