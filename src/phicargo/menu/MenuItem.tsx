@@ -1,5 +1,5 @@
-import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../modules/auth/hooks';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
   icon: string;
