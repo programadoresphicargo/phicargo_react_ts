@@ -14,7 +14,7 @@ import {
   Button,
   useDisclosure,
 } from "@nextui-org/react";
-
+import { Chip } from "@nextui-org/react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -85,10 +85,30 @@ const Operadores = ({ estado }) => {
       {
         accessorKey: 'banco',
         header: 'Banco',
+        Cell: ({ cell }) => {
+          const referencia = cell.getValue() || '';
+          return (
+            <Chip color='primary'>
+              {referencia}
+            </Chip>
+          );
+        },
       },
       {
         accessorKey: 'referencia',
         header: 'Referencia',
+        Cell: ({ cell }) => {
+          const referencia = cell.getValue() || '';
+          return (
+            <Chip color='success' className='text-white'>
+              {referencia}
+            </Chip>
+          );
+        },
+      },
+      {
+        accessorKey: 'tipo',
+        header: 'Tipo',
       },
       {
         accessorKey: 'moneda',
@@ -97,10 +117,111 @@ const Operadores = ({ estado }) => {
       {
         accessorKey: 'saldo_anterior',
         header: 'Saldo anterior',
+        muiTableBodyCellProps: {
+          align: 'right',
+        },
+        Footer: ({ column, table }) => {
+          const totalGlobal = table
+            .getFilteredRowModel()
+            .rows.reduce((sum, row) => {
+              const value = row.getValue(column.id) || '0';
+              const numericValue = parseFloat(value.replace(/,/g, ''));
+              return sum + (isNaN(numericValue) ? 0 : numericValue);
+            }, 0);
+
+          if (totalGlobal === 0) return ''; // No mostrar nada si el total es 0.0
+
+          const formattedTotal = new Intl.NumberFormat('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }).format(totalGlobal);
+
+          return `Total Global: ${formattedTotal}`;
+        },
+        AggregatedCell: ({ column, row }) => {
+          const groupTotal = row
+            .subRows.reduce((sum, subRow) => {
+              const value = subRow.getValue(column.id) || '0';
+              const numericValue = parseFloat(value.replace(/,/g, ''));
+              return sum + (isNaN(numericValue) ? 0 : numericValue);
+            }, 0);
+
+          if (groupTotal === 0) return ''; // No mostrar nada si el total del grupo es 0.0
+
+          const formattedTotal = new Intl.NumberFormat('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }).format(groupTotal);
+
+          return `Total: ${formattedTotal}`;
+        },
+        Cell: ({ cell }) => {
+          const value = parseFloat((cell.getValue() || '0').replace(/,/g, ''));
+          if (value === 0) return ''; // No mostrar nada si el valor es 0.0
+
+          return new Intl.NumberFormat('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }).format(value);
+        },
       },
       {
         accessorKey: 'saldo_actual',
-        header: 'Saldo actual',
+        header: 'Saldo Actual',
+        muiTableBodyCellProps: {
+          align: 'right',
+        },
+        Footer: ({ column, table }) => {
+          const totalGlobal = table
+            .getFilteredRowModel()
+            .rows.reduce((sum, row) => {
+              const value = row.getValue(column.id) || '0';
+              const numericValue = parseFloat(value.replace(/,/g, ''));
+              return sum + (isNaN(numericValue) ? 0 : numericValue);
+            }, 0);
+
+          if (totalGlobal === 0) return ''; // No mostrar nada si el total es 0.0
+
+          const formattedTotal = new Intl.NumberFormat('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }).format(totalGlobal);
+
+          return `Total Global: ${formattedTotal}`;
+        },
+        AggregatedCell: ({ column, row }) => {
+          const groupTotal = row
+            .subRows.reduce((sum, subRow) => {
+              const value = subRow.getValue(column.id) || '0';
+              const numericValue = parseFloat(value.replace(/,/g, ''));
+              return sum + (isNaN(numericValue) ? 0 : numericValue);
+            }, 0);
+
+          if (groupTotal === 0) return ''; // No mostrar nada si el total del grupo es 0.0
+
+          const formattedTotal = new Intl.NumberFormat('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }).format(groupTotal);
+
+          return `Total: ${formattedTotal}`;
+        },
+        Cell: ({ cell }) => {
+          const value = parseFloat((cell.getValue() || '0').replace(/,/g, ''));
+          if (value === 0) return ''; // No mostrar nada si el valor es 0.0
+
+          return new Intl.NumberFormat('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }).format(value);
+        },
+      },
+      {
+        accessorKey: 'variacion',
+        header: 'Variación',
+        muiTableBodyCellProps: {
+          align: 'right',
+        },
       },
       {
         accessorKey: 'id_saldo',
@@ -136,8 +257,8 @@ const Operadores = ({ estado }) => {
     columnResizeMode: "onEnd",
     initialState: {
       density: 'compact',
-      expanded: true,
-      grouping: ['empresa', 'moneda'],
+      expanded: false,
+      grouping: ['empresa', 'tipo', 'moneda'],
       pagination: { pageIndex: 0, pageSize: 100 },
       showColumnFilters: true,
     },
@@ -166,7 +287,7 @@ const Operadores = ({ estado }) => {
     },
     muiTableBodyCellProps: ({ row }) => ({
       sx: {
-        backgroundColor: row.subRows?.length ? '#1184e8' : '#FFFFFF',
+        backgroundColor: row.subRows?.length ? '#0456cf' : '#FFFFFF',
         fontFamily: 'Inter',
         fontWeight: 'normal',
         fontSize: '14px',
@@ -175,7 +296,7 @@ const Operadores = ({ estado }) => {
     }),
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 200px)',
+        maxHeight: 'calc(100vh - 280px)',
       },
     },
     renderTopToolbarCustomActions: ({ table }) => (
