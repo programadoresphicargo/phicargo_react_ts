@@ -245,8 +245,15 @@ const ViajesActivos = ({ }) => {
     state: { isLoading: isLoading },
     enableColumnPinning: true,
     enableStickyHeader: true,
+    positionGlobalFilter: "right",
+    muiSearchTextFieldProps: {
+      placeholder: `Buscar en ${data.length} viajes`,
+      sx: { minWidth: '300px' },
+      variant: 'outlined',
+    },
     columnResizeMode: "onEnd",
     initialState: {
+      showGlobalFilter: true,
       columnVisibility: {
         empresa: false,
       },
