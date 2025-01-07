@@ -91,7 +91,7 @@ const Entregas = ({ fecha }) => {
       }
 
     } catch (error) {
-      toast.error('Error al obtener los datos:', error);
+      toast.error('Error al obtener los datos: '  + error);
     }
   };
 
@@ -111,7 +111,7 @@ const Entregas = ({ fecha }) => {
         header: 'Fecha',
       },
       {
-        accessorFn: (row) => row.usuario?.nombre,
+        accessorKey: 'nombre_usuario',
         header: 'Monitorista',
       },
       {

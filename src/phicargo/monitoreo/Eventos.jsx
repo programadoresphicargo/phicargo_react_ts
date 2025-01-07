@@ -178,7 +178,7 @@ export default function PersistentDrawerRight({ id_entrega, onClose }) {
                 header: 'Titulo',
             },
             {
-                accessorFn: (row) => row.tipoEvento?.nombre_evento,
+                accessorKey: 'nombre_evento',
                 header: 'Clasificación',
             },
             {

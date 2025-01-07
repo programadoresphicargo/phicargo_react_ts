@@ -83,7 +83,7 @@ const EntregaForm2 = ({ id_entrega, onClose }) => {
             }
 
         } catch (error) {
-            console.error('Error al enviar los datos:', error);
+            toast.error('Error al enviar los datos:' + error);
         }
     };
 

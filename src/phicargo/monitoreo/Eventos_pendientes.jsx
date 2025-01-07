@@ -98,7 +98,7 @@ const EventosPendientes = () => {
         header: 'Nombre del evento',
       },
       {
-        accessorFn: (row) => row.tipoEvento?.nombre_evento,
+        accessorKey: 'nombre_evento',
         header: 'Tipo evento',
         Cell: ({ cell }) => {
           const value = cell.getValue();
@@ -113,7 +113,7 @@ const EventosPendientes = () => {
         },
       },
       {
-        accessorFn: (row) => row.usuario?.nombre,
+        accessorKey: 'nombre',
         header: 'Monitorista',
       },
       {

@@ -4,7 +4,6 @@ import { Button } from "@nextui-org/react";
 import axios from "axios";
 import { toast } from 'react-toastify';
 import Stack from '@mui/material/Stack';
-import Autocomplete from '@mui/material/Autocomplete';
 import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
@@ -28,7 +27,7 @@ import { Input } from "@nextui-org/react";
 import { Card, CardHeader, CardFooter, CardBody, Divider } from "@nextui-org/react";
 import { Textarea } from "@nextui-org/react";
 import odooApi from "../modules/core/api/odoo-api";
-import { Select } from "@mui/material"
+import { Select, SelectItem, Autocomplete, AutocompleteItem } from "@nextui-org/react"
 
 const DetalleForm = ({ id_evento, onClose }) => {
 
@@ -89,7 +88,7 @@ const DetalleForm = ({ id_evento, onClose }) => {
 
         odooApi.post('/comentarios/crear_comentario/', data)
             .then((response) => {
-                console.log('Respuesta exitosa:', response.data);
+                toast.su('Respuesta exitosa:', response.data);
                 setComentario('');
                 obtenerComentarios();
             })
@@ -104,7 +103,7 @@ const DetalleForm = ({ id_evento, onClose }) => {
         odooApi.get(baseUrl)
             .then(response => {
                 const data = response.data.map(item => ({
-                    value: item.id_tipo_evento,
+                    key: item.id_tipo_evento,
                     label: item.nombre_evento,
                 }));
                 setTipoEventos(data);
@@ -120,7 +119,7 @@ const DetalleForm = ({ id_evento, onClose }) => {
 
         odooApi.get(baseUrl)
             .then(response => {
-                const evento = response.data;
+                const evento = response.data[0];
                 setFormData({
                     id_evento: id_evento,
                     id_entrega: evento.id_entrega,
@@ -129,10 +128,8 @@ const DetalleForm = ({ id_evento, onClose }) => {
                     descripcion: evento.descripcion || '',
                     sucursal: evento.sucursal || '',
                     usuario_creacion: evento.usuario_creacion || '',
-                    id_tipo_evento: evento.tipoEvento.id_tipo_evento || '',
+                    id_tipo_evento: evento.id_tipo_evento || '',
                     estado: evento.estado || '',
-                    usuario_atendio: evento.usuario_atendio || '',
-                    fecha_atencion: evento.fecha_atencion || null
                 });
                 setIsLoading(false);
             })
@@ -145,12 +142,12 @@ const DetalleForm = ({ id_evento, onClose }) => {
         setIsLoading(true);
         odooApi.post('/eventos/actualizar_evento/' + id_evento, formData)
             .then(response => {
-                toast.success("Datos enviados exitosamente:", response.data);
+                toast.success("Datos enviados exitosamente: " + response.data);
                 onClose();
                 setIsLoading(false);
             })
             .catch(err => {
-                toast.error("Error al enviar los datos:", err);
+                toast.error("Error al enviar los datos:" + err);
                 setIsLoading(false);
             });
     };
@@ -208,57 +205,55 @@ const DetalleForm = ({ id_evento, onClose }) => {
                             id="titulo"
                             name="titulo"
                             label="Titulo del evento"
-                            className="mb-2"
+                            className="mb-4"
+                            size="lg"
                             value={formData.titulo}
                             onChange={handleChange}
                             variant="bordered"
                             isDisabled={formData.usuario_creacion == session.user.id ? false : true}
                         />
 
-
                         <Select
                             labelId="sucursal"
                             id="sucursal"
                             name="sucursal"
                             label="Sucursal"
+                            variant="bordered"
+                            size="lg"
                             value={formData.sucursal}
+                            selectedKeys={[formData.sucursal]}
                             onChange={handleChange}
-                            disabled={formData.usuario_creacion == session.user.id ? false : true}
+                            isDisabled={formData.usuario_creacion == session.user.id ? false : true}
                             fullWidth={true}
-                            size='small'
                             className="mb-4"
                         >
-                            <MenuItem value={'veracruz'}>Veracruz</MenuItem>
-                            <MenuItem value={'manzanillo'}>Manzanillo</MenuItem>
-                            <MenuItem value={'mexico'}>México</MenuItem>
+                            <SelectItem key="veracruz">Veracruz</SelectItem>
+                            <SelectItem key="manzanillo">Manzanillo</SelectItem>
+                            <SelectItem key="mexico">México</SelectItem>
                         </Select>
 
                         <Autocomplete
-                            disabled={formData.usuario_creacion == session.user.id ? false : true}
+                            isDisabled={formData.usuario_creacion == session.user.id ? false : true}
                             id="id_tipo_evento"
+                            size="lg"
+                            className="mb-4"
+                            variant="bordered"
                             name="id_tipo_evento"
-                            size='small'
-                            value={tipo_eventos.find(option => option.value === formData.id_tipo_evento) || null}
-                            onChange={(event, newValue) => {
+                            label="Tipo de evento"
+                            selectedKey={String(formData.id_tipo_evento || '')}
+                            onSelectionChange={(newValue) => {
                                 setFormData({
                                     ...formData,
-                                    id_tipo_evento: newValue ? newValue.value : ''
+                                    id_tipo_evento: newValue ? newValue : ''
                                 });
                             }}
-                            getOptionLabel={(option) => option.label}
-                            isOptionEqualToValue={(option, value) => option.value === value.value}
-                            options={tipo_eventos}
-                            renderInput={(params) => (
-                                <TextField
-                                    {...params}
-                                    label="Tipo de evento"
-                                    variant="outlined"
-                                    fullWidth={true}
-                                />
-                            )}
-                        />
+                            defaultItems={tipo_eventos}
+                        >
+                            {(item) => <AutocompleteItem key={item.key}>{item.label}</AutocompleteItem>}
+                        </Autocomplete>
 
                         <Textarea
+                            size="lg"
                             value={formData.descripcion}
                             onChange={handleChange}
                             className="col-span-12 md:col-span-6 mb-6 md:mb-0"
@@ -307,7 +302,7 @@ const DetalleForm = ({ id_evento, onClose }) => {
                                                     src="/broken-image.jpg"
                                                 />
                                                 <div className="flex flex-col gap-1 items-start justify-center">
-                                                    <h4 className="text-small font-semibold leading-none text-default-600"> ({comentario.usuario.id_usuario}) {comentario.usuario.nombre}</h4>
+                                                    <h4 className="text-small font-semibold leading-none text-default-600"> ({comentario.id_usuario}) {comentario.nombre}</h4>
                                                 </div>
                                             </div>
                                         </CardHeader>
