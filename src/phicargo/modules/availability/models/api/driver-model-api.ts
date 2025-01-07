@@ -38,8 +38,8 @@ export type DriverSimpleApi = Pick<
 >;
 
 export interface DriverApi extends DriverBaseApi {
-  vehicle: VehicleSimpleApi[];
-  permissions: DriverPermissionSimpleApi[];
+  vehicle: VehicleSimpleApi | null;
+  permissions: DriverPermissionSimpleApi | null;
 
   tms_travel: TravelSimpleApi | null;
   maniobra: ManeuverSimpleApi | null;

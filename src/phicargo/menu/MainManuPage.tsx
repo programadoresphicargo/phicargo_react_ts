@@ -1,9 +1,14 @@
 import { useEffect, useMemo } from 'react';
+
+import AppBar from '@mui/material/AppBar';
 import AvatarProfile from '../modules/core/components/ui/AvatarProfile';
+import { Grid } from '@mui/system';
 import MenuItem from './MenuItem';
+import Toolbar from '@mui/material/Toolbar';
 import accesos_img from '../../assets/menu/accesos.png';
 import bonos_img from '../../assets/menu/bonos.png';
 import correo_img from '../../assets/menu/correo.png';
+// import dashboardIcon from '../../assets/menu/dashboardIcon.png';
 import maniobras_img from '../../assets/menu/maniobras.png';
 import monitoreo_img from '../../assets/menu/monitoreo.png';
 import operadores_img from '../../assets/menu/operadores.png';
@@ -12,9 +17,7 @@ import turnos_img from '../../assets/menu/turnos.png';
 import { useAuthContext } from '../modules/auth/hooks';
 import usuarios_img from '../../assets/menu/usuarios.png';
 import viajes_img from '../../assets/menu/viajes.png';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import { Grid } from '@mui/system';
+
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 type MenuItemType = {
@@ -24,8 +27,6 @@ type MenuItemType = {
   requiredPermissions: number[];
   isExternal?: boolean;
 };
-
-
 
 const menuItems: MenuItemType[] = [
   {
@@ -96,6 +97,18 @@ const menuItems: MenuItemType[] = [
     link: '/reportes',
     requiredPermissions: [4],
   },
+  // {
+  //   icon: dashboardIcon,
+  //   label: 'Dashboard',
+  //   link: '/dashboards',
+  //   requiredPermissions: [],
+  // },
+  // {
+  //   icon: turnos_img,
+  //   label: 'Turnos',
+  //   requiredPermissions: [8],
+  //   link: '/turnos',
+  // },
 ];
 
 const MainMenuPage = () => {
@@ -116,20 +129,20 @@ const MainMenuPage = () => {
     const checkSession = async () => {
       try {
         const response = await fetch(
-          VITE_PHIDES_API_URL + "/login/inicio/get_user.php",
+          VITE_PHIDES_API_URL + '/login/inicio/get_user.php',
           {
-            credentials: "include", // Incluir cookies para CORS
-          }
+            credentials: 'include', // Incluir cookies para CORS
+          },
         );
         const data = await response.json();
         // Mostrar respuesta en Toast
-        if (data.status === "success") {
+        if (data.status === 'success') {
           console.log(`Sesión activa: UserID ${data.userID}`);
         } else {
           console.error(`Error: ${data.message}`);
         }
       } catch (error) {
-        console.error("Error checking session:", error);
+        console.error('Error checking session:', error);
       }
     };
 
@@ -147,7 +160,11 @@ const MainMenuPage = () => {
 
   return (
     <>
-      <AppBar position="static" style={{ backgroundColor: 'rgb(129, 146, 176)' }} elevation={0}>
+      <AppBar
+        position="static"
+        style={{ backgroundColor: 'rgb(129, 146, 176)' }}
+        elevation={0}
+      >
         <Toolbar>
           <Grid sx={{ flexGrow: 1 }}></Grid>
           <AvatarProfile />
@@ -164,7 +181,10 @@ const MainMenuPage = () => {
         }}
       >
         {/* Contenedor 1 */}
-        <div className="flex items-center justify-center mb-8 sm:mb-12 px-4 relative z-10" style={{ minHeight: '30vh' }}>
+        <div
+          className="flex items-center justify-center mb-8 sm:mb-12 px-4 relative z-10"
+          style={{ minHeight: '30vh' }}
+        >
           <div className="flex justify-center items-center">
             <img
               src="https://phi-cargo.com/wp-content/uploads/2021/05/logo-phicargo-vertical.png"
@@ -173,11 +193,9 @@ const MainMenuPage = () => {
             />
           </div>
         </div>
-
-
         {/* Agregar margen abajo para separar los contenedores */}
-        <div className="mb-8" /> {/* Esto agrega el margen entre contenedores */}
-
+        <div className="mb-8" />{' '}
+        {/* Esto agrega el margen entre contenedores */}
         {/* Contenedor 2 */}
         <div className="flex-grow flex items-center relative lg:mx-12 z-10 -mt-10 sm:-mt-14 md:-mt-20">
           <div className="w-full">
@@ -200,3 +218,4 @@ const MainMenuPage = () => {
 };
 
 export default MainMenuPage;
+

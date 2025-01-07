@@ -9,6 +9,7 @@ import AvailabilityRoutes from '../phicargo/modules/availability/routes/Availabi
 import CashflowReportRoutes from '../phicargo/modules/cashflow-report/routes/CashflowReportRoutes';
 import DOReportRoutes from '@/phicargo/modules/daily-operations-report/routes/DOReportRoutes';
 import DashboardsRoutes from '@/phicargo/modules/dashboards/routes/DashboardRoutes';
+import EventosPendientes from '@/phicargo/monitoreo/Eventos_pendientes';
 import { LoadingPage } from '../phicargo/modules/core/pages/LoadingPage';
 import MainMenuPage from '@/phicargo/menu/MainManuPage';
 import MaintenanceReportRoutes from '../phicargo/modules/maintenance/routes/MaintenanceReportRoutes';
@@ -16,13 +17,12 @@ import NotFoundPage from '@/phicargo/modules/core/pages/NotFoundPage';
 import PersistentDrawer from '../phicargo/monitoreo/Eventos';
 import ProtectedRoute from './ProtectedRoute';
 import ReportsMenuPage from '../phicargo/modules/core/pages/ReportsMenuPage';
+import Saldos from '@/phicargo/saldos_contabilidad/ControlUsuarios';
 import ShiftsRoutes from '../phicargo/modules/shifts/routes/ShiftsRoutes';
 import { ToastContainer } from 'react-toastify';
 import { Toaster } from 'react-hot-toast';
 import UsersManagementLayout from '../phicargo/modules/users-management/layouts/UsersManagementLayout';
 import UsersManagementRoutes from '../phicargo/modules/users-management/routes/UsersManagementRoutes';
-import EventosPendientes from '@/phicargo/monitoreo/Eventos_pendientes';
-import Saldos from '@/phicargo/saldos_contabilidad/ControlUsuarios';
 
 // Lazy load the components
 const CartasPorte = lazy(
@@ -314,7 +314,7 @@ export const PrivateRoutes = () => {
           {AvailabilityRoutes()}
         </Route>
 
-        <Route path="/turnos/*" element={<ShiftsRoutes />}></Route>
+        <Route path="/turnos/*" element={<ShiftsRoutes />}/>
 
         {/* Ruta para manejar rutas no válidas */}
         <Route path="*" element={<NotFoundPage />} />

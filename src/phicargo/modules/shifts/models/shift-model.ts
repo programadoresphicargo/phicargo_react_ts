@@ -36,6 +36,7 @@ export interface ShiftBase {
 
 export interface Shift extends ShiftBase {
   id: number;
+  phoneNumber: string | null;
   branch: BranchSimple;
   driver: DriverInfo;
   vehicle: VehicleInfo;
@@ -69,3 +70,7 @@ export interface ShiftArchive {
   reason: string;
 }
 
+export interface ShiftReorder {
+  shiftId: number;
+  shift: number;
+}

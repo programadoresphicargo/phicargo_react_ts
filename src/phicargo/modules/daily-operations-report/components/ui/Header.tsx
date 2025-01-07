@@ -99,7 +99,7 @@ const Header = () => {
           </div>
         </div>
 
-        <div className='max-w-56'>
+        <div className=''>
           <DateRangePicker
             hoverRange="month"
             oneTap
@@ -111,7 +111,7 @@ const Header = () => {
             showWeekNumbers
             value={month}
             onChange={setMonth}
-            shouldDisableDate={after(dayjs().endOf('month').toDate())}
+            shouldDisableDate={after(dayjs().endOf('month').add(1, 'month').toDate())}
           />
         </div>
       </div>

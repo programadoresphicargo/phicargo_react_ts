@@ -59,6 +59,7 @@ export const useShiftQueries = () => {
   });
 
   return {
+    shifts: shiftQuery.data || [],
     shiftQuery,
     createShift,
     editShift,

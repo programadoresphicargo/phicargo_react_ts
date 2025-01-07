@@ -1,6 +1,6 @@
 import BaseLayout from '../../core/layouts/BaseLayout';
+import { DateRangeProvider } from '../context/DateRangeContext';
 import { MenuItemType } from '../../core/types/global-types';
-import { Outlet } from 'react-router-dom';
 import { ReactNode } from 'react';
 
 const pages: MenuItemType[] = [
@@ -13,10 +13,9 @@ interface Props {
 
 export const DashboardsLayout = ({ children }: Props) => {
   return (
-    <BaseLayout pages={pages}>
-      {children}
-      <Outlet />
-    </BaseLayout>
+    <DateRangeProvider>
+      <BaseLayout pages={pages}>{children}</BaseLayout>
+    </DateRangeProvider>
   );
 };
 

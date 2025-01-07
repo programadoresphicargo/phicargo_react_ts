@@ -98,7 +98,7 @@ const DailyReportTable = () => {
           <span>
             <IconButton
               color="primary"
-              disabled={row.original?.date.isBefore(dayjs(), 'day')}
+              disabled={row.original?.date.isBefore(dayjs().subtract(3, 'day'), 'day')}
               onClick={() => table.setEditingRow(row)}
             >
               <EditIcon />
