@@ -162,7 +162,6 @@ const Operadores = ({ estado }) => {
         },
         Cell: ({ cell }) => {
           const value = parseFloat((cell.getValue() || '0').replace(/,/g, ''));
-          if (value === 0) return ''; // No mostrar nada si el valor es 0.0
 
           return new Intl.NumberFormat('en-US', {
             minimumFractionDigits: 2,
@@ -218,7 +217,6 @@ const Operadores = ({ estado }) => {
         },
         Cell: ({ cell }) => {
           const value = parseFloat((cell.getValue() || '0').replace(/,/g, ''));
-          if (value === 0) return ''; // No mostrar nada si el valor es 0.0
 
           return new Intl.NumberFormat('en-US', {
             minimumFractionDigits: 2,
