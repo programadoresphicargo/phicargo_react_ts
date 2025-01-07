@@ -247,7 +247,13 @@ const ViajesActivos = ({ }) => {
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
     initialState: {
+      columnVisibility: {
+        empresa: false,
+      },
+      hiddenColumns: ["empresa"],
       density: 'compact',
+      expanded: true,
+      grouping: ['sucursal', 'x_status_viaje'],
       showColumnFilters: true,
       pagination: { pageSize: 80 },
     },
@@ -282,9 +288,18 @@ const ViajesActivos = ({ }) => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 190px)',
+        maxHeight: 'calc(100vh - 250px)',
       },
     },
+    muiTableBodyCellProps: ({ row }) => ({
+      sx: {
+        backgroundColor: row.subRows?.length ? '#0456cf' : '#FFFFFF',
+        fontFamily: 'Inter',
+        fontWeight: 'normal',
+        fontSize: '14px',
+        color: row.subRows?.length ? '#FFFFFF' : '#000000',
+      },
+    }),
     renderTopToolbarCustomActions: ({ table }) => (
       <Box
         sx={{
