@@ -141,12 +141,17 @@ const Operadores = ({ estado }) => {
         AggregatedCell: ({ column, row }) => {
           const groupTotal = row
             .subRows.reduce((sum, subRow) => {
-              const value = subRow.getValue(column.id) || '0';
+              let value = subRow.getValue(column.id) || '0';
+
+              if (typeof value !== 'string') {
+                value = String(value);
+              }
+
               const numericValue = parseFloat(value.replace(/,/g, ''));
               return sum + (isNaN(numericValue) ? 0 : numericValue);
             }, 0);
 
-          if (groupTotal === 0) return ''; // No mostrar nada si el total del grupo es 0.0
+          if (groupTotal === 0) return '';
 
           const formattedTotal = new Intl.NumberFormat('en-US', {
             minimumFractionDigits: 2,
@@ -192,12 +197,17 @@ const Operadores = ({ estado }) => {
         AggregatedCell: ({ column, row }) => {
           const groupTotal = row
             .subRows.reduce((sum, subRow) => {
-              const value = subRow.getValue(column.id) || '0';
+              let value = subRow.getValue(column.id) || '0';
+
+              if (typeof value !== 'string') {
+                value = String(value);
+              }
+
               const numericValue = parseFloat(value.replace(/,/g, ''));
               return sum + (isNaN(numericValue) ? 0 : numericValue);
             }, 0);
 
-          if (groupTotal === 0) return ''; // No mostrar nada si el total del grupo es 0.0
+          if (groupTotal === 0) return '';
 
           const formattedTotal = new Intl.NumberFormat('en-US', {
             minimumFractionDigits: 2,
