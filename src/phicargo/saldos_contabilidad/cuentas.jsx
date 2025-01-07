@@ -3,7 +3,7 @@ import Slide from '@mui/material/Slide';
 import { Box } from '@mui/material';
 import OperadorForm from './saldoForm';
 import odooApi from '../modules/core/api/odoo-api';
-import { DatePicker } from "@nextui-org/react";
+import { DatePicker, Chip } from "@nextui-org/react";
 import { parseDate, getLocalTimeZone } from "@internationalized/date";
 import {
   Modal,
@@ -66,6 +66,14 @@ const Cuentas = ({ estado }) => {
       {
         accessorKey: 'banco',
         header: 'Banco',
+        Cell: ({ cell }) => {
+          const referencia = cell.getValue() || '';
+          return (
+            <Chip color='primary' className='text-white'>
+              {referencia}
+            </Chip>
+          );
+        },
       },
       {
         accessorKey: 'referencia',
@@ -74,6 +82,14 @@ const Cuentas = ({ estado }) => {
       {
         accessorKey: 'tipo',
         header: 'Tipo',
+        Cell: ({ cell }) => {
+          const referencia = cell.getValue() || '';
+          return (
+            <Chip color='success' className='text-white'>
+              {referencia}
+            </Chip>
+          );
+        },
       },
       {
         accessorKey: 'moneda',

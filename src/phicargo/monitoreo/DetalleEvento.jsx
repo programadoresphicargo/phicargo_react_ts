@@ -88,7 +88,7 @@ const DetalleForm = ({ id_evento, onClose }) => {
 
         odooApi.post('/comentarios/crear_comentario/', data)
             .then((response) => {
-                toast.su('Respuesta exitosa:', response.data);
+                toast.success(response.data.mensaje);
                 setComentario('');
                 obtenerComentarios();
             })

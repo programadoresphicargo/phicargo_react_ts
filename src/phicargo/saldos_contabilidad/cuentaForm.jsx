@@ -18,7 +18,7 @@ const CuentaForm = ({ id_cuenta, onClose }) => {
     const getCuentaByID = async () => {
         try {
             const response = await odooApi.get('/cuentas/get_cuenta_by_id/' + id_cuenta);
-            const data = response.data[0]
+            const data = response.data
             setFormData((prevFormData) => ({
                 ...prevFormData,
                 id_empresa: data.id_empresa,
@@ -175,12 +175,12 @@ const CuentaForm = ({ id_cuenta, onClose }) => {
                         selectedKeys={[formData.tipo]}
                         onChange={(e) => handleChange('tipo', e.target.value)}
                     >
-                        <SelectItem key="cuenta bancaria">Cuenta bancaria</SelectItem>
-                        <SelectItem key="credito revolvente">Credito revolvente</SelectItem>
-                        <SelectItem key="inversiones">Inversiones</SelectItem>
-                        <SelectItem key="tarjeta de credito">Tarjeta de credito</SelectItem>
-                        <SelectItem key="factoraje">Factoraje</SelectItem>
-                        <SelectItem key="cartera">Cartera</SelectItem>
+                        <SelectItem key="Cuenta bancaria">Cuenta bancaria</SelectItem>
+                        <SelectItem key="Credito revolvente">Credito revolvente</SelectItem>
+                        <SelectItem key="Inversiones">Inversiones</SelectItem>
+                        <SelectItem key="Tarjeta de credito">Tarjeta de credito</SelectItem>
+                        <SelectItem key="Factoraje">Factoraje</SelectItem>
+                        <SelectItem key="Cartera">Cartera</SelectItem>
                     </Select>
                 </Grid>
                 <Grid item xs={12} md={12}>
