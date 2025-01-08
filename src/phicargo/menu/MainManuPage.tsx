@@ -101,12 +101,12 @@ const menuItems: MenuItemType[] = [
     icon: dashboardIcon,
     label: 'Dashboard',
     link: '/dashboards',
-    requiredPermissions: [],
+    requiredPermissions: [203],
   },
   {
     icon: turnos_img,
     label: 'Turnos 2.0',
-    requiredPermissions: [8],
+    requiredPermissions: [202],
     link: '/turnos',
   },
 ];

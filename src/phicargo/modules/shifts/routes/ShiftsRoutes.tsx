@@ -1,6 +1,7 @@
 import { Suspense, lazy } from 'react';
 
 import { LoadingPage } from '../../core/pages/LoadingPage';
+import ProtectedRoute from '@/router/ProtectedRoute';
 import { Route } from 'react-router-dom';
 import ShiftsLayout from '../layouts/ShiftsLayout';
 
@@ -16,8 +17,18 @@ const TravelsNearToBranch = lazy(
 const TravelsUnloading = lazy(() => import('../outlets/TravelsUnloading'));
 const TravelsInPlant = lazy(() => import('../outlets/TravelsInPlant'));
 
+const permission = 202;
+
 const ShiftsRoutes = () => (
-  <Route path="/turnos" element={<ShiftsLayout />}>
+  <Route
+    path="/turnos"
+    element={
+      <ProtectedRoute
+        element={<ShiftsLayout />}
+        requiredPermissionId={permission}
+      />
+    }
+  >
     <Route
       path=""
       element={
