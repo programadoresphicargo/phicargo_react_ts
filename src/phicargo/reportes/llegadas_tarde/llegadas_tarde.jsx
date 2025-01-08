@@ -41,7 +41,8 @@ const DetencionesTable = () => {
       setisLoading(false);
       console.log(response.data);
     } catch (error) {
-      console.error('Error al enviar los datos:', error);
+      setisLoading(false);
+      toast.error('Error al enviar los datos:' + error);
     }
   };
 
@@ -50,7 +51,7 @@ const DetencionesTable = () => {
     { accessorKey: 'route_name', header: 'Ruta' },
     { accessorKey: 'employee_name', header: 'Operador' },
     { accessorKey: 'x_ejecutivo_viaje_bel', header: 'Ejecutivo' },
-    { accessorKey: 'inicio_programado', header: 'Inicio programado' ,},
+    { accessorKey: 'inicio_programado', header: 'Inicio programado', },
     { accessorKey: 'fecha_inicio', header: 'Fecha inicio' },
     { accessorKey: 'diferencia_tiempo', header: 'Diferencia tiempo salida' },
     { accessorKey: 'llegada_planta_programada', header: 'Llegada a planta programada' },
