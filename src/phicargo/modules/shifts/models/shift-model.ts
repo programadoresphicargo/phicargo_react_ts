@@ -1,6 +1,7 @@
 import type { BranchSimple } from '../../core/models';
-import { Dayjs } from 'dayjs';
-import { UserBasic } from '../../auth/models';
+import type { Dayjs } from 'dayjs';
+import type { ShiftTravelInfo } from './travels-models';
+import type { UserBasic } from '../../auth/models';
 
 export interface DriverInfo {
   id: number;
@@ -41,6 +42,7 @@ export interface Shift extends ShiftBase {
   driver: DriverInfo;
   vehicle: VehicleInfo;
   registerUser: UserBasic;
+  travel: ShiftTravelInfo | null;
 }
 
 export type ShiftSimple = Pick<Shift, 'id' | 'shift' | 'arrivalAt' | 'driver'>;

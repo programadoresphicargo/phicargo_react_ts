@@ -15,9 +15,16 @@ import type {
   VehicleInfoApi,
 } from '../models';
 
+import { ShiftTravelInfo } from '../models/travels-models';
+import { ShiftTravelInfoApi } from '../models/api/travel-models-models-api';
 import dayjs from 'dayjs';
 import { userBasicToLocal } from '../../auth/adapters';
 
+/**
+ * Mapper to convert the data of a driver from the API to the local model
+ * @param driver Object with the data of the driver
+ * @returns Object with the data of the driver
+ */
 const driverInfoToLocal = (driver: DriverInfoApi): DriverInfo => ({
   id: driver.id,
   name: driver.name,
@@ -42,6 +49,28 @@ const vehicleInfoToLocal = (vehicle: VehicleInfoApi): VehicleInfo => ({
 });
 
 /**
+ * Mapper to convert the data of a travel from the API to the local model
+ * @param travel Object with the data of the travel
+ * @returns Object with the data of the travel
+ */
+const travelInfoToLocal = (travel: ShiftTravelInfoApi): ShiftTravelInfo => {
+  const startDate = dayjs(travel.date);
+  const endDate = travel.end_date ? dayjs(travel.end_date) : null;
+  const duration = endDate ? endDate.diff(startDate) : 0;
+  const durationDays = Math.floor(duration / (1000 * 60 * 60 * 24));
+  const durationHours = Math.floor((duration % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+
+  return {
+    id: travel.id,
+    name: travel.name,
+    startDate: startDate,
+    endDate: endDate,
+    routeName: travel.route_name,
+    duration: `${durationDays} días y ${durationHours} horas`
+  };
+};
+
+/**
  * Mapper to convert the data of a shift from the API to the local model
  * @param shift Object with the data of the shift
  * @returns Objet with the data of the shift
@@ -64,6 +93,7 @@ export const shiftToLocal = (shift: ShiftApi): Shift => ({
   vehicle: vehicleInfoToLocal(shift.vehicle),
   branch: shift.res_store,
   registerUser: userBasicToLocal(shift.register_user),
+  travel: shift.travel ? travelInfoToLocal(shift.travel) : null,
 });
 
 /**

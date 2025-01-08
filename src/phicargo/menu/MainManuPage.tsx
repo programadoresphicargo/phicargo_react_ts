@@ -8,7 +8,7 @@ import Toolbar from '@mui/material/Toolbar';
 import accesos_img from '../../assets/menu/accesos.png';
 import bonos_img from '../../assets/menu/bonos.png';
 import correo_img from '../../assets/menu/correo.png';
-// import dashboardIcon from '../../assets/menu/dashboardIcon.png';
+import dashboardIcon from '../../assets/menu/dashboardIcon.png';
 import maniobras_img from '../../assets/menu/maniobras.png';
 import monitoreo_img from '../../assets/menu/monitoreo.png';
 import operadores_img from '../../assets/menu/operadores.png';
@@ -97,18 +97,18 @@ const menuItems: MenuItemType[] = [
     link: '/reportes',
     requiredPermissions: [4],
   },
-  // {
-  //   icon: dashboardIcon,
-  //   label: 'Dashboard',
-  //   link: '/dashboards',
-  //   requiredPermissions: [],
-  // },
-  // {
-  //   icon: turnos_img,
-  //   label: 'Turnos',
-  //   requiredPermissions: [8],
-  //   link: '/turnos',
-  // },
+  {
+    icon: dashboardIcon,
+    label: 'Dashboard',
+    link: '/dashboards',
+    requiredPermissions: [],
+  },
+  {
+    icon: turnos_img,
+    label: 'Turnos',
+    requiredPermissions: [8],
+    link: '/turnos',
+  },
 ];
 
 const MainMenuPage = () => {

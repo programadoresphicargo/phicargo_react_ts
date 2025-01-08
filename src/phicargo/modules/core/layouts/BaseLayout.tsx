@@ -1,5 +1,5 @@
 import { ErrorBoundary } from '../utilities/error-boundary';
-import Navbar from '../components/ui/Navbar';
+import { Navbar } from '../components/ui/Navbar';
 import { Outlet } from 'react-router-dom';
 import type { ReactNode } from 'react';
 import { Toaster } from 'react-hot-toast';

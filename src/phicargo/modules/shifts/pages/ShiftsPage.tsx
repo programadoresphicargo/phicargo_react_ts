@@ -150,7 +150,7 @@ const ShiftsPage = () => {
     ),
     muiTableContainerProps: {
       sx: {
-        height: 'calc(100vh - 195px)',
+        height: 'calc(100vh - 212px)',
       },
     },
     defaultColumn: {

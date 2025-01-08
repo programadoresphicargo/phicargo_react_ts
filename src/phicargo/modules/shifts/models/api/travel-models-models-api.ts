@@ -1,3 +1,12 @@
+
+export interface ShiftTravelInfoApi {
+  id: number;
+  name: string;
+  date: string;
+  end_date: string | null;
+  route_name: string;
+}
+
 export interface TravelApi {
   id: number;
   branch: string;

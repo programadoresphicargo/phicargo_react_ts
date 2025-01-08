@@ -110,12 +110,11 @@ const PERMISSIONS = {
 export const PrivateRoutes = () => {
   return (
     <>
-      <Toaster></Toaster>
-      <ToastContainer></ToastContainer>
+      <Toaster />
+      <ToastContainer />
       <Routes>
-        {/* Ruta predeterminada */}
+        {/* Menú */}
         <Route path="/" element={<Navigate to="/menu" />} />
-
         <Route path="/menu" element={<MainMenuPage />} />
 
         <Route
@@ -313,8 +312,9 @@ export const PrivateRoutes = () => {
         >
           {AvailabilityRoutes()}
         </Route>
-
-        <Route path="/turnos/*" element={<ShiftsRoutes />}/>
+        
+        {/* Módulo de turnos */}
+        {ShiftsRoutes()}
 
         {/* Ruta para manejar rutas no válidas */}
         <Route path="*" element={<NotFoundPage />} />
