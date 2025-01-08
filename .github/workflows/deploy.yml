@@ -22,8 +22,10 @@ jobs:
       - name: Build project
         run: npm run build
         env:
+          VITE_ENVIRONMENT: 'production'
           VITE_ODOO_API_URL: 'https://phides-api.phicargo-sistemas.online'
           VITE_PHIDES_API_URL: 'https://phides.phicargo-sistemas.online/phicargo'
+          VITE_SENTRY_DNS: ${{ secrets.SENTRY_DSN }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
