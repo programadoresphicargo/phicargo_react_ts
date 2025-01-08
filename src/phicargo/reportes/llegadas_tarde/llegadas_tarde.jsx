@@ -42,7 +42,7 @@ const DetencionesTable = () => {
       }
 
       setisLoading(true);
-      const response = await odooApi.get(`/tms_travel/salidas_llegadas/${fechaInicio}/${fechaFin}/`);
+      const response = await odooApi.get(`/tms_travel/salidas_llegadas/${fechaInicio}/${fechaFin}`);
       setData(response.data);
       console.log(response.data);
     } catch (error) {
