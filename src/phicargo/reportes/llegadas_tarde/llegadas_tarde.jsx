@@ -36,16 +36,26 @@ const DetencionesTable = () => {
 
   const fetchData = async () => {
     try {
+      // Validar fechas
+      if (!fechaInicio || !fechaFin) {
+        throw new Error('Las fechas de inicio y fin son obligatorias.');
+      }
+
       setisLoading(true);
       const response = await odooApi.get(`/tms_travel/salidas_llegadas/${fechaInicio}/${fechaFin}/`);
       setData(response.data);
-      setisLoading(false);
       console.log(response.data);
     } catch (error) {
+      const errorMessage = error.response
+        ? `Error: ${error.response.status} - ${error.response.data.message}`
+        : error.message;
+
+      toast.error('Error al enviar los datos: ' + errorMessage);
+    } finally {
       setisLoading(false);
-      toast.error('Error al enviar los datos:' + error);
     }
   };
+
 
   const columns = [
     { accessorKey: 'travel_name', header: 'Referencia' },
