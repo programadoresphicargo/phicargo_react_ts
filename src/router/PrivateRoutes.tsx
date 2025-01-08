@@ -21,7 +21,6 @@ import Saldos from '@/phicargo/saldos_contabilidad/ControlUsuarios';
 import ShiftsRoutes from '../phicargo/modules/shifts/routes/ShiftsRoutes';
 import { ToastContainer } from 'react-toastify';
 import { Toaster } from 'react-hot-toast';
-import UsersManagementLayout from '../phicargo/modules/users-management/layouts/UsersManagementLayout';
 import UsersManagementRoutes from '../phicargo/modules/users-management/routes/UsersManagementRoutes';
 
 // Lazy load the components
@@ -288,18 +287,9 @@ export const PrivateRoutes = () => {
         <Route path="/reportes/saldos/" element={<Saldos />} />
 
         <Route path="/dashboards/*" element={<DashboardsRoutes />} />
-
-        <Route
-          path="/control-usuarios"
-          element={
-            <ProtectedRoute
-              element={<UsersManagementLayout children={undefined} />}
-              requiredPermissionId={PERMISSIONS['Módulo usuarios']}
-            />
-          }
-        >
-          {UsersManagementRoutes()}
-        </Route>
+        
+        {/* Módulo de turnos */}
+        {UsersManagementRoutes()}
 
         <Route
           path="/disponibilidad"

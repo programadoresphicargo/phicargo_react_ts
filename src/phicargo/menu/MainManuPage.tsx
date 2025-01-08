@@ -105,7 +105,7 @@ const menuItems: MenuItemType[] = [
   },
   {
     icon: turnos_img,
-    label: 'Turnos',
+    label: 'Turnos 2.0',
     requiredPermissions: [8],
     link: '/turnos',
   },
