@@ -4,17 +4,18 @@ import { App } from './App';
 import { BrowserRouter } from 'react-router-dom';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { getEnvVariables } from './phicargo/modules/cashflow-report/utils';
-import { init as sentryInit } from '@sentry/react';
 
-const { VITE_SENTRY_DNS, VITE_ENVIRONMENT } = getEnvVariables();
+// import { getEnvVariables } from './phicargo/modules/cashflow-report/utils';
+// import { init as sentryInit } from '@sentry/react';
 
-if (VITE_ENVIRONMENT === 'production') {
-  sentryInit({
-    dsn: VITE_SENTRY_DNS,
-    defaultIntegrations: false,
-  });
-}
+// const { VITE_SENTRY_DNS, VITE_ENVIRONMENT } = getEnvVariables();
+
+// if (VITE_ENVIRONMENT === 'production') {
+//   sentryInit({
+//     dsn: VITE_SENTRY_DNS,
+//     defaultIntegrations: false,
+//   });
+// }
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
