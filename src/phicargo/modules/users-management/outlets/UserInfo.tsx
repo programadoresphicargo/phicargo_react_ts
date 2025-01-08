@@ -20,11 +20,11 @@ const UserInfo = () => {
   const { data: user } = useGetUserQuery(Number(id));
 
   const onClose = () => {
-    navigate(`/control-usuarios/usuarios`);
+    navigate(`/control-usuarios`);
   };
 
   if (!id) {
-    return <Navigate to="/control-usuarios/" replace />;
+    return <Navigate to="/control-usuarios" replace />;
   }
 
   return (

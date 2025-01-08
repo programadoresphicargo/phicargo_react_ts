@@ -16,8 +16,26 @@ export const useTravelQueries = () => {
     enabled: !!branchId,
   });
 
+  const travelsUnloadingQuery = useQuery<Travel[]>({
+    queryKey: [mainKey, 'unloading', branchId],
+    queryFn: () => TravelServiceApi.getUnloadingTravels(branchId),
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 10,
+    enabled: !!branchId,
+  });
+
+  const travelsInPlantQuery = useQuery<Travel[]>({
+    queryKey: [mainKey, 'in-plant', branchId],
+    queryFn: () => TravelServiceApi.getTravelsInPlant(branchId),
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 10,
+    enabled: !!branchId,
+  });
+
   return {
     travelsNearQuery,
+    travelsUnloadingQuery,
+    travelsInPlantQuery
   };
 };
 

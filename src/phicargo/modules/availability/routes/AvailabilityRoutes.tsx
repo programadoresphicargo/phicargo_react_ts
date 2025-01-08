@@ -1,32 +1,54 @@
 import { Navigate, Route } from 'react-router-dom';
 import { Suspense, lazy, memo } from 'react';
 
+import AvailabilityLayout from '../layout/AvailabilityLayout';
 import { LoadingPage } from '../../core/pages/LoadingPage';
+import ProtectedRoute from '@/router/ProtectedRoute';
 
-const VehicleAvailabilityPage = lazy(() => import('../pages/VehicleAvailabilityPage').then(module => ({
-  default: memo(module.default),
-})));
+const VehicleAvailabilityPage = lazy(() =>
+  import('../pages/VehicleAvailabilityPage').then((module) => ({
+    default: memo(module.default),
+  })),
+);
 
 const VehicleInfo = lazy(() => import('../outlets/VehicleInfo'));
-const DriverAvailabilityPage = lazy(() => import('../pages/DriverAvailabilityPage').then(module => ({
-  default: memo(module.default),
-})));
+const DriverAvailabilityPage = lazy(() =>
+  import('../pages/DriverAvailabilityPage').then((module) => ({
+    default: memo(module.default),
+  })),
+);
 const DriverInfo = lazy(() => import('../outlets/DriverInfo'));
 const NotAssignedPage = lazy(() => import('../pages/NotAssignedPage'));
-const SummaryPage = lazy(() => import('../pages/SummaryPage').then(module => ({
-  default: memo(module.default),
-})));
-const DriverSummaryPage = lazy(() => import('../pages/DriverSummaryPage').then(module => ({
-  default: memo(module.default),
-})));
-const VehiclesPage = lazy(() => import('../../../disponiblidad/equipos/equipos'));
+const SummaryPage = lazy(() =>
+  import('../pages/SummaryPage').then((module) => ({
+    default: memo(module.default),
+  })),
+);
+const DriverSummaryPage = lazy(() =>
+  import('../pages/DriverSummaryPage').then((module) => ({
+    default: memo(module.default),
+  })),
+);
+const VehiclesPage = lazy(
+  () => import('../../../disponiblidad/equipos/equipos'),
+);
+
+const permission = 200;
 
 const AvailabilityRoutes = () => {
   return (
-    <>
+    <Route
+      path="/disponibilidad"
+      element={
+        <ProtectedRoute
+          element={<AvailabilityLayout />}
+          requiredPermissionId={permission}
+        />
+      }
+    > 
       <Route
         index
-        element={<Navigate to="/disponibilidad/unidades" replace />}
+        element={<Navigate to="unidades" replace />}
       />
       <Route
         path="unidades"
@@ -94,7 +116,7 @@ const AvailabilityRoutes = () => {
           </Suspense>
         }
       />
-    </>
+    </Route>
   );
 };
 

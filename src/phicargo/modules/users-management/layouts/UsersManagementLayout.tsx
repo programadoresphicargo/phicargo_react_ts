@@ -2,12 +2,10 @@ import BaseLayout from '../../core/layouts/BaseLayout';
 import { MenuItemType } from '../../core/types/global-types';
 import { ReactNode } from 'react';
 
-const pages: MenuItemType[] = [
-  { name: 'Usuarios', path: '/control-usuarios/usuarios' },
-];
+const pages: MenuItemType[] = [];
 
 interface Props {
-  children: ReactNode;
+  children?: ReactNode;
 }
 
 const UsersManagementLayout = ({ children }: Props) => {

@@ -1,36 +1,36 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { DialogContent } from '@mui/material';
-import dayjs from 'dayjs';
-import Dialog from '@mui/material/Dialog';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemButton from '@mui/material/ListItemButton';
-import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import CloseIcon from '@mui/icons-material/Close';
-import Slide from '@mui/material/Slide';
 import { Card, CardBody } from '@nextui-org/react';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import PersistentDrawerRight from './Eventos';
-import { toast } from 'react-toastify';
-import axios from 'axios';
-import { Box } from '@mui/material';
-import { Button } from '@nextui-org/react';
-import { Chip } from '@nextui-org/react';
-import odooApi from '../modules/core/api/odoo-api';
-import DetalleForm from './DetalleEvento';
-
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
+import React, { useEffect, useMemo, useState } from 'react';
+
+import AppBar from '@mui/material/AppBar';
 import AuthContext from '../modules/auth/context/AuthContext';
-import { useAuthContext } from '../modules/auth/hooks';
+import { Box } from '@mui/material';
+import { Button } from '@nextui-org/react';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import { Chip } from '@nextui-org/react';
+import CloseIcon from '@mui/icons-material/Close';
+import DetalleForm from './DetalleEvento';
+import Dialog from '@mui/material/Dialog';
+import { DialogContent } from '@mui/material';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
 import MonitoreoNavbar from './Navbar';
+import PersistentDrawerRight from './Eventos';
+import Slide from '@mui/material/Slide';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import axios from 'axios';
+import dayjs from 'dayjs';
+import odooApi from '../modules/core/api/odoo-api';
+import { toast } from 'react-toastify';
+import { useAuthContext } from '../modules/auth/hooks';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -163,13 +163,6 @@ const EventosPendientes = () => {
       sx: {
         fontFamily: 'Inter',
         fontWeight: 'Bold',
-        fontSize: '14px',
-      },
-    },
-    muiTableBodyCellProps: {
-      sx: {
-        fontFamily: 'Inter',
-        fontWeight: 'normal',
         fontSize: '14px',
       },
     },

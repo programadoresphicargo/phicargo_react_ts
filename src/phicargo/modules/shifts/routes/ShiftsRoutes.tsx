@@ -1,7 +1,8 @@
-import { Route, Routes } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
 
 import { LoadingPage } from '../../core/pages/LoadingPage';
+import ProtectedRoute from '@/router/ProtectedRoute';
+import { Route } from 'react-router-dom';
 import ShiftsLayout from '../layouts/ShiftsLayout';
 
 const ShiftsPage = lazy(() => import('../pages/ShiftsPage'));
@@ -10,73 +11,99 @@ const CreateShift = lazy(() => import('../outlets/CreateShift'));
 const ShiftQueues = lazy(() => import('../outlets/ShiftQueues'));
 const CreateIncidence = lazy(() => import('../outlets/CreateIncidence'));
 const IncidencesList = lazy(() => import('../outlets/IncidencesList'));
-const TravelsNearToBranch = lazy(() => import('../outlets/TravelsNearToBranch'));
+const TravelsNearToBranch = lazy(
+  () => import('../outlets/TravelsNearToBranch'),
+);
+const TravelsUnloading = lazy(() => import('../outlets/TravelsUnloading'));
+const TravelsInPlant = lazy(() => import('../outlets/TravelsInPlant'));
 
-const ShiftsRoutes = () => {
-  return (
-    <Routes>
-      <Route path="/" element={<ShiftsLayout />}>
-        <Route
-          path="/"
-          element={
-            <Suspense fallback={<LoadingPage />}>
-              <ShiftsPage />
-            </Suspense>
-          }
-        >
-          <Route
-            path="detalles/:id"
-            element={
-              <Suspense fallback={null}>
-                <ShiftDetail />
-              </Suspense>
-            }
-          />
-          <Route
-            path="crear"
-            element={
-              <Suspense fallback={null}>
-                <CreateShift />
-              </Suspense>
-            }
-          />
-          <Route
-            path="cola"
-            element={
-              <Suspense fallback={null}>
-                <ShiftQueues />
-              </Suspense>
-            }
-          />
-          <Route
-            path="incidencias"
-            element={
-              <Suspense fallback={null}>
-                <IncidencesList />
-              </Suspense>
-            }
-          />
-          <Route
-            path="incidencias/crear/:id"
-            element={
-              <Suspense fallback={null}>
-                <CreateIncidence />
-              </Suspense>
-            }
-          />
-          <Route
-            path="unidades-bajando"
-            element={
-              <Suspense fallback={null}>
-                <TravelsNearToBranch />
-              </Suspense>
-            }
-          />
-        </Route>
-      </Route>
-    </Routes>
-  );
-};
+const permission = 202;
+
+const ShiftsRoutes = () => (
+  <Route
+    path="/turnos"
+    element={
+      <ProtectedRoute
+        element={<ShiftsLayout />}
+        requiredPermissionId={permission}
+      />
+    }
+  >
+    <Route
+      path=""
+      element={
+        <Suspense fallback={<LoadingPage />}>
+          <ShiftsPage />
+        </Suspense>
+      }
+    >
+      <Route
+        path="detalles/:id"
+        element={
+          <Suspense fallback={<LoadingPage />}>
+            <ShiftDetail />
+          </Suspense>
+        }
+      />
+      <Route
+        path="crear"
+        element={
+          <Suspense fallback={<LoadingPage />}>
+            <CreateShift />
+          </Suspense>
+        }
+      />
+      <Route
+        path="cola"
+        element={
+          <Suspense fallback={<LoadingPage />}>
+            <ShiftQueues />
+          </Suspense>
+        }
+      />
+      <Route
+        path="incidencias"
+        element={
+          <Suspense fallback={<LoadingPage />}>
+            <IncidencesList />
+          </Suspense>
+        }
+      />
+      <Route
+        path="incidencias/crear/:id"
+        element={
+          <Suspense fallback={<LoadingPage />}>
+            <CreateIncidence />
+          </Suspense>
+        }
+      />
+      <Route
+        path="unidades-bajando"
+        element={
+          <Suspense fallback={<LoadingPage />}>
+            <TravelsNearToBranch />
+          </Suspense>
+        }
+      />
+      <Route
+        path="unidades-descargando"
+        element={
+          <Suspense fallback={<LoadingPage />}>
+            <TravelsUnloading />
+          </Suspense>
+        }
+      />
+      <Route
+        path="unidades-planta"
+        element={
+          <Suspense fallback={<LoadingPage />}>
+            <TravelsInPlant />
+          </Suspense>
+        }
+      />
+    </Route>
+  </Route>
+);
 
 export default ShiftsRoutes;
 

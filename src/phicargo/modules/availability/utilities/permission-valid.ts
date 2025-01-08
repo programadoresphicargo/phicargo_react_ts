@@ -19,6 +19,6 @@ export const getValidPermission = (driver: Driver) => {
   //   .sort((a, b) => dayjs(a.endDate).diff(dayjs(b.endDate)));
 
   // return validPermissions;
-  return driver.permissions;
+  return driver.permission;
 };
 

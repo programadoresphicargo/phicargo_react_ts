@@ -1,4 +1,5 @@
 import type { BranchSimple } from '../../../core/models';
+import type { ShiftTravelInfoApi } from './travel-models-models-api';
 import type { UserBasicApi } from '@/phicargo/modules/auth/models';
 
 export interface DriverInfoApi {
@@ -39,6 +40,7 @@ export interface ShiftApi extends ShiftBaseApi {
   driver: DriverInfoApi;
   vehicle: VehicleInfoApi;
   register_user: UserBasicApi;
+  travel: ShiftTravelInfoApi | null;
 }
 
 export type ShiftSimpleApi = Pick<ShiftApi, 'id' | 'shift' | 'arrival_at' | 'driver'>;

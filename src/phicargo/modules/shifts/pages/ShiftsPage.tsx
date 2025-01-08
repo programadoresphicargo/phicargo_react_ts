@@ -16,8 +16,7 @@ import { useMaterialReactTable } from 'material-react-table';
 import { useReorderShifts } from '../hooks/useReorderShifts';
 import { useShiftColumns } from '../hooks/useShiftColumns';
 import { useShiftQueries } from '../hooks/useShiftQueries';
-import { getRowActionMenuItems } from '../components/RowActionsList';
-import { TbTruckReturn } from "react-icons/tb";
+import { MdOutlineDangerous } from "react-icons/md";
 
 const exportConf: ExportConfig<Shift> = {
   fileName: 'Turnos',
@@ -64,7 +63,7 @@ const ShiftsPage = () => {
     enableStickyHeader: true,
     autoResetPageIndex: false,
     // PAGINATION, FILTERS, SORTING
-    enableRowActions: true,
+    enableRowActions: false,
     enableRowOrdering: true,
     enableSorting: false,
     enableGrouping: true,
@@ -85,8 +84,8 @@ const ShiftsPage = () => {
       isLoading: isFetching,
     },
     // CUSTOMIZATIONS
-    renderRowActionMenuItems: ({ row, closeMenu }) =>
-      getRowActionMenuItems(row.original, closeMenu, onOpenDetails),
+    // renderRowActionMenuItems: ({ row }) =>
+    //   getRowActionMenuItems(row.original),
     muiTableBodyRowProps: ({ row }) => ({
       onDoubleClick: () => onOpenDetails(row.original.id),
       sx: { cursor: 'pointer' },
@@ -113,8 +112,8 @@ const ShiftsPage = () => {
         />
         <Button
           size="sm"
-          variant="faded"
-          color="warning"
+          variant="flat"
+          color="secondary"
           className="font-bold"
           startContent={<HiQueueList />}
           onPress={() => navigate('/turnos/cola')}
@@ -123,23 +122,13 @@ const ShiftsPage = () => {
         </Button>
         <Button
           size="sm"
-          variant="faded"
+          variant="flat"
           color="danger"
           className="font-bold"
-          startContent={<HiQueueList />}
+          startContent={<MdOutlineDangerous />}
           onPress={() => navigate('/turnos/incidencias')}
         >
           Conteo de Incidencias
-        </Button>
-        <Button
-          size="sm"
-          variant="faded"
-          color="warning"
-          className="font-bold"
-          startContent={<TbTruckReturn />}
-          onPress={() => navigate('/turnos/unidades-bajando')}
-        >
-          Unidades Bajando
         </Button>
         <ExportExcelButton
           size="sm"
@@ -150,7 +139,7 @@ const ShiftsPage = () => {
     ),
     muiTableContainerProps: {
       sx: {
-        height: 'calc(100vh - 195px)',
+        height: 'calc(100vh - 212px)',
       },
     },
     defaultColumn: {

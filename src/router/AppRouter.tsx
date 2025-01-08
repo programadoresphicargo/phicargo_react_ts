@@ -1,4 +1,3 @@
-import { HashRouter } from 'react-router-dom';
 import { LoadingPage } from '../phicargo/modules/core/pages/LoadingPage';
 import { PrivateRoutes } from './PrivateRoutes';
 import { PublicRoutes } from './PublicRoutes';
@@ -16,13 +15,9 @@ export const AppRouter = () => {
   }
 
   return (
-    <HashRouter
-      future={{
-        v7_relativeSplatPath: true,
-      }}
-    >
+    <>
       {authStatus === 'authenticated' ? <PrivateRoutes /> : <PublicRoutes />}
-    </HashRouter>
+    </>
   );
 };
 
