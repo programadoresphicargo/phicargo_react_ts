@@ -11,6 +11,7 @@ import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import ResponsiveAppBar from '@/phicargo/saldos_contabilidad/Navbar';
 import { parseDate, getLocalTimeZone } from "@internationalized/date";
 import { useDateFormatter } from "@react-aria/i18n";
+import { toast } from "react-toastify";
 
 const DetencionesTable = () => {
 
