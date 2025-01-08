@@ -1,6 +1,7 @@
 import { Checkbox } from '@nextui-org/react';
 import { HeaderBase } from '@/phicargo/modules/core/components/ui/HeaderBase';
 import { HeaderCard } from '@/phicargo/modules/core/components/ui/HeaderCard';
+import { RefreshButton } from '@/phicargo/modules/core/components/ui/RefreshButton';
 import { useNavigate } from 'react-router-dom';
 import { useShiftsContext } from '../../hooks/useShiftsContext';
 import { useTravelQueries } from '../../hooks/useTravelQueries';
@@ -22,6 +23,12 @@ export const Header = () => {
         content={travelsUnloadingQuery.data?.length || 0}
         infoButton
         onInfoClick={() => navigate('/turnos/unidades-descargando')}
+        startContent={
+          <RefreshButton  
+            onClick={() => travelsUnloadingQuery.refetch()}
+            buttonClassName='text-emerald-400'
+          />
+        }
       />
       <HeaderCard
         title="Bajando"
@@ -29,6 +36,12 @@ export const Header = () => {
         content={travelsNearQuery.data?.length || 0}
         infoButton
         onInfoClick={() => navigate('/turnos/unidades-bajando')}
+        startContent={
+          <RefreshButton  
+            onClick={() => travelsNearQuery.refetch()}
+            buttonClassName='text-emerald-400'
+          />
+        }
       />
       <HeaderCard
         title="Planta"
@@ -36,6 +49,12 @@ export const Header = () => {
         content={travelsInPlantQuery.data?.length || 0}
         infoButton
         onInfoClick={() => navigate('/turnos/unidades-planta')}
+        startContent={
+          <RefreshButton  
+            onClick={() => travelsInPlantQuery.refetch()}
+            buttonClassName='text-emerald-400'
+          />
+        }
       />
       <div className="flex flex-col gap-3">
         <div className="flex flex-row gap-2 bg-gray-700 py-1.5 px-2 rounded-xl">

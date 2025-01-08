@@ -33,5 +33,7 @@ export const driverIncidentToApi = (
 ): IncidenceCreateApi => ({
   incidence: incidence.incidence,
   comments: incidence.comments,
+  start_date: incidence.startDate.format('YYYY-MM-DD'), 
+  end_date: incidence.endDate.format('YYYY-MM-DD'),
 });
 

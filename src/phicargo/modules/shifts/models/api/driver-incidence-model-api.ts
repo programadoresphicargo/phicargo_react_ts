@@ -13,5 +13,8 @@ export interface IncidenceApi extends IncidenceBaseApi {
   driver: DriverInfoApi;
 }
 
-export type IncidenceCreateApi = IncidenceBaseApi
+export interface IncidenceCreateApi extends IncidenceBaseApi {
+  start_date: string;
+  end_date: string;
+}
 

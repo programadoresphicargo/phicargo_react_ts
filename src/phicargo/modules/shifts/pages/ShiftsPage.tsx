@@ -16,8 +16,7 @@ import { useMaterialReactTable } from 'material-react-table';
 import { useReorderShifts } from '../hooks/useReorderShifts';
 import { useShiftColumns } from '../hooks/useShiftColumns';
 import { useShiftQueries } from '../hooks/useShiftQueries';
-import { getRowActionMenuItems } from '../components/RowActionsList';
-import { TbTruckReturn } from "react-icons/tb";
+import { MdOutlineDangerous } from "react-icons/md";
 
 const exportConf: ExportConfig<Shift> = {
   fileName: 'Turnos',
@@ -64,7 +63,7 @@ const ShiftsPage = () => {
     enableStickyHeader: true,
     autoResetPageIndex: false,
     // PAGINATION, FILTERS, SORTING
-    enableRowActions: true,
+    enableRowActions: false,
     enableRowOrdering: true,
     enableSorting: false,
     enableGrouping: true,
@@ -85,8 +84,8 @@ const ShiftsPage = () => {
       isLoading: isFetching,
     },
     // CUSTOMIZATIONS
-    renderRowActionMenuItems: ({ row, closeMenu }) =>
-      getRowActionMenuItems(row.original, closeMenu, onOpenDetails),
+    // renderRowActionMenuItems: ({ row }) =>
+    //   getRowActionMenuItems(row.original),
     muiTableBodyRowProps: ({ row }) => ({
       onDoubleClick: () => onOpenDetails(row.original.id),
       sx: { cursor: 'pointer' },
@@ -126,7 +125,7 @@ const ShiftsPage = () => {
           variant="flat"
           color="danger"
           className="font-bold"
-          startContent={<HiQueueList />}
+          startContent={<MdOutlineDangerous />}
           onPress={() => navigate('/turnos/incidencias')}
         >
           Conteo de Incidencias

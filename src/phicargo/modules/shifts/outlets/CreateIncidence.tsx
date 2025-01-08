@@ -8,6 +8,8 @@ import {
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
+import { DatePickerInput } from '../../core/components/inputs/DatePickerInput';
+import { Dayjs } from 'dayjs';
 import { FaRegSave } from 'react-icons/fa';
 import type { IncidenceCreate } from '../models/driver-incidence-model';
 import { SelectInput } from '../../core/components/inputs/SelectInput';
@@ -20,26 +22,23 @@ import { useShiftQueries } from '../hooks/useShiftQueries';
 const intialState: IncidenceCreate = {
   incidence: '',
   comments: '',
+  startDate: null as unknown as Dayjs,
+  endDate: null as unknown as Dayjs,
 };
 
-const incidenceType: SelectItem[] = [
-  { key: 'EFECTOS', value: 'CONDUCIR BAJO LOS EFECTOS DEL ALCOHOL O DROGAS' },
-  { key: 'TRAFFICO', value: 'VIOLACIONES DE TRAFICO' },
-  {
-    key: 'SEGURIDAD',
-    value: 'INCUMPLIMIENTO DE REGLAMENTACIONES DE SEGURIDAD',
-  },
-  { key: 'MANTENIMIENTO', value: 'MANTENIMIENTO DEFICIENTE DEL VEHICULO' },
-  { key: 'CONDUCTA', value: 'CONDUCTA AGRESIVA O IMPRUDENTE' },
-  { key: 'CARGA', value: 'INCUMPLIMIENTO DE NORMAS DE CARGA Y PESO' },
-  { key: 'DOCUMENTACION', value: 'DOCUMENTACION Y REGISTROS INCORRECTOS' },
-  {
-    key: 'MANIOBRA_NO_REALIZADA',
-    value: 'OPERADOR NO QUISO HACER UNA MANIOBRA',
-  },
-  { key: 'MANIOBRA_ABANDONADA', value: 'OPERADOR DEJO BOTADA LA MANIOBRA' },
-  { key: 'NO-TOMO-EQUIPO', value: 'NO TOMO EQUIPO ASIGNADO' },
+const incidenceValues: string[] = [
+  'CONDUCIR BAJO LOS EFECTOS DEL ALCOHOL O DROGAS',
+  'VIOLACIONES DE TRAFICO',
+  'INCUMPLIMIENTO DE REGLAMENTACIONES DE SEGURIDAD',
+  'MANTENIMIENTO DEFICIENTE DEL VEHICULO',
+  'CONDUCTA AGRESIVA O IMPRUDENTE',
+  'INCUMPLIMIENTO DE NORMAS DE CARGA Y PESO',
+  'DOCUMENTACION Y REGISTROS INCORRECTOS',
+  'OPERADOR NO QUISO HACER UNA MANIOBRA',
+  'OPERADOR DEJO BOTADA LA MANIOBRA',
+  'NO TOMO EQUIPO ASIGNADO'
 ];
+const incidenceType: SelectItem[] = incidenceValues.map((r) => ({ key: r, value: r }));
 
 const CreateIncidence = () => {
   const { id } = useParams();
@@ -103,6 +102,21 @@ const CreateIncidence = () => {
                   minRows={6}
                   rules={{ required: 'Comentario requerido' }}
                 />
+                <div className="flex flex-row gap-4">
+                  <DatePickerInput 
+                    control={control}
+                    name="startDate"
+                    label="Fecha Inicio"
+                    rules={{ required: 'Fecha de inicio requerida' }}
+                  />
+
+                  <DatePickerInput 
+                    control={control}
+                    name="endDate"
+                    label="Fecha Fin"
+                    rules={{ required: 'Fecha de fin requerida' }}
+                  />
+                </div>
               </div>
               <Button
                 onPress={() => handleSubmit(onSubmit)()}
