@@ -242,7 +242,7 @@ const ViajesActivos = ({ }) => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
-    state: { isLoading: isLoading },
+    state: { showProgressBars: isLoading },
     enableColumnPinning: true,
     enableStickyHeader: true,
     positionGlobalFilter: "right",
@@ -260,7 +260,7 @@ const ViajesActivos = ({ }) => {
       hiddenColumns: ["empresa"],
       density: 'compact',
       expanded: true,
-      grouping: ['sucursal', 'x_status_viaje'],
+      grouping: ['sucursal'],
       showColumnFilters: true,
       pagination: { pageSize: 80 },
     },
@@ -295,7 +295,7 @@ const ViajesActivos = ({ }) => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 250px)',
+        maxHeight: 'calc(100vh - 230px)',
       },
     },
     muiTableBodyCellProps: ({ row }) => ({
