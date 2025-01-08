@@ -2,6 +2,7 @@ import { Component, ErrorInfo, ReactNode } from 'react';
 
 import { IoSadOutline } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
+import { captureException } from '@sentry/react';
 
 /**
  * Componente que captura errores en la aplicación y muestra un mensaje de error
@@ -20,7 +21,10 @@ export class ErrorBoundary extends Component<
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-    console.error('Uncaught error:', error, errorInfo);
+    console.error('Error sin capturar:', error, errorInfo);
+
+    // Envía el error a Sentry solo cuando ocurre en el ErrorBoundary
+    captureException(error);
   }
 
   private resetError = () => {
@@ -30,7 +34,7 @@ export class ErrorBoundary extends Component<
   render() {
     if (this.state.hasError) {
       return (
-        <div className="flex flex-col items-center justify-cente p-6">
+        <div className="flex flex-col items-center justify-center p-6">
           <div className="bg-white shadow-lg rounded-lg p-8 max-w-md text-center">
             <IoSadOutline className="h-16 w-16 text-red-500 mx-auto mb-4" />
             <h1 className="text-2xl font-bold text-gray-800 mb-2">
@@ -62,3 +66,4 @@ export class ErrorBoundary extends Component<
     return this.props.children;
   }
 }
+

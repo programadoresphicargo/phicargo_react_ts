@@ -51,8 +51,8 @@ export const driverToLocal = (driver: DriverApi): Driver => ({
         loadType: driver.vehicle.x_tipo_carga,
       }
     : null,
-  permissions: driver.permissions
-    ? driverPermissionSimpleToLocal(driver.permissions)
+  permission: driver.permission
+    ? driverPermissionSimpleToLocal(driver.permission)
     : null,
   travel: driver.tms_travel
     ? {

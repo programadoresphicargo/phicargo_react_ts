@@ -1,24 +1,25 @@
-import React, { useState, useEffect, useMemo, useContext } from 'react';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import CloseIcon from '@mui/icons-material/Close';
-import Slide from '@mui/material/Slide';
-import Viaje from '../viaje';
-import { Box } from '@mui/material';
-import { Image } from 'antd';
-import { Avatar } from '@nextui-org/react';
-const { VITE_PHIDES_API_URL } = import.meta.env;
-import { Chip } from '@nextui-org/react';
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import { ViajeContext } from '../context/viajeContext';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
+
+import AppBar from '@mui/material/AppBar';
+import { Avatar } from '@nextui-org/react';
+import { Box } from '@mui/material';
+import Button from '@mui/material/Button';
+import { Chip } from '@nextui-org/react';
+import CloseIcon from '@mui/icons-material/Close';
+import Dialog from '@mui/material/Dialog';
+import IconButton from '@mui/material/IconButton';
+import { Image } from 'antd';
 import NavbarViajes from '../navbar';
+import Slide from '@mui/material/Slide';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Viaje from '../viaje';
+import { ViajeContext } from '../context/viajeContext';
+const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -283,13 +284,6 @@ const ViajesActivos = ({ }) => {
       sx: {
         fontFamily: 'Inter',
         fontWeight: 'Bold',
-        fontSize: '14px',
-      },
-    },
-    muiTableBodyCellProps: {
-      sx: {
-        fontFamily: 'Inter',
-        fontWeight: 'normal',
         fontSize: '14px',
       },
     },

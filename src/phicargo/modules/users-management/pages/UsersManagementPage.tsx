@@ -44,7 +44,7 @@ const UsersManagementPage = () => {
       showColumnFilters: true,
     },
     muiTableBodyRowProps: ({ row }) => ({
-      onDoubleClick: () => navigate(`/control-usuarios/usuarios/detalles/${row.original.id}`),
+      onDoubleClick: () => navigate(`/control-usuarios/detalles/${row.original.id}`),
       sx: { cursor: 'pointer' },
     }),
     renderTopToolbarCustomActions: () => (

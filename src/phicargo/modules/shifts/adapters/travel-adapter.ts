@@ -4,13 +4,15 @@ import dayjs from '../../core/utilities/dayjs-config';
 
 export const travelToLocal = (travel: TravelApi): Travel => ({
   id: travel.id,
-  branch: travel.branch,
+  name: travel.name,
   status: travel.x_status_viaje,
-  vehicle: travel.vehicle,
+  operativeStatus: travel.operative_status,
+  branch: travel.branch,
   driver: travel.driver,
+  vehicle: travel.vehicle,
   latitude: travel.latitude,
   longitude: travel.longitude,
+  recordedAt: travel.recorded_at ? dayjs(travel.recorded_at) : null,
   distanceToBranch: travel.distance_to_branch,
-  recordedAt: dayjs(travel.recorded_at),
 });
 

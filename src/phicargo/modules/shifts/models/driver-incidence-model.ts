@@ -14,5 +14,8 @@ export interface Incidence extends IncidenceBase {
   driver: DriverInfo;
 }
 
-export type IncidenceCreate = IncidenceBase;
+export interface IncidenceCreate extends IncidenceBase {
+  startDate: Dayjs;
+  endDate: Dayjs;
+}
 

@@ -1,15 +1,61 @@
 import { Checkbox } from '@nextui-org/react';
 import { HeaderBase } from '@/phicargo/modules/core/components/ui/HeaderBase';
+import { HeaderCard } from '@/phicargo/modules/core/components/ui/HeaderCard';
+import { RefreshButton } from '@/phicargo/modules/core/components/ui/RefreshButton';
 import { useNavigate } from 'react-router-dom';
 import { useShiftsContext } from '../../hooks/useShiftsContext';
+import { useTravelQueries } from '../../hooks/useTravelQueries';
 
 export const Header = () => {
   const navigate = useNavigate();
   const { branchId, setBranchId } = useShiftsContext();
-
+  const {
+    travelsInPlantQuery, 
+    travelsUnloadingQuery,
+    travelsNearQuery
+  } = useTravelQueries();
+  
   return (
     <HeaderBase onBack={() => navigate('/menu')}>
-      <h1 className="text-2xl font-semibold">Turnos</h1>
+      <HeaderCard
+        title="Descargando"
+        isLoading={travelsUnloadingQuery.isFetching}
+        content={travelsUnloadingQuery.data?.length || 0}
+        infoButton
+        onInfoClick={() => navigate('/turnos/unidades-descargando')}
+        startContent={
+          <RefreshButton  
+            onClick={() => travelsUnloadingQuery.refetch()}
+            buttonClassName='text-emerald-400'
+          />
+        }
+      />
+      <HeaderCard
+        title="Bajando"
+        isLoading={travelsNearQuery.isFetching}
+        content={travelsNearQuery.data?.length || 0}
+        infoButton
+        onInfoClick={() => navigate('/turnos/unidades-bajando')}
+        startContent={
+          <RefreshButton  
+            onClick={() => travelsNearQuery.refetch()}
+            buttonClassName='text-emerald-400'
+          />
+        }
+      />
+      <HeaderCard
+        title="Planta"
+        isLoading={travelsInPlantQuery.isFetching}
+        content={travelsInPlantQuery.data?.length || 0}
+        infoButton
+        onInfoClick={() => navigate('/turnos/unidades-planta')}
+        startContent={
+          <RefreshButton  
+            onClick={() => travelsInPlantQuery.refetch()}
+            buttonClassName='text-emerald-400'
+          />
+        }
+      />
       <div className="flex flex-col gap-3">
         <div className="flex flex-row gap-2 bg-gray-700 py-1.5 px-2 rounded-xl">
           <Checkbox

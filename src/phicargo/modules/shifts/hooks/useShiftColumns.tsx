@@ -69,6 +69,15 @@ export const useShiftColumns = () => {
         header: 'Llegada',
       },
       {
+        accessorFn: (row) => row.travel?.routeName || 'SIN ASIGNAR',
+        header: 'Ruta',
+        id: 'route',
+      },
+      {
+        accessorFn: (row) => row.travel?.duration || 'SIN ASIGNAR',
+        header: 'Duración',
+      },
+      {
         accessorFn: (row) => row.comments,
         header: 'Comentarios',
       },

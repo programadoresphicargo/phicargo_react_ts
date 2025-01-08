@@ -1,30 +1,26 @@
-import { Route, Routes } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
 
 import { LoadingPage } from '../../core/pages/LoadingPage';
 import ProtectedRoute from '@/router/ProtectedRoute';
+import { Route } from 'react-router-dom';
 
 const DailyOperationsPage = lazy(() => import('../pages/DailyOperationsPage'));
 
-const DOReportRoutes = () => {
-  return (
-    <Routes>
-      <Route
-        path="/"
+const DOReportRoutes = () => (
+  <Route
+    path="operaciones"
+    element={
+      <ProtectedRoute
         element={
-          <ProtectedRoute
-            element={
-              <Suspense fallback={<LoadingPage />}>
-                <DailyOperationsPage />
-              </Suspense>
-            }
-            requiredPermissionId={201}
-          />
+          <Suspense fallback={<LoadingPage />}>
+            <DailyOperationsPage />
+          </Suspense>
         }
+        requiredPermissionId={201}
       />
-    </Routes>
-  );
-};
+    }
+  />
+);
 
 export default DOReportRoutes;
 
