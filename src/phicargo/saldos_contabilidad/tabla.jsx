@@ -259,14 +259,14 @@ const Operadores = ({ estado }) => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
-    state: { isLoading: isLoading2 },
+    state: { showProgressBars: isLoading2 },
     enableColumnPinning: true,
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
     initialState: {
       density: 'compact',
       expanded: false,
-      grouping: ['empresa', 'tipo', 'moneda'],
+      grouping: ['empresa', 'tipo'],
       pagination: { pageIndex: 0, pageSize: 100 },
       showColumnFilters: true,
     },
@@ -358,7 +358,7 @@ const Operadores = ({ estado }) => {
           Registro de saldo
         </ModalHeader>
         <ModalBody>
-          <SaldoForm id_cuenta={id_cuenta} referencia={referencia} onClose={handleClose}></SaldoForm>
+          <SaldoForm id_cuenta={id_cuenta} referencia={referencia} onClose={handleClose2}></SaldoForm>
         </ModalBody>
       </ModalContent>
     </Modal>

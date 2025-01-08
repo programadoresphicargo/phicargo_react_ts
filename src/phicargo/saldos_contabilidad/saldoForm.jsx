@@ -2,41 +2,52 @@ import React, { useState, useEffect } from "react";
 import { Grid, Stack } from "@mui/material";
 import { toast } from "react-toastify";
 import odooApi from "../modules/core/api/odoo-api";
-import { Input, Button, DateInput, DatePicker } from "@nextui-org/react";
+import { Input, Button, DateInput, DatePicker, Chip } from "@nextui-org/react";
 import { useDateFormatter } from "@react-aria/i18n";
 import { parseDate, getLocalTimeZone, today } from "@internationalized/date";
+import { Progress } from "@nextui-org/react";
 
 const SaldoForm = ({ id_cuenta, referencia, onClose }) => {
+
+    const [loading, setLoading] = useState(false);
+
+    const [loadingSaldo, setLoadingSaldo] = useState(false);
+
     const currentDate = today(getLocalTimeZone());
     const [value, setValue] = useState(currentDate);
     const [formData, setFormData] = useState({
         id_saldo: "",
         id_cuenta: id_cuenta || "",
         fecha: value.toString(),
-        saldo: 0,
+        saldo: 0.0,
         id_usuario: "",
-        disponible: 0,
-        utilizado: 0,
+        disponible: 0.0,
+        utilizado: 0.0,
     });
 
     let formatter = useDateFormatter({ dateStyle: "full" });
 
     const actualizarSaldo = async () => {
         try {
+            setLoading(true);
             const response = await odooApi.post(`/saldos/actualizar_saldo/`, formData);
             const data = response.data || response;
             if (data.mensaje === "Saldo actualizado exitosamente") {
                 toast.success(data.mensaje);
+                onClose();
             } else {
                 toast.error(data.mensaje);
             }
+            setLoading(false);
         } catch (error) {
+            setLoading(false);
             toast.error("Error de conexión: " + error.message);
         }
     };
 
     const getSaldoCuentaByFecha = async () => {
         try {
+            setLoadingSaldo(true);
             const response = await odooApi.get(
                 `/saldos/get_saldo_by_cuenta_and_fecha/${id_cuenta}/${value.toString()}`
             );
@@ -57,14 +68,16 @@ const SaldoForm = ({ id_cuenta, referencia, onClose }) => {
                     id_saldo: "",
                     id_cuenta: id_cuenta || "",
                     fecha: value.toString(),
-                    saldo: 0,
+                    saldo: 0.0,
                     id_usuario: "",
-                    disponible: 0,
-                    utilizado: 0,
+                    disponible: 0.0,
+                    utilizado: 0.0,
                 });
-                toast.warn("No se encontraron datos para la cuenta y fecha especificadas.");
+                console.log("No se encontraron datos para la cuenta y fecha especificadas.");
             }
+            setLoadingSaldo(false);
         } catch (error) {
+            setLoadingSaldo(false);
             toast.error("Error al obtener los datos: " + error.message);
         }
     };
@@ -78,7 +91,15 @@ const SaldoForm = ({ id_cuenta, referencia, onClose }) => {
     return (
         <Grid container spacing={2} className="mb-5">
             <Grid item xs={12}>
-                <h1>{referencia}</h1>
+                <Chip color="primary" size="lg">Cuenta - {referencia}</Chip>
+                {loadingSaldo && (
+                    <Progress
+                        isIndeterminate
+                        label="Obteniendo saldo..."
+                        className="mt-3"
+                        size="sm"
+                    />
+                )}
             </Grid>
             <Grid item xs={12}>
                 <DatePicker
@@ -118,8 +139,8 @@ const SaldoForm = ({ id_cuenta, referencia, onClose }) => {
             </Grid>
             <Grid item xs={12}>
                 <Stack spacing={2} direction="row">
-                    <Button color="primary" onClick={actualizarSaldo}>
-                        Actualizar
+                    <Button color="primary" onClick={actualizarSaldo} isLoading={loading}>
+                        Actualizar saldo
                     </Button>
                 </Stack>
             </Grid>
