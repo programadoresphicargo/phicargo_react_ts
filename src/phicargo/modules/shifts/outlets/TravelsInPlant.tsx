@@ -14,6 +14,7 @@ import { FaSearchLocation } from 'react-icons/fa';
 import { GiPathDistance } from 'react-icons/gi';
 import { TbTruckReturn } from 'react-icons/tb';
 
+
 const columns: MRT_ColumnDef<Travel>[] = [
   {
     accessorFn: (row) => row.branch,
@@ -37,6 +38,21 @@ const columns: MRT_ColumnDef<Travel>[] = [
     accessorFn: (row) => row.driver,
     header: 'Operador',
     id: 'driver',
+  },
+  {
+    accessorFn: (row) => row.name,
+    header: 'Viaje',
+    id: 'travelName',
+  },
+  {
+    accessorFn: (row) => row.status,
+    header: 'Estatus Viaje',
+    id: 'travelStatus',
+  },
+  {
+    accessorFn: (row) => row.operativeStatus,
+    header: 'Estatus Operativo',
+    id: 'travelOperativeStatus',
   },
   {
     header: 'Ubicación',
@@ -71,21 +87,30 @@ const columns: MRT_ColumnDef<Travel>[] = [
     accessorFn: (row) => row.distanceToBranch,
     header: 'Distancia a Sucursal',
     id: 'distanceToBranch',
-    Cell: ({ cell }) => (
-      <div className="text-blue-700 font-bold flex items-center space-x-2">
-        <GiPathDistance />
-        <span className="truncate">{`${cell
-          .getValue<number>()
-          ?.toFixed(2)} KM`}</span>
-      </div>
-    ),
+    Cell: ({ cell }) => {
+
+      if (!cell.getValue<number>()) {
+        return (
+          <span className="text-gray-500">No disponible</span>
+        );
+      }
+
+      return (
+        <div className="text-blue-700 font-bold flex items-center space-x-2">
+          <GiPathDistance />
+          <span className="truncate">{`${cell
+            .getValue<number>()
+            ?.toFixed(2)} KM`}</span>
+        </div>
+      )
+    }
   },
 ];
 
-const TravelsNearToBranch = () => {
+const TravelsInPlant = () => {
   const navigate = useNavigate();
 
-  const { travelsNearQuery } = useTravelQueries();
+  const { travelsInPlantQuery } = useTravelQueries();
 
   const onClose = () => {
     navigate('/turnos');
@@ -94,7 +119,7 @@ const TravelsNearToBranch = () => {
   const table = useMaterialReactTable<Travel>({
     // DATA
     columns,
-    data: travelsNearQuery.data || [],
+    data: travelsInPlantQuery.data || [],
     enableStickyHeader: true,
     autoResetPageIndex: false,
     // PAGINATION, FILTERS, SORTING
@@ -111,21 +136,20 @@ const TravelsNearToBranch = () => {
       pagination: { pageSize: 100, pageIndex: 0 },
     },
     state: {
-      isLoading: travelsNearQuery.isFetching,
+      isLoading: travelsInPlantQuery.isFetching,
     },
     // CUSTOMIZATIONS
     renderTopToolbarCustomActions: () => (
       <div className="flex items-center gap-4">
         <Tooltip arrow title="Refrescar">
-          <IconButton onClick={() => travelsNearQuery.refetch()}>
+          <IconButton onClick={() => travelsInPlantQuery.refetch()}>
             <RefreshIcon />
           </IconButton>
         </Tooltip>
         <div className="flex items-center gap-2 px-3 py-1 border border-blue-200 bg-blue-50 rounded-lg shadow-sm">
           <TbTruckReturn className="text-blue-500" />
           <p className="text-gray-700">
-            Unidades que están realizando viaje en estado de retorno hacia su
-            sucursal de origen
+            Unidades que están realizando viaje en planta
           </p>
         </div>
       </div>
@@ -152,7 +176,7 @@ const TravelsNearToBranch = () => {
           <>
             <ModalHeader className="flex items-center justify-center bg-[#dadfeb] pb-2">
               <h3 className="font-bold text-xl text-center text-gray-800 uppercase">
-                Viajes Bajando
+                Viajes en Planta
               </h3>
             </ModalHeader>
             <ModalBody className="p-0">
@@ -163,7 +187,6 @@ const TravelsNearToBranch = () => {
       </ModalContent>
     </Modal>
   );
-};
+}
 
-export default TravelsNearToBranch;
-
+export default TravelsInPlant

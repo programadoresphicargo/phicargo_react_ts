@@ -3,28 +3,37 @@ import { HeaderBase } from '@/phicargo/modules/core/components/ui/HeaderBase';
 import { HeaderCard } from '@/phicargo/modules/core/components/ui/HeaderCard';
 import { useNavigate } from 'react-router-dom';
 import { useShiftsContext } from '../../hooks/useShiftsContext';
+import { useTravelQueries } from '../../hooks/useTravelQueries';
 
 export const Header = () => {
   const navigate = useNavigate();
   const { branchId, setBranchId } = useShiftsContext();
+  const {
+    travelsInPlantQuery, 
+    travelsUnloadingQuery,
+    travelsNearQuery
+  } = useTravelQueries();
   
   return (
     <HeaderBase onBack={() => navigate('/menu')}>
       <HeaderCard
         title="Descargando"
-        content="23"
+        isLoading={travelsUnloadingQuery.isFetching}
+        content={travelsUnloadingQuery.data?.length || 0}
         infoButton
         onInfoClick={() => navigate('/turnos/unidades-descargando')}
       />
       <HeaderCard
         title="Bajando"
-        content="23"
+        isLoading={travelsNearQuery.isFetching}
+        content={travelsNearQuery.data?.length || 0}
         infoButton
         onInfoClick={() => navigate('/turnos/unidades-bajando')}
       />
       <HeaderCard
         title="Planta"
-        content="23"
+        isLoading={travelsInPlantQuery.isFetching}
+        content={travelsInPlantQuery.data?.length || 0}
         infoButton
         onInfoClick={() => navigate('/turnos/unidades-planta')}
       />

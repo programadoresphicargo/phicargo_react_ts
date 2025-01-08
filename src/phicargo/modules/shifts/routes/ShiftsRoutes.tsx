@@ -13,6 +13,8 @@ const IncidencesList = lazy(() => import('../outlets/IncidencesList'));
 const TravelsNearToBranch = lazy(
   () => import('../outlets/TravelsNearToBranch'),
 );
+const TravelsUnloading = lazy(() => import('../outlets/TravelsUnloading'));
+const TravelsInPlant = lazy(() => import('../outlets/TravelsInPlant'));
 
 const ShiftsRoutes = () => (
   <Route path="/turnos" element={<ShiftsLayout />}>
@@ -76,7 +78,7 @@ const ShiftsRoutes = () => (
         path="unidades-descargando"
         element={
           <Suspense fallback={<LoadingPage />}>
-            <TravelsNearToBranch />
+            <TravelsUnloading />
           </Suspense>
         }
       />
@@ -84,7 +86,7 @@ const ShiftsRoutes = () => (
         path="unidades-planta"
         element={
           <Suspense fallback={<LoadingPage />}>
-            <TravelsNearToBranch />
+            <TravelsInPlant />
           </Suspense>
         }
       />

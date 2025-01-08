@@ -113,8 +113,8 @@ const ShiftsPage = () => {
         />
         <Button
           size="sm"
-          variant="faded"
-          color="warning"
+          variant="flat"
+          color="secondary"
           className="font-bold"
           startContent={<HiQueueList />}
           onPress={() => navigate('/turnos/cola')}
@@ -123,23 +123,13 @@ const ShiftsPage = () => {
         </Button>
         <Button
           size="sm"
-          variant="faded"
+          variant="flat"
           color="danger"
           className="font-bold"
           startContent={<HiQueueList />}
           onPress={() => navigate('/turnos/incidencias')}
         >
           Conteo de Incidencias
-        </Button>
-        <Button
-          size="sm"
-          variant="faded"
-          color="warning"
-          className="font-bold"
-          startContent={<TbTruckReturn />}
-          onPress={() => navigate('/turnos/unidades-bajando')}
-        >
-          Unidades Bajando
         </Button>
         <ExportExcelButton
           size="sm"

@@ -14,6 +14,7 @@ import { FaSearchLocation } from 'react-icons/fa';
 import { GiPathDistance } from 'react-icons/gi';
 import { TbTruckReturn } from 'react-icons/tb';
 
+
 const columns: MRT_ColumnDef<Travel>[] = [
   {
     accessorFn: (row) => row.branch,
@@ -82,10 +83,10 @@ const columns: MRT_ColumnDef<Travel>[] = [
   },
 ];
 
-const TravelsNearToBranch = () => {
+const TravelsUnloading = () => {
   const navigate = useNavigate();
 
-  const { travelsNearQuery } = useTravelQueries();
+  const { travelsUnloadingQuery } = useTravelQueries();
 
   const onClose = () => {
     navigate('/turnos');
@@ -94,7 +95,7 @@ const TravelsNearToBranch = () => {
   const table = useMaterialReactTable<Travel>({
     // DATA
     columns,
-    data: travelsNearQuery.data || [],
+    data: travelsUnloadingQuery.data || [],
     enableStickyHeader: true,
     autoResetPageIndex: false,
     // PAGINATION, FILTERS, SORTING
@@ -107,25 +108,24 @@ const TravelsNearToBranch = () => {
     // STATE
     initialState: {
       showColumnFilters: false,
-      density: 'compact',
+      density: 'comfortable',
       pagination: { pageSize: 100, pageIndex: 0 },
     },
     state: {
-      isLoading: travelsNearQuery.isFetching,
+      isLoading: travelsUnloadingQuery.isFetching,
     },
     // CUSTOMIZATIONS
     renderTopToolbarCustomActions: () => (
       <div className="flex items-center gap-4">
         <Tooltip arrow title="Refrescar">
-          <IconButton onClick={() => travelsNearQuery.refetch()}>
+          <IconButton onClick={() => travelsUnloadingQuery.refetch()}>
             <RefreshIcon />
           </IconButton>
         </Tooltip>
         <div className="flex items-center gap-2 px-3 py-1 border border-blue-200 bg-blue-50 rounded-lg shadow-sm">
           <TbTruckReturn className="text-blue-500" />
           <p className="text-gray-700">
-            Unidades que están realizando viaje en estado de retorno hacia su
-            sucursal de origen
+            Unidades que están realizando viaje en estado descargando
           </p>
         </div>
       </div>
@@ -152,7 +152,7 @@ const TravelsNearToBranch = () => {
           <>
             <ModalHeader className="flex items-center justify-center bg-[#dadfeb] pb-2">
               <h3 className="font-bold text-xl text-center text-gray-800 uppercase">
-                Viajes Bajando
+                Viajes Descargando
               </h3>
             </ModalHeader>
             <ModalBody className="p-0">
@@ -163,7 +163,6 @@ const TravelsNearToBranch = () => {
       </ModalContent>
     </Modal>
   );
-};
+}
 
-export default TravelsNearToBranch;
-
+export default TravelsUnloading

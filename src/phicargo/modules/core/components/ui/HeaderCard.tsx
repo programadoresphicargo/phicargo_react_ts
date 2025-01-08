@@ -5,6 +5,7 @@ interface Props {
   title: string;
   alert?: boolean;
   content: string | number | ReactNode;
+  isLoading?: boolean;
 
   infoButton?: boolean;
   infoButtonIcon?: ReactNode;
@@ -28,9 +29,13 @@ export const HeaderCard = (props: Props) => {
         {props.title}
       </p>
       <hr className="border-t border-gray-600 my-1" />
-      <p className="text-emerald-400 text-center font-bold text-2xl m-0 transition-colors duration-300">
-        {props.content}
-      </p>
+      {
+        props.isLoading
+          ? <div className="animate-pulse bg-gray-600 h-8 rounded-lg"></div>
+          : <p className="text-emerald-400 text-center font-bold text-2xl m-0 transition-colors duration-300">
+              {props.content}
+            </p>
+      }
     </div>
   );
 };
