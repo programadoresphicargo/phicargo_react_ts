@@ -14,7 +14,7 @@ import {
   Button,
   useDisclosure,
 } from "@nextui-org/react";
-
+import { Chip } from "@nextui-org/react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -23,6 +23,8 @@ import Cuentas from './cuentas';
 import SaldoForm from './saldoForm';
 
 const Operadores = ({ estado }) => {
+  const [id_cuenta, setCuenta] = React.useState(0);
+  const [referencia, setReferencia] = React.useState(0);
 
   const fechaActual = new Date().toISOString().split('T')[0];
   const [value, setValue] = React.useState(parseDate(fechaActual));
@@ -39,8 +41,10 @@ const Operadores = ({ estado }) => {
     setOpen(true);
   };
 
-  const abrirForm = () => {
+  const abrirForm = (id_cuenta, referencia) => {
     setOpen2(true);
+    setCuenta(id_cuenta);
+    setReferencia(referencia);
   };
 
   const handleClose = () => {
@@ -50,6 +54,7 @@ const Operadores = ({ estado }) => {
 
   const handleClose2 = () => {
     setOpen2(false);
+    fetchData();
   };
 
   const [data, setData] = useState([]);
@@ -80,10 +85,30 @@ const Operadores = ({ estado }) => {
       {
         accessorKey: 'banco',
         header: 'Banco',
+        Cell: ({ cell }) => {
+          const referencia = cell.getValue() || '';
+          return (
+            <Chip color='primary'>
+              {referencia}
+            </Chip>
+          );
+        },
       },
       {
         accessorKey: 'referencia',
         header: 'Referencia',
+        Cell: ({ cell }) => {
+          const referencia = cell.getValue() || '';
+          return (
+            <Chip color='success' className='text-white'>
+              {referencia}
+            </Chip>
+          );
+        },
+      },
+      {
+        accessorKey: 'tipo',
+        header: 'Tipo',
       },
       {
         accessorKey: 'moneda',
@@ -91,29 +116,133 @@ const Operadores = ({ estado }) => {
       },
       {
         accessorKey: 'saldo_anterior',
-        header: 'Saldo anterior - ' + formattedValueMenosUnDia,
+        header: 'Saldo anterior',
+        muiTableBodyCellProps: {
+          align: 'right',
+        },
+        Footer: ({ column, table }) => {
+          const totalGlobal = table
+            .getFilteredRowModel()
+            .rows.reduce((sum, row) => {
+              const value = row.getValue(column.id) || '0';
+              const numericValue = parseFloat(value.replace(/,/g, ''));
+              return sum + (isNaN(numericValue) ? 0 : numericValue);
+            }, 0);
+
+          if (totalGlobal === 0) return ''; // No mostrar nada si el total es 0.0
+
+          const formattedTotal = new Intl.NumberFormat('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }).format(totalGlobal);
+
+          return `Total Global: ${formattedTotal}`;
+        },
+        AggregatedCell: ({ column, row }) => {
+          const groupTotal = row
+            .subRows.reduce((sum, subRow) => {
+              let value = subRow.getValue(column.id) || '0';
+
+              if (typeof value !== 'string') {
+                value = String(value);
+              }
+
+              const numericValue = parseFloat(value.replace(/,/g, ''));
+              return sum + (isNaN(numericValue) ? 0 : numericValue);
+            }, 0);
+
+          if (groupTotal === 0) return '';
+
+          const formattedTotal = new Intl.NumberFormat('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }).format(groupTotal);
+
+          return `Total: ${formattedTotal}`;
+        },
+        Cell: ({ cell }) => {
+          const value = parseFloat((cell.getValue() || '0').replace(/,/g, ''));
+
+          return new Intl.NumberFormat('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }).format(value);
+        },
       },
       {
         accessorKey: 'saldo_actual',
-        header: 'Saldo actual - ' + value,
+        header: 'Saldo Actual',
+        muiTableBodyCellProps: {
+          align: 'right',
+        },
+        Footer: ({ column, table }) => {
+          const totalGlobal = table
+            .getFilteredRowModel()
+            .rows.reduce((sum, row) => {
+              const value = row.getValue(column.id) || '0';
+              const numericValue = parseFloat(value.replace(/,/g, ''));
+              return sum + (isNaN(numericValue) ? 0 : numericValue);
+            }, 0);
+
+          if (totalGlobal === 0) return ''; // No mostrar nada si el total es 0.0
+
+          const formattedTotal = new Intl.NumberFormat('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }).format(totalGlobal);
+
+          return `Total Global: ${formattedTotal}`;
+        },
+        AggregatedCell: ({ column, row }) => {
+          const groupTotal = row
+            .subRows.reduce((sum, subRow) => {
+              let value = subRow.getValue(column.id) || '0';
+
+              if (typeof value !== 'string') {
+                value = String(value);
+              }
+
+              const numericValue = parseFloat(value.replace(/,/g, ''));
+              return sum + (isNaN(numericValue) ? 0 : numericValue);
+            }, 0);
+
+          if (groupTotal === 0) return '';
+
+          const formattedTotal = new Intl.NumberFormat('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }).format(groupTotal);
+
+          return `Total: ${formattedTotal}`;
+        },
+        Cell: ({ cell }) => {
+          const value = parseFloat((cell.getValue() || '0').replace(/,/g, ''));
+
+          return new Intl.NumberFormat('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }).format(value);
+        },
+      },
+      {
+        accessorKey: 'variacion',
+        header: 'Variación',
+        muiTableBodyCellProps: {
+          align: 'right',
+        },
       },
       {
         accessorKey: 'id_saldo',
         header: 'Acción',
         Cell: ({ row }) => (
-          <button
-            onClick={() => abrirForm(row.original)}
-            style={{
-              backgroundColor: '#4CAF50',
-              color: 'white',
-              border: 'none',
-              padding: '5px 10px',
-              borderRadius: '5px',
-              cursor: 'pointer',
-            }}
+          <Button
+            size='sm'
+            color='success'
+            className='text-white'
+            onClick={() => abrirForm(row.original.id_cuenta, row.original.referencia)}
           >
             <i class="bi bi-pen"></i>
-          </button>)
+          </Button>)
       },
     ],
     [],
@@ -125,14 +254,14 @@ const Operadores = ({ estado }) => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
-    state: { isLoading: isLoading2 },
+    state: { showProgressBars: isLoading2 },
     enableColumnPinning: true,
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
     initialState: {
       density: 'compact',
-      expanded: true,
-      grouping: ['empresa', 'moneda'],
+      expanded: false,
+      grouping: ['empresa', 'tipo'],
       pagination: { pageIndex: 0, pageSize: 100 },
       showColumnFilters: true,
     },
@@ -161,7 +290,7 @@ const Operadores = ({ estado }) => {
     },
     muiTableBodyCellProps: ({ row }) => ({
       sx: {
-        backgroundColor: row.subRows?.length ? '#1184e8' : '#FFFFFF',
+        backgroundColor: row.subRows?.length ? '#0456cf' : '#FFFFFF',
         fontFamily: 'Inter',
         fontWeight: 'normal',
         fontSize: '14px',
@@ -170,7 +299,7 @@ const Operadores = ({ estado }) => {
     }),
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 200px)',
+        maxHeight: 'calc(100vh - 290px)',
       },
     },
     renderTopToolbarCustomActions: ({ table }) => (
@@ -224,7 +353,7 @@ const Operadores = ({ estado }) => {
           Registro de saldo
         </ModalHeader>
         <ModalBody>
-          <SaldoForm></SaldoForm>
+          <SaldoForm id_cuenta={id_cuenta} referencia={referencia} onClose={handleClose2}></SaldoForm>
         </ModalBody>
       </ModalContent>
     </Modal>

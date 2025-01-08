@@ -242,12 +242,25 @@ const ViajesActivos = ({ }) => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
-    state: { isLoading: isLoading },
+    state: { showProgressBars: isLoading },
     enableColumnPinning: true,
     enableStickyHeader: true,
+    positionGlobalFilter: "right",
+    muiSearchTextFieldProps: {
+      placeholder: `Buscar en ${data.length} viajes`,
+      sx: { minWidth: '300px' },
+      variant: 'outlined',
+    },
     columnResizeMode: "onEnd",
     initialState: {
+      showGlobalFilter: true,
+      columnVisibility: {
+        empresa: false,
+      },
+      hiddenColumns: ["empresa"],
       density: 'compact',
+      expanded: true,
+      grouping: ['sucursal'],
       showColumnFilters: true,
       pagination: { pageSize: 80 },
     },
@@ -282,9 +295,18 @@ const ViajesActivos = ({ }) => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 190px)',
+        maxHeight: 'calc(100vh - 230px)',
       },
     },
+    muiTableBodyCellProps: ({ row }) => ({
+      sx: {
+        backgroundColor: row.subRows?.length ? '#0456cf' : '#FFFFFF',
+        fontFamily: 'Inter',
+        fontWeight: 'normal',
+        fontSize: '14px',
+        color: row.subRows?.length ? '#FFFFFF' : '#000000',
+      },
+    }),
     renderTopToolbarCustomActions: ({ table }) => (
       <Box
         sx={{

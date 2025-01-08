@@ -91,14 +91,14 @@ const WebSocketWithToast = () => {
 
         webSocket.onerror = () => {
             const message = "Error en la conexión WebSocket";
-            toast.error(message, { autoClose: 3000 });
+            console.log(message, { autoClose: 3000 });
             speakMessage(message);
             showPushNotification("Error WebSocket", message);
         };
 
         webSocket.onclose = () => {
             const message = "Conexión WebSocket cerrada";
-            toast.warning(message, { autoClose: 3000 });
+            console.log(message, { autoClose: 3000 });
             speakMessage(message);
             showPushNotification("Conexión cerrada", message);
 

@@ -88,7 +88,9 @@ function EstatusHistorial() {
                                     </Badge>
                                     <div className="flex flex-col gap-1 items-start justify-center">
                                         <h4 className="text-small font-semibold leading-none text-default-600">{step.nombre_estatus}</h4>
-                                        <h5 className="text-small tracking-tight text-default-400">{step.name || step.nombre}</h5>
+                                        <h5 className="text-small tracking-tight text-default-400">
+                                            {step.department_id === 5 || step.department_id === 6 ? step.name : step.nombre}
+                                        </h5>
                                     </div>
                                 </div>
 
