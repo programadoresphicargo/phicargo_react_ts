@@ -235,19 +235,14 @@ const Operadores = ({ estado }) => {
         accessorKey: 'id_saldo',
         header: 'Acción',
         Cell: ({ row }) => (
-          <button
+          <Button
+            size='sm'
+            color='success'
+            className='text-white'
             onClick={() => abrirForm(row.original.id_cuenta, row.original.referencia)}
-            style={{
-              backgroundColor: '#4CAF50',
-              color: 'white',
-              border: 'none',
-              padding: '5px 10px',
-              borderRadius: '5px',
-              cursor: 'pointer',
-            }}
           >
             <i class="bi bi-pen"></i>
-          </button>)
+          </Button>)
       },
     ],
     [],
@@ -304,7 +299,7 @@ const Operadores = ({ estado }) => {
     }),
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 280px)',
+        maxHeight: 'calc(100vh - 290px)',
       },
     },
     renderTopToolbarCustomActions: ({ table }) => (

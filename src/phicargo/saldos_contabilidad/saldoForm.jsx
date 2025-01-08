@@ -139,7 +139,7 @@ const SaldoForm = ({ id_cuenta, referencia, onClose }) => {
             </Grid>
             <Grid item xs={12}>
                 <Stack spacing={2} direction="row">
-                    <Button color="primary" onClick={actualizarSaldo} isLoading={loading}>
+                    <Button color="primary" onClick={actualizarSaldo} isLoading={loading} isDisabled={loadingSaldo}>
                         Actualizar saldo
                     </Button>
                 </Stack>
