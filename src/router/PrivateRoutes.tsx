@@ -4,20 +4,14 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
 
 import AccesoForm from '../phicargo/accesos/formulario';
-import AvailabilityLayout from '../phicargo/modules/availability/layout/AvailabilityLayout';
 import AvailabilityRoutes from '../phicargo/modules/availability/routes/AvailabilityRoutes';
-import CashflowReportRoutes from '../phicargo/modules/cashflow-report/routes/CashflowReportRoutes';
-import DOReportRoutes from '@/phicargo/modules/daily-operations-report/routes/DOReportRoutes';
 import DashboardsRoutes from '@/phicargo/modules/dashboards/routes/DashboardRoutes';
 import EventosPendientes from '@/phicargo/monitoreo/Eventos_pendientes';
 import { LoadingPage } from '../phicargo/modules/core/pages/LoadingPage';
 import MainMenuPage from '@/phicargo/menu/MainManuPage';
-import MaintenanceReportRoutes from '../phicargo/modules/maintenance/routes/MaintenanceReportRoutes';
 import NotFoundPage from '@/phicargo/modules/core/pages/NotFoundPage';
 import PersistentDrawer from '../phicargo/monitoreo/Eventos';
-import ProtectedRoute from './ProtectedRoute';
-import ReportsMenuPage from '../phicargo/modules/core/pages/ReportsMenuPage';
-import Saldos from '@/phicargo/saldos_contabilidad/ControlUsuarios';
+import { ReportsRoutes } from './ReportsRoutes';
 import ShiftsRoutes from '../phicargo/modules/shifts/routes/ShiftsRoutes';
 import { ToastContainer } from 'react-toastify';
 import { Toaster } from 'react-hot-toast';
@@ -65,46 +59,6 @@ const AsignacionUnidades = lazy(
 const ControlOperadores = lazy(
   () => import('../phicargo/operadores/ControlUsuarios'),
 );
-
-const PERMISSIONS = {
-  'Módulo trafico': 1,
-  'Módulo ajustes': 2,
-  'Módulo bonos': 3,
-  'Módulo reportes': 4,
-  'Módulo usuarios': 5,
-  'Módulo operadores': 7,
-  'Modulo turnos': 8,
-  'Modulo disponibilidad': 200,
-  'Ingresar incidencia asesor legal': 9,
-  'Ingresar incidencia mantenimiento': 10,
-  'Ingresar incidencia th': 11,
-  'Ingresar incidencia operaciones': 12,
-  'Ingresar incidencia calidad': 13,
-  'modulo maniobras': 38,
-  'modulo comunicados': 39,
-  'modulo monitoreo': 40,
-  'cuentas operadores': 41,
-  viajes: 101,
-  finalizados: 102,
-  'banco de correos': 103,
-  detenciones: 104,
-  'pestañas viajes': 105,
-  retorno: 106,
-  'modulo informe': 120,
-  'informe empresa phicargo': 121,
-  'informe empresa servicontainer': 122,
-  'informe empresa tankcontainer': 123,
-  'informe empresa ometra': 124,
-  'informe empresa transportes belchez': 125,
-  'modulo accesos': 126,
-  'modulo ti': 127,
-  'reporte gerencial': 190,
-  'reporte ingresos': 191,
-  'numero de viajes': 192,
-  'inicios de ruta y llegada a planta': 193,
-  estadias: 195,
-  'cumplimiento estatus': 196,
-};
 
 export const PrivateRoutes = () => {
   return (
@@ -269,46 +223,24 @@ export const PrivateRoutes = () => {
           }
         />
 
-        <Route
-          path="/reportes"
-          element={
-            <ProtectedRoute
-              element={<ReportsMenuPage />}
-              requiredPermissionId={PERMISSIONS['Módulo reportes']}
-            />
-          }
-        />
-        <Route
-          path="/reportes/mantenimiento/*"
-          element={<MaintenanceReportRoutes />}
-        />
-        <Route path="/reportes/balance/*" element={<CashflowReportRoutes />} />
-        <Route path="/reportes/operaciones" element={<DOReportRoutes />} />
-        <Route path="/reportes/saldos/" element={<Saldos />} />
+        {/* Modulo de reportes */}
+        {ReportsRoutes()}
 
-        <Route path="/dashboards/*" element={<DashboardsRoutes />} />
-        
+        {/* Dashboards */}
+        {DashboardsRoutes()}
+
         {/* Módulo de turnos */}
         {UsersManagementRoutes()}
 
-        <Route
-          path="/disponibilidad"
-          element={
-            <ProtectedRoute
-              element={<AvailabilityLayout children={undefined} />}
-              requiredPermissionId={PERMISSIONS['Modulo disponibilidad']}
-            />
-          }
-        >
-          {AvailabilityRoutes()}
-        </Route>
-        
+        {/* Módulo de disponibilidad */}
+        {AvailabilityRoutes()}
+
         {/* Módulo de turnos */}
         {ShiftsRoutes()}
 
         {/* Ruta para manejar rutas no válidas */}
         <Route path="*" element={<NotFoundPage />} />
-      </Routes >
+      </Routes>
     </>
   );
 };

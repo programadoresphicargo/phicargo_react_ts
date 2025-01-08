@@ -12,7 +12,7 @@ const pages: MenuItemType[] = [
 ];
 
 interface Props {
-  children: ReactNode;
+  children?: ReactNode;
 }
 
 const AvailabilityLayout = ({ children }: Props) => {

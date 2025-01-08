@@ -1,8 +1,8 @@
-import { Route, Routes } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
 
 import { LoadingPage } from '../../core/pages/LoadingPage';
 import ProtectedRoute from '@/router/ProtectedRoute';
+import { Route } from 'react-router-dom';
 
 const MaintenanceReportPage = lazy(
   () => import('../pages/MaintenanceReportPage'),
@@ -10,42 +10,38 @@ const MaintenanceReportPage = lazy(
 const RecordDetails = lazy(() => import('../outlets/RecordDetails'));
 const CreateNewRecord = lazy(() => import('../outlets/CreateNewRecord'));
 
-const MaintenanceReportRoutes = () => {
-  return (
-    <Routes>
-      <Route
-        path="/"
+const MaintenanceReportRoutes = () => (
+  <Route
+    path="mantenimiento"
+    element={
+      <ProtectedRoute
         element={
-          <ProtectedRoute 
-            element={
-              <Suspense fallback={<LoadingPage />}>
-              <MaintenanceReportPage />
-            </Suspense>
-            }
-            requiredPermissionId={198}
-          />
+          <Suspense fallback={<LoadingPage />}>
+            <MaintenanceReportPage />
+          </Suspense>
         }
-      >
-        <Route
-          path="detalles/:id"
-          element={
-            <Suspense fallback={null}>
-              <RecordDetails />
-            </Suspense>
-          }
-        />
-        <Route
-          path="nuevo"
-          element={
-            <Suspense fallback={null}>
-              <CreateNewRecord />
-            </Suspense>
-          }
-        />
-      </Route>
-    </Routes>
-  );
-};
+        requiredPermissionId={198}
+      />
+    }
+  >
+    <Route
+      path="detalles/:id"
+      element={
+        <Suspense fallback={null}>
+          <RecordDetails />
+        </Suspense>
+      }
+    />
+    <Route
+      path="nuevo"
+      element={
+        <Suspense fallback={null}>
+          <CreateNewRecord />
+        </Suspense>
+      }
+    />
+  </Route>
+);
 
 export default MaintenanceReportRoutes;
 

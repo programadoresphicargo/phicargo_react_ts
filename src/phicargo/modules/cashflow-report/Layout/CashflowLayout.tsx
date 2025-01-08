@@ -5,7 +5,7 @@ import { Toaster } from 'react-hot-toast';
 import WeekProvider from '../context/week-context/WeekProvider';
 
 interface BaseLayoutProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 const CashflowLayout = ({ children }: BaseLayoutProps) => {
