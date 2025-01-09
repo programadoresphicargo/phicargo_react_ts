@@ -12,7 +12,8 @@ import { useState } from 'react';
 
 const Header = () => {
   const navigate = useNavigate();
-  const { activeWeekId, weekSelected, companySelected, onCompanyChange } = useWeekContext();
+  const { activeWeekId, weekSelected, companySelected, onCompanyChange } =
+    useWeekContext();
   const { loadPrevious, isPending } = useLoadPrevious();
 
   const [loadPreviousConfirm, setLoadPreviousConfirm] = useState(false);
@@ -33,11 +34,12 @@ const Header = () => {
           backgroundPosition: 'center',
         }}
       >
-        <div className="flex justify-between items-center flex-wrap gap-4">
+        <div className="flex justify-between items-center flex-wrap gap-2">
           <div className="flex items-center">
             <Button
               isIconOnly
               aria-label="back"
+              size="sm"
               onPress={() => navigate('/reportes')}
               className="bg-gray-100 rounded-full p-2 mr-2 shadow-md hover:bg-gray-200 transition"
             >
@@ -45,40 +47,43 @@ const Header = () => {
             </Button>
           </div>
 
-          <div className="flex flex-col gap-3">
-            <div className="flex flex-col gap-2 bg-gray-700 py-1.5 px-2 rounded-xl">
-              <Checkbox
-                isSelected={companySelected === 1}
-                onValueChange={() => onCompanyChange(1)}
-                classNames={{ label: 'text-white uppercase' }}
+          <div className="flex flex-col gap-1 bg-gray-700 py-1.5 px-2 rounded-xl">
+            <Checkbox
+              isSelected={companySelected === 1}
+              onValueChange={() => onCompanyChange(1)}
+              classNames={{ label: 'text-white uppercase text-xs' }}
+              size='sm'
               >
-                Belchez
-              </Checkbox>
-              <hr className="border-t border-gray-600" />
-              <Checkbox
-                isSelected={companySelected === 2}
-                onValueChange={() => onCompanyChange(2)}
-                classNames={{ label: 'text-white uppercase' }}
-              >
-                Phicargo
-              </Checkbox>
-            </div>
+              Belchez
+            </Checkbox>
+            <hr className="border-t border-gray-600" />
+            <Checkbox
+              isSelected={companySelected === 2}
+              onValueChange={() => onCompanyChange(2)}
+              classNames={{
+                label: 'text-white uppercase text-xs' 
+              }}
+              size='sm'
+            >
+              Phicargo
+            </Checkbox>
           </div>
 
           <div className="flex flex-col items-start gap-2">
             <Tabs
               aria-label="Options"
               isVertical
-              variant='solid'
+              variant="solid"
               color="primary"
+              size='sm'
               onSelectionChange={(e) => navigate(`/reportes/balance/${e}`)}
             >
-              <Tab key="collect" title="Reporte de Cobro" />
-              <Tab key="payment" title="Reporte de cuentas por pagar" />
+              <Tab key="collect" title="Cobro" />
+              <Tab key="payment" title="Cuentas por pagar" />
             </Tabs>
           </div>
 
-          <div className="flex bg-gray-700 py-1.5 px-2 rounded-xl flex-col gap-2 w-1/6 min-w-[200px]">
+          <div className="flex bg-gray-700 py-1.5 px-2 rounded-xl flex-col gap-2 w-1/6 min-w-[150px]">
             <WeekSelector />
             <Button
               color="primary"
@@ -86,7 +91,7 @@ const Header = () => {
               isLoading={isPending}
               isDisabled={!isSameWeek(weekSelected!)}
               startContent={<IoReturnDownForwardOutline />}
-              className="font-bold uppercase"
+              className="uppercase font-bold"
               size="sm"
             >
               Traer Anteriores

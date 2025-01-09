@@ -63,7 +63,7 @@ export const collectRegisterToLocal = (
   friday: amountToLocal(data.friday_amount),
   saturday: amountToLocal(data.saturday_amount),
   observations: data.observations,
-  totalConfirmed: data.total_confirmed_amount,
+  totalConfirmed: Number(data.total_confirmed_amount),
   migratedFromWeekId: data?.migrated_from_week_id,
 });
 

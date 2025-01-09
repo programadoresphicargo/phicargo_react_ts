@@ -150,44 +150,42 @@ const CollectionTable = () => {
       <div className="flex flex-row gap-2">
         <div className="flex flex-row items-center rounded-xl">
           <Tooltip arrow title="Refrescar">
-            <IconButton onClick={() => refetch()}>
+            <IconButton onClick={() => refetch()} size="small">
               <RefreshIcon />
             </IconButton>
           </Tooltip>
         </div>
         <AddButton
           label="Añadir"
+          size='sm'
           onPress={() => navigate('/reportes/balance/collect/add')}
-        />
+          />
         <ExportExcelButton 
+          size='sm'
           label="Exportar"
           onPress={() => exportTo.exportData(registers || [])}
         />
       </div>
     ),
-    muiTablePaperProps: {
-      elevation: 0,
-      sx: {
-        borderRadius: '0',
-      },
-    },
     muiTableHeadCellProps: {
       sx: {
         fontFamily: 'Inter',
         fontWeight: 'Bold',
-        fontSize: '14px',
+        fontSize: '12px',
       },
     },
     muiTableBodyCellProps: {
       sx: {
         fontFamily: 'Inter',
         fontWeight: 'normal',
-        fontSize: '14px',
+        fontSize: '12px',
+        padding: '0 2px',
+        margin: '0',
       },
     },
     muiTableContainerProps: {
       sx: {
-        height: 'calc(100vh - 225px)',
+        height: 'calc(100vh - 210px)',
       },
     },
   });
