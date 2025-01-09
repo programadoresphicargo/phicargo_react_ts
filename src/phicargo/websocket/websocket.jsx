@@ -75,7 +75,7 @@ const WebSocketWithToast = () => {
                 const message = data.message || "Nuevo mensaje recibido";
                 toast.success(`Notificación: ${data}`, { autoClose: 5000 });
                 //speakMessage(message);
-                showPushNotification("Nuevo mensaje: " + data);
+                showPushNotification("Nueva alerta: " + data);
 
                 if (audioRef.current) {
                     audioRef.current.play();
