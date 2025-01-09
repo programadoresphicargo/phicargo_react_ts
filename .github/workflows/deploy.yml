@@ -25,6 +25,7 @@ jobs:
           VITE_ENVIRONMENT: 'production'
           VITE_ODOO_API_URL: 'https://phides-api.phicargo-sistemas.online'
           VITE_PHIDES_API_URL: 'https://phides.phicargo-sistemas.online/phicargo'
+          VITE_WEBSOCKET_SERVER: 'wss://phides-api.phicargo-sistemas.online/ws/'
           VITE_SENTRY_DNS: ${{ secrets.SENTRY_DSN }}
 
       - name: Set up Docker Buildx

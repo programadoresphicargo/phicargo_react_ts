@@ -1,12 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import audioFile from '../../assets/audio/estatus_operador.mp3';
+import { useAuthContext } from "../modules/auth/hooks";
+import { user } from "@nextui-org/react";
+const { VITE_WEBSOCKET_SERVER } = import.meta.env;
 
 const WebSocketWithToast = () => {
+    const { session } = useAuthContext();
     const webSocketRef = useRef(null);
     const audioRef = useRef(null);
     const [selectedVoice, setSelectedVoice] = useState(null);
-    const pingIntervalRef = useRef(null); // Ref para el intervalo de ping
 
     const speakMessage = (message) => {
         if ("speechSynthesis" in window) {
@@ -47,39 +50,32 @@ const WebSocketWithToast = () => {
         window.speechSynthesis.onvoiceschanged = loadVoices;
         loadVoices();
 
-        const webSocket = new WebSocket("wss://websocket.phicargo-sistemas.online/ws");
+        const webSocket = new WebSocket(VITE_WEBSOCKET_SERVER + session.user.id);
         webSocketRef.current = webSocket;
 
         webSocket.onopen = () => {
             const message = "Conectado al servidor WebSocket";
             toast.info(message, { autoClose: 3000 });
             speakMessage(message);
-            showPushNotification("Conexión WebSocket", message);
-
-            // Iniciar envío de pings cada 30 segundos
-            pingIntervalRef.current = setInterval(() => {
-                if (webSocket.readyState === WebSocket.OPEN) {
-                    webSocket.send(JSON.stringify({ type: "ping" })); // Mensaje de ping
-                    console.log("Ping enviado al servidor.");
-                }
-            }, 30000); // 30 segundos
+            console.log("Conexión WebSocket", message);
         };
 
         webSocket.onmessage = (event) => {
             try {
-                const data = JSON.parse(event.data);
+                const data = event.data;
+                console.log(data);
 
                 // Manejar mensajes de tipo 'ping' o 'pong'
-                if (data.type === "pong" || data.type === 'ping') {
+                if (data.type === 'ping') {
                     console.log(`Mensaje ${data.type} recibido del servidor.`);
                     return; // Ignorar el mensaje si es una respuesta al ping
                 }
 
                 // Procesar otros mensajes
                 const message = data.message || "Nuevo mensaje recibido";
-                toast.success(`Notificación: ${message}`, { autoClose: 5000 });
+                toast.success(`Notificación: ${data}`, { autoClose: 5000 });
                 speakMessage(message);
-                showPushNotification("Nuevo mensaje", message);
+                showPushNotification("Nuevo mensaje", data);
 
                 if (audioRef.current) {
                     audioRef.current.play();
@@ -93,26 +89,18 @@ const WebSocketWithToast = () => {
             const message = "Error en la conexión WebSocket";
             console.log(message, { autoClose: 3000 });
             speakMessage(message);
-            showPushNotification("Error WebSocket", message);
+            console.log("Error WebSocket", message);
         };
 
         webSocket.onclose = () => {
             const message = "Conexión WebSocket cerrada";
             console.log(message, { autoClose: 3000 });
             speakMessage(message);
-            showPushNotification("Conexión cerrada", message);
-
-            // Limpiar el intervalo de ping
-            if (pingIntervalRef.current) {
-                clearInterval(pingIntervalRef.current);
-            }
+            console.log("Conexión cerrada", message);
         };
 
         return () => {
             webSocket.close();
-            if (pingIntervalRef.current) {
-                clearInterval(pingIntervalRef.current);
-            }
         };
     }, [selectedVoice]);
 
