@@ -6,7 +6,7 @@ import { mkConfig, generateCsv, download } from 'export-to-csv';
 import { Box } from '@mui/material';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { Component } from "react";
-import { Button, DatePicker } from '@nextui-org/react';
+import { Button, DatePicker, Chip } from '@nextui-org/react';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import ResponsiveAppBar from '@/phicargo/saldos_contabilidad/Navbar';
 import { parseDate, getLocalTimeZone } from "@internationalized/date";
@@ -59,15 +59,60 @@ const DetencionesTable = () => {
 
   const columns = [
     { accessorKey: 'travel_name', header: 'Referencia' },
+    { accessorKey: 'x_status_viaje', header: 'Estado del viaje' },
     { accessorKey: 'route_name', header: 'Ruta' },
     { accessorKey: 'employee_name', header: 'Operador' },
     { accessorKey: 'x_ejecutivo_viaje_bel', header: 'Ejecutivo' },
     { accessorKey: 'inicio_programado', header: 'Inicio programado', },
     { accessorKey: 'fecha_inicio', header: 'Fecha inicio' },
     { accessorKey: 'diferencia_tiempo', header: 'Diferencia tiempo salida' },
+    {
+      accessorKey: 'mensaje1', header: 'Mensaje', Cell: ({ cell }) => {
+        const valor = cell.getValue() || '';
+        var clase;
+
+        if (valor === 'Llegó tarde') {
+          clase = 'danger';
+        } else if (valor === 'Va tarde') {
+          clase = 'warning';
+        } else if (valor === 'Llegó temprano') {
+          clase = 'primary';
+        } else {
+          clase = 'primary';
+        }
+
+        return (
+          <Chip color={clase} size='sm'>
+            {valor}
+          </Chip>
+        );
+      },
+    },
     { accessorKey: 'llegada_planta_programada', header: 'Llegada a planta programada' },
     { accessorKey: 'llegada_planta', header: 'Llegada a planta reportada' },
     { accessorKey: 'diferencia_llegada_planta', header: 'Diferencia tiempo planta' },
+    {
+      accessorKey: 'mensaje2', header: 'Mensaje', Cell: ({ cell }) => {
+        const valor = cell.getValue() || '';
+        var clase;
+
+        if (valor === 'Llegó tarde') {
+          clase = 'danger';
+        } else if (valor === 'Va tarde') {
+          clase = 'warning';
+        } else if (valor === 'Llegó temprano') {
+          clase = 'primary';
+        } else {
+          clase = 'primary';
+        }
+
+        return (
+          <Chip color={clase} size='sm'>
+            {valor}
+          </Chip>
+        );
+      },
+    },
     { accessorKey: 'fecha_finalizado', header: 'Fecha finalizado' },
   ];
 
@@ -97,6 +142,7 @@ const DetencionesTable = () => {
     columnFilterDisplayMode: 'popover',
     paginationDisplayMode: 'pages',
     positionToolbarAlertBanner: 'bottom',
+    enableGrouping: true,
     initialState: {
       density: 'compact',
       expanded: false,
