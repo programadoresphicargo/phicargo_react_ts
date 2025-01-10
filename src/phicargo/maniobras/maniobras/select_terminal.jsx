@@ -2,15 +2,13 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Autocomplete } from '@mui/material';
 import TextField from '@mui/material/TextField';
-const { VITE_PHIDES_API_URL } = import.meta.env;
+import odooApi from '@/phicargo/modules/core/api/odoo-api';
 
 const SelectTerminal = ({ label, id, name, onChange, value, disabled, error_terminal }) => {
     const [options, setOptions] = useState([]);
 
     useEffect(() => {
-        const baseUrl = VITE_PHIDES_API_URL + '/modulo_maniobras/terminales/getTerminales.php';
-
-        axios.get(`${baseUrl}`)
+        odooApi.get('/terminales_maniobras/')
             .then(response => {
                 const data = response.data.map(item => ({
                     value: Number(item.id_terminal),
