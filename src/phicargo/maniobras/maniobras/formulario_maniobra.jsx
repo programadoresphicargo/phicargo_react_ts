@@ -563,10 +563,12 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
     };
 
     const enviar_correo = async (id_maniobra, id_estatus, comentarios) => {
+        const session = useAuthContext();
         const formData = new FormData();
         formData.append('id_maniobra', id_maniobra);
         formData.append('id_estatus', id_estatus);
         formData.append('comentarios', comentarios);
+        formData.append('id_usuario', session.user.id);
 
         try {
             toast.success('Enviando correo espere...');
