@@ -833,7 +833,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                                 <User
                                                     name="Iniciada por"
                                                     isBordered color="primary"
-                                                    description={formData.usuario_activo / formData.fecha_activacion}
+                                                    description={formData.usuario_activo}
                                                     avatarProps={{
                                                         src: ""
                                                     }}
