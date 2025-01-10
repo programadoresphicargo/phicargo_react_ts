@@ -28,6 +28,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import PanelEstatus from './envio_estatus/panel';
 import { useAuthContext } from '@/phicargo/modules/auth/hooks';
+import EstatusHistorialManiobras from '../reportes_estatus/estatus';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const fieldValidations = {
@@ -850,9 +851,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                         </div>
                                     </CardBody>
                                     <CardBody>
-                                        <div
-                                            dangerouslySetInnerHTML={{ __html: htmlContent }}
-                                        />
+                                        <EstatusHistorialManiobras id_maniobra={id_maniobra}></EstatusHistorialManiobras>
                                     </CardBody>
                                 </Card>
                             ) : ''}
