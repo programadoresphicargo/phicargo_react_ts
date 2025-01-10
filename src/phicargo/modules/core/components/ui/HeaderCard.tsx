@@ -1,11 +1,18 @@
 import { IoMdInformationCircle } from 'react-icons/io';
 import { ReactNode } from 'react';
 
+type ClassNames = {
+  title?: string;
+  content?: string;
+};
+
 interface Props {
   title: string;
   alert?: boolean;
   content: string | number | ReactNode;
   isLoading?: boolean;
+
+  classNames?: ClassNames;
 
   startContent?: string | number | ReactNode;
 
@@ -16,14 +23,17 @@ interface Props {
 
 export const HeaderCard = (props: Props) => {
   return (
-    <div className="bg-gray-700 rounded-lg p-2 shadow-md max-w-xs flex-1 hover:shadow-xl relative">
+    <div className="bg-gray-700 rounded-lg p-1 shadow-md max-w-xs flex-1 hover:shadow-xl relative">
       {props.startContent && (
-        <div className='absolute top-2 left-2'>
-          {props.startContent}
-        </div>
+        <div className="absolute top-2 left-2">{props.startContent}</div>
       )}
 
-      <p className="text-gray-300 text-center font-bold text-base m-0">
+      <p
+        className={
+          props.classNames?.title ||
+          'text-gray-300 text-center font-bold text-base m-0'
+        }
+      >
         {props.title}
       </p>
 
@@ -41,7 +51,12 @@ export const HeaderCard = (props: Props) => {
       {props.isLoading ? (
         <div className="animate-pulse bg-gray-600 h-8 rounded-lg"></div>
       ) : (
-        <p className="text-emerald-400 text-center font-bold text-2xl m-0 transition-colors duration-300">
+        <p
+          className={
+            props.classNames?.content ||
+            'text-emerald-400 text-center font-bold text-2xl m-0 transition-colors duration-300'
+          }
+        >
           {props.content}
         </p>
       )}

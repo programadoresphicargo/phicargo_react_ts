@@ -64,14 +64,23 @@ const LoginPage = () => {
             <div className="mb-6">
               <TextInput
                 control={control}
+                className='h-9'
+                classNames={{
+                  label: 'text-xs',
+                  innerWrapper: 'bg-red',
+                }}
                 name="username"
                 label="Usuario"
                 placeholder="Username"
                 rules={{ required: 'El usuario es requerido' }}
-              />
+                />
             </div>
             <div className="mb-6">
               <PasswordInput
+                className='h-9'
+                classNames={{
+                  label: 'text-xs',
+                }}
                 control={control}
                 name="password"
                 label="Password"
@@ -81,7 +90,7 @@ const LoginPage = () => {
             </div>
             <Button
               color="primary"
-              className="w-full mb-4  bg-[#5e0e0d] font-bold uppercase text-medium transform transition-transform duration-300 hover:scale-105"
+              className="w-full mb-4 bg-[#5e0e0d] h-7 font-bold uppercase text-sm transform transition-transform duration-300"
               type="submit"
               isLoading={isPending}
             >

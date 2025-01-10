@@ -1,21 +1,18 @@
-import { useEffect, useMemo, useState } from 'react';
+import { CategoryScale, ChartOptions } from 'chart.js';
+import { useEffect, useState } from 'react';
 
 import { Bar } from 'react-chartjs-2';
+import Chart from 'chart.js/auto';
 import { ChartCard } from './ChartCard';
 import { ChartData } from 'chart.js';
-import { ChartOptions } from 'chart.js';
 import { TravelStats } from '../models/travels-stats-models';
-import dayjs from 'dayjs';
 import { useDateRangeContext } from '../hooks/useDateRangeContext';
+
+Chart.register(CategoryScale);
 
 const options: ChartOptions<'bar'> = {
   responsive: true,
   maintainAspectRatio: false,
-  plugins:{
-    tooltip: {
-      enabled: true,
-    }
-  },
   scales: {
     y: {
       beginAtZero: true,
@@ -33,40 +30,33 @@ const options: ChartOptions<'bar'> = {
         display: false,
       },
       ticks: {
-        maxRotation: 0,
-        minRotation: 0,
+        font: {
+          size: 15,
+        },
       },
     },
   },
 };
-
 
 interface Props {
   data?: TravelStats;
   isLoading: boolean;
 }
 
-export const TravelsByClientChart = (props: Props) => {
+export const TravelsByTrafficExecutive = (props: Props) => {
   const { isLoading, data } = props;
   const [chartData, setChartData] = useState<ChartData<'bar'> | null>(null);
-  const { month } = useDateRangeContext();
-
-  const monthName = useMemo(() => {
-    if (!month) return '';
-    const date = month[0];
-    return dayjs(date).format('MMMM YYYY');
-  }, [month]);
+  const { monthYearName } = useDateRangeContext();
 
   useEffect(() => {
     if (!data) return;
 
     const chartData: ChartData<'bar'> = {
-      labels: data.byClient.map((r) => r.client.split(' ')
-      ),
+      labels: data.byTrafficExecutive.map((item) => item.trafficExecutive),
       datasets: [
-        { 
+        {
           label: 'Viajes',
-          data: data.byClient.map((r) => r.travels),
+          data: data.byTrafficExecutive.map((item) => item.travels),
           borderWidth: 2,
           borderRadius: 10,
           backgroundColor: [
@@ -90,10 +80,11 @@ export const TravelsByClientChart = (props: Props) => {
 
   return (
     <ChartCard
-      title={`Top 10 clientes ${monthName}`}
+      title={`Viajes por Ejecutivo ${monthYearName}`}
       isLoading={isLoading && !chartData}
     >
       {chartData && <Bar data={chartData} options={options} />}
     </ChartCard>
   );
 };
+

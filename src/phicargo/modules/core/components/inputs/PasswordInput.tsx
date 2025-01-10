@@ -15,6 +15,7 @@ export const PasswordInput = <T extends FieldValues>({
   name,
   className,
   rules,
+  classNames,
   label = 'Contraseña',
 }: PasswordInputProps<T>) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -45,6 +46,7 @@ export const PasswordInput = <T extends FieldValues>({
             variant="faded"
             defaultValue=""
             onValueChange={onChange}
+            classNames={classNames}
             endContent={
               <button
                 className="focus:outline-none"
@@ -52,9 +54,9 @@ export const PasswordInput = <T extends FieldValues>({
                 onClick={toggleVisibility}
               >
                 {isVisible ? (
-                  <FaRegEye className="text-2xl pointer-events-none text-default-400" />
+                  <FaRegEye className="text-lg pointer-events-none text-default-400" />
                 ) : (
-                  <FaRegEyeSlash className="text-2xl pointer-events-none text-default-400" />
+                  <FaRegEyeSlash className="text-lg pointer-events-none text-default-400" />
                 )}
               </button>
             }

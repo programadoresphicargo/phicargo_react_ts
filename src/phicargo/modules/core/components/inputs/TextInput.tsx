@@ -1,10 +1,21 @@
-import { Controller, FieldValues } from "react-hook-form";
+import { Controller, FieldValues } from 'react-hook-form';
 
-import { CustomInputProps } from "../../../core/types/global-types";
-import { Input } from "@nextui-org/react";
+import { CustomInputProps } from '../../../core/types/global-types';
+import { Input } from '@nextui-org/react';
 
-export const TextInput = <T extends FieldValues>(props: CustomInputProps<T>) => {
-  const { control, name, className, label, rules, isDisabled, isUpperCase } = props;
+export const TextInput = <T extends FieldValues>(
+  props: CustomInputProps<T>,
+) => {
+  const {
+    control,
+    name,
+    className,
+    label,
+    rules,
+    isDisabled,
+    isUpperCase,
+    classNames,
+  } = props;
 
   return (
     <>
@@ -17,13 +28,16 @@ export const TextInput = <T extends FieldValues>(props: CustomInputProps<T>) => 
             type="text"
             className={className}
             isDisabled={isDisabled}
+            classNames={classNames}
             label={label}
             size="sm"
             variant="flat"
             name={name}
             onValueChange={(newValue) => {
-              const transformedValue = isUpperCase ? newValue.toUpperCase() : newValue;
-              onChange(transformedValue); 
+              const transformedValue = isUpperCase
+                ? newValue.toUpperCase()
+                : newValue;
+              onChange(transformedValue);
             }}
             value={value}
             isInvalid={fieldState.invalid}

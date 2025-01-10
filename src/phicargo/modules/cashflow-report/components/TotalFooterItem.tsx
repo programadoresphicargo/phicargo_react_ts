@@ -16,7 +16,7 @@ const TotalFooterItem: React.FC<TotalFooterItemProps> = ({ total }) => {
         backgroundColor: '#f0f8ff', // Color de fondo claro
         color: '#333', // Color del texto
         textAlign: 'left', // Alineación a la izquierda
-        fontSize: '15px', // Tamaño de fuente mayor
+        fontSize: '12px', // Tamaño de fuente mayor
         fontWeight: 'bold', // Peso de fuente negrita
       }}
     >
