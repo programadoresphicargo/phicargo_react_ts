@@ -12,17 +12,23 @@ export interface ByClientApi {
 
 export interface ByTrafficExecutiveApi {
   traffic_executive: string;
-  travels: number;
+  total_travels: number;
+  travels_pending: number;
+  travels_completed: number;
 }
 
 export interface ByConstructionTypeApi {
   trailer_construction_type: string;
-  travels: number;
+  total_travels: number;
+  travels_pending: number;
+  travels_completed: number;
 }
 
 export interface ByCargoTypeApi {
   cargo_type: string;
-  travels: number;
+  total_travels: number;
+  travels_pending: number;
+  travels_completed: number;
 }
 
 export interface OfYearApi {

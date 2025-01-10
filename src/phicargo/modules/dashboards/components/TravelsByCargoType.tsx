@@ -52,22 +52,28 @@ export const TravelsByCargoType = (props: Props) => {
       labels: data.byCargoType.map((item) => item.cargoType),
       datasets: [
         {
-          label: 'Viajes',
-          data: data.byCargoType.map((item) => item.travels),
+          label: 'Viajes Totales',
+          data: data.byCargoType.map((item) => item.totalTravels),
           borderWidth: 2,
           borderRadius: 10,
-          backgroundColor: [
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(255, 159, 64, 0.2)',
-            'rgba(153, 102, 255, 0.2)',
-          ],
-          borderColor: [
-            'rgba(75, 192, 192, 1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 159, 64, 1)',
-            'rgba(153, 102, 255, 1)',
-          ],
+          backgroundColor: ['rgba(153, 102, 255, 0.2)'],
+          borderColor: ['rgba(153, 102, 255, 1)'],
+        },
+        {
+          label: 'Viajes Completados',
+          data: data.byCargoType.map((item) => item.travelsCompleted),
+          borderWidth: 2,
+          borderRadius: 10,
+          backgroundColor: ['rgba(75, 192, 192, 0.2)'],
+          borderColor: ['rgba(75, 192, 192, 1)'],
+        },
+        {
+          label: 'Viajes Pendientes',
+          data: data.byCargoType.map((item) => item.travelsPending),
+          borderWidth: 2,
+          borderRadius: 10,
+          backgroundColor: ['rgba(255, 99, 132, 0.2)'],
+          borderColor: ['rgba(255,99,132, 1)'],
         },
       ],
     };

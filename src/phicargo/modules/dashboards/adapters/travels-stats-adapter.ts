@@ -41,19 +41,25 @@ const ByTrafficExecutiveToLocal = (
   byTrafficExecutive: ByTrafficExecutiveApi,
 ): ByTrafficExecutive => ({
   trafficExecutive: byTrafficExecutive.traffic_executive,
-  travels: byTrafficExecutive.travels,
+  totalTravels: byTrafficExecutive.total_travels,
+  travelsPending: byTrafficExecutive.travels_pending,
+  travelsCompleted: byTrafficExecutive.travels_completed,
 });
 
 const byConstructionTypeToLocal = (
   byConstructionType: ByConstructionTypeApi,
 ): ByConstructionType => ({
   constructionType: byConstructionType.trailer_construction_type,
-  travels: byConstructionType.travels,
+  totalTravels: byConstructionType.total_travels,
+  travelsPending: byConstructionType.travels_pending,
+  travelsCompleted: byConstructionType.travels_completed,
 });
 
 const byCargoTypeToLocal = (byCargoType: ByCargoTypeApi): ByCargoType => ({
   cargoType: byCargoType.cargo_type,
-  travels: byCargoType.travels,
+  totalTravels: byCargoType.total_travels,
+  travelsCompleted: byCargoType.travels_completed,
+  travelsPending: byCargoType.travels_pending,
 });
 
 const months: MonthType[] = [

@@ -14,17 +14,23 @@ export interface ByClient {
 
 export interface ByTrafficExecutive {
   trafficExecutive: string;
-  travels: number;
+  totalTravels: number;
+  travelsPending: number;
+  travelsCompleted: number;
 }
 
 export interface ByConstructionType {
   constructionType: string;
-  travels: number;
+  totalTravels: number;
+  travelsPending: number;
+  travelsCompleted: number;
 }
 
 export interface ByCargoType {
   cargoType: string;
-  travels: number;
+  totalTravels: number;
+  travelsPending: number;
+  travelsCompleted: number;
 }
 
 export type MonthType = 'ENE' | 'FEB' | 'MAR' | 'ABR' | 'MAY' | 'JUN' | 'JUL' | 'AGO' | 'SEP' | 'OCT' | 'NOV' | 'DIC';
