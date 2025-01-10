@@ -1,5 +1,6 @@
 import React, { useState, useEffect, } from 'react';
 import Drawer from '@mui/material/Drawer';
+import { Card, CardHeader, CardBody, CardFooter, Avatar, AvatarGroup, AvatarIcon, Button } from "@nextui-org/react"
 import { CircularProgress } from "@nextui-org/progress";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -70,38 +71,38 @@ export default function ProblemasOperadores({ open, toggleDrawer }) {
                     </Toolbar>
                 </AppBar>
 
-                <ul class="list-group list-group-flush navbar-card-list-group">
 
-                    {isLoading && (
-                        <div style={{ marginTop: '20px' }} className="d-flex justify-content-center">
-                            <CircularProgress size="lg" aria-label="Loading..." color='danger' />
-                        </div>
-                    )}
+                {isLoading && (
+                    <div style={{ marginTop: '20px' }} className="d-flex justify-content-center">
+                        <CircularProgress size="lg" aria-label="Loading..." color='danger' />
+                    </div>
+                )}
 
-                    {estatus.map((step, index) => (
-                        <li class="list-group-item form-check-select" onClick={() => handleClickOpen(step.id_reporte)}>
-                            <div class="row">
-                                <div class="col-auto">
-                                    <div class="d-flex align-items-center">
-                                        <label class="form-check-label" for="notificationCheck6"></label>
-                                        <span class="form-check-stretched-bg"></span>
-                                        <div class="avatar avatar-sm avatar-soft-dark avatar-circle">
-                                            <span class="avatar-initials">A</span>
-                                        </div>
+                {estatus.map((step, index) => (
+                    <>
+                        <Card className="m-2" onPress={() => handleClickOpen(step.id_reporte)} isPressable>
+                            <CardBody className="px-3 text-small text-default-400">
+                                <div className="flex gap-5">
+                                    <Avatar
+                                        color='danger'
+                                        isBordered
+                                        radius="full"
+                                        size="md"
+                                    />
+                                    <div className="flex flex-col gap-1 items-start justify-center">
+                                        <h4 className="text-small font-semibold leading-none text-default-600">{step.referencia}</h4>
+                                        <h5 className="text-small tracking-tight text-default-400">{step.nombre_operador}</h5>
                                     </div>
                                 </div>
-
-                                <div class="col ms-n2">
-                                    <h5 class="mb-1">{step.referencia}</h5>
-                                    <p class="text-body fs-5">{step.nombre_operador}</p>
+                            </CardBody>
+                            <CardFooter className="gap-3">
+                                <div className="flex gap-1">
+                                    <p className=" text-default-400 text-small">{step.fecha_creacion}</p>
                                 </div>
-
-                                <small class="col-auto text-muted text-cap">{step.fecha_creacion}</small>
-                            </div>
-
-                        </li>
-                    ))}
-                </ul>
+                            </CardFooter>
+                        </Card>
+                    </>
+                ))}
 
                 <ReporteOperador id_reporte={id_reporte} open={openReporte} onClose={handleCloseReporte}></ReporteOperador>
 
