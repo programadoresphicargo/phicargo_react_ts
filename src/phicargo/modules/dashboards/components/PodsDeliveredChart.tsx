@@ -1,14 +1,11 @@
-import { CategoryScale, ChartOptions } from 'chart.js';
 import { useEffect, useState } from 'react';
 
 import { Bar } from 'react-chartjs-2';
-import Chart from 'chart.js/auto';
 import { ChartCard } from './ChartCard';
 import { ChartData } from 'chart.js';
+import { ChartOptions } from 'chart.js';
 import { TravelStats } from '../models/travels-stats-models';
 import { useDateRangeContext } from '../hooks/useDateRangeContext';
-
-Chart.register(CategoryScale);
 
 const options: ChartOptions<'bar'> = {
   responsive: true,

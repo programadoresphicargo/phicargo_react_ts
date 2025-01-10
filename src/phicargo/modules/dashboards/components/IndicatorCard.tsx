@@ -30,14 +30,14 @@ export const IndicatorCard = ({
   }
 
   return (
-    <div className="bg-white border-2 border-slate-300 rounded-xl p-3 shadow-md flex flex-col justify-between">
-      <h2 className="text-lg font-semibold text-slate-700">{title}</h2>
+    <div className="bg-white border-2 border-slate-300 rounded-xl px-3 py-1 shadow-md flex flex-col justify-between">
+      <h2 className="text-medium font-semibold text-slate-700">{title}</h2>
       {isLoading ? (
         <Spinner />
       ) : (
         <>
-          <p className={`text-3xl font-bold ${colorClass} mt-2`}>{value}</p>
-          <p className="text-sm text-slate-500 mt-2">{description}</p>
+          <p className={`text-2xl font-bold ${colorClass} mt-2`}>{value}</p>
+          <p className="text-xs text-slate-500 mt-2">{description}</p>
         </>
       )}
     </div>
