@@ -8,6 +8,8 @@ import type {
   MRT_SortingState,
 } from 'material-react-table';
 
+import { SlotsToClasses } from '@nextui-org/react';
+
 export type OnError = {
   error: string | null;
 };
@@ -31,6 +33,7 @@ export interface CustomInputProps<T extends FieldValues> {
   control: Control<T, any>;
   name: Path<T>;
   className?: string;
+  classNames?: SlotsToClasses<"label" | "input" | "base" | "description" | "errorMessage" | "mainWrapper" | "inputWrapper" | "innerWrapper" | "clearButton" | "helperWrapper">
   label: ReactNode;
   placeholder?: string;
   rules?: Omit<

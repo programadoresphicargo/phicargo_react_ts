@@ -45,7 +45,7 @@ const WeekSelector = () => {
       placeholder="Selecciona la semana"
       hoverRange="week"
       showWeekNumbers
-      size='sm'
+      size="xs"
       isoWeek
       ranges={[]}
       style={{

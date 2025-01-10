@@ -45,9 +45,8 @@ const MenuItem = ({ icon, label, link, isExternal = false }: Props) => {
         flex-col 
         items-center 
         justify-center 
-        w-[150px] 
-        h-[150px] 
-        m-2.5 
+        w-32
+        h-32
         rounded-2xl 
         bg-white 
         shadow-md 
@@ -59,9 +58,9 @@ const MenuItem = ({ icon, label, link, isExternal = false }: Props) => {
       "
     >
       <div className="mb-2.5">
-        <img src={icon} alt={label} className="w-[100px] h-[100px] mb-1.5" />
+        <img src={icon} alt={label} className="w-20 h-20 mb-1.5" />
       </div>
-      <div className="text-sm font-bold text-center">{label}</div>
+      <div className="text-xs font-bold text-center">{label}</div>
     </div>
   );
 };

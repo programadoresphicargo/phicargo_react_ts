@@ -1,7 +1,10 @@
 import { formatCurrency, getProjection } from '../utils';
 import { useCollectRegisters, usePayments } from '../hooks';
 
-import Card from './Card';
+import { HeaderCard } from '../../core/components/ui/HeaderCard';
+
+// import Card from './Card';
+
 
 const HeaderCards = () => {
   const {
@@ -14,8 +17,13 @@ const HeaderCards = () => {
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
-      <Card
+      <HeaderCard
         title="Total Cobrado"
+        classNames={{
+          title: 'text-gray-300 text-center font-bold text-sm m-0',
+          content:
+            'text-emerald-400 text-center font-bold text-medium m-0 transition-colors duration-300',
+        }}
         content={
           loadingCollect
             ? 'Cargando...'
@@ -27,8 +35,13 @@ const HeaderCards = () => {
               )
         }
       />
-      <Card
+      <HeaderCard
         title="Proyección de Cobro"
+        classNames={{
+          title: 'text-gray-300 text-center font-bold text-sm m-0',
+          content:
+            'text-emerald-400 text-center font-bold text-medium m-0 transition-colors duration-300',
+        }}
         content={
           loadingCollect
             ? 'Cargando...'
@@ -40,8 +53,13 @@ const HeaderCards = () => {
               )
         }
       />
-      <Card
+      <HeaderCard
         title="Total Pagado"
+        classNames={{
+          title: 'text-gray-300 text-center font-bold text-sm m-0',
+          content:
+            'text-emerald-400 text-center font-bold text-medium m-0 transition-colors duration-300',
+        }}
         content={
           loadingPayments
             ? 'Cargando...'
@@ -53,8 +71,13 @@ const HeaderCards = () => {
               )
         }
       />
-      <Card
+      <HeaderCard
         title="Proyección de Pago"
+        classNames={{
+          title: 'text-gray-300 text-center font-bold text-sm m-0',
+          content:
+            'text-emerald-400 text-center font-bold text-medium m-0 transition-colors duration-300',
+        }}
         content={
           loadingCollect
             ? 'Cargando...'

@@ -17,14 +17,14 @@ export const Header = () => {
 
   return (
     <div className="mb-4 flex justify-between items-center">
-      <Tabs aria-label="dashboards" size='lg' color='primary' variant='bordered'>
-        <Tab key="operations" title="Operaciones"></Tab>
-        <Tab key="late-arrives" title="Llegadas Tarde"></Tab>
+      <Tabs aria-label="dashboards" size='sm' color='primary' variant='bordered'>
+        <Tab key="operations" title="Operaciones" />
+        <Tab key="late-arrives" title="Llegadas Tarde" />
       </Tabs>
       <div className="flex flex-row gap-2 border-2 items-center border-slate-300 rounded-xl p-1 shadow-md">
         <div className="flex flex-row items-center rounded-xl">
           <Tooltip arrow title="Refrescar">
-            <IconButton onClick={() => travelStatsQuery.refetch()}>
+            <IconButton size="small" onClick={() => travelStatsQuery.refetch()}>
               <RefreshIcon />
             </IconButton>
           </Tooltip>
@@ -34,7 +34,7 @@ export const Header = () => {
           oneTap
           showOneCalendar
           placeholder="Selecciona Un Mes"
-          size="md"
+          size="sm"
           format="dd/MM/yyyy"
           character=" - "
           showWeekNumbers

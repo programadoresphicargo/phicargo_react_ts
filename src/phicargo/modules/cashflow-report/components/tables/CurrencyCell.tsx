@@ -36,7 +36,7 @@ const CurrencyCell = (props: CurrencyCellProps) => {
   return (
     <>
       <span
-        className={`inline-block py-0.5 px-1 rounded text-sm font-bold text-right select-none cursor-pointer`}
+        className={`inline-block py-0.5 px-1 rounded text-xs font-bold text-right select-none cursor-pointer`}
         style={{ backgroundColor: customColor || "#f0f8ff", color: "#333" }}
         onDoubleClick={handleDoubleClick}
       >
