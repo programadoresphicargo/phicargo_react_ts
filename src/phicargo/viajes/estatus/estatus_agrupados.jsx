@@ -15,7 +15,7 @@ import { CircularProgress } from "@nextui-org/react";
 import ArchivosAdjuntos from './archivos_adjuntos';
 import axios from 'axios';
 import { tiempoTranscurrido } from '../../funciones/tiempo';
-import { Card, CardHeader, CardBody, CardFooter } from '@nextui-org/react';
+import { Card, CardHeader, CardBody, CardFooter, Chip } from '@nextui-org/react';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 function EstatusHistorialAgrupado({ registros_agrupados }) {
@@ -130,7 +130,7 @@ function EstatusHistorialAgrupado({ registros_agrupados }) {
                                         <div>{step.nombre_estatus}</div>
                                         {step.id_reenvio !== null && (
                                             <div className="ml-auto">
-                                                <span className="badge rounded-pill bg-success"><i class="bi bi-check2"></i> Reenviado R-{step.id_reenvio}</span>
+                                                <Chip className="text-white" color='success'><i class="bi bi-check2"></i> Reenviado R-{step.id_reenvio}</Chip>
                                             </div>
                                         )}
 
