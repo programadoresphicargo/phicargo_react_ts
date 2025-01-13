@@ -7,6 +7,7 @@ import Chip from '@mui/material/Chip';
 import FormularioCorreo from './formulario';
 import { Card, CardBody } from '@nextui-org/react';
 import { Button } from '@nextui-org/react';
+import odooApi from '@/phicargo/modules/core/api/odoo-api';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const AutocompleteManager = ({ onValuesChange, id_maniobra, id_cliente, disabled }) => {
@@ -22,9 +23,7 @@ const AutocompleteManager = ({ onValuesChange, id_maniobra, id_cliente, disabled
     };
 
     const fetchCorreos = () => {
-        const baseUrl = VITE_PHIDES_API_URL + `/modulo_maniobras/correos/correos_disponibles.php?id_cliente=${id_cliente}`;
-
-        axios.get(baseUrl)
+        odooApi.get('/correos/get_by_id_cliente/' + id_cliente)
             .then(response => {
                 const data = response.data.map(item => ({
                     value: item.id_correo,

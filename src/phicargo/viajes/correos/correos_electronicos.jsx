@@ -10,7 +10,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import FormularioCorreo from './formulario';
 import { ViajeContext } from '../context/viajeContext';
 import { Autocomplete, AutocompleteItem, Avatar } from "@nextui-org/react";
-const { VITE_PHIDES_API_URL } = import.meta.env;
+import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import { toast } from 'react-toastify';
 
 const CorreosElectronicosViaje = ({ openCorreos }) => {
 
@@ -22,17 +23,11 @@ const CorreosElectronicosViaje = ({ openCorreos }) => {
   const getCorreosCliente = async () => {
     try {
       setLoading(true);
-      const response = await fetch(VITE_PHIDES_API_URL + '/viajes/correos_electronicos/getCorreosCliente.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({ id_cliente: viaje.id_cliente }),
-      });
-      const jsonData = await response.json();
-      setCorreosCliente(jsonData);
+      const response = await odooApi.get('/correos/get_by_id_cliente/' + viaje.id_cliente);
+      setCorreosCliente(response.data);
     } catch (error) {
       console.error('Error al obtener los datos:', error);
+      setLoading(false);
     } finally {
       setLoading(false);
     }
@@ -41,17 +36,11 @@ const CorreosElectronicosViaje = ({ openCorreos }) => {
   const getCorreosLigados = async () => {
     try {
       setLoading(true);
-      const response = await fetch(VITE_PHIDES_API_URL + '/viajes/correos_electronicos/getCorreosLigados.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({ id_viaje }),
-      });
-      const jsonData = await response.json();
-      setCorreosLigados(jsonData);
+      const response = await odooApi.get('/correos_viajes/get_correos_by_id_viaje/' + id_viaje);
+      setCorreosLigados(response.data);
     } catch (error) {
       console.error('Error al obtener los datos:', error);
+      setLoading(false);
     } finally {
       setLoading(false);
     }
@@ -60,20 +49,16 @@ const CorreosElectronicosViaje = ({ openCorreos }) => {
   const enlazarCorreo = async (id_correo) => {
     try {
       setLoading(true);
-      const response = await fetch(VITE_PHIDES_API_URL + '/viajes/correos_electronicos/ligarCorreo.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-          id_viaje: id_viaje,
-          id_correo: id_correo
-        }),
-      });
-      getCorreosLigados();
-      comprobacion_correos();
+      const response = await odooApi.get(`/correos_viajes/enlazar_correo/${id_viaje}/${id_correo}`);
+      if (response.data.success) {
+        toast.success(response.data.message);
+        getCorreosLigados();
+        comprobacion_correos();
+      } else {
+        toast.error(response.data.message);
+      }
     } catch (error) {
-      console.error('Error al obtener los datos:', error);
+      toast.error('Error al obtener los datos:' + error);
     } finally {
       setLoading(false);
     }
@@ -82,19 +67,11 @@ const CorreosElectronicosViaje = ({ openCorreos }) => {
   const desvincularCorreo = async (id) => {
     try {
       setLoading(true);
-      const response = await fetch(VITE_PHIDES_API_URL + '/viajes/correos_electronicos/desvincularCorreo.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-          id: id
-        }),
-      });
+      const response = await odooApi.get('/correos_viajes/desvincular_correo/' + id);
       getCorreosLigados();
       comprobacion_correos();
     } catch (error) {
-      console.error('Error al obtener los datos:', error);
+      console.error('Error en desvincularCorreo', error);
     } finally {
       setLoading(false);
     }
@@ -109,7 +86,6 @@ const CorreosElectronicosViaje = ({ openCorreos }) => {
 
   const filteredData = correosLigados.filter((visitor) =>
     visitor.correo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    visitor.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
     visitor.tipo.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -203,7 +179,7 @@ const CorreosElectronicosViaje = ({ openCorreos }) => {
             <TableRow key={index}>
               <TableCell>
                 <User
-                  avatarProps={{ radius: "full", size: "sm", src: visitor.tipo }}
+                  avatarProps={{ radius: "full", size: "sm", src: "https://icon-library.com/images/email-app-icon/email-app-icon-15.jpg" }}
                   classNames={{
                     description: "text-default-500",
                   }}

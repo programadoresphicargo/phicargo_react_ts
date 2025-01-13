@@ -7,7 +7,7 @@ import React, { useContext, useEffect, useMemo, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import { Avatar } from '@nextui-org/react';
 import { Box } from '@mui/material';
-import Button from '@mui/material/Button';
+import { Button } from '@nextui-org/react'
 import { Chip } from '@nextui-org/react';
 import CloseIcon from '@mui/icons-material/Close';
 import Dialog from '@mui/material/Dialog';
@@ -19,6 +19,8 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Viaje from '../viaje';
 import { ViajeContext } from '../context/viajeContext';
+import ViajesActivosMasivo from '../envio_masivo/viajes_activos';
+import odooApi from '@/phicargo/modules/core/api/odoo-api';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -28,6 +30,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const ViajesActivos = ({ }) => {
 
   const [open, setOpen] = React.useState(false);
+  const [openMasivo, setMasivoOpen] = React.useState(false);
   const { id_viaje, viaje, getViaje, loading, error, ActualizarIDViaje } = useContext(ViajeContext);
 
   useEffect(() => {
@@ -43,15 +46,19 @@ const ViajesActivos = ({ }) => {
     fetchData();
   };
 
+  const handleClose2 = () => {
+    setMasivoOpen(false);
+    fetchData();
+  };
+
   const [data, setData] = useState([]);
   const [isLoading, setLoading] = useState();
 
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await fetch(VITE_PHIDES_API_URL + '/viajes/control/getViajes.php');
-      const jsonData = await response.json();
-      setData(jsonData);
+      const response = await odooApi.get('/tms_travel/active_travels/');
+      setData(response.data);
       setLoading(false);
     } catch (error) {
       console.error('Error al obtener los datos:', error);
@@ -311,6 +318,9 @@ const ViajesActivos = ({ }) => {
         }}
       >
         <h1 className='text-primary'>Gestión de viajes</h1>
+        <Button className='text-white' color='success'
+          onClick={() => setMasivoOpen(true)}
+        >Envio masivo</Button>
       </Box>
     ),
   });
@@ -321,6 +331,33 @@ const ViajesActivos = ({ }) => {
       <MaterialReactTable
         table={table}
       />
+
+      <Dialog
+        open={openMasivo}
+        fullWidth={true}
+        maxWidth={"xl"}
+        onClose={handleClose2}
+        TransitionComponent={Transition}
+      >
+        <AppBar sx={{ position: 'relative', backgroundColor: 'white' }} elevation={0}>
+          <Toolbar>
+            <IconButton
+              edge="start"
+              color="black"
+              onClick={handleClose2}
+              aria-label="close"
+            >
+              <CloseIcon />
+            </IconButton>
+            <Typography sx={{ ml: 2, flex: 1, color: 'black' }} variant="h6" component="div">
+            </Typography>
+            <Button autoFocus color="primary" onPress={handleClose2}>
+              SALIR
+            </Button>
+          </Toolbar>
+        </AppBar>
+        <ViajesActivosMasivo></ViajesActivosMasivo>
+      </Dialog>
 
       <Dialog
         fullScreen

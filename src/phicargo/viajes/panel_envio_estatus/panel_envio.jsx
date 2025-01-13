@@ -2,14 +2,13 @@ import {
   Stepper,
   Step,
   StepLabel,
-  Button,
   Box,
   DialogContent,
   Dialog,
 } from '@mui/material';
 import Swal from 'sweetalert2';
 import React, { useState, useEffect, useMemo, useContext } from 'react';
-import { Card, CardBody, CardFooter, Image } from "@nextui-org/react";
+import { Card, CardBody, CardFooter, Image, Button } from "@nextui-org/react";
 import { InboxOutlined } from '@ant-design/icons';
 import { message, Upload } from 'antd';
 import { ViajeContext } from '../context/viajeContext';
@@ -20,6 +19,7 @@ import { DialogActions } from '@mui/material';
 import Slide from '@mui/material/Slide';
 import 'react-quill/dist/quill.snow.css';
 import { Progress } from "@nextui-org/react";
+import odooApi from '@/phicargo/modules/core/api/odoo-api';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -80,17 +80,10 @@ function PanelEnvio({ open, cerrar, id_reporte, estatusSeleccionado, comentarios
 
   useEffect(() => {
     const fetchData = async () => {
-
       try {
         setLoading(true);
-        const response = await fetch(VITE_PHIDES_API_URL + '/viajes/panel_envio_estatus/getEstatus.php', {
-          method: 'POST',
-          body: new URLSearchParams({
-            estado: viaje.estado
-          }),
-        });
-        const jsonData = await response.json();
-        setData(jsonData);
+        const response = await odooApi.get('/estatus_operativos/monitoreo/');
+        setData(response.data);
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -167,6 +160,7 @@ function PanelEnvio({ open, cerrar, id_reporte, estatusSeleccionado, comentarios
       open={open}
       onClose={cerrar}
       TransitionComponent={Transition}
+      scroll='body'
       keepMounted
       sx={{
         '& .MuiPaper-root': {
@@ -187,7 +181,7 @@ function PanelEnvio({ open, cerrar, id_reporte, estatusSeleccionado, comentarios
           <Stepper activeStep={activeStep}>
             {steps.map((label) => (
               <Step key={label}>
-                <StepLabel>{label}</StepLabel>
+                <StepLabel style={{ fontFamily: 'Inter' }}>{label}</StepLabel>
               </Step>
             ))}
           </Stepper>
@@ -252,7 +246,7 @@ function PanelEnvio({ open, cerrar, id_reporte, estatusSeleccionado, comentarios
 
             {activeStep != 1 ? (
               <Button
-                variant="contained"
+                color='primary'
                 onClick={handleNext}
                 disabled={estatus_seleccionado == null}
               >
@@ -262,7 +256,7 @@ function PanelEnvio({ open, cerrar, id_reporte, estatusSeleccionado, comentarios
               <>
                 {id_reporte == null ? (
                   <>
-                    <Button variant="contained" onClick={confirmar_envio}>
+                    <Button color="success" className='text-white' onClick={confirmar_envio}>
                       Enviar estatus
                     </Button>
                   </>
@@ -277,9 +271,6 @@ function PanelEnvio({ open, cerrar, id_reporte, estatusSeleccionado, comentarios
           </Box>
         </Box>
       </DialogContent>
-      <DialogActions>
-        <button onClick={cerrar}>Close</button>
-      </DialogActions>
     </Dialog >
   );
 }

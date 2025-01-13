@@ -5,12 +5,14 @@ import {
 } from 'material-react-table';
 import MonitoreoNavbar from '../../monitoreo/Navbar';
 import Box from '@mui/material/Box';
-import { Button } from '@mui/material';
+import { Button } from '@nextui-org/react'
 import { DatePicker } from 'antd';
-const { VITE_PHIDES_API_URL } = import.meta.env;
+import odooApi from '@/phicargo/modules/core/api/odoo-api';
 const { RangePicker } = DatePicker;
 
 const ReporteCumplimiento = () => {
+
+    const [isLoading, setLoading] = useState(false);
 
     const [dates, setDates] = useState([]);
 
@@ -25,17 +27,13 @@ const ReporteCumplimiento = () => {
             const startDate = dates[0].format('YYYY-MM-DD');
             const endDate = dates[1].format('YYYY-MM-DD');
             try {
-                const response = await fetch(VITE_PHIDES_API_URL + '/viajes/reportes/reporte_cumplimiento_operador.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: new URLSearchParams({ inicio: startDate, fin: endDate }),
-                });
-                const jsonData = await response.json();
-                setData(jsonData);
+                setLoading(true);
+                const response = await odooApi.get('/reportes_estatus_viajes/cumplimiento_estatus_operadores/' + startDate + '/' + endDate);
+                setData(response.data);
+                setLoading(false);
             } catch (error) {
                 console.error('Error al obtener los datos:', error);
+                setLoading(false);
             }
         }
     };
@@ -62,6 +60,7 @@ const ReporteCumplimiento = () => {
         enableGrouping: true,
         enableGlobalFilter: true,
         enableFilters: true,
+        state: { showProgressBars: isLoading },
         initialState: {
             density: 'compact',
             pagination: { pageSize: 80 },
@@ -86,6 +85,11 @@ const ReporteCumplimiento = () => {
                 fontSize: '14px',
             },
         },
+        muiTableContainerProps: {
+            sx: {
+                maxHeight: 'calc(100vh - 202px)',
+            },
+        },
         renderTopToolbarCustomActions: ({ table }) => (
             <Box
                 sx={{
@@ -96,7 +100,7 @@ const ReporteCumplimiento = () => {
                 }}
             >
                 <RangePicker onChange={handleDateChange} />
-                <Button variant="contained" color="primary" onClick={exportToCSV}>
+                <Button color="primary" onPress={exportToCSV}>
                     Exportar
                 </Button>
             </Box>

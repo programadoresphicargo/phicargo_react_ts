@@ -16,7 +16,8 @@ import {
 } from 'material-react-table';
 import { ViajeContext } from '../context/viajeContext';
 import NavbarViajes from '../navbar';
-const { VITE_PHIDES_API_URL } = import.meta.env;
+import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import { toast } from 'react-toastify';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -29,7 +30,7 @@ const ViajesFinalizados = ({ }) => {
 
   const mesActual = String(new Date().getMonth() + 1).padStart(2, '0');
   const [mes, setMes] = useState(mesActual);
-  
+
   const añoActual = String(new Date().getFullYear());
   const [año, setAño] = useState(añoActual);
 
@@ -60,18 +61,12 @@ const ViajesFinalizados = ({ }) => {
 
     try {
       setLoading(true);
-      const response = await fetch(VITE_PHIDES_API_URL + '/viajes/control/getViajesFinalizados.php', {
-        method: 'POST',
-        body: new URLSearchParams({
-          mes: mes,
-          año: año,
-        }),
-      });
-      const jsonData = await response.json();
-      setData(jsonData);
+      const response = await odooApi.get('/tms_travel/completed_travels/' + mes + '/' + año);
+      setData(response.data);
       setLoading(false);
     } catch (error) {
-      console.error('Error al obtener los datos:', error);
+      toast.error('Error al obtener los datos:' + error);
+      setLoading(false);
     }
   };
 
@@ -185,7 +180,7 @@ const ViajesFinalizados = ({ }) => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
-    state: { isLoading: isLoading },
+    state: { showProgressBars: isLoading },
     enableColumnPinning: true,
     enableStickyHeader: true,
     columnResizeMode: "onEnd",

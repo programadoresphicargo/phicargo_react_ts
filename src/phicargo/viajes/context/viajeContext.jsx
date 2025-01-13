@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import axios from "axios";
+import odooApi from '@/phicargo/modules/core/api/odoo-api';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const ViajeContext = React.createContext();
@@ -19,12 +20,9 @@ const ViajeProvider = ({ children }) => {
     }
 
     const comprobacion_correos = async () => {
-        const data = new URLSearchParams();
-        data.append('id_viaje', id_viaje);
-
-        axios.post(VITE_PHIDES_API_URL + '/viajes/correos_electronicos/correosLigadosComprobacion.php', data)
+        odooApi.get('/correos_viajes/get_correos_by_id_viaje/' + id_viaje)
             .then(response => {
-                if (response.data === 1) {
+                if (response.data.length > 0) {
                     toast.success('Correos ligados.');
                     ActualizarCorreosLigados(false);
                 } else {
@@ -106,18 +104,8 @@ const ViajeProvider = ({ children }) => {
 
     const getHistorialEstatus = async () => {
         try {
-            const response = await fetch(VITE_PHIDES_API_URL + '/viajes/historial_estatus/getReportesEstatus.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: new URLSearchParams({
-                    id_viaje: id_viaje,
-                    busqueda: ''
-                }),
-            })
-            const jsonData = await response.json();
-            setHistorial(jsonData);
+            const response = await odooApi.get('/reportes_estatus_viajes/by_id_viaje/' + id_viaje);
+            setHistorial(response.data);
         } catch (error) {
             console.error('Error al obtener los datos:', error);
         }

@@ -11,6 +11,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { tiempoTranscurrido } from '../../funciones/tiempo';
 import { Card, CardBody, CardHeader, CardFooter } from '@nextui-org/react';
 import { Avatar } from '@nextui-org/react';
+import odooApi from '@/phicargo/modules/core/api/odoo-api';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 export default function Notificaciones({ open, toggleDrawer }) {
@@ -26,13 +27,8 @@ export default function Notificaciones({ open, toggleDrawer }) {
 
         try {
             setLoading(true);
-            const response = await fetch(VITE_PHIDES_API_URL + '/viajes/notificaciones/getNotificaciones.php', {
-                method: 'POST',
-                body: new URLSearchParams({
-                }),
-            })
-            const jsonData = await response.json();
-            setEstatus(jsonData);
+            const response = await odooApi.get('/notificaciones/estatus_operadores/');
+            setEstatus(response.data);
             setLoading(false);
         } catch (error) {
             setLoading(false);

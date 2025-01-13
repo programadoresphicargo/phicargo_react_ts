@@ -2,10 +2,12 @@ import React, { useState, useContext } from 'react';
 import { Button, Input, Select, SelectItem } from "@nextui-org/react";
 import { toast } from 'react-toastify';
 import { ViajeContext } from '../context/viajeContext';
-const { VITE_PHIDES_API_URL } = import.meta.env;
+import odooApi from '@/phicargo/modules/core/api/odoo-api';
 
 const FormularioCorreo = ({ handleClose }) => {
   const { viaje } = useContext(ViajeContext);
+
+  const [isLoading, setLoading] = useState(false);
 
   const [nombreContacto, setNombreContacto] = useState('');
   const [correoElectronico, setCorreoElectronico] = useState('');
@@ -31,36 +33,44 @@ const FormularioCorreo = ({ handleClose }) => {
     return Object.keys(formErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const crear_correo = async () => {
     if (validateForm()) {
-      fetch(VITE_PHIDES_API_URL + '/correos/consultas/ingresar_correo.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
+      try {
+        setLoading(true);
+        const response = await odooApi.post('/correos/crear_correo/', {
           id_cliente: viaje.id_cliente,
-          nombre_contacto: nombreContacto,
-          correo_electronico: correoElectronico,
-          tipo_correo: tipoCorreo,
-        }),
-      })
-        .then(response => response.json())
-        .then(data => {
-          toast.success("Formulario enviado exitosamente");
-          handleClose();
-        })
-        .catch(error => {
-          console.error('Error:', error);
+          nombre_completo: nombreContacto,
+          correo: correoElectronico,
+          tipo: tipoCorreo,
         });
+
+        if (response.status === 200 || response.status === 201) {
+          if (response.data.status === "success") {
+            toast.success(response.data.message);
+            handleClose();
+          } else {
+            toast.error('Error: ' + response.data.message);
+          }
+        } else {
+          toast.error("Error inesperado del servidor. Por favor, intente nuevamente.");
+        }
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        if (error.response && error.response.data) {
+          toast.error(error.response.data.message);
+        } else {
+          toast.error("Error al conectar con el servidor: " + error.message);
+        }
+      }
     } else {
+      setLoading(false);
       toast.error("Hay errores en el formulario. Por favor, corrígelos antes de enviar.");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={crear_correo}>
       <div className="w-full flex flex-col gap-4">
         <Input
           id="nombre_contacto"
@@ -104,7 +114,7 @@ const FormularioCorreo = ({ handleClose }) => {
           <SelectItem key="CC">CC</SelectItem>
         </Select>
 
-        <Button color='primary' type="submit">Registrar</Button>
+        <Button color='primary' onPress={() => crear_correo()} isLoading={isLoading}>Registrar</Button>
       </div>
     </form>
   );

@@ -22,7 +22,7 @@ import AppsIcon from '@mui/icons-material/Apps';
 const pages = [
     { name: 'ACTIVOS', path: '/viajes' },
     { name: 'FINALIZADOS', path: '/viajesfinalizados' },
-    { name: 'PROGRAMACIÓN DE VIAJES', path: '/viajesprogramados' },
+    { name: 'PROGRAMACIÓN', path: '/viajesprogramados' },
     { name: 'CONTROL ESTATUS', path: '/controlestatus' },
 ];
 

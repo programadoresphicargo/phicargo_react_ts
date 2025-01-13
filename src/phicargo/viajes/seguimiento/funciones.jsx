@@ -4,6 +4,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { ViajeContext } from '../context/viajeContext';
 import axios from "axios";
 import { useAuthContext } from '../../modules/auth/hooks';
+import odooApi from '@/phicargo/modules/core/api/odoo-api';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 export const useJourneyDialogs = () => {
@@ -85,16 +86,13 @@ export const useJourneyDialogs = () => {
             if (result.isConfirmed) {
                 const loadingToast = toast.loading('Reactivando viaje, espere...');
 
-                const data = new URLSearchParams();
-                data.append('id_viaje', id_viaje);
-
-                axios.post(VITE_PHIDES_API_URL + '/viajes/funciones/reactivarViaje.php', data)
+                odooApi.get('/tms_travel/reactivar_viaje/' + id_viaje)
                     .then(response => {
-                        if (response.data === 1) {
-                            toast.success('Viaje reactivado.', { id: loadingToast });
+                        if (response.data.status === "success") {
+                            toast.success(response.data.message, { id: loadingToast });
                             getViaje(id_viaje);
                         } else {
-                            toast.error('Error activando el viaje: ' + response.data, { id: loadingToast });
+                            toast.error('Error activando el viaje: ' + response.data.message, { id: loadingToast });
                         }
                     })
                     .catch(error => {

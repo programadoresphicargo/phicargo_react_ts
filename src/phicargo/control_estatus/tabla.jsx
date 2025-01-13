@@ -4,14 +4,16 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
 import { Checkbox } from '@mui/material';
+import { Button } from '@nextui-org/react';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
+import odooApi from '../modules/core/api/odoo-api';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -42,11 +44,11 @@ const EstatusOperativos = ({ estado }) => {
 
     try {
       setLoading(true);
-      const response = await fetch(VITE_PHIDES_API_URL + '/control_estatus/getEstatus.php');
-      const jsonData = await response.json();
-      setData(jsonData);
+      const response = await odooApi.get('/estatus_operativos/');
+      setData(response.data);
       setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.error('Error al obtener los datos:', error);
     }
   };
@@ -194,7 +196,7 @@ const EstatusOperativos = ({ estado }) => {
         }}
       >
         <Button
-          variant='contained'
+          color='primary'
           disabled={table.getPrePaginationRowModel().rows.length === 0}
           onClick={() =>
             NuevoAcceso()

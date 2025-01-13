@@ -39,7 +39,6 @@ const CorreosElectronicos = ({ estado }) => {
     try {
       setLoading(true);
       const response = await odooApi.get('/correos/');
-      console.log(response);
       setData(response.data);
       setLoading(false);
     } catch (error) {
@@ -58,7 +57,7 @@ const CorreosElectronicos = ({ estado }) => {
         header: 'ID Correo',
       },
       {
-        accessorFn: (row) => row.cliente?.name,
+        accessorKey: 'cliente_name',
         header: 'Cliente',
       },
       {

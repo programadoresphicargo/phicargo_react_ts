@@ -16,6 +16,7 @@ import ArchivosAdjuntos from './archivos_adjuntos';
 import axios from 'axios';
 import { tiempoTranscurrido } from '../../funciones/tiempo';
 import { Card, CardHeader, CardBody, CardFooter, Chip } from '@nextui-org/react';
+import odooApi from '@/phicargo/modules/core/api/odoo-api';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 function EstatusHistorialAgrupado({ registros_agrupados }) {
@@ -43,17 +44,10 @@ function EstatusHistorialAgrupado({ registros_agrupados }) {
     }, [registros_agrupados]);
 
     const getEstatus = async () => {
-
         try {
             setLoading(true);
-            const response = await fetch(VITE_PHIDES_API_URL + '/viajes/historial_estatus/getEstatus.php', {
-                method: 'POST',
-                body: new URLSearchParams({
-                    estatus: registros_agrupados,
-                }),
-            })
-            const jsonData = await response.json();
-            setEstatus(jsonData);
+            const response = await odooApi.get('/reportes_estatus_viajes/by_id_reportes/' + registros_agrupados);
+            setEstatus(response.data);
             setLoading(false);
         } catch (error) {
             setLoading(false);

@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
-import Button from '@mui/material/Button';
 import FormularioTerminales from './informacion';
 import ManiobrasNavBar from '../../Navbar';
+import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import { Button } from '@nextui-org/react';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const Terminales = () => {
@@ -25,9 +26,8 @@ const Terminales = () => {
     const fetchData = useCallback(async () => {
         try {
             setILoading(true);
-            const response = await fetch(VITE_PHIDES_API_URL + '/modulo_maniobras/terminales/getTerminales.php');
-            const jsonData = await response.json();
-            setData(jsonData);
+            const response = await odooApi.get('/terminales_maniobras/');
+            setData(response.data);
             setILoading(false);
         } catch (error) {
             console.error('Error al obtener los datos:', error);
@@ -101,13 +101,18 @@ const Terminales = () => {
                 fontSize: '14px',
             },
         },
+        muiTableContainerProps: {
+            sx: {
+                maxHeight: 'calc(100vh - 250px)',
+            },
+        },
     });
 
     return (
         <div>
             <ManiobrasNavBar />
             <div className="flex flex-wrap gap-2 items-center p-2">
-                <Button variant="contained" onClick={handleClickOpen}>
+                <Button color='primary' onPress={handleClickOpen}>
                     Ingresar terminal
                 </Button>
             </div>
