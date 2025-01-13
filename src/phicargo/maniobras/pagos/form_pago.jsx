@@ -106,7 +106,7 @@ const Nomina_form = ({ show, handleClose, id_pago, id_operador, fecha_inicio, fe
     const handleSelectChange = (selectedOption) => {
         setFormData({
             ...form,
-            operador_id: selectedOption ? selectedOption.value : ''
+            operador_id: selectedOption ? selectedOption : ''
         });
         console.log('Form has changed:', form);
     };

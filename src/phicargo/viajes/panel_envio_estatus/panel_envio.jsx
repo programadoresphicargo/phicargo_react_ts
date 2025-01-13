@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import Swal from 'sweetalert2';
 import React, { useState, useEffect, useMemo, useContext } from 'react';
-import { Card, CardBody, CardFooter, Image, Button } from "@nextui-org/react";
+import { Card, CardBody, CardFooter, Image, Button, CardHeader, Switch } from "@nextui-org/react";
 import { InboxOutlined } from '@ant-design/icons';
 import { message, Upload } from 'antd';
 import { ViajeContext } from '../context/viajeContext';
@@ -20,6 +20,12 @@ import Slide from '@mui/material/Slide';
 import 'react-quill/dist/quill.snow.css';
 import { Progress } from "@nextui-org/react";
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import { DatePicker } from "@nextui-org/react";
+import { now, getLocalTimeZone } from "@internationalized/date";
+import { parseDate } from "@internationalized/date";
+import { parseZonedDateTime, parseAbsoluteToLocal } from "@internationalized/date";
+import { FormattedDate } from 'rsuite/esm/CustomProvider';
+
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -50,6 +56,8 @@ function PanelEnvio({ open, cerrar, id_reporte, estatusSeleccionado, comentarios
     comentariosEstatus || ''
   );
 
+  const [NuevaFecha, setNuevaFecha] = React.useState(now(getLocalTimeZone()));
+
   const [fileList, setFileList] = useState(archivos || []);
 
   const handleSelectCard = (id) => {
@@ -59,6 +67,7 @@ function PanelEnvio({ open, cerrar, id_reporte, estatusSeleccionado, comentarios
   const handleNext = () => setActiveStep((prevStep) => prevStep + 1);
   const handleBack = () => setActiveStep((prevStep) => prevStep - 1);
 
+  const [isSelected, setIsSelected] = React.useState(false);
   const [data, setData] = useState([]);
   const [isLoading, setLoading] = useState();
 
@@ -214,26 +223,66 @@ function PanelEnvio({ open, cerrar, id_reporte, estatusSeleccionado, comentarios
             {activeStep === 1 && (
               <Box>
 
-                <h2>Añadir comentarios</h2>
-                <div class="quill-custom">
-                  <ReactQuill
-                    class="js-quill"
-                    value={comentarios}
-                    onChange={setContenido}
-                    modules={modules}
-                    formats={formats}
-                    placeholder="Escribe aquí el contenido..."
-                  />
-                </div>
+                <Card className='mb-5'>
+                  <CardHeader className="justify-between bg-danger">
+                    <Switch isSelected={isSelected} onValueChange={setIsSelected}>
+                    </Switch>
+                    <div className="flex gap-3">
+                      <div className="flex flex-col gap-1 items-start justify-center">
+                        <p className="text-md font-bold">Cambiar horario</p>
+                        <p className="text-small text-default-500 text-white">Seleccione una hora diferente en caso de que desee reportar un estatus de atención distinto al que se genera automáticamente por el sistema GPS.</p>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardBody>
+                    <DatePicker
+                      hideTimeZone
+                      showMonthAndYearPickers
+                      defaultValue={now(getLocalTimeZone())}
+                      label="Nueva hora"
+                      variant="bordered"
+                      isDisabled={!isSelected}
+                      onChange={setNuevaFecha}
+                    />
+                  </CardBody>
+                </Card>
 
-                <h2 className='mt-5'>Añadir evidencias</h2>
-                <Dragger {...props} style={{ fontFamily: 'Inter' }}>
-                  <p className="ant-upload-drag-icon">
-                    <InboxOutlined />
-                  </p>
-                  <p className="ant-upload-text">Haz clic o arrastra el archivo aquí para subirlo</p>
-                  <p className="ant-upload-hint">Soporta múltiples archivos</p>
-                </Dragger>
+                <Card>
+                  <CardHeader className='bg-success'>
+                    <div className="flex flex-col">
+                      <p className="text-md font-bold text-white">Añadir comentarios</p>
+                    </div>
+                  </CardHeader>
+                  <CardBody>
+                    <div class="quill-custom">
+                      <ReactQuill
+                        class="js-quill"
+                        value={comentarios}
+                        onChange={setContenido}
+                        modules={modules}
+                        formats={formats}
+                        placeholder="Escribe aquí el contenido..."
+                      />
+                    </div>
+                  </CardBody>
+                </Card>
+
+                <Card className='mt-5'>
+                  <CardHeader className='bg-primary'>
+                    <div className="flex flex-col">
+                      <p className="text-md font-bold text-white">Añadir evidencias</p>
+                    </div>
+                  </CardHeader>
+                  <CardBody>
+                    <Dragger {...props} style={{ fontFamily: 'Inter' }}>
+                      <p className="ant-upload-drag-icon">
+                        <InboxOutlined />
+                      </p>
+                      <p className="ant-upload-text">Haz clic o arrastra el archivo aquí para subirlo</p>
+                      <p className="ant-upload-hint">Soporta múltiples archivos</p>
+                    </Dragger>
+                  </CardBody>
+                </Card>
               </Box>
             )}
 
