@@ -1,22 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Autocomplete } from '@mui/material';
+import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
 import TextField from '@mui/material/TextField';
-const { VITE_PHIDES_API_URL } = import.meta.env;
+import odooApi from '@/phicargo/modules/core/api/odoo-api';
 
 const SelectOperador = ({ label, id, name, onChange, value, disabled, error_operador }) => {
     const [options, setOptions] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [isLoading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const baseUrl = VITE_PHIDES_API_URL + '/modulo_maniobras/data/get_operadores.php';
-
-        axios.get(`${baseUrl}`)
+        odooApi.get('/drivers/')
             .then(response => {
                 const data = response.data.map(item => ({
-                    value: Number(item.id),
-                    label: item.nombre_operador,
+                    key: Number(item.id),
+                    label: item.name,
                 }));
                 setOptions(data);
             })
@@ -31,27 +29,20 @@ const SelectOperador = ({ label, id, name, onChange, value, disabled, error_oper
     return (
         <div>
             <Autocomplete
-                size="small"
+                variant='bordered'
                 id={id}
+                label={label}
+                isLoading={isLoading}
                 name={name}
-                disabled={disabled}
-                options={options}
-                isClearable={true}
-                value={options.find(option => option.value === value) || null}
-                getOptionLabel={(option) => option.label}
-                isOptionEqualToValue={(option, value) => option.value === value.value}
-                onChange={(event, selectedOption) => onChange(selectedOption, name)}
-                renderInput={(params) => (
-                    <TextField
-                        {...params}
-                        label={label}
-                        variant="outlined"
-                        disabled={disabled}
-                        error={error_operador}
-                        helperText={error_operador}
-                    />
-                )}
-            />
+                isDisabled={disabled}
+                defaultItems={options}
+                selectedKey={String(value)}
+                isInvalid={error_operador}
+                errorMessage={error_operador}
+                onSelectionChange={(e) => onChange(e, name)}
+            >
+                {(item) => <AutocompleteItem key={item.key}>{item.label}</AutocompleteItem>}
+            </Autocomplete>
         </div>
     );
 };

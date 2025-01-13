@@ -18,7 +18,7 @@ import CancelarManiobraDialog from './cancelar_maniobra';
 import { toast } from 'react-toastify';
 import { Card, CardBody } from '@nextui-org/react';
 import SelectTerminal from './select_terminal';
-import { Autocomplete, Container, filledInputClasses } from '@mui/material';
+import { Container, filledInputClasses } from '@mui/material';
 import LinearProgress from '@mui/material/LinearProgress';
 import Swal from 'sweetalert2';
 import TextField from '@mui/material/TextField';
@@ -29,6 +29,8 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import PanelEstatus from './envio_estatus/panel';
 import { useAuthContext } from '@/phicargo/modules/auth/hooks';
 import EstatusHistorialManiobras from '../reportes_estatus/estatus';
+import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
+
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const fieldValidations = {
@@ -158,11 +160,11 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
     };
 
     const options_tipo_maniobra = [
-        { value: 'ingreso', label: 'Ingreso' },
-        { value: 'retiro', label: 'Retiro' },
-        { value: 'local', label: 'Viaje local' },
-        { value: 'resguardo', label: 'resguardo' },
-        { value: 'pesaje', label: 'pesaje' }
+        { key: 'ingreso', label: 'Ingreso' },
+        { key: 'retiro', label: 'Retiro' },
+        { key: 'local', label: 'Viaje local' },
+        { key: 'resguardo', label: 'resguardo' },
+        { key: 'pesaje', label: 'pesaje' }
     ];
 
     const [formData, setFormData] = useState({
@@ -322,18 +324,10 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
         }));
     };
 
-    const handleChangeTipoManiobra = (event, newValue) => {
-        const valueToSet = newValue ? newValue.value : null;
-        setFormData((prevData) => ({
-            ...prevData,
-            tipo_maniobra: valueToSet,
-        }));
-    };
-
     const handleSelectChange = (selectedOption, name) => {
         setFormData((prevData) => ({
             ...prevData,
-            [name]: selectedOption ? selectedOption.value : '',
+            [name]: selectedOption ? selectedOption : '',
         }));
         console.log('Datos del formulario actualizados:', formData);
     };
@@ -671,26 +665,20 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                             </Grid>
                                             <Grid item xs={12} lg={6}>
                                                 <Autocomplete
+                                                    isRequired
+                                                    label="Tipo de maniobra"
                                                     id="tipo_maniobra"
                                                     name="tipo_maniobra"
-                                                    size="small"
-                                                    onChange={handleChangeTipoManiobra}
-                                                    value={options_tipo_maniobra.find(option => option.value === formData.tipo_maniobra) || null}
-                                                    getOptionLabel={(option) => option.label}
-                                                    isOptionEqualToValue={(option, value) => option.value === value.value}
-                                                    options={options_tipo_maniobra}
-                                                    disabled={formDisabled}
-                                                    renderInput={(params) => (
-                                                        <TextField
-                                                            {...params}
-                                                            label="Tipo de maniobra"
-                                                            variant="outlined"
-                                                            disabled={formDisabled}
-                                                            error={errors['tipo_maniobra']}
-                                                            helperText={errors['tipo_maniobra']}
-                                                        />
-                                                    )}
-                                                />
+                                                    variant='bordered'
+                                                    onSelectionChange={(e) => (handleSelectChange(e, 'tipo_maniobra'))}
+                                                    defaultItems={options_tipo_maniobra}
+                                                    selectedKey={String(formData.tipo_maniobra)}
+                                                    isDisabled={formDisabled}
+                                                    isInvalid={errors['tipo_maniobra'] ? true : false}
+                                                    errorMessage={errors['tipo_maniobra']}
+                                                >
+                                                    {(item) => <AutocompleteItem key={item.key}>{item.label}</AutocompleteItem>}
+                                                </Autocomplete>
                                             </Grid>
                                             <Grid item xs={12} lg={6}>
                                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
