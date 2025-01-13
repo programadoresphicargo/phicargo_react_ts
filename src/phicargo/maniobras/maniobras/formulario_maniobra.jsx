@@ -191,7 +191,6 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
     useEffect(() => {
         if (id_maniobra) {
             setFormDisabled(true);
-            validarCampos();
             axios.get(VITE_PHIDES_API_URL + `/modulo_maniobras/maniobra/get_maniobra.php?id_maniobra=${id_maniobra}`)
                 .then((response) => {
                     const data = response.data[0];
@@ -647,11 +646,11 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                             </Box>
                         )}
 
-                        <Grid lg={6} xs={12} p={1}>
+                        <Grid lg={6} xs={12}>
                             <Card>
                                 <CardBody>
                                     <form>
-                                        <Grid container spacing={3} p={1}>
+                                        <Grid container spacing={3}>
                                             <Grid item xs={12} lg={6}>
                                                 <SelectTerminal
                                                     label={'Terminal'}
