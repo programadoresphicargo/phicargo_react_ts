@@ -30,6 +30,7 @@ import PanelEstatus from './envio_estatus/panel';
 import { useAuthContext } from '@/phicargo/modules/auth/hooks';
 import EstatusHistorialManiobras from '../reportes_estatus/estatus';
 import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
+import odooApi from '@/phicargo/modules/core/api/odoo-api';
 
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
@@ -191,7 +192,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
     useEffect(() => {
         if (id_maniobra) {
             setFormDisabled(true);
-            axios.get(VITE_PHIDES_API_URL + `/modulo_maniobras/maniobra/get_maniobra.php?id_maniobra=${id_maniobra}`)
+            odooApi.get(`/maneuvers/get_by_id/${id_maniobra}`)
                 .then((response) => {
                     const data = response.data[0];
                     console.log('datos de maniobra');

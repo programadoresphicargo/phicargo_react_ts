@@ -4,23 +4,24 @@ import { MaterialReactTable, useMaterialReactTable } from 'material-react-table'
 import { format, isValid } from 'date-fns';
 import { Button } from '@nextui-org/react';
 import { Chip } from '@nextui-org/react';
-const { VITE_PHIDES_API_URL } = import.meta.env;
+import { Box } from '@mui/system';
+import odooApi from '@/phicargo/modules/core/api/odoo-api';
 
 const Registromaniobras = ({ id_cp, id_cliente }) => {
     const [isLoading2, setILoading] = useState();
     const [idManiobra, setIdManiobra] = useState();
     const [idCliente, setClienteID] = useState();
     const [modalShow, setModalShow] = useState(false);
-    const [data, setData] = useState([]); // Estado para almacenar los datos
+    const [data, setData] = useState([]);
 
     const fetchData = useCallback(async () => {
         try {
             setILoading(true);
-            const response = await fetch(VITE_PHIDES_API_URL + '/modulo_maniobras/maniobra/registros.php?id_cp=' + id_cp);
-            const jsonData = await response.json();
-            setData(jsonData);
+            const response = await odooApi.get('/maneuvers/get_by_id_cp/' + id_cp);
+            setData(response.data);
             setILoading(false);
         } catch (error) {
+            setILoading(false);
             console.error('Error al obtener los datos:', error);
         }
     }, [id_cp]);
@@ -116,7 +117,7 @@ const Registromaniobras = ({ id_cp, id_cliente }) => {
                 borderRadius: '0',
             },
         },
-        state: { isLoading: isLoading2 },
+        state: { showProgressBars: isLoading2 },
         muiCircularProgressProps: {
             color: 'primary',
             thickness: 5,
@@ -150,15 +151,23 @@ const Registromaniobras = ({ id_cp, id_cliente }) => {
                 fontSize: '14px',
             },
         },
+        renderTopToolbarCustomActions: ({ table }) => (
+            <Box
+                sx={{
+                    display: 'flex',
+                    gap: '16px',
+                    padding: '8px',
+                    flexWrap: 'wrap',
+                }}
+            >
+                <Button onPress={abrir_nueva} color='primary'>
+                    Ingresar maniobra
+                </Button>
+            </Box>)
     });
 
     return (
-        <div>
-            <div className="flex flex-wrap gap-2 items-center">
-                <Button onClick={abrir_nueva} color='primary'>
-                    Ingresar maniobra
-                </Button>
-            </div>
+        <>
             <Formulariomaniobra
                 show={modalShow}
                 handleClose={handleCloseModal}
@@ -168,7 +177,7 @@ const Registromaniobras = ({ id_cp, id_cliente }) => {
                 id_cliente={id_cliente}
             />
             <MaterialReactTable table={table} />
-        </div>
+        </>
     );
 };
 
