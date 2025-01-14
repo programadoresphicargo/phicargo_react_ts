@@ -152,7 +152,7 @@ const CartasPorte = () => {
       pagination: { pageSize: 80 },
       showGlobalFilter: false,
     },
-    state: { isLoading: isLoading2 },
+    state: { showProgressBars: isLoading2 },
     muiCircularProgressProps: {
       color: 'primary',
       thickness: 5,
