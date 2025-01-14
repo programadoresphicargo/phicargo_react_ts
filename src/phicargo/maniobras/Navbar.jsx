@@ -14,6 +14,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
 import { Navigate } from 'react-router-dom';
 import WebSocketWithToast from '../websocket/websocket';
+import AppsIcon from '@mui/icons-material/Apps';
 
 const pages = [
     { name: 'CONTENEDORES', path: '/cartas-porte' },
@@ -69,7 +70,7 @@ function ManiobrasNavBar() {
                             onClick={handleBackClick}
                             sx={{ mr: 2 }}
                         >
-                            <ArrowBackIcon />
+                            <AppsIcon></AppsIcon>
                         </IconButton>
 
                         <img className='m-2'

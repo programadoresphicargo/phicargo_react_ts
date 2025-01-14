@@ -12,8 +12,10 @@ import {
   useMaterialReactTable,
 } from 'material-react-table';
 import ManiobrasNavBar from '../Navbar';
-import { Button, Select, SelectItem } from '@nextui-org/react';
+import { Button, Select, SelectItem, Chip } from '@nextui-org/react';
 import YearSelector from '@/año';
+import { toast } from 'react-toastify';
+import odooApi from '@/phicargo/modules/core/api/odoo-api';
 
 const CartasPorte = () => {
   const [isLoading2, setLoading] = useState();
@@ -58,19 +60,10 @@ const CartasPorte = () => {
     if (!month || selectedTab === undefined) return;
     setLoading(true);
     try {
-      const response = await fetch(VITE_PHIDES_API_URL + '/modulo_maniobras/programacion/get_registros.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ month, year, selectedTab }),
-      });
-
-      const jsonData = await response.json();
-      console.log('Datos recibidos:', jsonData);
-      setData(jsonData);
+      const response = await odooApi.get(`/tms_waybill/get_contenedores/${month}/${year}/${selectedTab}`);
+      setData(response.data);
     } catch (error) {
-      console.error('Error al obtener los datos:', error);
+      toast.error('Error al obtener los datos:' + error);
     } finally {
       setLoading(false); // Mueve esto aquí
     }
@@ -136,9 +129,9 @@ const CartasPorte = () => {
           }
 
           return (
-            <span className={`badge bg-${variant} rounded-pill`} style={{ width: '100px' }}>
+            <Chip className={`badge bg-${variant} text-white`} size='sm'>
               {text}
-            </span>
+            </Chip>
           );
         },
       },
