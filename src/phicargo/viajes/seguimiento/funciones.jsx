@@ -102,7 +102,7 @@ export const useJourneyDialogs = () => {
         });
     };
 
-    const enviar_estatus = async (id_viaje, id_estatus, archivos, comentarios) => {
+    const enviar_estatus = async (id_viaje, id_estatus, archivos, comentarios, nueva_fecha = null) => {
         const loadingToast = toast.loading('Procesando, espere...');
 
         try {
@@ -111,6 +111,11 @@ export const useJourneyDialogs = () => {
             data.append('id_estatus', id_estatus);
             data.append('comentarios', comentarios);
             data.append('id_usuario', session.user.id);
+
+            if (nueva_fecha) {
+                data.append('nueva_fecha', nueva_fecha);
+            }
+
             archivos.forEach((file) => {
                 data.append('files[]', file);
             });
@@ -121,6 +126,7 @@ export const useJourneyDialogs = () => {
                 toast.success('Proceso correcto.', { id: loadingToast });
                 getHistorialEstatus();
                 getViaje(id_viaje);
+
                 if (id_estatus == 1) {
                     cambiar_estado_equipo('viaje');
                     cambiar_estado_operador('viaje');
@@ -128,12 +134,14 @@ export const useJourneyDialogs = () => {
                     cambiar_estado_equipo('disponible');
                     cambiar_estado_operador('disponible');
                 }
-
+                return true;
             } else {
-                toast.error('Error: ' + response.data, { id: loadingToast });
+                toast.error('Error: ' + response.data, { id: loadingToast, duration: 10000 });
+                return false;
             }
         } catch (error) {
-            toast.error('Error: ' + error, { id: loadingToast });
+            toast.error('Error catch: ' + (error.message || error.toString()), { id: loadingToast });
+            return false;
         }
     };
 

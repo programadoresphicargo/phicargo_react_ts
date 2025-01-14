@@ -21,10 +21,11 @@ import 'react-quill/dist/quill.snow.css';
 import { Progress } from "@nextui-org/react";
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { DatePicker } from "@nextui-org/react";
-import { now, getLocalTimeZone } from "@internationalized/date";
+import { now, getLocalTimeZone, today } from "@internationalized/date";
 import { parseDate } from "@internationalized/date";
 import { parseZonedDateTime, parseAbsoluteToLocal } from "@internationalized/date";
 import { FormattedDate } from 'rsuite/esm/CustomProvider';
+import { toast } from 'react-toastify';
 
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
@@ -47,6 +48,7 @@ function PanelEnvio({ open, cerrar, id_reporte, estatusSeleccionado, comentarios
   const { enviar_estatus, reenviar_estatus } = useJourneyDialogs();
   const { id_viaje, viaje } = useContext(ViajeContext);
 
+  const [isLoadingSendEstatus, setLoadingSE] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
 
   const [estatus_seleccionado, setEstatusSeleccionado] = useState(
@@ -119,8 +121,8 @@ function PanelEnvio({ open, cerrar, id_reporte, estatusSeleccionado, comentarios
     },
   };
 
-  const confirmar_envio = () => {
-    Swal.fire({
+  const confirmar_envio = async () => {
+    const result = await Swal.fire({
       title: '¿Estás seguro?',
       text: '¿Deseas enviar este estatus?',
       showCancelButton: true,
@@ -132,12 +134,24 @@ function PanelEnvio({ open, cerrar, id_reporte, estatusSeleccionado, comentarios
       imageWidth: 150,
       imageHeight: 150,
       imageAlt: 'Imagen de confirmación',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        enviar_estatus(id_viaje, estatus_seleccionado, fileList, comentarios);
-        cerrar();
-      }
     });
+
+    if (result.isConfirmed) {
+      try {
+        setLoadingSE(true);
+        const success = await enviar_estatus(id_viaje, estatus_seleccionado, fileList, comentarios, NuevaFecha);
+        if (success) {
+          cerrar();
+        } else {
+          toast.error("El envío del estatus falló.");
+        }
+        setLoadingSE(false);
+      } catch (error) {
+        console.error("Error al enviar el estatus:", error);
+        toast.error("Ocurrió un error al intentar enviar el estatus.");
+        setLoadingSE(false);
+      }
+    }
   };
 
   const confirmar_reenvio = () => {
@@ -169,7 +183,6 @@ function PanelEnvio({ open, cerrar, id_reporte, estatusSeleccionado, comentarios
       open={open}
       onClose={cerrar}
       TransitionComponent={Transition}
-      scroll='body'
       keepMounted
       sx={{
         '& .MuiPaper-root': {
@@ -184,6 +197,7 @@ function PanelEnvio({ open, cerrar, id_reporte, estatusSeleccionado, comentarios
       }}
     >
       <DialogTitle>Nuevo estatus</DialogTitle>
+      {isLoadingSendEstatus && <Progress isIndeterminate aria-label="Loading..." size='sm' />}
 
       <DialogContent>
         <Box sx={{ width: '100%' }}>
@@ -206,7 +220,8 @@ function PanelEnvio({ open, cerrar, id_reporte, estatusSeleccionado, comentarios
                         border: estatus_seleccionado === item.id_estatus ? '2px solid blue' : 'none',
                       }}>
                       <CardBody className="overflow-visible flex items-center justify-center">
-                        <img
+                        <Image
+                          isZoomed
                           src={VITE_PHIDES_API_URL + '/img/status/' + item.imagen}
                           style={{ width: '80px' }}
                         />
@@ -243,6 +258,7 @@ function PanelEnvio({ open, cerrar, id_reporte, estatusSeleccionado, comentarios
                       variant="bordered"
                       isDisabled={!isSelected}
                       onChange={setNuevaFecha}
+                      maxValue={today(getLocalTimeZone())}
                     />
                   </CardBody>
                 </Card>
@@ -287,39 +303,44 @@ function PanelEnvio({ open, cerrar, id_reporte, estatusSeleccionado, comentarios
             )}
 
           </Box>
-
-          <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-            <Button disabled={activeStep === 0} onClick={handleBack} sx={{ mr: 1 }}>
-              Atrás
-            </Button>
-
-            {activeStep != 1 ? (
-              <Button
-                color='primary'
-                onClick={handleNext}
-                disabled={estatus_seleccionado == null}
-              >
-                Siguiente
-              </Button>
-            ) : (
-              <>
-                {id_reporte == null ? (
-                  <>
-                    <Button color="success" className='text-white' onClick={confirmar_envio}>
-                      Enviar estatus
-                    </Button>
-                  </>
-                ) : (
-                  <Button variant="contained" color="success" onClick={confirmar_reenvio}>
-                    Reenviar estatus
-                  </Button>
-                )}
-              </>
-            )}
-
-          </Box>
         </Box>
       </DialogContent>
+      <DialogActions>
+
+        <Box sx={{ display: 'flex', flexDirection: 'row', pt: 1, gap: 1 }}>
+          <Button disabled={activeStep === 0} onPress={handleBack} sx={{ ml: 3 }}>
+            Atrás
+          </Button>
+
+          {activeStep != 1 ? (
+            <Button
+              color="primary"
+              onPress={handleNext}
+              isDisabled={estatus_seleccionado == null}
+            >
+              Siguiente
+            </Button>
+          ) : (
+            <>
+              {id_reporte == null ? (
+                <Button
+                  color="success"
+                  className="text-white"
+                  onPress={confirmar_envio}
+                  isLoading={isLoadingSendEstatus}
+                >
+                  Enviar estatus
+                </Button>
+              ) : (
+                <Button variant="contained" color="success" onPress={confirmar_reenvio}>
+                  Reenviar estatus
+                </Button>
+              )}
+            </>
+          )}
+        </Box>
+
+      </DialogActions>
     </Dialog >
   );
 }
