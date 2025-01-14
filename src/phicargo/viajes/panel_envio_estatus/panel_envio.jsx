@@ -316,7 +316,7 @@ function PanelEnvio({ open, cerrar, id_reporte, estatusSeleccionado, comentarios
             <Button
               color="primary"
               onPress={handleNext}
-              isDisabled={estatus_seleccionado == null}
+              isDisabled={estatus_seleccionado == '' ? true : false}
             >
               Siguiente
             </Button>
