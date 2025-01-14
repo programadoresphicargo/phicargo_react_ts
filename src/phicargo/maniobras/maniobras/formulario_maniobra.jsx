@@ -399,27 +399,40 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
     };
 
     const reactivar_maniobra = () => {
-        console.log(id_maniobra);
-        axios.post(VITE_PHIDES_API_URL + '/modulo_maniobras/maniobra/reactivar_maniobra.php', formData)
-            .then((response) => {
-                if (response.data === 1) {
-                    toast.success('El registro ha sido exitoso.');
-                    handleClose();
-                    toggleButtonsVisibility('borrador');
-                } else {
-                    toast.error('Respuesta inesperada del servidor:', response.data);
-                }
-            })
-            .catch((error) => {
-                console.error('Error en la solicitud:', error);
-                if (error.response) {
-                    toast.error('Hubo un problema al registrar la maniobra. Código de error: ' + error.response.status);
-                } else if (error.request) {
-                    toast.error('No se recibió respuesta del servidor:', error.request);
-                } else {
-                    toast.error('Error al configurar la solicitud:', error.message);
-                }
-            });
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "¿Deseas reactivar esta maniobra?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, reactivar',
+            cancelButtonText: 'Cancelar',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                console.log(formData.id_maniobra);
+                odooApi.get('/maneuvers/reactivar_maniobra/' + formData.id_maniobra)
+                    .then((response) => {
+                        if (response.data.status === 'success') {
+                            toast.success(response.data.message);
+                            handleClose();
+                            toggleButtonsVisibility('borrador');
+                        } else {
+                            toast.error('Respuesta inesperada del servidor: ' + response.data.message);
+                        }
+                    })
+                    .catch((error) => {
+                        toast.error('Error en la solicitud:' + error);
+                        if (error.response) {
+                            toast.error('Hubo un problema al registrar la maniobra. Código de error: ' + error.response.status);
+                        } else if (error.request) {
+                            toast.error('No se recibió respuesta del servidor:', error.request);
+                        } else {
+                            toast.error('Error al configurar la solicitud: ' + error.message);
+                        }
+                    });
+            }
+        });
     };
 
     const comprobar_equipo = () => {
