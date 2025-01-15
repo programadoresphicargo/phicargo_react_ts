@@ -7,11 +7,11 @@ import { Input } from "@nextui-org/react";
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import FormularioCorreo from './formulario';
 import { ViajeContext } from '../context/viajeContext';
 import { Autocomplete, AutocompleteItem, Avatar } from "@nextui-org/react";
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { toast } from 'react-toastify';
+import FormularioCorreoGeneral from '@/phicargo/correos_electronicos/correoForm';
 
 const CorreosElectronicosViaje = ({ openCorreos }) => {
 
@@ -96,6 +96,7 @@ const CorreosElectronicosViaje = ({ openCorreos }) => {
   };
 
   const handleClose = () => {
+    getCorreosCliente();
     getCorreosLigados();
     setOpen(false);
   };
@@ -227,7 +228,12 @@ const CorreosElectronicosViaje = ({ openCorreos }) => {
     >
       <DialogTitle>Registro de correo electronico</DialogTitle>
       <DialogContent>
-        <FormularioCorreo handleClose={handleClose}></FormularioCorreo>
+
+        <FormularioCorreoGeneral
+          handleClose={handleClose}
+          idCliente={viaje.id_cliente}>
+        </FormularioCorreoGeneral>
+        
       </DialogContent>
     </Dialog>
   </>

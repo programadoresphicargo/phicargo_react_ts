@@ -4,7 +4,8 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
+import { Button } from '@nextui-org/react';
 
 import {
   MaterialReactTable,
@@ -12,11 +13,14 @@ import {
 } from 'material-react-table';
 import MonitoreoNavbar from '../monitoreo/Navbar';
 import odooApi from '../modules/core/api/odoo-api';
+import FormularioCorreoGeneral from './correoForm';
 
 const CorreosElectronicos = ({ estado }) => {
 
   const [open, setOpen] = React.useState(false);
+
   const [id_acceso, setIDAcceso] = useState(0);
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -134,8 +138,8 @@ const CorreosElectronicos = ({ estado }) => {
         }}
       >
         <Button
-          variant='contained'
-          onClick={() =>
+          color='primary'
+          onPress={() =>
             NuevoAcceso()
           }
         >
@@ -150,19 +154,17 @@ const CorreosElectronicos = ({ estado }) => {
     <MaterialReactTable table={table} />
 
     <Dialog
+      fullWidth={true}
+      maxWidth={"sm"}
       open={open}
       onClose={handleClose}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
       <DialogContent>
+        <FormularioCorreoGeneral idCliente={null} handleClose={handleClose}>
+        </FormularioCorreoGeneral>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>Disagree</Button>
-        <Button onClick={handleClose} autoFocus>
-          Agree
-        </Button>
-      </DialogActions>
     </Dialog>
   </>
   );
