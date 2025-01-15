@@ -1,28 +1,24 @@
-import React, { useState, useEffect, useMemo, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { ViajeContext } from '../context/viajeContext';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import Slide from '@mui/material/Slide';
-import { Button } from '@nextui-org/button';
-import { tiempoTranscurrido } from '../../funciones/tiempo';
-import { Card, CardHeader } from '@nextui-org/react';
-import { Avatar } from '@nextui-org/react';
-import { Badge } from '@nextui-org/react';
+import { Spinner } from '@nextui-org/react';
+import { Card, CardHeader, Avatar, Badge } from '@nextui-org/react';
 import { toast } from 'react-toastify';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 
 function Contenedores() {
-
     const { id_viaje } = useContext(ViajeContext);
     const [data, setData] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     const fetchData = async () => {
+        setIsLoading(true); // Inicia la carga
         try {
             const response = await odooApi.get('/tms_waybill/get_by_travel_id/' + id_viaje);
             setData(response.data);
         } catch (error) {
-            toast.error('Error al obtener los contenedores:' + error);
+            toast.error('Error al obtener los contenedores: ' + error);
+        } finally {
+            setIsLoading(false); // Finaliza la carga
         }
     };
 
@@ -32,10 +28,13 @@ function Contenedores() {
 
     return (
         <>
-            {data.map((step, index) => {
-
-                return (
-                    <Card className="mb-2 w-full" isPressable>
+            {isLoading ? (
+                <div className="flex justify-center items-center h-20">
+                    <Spinner size="lg" color="primary" />
+                </div>
+            ) : (
+                data.map((step, index) => (
+                    <Card key={index} className="mb-2 w-full" isPressable>
                         <CardHeader className="justify-between">
                             <div className="flex gap-5">
                                 <Avatar
@@ -54,10 +53,10 @@ function Contenedores() {
                             </div>
                         </CardHeader>
                     </Card>
-                );
-            })}
+                ))
+            )}
         </>
-    )
+    );
 }
 
 export default Contenedores;
