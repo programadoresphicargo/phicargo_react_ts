@@ -19,6 +19,7 @@ import { CardBody, CardHeader, Snippet } from "@nextui-org/react";
 import { fontFamily } from "@mui/system";
 import Grid from '@mui/material/Grid2';
 import { Card, Chip, Divider } from "@nextui-org/react";
+import Contenedores from "../contenedores/contenedores";
 
 export default function BasicButtons2() {
 
@@ -82,20 +83,27 @@ export default function BasicButtons2() {
                             </CardHeader>
                             <CardBody>
                                 <ul class="list-unstyled list-py-2 text-dark mb-0">
-                                    <li class="pb-0"><span class="card-subtitle">Datos</span></li>
-                                    <li>Vehiculo: {viaje.vehiculo}</li>
+                                    <li>Vehículo: {viaje.vehiculo}</li>
                                     <li>Operador: {viaje.operador}</li>
                                     <li>Ejecutiv@: {viaje.ejecutivo}</li>
                                     <li>Cliente: {viaje.cliente}</li>
                                     <li>Modo: {viaje.modo}</li>
                                     <li>Armado: {viaje.tipo_armado}</li>
-
-                                    <li class="pt-4 pb-0"><span class="card-subtitle">Contenedores</span></li>
-                                    <Snippet size="sm" variant="solid" color="primary" style={{ fontFamily: 'Inter' }}>{viaje.contenedores}</Snippet>
                                 </ul>
                             </CardBody>
                         </Card>
                     </Grid>
+
+                    <Card className="mt-3">
+                        <CardHeader>
+                            <Chip color="secondary">
+                                Contenedores
+                            </Chip>
+                        </CardHeader>
+                        <CardBody>
+                            <Contenedores></Contenedores>
+                        </CardBody>
+                    </Card>
 
                     <Grid item size={12}>
                         <Card className="mt-3">

@@ -51,6 +51,7 @@ const CostosExtrasProvider = ({ children }) => {
             }
 
             const data = await response.json();
+            console.log(data);
             setViaje({
                 id: data[0].id,
                 name: data[0].name,

@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import axios from "axios";
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
-const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const ViajeContext = React.createContext();
 
@@ -55,38 +54,30 @@ const ViajeProvider = ({ children }) => {
     const [error, setError] = useState(null);
 
     const getViaje = async (id_viaje) => {
+
+        if (id_viaje == 0) {
+            return;
+        }
+
         setLoading(true);
         setError(null);
 
         try {
             setLoading(true);
-            const response = await fetch(VITE_PHIDES_API_URL + '/viajes/viaje/getViaje.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: new URLSearchParams({
-                    id_viaje: id_viaje,
-                }),
-            });
-
-            if (!response.ok) {
-                throw new Error('Error en la respuesta del servidor');
-            }
-
-            const data = await response.json();
+            const response = await odooApi.get('/tms_travel/get_by_id/' + id_viaje);
+            const data = response.data;
+            console.log(data);
             setViaje({
                 id: data[0].id,
                 name: data[0].name,
-                id_cliente: data[0].id_cliente,
-                cliente: data[0].cliente,
+                id_cliente: data[0].partner.id,
+                cliente: data[0].partner.name,
                 estado: data[0].x_status_viaje,
-                id_operador: data[0].id_operador,
-                operador: data[0].operador,
-                vehiculo: data[0].vehiculo,
-                modo: data[0].modo,
-                tipo_armado: data[0].tipo_armado,
-                contenedores: data[0].contenedores,
+                id_operador: data[0].employee.id,
+                operador: data[0].employee.name,
+                vehiculo: data[0].vehicle.name,
+                modo: data[0].x_modo_bel,
+                tipo_armado: data[0].x_tipo_bel,
                 ejecutivo: data[0].x_ejecutivo_viaje_bel,
             });
             comprobacion_correos();
