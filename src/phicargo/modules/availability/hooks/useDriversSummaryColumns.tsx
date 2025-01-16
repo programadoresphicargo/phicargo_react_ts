@@ -19,7 +19,7 @@ export const useDriversSummaryColumns = () => {
         accessorKey: 'name',
         header: 'Operador',
         Cell: ({ cell }) => (
-          <span className="font-bold text-medium">
+          <span className="font-bold">
             {cell.getValue<string>()}
           </span>
         ),
@@ -48,7 +48,7 @@ export const useDriversSummaryColumns = () => {
         Cell: ({ cell, row }) => {
           const value = cell.getValue<string>();
           return value === 'N/A' ? (
-            <span className="text-gray-400 text-sm">
+            <span className="text-gray-400">
               {cell.getValue<string>()}
             </span>
           ) : (
@@ -62,7 +62,7 @@ export const useDriversSummaryColumns = () => {
         Cell: ({ cell, row }) => {
           const value = cell.getValue<string>();
           return value === 'N/A' ? (
-            <span className="text-gray-400 text-sm">
+            <span className="text-gray-400">
               {cell.getValue<string>()}
             </span>
           ) : (

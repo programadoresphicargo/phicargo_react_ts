@@ -20,7 +20,7 @@ const getJobColor = (job: Job) => {
 
 const JobChip = ({ job }: Props) => {
   return (
-    <Chip color={getJobColor(job)} size="sm">
+    <Chip color={getJobColor(job)} size="sm" classNames={{ content: 'text-xs' }}>
       {job}
     </Chip>
   );

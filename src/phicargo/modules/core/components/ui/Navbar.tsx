@@ -32,7 +32,7 @@ export const Navbar = (props: Props) => {
   return (
     <NextUiNavbar
       maxWidth="full"
-      height={'3.5rem'}
+      height={'3.2rem'}
       isMenuOpen={isMenuOpen}
       onMenuOpenChange={setIsMenuOpen}
       style={{
@@ -54,8 +54,7 @@ export const Navbar = (props: Props) => {
             src="https://phi-cargo.com/wp-content/uploads/2021/05/logo-phicargo-vertical.png"
             alt="logo phicargo"
             style={{
-              width: '175px',
-              height: '60px',
+              height: '50px',
             }}
           />
         </NavbarBrand>
@@ -65,6 +64,7 @@ export const Navbar = (props: Props) => {
         <Button
           isIconOnly
           aria-label="back"
+          size='sm'
           as={Link}
           href="/menu"
           className="bg-gray-100 rounded-full p-2 shadow-md hover:bg-gray-200 transition"
@@ -77,7 +77,7 @@ export const Navbar = (props: Props) => {
             src="https://phi-cargo.com/wp-content/uploads/2021/05/logo-phicargo-vertical.png"
             alt="logo phicargo"
             style={{
-              height: '55px',
+              height: '50px',
             }}
           />
         </NavbarBrand>
