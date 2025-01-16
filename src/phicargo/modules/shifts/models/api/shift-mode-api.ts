@@ -36,6 +36,7 @@ export interface ShiftBaseApi {
 
 export interface ShiftApi extends ShiftBaseApi {
   id: number;
+  phone: string | null;
   res_store: BranchSimple;
   driver: DriverInfoApi;
   vehicle: VehicleInfoApi;
