@@ -13,6 +13,7 @@ const YearSelector = ({ selectedYear, handleChange }) => {
                 selectedKeys={[String(selectedYear)]}
                 style={{ minWidth: "200px" }}
                 variant='bordered'
+                size="sm"
             >
                 <SelectItem key={"2020"}>2020</SelectItem>
                 <SelectItem key={"2021"}>2021</SelectItem>

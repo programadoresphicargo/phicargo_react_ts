@@ -13,6 +13,7 @@ const MonthSelector = ({ selectedMonth, handleChange }) => {
         selectedKeys={selectedMonth}
         style={{ minWidth: "200px" }}
         variant='bordered'
+        size="sm"
       >
         <SelectItem key={1}>Enero</SelectItem>
         <SelectItem key={2}>Febrero</SelectItem>

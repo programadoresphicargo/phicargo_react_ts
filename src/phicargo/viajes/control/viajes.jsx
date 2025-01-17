@@ -319,7 +319,7 @@ const ViajesActivos = ({ }) => {
       >
         <h1 className='text-primary'>Gestión de viajes</h1>
         <Button className='text-white' color='success'
-          isDisabled={true}
+          isDisabled={false}
           onClick={() => setMasivoOpen(true)}
         >Envio masivo</Button>
       </Box>

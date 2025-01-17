@@ -16,6 +16,7 @@ import ShiftsRoutes from '../phicargo/modules/shifts/routes/ShiftsRoutes';
 import { ToastContainer } from 'react-toastify';
 import { Toaster } from 'react-hot-toast';
 import UsersManagementRoutes from '../phicargo/modules/users-management/routes/UsersManagementRoutes';
+import EstadiasIndex from '../phicargo/estadias/Control';
 
 // Lazy load the components
 const CartasPorte = lazy(
@@ -46,6 +47,12 @@ const CorreosElectronicos = lazy(
 );
 const ReporteCumplimiento = lazy(
   () => import('../phicargo/reportes/cumplimiento'),
+);
+const CostosExtras = lazy(
+  () => import('../phicargo/viajes/costos_extras/documentacion'),
+);
+const Estadias = lazy(
+  () => import('../phicargo/estadias/Control')
 );
 const Accesos = lazy(() => import('../phicargo/accesos/Accesos'));
 const EntregaMonitoreo = lazy(() => import('../phicargo/monitoreo/monitoreo'));
@@ -158,6 +165,24 @@ export const PrivateRoutes = () => {
           element={
             <Suspense fallback={<LoadingPage />}>
               <ReporteCumplimiento />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/costos_extras"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <CostosExtras />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/estadias"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <EstadiasIndex />
             </Suspense>
           }
         />

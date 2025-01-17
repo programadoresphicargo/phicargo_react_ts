@@ -56,6 +56,18 @@ const reports: MenuItemType[] = [
     icon: phoneIcon,
     requiredPermissions: [],
   },
+  {
+    label: 'Costos extras',
+    path: '/costos_extras',
+    icon: '',
+    requiredPermissions: [],
+  },
+  {
+    label: 'Reporte de estadias',
+    path: '/estadias',
+    icon: '',
+    requiredPermissions: [],
+  },
 ];
 
 const ReportsMenuPage = () => {
