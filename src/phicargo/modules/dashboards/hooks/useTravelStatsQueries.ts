@@ -7,14 +7,16 @@ const travelKey = 'travelStats';
 
 export const useTravelStatsQueries = () => {
   // const queryClient = useQueryClient();
-  const { monthString } = useDateRangeContext();
+  const { monthString, companyId, branchId } = useDateRangeContext();
 
   const travelStatsQuery = useQuery<TravelStats>({
-    queryKey: [travelKey, monthString?.start, monthString?.end],
+    queryKey: [travelKey, monthString?.start, monthString?.end, companyId, branchId],
     queryFn: () =>
       TravelStatsServiceApi.getTravelStats(
         monthString!.start,
         monthString!.end,
+        companyId,
+        branchId,
       ),
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 10,

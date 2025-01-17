@@ -17,8 +17,20 @@ class TravelStatsServiceApi {
   public static async getTravelStats(
     startDate: string,
     endDate: string,
+    companyId: number | null,
+    branchId: number | null,
   ): Promise<TravelStats> {
-    const url = `/tms_travel/stats?start_date=${startDate}&end_date=${endDate}`;
+    let url = `/tms_travel/stats?start_date=${startDate}&end_date=${endDate}`;
+
+    if (companyId) {
+      url = url.concat(`&company_id=${companyId}`);
+    }
+
+    if (branchId) {
+      url = url.concat(`&branch_id=${branchId}`);
+    }
+
+    console.log(url);
 
     try {
       const response = await odooApi.get<TravelStatsApi>(url);
