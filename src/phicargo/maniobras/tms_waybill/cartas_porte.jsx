@@ -113,24 +113,33 @@ const CartasPorte = () => {
 
           let variant = 'secondary';
           let text = '';
-          if (value === 'Ing') {
-            variant = 'success';
-            text = 'Ingresado';
-          } else if (value === 'P') {
-            variant = 'primary';
-            text = 'Patio';
-          } else if (value === 'local') {
-            variant = 'danger';
-            text = 'Local';
+
+          const mappings = {
+            sm: { variant: 'secondary', text: 'SIN MANIOBRA' },
+            EI: { variant: 'warning', text: 'EN PROCESO DE INGRESO' },
+            pm: { variant: 'primary', text: 'PATIO MÉXICO' },
+            Ing: { variant: 'success', text: 'INGRESADO' },
+            'No Ing': { variant: 'danger', text: 'NO INGRESADO' },
+            ru: { variant: 'info', text: 'REUTILIZADO' },
+            can: { variant: 'error', text: 'CANCELADO' },
+            P: { variant: 'primary', text: 'EN PATIO' },
+            T: { variant: 'warning', text: 'EN TERRAPORTS' },
+            V: { variant: 'success', text: 'EN VIAJE' },
+          };
+
+          if (mappings[value]) {
+            variant = mappings[value].variant;
+            text = mappings[value].text;
           } else {
-            variant = 'danger';
-            text = value;
+            variant = 'danger'; 
+            text = value || 'DESCONOCIDO';
           }
 
           return (
-            <Chip className={`badge bg-${variant} text-white`} size='sm'>
-              {text}
-            </Chip>
+            value !== null ? (
+              <Chip color={variant} size='sm' className="text-white">
+                {text}
+              </Chip>) : null
           );
         },
       },
