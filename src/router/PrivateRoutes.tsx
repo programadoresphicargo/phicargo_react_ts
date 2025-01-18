@@ -16,7 +16,6 @@ import ShiftsRoutes from '../phicargo/modules/shifts/routes/ShiftsRoutes';
 import { ToastContainer } from 'react-toastify';
 import { Toaster } from 'react-hot-toast';
 import UsersManagementRoutes from '../phicargo/modules/users-management/routes/UsersManagementRoutes';
-import EstadiasIndex from '../phicargo/estadias/Control';
 
 // Lazy load the components
 const CartasPorte = lazy(
