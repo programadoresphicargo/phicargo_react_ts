@@ -23,7 +23,7 @@ const ModalityChip = ({ modality }: Props) => {
     <Chip 
       color={getModalityColor(modality)} 
       size="sm"
-      className='uppercase'
+      className='uppercase text-xs'
     >
       {modality}
     </Chip>

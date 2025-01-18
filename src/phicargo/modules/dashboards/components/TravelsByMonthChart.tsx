@@ -61,7 +61,7 @@ export const TravelsByMonthChart = (props: Props) => {
           borderColor: ['rgba(75, 192, 192, 1)'],
           pointStyle: 'circle',
           pointRadius: 10,
-          pointHoverRadius: 15
+          pointHoverRadius: 15,
         },
       ],
     };

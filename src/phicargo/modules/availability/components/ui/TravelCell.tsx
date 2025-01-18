@@ -14,7 +14,7 @@ export const TravelCell = memo(({ travel }: Props) => {
         <div className="flex items-center gap-2">
         <span className="font-bold text-gray-400">Status:</span>
         <span
-          className={`text-sm text-green-500`}
+          className={`text-xs text-green-500`}
         >
           {travel?.status || 'N/A'}
         </span>

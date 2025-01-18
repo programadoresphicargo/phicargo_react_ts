@@ -19,7 +19,7 @@ export const useSummaryColumns = () => {
         accessorKey: 'name', 
         header: 'Unidad',
         Cell: ({ cell }) => (
-          <span className='font-bold text-medium'>{cell.getValue<string>()}</span>
+          <span className='font-bold'>{cell.getValue<string>()}</span>
         ) 
       },
       { 
@@ -37,7 +37,7 @@ export const useSummaryColumns = () => {
           },
         ],
         Cell: ({ cell }) => (
-          <span className='font-bold text-medium'>{cell.getValue<string>()}</span>
+          <span className='font-bold'>{cell.getValue<string>()}</span>
         ) 
       },
       {
@@ -64,7 +64,7 @@ export const useSummaryColumns = () => {
         Cell: ({ cell, row }) => {
           const value = cell.getValue<string>();
           return value === 'N/A' 
-            ? <span className='text-gray-400 text-sm'>{value}</span>
+            ? <span className='text-gray-400'>{value}</span>
             : <TravelCell travel={row.original.travel} />
         }
       },
@@ -74,7 +74,7 @@ export const useSummaryColumns = () => {
         Cell: ({ cell }) => {
           const value = cell.getValue<string>();
           return value === 'N/A' 
-            ? <span className='text-gray-400 text-sm'>{value}</span>
+            ? <span className='text-gray-400'>{value}</span>
             : <ManeuverCell maneuver={cell.row.original.maneuver} />
         }
       },
@@ -84,7 +84,7 @@ export const useSummaryColumns = () => {
         Cell: ({ cell }) => {
           const value = cell.getValue<string>();
           return value === 'N/A' 
-            ? <span className='text-gray-400 text-sm'>{cell.getValue<string>()}</span>
+            ? <span className='text-gray-400'>{cell.getValue<string>()}</span>
             : <span className='font-bold text-blue-600 uppercase'>{cell.getValue<string>()}</span>
         }
       },

@@ -38,7 +38,7 @@ export const useBaseTable = <T extends MRT_RowData>({
     showGlobalFilter: true,
   },
   customActions,
-  containerHeight = 'calc(100vh - 180px)',
+  containerHeight = 'calc(100vh - 171px)',
   memoMode,
   onExportExcel
 }: UseTableConfig<T>) => {
@@ -84,7 +84,8 @@ export const useBaseTable = <T extends MRT_RowData>({
       sx: {
         fontFamily: 'Inter',
         fontWeight: 'normal',
-        fontSize: '14px',
+        fontSize: '0.75rem',
+        padding: '3px 5px',
       },
     },
     muiTableBodyRowProps: onDoubleClickFn

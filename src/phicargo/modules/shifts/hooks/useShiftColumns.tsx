@@ -69,6 +69,24 @@ export const useShiftColumns = () => {
         header: 'Llegada',
       },
       {
+        accessorFn: (row) => row.phoneNumber,
+        header: 'Teléfono',
+        Cell: ({ cell }) => {
+          const value = cell.getValue<string | null>();
+          return (
+            <span 
+              className={
+                value 
+                  ? "text-blue-700 text-sm font-semibold"
+                  : "text-gray-400 text-sm"
+              }
+            >
+              {value || 'SIN NÚMERO'}
+            </span>
+          )
+        }
+      },
+      {
         accessorFn: (row) => row.travel?.routeName || 'SIN ASIGNAR',
         header: 'Ruta',
         id: 'route',

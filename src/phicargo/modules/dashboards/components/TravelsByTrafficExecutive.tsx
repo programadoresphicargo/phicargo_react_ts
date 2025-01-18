@@ -13,6 +13,15 @@ Chart.register(CategoryScale);
 const options: ChartOptions<'bar'> = {
   responsive: true,
   maintainAspectRatio: false,
+  plugins: {
+    tooltip: {
+      callbacks: {
+        title: (context) => {
+          return context[0].label.replace(/,/g, ' ');
+        },
+      },
+    },
+  },
   scales: {
     y: {
       beginAtZero: true,
@@ -31,8 +40,10 @@ const options: ChartOptions<'bar'> = {
       },
       ticks: {
         font: {
-          size: 15,
+          size: 9,
         },
+        maxRotation: 0,
+        minRotation: 0,
       },
     },
   },
@@ -52,24 +63,44 @@ export const TravelsByTrafficExecutive = (props: Props) => {
     if (!data) return;
 
     const chartData: ChartData<'bar'> = {
-      labels: data.byTrafficExecutive.map((item) => item.trafficExecutive),
+      labels: data.byTrafficExecutive.map((item) =>
+        item.trafficExecutive.split(' '),
+      ),
       datasets: [
         {
           label: 'Viajes',
-          data: data.byTrafficExecutive.map((item) => item.travels),
+          data: data.byTrafficExecutive.map((item) => item.totalTravels),
           borderWidth: 2,
           borderRadius: 10,
           backgroundColor: [
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(54, 162, 235, 0.2)',
             'rgba(255, 159, 64, 0.2)',
-            'rgba(153, 102, 255, 0.2)'
           ],
           borderColor: [
-            'rgba(75, 192, 192, 1)',
-            'rgba(54, 162, 235, 1)',
             'rgba(255, 159, 64, 1)',
-            'rgba(153, 102, 255, 1)'
+          ],
+        },
+        {
+          label: 'Viajes Completados',
+          data: data.byTrafficExecutive.map((item) => item.travelsCompleted),
+          borderWidth: 2,
+          borderRadius: 10,
+          backgroundColor: [
+            'rgba(54, 162, 235, 0.2)',
+          ],
+          borderColor: [
+            'rgba(54, 162, 235, 1)',
+          ],
+        },
+        {
+          label: 'Viajes',
+          data: data.byTrafficExecutive.map((item) => item.travelsPending),
+          borderWidth: 2,
+          borderRadius: 10,
+          backgroundColor: [
+            'rgba(153, 102, 255, 0.2)',
+          ],
+          borderColor: [
+            'rgba(153, 102, 255, 1)',
           ],
         },
       ],
