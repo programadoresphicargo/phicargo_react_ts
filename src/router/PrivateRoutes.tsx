@@ -182,7 +182,7 @@ export const PrivateRoutes = () => {
           path="/estadias"
           element={
             <Suspense fallback={<LoadingPage />}>
-              <EstadiasIndex />
+              <Estadias />
             </Suspense>
           }
         />
