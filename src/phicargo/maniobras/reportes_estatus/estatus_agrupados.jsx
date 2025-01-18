@@ -12,7 +12,7 @@ import BotonDistanciaMapa from '@/phicargo/viajes/estatus/enlaceDistancia';
 import { CircularProgress } from "@nextui-org/react";
 import axios from 'axios';
 import { tiempoTranscurrido } from '../../funciones/tiempo';
-import { Card, CardHeader, CardBody, CardFooter } from '@nextui-org/react';
+import { Card, CardHeader, CardBody, CardFooter, Chip } from '@nextui-org/react';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 
 function EstatusHistorialAgrupado({ id_reporte }) {
@@ -89,6 +89,7 @@ function EstatusHistorialAgrupado({ id_reporte }) {
                                         {tiempoTranscurrido(step.fecha_hora)}
                                     </CardHeader>
                                     <CardBody className="text-small text-default-500">
+                                        <Chip color='success' className='text-white' size='sm'>{step.comentarios_estatus}</Chip>
                                         <span>Referencia reporte: {step.id_reporte}</span>
                                         <span>Placas: {step.placas}</span>
                                         <span>Coordenadas: {step.latitud}, {step.longitud}</span>

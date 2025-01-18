@@ -7,7 +7,7 @@ import { Button } from '@nextui-org/button';
 import { tiempoTranscurrido } from '../../funciones/tiempo';
 import { Card, CardHeader } from '@nextui-org/react';
 import { Avatar } from '@nextui-org/react';
-import { Badge } from '@nextui-org/react';
+import { Badge, Chip } from '@nextui-org/react';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import EstatusHistorialAgrupado from './estatus_agrupados';
 
@@ -91,17 +91,17 @@ function EstatusHistorialManiobras({ id_maniobra }) {
                                             isBordered
                                             radius="full"
                                             size="md"
-                                            src={`/img/status/${step.imagen}`}
+                                            src={`/img/status/`}
                                         />
                                     </Badge>
                                     <div className="flex flex-col gap-1 items-start justify-center">
                                         <h4 className="text-small font-semibold leading-none text-default-600">{step.nombre_estatus}</h4>
+                                        <Chip color='success' className='text-white' size='sm'>{step.comentarios_estatus}</Chip>
                                         <h5 className="text-small tracking-tight text-default-400">
                                             {step.nombre}
                                         </h5>
                                     </div>
                                 </div>
-
                                 {tiempoTranscurrido(step.fecha_hora)}
                             </CardHeader>
                         </Card>
