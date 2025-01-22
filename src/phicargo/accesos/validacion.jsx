@@ -13,7 +13,7 @@ import odooApi from '../modules/core/api/odoo-api';
 
 const Validador = ({ id_acceso, estado_acceso, open, handleClose }) => {
 
-    const [pin, setPin] = useState(0);
+    const [pin, setPin] = useState('');
 
     useEffect(() => {
         if (open) {
