@@ -134,7 +134,7 @@ const Maniobras = ({ estado_maniobra }) => {
         accessorKey: 'estado_acceso',
         header: 'Estado del acceso',
         Cell: ({ cell }) => {
-          const tipoMovimiento = cell.getValue()?.toUpperCase();
+          const tipoMovimiento = cell.getValue();
           let badgeClass = '';
 
           if (tipoMovimiento === 'espera') {
