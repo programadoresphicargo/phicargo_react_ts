@@ -54,7 +54,7 @@ export default function FormVisitante({ open, handleClose }) {
                 setNombreVisitante('');
                 handleClose();
             } else {
-                toast.error(response.data.menssage);
+                toast.error(response.data.message);
             }
         } catch (error) {
             toast.error("Error al comunicarse con el servidor: " + error.message);
