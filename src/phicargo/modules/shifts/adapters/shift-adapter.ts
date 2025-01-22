@@ -78,7 +78,7 @@ const travelInfoToLocal = (travel: ShiftTravelInfoApi): ShiftTravelInfo => {
 export const shiftToLocal = (shift: ShiftApi): Shift => ({
   id: shift.id,
   shift: shift.shift,
-  phoneNumber: null,
+  phoneNumber: shift.phone,
   arrivalAt: dayjs(shift.arrival_at),
   locked: shift.locked,
   maneuver1: shift.maneuver1,

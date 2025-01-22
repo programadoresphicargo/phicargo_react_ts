@@ -1,14 +1,11 @@
 import { useEffect, useState } from 'react';
 
 import { Bar } from 'react-chartjs-2';
-// import Chart from 'chart.js/auto';
 import { ChartCard } from './ChartCard';
 import { ChartData } from 'chart.js';
 import { ChartOptions } from 'chart.js';
 import { TravelStats } from '../models/travels-stats-models';
 import { useDateRangeContext } from '../hooks/useDateRangeContext';
-
-// Chart.register(CategoryScale);
 
 const options: ChartOptions<'bar'> = {
   responsive: true,
@@ -54,22 +51,28 @@ export const TravelsByConstruction = (props: Props) => {
       labels: data.byConstructionType.map((item) => item.constructionType),
       datasets: [
         {
-          label: 'Viajes',
-          data: data.byConstructionType.map((item) => item.travels),
+          label: 'Viajes Totales',
+          data: data.byConstructionType.map((item) => item.totalTravels),
           borderWidth: 2,
           borderRadius: 10,
-          backgroundColor: [
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(255, 159, 64, 0.2)',
-            'rgba(153, 102, 255, 0.2)',
-          ],
-          borderColor: [
-            'rgba(75, 192, 192, 1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 159, 64, 1)',
-            'rgba(153, 102, 255, 1)',
-          ],
+          backgroundColor: ['rgba(54, 162, 235, 0.2)'],
+          borderColor: ['rgba(54, 162, 235, 1)'],
+        },
+        {
+          label: 'Viajes Completados',
+          data: data.byConstructionType.map((item) => item.travelsCompleted),
+          borderWidth: 2,
+          borderRadius: 10,
+          backgroundColor: ['rgba(75, 192, 192, 0.2)'],
+          borderColor: ['rgba(75, 192, 192, 1)'],
+        },
+        {
+          label: 'Viajes Pendientes',
+          data: data.byConstructionType.map((item) => item.travelsPending),
+          borderWidth: 2,
+          borderRadius: 10,
+          backgroundColor: ['rgba(255, 99, 132, 0.2)'],
+          borderColor: ['rgba(255,99,132, 1)'],
         },
       ],
     };

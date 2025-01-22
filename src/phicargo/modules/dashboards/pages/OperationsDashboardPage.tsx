@@ -3,6 +3,7 @@ import Chart from 'chart.js/auto';
 import { Header } from '../components/Header';
 import { Indicators } from '../components/Indicators';
 import { PodsDeliveredChart } from '../components/PodsDeliveredChart';
+import { TravelsByCargoType } from '../components/TravelsByCargoType';
 import { TravelsByClientChart } from '../components/TravelsByClientChart';
 import { TravelsByConstruction } from '../components/TravelsByConstruction';
 import { TravelsByMonthChart } from '../components/TravelsByMonthChart';
@@ -30,6 +31,10 @@ const OperationsDashboardPage = () => {
           data={travelStatsQuery.data}
         />
         <TravelsByConstruction 
+          isLoading={travelStatsQuery.isFetching}
+          data={travelStatsQuery.data}
+        />
+        <TravelsByCargoType 
           isLoading={travelStatsQuery.isFetching}
           data={travelStatsQuery.data}
         />

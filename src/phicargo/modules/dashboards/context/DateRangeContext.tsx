@@ -13,6 +13,12 @@ interface DateRangeContextProps {
   setMonth: (month: DateRange | null) => void;
   monthString: DateRangeString | null;
   monthYearName?: string;
+
+  companyId: number | null; 
+  setCompanyId: (companyId: number | null) => void;
+
+  branchId: number | null;
+  setBranchId: (branchId: number | null) => void;
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -34,6 +40,9 @@ export const DateRangeProvider = ({ children }: Props) => {
     start: dayjs().startOf('month').format('YYYY-MM-DD'),
     end: dayjs().endOf('month').format('YYYY-MM-DD'),
   });
+
+  const [companyId, setCompanyId] = useState<number | null>(null);
+  const [branchId, setBranchId] = useState<number | null>(null);
 
   const onMonthChange = (month: DateRange | null) => {
     setMonth(month);
@@ -57,7 +66,12 @@ export const DateRangeProvider = ({ children }: Props) => {
         month,
         setMonth: onMonthChange,
         monthString,
-        monthYearName
+        monthYearName,
+
+        companyId,
+        setCompanyId,
+        branchId,
+        setBranchId,
       }}
     >
       {children}

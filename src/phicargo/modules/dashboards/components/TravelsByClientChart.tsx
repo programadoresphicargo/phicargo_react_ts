@@ -11,10 +11,14 @@ import { useDateRangeContext } from '../hooks/useDateRangeContext';
 const options: ChartOptions<'bar'> = {
   responsive: true,
   maintainAspectRatio: false,
-  plugins:{
+  plugins: {
     tooltip: {
-      enabled: true,
-    }
+      callbacks: {
+        title: (context) => {
+          return context[0].label.replace(/,/g, ' ');
+        },
+      },
+    },
   },
   scales: {
     y: {
@@ -40,7 +44,6 @@ const options: ChartOptions<'bar'> = {
   },
 };
 
-
 interface Props {
   data?: TravelStats;
   isLoading: boolean;
@@ -61,10 +64,9 @@ export const TravelsByClientChart = (props: Props) => {
     if (!data) return;
 
     const chartData: ChartData<'bar'> = {
-      labels: data.byClient.map((r) => r.client.split(' ')
-      ),
+      labels: data.byClient.map((r) => r.client.split(' ')),
       datasets: [
-        { 
+        {
           label: 'Viajes',
           data: data.byClient.map((r) => r.travels),
           borderWidth: 2,
@@ -73,13 +75,13 @@ export const TravelsByClientChart = (props: Props) => {
             'rgba(75, 192, 192, 0.2)',
             'rgba(54, 162, 235, 0.2)',
             'rgba(255, 159, 64, 0.2)',
-            'rgba(153, 102, 255, 0.2)'
+            'rgba(153, 102, 255, 0.2)',
           ],
           borderColor: [
             'rgba(75, 192, 192, 1)',
             'rgba(54, 162, 235, 1)',
             'rgba(255, 159, 64, 1)',
-            'rgba(153, 102, 255, 1)'
+            'rgba(153, 102, 255, 1)',
           ],
         },
       ],
@@ -97,3 +99,4 @@ export const TravelsByClientChart = (props: Props) => {
     </ChartCard>
   );
 };
+
