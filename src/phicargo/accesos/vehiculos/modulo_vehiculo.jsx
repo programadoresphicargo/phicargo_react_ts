@@ -54,7 +54,7 @@ const ModuloVehiculo = ({disabled}) => {
                         <TableBody>
                             {selectVehiculos.map((visitor, index) => (
                                 <TableRow key={index}>
-                                    <TableCell>{visitor.value}</TableCell>
+                                    <TableCell>{visitor.id_vehiculo}</TableCell>
                                     <TableCell>{visitor.marca}</TableCell>
                                     <TableCell>{visitor.modelo}</TableCell>
                                     <TableCell>{visitor.placas}</TableCell>
@@ -62,7 +62,7 @@ const ModuloVehiculo = ({disabled}) => {
                                     <TableCell>{visitor.contenedor1}</TableCell>
                                     <TableCell>{visitor.contenedor2}</TableCell>
                                     <TableCell>
-                                        <Button onClick={() => EliminarVehiculo(visitor.value)} size='sm'>Eliminar</Button>
+                                        <Button onPress={() => EliminarVehiculo(visitor.id_vehiculo)} size='sm'>Eliminar</Button>
                                     </TableCell>
                                 </TableRow>
                             ))}

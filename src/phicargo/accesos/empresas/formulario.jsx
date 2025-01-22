@@ -8,7 +8,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { AccesoContext } from '../context';
-const { VITE_PHIDES_API_URL } = import.meta.env;
+import odooApi from '@/phicargo/modules/core/api/odoo-api';
 
 export default function FormEmpresa({ open, handleClose }) {
     const [nombreEmpresa, setNombreEmpresa] = useState('');
@@ -32,14 +32,14 @@ export default function FormEmpresa({ open, handleClose }) {
         }
 
         try {
-            const response = await axios.get(VITE_PHIDES_API_URL + '/accesos/empresas/registrar_empresa.php', {
-                params: { nombre_empresa: nombreEmpresa.trim() },
+            const response = await odooApi.post('/empresas_visitantes/crear_empresa_visitante/', {
+                empresa: nombreEmpresa.trim()
             });
 
-            if (response.data.success) {
+            if (response.data.status == 'success') {
                 toast.success(response.data.message);
-                setNombreEmpresa(''); // Limpiar el campo después de registrar
-                handleClose(); // Cerrar el diálogo
+                setNombreEmpresa('');
+                handleClose();
             } else {
                 toast.error(response.data.message);
             }

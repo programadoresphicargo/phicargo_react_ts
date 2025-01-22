@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Button from '@mui/material/Button';
+import { Button } from '@nextui-org/react';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -8,7 +8,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-const { VITE_PHIDES_API_URL } = import.meta.env;
+import { InputOtp } from "@nextui-org/react";
+import odooApi from '../modules/core/api/odoo-api';
 
 const Validador = ({ id_acceso, estado_acceso, open, handleClose }) => {
 
@@ -28,43 +29,36 @@ const Validador = ({ id_acceso, estado_acceso, open, handleClose }) => {
         }
 
         try {
-            const baseUrl = VITE_PHIDES_API_URL + '/accesos/vigilancia/validacion.php';
-            const response = await axios.get(baseUrl, {
-                params: {
-                    pin: pin,
-                }
-            });
-
+            toast.warning('Validando pin');
+            const response = await odooApi.post('/users/by_pin/' + pin);
             const data = response.data;
-            if (data.respuesta === 1) {
-                toast.success('Se valido el acceso.');
-                cambiar_estado(data.id_usuario, estado_acceso, id_acceso);
-                handleClose();
+            if (data.id_usuario) {
+                toast.success('Pin valido.');
+                cambiar_estado(id_acceso);
             } else {
-                toast.error('Invalid PIN');
+                toast.error(data.error);
             }
 
         } catch (error) {
-            console.error("Error obteniendo los datos:", error);
+            toast.error("Error" + error);
         }
     };
 
-    const cambiar_estado = async (id_usuario, estado_acceso, id_acceso) => {
+    const cambiar_estado = async (id_acceso) => {
         try {
             var baseUrl = '';
             if (estado_acceso == 'espera') {
-                baseUrl = VITE_PHIDES_API_URL + '/accesos/acceso/validar.php';
+                baseUrl = '/accesos/validar_acceso/';
             } else if (estado_acceso == 'validado') {
-                baseUrl = VITE_PHIDES_API_URL + '/accesos/acceso/archivar.php';
+                baseUrl = '/accesos/archivar_acceso/';
             }
-            const response = await axios.get(baseUrl, {
-                params: {
-                    'id_acceso': id_acceso,
-                    'id_usuario': id_usuario,
-                }
-            });
-
-            const data = response.data;
+            const response = await odooApi.get(baseUrl + id_acceso);
+            if (response.data.status == 'success') {
+                toast.success(response.data.message);
+                handleClose();
+            } else {
+                toast.error("Error2: " + data.error);
+            }
         } catch (error) {
             console.error("Error obteniendo los datos:", error);
         }
@@ -74,23 +68,20 @@ const Validador = ({ id_acceso, estado_acceso, open, handleClose }) => {
         <Dialog
             open={open}
             onClose={handleClose}
+            fullWidth={true}
+            maxWidth={'xs'}
         >
             <DialogTitle id="alert-dialog-title">
                 {"Ingresa tu PIN"}
             </DialogTitle>
             <DialogContent>
 
-                <TextField
-                    id="pin"
-                    label="PIN"
-                    onChange={(event) => setPin(event.target.value)}
-                    fullWidth
-                    variant="outlined" />
+                <InputOtp length={4} value={pin} onValueChange={setPin} size='lg' />
 
             </DialogContent>
             <DialogActions>
-                <Button >Cancelar</Button>
-                <Button autoFocus onClick={validar_pin}>
+                <Button onPress={handleClose}>Cancelar</Button>
+                <Button autoFocus onPress={validar_pin} color='primary'>
                     Validar
                 </Button>
             </DialogActions>

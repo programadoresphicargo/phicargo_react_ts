@@ -41,7 +41,7 @@ const SelectedVisitantesTable = ({ }) => {
         <Grid item xs={12} sm={12} md={12}>
 
             <div className="flex flex-wrap gap-4 items-center">
-                <Button onClick={abrirVisitantes} color={disabledFom ? "secondary" : "primary"} isDisabled={disabledFom || formData.id_empresa == '' ? true : false}>Añadir visitantes al acceso</Button>
+                <Button onPress={abrirVisitantes} color={disabledFom ? "default" : "primary"} isDisabled={disabledFom || formData.id_empresa == '' ? true : false}>Añadir visitantes al acceso</Button>
             </div>
 
             <Table aria-label="Example static collection table" isStriped>
@@ -58,7 +58,7 @@ const SelectedVisitantesTable = ({ }) => {
                             <TableCell>
                                 <Button
                                     size='sm'
-                                    color={disabledFom ? "secondary" : "primary"}
+                                    color={disabledFom ? "default" : "primary"}
                                     isDisabled={disabledFom}
                                     onClick={() => borrarVisitante(visitor.id_visitante)}
                                 >

@@ -4,14 +4,14 @@ import axios from "axios";
 import { toast } from 'react-toastify';
 import { Button } from "@nextui-org/react";
 import { useAuthContext } from "@/phicargo/modules/auth/hooks";
-const { VITE_PHIDES_API_URL } = import.meta.env;
+import odooApi from "@/phicargo/modules/core/api/odoo-api";
 
 const VehiculoForm = ({ onClose }) => {
     const { session } = useAuthContext();
     const [marca, setMarca] = useState("");
     const [modelo, setModelo] = useState("");
     const [placas, setPlacas] = useState("");
-    const [tipoVehiculo, setTipoVehiculo] = useState("");
+    const [tipo_vehiculo, setTipoVehiculo] = useState("");
     const [color, setColor] = useState("");
     const [referencia1, setReferencia1] = useState("");
     const [referencia2, setReferencia2] = useState("");
@@ -20,12 +20,12 @@ const VehiculoForm = ({ onClose }) => {
         marca: "",
         modelo: "",
         placas: "",
-        tipoVehiculo: "",
+        tipo_vehiculo: "",
         color: ""
     });
 
     const registrar_vehiculo = async () => {
-        setErrors({ marca: "", modelo: "", placas: "", tipoVehiculo: "", color: "" });
+        setErrors({ marca: "", modelo: "", placas: "", tipo_vehiculo: "", color: "" });
 
         let hasError = false;
         if (!marca) {
@@ -40,8 +40,8 @@ const VehiculoForm = ({ onClose }) => {
             setErrors(prev => ({ ...prev, placas: "Placas son obligatorias" }));
             hasError = true;
         }
-        if (!tipoVehiculo) {
-            setErrors(prev => ({ ...prev, tipoVehiculo: "Tipo de vehiculo es obligatorio" }));
+        if (!tipo_vehiculo) {
+            setErrors(prev => ({ ...prev, tipo_vehiculo: "Tipo de vehiculo es obligatorio" }));
             hasError = true;
         }
         if (!color) {
@@ -56,19 +56,19 @@ const VehiculoForm = ({ onClose }) => {
             marca,
             modelo,
             placas,
-            tipoVehiculo,
+            tipo_vehiculo,
             color,
             referencia1,
             referencia2,
         };
 
         try {
-            const response = await axios.post(VITE_PHIDES_API_URL + "/accesos/vehiculos/registrar_vehiculo.php", vehiculoData);
-            if (response.data.mensaje) {
+            const response = await odooApi.post("/vehiculos_visitantes/crear_vehiculo_visitante/", vehiculoData);
+            if (response.data.status == 'success') {
                 toast.success(response.data.mensaje);
                 onClose();
             } else {
-                toast.error(response.data.error);
+                toast.error(response.data.message);
             }
         } catch (error) {
             toast.error("Error enviando los datos:" + error);
@@ -116,10 +116,10 @@ const VehiculoForm = ({ onClose }) => {
                 />
             </Grid>
             <Grid item xs={12} md={6}>
-                <FormControl fullWidth variant="outlined" error={!!errors.tipoVehiculo}>
+                <FormControl fullWidth variant="outlined" error={!!errors.tipo_vehiculo}>
                     <InputLabel>Tipo de vehiculo</InputLabel>
                     <Select
-                        value={tipoVehiculo}
+                        value={tipo_vehiculo}
                         onChange={(e) => setTipoVehiculo(e.target.value)}
                         label="Tipo de vehiculo"
                     >
@@ -130,7 +130,7 @@ const VehiculoForm = ({ onClose }) => {
                         <MenuItem value="camion">Camión</MenuItem>
                         <MenuItem value="grua">Grúa</MenuItem>
                     </Select>
-                    {errors.tipoVehiculo && <span style={{ color: 'red' }}>{errors.tipoVehiculo}</span>}
+                    {errors.tipo_vehiculo && <span style={{ color: 'red' }}>{errors.tipo_vehiculo}</span>}
                 </FormControl>
             </Grid>
             <Grid item xs={12} md={6}>

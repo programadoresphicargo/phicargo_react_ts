@@ -3,11 +3,11 @@ import { AccesoContext } from "./context";
 import axios from 'axios';
 import { toast } from "react-toastify";
 import { useAuthContext } from "../modules/auth/hooks";
-const { VITE_PHIDES_API_URL } = import.meta.env;
+import odooApi from "../modules/core/api/odoo-api";
 
 const AccesoCompo = ({ children }) => {
     const { session } = useAuthContext();
-    const [id_acceso, setAcceso] = useState([]);
+    const [id_acceso, setAcceso] = useState(null);
     const [disabledFom, setFormOptions] = useState(false);
 
     const [empresas, setEmpresas] = useState([]);
@@ -83,13 +83,11 @@ const AccesoCompo = ({ children }) => {
     };
 
     const AñadirVehiculo = (id_vehiculo) => {
-        const vehiculoData = { id_vehiculo };
-
-        axios.post(VITE_PHIDES_API_URL + "/accesos/vehiculos/getVehiculo.php", vehiculoData)
+        odooApi.get("/vehiculos_visitantes/get_by_id/" + id_vehiculo)
             .then(response => {
                 const data = response.data[0];
                 const nuevoVehiculo = {
-                    value: data.id_vehiculo,
+                    id_vehiculo: data.id_vehiculo,
                     marca: data.marca,
                     modelo: data.modelo,
                     placas: data.placas,
@@ -98,7 +96,7 @@ const AccesoCompo = ({ children }) => {
                     contenedor2: data.contenedor2,
                 };
 
-                const existe = selectVehiculos.some(vehiculo => vehiculo.value === nuevoVehiculo.value);
+                const existe = selectVehiculos.some(vehiculo => vehiculo.id_vehiculo === nuevoVehiculo.id_vehiculo);
 
                 if (!existe) {
                     setVehiculoSeleccionado((prev) => {
@@ -122,10 +120,10 @@ const AccesoCompo = ({ children }) => {
 
     const getVehiculos = (id_acceso) => {
 
-        axios.post(VITE_PHIDES_API_URL + "/accesos/accesos/getVehiculos.php?id_acceso=" + id_acceso)
+        odooApi.get("/accesos/get_vehiculos/" + id_acceso)
             .then(response => {
                 const nuevosVehiculos = response.data.map(data => ({
-                    value: data.id_vehiculo,
+                    id_vehiculo: data.id_vehiculo,
                     marca: data.marca,
                     modelo: data.modelo,
                     placas: data.placas,
@@ -143,8 +141,8 @@ const AccesoCompo = ({ children }) => {
 
     const EliminarVehiculo = (id_vehiculo) => {
         setVehiculoSeleccionado((prev) => {
-            const updatedList = prev.filter(vehiculo => vehiculo.value !== id_vehiculo);
-            const vehiculoEliminado = prev.find(vehiculo => vehiculo.value === id_vehiculo);
+            const updatedList = prev.filter(vehiculo => vehiculo.id_vehiculo !== id_vehiculo);
+            const vehiculoEliminado = prev.find(vehiculo => vehiculo.id_vehiculo === id_vehiculo);
             if (vehiculoEliminado) {
                 setVehiculosEliminados((prevEliminados) => [...prevEliminados, vehiculoEliminado]);
                 toast.success(`Vehículo eliminado: ${vehiculoEliminado.marca} ${vehiculoEliminado.modelo}`);

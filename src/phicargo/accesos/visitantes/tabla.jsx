@@ -12,12 +12,12 @@ import Stack from '@mui/material/Stack';
 import { AccesoContext } from '../context';
 import { toast } from 'react-toastify';
 import axios from 'axios';
-const { VITE_PHIDES_API_URL } = import.meta.env;
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
 import FormEmpresa from './formulario';
+import odooApi from '@/phicargo/modules/core/api/odoo-api';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -41,9 +41,8 @@ const ListadoVisitantes = ({ open, handleClose }) => {
 
   const fetchVisitantes = async () => {
     setLoading(true);
-    const response = await fetch(VITE_PHIDES_API_URL + '/accesos/visitantes/getVisitantes.php?id_empresa=' + formData.id_empresa);
-    const jsonData = await response.json();
-    setVisitantes(jsonData);
+    const response = await odooApi.get('/visitantes/by_id_empresa/' + formData.id_empresa);
+    setVisitantes(response.data);
     setLoading(false);
   };
 

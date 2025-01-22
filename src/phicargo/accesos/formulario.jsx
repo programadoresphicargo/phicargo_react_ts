@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Button } from "@nextui-org/react";
+import { Button, Select, SelectItem } from "@nextui-org/react";
 import axios from 'axios';
-import Autocomplete from '@mui/material/Autocomplete';
 import Grid from '@mui/material/Grid';
 import { Card, CardHeader, CardBody, CardFooter, Divider, Link, Image } from "@nextui-org/react";
 import { toast } from 'react-toastify';
@@ -31,13 +30,26 @@ import SelectedVisitantesTable from './visitantes/visitantes_seleccionados_tabla
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
-const { VITE_PHIDES_API_URL } = import.meta.env;
+import { Textarea } from "@nextui-org/react";
+import odooApi from '../modules/core/api/odoo-api';
+import { Input } from "@nextui-org/react";
+import { Progress } from "@nextui-org/react";
+import { Box } from '@mui/material';
+import {
+    Autocomplete,
+    AutocompleteSection,
+    AutocompleteItem
+} from "@nextui-org/react";
+import { ClockIcon } from '@mui/x-date-pickers';
+
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 const AccesoForm = ({ id_acceso, onClose }) => {
 
     const [openEmpresas, setEmpresas] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingVisitantes, setIsLoadingVisitantes] = useState(false);
 
     const abrirEmpresas = () => {
         setEmpresas(true);
@@ -78,6 +90,10 @@ const AccesoForm = ({ id_acceso, onClose }) => {
         }
         if (!formData.tipo_identificacion) {
             newErrors.tipo_identificacion = 'Tipo de identificación es obligatorio';
+        }
+
+        if (!formData.areas) {
+            newErrors.areas = 'Areas es obligatorio';
         }
         return newErrors;
     };
@@ -122,9 +138,10 @@ const AccesoForm = ({ id_acceso, onClose }) => {
 
     const getAcceso = async () => {
         try {
+            setIsLoading(true);
             setFormOptions(true);
-            const baseUrl = VITE_PHIDES_API_URL + `/accesos/accesos/getAcceso.php?id_acceso=${id_acceso}`;
-            const response = await axios.get(baseUrl);
+            const baseUrl = `/accesos/get_by_id_acceso/${id_acceso}`;
+            const response = await odooApi.get(baseUrl);
             const data = response.data[0];
             if (data) {
 
@@ -134,7 +151,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                     id_acceso: data.id_acceso || 0,
                     estado_acceso: data.estado_acceso || '',
                     id_empresa: data.id_empresa || '',
-                    nombre_empresa: data.nombre_empresa || '',
+                    empresa: data.empresa || '',
                     id_empresa_visitada: data.id_empresa_visitada || '',
                     tipo_movimiento: data.tipo_movimiento || '',
                     fecha_entrada: data.fecha_entrada || '',
@@ -153,7 +170,9 @@ const AccesoForm = ({ id_acceso, onClose }) => {
             } else {
                 toast.error("No se encontraron datos para el acceso.");
             }
+            setIsLoading(false);
         } catch (error) {
+            setIsLoading(false);
             console.error("Error obteniendo los datos:", error);
             toast.error("Error al obtener datos del acceso.");
         }
@@ -168,25 +187,25 @@ const AccesoForm = ({ id_acceso, onClose }) => {
     }, [id_acceso]);
 
     const getVisitantesAccceso = () => {
-        const baseUrl = VITE_PHIDES_API_URL + '/accesos/accesos/getVisitantes.php?id_acceso=' + id_acceso;
-        axios.get(baseUrl)
+        setIsLoadingVisitantes(true);
+        odooApi.get('/accesos/get_visitantes/' + id_acceso)
             .then(response => {
                 const data = response.data;
                 setSelectedVisitantes(data);
+                setIsLoadingVisitantes(false);
             })
             .catch(err => {
                 console.error('Error al obtener la flota:', err);
+                setIsLoadingVisitantes(false);
             });
     };
 
     const fetchEmpresasVisitada = () => {
-        const baseUrl = VITE_PHIDES_API_URL + '/accesos/empresas/getEmpresasVisitadas.php';
-
-        axios.get(baseUrl)
+        odooApi.get('/empresas/get_empresas/')
             .then(response => {
                 const data = response.data.map(item => ({
                     value: item.id_empresa,
-                    label: item.nombre,
+                    label: item.empresa,
                 }));
                 setEmpresasVisitadasOptions(data);
             })
@@ -224,21 +243,23 @@ const AccesoForm = ({ id_acceso, onClose }) => {
             }
 
             const dataToSend = {
-                ...formData,
-                visitantes_seleccionados: selectedVisitantes,
-                vehiculos_seleccionados: selectVehiculos,
+                data: formData,
+                visitantes: selectedVisitantes,
+                vehiculos: selectVehiculos,
             };
 
             try {
-                const response = await axios.post(VITE_PHIDES_API_URL + '/accesos/acceso/registrar.php', dataToSend);
-                console.log('Respuesta del servidor:', response.data);
-                if (response.data.status === 1) {
+                setIsLoading(true);
+                const response = await odooApi.post('/accesos/crear_acceso/', dataToSend);
+                if (response.data.status === "success") {
                     toast.success(`Acceso registrado correctamente.`);
                     onClose();
                 } else {
-                    toast.error("Error al actualizar los datos.");
+                    toast.error("Error al ingresar acceso: ");
                 }
+                setIsLoading(false);
             } catch (error) {
+                setIsLoading(false);
                 toast.error('Error al enviar los datos:' + error);
             }
         } else {
@@ -248,26 +269,27 @@ const AccesoForm = ({ id_acceso, onClose }) => {
 
     const actualizar_acceso = async (e) => {
         console.log(formData);
-        e.preventDefault();
-
         const dataToSend = {
-            ...formData,
-            visitantesAñadidos: addedVisitors,
-            visitantesEliminados: removedVisitors,
-            vehiculosAñadidos: vehiculosAñadidos,
-            vehiculosEliminados: vehiculosEliminados
+            data: formData,
+            visitantes_agregados: addedVisitors,
+            visitantes_removidos: removedVisitors,
+            vehiculos_agregados: vehiculosAñadidos,
+            vehiculos_removidos: vehiculosEliminados
         };
 
         try {
-            const response = await axios.post(VITE_PHIDES_API_URL + '/accesos/acceso/actualizar.php', dataToSend);
+            setIsLoading(true);
+            const response = await odooApi.post('/accesos/actualizar_acceso/' + id_acceso, dataToSend);
             console.log('Respuesta del servidor:', response.data);
-            if (response.data.status === 1) {
+            if (response.data.status === "success") {
                 toast.success(`Acceso A-${response.data.id_insertado} actualizado correctamente.`);
                 onClose();
             } else {
                 toast.error("Error al actualizar los datos.");
             }
+            setIsLoading(false);
         } catch (error) {
+            setIsLoading(false);
             console.error('Error en la petición', error);
             toast.error('Error en la conexión o al procesar los datos. ' + error);
         }
@@ -284,10 +306,12 @@ const AccesoForm = ({ id_acceso, onClose }) => {
         onClose();
     };
 
-    const handleSelectionChange = (event, newValue) => {
+    const handleSelectionChange = (e) => {
+        const val = e.target.value;
+
         setFormData((prevData) => ({
             ...prevData,
-            areas: JSON.stringify(newValue),
+            areas: prevData ? `${prevData},${val}` : val,
         }));
     };
 
@@ -300,19 +324,19 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                     </Typography>
                 )}
                 {!id_acceso && (
-                    <Button onClick={registrar_acceso} style={{ marginTop: '20px' }} color='primary'>Registrar</Button>
+                    <Button onPress={registrar_acceso} style={{ marginTop: '20px' }} color='primary' isLoading={isLoading}>Registrar</Button>
                 )}
                 {formData.estado_acceso !== 'archivado' && disabledFom && id_acceso && (
-                    <Button onClick={EditarForm} style={{ marginTop: '20px' }} color='primary'>Editar</Button>
+                    <Button onPress={EditarForm} style={{ marginTop: '20px' }} color='primary'>Editar</Button>
                 )}
                 {id_acceso && !disabledFom && (
-                    <Button onClick={actualizar_acceso} style={{ marginTop: '20px' }} color='primary'>Guardar Cambios</Button>
+                    <Button onPress={actualizar_acceso} style={{ marginTop: '20px' }} color='primary' isLoading={isLoading}>Guardar Cambios</Button>
                 )}
                 {formData.estado_acceso == 'espera' && (
-                    <Button onClick={handleClickOpenValidador} style={{ marginTop: '20px' }} color='primary'>Validar {formData.tipo_movimiento}</Button>
+                    <Button onPress={handleClickOpenValidador} style={{ marginTop: '20px' }} color='primary'>Validar {formData.tipo_movimiento}</Button>
                 )}
                 {formData.estado_acceso == 'validado' && (
-                    <Button onClick={handleClickOpenValidador} style={{ marginTop: '20px' }} color='primary'>Archivar / Finalizar acceso</Button>
+                    <Button onPress={handleClickOpenValidador} style={{ marginTop: '20px' }} color='primary'>Archivar / Finalizar acceso</Button>
                 )}
             </Stack >
 
@@ -326,6 +350,13 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                             </div>
                         </CardHeader>
                         <Divider />
+                        {isLoading ? (
+                            <Progress
+                                isIndeterminate
+                                aria-label="Loading..."
+                                size="sm"
+                            />
+                        ) : ('')}
                         <CardBody>
 
                             <Grid container spacing={2}>
@@ -334,22 +365,17 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                                     <Autocomplete
                                         id="tipo_movimiento"
                                         name="tipo_movimiento"
-                                        value={options_tipo_movimiento.find(option => option.value === formData.tipo_movimiento) || null}
-                                        onChange={(event, newValue) => handleChange('tipo_movimiento', newValue ? newValue.value : '')}
-                                        getOptionLabel={(option) => option.label}
-                                        isOptionEqualToValue={(option, value) => option.value === value.value}
-                                        options={options_tipo_movimiento}
-                                        disabled={disabledFom}
-                                        renderInput={(params) => (
-                                            <TextField
-                                                {...params}
-                                                label="Tipo de movimiento"
-                                                variant="outlined"
-                                                error={!!errors.tipo_movimiento}
-                                                helperText={errors.tipo_movimiento}
-                                            />
-                                        )}
-                                    />
+                                        variant='bordered'
+                                        label="Tipo de movimiento"
+                                        selectedKey={formData.tipo_movimiento || null}
+                                        onSelectionChange={(e) => handleChange('tipo_movimiento', e)}
+                                        isDisabled={disabledFom}
+                                        defaultItems={options_tipo_movimiento}
+                                        isInvalid={!!errors.tipo_movimiento}
+                                        errorMessage={errors.tipo_movimiento}
+                                    >
+                                        {(item) => <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>}
+                                    </Autocomplete>
                                 </Grid>
 
                                 <Grid item xs={12} sm={6} md={4}>
@@ -389,120 +415,97 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                                 </Grid>
 
                                 <Grid item xs={12} sm={6} md={4}>
-                                    <TextField
-                                        InputProps={{
-                                            endAdornment: (
-                                                <InputAdornment position="end">
-                                                    <IconButton edge="end" color="primary">
-                                                        <SearchIcon />
-                                                    </IconButton>
-                                                </InputAdornment>
-                                            ),
-                                        }}
-                                        id="id_empresa"
-                                        name="id_empresa"
-                                        label="Empresa"
-                                        variant="outlined"
-                                        disabled={disabledFom}
-                                        defaultValue={(formData.nombre_empresa) || ' '}
-                                        value={(formData.nombre_empresa) || ' '}
-                                        fullWidth
-                                        error={!!errors.id_empresa}
-                                        helperText={errors.id_empresa}
-                                        onClick={abrirEmpresas} />
+                                    <Box display="flex" alignItems="center">
+                                        <Button color={disabledFom ? "default" : "primary"} size='lg' onPress={abrirEmpresas} isDisabled={disabledFom}><i class="bi bi-search"></i></Button>
+                                        <Input
+                                            size='sm'
+                                            id="id_empresa"
+                                            name="id_empresa"
+                                            label="Empresa"
+                                            variant="bordered"
+                                            isDisabled={disabledFom}
+                                            defaultValue={(formData.empresa) || ' '}
+                                            value={(formData.empresa) || ' '}
+                                            isInvalid={!!errors.id_empresa}
+                                            errorMessage={errors.id_empresa}
+                                            onClick={abrirEmpresas} />
+                                    </Box>
                                 </Grid>
 
                                 <SelectedVisitantesTable></SelectedVisitantesTable>
 
                                 <Grid item xs={12} sm={6} md={4}>
                                     <Autocomplete
+                                        label="Documento con el que se identifica"
                                         id="tipo_identificacion"
                                         name="tipo_identificacion"
-                                        value={identificationOptions.find(option => option.value === formData.tipo_identificacion) || null}
-                                        onChange={(event, newValue) => handleChange('tipo_identificacion', newValue ? newValue.value : '')}
-                                        getOptionLabel={(option) => option.label}
-                                        isOptionEqualToValue={(option, value) => option.value === value.value}
-                                        options={identificationOptions}
-                                        disabled={disabledFom}
-                                        renderInput={(params) => (
-                                            <TextField
-                                                {...params}
-                                                label="Documento con el que se identifica"
-                                                variant="outlined"
-                                                error={!!errors.tipo_identificacion}
-                                                helperText={errors.tipo_identificacion}
-                                            />
-                                        )}
-                                    />
+                                        variant='bordered'
+                                        selectedKey={formData.tipo_identificacion || null}
+                                        onSelectionChange={(e) => handleChange('tipo_identificacion', e)}
+                                        isDisabled={disabledFom}
+                                        defaultItems={identificationOptions}
+                                        isInvalid={!!errors.tipo_identificacion}
+                                        errorMessage={errors.tipo_identificacion}
+                                    >
+                                        {(item) => <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>}
+                                    </Autocomplete>
                                 </Grid>
 
                                 <Grid item xs={12} sm={6} md={4}>
                                     <Autocomplete
                                         id="id_empresa_visitada"
                                         name="id_empresa_visitada"
-                                        value={empresas_visitadas.find(option => option.value === formData.id_empresa_visitada) || null}
-                                        onChange={(event, newValue) => handleChange('id_empresa_visitada', newValue ? newValue.value : '')}
-                                        getOptionLabel={(option) => option.label}
-                                        isOptionEqualToValue={(option, value) => option.value === value.value}
-                                        options={empresas_visitadas}
-                                        disabled={disabledFom}
-                                        renderInput={(params) => (
-                                            <TextField
-                                                {...params}
-                                                label="Empresa visitada"
-                                                variant="outlined"
-                                                error={!!errors.id_empresa_visitada}
-                                                helperText={errors.id_empresa_visitada}
-                                            />
-                                        )}
-                                    />
+                                        label="Empresa visitada"
+                                        variant='bordered'
+                                        selectedKey={String(formData.id_empresa_visitada) || null}
+                                        onSelectionChange={(e) => handleChange('id_empresa_visitada', e)}
+                                        defaultItems={empresas_visitadas}
+                                        isDisabled={disabledFom}
+                                        isInvalid={!!errors.id_empresa_visitada}
+                                        errorMessage={errors.id_empresa_visitada}
+                                    >
+                                        {(item) => <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>}
+                                    </Autocomplete>
                                 </Grid>
 
                                 <Grid item xs={12} sm={6} md={4}>
-                                    <Autocomplete
-                                        multiple
+                                    <Select
+                                        selectionMode="multiple"
+                                        isMultiline={true}
                                         id="areas"
                                         name="areas"
-                                        options={areas}
-                                        disabled={disabledFom}
-                                        disableCloseOnSelect
-                                        getOptionLabel={(option) => option.label}
-                                        onChange={handleSelectionChange} // Llama a la función que maneja el cambio
-                                        value={formData.areas ? JSON.parse(formData.areas) : []} // Convierte el string a array
-                                        renderOption={(props, option, { selected }) => {
-                                            const { key, ...optionProps } = props;
-                                            return (
-                                                <li key={key} {...optionProps}>
-                                                    <Checkbox
-                                                        icon={<span />} // Reemplaza con tu ícono
-                                                        checkedIcon={<span />} // Reemplaza con tu ícono
-                                                        style={{ marginRight: 8 }}
-                                                        checked={selected}
-                                                    />
-                                                    {option.label}
-                                                </li>
-                                            );
-                                        }}
-                                        renderInput={(params) => (
-                                            <TextField {...params}
-                                                label="Áreas a visitar"
-                                                placeholder="Seleccionar áreas permitidas a transitar" />
-                                        )}
-                                    />
+                                        variant='bordered'
+                                        label="Áreas a visitar"
+                                        placeholder="Seleccionar áreas permitidas a transitar"
+                                        defaultItems={areas}
+                                        isDisabled={disabledFom}
+                                        onChange={handleSelectionChange}
+                                        selectedKeys={
+                                            formData.areas
+                                                ? formData.areas.split(',').map((key) => key.replace(/"/g, '').trim())
+                                                : []
+                                        }
+                                        isInvalid={!!errors.areas}
+                                        errorMessage={errors.areas}
+                                    >
+                                        {areas.map((animal) => (
+                                            <SelectItem key={animal.value}>{animal.label}</SelectItem>
+                                        ))}
+                                    </Select>
                                 </Grid>
 
-                                <Grid item xs={12} sm={6} md={4}>
-                                    <TextField
+                                <Grid item xs={12} sm={6} md={8}>
+                                    <Textarea
                                         id="motivo"
                                         name="motivo"
                                         label="Motivo de entrada o salida"
                                         placeholder="Ingresa una descripción"
-                                        disabled={disabledFom}
+                                        variant='bordered'
+                                        isDisabled={disabledFom}
                                         value={formData.motivo}
                                         onChange={(event) => handleChange('motivo', event.target.value)}
-                                        fullWidth
-                                        error={!!errors.motivo}
-                                        helperText={errors.motivo}
+                                        isInvalid={!!errors.motivo}
+                                        errorMessage={errors.motivo}
                                     />
                                 </Grid>
 
@@ -517,7 +520,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
 
                 </Grid>
 
-                <Grid item xs={4}>
+                <Grid item xs={12} sm={6} md={4}>
                     <Card>
                         <CardHeader className="flex gap-3">
                             <div className="flex flex-col">
@@ -527,20 +530,18 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                         <Divider />
                         <CardBody>
 
-                            <TextField
+                            <Textarea
                                 label="Notas para vigilancia"
-                                placeholder="Ingresa tus notas para el personal de vigilancia"
-                                multiline
-                                rows={5}
-                                disabled={disabledFom}
                                 value={formData.notas}
+                                variant='bordered'
+                                isDisabled={disabledFom}
                                 onChange={(event) => handleChange('notas', event.target.value)}
-                            />
+                                placeholder="Ingresa tus notas para el personal de vigilancia" />
 
                             <Timeline>
                                 <TimelineItem>
                                     <TimelineOppositeContent
-                                        sx={{ m: 'auto 0' }}
+                                        sx={{ m: 'auto 0', fontFamily: 'Inter' }}
                                         align="right"
                                         variant="body2"
                                         color="text.secondary"
@@ -550,15 +551,16 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                                     <TimelineSeparator>
                                         <TimelineConnector />
                                         <TimelineDot color="primary">
-                                            <LaptopMacIcon />
+                                            <ClockIcon />
                                         </TimelineDot>
                                         <TimelineConnector />
                                     </TimelineSeparator>
                                     <TimelineContent sx={{ py: '12px', px: 2 }}>
-                                        <Typography variant="h6" component="span">
+                                        <Typography variant="h6" component="span" sx={{ m: 'auto 0', fontFamily: 'Inter' }}
+                                        >
                                             Creado por
                                         </Typography>
-                                        <Typography> {formData.usuario_creacion}</Typography>
+                                        <Typography sx={{ m: 'auto 0', fontFamily: 'Inter' }}> {formData.usuario_creacion}</Typography>
                                     </TimelineContent>
                                 </TimelineItem>
 
@@ -568,21 +570,22 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                                         align="right"
                                         variant="body2"
                                         color="text.secondary"
+                                        sx={{ m: 'auto 0', fontFamily: 'Inter' }}
                                     >
                                         {formData.fecha_validacion}
                                     </TimelineOppositeContent>
                                     <TimelineSeparator>
                                         <TimelineConnector />
                                         <TimelineDot color="primary">
-                                            <LaptopMacIcon />
+                                            <ClockIcon />
                                         </TimelineDot>
                                         <TimelineConnector />
                                     </TimelineSeparator>
                                     <TimelineContent sx={{ py: '12px', px: 2 }}>
-                                        <Typography variant="h6" component="span">
+                                        <Typography variant="h6" component="span" sx={{ m: 'auto 0', fontFamily: 'Inter' }}>
                                             Validado por
                                         </Typography>
-                                        <Typography>
+                                        <Typography sx={{ m: 'auto 0', fontFamily: 'Inter' }}>
                                             {formData.usuario_valido}
                                         </Typography>
                                     </TimelineContent>
@@ -594,21 +597,22 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                                         align="right"
                                         variant="body2"
                                         color="text.secondary"
+                                        sx={{ m: 'auto 0', fontFamily: 'Inter' }}
                                     >
                                         {formData.fecha_archivado}
                                     </TimelineOppositeContent>
                                     <TimelineSeparator>
                                         <TimelineConnector />
                                         <TimelineDot color="primary">
-                                            <LaptopMacIcon />
+                                            <ClockIcon />
                                         </TimelineDot>
                                         <TimelineConnector />
                                     </TimelineSeparator>
                                     <TimelineContent sx={{ py: '12px', px: 2 }}>
-                                        <Typography variant="h6" component="span">
+                                        <Typography variant="h6" component="span" sx={{ m: 'auto 0', fontFamily: 'Inter' }}>
                                             Archivado por
                                         </Typography>
-                                        <Typography>{formData.usuario_archivo}</Typography>
+                                        <Typography sx={{ m: 'auto 0', fontFamily: 'Inter' }}>{formData.usuario_archivo}</Typography>
                                     </TimelineContent>
                                 </TimelineItem>
                             </Timeline>

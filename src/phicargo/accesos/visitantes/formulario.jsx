@@ -9,7 +9,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { AccesoContext } from '../context';
 import { useAuthContext } from '@/phicargo/modules/auth/hooks';
-const { VITE_PHIDES_API_URL } = import.meta.env;
+import odooApi from '@/phicargo/modules/core/api/odoo-api';
 
 export default function FormVisitante({ open, handleClose }) {
 
@@ -40,10 +40,10 @@ export default function FormVisitante({ open, handleClose }) {
         };
 
         try {
-            const response = await axios.post(VITE_PHIDES_API_URL + '/accesos/visitantes/ingresar.php', dataToSend);
+            const response = await odooApi.post('/visitantes/crear_visitante/', dataToSend);
 
-            if (response.data.success) {
-                toast.success(response.data.mensaje);
+            if (response.data.status == 'success') {
+                toast.success(response.data.message);
 
                 const nuevoVisitante = {
                     id_visitante: response.data.id_visitante,
@@ -54,7 +54,7 @@ export default function FormVisitante({ open, handleClose }) {
                 setNombreVisitante('');
                 handleClose();
             } else {
-                toast.error(response.data.mensaje);
+                toast.error(response.data.menssage);
             }
         } catch (error) {
             toast.error("Error al comunicarse con el servidor: " + error.message);

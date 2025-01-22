@@ -10,12 +10,12 @@ import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 import Stack from '@mui/material/Stack';
 import { AccesoContext } from '../context';
-const { VITE_PHIDES_API_URL } = import.meta.env;
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
 import FormEmpresa from './formulario';
+import odooApi from '@/phicargo/modules/core/api/odoo-api';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -42,9 +42,8 @@ const ListadoEmpresas = ({ open, handleClose }) => {
 
     try {
       setLoading(true);
-      const response = await fetch(VITE_PHIDES_API_URL + '/accesos/empresas/getEmpresas.php');
-      const jsonData = await response.json();
-      setData(jsonData);
+      const response = await odooApi.get('/empresas_visitantes/');
+      setData(response.data);
       setLoading(false);
     } catch (error) {
       console.error('Error al obtener los datos:', error);
@@ -62,7 +61,7 @@ const ListadoEmpresas = ({ open, handleClose }) => {
         header: 'ID Empresa',
       },
       {
-        accessorKey: 'nombre_empresa',
+        accessorKey: 'empresa',
         header: 'Nombre de la empresa',
         Cell: ({ cell }) => cell.getValue()?.toUpperCase(),
       },
@@ -102,7 +101,7 @@ const ListadoEmpresas = ({ open, handleClose }) => {
           setFormData((prevData) => ({
             ...prevData,
             ['id_empresa']: row.original.id_empresa,
-            ['nombre_empresa']: row.original.nombre_empresa
+            ['empresa']: row.original.empresa
           }));
           handleClose();
         }

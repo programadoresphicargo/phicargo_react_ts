@@ -9,7 +9,7 @@ import {
 } from 'material-react-table';
 import { DialogContent } from '@mui/material';
 import { AccesoContext } from '../context';
-const { VITE_PHIDES_API_URL } = import.meta.env;
+import odooApi from '@/phicargo/modules/core/api/odoo-api';
 
 const RegistroVehiculos = ({ onClose }) => {
   const { AñadirVehiculo } = useContext(AccesoContext);
@@ -31,9 +31,8 @@ const RegistroVehiculos = ({ onClose }) => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await fetch(VITE_PHIDES_API_URL + '/accesos/vehiculos/getVehiculos.php');
-      const jsonData = await response.json();
-      setData(jsonData);
+      const response = await odooApi.get('/vehiculos_visitantes/');
+      setData(response.data);
       setLoading(false);
     } catch (error) {
       console.error('Error al obtener los datos:', error);

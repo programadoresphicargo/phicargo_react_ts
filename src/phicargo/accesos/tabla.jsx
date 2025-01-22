@@ -17,13 +17,13 @@ import AccesoCompo from './AccesoCompo';
 import AccesoForm from './formulario';
 import { Box } from '@mui/material';
 import { Chip } from '@nextui-org/react';
-const { VITE_PHIDES_API_URL } = import.meta.env;
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
 import { width } from '@mui/system';
 import { button } from '@nextui-org/theme';
+import odooApi from '../modules/core/api/odoo-api';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -54,9 +54,8 @@ const Maniobras = ({ estado_maniobra }) => {
 
     try {
       setLoading(true);
-      const response = await fetch(VITE_PHIDES_API_URL + '/accesos/accesos/getAccesos.php?estado_acceso=' + estado_maniobra);
-      const jsonData = await response.json();
-      setData(jsonData);
+      const response = await odooApi.get('/accesos/get_by_tipo_acceso/' + estado_maniobra);
+      setData(response.data);
       setLoading(false);
     } catch (error) {
       console.error('Error al obtener los datos:', error);
@@ -74,9 +73,11 @@ const Maniobras = ({ estado_maniobra }) => {
         header: 'ID Acceso',
       },
       {
-        accessorKey: 'nombre_empresa',
+        accessorKey: 'empresa',
         header: 'Empresa visitante',
-        Cell: ({ cell }) => cell.getValue()?.toUpperCase(),
+        Cell: ({ cell }) => (
+          <span style={{ fontWeight: 'bold' }}>{cell.getValue()?.toUpperCase()}</span>
+        ),
       },
       {
         accessorKey: 'tipo_movimiento',
@@ -95,7 +96,7 @@ const Maniobras = ({ estado_maniobra }) => {
 
           return (
             <Chip color={badgeClass} size="sm" className={"text-white"}>
-              {tipoMovimiento.charAt(0).toUpperCase() + tipoMovimiento.slice(1)}
+              {tipoMovimiento?.toUpperCase()}
             </Chip>
           );
         },
@@ -104,40 +105,50 @@ const Maniobras = ({ estado_maniobra }) => {
         accessorKey: 'fecha_entrada',
         header: 'Fecha de entrada',
         Cell: ({ cell }) => {
-          const fechaOriginal = cell.getValue();
-          const fechaValida = dayjs(fechaOriginal, 'YYYY-MM-DD HH:mm:ss', true).isValid();
-          return fechaValida
-            ? dayjs(fechaOriginal).format('DD/MM/YYYY hh:mm A')
-            : 'Fecha inválida';
+          const rawDate = cell.getValue();
+          return dayjs(rawDate).format('DD/MM/YYYY h:mm A'); // Formato: 20/01/2025 6:00 am
         },
       },
       {
         accessorKey: 'nombre',
-        header: 'Solicitado por',
+        header: 'Solicita',
+        Cell: ({ cell }) => {
+          const usuario = cell.getValue()?.toUpperCase();
+
+          return (
+            <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <i class="bi bi-person-fill"></i>
+              {usuario}
+            </span>
+          );
+        },
       },
       {
         accessorKey: 'empresa_visitada',
         header: 'Empresa visitada',
+        Cell: ({ cell }) => (
+          <span style={{ fontWeight: 'bold' }}>{cell.getValue()?.toUpperCase()}</span>
+        ),
       },
       {
         accessorKey: 'estado_acceso',
         header: 'Estado del acceso',
         Cell: ({ cell }) => {
-          const tipoMovimiento = cell.getValue();
+          const tipoMovimiento = cell.getValue()?.toUpperCase();
           let badgeClass = '';
 
           if (tipoMovimiento === 'espera') {
-            badgeClass += 'bg-secondary text-white';
+            badgeClass = 'warning';
           } else if (tipoMovimiento === 'validado') {
-            badgeClass += 'bg-success text-white';
+            badgeClass = 'success';
           } else {
-            badgeClass += 'bg-primary text-white';
+            badgeClass = 'primary';
           }
 
-          const displayText = tipoMovimiento === 'espera' ? 'En espera de validación' : tipoMovimiento.charAt(0).toUpperCase() + tipoMovimiento.slice(1);
+          const displayText = tipoMovimiento === 'espera' ? 'En espera de validación' : tipoMovimiento;
 
           return (
-            <Chip className={badgeClass} size='sm' style={{ width: '150px' }}>
+            <Chip color={badgeClass} size='sm' className={"text-white"}>
               {displayText}
             </Chip>
           );
@@ -199,7 +210,7 @@ const Maniobras = ({ estado_maniobra }) => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 310px)',
+        maxHeight: 'calc(100vh - 260px)',
       },
     },
     renderTopToolbarCustomActions: ({ table }) => (
@@ -211,6 +222,7 @@ const Maniobras = ({ estado_maniobra }) => {
           flexWrap: 'wrap',
         }}
       >
+        <h1>Modulo de accesos</h1>
         <Button
           color='primary'
           onClick={() =>
@@ -218,6 +230,14 @@ const Maniobras = ({ estado_maniobra }) => {
           }
         >
           Nuevo registro
+        </Button>
+        <Button
+          color='primary'
+          onPress={() =>
+            fetchData()
+          }
+        >
+          <i class="bi bi-arrow-clockwise"></i> Recargar
         </Button>
       </Box>
     ),
