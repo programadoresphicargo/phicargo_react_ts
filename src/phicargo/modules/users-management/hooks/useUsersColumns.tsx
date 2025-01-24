@@ -16,7 +16,7 @@ export const useUsersColums = () => {
         accessorKey: 'username',
         header: 'Usuario',
         Cell: ({ cell }) => 
-          <span className='font-bold bg-sky-800 text-white p-2 rounded-xl'>{cell.getValue<string>()}</span>
+          <Chip color="primary" size="sm">{cell.getValue<string>()}</Chip>
       },
       {
         accessorKey: 'name',
@@ -36,7 +36,7 @@ export const useUsersColums = () => {
       {
         accessorKey: 'role',
         header: 'Rol',
-        Cell: ({ cell }) => <Chip color='primary'>{cell.getValue<string>()}</Chip>
+        Cell: ({ cell }) => <Chip color='primary' size="sm">{cell.getValue<string>()}</Chip>
       },
     ],
     [],
