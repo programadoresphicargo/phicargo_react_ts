@@ -89,7 +89,7 @@ const menuItems: MenuItemType[] = [
     icon: correo_img,
     label: 'Correos electronicos',
     link: '/CorreosElectronicos',
-    requiredPermissions: [],
+    requiredPermissions: [103],
   },
   {
     icon: reportesImg,
