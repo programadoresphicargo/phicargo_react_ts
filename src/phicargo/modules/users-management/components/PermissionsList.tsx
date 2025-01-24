@@ -25,7 +25,7 @@ export const PermissionsList = (props: Props) => {
           />
           <label htmlFor={`perm-${perm.id}`} className="text-sm">
             <span className="text-medium uppercase text-gray-800">
-              {perm.name}
+              ({perm.id}) {perm.name}
             </span>
             {perm.description && (
               <span className="text-gray-700 text-medium">

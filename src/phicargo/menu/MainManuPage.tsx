@@ -40,7 +40,7 @@ const menuItems: MenuItemType[] = [
     icon: viajes_img,
     label: 'Control de viajes',
     link: '/viajes',
-    requiredPermissions: [1, 101, 102],
+    requiredPermissions: [1],
   },
   {
     icon: maniobras_img,
