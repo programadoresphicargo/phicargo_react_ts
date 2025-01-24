@@ -200,12 +200,9 @@ export const useJourneyDialogs = () => {
 
     const comprobar_disponibilidad = async () => {
         try {
-            const data = new URLSearchParams();
-            data.append('id_viaje', id_viaje);
-
-            const response = await axios.post(VITE_PHIDES_API_URL + '/viajes/disponibilidad/comprobar_disponibilidad.php', data);
-
+            const response = await odooApi.get('/tms_travel/comprobar_disponibilidad_equipo/' + id_viaje);
             const datos = response.data;
+
             if (Array.isArray(datos) && datos.length > 0) {
                 let mensajesEquipos = '';
 
@@ -226,25 +223,21 @@ export const useJourneyDialogs = () => {
 
         } catch (error) {
             console.error('Error:', error);
-            toast.error('Error activando el viaje');
+            toast.error('Error catch' + error);
             throw error;
         }
     };
 
     const cambiar_estado_equipo = async (estado) => {
         try {
-            const data = new URLSearchParams();
-            data.append('id_viaje', id_viaje);
-            data.append('estado', estado);
-            const response = await axios.post(VITE_PHIDES_API_URL + '/viajes/disponibilidad/cambiar_estados.php', data);
+            const response = await odooApi.get(`/tms_travel/cambiar_estado_equipo/${id_viaje}/${estado}`);
             if (response.data.success) {
-                toast.success(response.data.message);
+                toast.success(response.data.message, { duration: 10000, });
             } else {
-                toast.error(response.data.message);
+                toast.error(response.data.message, { duration: 10000, });
             }
 
         } catch (error) {
-            console.error('Error:', error);
             toast.error('Error activando el viaje');
             throw error;
         }
@@ -252,18 +245,14 @@ export const useJourneyDialogs = () => {
 
     const cambiar_estado_operador = async (estado) => {
         try {
-            const data = new URLSearchParams();
-            data.append('id_viaje', id_viaje);
-            data.append('estado', estado);
-            const response = await axios.post(VITE_PHIDES_API_URL + '/viajes/disponibilidad/cambiar_estado_operador.php', data);
+            const response = await odooApi(`/tms_travel/cambiar_estado_operador/${id_viaje}/${estado}`);
             if (response.data.success) {
-                toast.success(response.data.message);
+                toast.success(response.data.message, { duration: 10000, });
             } else {
-                toast.error(response.data.message);
+                toast.error(response.data.message, { duration: 10000, });
             }
 
         } catch (error) {
-            console.error('Error:', error);
             toast.error('Error activando el viaje');
             throw error;
         }
