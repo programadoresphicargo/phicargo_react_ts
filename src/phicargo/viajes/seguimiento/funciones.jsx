@@ -176,18 +176,14 @@ export const useJourneyDialogs = () => {
 
     const comprobar_operador = async () => {
         try {
-            const data = new URLSearchParams();
-            data.append('id_viaje', id_viaje);
-
-            const response = await axios.post(VITE_PHIDES_API_URL + '/viajes/funciones/comprobarOperador.php', data);
-
-            if (response.data === 1) {
+            const response = await odooApi.get('/tms_travel/comprobar_operador_viaje/' + id_viaje);
+            if (response.data.status === 'success') {
                 return true;
             } else {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'El nombre del conductor de este viaje no concuerda con el operador programado en las cartas porte ligadas. Favor de actualizar los campos "Conductor en viaje" y "Operador Prog en carta porte" e intente nuevamente.',
+                    text: response.data.message,
                 });
                 return false;
             }
