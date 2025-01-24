@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
+import { Button, Input } from "@nextui-org/react";
+import odooApi from "@/phicargo/modules/core/api/odoo-api";
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 function FormularioTerminales({ open, onClose, id_terminal }) {
@@ -14,7 +16,7 @@ function FormularioTerminales({ open, onClose, id_terminal }) {
     useEffect(() => {
         const fetchVehiculoData = async () => {
             try {
-                const response = await axios.get(VITE_PHIDES_API_URL + '/modulo_maniobras/terminales/getTerminal.php?id_terminal=' + id_terminal);
+                const response = await odooApi.get('/terminales_maniobras/by_id_terminal/' + id_terminal);
                 const data = response.data[0];
                 setFormData(prevState => ({
                     ...prevState,
@@ -52,7 +54,7 @@ function FormularioTerminales({ open, onClose, id_terminal }) {
 
     const registrar = () => {
         console.log(formData);
-        axios.post(VITE_PHIDES_API_URL + '/modulo_maniobras/terminales/registrar_terminal.php', formData)
+        (VITE_PHIDES_API_URL + '/modulo_maniobras/terminales/registrar_terminal.php', formData)
             .then(response => {
                 var data = response.data;
                 if (data.success) {
@@ -69,23 +71,23 @@ function FormularioTerminales({ open, onClose, id_terminal }) {
     return (
         <div>
             <Dialog open={open} onClose={onClose}
-                fullWidth="lg"
-                maxWidth="lg">
+                fullWidth="sm"
+                maxWidth="sm">
                 <DialogTitle></DialogTitle>
                 <DialogContent>
                     <DialogContentText>
 
                         <form id="formpostura">
-                            <div className="col-4 mb-3 mt-3">
-                                <button type="button" className="btn btn-success btn-sm" onClick={registrar}>Guardar</button>
-                            </div>
-
-                            <div className="row">
-                                <div className="col-3 mb-3">
-                                    <label className="form-label">Terminal</label>
-                                    <input type="text" className="form-control" id="terminal" name="terminal" value={formData.terminal} onChange={handleInputChange} />
-                                </div>
-                            </div>
+                            <Button type="button" color="primary" onPress={registrar}>Guardar</Button>
+                            <Input
+                                label='Nombre terminal'
+                                variant="bordered"
+                                type="text"
+                                className="form-control"
+                                id="terminal"
+                                name="terminal"
+                                value={formData.terminal}
+                                onChange={handleInputChange} />
                         </form>
 
                     </DialogContentText>
