@@ -570,7 +570,6 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                                         align="right"
                                         variant="body2"
                                         color="text.secondary"
-                                        sx={{ m: 'auto 0', fontFamily: 'Inter' }}
                                     >
                                         {formData.fecha_validacion}
                                     </TimelineOppositeContent>
