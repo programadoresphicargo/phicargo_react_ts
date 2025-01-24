@@ -89,6 +89,8 @@ export default function BasicButtons2() {
                                     <li>Cliente: {viaje.cliente}</li>
                                     <li>Modo: {viaje.modo}</li>
                                     <li>Armado: {viaje.tipo_armado}</li>
+                                    <li>Contenedores:</li>
+                                    <Snippet color="primary" variant="solid" size="sm">{viaje.contenedores}</Snippet>
                                 </ul>
                             </CardBody>
                         </Card>

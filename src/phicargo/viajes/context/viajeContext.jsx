@@ -79,6 +79,7 @@ const ViajeProvider = ({ children }) => {
                 modo: data[0].x_modo_bel,
                 tipo_armado: data[0].x_tipo_bel,
                 ejecutivo: data[0].x_ejecutivo_viaje_bel,
+                contenedores: data[0].x_references,
             });
             comprobacion_correos();
             setLoading(false);
