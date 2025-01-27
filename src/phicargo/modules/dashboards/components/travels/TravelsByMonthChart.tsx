@@ -1,9 +1,9 @@
 import { ChartData, ChartOptions } from 'chart.js';
 import { useEffect, useMemo, useState } from 'react';
 
-import { ChartCard } from './ChartCard';
+import { ChartCard } from '../ChartCard';
 import { Line } from 'react-chartjs-2';
-import type { TravelStats } from '../models/travels-stats-models';
+import { TravelStats } from '../../models/travels-stats-models';
 import dayjs from 'dayjs';
 
 const options: ChartOptions<'line'> = {

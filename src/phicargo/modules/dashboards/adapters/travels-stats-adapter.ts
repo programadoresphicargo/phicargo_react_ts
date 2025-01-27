@@ -1,8 +1,10 @@
 import type {
   ByBranch,
   ByCargoType,
+  ByCategory,
   ByClient,
   ByConstructionType,
+  ByRoute,
   ByTrafficExecutive,
   MonthType,
   OfYear,
@@ -11,16 +13,19 @@ import type {
 import type {
   ByBranchApi,
   ByCargoTypeApi,
+  ByCategoryApi,
   ByConstructionTypeApi,
+  ByRouteApi,
   ByTrafficExecutiveApi,
   OfYearApi,
   TravelStatsApi,
 } from '../models/api/travels-stats-models-api';
 
 const getBranchCode = (branch: string): string => {
-  if (branch.toLowerCase().includes('ver')) return 'VER';
-  if (branch.toLowerCase().includes('man')) return 'MZN';
-  if (branch.toLowerCase().includes('méx')) return 'MX';
+  branch = branch.toLowerCase();
+  if (branch.includes('ver')) return 'VER';
+  if (branch.includes('man')) return 'MZN';
+  if (branch.includes('méx') || branch.includes('mex')) return 'MX';
   return branch;
 };
 
@@ -82,6 +87,17 @@ const OfYearToLocal = (ofYear: OfYearApi): OfYear => ({
   podsSent: ofYear.pods_sent,
 });
 
+
+const byRouteToLocal = (data: ByRouteApi): ByRoute => ({
+  route: data.route,
+  travels: data.travels,
+});
+
+const byCategoryToLocal = (data: ByCategoryApi): ByCategory => ({
+  category: data.category,
+  travels: data.travels,
+});
+
 /**
  * Mapper function to convert the travels stats from the API to the local model
  * @param stats Object with the data of the travels stats
@@ -99,5 +115,8 @@ export const travelsStatsToLocal = (stats: TravelStatsApi): TravelStats => ({
   byCargoType: stats.travels_by_cargo_type.map(byCargoTypeToLocal),
   ofYear: stats.travels_of_year.map(OfYearToLocal),
   monthMeta: stats.month_meta,
+
+  byRoute: stats.travels_by_route.map(byRouteToLocal),
+  byCategory: stats.travels_by_category.map(byCategoryToLocal),
 });
 

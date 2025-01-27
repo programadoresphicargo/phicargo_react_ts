@@ -39,6 +39,16 @@ export interface OfYear {
   podsSent: number;
 }
 
+export interface ByRoute {
+  route: string;
+  travels: number;
+}
+
+export interface ByCategory {
+  category: string;
+  travels: number;
+}
+
 export interface TravelStats {
   byBranch: ByBranch[];
   byClient: ByClient[];
@@ -47,4 +57,7 @@ export interface TravelStats {
   byCargoType: ByCargoType[];
   ofYear: OfYear[];
   monthMeta: number;
+
+  byRoute: ByRoute[];
+  byCategory: ByCategory[];
 }
