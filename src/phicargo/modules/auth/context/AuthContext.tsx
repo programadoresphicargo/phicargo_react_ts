@@ -1,6 +1,6 @@
 import { ReactNode, createContext, useEffect, useState } from 'react';
 
-import { Session } from '../models';
+import type { Session } from '../models';
 import odooApi from '../../core/api/odoo-api';
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -10,7 +10,7 @@ interface AuthState {
   session: Session | null;
   authStatus: AuthStatus;
   redirectTo: string;
-  
+
   setAuthStatus: (authStatus: AuthStatus) => void;
   setSession: (session: Session | null) => void;
   onLogout: () => void;
@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }: ProviderProps) => {
   const queryClient = useQueryClient();
 
   const [session, setSession] = useState<Session | null>(
-    JSON.parse(sessionStorage.getItem('session') || 'null')
+    JSON.parse(sessionStorage.getItem('session') || 'null'),
   );
   const [authStatus, setAuthStatus] = useState<AuthStatus>('loading');
   const [redirectTo, setRedirectTo] = useState('/');
@@ -53,15 +53,13 @@ export const AuthProvider = ({ children }: ProviderProps) => {
     delete odooApi.defaults.headers.common['Authorization'];
     queryClient.clear();
     setRedirectTo('/');
-  }
+  };
 
   useEffect(() => {
     if (session) {
       setAuthStatus('authenticated');
-      odooApi.defaults.headers.common['Authorization'] = `Bearer ${session.token.accessToken}`;
     } else {
       setAuthStatus('unauthenticated');
-      delete odooApi.defaults.headers.common['Authorization'];
     }
   }, [session]);
 
