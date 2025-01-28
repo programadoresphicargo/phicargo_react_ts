@@ -320,7 +320,7 @@ const ViajesActivos = ({ }) => {
         <h1 className='text-primary'>Gestión de viajes</h1>
         <Button className='text-white' color='success'
           isDisabled={false}
-          onClick={() => setMasivoOpen(true)}
+          onPress={() => setMasivoOpen(true)}
         >Envio masivo</Button>
       </Box>
     ),
@@ -378,8 +378,8 @@ const ViajesActivos = ({ }) => {
             </IconButton>
             <Typography sx={{ ml: 2, flex: 1, color: 'black' }} variant="h6" component="div">
             </Typography>
-            <Button autoFocus color="primary" onClick={handleClose}>
-              SALIR
+            <Button autoFocus color="primary" onPress={handleClose}>
+              Salir
             </Button>
           </Toolbar>
         </AppBar>
