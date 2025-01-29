@@ -22,10 +22,8 @@ const ViajesActivosMasivo = ({ }) => {
   const fetchData = async () => {
     try {
       const response = await odooApi.get('/tms_travel/active_travels/');
-      const filteredData = response.data.filter(item => item.ejecutivo.includes(session.user.name));
-
       setData(
-        filteredData.map((row) => ({
+        response.data.map((row) => ({
           ...row,
           estatus_seleccionado: null,
           comentarios: '',
@@ -63,7 +61,7 @@ const ViajesActivosMasivo = ({ }) => {
 
     if (invalidRows.length > 0) {
       toast.error('Existen filas con estatus_seleccionado nulo.');
-      return; 
+      return;
     }
 
     const exportData = data.map((row) => ({
@@ -101,6 +99,10 @@ const ViajesActivosMasivo = ({ }) => {
       {
         accessorKey: 'operador',
         header: 'Operador',
+      },
+      {
+        accessorKey: 'contenedores',
+        header: 'Contenedores',
       },
       {
         accessorKey: 'estatus_seleccionado',
