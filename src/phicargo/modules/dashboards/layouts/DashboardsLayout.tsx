@@ -8,7 +8,7 @@ const pages: MenuItemType[] = [
   { name: 'Viajes', path: '/dashboards/operaciones' },
   { name: 'Unidades', path: '/dashboards/unidades' },
   { name: 'Operadores', path: '/dashboards/operadores' },
-  // { name: 'Llegadas Tarde', path: '/dashboards/llegadas-tarde' },
+  { name: 'Llegadas Tarde', path: '/dashboards/llegadas-tarde' },
 ];
 
 interface Props {
