@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 
 import { Bar } from 'react-chartjs-2';
-import { ChartCard } from './ChartCard';
+import { ChartCard } from '../ChartCard';
 import { ChartData } from 'chart.js';
 import { ChartOptions } from 'chart.js';
-import { TravelStats } from '../models/travels-stats-models';
-import { useDateRangeContext } from '../hooks/useDateRangeContext';
+import { TravelStats } from '../../models/travels-stats-models';
+import { useDateRangeContext } from '../../hooks/useDateRangeContext';
 
 const options: ChartOptions<'bar'> = {
   responsive: true,

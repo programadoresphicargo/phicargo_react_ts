@@ -36,6 +36,16 @@ export interface OfYearApi {
   pods_sent: number;
 }
 
+export interface ByRouteApi {
+  route: string;
+  travels: number;
+}
+
+export interface ByCategoryApi {
+  category: string;
+  travels: number;
+}
+
 export interface TravelStatsApi {
   travels_by_branch: ByBranchApi[];
   travels_by_client: ByClientApi[];
@@ -44,5 +54,8 @@ export interface TravelStatsApi {
   travels_by_cargo_type: ByCargoTypeApi[];
   travels_of_year: OfYearApi[];
   month_meta: number;
+
+  travels_by_route: ByRouteApi[];
+  travels_by_category: ByCategoryApi[];
 }
 

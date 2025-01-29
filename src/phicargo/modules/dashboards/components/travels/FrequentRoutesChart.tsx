@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { Bar } from 'react-chartjs-2';
-import { ChartCard } from './ChartCard';
+import { ChartCard } from '../ChartCard';
 import { ChartData } from 'chart.js';
 import { ChartOptions } from 'chart.js';
-import { TravelStats } from '../models/travels-stats-models';
+import { TravelStats } from '../../models/travels-stats-models';
 import dayjs from 'dayjs';
-import { useDateRangeContext } from '../hooks/useDateRangeContext';
+import { useDateRangeContext } from '../../hooks/useDateRangeContext';
 
 const options: ChartOptions<'bar'> = {
   responsive: true,
@@ -49,7 +49,7 @@ interface Props {
   isLoading: boolean;
 }
 
-export const TravelsByClientChart = (props: Props) => {
+export const FrequentRoutesChart = (props: Props) => {
   const { isLoading, data } = props;
   const [chartData, setChartData] = useState<ChartData<'bar'> | null>(null);
   const { month } = useDateRangeContext();
@@ -64,11 +64,11 @@ export const TravelsByClientChart = (props: Props) => {
     if (!data) return;
 
     const chartData: ChartData<'bar'> = {
-      labels: data.byClient.map((r) => r.client.split(' ')),
+      labels: data.byRoute.map((r) => r.route.split(' ')),
       datasets: [
         {
           label: 'Viajes',
-          data: data.byClient.map((r) => r.travels),
+          data: data.byRoute.map((r) => r.travels),
           borderWidth: 2,
           borderRadius: 10,
           backgroundColor: [
@@ -92,11 +92,10 @@ export const TravelsByClientChart = (props: Props) => {
 
   return (
     <ChartCard
-      title={`Top 10 clientes ${monthName}`}
+      title={`Top 10 Rutas ${monthName}`}
       isLoading={isLoading && !chartData}
     >
       {chartData && <Bar data={chartData} options={options} />}
     </ChartCard>
   );
-};
-
+}

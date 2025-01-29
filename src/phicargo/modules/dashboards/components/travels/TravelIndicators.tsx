@@ -1,9 +1,9 @@
-import { IndicatorCard } from './IndicatorCard';
-import { useDateRangeContext } from '../hooks/useDateRangeContext';
+import { IndicatorCard } from '../IndicatorCard';
+import { useDateRangeContext } from '../../hooks/useDateRangeContext';
 import { useMemo } from 'react';
-import { useTravelStatsQueries } from '../hooks/useTravelStatsQueries';
+import { useTravelStatsQueries } from '../../hooks/useTravelStatsQueries';
 
-export const Indicators = () => {
+export const TravelIndicators = () => {
   const { travelStatsQuery } = useTravelStatsQueries();
   const { monthYearName } = useDateRangeContext();
 
@@ -52,7 +52,9 @@ export const Indicators = () => {
         title="Meta Tentativa de Viajes"
         value={travelStatsQuery.data?.monthMeta}
         description={`Meta de ${monthYearName}`}
-        color={(travelStatsQuery.data?.monthMeta || 0) > totalPods ? 'red' : 'green'}
+        color={
+          (travelStatsQuery.data?.monthMeta || 0) > totalPods ? 'red' : 'green'
+        }
         isLoading={travelStatsQuery.isFetching}
       />
     </>

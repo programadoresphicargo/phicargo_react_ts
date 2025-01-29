@@ -25,7 +25,7 @@ export const HeaderCard = (props: Props) => {
   return (
     <div className="bg-gray-700 rounded-lg p-1 shadow-md max-w-xs flex-1 hover:shadow-xl relative">
       {props.startContent && (
-        <div className="absolute top-2 left-2">{props.startContent}</div>
+        <div className="absolute top-1 left-2">{props.startContent}</div>
       )}
 
       <p

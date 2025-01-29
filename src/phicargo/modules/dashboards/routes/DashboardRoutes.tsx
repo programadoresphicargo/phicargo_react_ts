@@ -5,9 +5,11 @@ import { DashboardsLayout } from '../layouts/DashboardsLayout';
 import { LoadingPage } from '../../core/pages/LoadingPage';
 import ProtectedRoute from '@/router/ProtectedRoute';
 
-const OperationsDashboardPage = lazy(
-  () => import('../pages/OperationsDashboardPage'),
+const TravelsDashboardPage = lazy(
+  () => import('../pages/TravelsDashboardPage'),
 );
+const VehiclesDashboard = lazy(() => import('../pages/VehiclesDashboard'));
+const DriverDashboardPage = lazy(() => import('../pages/DriverDashboardPage'));
 
 const permission = 203;
 
@@ -26,7 +28,23 @@ const DashboardsRoutes = () => (
       path="operaciones"
       element={
         <Suspense fallback={<LoadingPage />}>
-          <OperationsDashboardPage />
+          <TravelsDashboardPage />
+        </Suspense>
+      }
+    />
+    <Route
+      path="unidades"
+      element={
+        <Suspense fallback={<LoadingPage />}>
+          <VehiclesDashboard />
+        </Suspense>
+      }
+    />
+    <Route
+      path="operadores"
+      element={
+        <Suspense fallback={<LoadingPage />}>
+          <DriverDashboardPage />
         </Suspense>
       }
     />

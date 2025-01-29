@@ -1,4 +1,3 @@
-import { IconButton, Tooltip } from '@mui/material';
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -6,7 +5,7 @@ import {
 import { Outlet, useNavigate } from 'react-router-dom';
 
 import AddButton from '@/phicargo/modules/core/components/ui/AddButton';
-import RefreshIcon from '@mui/icons-material/Refresh';
+import { RefreshButton } from '../../core/components/ui/RefreshButton';
 import { User } from '../../auth/models';
 import { UserCreateForm } from '../components/UserCreateForm';
 import { useState } from 'react';
@@ -16,7 +15,7 @@ import { useUsersQueries } from '../hooks/useUsersQueries';
 const UsersManagementPage = () => {
   const navigate = useNavigate();
   const { columns } = useUsersColums();
-  const [ createModal, setCreateModal ] = useState(false);
+  const [createModal, setCreateModal] = useState(false);
 
   const {
     usersQuery: { data: users, isFetching, refetch },
@@ -44,20 +43,20 @@ const UsersManagementPage = () => {
       showColumnFilters: true,
     },
     muiTableBodyRowProps: ({ row }) => ({
-      onDoubleClick: () => navigate(`/control-usuarios/detalles/${row.original.id}`),
+      onDoubleClick: () =>
+        navigate(`/control-usuarios/detalles/${row.original.id}`),
       sx: { cursor: 'pointer' },
     }),
     renderTopToolbarCustomActions: () => (
       <div className="flex flex-row gap-2">
         <div className="flex flex-row items-center rounded-xl">
-          <Tooltip arrow title="Refrescar">
-            <IconButton onClick={() => refetch()}>
-              <RefreshIcon />
-            </IconButton>
-          </Tooltip>
+          <RefreshButton onClick={() => refetch()} isLoading={isFetching} />
         </div>
         <div className="flex flex-row items-center">
-          <AddButton label="Crear Usuario" onPress={() => setCreateModal(true)} />
+          <AddButton
+            label="Crear Usuario"
+            onPress={() => setCreateModal(true)}
+          />
         </div>
       </div>
     ),
@@ -79,6 +78,8 @@ const UsersManagementPage = () => {
         fontFamily: 'Inter',
         fontWeight: 'normal',
         fontSize: '14px',
+
+        padding: '3px 10px',
       },
     },
     muiTableContainerProps: {
@@ -91,7 +92,10 @@ const UsersManagementPage = () => {
   return (
     <>
       <MaterialReactTable table={table} />
-      <UserCreateForm open={createModal} onClose={() => setCreateModal(false)} />
+      <UserCreateForm
+        open={createModal}
+        onClose={() => setCreateModal(false)}
+      />
       <Outlet />
     </>
   );

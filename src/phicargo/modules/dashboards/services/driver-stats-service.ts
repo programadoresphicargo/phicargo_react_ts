@@ -1,0 +1,29 @@
+import { AxiosError } from 'axios';
+import { DriverStats } from '../models/driver-stats-models';
+import { DriverStatsApi } from '../models/api/driver-stats-models-api';
+import { driverStatsToLocal } from '../adapters/driver-stats-adapter';
+import odooApi from '../../core/api/odoo-api';
+
+export class DriverStatsService {
+  public static async getDriverStats(
+    startDate: string,
+    endDate: string,
+  ): Promise<DriverStats> {
+    const url = `/drivers/stats/?start_date=${startDate}&end_date=${endDate}`;
+
+    try {
+      const response = await odooApi.get<DriverStatsApi>(url);
+      return driverStatsToLocal(response.data);
+    } catch (error) {
+      console.log(error);
+      if (error instanceof AxiosError) {
+        throw new Error(
+          error.response?.data?.detail ||
+            'Error al obtener las estadísticas de operadores',
+        );
+      }
+      throw new Error('Error al obtener las estadísticas de operadores');
+    }
+  }
+}
+
