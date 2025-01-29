@@ -8,6 +8,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
 import { Button } from '@nextui-org/react';
 import { Autocomplete, AutocompleteItem, Textarea } from '@nextui-org/react';
+import Swal from 'sweetalert2';
 
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { useAuthContext } from '@/phicargo/modules/auth/hooks';
@@ -41,7 +42,7 @@ const ViajesActivosMasivo = ({ }) => {
     if (selectedValue) {
       setData(allData.filter(item => item.ejecutivo && item.ejecutivo.includes(selectedValue)));
     } else {
-      setData(allData); 
+      setData(allData);
     }
   };
 
@@ -78,22 +79,49 @@ const ViajesActivosMasivo = ({ }) => {
       return;
     }
 
-    const exportData = data.map((row) => ({
-      id_viaje: row.id_viaje,
-      estatus_seleccionado: row.estatus_seleccionado,
-      comentarios: row.comentarios,
-    }));
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Se enviarán los correos masivos para los viajes seleccionados.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, enviar',
+      cancelButtonText: 'Cancelar',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const exportData = data.map((row) => ({
+          id_viaje: row.id_viaje,
+          estatus_seleccionado: row.estatus_seleccionado,
+          comentarios: row.comentarios ?? '',
+        }));
 
-    console.log('Export Data:', exportData);
+        console.log('Export Data:', exportData);
 
-    try {
-      setLoading(true);
-      const response = await odooApi.post('/tms_travel/envio_masivo/', exportData);
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      toast.error('Error al obtener los datos: ' + error);
-    }
+        try {
+          setLoading(true);
+          const response = await odooApi.post('/tms_travel/envio_masivo/', exportData);
+          setLoading(false);
+
+          if (response.data) {
+            console.log('Respuesta de la API:', response.data);
+
+            response.data.forEach((item) => {
+              if (item.status === 'Correo enviado correctamente') {
+                toast.success(`Viaje ${item.id_viaje}: Correo enviado con éxito`);
+              } else {
+                toast.error(`Viaje ${item.id_viaje}: ${item.status}`);
+              }
+            });
+
+            toast.success('Envío exitoso, los correos han sido enviados correctamente.');
+          } else {
+            toast.error('No se recibió una respuesta válida del servidor');
+          }
+        } catch (error) {
+          setLoading(false);
+          toast.error('Error al obtener los datos: ' + error.message);
+        }
+      }
+    });
   };
 
   const columns = useMemo(
@@ -209,11 +237,6 @@ const ViajesActivosMasivo = ({ }) => {
         fontFamily: 'Inter',
         fontWeight: 'Bold',
         fontSize: '14px',
-      },
-    },
-    muiTableContainerProps: {
-      sx: {
-        maxHeight: 'calc(100vh - 230px)',
       },
     },
     muiTableBodyCellProps: ({ row }) => ({
