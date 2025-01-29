@@ -1,12 +1,11 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useHref, useNavigate } from 'react-router-dom';
 
 import { AppRouter } from './router/AppRouter';
 import { AuthProvider } from './phicargo/modules/auth/context';
 import { NextUIProvider } from '@nextui-org/react';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-
-const queryClient = new QueryClient();
+import { queryClient } from './utilities';
 
 export const App = () => {
   const navigate = useNavigate();

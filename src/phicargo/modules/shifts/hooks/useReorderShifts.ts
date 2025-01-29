@@ -3,11 +3,17 @@ import { useEffect, useState } from 'react';
 
 import type { MRT_Row } from 'material-react-table';
 import ShiftServiceApi from '../services/shifts-service';
+import { shiftKey } from './useShiftQueries';
 import toast from 'react-hot-toast';
+import { useQueryClient } from '@tanstack/react-query';
+import { useShiftsContext } from './useShiftsContext';
 
 export const useReorderShifts = (initialShifts: Shift[]) => {
+  const queryClient = useQueryClient();
   const [data, setData] = useState<Shift[]>(initialShifts);
   const [previousState, setPreviousState] = useState<Shift[]>(initialShifts);
+
+  const { branchId } = useShiftsContext();
 
   const buildReorderPayload = (): ShiftReorder[] =>
     data.map((s) => ({ shiftId: s.id, shift: s.shift }));
@@ -16,6 +22,8 @@ export const useReorderShifts = (initialShifts: Shift[]) => {
     try {
       await ShiftServiceApi.reorderShifts(buildReorderPayload());
       setPreviousState([...data]);
+      const dataOrdered = data.sort((a, b) => a.shift - b.shift);
+      queryClient.setQueryData([shiftKey, branchId], () => [...dataOrdered]);
     } catch (error) {
       console.error(error);
       if (error instanceof Error) {
@@ -31,17 +39,17 @@ export const useReorderShifts = (initialShifts: Shift[]) => {
     hoveredRow: Partial<MRT_Row<Shift>> | null,
   ) => {
     if (draggingRow && hoveredRow) {
-      if(hoveredRow.original?.locked) {
+      if (hoveredRow.original?.locked) {
         toast.error('No puedes reordenar un turno fijado');
         return;
       }
 
-      if(draggingRow.original?.locked) {
+      if (draggingRow.original?.locked) {
         toast.error('No puedes reordenar un turno fijado');
         return;
       }
 
-      if(draggingRow.index === hoveredRow.index) {
+      if (draggingRow.index === hoveredRow.index) {
         return;
       }
 

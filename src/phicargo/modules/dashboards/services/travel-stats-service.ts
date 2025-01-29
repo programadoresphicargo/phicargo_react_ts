@@ -30,8 +30,6 @@ class TravelStatsServiceApi {
       url = url.concat(`&branch_id=${branchId}`);
     }
 
-    console.log(url);
-
     try {
       const response = await odooApi.get<TravelStatsApi>(url);
       return travelsStatsToLocal(response.data);

@@ -23,7 +23,7 @@
     "@mui/system": "^6.1.8",
     "@mui/x-date-pickers": "^7.22.3",
     "@mui/x-date-pickers-pro": "^7.22.3",
-    "@nextui-org/react": "^2.6.8",
+    "@nextui-org/react": "2.6.11",
     "@react-pdf/renderer": "^4.1.6",
     "@sentry/react": "^8.48.0",
     "@sentry/vite-plugin": "^2.22.7",

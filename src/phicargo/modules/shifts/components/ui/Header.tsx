@@ -24,9 +24,11 @@ export const Header = () => {
         infoButton
         onInfoClick={() => navigate('/turnos/unidades-descargando')}
         startContent={
-          <RefreshButton  
+          <RefreshButton 
+            style={{ padding: 0 }} 
             onClick={() => travelsUnloadingQuery.refetch()}
             buttonClassName='text-emerald-400'
+            isLoading={travelsUnloadingQuery.isPending}
           />
         }
       />
@@ -37,9 +39,11 @@ export const Header = () => {
         infoButton
         onInfoClick={() => navigate('/turnos/unidades-bajando')}
         startContent={
-          <RefreshButton  
+          <RefreshButton
+            style={{ padding: 0 }}   
             onClick={() => travelsNearQuery.refetch()}
             buttonClassName='text-emerald-400'
+            isLoading={travelsNearQuery.isPending}
           />
         }
       />
@@ -50,9 +54,11 @@ export const Header = () => {
         infoButton
         onInfoClick={() => navigate('/turnos/unidades-planta')}
         startContent={
-          <RefreshButton  
+          <RefreshButton
+            style={{ padding: 0 }}   
             onClick={() => travelsInPlantQuery.refetch()}
             buttonClassName='text-emerald-400'
+            isLoading={travelsInPlantQuery.isPending}
           />
         }
       />

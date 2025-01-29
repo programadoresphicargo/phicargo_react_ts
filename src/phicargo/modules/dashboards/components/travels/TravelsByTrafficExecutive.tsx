@@ -3,16 +3,17 @@ import { useEffect, useState } from 'react';
 
 import { Bar } from 'react-chartjs-2';
 import Chart from 'chart.js/auto';
-import { ChartCard } from './ChartCard';
+import { ChartCard } from '../ChartCard';
 import { ChartData } from 'chart.js';
-import { TravelStats } from '../models/travels-stats-models';
-import { useDateRangeContext } from '../hooks/useDateRangeContext';
+import { TravelStats } from '../../models/travels-stats-models';
+import { useDateRangeContext } from '../../hooks/useDateRangeContext';
 
 Chart.register(CategoryScale);
 
 const options: ChartOptions<'bar'> = {
   responsive: true,
   maintainAspectRatio: false,
+  indexAxis: 'y',
   plugins: {
     tooltip: {
       callbacks: {
@@ -63,45 +64,34 @@ export const TravelsByTrafficExecutive = (props: Props) => {
     if (!data) return;
 
     const chartData: ChartData<'bar'> = {
-      labels: data.byTrafficExecutive.map((item) =>
-        item.trafficExecutive.split(' '),
-      ),
+      // labels: data.byTrafficExecutive.map((item) =>
+      //   item.trafficExecutive.split(' '),
+      // ),
+      labels: data.byTrafficExecutive.map((item) => item.trafficExecutive),
       datasets: [
         {
           label: 'Viajes',
           data: data.byTrafficExecutive.map((item) => item.totalTravels),
           borderWidth: 2,
           borderRadius: 10,
-          backgroundColor: [
-            'rgba(255, 159, 64, 0.2)',
-          ],
-          borderColor: [
-            'rgba(255, 159, 64, 1)',
-          ],
+          backgroundColor: ['rgba(255, 159, 64, 0.2)'],
+          borderColor: ['rgba(255, 159, 64, 1)'],
         },
         {
           label: 'Viajes Completados',
           data: data.byTrafficExecutive.map((item) => item.travelsCompleted),
           borderWidth: 2,
           borderRadius: 10,
-          backgroundColor: [
-            'rgba(54, 162, 235, 0.2)',
-          ],
-          borderColor: [
-            'rgba(54, 162, 235, 1)',
-          ],
+          backgroundColor: ['rgba(54, 162, 235, 0.2)'],
+          borderColor: ['rgba(54, 162, 235, 1)'],
         },
         {
           label: 'Viajes',
           data: data.byTrafficExecutive.map((item) => item.travelsPending),
           borderWidth: 2,
           borderRadius: 10,
-          backgroundColor: [
-            'rgba(153, 102, 255, 0.2)',
-          ],
-          borderColor: [
-            'rgba(153, 102, 255, 1)',
-          ],
+          backgroundColor: ['rgba(153, 102, 255, 0.2)'],
+          borderColor: ['rgba(153, 102, 255, 1)'],
         },
       ],
     };
@@ -113,6 +103,7 @@ export const TravelsByTrafficExecutive = (props: Props) => {
     <ChartCard
       title={`Viajes por Ejecutivo ${monthYearName}`}
       isLoading={isLoading && !chartData}
+      customHeight="49rem"
     >
       {chartData && <Bar data={chartData} options={options} />}
     </ChartCard>

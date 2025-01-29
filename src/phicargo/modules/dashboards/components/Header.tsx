@@ -6,8 +6,6 @@ import {
   Select,
   SelectItem,
   SharedSelection,
-  Tab,
-  Tabs,
 } from '@nextui-org/react';
 
 import { BiBuildings } from 'react-icons/bi';
@@ -52,16 +50,7 @@ export const Header = () => {
   };
 
   return (
-    <div className="mb-4 flex justify-between items-center">
-      <Tabs
-        aria-label="dashboards"
-        size="sm"
-        color="primary"
-        variant="bordered"
-      >
-        <Tab key="operations" title="Operaciones" />
-        <Tab key="late-arrives" title="Llegadas Tarde" />
-      </Tabs>
+    <div className="flex justify-between items-center px-4 mt-2">
       <div className="flex flex-row gap-6 items-center">
         <Select
           aria-label="company"

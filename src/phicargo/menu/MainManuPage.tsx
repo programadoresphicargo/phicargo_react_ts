@@ -32,9 +32,8 @@ const menuItems: MenuItemType[] = [
   {
     icon: turnos_img,
     label: 'Turnos',
-    requiredPermissions: [8],
-    link: VITE_PHIDES_API_URL + '/turnos/vista/index.php?sucursal=veracruz',
-    isExternal: true,
+    requiredPermissions: [202],
+    link: '/turnos',
   },
   {
     icon: viajes_img,
@@ -102,12 +101,6 @@ const menuItems: MenuItemType[] = [
     label: 'Dashboard',
     link: '/dashboards',
     requiredPermissions: [203],
-  },
-  {
-    icon: turnos_img,
-    label: 'Turnos 2.0',
-    requiredPermissions: [202],
-    link: '/turnos',
   },
 ];
 
