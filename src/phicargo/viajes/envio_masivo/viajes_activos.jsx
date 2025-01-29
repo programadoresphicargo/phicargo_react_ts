@@ -36,13 +36,12 @@ const ViajesActivosMasivo = ({ }) => {
 
   const handleSelectChange = (event) => {
     const selectedValue = event.target.value;
-    console.log(selectedValue);
     setSelectedEjecutivo(selectedValue);
 
     if (selectedValue) {
-      setData(allData.filter(item => item.ejecutivo.includes(selectedValue)));
+      setData(allData.filter(item => item.ejecutivo && item.ejecutivo.includes(selectedValue)));
     } else {
-      setData(allData);
+      setData(allData); 
     }
   };
 
