@@ -58,10 +58,16 @@ const UserInfo = () => {
                   aria-label="vehicle-forms"
                   color="primary"
                   variant="bordered"
-                  className='flex flex-col flex-1'
+                  className="flex flex-col flex-1"
                 >
                   <Tab key="user-data" title="Datos de Usuario">
-                    {user ? <UserForm user={user} /> : <Spinner />}
+                    {user ? (
+                      <UserForm user={user} />
+                    ) : (
+                      <div className="flex justify-center">
+                        <Spinner />
+                      </div>
+                    )}
                   </Tab>
                   <Tab key="user-permissions" title="Permisos">
                     {user ? <UserPermissions user={user} /> : <Spinner />}

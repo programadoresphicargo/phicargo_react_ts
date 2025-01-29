@@ -8,15 +8,10 @@ export const useUsersColums = () => {
   const columns = useMemo<MRT_ColumnDef<User>[]>(
     () => [
       {
-        accessorKey: 'id',
-        header: 'ID Usuario',
-        Cell: ({ cell }) => <span className='text-gray-400 text-sm'>{cell.getValue<string>()}</span>
-      },
-      {
         accessorKey: 'username',
         header: 'Usuario',
         Cell: ({ cell }) => 
-          <span className='font-bold bg-sky-800 text-white p-2 rounded-xl'>{cell.getValue<string>()}</span>
+          <span className='font-bold bg-sky-800 text-white px-2 p-1 rounded-xl'>{cell.getValue<string>()}</span>
       },
       {
         accessorKey: 'name',
@@ -36,7 +31,7 @@ export const useUsersColums = () => {
       {
         accessorKey: 'role',
         header: 'Rol',
-        Cell: ({ cell }) => <Chip color='primary'>{cell.getValue<string>()}</Chip>
+        Cell: ({ cell }) => <Chip size="sm" color='primary'>{cell.getValue<string>()}</Chip>
       },
     ],
     [],
