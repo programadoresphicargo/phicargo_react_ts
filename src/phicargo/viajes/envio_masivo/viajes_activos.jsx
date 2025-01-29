@@ -36,6 +36,7 @@ const ViajesActivosMasivo = ({ }) => {
 
   const handleSelectChange = (event) => {
     const selectedValue = event.target.value;
+    console.log(selectedValue);
     setSelectedEjecutivo(selectedValue);
 
     if (selectedValue) {
