@@ -13,25 +13,40 @@ import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { useAuthContext } from '@/phicargo/modules/auth/hooks';
 
 const ViajesActivosMasivo = ({ }) => {
+  const [allData, setAllData] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
   const [data, setData] = useState([]);
   const [options, setOptions] = useState([]);
-  const { session } = useAuthContext();
+  const [selectedEjecutivo, setSelectedEjecutivo] = useState('');
 
-  const fetchData = async () => {
-    try {
-      const response = await odooApi.get('/tms_travel/active_travels/');
-      setData(
-        response.data.map((row) => ({
-          ...row,
-          estatus_seleccionado: null,
-          comentarios: '',
-        }))
-      );
-    } catch (error) {
-      console.error('Error al obtener los datos:', error);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await odooApi.get('/tms_travel/active_travels/');
+        setAllData(response.data);
+        setData(response.data);
+      } catch (error) {
+        console.error('Error al obtener los datos:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleSelectChange = (event) => {
+    const selectedValue = event.target.value;
+    setSelectedEjecutivo(selectedValue);
+
+    if (selectedValue) {
+      setData(allData.filter(item => item.ejecutivo.includes(selectedValue)));
+    } else {
+      setData(allData);
     }
+  };
+
+  const getUniqueEjecutivos = () => {
+    return [...new Set(allData.map(item => item.ejecutivo))];
   };
 
   const fetchEstatus = async () => {
@@ -48,7 +63,6 @@ const ViajesActivosMasivo = ({ }) => {
   };
 
   useEffect(() => {
-    fetchData();
     fetchEstatus();
   }, []);
 
@@ -167,11 +181,23 @@ const ViajesActivosMasivo = ({ }) => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
+    state: { showProgressBars: isLoading },
     enableColumnPinning: true,
-    enableRowActions: true,
-    layoutMode: 'grid-no-grow',
     enableStickyHeader: true,
-    positionGlobalFilter: 'right',
+    positionGlobalFilter: "right",
+    muiSearchTextFieldProps: {
+      placeholder: `Buscar en ${data.length} viajes`,
+      sx: { minWidth: '300px' },
+      variant: 'outlined',
+    },
+    columnResizeMode: "onEnd",
+    initialState: {
+      showGlobalFilter: true,
+      density: 'compact',
+      expanded: true,
+      showColumnFilters: true,
+      pagination: { pageSize: 80 },
+    },
     muiTablePaperProps: {
       elevation: 0,
       sx: {
@@ -183,6 +209,11 @@ const ViajesActivosMasivo = ({ }) => {
         fontFamily: 'Inter',
         fontWeight: 'Bold',
         fontSize: '14px',
+      },
+    },
+    muiTableContainerProps: {
+      sx: {
+        maxHeight: 'calc(100vh - 230px)',
       },
     },
     muiTableBodyCellProps: ({ row }) => ({
@@ -206,6 +237,13 @@ const ViajesActivosMasivo = ({ }) => {
         <Button onPress={handleExportData} color="primary" isLoading={isLoading}>
           Enviar estatus
         </Button>
+
+        <select onChange={handleSelectChange} value={selectedEjecutivo} className='form-control'>
+          <option value="">Todos los ejecutivos</option>
+          {getUniqueEjecutivos().map((ejecutivo, index) => (
+            <option key={index} value={ejecutivo}>{ejecutivo}</option>
+          ))}
+        </select>
       </Box>
     ),
   });
