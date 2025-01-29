@@ -2,6 +2,7 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
+import toast from 'react-hot-toast';
 import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box } from '@mui/material';
@@ -9,21 +10,25 @@ import { Button } from '@nextui-org/react';
 import { Autocomplete, AutocompleteItem, Textarea } from '@nextui-org/react';
 
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import { useAuthContext } from '@/phicargo/modules/auth/hooks';
 
 const ViajesActivosMasivo = ({ }) => {
   const [isLoading, setLoading] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
   const [data, setData] = useState([]);
   const [options, setOptions] = useState([]);
+  const { session } = useAuthContext();
 
   const fetchData = async () => {
     try {
       const response = await odooApi.get('/tms_travel/active_travels/');
+      const filteredData = response.data.filter(item => item.ejecutivo.includes(session.user.name));
+
       setData(
-        response.data.map((row) => ({
+        filteredData.map((row) => ({
           ...row,
-          estatus_seleccionado: '', // Inicializa el campo autocomplete
-          comentarios: '', // Inicializa el campo textarea
+          estatus_seleccionado: null,
+          comentarios: '',
         }))
       );
     } catch (error) {
@@ -54,23 +59,29 @@ const ViajesActivosMasivo = ({ }) => {
   };
 
   const handleExportData = async () => {
+    const invalidRows = data.filter(row => row.estatus_seleccionado == null);
+
+    if (invalidRows.length > 0) {
+      toast.error('Existen filas con estatus_seleccionado nulo.');
+      return; 
+    }
+
     const exportData = data.map((row) => ({
       id_viaje: row.id_viaje,
       estatus_seleccionado: row.estatus_seleccionado,
       comentarios: row.comentarios,
     }));
+
     console.log('Export Data:', exportData);
 
     try {
       setLoading(true);
       const response = await odooApi.post('/tms_travel/envio_masivo/', exportData);
-      toast.success(response.data);
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      toast.error('Error al obtener los datos:' + error);
+      toast.error('Error al obtener los datos: ' + error);
     }
-
   };
 
   const columns = useMemo(
@@ -88,12 +99,16 @@ const ViajesActivosMasivo = ({ }) => {
         header: 'Vehiculo',
       },
       {
+        accessorKey: 'operador',
+        header: 'Operador',
+      },
+      {
         accessorKey: 'estatus_seleccionado',
         header: 'Estatus',
         enableColumnPinning: true,
         Cell: ({ cell, row }) => (
           <Autocomplete
-            className="max-w-xs"
+            className="max-w-md"
             defaultItems={options}
             label="Estatus"
             placeholder="Selecciona un estatus"
