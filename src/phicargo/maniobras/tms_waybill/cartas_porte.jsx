@@ -18,11 +18,11 @@ import odooApi from '@/phicargo/modules/core/api/odoo-api';
 
 const CartasPorte = () => {
   const [isLoading2, setLoading] = useState();
-  const [selectedTab, setSelectedTab] = useState('carta');
+  const [selectedTab, setSelectedTab] = React.useState("carta");
 
-  const handleTabChange = (event, newValue) => {
-    setSelectedTab(newValue);
-    fetchData(selectedMonth, newValue);
+  const handleTabChange = (e) => {
+    setSelectedTab(e.target.value);
+    fetchData(selectedMonth, selectedYear, e.target.value);
   };
 
   const currentMonth = String(new Date().getMonth() + 1).padStart(2, '0');
@@ -64,7 +64,7 @@ const CartasPorte = () => {
     } catch (error) {
       toast.error('Error al obtener los datos:' + error);
     } finally {
-      setLoading(false); // Mueve esto aquí
+      setLoading(false);
     }
   };
 
@@ -131,7 +131,7 @@ const CartasPorte = () => {
             variant = mappings[value].variant;
             text = mappings[value].text;
           } else {
-            variant = 'danger'; 
+            variant = 'danger';
             text = value || 'DESCONOCIDO';
           }
 
@@ -153,9 +153,9 @@ const CartasPorte = () => {
     enableGrouping: true,
     enableGlobalFilter: false,
     enableFilters: true,
+    positionToolbarAlertBanner: 'none',
     initialState: {
       showColumnFilters: true,
-      grouping: ['sucursal'],
       density: 'compact',
       pagination: { pageSize: 80 },
       showGlobalFilter: false,
@@ -190,7 +190,7 @@ const CartasPorte = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 310px)',
+        maxHeight: 'calc(100vh - 230px)',
       },
     },
     muiTableBodyCellProps: ({ row }) => ({
@@ -213,6 +213,16 @@ const CartasPorte = () => {
         <Box sx={{ flexGrow: 1, mr: 2 }}>
           <YearSelector selectedYear={selectedYear} handleChange={handleChangeYear}></YearSelector>
         </Box>
+        <Select
+          onChange={handleTabChange}
+          label="Seleccionar una opción"
+          size={'sm'} variant='bordered'
+          selectedKeys={[selectedTab]}
+          fullWidth={true}
+          style={{ minWidth: "200px" }}>
+          <SelectItem key={'carta'}>Cartas porte</SelectItem>
+          <SelectItem key={'solicitud'}>Solicitudes de transporte</SelectItem>
+        </Select>
       </Box>
     ),
   });
@@ -220,23 +230,13 @@ const CartasPorte = () => {
   return (
     <div>
       <ManiobrasNavBar />
-      <Box display="flex" alignItems="center" m={2}>
-        <Box sx={{ flexGrow: 1, mr: 2 }}>
-          <Tabs value={selectedTab} onChange={handleTabChange} aria-label="Tabs">
-            <Tab value="carta" label="Carta porte" />
-            <Tab value="solicitud" label="Solicitudes de transporte" />
-          </Tabs>
-        </Box>
-      </Box>
+      <MaterialReactTable key={selectedTab} table={table} />
       <Example2
         show={modalShow}
         handleClose={handleCloseModal}
         id_cp={modalContent}
         x_reference={x_reference}
         id_cliente={partner_id} />
-      <ThemeProvider theme={customFontTheme}>
-        <MaterialReactTable key={selectedTab} table={table} />
-      </ThemeProvider>
     </div >
   );
 };
