@@ -190,7 +190,7 @@ const CartasPorte = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 285px)',
+        maxHeight: 'calc(100vh - 310px)',
       },
     },
     muiTableBodyCellProps: ({ row }) => ({
