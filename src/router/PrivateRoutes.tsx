@@ -24,9 +24,6 @@ const CartasPorte = lazy(
 const ControlManiobras = lazy(
   () => import('../phicargo/maniobras/control/control'),
 );
-const ControlContenedores = lazy(
-  () => import('../phicargo/maniobras/control_contenedores/control')
-);
 const Nominas = lazy(() => import('../phicargo/maniobras/pagos/pagos'));
 const PreciosManiobras = lazy(
   () => import('../phicargo/maniobras/precios/precios'),
@@ -92,14 +89,6 @@ export const PrivateRoutes = () => {
           element={
             <Suspense fallback={<LoadingPage />}>
               <ControlManiobras />
-            </Suspense>
-          }
-        />
-        <Route
-          path="/control_contenedores"
-          element={
-            <Suspense fallback={<LoadingPage />}>
-              <ControlContenedores />
             </Suspense>
           }
         />

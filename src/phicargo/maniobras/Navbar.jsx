@@ -18,7 +18,6 @@ import AppsIcon from '@mui/icons-material/Apps';
 
 const pages = [
     { name: 'CONTENEDORES', path: '/cartas-porte' },
-    { name: 'CONTROL CONTENEDORES', path: '/control_contenedores' },
     { name: 'CONTROL DE MANIOBRAS', path: '/control_maniobras' },
     { name: 'NOMINAS', path: '/nominas' },
     { name: 'TERMINALES', path: '/terminales' },
