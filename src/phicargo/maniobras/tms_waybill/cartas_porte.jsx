@@ -95,11 +95,6 @@ const CartasPorte = () => {
         header: 'Cliente',
       },
       {
-        accessorKey: 'x_ejecutivo_viaje_bel',
-        header: 'Ejecutivo de viaje',
-        size: 150,
-      },
-      {
         accessorKey: 'x_reference',
         header: 'Contenedor',
         size: 150,
@@ -143,6 +138,11 @@ const CartasPorte = () => {
           );
         },
       },
+      {
+        accessorKey: 'x_ejecutivo_viaje_bel',
+        header: 'Ejecutivo',
+        size: 150,
+      },
     ],
     [],
   );
@@ -151,7 +151,7 @@ const CartasPorte = () => {
     columns,
     data,
     enableGrouping: true,
-    enableGlobalFilter: false,
+    enableGlobalFilter: true,
     enableFilters: true,
     positionToolbarAlertBanner: 'none',
     initialState: {
