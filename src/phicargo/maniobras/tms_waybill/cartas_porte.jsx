@@ -152,8 +152,15 @@ const CartasPorte = () => {
     data,
     enableGrouping: true,
     enableGlobalFilter: true,
-    enableFilters: true,
+    enableColumnPinning: true,
+    enableStickyHeader: true,
     positionToolbarAlertBanner: 'none',
+    positionGlobalFilter: "right",
+    muiSearchTextFieldProps: {
+      placeholder: `Buscador global`,
+      sx: { minWidth: '300px' },
+      variant: 'outlined',
+    },
     initialState: {
       showColumnFilters: true,
       density: 'compact',
