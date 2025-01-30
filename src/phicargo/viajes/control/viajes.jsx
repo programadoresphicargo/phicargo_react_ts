@@ -268,7 +268,6 @@ const ViajesActivos = ({ }) => {
       hiddenColumns: ["empresa"],
       density: 'compact',
       expanded: true,
-      grouping: ['sucursal'],
       showColumnFilters: true,
       pagination: { pageSize: 80 },
     },
@@ -296,7 +295,7 @@ const ViajesActivos = ({ }) => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 230px)',
+        maxHeight: 'calc(100vh - 200px)',
       },
     },
     muiTableBodyCellProps: ({ row }) => ({
