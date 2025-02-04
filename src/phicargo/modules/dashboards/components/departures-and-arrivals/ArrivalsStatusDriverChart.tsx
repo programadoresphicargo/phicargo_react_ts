@@ -42,17 +42,6 @@ const options: ChartOptions<'bar'> = {
   },
 };
 
-const actions: ChartActions[] = [
-  {
-    action: 'Llegadas Tarde',
-    handler: () => console.log('Llegadas Tarde'),
-  },
-  {
-    action: 'Llegadas Temprano',
-    handler: () => console.log('Llegadas Temprano'),
-  },
-]
- 
 interface Props {
   data?: DepartureAndArrivalStats;
   isLoading: boolean;
@@ -63,6 +52,21 @@ export const ArrivalsStatusDriverChart = (props: Props) => {
   const [chartData, setChartData] = useState<ChartData<'bar'> | null>(null);
   const { monthYearName } = useDateRangeContext();
 
+  const [selectedAction, setSelectedAction] = useState<
+    'arrivalLate' | 'arrivalEarly'
+  >('arrivalLate');
+
+  const actions: ChartActions[] = [
+    {
+      action: 'Llegadas Tarde',
+      handler: () => setSelectedAction('arrivalLate'),
+    },
+    {
+      action: 'Llegadas Temprano',
+      handler: () => setSelectedAction('arrivalEarly'),
+    },
+  ];
+
   useEffect(() => {
     if (!data) return;
 
@@ -71,26 +75,31 @@ export const ArrivalsStatusDriverChart = (props: Props) => {
       datasets: [
         {
           label: 'Estatus de Llegada',
-          data: data.arrivalStatusDrivers.map((item) => item.arrivalLate),
+          data: data.arrivalStatusDrivers.map((item) => item[selectedAction]),
           borderWidth: 2,
           borderRadius: 10,
-          backgroundColor: getBackgroundColors(data.arrivalStatusDrivers.length),
+          backgroundColor: getBackgroundColors(
+            data.arrivalStatusDrivers.length,
+          ),
           borderColor: getBorderColors(data.arrivalStatusDrivers.length),
         },
       ],
     };
 
     setChartData(chartData);
-  }, [data]);
+  }, [data, selectedAction]);
 
   return (
     <ChartCard
-      title={`Llegadas ${monthYearName}`}
+      title={`Llegadas ${
+        selectedAction === 'arrivalLate' ? 'Tarde' : 'temprano'
+      } ${monthYearName}`}
       isLoading={isLoading && !chartData}
-      customHeight='70rem'
+      customHeight="70rem"
       actions={actions}
     >
       {chartData && <Bar data={chartData} options={options} />}
     </ChartCard>
   );
-}
+};
+

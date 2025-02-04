@@ -1,10 +1,17 @@
+export type ArrivalStatus =
+  | 'arrived_late'
+  | 'no_arrival_recorded'
+  | 'arrived_early'
+  | 'no_info';
+export type DepartureStatus = 'start_late' | 'late' | 'start_early' | 'no_info';
+
 export interface ArrivalApi {
-  arrival_status: string;
+  arrival_status: ArrivalStatus;
   travels: number;
 }
 
 export interface DepartureApi {
-  departure_status: string;
+  departure_status: DepartureStatus;
   travels: number;
 }
 
