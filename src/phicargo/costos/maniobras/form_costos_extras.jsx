@@ -217,14 +217,8 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
             <Dialog open={show}
                 onClose={handleClose}
                 fullScreen
-                TransitionComponent={Transition}
-                PaperProps={{
-                    style: {
-                        zIndex: 1,
-                    },
-                }}>
+                TransitionComponent={Transition}>
                 <Box className='bg-soft-secondary'>
-
                     <AppBar sx={{ position: 'relative' }} elevation={0}>
                         <Toolbar>
                             <Typography sx={{ flex: 1 }} component="div">
@@ -258,20 +252,21 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
                                 )}
 
                                 {formData.status === 'borrador' && (
-                                    <Button color="secondary" size="sm" onPress={facturar_folio}>
+                                    <Button color="success" size="sm" onPress={facturar_folio} className='text-white'>
                                         Facturar
                                     </Button>
                                 )}
 
                                 {formData.status === "borrador" && !isEditing && (
-                                    <Button color="secondary" size="sm" onPress={() => editar_registro()}>
+                                    <Button color="primary" size="sm" onPress={() => editar_registro()}>
                                         Editar
                                     </Button>
                                 )}
 
                                 {formData.status === "borrador" && isEditing && (
                                     <Button
-                                        color="primary"
+                                        color="success"
+                                        className='text-white'
                                         size="sm"
                                         onPress={() => {
                                             actualizar_folio();
