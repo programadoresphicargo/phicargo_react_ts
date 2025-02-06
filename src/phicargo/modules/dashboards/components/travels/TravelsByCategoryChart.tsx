@@ -5,6 +5,7 @@ import { ChartData } from 'chart.js';
 import { ChartOptions } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import { TravelStats } from '../../models/travels-stats-models';
+import { getBackgroundColors } from '../../utils/charts-colors';
 import { useDateRangeContext } from '../../hooks/useDateRangeContext';
 
 const options: ChartOptions<'doughnut'> = {
@@ -32,6 +33,7 @@ const { isLoading, data } = props;
         {
           label: 'Viajes Totales',
           data: data.byCategory.map((item) => item.travels),
+          backgroundColor: getBackgroundColors(data.byCategory.length),
         },
       ],
     };
