@@ -27,7 +27,7 @@ import { CostosExtrasContext } from '../../context/context';
 import ServiciosExtras from './servicios_extras';
 
 const ServiciosAplicadosCE = ({ onClose }) => {
-    const { id_folio, ServiciosAplicados, setServiciosAplicados, setCostosExtrasEliminados } = useContext(CostosExtrasContext);
+    const { id_folio, ServiciosAplicados, setServiciosAplicados, setCostosExtrasEliminados, DisabledForm, setDisabledForm } = useContext(CostosExtrasContext);
     const [loading, setLoading] = useState(false);
 
     const [open, setOpen] = useState(false);
@@ -190,7 +190,7 @@ const ServiciosAplicadosCE = ({ onClose }) => {
                 }}
             >
                 <h1>Costos extras</h1>
-                <Button onPress={handleClickOpen} color="primary" size="sm">
+                <Button onPress={handleClickOpen} color="primary" size="sm" isDisabled={DisabledForm}>
                     Nuevo servicio
                 </Button>
             </Box>

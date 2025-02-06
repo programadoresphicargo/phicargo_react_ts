@@ -14,6 +14,8 @@ const CostosExtrasProvider = ({ children }) => {
         ref_factura: 0,
     });
 
+    const [DisabledForm, setDisabledForm] = useState(false);
+
     const [id_folio, setIDFolio] = useState(null);
     const [CartasPorte, setCPS] = useState([]);
     const [CartasPorteEliminadas, setCPSEliminadas] = useState([]);
@@ -26,6 +28,8 @@ const CostosExtrasProvider = ({ children }) => {
 
     return (
         <CostosExtrasContext.Provider value={{
+            DisabledForm, 
+            setDisabledForm,
             formData,
             setFormData,
             id_folio,

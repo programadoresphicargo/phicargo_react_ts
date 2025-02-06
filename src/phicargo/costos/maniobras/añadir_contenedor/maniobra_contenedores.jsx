@@ -17,7 +17,7 @@ import { CostosExtrasContext } from '../../context/context';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 
 const CostosExtrasContenedores = ({ id_maniobra }) => {
-    const { id_folio, CartasPorte, setCPS, CartasPorteEliminadas, setCPSEliminadas } = useContext(CostosExtrasContext);
+    const { id_folio, CartasPorte, setCPS, CartasPorteEliminadas, setCPSEliminadas, DisabledForm, setDisabledForm} = useContext(CostosExtrasContext);
     const [modalShow, setModalShow] = useState(false);
     const [openDialog, setOpenDialog] = useState(false);
     const [selectedId, setSelectedId] = useState(null);
@@ -75,7 +75,7 @@ const CostosExtrasContenedores = ({ id_maniobra }) => {
         enableRowActions: true,
         renderRowActions: ({ row }) => (
             <Box>
-                <IconButton onClick={() => handleDelete(row.original.id)}>
+                <IconButton onClick={() => handleDelete(row.original.id)} disabled={DisabledForm}>
                     <DeleteIcon />
                 </IconButton>
             </Box>
@@ -95,8 +95,8 @@ const CostosExtrasContenedores = ({ id_maniobra }) => {
                     flexWrap: 'wrap',
                 }}
             >
-                <h1 className='text-primary'>Cartas porte</h1>
-                <Button color='primary' onPress={handleShowModal}>Añadir contenedor</Button>
+                <h1>Cartas porte</h1>
+                <Button color='primary' onPress={handleShowModal} isDisabled={DisabledForm} size='sm'>Añadir carta porte</Button>
             </Box>
         ),
     });

@@ -37,8 +37,14 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const FormularioCostoExtra = ({ show, handleClose }) => {
 
-    const { id_folio, CartasPorte, CartasPorteEliminadas, ServiciosAplicados, setServiciosAplicados, CostosExtrasEliminados, formData, setFormData } = useContext(CostosExtrasContext);
+    const { id_folio, CartasPorte, CartasPorteEliminadas, ServiciosAplicados, setServiciosAplicados, CostosExtrasEliminados, formData, setFormData, DisabledForm, setDisabledForm } = useContext(CostosExtrasContext);
     const [Loading, setLoading] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+
+    const editar_registro = () => {
+        setIsEditing(true);
+        setDisabledForm(false);
+    }
 
     useEffect(() => {
         setFormData(prev => ({
@@ -57,29 +63,40 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
         setDialogOpen(false);
     };
 
-
     useEffect(() => {
         if (id_folio) {
             odooApi.get(`/folios_costos_extras/get_by_id/${id_folio}`)
                 .then((response) => {
-                    const data = response.data[0];
-                    setFormData({
-                        id_folio: data.id_folio,
-                        ref_factura: data.ref_factura || '',
-                        status: data.status || '',
-                    });
+                    if (response.data.length > 0) {
+                        const data = response.data[0];
+                        setFormData({
+                            id_folio: data.id_folio,
+                            ref_factura: data.ref_factura || '',
+                            status: data.status || '',
+                        });
+                        setDisabledForm(true);
+                    } else {
+                        console.warn('No se encontraron datos para id_folio:', id_folio);
+                        setFormData({});
+                        setDisabledForm(false);
+                    }
                 })
                 .catch((error) => {
-                    toast.error('Error al obtener datos de maniobra:' + error);
+                    console.error('Error al obtener datos:', error);
+                    toast.error(`Error al obtener datos de maniobra: ${error.response?.data?.message || error.message}`);
                 });
         } else {
             setFormData({
+                id_folio: '',
+                ref_factura: '',
+                status: '',
                 facturado: false,
             });
+            setDisabledForm(false);
         }
     }, [id_folio]);
 
-    const registrar_maniobra = () => {
+    const registrar_folio = () => {
         const formData2 = {
             data: formData,
             cartas_porte: CartasPorte,
@@ -106,7 +123,7 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
             });
     };
 
-    const actualizar_maniobra = () => {
+    const actualizar_folio = () => {
         const formData2 = {
             data: formData,
             cartas_porte: CartasPorte,
@@ -124,6 +141,7 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
 
                 if (data.status === 'success') {
                     toast.success(data.message);
+                    setIsEditing(false);
                 } else {
                     toast.error('Respuesta inesperada del servidor: ' + JSON.stringify(data));
                 }
@@ -149,7 +167,7 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Sí, cancelar',
+            confirmButtonText: 'Sí, confirmar',
             cancelButtonText: 'Cancelar',
             imageWidth: 150,
             imageHeight: 150,
@@ -227,10 +245,43 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
                     <Grid container>
                         <Grid lg={12} xs={12} className='mt-2 mb-2'>
                             <Stack spacing={1} direction="row">
-                                <Button color="primary" size='sm' onPress={registrar_maniobra} isLoading={Loading}>Registrar</Button>
-                                <Button color="danger" size='sm' onPress={cancelar_folio} isDisabled={formData.status == 'cancelado' ? true : false}>Cancelar</Button>
-                                <Button color="secondary" size='sm' onPress={facturar_folio}>Facturar</Button>
-                                <Button color="primary" size='sm' onPress={actualizar_maniobra} isLoading={Loading}>Guardar cambios</Button>
+                                {formData.id_folio == null && (
+                                    <Button color="primary" size="sm" onPress={registrar_folio} isLoading={Loading}>
+                                        Registrar
+                                    </Button>
+                                )}
+
+                                {formData.status === 'borrador' && (
+                                    <Button color="danger" size="sm" onPress={cancelar_folio}>
+                                        Cancelar
+                                    </Button>
+                                )}
+
+                                {formData.status === 'borrador' && (
+                                    <Button color="secondary" size="sm" onPress={facturar_folio}>
+                                        Facturar
+                                    </Button>
+                                )}
+
+                                {formData.status === "borrador" && !isEditing && (
+                                    <Button color="secondary" size="sm" onPress={() => editar_registro()}>
+                                        Editar
+                                    </Button>
+                                )}
+
+                                {formData.status === "borrador" && isEditing && (
+                                    <Button
+                                        color="primary"
+                                        size="sm"
+                                        onPress={() => {
+                                            actualizar_folio();
+                                        }}
+                                        isLoading={Loading}
+                                    >
+                                        Guardar cambios
+                                    </Button>
+                                )}
+
                             </Stack>
                         </Grid>
 
