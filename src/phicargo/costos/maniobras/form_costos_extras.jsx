@@ -12,7 +12,6 @@ import Slide from '@mui/material/Slide';
 import Stack from '@mui/material/Stack';
 import { Button } from '@nextui-org/react';
 import AutocompleteManager from './correos_electronicos/correos_electronicos';
-import CancelarManiobraDialog from './cancelar_maniobra';
 import { toast } from 'react-toastify';
 import { Card, CardBody } from '@nextui-org/react';
 import { Container, filledInputClasses } from '@mui/material';
@@ -23,7 +22,6 @@ import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import PanelEstatus from './envio_estatus/panel';
 import { useAuthContext } from '@/phicargo/modules/auth/hooks';
 import EstatusHistorialManiobras from '../reportes_estatus/estatus';
 import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
@@ -31,6 +29,7 @@ import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import CostosExtrasContenedores from './añadir_contenedor/maniobra_contenedores';
 import { CostosExtrasContext } from '../context/context';
 import ServiciosAplicadosCE from './costos_aplicados/servicios_aplicados';
+import FormCE from './form';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -38,13 +37,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const FormularioCostoExtra = ({ show, handleClose }) => {
 
-    const { id_folio, CartasPorte, CartasPorteEliminadas, ServiciosAplicados, setServiciosAplicados, CostosExtrasEliminados } = useContext(CostosExtrasContext);
+    const { id_folio, CartasPorte, CartasPorteEliminadas, ServiciosAplicados, setServiciosAplicados, CostosExtrasEliminados, formData, setFormData } = useContext(CostosExtrasContext);
     const [Loading, setLoading] = useState(false);
-
-    const [formData, setFormData] = useState({
-        id_folio: id_folio,
-        facturado: false,
-    });
 
     useEffect(() => {
         setFormData(prev => ({
@@ -62,6 +56,28 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
     const handleCloseDialog = () => {
         setDialogOpen(false);
     };
+
+
+    useEffect(() => {
+        if (id_folio) {
+            odooApi.get(`/folios_costos_extras/get_by_id/${id_folio}`)
+                .then((response) => {
+                    const data = response.data[0];
+                    setFormData({
+                        id_folio: data.id_folio,
+                        ref_factura: data.ref_factura || '',
+                        status: data.status || '',
+                    });
+                })
+                .catch((error) => {
+                    toast.error('Error al obtener datos de maniobra:' + error);
+                });
+        } else {
+            setFormData({
+                facturado: false,
+            });
+        }
+    }, [id_folio]);
 
     const registrar_maniobra = () => {
         const formData2 = {
@@ -126,6 +142,58 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
             });
     };
 
+    const facturar_folio = () => {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: '¿Deseas facturar este folio?',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, cancelar',
+            cancelButtonText: 'Cancelar',
+            imageWidth: 150,
+            imageHeight: 150,
+            imageAlt: 'Imagen de confirmación',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                odooApi.post('/folios_costos_extras/facturar/' + id_folio)
+                    .then(response => {
+                        Swal.fire('Facturado', 'El folio ha sido facturado y cerrado.', 'success');
+                        handleClose();
+                    })
+                    .catch(error => {
+                        Swal.fire('Error', 'Hubo un problema al cancelar el folio.', 'error');
+                    });
+            }
+        });
+    }
+
+    const cancelar_folio = () => {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: '¿Deseas cancelar este folio?',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, cancelar',
+            cancelButtonText: 'Cancelar',
+            imageWidth: 150,
+            imageHeight: 150,
+            imageAlt: 'Imagen de confirmación',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                odooApi.post('/folios_costos_extras/cancelar/' + id_folio)
+                    .then(response => {
+                        Swal.fire('Cancelado', 'El folio ha sido cancelado.', 'success');
+                        handleClose();
+                    })
+                    .catch(error => {
+                        Swal.fire('Error', 'Hubo un problema al cancelar el folio.', 'error');
+                    });
+            }
+        });
+    }
+
     return (
         <>
             <Dialog open={show}
@@ -137,14 +205,14 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
                         zIndex: 1,
                     },
                 }}>
-                <Box sx={{ flexGrow: 1 }} className='bg-soft-secondary'>
+                <Box className='bg-soft-secondary'>
 
                     <AppBar sx={{ position: 'relative' }} elevation={0}>
                         <Toolbar>
                             <Typography sx={{ flex: 1 }} component="div">
-                                Registro de costos extras CE-{id_folio}
+                                CE-{id_folio}
                             </Typography>
-                            <Button autoFocus color="inherit" onClick={handleClose}>
+                            <Button autoFocus color="inherit" onPress={handleClose}>
                                 Cerrar
                             </Button>
                         </Toolbar>
@@ -156,22 +224,25 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
                         </Box>
                     )}
 
-                    <Grid container className='m-1'>
+                    <Grid container>
                         <Grid lg={12} xs={12} className='mt-2 mb-2'>
                             <Stack spacing={1} direction="row">
                                 <Button color="primary" size='sm' onPress={registrar_maniobra} isLoading={Loading}>Registrar</Button>
-                                <Button color="danger" size='sm' onPress={handleOpenDialog} >Cancelar</Button>
-                                <Button color="secondary" size='sm' onPress={handleOpenDialog} >Facturar</Button>
+                                <Button color="danger" size='sm' onPress={cancelar_folio} isDisabled={formData.status == 'cancelado' ? true : false}>Cancelar</Button>
+                                <Button color="secondary" size='sm' onPress={facturar_folio}>Facturar</Button>
                                 <Button color="primary" size='sm' onPress={actualizar_maniobra} isLoading={Loading}>Guardar cambios</Button>
                             </Stack>
                         </Grid>
 
                         <Grid lg={7} xs={12}>
                             <CostosExtrasContenedores></CostosExtrasContenedores>
-                            <ServiciosAplicadosCE></ServiciosAplicadosCE>
                         </Grid>
 
                         <Grid lg={5} xs={12}>
+                            <FormCE></FormCE>
+                        </Grid>
+
+                        <Grid lg={12} xs={12} className='m-2'>
                             <ServiciosAplicadosCE></ServiciosAplicadosCE>
                         </Grid>
 

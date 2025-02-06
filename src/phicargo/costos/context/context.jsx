@@ -6,6 +6,14 @@ import odooApi from '@/phicargo/modules/core/api/odoo-api';
 const CostosExtrasContext = React.createContext();
 
 const CostosExtrasProvider = ({ children }) => {
+
+    const [formData, setFormData] = useState({
+        id_folio: null,
+        status: 'borrador',
+        facturado: false,
+        ref_factura: 0,
+    });
+
     const [id_folio, setIDFolio] = useState(null);
     const [CartasPorte, setCPS] = useState([]);
     const [CartasPorteEliminadas, setCPSEliminadas] = useState([]);
@@ -18,6 +26,8 @@ const CostosExtrasProvider = ({ children }) => {
 
     return (
         <CostosExtrasContext.Provider value={{
+            formData,
+            setFormData,
             id_folio,
             setIDFolio,
             CartasPorte,
@@ -26,7 +36,7 @@ const CostosExtrasProvider = ({ children }) => {
             setCPSEliminadas,
             ServiciosAplicados,
             setServiciosAplicados,
-            CostosExtrasEliminados, 
+            CostosExtrasEliminados,
             setCostosExtrasEliminados
         }}>
             {children}

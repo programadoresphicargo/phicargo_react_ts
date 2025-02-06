@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useMemo, useContext } from 'react';
 import { TextField } from '@mui/material';
 import dayjs from 'dayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 import { Box } from '@mui/material';
 import { Button, Chip } from '@nextui-org/react';
@@ -10,7 +8,6 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import { width } from '@mui/system';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import FormularioCostoExtra from '../maniobras/form_costos_extras';
 import { CostosExtrasContext } from '../context/context';
@@ -86,6 +83,24 @@ const Maniobras = () => {
       {
         accessorKey: 'status',
         header: 'Estatus',
+        Cell: ({ cell }) => {
+          const status = cell.getValue() || '';
+          let badgeClass = '';
+
+          if (status === 'cancelado') {
+            badgeClass = 'danger';
+          } else if (status === 'facturado') {
+            badgeClass = 'success';
+          } else if (status === 'borrador') {
+            badgeClass = 'warning';
+          }
+
+          return (
+            <Chip color={badgeClass} size='sm' className="text-white">
+              {status}
+            </Chip>
+          );
+        },
       },
       {
         accessorKey: 'ref_factura',

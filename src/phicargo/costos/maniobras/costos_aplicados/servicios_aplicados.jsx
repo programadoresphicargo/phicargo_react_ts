@@ -112,6 +112,11 @@ const ServiciosAplicadosCE = ({ onClose }) => {
                     align: 'right',
                 },
             },
+            {
+                accessorKey: 'comentarios',
+                header: 'Comentarios',
+                enableEditing: true,
+            },
         ],
         []
     );
