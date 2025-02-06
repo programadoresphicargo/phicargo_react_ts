@@ -47,6 +47,9 @@ const CorreosElectronicos = lazy(
 const ReporteCumplimiento = lazy(
   () => import('../phicargo/reportes/cumplimiento'),
 );
+const FoliosCostosExtras = lazy(
+  () => import('../phicargo/costos/folios/control'),
+);
 const CostosExtras = lazy(
   () => import('../phicargo/viajes/costos_extras/documentacion'),
 );
@@ -75,6 +78,15 @@ export const PrivateRoutes = () => {
         {/* Menú */}
         <Route path="/" element={<Navigate to="/menu" />} />
         <Route path="/menu" element={<MainMenuPage />} />
+
+        <Route
+          path="/folios_costos_extras"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <FoliosCostosExtras />
+            </Suspense>
+          }>
+        </Route>
 
         <Route
           path="/cartas-porte"

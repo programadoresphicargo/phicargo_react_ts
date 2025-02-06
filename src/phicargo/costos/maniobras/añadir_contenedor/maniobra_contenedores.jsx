@@ -1,0 +1,116 @@
+import React, { useState, useEffect, useMemo, useCallback, useContext } from 'react';
+import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
+import AñadirContenedor from './modal_añadir_contenedor';
+import axios from 'axios';
+import { Button } from '@nextui-org/react';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import { toast } from 'react-toastify';
+import { Card, CardBody } from '@nextui-org/react';
+import { CostosExtrasContext } from '../../context/context';
+import odooApi from '@/phicargo/modules/core/api/odoo-api';
+
+const CostosExtrasContenedores = ({ id_maniobra }) => {
+    const { id_folio, CartasPorte, setCPS, CartasPorteEliminadas, setCPSEliminadas } = useContext(CostosExtrasContext);
+    const [modalShow, setModalShow] = useState(false);
+    const [openDialog, setOpenDialog] = useState(false);
+    const [selectedId, setSelectedId] = useState(null);
+    const [isLoading, setLoading] = useState(false);
+
+    const handleDelete = (id) => {
+        setCPSEliminadas((prev) => [...prev, { id }]);
+        setCPS((prev) => prev.filter(item => item.id !== id));
+    };
+
+    const handleShowModal = () => setModalShow(true);
+    const handleCloseModal = () => {
+        setModalShow(false);
+        fetchData();
+    };
+
+    const columns = useMemo(
+        () => [
+            { accessorKey: 'id', header: 'ID' },
+            { accessorKey: 'name', header: 'Cartas porte' },
+            { accessorKey: 'x_reference', header: 'Contenedor' },
+        ],
+        []
+    );
+
+    const fetchData = async () => {
+        try {
+            setLoading(true);
+            const response = await odooApi.get('/folios_cartas_porte/by_id_folio/' + id_folio);
+            setCPS(response.data);
+            setLoading(false);
+        } catch (error) {
+            console.error('Error al obtener los datos:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const table = useMaterialReactTable({
+        columns,
+        data: CartasPorte,
+        enableGrouping: true,
+        enableGlobalFilter: true,
+        enableFilters: true,
+        state: { isLoading: isLoading },
+        initialState: {
+            density: 'compact',
+            pagination: { pageSize: 80 },
+        },
+        muiTablePaperProps: { elevation: 0, sx: { boxShadow: 'none' } },
+        enableRowActions: true,
+        renderRowActions: ({ row }) => (
+            <Box>
+                <IconButton onClick={() => handleDelete(row.original.id)}>
+                    <DeleteIcon />
+                </IconButton>
+            </Box>
+        ),
+        muiTableBodyRowProps: ({ row }) => ({
+            onDoubleClick: () => setOpenDialog(row.original.id),
+            style: { cursor: 'pointer' },
+        }),
+        muiTableHeadCellProps: { sx: { fontFamily: 'Inter', fontWeight: 'Bold', fontSize: '14px' } },
+        muiTableBodyCellProps: { sx: { fontFamily: 'Inter', fontWeight: 'normal', fontSize: '14px' } },
+        renderTopToolbarCustomActions: ({ table }) => (
+            <Box
+                sx={{
+                    display: 'flex',
+                    gap: '16px',
+                    padding: '8px',
+                    flexWrap: 'wrap',
+                }}
+            >
+                <h1 className='text-primary'>Cartas porte</h1>
+                <Button color='primary' onPress={handleShowModal}>Añadir contenedor</Button>
+            </Box>
+        ),
+    });
+
+    return (
+        <>
+            <Card>
+                <CardBody>
+                    <AñadirContenedor show={modalShow} handleClose={handleCloseModal} id_maniobra={id_maniobra} />
+                    <MaterialReactTable table={table} />
+                </CardBody>
+            </Card>
+        </>
+    );
+};
+
+export default CostosExtrasContenedores;

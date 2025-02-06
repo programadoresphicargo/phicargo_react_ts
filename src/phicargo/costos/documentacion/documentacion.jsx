@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo, useContext } from 'react';
 import { Box } from '@mui/material';
-import { ViajeContext } from '../context/viajeContext';
 import { Button } from '@nextui-org/button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -12,23 +11,15 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import FormularioDocumentacion from './formulario';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { toast } from 'react-toastify';
-import FormularioCostoExtra from './formulario';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import CloseIcon from '@mui/icons-material/Close';
+import FormularioDocumentacionManiobra from './formulario';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const Costos_Extras = ({ }) => {
-
-  const { id_viaje, viaje, getViaje, loading, error, setIDViaje, isLoading } = useContext(ViajeContext);
+const DocumentacionManiobra = ({ }) => {
 
   const [data, setData] = useState([]);
   const [isLoading2, setLoading] = useState();
@@ -36,7 +27,7 @@ const Costos_Extras = ({ }) => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await odooApi.get('/tms_waybill/get_by_travel_id/' + id_viaje);
+      const response = await odooApi.get('/archivos/get_archivos_viaje/');
       setData(response.data);
       setLoading(false);
     } catch (error) {
@@ -48,15 +39,53 @@ const Costos_Extras = ({ }) => {
     fetchData();
   }, []);
 
+  const obtenerUrlPublico = async (idOnedrive) => {
+    try {
+      const response = await odooApi.post('/archivos/generate_link/' + idOnedrive);
+      if (response.data.url) {
+        window.open(response.data.url, '_blank');
+      } else {
+        alert('No se pudo obtener el enlace del archivo.' + response.data);
+      }
+    } catch (error) {
+      console.error('Error al obtener el enlace público:', error);
+      toast.error('Hubo un error al intentar obtener el enlace.');
+    }
+  };
+
   const columns = useMemo(
     () => [
       {
-        accessorKey: 'name',
-        header: 'Cartas porte',
+        accessorKey: 'filename',
+        header: 'Nombre del archivo',
       },
       {
-        accessorKey: 'x_reference',
-        header: 'Contenedores',
+        accessorKey: 'tipo_archivo',
+        header: 'Tipo de documento',
+      },
+      {
+        accessorKey: 'nombre_usuario',
+        header: 'Usuario',
+      },
+      {
+        accessorKey: 'id_onedrive',
+        header: 'Onedrive ID',
+      },
+      {
+        accessorKey: 'fecha_creacion',
+        header: 'Fecha de subida',
+      },
+      {
+        accessorKey: 'ver',
+        header: 'Ver',
+        Cell: ({ row }) => (
+          <Button
+            color='primary'
+            onClick={() => obtenerUrlPublico(row.original.id_onedrive)}
+          >
+            Ver archivo
+          </Button>
+        ),
       },
     ],
     [],
@@ -111,9 +140,8 @@ const Costos_Extras = ({ }) => {
           flexWrap: 'wrap',
         }}
       >
-        <h1>Costos extras</h1>
-        <Button color='primary' onPress={handleClickOpen}>
-          Nuevo registro
+        <Button color='primary' onClick={handleClickOpen}>
+          Nuevo documento
         </Button>
       </Box>
     )
@@ -132,7 +160,9 @@ const Costos_Extras = ({ }) => {
 
   return (
     <>
-      <MaterialReactTable table={table} />
+      <div className='card p-2 rounded'>
+        <MaterialReactTable table={table} />
+      </div>
 
       <Dialog
         open={open}
@@ -140,32 +170,16 @@ const Costos_Extras = ({ }) => {
         keepMounted
         onClose={handleClose}
         aria-describedby="alert-dialog-slide-description"
-        fullScreen
+        fullWidth="sm"
+        maxWidth="sm"
       >
-        <AppBar sx={{ position: 'relative' }} elevation={0}>
-          <Toolbar>
-            <IconButton
-              edge="start"
-              color="inherit"
-              onClick={handleClose}
-              aria-label="close"
-            >
-              <CloseIcon />
-            </IconButton>
-            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              Costos extras
-            </Typography>
-            <Button autoFocus color="inherit" onClick={handleClose}>
-              Salir
-            </Button>
-          </Toolbar>
-        </AppBar>
+        <DialogTitle>{"Envio de documentos"}</DialogTitle>
         <DialogContent>
-          <FormularioCostoExtra onClose={handleClose} />
+          <FormularioDocumentacionManiobra onClose={handleClose}></FormularioDocumentacionManiobra>
         </DialogContent>
       </Dialog>
     </>
   );
 };
 
-export default Costos_Extras;
+export default DocumentacionManiobra;

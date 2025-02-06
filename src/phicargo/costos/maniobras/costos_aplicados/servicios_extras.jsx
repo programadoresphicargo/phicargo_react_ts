@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useMemo, useContext } from 'react';
 import { Box } from '@mui/material';
-import { ViajeContext } from '../context/viajeContext';
-import { CostosExtrasContext } from '../context/costosContext';
+import { ViajeContext } from '../../../viajes/context/viajeContext';
 import { Button } from '@nextui-org/button';
 import {
     MaterialReactTable,
     useMaterialReactTable,
 } from 'material-react-table';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import { CostosExtrasContext } from '../../context/context';
 
 const ServiciosExtras = ({ onClose }) => {
     const [open, setOpen] = React.useState(false);
@@ -20,8 +20,7 @@ const ServiciosExtras = ({ onClose }) => {
         setOpen(false);
     };
 
-    const { id_viaje } = useContext(ViajeContext);
-    const { ServiciosAplicados, setServiciosAplicados } = useContext(CostosExtrasContext); // Usa el contexto para gestionar los servicios aplicados
+    const { ServiciosAplicados, setServiciosAplicados } = useContext(CostosExtrasContext);
 
     const [data, setData] = useState([]);
     const [isLoading2, setLoading] = useState();
@@ -29,7 +28,7 @@ const ServiciosExtras = ({ onClose }) => {
     const fetchData = async () => {
         try {
             setLoading(true);
-            const response = await odooApi.get('/costos_extras/servicios_extras/');
+            const response = await odooApi.get('/tipos_costos_extras/');
             setData(response.data);
             setLoading(false);
         } catch (error) {
@@ -44,12 +43,12 @@ const ServiciosExtras = ({ onClose }) => {
     const columns = useMemo(
         () => [
             {
-                accessorKey: 'id_servicio',
+                accessorKey: 'id_tipo_costo',
                 header: 'Referencia',
             },
             {
-                accessorKey: 'nombre_servicio',
-                header: 'Nombre del Servicio',
+                accessorKey: 'descripcion',
+                header: 'Descripción',
             },
             {
                 accessorKey: 'costo',

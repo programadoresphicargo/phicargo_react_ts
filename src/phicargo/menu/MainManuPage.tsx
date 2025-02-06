@@ -97,6 +97,12 @@ const menuItems: MenuItemType[] = [
     requiredPermissions: [4],
   },
   {
+    icon: reportesImg,
+    label: 'Costos extras',
+    link: '/folios_costos_extras',
+    requiredPermissions: [],
+  },
+  {
     icon: dashboardIcon,
     label: 'Dashboard',
     link: '/dashboards',
@@ -155,9 +161,9 @@ const MainMenuPage = () => {
     <>
       <AppBar
         position="static"
-        style={{ 
+        style={{
           backgroundColor: 'rgb(129, 146, 176)',
-          padding: '0', 
+          padding: '0',
         }}
         elevation={0}
       >

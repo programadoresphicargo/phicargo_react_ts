@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo, useContext } from 'react';
 import { Box } from '@mui/material';
-import { ViajeContext } from '../context/viajeContext';
 import { Button } from '@nextui-org/button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -12,10 +11,8 @@ import {
     MaterialReactTable,
     useMaterialReactTable,
 } from 'material-react-table';
-import FormularioDocumentacion from './formulario';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { toast } from 'react-toastify';
-import FormularioCostoExtra from './formulario';
 import { Card, CardBody } from '@nextui-org/react';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -26,12 +23,12 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
+import { CostosExtrasContext } from '../../context/context';
 import ServiciosExtras from './servicios_extras';
-import { CostosExtrasContext } from '../context/costosContext';
 
-const ServiciosAplicados = ({ onClose }) => {
-    const { id_viaje } = useContext(ViajeContext);
-    const { ServiciosAplicados, setServiciosAplicados } = useContext(CostosExtrasContext);
+const ServiciosAplicadosCE = ({ onClose }) => {
+    const { id_folio, ServiciosAplicados, setServiciosAplicados, setCostosExtrasEliminados } = useContext(CostosExtrasContext);
+    const [loading, setLoading] = useState(false);
 
     const [open, setOpen] = useState(false);
 
@@ -48,27 +45,45 @@ const ServiciosAplicados = ({ onClose }) => {
     };
 
     const removeRow = (rowIndex) => {
+        const deletedItem = ServiciosAplicados[rowIndex];
         const updatedData = ServiciosAplicados.filter((_, index) => index !== rowIndex);
         setServiciosAplicados(updatedData);
+        setCostosExtrasEliminados(prev => [...prev, deletedItem]);
         toast.success('Registro eliminado correctamente');
     };
+
+
+    const fetchData = async () => {
+        try {
+            setLoading(true);
+            const response = await odooApi.get('/costos_extras/by_id_folio/' + id_folio);
+            setServiciosAplicados(response.data);
+            setLoading(false);
+        } catch (error) {
+            console.error('Error al obtener los datos:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, [id_folio]);
 
     const columns = useMemo(
         () => [
             {
-                accessorKey: 'id_servicio',
-                header: 'Clave servicio',
-                enableEditing: false, // Campo no editable
+                accessorKey: 'id_tipo_costo',
+                header: 'Clave costo',
+                enableEditing: false,
             },
             {
-                accessorKey: 'nombre_servicio',
-                header: 'Nombre del Servicio',
-                enableEditing: false, // Campo no editable
+                accessorKey: 'descripcion',
+                header: 'Descripción',
+                enableEditing: false,
             },
             {
                 accessorKey: 'costo',
                 header: 'Costo',
-                enableEditing: true, // Campo editable
+                enableEditing: true,
                 muiTableBodyCellProps: {
                     align: 'right',
                 },
@@ -76,7 +91,7 @@ const ServiciosAplicados = ({ onClose }) => {
             {
                 accessorKey: 'cantidad',
                 header: 'Cantidad',
-                enableEditing: true, // Campo editable
+                enableEditing: true,
                 muiTableBodyCellProps: {
                     align: 'right',
                 },
@@ -84,7 +99,7 @@ const ServiciosAplicados = ({ onClose }) => {
             {
                 accessorKey: 'subtotal',
                 header: 'Subtotal',
-                enableEditing: false, // Calculado, no editable
+                enableEditing: false,
                 Cell: ({ row }) => {
                     const subtotal =
                         (row.original.costo || 0) * (row.original.cantidad || 1);
@@ -116,6 +131,7 @@ const ServiciosAplicados = ({ onClose }) => {
         data: ServiciosAplicados,
         enableEditing: true,
         editDisplayMode: 'row',
+        state: { showLoadingOverlay: loading },
         initialState: {
             density: 'compact',
             pagination: { pageSize: 80 },
@@ -132,6 +148,12 @@ const ServiciosAplicados = ({ onClose }) => {
             setServiciosAplicados(updatedData);
             exitEditingMode();
             toast.success('Fila actualizada correctamente');
+        },
+        muiTablePaperProps: {
+            elevation: 0,
+            sx: {
+                borderRadius: '0',
+            },
         },
         muiTableHeadCellProps: {
             sx: {
@@ -162,12 +184,9 @@ const ServiciosAplicados = ({ onClose }) => {
                     flexWrap: 'wrap',
                 }}
             >
-                <h1>Servicios aplicados</h1>
-                <Button onPress={guardar} color="primary" size="sm">
-                    Guardar
-                </Button>
+                <h1>Costos extras</h1>
                 <Button onPress={handleClickOpen} color="primary" size="sm">
-                    Añadir servicio
+                    Nuevo servicio
                 </Button>
             </Box>
         ),
@@ -186,7 +205,7 @@ const ServiciosAplicados = ({ onClose }) => {
                     size="sm"
                     onPress={() => removeRow(row.index)}
                 >
-                    Quitar
+                    Eliminar
                 </Button>
             </Box>
         ),
@@ -209,7 +228,7 @@ const ServiciosAplicados = ({ onClose }) => {
 
     return (
         <>
-            <Card className="mt-3">
+            <Card>
                 <CardBody>
                     <MaterialReactTable table={table} />
                 </CardBody>
@@ -221,7 +240,7 @@ const ServiciosAplicados = ({ onClose }) => {
                 open={open}
                 onClose={handleClose}
             >
-                <AppBar sx={{ position: 'relative' }}>
+                <AppBar sx={{ position: 'relative' }} elevation={0}>
                     <Toolbar>
                         <IconButton
                             edge="start"
@@ -245,5 +264,5 @@ const ServiciosAplicados = ({ onClose }) => {
     );
 };
 
-export default ServiciosAplicados;
+export default ServiciosAplicadosCE;
 

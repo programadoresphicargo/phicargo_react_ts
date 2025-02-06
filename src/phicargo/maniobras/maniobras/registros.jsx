@@ -2,10 +2,15 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import Formulariomaniobra from './formulario_maniobra';
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 import { format, isValid } from 'date-fns';
-import { Button } from '@nextui-org/react';
+import { Button, Card, CardBody } from '@nextui-org/react';
 import { Chip } from '@nextui-org/react';
 import { Box } from '@mui/system';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import Tab from '@mui/material/Tab';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
+import DocumentacionManiobra from '../documentacion/documentacion';
 
 const Registromaniobras = ({ id_cp, id_cliente }) => {
     const [isLoading2, setILoading] = useState();
@@ -166,6 +171,12 @@ const Registromaniobras = ({ id_cp, id_cliente }) => {
             </Box>)
     });
 
+    const [value, setValue] = React.useState('1');
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
+
     return (
         <>
             <Formulariomaniobra
@@ -176,7 +187,32 @@ const Registromaniobras = ({ id_cp, id_cliente }) => {
                 form_deshabilitado={true}
                 id_cliente={id_cliente}
             />
-            <MaterialReactTable table={table} />
+
+            <Box sx={{ width: '100%', typography: 'body1' }}>
+                <TabContext value={value}>
+                    <Box>
+                        <TabList onChange={handleChange}>
+                            <Tab label="Maniobras registradas" value="1" />
+                            <Tab label="Documentación" value="2" />
+                        </TabList>
+                    </Box>
+                    <TabPanel value="1">
+                        <Card>
+                            <CardBody>
+                                <MaterialReactTable table={table} />
+                            </CardBody>
+                        </Card>
+                    </TabPanel>
+                    <TabPanel value="2">
+                        <Card>
+                            <CardBody>
+                                <DocumentacionManiobra>
+                                </DocumentacionManiobra>
+                            </CardBody>
+                        </Card>
+                    </TabPanel>
+                </TabContext>
+            </Box>
         </>
     );
 };
