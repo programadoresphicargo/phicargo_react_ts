@@ -42,6 +42,7 @@ const FormularioNewCE = ({ onClose, id_tipo_costo }) => {
       setLoading(false);
       if (data.status == "success") {
         message.success(data.message);
+        id_tipo_costo = null
         onClose();
       } else {
         message.error(`Error: ${data.message}`);

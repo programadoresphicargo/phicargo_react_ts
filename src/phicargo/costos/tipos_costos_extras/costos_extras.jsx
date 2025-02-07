@@ -51,6 +51,14 @@ const TiposCostosExtras = ({ }) => {
         accessorKey: 'costo',
         header: 'Costo',
       },
+      {
+        accessorKey: 'usuario_creacion',
+        header: 'Usuario creación',
+      },
+      {
+        accessorKey: 'fecha_creacion',
+        header: 'Fecha creación',
+      },
     ],
     [],
   );

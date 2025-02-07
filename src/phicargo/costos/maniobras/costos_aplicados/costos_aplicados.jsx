@@ -65,7 +65,9 @@ const ServiciosAplicadosCE = ({ onClose }) => {
     };
 
     useEffect(() => {
-        fetchData();
+        if (id_folio) {
+            fetchData();
+        }
     }, [id_folio]);
 
     const columns = useMemo(
