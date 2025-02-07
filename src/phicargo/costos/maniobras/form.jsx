@@ -28,7 +28,7 @@ import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import CostosExtrasContenedores from './añadir_contenedor/maniobra_contenedores';
 import { CostosExtrasContext } from '../context/context';
-import ServiciosAplicadosCE from './costos_aplicados/servicios_aplicados';
+import ServiciosAplicadosCE from './costos_aplicados/costos_aplicados';
 
 const FormCE = ({ }) => {
 

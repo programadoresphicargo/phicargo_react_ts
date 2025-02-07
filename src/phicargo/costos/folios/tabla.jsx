@@ -52,6 +52,14 @@ const Maniobras = () => {
         header: 'Folio',
       },
       {
+        accessorKey: 'empresa',
+        header: 'Empresa',
+      },
+      {
+        accessorKey: 'sucursal',
+        header: 'Sucursal',
+      },
+      {
         accessorKey: 'fecha_creacion',
         header: 'Fecha creación',
         size: 150,
@@ -81,6 +89,18 @@ const Maniobras = () => {
         header: 'Usuario',
       },
       {
+        accessorKey: 'cliente',
+        header: 'Cliente',
+      },
+      {
+        accessorKey: 'cartas_porte',
+        header: 'Cartas porte',
+      },
+      {
+        accessorKey: 'x_referencias',
+        header: 'Contenedores',
+      },
+      {
         accessorKey: 'status',
         header: 'Estatus',
         Cell: ({ cell }) => {
@@ -101,14 +121,6 @@ const Maniobras = () => {
             </Chip>
           );
         },
-      },
-      {
-        accessorKey: 'cartas_porte',
-        header: 'Cartas porte',
-      },
-      {
-        accessorKey: 'x_referencias',
-        header: 'Contenedores',
       },
       {
         accessorKey: 'ref_factura',

@@ -13,21 +13,19 @@ import {
 } from 'material-react-table';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { toast } from 'react-toastify';
-import FormularioDocumentacionManiobra from './formulario';
+import CENavBar from '../Navbar';
+import FormularioNewCE from './formulario';
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
-
-const DocumentacionManiobra = ({ }) => {
+const TiposCostosExtras = ({ }) => {
 
   const [data, setData] = useState([]);
   const [isLoading2, setLoading] = useState();
+  const [id_tipo_costo, setIDTCE] = useState(null);
 
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await odooApi.get('/archivos/get_archivos_viaje/');
+      const response = await odooApi.get('/tipos_costos_extras/');
       setData(response.data);
       setLoading(false);
     } catch (error) {
@@ -39,53 +37,19 @@ const DocumentacionManiobra = ({ }) => {
     fetchData();
   }, []);
 
-  const obtenerUrlPublico = async (idOnedrive) => {
-    try {
-      const response = await odooApi.post('/archivos/generate_link/' + idOnedrive);
-      if (response.data.url) {
-        window.open(response.data.url, '_blank');
-      } else {
-        alert('No se pudo obtener el enlace del archivo.' + response.data);
-      }
-    } catch (error) {
-      console.error('Error al obtener el enlace público:', error);
-      toast.error('Hubo un error al intentar obtener el enlace.');
-    }
-  };
-
   const columns = useMemo(
     () => [
       {
-        accessorKey: 'filename',
-        header: 'Nombre del archivo',
+        accessorKey: 'id_tipo_costo',
+        header: 'Clave',
       },
       {
-        accessorKey: 'tipo_archivo',
-        header: 'Tipo de documento',
+        accessorKey: 'descripcion',
+        header: 'Descripción',
       },
       {
-        accessorKey: 'nombre_usuario',
-        header: 'Usuario',
-      },
-      {
-        accessorKey: 'id_onedrive',
-        header: 'Onedrive ID',
-      },
-      {
-        accessorKey: 'fecha_creacion',
-        header: 'Fecha de subida',
-      },
-      {
-        accessorKey: 'ver',
-        header: 'Ver',
-        Cell: ({ row }) => (
-          <Button
-            color='primary'
-            onClick={() => obtenerUrlPublico(row.original.id_onedrive)}
-          >
-            Ver archivo
-          </Button>
-        ),
+        accessorKey: 'costo',
+        header: 'Costo',
       },
     ],
     [],
@@ -131,6 +95,18 @@ const DocumentacionManiobra = ({ }) => {
         overflow: 'hidden',
       },
     },
+    muiTableBodyRowProps: ({ row }) => ({
+      onClick: ({ event }) => {
+        if (row.subRows?.length) {
+        } else {
+          handleClickOpen();
+          setIDTCE(row.original.id_tipo_costo);
+        }
+      },
+      style: {
+        cursor: 'pointer',
+      },
+    }),
     renderTopToolbarCustomActions: ({ table }) => (
       <Box
         sx={{
@@ -140,8 +116,8 @@ const DocumentacionManiobra = ({ }) => {
           flexWrap: 'wrap',
         }}
       >
-        <Button color='primary' onClick={handleClickOpen}>
-          Nuevo documento
+        <Button color='primary' onPress={handleClickOpen}>
+          Nuevo
         </Button>
       </Box>
     )
@@ -160,26 +136,23 @@ const DocumentacionManiobra = ({ }) => {
 
   return (
     <>
-      <div className='card p-2 rounded'>
-        <MaterialReactTable table={table} />
-      </div>
+      <CENavBar></CENavBar>
+      <MaterialReactTable table={table} />
 
       <Dialog
         open={open}
-        TransitionComponent={Transition}
         keepMounted
         onClose={handleClose}
         aria-describedby="alert-dialog-slide-description"
         fullWidth="sm"
         maxWidth="sm"
       >
-        <DialogTitle>{"Envio de documentos"}</DialogTitle>
         <DialogContent>
-          <FormularioDocumentacionManiobra onClose={handleClose}></FormularioDocumentacionManiobra>
+          <FormularioNewCE onClose={handleClose} id_tipo_costo={id_tipo_costo}></FormularioNewCE>
         </DialogContent>
       </Dialog>
     </>
   );
 };
 
-export default DocumentacionManiobra;
+export default TiposCostosExtras;

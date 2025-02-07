@@ -24,7 +24,7 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import { CostosExtrasContext } from '../../context/context';
-import ServiciosExtras from './servicios_extras';
+import ServiciosExtras from './tipos_costos_extras';
 
 const ServiciosAplicadosCE = ({ onClose }) => {
     const { id_folio, ServiciosAplicados, setServiciosAplicados, setCostosExtrasEliminados, DisabledForm, setDisabledForm } = useContext(CostosExtrasContext);
@@ -97,19 +97,38 @@ const ServiciosAplicadosCE = ({ onClose }) => {
                 },
             },
             {
-                accessorKey: 'subtotal',
-                header: 'Subtotal',
+                accessorKey: "iva",
+                header: "IVA",
+                enableEditing: true,
+                muiTableBodyCellProps: {
+                    align: "right",
+                },
+                Cell: ({ row }) => {
+                    // Acceder al IVA o asignar un valor por defecto (16%)
+                    const iva = row.original.iva ?? 0.16;
+                    return iva.toLocaleString("es-MX", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                    });
+                },
+            },
+            {
+                accessorKey: "subtotal",
+                header: "Subtotal",
                 enableEditing: false,
                 Cell: ({ row }) => {
-                    const subtotal =
-                        (row.original.costo || 0) * (row.original.cantidad || 1);
-                    return subtotal.toLocaleString('es-MX', {
+                    const costo = row.original.costo || 0;
+                    const cantidad = row.original.cantidad || 1;
+                    const iva = row.original.iva ?? 0.16; // Usar el IVA definido o el 16% por defecto
+
+                    const subtotal = (costo * cantidad) * (1 + iva); // Se incluye el IVA en el subtotal
+                    return subtotal.toLocaleString("es-MX", {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,
                     });
                 },
                 muiTableBodyCellProps: {
-                    align: 'right',
+                    align: "right",
                 },
             },
             {

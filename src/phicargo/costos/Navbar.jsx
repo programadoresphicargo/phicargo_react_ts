@@ -18,7 +18,7 @@ import AppsIcon from '@mui/icons-material/Apps';
 
 const pages = [
     { name: 'FOLIOS', path: '/folios_costos_extras' },
-    { name: 'CONTROL DE COSTOS', path: '/control_maniobras' },
+    { name: 'CONTROL DE COSTOS', path: '/tipos_costos_extras' },
 ];
 
 const useStyles = makeStyles((theme) => ({
@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function ManiobrasNavBar() {
+function CENavBar() {
     const classes = useStyles();
     const navigate = useNavigate();
 
@@ -136,4 +136,4 @@ function ManiobrasNavBar() {
     );
 }
 
-export default ManiobrasNavBar;
+export default CENavBar;
