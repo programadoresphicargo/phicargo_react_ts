@@ -53,7 +53,6 @@ function ManiobrasNavBar() {
 
     return (
         <>
-            <WebSocketWithToast></WebSocketWithToast>
             <AppBar position="static" elevation={0} className={classes.appBar}>
                 <Container maxWidth="xl">
                     <Toolbar disableGutters>

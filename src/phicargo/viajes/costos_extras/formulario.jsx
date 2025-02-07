@@ -9,7 +9,6 @@ import { message, Upload } from 'antd';
 import { useAuthContext } from '../../modules/auth/hooks';
 import CostosExtras from '../viajes/costos_extras/costos_extras/registros';
 import CartasPorteCostoExtra from './cartas_porte';
-import ServiciosAplicados from './servicios_aplicados';
 import Stack from '@mui/material/Stack';
 
 const FormularioCostoExtra = ({ onClose }) => {
@@ -32,7 +31,6 @@ const FormularioCostoExtra = ({ onClose }) => {
           <CartasPorteCostoExtra></CartasPorteCostoExtra>
         </Grid>
         <Grid xs={9} className='p-2'>
-          <ServiciosAplicados></ServiciosAplicados>
         </Grid>
       </Grid>
     </>
