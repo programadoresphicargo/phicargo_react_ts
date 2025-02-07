@@ -37,7 +37,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const FormularioCostoExtra = ({ show, handleClose }) => {
 
-    const { id_folio, CartasPorte, CartasPorteEliminadas, CostosExtras, setCostosExtras, CostosExtrasEliminados, formData, setFormData, DisabledForm, setDisabledForm } = useContext(CostosExtrasContext);
+    const { id_folio, CartasPorte, CartasPorteEliminadas, CostosExtras, setCostosExtras, CostosExtrasEliminados, setCostosExtrasEliminados, formData, setFormData, DisabledForm, setDisabledForm } = useContext(CostosExtrasContext);
     const [Loading, setLoading] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
 
@@ -52,16 +52,6 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
             id_folio: id_folio
         }));
     }, [id_folio]);
-
-    const [dialogOpen, setDialogOpen] = useState(false);
-
-    const handleOpenDialog = () => {
-        setDialogOpen(true);
-    };
-
-    const handleCloseDialog = () => {
-        setDialogOpen(false);
-    };
 
     useEffect(() => {
         if (id_folio) {

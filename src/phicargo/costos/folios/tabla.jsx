@@ -14,11 +14,19 @@ import { CostosExtrasContext } from '../context/context';
 
 const Maniobras = () => {
 
-  const { id_folio, setIDFolio } = useContext(CostosExtrasContext);
+  const { id_folio, setIDFolio, CartasPorte, CartasPorteEliminadas, setCPS, setCPSEliminadas, CostosExtras, setCostosExtras, CostosExtrasEliminados, setCostosExtrasEliminados, formData, setFormData, DisabledForm, setDisabledForm } = useContext(CostosExtrasContext);
 
   const [data, setData] = useState([]);
   const [isLoading2, setLoading] = useState();
   const [modalShow, setModalShow] = useState(false);
+
+  const limpiarForm = () => {
+    setIDFolio(null);
+    setCPS([]);
+    setCPSEliminadas([]);
+    setCostosExtras([]);
+    setCostosExtrasEliminados([]);
+  };
 
   const handleShowModal = () => {
     setModalShow(true);
@@ -27,8 +35,8 @@ const Maniobras = () => {
   const handleCloseModal = () => {
     setModalShow(false);
     fetchData();
+    limpiarForm();
   };
-
 
   const fetchData = async () => {
     try {
