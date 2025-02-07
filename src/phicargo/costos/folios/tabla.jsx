@@ -126,6 +126,10 @@ const Maniobras = () => {
         accessorKey: 'ref_factura',
         header: 'Referencia factura',
       },
+      {
+        accessorKey: 'total',
+        header: 'Total',
+      },
     ],
     [],
   );

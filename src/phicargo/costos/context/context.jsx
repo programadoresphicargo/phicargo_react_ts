@@ -20,7 +20,7 @@ const CostosExtrasProvider = ({ children }) => {
     const [CartasPorte, setCPS] = useState([]);
     const [CartasPorteEliminadas, setCPSEliminadas] = useState([]);
 
-    const [ServiciosAplicados, setServiciosAplicados] = useState([]);
+    const [CostosExtras, setCostosExtras] = useState([]);
     const [CostosExtrasEliminados, setCostosExtrasEliminados] = useState([]);
 
     const [isLoading, setLoading] = useState(false);
@@ -28,7 +28,7 @@ const CostosExtrasProvider = ({ children }) => {
 
     return (
         <CostosExtrasContext.Provider value={{
-            DisabledForm, 
+            DisabledForm,
             setDisabledForm,
             formData,
             setFormData,
@@ -38,8 +38,8 @@ const CostosExtrasProvider = ({ children }) => {
             setCPS,
             CartasPorteEliminadas,
             setCPSEliminadas,
-            ServiciosAplicados,
-            setServiciosAplicados,
+            CostosExtras,
+            setCostosExtras,
             CostosExtrasEliminados,
             setCostosExtrasEliminados
         }}>

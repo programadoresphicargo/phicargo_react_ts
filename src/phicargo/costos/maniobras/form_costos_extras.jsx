@@ -37,7 +37,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const FormularioCostoExtra = ({ show, handleClose }) => {
 
-    const { id_folio, CartasPorte, CartasPorteEliminadas, ServiciosAplicados, setServiciosAplicados, CostosExtrasEliminados, formData, setFormData, DisabledForm, setDisabledForm } = useContext(CostosExtrasContext);
+    const { id_folio, CartasPorte, CartasPorteEliminadas, CostosExtras, setCostosExtras, CostosExtrasEliminados, formData, setFormData, DisabledForm, setDisabledForm } = useContext(CostosExtrasContext);
     const [Loading, setLoading] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
 
@@ -97,10 +97,21 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
     }, [id_folio]);
 
     const registrar_folio = () => {
+
+        if (CartasPorte.length === 0) {
+            toast.error("Añadir cartas porte");
+            return;
+        }
+
+        if (CostosExtras.length === 0) {
+            toast.error("Añadir costos extras");
+            return;
+        }
+
         const formData2 = {
             data: formData,
             cartas_porte: CartasPorte,
-            costos_extras: ServiciosAplicados
+            costos_extras: CostosExtras
         }
         setLoading(true);
         odooApi.post('/folios_costos_extras/create/', formData2)
@@ -124,11 +135,22 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
     };
 
     const actualizar_folio = () => {
+
+        if (CartasPorte.length === 0) {
+            toast.error("Añadir cartas porte");
+            return;
+        }
+
+        if (CostosExtras.length === 0) {
+            toast.error("Añadir costos extras");
+            return;
+        }
+
         const formData2 = {
             data: formData,
             cartas_porte: CartasPorte,
             cartas_porte_eliminadas: CartasPorteEliminadas,
-            costos_extras: ServiciosAplicados,
+            costos_extras: CostosExtras,
             costos_extras_eliminados: CostosExtrasEliminados,
         };
 
@@ -236,7 +258,7 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
                         </Box>
                     )}
 
-                    <Grid container>
+                    <Grid container className={'p-4'}>
                         <Grid size={8} className='mt-2 mb-2'>
                             <Stack spacing={1} direction="row">
                                 {id_folio == null && (

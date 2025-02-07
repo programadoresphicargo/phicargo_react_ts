@@ -20,7 +20,7 @@ const ServiciosExtras = ({ onClose }) => {
         setOpen(false);
     };
 
-    const { ServiciosAplicados, setServiciosAplicados } = useContext(CostosExtrasContext);
+    const { CostosExtras, setCostosExtras } = useContext(CostosExtrasContext);
 
     const [data, setData] = useState([]);
     const [isLoading2, setLoading] = useState();
@@ -122,7 +122,7 @@ const ServiciosExtras = ({ onClose }) => {
                 };
 
                 // Actualizar el estado con el nuevo servicio
-                setServiciosAplicados((prev) => [...prev, servicioConExtras]);
+                setCostosExtras((prev) => [...prev, servicioConExtras]);
                 onClose();
             },
             sx: {

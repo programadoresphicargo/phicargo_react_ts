@@ -27,7 +27,7 @@ import { CostosExtrasContext } from '../../context/context';
 import ServiciosExtras from './tipos_costos_extras';
 
 const ServiciosAplicadosCE = ({ onClose }) => {
-    const { id_folio, ServiciosAplicados, setServiciosAplicados, setCostosExtrasEliminados, DisabledForm, setDisabledForm } = useContext(CostosExtrasContext);
+    const { id_folio, CostosExtras, setCostosExtras, setCostosExtrasEliminados, DisabledForm, setDisabledForm } = useContext(CostosExtrasContext);
     const [loading, setLoading] = useState(false);
 
     const [open, setOpen] = useState(false);
@@ -37,7 +37,7 @@ const ServiciosAplicadosCE = ({ onClose }) => {
     };
 
     const guardar = () => {
-        console.log(ServiciosAplicados);
+        console.log(CostosExtras);
     };
 
     const handleClose = () => {
@@ -45,9 +45,9 @@ const ServiciosAplicadosCE = ({ onClose }) => {
     };
 
     const removeRow = (rowIndex) => {
-        const deletedItem = ServiciosAplicados[rowIndex];
-        const updatedData = ServiciosAplicados.filter((_, index) => index !== rowIndex);
-        setServiciosAplicados(updatedData);
+        const deletedItem = CostosExtras[rowIndex];
+        const updatedData = CostosExtras.filter((_, index) => index !== rowIndex);
+        setCostosExtras(updatedData);
         setCostosExtrasEliminados(prev => [...prev, deletedItem]);
         toast.success('Registro eliminado correctamente');
     };
@@ -57,7 +57,7 @@ const ServiciosAplicadosCE = ({ onClose }) => {
         try {
             setLoading(true);
             const response = await odooApi.get('/costos_extras/by_id_folio/' + id_folio);
-            setServiciosAplicados(response.data);
+            setCostosExtras(response.data);
             setLoading(false);
         } catch (error) {
             console.error('Error al obtener los datos:', error);
@@ -143,18 +143,18 @@ const ServiciosAplicadosCE = ({ onClose }) => {
     );
 
     const totalSubtotal = useMemo(() => {
-        return ServiciosAplicados.reduce((total, item) => {
+        return CostosExtras.reduce((total, item) => {
             const subtotal = (item.costo || 0) * (item.cantidad || 1);
             return total + subtotal;
         }, 0).toLocaleString('es-MX', {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
         });
-    }, [ServiciosAplicados]);
+    }, [CostosExtras]);
 
     const table = useMaterialReactTable({
         columns,
-        data: ServiciosAplicados,
+        data: CostosExtras,
         enableEditing: true,
         editDisplayMode: 'row',
         state: { showLoadingOverlay: loading },
@@ -163,7 +163,7 @@ const ServiciosAplicadosCE = ({ onClose }) => {
             pagination: { pageSize: 80 },
         },
         onEditingRowSave: ({ row, values, exitEditingMode }) => {
-            const updatedData = [...ServiciosAplicados];
+            const updatedData = [...CostosExtras];
             const updatedRow = { ...row.original, ...values };
 
             updatedRow.costo = parseFloat(updatedRow.costo) || 0;
@@ -171,7 +171,7 @@ const ServiciosAplicadosCE = ({ onClose }) => {
             updatedRow.subtotal = updatedRow.costo * updatedRow.cantidad;
 
             updatedData[row.index] = updatedRow;
-            setServiciosAplicados(updatedData);
+            setCostosExtras(updatedData);
             exitEditingMode();
             toast.success('Fila actualizada correctamente');
         },
