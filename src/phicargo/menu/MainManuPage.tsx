@@ -14,6 +14,7 @@ import monitoreo_img from '../../assets/menu/monitoreo.png';
 import operadores_img from '../../assets/menu/operadores.png';
 import reportesImg from '../../assets/menu/reportes.png';
 import turnos_img from '../../assets/menu/turnos.png';
+import ce_img from '../../assets/menu/costos_extras.png';
 import { useAuthContext } from '../modules/auth/hooks';
 import usuarios_img from '../../assets/menu/usuarios.png';
 import viajes_img from '../../assets/menu/viajes.png';
@@ -97,7 +98,7 @@ const menuItems: MenuItemType[] = [
     requiredPermissions: [4],
   },
   {
-    icon: reportesImg,
+    icon: ce_img,
     label: 'Costos extras',
     link: '/folios_costos_extras',
     requiredPermissions: [],
