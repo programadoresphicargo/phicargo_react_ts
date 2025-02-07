@@ -3,20 +3,16 @@ import {
     useMaterialReactTable,
 } from 'material-react-table';
 import React, { useEffect, useMemo, useState, useContext } from 'react';
-
 import { Box } from '@mui/material';
 import { Button } from '@nextui-org/react';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Select, SelectItem } from '@nextui-org/react';
-import MonthSelector from '@/mes';
-import YearSelector from '@/año';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { CostosExtrasContext } from '../../context/context';
-const { VITE_PHIDES_API_URL } = import.meta.env;
+import { DateRangePicker } from "rsuite";
 
 const AñadirContenedor = ({ show, handleClose }) => {
 
@@ -24,6 +20,7 @@ const AñadirContenedor = ({ show, handleClose }) => {
 
     const [data, setData] = useState([]);
     const [isLoading2, setILoading] = useState();
+    const [range, setRange] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -43,6 +40,7 @@ const AñadirContenedor = ({ show, handleClose }) => {
 
     const añadir_contenedor = (data) => {
         setCPS(prevCartasPorte => [...prevCartasPorte, data]);
+        handleClose();
     };
 
     const columns = useMemo(
@@ -96,19 +94,19 @@ const AñadirContenedor = ({ show, handleClose }) => {
         },
         muiTableBodyCellProps: {
             sx: {
-                borderBottom: '1px solid #e0e0e0', // Añade un borde entre columnas
+                borderBottom: '1px solid #e0e0e0', 
             },
         },
         enableRowActions: true,
         displayColumnDefOptions: {
             'mrt-row-actions': {
-                header: 'Seleccionar', //change header text
-                size: 100, //make actions column wider
+                header: 'Seleccionar', 
+                size: 100, 
             },
         },
         renderRowActions: ({ row }) => (
             <Box>
-                <Button color='primary' onClick={() => añadir_contenedor(row.original)}>
+                <Button color='primary' onPress={() => añadir_contenedor(row.original)} size='sm'>
                     Añadir
                 </Button>
             </Box>
@@ -143,6 +141,22 @@ const AñadirContenedor = ({ show, handleClose }) => {
         }),
         renderTopToolbarCustomActions: ({ table }) => (
             <Box display="flex" alignItems="center" m={2}>
+                <h3>Selecciona un rango de fechas:</h3>
+                <DateRangePicker
+                    sx={{ zIndex: 1000 }}
+                    placeholder="Selecciona un rango"
+                    value={range}
+                    onChange={setRange}
+                    format="yyyy-MM-dd"
+                    size="lg"
+                    cleanable
+                />
+                {range && (
+                    <p>
+                        Fechas seleccionadas: <b>{range[0]?.toLocaleDateString()}</b> -{" "}
+                        <b>{range[1]?.toLocaleDateString()}</b>
+                    </p>
+                )}
             </Box>
         ),
     });

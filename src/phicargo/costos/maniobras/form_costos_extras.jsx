@@ -3,7 +3,7 @@ import axios from 'axios';
 import ManiobraContenedores from './añadir_contenedor/maniobra_contenedores';
 import { User } from "@nextui-org/react";
 import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import Dialog from '@mui/material/Dialog';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -87,7 +87,7 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
                 });
         } else {
             setFormData({
-                id_folio: '',
+                id_folio: null,
                 ref_factura: '',
                 status: '',
                 facturado: false,
@@ -107,7 +107,7 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
             .then((response) => {
                 const data = response.data;
                 setLoading(false);
-                if (data.success) {
+                if (data.status == "success") {
                     toast.success('El registro ha sido exitoso.');
                     handleClose();
                 } else if (data.error) {
@@ -237,9 +237,9 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
                     )}
 
                     <Grid container>
-                        <Grid lg={12} xs={12} className='mt-2 mb-2'>
+                        <Grid size={8} className='mt-2 mb-2'>
                             <Stack spacing={1} direction="row">
-                                {formData.id_folio == null && (
+                                {id_folio == null && (
                                     <Button color="primary" size="sm" onPress={registrar_folio} isLoading={Loading}>
                                         Registrar
                                     </Button>
@@ -280,15 +280,15 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
                             </Stack>
                         </Grid>
 
-                        <Grid lg={7} xs={12}>
+                        <Grid size={8} className={"m-1"}>
                             <CostosExtrasContenedores></CostosExtrasContenedores>
                         </Grid>
 
-                        <Grid lg={5} xs={12}>
+                        <Grid size={3} className={"m-1"}>
                             <FormCE></FormCE>
                         </Grid>
 
-                        <Grid lg={12} xs={12} className='m-2'>
+                        <Grid size={12} className={"m-1"}>
                             <ServiciosAplicadosCE></ServiciosAplicadosCE>
                         </Grid>
 

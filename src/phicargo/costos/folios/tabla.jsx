@@ -103,6 +103,14 @@ const Maniobras = () => {
         },
       },
       {
+        accessorKey: 'cartas_porte',
+        header: 'Cartas porte',
+      },
+      {
+        accessorKey: 'x_referencias',
+        header: 'Contenedores',
+      },
+      {
         accessorKey: 'ref_factura',
         header: 'Referencia factura',
       },
@@ -173,7 +181,15 @@ const Maniobras = () => {
           alignItems: 'center',
         }}
       >
-        <Button color='primary'>Nuevo folio</Button>
+        <Button
+          color="primary"
+          onPress={() => {
+            handleShowModal();
+            setIDFolio(null);
+          }}
+        >
+          Nuevo folio
+        </Button>
       </Box >
     ),
   });

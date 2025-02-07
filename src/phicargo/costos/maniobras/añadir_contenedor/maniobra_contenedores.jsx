@@ -17,7 +17,7 @@ import { CostosExtrasContext } from '../../context/context';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 
 const CostosExtrasContenedores = ({ id_maniobra }) => {
-    const { id_folio, CartasPorte, setCPS, CartasPorteEliminadas, setCPSEliminadas, DisabledForm, setDisabledForm} = useContext(CostosExtrasContext);
+    const { id_folio, CartasPorte, setCPS, CartasPorteEliminadas, setCPSEliminadas, DisabledForm, setDisabledForm } = useContext(CostosExtrasContext);
     const [modalShow, setModalShow] = useState(false);
     const [openDialog, setOpenDialog] = useState(false);
     const [selectedId, setSelectedId] = useState(null);
@@ -29,9 +29,9 @@ const CostosExtrasContenedores = ({ id_maniobra }) => {
     };
 
     const handleShowModal = () => setModalShow(true);
+    
     const handleCloseModal = () => {
         setModalShow(false);
-        fetchData();
     };
 
     const columns = useMemo(
@@ -105,7 +105,7 @@ const CostosExtrasContenedores = ({ id_maniobra }) => {
         <>
             <Card>
                 <CardBody>
-                    <AñadirContenedor show={modalShow} handleClose={handleCloseModal} id_maniobra={id_maniobra} />
+                    <AñadirContenedor show={modalShow} handleClose={handleCloseModal} />
                     <MaterialReactTable table={table} />
                 </CardBody>
             </Card>
