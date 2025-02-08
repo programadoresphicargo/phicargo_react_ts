@@ -25,6 +25,7 @@ import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import { CostosExtrasContext } from '../../context/context';
 import ServiciosExtras from './tipos_costos_extras';
+import Swal from 'sweetalert2';
 
 const ServiciosAplicadosCE = ({ onClose }) => {
     const { id_folio, CostosExtras, setCostosExtras, setCostosExtrasEliminados, DisabledForm, setDisabledForm } = useContext(CostosExtrasContext);
@@ -45,13 +46,25 @@ const ServiciosAplicadosCE = ({ onClose }) => {
     };
 
     const removeRow = (rowIndex) => {
-        const deletedItem = CostosExtras[rowIndex];
-        const updatedData = CostosExtras.filter((_, index) => index !== rowIndex);
-        setCostosExtras(updatedData);
-        setCostosExtrasEliminados(prev => [...prev, deletedItem]);
-        toast.success('Registro eliminado correctamente');
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: 'Esta acción eliminará el registro.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const deletedItem = CostosExtras[rowIndex];
+                const updatedData = CostosExtras.filter((_, index) => index !== rowIndex);
+                setCostosExtras(updatedData);
+                setCostosExtrasEliminados(prev => [...prev, deletedItem]);
+                toast.success('Registro eliminado correctamente');
+            }
+        });
     };
-
 
     const fetchData = async () => {
         try {
@@ -156,7 +169,8 @@ const ServiciosAplicadosCE = ({ onClose }) => {
         columns,
         data: CostosExtras,
         enableEditing: true,
-        editDisplayMode: 'row',
+        editDisplayMode: 'modal',
+        positionActionsColumn: 'last',
         state: { showLoadingOverlay: loading },
         initialState: {
             density: 'compact',
@@ -173,7 +187,7 @@ const ServiciosAplicadosCE = ({ onClose }) => {
             updatedData[row.index] = updatedRow;
             setCostosExtras(updatedData);
             exitEditingMode();
-            toast.success('Fila actualizada correctamente');
+            toast.success('Registro actualizado');
         },
         muiTablePaperProps: {
             elevation: 0,
@@ -219,9 +233,10 @@ const ServiciosAplicadosCE = ({ onClose }) => {
         renderRowActions: ({ row, table }) => (
             <Box sx={{ display: 'flex', gap: '8px' }}>
                 <Button
-                    color="success"
+                    color="primary"
                     size="sm"
                     className='text-white'
+                    isDisabled={DisabledForm}
                     onPress={() => table.setEditingRow(row)}
                 >
                     Editar
@@ -229,6 +244,7 @@ const ServiciosAplicadosCE = ({ onClose }) => {
                 <Button
                     color="danger"
                     size="sm"
+                    isDisabled={DisabledForm}
                     onPress={() => removeRow(row.index)}
                 >
                     Eliminar

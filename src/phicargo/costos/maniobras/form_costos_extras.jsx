@@ -58,11 +58,12 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
             odooApi.get(`/folios_costos_extras/get_by_id/${id_folio}`)
                 .then((response) => {
                     if (response.data.length > 0) {
+                        setIsEditing(false);
                         const data = response.data[0];
                         setFormData({
                             id_folio: data.id_folio,
-                            ref_factura: data.ref_factura || '',
-                            status: data.status || '',
+                            ref_factura: data.ref_factura || null,
+                            status: data.status || null,
                         });
                         setDisabledForm(true);
                     } else {
@@ -78,25 +79,31 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
         } else {
             setFormData({
                 id_folio: null,
-                ref_factura: '',
-                status: '',
+                ref_factura: null,
+                status: null,
                 facturado: false,
             });
             setDisabledForm(false);
         }
     }, [id_folio]);
 
-    const registrar_folio = () => {
-
+    const validar_folio = () => {
         if (CartasPorte.length === 0) {
             toast.error("Añadir cartas porte");
-            return;
+            return false;
         }
 
         if (CostosExtras.length === 0) {
             toast.error("Añadir costos extras");
-            return;
+            return false;
         }
+
+        return true;
+    };
+
+    const registrar_folio = () => {
+
+        if (!validar_folio()) return;
 
         const formData2 = {
             data: formData,
@@ -126,15 +133,7 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
 
     const actualizar_folio = () => {
 
-        if (CartasPorte.length === 0) {
-            toast.error("Añadir cartas porte");
-            return;
-        }
-
-        if (CostosExtras.length === 0) {
-            toast.error("Añadir costos extras");
-            return;
-        }
+        if (!validar_folio()) return;
 
         const formData2 = {
             data: formData,
