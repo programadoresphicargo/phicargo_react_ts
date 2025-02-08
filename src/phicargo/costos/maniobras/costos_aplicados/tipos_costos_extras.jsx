@@ -108,7 +108,6 @@ const ServiciosExtras = ({ onClose }) => {
                 }}
             >
                 <h1>Servicios aplicados</h1>
-                <Button onPress={handleClickOpen} color='primary' size='sm'>Añadir servicio</Button>
             </Box>
         ),
         muiTableBodyRowProps: ({ row }) => ({

@@ -102,6 +102,9 @@ const ServiciosAplicadosCE = ({ onClose }) => {
                 muiTableBodyCellProps: {
                     align: 'right',
                 },
+                muiTableHeadCellProps: {
+                    align: 'right',
+                },
             },
             {
                 accessorKey: 'cantidad',
@@ -110,13 +113,19 @@ const ServiciosAplicadosCE = ({ onClose }) => {
                 muiTableBodyCellProps: {
                     align: 'right',
                 },
+                muiTableHeadCellProps: {
+                    align: 'right',
+                },
             },
             {
                 accessorKey: "iva",
                 header: "IVA",
                 enableEditing: true,
                 muiTableBodyCellProps: {
-                    align: "right",
+                    align: 'right',
+                },
+                muiTableHeadCellProps: {
+                    align: 'right',
                 },
                 Cell: ({ row }) => {
                     // Acceder al IVA o asignar un valor por defecto (16%)
@@ -131,6 +140,12 @@ const ServiciosAplicadosCE = ({ onClose }) => {
                 accessorKey: "subtotal",
                 header: "Subtotal",
                 enableEditing: false,
+                muiTableBodyCellProps: {
+                    align: 'right',
+                },
+                muiTableHeadCellProps: {
+                    align: 'right',
+                },
                 Cell: ({ row }) => {
                     const costo = row.original.costo || 0;
                     const cantidad = row.original.cantidad || 1;
@@ -293,7 +308,7 @@ const ServiciosAplicadosCE = ({ onClose }) => {
                             <CloseIcon />
                         </IconButton>
                         <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-                            Servicios extras
+                            Tipos de sevicios extras
                         </Typography>
                         <Button autoFocus color="inherit" onClick={handleClose}>
                             Cerrar

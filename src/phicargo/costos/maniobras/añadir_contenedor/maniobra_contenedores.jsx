@@ -29,7 +29,7 @@ const CostosExtrasContenedores = ({ id_maniobra }) => {
     };
 
     const handleShowModal = () => setModalShow(true);
-    
+
     const handleCloseModal = () => {
         setModalShow(false);
     };
@@ -66,6 +66,7 @@ const CostosExtrasContenedores = ({ id_maniobra }) => {
         enableGrouping: true,
         enableGlobalFilter: true,
         enableFilters: true,
+        positionActionsColumn: 'last',
         state: { isLoading: isLoading },
         initialState: {
             density: 'compact',
