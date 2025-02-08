@@ -94,7 +94,7 @@ const Maniobras = () => {
       },
       {
         accessorKey: 'nombre',
-        header: 'Usuario',
+        header: 'Creado por',
       },
       {
         accessorKey: 'cliente',
