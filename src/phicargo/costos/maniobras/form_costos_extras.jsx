@@ -251,25 +251,25 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
                         <Grid size={8} className='mt-2 mb-2'>
                             <Stack spacing={1} direction="row">
                                 {id_folio == null && (
-                                    <Button color="primary" size="sm" onPress={registrar_folio} isLoading={Loading}>
+                                    <Button color="primary" onPress={registrar_folio} isLoading={Loading}>
                                         Registrar
                                     </Button>
                                 )}
 
                                 {formData.status === 'borrador' && (
-                                    <Button color="danger" size="sm" onPress={cancelar_folio}>
+                                    <Button color="danger" onPress={cancelar_folio}>
                                         Cancelar
                                     </Button>
                                 )}
 
                                 {formData.status === 'borrador' && (
-                                    <Button color="success" size="sm" onPress={facturar_folio} className='text-white'>
+                                    <Button color="success" onPress={facturar_folio} className='text-white'>
                                         Facturar
                                     </Button>
                                 )}
 
                                 {formData.status === "borrador" && !isEditing && (
-                                    <Button color="primary" size="sm" onPress={() => editar_registro()}>
+                                    <Button color="primary" onPress={() => editar_registro()}>
                                         Editar
                                     </Button>
                                 )}
