@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useContext } from 'react';
 import { TextField } from '@mui/material';
 import dayjs from 'dayjs';
-import { MenuItem, Select, FormControl, InputLabel } from '@mui/material';
+import { MenuItem, FormControl, InputLabel } from '@mui/material';
 import { Box } from '@mui/material';
 import { Button, Chip } from '@nextui-org/react';
 import {
@@ -11,6 +11,7 @@ import {
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import FormularioCostoExtra from '../maniobras/form_costos_extras';
 import { CostosExtrasContext } from '../context/context';
+import { Select, SelectItem } from "@nextui-org/react";
 
 const Maniobras = () => {
 
@@ -19,6 +20,11 @@ const Maniobras = () => {
   const [data, setData] = useState([]);
   const [isLoading2, setLoading] = useState();
   const [modalShow, setModalShow] = useState(false);
+  const [sucursal, setSucursal] = React.useState("1");
+
+  const seleccionar_sucursal = (e) => {
+    setSucursal(e.target.value);
+  };
 
   const limpiarForm = () => {
     setIDFolio(null);
@@ -41,7 +47,7 @@ const Maniobras = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await odooApi.get('/folios_costos_extras/');
+      const response = await odooApi.get('/folios_costos_extras/by_store_id/' + sucursal);
       setData(response.data);
       setLoading(false);
     } catch (error) {
@@ -51,7 +57,7 @@ const Maniobras = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [sucursal]);
 
   const columns = useMemo(
     () => [
@@ -165,7 +171,7 @@ const Maniobras = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 210px)',
+        maxHeight: 'calc(100vh - 220px)',
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
@@ -205,16 +211,35 @@ const Maniobras = () => {
           alignItems: 'center',
         }}
       >
-        <Button
-          color="primary"
-          onPress={() => {
-            handleShowModal();
-            setIDFolio(null);
-          }}
-        >
-          Nuevo folio
-        </Button>
-      </Box >
+        <Box sx={{ width: '200px' }}>
+          <Button
+            color="primary"
+            size='lg'
+            fullWidth
+            onPress={() => {
+              handleShowModal();
+              setIDFolio(null);
+            }}
+          >
+            Nuevo folio
+          </Button>
+        </Box>
+
+        <Box sx={{ width: '250px' }}>
+          <Select
+            label="Sucursal"
+            placeholder="Selecciona una sucursal"
+            selectedKeys={[sucursal]}
+            onChange={seleccionar_sucursal}
+            fullWidth // Hace que el Select ocupe todo el ancho del contenedor
+          >
+            <SelectItem key={'1'}>Veracruz</SelectItem>
+            <SelectItem key={'2'}>México</SelectItem>
+            <SelectItem key={'9'}>Manzanillo</SelectItem>
+          </Select>
+        </Box>
+      </Box>
+
     ),
   });
 
