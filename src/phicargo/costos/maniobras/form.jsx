@@ -34,16 +34,18 @@ const FormCE = ({ }) => {
 
     const { id_folio, formData, setFormData } = useContext(CostosExtrasContext);
 
-    const handleChange = (e) => {
-        console.log(e);
-        setFormData({ ...formData, ref_factura: e });
+    const handleChange = (value) => { 
+        setFormData((prev) => ({
+            ...prev,
+            ref_factura: value === "" ? null : value,
+        }));
     };
 
     return (
         <>
             <Card>
                 <CardBody>
-                    <Input label="Referencia factura" value={formData.ref_factura} onValueChange={handleChange} variant='bordered' type='number'></Input>
+                    <Input label="Referencia factura" value={formData.ref_factura ?? ""} onValueChange={handleChange} variant='bordered' type='number'></Input>
                 </CardBody>
             </Card>
         </>

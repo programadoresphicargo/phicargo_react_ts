@@ -11,7 +11,6 @@ import Typography from '@mui/material/Typography';
 import Slide from '@mui/material/Slide';
 import Stack from '@mui/material/Stack';
 import { Button } from '@nextui-org/react';
-import AutocompleteManager from './correos_electronicos/correos_electronicos';
 import { toast } from 'react-toastify';
 import { Card, CardBody } from '@nextui-org/react';
 import { Container, filledInputClasses } from '@mui/material';
@@ -193,13 +192,26 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
             imageAlt: 'Imagen de confirmación',
         }).then((result) => {
             if (result.isConfirmed) {
-                odooApi.post('/folios_costos_extras/facturar/' + id_folio)
+                odooApi.post(`/folios_costos_extras/facturar/${id_folio}`)
                     .then(response => {
-                        Swal.fire('Facturado', 'El folio ha sido facturado y cerrado.', 'success');
-                        handleClose();
+                        if (response.data?.status === 'error') {
+                            toast.error(response.data.message);
+                        } else {
+                            Swal.fire({
+                                title: 'Facturado',
+                                text: 'El folio ha sido facturado y cerrado.',
+                                icon: 'success'
+                            });
+                            handleClose();
+                        }
                     })
                     .catch(error => {
-                        Swal.fire('Error', 'Hubo un problema al cancelar el folio.', 'error');
+                        console.error('Error en la solicitud:', error);
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'Hubo un problema al facturar el folio.',
+                            icon: 'error'
+                        });
                     });
             }
         });
@@ -286,7 +298,6 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
                                     <Button
                                         color="success"
                                         className='text-white'
-                                        size="sm"
                                         onPress={() => {
                                             actualizar_folio();
                                         }}
