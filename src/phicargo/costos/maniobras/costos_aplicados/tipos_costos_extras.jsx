@@ -54,6 +54,14 @@ const ServiciosExtras = ({ onClose }) => {
                 accessorKey: 'costo',
                 header: 'Costo',
             },
+            {
+                accessorKey: 'unidad_medida',
+                header: 'Unidad medida',
+            },
+            {
+                accessorKey: 'observaciones',
+                header: 'Observaciones',
+            },
         ],
         [],
     );

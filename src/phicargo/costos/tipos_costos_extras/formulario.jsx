@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useMemo, useContext } from 'react';
 import { Box } from '@mui/material';
 import { Button, select } from "@nextui-org/react";
-import { Select, SelectItem } from "@nextui-org/react";
 import Slide from '@mui/material/Slide';
 import { InboxOutlined } from '@ant-design/icons';
 import { message, Upload } from 'antd';
 import { Input } from "@nextui-org/react";
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import { Select, SelectItem, Textarea } from "@nextui-org/react";
 
 const FormularioNewCE = ({ onClose, id_tipo_costo }) => {
 
@@ -55,7 +55,9 @@ const FormularioNewCE = ({ onClose, id_tipo_costo }) => {
 
   const [formData, setFormData] = useState({
     descripcion: '',
-    costo: 0.0
+    costo: 0.0,
+    unidad_medida: null,
+    observaciones: null
   })
 
   const handleChange = (name, value) => {
@@ -69,16 +71,25 @@ const FormularioNewCE = ({ onClose, id_tipo_costo }) => {
     if (id_tipo_costo) {
       odooApi.get(`/tipos_costos_extras/by_id_tipo_costo/${id_tipo_costo}`)
         .then((response) => {
-          if (response.data.length > 0) {
+          if (Array.isArray(response.data) && response.data.length > 0) {
             const data = response.data[0];
-            setFormData({
-              id_tipo_costo: data.id_tipo_costo,
+            setFormData(prevState => ({
+              ...prevState,
+              id_tipo_costo: data.id_tipo_costo || '',
               descripcion: data.descripcion || '',
               costo: data.costo || 0.0,
-            });
+              unidad_medida: data.unidad_medida || '',
+              observaciones: data.observaciones || ''
+            }));
           } else {
             console.warn('No se encontraron datos para id_tipo_costo:', id_tipo_costo);
-            setFormData({});
+            setFormData({
+              id_tipo_costo: '',
+              descripcion: '',
+              costo: 0,
+              unidad_medida: '',
+              observaciones: ''
+            });
           }
         })
         .catch((error) => {
@@ -87,12 +98,21 @@ const FormularioNewCE = ({ onClose, id_tipo_costo }) => {
         });
     } else {
       setFormData({
-        id_tipo_costo: null,
+        id_tipo_costo: '',
         descripcion: '',
         costo: 0,
+        unidad_medida: '',
+        observaciones: ''
       });
     }
   }, [id_tipo_costo]);
+
+  const animals = [
+    { key: "pieza", label: "pieza" },
+    { key: "contenedor", label: "contenedor" },
+    { key: "operador", label: "operador" },
+    { key: "plataforma", label: "plataforma" },
+  ];
 
   return (
     <>
@@ -123,16 +143,45 @@ const FormularioNewCE = ({ onClose, id_tipo_costo }) => {
           label="Descripción"
           type="text"
           name="descripcion"
+          variant="bordered"
           value={formData.descripcion}
           onValueChange={(value) => handleChange("descripcion", value)} />
+      </div>
 
+      <div className="flex w-full flex-wrap md:flex-nowrap gap-2 mt-3">
         <Input
           label="Costo preestablecido"
           type="number"
           value={formData.costo}
           name="costo"
+          variant="bordered"
           onValueChange={(value) => handleChange("costo", value)} />
       </div>
+
+      <div className="flex w-full flex-wrap md:flex-nowrap gap-2 mt-3">
+        <Select
+          label="Unidad medida"
+          fullWidth={true}
+          placeholder="Seleccionar unidad de medida"
+          selectedKeys={[formData.unidad_medida]}
+          variant="bordered"
+          onSelectionChange={(value) => handleChange("unidad_medida", value.currentKey)}
+        >
+          {animals.map((animal) => (
+            <SelectItem key={animal.key}>{animal.label}</SelectItem>
+          ))}
+        </Select>
+      </div>
+
+      <div className="flex w-full flex-wrap md:flex-nowrap gap-2 mt-3">
+        <Textarea
+          label="Observaciones"
+          placeholder="Ingresa las observaciones"
+          value={formData.observaciones}
+          variant="bordered"
+          onValueChange={(value) => handleChange("observaciones", value)}
+        />
+      </div >
     </>
   );
 };

@@ -318,7 +318,7 @@ const ServiciosAplicadosCE = ({ onClose }) => {
 
             <Dialog
                 fullWidth={true}
-                maxWidth="md"
+                maxWidth="lg"
                 open={open}
                 onClose={handleClose}
             >
@@ -333,7 +333,7 @@ const ServiciosAplicadosCE = ({ onClose }) => {
                             <CloseIcon />
                         </IconButton>
                         <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-                            Tipos de sevicios extras
+                            Costos extras
                         </Typography>
                         <Button autoFocus color="inherit" onClick={handleClose}>
                             Cerrar

@@ -52,6 +52,14 @@ const TiposCostosExtras = ({ }) => {
         header: 'Costo',
       },
       {
+        accessorKey: 'unidad_medida',
+        header: 'Unidad medida',
+      },
+      {
+        accessorKey: 'observaciones',
+        header: 'Observaciones',
+      },
+      {
         accessorKey: 'usuario_creacion',
         header: 'Usuario creación',
       },
@@ -135,6 +143,7 @@ const TiposCostosExtras = ({ }) => {
 
   const handleClickOpen = () => {
     setOpen(true);
+    setIDTCE(null);
   };
 
   const handleClose = () => {
