@@ -14,12 +14,13 @@ import {
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { toast } from 'react-toastify';
 import FormularioDocumentacionManiobra from './formulario';
+const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const DocumentacionManiobra = ({ }) => {
+const DocumentacionManiobra = ({ id_maniobra }) => {
 
   const [data, setData] = useState([]);
   const [isLoading2, setLoading] = useState();
@@ -27,8 +28,15 @@ const DocumentacionManiobra = ({ }) => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await odooApi.get('/archivos/get_archivos_viaje/');
-      setData(response.data);
+      const formData = new FormData();
+      formData.append('id_maniobra', id_maniobra);
+
+      const response = await fetch(VITE_PHIDES_API_URL + '/modulo_maniobras/documentacion/getDocumentos.php', {
+        method: 'POST',
+        body: formData,
+      });
+      const result = await response.json();
+      setData(result);
       setLoading(false);
     } catch (error) {
       console.error('Error al obtener los datos:', error);
@@ -175,7 +183,7 @@ const DocumentacionManiobra = ({ }) => {
       >
         <DialogTitle>{"Envio de documentos"}</DialogTitle>
         <DialogContent>
-          <FormularioDocumentacionManiobra onClose={handleClose}></FormularioDocumentacionManiobra>
+          <FormularioDocumentacionManiobra onClose={handleClose} id_maniobra={id_maniobra}></FormularioDocumentacionManiobra>
         </DialogContent>
       </Dialog>
     </>

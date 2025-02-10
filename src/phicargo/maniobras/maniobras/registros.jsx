@@ -166,16 +166,10 @@ const Registromaniobras = ({ id_cp, id_cliente }) => {
                 }}
             >
                 <Button onPress={abrir_nueva} color='primary'>
-                    Ingresar maniobra
+                    Ingresar nueva maniobra
                 </Button>
             </Box>)
     });
-
-    const [value, setValue] = React.useState('1');
-
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
 
     return (
         <>
@@ -189,29 +183,11 @@ const Registromaniobras = ({ id_cp, id_cliente }) => {
             />
 
             <Box sx={{ width: '100%', typography: 'body1' }}>
-                <TabContext value={value}>
-                    <Box>
-                        <TabList onChange={handleChange}>
-                            <Tab label="Maniobras registradas" value="1" />
-                            <Tab label="Documentación" value="2" />
-                        </TabList>
-                    </Box>
-                    <TabPanel value="1">
-                        <Card>
-                            <CardBody>
-                                <MaterialReactTable table={table} />
-                            </CardBody>
-                        </Card>
-                    </TabPanel>
-                    <TabPanel value="2">
-                        <Card>
-                            <CardBody>
-                                <DocumentacionManiobra>
-                                </DocumentacionManiobra>
-                            </CardBody>
-                        </Card>
-                    </TabPanel>
-                </TabContext>
+                <Card>
+                    <CardBody>
+                        <MaterialReactTable table={table} />
+                    </CardBody>
+                </Card>
             </Box>
         </>
     );

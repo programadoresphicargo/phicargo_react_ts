@@ -261,7 +261,7 @@ const Operadores = ({ estado }) => {
     initialState: {
       density: 'compact',
       expanded: false,
-      grouping: ['empresa', 'tipo'],
+      grouping: ['empresa', 'tipo', 'moneda'],
       pagination: { pageIndex: 0, pageSize: 100 },
       showColumnFilters: true,
     },

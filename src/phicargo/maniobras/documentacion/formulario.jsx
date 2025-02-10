@@ -9,7 +9,7 @@ import { useAuthContext } from '../../modules/auth/hooks';
 const { Dragger } = Upload;
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
-const FormularioDocumentacionManiobra = ({ onClose }) => {
+const FormularioDocumentacionManiobra = ({ onClose, id_maniobra }) => {
 
   const { session } = useAuthContext();
   const [tipo_doc, setSelectedValue] = useState('');
@@ -33,7 +33,7 @@ const FormularioDocumentacionManiobra = ({ onClose }) => {
   const handleUpload = async () => {
     setLoading(true);
     const formData = new FormData();
-    formData.append('id_viaje', id_viaje);
+    formData.append('id_maniobra', id_maniobra);
     formData.append('tipo_doc', tipo_doc);
     formData.append('id_usuario', session.user.id);
     fileList.forEach((file) => {
@@ -41,7 +41,7 @@ const FormularioDocumentacionManiobra = ({ onClose }) => {
     });
 
     try {
-      const response = await fetch(VITE_PHIDES_API_URL + '/viajes/documentacion/enviarDocumentos.php', {
+      const response = await fetch(VITE_PHIDES_API_URL + '/modulo_maniobras/documentacion/enviarDocumentos.php', {
         method: 'POST',
         body: formData,
       });
