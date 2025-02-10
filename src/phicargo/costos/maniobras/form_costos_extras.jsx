@@ -226,9 +226,6 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
             cancelButtonColor: '#d33',
             confirmButtonText: 'Sí, cancelar',
             cancelButtonText: 'Cancelar',
-            imageWidth: 150,
-            imageHeight: 150,
-            imageAlt: 'Imagen de confirmación',
         }).then((result) => {
             if (result.isConfirmed) {
                 odooApi.post('/folios_costos_extras/cancelar/' + id_folio)
@@ -245,29 +242,31 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
 
     return (
         <>
-            <Dialog open={show}
-                onClose={handleClose}
+            <Dialog
                 fullScreen
-                TransitionComponent={Transition}>
-                <Box className='bg-soft-secondary'>
-                    <AppBar sx={{ position: 'relative' }} elevation={0}>
-                        <Toolbar>
-                            <Typography sx={{ flex: 1 }} component="div">
-                                CE-{id_folio}
-                            </Typography>
-                            <Button autoFocus color="inherit" onPress={handleClose}>
-                                Cerrar
-                            </Button>
-                        </Toolbar>
-                    </AppBar>
+                open={show}
+                onClose={handleClose}
+                TransitionComponent={Transition}
+            >
+                <AppBar sx={{ position: 'relative' }} elevation={0}>
+                    <Toolbar>
+                        <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+                            CE-{id_folio}
+                        </Typography>
+                        <Button autoFocus color="inherit" onClick={handleClose}>
+                            Cerrar
+                        </Button>
+                    </Toolbar>
+                </AppBar>
 
+                <Box className='bg-soft-secondary' className={'p-3'}>
                     {Loading && (
                         <Box sx={{ width: '100%' }} visibility={false}>
                             <LinearProgress />
                         </Box>
                     )}
 
-                    <Grid container className={'p-4'}>
+                    <Grid container>
                         <Grid size={8} className='mt-2 mb-2'>
                             <Stack spacing={1} direction="row">
                                 {id_folio == null && (
@@ -310,21 +309,21 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
                             </Stack>
                         </Grid>
 
-                        <Grid size={8} className={"m-1"}>
+                        <Grid size={8} className={"mt-2"}>
                             <CostosExtrasContenedores></CostosExtrasContenedores>
                         </Grid>
 
-                        <Grid size={3} className={"m-1"}>
+                        <Grid size={3} className={"mt-2"}>
                             <FormCE></FormCE>
                         </Grid>
 
-                        <Grid size={12} className={"m-1"}>
+                        <Grid size={12} className={"mt-2"}>
                             <ServiciosAplicadosCE></ServiciosAplicadosCE>
                         </Grid>
 
                     </Grid>
                 </Box>
-            </Dialog >
+            </Dialog>
         </>
     );
 };

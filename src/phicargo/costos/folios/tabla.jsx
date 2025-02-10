@@ -248,7 +248,6 @@ const Maniobras = () => {
       <FormularioCostoExtra
         show={modalShow}
         handleClose={handleCloseModal}
-        form_deshabilitado={true}
       />
       <MaterialReactTable table={table} />
     </div >
