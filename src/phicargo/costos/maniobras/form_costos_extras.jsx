@@ -54,29 +54,7 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
     }, [id_folio]);
 
     useEffect(() => {
-        if (id_folio) {
-            odooApi.get(`/folios_costos_extras/get_by_id/${id_folio}`)
-                .then((response) => {
-                    if (response.data.length > 0) {
-                        setIsEditing(false);
-                        const data = response.data[0];
-                        setFormData({
-                            id_folio: data.id_folio,
-                            ref_factura: data.ref_factura || null,
-                            status: data.status || null,
-                        });
-                        setDisabledForm(true);
-                    } else {
-                        console.warn('No se encontraron datos para id_folio:', id_folio);
-                        setFormData({});
-                        setDisabledForm(false);
-                    }
-                })
-                .catch((error) => {
-                    console.error('Error al obtener datos:', error);
-                    toast.error(`Error al obtener datos de maniobra: ${error.response?.data?.message || error.message}`);
-                });
-        } else {
+        if (!id_folio) {
             setFormData({
                 id_folio: null,
                 ref_factura: null,
@@ -84,8 +62,38 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
                 facturado: false,
             });
             setDisabledForm(false);
+            return;
         }
-    }, [id_folio]);
+
+        const fetchData = async () => {
+            try {
+                const response = await odooApi.get(`/folios_costos_extras/get_by_id/${id_folio}`);
+
+                if (!response.data || !Array.isArray(response.data) || response.data.length === 0) {
+                    console.warn('No se encontraron datos para id_folio:', id_folio);
+                    setFormData({});
+                    setDisabledForm(false);
+                    return;
+                }
+
+                setIsEditing(false);
+                const data = response.data[0];
+
+                setFormData({
+                    id_folio: data.id_folio,
+                    ref_factura: data.ref_factura || null,
+                    status: data.status || null,
+                });
+
+                setDisabledForm(true);
+            } catch (error) {
+                console.error('Error al obtener datos:', error);
+                toast.error(`Error al obtener datos de maniobra: ${error.response?.data?.message || error.message}`);
+            }
+        };
+
+        fetchData();
+    }, [id_folio, odooApi]);
 
     const validar_folio = () => {
         if (CartasPorte.length === 0) {

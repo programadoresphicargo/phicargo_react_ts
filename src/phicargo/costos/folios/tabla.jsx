@@ -214,7 +214,6 @@ const Maniobras = () => {
         <Box sx={{ width: '200px' }}>
           <Button
             color="primary"
-            size='lg'
             fullWidth
             onPress={() => {
               handleShowModal();
@@ -228,10 +227,11 @@ const Maniobras = () => {
         <Box sx={{ width: '250px' }}>
           <Select
             label="Sucursal"
+            size='sm'
             placeholder="Selecciona una sucursal"
             selectedKeys={[sucursal]}
             onChange={seleccionar_sucursal}
-            fullWidth // Hace que el Select ocupe todo el ancho del contenedor
+            fullWidth
           >
             <SelectItem key={'1'}>Veracruz</SelectItem>
             <SelectItem key={'2'}>México</SelectItem>

@@ -43,7 +43,7 @@ const FormCE = ({ }) => {
         <>
             <Card>
                 <CardBody>
-                    <Input label="Referencia factura" value={formData.ref_factura} onValueChange={handleChange} variant='bordered'></Input>
+                    <Input label="Referencia factura" value={formData.ref_factura} onValueChange={handleChange} variant='bordered' type='number'></Input>
                 </CardBody>
             </Card>
         </>

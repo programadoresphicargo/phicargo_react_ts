@@ -9,12 +9,28 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { toast } from 'react-toastify';
-import { Select, SelectItem } from '@nextui-org/react';
+import { Select, SelectItem, DateRangePicker } from '@nextui-org/react';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { CostosExtrasContext } from '../../context/context';
-import { DateRangePicker } from "rsuite";
+import MonthSelector from '@/mes';
+import YearSelector from '@/año';
+import { parseDate, getLocalTimeZone } from "@internationalized/date";
 
 const AñadirContenedor = ({ show, handleClose }) => {
+
+    const now = new Date();
+
+    const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+    const firstDayDate = firstDay.toISOString().split('T')[0];
+
+    const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+    const lastDayDate = lastDay.toISOString().split('T')[0];
+
+
+    const [value, setValue] = React.useState({
+        start: parseDate(firstDayDate),
+        end: parseDate(lastDayDate),
+    });
 
     const { id_folio, CartasPorte, setCPS } = useContext(CostosExtrasContext);
 
@@ -22,11 +38,25 @@ const AñadirContenedor = ({ show, handleClose }) => {
     const [isLoading2, setILoading] = useState();
     const [range, setRange] = useState(null);
 
+    const currentMonth = String(new Date().getMonth() + 1).padStart(2, '0');
+    const [selectedMonth, setSelectedMonth] = useState(currentMonth);
+
+    const handleChange = (event) => {
+        setSelectedMonth(event.target.value);
+    };
+
+    const currentYear = new Date().getFullYear();
+    const [selectedYear, setSelectedYear] = useState(currentYear);
+
+    const handleChangeYear = (event) => {
+        setSelectedYear(event.target.value);
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             try {
                 setILoading(true);
-                const response = await odooApi.get('/tms_waybill/get_by_date_range/2025-01-01/2025-01-31');
+                const response = await odooApi.get(`/tms_waybill/get_by_date_range/${value.start}/${value.end}`);
                 setData(response.data);
             } catch (error) {
                 console.error('Error al obtener los datos:', error);
@@ -36,7 +66,7 @@ const AñadirContenedor = ({ show, handleClose }) => {
         };
 
         fetchData();
-    }, []);
+    }, [value]);
 
     const añadir_contenedor = (data) => {
         setCPS(prevCartasPorte => [...prevCartasPorte, data]);
@@ -94,14 +124,14 @@ const AñadirContenedor = ({ show, handleClose }) => {
         },
         muiTableBodyCellProps: {
             sx: {
-                borderBottom: '1px solid #e0e0e0', 
+                borderBottom: '1px solid #e0e0e0',
             },
         },
         enableRowActions: true,
         displayColumnDefOptions: {
             'mrt-row-actions': {
-                header: 'Seleccionar', 
-                size: 100, 
+                header: 'Seleccionar',
+                size: 100,
             },
         },
         renderRowActions: ({ row }) => (
@@ -141,22 +171,9 @@ const AñadirContenedor = ({ show, handleClose }) => {
         }),
         renderTopToolbarCustomActions: ({ table }) => (
             <Box display="flex" alignItems="center" m={2}>
-                <h3>Selecciona un rango de fechas:</h3>
-                <DateRangePicker
-                    sx={{ zIndex: 1000 }}
-                    placeholder="Selecciona un rango"
-                    value={range}
-                    onChange={setRange}
-                    format="yyyy-MM-dd"
-                    size="lg"
-                    cleanable
-                />
-                {range && (
-                    <p>
-                        Fechas seleccionadas: <b>{range[0]?.toLocaleDateString()}</b> -{" "}
-                        <b>{range[1]?.toLocaleDateString()}</b>
-                    </p>
-                )}
+                <Box sx={{ flexGrow: 1, mr: 2 }}>
+                    <DateRangePicker label="Fecha" value={value} onChange={setValue} variant='bordered' />
+                </Box>
             </Box>
         ),
     });
