@@ -32,9 +32,9 @@ import ServiciosAplicadosCE from './costos_aplicados/costos_aplicados';
 
 const FormCE = ({ }) => {
 
-    const { id_folio, formData, setFormData } = useContext(CostosExtrasContext);
+    const { id_folio, formData, setFormData, DisabledForm } = useContext(CostosExtrasContext);
 
-    const handleChange = (value) => { 
+    const handleChange = (value) => {
         setFormData((prev) => ({
             ...prev,
             ref_factura: value === "" ? null : value,
@@ -45,7 +45,13 @@ const FormCE = ({ }) => {
         <>
             <Card>
                 <CardBody>
-                    <Input label="Referencia factura" value={formData.ref_factura ?? ""} onValueChange={handleChange} variant='bordered' type='number'></Input>
+                    <Input
+                        label="Referencia factura"
+                        value={formData.ref_factura ?? ""}
+                        onValueChange={handleChange}
+                        isDisabled={DisabledForm}
+                        variant='bordered'
+                        type='number'></Input>
                 </CardBody>
             </Card>
         </>

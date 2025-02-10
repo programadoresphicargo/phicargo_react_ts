@@ -117,6 +117,8 @@ const ServiciosExtras = ({ onClose }) => {
                 const servicioConExtras = {
                     ...servicioSeleccionado,
                     cantidad: 1,
+                    iva: .16,
+                    retencion: 0,
                     subtotal: servicioSeleccionado.costo,
                 };
 

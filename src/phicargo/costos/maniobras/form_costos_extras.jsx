@@ -160,6 +160,7 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
                 if (data.status === 'success') {
                     toast.success(data.message);
                     setIsEditing(false);
+                    handleClose();
                 } else {
                     toast.error('Respuesta inesperada del servidor: ' + JSON.stringify(data));
                 }

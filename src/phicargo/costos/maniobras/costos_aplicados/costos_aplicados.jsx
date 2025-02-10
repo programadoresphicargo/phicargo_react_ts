@@ -128,9 +128,30 @@ const ServiciosAplicadosCE = ({ onClose }) => {
                     align: 'right',
                 },
                 Cell: ({ row }) => {
-                    // Acceder al IVA o asignar un valor por defecto (16%)
                     const iva = row.original.iva ?? 0.16;
                     return iva.toLocaleString("es-MX", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                    });
+                },
+            },
+            {
+                accessorKey: "retencion",
+                header: "Retención",
+                enableEditing: false,
+                muiTableBodyCellProps: {
+                    align: 'right',
+                },
+                muiTableHeadCellProps: {
+                    align: 'right',
+                },
+                Cell: ({ row }) => {
+                    const costo = row.original.costo || 0;
+                    const cantidad = row.original.cantidad || 1;
+                    const retencion = row.original.id_tipo_costo === 1 ? (costo * cantidad) * 0.04 : 0;
+                    row.original.retencion = retencion;
+
+                    return row.original.retencion.toLocaleString("es-MX", {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,
                     });
@@ -149,16 +170,14 @@ const ServiciosAplicadosCE = ({ onClose }) => {
                 Cell: ({ row }) => {
                     const costo = row.original.costo || 0;
                     const cantidad = row.original.cantidad || 1;
-                    const iva = row.original.iva ?? 0.16; // Usar el IVA definido o el 16% por defecto
+                    const iva = row.original.iva ?? 0.16;
+                    const retencion = row.original.id_tipo_costo === 1 ? (costo * cantidad) * 0.04 : 0;
 
-                    const subtotal = (costo * cantidad) * (1 + iva); // Se incluye el IVA en el subtotal
+                    const subtotal = (costo * cantidad) * (1 + iva) - retencion;
                     return subtotal.toLocaleString("es-MX", {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,
                     });
-                },
-                muiTableBodyCellProps: {
-                    align: "right",
                 },
             },
             {
@@ -172,13 +191,19 @@ const ServiciosAplicadosCE = ({ onClose }) => {
 
     const totalSubtotal = useMemo(() => {
         return CostosExtras.reduce((total, item) => {
-            const subtotal = (item.costo || 0) * (item.cantidad || 1);
+            const costo = item.costo || 0;
+            const cantidad = item.cantidad || 1;
+            const iva = item.iva ?? 0.16;
+            const retencion = item.id_tipo_costo === 1 ? (costo * cantidad) * -0.04 : 0;
+
+            const subtotal = (costo * cantidad) * (1 + iva) + retencion;
             return total + subtotal;
         }, 0).toLocaleString('es-MX', {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
         });
     }, [CostosExtras]);
+
 
     const table = useMaterialReactTable({
         columns,
