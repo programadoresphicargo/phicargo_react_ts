@@ -17,6 +17,7 @@ import { VehicleSearchInput } from '../../core/components/inputs/VehicleSearchIn
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 import { useShiftQueries } from '../hooks/useShiftQueries';
+import { useShiftsContext } from '../hooks/useShiftsContext';
 
 const initialValues: ShiftCreate = {
   branchId: 0,
@@ -35,17 +36,18 @@ const CreateShift = () => {
     defaultValues: initialValues,
   });
 
+  const { branchId } = useShiftsContext();
+
   const { createShift } = useShiftQueries();
 
   const driverId = watch('driverId');
   const vehicleId = watch('vehicleId');
 
   const onSubmit: SubmitHandler<ShiftCreate> = (data) => {
-    console.log(data);
     createShift.mutate(
       {
         ...data,
-        branchId: 1,
+        branchId: branchId,
       },
       {
         onSuccess: () => {
