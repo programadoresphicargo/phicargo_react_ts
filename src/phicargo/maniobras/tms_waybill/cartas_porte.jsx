@@ -139,6 +139,11 @@ const CartasPorte = () => {
         },
       },
       {
+        accessorKey: 'estado_eir',
+        header: 'EIR',
+        size: 150,
+      },
+      {
         accessorKey: 'x_ejecutivo_viaje_bel',
         header: 'Ejecutivo',
         size: 150,
