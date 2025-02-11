@@ -127,6 +127,8 @@ const FoliosCostosExtras = () => {
             badgeClass = 'success';
           } else if (status === 'borrador') {
             badgeClass = 'warning';
+          } else {
+            badgeClass = 'primary';
           }
 
           return (

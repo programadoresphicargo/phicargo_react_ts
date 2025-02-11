@@ -25,6 +25,7 @@ import CostosExtrasContenedores from './añadir_contenedor/maniobra_contenedores
 import { CostosExtrasContext } from '../context/context';
 import ServiciosAplicadosCE from './costos_aplicados/costos_aplicados';
 import FormCE from './form';
+import TimeLineCE from './linea_tiempo';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -78,6 +79,17 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
                     id_folio: data.id_folio,
                     ref_factura: data.ref_factura || null,
                     status: data.status || null,
+                    usuario_creacion: data.usuario_creacion || null,
+                    fecha_creacion: data.fecha_creacion || null,
+
+                    usuario_confirmacion: data.usuario_confirmacion || null,
+                    fecha_confirmacion: data.fecha_confirmacion || null,
+
+                    usuario_facturo: data.usuario_facturo || null,
+                    fecha_facturacion: data.fecha_facturacion || null,
+
+                    usuario_cancelo: data.usuario_cancelo || null,
+                    fecha_cancelacion: data.fecha_cancelacion || null,
                 });
 
                 setDisabledForm(true);
@@ -175,6 +187,35 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
             });
     };
 
+    const confirmar_folio = () => {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: '¿Deseas confirmar este folio?',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, confirmar',
+            cancelButtonText: 'Cancelar',
+            imageWidth: 150,
+            imageHeight: 150,
+            imageAlt: 'Imagen de confirmación',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                odooApi.post(`/folios_costos_extras/confirmar/${id_folio}`)
+                    .then(response => {
+                        if (response.data === 1) {
+                            toast.success('El folio ha sido confirmado.');
+                            handleClose();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error en la solicitud:', error);
+                        toast.error('Hubo un problema al confirmar el folio.' + error);
+                    });
+            }
+        });
+    }
+
     const facturar_folio = () => {
         Swal.fire({
             title: '¿Estás seguro?',
@@ -264,58 +305,75 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
                     )}
 
                     <Grid container>
-                        <Grid size={8} className='mt-2 mb-2'>
-                            <Stack spacing={1} direction="row">
-                                {id_folio == null && (
-                                    <Button color="primary" onPress={registrar_folio} isLoading={Loading}>
-                                        Registrar
-                                    </Button>
-                                )}
+                        <Grid size={12} className='mt-2 mb-2'>
+                            <Card>
+                                <CardBody>
+                                    <Stack spacing={1} direction="row">
 
-                                {formData.status === 'borrador' && (
-                                    <Button color="danger" onPress={cancelar_folio}>
-                                        Cancelar
-                                    </Button>
-                                )}
+                                        {id_folio == null && (
+                                            <Button color="primary" onPress={registrar_folio} isLoading={Loading}>
+                                                Registrar
+                                            </Button>
+                                        )}
 
-                                {formData.status === 'borrador' && (
-                                    <Button color="success" onPress={facturar_folio} className='text-white'>
-                                        Facturar
-                                    </Button>
-                                )}
+                                        {formData.status === 'borrador' && (
+                                            <Button color="danger" onPress={cancelar_folio} startContent={<i class="bi bi-x-circle"></i>}>
+                                                Cancelar
+                                            </Button>
+                                        )}
 
-                                {formData.status === "borrador" && !isEditing && (
-                                    <Button color="primary" onPress={() => editar_registro()}>
-                                        Editar
-                                    </Button>
-                                )}
+                                        {formData.status === 'borrador' && (
+                                            <Button color="success" onPress={confirmar_folio} className='text-white' startContent={<i class="bi bi-check-lg"></i>}>
+                                                Confirmar
+                                            </Button>
+                                        )}
 
-                                {formData.status === "borrador" && isEditing && (
-                                    <Button
-                                        color="success"
-                                        className='text-white'
-                                        onPress={() => {
-                                            actualizar_folio();
-                                        }}
-                                        isLoading={Loading}
-                                    >
-                                        Guardar cambios
-                                    </Button>
-                                )}
+                                        {formData.status === 'confirmado' && (
+                                            <Button color="success" onPress={facturar_folio} className='text-white'>
+                                                Facturar
+                                            </Button>
+                                        )}
 
-                            </Stack>
+                                        {(formData.status === "borrador" || formData.status === 'confirmado') && !isEditing && (
+                                            <Button color="primary" onPress={() => editar_registro()} startContent={<i class="bi bi-pen"></i>}>
+                                                Editar
+                                            </Button>
+                                        )}
+
+                                        {(formData.status === "borrador" || formData.status === 'confirmado') && isEditing && (
+                                            <Button
+                                                color="success"
+                                                className='text-white'
+                                                startContent={<i class="bi bi-floppy"></i>}
+                                                onPress={() => {
+                                                    actualizar_folio();
+                                                }}
+                                                isLoading={Loading}
+                                            >
+                                                Guardar cambios
+                                            </Button>
+                                        )}
+
+                                    </Stack>
+                                </CardBody>
+                            </Card>
                         </Grid>
 
-                        <Grid size={8} className={"mt-2"}>
-                            <CostosExtrasContenedores></CostosExtrasContenedores>
-                        </Grid>
-
-                        <Grid size={3} className={"mt-2"}>
-                            <FormCE></FormCE>
+                        <Grid size={12} container spacing={1}>
+                            <Grid size={8}>
+                                <CostosExtrasContenedores></CostosExtrasContenedores>
+                            </Grid>
+                            <Grid size={4}>
+                                <TimeLineCE></TimeLineCE>
+                            </Grid>
                         </Grid>
 
                         <Grid size={12} className={"mt-2"}>
                             <ServiciosAplicadosCE></ServiciosAplicadosCE>
+                        </Grid>
+
+                        <Grid size={3} className={"mt-2"}>
+                            <FormCE></FormCE>
                         </Grid>
 
                     </Grid>

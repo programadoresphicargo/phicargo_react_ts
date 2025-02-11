@@ -101,7 +101,7 @@ const menuItems: MenuItemType[] = [
     icon: ce_img,
     label: 'Costos extras',
     link: '/folios_costos_extras',
-    requiredPermissions: [],
+    requiredPermissions: [130],
   },
   {
     icon: dashboardIcon,

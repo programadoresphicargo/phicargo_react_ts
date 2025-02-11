@@ -264,9 +264,9 @@ const ServiciosAplicadosCE = ({ onClose }) => {
                     flexWrap: 'wrap',
                 }}
             >
-                <h1>Costos extras</h1>
-                <Button onPress={handleClickOpen} color="primary" size="sm" isDisabled={DisabledForm}>
-                    Nuevo servicio
+                <h1 className='text-primary'>Costos extras</h1>
+                <Button onPress={handleClickOpen} color="primary" size="md" isDisabled={DisabledForm} startContent={<i class="bi bi-plus-lg"></i>}>
+                    Añadir costo extra
                 </Button>
             </Box>
         ),
