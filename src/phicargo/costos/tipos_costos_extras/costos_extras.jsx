@@ -111,6 +111,11 @@ const TiposCostosExtras = ({ }) => {
         overflow: 'hidden',
       },
     },
+    muiTableContainerProps: {
+      sx: {
+        maxHeight: 'calc(100vh - 210px)',
+      },
+    },
     muiTableBodyRowProps: ({ row }) => ({
       onClick: ({ event }) => {
         if (row.subRows?.length) {

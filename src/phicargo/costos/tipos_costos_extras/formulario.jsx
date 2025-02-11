@@ -22,6 +22,13 @@ const FormularioNewCE = ({ onClose, id_tipo_costo }) => {
       setLoading(false);
       if (data.status == "success") {
         message.success(data.message);
+        setFormData({
+          id_tipo_costo: null,
+          descripcion: '',
+          costo: 0,
+          unidad_medida: '',
+          observaciones: ''
+        });
         onClose();
       } else {
         message.error(`Error: ${data.message}`);
@@ -68,7 +75,7 @@ const FormularioNewCE = ({ onClose, id_tipo_costo }) => {
   };
 
   useEffect(() => {
-    if (id_tipo_costo) {
+    if (id_tipo_costo != null) {
       odooApi.get(`/tipos_costos_extras/by_id_tipo_costo/${id_tipo_costo}`)
         .then((response) => {
           if (Array.isArray(response.data) && response.data.length > 0) {
@@ -98,7 +105,6 @@ const FormularioNewCE = ({ onClose, id_tipo_costo }) => {
         });
     } else {
       setFormData({
-        id_tipo_costo: '',
         descripcion: '',
         costo: 0,
         unidad_medida: '',
