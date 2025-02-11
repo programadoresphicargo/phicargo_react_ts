@@ -11,7 +11,6 @@ import Typography from '@mui/material/Typography';
 import Slide from '@mui/material/Slide';
 import Stack from '@mui/material/Stack';
 import { Button } from '@nextui-org/react';
-import AutocompleteManager from './correos_electronicos/correos_electronicos';
 import { toast } from 'react-toastify';
 import { Card, CardBody } from '@nextui-org/react';
 import { Container, filledInputClasses } from '@mui/material';

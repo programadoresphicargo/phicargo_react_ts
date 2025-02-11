@@ -14,6 +14,7 @@ import {
     ZoomInOutlined,
     ZoomOutOutlined,
 } from '@ant-design/icons';
+import { Link } from "@nextui-org/react";
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 function ArchivosAdjuntos({ id_reporte }) {
@@ -69,17 +70,22 @@ function ArchivosAdjuntos({ id_reporte }) {
                                     }}
                                 >
                                     {images.files.map((item, index) => (
-                                        <Image
-                                            key={index}
-                                            width={100}
-                                            height={100}
-                                            src={`data:${item.contentType};base64,${item.content}`}
-                                            style={{
-                                                objectFit: 'cover',
-                                                width: '100px',
-                                                height: '100px',
-                                            }}
-                                        />
+                                        <>
+                                            <Link href={item.publicLink} isExternal showAnchorIcon>
+                                                Ver archivo en OneDrive
+                                            </Link>
+                                            <Image
+                                                key={index}
+                                                width={100}
+                                                height={100}
+                                                src={`data:${item.contentType};base64,${item.content}`}
+                                                style={{
+                                                    objectFit: 'cover',
+                                                    width: '100px',
+                                                    height: '100px',
+                                                }}
+                                            />
+                                        </>
                                     ))}
                                 </Image.PreviewGroup>
                             </div>
