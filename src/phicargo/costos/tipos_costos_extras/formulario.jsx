@@ -108,10 +108,11 @@ const FormularioNewCE = ({ onClose, id_tipo_costo }) => {
   }, [id_tipo_costo]);
 
   const animals = [
-    { key: "pieza", label: "pieza" },
-    { key: "contenedor", label: "contenedor" },
-    { key: "operador", label: "operador" },
-    { key: "plataforma", label: "plataforma" },
+    { key: "pieza", label: "Pieza" },
+    { key: "contenedor", label: "Contenedor" },
+    { key: "operador", label: "Operador" },
+    { key: "plataforma", label: "Plataforma" },
+    { key: "na", label: "No aplica" },
   ];
 
   return (
