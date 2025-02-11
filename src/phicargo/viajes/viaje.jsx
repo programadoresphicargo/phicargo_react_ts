@@ -101,13 +101,31 @@ const Viaje = ({ }) => {
               <Tab label="Costos extras" value="7" />
             </TabList>
           </Box>
-          <TabPanel value="1" className='bg-soft-secondary'><BasicButtons2></BasicButtons2></TabPanel>
-          <TabPanel value="2" className='bg-soft-secondary'><Checklist></Checklist></TabPanel>
-          <TabPanel value="3" className='bg-soft-secondary p-0 m-0'><Map></Map></TabPanel>
-          <TabPanel value="4" className='bg-soft-secondary'><Documentacion></Documentacion></TabPanel>
-          <TabPanel value="5" className='bg-soft-secondary'><IndexCambioEquipo></IndexCambioEquipo></TabPanel>
-          <TabPanel value="6" className='bg-soft-secondary'><Detenciones></Detenciones></TabPanel>
-          <TabPanel value="7" className='bg-soft-secondary'><CostosExtrasProvider><FoliosCostosExtrasViaje></FoliosCostosExtrasViaje></CostosExtrasProvider></TabPanel>
+
+          <TabPanel value="1" sx={{ backgroundColor: '#f8f9fa', padding: 2 }}>
+            <BasicButtons2 />
+          </TabPanel>
+          <TabPanel value="2" sx={{ backgroundColor: '#f8f9fa', padding: 2 }}>
+            <Checklist />
+          </TabPanel>
+          <TabPanel value="3" sx={{ padding: 0, margin: 0 }}>
+            <Map />
+          </TabPanel>
+          <TabPanel value="4" sx={{ padding: 0 }}>
+            <Documentacion />
+          </TabPanel>
+          <TabPanel value="5" sx={{ padding: 2 }}>
+            <IndexCambioEquipo />
+          </TabPanel>
+          <TabPanel value="6" sx={{ padding: 0 }}>
+            <Detenciones />
+          </TabPanel>
+          <TabPanel value="7" sx={{ padding: 0 }}>
+            <CostosExtrasProvider>
+              <FoliosCostosExtrasViaje />
+            </CostosExtrasProvider>
+          </TabPanel>
+
         </TabContext>
       </Box>
 
