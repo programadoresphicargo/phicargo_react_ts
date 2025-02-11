@@ -15,8 +15,13 @@ import { toast } from 'react-toastify';
 import { Card, CardBody } from '@nextui-org/react';
 import { CostosExtrasContext } from '../../context/context';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import { ViajeContext } from '@/phicargo/viajes/context/viajeContext';
 
-const CostosExtrasContenedores = ({ id_maniobra }) => {
+const CostosExtrasContenedores = ({ }) => {
+
+    const contexto = useContext(ViajeContext);
+    const id_viaje = contexto?.id_viaje ?? null;
+
     const { id_folio, CartasPorte, setCPS, CartasPorteEliminadas, setCPSEliminadas, DisabledForm, setDisabledForm } = useContext(CostosExtrasContext);
     const [modalShow, setModalShow] = useState(false);
     const [openDialog, setOpenDialog] = useState(false);
@@ -56,9 +61,29 @@ const CostosExtrasContenedores = ({ id_maniobra }) => {
         }
     };
 
+    const fetchDataCP = async () => {
+        try {
+            toast.success('Obteniendo cartas porte de viaje');
+            setLoading(true);
+            const response = await odooApi.get('/tms_waybill/get_by_travel_id/' + id_viaje);
+            setCPS(response.data);
+            setLoading(false);
+        } catch (error) {
+            console.error('Error al obtener los datos:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
         fetchData();
     }, []);
+
+    useEffect(() => {
+        if (id_folio == null && id_viaje != null) {
+            fetchDataCP();
+        }
+    }, [id_folio]);
 
     const table = useMaterialReactTable({
         columns,

@@ -21,8 +21,10 @@ import Map from './mapa/mapa';
 import Notificaciones from './panel_notificaciones/panel';
 import Checklist from './checklist/checklist';
 import { Chip } from '@nextui-org/react';
-import Costos_Extras from './costos_extras/documentacion';
-import { CostosExtrasProvider } from './context/costosContext';
+import { CostosExtrasProvider } from '../costos/context/context';
+import Detenciones from './detenciones/detenciones';
+import FoliosCostosExtras from '../costos/folios/tabla';
+import FoliosCostosExtrasViaje from './costos_extras/tabla';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -95,7 +97,8 @@ const Viaje = ({ }) => {
               <Tab label="Mapa" value="3" />
               <Tab label="Documentos" value="4" />
               <Tab label="Cambio de equipo" value="5" />
-              <Tab label="Costos extras" value="6" />
+              <Tab label="Detenciones" value="6" />
+              <Tab label="Costos extras" value="7" />
             </TabList>
           </Box>
           <TabPanel value="1" className='bg-soft-secondary'><BasicButtons2></BasicButtons2></TabPanel>
@@ -103,7 +106,8 @@ const Viaje = ({ }) => {
           <TabPanel value="3" className='bg-soft-secondary p-0 m-0'><Map></Map></TabPanel>
           <TabPanel value="4" className='bg-soft-secondary'><Documentacion></Documentacion></TabPanel>
           <TabPanel value="5" className='bg-soft-secondary'><IndexCambioEquipo></IndexCambioEquipo></TabPanel>
-          <TabPanel value="6" className='bg-soft-secondary'><CostosExtrasProvider><Costos_Extras></Costos_Extras></CostosExtrasProvider></TabPanel>
+          <TabPanel value="6" className='bg-soft-secondary'><Detenciones></Detenciones></TabPanel>
+          <TabPanel value="7" className='bg-soft-secondary'><CostosExtrasProvider><FoliosCostosExtrasViaje></FoliosCostosExtrasViaje></CostosExtrasProvider></TabPanel>
         </TabContext>
       </Box>
 

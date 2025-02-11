@@ -9,18 +9,19 @@ import {
   useMaterialReactTable,
 } from 'material-react-table';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
-import FormularioCostoExtra from '../maniobras/form_costos_extras';
-import { CostosExtrasContext } from '../context/context';
+import { CostosExtrasContext } from '@/phicargo/costos/context/context';
 import { Select, SelectItem } from "@nextui-org/react";
+import FormularioCostoExtra from '@/phicargo/costos/maniobras/form_costos_extras';
+import { ViajeContext } from '../context/viajeContext';
 
-const FoliosCostosExtras = () => {
+const FoliosCostosExtrasViaje = () => {
 
+  const { id_viaje, getHistorialEstatus, getViaje } = useContext(ViajeContext);
   const { id_folio, setIDFolio, CartasPorte, CartasPorteEliminadas, setCPS, setCPSEliminadas, CostosExtras, setCostosExtras, CostosExtrasEliminados, setCostosExtrasEliminados, formData, setFormData, DisabledForm, setDisabledForm } = useContext(CostosExtrasContext);
 
   const [data, setData] = useState([]);
   const [isLoading2, setLoading] = useState();
   const [modalShow, setModalShow] = useState(false);
-  const [sucursal, setSucursal] = React.useState("1");
 
   const seleccionar_sucursal = (e) => {
     setSucursal(e.target.value);
@@ -47,7 +48,7 @@ const FoliosCostosExtras = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await odooApi.get('/folios_costos_extras/by_store_id/' + sucursal);
+      const response = await odooApi.get('/folios_costos_extras/by_travel_id/' + id_viaje);
       setData(response.data);
       setLoading(false);
     } catch (error) {
@@ -57,7 +58,7 @@ const FoliosCostosExtras = () => {
 
   useEffect(() => {
     fetchData();
-  }, [sucursal]);
+  }, [id_viaje]);
 
   const columns = useMemo(
     () => [
@@ -176,7 +177,6 @@ const FoliosCostosExtras = () => {
     },
     muiTableBodyRowProps: ({ row }) => ({
       onClick: ({ event }) => {
-
         if (row.subRows?.length) {
         } else {
           handleShowModal(row.original.id_folio);
@@ -223,21 +223,6 @@ const FoliosCostosExtras = () => {
             Nuevo folio
           </Button>
         </Box>
-
-        <Box sx={{ width: '250px' }}>
-          <Select
-            label="Sucursal"
-            size='sm'
-            placeholder="Selecciona una sucursal"
-            selectedKeys={[sucursal]}
-            onChange={seleccionar_sucursal}
-            fullWidth
-          >
-            <SelectItem key={'1'}>Veracruz</SelectItem>
-            <SelectItem key={'2'}>México</SelectItem>
-            <SelectItem key={'9'}>Manzanillo</SelectItem>
-          </Select>
-        </Box>
       </Box>
 
     ),
@@ -255,4 +240,4 @@ const FoliosCostosExtras = () => {
 
 };
 
-export default FoliosCostosExtras;
+export default FoliosCostosExtrasViaje;

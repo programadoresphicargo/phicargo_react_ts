@@ -12,21 +12,10 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import FormularioDocumentacion from './formulario';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { toast } from 'react-toastify';
-import FormularioCostoExtra from './formulario';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import CloseIcon from '@mui/icons-material/Close';
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
-
-const Costos_Extras = ({ }) => {
+const Detenciones = ({ }) => {
 
   const { id_viaje, viaje, getViaje, loading, error, setIDViaje, isLoading } = useContext(ViajeContext);
 
@@ -36,7 +25,7 @@ const Costos_Extras = ({ }) => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await odooApi.get('/tms_waybill/get_by_travel_id/' + id_viaje);
+      const response = await odooApi.get('/locations/by_vehicle_id/');
       setData(response.data);
       setLoading(false);
     } catch (error) {
@@ -51,12 +40,36 @@ const Costos_Extras = ({ }) => {
   const columns = useMemo(
     () => [
       {
-        accessorKey: 'name',
-        header: 'Cartas porte',
+        accessorKey: 'start_time',
+        header: 'Nombre del archivo',
       },
       {
-        accessorKey: 'x_reference',
-        header: 'Contenedores',
+        accessorKey: 'start_latitude',
+        header: 'Latitud',
+      },
+      {
+        accessorKey: 'start_longitude',
+        header: 'Longitud',
+      },
+      {
+        accessorKey: 'detention_minutes',
+        header: 'Minutos detenido',
+      },
+      {
+        header: 'Ver en Mapa',
+        id: 'map',
+        Cell: ({ row }) => {
+          const { start_latitude, start_longitude } = row.original;
+          const mapsUrl = `https://www.google.com/maps?q=${start_latitude},${start_longitude}`;
+
+          return (
+            <a href={mapsUrl} target="_blank" rel="noopener noreferrer">
+              <Button color='primary' size='sm'>
+                Ver en Mapa
+              </Button>
+            </a>
+          );
+        },
       },
     ],
     [],
@@ -111,10 +124,6 @@ const Costos_Extras = ({ }) => {
           flexWrap: 'wrap',
         }}
       >
-        <h1>Costos extras</h1>
-        <Button color='primary' onPress={handleClickOpen}>
-          Nuevo registro
-        </Button>
       </Box>
     )
   });
@@ -133,39 +142,8 @@ const Costos_Extras = ({ }) => {
   return (
     <>
       <MaterialReactTable table={table} />
-
-      <Dialog
-        open={open}
-        TransitionComponent={Transition}
-        keepMounted
-        onClose={handleClose}
-        aria-describedby="alert-dialog-slide-description"
-        fullScreen
-      >
-        <AppBar sx={{ position: 'relative' }} elevation={0}>
-          <Toolbar>
-            <IconButton
-              edge="start"
-              color="inherit"
-              onClick={handleClose}
-              aria-label="close"
-            >
-              <CloseIcon />
-            </IconButton>
-            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              Costos extras
-            </Typography>
-            <Button autoFocus color="inherit" onClick={handleClose}>
-              Salir
-            </Button>
-          </Toolbar>
-        </AppBar>
-        <DialogContent>
-          <FormularioCostoExtra onClose={handleClose} />
-        </DialogContent>
-      </Dialog>
     </>
   );
 };
 
-export default Costos_Extras;
+export default Detenciones;
