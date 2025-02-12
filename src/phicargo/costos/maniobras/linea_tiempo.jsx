@@ -138,7 +138,7 @@ const TimeLineCE = ({ }) => {
                                 <Typography component="span">
                                     Cancelado
                                 </Typography>
-                                <Typography>{formData.usuario_cancelo}</Typography>
+                                <Typography>{formData.usuario_cancelacion}</Typography>
                             </TimelineContent>
                         </TimelineItem>
                     </Timeline>

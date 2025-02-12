@@ -49,6 +49,50 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
         }));
     }, [id_folio]);
 
+    const fetchCE = async () => {
+        const responseCE = await odooApi.get('/costos_extras/by_id_folio/' + id_folio);
+        setCostosExtras(responseCE.data);
+    }
+
+    const fetchData = async () => {
+        try {
+            const response = await odooApi.get(`/folios_costos_extras/get_by_id/${id_folio}`);
+
+            if (!response.data || !Array.isArray(response.data) || response.data.length === 0) {
+                console.warn('No se encontraron datos para id_folio:', id_folio);
+                setFormData({});
+                setDisabledForm(false);
+                return;
+            }
+
+            setIsEditing(false);
+            const data = response.data[0];
+
+            setFormData({
+                id_folio: data.id_folio,
+                ref_factura: data.ref_factura || null,
+                status: data.status || null,
+                usuario_creacion: data.usuario_creacion || null,
+                fecha_creacion: data.fecha_creacion || null,
+
+                usuario_confirmacion: data.usuario_confirmacion || null,
+                fecha_confirmacion: data.fecha_confirmacion || null,
+
+                usuario_facturo: data.usuario_facturo || null,
+                fecha_facturacion: data.fecha_facturacion || null,
+
+                usuario_cancelacion: data.usuario_cancelacion || null,
+                fecha_cancelacion: data.fecha_cancelacion || null,
+            });
+
+            fetchCE();
+            setDisabledForm(true);
+        } catch (error) {
+            console.error('Error al obtener datos:', error);
+            toast.error(`Error al obtener datos de maniobra: ${error.response?.data?.message || error.message}`);
+        }
+    };
+
     useEffect(() => {
         if (!id_folio) {
             setFormData({
@@ -60,44 +104,6 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
             setDisabledForm(false);
             return;
         }
-
-        const fetchData = async () => {
-            try {
-                const response = await odooApi.get(`/folios_costos_extras/get_by_id/${id_folio}`);
-
-                if (!response.data || !Array.isArray(response.data) || response.data.length === 0) {
-                    console.warn('No se encontraron datos para id_folio:', id_folio);
-                    setFormData({});
-                    setDisabledForm(false);
-                    return;
-                }
-
-                setIsEditing(false);
-                const data = response.data[0];
-
-                setFormData({
-                    id_folio: data.id_folio,
-                    ref_factura: data.ref_factura || null,
-                    status: data.status || null,
-                    usuario_creacion: data.usuario_creacion || null,
-                    fecha_creacion: data.fecha_creacion || null,
-
-                    usuario_confirmacion: data.usuario_confirmacion || null,
-                    fecha_confirmacion: data.fecha_confirmacion || null,
-
-                    usuario_facturo: data.usuario_facturo || null,
-                    fecha_facturacion: data.fecha_facturacion || null,
-
-                    usuario_cancelo: data.usuario_cancelo || null,
-                    fecha_cancelacion: data.fecha_cancelacion || null,
-                });
-
-                setDisabledForm(true);
-            } catch (error) {
-                console.error('Error al obtener datos:', error);
-                toast.error(`Error al obtener datos de maniobra: ${error.response?.data?.message || error.message}`);
-            }
-        };
 
         fetchData();
     }, [id_folio, odooApi]);
@@ -132,7 +138,7 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
                 setLoading(false);
                 if (data.status == "success") {
                     toast.success('El registro ha sido exitoso.');
-                    handleClose();
+                    fetchCE();
                 } else if (data.error) {
                     toast.error('Error: ' + data.error);
                 } else {
@@ -167,8 +173,9 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
 
                 if (data.status === 'success') {
                     toast.success(data.message);
+                    fetchData();
                     setIsEditing(false);
-                    handleClose();
+                    setDisabledForm(true);
                 } else {
                     toast.error('Respuesta inesperada del servidor: ' + JSON.stringify(data));
                 }
@@ -204,8 +211,8 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
                 odooApi.post(`/folios_costos_extras/confirmar/${id_folio}`)
                     .then(response => {
                         if (response.data === 1) {
+                            fetchData();
                             toast.success('El folio ha sido confirmado.');
-                            handleClose();
                         }
                     })
                     .catch(error => {
@@ -235,21 +242,13 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
                         if (response.data?.status === 'error') {
                             toast.error(response.data.message);
                         } else {
-                            Swal.fire({
-                                title: 'Facturado',
-                                text: 'El folio ha sido facturado y cerrado.',
-                                icon: 'success'
-                            });
-                            handleClose();
+                            fetchData();
+                            toast.success('El folio ha sido facturado y cerrado.');
                         }
                     })
                     .catch(error => {
                         console.error('Error en la solicitud:', error);
-                        Swal.fire({
-                            title: 'Error',
-                            text: 'Hubo un problema al facturar el folio.',
-                            icon: 'error'
-                        });
+                        toast.error('Hubo un problema al facturar el folio.');
                     });
             }
         });
@@ -268,11 +267,11 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
             if (result.isConfirmed) {
                 odooApi.post('/folios_costos_extras/cancelar/' + id_folio)
                     .then(response => {
-                        Swal.fire('Cancelado', 'El folio ha sido cancelado.', 'success');
-                        handleClose();
+                        fetchData();
+                        toast.success('El folio ha sido cancelado.');
                     })
                     .catch(error => {
-                        Swal.fire('Error', 'Hubo un problema al cancelar el folio.', 'error');
+                        toast.error('Error, Hubo un problema al cancelar el folio:' + error);
                     });
             }
         });
@@ -316,7 +315,7 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
                                             </Button>
                                         )}
 
-                                        {formData.status === 'borrador' && (
+                                        {(formData.status === "borrador" || formData.status === 'confirmado') && (
                                             <Button color="danger" onPress={cancelar_folio} startContent={<i class="bi bi-x-circle"></i>}>
                                                 Cancelar
                                             </Button>
@@ -362,6 +361,7 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
                         <Grid size={12} container spacing={1}>
                             <Grid size={8}>
                                 <CostosExtrasContenedores></CostosExtrasContenedores>
+                                <FormCE></FormCE>
                             </Grid>
                             <Grid size={4}>
                                 <TimeLineCE></TimeLineCE>
@@ -370,10 +370,6 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
 
                         <Grid size={12} className={"mt-2"}>
                             <ServiciosAplicadosCE></ServiciosAplicadosCE>
-                        </Grid>
-
-                        <Grid size={3} className={"mt-2"}>
-                            <FormCE></FormCE>
                         </Grid>
 
                     </Grid>

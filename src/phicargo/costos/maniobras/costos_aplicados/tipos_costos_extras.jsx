@@ -115,7 +115,7 @@ const ServiciosExtras = ({ onClose }) => {
                     flexWrap: 'wrap',
                 }}
             >
-                <h1>Servicios aplicados</h1>
+                <h1>Catalogo de costos extras</h1>
             </Box>
         ),
         muiTableBodyRowProps: ({ row }) => ({

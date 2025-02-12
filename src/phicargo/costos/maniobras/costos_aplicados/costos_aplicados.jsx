@@ -66,23 +66,6 @@ const ServiciosAplicadosCE = ({ onClose }) => {
         });
     };
 
-    const fetchData = async () => {
-        try {
-            setLoading(true);
-            const response = await odooApi.get('/costos_extras/by_id_folio/' + id_folio);
-            setCostosExtras(response.data);
-            setLoading(false);
-        } catch (error) {
-            console.error('Error al obtener los datos:', error);
-        }
-    };
-
-    useEffect(() => {
-        if (id_folio) {
-            fetchData();
-        }
-    }, [id_folio]);
-
     const columns = useMemo(
         () => [
             {
@@ -319,6 +302,7 @@ const ServiciosAplicadosCE = ({ onClose }) => {
             <Dialog
                 fullWidth={true}
                 maxWidth="lg"
+                scroll='body'
                 open={open}
                 onClose={handleClose}
             >

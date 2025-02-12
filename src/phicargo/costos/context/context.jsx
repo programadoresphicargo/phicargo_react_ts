@@ -28,6 +28,8 @@ const CostosExtrasProvider = ({ children }) => {
 
     return (
         <CostosExtrasContext.Provider value={{
+            isLoading,
+            setLoading,
             DisabledForm,
             setDisabledForm,
             formData,
