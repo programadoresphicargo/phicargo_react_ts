@@ -25,6 +25,7 @@ import { CostosExtrasProvider } from '../costos/context/context';
 import Detenciones from './detenciones/detenciones';
 import FoliosCostosExtras from '../costos/folios/tabla';
 import FoliosCostosExtrasViaje from './costos_extras/tabla';
+import { TiemposViajeProvider } from './detenciones/TiemposViajeContext';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -118,7 +119,9 @@ const Viaje = ({ }) => {
             <IndexCambioEquipo />
           </TabPanel>
           <TabPanel value="6" sx={{ padding: 0 }}>
-            <Detenciones />
+            <TiemposViajeProvider>
+              <Detenciones />
+            </TiemposViajeProvider>
           </TabPanel>
           <TabPanel value="7" sx={{ padding: 0 }}>
             <CostosExtrasProvider>
