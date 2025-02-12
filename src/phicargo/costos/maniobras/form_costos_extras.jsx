@@ -33,7 +33,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const FormularioCostoExtra = ({ show, handleClose }) => {
 
-    const { id_folio, CartasPorte, CartasPorteEliminadas, CostosExtras, setCostosExtras, CostosExtrasEliminados, setCostosExtrasEliminados, formData, setFormData, DisabledForm, setDisabledForm } = useContext(CostosExtrasContext);
+    const { id_folio, setIDFolio, CartasPorte, CartasPorteEliminadas, CostosExtras, setCostosExtras, CostosExtrasEliminados, setCostosExtrasEliminados, formData, setFormData, DisabledForm, setDisabledForm } = useContext(CostosExtrasContext);
     const [Loading, setLoading] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
 
@@ -137,7 +137,8 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
                 const data = response.data;
                 setLoading(false);
                 if (data.status == "success") {
-                    toast.success('El registro ha sido exitoso.');
+                    toast.success('El registro ha sido exitoso, Folio: ' + response.data.id_folio);
+                    setIDFolio(response.data.id_folio);
                     fetchCE();
                 } else if (data.error) {
                     toast.error('Error: ' + data.error);
