@@ -156,6 +156,15 @@ const Detenciones = ({ }) => {
         overflow: 'hidden',
       },
     },
+    muiTableBodyCellProps: ({ row }) => ({
+      sx: {
+        backgroundColor: row.subRows?.length ? '#1184e8' : '#FFFFFF',
+        fontFamily: 'Inter',
+        fontWeight: 'normal',
+        fontSize: '14px',
+        color: row.subRows?.length ? '#FFFFFF' : '#000000',
+      },
+    }),
     renderTopToolbarCustomActions: ({ table }) => (
       <Box
         sx={{

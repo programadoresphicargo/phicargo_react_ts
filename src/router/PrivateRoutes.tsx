@@ -62,6 +62,9 @@ const EntregaMonitoreo = lazy(() => import('../phicargo/monitoreo/monitoreo'));
 const DetencionesTable = lazy(
   () => import('../phicargo/reportes/llegadas_tarde/llegadas_tarde'),
 );
+const ReporteDetencionesViajes = lazy(
+  () => import('../phicargo/viajes/detenciones/reporte_detenciones_viajes'),
+);
 const AsignacionUnidades = lazy(
   () => import('../phicargo/reportes/asignacion_unidades'),
 );
@@ -241,6 +244,15 @@ export const PrivateRoutes = () => {
             </Suspense>
           }
         />
+
+        <Route
+          path="/reporte_detenciones"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <ReporteDetencionesViajes />
+            </Suspense>
+          } />
+
         <Route
           path="/asignacion"
           element={
