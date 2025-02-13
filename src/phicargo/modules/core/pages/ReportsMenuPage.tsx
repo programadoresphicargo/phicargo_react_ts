@@ -8,6 +8,7 @@ import dailyOpIcon from '../../../../assets/menu/dailyOpIcon.png';
 import maintenanceIcon from '../../../../assets/menu/maintenanceIcon.png';
 import phoneIcon from '../../../../assets/menu/app.png';
 import reportIcon from '../../../../assets/menu/reportes.png';
+import estadias from '../../../../assets/menu/estadias.png';
 import { useAuthContext } from '../../auth/hooks';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -57,15 +58,9 @@ const reports: MenuItemType[] = [
     requiredPermissions: [],
   },
   {
-    label: 'Costos extras',
-    path: '/costos_extras',
-    icon: '',
-    requiredPermissions: [],
-  },
-  {
     label: 'Reporte de estadias',
     path: '/estadias',
-    icon: '',
+    icon: estadias,
     requiredPermissions: [],
   },
 ];

@@ -47,26 +47,12 @@ const ReporteCumplimiento = () => {
       { accessorKey: 'cliente', header: 'Cliente' },
       { accessorKey: 'horas_estadias', header: 'Horas estadias' },
       { accessorKey: 'employee_name', header: 'Operador', size: 150 },
-      { accessorKey: 'fecha_inicio', header: 'Fecha inicio', size: 150 },
+      { accessorKey: 'llegada_planta_programada', header: 'Llegada planta programada', size: 150 },
       { accessorKey: 'llegada_planta', header: 'Llegada planta', size: 150 },
+      { accessorKey: 'diferencia_llegada_planta', header: 'Diferencia', size: 150 },
       { accessorKey: 'salida_planta', header: 'Salida planta', size: 150 },
-      {
-        accessorKey: 'estadias_estatus', header: 'Estadias', size: 150, Cell: ({ cell }) => {
-          const tipoMovimiento = cell.getValue() || '';
-          let badgeClass = '';
-
-          if (tipoMovimiento === 'genera estadias') {
-            badgeClass = 'danger';
-          }
-
-          return (
-            <Chip color={badgeClass} size='sm'>
-              {tipoMovimiento}
-            </Chip>
-          );
-        },
-      },
-      { accessorKey: 'horas_superadas', header: 'Horas superadas', size: 150 },
+      { accessorKey: 'horas_estadia_real', header: 'Tiempo en planta', size: 150 },
+      { accessorKey: 'horas_excedidas', header: 'Horas excedidas', size: 150 },
     ],
     [],
   );
