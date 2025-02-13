@@ -8,7 +8,8 @@ import dailyOpIcon from '../../../../assets/menu/dailyOpIcon.png';
 import maintenanceIcon from '../../../../assets/menu/maintenanceIcon.png';
 import phoneIcon from '../../../../assets/menu/app.png';
 import reportIcon from '../../../../assets/menu/reportes.png';
-import estadias from '../../../../assets/menu/estadias.png';
+import estadiasIcon from '../../../../assets/menu/estadias.png';
+import detencionesIcon from '../../../../assets/menu/detenciones.png'
 import { useAuthContext } from '../../auth/hooks';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -60,7 +61,13 @@ const reports: MenuItemType[] = [
   {
     label: 'Reporte de estadias',
     path: '/estadias',
-    icon: estadias,
+    icon: estadiasIcon,
+    requiredPermissions: [],
+  },
+  {
+    label: 'Reporte de detenciones',
+    path: '/reporte_detenciones',
+    icon: detencionesIcon,
     requiredPermissions: [],
   },
 ];
