@@ -101,6 +101,16 @@ const Detenciones = ({ }) => {
       { accessorKey: 'start_latitude', header: 'Latitud' },
       { accessorKey: 'start_longitude', header: 'Longitud' },
       { accessorKey: 'detention_minutes', header: 'Minutos detenido' },
+      {
+        accessorKey: 'map_link',
+        header: 'Ver en Google Maps',
+        cell: ({ row }) => {
+          const lat = row.original.start_latitude;
+          const lng = row.original.start_longitude;
+          const url = `https://www.google.com/maps?q=${lat},${lng}`;
+          return <a href={url} target="_blank" rel="noopener noreferrer">Ver mapa</a>;
+        },
+      }
     ],
     [],
   );
@@ -118,7 +128,7 @@ const Detenciones = ({ }) => {
     initialState: {
       density: 'compact',
       pagination: { pageSize: 80 },
-      grouping: ['rango_fechas'], 
+      grouping: ['rango_fechas'],
     },
     muiTablePaperProps: {
       elevation: 0,
