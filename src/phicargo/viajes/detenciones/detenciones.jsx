@@ -14,11 +14,12 @@ import {
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { toast } from 'react-toastify';
 import TiemposViajes from './tiempos_viaje';
-import { Card, CardHeader } from '@nextui-org/react';
+import { Card, CardBody, CardHeader } from '@nextui-org/react';
 import Grid from '@mui/material/Grid2';
 import Box from '@mui/material/Box';
 import { TiemposViajeProvider, useTiemposViaje } from './TiemposViajeContext';
 import { Typography } from '@mui/material';
+import { Link } from "@nextui-org/react";
 
 const Detenciones = ({ }) => {
 
@@ -52,17 +53,15 @@ const Detenciones = ({ }) => {
     const newDetenciones = [];
 
     for (let i = 0; i < keys.length - 1; i++) {
-      const date_start = data[keys[i]];
-      const date_end = data[keys[i + 1]];
-      console.log(data[keys[i]]);
-      console.log(data[keys[i]]);
+      const date_start = '2025-01-01 00:00:00';
+      const date_end = '2025-01-31 00:00:00';
 
       const url = `/locations/by_vehicle_id/`;
 
       try {
         const response = await odooApi.get(url, {
           params: {
-            vehicle_id: vehicleId,
+            vehicle_id: 7206,
             date_start: date_start,
             date_end: date_end,
           },
@@ -115,7 +114,17 @@ const Detenciones = ({ }) => {
           const lat = row.original.start_latitude;
           const lng = row.original.start_longitude;
           const url = `https://www.google.com/maps?q=${lat},${lng}`;
-          return <a href={url} target="_blank" rel="noopener noreferrer">Ver mapa</a>;
+          return <Button
+            showAnchorIcon
+            as={Link}
+            isExternal={true}
+            size='sm'
+            color="primary"
+            href={url}
+            variant="solid"
+          >
+            Ver en Maps
+          </Button>;
         },
       }
     ],
@@ -172,6 +181,11 @@ const Detenciones = ({ }) => {
         color: row.subRows?.length ? '#FFFFFF' : '#000000',
       },
     }),
+    muiTableContainerProps: {
+      sx: {
+        maxHeight: 'calc(100vh)',
+      },
+    },
     renderTopToolbarCustomActions: ({ table }) => (
       <Box
         sx={{
@@ -199,7 +213,9 @@ const Detenciones = ({ }) => {
               <CardHeader>
                 <Typography variant="h6" className='text-primary'>Tiempos de Detención</Typography>
               </CardHeader>
-              <MaterialReactTable table={table} />
+              <CardBody>
+                <MaterialReactTable table={table} />
+              </CardBody>
             </Card>
           </Grid>
         </Grid>
