@@ -104,7 +104,7 @@ const Detenciones = ({ }) => {
       {
         accessorKey: 'map_link',
         header: 'Ver en Google Maps',
-        cell: ({ row }) => {
+        Cell: ({ row }) => {
           const lat = row.original.start_latitude;
           const lng = row.original.start_longitude;
           const url = `https://www.google.com/maps?q=${lat},${lng}`;
