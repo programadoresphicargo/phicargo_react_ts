@@ -100,7 +100,14 @@ const Detenciones = ({ }) => {
       { accessorKey: 'start_time', header: 'Hora de inicio' },
       { accessorKey: 'start_latitude', header: 'Latitud' },
       { accessorKey: 'start_longitude', header: 'Longitud' },
-      { accessorKey: 'detention_minutes', header: 'Minutos detenido' },
+      {
+        accessorKey: 'detention_minutes',
+        header: 'Minutos detenido',
+        aggregationFn: 'sum',
+        AggregatedCell: ({ cell }) => (
+          <strong>Total: {cell.getValue()} min</strong>
+        ),
+      },
       {
         accessorKey: 'map_link',
         header: 'Ver en Google Maps',
