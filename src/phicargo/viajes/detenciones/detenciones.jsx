@@ -53,15 +53,17 @@ const Detenciones = ({ }) => {
     const newDetenciones = [];
 
     for (let i = 0; i < keys.length - 1; i++) {
-      const date_start = '2025-01-01 00:00:00';
-      const date_end = '2025-01-31 00:00:00';
+      const date_start = data[keys[i]];
+      const date_end = data[keys[i + 1]];
+      console.log(data[keys[i]]);
+      console.log(data[keys[i]]);
 
       const url = `/locations/by_vehicle_id/`;
 
       try {
         const response = await odooApi.get(url, {
           params: {
-            vehicle_id: 7206,
+            vehicle_id: vehicleId,
             date_start: date_start,
             date_end: date_end,
           },
