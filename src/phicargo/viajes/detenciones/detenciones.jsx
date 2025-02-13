@@ -14,7 +14,7 @@ import {
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { toast } from 'react-toastify';
 import TiemposViajes from './tiempos_viaje';
-import { Card } from '@nextui-org/react';
+import { Card, CardHeader } from '@nextui-org/react';
 import Grid from '@mui/material/Grid2';
 import Box from '@mui/material/Box';
 import { TiemposViajeProvider, useTiemposViaje } from './TiemposViajeContext';
@@ -49,20 +49,40 @@ const Detenciones = ({ }) => {
 
   const fetchData = async (vehicleId, data) => {
     const keys = Object.keys(data);
+    const newDetenciones = [];
 
     for (let i = 0; i < keys.length - 1; i++) {
-      const date_start = encodeURIComponent(data[keys[i]]);
-      const date_end = encodeURIComponent(data[keys[i + 1]]);
+      const date_start = data[keys[i]];
+      const date_end = data[keys[i + 1]];
+      console.log(data[keys[i]]);
+      console.log(data[keys[i]]);
 
-      const url = `/locations/by_vehicle_id/?vehicle_id=${vehicleId}&date_start=${date_start}&date_end=${date_end}`;
+      const url = `/locations/by_vehicle_id/`;
 
       try {
-        const response = await odooApi.get(url);
+        const response = await odooApi.get(url, {
+          params: {
+            vehicle_id: vehicleId,
+            date_start: date_start,
+            date_end: date_end,
+          },
+        });
+
         console.log(`Datos entre ${keys[i]} y ${keys[i + 1]}:`, response.data);
+
+        // Procesamos los datos y agregamos el rango de fechas
+        const formattedData = response.data.map((item) => ({
+          ...item,
+          rango_fechas: `${keys[i]} - ${keys[i + 1]}`, // Agrupación por rango
+        }));
+
+        newDetenciones.push(...formattedData);
       } catch (error) {
         console.error(`Error en la solicitud entre ${keys[i]} y ${keys[i + 1]}`, error);
       }
     }
+
+    setDetenciones(newDetenciones);
   };
 
   useEffect(() => {
@@ -76,22 +96,11 @@ const Detenciones = ({ }) => {
 
   const columns = useMemo(
     () => [
-      {
-        accessorKey: 'start_time',
-        header: 'Nombre del archivo',
-      },
-      {
-        accessorKey: 'start_latitude',
-        header: 'Latitud',
-      },
-      {
-        accessorKey: 'start_longitude',
-        header: 'Longitud',
-      },
-      {
-        accessorKey: 'detention_minutes',
-        header: 'Minutos detenido',
-      },
+      { accessorKey: 'rango_fechas', header: 'Rango de Fechas', enableGrouping: true },
+      { accessorKey: 'start_time', header: 'Hora de inicio' },
+      { accessorKey: 'start_latitude', header: 'Latitud' },
+      { accessorKey: 'start_longitude', header: 'Longitud' },
+      { accessorKey: 'detention_minutes', header: 'Minutos detenido' },
     ],
     [],
   );
@@ -109,6 +118,7 @@ const Detenciones = ({ }) => {
     initialState: {
       density: 'compact',
       pagination: { pageSize: 80 },
+      grouping: ['rango_fechas'], 
     },
     muiTablePaperProps: {
       elevation: 0,
@@ -127,7 +137,7 @@ const Detenciones = ({ }) => {
       sx: {
         fontFamily: 'Inter',
         fontWeight: 'normal',
-        fontSize: '10px',
+        fontSize: '14px',
       },
     },
     muiTableContainerProps: {
@@ -151,28 +161,6 @@ const Detenciones = ({ }) => {
 
   return (
     <>
-
-      <Box sx={{ padding: 2 }}>
-        <Typography variant="h4">Tiempos de Viaje</Typography>
-
-        {loading ? (
-          <Typography>Cargando datos...</Typography>
-        ) : (
-          <>
-            {detenciones.length === 0 ? (
-              <Typography>No hay datos disponibles</Typography>
-            ) : (
-              detenciones.map((item, index) => (
-                <Box key={index} sx={{ marginBottom: 4 }}>
-                  <Typography variant="h6">{item.title}</Typography>
-                  <MaterialReactTable columns={columns} data={item.data} />
-                </Box>
-              ))
-            )}
-          </>
-        )}
-      </Box>
-
       <Box sx={{ flexGrow: 1 }} margin={2}>
         <Grid container spacing={2}>
           <Grid size={12}>
@@ -180,8 +168,11 @@ const Detenciones = ({ }) => {
               <TiemposViajes></TiemposViajes>
             </Card>
           </Grid>
-          <Grid size={3}>
+          <Grid size={12}>
             <Card>
+              <CardHeader>
+                <Typography variant="h6" className='text-primary'>Tiempos de Detención</Typography>
+              </CardHeader>
               <MaterialReactTable table={table} />
             </Card>
           </Grid>

@@ -12,28 +12,28 @@ function TiemposViajes() {
         <>
             <div className="gap-2 grid grid-cols-2 sm:grid-cols-4">
                 <Card>
-                    <CardHeader>Fecha inicio</CardHeader>
+                    <CardHeader className='bg-primary text-white'>Fecha inicio</CardHeader>
                     <Divider></Divider>
                     <CardBody>
                         <h1>{data.fecha_inicio}</h1>
                     </CardBody>
                 </Card>
                 <Card>
-                    <CardHeader>Llegada a planta</CardHeader>
+                    <CardHeader className='bg-primary text-white'>Llegada a planta</CardHeader>
                     <Divider></Divider>
                     <CardBody>
                         <h1>{data.llegada_planta}</h1>
                     </CardBody>
                 </Card>
                 <Card>
-                    <CardHeader>Salida de planta</CardHeader>
+                    <CardHeader className='bg-primary text-white'>Salida de planta</CardHeader>
                     <Divider></Divider>
                     <CardBody>
                         <h1>{data.llegada_planta}</h1>
                     </CardBody>
                 </Card>
                 <Card>
-                    <CardHeader>Fecha finalizado</CardHeader>
+                    <CardHeader className='bg-primary text-white'>Fecha finalizado</CardHeader>
                     <Divider></Divider>
                     <CardBody>
                         <h1>{data.fecha_finalizado}</h1>
