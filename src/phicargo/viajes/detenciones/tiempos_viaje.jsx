@@ -29,7 +29,7 @@ function TiemposViajes() {
                     <CardHeader className='bg-primary text-white'>Salida de planta</CardHeader>
                     <Divider></Divider>
                     <CardBody>
-                        <h1>{data.llegada_planta}</h1>
+                        <h1>{data.salida_planta}</h1>
                     </CardBody>
                 </Card>
                 <Card>
