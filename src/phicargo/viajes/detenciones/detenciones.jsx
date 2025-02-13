@@ -212,8 +212,8 @@ const Detenciones = ({ }) => {
           </Grid>
           <Grid size={12}>
             <Card>
-              <CardHeader>
-                <Typography variant="h6" className='text-primary'>Tiempos de Detención</Typography>
+              <CardHeader className='bg-primary'>
+                <h1 className='text-white'>Tiempos de Detención</h1>
               </CardHeader>
               <CardBody>
                 <MaterialReactTable table={table} />
