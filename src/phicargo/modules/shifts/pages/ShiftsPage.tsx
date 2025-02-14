@@ -16,7 +16,8 @@ import { useMaterialReactTable } from 'material-react-table';
 import { useReorderShifts } from '../hooks/useReorderShifts';
 import { useShiftColumns } from '../hooks/useShiftColumns';
 import { useShiftQueries } from '../hooks/useShiftQueries';
-import { MdOutlineDangerous } from "react-icons/md";
+import { MdOutlineDangerous } from 'react-icons/md';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
 const exportConf: ExportConfig<Shift> = {
   fileName: 'Turnos',
@@ -60,6 +61,7 @@ const ShiftsPage = () => {
     // DATA
     columns,
     data: data,
+    localization: MRT_Localization_ES,
     enableStickyHeader: true,
     autoResetPageIndex: false,
     // PAGINATION, FILTERS, SORTING

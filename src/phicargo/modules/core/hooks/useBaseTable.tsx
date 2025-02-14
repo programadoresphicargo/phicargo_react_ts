@@ -9,6 +9,7 @@ import {
 import RefreshIcon from '@mui/icons-material/Refresh';
 import type { TableState } from '../types/global-types';
 import ExportExcelButton from '../components/ui/ExportExcelButton';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
 interface UseTableConfig<T extends MRT_RowData> {
   columns: MRT_ColumnDef<T>[];
@@ -46,6 +47,7 @@ export const useBaseTable = <T extends MRT_RowData>({
     // DATA
     columns,
     data: data || [],
+    localization: MRT_Localization_ES,
     // EXTRA CONFIG
     enableStickyHeader: true,
     enableDensityToggle: false,

@@ -7,6 +7,7 @@ import {
 import { Modal, ModalBody, ModalContent, ModalHeader } from '@nextui-org/react';
 
 import { Incidence } from '../models/driver-incidence-model';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import MaterialTableBase from '../../core/components/tables/MaterialTableBase';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { useIncidenceQueries } from '../hooks/useIncidenceQueries';
@@ -53,6 +54,7 @@ const IncidencesList = () => {
     data: incidencesQuery.data || [],
     enableStickyHeader: true,
     autoResetPageIndex: false,
+    localization: MRT_Localization_ES,
     // PAGINATION, FILTERS, SORTING
     enableSorting: false,
     enableGrouping: true,
