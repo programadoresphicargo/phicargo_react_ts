@@ -1,3 +1,11 @@
+import type {
+  ClientRevenue,
+  WaybillStats,
+} from '../../models/waybill-stats-model';
+import {
+  ExportConfig,
+  ExportToExcel,
+} from '@/phicargo/modules/core/utilities/export-to-excel';
 import {
   getBackgroundColors,
   getBorderColors,
@@ -8,7 +16,6 @@ import { Bar } from 'react-chartjs-2';
 import { ChartCard } from '../ChartCard';
 import { ChartData } from 'chart.js';
 import { ChartOptions } from 'chart.js';
-import type { WaybillStats } from '../../models/waybill-stats-model';
 import { useDateRangeContext } from '../../hooks/useDateRangeContext';
 
 const options: ChartOptions<'bar'> = {
@@ -89,9 +96,22 @@ export const ClientsRevenueChart = (props: Props) => {
       title={`Ingresos Por Cliente ${monthYearName}`}
       isLoading={isLoading && !chartData}
       customHeight="65rem"
+      downloadFn={() => toExcel.exportData(data?.clientRevenue || [])}
     >
       {chartData && <Bar data={chartData} options={options} />}
     </ChartCard>
   );
 };
+
+const exportConf: ExportConfig<ClientRevenue> = {
+  fileName: `Ingresos por cliente`,
+  withDate: true,
+  sheetName: 'Ingresos por cliente',
+  columns: [
+    { accessorFn: (data) => data.client, header: 'Cliente' },
+    { accessorFn: (data) => data.amount, header: 'Ingresos' },
+  ],
+};
+
+const toExcel = new ExportToExcel(exportConf);
 

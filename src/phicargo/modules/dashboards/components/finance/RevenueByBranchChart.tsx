@@ -1,11 +1,21 @@
-import { getBackgroundColors, getBorderColors } from '../../utils/charts-colors';
+import type {
+  BranchRevenue,
+  WaybillStats,
+} from '../../models/waybill-stats-model';
+import {
+  ExportConfig,
+  ExportToExcel,
+} from '@/phicargo/modules/core/utilities/export-to-excel';
+import {
+  getBackgroundColors,
+  getBorderColors,
+} from '../../utils/charts-colors';
 import { useEffect, useState } from 'react';
 
 import { Bar } from 'react-chartjs-2';
 import { ChartCard } from '../ChartCard';
 import { ChartData } from 'chart.js';
 import { ChartOptions } from 'chart.js';
-import type { WaybillStats } from '../../models/waybill-stats-model';
 import { useDateRangeContext } from '../../hooks/useDateRangeContext';
 
 const options: ChartOptions<'bar'> = {
@@ -83,8 +93,22 @@ export const RevenueByBranchChart = (props: Props) => {
     <ChartCard
       title={`Ingresos por Sucursal ${monthYearName}`}
       isLoading={isLoading && !chartData}
+      downloadFn={() => toExcel.exportData(data?.branchRevenue || [])}
     >
       {chartData && <Bar data={chartData} options={options} />}
     </ChartCard>
   );
 };
+
+const exportConf: ExportConfig<BranchRevenue> = {
+  fileName: `Ingresos por sucursal`,
+  withDate: true,
+  sheetName: 'Ingresos por sucursal',
+  columns: [
+    { accessorFn: (data) => data.branch, header: 'Sucursal' },
+    { accessorFn: (data) => data.amount, header: 'Ingresos' },
+  ],
+};
+
+const toExcel = new ExportToExcel(exportConf);
+
