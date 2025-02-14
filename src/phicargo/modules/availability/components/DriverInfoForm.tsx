@@ -3,6 +3,7 @@ import { Driver, DriverEdit } from '../models/driver-model';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { CheckboxInput } from '../../core/components/inputs/CheckboxInput';
+import { DatePickerInput } from '../../core/components/inputs/DatePickerInput';
 import { SelectInput } from '../../core/components/inputs/SelectInput';
 import { TextInput } from '../../core/components/inputs/TextInput';
 import { useDriverQueries } from '../hooks/useDriverQueries';
@@ -27,6 +28,7 @@ const transformDriverToForm = (driver: Driver): DriverEdit => ({
   modality: driver.modality,
   isDangerous: driver.isDangerous ? 'SI' : 'NO',
   isActive: driver.isActive,
+  hireDate: driver.hireDate,
 });
 
 const disabled = false;
@@ -103,6 +105,13 @@ const DriverInfoForm = (props: Props) => {
               { value: 'SI', key: 'SI' },
               { value: 'NO', key: 'NO' },
             ]}
+          />
+          <DatePickerInput 
+            control={control}
+            name="hireDate"
+            label="Fecha de Ingreso"
+            initialValue={formData.hireDate || undefined}
+            isDisabled={disabled}
           />
           <CheckboxInput 
             control={control}

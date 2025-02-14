@@ -18,7 +18,6 @@ const DriverAvailabilityPage = lazy(() =>
   })),
 );
 const DriverInfo = lazy(() => import('../outlets/DriverInfo'));
-const VacationsRequestView = lazy(() => import('../outlets/VacationsRequestView'));
 const NotAssignedPage = lazy(() => import('../pages/NotAssignedPage'));
 const SummaryPage = lazy(() =>
   import('../pages/SummaryPage').then((module) => ({
@@ -81,14 +80,6 @@ const AvailabilityRoutes = () => {
           element={
             <Suspense fallback={<LoadingPage />}>
               <DriverInfo />
-            </Suspense>
-          }
-        />
-        <Route
-          path="solicitud-vacaciones/:id"
-          element={
-            <Suspense fallback={<LoadingPage />}>
-              <VacationsRequestView />
             </Suspense>
           }
         />
