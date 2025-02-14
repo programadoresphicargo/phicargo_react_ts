@@ -85,12 +85,13 @@ class ShiftServiceApi {
   public static async archiveShift({
     id,
     updatedItem,
-  }: UpdatableItem<ShiftArchive>): Promise<void> {
+  }: UpdatableItem<ShiftArchive>): Promise<Shift[]> {
     const url = `/shifts/${id}/archive`;
     const data = updatedItem;
 
     try {
-      await odooApi.put(url, data);
+      const response = await odooApi.put<ShiftApi[]>(url, data);
+      return response.data.map(shiftToLocal);
     } catch (error) {
       console.log(error);
       if (error instanceof AxiosError) {
@@ -107,7 +108,6 @@ class ShiftServiceApi {
    * @param shifts List of shifts to reorder
    */
   public static async reorderShifts(shifts: ShiftReorder[]) {
-
     const data = shifts.map(shiftReorderToApi);
 
     try {
