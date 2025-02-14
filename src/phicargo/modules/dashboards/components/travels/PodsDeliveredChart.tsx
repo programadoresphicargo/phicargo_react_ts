@@ -1,10 +1,14 @@
+import { ByBranch, TravelStats } from '../../models/travels-stats-models';
+import {
+  ExportConfig,
+  ExportToExcel,
+} from '@/phicargo/modules/core/utilities/export-to-excel';
 import { useEffect, useState } from 'react';
 
 import { Bar } from 'react-chartjs-2';
 import { ChartCard } from '../ChartCard';
 import { ChartData } from 'chart.js';
 import { ChartOptions } from 'chart.js';
-import { TravelStats } from '../../models/travels-stats-models';
 import { useDateRangeContext } from '../../hooks/useDateRangeContext';
 
 const options: ChartOptions<'bar'> = {
@@ -85,8 +89,25 @@ export const PodsDeliveredChart = (props: Props) => {
     <ChartCard
       title={`Pruebas de Entrega ${monthYearName}`}
       isLoading={isLoading && !chartData}
+      downloadFn={() => toExcel.exportData(data?.byBranch || [])}
     >
       {chartData && <Bar data={chartData} options={options} />}
     </ChartCard>
   );
 };
+
+const exportConf: ExportConfig<ByBranch> = {
+  fileName: `Pruebas de Entrega`,
+  withDate: true,
+  sheetName: 'Pruebas de entrega',
+  columns: [
+    { accessorFn: (data) => data.branch, header: 'Sucursal' },
+    { accessorFn: (data) => data.code, header: 'Codigo' },
+    { accessorFn: (data) => data.total, header: 'PODs' },
+    { accessorFn: (data) => data.podsPending, header: 'PODs Pendientes' },
+    { accessorFn: (data) => data.podsSent, header: 'PODs Enviadas' },
+  ],
+};
+
+const toExcel = new ExportToExcel(exportConf);
+

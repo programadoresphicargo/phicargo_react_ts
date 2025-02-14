@@ -1,10 +1,14 @@
+import { ByCategory, TravelStats } from '../../models/travels-stats-models';
+import {
+  ExportConfig,
+  ExportToExcel,
+} from '@/phicargo/modules/core/utilities/export-to-excel';
 import { useEffect, useState } from 'react';
 
 import { ChartCard } from '../ChartCard';
 import { ChartData } from 'chart.js';
 import { ChartOptions } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
-import { TravelStats } from '../../models/travels-stats-models';
 import { getBackgroundColors } from '../../utils/charts-colors';
 import { useDateRangeContext } from '../../hooks/useDateRangeContext';
 
@@ -18,10 +22,11 @@ interface Props {
   isLoading: boolean;
 }
 
-
 export const TravelsByCategoryChart = (props: Props) => {
-const { isLoading, data } = props;
-  const [chartData, setChartData] = useState<ChartData<'doughnut'> | null>(null);
+  const { isLoading, data } = props;
+  const [chartData, setChartData] = useState<ChartData<'doughnut'> | null>(
+    null,
+  );
   const { monthYearName } = useDateRangeContext();
 
   useEffect(() => {
@@ -43,10 +48,24 @@ const { isLoading, data } = props;
 
   return (
     <ChartCard
-      title={`Viajes por tipo de carga ${monthYearName}`}
+      title={`Viajes por categoria ${monthYearName}`}
       isLoading={isLoading && !chartData}
+      downloadFn={() => toExcel.exportData(data?.byCategory || [])}
     >
       {chartData && <Doughnut data={chartData} options={options} />}
     </ChartCard>
   );
-}
+};
+
+const exportConf: ExportConfig<ByCategory> = {
+  fileName: `Viajes por categoria`,
+  withDate: true,
+  sheetName: 'Viajes por categoria',
+  columns: [
+    { accessorFn: (data) => data.category, header: 'Tipo de carga' },
+    { accessorFn: (data) => data.travels, header: 'Viajes' },
+  ],
+};
+
+const toExcel = new ExportToExcel(exportConf);
+
