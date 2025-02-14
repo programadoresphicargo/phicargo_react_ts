@@ -1,3 +1,11 @@
+import type {
+  ArrivalStatusDriver,
+  DepartureAndArrivalStats,
+} from '../../models/departure-and-arrival-models';
+import {
+  ExportConfig,
+  ExportToExcel,
+} from '@/phicargo/modules/core/utilities/export-to-excel';
 import {
   getBackgroundColors,
   getBorderColors,
@@ -9,7 +17,6 @@ import { ChartActions } from '../../types';
 import { ChartCard } from '../ChartCard';
 import { ChartData } from 'chart.js';
 import { ChartOptions } from 'chart.js';
-import type { DepartureAndArrivalStats } from '../../models/departure-and-arrival-models';
 import { useDateRangeContext } from '../../hooks/useDateRangeContext';
 
 const options: ChartOptions<'bar'> = {
@@ -97,9 +104,27 @@ export const ArrivalsStatusDriverChart = (props: Props) => {
       isLoading={isLoading && !chartData}
       customHeight="70rem"
       actions={actions}
+      downloadFn={() => toExcel.exportData(data?.arrivalStatusDrivers || [])}
     >
       {chartData && <Bar data={chartData} options={options} />}
     </ChartCard>
   );
 };
+
+const exportConf: ExportConfig<ArrivalStatusDriver> = {
+  fileName: `Llegadas tarde`,
+  withDate: true,
+  sheetName: 'Llegadas tarde',
+  columns: [
+    { accessorFn: (data) => data.driver, header: 'Operador' },
+    { accessorFn: (data) => data.arrivalEarly, header: 'Temprano' },
+    {
+      accessorFn: (data) => data.arrivalLate,
+      header: 'Tarde',
+    },
+    { accessorFn: (data) => data.noArrivalRecorded, header: 'Sin informacion' },
+  ],
+};
+
+const toExcel = new ExportToExcel(exportConf);
 
