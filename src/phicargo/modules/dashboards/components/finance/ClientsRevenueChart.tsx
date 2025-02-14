@@ -8,7 +8,7 @@ import { Bar } from 'react-chartjs-2';
 import { ChartCard } from '../ChartCard';
 import { ChartData } from 'chart.js';
 import { ChartOptions } from 'chart.js';
-import type { VehicleStats } from '../../models/vehicles-stats-models';
+import type { WaybillStats } from '../../models/waybill-stats-model';
 import { useDateRangeContext } from '../../hooks/useDateRangeContext';
 
 const options: ChartOptions<'bar'> = {
@@ -20,7 +20,7 @@ const options: ChartOptions<'bar'> = {
       callbacks: {
         label: (context) => {
           const value = context.raw;
-          return `Distancia: ${Number(value).toLocaleString()} KM`;
+          return `Ingresos: $${Number(value).toLocaleString()}`;
         },
       },
     },
@@ -47,7 +47,7 @@ const options: ChartOptions<'bar'> = {
           size: 15,
         },
         callback: (value) => {
-          return `${Number(value).toLocaleString()} KM`;
+          return `$${Number(value).toLocaleString()}`;
         },
       },
     },
@@ -55,11 +55,11 @@ const options: ChartOptions<'bar'> = {
 };
 
 interface Props {
-  data?: VehicleStats;
+  data?: WaybillStats;
   isLoading: boolean;
 }
 
-export const DistanceByVehiclesChart = (props: Props) => {
+export const ClientsRevenueChart = (props: Props) => {
   const { isLoading, data } = props;
   const [chartData, setChartData] = useState<ChartData<'bar'> | null>(null);
   const { monthYearName } = useDateRangeContext();
@@ -68,15 +68,15 @@ export const DistanceByVehiclesChart = (props: Props) => {
     if (!data) return;
 
     const chartData: ChartData<'bar'> = {
-      labels: data.distanceByVehicle.map((item) => item.vehicle),
+      labels: data.clientRevenue.map((item) => item.client),
       datasets: [
         {
-          label: 'Kilometros Recorridos',
-          data: data.distanceByVehicle.map((item) => item.distance),
+          label: 'Ingresos',
+          data: data.clientRevenue.map((item) => item.amount),
           borderWidth: 2,
           borderRadius: 10,
-          backgroundColor: getBackgroundColors(data.distanceByVehicle.length),
-          borderColor: getBorderColors(data.distanceByVehicle.length),
+          backgroundColor: getBackgroundColors(data.clientRevenue.length),
+          borderColor: getBorderColors(data.clientRevenue.length),
         },
       ],
     };
@@ -86,7 +86,7 @@ export const DistanceByVehiclesChart = (props: Props) => {
 
   return (
     <ChartCard
-      title={`Distancia Recorrida Por Unidad ${monthYearName}`}
+      title={`Ingresos Por Cliente ${monthYearName}`}
       isLoading={isLoading && !chartData}
       customHeight="65rem"
     >
