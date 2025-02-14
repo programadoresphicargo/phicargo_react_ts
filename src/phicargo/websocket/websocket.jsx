@@ -62,20 +62,25 @@ const WebSocketWithToast = () => {
 
         webSocket.onmessage = (event) => {
             try {
-                const data = event.data;
+                const data = JSON.parse(event.data);
                 console.log(data);
+                const messageType = data.type || "Desconocido";
+                const message = data.message || "Nuevo mensaje recibido";
 
-                // Manejar mensajes de tipo 'ping' o 'pong'
-                if (data.type === 'ping') {
-                    console.log(`Mensaje ${data.type} recibido del servidor.`);
-                    return; // Ignorar el mensaje si es una respuesta al ping
+                if (messageType === "ping") {
+                    console.log(`Mensaje ${messageType} recibido del servidor.`);
+                    return;
                 }
 
-                // Procesar otros mensajes
-                const message = data.message || "Nuevo mensaje recibido";
-                toast.success(`Notificación: ${data}`, { autoClose: 5000 });
-                //speakMessage(message);
-                showPushNotification("Nueva alerta: " + data);
+                console.log(messageType);
+                if (messageType == 'detencion') {
+                    console.log(message);
+                    return;
+                } else {
+                    toast.success(`Notificación: ${message}`, { autoClose: 5000 });
+                    //speakMessage(message);
+                    showPushNotification(`Nueva alerta: ${message}`);
+                }
 
                 if (audioRef.current) {
                     audioRef.current.play();
