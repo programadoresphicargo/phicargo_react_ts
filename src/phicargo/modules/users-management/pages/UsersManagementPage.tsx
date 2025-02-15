@@ -5,6 +5,7 @@ import {
 import { Outlet, useNavigate } from 'react-router-dom';
 
 import AddButton from '@/phicargo/modules/core/components/ui/AddButton';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { RefreshButton } from '../../core/components/ui/RefreshButton';
 import { User } from '../../auth/models';
 import { UserCreateForm } from '../components/UserCreateForm';
@@ -25,6 +26,7 @@ const UsersManagementPage = () => {
     // DATA
     columns,
     data: users || [],
+    localization: MRT_Localization_ES,
     enableStickyHeader: true,
     // PAGINATION, FILTERS, SORTING
     enableGrouping: true,

@@ -15,6 +15,7 @@ import { useRecords } from '../../hook/useRecords';
 import { Record } from '../../models/record-model';
 import { useDailyReportColumns } from '../../hook/useDailyReportTable';
 import toast from 'react-hot-toast';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
 /**
  * Componente que muestra la tabla de registros diarios
@@ -59,6 +60,7 @@ const DailyReportTable = () => {
     // DATA
     data: records || [],
     columns: columns,
+    localization: MRT_Localization_ES,
     enableStickyHeader: true,
     enableRowPinning: true,
     keepPinnedRows: false,
@@ -98,7 +100,10 @@ const DailyReportTable = () => {
           <span>
             <IconButton
               color="primary"
-              disabled={row.original?.date.isBefore(dayjs().subtract(3, 'day'), 'day')}
+              disabled={row.original?.date.isBefore(
+                dayjs().subtract(3, 'day'),
+                'day',
+              )}
               onClick={() => table.setEditingRow(row)}
             >
               <EditIcon />

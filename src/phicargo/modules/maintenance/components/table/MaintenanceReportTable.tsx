@@ -13,6 +13,7 @@ import AddButton from '../../../core/components/ui/AddButton';
 import CheckIcon from '@mui/icons-material/Check';
 import CompleteDialog from '../CompleteDialog';
 import InfoIcon from '@mui/icons-material/Info';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
@@ -71,6 +72,7 @@ const MaintenanceReportTable = (props: MaintenanceReportTableProps) => {
     // DATA
     columns,
     data: records || [],
+    localization: MRT_Localization_ES,
     enableStickyHeader: true,
     // PAGINATION, FILTERS, SORTING
     enableGrouping: true,

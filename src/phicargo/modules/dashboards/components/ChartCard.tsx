@@ -1,6 +1,7 @@
-import { Button, Spinner } from '@nextui-org/react';
+import { Button, Spinner, Tooltip } from '@nextui-org/react';
 
 import type { ChartActions } from '../types';
+import { FaFileDownload } from 'react-icons/fa';
 import { ReactNode } from 'react';
 
 interface Props {
@@ -8,6 +9,7 @@ interface Props {
   children?: ReactNode;
   isLoading?: boolean;
   customHeight?: string;
+  downloadFn?: () => void;
   actions?: ChartActions[];
 }
 
@@ -16,6 +18,7 @@ export const ChartCard = ({
   title,
   isLoading,
   customHeight,
+  downloadFn,
   actions,
 }: Props) => {
   const baseClassName =
@@ -25,7 +28,22 @@ export const ChartCard = ({
     <div className={baseClassName} style={{ height: customHeight || '24rem' }}>
       <div className="flex items-center justify-between">
         <h2 className="text-base font-bold uppercase"> {title} </h2>
-        <div className='flex space-x-2'>
+        <div className="flex space-x-2">
+          {downloadFn && (
+            <Tooltip content="Descargar Datos" placement="top">
+              <Button
+                isIconOnly
+                aria-label="download-excel"
+                color="success"
+                size="sm"
+                variant="light"
+                className="p-0"
+                onPress={downloadFn}
+              >
+                <FaFileDownload className="text-lg" />
+              </Button>
+            </Tooltip>
+          )}
           {actions?.map((action, index) => (
             <Button
               key={index}

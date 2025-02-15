@@ -1,8 +1,15 @@
-import { ByBranch, TravelStats } from '../../models/travels-stats-models';
+import type {
+  BranchRevenue,
+  WaybillStats,
+} from '../../models/waybill-stats-model';
 import {
   ExportConfig,
   ExportToExcel,
 } from '@/phicargo/modules/core/utilities/export-to-excel';
+import {
+  getBackgroundColors,
+  getBorderColors,
+} from '../../utils/charts-colors';
 import { useEffect, useState } from 'react';
 
 import { Bar } from 'react-chartjs-2';
@@ -14,6 +21,16 @@ import { useDateRangeContext } from '../../hooks/useDateRangeContext';
 const options: ChartOptions<'bar'> = {
   responsive: true,
   maintainAspectRatio: false,
+  plugins: {
+    tooltip: {
+      callbacks: {
+        label: (context) => {
+          const value = context.raw;
+          return `Ingresos: $${Number(value).toLocaleString()}`;
+        },
+      },
+    },
+  },
   scales: {
     y: {
       beginAtZero: true,
@@ -23,6 +40,9 @@ const options: ChartOptions<'bar'> = {
       ticks: {
         font: {
           size: 15,
+        },
+        callback: (value) => {
+          return `$${Number(value).toLocaleString()}`;
         },
       },
     },
@@ -40,11 +60,11 @@ const options: ChartOptions<'bar'> = {
 };
 
 interface Props {
-  data?: TravelStats;
+  data?: WaybillStats;
   isLoading: boolean;
 }
 
-export const PodsDeliveredChart = (props: Props) => {
+export const RevenueByBranchChart = (props: Props) => {
   const { isLoading, data } = props;
   const [chartData, setChartData] = useState<ChartData<'bar'> | null>(null);
   const { monthYearName } = useDateRangeContext();
@@ -53,31 +73,15 @@ export const PodsDeliveredChart = (props: Props) => {
     if (!data) return;
 
     const chartData: ChartData<'bar'> = {
-      labels: data.byBranch.map((branch) => branch.code),
+      labels: data.branchRevenue.map((branch) => branch.branch),
       datasets: [
         {
-          label: 'Todas',
-          data: data.byBranch.map((branch) => branch.total),
+          label: '',
+          data: data.branchRevenue.map((branch) => branch.amount),
           borderWidth: 2,
           borderRadius: 10,
-          backgroundColor: ['rgba(75, 192, 192, 0.2)'],
-          borderColor: ['rgba(75, 192, 192, 1)'],
-        },
-        {
-          label: 'Enviadas',
-          data: data.byBranch.map((branch) => branch.podsSent),
-          borderWidth: 2,
-          borderRadius: 10,
-          backgroundColor: ['rgba(54, 162, 235, 0.2)'],
-          borderColor: ['rgba(54, 162, 235, 1)'],
-        },
-        {
-          label: 'Pendientes',
-          data: data.byBranch.map((branch) => branch.podsPending),
-          borderWidth: 2,
-          borderRadius: 10,
-          backgroundColor: ['rgba(255, 99, 132, 0.2)'],
-          borderColor: ['rgba(255,99,132, 1)'],
+          backgroundColor: getBackgroundColors(data.branchRevenue.length),
+          borderColor: getBorderColors(data.branchRevenue.length),
         },
       ],
     };
@@ -87,25 +91,22 @@ export const PodsDeliveredChart = (props: Props) => {
 
   return (
     <ChartCard
-      title={`Pruebas de Entrega ${monthYearName}`}
+      title={`Ingresos por Sucursal ${monthYearName}`}
       isLoading={isLoading && !chartData}
-      downloadFn={() => toExcel.exportData(data?.byBranch || [])}
+      downloadFn={() => toExcel.exportData(data?.branchRevenue || [])}
     >
       {chartData && <Bar data={chartData} options={options} />}
     </ChartCard>
   );
 };
 
-const exportConf: ExportConfig<ByBranch> = {
-  fileName: `Pruebas de Entrega`,
+const exportConf: ExportConfig<BranchRevenue> = {
+  fileName: `Ingresos por sucursal`,
   withDate: true,
-  sheetName: 'Pruebas de entrega',
+  sheetName: 'Ingresos por sucursal',
   columns: [
     { accessorFn: (data) => data.branch, header: 'Sucursal' },
-    { accessorFn: (data) => data.code, header: 'Codigo' },
-    { accessorFn: (data) => data.total, header: 'PODs' },
-    { accessorFn: (data) => data.podsPending, header: 'PODs Pendientes' },
-    { accessorFn: (data) => data.podsSent, header: 'PODs Enviadas' },
+    { accessorFn: (data) => data.amount, header: 'Ingresos' },
   ],
 };
 

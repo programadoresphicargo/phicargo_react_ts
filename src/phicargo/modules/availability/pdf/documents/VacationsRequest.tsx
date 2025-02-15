@@ -1,5 +1,10 @@
 import { Document, Page, Text, View } from '@react-pdf/renderer';
+import type {
+  DriverUnavailable,
+  DriverVacationSummary,
+} from '../../models/driver-unavailability';
 
+import type { Driver } from '../../models/driver-model';
 import { Header } from '../components/Header';
 import { RequestedDaysData } from '../components/RequestedDaysData';
 import { RequisitionersData } from '../components/RequisitionersData';
@@ -8,12 +13,16 @@ import { SignatureSection } from '../components/SignatureSection';
 import dayjs from 'dayjs';
 
 interface Props {
-  requisitionerName: string;
-  periodStart: string;
-  periodEnd: string;
+  driver: Driver;
+  unavailability: DriverUnavailable;
+  vacationSummary: DriverVacationSummary;
 }
 
-export const VacationsRequest = (props: Props) => {
+export const VacationsRequest = ({
+  driver,
+  unavailability,
+  vacationSummary,
+}: Props) => {
   return (
     <Document>
       <Page
@@ -38,13 +47,17 @@ export const VacationsRequest = (props: Props) => {
           }}
         >
           <Header />
-          <RequisitionersData requisitionerName={props.requisitionerName} />
-          <SeniorityData />
-          <RequestedDaysData
-            startDate={props.periodStart}
-            endDate={props.periodEnd}
+          <RequisitionersData requisitionerName={driver.name} />
+          <SeniorityData
+            hireDate={driver.hireDate!}
+            vacationSummary={vacationSummary}
           />
-          <SignatureSection requisitionerName={props.requisitionerName} />
+          <RequestedDaysData
+            startDate={unavailability.startDate}
+            endDate={unavailability.endDate}
+            pendingDays={vacationSummary.pendingDays}
+          />
+          <SignatureSection requisitionerName={driver.name} />
         </View>
       </Page>
     </Document>

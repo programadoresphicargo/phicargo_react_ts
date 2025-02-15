@@ -1,31 +1,34 @@
-import React, { useState, useEffect, useCallback, useContext } from 'react';
-import axios from 'axios';
-import ManiobraContenedores from './añadir_contenedor/maniobra_contenedores';
-import { User } from "@nextui-org/react";
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid2';
-import Dialog from '@mui/material/Dialog';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Slide from '@mui/material/Slide';
-import Stack from '@mui/material/Stack';
-import { Button } from '@nextui-org/react';
-import { toast } from 'react-toastify';
+import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
 import { Card, CardBody } from '@nextui-org/react';
 import { Container, filledInputClasses } from '@mui/material';
-import LinearProgress from '@mui/material/LinearProgress';
-import Swal from 'sweetalert2';
-import TextField from '@mui/material/TextField';
-import dayjs from 'dayjs';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
+
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import { Button } from '@nextui-org/react';
 import CostosExtrasContenedores from './añadir_contenedor/maniobra_contenedores';
 import { CostosExtrasContext } from '../context/context';
-import ServiciosAplicadosCE from './costos_aplicados/costos_aplicados';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import Dialog from '@mui/material/Dialog';
 import FormCE from './form';
-import TimeLineCE from './linea_tiempo';
+import Grid from '@mui/material/Grid2';
+import LinearProgress from '@mui/material/LinearProgress';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import ManiobraContenedores from './añadir_contenedor/maniobra_contenedores';
+import ServiciosAplicadosCE from './costos_aplicados/costos_aplicados';
+import Slide from '@mui/material/Slide';
+import Stack from '@mui/material/Stack';
+import Swal from 'sweetalert2';
+import TextField from '@mui/material/TextField';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import { User } from "@nextui-org/react";
+import axios from 'axios';
+import dayjs from 'dayjs';
+import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import { toast } from 'react-toastify';
+import { useAuthContext } from '@/phicargo/modules/auth/hooks';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -297,7 +300,7 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
                     </Toolbar>
                 </AppBar>
 
-                <Box className='bg-soft-secondary' className={'p-3'}>
+                <Box className='bg-soft-secondary p-3'>
                     {Loading && (
                         <Box sx={{ width: '100%' }} visibility={false}>
                             <LinearProgress />

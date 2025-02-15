@@ -1,3 +1,8 @@
+import { DriverStats, RevenueByDriver } from '../../models/driver-stats-models';
+import {
+  ExportConfig,
+  ExportToExcel,
+} from '@/phicargo/modules/core/utilities/export-to-excel';
 import {
   getBackgroundColors,
   getBorderColors,
@@ -8,7 +13,6 @@ import { Bar } from 'react-chartjs-2';
 import { ChartCard } from '../ChartCard';
 import { ChartData } from 'chart.js';
 import { ChartOptions } from 'chart.js';
-import { DriverStats } from '../../models/driver-stats-models';
 import { useDateRangeContext } from '../../hooks/useDateRangeContext';
 
 const options: ChartOptions<'bar'> = {
@@ -89,9 +93,26 @@ export const RevenueByDriverChart = (props: Props) => {
       title={`Ingresos Por Operador ${monthYearName}`}
       isLoading={isLoading && !chartData}
       customHeight="65rem"
+      downloadFn={() => toExcel.exportData(data?.revenueByDriver || [])}
     >
       {chartData && <Bar data={chartData} options={options} />}
     </ChartCard>
   );
 };
+
+const exportConf: ExportConfig<RevenueByDriver> = {
+  fileName: `Ingresos Por Operador`,
+  withDate: true,
+  sheetName: 'Ingresos Por Operador',
+  columns: [
+    { accessorFn: (data) => data.driver, header: 'Operador' },
+    { accessorFn: (data) => data.travels, header: 'Viajes' },
+    {
+      accessorFn: (data) => data.amount,
+      header: 'Ingresos',
+    },
+  ],
+};
+
+const toExcel = new ExportToExcel(exportConf);
 

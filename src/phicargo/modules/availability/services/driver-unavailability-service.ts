@@ -1,14 +1,19 @@
 import type {
   DriverUnavailabilityCreate,
   DriverUnavailable,
+  DriverVacationSummary,
 } from '../models/driver-unavailability';
+import type {
+  DriverUnavailableApi,
+  DriverVacationSummaryApi,
+} from '../models/api/driver-unavailability-api';
 import {
   driverUnavailabilityToApi,
   driverUnavailabilityToLocal,
 } from '../adapters/drivers/driver-unavailability-mapper';
 
 import { AxiosError } from 'axios';
-import type { DriverUnavailableApi } from '../models/api/driver-unavailability-api';
+import { driverVacationSummaryToLocal } from '../adapters/drivers/driver-unavailability-mapper';
 import odooApi from '../../core/api/odoo-api';
 
 /**
@@ -50,7 +55,10 @@ class DriverUnavailabilityServiceApi {
     const data = driverUnavailabilityToApi(newItem);
 
     try {
-      const response = await odooApi.post<DriverUnavailableApi>('/drivers/unavailability', data);
+      const response = await odooApi.post<DriverUnavailableApi>(
+        '/drivers/unavailability',
+        data,
+      );
       return driverUnavailabilityToLocal(response.data);
     } catch (error) {
       console.log(error);
@@ -61,6 +69,26 @@ class DriverUnavailabilityServiceApi {
         );
       }
       throw new Error('Error creating driver unavailability');
+    }
+  }
+
+  public static async getDriverVacationSummary(
+    id: number,
+  ): Promise<DriverVacationSummary> {
+    try {
+      const response = await odooApi.get<DriverVacationSummaryApi>(
+        `/drivers/vacation-summary/${id}`,
+      );
+      return driverVacationSummaryToLocal(response.data);
+    } catch (error) {
+      console.log(error);
+      if (error instanceof AxiosError) {
+        throw new Error(
+          error.response?.data?.detail ||
+            'Error getting driver vacation summary',
+        );
+      }
+      throw new Error('Error getting driver vacation summary');
     }
   }
 }

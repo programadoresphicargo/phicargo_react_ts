@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from '@react-pdf/renderer';
+import dayjs, { Dayjs } from 'dayjs';
 
 import { SectionTitle } from './SectionTitle';
-import dayjs from 'dayjs';
 import { useMemo } from 'react';
 
 const styles = StyleSheet.create({
@@ -13,15 +13,26 @@ const styles = StyleSheet.create({
 const rows = Array(5).fill(null);
 
 interface Props {
-  startDate: string;
-  endDate: string;
+  startDate: Dayjs;
+  endDate: Dayjs;
+  pendingDays: number;
 }
 
-export const RequestedDaysData = ({ startDate, endDate }: Props) => {
-  const totalDays = useMemo(
-    () => dayjs(endDate).diff(dayjs(startDate), 'days') + 1,
-    [startDate, endDate],
-  );
+export const RequestedDaysData = ({ startDate, endDate, pendingDays }: Props) => {
+  const totalDays = useMemo(() => {
+    let current = dayjs(startDate);
+    const end = dayjs(endDate);
+    let count = 0;
+
+    while (current.isBefore(end) || current.isSame(end, 'day')) {
+      if (current.day() !== 0) {
+        count++;
+      }
+      current = current.add(1, 'day');
+    }
+
+    return count;
+  }, [startDate, endDate]);
 
   return (
     <View style={styles.container}>
@@ -102,7 +113,7 @@ export const RequestedDaysData = ({ startDate, endDate }: Props) => {
                   textAlign: 'center',
                 }}
               >
-                {index === 0 ? dayjs(startDate).format('DD/MM/YYYY') : ''}
+                {index === 0 ? startDate.format('DD/MM/YYYY') : ''}
               </Text>
               <Text
                 style={{
@@ -113,7 +124,7 @@ export const RequestedDaysData = ({ startDate, endDate }: Props) => {
                   textAlign: 'center',
                 }}
               >
-                {index === 0 ? dayjs(endDate).format('DD/MM/YYYY') : ''}
+                {index === 0 ? endDate.format('DD/MM/YYYY') : ''}
               </Text>
               <Text
                 style={{
@@ -159,7 +170,7 @@ export const RequestedDaysData = ({ startDate, endDate }: Props) => {
               justifyContent: 'center',
             }}
           >
-            <Text style={{ fontSize: 10 }}>{totalDays}</Text>
+            <Text style={{ fontSize: 10 }}>{pendingDays}</Text>
           </View>
         </View>
       </View>

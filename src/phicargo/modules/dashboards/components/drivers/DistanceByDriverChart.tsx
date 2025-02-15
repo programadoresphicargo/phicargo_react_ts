@@ -1,4 +1,12 @@
 import {
+  DistanceByDriver,
+  DriverStats,
+} from '../../models/driver-stats-models';
+import {
+  ExportConfig,
+  ExportToExcel,
+} from '@/phicargo/modules/core/utilities/export-to-excel';
+import {
   getBackgroundColors,
   getBorderColors,
 } from '../../utils/charts-colors';
@@ -8,7 +16,6 @@ import { Bar } from 'react-chartjs-2';
 import { ChartCard } from '../ChartCard';
 import { ChartData } from 'chart.js';
 import { ChartOptions } from 'chart.js';
-import { DriverStats } from '../../models/driver-stats-models';
 import { useDateRangeContext } from '../../hooks/useDateRangeContext';
 
 const options: ChartOptions<'bar'> = {
@@ -89,9 +96,26 @@ export const DistanceByDriverChart = (props: Props) => {
       title={`Distancia Recorrida Por Operador ${monthYearName}`}
       isLoading={isLoading && !chartData}
       customHeight="65rem"
+      downloadFn={() => toExcel.exportData(data?.distanceByDriver || [])}
     >
       {chartData && <Bar data={chartData} options={options} />}
     </ChartCard>
   );
 };
+
+const exportConf: ExportConfig<DistanceByDriver> = {
+  fileName: `Distancia Recorrida Por Operador`,
+  withDate: true,
+  sheetName: 'Distancia Por Operador',
+  columns: [
+    { accessorFn: (data) => data.driver, header: 'Operador' },
+    { accessorFn: (data) => data.travels, header: 'Viajes' },
+    {
+      accessorFn: (data) => data.distance,
+      header: 'Distancia Recorrida (KM)',
+    },
+  ],
+};
+
+const toExcel = new ExportToExcel(exportConf);
 

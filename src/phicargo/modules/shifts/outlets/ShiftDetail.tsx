@@ -141,7 +141,10 @@ const ShiftDetail = () => {
       {shift && (
         <ArchiveDialog
           isOpen={archiveDialogOpen}
-          onClose={() => setArchiveDialogOpen(false)}
+          onClose={() => {
+            setArchiveDialogOpen(false);
+            onClose();
+          }}
           shiftId={shift.id}
         />
       )}

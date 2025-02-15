@@ -15,6 +15,7 @@ import AlertDialog from '../AlertDialog';
 import type { CollectRegister } from '../../models';
 import ExportExcelButton from '@/phicargo/modules/core/components/ui/ExportExcelButton';
 import { FaRegEdit } from 'react-icons/fa';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { RiDeleteRow } from 'react-icons/ri';
 import { isGOEWeek } from '../../utils';
@@ -97,6 +98,7 @@ const CollectionTable = () => {
     // DATA
     columns,
     data: registers || [],
+    localization: MRT_Localization_ES,
     enableStickyHeader: true,
     enableStickyFooter: true,
     // PAGINATION, FILTERS, SORTING

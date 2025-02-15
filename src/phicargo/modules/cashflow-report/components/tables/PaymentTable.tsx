@@ -14,6 +14,7 @@ import AddButton from '../../../core/components/ui/AddButton';
 import AlertDialog from '../AlertDialog';
 import ExportExcelButton from '@/phicargo/modules/core/components/ui/ExportExcelButton';
 import { FaRegEdit } from 'react-icons/fa';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { Payment } from '../../models';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { RiDeleteRow } from 'react-icons/ri';
@@ -95,6 +96,7 @@ const PaymentTable = () => {
     // DATA
     columns,
     data: payments || [],
+    localization: MRT_Localization_ES,
     enableStickyHeader: true,
     enableStickyFooter: true,
     // PAGINATION, FILTERS, SORTING

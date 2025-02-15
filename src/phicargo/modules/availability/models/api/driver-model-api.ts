@@ -21,6 +21,7 @@ export interface DriverBaseApi {
   x_status: Status | null;
   x_viaje: number | null;
   x_maniobra: number | null;
+  x_hire_date: string | null;
 
   job: JobSimple;
   res_company: CompanySimple | null;
@@ -52,4 +53,5 @@ export interface DriverEditApi {
   x_modalidad?: Modality | null;
   x_peligroso_lic?: 'SI' | 'NO' | null;
   active?: boolean | null;
+  x_hire_date?: string | null;
 }

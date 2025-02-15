@@ -9,7 +9,6 @@ import UnavailiabilityCreateModal from '../components/UnavailiabilityCreateModal
 import { useDriverQueries } from '../hooks/useDriverQueries';
 
 const DriverInfo = () => {
-
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -23,7 +22,7 @@ const DriverInfo = () => {
 
   const onClose = () => {
     navigate('/disponibilidad/operadores');
-  }
+  };
 
   if (!id) {
     return <Navigate to="/disponibilidad/operadores" />;
@@ -31,11 +30,7 @@ const DriverInfo = () => {
 
   return (
     <>
-      <Modal 
-        isOpen={true} 
-        onOpenChange={onClose} 
-        size="2xl"
-      >
+      <Modal isOpen={true} onOpenChange={onClose} size="2xl">
         <ModalContent>
           {() => (
             <>
@@ -44,7 +39,7 @@ const DriverInfo = () => {
               </ModalHeader>
               <ModalBody className="flex flex-col md:flex-row bg-gray-400 p-4 gap-4">
                 <div className="w-full md:w-1/2">
-                  <DriverPermissions driverId={Number(id)} />
+                  {driver && <DriverPermissions driver={driver} />}
                 </div>
                 <div className="w-full md:w-1/2">
                   <DriverInfoForm driver={driver} />
