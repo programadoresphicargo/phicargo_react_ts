@@ -1,20 +1,21 @@
+import { DateRangePicker, Select, SelectItem } from '@nextui-org/react';
 import {
     MaterialReactTable,
     useMaterialReactTable,
 } from 'material-react-table';
-import React, { useEffect, useMemo, useState, useContext } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { getLocalTimeZone, parseDate } from "@internationalized/date";
+
 import { Box } from '@mui/material';
 import { Button } from '@nextui-org/react';
+import { CostosExtrasContext } from '../../context/context';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { toast } from 'react-toastify';
-import { Select, SelectItem, DateRangePicker } from '@nextui-org/react';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
-import { CostosExtrasContext } from '../../context/context';
 import MonthSelector from '@/mes';
 import YearSelector from '@/año';
-import { parseDate, getLocalTimeZone } from "@internationalized/date";
+import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import { toast } from 'react-toastify';
 
 const AñadirContenedor = ({ show, handleClose }) => {
 
@@ -104,10 +105,10 @@ const AñadirContenedor = ({ show, handleClose }) => {
         enableGrouping: true,
         enableGlobalFilter: false,
         enableFilters: true,
-        state: { showProgressBars: isLoading2 },
         state: {
             isLoading: isLoading2,
-            showColumnFilters: true
+            showColumnFilters: true,
+            showProgressBars: isLoading2
         },
         muiCircularProgressProps: {
             color: 'primary',
@@ -121,11 +122,6 @@ const AñadirContenedor = ({ show, handleClose }) => {
         initialState: {
             density: 'compact',
             pagination: { pageSize: 80 },
-        },
-        muiTableBodyCellProps: {
-            sx: {
-                borderBottom: '1px solid #e0e0e0',
-            },
         },
         enableRowActions: true,
         displayColumnDefOptions: {
@@ -167,6 +163,7 @@ const AñadirContenedor = ({ show, handleClose }) => {
                 fontWeight: 'normal',
                 fontSize: '14px',
                 color: row.subRows?.length ? '#FFFFFF' : '#000000',
+                borderBottom: '1px solid #e0e0e0'
             },
         }),
         renderTopToolbarCustomActions: ({ table }) => (

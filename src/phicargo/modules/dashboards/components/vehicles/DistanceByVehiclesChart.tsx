@@ -1,3 +1,11 @@
+import type {
+  DistanceByVehicle,
+  VehicleStats,
+} from '../../models/vehicles-stats-models';
+import {
+  ExportConfig,
+  ExportToExcel,
+} from '@/phicargo/modules/core/utilities/export-to-excel';
 import {
   getBackgroundColors,
   getBorderColors,
@@ -8,7 +16,6 @@ import { Bar } from 'react-chartjs-2';
 import { ChartCard } from '../ChartCard';
 import { ChartData } from 'chart.js';
 import { ChartOptions } from 'chart.js';
-import type { VehicleStats } from '../../models/vehicles-stats-models';
 import { useDateRangeContext } from '../../hooks/useDateRangeContext';
 
 const options: ChartOptions<'bar'> = {
@@ -71,7 +78,7 @@ export const DistanceByVehiclesChart = (props: Props) => {
       labels: data.distanceByVehicle.map((item) => item.vehicle),
       datasets: [
         {
-          label: 'Kilometros Recorridso',
+          label: 'Kilometros Recorridos',
           data: data.distanceByVehicle.map((item) => item.distance),
           borderWidth: 2,
           borderRadius: 10,
@@ -89,9 +96,26 @@ export const DistanceByVehiclesChart = (props: Props) => {
       title={`Distancia Recorrida Por Unidad ${monthYearName}`}
       isLoading={isLoading && !chartData}
       customHeight="65rem"
+      downloadFn={() => toExcel.exportData(data?.distanceByVehicle || [])}
     >
       {chartData && <Bar data={chartData} options={options} />}
     </ChartCard>
   );
 };
+
+const exportConf: ExportConfig<DistanceByVehicle> = {
+  fileName: `Distancia Recorrida Por Unidad`,
+  withDate: true,
+  sheetName: 'Distancia Recorrida Por Unidad',
+  columns: [
+    { accessorFn: (data) => data.vehicle, header: 'Unidad' },
+    { accessorFn: (data) => data.travels, header: 'Viajes' },
+    {
+      accessorFn: (data) => data.distance,
+      header: 'Distancia Recorrida (KM)',
+    },
+  ],
+};
+
+const toExcel = new ExportToExcel(exportConf);
 

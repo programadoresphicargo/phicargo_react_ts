@@ -47,10 +47,8 @@ export const useShiftQueries = () => {
 
   const archiveShift = useMutation({
     mutationFn: ShiftServiceApi.archiveShift,
-    onSuccess: (_item, variables) => {
-      queryClient.setQueryData([shiftKey, branchId], (prev: Shift[]) =>
-        prev?.filter((r) => r.id !== variables.id),
-      );
+    onSuccess: (newShifts) => {
+      queryClient.setQueryData([shiftKey, branchId], () => newShifts || []);
       toast.success('Registro archivado');
     },
     onError: (error) => {

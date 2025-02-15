@@ -1,5 +1,6 @@
 import type { CompanySimple, ManeuverSimple, TravelSimple } from '../../core/models';
 
+import { Dayjs } from 'dayjs';
 import type { DriverPermissionSimple } from './driver-unavailability';
 import type { VehicleSimple } from './vehicle-model';
 
@@ -25,6 +26,7 @@ export interface DriverBase {
   readonly status: Status | null;
   readonly travelId: number | null;
   readonly maneuverId: number | null;
+  hireDate: Dayjs | null;
 
   job: JobSimple;
   company: CompanySimple | null;
@@ -50,6 +52,7 @@ export interface DriverEdit {
   modality?: Modality | null;
   isDangerous?: IsDangerous | null;
   isActive?: boolean | null;
+  hireDate?: Dayjs | null;
 }
 
 export interface DriverWithRealStatus extends Driver {

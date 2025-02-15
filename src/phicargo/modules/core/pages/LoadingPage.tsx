@@ -1,14 +1,14 @@
-import { Box } from "@mui/material";
-import { ThreeDots } from "@agney/react-loading";
+import { Box } from '@mui/material';
+import { ThreeDots } from '@agney/react-loading';
 
 export const LoadingPage = () => {
   return (
     <Box
       sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
       }}
     >
       <ThreeDots

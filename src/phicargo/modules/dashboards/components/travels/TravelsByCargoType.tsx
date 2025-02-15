@@ -1,10 +1,11 @@
+import type { ByCargoType, TravelStats } from '../../models/travels-stats-models';
+import { ExportConfig, ExportToExcel } from '@/phicargo/modules/core/utilities/export-to-excel';
 import { useEffect, useState } from 'react';
 
 import { Bar } from 'react-chartjs-2';
 import { ChartCard } from '../ChartCard';
 import { ChartData } from 'chart.js';
 import { ChartOptions } from 'chart.js';
-import { TravelStats } from '../../models/travels-stats-models';
 import { useDateRangeContext } from '../../hooks/useDateRangeContext';
 
 const options: ChartOptions<'bar'> = {
@@ -85,9 +86,23 @@ export const TravelsByCargoType = (props: Props) => {
     <ChartCard
       title={`Viajes por tipo de carga ${monthYearName}`}
       isLoading={isLoading && !chartData}
+      downloadFn={() => toExcel.exportData(data?.byCargoType || [])}
     >
       {chartData && <Bar data={chartData} options={options} />}
     </ChartCard>
   );
 };
 
+const exportConf: ExportConfig<ByCargoType> = {
+  fileName: `Viajes por tipo de carga`,
+  withDate: true,
+  sheetName: 'Viajes por tipo de carga',
+  columns: [
+    { accessorFn: (data) => data.cargoType, header: 'Tipo de Carga' },
+    { accessorFn: (data) => data.totalTravels, header: 'Viajes Totales' },
+    { accessorFn: (data) => data.travelsCompleted, header: 'Viajes completados' },
+    { accessorFn: (data) => data.travelsPending, header: 'Viajes pendientes' },
+  ],
+};
+
+const toExcel = new ExportToExcel(exportConf);

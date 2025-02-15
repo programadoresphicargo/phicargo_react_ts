@@ -1,5 +1,6 @@
 import { Button, Card, CardBody, CardHeader, Spinner } from '@nextui-org/react';
 
+import { Driver } from '../models/driver-model';
 import { IoIosAddCircle } from 'react-icons/io';
 import { PermissionsHistory } from './PermissionsHistory';
 import UnavailiabilityCreateModal from './UnavailiabilityCreateModal';
@@ -7,17 +8,17 @@ import { useState } from 'react';
 import { useUnavailabilityQueries } from '../hooks/useUnavailabilityQueries';
 
 interface Props {
-  driverId: number;
+  driver: Driver;
 }
 
 const DriverPermissions = (props: Props) => {
-  const { driverId } = props;
+  const { driver } = props;
 
   const [isOpen, setIsOpen] = useState(false);
 
   const {
     driverUnavailabilityQuery: { data: unavailabilities, isFetching },
-  } = useUnavailabilityQueries({ driverId });
+  } = useUnavailabilityQueries({ driverId: driver.id });
 
   return (
     <>
@@ -40,7 +41,7 @@ const DriverPermissions = (props: Props) => {
           {isFetching ? (
             <Spinner size="sm" />
           ) : unavailabilities && unavailabilities.length > 0 ? (
-            <PermissionsHistory unavailabilities={unavailabilities} />
+            <PermissionsHistory driver={driver} unavailabilities={unavailabilities} />
           ) : (
             <p className="text-sm text-gray-500">
               No hay permisos registrados.
@@ -49,7 +50,7 @@ const DriverPermissions = (props: Props) => {
         </CardBody>
       </Card>
       <UnavailiabilityCreateModal
-        driverId={driverId}
+        driverId={driver.id}
         isOpen={isOpen}
         onOpenChange={() => setIsOpen(!isOpen)}
       />

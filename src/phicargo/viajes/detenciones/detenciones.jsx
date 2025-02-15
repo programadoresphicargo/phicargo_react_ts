@@ -1,25 +1,26 @@
-import React, { useState, useEffect, useMemo, useContext } from 'react';
-import { ViajeContext } from '../context/viajeContext';
+import { Card, CardBody, CardHeader } from '@nextui-org/react';
+import {
+  MaterialReactTable,
+  useMaterialReactTable,
+} from 'material-react-table';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { TiemposViajeProvider, useTiemposViaje } from './TiemposViajeContext';
+
+import Box from '@mui/material/Box';
 import { Button } from '@nextui-org/button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import Grid from '@mui/material/Grid2';
+import { Link } from "@nextui-org/react";
 import Slide from '@mui/material/Slide';
-import {
-  MaterialReactTable,
-  useMaterialReactTable,
-} from 'material-react-table';
+import TiemposViajes from './tiempos_viaje';
+import { Typography } from '@mui/material';
+import { ViajeContext } from '../context/viajeContext';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { toast } from 'react-toastify';
-import TiemposViajes from './tiempos_viaje';
-import { Card, CardBody, CardHeader } from '@nextui-org/react';
-import Grid from '@mui/material/Grid2';
-import Box from '@mui/material/Box';
-import { TiemposViajeProvider, useTiemposViaje } from './TiemposViajeContext';
-import { Typography } from '@mui/material';
-import { Link } from "@nextui-org/react";
 
 const Detenciones = ({ }) => {
 
@@ -161,17 +162,11 @@ const Detenciones = ({ }) => {
         fontSize: '14px',
       },
     },
-    muiTableBodyCellProps: {
-      sx: {
-        fontFamily: 'Inter',
-        fontWeight: 'normal',
-        fontSize: '14px',
-      },
-    },
     muiTableContainerProps: {
       sx: {
         borderRadius: '8px',
         overflow: 'hidden',
+        maxHeight: 'calc(100vh)',
       },
     },
     muiTableBodyCellProps: ({ row }) => ({
@@ -183,11 +178,6 @@ const Detenciones = ({ }) => {
         color: row.subRows?.length ? '#FFFFFF' : '#000000',
       },
     }),
-    muiTableContainerProps: {
-      sx: {
-        maxHeight: 'calc(100vh)',
-      },
-    },
     renderTopToolbarCustomActions: ({ table }) => (
       <Box
         sx={{

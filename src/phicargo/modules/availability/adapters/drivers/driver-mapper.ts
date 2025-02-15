@@ -11,6 +11,7 @@ import type {
 } from '../../models/api/driver-model-api';
 
 import type { DriverBase } from '../../models/driver-model';
+import dayjs from 'dayjs';
 import { driverPermissionSimpleToLocal } from './driver-unavailability-mapper';
 
 /**
@@ -28,6 +29,7 @@ const driverBaseToLocal = (driver: DriverBaseApi): DriverBase => ({
   modality: driver.x_modalidad,
   isDangerous: driver.x_peligroso_lic,
   status: driver.x_status,
+  hireDate: driver.x_hire_date ? dayjs(driver.x_hire_date) : null,
   travelId: driver.x_viaje,
   maneuverId: driver.x_maniobra,
   job: driver.job,
@@ -115,6 +117,10 @@ export const driverUpdateToApi = (driver: DriverEdit): DriverEditApi => {
 
   if (driver.isActive !== null || driver.isActive !== undefined) {
     driverApi.active = driver.isActive;
+  }
+
+  if (driver.hireDate) {
+    driverApi.x_hire_date = driver.hireDate.format('YYYY-MM-DD');
   }
 
   return driverApi;

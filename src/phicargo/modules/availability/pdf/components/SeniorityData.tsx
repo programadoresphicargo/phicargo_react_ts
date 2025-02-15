@@ -1,5 +1,7 @@
 import { StyleSheet, Text, View } from '@react-pdf/renderer';
 
+import { Dayjs } from 'dayjs';
+import type { DriverVacationSummary } from '../../models/driver-unavailability';
 import { SectionTitle } from './SectionTitle';
 
 const styles = StyleSheet.create({
@@ -47,7 +49,12 @@ const styles = StyleSheet.create({
   },
 });
 
-export const SeniorityData = () => {
+interface Props {
+  hireDate: Dayjs;
+  vacationSummary: DriverVacationSummary;
+}
+
+export const SeniorityData = ({ hireDate, vacationSummary }: Props) => {
   return (
     <View style={styles.container}>
       <SectionTitle title="II. DATOS DE ANTIGÜEDAD" />
@@ -101,7 +108,9 @@ export const SeniorityData = () => {
                 border: '2 solid black',
               }}
             >
-              <Text style={styles.text}>{' '}</Text>
+              <Text style={styles.text}>
+                {vacationSummary.periodStart?.format('DD/MM/YYYY')}
+              </Text>
             </View>
           </View>
 
@@ -128,7 +137,9 @@ export const SeniorityData = () => {
                 border: '2 solid black',
               }}
             >
-              <Text style={styles.text}>{' '}</Text>
+              <Text style={styles.text}>
+                {vacationSummary.periodEnd?.format('DD/MM/YYYY')}
+              </Text>
             </View>
           </View>
         </View>
@@ -163,7 +174,7 @@ export const SeniorityData = () => {
                 border: '2 solid black',
               }}
             >
-              <Text style={styles.text}>{' '}</Text>
+              <Text style={styles.text}>{hireDate?.format('DD/MM/YYYY')}</Text>
             </View>
           </View>
 
@@ -190,7 +201,7 @@ export const SeniorityData = () => {
                 border: '2 solid black',
               }}
             >
-              <Text style={styles.text}>{' '}</Text>
+              <Text style={styles.text}>{vacationSummary.yearsWorked}</Text>
             </View>
           </View>
 
@@ -224,7 +235,7 @@ export const SeniorityData = () => {
                 border: '2 solid black',
               }}
             >
-              <Text style={styles.text}>{' '}</Text>
+              <Text style={styles.text}>{vacationSummary.entitledDays}</Text>
             </View>
           </View>
         </View>
@@ -260,7 +271,7 @@ export const SeniorityData = () => {
                 border: '2 solid black',
               }}
             >
-              <Text style={styles.text}>{' '}</Text>
+              <Text style={styles.text}>{vacationSummary.enjoyedDays}</Text>
             </View>
           </View>
 
@@ -287,7 +298,7 @@ export const SeniorityData = () => {
                 border: '2 solid black',
               }}
             >
-              <Text style={styles.text}>{' '}</Text>
+              <Text style={styles.text}>{vacationSummary.pendingDays}</Text>
             </View>
           </View>
         </View>
