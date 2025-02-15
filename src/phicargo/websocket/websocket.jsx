@@ -77,7 +77,7 @@ const WebSocketWithToast = () => {
                 console.log(messageType);
                 if (messageType == 'detencion') {
                     toast.success(`Detención: ${message}`, { autoClose: 5000 });
-                    showPushNotification(`Nueva alerta: ${message}`);
+                    //showPushNotification(`Nueva alerta: ${message}`);
                     if (audioDet.current) {
                         audioDet.current.play();
                     }

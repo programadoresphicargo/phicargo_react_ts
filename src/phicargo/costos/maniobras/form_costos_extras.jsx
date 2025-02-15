@@ -29,6 +29,7 @@ import dayjs from 'dayjs';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { toast } from 'react-toastify';
 import { useAuthContext } from '@/phicargo/modules/auth/hooks';
+import TimeLineCE from "./linea_tiempo";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
