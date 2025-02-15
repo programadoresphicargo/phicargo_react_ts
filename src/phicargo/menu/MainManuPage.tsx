@@ -64,8 +64,7 @@ const menuItems: MenuItemType[] = [
     icon: bonos_img,
     label: 'Bonos',
     requiredPermissions: [3],
-    link: VITE_PHIDES_API_URL + '/bonos/vista/index.php',
-    isExternal: true,
+    link: '/bonos',
   },
   {
     icon: usuarios_img,

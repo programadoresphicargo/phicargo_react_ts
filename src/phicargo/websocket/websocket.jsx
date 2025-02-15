@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import audioFile from '../../assets/audio/estatus_operador.mp3';
+import audioDetenciones from '../../assets/audio/detencion.mp3';
 import { useAuthContext } from "../modules/auth/hooks";
 import { user } from "@nextui-org/react";
 const { VITE_WEBSOCKET_SERVER } = import.meta.env;
@@ -9,6 +10,7 @@ const WebSocketWithToast = () => {
     const { session } = useAuthContext();
     const webSocketRef = useRef(null);
     const audioRef = useRef(null);
+    const audioDet = useRef(null);
     const [selectedVoice, setSelectedVoice] = useState(null);
 
     const speakMessage = (message) => {
@@ -74,7 +76,12 @@ const WebSocketWithToast = () => {
 
                 console.log(messageType);
                 if (messageType == 'detencion') {
-                    console.log(message);
+                    toast.success(`Detención: ${message}`, { autoClose: 5000 });
+                    showPushNotification(`Nueva alerta: ${message}`);
+                    if (audioDet.current) {
+                        audioDet.current.play();
+                    }
+                    //speakMessage(message);
                     return;
                 } else {
                     toast.success(`Notificación: ${message}`, { autoClose: 5000 });
@@ -112,6 +119,7 @@ const WebSocketWithToast = () => {
     return (
         <div>
             <audio ref={audioRef} src={audioFile} hidden />
+            <audio ref={audioDet} src={audioDetenciones} hidden />
         </div>
     );
 };

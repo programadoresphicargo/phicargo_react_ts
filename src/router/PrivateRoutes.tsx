@@ -71,6 +71,9 @@ const AsignacionUnidades = lazy(
 const ControlOperadores = lazy(
   () => import('../phicargo/operadores/ControlUsuarios'),
 );
+const BonosOperadores = lazy(
+  () => import('../phicargo/bonos/BonosIndex'),
+);
 
 export const PrivateRoutes = () => {
   return (
@@ -200,6 +203,16 @@ export const PrivateRoutes = () => {
             </Suspense>
           }
         />
+
+        <Route
+          path="/bonos"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <BonosOperadores></BonosOperadores>
+            </Suspense>
+          }
+        />
+
 
         <Route
           path="/Accesos"
