@@ -28,6 +28,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const BonosOperadores = () => {
 
   const [open, setOpen] = React.useState(false);
+  const [month, setMonth] = React.useState('0');
+  const [year, setYear] = React.useState('0');
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -63,9 +65,21 @@ const BonosOperadores = () => {
     fetchData();
   }, [dates]);
 
+
+  const obtenerNombreMes = (numeroMes) => {
+    const meses = [
+      "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+      "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+    ];
+    return meses[numeroMes - 1] || "Mes inválido";
+  };
+
   const columns = useMemo(
     () => [
-      { accessorKey: 'mes', header: 'Mes' },
+      {
+        accessorKey: 'mes', header: 'Mes',
+        Cell: ({ cell }) => obtenerNombreMes(cell.getValue())
+      },
       { accessorKey: 'ano', header: 'Año' },
     ],
     [],
@@ -84,6 +98,8 @@ const BonosOperadores = () => {
     },
     muiTableBodyRowProps: ({ row }) => ({
       onClick: ({ event }) => {
+        setMonth(row.original.mes);
+        setYear(row.original.ano);
         handleClickOpen();
       },
       style: {
@@ -106,7 +122,7 @@ const BonosOperadores = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 200px)',
+        maxHeight: 'calc(100vh - 190px)',
       },
     },
     renderTopToolbarCustomActions: ({ table }) => (
@@ -133,7 +149,7 @@ const BonosOperadores = () => {
         onClose={handleClose}
         TransitionComponent={Transition}
       >
-        <AppBar sx={{ position: 'relative' }}>
+        <AppBar sx={{ position: 'relative' }} elevation={0}>
           <Toolbar>
             <IconButton
               edge="start"
@@ -143,15 +159,15 @@ const BonosOperadores = () => {
             >
               <CloseIcon />
             </IconButton>
-            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              Sound
+            <Typography sx={{ ml: 2, flex: 1 }} component="div">
+              Registro de bonos {obtenerNombreMes(month)} {year}
             </Typography>
             <Button autoFocus color="inherit" onClick={handleClose}>
-              save
+              Cerrar
             </Button>
           </Toolbar>
         </AppBar>
-        <BonosMes></BonosMes>
+        <BonosMes month={month} year={year}></BonosMes>
       </Dialog>
     </div>
   );
