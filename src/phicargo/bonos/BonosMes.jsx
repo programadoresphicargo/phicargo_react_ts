@@ -23,6 +23,20 @@ import CuentaForm from './costos_extras';
 
 const BonosMes = ({ month, year }) => {
 
+  const [permisosEdicion, setPermisos] = useState([]);
+
+  const fetchPermisos = async () => {
+    try {
+      toast.info('Obteniendo permisos');
+      const response = await odooApi.get(`/users-management/permissions/533`);
+      const ids = response.data.map(permiso => permiso.permission_id);
+      setPermisos(ids);
+      console.log(ids);
+    } catch (error) {
+      console.error('Error al obtener los datos:', error);
+    }
+  };
+
   const fetchData = async () => {
     try {
       toast.info('Obteniendo informacion');
@@ -37,14 +51,13 @@ const BonosMes = ({ month, year }) => {
   };
 
   useEffect(() => {
+    fetchPermisos();
     fetchData();
   }, []);
 
   const [isLoading, setIsLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editedData, setEditedData] = useState([]);
-
-  const permisosEdicion = ["nombre", "ciudad"];
 
   const handleEditChange = (event, rowIndex, columnId) => {
     const newData = [...editedData];
@@ -86,7 +99,7 @@ const BonosMes = ({ month, year }) => {
       accessorKey: "excelencia",
       header: "Excelencia",
       Cell: ({ row, cell }) =>
-        isEditing && permisosEdicion.includes("nombre") ? (
+        isEditing && permisosEdicion.includes(12) ? (
           <TextField
             variant='standard'
             value={editedData[row.index].excelencia}
@@ -101,7 +114,7 @@ const BonosMes = ({ month, year }) => {
       accessorKey: "productividad",
       header: "Productividad",
       Cell: ({ row, cell }) =>
-        isEditing && permisosEdicion.includes("nombre") ? (
+        isEditing && permisosEdicion.includes(12) ? (
           <TextField
             variant='standard'
             value={editedData[row.index].productividad}
@@ -116,7 +129,7 @@ const BonosMes = ({ month, year }) => {
       accessorKey: "operacion",
       header: "Operacion",
       Cell: ({ row, cell }) =>
-        isEditing && permisosEdicion.includes("nombre") ? (
+        isEditing && permisosEdicion.includes(12) ? (
           <TextField
             variant='standard'
             value={editedData[row.index].operacion}
@@ -131,7 +144,7 @@ const BonosMes = ({ month, year }) => {
       accessorKey: "seguridad_vial",
       header: "Seguridad vial",
       Cell: ({ row, cell }) =>
-        isEditing && permisosEdicion.includes("nombre") ? (
+        isEditing && permisosEdicion.includes(9) ? (
           <TextField
             variant='standard'
             value={editedData[row.index].seguridad_vial}
@@ -146,7 +159,7 @@ const BonosMes = ({ month, year }) => {
       accessorKey: "cuidado_unidad",
       header: "Cuidado unidad",
       Cell: ({ row, cell }) =>
-        isEditing && permisosEdicion.includes("nombre") ? (
+        isEditing && permisosEdicion.includes(10) ? (
           <TextField
             variant='standard'
             value={editedData[row.index].cuidado_unidad}
@@ -161,7 +174,7 @@ const BonosMes = ({ month, year }) => {
       accessorKey: "rendimiento",
       header: "Rendimiento",
       Cell: ({ row, cell }) =>
-        isEditing && permisosEdicion.includes("nombre") ? (
+        isEditing && permisosEdicion.includes(10) ? (
           <TextField
             variant='standard'
             value={editedData[row.index].rendimiento}
@@ -176,7 +189,7 @@ const BonosMes = ({ month, year }) => {
       accessorKey: "calificacion",
       header: "Calificación",
       Cell: ({ row, cell }) =>
-        isEditing && permisosEdicion.includes("nombre") ? (
+        isEditing && permisosEdicion.includes(10) ? (
           <TextField
             variant='standard'
             value={editedData[row.index].calificacion}
