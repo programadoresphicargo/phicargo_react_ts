@@ -59,7 +59,7 @@ const Detenciones = ({ }) => {
       console.log(data[keys[i]]);
       console.log(data[keys[i]]);
 
-      const url = `/locations/by_vehicle_id/`;
+      const url = `/detenciones/by_vehicle_id/`;
 
       try {
         const response = await odooApi.get(url, {
