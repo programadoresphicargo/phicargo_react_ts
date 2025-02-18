@@ -372,7 +372,7 @@ const ViajesActivos = ({ }) => {
                   Unidades detenidas
                 </h3>
                 <div className="text-tiny">
-                  Los viajes resaltados en amarillo indican que la unidad ha estado detenida por más de 15 minutos.
+                  Los viajes resaltados en amarillo indican que la unidad esta detenida.
                 </div>
               </div>
             )}
