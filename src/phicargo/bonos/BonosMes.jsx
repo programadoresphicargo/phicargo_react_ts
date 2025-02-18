@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Slide from '@mui/material/Slide';
 import { Box, TextField } from '@mui/material';
-import OperadorForm from './saldoForm';
 import odooApi from '../modules/core/api/odoo-api';
 import { DatePicker, Chip } from "@nextui-org/react";
 import { parseDate, getLocalTimeZone } from "@internationalized/date";
@@ -19,7 +18,6 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import CuentaForm from './costos_extras';
 
 const BonosMes = ({ month, year }) => {
 

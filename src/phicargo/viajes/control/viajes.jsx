@@ -21,6 +21,7 @@ import Viaje from '../viaje';
 import { ViajeContext } from '../context/viajeContext';
 import ViajesActivosMasivo from '../envio_masivo/viajes_activos';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/react";
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -244,6 +245,32 @@ const ViajesActivos = ({ }) => {
     [],
   );
 
+  const [blinkRows, setBlinkRows] = useState({});
+
+  useEffect(() => {
+    if (data.length > 0) {
+      data.forEach((row) => ConsultarVelocidad(row.id_viaje, row.vehicle_id));
+    }
+  }, [data]);
+
+  const ConsultarVelocidad = async (id_viaje, vehicle_id) => {
+
+    try {
+      const response = await odooApi.get('/detenciones/consultar_detencion/' + vehicle_id);
+
+      if (Array.isArray(response.data) && response.data.length > 0) {
+        console.log('entro');
+        setBlinkRows((prev) => ({ ...prev, [id_viaje]: true }));
+      } else {
+        console.log('no entro');
+        setBlinkRows((prev) => ({ ...prev, [id_viaje]: false }));
+      }
+    } catch (error) {
+      console.error('Error en la petición:', error);
+      setBlinkRows((prev) => ({ ...prev, [id_viaje]: false }));
+    }
+  };
+
   const table = useMaterialReactTable({
     columns,
     data,
@@ -282,8 +309,13 @@ const ViajesActivos = ({ }) => {
         handleClickOpen();
         ActualizarIDViaje(row.original.id_viaje);
       },
-      style: {
-        cursor: 'pointer',
+      sx: {
+        backgroundColor: blinkRows[row.original.id_viaje] ? '#FFF5CC' : 'transparent',
+        animation: blinkRows[row.original.id_viaje] ? 'blink 1s infinite alternate' : 'none',
+        '@keyframes blink': {
+          '0%': { backgroundColor: '#FFF5CC' },
+          '100%': { backgroundColor: '#FFD700' }
+        }
       },
     }),
     muiTableHeadCellProps: {
@@ -300,11 +332,9 @@ const ViajesActivos = ({ }) => {
     },
     muiTableBodyCellProps: ({ row }) => ({
       sx: {
-        backgroundColor: row.subRows?.length ? '#0456cf' : '#FFFFFF',
         fontFamily: 'Inter',
         fontWeight: 'normal',
         fontSize: '14px',
-        color: row.subRows?.length ? '#FFFFFF' : '#000000',
       },
     }),
     renderTopToolbarCustomActions: ({ table }) => (
@@ -317,10 +347,40 @@ const ViajesActivos = ({ }) => {
         }}
       >
         <h1 className='text-primary'>Gestión de viajes</h1>
-        <Button className='text-white' color='success'
+        <Button
+          className='text-white'
+          startContent={<i class="bi bi-send-plus-fill"></i>}
+          color='success'
           isDisabled={false}
           onPress={() => setMasivoOpen(true)}
-        >Envio masivo</Button>
+        >Envio masivo
+        </Button>
+        <Button
+          className='text-white'
+          startContent={<i class="bi bi-arrow-clockwise"></i>}
+          color='primary'
+          isDisabled={false}
+          onPress={() => fetchData()}
+        >Actualizar tablero
+        </Button>
+        <Popover placement="right" backdrop='blur'>
+          <PopoverTrigger>
+            <Button color='warning' className='text-white' startContent={<i class="bi bi-sign-stop"></i>}>Unidades detenidas</Button>
+          </PopoverTrigger>
+          <PopoverContent>
+            {(titleProps) => (
+              <div className="px-1 py-2">
+                <h3 className="text-small font-bold" {...titleProps}>
+                  Unidades detenidas
+                </h3>
+                <div className="text-tiny">
+                  Los viajes resaltados en amarillo indican que la unidad ha estado detenida por más de 15 minutos.
+                </div>
+              </div>
+            )}
+          </PopoverContent>
+        </Popover>
+
       </Box>
     ),
   });

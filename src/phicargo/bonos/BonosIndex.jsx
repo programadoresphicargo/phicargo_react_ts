@@ -20,13 +20,14 @@ import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 import BonosMes from './BonosMes';
+import BonosModal from './AbrirModal';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 const BonosOperadores = () => {
-
+  const [isModalOpen, setModalOpen] = useState(false);
   const [open, setOpen] = React.useState(false);
   const [month, setMonth] = React.useState('0');
   const [year, setYear] = React.useState('0');
@@ -134,6 +135,7 @@ const BonosOperadores = () => {
           flexWrap: 'wrap',
         }}
       >
+        <Button onPress={() => setModalOpen(true)} color='primary'>Abrir nuevo mes</Button>
       </Box>
     ),
   });
@@ -142,7 +144,8 @@ const BonosOperadores = () => {
     <div>
       <NavbarViajes></NavbarViajes>
       <MaterialReactTable table={table} />
-
+      <BonosModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
+      
       <Dialog
         fullScreen
         open={open}
