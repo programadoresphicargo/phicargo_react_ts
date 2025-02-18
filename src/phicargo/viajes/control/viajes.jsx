@@ -254,11 +254,9 @@ const ViajesActivos = ({ }) => {
   }, [data]);
 
   const ConsultarVelocidad = async (id_viaje, vehicle_id) => {
-
     try {
       const response = await odooApi.get('/detenciones/consultar_detencion/' + vehicle_id);
-
-      if (Array.isArray(response.data) && response.data.length > 0) {
+      if (response.data[0].speed == 0) {
         console.log('entro');
         setBlinkRows((prev) => ({ ...prev, [id_viaje]: true }));
       } else {
