@@ -126,6 +126,11 @@ const DetencionesViajesActivos = ({ isOpen, close }) => {
         maxHeight: 'calc(100vh)',
       },
     },
+    muiTableContainerProps: {
+      sx: {
+        maxHeight: 'calc(100vh - 200px)',
+      },
+    },
     muiTableBodyCellProps: ({ row }) => ({
       sx: {
         backgroundColor: row.subRows?.length ? '#1184e8' : '#FFFFFF',
