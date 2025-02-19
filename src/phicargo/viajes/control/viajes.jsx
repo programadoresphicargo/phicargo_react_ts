@@ -21,7 +21,8 @@ import Viaje from '../viaje';
 import { ViajeContext } from '../context/viajeContext';
 import ViajesActivosMasivo from '../envio_masivo/viajes_activos';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
-import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/react";
+import { Popover, PopoverTrigger, PopoverContent, useDisclosure } from "@nextui-org/react";
+import DetencionesViajesActivos from '../detenciones/detenciones_modal';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -361,30 +362,22 @@ const ViajesActivos = ({ }) => {
           onPress={() => fetchData()}
         >Actualizar tablero
         </Button>
-        <Popover placement="right" backdrop='blur'>
-          <PopoverTrigger>
-            <Button color='warning' className='text-white' startContent={<i class="bi bi-sign-stop"></i>}>Unidades detenidas</Button>
-          </PopoverTrigger>
-          <PopoverContent>
-            {(titleProps) => (
-              <div className="px-1 py-2">
-                <h3 className="text-small font-bold" {...titleProps}>
-                  Unidades detenidas
-                </h3>
-                <div className="text-tiny">
-                  Los viajes resaltados en amarillo indican que la unidad esta detenida.
-                </div>
-              </div>
-            )}
-          </PopoverContent>
-        </Popover>
+
+        <Button color='warning' className='text-white' startContent={<i class="bi bi-sign-stop"></i>} onPress={()=>handleOpen()}>Unidades detenidas</Button>
 
       </Box>
     ),
   });
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const handleOpen = (size) => {
+    onOpen();
+  };
+
   return (
     <>
+      <DetencionesViajesActivos isOpen={isOpen} close={onClose}></DetencionesViajesActivos>
       <NavbarViajes></NavbarViajes>
       <MaterialReactTable
         table={table}
