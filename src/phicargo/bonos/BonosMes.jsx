@@ -63,7 +63,7 @@ const BonosMes = ({ month, year }) => {
     setEditedData(newData);
   };
 
-  const handleSaveChanges = async () => {
+  const guardar_bonos = async () => {
     console.log("Datos modificados:", editedData);
     try {
       setIsLoading(true);
@@ -244,7 +244,7 @@ const BonosMes = ({ month, year }) => {
           {isEditing ? "Cancelar Edición" : "Editar"}
         </Button>
         {isEditing && (
-          <Button color="success" onClick={handleSaveChanges} sx={{ m: 1 }} className='text-white' isLoading={isLoading}>
+          <Button color="success" onPress={guardar_bonos} sx={{ m: 1 }} className='text-white' isLoading={isLoading}>
             Guardar Cambios
           </Button>
         )}

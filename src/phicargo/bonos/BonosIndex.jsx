@@ -136,7 +136,7 @@ const BonosOperadores = () => {
           flexWrap: 'wrap',
         }}
       >
-        <Button onPress={() => setModalOpen(true)} color='primary'>Abrir nuevo mes</Button>
+        <Button onPress={() => setModalOpen(true)} color='primary'>Nuevo periodo</Button>
       </Box>
     ),
   });
