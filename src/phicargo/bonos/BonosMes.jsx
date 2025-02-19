@@ -27,7 +27,6 @@ const BonosMes = ({ month, year }) => {
 
   const fetchPermisos = async () => {
     try {
-      toast.info('Obteniendo permisos');
       const response = await odooApi.get(`/users-management/permissions/` + session.user.id);
       const ids = response.data.map(permiso => permiso.permission_id);
       setPermisos(ids);
