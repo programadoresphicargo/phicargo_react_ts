@@ -38,6 +38,7 @@ const BonosOperadores = () => {
 
   const handleClose = () => {
     setOpen(false);
+    fetchData();
   };
 
   const [isLoading, setLoading] = useState(false);
@@ -81,7 +82,7 @@ const BonosOperadores = () => {
         accessorKey: 'mes', header: 'Mes',
         Cell: ({ cell }) => obtenerNombreMes(cell.getValue())
       },
-      { accessorKey: 'ano', header: 'Año' },
+      { accessorKey: 'anio', header: 'Año' },
     ],
     [],
   );
@@ -100,7 +101,7 @@ const BonosOperadores = () => {
     muiTableBodyRowProps: ({ row }) => ({
       onClick: ({ event }) => {
         setMonth(row.original.mes);
-        setYear(row.original.ano);
+        setYear(row.original.anio);
         handleClickOpen();
       },
       style: {

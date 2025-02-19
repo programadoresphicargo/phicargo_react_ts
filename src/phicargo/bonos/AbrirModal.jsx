@@ -37,8 +37,10 @@ export default function BonosModal({ isOpen, onClose }) {
             setLoading(true);
             const response = await odooApi.post(`/bonos_operadores/create_bonos/${month}/${year}`);
             console.log("Respuesta:", response.data);
-            toast.success(response.data);
-            onClose();
+            if (response.data.status == 'success') {
+                toast.success(response.data.message);
+                onClose();
+            }
         } catch (error) {
             console.error("Error al crear bonos:", error);
             alert("Hubo un error al procesar la solicitud.");
