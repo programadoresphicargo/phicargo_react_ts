@@ -150,7 +150,7 @@ const DetencionesViajesActivos = ({ isOpen, close }) => {
 
   return (
     <>
-      <Modal isOpen={isOpen} size='full' onClose={close}>
+      <Modal isOpen={isOpen} size='5xl' onClose={close}>
         <ModalContent>
           {(onClose) => (
             <>
