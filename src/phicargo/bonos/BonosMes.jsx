@@ -18,15 +18,17 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
+import { useAuthContext } from '../modules/auth/hooks';
 
 const BonosMes = ({ month, year }) => {
 
+  const { session } = useAuthContext();
   const [permisosEdicion, setPermisos] = useState([]);
 
   const fetchPermisos = async () => {
     try {
       toast.info('Obteniendo permisos');
-      const response = await odooApi.get(`/users-management/permissions/533`);
+      const response = await odooApi.get(`/users-management/permissions/` + session.user.id);
       const ids = response.data.map(permiso => permiso.permission_id);
       setPermisos(ids);
       console.log(ids);

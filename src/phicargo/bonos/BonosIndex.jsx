@@ -37,11 +37,6 @@ const BonosOperadores = () => {
     setOpen(true);
   };
 
-  const handleClose = () => {
-    setOpen(false);
-    fetchData();
-  };
-
   const [isLoading, setLoading] = useState(false);
 
   const [dates, setDates] = useState([]);
@@ -68,6 +63,10 @@ const BonosOperadores = () => {
     fetchData();
   }, [dates]);
 
+  const handleClose = () => {
+    setOpen(false);
+    fetchData();
+  };
 
   const obtenerNombreMes = (numeroMes) => {
     const meses = [
