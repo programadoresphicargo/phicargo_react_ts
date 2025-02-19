@@ -143,7 +143,6 @@ const BonosOperadores = () => {
 
   return (
     <div>
-      <NavbarViajes></NavbarViajes>
       <MaterialReactTable table={table} />
       <BonosModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
       
