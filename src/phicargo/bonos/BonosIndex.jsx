@@ -21,6 +21,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 import BonosMes from './BonosMes';
 import BonosModal from './AbrirModal';
+import NavbarBonos from './navbar';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -143,9 +144,10 @@ const BonosOperadores = () => {
 
   return (
     <div>
+      <NavbarBonos></NavbarBonos>
       <MaterialReactTable table={table} />
       <BonosModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
-      
+
       <Dialog
         fullScreen
         open={open}
