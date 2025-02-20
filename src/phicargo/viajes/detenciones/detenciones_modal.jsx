@@ -105,7 +105,7 @@ const DetencionesViajesActivos = ({ isOpen, close }) => {
       header: "Tiempo detenido",
     },
     {
-      header: "Mapa", // Nueva columna con el botón
+      header: "Mapa",
       Cell: ({ row }) => {
         const lat = row.original.latitude;
         const lng = row.original.longitude;
