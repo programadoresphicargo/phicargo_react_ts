@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Button } from '@nextui-org/react';
+import { Button } from "@heroui/react";
 import Card from './Card';
 import { MaintenanceRecordStatus } from '../models';
 import { useMaintenanceRecord } from '../hooks';

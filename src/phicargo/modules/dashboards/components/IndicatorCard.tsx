@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Spinner } from '@nextui-org/react';
+import { Spinner } from "@heroui/react";
 
 type Color = 'blue' | 'green' | 'red' | 'yellow';
 

@@ -4,7 +4,7 @@ import {
   ModalBody,
   ModalContent,
   ModalHeader,
-} from '@nextui-org/react';
+} from "@heroui/react";
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { EmailInput } from '../../core/components/inputs/EmailInput';
@@ -49,7 +49,7 @@ export const UserCreateForm = (props: Props) => {
   };
 
   return (
-    <Modal isOpen={open} onOpenChange={onClose} size="lg">
+    (<Modal isOpen={open} onOpenChange={onClose} size="lg">
       <ModalContent>
         {() => (
           <>
@@ -141,7 +141,7 @@ export const UserCreateForm = (props: Props) => {
           </>
         )}
       </ModalContent>
-    </Modal>
+    </Modal>)
   );
 };
 

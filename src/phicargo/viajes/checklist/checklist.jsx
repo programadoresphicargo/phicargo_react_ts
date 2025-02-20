@@ -1,5 +1,5 @@
 import React from "react";
-import { Tabs, Tab, Card, CardBody, CardHeader } from "@nextui-org/react";
+import { Tabs, Tab, Card, CardBody, CardHeader } from "@heroui/react";
 import ChecklistDetalle from ".";
 
 export default function Checklist() {

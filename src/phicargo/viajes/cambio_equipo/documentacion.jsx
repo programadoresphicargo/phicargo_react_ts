@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useContext } from 'react';
 import { Box } from '@mui/material';
 import { ViajeContext } from '../context/viajeContext';
-import { Button } from '@nextui-org/button';
+import { Button } from "@heroui/button";
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';

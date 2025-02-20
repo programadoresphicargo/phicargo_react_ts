@@ -1,4 +1,4 @@
-import { Modal, ModalBody, ModalContent, ModalHeader } from '@nextui-org/react';
+import { Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/react";
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useMemo, useState } from 'react';
 

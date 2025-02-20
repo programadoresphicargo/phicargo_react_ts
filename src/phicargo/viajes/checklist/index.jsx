@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Tabs, Tab, Card, CardBody, CardHeader } from "@nextui-org/react";
+import { Tabs, Tab, Card, CardBody, CardHeader } from "@heroui/react";
 import { ViajeContext } from "../context/viajeContext";
-import { CircularProgress } from "@nextui-org/progress";
-import { Accordion, AccordionItem } from "@nextui-org/accordion";
-import { Avatar, AvatarGroup, AvatarIcon } from "@nextui-org/avatar";
+import { CircularProgress } from "@heroui/progress";
+import { Accordion, AccordionItem } from "@heroui/accordion";
+import { Avatar, AvatarGroup, AvatarIcon } from "@heroui/avatar";
 import RevisionesChecklist from "./revisiones";
 const { VITE_PHIDES_API_URL } = import.meta.env;
 

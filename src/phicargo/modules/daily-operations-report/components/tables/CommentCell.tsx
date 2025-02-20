@@ -1,4 +1,4 @@
-import { Popover, PopoverContent, PopoverTrigger } from '@nextui-org/react';
+import { Popover, PopoverContent, PopoverTrigger } from "@heroui/react";
 import { ReactNode, memo, useState } from 'react';
 import type {
   RecordColumnComment,

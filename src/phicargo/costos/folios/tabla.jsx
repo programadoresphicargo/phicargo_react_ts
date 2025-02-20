@@ -3,7 +3,7 @@ import { TextField } from '@mui/material';
 import dayjs from 'dayjs';
 import { MenuItem, FormControl, InputLabel } from '@mui/material';
 import { Box } from '@mui/material';
-import { Button, Chip } from '@nextui-org/react';
+import { Button, Chip } from "@heroui/react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -11,7 +11,7 @@ import {
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import FormularioCostoExtra from '../maniobras/form_costos_extras';
 import { CostosExtrasContext } from '../context/context';
-import { Select, SelectItem } from "@nextui-org/react";
+import { Select, SelectItem } from "@heroui/react";
 
 const FoliosCostosExtras = () => {
 

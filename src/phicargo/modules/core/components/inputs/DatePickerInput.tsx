@@ -1,5 +1,5 @@
 import { Controller, FieldValues } from "react-hook-form";
-import { DatePicker, DateValue } from "@nextui-org/react";
+import { DatePicker, DateValue } from "@heroui/react";
 import dayjs, { Dayjs } from "dayjs";
 
 import { CustomInputProps } from "../../../core/types/global-types";

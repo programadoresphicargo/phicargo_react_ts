@@ -1,7 +1,7 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Vehicle, VehicleUpdate } from '../models/vehicle-model';
 
-import { Button } from '@nextui-org/react';
+import { Button } from "@heroui/react";
 import { DriverSearchInput } from '../../core/components/inputs/DriverSearchInput';
 import { SelectInput } from '../../core/components/inputs/SelectInput';
 import { useMemo } from 'react';

@@ -3,11 +3,11 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import Slide from '@mui/material/Slide';
-import { Button } from '@nextui-org/button';
+import { Button } from "@heroui/button";
 import { tiempoTranscurrido } from '../../funciones/tiempo';
-import { Card, CardHeader } from '@nextui-org/react';
-import { Avatar } from '@nextui-org/react';
-import { Badge, Chip } from '@nextui-org/react';
+import { Card, CardHeader } from "@heroui/react";
+import { Avatar } from "@heroui/react";
+import { Badge, Chip } from "@heroui/react";
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import EstatusHistorialAgrupado from './estatus_agrupados';
 

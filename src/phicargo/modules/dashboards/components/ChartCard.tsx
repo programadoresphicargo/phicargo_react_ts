@@ -1,4 +1,4 @@
-import { Button, Spinner, Tooltip } from '@nextui-org/react';
+import { Button, Spinner, Tooltip } from "@heroui/react";
 
 import type { ChartActions } from '../types';
 import { FaFileDownload } from 'react-icons/fa';

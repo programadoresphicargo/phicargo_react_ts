@@ -17,7 +17,7 @@ import {
 } from 'material-react-table';
 import { toast } from 'react-toastify';
 import ManiobrasNavBar from '../../maniobras/Navbar';
-import { Chip } from '@nextui-org/react';
+import { Chip } from "@heroui/react";
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const Disponibilidad_unidades = () => {

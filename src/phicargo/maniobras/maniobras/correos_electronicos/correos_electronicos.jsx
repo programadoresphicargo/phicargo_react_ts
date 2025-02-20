@@ -5,8 +5,8 @@ import axios from 'axios';
 import Avatar from '@mui/material/Avatar';
 import Chip from '@mui/material/Chip';
 import FormularioCorreo from './formulario';
-import { Card, CardBody } from '@nextui-org/react';
-import { Button } from '@nextui-org/react';
+import { Card, CardBody } from "@heroui/react";
+import { Button } from "@heroui/react";
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 

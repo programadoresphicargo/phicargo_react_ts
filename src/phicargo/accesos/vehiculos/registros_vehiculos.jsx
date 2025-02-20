@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext, useMemo } from 'react';
 import Dialog from '@mui/material/Dialog';
 import VehiculoForm from './vehiculoForm';
 import Box from '@mui/material/Box';
-import { Button } from '@nextui-org/react';
+import { Button } from "@heroui/react";
 import {
   MaterialReactTable,
   useMaterialReactTable,

@@ -1,5 +1,5 @@
 import { ActivePermissionCell } from '../components/ui/ActivePermissionCell';
-import { Chip } from '@nextui-org/react';
+import { Chip } from "@heroui/react";
 import type { DriverWithRealStatus } from '../models/driver-model';
 import JobChip from '../components/ui/JobChip';
 import type { MRT_ColumnDef } from 'material-react-table';

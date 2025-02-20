@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import Slide from '@mui/material/Slide';
 import { Box, TextField } from '@mui/material';
 import odooApi from '../modules/core/api/odoo-api';
-import { DatePicker, Chip } from "@nextui-org/react";
+import { DatePicker, Chip } from "@heroui/react";
 import { parseDate, getLocalTimeZone } from "@internationalized/date";
 import {
   Modal,
@@ -12,7 +12,7 @@ import {
   ModalFooter,
   Button,
   useDisclosure,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { toast } from 'react-toastify';
 import {
   MaterialReactTable,

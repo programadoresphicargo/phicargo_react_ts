@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useContext } from 'react';
 import { Box } from '@mui/material';
-import { Button } from '@nextui-org/button';
+import { Button } from "@heroui/button";
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -13,7 +13,7 @@ import {
 } from 'material-react-table';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { toast } from 'react-toastify';
-import { Card, CardBody } from '@nextui-org/react';
+import { Card, CardBody } from "@heroui/react";
 import ListItemText from '@mui/material/ListItemText';
 import ListItemButton from '@mui/material/ListItemButton';
 import List from '@mui/material/List';

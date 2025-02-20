@@ -1,4 +1,4 @@
-import { Chip } from "@nextui-org/react";
+import { Chip } from "@heroui/react";
 import { MRT_ColumnDef } from "material-react-table";
 import { User } from "../../auth/models";
 import { useMemo } from "react";

@@ -1,4 +1,4 @@
-import { Checkbox } from '@nextui-org/react';
+import { Checkbox } from "@heroui/react";
 import { HeaderBase } from '@/phicargo/modules/core/components/ui/HeaderBase';
 import { HeaderCard } from '@/phicargo/modules/core/components/ui/HeaderCard';
 import { RefreshButton } from '@/phicargo/modules/core/components/ui/RefreshButton';

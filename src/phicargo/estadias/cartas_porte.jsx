@@ -4,7 +4,7 @@ import {
   useMaterialReactTable,
 } from 'material-react-table';
 import Box from '@mui/material/Box';
-import { Button, Chip } from '@nextui-org/react'
+import { Button, Chip } from "@heroui/react"
 import { DatePicker } from 'antd';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 const { RangePicker } = DatePicker;

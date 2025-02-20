@@ -1,6 +1,6 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AvatarProfile from '../components/ui/AvatarProfile';
-import { Button } from '@nextui-org/react';
+import { Button } from "@heroui/react";
 import ReportMenuItem from '../components/ui/ReportMenuItem';
 import balanceIcon from '../../../../assets/menu/balanceIcon.png';
 import clockIcon from '../../../../assets/menu/clock.png';

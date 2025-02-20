@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { FaSearch } from 'react-icons/fa';
-import { Input } from '@nextui-org/react';
+import { Input } from "@heroui/react";
 import { Permission } from '../models';
 import { useDebounce } from '../../core/hooks';
 

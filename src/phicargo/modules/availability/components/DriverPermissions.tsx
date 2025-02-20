@@ -1,4 +1,4 @@
-import { Button, Card, CardBody, CardHeader, Spinner } from '@nextui-org/react';
+import { Button, Card, CardBody, CardHeader, Spinner } from "@heroui/react";
 
 import { Driver } from '../models/driver-model';
 import { IoIosAddCircle } from 'react-icons/io';

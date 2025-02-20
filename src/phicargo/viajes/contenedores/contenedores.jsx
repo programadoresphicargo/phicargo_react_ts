@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { ViajeContext } from '../context/viajeContext';
-import { Spinner } from '@nextui-org/react';
-import { Card, CardHeader, Avatar, Badge } from '@nextui-org/react';
+import { Spinner } from "@heroui/react";
+import { Card, CardHeader, Avatar, Badge } from "@heroui/react";
 import { toast } from 'react-toastify';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 

@@ -16,6 +16,7 @@ import ShiftsRoutes from '../phicargo/modules/shifts/routes/ShiftsRoutes';
 import { ToastContainer } from 'react-toastify';
 import { Toaster } from 'react-hot-toast';
 import UsersManagementRoutes from '../phicargo/modules/users-management/routes/UsersManagementRoutes';
+import { ToastProvider } from "@heroui/toast";
 
 // Lazy load the components
 const CartasPorte = lazy(
@@ -80,6 +81,7 @@ export const PrivateRoutes = () => {
     <>
       <Toaster />
       <ToastContainer />
+      <ToastProvider></ToastProvider>
       <Routes>
         {/* Menú */}
         <Route path="/" element={<Navigate to="/menu" />} />

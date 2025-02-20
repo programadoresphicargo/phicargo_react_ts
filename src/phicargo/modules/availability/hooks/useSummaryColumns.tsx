@@ -1,6 +1,6 @@
 import type { VehicleRealStatus, VehicleWithRealStatus } from '../models/vehicle-model';
 
-import { Chip } from '@nextui-org/react';
+import { Chip } from "@heroui/react";
 import type { MRT_ColumnDef } from 'material-react-table';
 import { ManeuverCell } from '../components/ui/ManeuverCell';
 import { TravelCell } from '../components/ui/TravelCell';

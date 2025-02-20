@@ -5,7 +5,7 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-} from '@nextui-org/react';
+} from "@heroui/react";
 
 import type { Amount } from '../models';
 import { FaCheck } from 'react-icons/fa';

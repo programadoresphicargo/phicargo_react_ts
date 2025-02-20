@@ -1,4 +1,4 @@
-import { Button, Checkbox, Tab, Tabs } from '@nextui-org/react';
+import { Button, Checkbox, Tab, Tabs } from "@heroui/react";
 import { useLoadPrevious, useWeekContext } from '../hooks';
 
 import AlertDialog from './AlertDialog';

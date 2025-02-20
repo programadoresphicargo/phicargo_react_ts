@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import FsLightbox from "fslightbox-react";
-import { Progress } from "@nextui-org/react";
+import { Progress } from "@heroui/react";
 import { ViajeContext } from "../context/viajeContext";
 import { Image } from "antd";
 import {
@@ -14,7 +14,7 @@ import {
     ZoomInOutlined,
     ZoomOutOutlined,
 } from '@ant-design/icons';
-import { Link } from "@nextui-org/react";
+import { Link } from "@heroui/react";
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 function ArchivosAdjuntos({ id_reporte }) {

@@ -1,6 +1,6 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-import { Button } from '@nextui-org/react';
+import { Button } from "@heroui/react";
 import { SelectInput } from '../../core/components/inputs/SelectInput';
 import { TextInput } from '../../core/components/inputs/TextInput';
 import { Vehicle } from '../models/vehicle-model';

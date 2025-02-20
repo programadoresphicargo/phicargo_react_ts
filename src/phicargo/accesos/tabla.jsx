@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { TextField } from '@mui/material';
 import dayjs from 'dayjs';
-import { Button } from '@nextui-org/button';
+import { Button } from "@heroui/button";
 import Dialog from '@mui/material/Dialog';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -16,13 +16,13 @@ import Slide from '@mui/material/Slide';
 import AccesoCompo from './AccesoCompo';
 import AccesoForm from './formulario';
 import { Box } from '@mui/material';
-import { Chip } from '@nextui-org/react';
+import { Chip } from "@heroui/react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
 import { width } from '@mui/system';
-import { button } from '@nextui-org/theme';
+import { button } from "@heroui/theme";
 import odooApi from '../modules/core/api/odoo-api';
 
 const Transition = React.forwardRef(function Transition(props, ref) {

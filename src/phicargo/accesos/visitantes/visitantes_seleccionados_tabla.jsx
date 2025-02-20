@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useMemo, useContext } from 'react';
-import { Button } from '@nextui-org/button';
-import { Table, TableRow } from '@nextui-org/react';
+import { Button } from "@heroui/button";
+import { Table, TableRow } from "@heroui/react";
 import { Grid } from '@mui/material';
-import { TableHeader } from '@nextui-org/react';
-import { TableCell } from '@nextui-org/react';
-import { TableColumn } from '@nextui-org/react';
-import { TableBody } from '@nextui-org/react';
+import { TableHeader } from "@heroui/react";
+import { TableCell } from "@heroui/react";
+import { TableColumn } from "@heroui/react";
+import { TableBody } from "@heroui/react";
 import { AccesoContext } from '../context';
 import ListadoVisitantes from './tabla';
 import axios from 'axios';

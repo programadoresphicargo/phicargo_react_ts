@@ -1,4 +1,4 @@
-import { Button, Spinner, Tooltip } from '@nextui-org/react';
+import { Button, Spinner, Tooltip } from "@heroui/react";
 import { useEffect, useState } from 'react';
 
 import { IconButton } from '@mui/material';

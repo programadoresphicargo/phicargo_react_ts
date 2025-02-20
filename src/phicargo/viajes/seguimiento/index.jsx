@@ -6,19 +6,19 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import PanelEnvio from '../panel_envio_estatus/panel_envio';
 import axios from "axios";
-import { Button, ButtonGroup } from "@nextui-org/button";
+import { Button, ButtonGroup } from "@heroui/button";
 import { Steps } from 'antd';
-import { Spacer } from "@nextui-org/spacer";
+import { Spacer } from "@heroui/spacer";
 import EstatusHistorial from "../estatus/estatus";
 import { useJourneyDialogs } from "./funciones";
 import Slide from '@mui/material/Slide';
 import EstatusViaje from "./estado_viaje";
 import { ViajeContext } from "../context/viajeContext";
 import CumplimientoOperador from "../cumplimiento_operador/cumplimiento";
-import { CardBody, CardHeader, Snippet } from "@nextui-org/react";
+import { CardBody, CardHeader, Snippet } from "@heroui/react";
 import { fontFamily } from "@mui/system";
 import Grid from '@mui/material/Grid2';
-import { Card, Chip, Divider } from "@nextui-org/react";
+import { Card, Chip, Divider } from "@heroui/react";
 import Contenedores from "../contenedores/contenedores";
 
 export default function BasicButtons2() {

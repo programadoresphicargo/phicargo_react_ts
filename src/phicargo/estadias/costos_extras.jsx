@@ -4,9 +4,9 @@ import axios from "axios";
 import { toast } from 'react-toastify';
 import Stack from '@mui/material/Stack';
 import odooApi from "../modules/core/api/odoo-api";
-import { Input } from "@nextui-org/react";
-import { Button } from "@nextui-org/react";
-import { DatePicker, Select, SelectItem, Autocomplete, AutocompleteItem } from "@nextui-org/react";
+import { Input } from "@heroui/react";
+import { Button } from "@heroui/react";
+import { DatePicker, Select, SelectItem, Autocomplete, AutocompleteItem } from "@heroui/react";
 import { parseDate, getLocalTimeZone } from "@internationalized/date";
 
 const ListadoCostosExtras = ({ id_cuenta, onClose }) => {

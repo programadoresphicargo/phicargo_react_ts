@@ -1,11 +1,11 @@
 import { Controller, FieldValues } from "react-hook-form";
 
 import { CustomInputProps } from "../../types/global-types";
-import { Input } from "@nextui-org/react";
+import { Input } from "@heroui/react";
 
 export const EmailInput = <T extends FieldValues>({ control, name }: CustomInputProps<T>) => {
   return (
-    <Controller
+    (<Controller
       name={name}
       control={control}
       rules={{
@@ -30,6 +30,6 @@ export const EmailInput = <T extends FieldValues>({ control, name }: CustomInput
           errorMessage={fieldState.error ? fieldState.error.message : null}
         />
       )}
-    />
+    />)
   );
 };

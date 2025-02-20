@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useContext } from 'react';
-import { Progress, Card, CardHeader, Divider, CardBody } from "@nextui-org/react";
+import { Progress, Card, CardHeader, Divider, CardBody } from "@heroui/react";
 import { ViajeContext } from '../context/viajeContext';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { TiemposViajeProvider, useTiemposViaje } from './TiemposViajeContext';

@@ -6,8 +6,8 @@ import toast from 'react-hot-toast';
 import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box } from '@mui/material';
-import { Button } from '@nextui-org/react';
-import { Autocomplete, AutocompleteItem, Textarea } from '@nextui-org/react';
+import { Button } from "@heroui/react";
+import { Autocomplete, AutocompleteItem, Textarea } from "@heroui/react";
 import Swal from 'sweetalert2';
 
 import odooApi from '@/phicargo/modules/core/api/odoo-api';

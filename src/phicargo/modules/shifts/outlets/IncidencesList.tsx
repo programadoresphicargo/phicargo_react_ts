@@ -4,7 +4,7 @@ import {
   MRT_GroupingState,
   useMaterialReactTable,
 } from 'material-react-table';
-import { Modal, ModalBody, ModalContent, ModalHeader } from '@nextui-org/react';
+import { Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/react";
 
 import { Incidence } from '../models/driver-incidence-model';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';

@@ -5,7 +5,7 @@ import {
   ModalContent,
   ModalHeader,
   Spinner,
-} from '@nextui-org/react';
+} from "@heroui/react";
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useGetComments, useMaintenanceRecord } from '../hooks';

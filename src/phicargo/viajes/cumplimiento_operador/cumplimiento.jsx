@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useContext } from 'react';
-import { Progress } from "@nextui-org/react";
+import { Progress } from "@heroui/react";
 import { ViajeContext } from '../context/viajeContext';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 

@@ -5,10 +5,10 @@ import {
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 
 import AppBar from '@mui/material/AppBar';
-import { Avatar } from '@nextui-org/react';
+import { Avatar } from "@heroui/react";
 import { Box } from '@mui/material';
-import { Button } from '@nextui-org/react'
-import { Chip } from '@nextui-org/react';
+import { Button } from "@heroui/react"
+import { Chip } from "@heroui/react";
 import CloseIcon from '@mui/icons-material/Close';
 import Dialog from '@mui/material/Dialog';
 import IconButton from '@mui/material/IconButton';
@@ -21,7 +21,7 @@ import Viaje from '../viaje';
 import { ViajeContext } from '../context/viajeContext';
 import ViajesActivosMasivo from '../envio_masivo/viajes_activos';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
-import { Popover, PopoverTrigger, PopoverContent, useDisclosure } from "@nextui-org/react";
+import { Popover, PopoverTrigger, PopoverContent, useDisclosure } from "@heroui/react";
 import DetencionesViajesActivos from '../detenciones/detenciones_modal';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 

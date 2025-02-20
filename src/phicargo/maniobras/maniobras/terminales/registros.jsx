@@ -3,7 +3,7 @@ import { MaterialReactTable, useMaterialReactTable } from 'material-react-table'
 import FormularioTerminales from './informacion';
 import ManiobrasNavBar from '../../Navbar';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
-import { Button } from '@nextui-org/react';
+import { Button } from "@heroui/react";
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const Terminales = () => {

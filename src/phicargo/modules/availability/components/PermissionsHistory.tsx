@@ -1,7 +1,7 @@
 import { Driver } from '../models/driver-model';
 import { DriverUnavailable } from '../models/driver-unavailability';
 import { IoDocumentTextOutline } from 'react-icons/io5';
-import { Tooltip } from '@nextui-org/react';
+import { Tooltip } from "@heroui/react";
 import VacationsRequestView from './VacationsRequestView';
 import { useState } from 'react';
 

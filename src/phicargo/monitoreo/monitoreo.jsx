@@ -6,8 +6,8 @@ import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import MonitoreoNavbar from './Navbar';
-import { Card, CardHeader, CardBody } from '@nextui-org/react';
-import { Calendar } from "@nextui-org/react";
+import { Card, CardHeader, CardBody } from "@heroui/react";
+import { Calendar } from "@heroui/react";
 import { parseDate } from "@internationalized/date";
 
 export default function EntregaMonitoreo() {

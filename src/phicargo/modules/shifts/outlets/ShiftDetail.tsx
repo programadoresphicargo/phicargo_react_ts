@@ -4,7 +4,7 @@ import {
   ModalBody,
   ModalContent,
   ModalHeader,
-} from '@nextui-org/react';
+} from "@heroui/react";
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useMemo, useState } from 'react';
 

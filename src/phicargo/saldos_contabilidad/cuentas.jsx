@@ -3,7 +3,7 @@ import Slide from '@mui/material/Slide';
 import { Box } from '@mui/material';
 import OperadorForm from './saldoForm';
 import odooApi from '../modules/core/api/odoo-api';
-import { DatePicker, Chip } from "@nextui-org/react";
+import { DatePicker, Chip } from "@heroui/react";
 import { parseDate, getLocalTimeZone } from "@internationalized/date";
 import {
   Modal,
@@ -13,7 +13,7 @@ import {
   ModalFooter,
   Button,
   useDisclosure,
-} from "@nextui-org/react";
+} from "@heroui/react";
 
 import {
   MaterialReactTable,

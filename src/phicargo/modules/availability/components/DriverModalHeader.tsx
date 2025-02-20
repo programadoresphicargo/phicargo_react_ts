@@ -1,4 +1,4 @@
-import { Chip } from '@nextui-org/react';
+import { Chip } from "@heroui/react";
 import { Driver } from '../models/driver-model';
 
 interface Props {

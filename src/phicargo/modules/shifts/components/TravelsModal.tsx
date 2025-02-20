@@ -3,7 +3,7 @@ import {
   type MRT_ColumnDef,
   useMaterialReactTable,
 } from 'material-react-table';
-import { Modal, ModalBody, ModalContent, ModalHeader } from '@nextui-org/react';
+import { Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/react";
 
 import MaterialTableBase from '../../core/components/tables/MaterialTableBase';
 import RefreshIcon from '@mui/icons-material/Refresh';

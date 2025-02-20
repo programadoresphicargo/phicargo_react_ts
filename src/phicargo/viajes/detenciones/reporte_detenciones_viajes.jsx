@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Button } from '@nextui-org/button';
+import { Button } from "@heroui/button";
 import Slide from '@mui/material/Slide';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { toast } from 'react-toastify';
-import { Card, CardHeader, NavbarMenu } from '@nextui-org/react';
+import { Card, CardHeader, NavbarMenu } from "@heroui/react";
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import { Typography } from '@mui/material';

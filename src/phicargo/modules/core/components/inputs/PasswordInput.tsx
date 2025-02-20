@@ -2,7 +2,7 @@ import { Controller, FieldValues } from 'react-hook-form';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 
 import { CustomInputProps } from '../../types/global-types';
-import { Input } from '@nextui-org/react';
+import { Input } from "@heroui/react";
 import { useState } from 'react';
 
 interface PasswordInputProps<T extends FieldValues>

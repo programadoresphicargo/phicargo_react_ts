@@ -7,7 +7,7 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
-} from '@nextui-org/react';
+} from "@heroui/react";
 
 import { BiUserMinus } from 'react-icons/bi';
 import { Queue } from '../models';

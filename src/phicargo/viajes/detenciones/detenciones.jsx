@@ -1,4 +1,4 @@
-import { Card, CardBody, CardHeader } from '@nextui-org/react';
+import { Card, CardBody, CardHeader } from "@heroui/react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -7,14 +7,14 @@ import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { TiemposViajeProvider, useTiemposViaje } from './TiemposViajeContext';
 
 import Box from '@mui/material/Box';
-import { Button } from '@nextui-org/button';
+import { Button } from "@heroui/button";
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Grid from '@mui/material/Grid2';
-import { Link } from "@nextui-org/react";
+import { Link } from "@heroui/react";
 import Slide from '@mui/material/Slide';
 import TiemposViajes from './tiempos_viaje';
 import { Typography } from '@mui/material';

@@ -2,7 +2,7 @@ import { IconButton, Tooltip } from '@mui/material';
 import { Outlet, useNavigate } from 'react-router-dom';
 
 import AddButton from '../../core/components/ui/AddButton';
-import { Button } from '@nextui-org/react';
+import { Button } from "@heroui/react";
 import {
   ExportToExcel,
   type ExportConfig,

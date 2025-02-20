@@ -1,4 +1,4 @@
-import { Button, ButtonProps } from '@nextui-org/react';
+import { Button, ButtonProps } from "@heroui/react";
 
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { ReactNode } from 'react';

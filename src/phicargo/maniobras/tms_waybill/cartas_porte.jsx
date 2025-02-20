@@ -11,7 +11,7 @@ import {
   useMaterialReactTable,
 } from 'material-react-table';
 import ManiobrasNavBar from '../Navbar';
-import { Button, Select, SelectItem, Chip } from '@nextui-org/react';
+import { Button, Select, SelectItem, Chip } from "@heroui/react";
 import YearSelector from '@/año';
 import { toast } from 'react-toastify';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';

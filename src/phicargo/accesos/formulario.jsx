@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Button, Select, SelectItem } from "@nextui-org/react";
+import { Button, Select, SelectItem } from "@heroui/react";
 import axios from 'axios';
 import Grid from '@mui/material/Grid';
-import { Card, CardHeader, CardBody, CardFooter, Divider, Link, Image } from "@nextui-org/react";
+import { Card, CardHeader, CardBody, CardFooter, Divider, Link, Image } from "@heroui/react";
 import { toast } from 'react-toastify';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -30,16 +30,16 @@ import SelectedVisitantesTable from './visitantes/visitantes_seleccionados_tabla
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
-import { Textarea } from "@nextui-org/react";
+import { Textarea } from "@heroui/react";
 import odooApi from '../modules/core/api/odoo-api';
-import { Input } from "@nextui-org/react";
-import { Progress } from "@nextui-org/react";
+import { Input } from "@heroui/react";
+import { Progress } from "@heroui/react";
 import { Box } from '@mui/material';
 import {
     Autocomplete,
     AutocompleteSection,
     AutocompleteItem
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { ClockIcon } from '@mui/x-date-pickers';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
@@ -315,321 +315,315 @@ const AccesoForm = ({ id_acceso, onClose }) => {
         }));
     };
 
-    return (
-        <>
-            <Stack spacing={2} direction="row" style={{ padding: '20px' }}>
-                {id_acceso && (
-                    <Typography variant="h4" style={{ marginTop: '20px' }}>
-                        Acceso A-{id_acceso}
-                    </Typography>
-                )}
-                {!id_acceso && (
-                    <Button onPress={registrar_acceso} style={{ marginTop: '20px' }} color='primary' isLoading={isLoading}>Registrar</Button>
-                )}
-                {formData.estado_acceso !== 'archivado' && disabledFom && id_acceso && (
-                    <Button onPress={EditarForm} style={{ marginTop: '20px' }} color='primary'>Editar</Button>
-                )}
-                {id_acceso && !disabledFom && (
-                    <Button onPress={actualizar_acceso} style={{ marginTop: '20px' }} color='primary' isLoading={isLoading}>Guardar Cambios</Button>
-                )}
-                {formData.estado_acceso == 'espera' && (
-                    <Button onPress={handleClickOpenValidador} style={{ marginTop: '20px' }} color='primary'>Validar {formData.tipo_movimiento}</Button>
-                )}
-                {formData.estado_acceso == 'validado' && (
-                    <Button onPress={handleClickOpenValidador} style={{ marginTop: '20px' }} color='primary'>Archivar / Finalizar acceso</Button>
-                )}
-            </Stack >
+    return (<>
+        <Stack spacing={2} direction="row" style={{ padding: '20px' }}>
+            {id_acceso && (
+                <Typography variant="h4" style={{ marginTop: '20px' }}>
+                    Acceso A-{id_acceso}
+                </Typography>
+            )}
+            {!id_acceso && (
+                <Button onPress={registrar_acceso} style={{ marginTop: '20px' }} color='primary' isLoading={isLoading}>Registrar</Button>
+            )}
+            {formData.estado_acceso !== 'archivado' && disabledFom && id_acceso && (
+                <Button onPress={EditarForm} style={{ marginTop: '20px' }} color='primary'>Editar</Button>
+            )}
+            {id_acceso && !disabledFom && (
+                <Button onPress={actualizar_acceso} style={{ marginTop: '20px' }} color='primary' isLoading={isLoading}>Guardar Cambios</Button>
+            )}
+            {formData.estado_acceso == 'espera' && (
+                <Button onPress={handleClickOpenValidador} style={{ marginTop: '20px' }} color='primary'>Validar {formData.tipo_movimiento}</Button>
+            )}
+            {formData.estado_acceso == 'validado' && (
+                <Button onPress={handleClickOpenValidador} style={{ marginTop: '20px' }} color='primary'>Archivar / Finalizar acceso</Button>
+            )}
+        </Stack >
+        <Grid container spacing={2} style={{ padding: '20px' }}>
+            <Grid item xs={12} sm={4} md={8}>
 
-            <Grid container spacing={2} style={{ padding: '20px' }}>
-                <Grid item xs={12} sm={4} md={8}>
+                <Card className='mb-3'>
+                    <CardHeader className="flex gap-3">
+                        <div className="flex flex-col">
+                            <p className="text-md">Datos del acceso</p>
+                        </div>
+                    </CardHeader>
+                    <Divider />
+                    {isLoading ? (
+                        <Progress
+                            isIndeterminate
+                            aria-label="Loading..."
+                            size="sm"
+                        />
+                    ) : ('')}
+                    <CardBody>
 
-                    <Card className='mb-3'>
-                        <CardHeader className="flex gap-3">
-                            <div className="flex flex-col">
-                                <p className="text-md">Datos del acceso</p>
-                            </div>
-                        </CardHeader>
-                        <Divider />
-                        {isLoading ? (
-                            <Progress
-                                isIndeterminate
-                                aria-label="Loading..."
-                                size="sm"
-                            />
-                        ) : ('')}
-                        <CardBody>
+                        <Grid container spacing={2}>
 
-                            <Grid container spacing={2}>
-
-                                <Grid item xs={12} sm={6} md={4}>
-                                    <Autocomplete
-                                        id="tipo_movimiento"
-                                        name="tipo_movimiento"
-                                        variant='bordered'
-                                        label="Tipo de movimiento"
-                                        selectedKey={formData.tipo_movimiento || null}
-                                        onSelectionChange={(e) => handleChange('tipo_movimiento', e)}
-                                        isDisabled={disabledFom}
-                                        defaultItems={options_tipo_movimiento}
-                                        isInvalid={!!errors.tipo_movimiento}
-                                        errorMessage={errors.tipo_movimiento}
-                                    >
-                                        {(item) => <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>}
-                                    </Autocomplete>
-                                </Grid>
-
-                                <Grid item xs={12} sm={6} md={4}>
-                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                        <DateTimePicker
-                                            slotProps={{
-                                                textField: {
-                                                    fullWidth: true,
-                                                    error: !!errors.fecha_entrada,
-                                                    helperText: errors.fecha_entrada,
-                                                }
-                                            }}
-                                            label="Fecha de entrada"
-                                            value={dayjs(formData.fecha_entrada)}
-                                            onChange={(newValue) => handleChange('fecha_entrada', newValue ? newValue.toISOString() : '')}
-                                            disabled={disabledFom}
-                                        />
-                                    </LocalizationProvider>
-                                </Grid>
-
-                                <Grid item xs={12} sm={6} md={4}>
-                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                        <DateTimePicker
-                                            slotProps={{
-                                                textField: {
-                                                    fullWidth: true,
-                                                    error: !!errors.fecha_salida,
-                                                    helperText: errors.fecha_salida,
-                                                }
-                                            }}
-                                            label="Fecha de salida"
-                                            value={dayjs(formData.fecha_salida)}
-                                            onChange={(newValue) => handleChange('fecha_salida', newValue ? newValue.toISOString() : '')}
-                                            disabled={disabledFom}
-                                        />
-                                    </LocalizationProvider>
-                                </Grid>
-
-                                <Grid item xs={12} sm={6} md={4}>
-                                    <Box display="flex" alignItems="center">
-                                        <Button color={disabledFom ? "default" : "primary"} size='lg' onPress={abrirEmpresas} isDisabled={disabledFom}><i class="bi bi-search"></i></Button>
-                                        <Input
-                                            size='sm'
-                                            id="id_empresa"
-                                            name="id_empresa"
-                                            label="Empresa"
-                                            variant="bordered"
-                                            isDisabled={disabledFom}
-                                            defaultValue={(formData.empresa) || ' '}
-                                            value={(formData.empresa) || ' '}
-                                            isInvalid={!!errors.id_empresa}
-                                            errorMessage={errors.id_empresa}
-                                            onClick={abrirEmpresas} />
-                                    </Box>
-                                </Grid>
-
-                                <SelectedVisitantesTable></SelectedVisitantesTable>
-
-                                <Grid item xs={12} sm={6} md={4}>
-                                    <Autocomplete
-                                        label="Documento con el que se identifica"
-                                        id="tipo_identificacion"
-                                        name="tipo_identificacion"
-                                        variant='bordered'
-                                        selectedKey={formData.tipo_identificacion || null}
-                                        onSelectionChange={(e) => handleChange('tipo_identificacion', e)}
-                                        isDisabled={disabledFom}
-                                        defaultItems={identificationOptions}
-                                        isInvalid={!!errors.tipo_identificacion}
-                                        errorMessage={errors.tipo_identificacion}
-                                    >
-                                        {(item) => <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>}
-                                    </Autocomplete>
-                                </Grid>
-
-                                <Grid item xs={12} sm={6} md={4}>
-                                    <Autocomplete
-                                        id="id_empresa_visitada"
-                                        name="id_empresa_visitada"
-                                        label="Empresa visitada"
-                                        variant='bordered'
-                                        selectedKey={String(formData.id_empresa_visitada) || null}
-                                        onSelectionChange={(e) => handleChange('id_empresa_visitada', e)}
-                                        defaultItems={empresas_visitadas}
-                                        isDisabled={disabledFom}
-                                        isInvalid={!!errors.id_empresa_visitada}
-                                        errorMessage={errors.id_empresa_visitada}
-                                    >
-                                        {(item) => <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>}
-                                    </Autocomplete>
-                                </Grid>
-
-                                <Grid item xs={12} sm={6} md={4}>
-                                    <Select
-                                        selectionMode="multiple"
-                                        isMultiline={true}
-                                        id="areas"
-                                        name="areas"
-                                        variant='bordered'
-                                        label="Áreas a visitar"
-                                        placeholder="Seleccionar áreas permitidas a transitar"
-                                        defaultItems={areas}
-                                        isDisabled={disabledFom}
-                                        onChange={handleSelectionChange}
-                                        selectedKeys={
-                                            formData.areas
-                                                ? formData.areas.split(',').map((key) => key.replace(/"/g, '').trim())
-                                                : []
-                                        }
-                                        isInvalid={!!errors.areas}
-                                        errorMessage={errors.areas}
-                                    >
-                                        {areas.map((animal) => (
-                                            <SelectItem key={animal.value}>{animal.label}</SelectItem>
-                                        ))}
-                                    </Select>
-                                </Grid>
-
-                                <Grid item xs={12} sm={6} md={8}>
-                                    <Textarea
-                                        id="motivo"
-                                        name="motivo"
-                                        label="Motivo de entrada o salida"
-                                        placeholder="Ingresa una descripción"
-                                        variant='bordered'
-                                        isDisabled={disabledFom}
-                                        value={formData.motivo}
-                                        onChange={(event) => handleChange('motivo', event.target.value)}
-                                        isInvalid={!!errors.motivo}
-                                        errorMessage={errors.motivo}
-                                    />
-                                </Grid>
-
+                            <Grid item xs={12} sm={6} md={4}>
+                                <Autocomplete
+                                    id="tipo_movimiento"
+                                    name="tipo_movimiento"
+                                    variant='bordered'
+                                    label="Tipo de movimiento"
+                                    selectedKey={formData.tipo_movimiento || null}
+                                    onSelectionChange={(e) => handleChange('tipo_movimiento', e)}
+                                    isDisabled={disabledFom}
+                                    defaultItems={options_tipo_movimiento}
+                                    isInvalid={!!errors.tipo_movimiento}
+                                    errorMessage={errors.tipo_movimiento}
+                                >
+                                    {(item) => <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>}
+                                </Autocomplete>
                             </Grid>
-                        </CardBody>
-                        <Divider />
-                        <CardFooter>
-                        </CardFooter>
-                    </Card>
 
-                    <ModuloVehiculo disabled={disabledFom}></ModuloVehiculo>
+                            <Grid item xs={12} sm={6} md={4}>
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <DateTimePicker
+                                        slotProps={{
+                                            textField: {
+                                                fullWidth: true,
+                                                error: !!errors.fecha_entrada,
+                                                helperText: errors.fecha_entrada,
+                                            }
+                                        }}
+                                        label="Fecha de entrada"
+                                        value={dayjs(formData.fecha_entrada)}
+                                        onChange={(newValue) => handleChange('fecha_entrada', newValue ? newValue.toISOString() : '')}
+                                        disabled={disabledFom}
+                                    />
+                                </LocalizationProvider>
+                            </Grid>
 
-                </Grid>
+                            <Grid item xs={12} sm={6} md={4}>
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <DateTimePicker
+                                        slotProps={{
+                                            textField: {
+                                                fullWidth: true,
+                                                error: !!errors.fecha_salida,
+                                                helperText: errors.fecha_salida,
+                                            }
+                                        }}
+                                        label="Fecha de salida"
+                                        value={dayjs(formData.fecha_salida)}
+                                        onChange={(newValue) => handleChange('fecha_salida', newValue ? newValue.toISOString() : '')}
+                                        disabled={disabledFom}
+                                    />
+                                </LocalizationProvider>
+                            </Grid>
 
-                <Grid item xs={12} sm={6} md={4}>
-                    <Card>
-                        <CardHeader className="flex gap-3">
-                            <div className="flex flex-col">
-                                <p className="text-md">Historial de cambios</p>
-                            </div>
-                        </CardHeader>
-                        <Divider />
-                        <CardBody>
+                            <Grid item xs={12} sm={6} md={4}>
+                                <Box display="flex" alignItems="center">
+                                    <Button color={disabledFom ? "default" : "primary"} size='lg' onPress={abrirEmpresas} isDisabled={disabledFom}><i class="bi bi-search"></i></Button>
+                                    <Input
+                                        size='sm'
+                                        id="id_empresa"
+                                        name="id_empresa"
+                                        label="Empresa"
+                                        variant="bordered"
+                                        isDisabled={disabledFom}
+                                        defaultValue={(formData.empresa) || ' '}
+                                        value={(formData.empresa) || ' '}
+                                        isInvalid={!!errors.id_empresa}
+                                        errorMessage={errors.id_empresa}
+                                        onClick={abrirEmpresas} />
+                                </Box>
+                            </Grid>
 
-                            <Textarea
-                                label="Notas para vigilancia"
-                                value={formData.notas}
-                                variant='bordered'
-                                isDisabled={disabledFom}
-                                onChange={(event) => handleChange('notas', event.target.value)}
-                                placeholder="Ingresa tus notas para el personal de vigilancia" />
+                            <SelectedVisitantesTable></SelectedVisitantesTable>
 
-                            <Timeline>
-                                <TimelineItem>
-                                    <TimelineOppositeContent
-                                        sx={{ m: 'auto 0', fontFamily: 'Inter' }}
-                                        align="right"
-                                        variant="body2"
-                                        color="text.secondary"
+                            <Grid item xs={12} sm={6} md={4}>
+                                <Autocomplete
+                                    label="Documento con el que se identifica"
+                                    id="tipo_identificacion"
+                                    name="tipo_identificacion"
+                                    variant='bordered'
+                                    selectedKey={formData.tipo_identificacion || null}
+                                    onSelectionChange={(e) => handleChange('tipo_identificacion', e)}
+                                    isDisabled={disabledFom}
+                                    defaultItems={identificationOptions}
+                                    isInvalid={!!errors.tipo_identificacion}
+                                    errorMessage={errors.tipo_identificacion}
+                                >
+                                    {(item) => <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>}
+                                </Autocomplete>
+                            </Grid>
+
+                            <Grid item xs={12} sm={6} md={4}>
+                                <Autocomplete
+                                    id="id_empresa_visitada"
+                                    name="id_empresa_visitada"
+                                    label="Empresa visitada"
+                                    variant='bordered'
+                                    selectedKey={String(formData.id_empresa_visitada) || null}
+                                    onSelectionChange={(e) => handleChange('id_empresa_visitada', e)}
+                                    defaultItems={empresas_visitadas}
+                                    isDisabled={disabledFom}
+                                    isInvalid={!!errors.id_empresa_visitada}
+                                    errorMessage={errors.id_empresa_visitada}
+                                >
+                                    {(item) => <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>}
+                                </Autocomplete>
+                            </Grid>
+
+                            <Grid item xs={12} sm={6} md={4}>
+                                <Select
+                                    selectionMode="multiple"
+                                    isMultiline={true}
+                                    id="areas"
+                                    name="areas"
+                                    variant='bordered'
+                                    label="Áreas a visitar"
+                                    placeholder="Seleccionar áreas permitidas a transitar"
+                                    defaultItems={areas}
+                                    isDisabled={disabledFom}
+                                    onChange={handleSelectionChange}
+                                    selectedKeys={
+                                        formData.areas
+                                            ? formData.areas.split(',').map((key) => key.replace(/"/g, '').trim())
+                                            : []
+                                    }
+                                    isInvalid={!!errors.areas}
+                                    errorMessage={errors.areas}
+                                >
+                                    {areas.map((animal) => (
+                                        <SelectItem key={animal.value}>{animal.label}</SelectItem>
+                                    ))}
+                                </Select>
+                            </Grid>
+
+                            <Grid item xs={12} sm={6} md={8}>
+                                <Textarea
+                                    id="motivo"
+                                    name="motivo"
+                                    label="Motivo de entrada o salida"
+                                    placeholder="Ingresa una descripción"
+                                    variant='bordered'
+                                    isDisabled={disabledFom}
+                                    value={formData.motivo}
+                                    onChange={(event) => handleChange('motivo', event.target.value)}
+                                    isInvalid={!!errors.motivo}
+                                    errorMessage={errors.motivo}
+                                />
+                            </Grid>
+
+                        </Grid>
+                    </CardBody>
+                    <Divider />
+                    <CardFooter>
+                    </CardFooter>
+                </Card>
+
+                <ModuloVehiculo disabled={disabledFom}></ModuloVehiculo>
+
+            </Grid>
+
+            <Grid item xs={12} sm={6} md={4}>
+                <Card>
+                    <CardHeader className="flex gap-3">
+                        <div className="flex flex-col">
+                            <p className="text-md">Historial de cambios</p>
+                        </div>
+                    </CardHeader>
+                    <Divider />
+                    <CardBody>
+
+                        <Textarea
+                            label="Notas para vigilancia"
+                            value={formData.notas}
+                            variant='bordered'
+                            isDisabled={disabledFom}
+                            onChange={(event) => handleChange('notas', event.target.value)}
+                            placeholder="Ingresa tus notas para el personal de vigilancia" />
+
+                        <Timeline>
+                            <TimelineItem>
+                                <TimelineOppositeContent
+                                    sx={{ m: 'auto 0', fontFamily: 'Inter' }}
+                                    align="right"
+                                    variant="body2"
+                                    color="text.secondary"
+                                >
+                                    {formData.fecha_creacion}
+                                </TimelineOppositeContent>
+                                <TimelineSeparator>
+                                    <TimelineConnector />
+                                    <TimelineDot color="primary">
+                                        <ClockIcon />
+                                    </TimelineDot>
+                                    <TimelineConnector />
+                                </TimelineSeparator>
+                                <TimelineContent sx={{ py: '12px', px: 2 }}>
+                                    <Typography variant="h6" component="span" sx={{ m: 'auto 0', fontFamily: 'Inter' }}
                                     >
-                                        {formData.fecha_creacion}
-                                    </TimelineOppositeContent>
-                                    <TimelineSeparator>
-                                        <TimelineConnector />
-                                        <TimelineDot color="primary">
-                                            <ClockIcon />
-                                        </TimelineDot>
-                                        <TimelineConnector />
-                                    </TimelineSeparator>
-                                    <TimelineContent sx={{ py: '12px', px: 2 }}>
-                                        <Typography variant="h6" component="span" sx={{ m: 'auto 0', fontFamily: 'Inter' }}
-                                        >
-                                            Creado por
-                                        </Typography>
-                                        <Typography sx={{ m: 'auto 0', fontFamily: 'Inter' }}> {formData.usuario_creacion}</Typography>
-                                    </TimelineContent>
-                                </TimelineItem>
+                                        Creado por
+                                    </Typography>
+                                    <Typography sx={{ m: 'auto 0', fontFamily: 'Inter' }}> {formData.usuario_creacion}</Typography>
+                                </TimelineContent>
+                            </TimelineItem>
 
-                                <TimelineItem>
-                                    <TimelineOppositeContent
-                                        sx={{ m: 'auto 0' }}
-                                        align="right"
-                                        variant="body2"
-                                        color="text.secondary"
-                                    >
-                                        {formData.fecha_validacion}
-                                    </TimelineOppositeContent>
-                                    <TimelineSeparator>
-                                        <TimelineConnector />
-                                        <TimelineDot color="primary">
-                                            <ClockIcon />
-                                        </TimelineDot>
-                                        <TimelineConnector />
-                                    </TimelineSeparator>
-                                    <TimelineContent sx={{ py: '12px', px: 2 }}>
-                                        <Typography variant="h6" component="span" sx={{ m: 'auto 0', fontFamily: 'Inter' }}>
-                                            Validado por
-                                        </Typography>
-                                        <Typography sx={{ m: 'auto 0', fontFamily: 'Inter' }}>
-                                            {formData.usuario_valido}
-                                        </Typography>
-                                    </TimelineContent>
-                                </TimelineItem>
+                            <TimelineItem>
+                                <TimelineOppositeContent
+                                    sx={{ m: 'auto 0' }}
+                                    align="right"
+                                    variant="body2"
+                                    color="text.secondary"
+                                >
+                                    {formData.fecha_validacion}
+                                </TimelineOppositeContent>
+                                <TimelineSeparator>
+                                    <TimelineConnector />
+                                    <TimelineDot color="primary">
+                                        <ClockIcon />
+                                    </TimelineDot>
+                                    <TimelineConnector />
+                                </TimelineSeparator>
+                                <TimelineContent sx={{ py: '12px', px: 2 }}>
+                                    <Typography variant="h6" component="span" sx={{ m: 'auto 0', fontFamily: 'Inter' }}>
+                                        Validado por
+                                    </Typography>
+                                    <Typography sx={{ m: 'auto 0', fontFamily: 'Inter' }}>
+                                        {formData.usuario_valido}
+                                    </Typography>
+                                </TimelineContent>
+                            </TimelineItem>
 
-                                <TimelineItem>
-                                    <TimelineOppositeContent
-                                        sx={{ m: 'auto 0' }}
-                                        align="right"
-                                        variant="body2"
-                                        color="text.secondary"
-                                    >
-                                        {formData.fecha_archivado}
-                                    </TimelineOppositeContent>
-                                    <TimelineSeparator>
-                                        <TimelineConnector />
-                                        <TimelineDot color="primary">
-                                            <ClockIcon />
-                                        </TimelineDot>
-                                        <TimelineConnector />
-                                    </TimelineSeparator>
-                                    <TimelineContent sx={{ py: '12px', px: 2 }}>
-                                        <Typography variant="h6" component="span" sx={{ m: 'auto 0', fontFamily: 'Inter' }}>
-                                            Archivado por
-                                        </Typography>
-                                        <Typography sx={{ m: 'auto 0', fontFamily: 'Inter' }}>{formData.usuario_archivo}</Typography>
-                                    </TimelineContent>
-                                </TimelineItem>
-                            </Timeline>
+                            <TimelineItem>
+                                <TimelineOppositeContent
+                                    sx={{ m: 'auto 0' }}
+                                    align="right"
+                                    variant="body2"
+                                    color="text.secondary"
+                                >
+                                    {formData.fecha_archivado}
+                                </TimelineOppositeContent>
+                                <TimelineSeparator>
+                                    <TimelineConnector />
+                                    <TimelineDot color="primary">
+                                        <ClockIcon />
+                                    </TimelineDot>
+                                    <TimelineConnector />
+                                </TimelineSeparator>
+                                <TimelineContent sx={{ py: '12px', px: 2 }}>
+                                    <Typography variant="h6" component="span" sx={{ m: 'auto 0', fontFamily: 'Inter' }}>
+                                        Archivado por
+                                    </Typography>
+                                    <Typography sx={{ m: 'auto 0', fontFamily: 'Inter' }}>{formData.usuario_archivo}</Typography>
+                                </TimelineContent>
+                            </TimelineItem>
+                        </Timeline>
 
-                        </CardBody>
-                        <Divider />
-                        <CardFooter>
-                        </CardFooter>
-                    </Card>
-                </Grid>
-            </Grid >
-
-            <ListadoEmpresas open={openEmpresas} handleClose={cerrarEmpresas}></ListadoEmpresas>
-
-            <Validador id_acceso={id_acceso} estado_acceso={formData.estado_acceso} open={OpenValidador} handleClose={handleCloseValidador}>
-            </Validador>
-
-        </>
-    );
+                    </CardBody>
+                    <Divider />
+                    <CardFooter>
+                    </CardFooter>
+                </Card>
+            </Grid>
+        </Grid >
+        <ListadoEmpresas open={openEmpresas} handleClose={cerrarEmpresas}></ListadoEmpresas>
+        <Validador id_acceso={id_acceso} estado_acceso={formData.estado_acceso} open={OpenValidador} handleClose={handleCloseValidador}>
+        </Validador>
+    </>);
 };
 
 export default AccesoForm;

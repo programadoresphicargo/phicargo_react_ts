@@ -1,5 +1,5 @@
 import { FiAlertCircle } from 'react-icons/fi';
-import { Spinner } from '@nextui-org/react';
+import { Spinner } from "@heroui/react";
 import { useManeuverQueries } from '../hooks/useManeuverQueries';
 
 interface Props {

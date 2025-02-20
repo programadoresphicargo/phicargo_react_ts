@@ -1,4 +1,4 @@
-import { Card, CardBody } from '@nextui-org/react';
+import { Card, CardBody } from "@heroui/react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -8,10 +8,10 @@ import React, { useEffect, useMemo, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import AuthContext from '../modules/auth/context/AuthContext';
 import { Box } from '@mui/material';
-import { Button } from '@nextui-org/react';
+import { Button } from "@heroui/react";
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import { Chip } from '@nextui-org/react';
+import { Chip } from "@heroui/react";
 import CloseIcon from '@mui/icons-material/Close';
 import DetalleForm from './DetalleEvento';
 import Dialog from '@mui/material/Dialog';

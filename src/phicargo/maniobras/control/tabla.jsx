@@ -6,7 +6,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 import { Box } from '@mui/material';
-import { Chip } from '@nextui-org/react';
+import { Chip } from "@heroui/react";
 import {
   MaterialReactTable,
   useMaterialReactTable,

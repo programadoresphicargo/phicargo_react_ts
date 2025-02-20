@@ -1,4 +1,4 @@
-import { Button, ButtonProps } from '@nextui-org/react';
+import { Button, ButtonProps } from "@heroui/react";
 
 import { FaFileExcel } from 'react-icons/fa6';
 import { ReactNode } from 'react';

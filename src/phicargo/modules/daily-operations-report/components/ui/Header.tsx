@@ -1,6 +1,6 @@
 import 'rsuite/dist/rsuite-no-reset.min.css';
 
-import { Button, Checkbox } from '@nextui-org/react';
+import { Button, Checkbox } from "@heroui/react";
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Card from './Card';

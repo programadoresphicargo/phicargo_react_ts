@@ -2,7 +2,7 @@ import { useState } from "react";
 import { TextField, MenuItem, Select, InputLabel, FormControl, Grid } from "@mui/material";
 import axios from "axios";
 import { toast } from 'react-toastify';
-import { Button } from "@nextui-org/react";
+import { Button } from "@heroui/react";
 import { useAuthContext } from "@/phicargo/modules/auth/hooks";
 import odooApi from "@/phicargo/modules/core/api/odoo-api";
 

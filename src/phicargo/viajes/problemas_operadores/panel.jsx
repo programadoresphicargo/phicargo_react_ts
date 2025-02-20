@@ -1,7 +1,7 @@
 import React, { useState, useEffect, } from 'react';
 import Drawer from '@mui/material/Drawer';
-import { Card, CardHeader, CardBody, CardFooter, Avatar, AvatarGroup, AvatarIcon, Button } from "@nextui-org/react"
-import { CircularProgress } from "@nextui-org/progress";
+import { Card, CardHeader, CardBody, CardFooter, Avatar, AvatarGroup, AvatarIcon, Button } from "@heroui/react"
+import { CircularProgress } from "@heroui/progress";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';

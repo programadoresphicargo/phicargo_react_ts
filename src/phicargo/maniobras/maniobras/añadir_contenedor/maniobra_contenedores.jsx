@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 import AñadirContenedor from './modal_añadir_contenedor';
 import axios from 'axios';
-import { Button } from '@nextui-org/react';
+import { Button } from "@heroui/react";
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -12,7 +12,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { toast } from 'react-toastify';
-import { Card, CardBody } from '@nextui-org/react';
+import { Card, CardBody } from "@heroui/react";
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const ManiobraContenedores = ({ id_maniobra }) => {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
+import { Autocomplete, AutocompleteItem } from "@heroui/react";
 import TextField from '@mui/material/TextField';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 

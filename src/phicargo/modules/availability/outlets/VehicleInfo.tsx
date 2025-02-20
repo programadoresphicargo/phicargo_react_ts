@@ -6,7 +6,7 @@ import {
   Spinner,
   Tab,
   Tabs,
-} from '@nextui-org/react';
+} from "@heroui/react";
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 
 import { BsBusFrontFill } from 'react-icons/bs';

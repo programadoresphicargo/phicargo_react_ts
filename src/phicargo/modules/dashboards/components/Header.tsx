@@ -6,7 +6,7 @@ import {
   Select,
   SelectItem,
   SharedSelection,
-} from '@nextui-org/react';
+} from "@heroui/react";
 
 import { BiBuildings } from 'react-icons/bi';
 import { DateRangePicker } from 'rsuite';

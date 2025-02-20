@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Select, SelectItem } from "@nextui-org/react";
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Select, SelectItem } from "@heroui/react";
 import axios from "axios";
 import { toast } from 'react-toastify';
 import odooApi from "../modules/core/api/odoo-api";

@@ -16,8 +16,8 @@ import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import Swal from 'sweetalert2';
 import React, { useState, useEffect, useContext, useMemo } from 'react';
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/react";
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure } from "@nextui-org/react";
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@heroui/react";
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure } from "@heroui/react";
 import axios from 'axios';
 import Autocomplete from '@mui/material/Autocomplete';
 import Grid from '@mui/material/Grid';
@@ -32,7 +32,7 @@ import {
     useMaterialReactTable,
 } from 'material-react-table';
 import { width } from '@mui/system';
-import { Card, CardHeader, CardBody, CardFooter, Divider, Link, Image } from "@nextui-org/react";
+import { Card, CardHeader, CardBody, CardFooter, Divider, Link, Image } from "@heroui/react";
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -40,7 +40,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import DetalleForm from './DetalleEvento';
 import EntregaForm2 from './entregaForm';
-import { Chip } from '@nextui-org/react';
+import { Chip } from "@heroui/react";
 import odooApi from '../modules/core/api/odoo-api';
 const drawerWidth = 650;
 

@@ -4,8 +4,8 @@ import axios from "axios";
 import { toast } from 'react-toastify';
 import Stack from '@mui/material/Stack';
 import odooApi from "../modules/core/api/odoo-api";
-import { Input } from "@nextui-org/react";
-import { Button } from "@nextui-org/react";
+import { Input } from "@heroui/react";
+import { Button } from "@heroui/react";
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const OperadorForm = ({ id_operador, onClose }) => {

@@ -12,14 +12,14 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
-import { Card, CardBody, CardHeader } from '@nextui-org/react';
+import { Card, CardBody, CardHeader } from "@heroui/react";
 import CardActions from '@mui/material/CardActions';
 import PersistentDrawerRight from './Eventos';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { Box } from '@mui/material';
-import { Button } from '@nextui-org/react';
-import { Chip } from '@nextui-org/react';
+import { Button } from "@heroui/react";
+import { Chip } from "@heroui/react";
 
 import {
   MaterialReactTable,

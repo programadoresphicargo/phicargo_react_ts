@@ -1,5 +1,5 @@
 import React from "react";
-import { Tabs, Tab, Card, CardBody } from "@nextui-org/react";
+import { Tabs, Tab, Card, CardBody } from "@heroui/react";
 import Maniobras from "./tabla";
 import { CostosExtrasProvider } from "../context/context";
 import CENavBar from "../Navbar";

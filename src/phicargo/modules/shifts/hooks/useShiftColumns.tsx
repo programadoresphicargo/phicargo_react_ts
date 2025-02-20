@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { type MRT_ColumnDef } from 'material-react-table';
 import { Shift } from '../models';
-import { Chip } from '@nextui-org/react';
+import { Chip } from "@heroui/react";
 
 export const useShiftColumns = () => {
   const columns = useMemo<MRT_ColumnDef<Shift>[]>(

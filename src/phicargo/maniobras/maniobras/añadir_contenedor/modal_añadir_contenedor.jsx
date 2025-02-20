@@ -11,7 +11,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Select, SelectItem } from '@nextui-org/react';
+import { Select, SelectItem } from "@heroui/react";
 import MonthSelector from '@/mes';
 import YearSelector from '@/año';
 const { VITE_PHIDES_API_URL } = import.meta.env;

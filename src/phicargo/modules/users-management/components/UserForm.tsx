@@ -1,6 +1,6 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-import { Button } from '@nextui-org/react';
+import { Button } from "@heroui/react";
 import { CheckboxInput } from '../../core/components/inputs/CheckboxInput';
 import { EmailInput } from '../../core/components/inputs/EmailInput';
 import type { FullUser } from '../../auth/models';

@@ -4,7 +4,7 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-} from '@nextui-org/react';
+} from "@heroui/react";
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useMaintenanceRecord, useVehicles, useWorkshop } from '../hooks';
 import { useMemo, useState } from 'react';

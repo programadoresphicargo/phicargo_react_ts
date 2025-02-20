@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '@nextui-org/button';
+import { Button } from "@heroui/button";
 
 function BotonMapa({ latitud, longitud }) {
     const enlace = `https://www.google.com/maps?q=${latitud},${longitud}&hl=es-PY&gl=py&shorturl=1`;

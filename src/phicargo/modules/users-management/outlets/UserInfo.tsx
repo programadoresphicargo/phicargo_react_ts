@@ -6,7 +6,7 @@ import {
   Spinner,
   Tab,
   Tabs,
-} from '@nextui-org/react';
+} from "@heroui/react";
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 
 import UserForm from '../components/UserForm';

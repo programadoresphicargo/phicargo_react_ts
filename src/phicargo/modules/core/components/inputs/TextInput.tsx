@@ -1,7 +1,7 @@
 import { Controller, FieldValues } from 'react-hook-form';
 
 import { CustomInputProps } from '../../../core/types/global-types';
-import { Input } from '@nextui-org/react';
+import { Input } from "@heroui/react";
 
 export const TextInput = <T extends FieldValues>(
   props: CustomInputProps<T>,

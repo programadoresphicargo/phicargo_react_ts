@@ -6,7 +6,7 @@ import { mkConfig, generateCsv, download } from 'export-to-csv';
 import { Box } from '@mui/material';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { Component } from "react";
-import { Button, DatePicker, Chip } from '@nextui-org/react';
+import { Button, DatePicker, Chip } from "@heroui/react";
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import ResponsiveAppBar from '@/phicargo/saldos_contabilidad/Navbar';
 import { parseDate, getLocalTimeZone } from "@internationalized/date";

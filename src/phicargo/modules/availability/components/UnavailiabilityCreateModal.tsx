@@ -5,7 +5,7 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-} from '@nextui-org/react';
+} from "@heroui/react";
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { DatePickerInput } from '../../core/components/inputs/DatePickerInput';

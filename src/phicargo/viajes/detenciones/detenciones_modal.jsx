@@ -1,13 +1,13 @@
-import { Card, CardBody, CardHeader, Modal, ModalContent, ModalBody, ModalHeader } from '@nextui-org/react';
+import { Card, CardBody, CardHeader, Modal, ModalContent, ModalBody, ModalHeader } from "@heroui/react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import Box from '@mui/material/Box';
-import { Button } from '@nextui-org/button';
-import { Chip } from '@nextui-org/react';
-import { Link } from "@nextui-org/react";
+import { Button } from "@heroui/button";
+import { Chip } from "@heroui/react";
+import { Link } from "@heroui/react";
 import Slide from '@mui/material/Slide';
 import { Typography } from '@mui/material';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';

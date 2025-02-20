@@ -6,7 +6,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Box } from '@mui/material';
 import { Checkbox } from '@mui/material';
-import { Button } from '@nextui-org/react';
+import { Button } from "@heroui/react";
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 import {

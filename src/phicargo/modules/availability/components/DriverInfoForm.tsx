@@ -1,4 +1,4 @@
-import { Button, Card, CardBody, CardFooter, CardHeader } from '@nextui-org/react';
+import { Button, Card, CardBody, CardFooter, CardHeader } from "@heroui/react";
 import { Driver, DriverEdit } from '../models/driver-model';
 import { SubmitHandler, useForm } from 'react-hook-form';
 

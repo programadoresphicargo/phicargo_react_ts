@@ -5,14 +5,14 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
-import { Button } from '@nextui-org/button';
-import { Accordion, AccordionItem, Avatar } from "@nextui-org/react";
+import { Button } from "@heroui/button";
+import { Accordion, AccordionItem, Avatar } from "@heroui/react";
 import BotonMapa from '@/phicargo/viajes/estatus/botonMapa';
 import BotonDistanciaMapa from '@/phicargo/viajes/estatus/enlaceDistancia';
-import { CircularProgress } from "@nextui-org/react";
+import { CircularProgress } from "@heroui/react";
 import axios from 'axios';
 import { tiempoTranscurrido } from '../../funciones/tiempo';
-import { Card, CardHeader, CardBody, CardFooter, Chip } from '@nextui-org/react';
+import { Card, CardHeader, CardBody, CardFooter, Chip } from "@heroui/react";
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 
 function EstatusHistorialAgrupado({ id_reporte }) {

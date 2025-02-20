@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useContext } from 'react';
 import Drawer from '@mui/material/Drawer';
-import { CircularProgress } from "@nextui-org/progress";
+import { CircularProgress } from "@heroui/progress";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -9,8 +9,8 @@ import IconButton from '@mui/material/IconButton';
 import { Container } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { tiempoTranscurrido } from '../../funciones/tiempo';
-import { Card, CardBody, CardHeader, CardFooter } from '@nextui-org/react';
-import { Avatar } from '@nextui-org/react';
+import { Card, CardBody, CardHeader, CardFooter } from "@heroui/react";
+import { Avatar } from "@heroui/react";
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 
 export default function Notificaciones({ open, toggleDrawer }) {

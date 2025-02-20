@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Grid, Stack } from "@mui/material";
 import { toast } from "react-toastify";
 import odooApi from "../modules/core/api/odoo-api";
-import { Input, Button, DateInput, DatePicker, Chip } from "@nextui-org/react";
+import { Input, Button, DateInput, DatePicker, Chip } from "@heroui/react";
 import { useDateFormatter } from "@react-aria/i18n";
 import { parseDate, getLocalTimeZone, today } from "@internationalized/date";
-import { Progress } from "@nextui-org/react";
+import { Progress } from "@heroui/react";
 
 const SaldoForm = ({ id_cuenta, referencia, onClose }) => {
 

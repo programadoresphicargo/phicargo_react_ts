@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { TextField, MenuItem, InputLabel, FormControl, Grid } from "@mui/material";
-import { Button } from "@nextui-org/react";
+import { Button } from "@heroui/react";
 import axios from "axios";
 import { toast } from 'react-toastify';
 import Stack from '@mui/material/Stack';
@@ -23,11 +23,11 @@ import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useAuthContext } from "../modules/auth/hooks";
-import { Input } from "@nextui-org/react";
-import { Card, CardHeader, CardFooter, CardBody, Divider } from "@nextui-org/react";
-import { Textarea } from "@nextui-org/react";
+import { Input } from "@heroui/react";
+import { Card, CardHeader, CardFooter, CardBody, Divider } from "@heroui/react";
+import { Textarea } from "@heroui/react";
 import odooApi from "../modules/core/api/odoo-api";
-import { Select, SelectItem, Autocomplete, AutocompleteItem } from "@nextui-org/react"
+import { Select, SelectItem, Autocomplete, AutocompleteItem } from "@heroui/react"
 
 const DetalleForm = ({ id_evento, onClose }) => {
 

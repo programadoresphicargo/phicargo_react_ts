@@ -1,5 +1,5 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Button } from '@nextui-org/react';
+import { Button } from "@heroui/react";
 import { ReactNode } from 'react';
 
 interface Props {

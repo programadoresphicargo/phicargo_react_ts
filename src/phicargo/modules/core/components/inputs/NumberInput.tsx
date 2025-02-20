@@ -1,7 +1,7 @@
 import { Controller, FieldValues } from 'react-hook-form';
 
 import { CustomInputProps } from '../../types/global-types';
-import { Input } from '@nextui-org/react';
+import { Input } from "@heroui/react";
 import { ReactNode } from 'react';
 
 interface NumberInputProps<T extends FieldValues> extends CustomInputProps<T> {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useContext } from 'react';
 import { Box } from '@mui/material';
-import { Button, select } from "@nextui-org/react";
-import { Select, SelectItem } from "@nextui-org/react";
+import { Button, select } from "@heroui/react";
+import { Select, SelectItem } from "@heroui/react";
 import Slide from '@mui/material/Slide';
 import { InboxOutlined } from '@ant-design/icons';
 import { message, Upload } from 'antd';

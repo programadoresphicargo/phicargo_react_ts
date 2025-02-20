@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button } from '@nextui-org/react';
+import { Button } from "@heroui/react";
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -8,7 +8,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { InputOtp } from "@nextui-org/react";
+import { InputOtp } from "@heroui/react";
 import odooApi from '../modules/core/api/odoo-api';
 
 const Validador = ({ id_acceso, estado_acceso, open, handleClose }) => {

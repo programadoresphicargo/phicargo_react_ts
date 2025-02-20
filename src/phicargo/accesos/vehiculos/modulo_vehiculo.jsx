@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Button } from "@nextui-org/react";
+import { Button } from "@heroui/react";
 import Autocomplete from '@mui/material/Autocomplete';
-import { Card, CardBody } from "@nextui-org/react";
+import { Card, CardBody } from "@heroui/react";
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
@@ -9,7 +9,7 @@ import DialogActions from '@mui/material/DialogActions';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import axios from 'axios';
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/react";
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@heroui/react";
 import AccesoCompo from '../AccesoCompo';
 import { AccesoContext } from '../context';
 import RegistroVehiculos from './registros_vehiculos';

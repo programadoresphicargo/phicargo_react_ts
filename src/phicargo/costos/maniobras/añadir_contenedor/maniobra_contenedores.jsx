@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback, useContext } from 're
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 import AñadirContenedor from './modal_añadir_contenedor';
 import axios from 'axios';
-import { Button } from '@nextui-org/react';
+import { Button } from "@heroui/react";
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -12,7 +12,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { toast } from 'react-toastify';
-import { Card, CardBody } from '@nextui-org/react';
+import { Card, CardBody } from "@heroui/react";
 import { CostosExtrasContext } from '../../context/context';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { ViajeContext } from '@/phicargo/viajes/context/viajeContext';

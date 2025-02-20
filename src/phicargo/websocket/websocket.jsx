@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import { toast } from "react-toastify";
 import audioFile from '../../assets/audio/estatus_operador.mp3';
 import audioDetenciones from '../../assets/audio/detencion.mp3';
 import { useAuthContext } from "../modules/auth/hooks";
-import { user } from "@nextui-org/react";
+import { user } from "@heroui/react";
+import { addToast } from "@heroui/react";
 const { VITE_WEBSOCKET_SERVER } = import.meta.env;
 
 const WebSocketWithToast = () => {
@@ -57,7 +57,11 @@ const WebSocketWithToast = () => {
 
         webSocket.onopen = () => {
             const message = "Conectado al servidor WebSocket";
-            toast.info(message, { autoClose: 3000 });
+            addToast({
+                title: message,
+                color: 'primary',
+                variant: 'solid'
+            });
             speakMessage(message);
             console.log("Conexión WebSocket", message);
         };
@@ -76,7 +80,11 @@ const WebSocketWithToast = () => {
 
                 console.log(messageType);
                 if (messageType == 'detencion') {
-                    toast.success(`Detención: ${message}`, { autoClose: 5000 });
+                    addToast({
+                        title: message,
+                        color: 'danger',
+                        variant: 'solid'
+                    });
                     //showPushNotification(`Nueva alerta: ${message}`);
                     if (audioDet.current) {
                         audioDet.current.play();
@@ -84,7 +92,11 @@ const WebSocketWithToast = () => {
                     //speakMessage(message);
                     return;
                 } else {
-                    toast.success(`Notificación: ${message}`, { autoClose: 5000 });
+                    addToast({
+                        title: message,
+                        color: 'success',
+                        variant: 'solid'
+                    });
                     //speakMessage(message);
                     showPushNotification(`Nueva alerta: ${message}`);
                 }

@@ -9,7 +9,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 import Viaje from '../viaje';
 import { Box } from '@mui/material';
-import { Chip } from '@nextui-org/react';
+import { Chip } from "@heroui/react";
 import {
   MaterialReactTable,
   useMaterialReactTable,

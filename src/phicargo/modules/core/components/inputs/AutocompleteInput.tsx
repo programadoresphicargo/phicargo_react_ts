@@ -1,4 +1,4 @@
-import { Autocomplete, AutocompleteItem } from '@nextui-org/react';
+import { Autocomplete, AutocompleteItem } from "@heroui/react";
 import { Controller, FieldValues } from 'react-hook-form';
 import { CustomInputProps, SelectItem } from '../../../core/types/global-types';
 

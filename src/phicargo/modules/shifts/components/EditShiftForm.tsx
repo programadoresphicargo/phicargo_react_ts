@@ -1,7 +1,7 @@
 import { Shift, ShiftEdit } from '../models';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-import { Button } from '@nextui-org/react';
+import { Button } from "@heroui/react";
 import { DatePickerInput } from '../../core/components/inputs/DatePickerInput';
 import { DriverSearchInput } from '../../core/components/inputs/DriverSearchInput';
 import { TextareaInput } from '../../core/components/inputs/TextareaInput';

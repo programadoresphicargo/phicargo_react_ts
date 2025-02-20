@@ -1,7 +1,7 @@
 import { Controller, FieldValues } from 'react-hook-form';
 
 import { CustomInputProps } from '../../types/global-types';
-import { Textarea } from '@nextui-org/react';
+import { Textarea } from "@heroui/react";
 
 interface TextareaInputProps<T extends FieldValues>
   extends CustomInputProps<T> {

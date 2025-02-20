@@ -5,7 +5,7 @@ import {
 } from 'material-react-table';
 import MonitoreoNavbar from '../../monitoreo/Navbar';
 import Box from '@mui/material/Box';
-import { Button } from '@nextui-org/react'
+import { Button } from "@heroui/react"
 import { DatePicker } from 'antd';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 const { RangePicker } = DatePicker;

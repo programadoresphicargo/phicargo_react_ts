@@ -4,7 +4,7 @@ import {
   ModalContent,
   ModalHeader,
   Spinner,
-} from '@nextui-org/react';
+} from "@heroui/react";
 
 import { Driver } from '../models/driver-model';
 import DriverUnavailabilityServiceApi from '../services/driver-unavailability-service';

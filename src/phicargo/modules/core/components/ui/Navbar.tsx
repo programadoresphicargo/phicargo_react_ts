@@ -8,7 +8,7 @@ import {
   NavbarMenuItem,
   NavbarMenuToggle,
   Navbar as NextUiNavbar,
-} from '@nextui-org/react';
+} from "@heroui/react";
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AvatarProfile from './AvatarProfile';

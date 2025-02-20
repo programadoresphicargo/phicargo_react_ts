@@ -1,4 +1,4 @@
-import { DateRangePicker, Select, SelectItem } from '@nextui-org/react';
+import { DateRangePicker, Select, SelectItem } from "@heroui/react";
 import {
     MaterialReactTable,
     useMaterialReactTable,
@@ -7,7 +7,7 @@ import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { getLocalTimeZone, parseDate } from "@internationalized/date";
 
 import { Box } from '@mui/material';
-import { Button } from '@nextui-org/react';
+import { Button } from "@heroui/react";
 import { CostosExtrasContext } from '../../context/context';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';

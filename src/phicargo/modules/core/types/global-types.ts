@@ -8,7 +8,7 @@ import type {
   MRT_SortingState,
 } from 'material-react-table';
 
-import { SlotsToClasses } from '@nextui-org/react';
+import { SlotsToClasses } from "@heroui/react";
 
 export type OnError = {
   error: string | null;

@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { Button, Input, Select, SelectItem } from "@nextui-org/react";
+import { Button, Input, Select, SelectItem } from "@heroui/react";
 import { toast } from 'react-toastify';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 

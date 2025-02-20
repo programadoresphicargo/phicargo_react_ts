@@ -1,5 +1,5 @@
 import { IconButton, Tooltip } from '@mui/material';
-import { Modal, ModalBody, ModalContent, ModalHeader } from '@nextui-org/react';
+import { Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/react";
 
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { ShiftQueueTable } from '../components/ShiftQueueTable';

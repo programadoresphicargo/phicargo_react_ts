@@ -1,6 +1,6 @@
 import { Controller, FieldValues } from 'react-hook-form';
 import { CustomInputProps, SelectItem } from '../../../core/types/global-types';
-import { Select, SelectItem as SelectItemNextUI } from '@nextui-org/react';
+import { Select, SelectItem as SelectItemNextUI } from "@heroui/react";
 
 interface SelectInputProps<T extends FieldValues> extends CustomInputProps<T> {
   items: SelectItem[];

@@ -1,5 +1,5 @@
 import React from "react";
-import { Tabs, Tab, Card, CardBody } from "@nextui-org/react";
+import { Tabs, Tab, Card, CardBody } from "@heroui/react";
 import Maniobras from "./tabla";
 import Typography from '@mui/material/Typography';
 import NavbarViajes from "../viajes/navbar";

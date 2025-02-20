@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useContext } from 'react';
 import { Box } from '@mui/material';
 import { ViajeContext } from '../../../viajes/context/viajeContext';
-import { Button } from '@nextui-org/button';
+import { Button } from "@heroui/button";
 import {
     MaterialReactTable,
     useMaterialReactTable,
