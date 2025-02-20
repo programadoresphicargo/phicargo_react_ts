@@ -25,20 +25,7 @@ const pages = [
     { name: 'DISPONIBILIDAD', path: '/disponibilidad' },
 ];
 
-const useStyles = makeStyles((theme) => ({
-    appBar: {
-        backgroundImage: 'url(https://phides.phicargo-sistemas.online/phicargo/img/fondo7.svg)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        height: '75px',
-    },
-    title: {
-        flexGrow: 1,
-    },
-}));
-
 function ManiobrasNavBar() {
-    const classes = useStyles();
     const navigate = useNavigate();
 
     const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -58,7 +45,11 @@ function ManiobrasNavBar() {
     return (
         <>
             <WebSocketWithToast></WebSocketWithToast>
-            <AppBar position="static" elevation={0} className={classes.appBar}>
+            <AppBar position="static" elevation={3}
+                sx={{
+                    background: 'linear-gradient(90deg, #0b2149, #002887)',
+                    padding: '0 16px'
+                }}>
                 <Container maxWidth="xl">
                     <Toolbar disableGutters>
 
@@ -79,7 +70,7 @@ function ManiobrasNavBar() {
                             style={{
                                 width: '175px',
                                 height: '60px',
-                                //filter: 'brightness(0) invert(1)' // Esto hará que la imagen sea blanca
+                                filter: 'brightness(0) invert(1)' // Esto hará que la imagen sea blanca
                             }}
                         />
 
@@ -125,7 +116,7 @@ function ManiobrasNavBar() {
                                 <Button
                                     key={name}
                                     onClick={handleCloseNavMenu}
-                                    sx={{ my: 2, color: 'black', display: 'block', fontFamily: 'Inter' }}
+                                    sx={{ my: 2, color: 'white', display: 'block', fontFamily: 'Inter' }}
                                     component={Link}
                                     to={path}
                                 >
