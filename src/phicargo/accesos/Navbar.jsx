@@ -16,7 +16,11 @@ function ResponsiveAppBar() {
     };
 
     return (
-        <AppBar position="static" elevation={0}>
+        <AppBar position="static" elevation={0}
+            sx={{
+                background: 'linear-gradient(90deg, #0b2149, #002887)',
+                padding: '0 16px'
+            }}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
 

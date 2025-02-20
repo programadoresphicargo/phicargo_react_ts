@@ -15,7 +15,11 @@ function ResponsiveAppBar() {
     };
 
     return (
-        <AppBar position="static" elevation={1}>
+        <AppBar position="static"
+            sx={{
+                background: 'linear-gradient(90deg, #0b2149, #002887)',
+                padding: '0 16px'
+            }}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
 
@@ -33,8 +37,8 @@ function ResponsiveAppBar() {
                         src="https://phi-cargo.com/wp-content/uploads/2021/05/logo-phicargo-vertical.png"
                         alt="Descripción de la imagen"
                         style={{
-                            width: '200px',
-                            height: '70px',
+                            width: '170px',
+                            height: '60px',
                             filter: 'brightness(0) invert(1)' // Esto hará que la imagen sea blanca
                         }}
                     />

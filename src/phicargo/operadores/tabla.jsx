@@ -130,7 +130,11 @@ const Operadores = ({ estado }) => {
           flexWrap: 'wrap',
         }}
       >
-        <h1 className='text-primary'>Cuentas app de operadores</h1>
+        <h1
+          className="tracking-tight font-semibold lg:text-2xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
+        >
+          Cuentas de operadores
+        </h1>
       </Box>
     ),
   });
