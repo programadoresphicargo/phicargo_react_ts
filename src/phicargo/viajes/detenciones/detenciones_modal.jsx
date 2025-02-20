@@ -14,23 +14,23 @@ import { toast } from 'react-toastify';
 
 const DetencionesViajesActivos = ({ isOpen, close }) => {
 
-  const [data2, setData2] = useState([]);
-  const [isLoading3, setLoading3] = React.useState(false);
+  const [data, setData] = useState([]);
+  const [isLoading, setLoading] = React.useState(false);
 
-  const getEstatus = async () => {
+  const getDetenciones = async () => {
     try {
-      setLoading3(true);
+      setLoading(true);
       const response = await odooApi.get('/detenciones/detenciones_viajes_activos/');
-      setData2(response.data);
-      setLoading3(false);
+      setData(response.data);
+      setLoading(false);
     } catch (error) {
-      setLoading3(false);
+      setLoading(false);
       console.error('Error al obtener los datos:', error);
     }
   };
 
   useEffect(() => {
-    getEstatus();
+    getDetenciones();
   }, []);
 
   const columns = [
@@ -58,28 +58,18 @@ const DetencionesViajesActivos = ({ isOpen, close }) => {
     },
     {
       accessorKey: "ultima_detencion",
-      header: "Velocidad Inicio",
+      header: "Latitud",
       Cell: ({ cell }) => {
         const detenciones = cell.getValue();
-        return detenciones.length > 0 ? `${detenciones[0].speed_inicio_detenido} km/h` : "Sin datos";
+        return detenciones.length > 0 ? `${detenciones[0].lat_inicio_detenido}` : "Sin datos";
       },
     },
     {
       accessorKey: "ultima_detencion",
-      header: "Reinicio Detención",
+      header: "Longitud",
       Cell: ({ cell }) => {
         const detenciones = cell.getValue();
-        return detenciones.length > 0
-          ? new Date(detenciones[0].recorded_at_reinicio).toLocaleString("es-MX")
-          : "Sin datos";
-      },
-    },
-    {
-      accessorKey: "ultima_detencion",
-      header: "Velocidad Reinicio",
-      Cell: ({ cell }) => {
-        const detenciones = cell.getValue();
-        return detenciones.length > 0 ? `${detenciones[0].speed_reinicio} km/h` : "Sin datos";
+        return detenciones.length > 0 ? `${detenciones[0].lon_inicio_detenido}` : "Sin datos";
       },
     },
     {
@@ -87,22 +77,27 @@ const DetencionesViajesActivos = ({ isOpen, close }) => {
       header: "Minutos Detenido",
       Cell: ({ cell }) => {
         const detenciones = cell.getValue();
-        return detenciones.length > 0 ? detenciones[0].minutos_detenido.toFixed(2) : "Sin datos";
+        return (
+          <div style={{ textAlign: "right", width: "100%" }}>
+            {detenciones.length > 0 ? detenciones[0].minutos_detenido.toFixed(2) : "Sin datos"}
+          </div>
+        );
       },
     },
   ];
 
   const table = useMaterialReactTable({
     columns,
-    data: data2,
+    data,
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
-    state: { isLoading: isLoading3 },
+    state: { isLoading: isLoading },
     enableColumnPinning: true,
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
     initialState: {
+      showProgressBars: isLoading,
       density: 'compact',
       pagination: { pageSize: 80 },
     },
@@ -149,6 +144,7 @@ const DetencionesViajesActivos = ({ isOpen, close }) => {
           flexWrap: 'wrap',
         }}
       >
+        <Button color='warning' className='text-white' onPress={() => getDetenciones()}>Actualizar</Button>
       </Box>
     )
   });
@@ -156,7 +152,7 @@ const DetencionesViajesActivos = ({ isOpen, close }) => {
   return (
     <>
       <Modal isOpen={isOpen} size='5xl' onClose={close} scrollBehavior='outside'>
-        <ModalContent>
+        <ModalContent style={{ maxWidth: "1700px", width: "120%" }}>
           {(onClose) => (
             <>
               <ModalHeader className='bg-warning'>
