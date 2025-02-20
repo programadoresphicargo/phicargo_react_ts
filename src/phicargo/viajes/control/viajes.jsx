@@ -257,7 +257,7 @@ const ViajesActivos = ({ }) => {
   const ConsultarVelocidad = async (id_viaje, vehicle_id) => {
     try {
       const response = await odooApi.get('/detenciones/consultar_detencion/' + vehicle_id);
-      if (response.data[0].speed == 0) {
+      if (response.data[0].detenido_mas_15_min == true) {
         console.log('entro');
         setBlinkRows((prev) => ({ ...prev, [id_viaje]: true }));
       } else {
@@ -309,11 +309,11 @@ const ViajesActivos = ({ }) => {
         ActualizarIDViaje(row.original.id_viaje);
       },
       sx: {
-        backgroundColor: blinkRows[row.original.id_viaje] ? '#FFF5CC' : 'transparent',
+        backgroundColor: blinkRows[row.original.id_viaje] ? '#f11461' : 'transparent',
         animation: blinkRows[row.original.id_viaje] ? 'blink 1s infinite alternate' : 'none',
         '@keyframes blink': {
-          '0%': { backgroundColor: '#FFF5CC' },
-          '100%': { backgroundColor: '#FFD700' }
+          '0%': { backgroundColor: '#f11461' },
+          '100%': { backgroundColor: '#fbdaf1' }
         }
       },
     }),
