@@ -78,6 +78,19 @@ const DetencionesViajesActivos = ({ isOpen, close }) => {
     {
       accessorKey: "recorded_at_inicio_detenido",
       header: "Inicio Detención",
+      Cell: ({ cell }) => {
+        const fecha = cell.getValue();
+        return fecha
+          ? new Date(fecha).toLocaleString("es-MX", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            hour: "numeric",
+            minute: "2-digit",
+            hour12: true,
+          })
+          : "Sin datos";
+      },
     },
     {
       accessorKey: "latitude",
@@ -90,6 +103,36 @@ const DetencionesViajesActivos = ({ isOpen, close }) => {
     {
       accessorKey: "tiempo_detenido",
       header: "Tiempo detenido",
+    },
+    {
+      header: "Mapa", // Nueva columna con el botón
+      Cell: ({ row }) => {
+        const lat = row.original.latitude;
+        const lng = row.original.longitude;
+
+        return lat && lng ? (
+          <a
+            href={`https://www.google.com/maps?q=${lat},${lng}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <button
+              style={{
+                backgroundColor: "#007bff",
+                color: "white",
+                border: "none",
+                padding: "5px 10px",
+                borderRadius: "5px",
+                cursor: "pointer",
+              }}
+            >
+              Ver en Mapa
+            </button>
+          </a>
+        ) : (
+          "Sin datos"
+        );
+      },
     },
   ];
 
