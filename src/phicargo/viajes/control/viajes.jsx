@@ -142,6 +142,16 @@ const ViajesActivos = ({ }) => {
       {
         accessorKey: 'vehiculo',
         header: 'Vehiculo',
+        Cell: ({ row }) => {
+          const id_viaje = row.original.id_viaje;
+          const vehiculo = row.original.vehiculo;
+
+          return (
+            <Chip color={blinkRows[id_viaje] ? 'danger' : ''} size='sm'>
+              {vehiculo}
+            </Chip>
+          );
+        },
       },
       {
         accessorKey: 'operador',
@@ -307,14 +317,6 @@ const ViajesActivos = ({ }) => {
       onClick: ({ event }) => {
         handleClickOpen();
         ActualizarIDViaje(row.original.id_viaje);
-      },
-      sx: {
-        backgroundColor: blinkRows[row.original.id_viaje] ? '#f11461' : 'transparent',
-        animation: blinkRows[row.original.id_viaje] ? 'blink 3s infinite alternate' : 'none',
-        '@keyframes blink': {
-          '0%': { backgroundColor: '#f11461' },
-          '100%': { backgroundColor: '#fbdaf1' }
-        }
       },
     }),
     muiTableHeadCellProps: {
