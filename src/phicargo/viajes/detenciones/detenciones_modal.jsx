@@ -23,7 +23,7 @@ const DetencionesViajesActivos = ({ isOpen, close }) => {
     const ahora = new Date().toLocaleTimeString();
     try {
       setLoading(true);
-      toast.success("Obteniendo detenciones, espere un segundo...");
+      toast.info("Obteniendo detenciones, espere un segundo...");
       const response = await odooApi.get("/detenciones/detenciones_viajes_activos/");
       setData(response.data);
       setUltimaActualizacion(ahora);
@@ -179,7 +179,7 @@ const DetencionesViajesActivos = ({ isOpen, close }) => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 160px)',
+        maxHeight: 'calc(100vh - 250px)',
       },
     },
     muiTableBodyCellProps: ({ row }) => ({
