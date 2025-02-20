@@ -50,8 +50,8 @@ const DetencionesViajesActivos = ({ isOpen, close }) => {
       header: "Vehículo",
     },
     {
-      accessorKey: "placas",
-      header: "Placas",
+      accessorKey: "operador",
+      header: "Operador",
     },
     {
       accessorKey: "x_status_viaje",
