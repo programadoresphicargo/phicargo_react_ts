@@ -82,7 +82,7 @@ const DetencionesViajesActivos = ({ isOpen, close }) => {
       },
     },
     {
-      accessorKey: "recorded_at_inicio_detenido",
+      accessorKey: "recorded_at_inicio",
       header: "Inicio Detención",
       Cell: ({ cell }) => {
         const fecha = cell.getValue();
@@ -179,7 +179,7 @@ const DetencionesViajesActivos = ({ isOpen, close }) => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 250px)',
+        maxHeight: 'calc(100vh - 300px)',
       },
     },
     muiTableBodyCellProps: ({ row }) => ({
