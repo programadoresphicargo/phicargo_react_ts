@@ -363,7 +363,7 @@ const ViajesActivos = ({ }) => {
         >Actualizar tablero
         </Button>
 
-        <Button color='warning' className='text-white' startContent={<i class="bi bi-sign-stop"></i>} onPress={()=>handleOpen()}>Unidades detenidas</Button>
+        <Button color='danger' className='text-white' startContent={<i class="bi bi-sign-stop"></i>} onPress={()=>handleOpen()}>Unidades detenidas</Button>
 
       </Box>
     ),

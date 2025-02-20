@@ -17,27 +17,33 @@ const DetencionesViajesActivos = ({ isOpen, close }) => {
 
   const [data, setData] = useState([]);
   const [isLoading, setLoading] = React.useState(false);
+  const [ultimaActualizacion, setUltimaActualizacion] = useState(null);
 
   const getDetenciones = async () => {
+    const ahora = new Date().toLocaleTimeString();
     try {
       setLoading(true);
-      const response = await odooApi.get('/detenciones/detenciones_viajes_activos/');
+      toast.success("Obteniendo detenciones, espere un segundo...");
+      const response = await odooApi.get("/detenciones/detenciones_viajes_activos/");
       setData(response.data);
-      setLoading(false);
+      setUltimaActualizacion(ahora);
     } catch (error) {
+      console.error("Error al obtener los datos:", error);
+    } finally {
       setLoading(false);
-      console.error('Error al obtener los datos:', error);
     }
   };
 
   useEffect(() => {
-    getDetenciones();
-  }, []);
+    if (isOpen) {
+      getDetenciones();
+    }
+  }, [isOpen]);
 
   const columns = [
     {
       accessorKey: "name",
-      header: "ID Viaje",
+      header: "Referencia viaje",
     },
     {
       accessorKey: "vehiculo",
@@ -102,7 +108,7 @@ const DetencionesViajesActivos = ({ isOpen, close }) => {
     },
     {
       accessorKey: "tiempo_detenido",
-      header: "Tiempo detenido",
+      header: "Tiempo detenido HHH:mm",
     },
     {
       header: "Mapa",
@@ -194,7 +200,14 @@ const DetencionesViajesActivos = ({ isOpen, close }) => {
           flexWrap: 'wrap',
         }}
       >
-        <Button color='warning' className='text-white' onPress={() => getDetenciones()}>Actualizar</Button>
+        <div>
+          <Button color="danger" className="text-white" onPress={getDetenciones} startContent={<i class="bi bi-arrow-clockwise"></i>}>
+            Actualizar detenciones
+          </Button>
+          {ultimaActualizacion && (
+            <p className='mt-3'>Última actualización: {ultimaActualizacion}</p>
+          )}
+        </div>
       </Box>
     )
   });
@@ -205,7 +218,7 @@ const DetencionesViajesActivos = ({ isOpen, close }) => {
         <ModalContent style={{ maxWidth: "1700px", width: "120%" }}>
           {(onClose) => (
             <>
-              <ModalHeader className='bg-warning'>
+              <ModalHeader className='bg-danger'>
                 <h1 className='text-white'>Tiempos de Detención</h1>
               </ModalHeader>
               <ModalBody>
