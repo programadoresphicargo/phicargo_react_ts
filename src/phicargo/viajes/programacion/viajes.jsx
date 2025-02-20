@@ -235,7 +235,11 @@ const ViajesProgramados = ({ }) => {
           alignItems: 'center',
         }}
       >
-        <h1 className='text-primary'>Programación de Viajes</h1>
+        <h1
+          className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
+        >
+          Programación de viajes
+        </h1>
         <select value={mes} onChange={handleChange} className='form-control'>
           <option value="">Seleccione un mes</option>
           <option value="1">Enero</option>

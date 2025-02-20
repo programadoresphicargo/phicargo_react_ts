@@ -58,7 +58,11 @@ function NavbarViajes() {
 
     return (
         <>
-            <AppBar elevation={0} position="static" sx={{ backgroundColor: '#353535' }}>
+            <AppBar elevation={0} position="static"
+                sx={{
+                    background: 'linear-gradient(90deg, #0b2149, #002887)',
+                    padding: '0 16px'
+                }}>
                 <Container maxWidth="xl">
                     <Toolbar disableGutters>
 

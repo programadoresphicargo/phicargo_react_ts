@@ -345,7 +345,11 @@ const ViajesActivos = ({ }) => {
           flexWrap: 'wrap',
         }}
       >
-        <h1 className='text-primary'>Gestión de viajes</h1>
+        <h1
+          className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
+        >
+          Viajes activos
+        </h1>
         <Button
           className='text-white'
           startContent={<i class="bi bi-send-plus-fill"></i>}
@@ -363,7 +367,7 @@ const ViajesActivos = ({ }) => {
         >Actualizar tablero
         </Button>
 
-        <Button color='danger' className='text-white' startContent={<i class="bi bi-sign-stop"></i>} onPress={()=>handleOpen()}>Unidades detenidas</Button>
+        <Button color='danger' className='text-white' startContent={<i class="bi bi-sign-stop"></i>} onPress={() => handleOpen()}>Unidades detenidas</Button>
 
       </Box>
     ),
