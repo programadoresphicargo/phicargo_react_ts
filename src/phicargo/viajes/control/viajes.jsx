@@ -310,7 +310,7 @@ const ViajesActivos = ({ }) => {
       },
       sx: {
         backgroundColor: blinkRows[row.original.id_viaje] ? '#f11461' : 'transparent',
-        animation: blinkRows[row.original.id_viaje] ? 'blink 1s infinite alternate' : 'none',
+        animation: blinkRows[row.original.id_viaje] ? 'blink 3s infinite alternate' : 'none',
         '@keyframes blink': {
           '0%': { backgroundColor: '#f11461' },
           '100%': { backgroundColor: '#fbdaf1' }
