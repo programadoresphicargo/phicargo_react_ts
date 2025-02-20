@@ -6,6 +6,7 @@ import {
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import Box from '@mui/material/Box';
 import { Button } from '@nextui-org/button';
+import { Chip } from '@nextui-org/react';
 import { Link } from "@nextui-org/react";
 import Slide from '@mui/material/Slide';
 import { Typography } from '@mui/material';
@@ -47,42 +48,48 @@ const DetencionesViajesActivos = ({ isOpen, close }) => {
       header: "Placas",
     },
     {
-      accessorKey: "ultima_detencion",
-      header: "Inicio Detención",
+      accessorKey: "x_status_viaje",
+      header: "Estado",
       Cell: ({ cell }) => {
-        const detenciones = cell.getValue();
-        return detenciones.length > 0
-          ? new Date(detenciones[0].recorded_at_inicio_detenido).toLocaleString("es-MX")
-          : "Sin datos";
-      },
-    },
-    {
-      accessorKey: "ultima_detencion",
-      header: "Latitud",
-      Cell: ({ cell }) => {
-        const detenciones = cell.getValue();
-        return detenciones.length > 0 ? `${detenciones[0].lat_inicio_detenido}` : "Sin datos";
-      },
-    },
-    {
-      accessorKey: "ultima_detencion",
-      header: "Longitud",
-      Cell: ({ cell }) => {
-        const detenciones = cell.getValue();
-        return detenciones.length > 0 ? `${detenciones[0].lon_inicio_detenido}` : "Sin datos";
-      },
-    },
-    {
-      accessorKey: "ultima_detencion",
-      header: "Minutos Detenido",
-      Cell: ({ cell }) => {
-        const detenciones = cell.getValue();
+        const estatus_viaje = cell.getValue();
+        let badgeClass = '';
+
+        if (estatus_viaje === 'ruta') {
+          badgeClass = 'primary';
+        } else if (estatus_viaje === 'planta') {
+          badgeClass = 'success';
+        } else if (estatus_viaje === 'retorno') {
+          badgeClass = 'warning';
+        } else if (estatus_viaje === 'resguardo') {
+          badgeClass = 'secondary';
+        }
+
         return (
-          <div style={{ textAlign: "right", width: "100%" }}>
-            {detenciones.length > 0 ? detenciones[0].minutos_detenido.toFixed(2) : "Sin datos"}
-          </div>
+          <Chip
+            color={badgeClass}
+            size="sm"
+            className="text-white"
+          >
+            {estatus_viaje.charAt(0).toUpperCase() + estatus_viaje.slice(1)}
+          </Chip>
         );
       },
+    },
+    {
+      accessorKey: "recorded_at_inicio_detenido",
+      header: "Inicio Detención",
+    },
+    {
+      accessorKey: "latitude",
+      header: "Latitud",
+    },
+    {
+      accessorKey: "longitude",
+      header: "Longitud",
+    },
+    {
+      accessorKey: "tiempo_detenido",
+      header: "Tiempo detenido",
     },
   ];
 
