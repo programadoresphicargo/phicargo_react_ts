@@ -179,7 +179,7 @@ const DetencionesViajesActivos = ({ isOpen, close }) => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 200px)',
+        maxHeight: 'calc(100vh - 160px)',
       },
     },
     muiTableBodyCellProps: ({ row }) => ({
