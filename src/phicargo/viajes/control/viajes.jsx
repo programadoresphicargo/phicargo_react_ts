@@ -34,6 +34,7 @@ const ViajesActivos = ({ }) => {
   const [open, setOpen] = React.useState(false);
   const [openMasivo, setMasivoOpen] = React.useState(false);
   const { id_viaje, viaje, getViaje, loading, error, ActualizarIDViaje } = useContext(ViajeContext);
+  const [blinkRows, setBlinkRows] = useState({});
 
   useEffect(() => {
     getViaje(id_viaje);
@@ -146,9 +147,34 @@ const ViajesActivos = ({ }) => {
         Cell: ({ row }) => {
           const id_viaje = row.original.id_viaje;
           const vehiculo = row.original.vehiculo;
+          const vehicle_id = row.original.vehicle_id; // Asegúrate de que esté disponible
+          const [color, setColor] = React.useState('secondary');
+
+          React.useEffect(() => {
+            const consultarDetencion = async () => {
+              try {
+                const response = await odooApi.get('/detenciones/consultar_detencion/' + vehicle_id);
+
+                if (response.data && response.data.length > 0) {
+                  if (response.data[0].detenido_mas_15_min === true) {
+                    setColor('danger');
+                  } else {
+                    setColor('default');
+                  }
+                } else {
+                  setColor('default');
+                }
+              } catch (error) {
+                console.error('Error en la petición:', error);
+                setColor('default');
+              }
+            };
+
+            consultarDetencion();
+          }, [vehicle_id, data]); 
 
           return (
-            <Chip color={blinkRows[id_viaje] == true ? 'danger' : 'white'} size='sm'>
+            <Chip color={color} size="sm">
               {vehiculo}
             </Chip>
           );
@@ -257,10 +283,8 @@ const ViajesActivos = ({ }) => {
     [],
   );
 
-  const [blinkRows, setBlinkRows] = useState({});
-
   useEffect(() => {
-    if (data.length > 0) {
+    if (data.length > 1) {
       data.forEach((row) => ConsultarVelocidad(row.id_viaje, row.vehicle_id));
     }
   }, [data]);
@@ -271,17 +295,13 @@ const ViajesActivos = ({ }) => {
 
       if (response.data && response.data.length > 0) {
         if (response.data[0].detenido_mas_15_min === true) {
-          console.log('entro');
           setBlinkRows((prev) => ({ ...prev, [id_viaje]: true }));
         } else {
-          console.log('no entro');
           setBlinkRows((prev) => ({ ...prev, [id_viaje]: false }));
         }
       } else {
-        console.log('Respuesta vacía');
         setBlinkRows((prev) => ({ ...prev, [id_viaje]: false }));
       }
-      console.log(blinkRows);
     } catch (error) {
       console.error('Error en la petición:', error);
       setBlinkRows((prev) => ({ ...prev, [id_viaje]: false }));
@@ -321,22 +341,6 @@ const ViajesActivos = ({ }) => {
         borderRadius: '0',
       },
     },
-    muiTableBodyCellProps: ({ cell, row }) => ({
-      sx: {
-        backgroundColor:
-          cell.column.id === 'vehiculo' && blinkRows[row.original.id_viaje]
-            ? '#FFF5CC'
-            : 'transparent',
-        animation:
-          cell.column.id === 'vehiculo' && blinkRows[row.original.id_viaje]
-            ? 'blink 1s infinite alternate'
-            : 'none',
-        '@keyframes blink': {
-          '0%': { backgroundColor: '#FFF5CC' },
-          '100%': { backgroundColor: '#FFD700' }
-        }
-      }
-    }),
     muiTableHeadCellProps: {
       sx: {
         fontFamily: 'Inter',
