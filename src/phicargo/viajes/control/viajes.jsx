@@ -148,7 +148,7 @@ const ViajesActivos = ({ }) => {
           const id_viaje = row.original.id_viaje;
           const vehiculo = row.original.vehiculo;
           const vehicle_id = row.original.vehicle_id; // Asegúrate de que esté disponible
-          const [color, setColor] = React.useState('secondary');
+          const [color, setColor] = React.useState('');
 
           React.useEffect(() => {
             const consultarDetencion = async () => {
