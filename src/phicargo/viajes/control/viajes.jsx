@@ -54,7 +54,7 @@ const ViajesActivos = ({ }) => {
   };
 
   const [data, setData] = useState([]);
-  const [isLoading, setLoading] = useState();
+  const [isLoading, setLoading] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -67,41 +67,9 @@ const ViajesActivos = ({ }) => {
     }
   };
 
-  const [blinkRows, setBlinkRows] = useState({});
-
-  const ConsultarVelocidad = async (id_viaje, vehicle_id) => {
-    console.log(id_viaje);
-    try {
-      const response = await odooApi.get('/detenciones/consultar_detencion/' + vehicle_id);
-
-      if (response.data && response.data.length > 0) {
-        if (response.data[0].detenido_mas_15_min === true) {
-          console.log('entro');
-          setBlinkRows((prev) => ({ ...prev, [id_viaje]: true }));
-        } else {
-          console.log('no entro');
-          setBlinkRows((prev) => ({ ...prev, [id_viaje]: false }));
-        }
-      } else {
-        console.log('Respuesta vacía');
-        setBlinkRows((prev) => ({ ...prev, [id_viaje]: false }));
-      }
-      console.log(blinkRows);
-    } catch (error) {
-      console.error('Error en la petición:', error);
-      setBlinkRows((prev) => ({ ...prev, [id_viaje]: false }));
-    }
-  };
-
   useEffect(() => {
     fetchData();
   }, []);
-
-  useEffect(() => {
-    if (data.length > 0) {
-      data.forEach((row) => ConsultarVelocidad(row.id_viaje, row.vehicle_id));
-    }
-  }, [data]);
 
   const columns = useMemo(
     () => [
@@ -174,12 +142,13 @@ const ViajesActivos = ({ }) => {
       {
         accessorKey: 'vehiculo',
         header: 'Vehiculo',
+        id: 'vehiculo',
         Cell: ({ row }) => {
           const id_viaje = row.original.id_viaje;
           const vehiculo = row.original.vehiculo;
 
           return (
-            <Chip color={blinkRows[row.original.id_viaje] == true ? 'danger' : 'secondary'} size='sm'>
+            <Chip color={blinkRows[id_viaje] == true ? 'danger' : 'white'} size='sm'>
               {vehiculo}
             </Chip>
           );
@@ -288,6 +257,37 @@ const ViajesActivos = ({ }) => {
     [],
   );
 
+  const [blinkRows, setBlinkRows] = useState({});
+
+  useEffect(() => {
+    if (data.length > 0) {
+      data.forEach((row) => ConsultarVelocidad(row.id_viaje, row.vehicle_id));
+    }
+  }, [data]);
+
+  const ConsultarVelocidad = async (id_viaje, vehicle_id) => {
+    try {
+      const response = await odooApi.get('/detenciones/consultar_detencion/' + vehicle_id);
+
+      if (response.data && response.data.length > 0) {
+        if (response.data[0].detenido_mas_15_min === true) {
+          console.log('entro');
+          setBlinkRows((prev) => ({ ...prev, [id_viaje]: true }));
+        } else {
+          console.log('no entro');
+          setBlinkRows((prev) => ({ ...prev, [id_viaje]: false }));
+        }
+      } else {
+        console.log('Respuesta vacía');
+        setBlinkRows((prev) => ({ ...prev, [id_viaje]: false }));
+      }
+      console.log(blinkRows);
+    } catch (error) {
+      console.error('Error en la petición:', error);
+      setBlinkRows((prev) => ({ ...prev, [id_viaje]: false }));
+    }
+  };
+
   const table = useMaterialReactTable({
     columns,
     data,
@@ -321,11 +321,21 @@ const ViajesActivos = ({ }) => {
         borderRadius: '0',
       },
     },
-    muiTableBodyRowProps: ({ row }) => ({
-      onClick: ({ event }) => {
-        handleClickOpen();
-        ActualizarIDViaje(row.original.id_viaje);
-      },
+    muiTableBodyCellProps: ({ cell, row }) => ({
+      sx: {
+        backgroundColor:
+          cell.column.id === 'vehiculo' && blinkRows[row.original.id_viaje]
+            ? '#FFF5CC'
+            : 'transparent',
+        animation:
+          cell.column.id === 'vehiculo' && blinkRows[row.original.id_viaje]
+            ? 'blink 1s infinite alternate'
+            : 'none',
+        '@keyframes blink': {
+          '0%': { backgroundColor: '#FFF5CC' },
+          '100%': { backgroundColor: '#FFD700' }
+        }
+      }
     }),
     muiTableHeadCellProps: {
       sx: {
