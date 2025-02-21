@@ -58,7 +58,7 @@ function NavbarViajes() {
 
     return (
         <>
-            <AppBar elevation={0} position="static"
+            <AppBar elevation={3} position="static"
                 sx={{
                     background: 'linear-gradient(90deg, #0b2149, #002887)',
                     padding: '0 16px'

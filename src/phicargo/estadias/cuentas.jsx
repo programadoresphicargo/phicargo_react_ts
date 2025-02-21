@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Slide from '@mui/material/Slide';
 import { Box } from '@mui/material';
-import OperadorForm from './saldoForm';
+import OperadorForm from './estadia_form';
 import odooApi from '../modules/core/api/odoo-api';
 import { DatePicker, Chip } from "@heroui/react";
 import { parseDate, getLocalTimeZone } from "@internationalized/date";

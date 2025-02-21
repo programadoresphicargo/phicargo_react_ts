@@ -7,11 +7,21 @@ import Box from '@mui/material/Box';
 import { Button, Chip } from "@heroui/react"
 import { DatePicker } from 'antd';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
+} from "@heroui/modal";
+import EstadiasForm from './estadia_form';
 const { RangePicker } = DatePicker;
 
 const ReporteCumplimiento = () => {
 
   const [isLoading, setLoading] = useState(false);
+  const [id_viaje, setIDViaje] = useState(0);
 
   const [dates, setDates] = useState([]);
 
@@ -27,7 +37,9 @@ const ReporteCumplimiento = () => {
       const endDate = dates[1].format('YYYY-MM-DD');
       try {
         setLoading(true);
-        const response = await odooApi.get('/tms_travel/reporte_estadias/' + startDate + '/' + endDate);
+        const response = await odooApi.get('/tms_travel/reporte_estadias/', {
+          params: { fecha_inicio: startDate, fecha_fin: endDate },
+        });
         setData(response.data);
         setLoading(false);
       } catch (error) {
@@ -69,7 +81,10 @@ const ReporteCumplimiento = () => {
       pagination: { pageSize: 80 },
     },
     muiTableBodyRowProps: ({ row }) => ({
-      onClick: ({ event }) => { },
+      onClick: ({ event }) => {
+        onOpen();
+        setIDViaje(row.original.travel_id)
+      },
       style: {
         cursor: 'pointer',
       },
@@ -90,7 +105,7 @@ const ReporteCumplimiento = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 202px)',
+        maxHeight: 'calc(100vh - 205px)',
       },
     },
     renderTopToolbarCustomActions: ({ table }) => (
@@ -133,9 +148,31 @@ const ReporteCumplimiento = () => {
     URL.revokeObjectURL(url);
   };
 
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
   return (
     <div>
       <MaterialReactTable table={table} />
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} size='5xl'>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1"></ModalHeader>
+              <ModalBody>
+                <EstadiasForm id_viaje={id_viaje}></EstadiasForm>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  Cancelar
+                </Button>
+                <Button color="primary" onPress={onClose}>
+                  Guardar
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </div>
   );
 };
