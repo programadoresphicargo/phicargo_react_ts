@@ -171,7 +171,7 @@ const ViajesActivos = ({ }) => {
             };
 
             consultarDetencion();
-          }, [vehicle_id, data]); 
+          }, [vehicle_id, data]);
 
           return (
             <Chip color={color} size="sm">
@@ -353,6 +353,12 @@ const ViajesActivos = ({ }) => {
         maxHeight: 'calc(100vh - 200px)',
       },
     },
+    muiTableBodyRowProps: ({ row }) => ({
+      onClick: ({ event }) => {
+        handleClickOpen();
+        ActualizarIDViaje(row.original.id_viaje);
+      },
+    }),
     muiTableBodyCellProps: ({ row }) => ({
       sx: {
         fontFamily: 'Inter',
