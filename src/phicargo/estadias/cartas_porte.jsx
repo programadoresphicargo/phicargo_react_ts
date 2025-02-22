@@ -162,12 +162,6 @@ const ReporteCumplimiento = () => {
                 <EstadiasForm id_viaje={id_viaje}></EstadiasForm>
               </ModalBody>
               <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
-                  Cancelar
-                </Button>
-                <Button color="primary" onPress={onClose}>
-                  Guardar
-                </Button>
               </ModalFooter>
             </>
           )}

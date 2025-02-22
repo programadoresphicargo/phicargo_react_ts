@@ -419,8 +419,8 @@ const ViajesActivos = ({ }) => {
 
       <Dialog
         open={openMasivo}
-        fullWidth={true}
-        maxWidth={"xl"}
+        fullScreen={true}
+        scroll='paper'
         onClose={handleClose2}
         TransitionComponent={Transition}
       >

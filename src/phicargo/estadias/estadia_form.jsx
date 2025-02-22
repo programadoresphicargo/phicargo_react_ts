@@ -73,6 +73,10 @@ const EstadiasForm = ({ id_viaje, referencia, onClose }) => {
                 <Grid container spacing={2} className="mb-5">
                     <Grid item xs={12}>
                         <Chip color="primary" size="lg">{data[0]?.travel_name}</Chip>
+                        <Stack spacing={1} direction="row" className="mt-2">
+                            <Button color="danger">Cancelar</Button>
+                            <Button color="success" className="text-white">Guadar cobro</Button>
+                        </Stack>
                         <div className="mt-3">
                             <p>Cliente: {data[0]?.cliente}</p>
                             <p>Horas estadias permitidas: {data[0]?.horas_estadias}</p>

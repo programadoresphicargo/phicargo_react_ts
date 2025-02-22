@@ -6,12 +6,13 @@ import toast from 'react-hot-toast';
 import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box } from '@mui/material';
-import { Button } from "@heroui/react";
+import { Button, Chip } from "@heroui/react";
 import { Autocomplete, AutocompleteItem, Textarea } from "@heroui/react";
 import Swal from 'sweetalert2';
 
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { useAuthContext } from '@/phicargo/modules/auth/hooks';
+import { Dropdown, DropdownMenu, DropdownTrigger, DropdownItem } from "@heroui/react";
 
 const ViajesActivosMasivo = ({ }) => {
   const [allData, setAllData] = useState([]);
@@ -21,17 +22,20 @@ const ViajesActivosMasivo = ({ }) => {
   const [options, setOptions] = useState([]);
   const [selectedEjecutivo, setSelectedEjecutivo] = useState('');
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await odooApi.get('/tms_travel/active_travels/');
-        setAllData(response.data);
-        setData(response.data);
-      } catch (error) {
-        console.error('Error al obtener los datos:', error);
-      }
-    };
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const response = await odooApi.get('/tms_travel/active_travels/');
+      setAllData(response.data);
+      setData(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error al obtener los datos:', error);
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
   }, []);
 
@@ -141,6 +145,42 @@ const ViajesActivosMasivo = ({ }) => {
       {
         accessorKey: 'operador',
         header: 'Operador',
+      },
+      {
+        accessorKey: 'ultimo_estatus_enviado',
+        header: 'Último estatus enviado',
+        Cell: ({ cell }) => {
+          const id_viaje = cell.row.original.id_viaje;
+          const ultimo_estatus = cell.getValue() || '';
+          const [items, setItems] = useState([]);
+
+          useEffect(() => {
+            odooApi.get("/reportes_estatus_viajes/by_id_viaje/" + id_viaje)
+              .then((response) => {
+                setItems(response.data);
+              })
+              .catch((error) => {
+                console.error("Error al obtener los items:", error);
+              });
+          }, []);
+
+          return (
+            <Dropdown>
+              <DropdownTrigger>
+                <Button variant="bordered">{ultimo_estatus}</Button>
+              </DropdownTrigger>
+              <DropdownMenu aria-label="Dynamic Actions" items={items}>
+                {(item) => (
+                  <DropdownItem
+                    key={item.nombre_estatus}
+                  >
+                    {item.nombre_estatus}
+                  </DropdownItem>
+                )}
+              </DropdownMenu>
+            </Dropdown>
+          );
+        },
       },
       {
         accessorKey: 'contenedores',
@@ -259,6 +299,10 @@ const ViajesActivosMasivo = ({ }) => {
       >
         <Button onPress={handleExportData} color="primary" isLoading={isLoading}>
           Enviar estatus
+        </Button>
+
+        <Button onPress={() => fetchData()} color="primary" isLoading={isLoading}>
+          Refrescar
         </Button>
 
         <select onChange={handleSelectChange} value={selectedEjecutivo} className='form-control'>
