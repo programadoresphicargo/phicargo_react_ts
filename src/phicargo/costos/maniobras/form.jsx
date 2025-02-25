@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useContext, useMemo } from 'react';
 import axios from 'axios';
 import ManiobraContenedores from './añadir_contenedor/maniobra_contenedores';
-import { CardHeader, Divider, Input, User } from "@heroui/react";
+import { CardHeader, Divider, Input, User, Chip } from "@heroui/react";
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import AppBar from '@mui/material/AppBar';
@@ -39,6 +39,23 @@ import MonthSelector from '@/mes';
 import YearSelector from '@/año';
 
 const FormCE = ({ }) => {
+
+    const getEstadoChip = (estado) => {
+        switch (estado.toLowerCase()) {
+            case "draft":
+                return { color: "warning", text: "Borrador" };
+            case "open":
+                return { color: "primary", text: "Abierto" };
+            case "paid":
+                return { color: "success", text: "Pagado" };
+            case "in_payment":
+                return { color: "secondary", text: "in_payment" };
+            case "cancel":
+                return { color: "danger", text: "Cancelado" };
+            default:
+                return { color: "default", text: "Sin estado" };
+        }
+    };
 
     const { id_folio, formData, setFormData, DisabledForm } = useContext(CostosExtrasContext);
     const [open, setOpen] = React.useState(false);
@@ -93,8 +110,18 @@ const FormCE = ({ }) => {
                 header: 'Fecha factura',
             },
             {
-                accessorKey: 'Estado factura',
-                header: 'state',
+                accessorKey: 'state',
+                header: 'Estado',
+                Cell: ({ cell }) => {
+                    const estado = cell.getValue();
+                    const { color, text } = getEstadoChip(estado);
+
+                    return (
+                        <Chip color={color} size='sm' className="text-white">
+                            {text}
+                        </Chip>
+                    );
+                },
             },
         ],
         [],
@@ -169,6 +196,10 @@ const FormCE = ({ }) => {
         ),
     });
 
+    const estado = formData.estado_factura ?? "";
+
+    const { color, text } = getEstadoChip(estado);
+
     return (
         <>
             <Card>
@@ -191,8 +222,12 @@ const FormCE = ({ }) => {
                         isDisabled={DisabledForm}
                         variant={"underlined"}>
                     </Input>
-                    <p className='mt-4'>Fecha factura: {formData.fecha_factura ?? ""}</p>
-                    <p>Estado: {formData.estado_factura ?? ""}</p>
+                    <div className="flex justify-between mt-4">
+                        <p>Fecha factura: {formData.fecha_factura ?? ""}</p>
+                        <Chip color={color} variant="flat">
+                            {text}
+                        </Chip>
+                    </div>
                 </CardBody>
             </Card>
 
