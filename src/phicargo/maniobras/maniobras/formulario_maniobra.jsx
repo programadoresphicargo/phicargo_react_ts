@@ -639,7 +639,12 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                 }}>
                 <Box sx={{ flexGrow: 1 }} className='bg-soft-secondary'>
 
-                    <AppBar sx={{ position: 'relative' }} elevation={0}>
+                    <AppBar elevation={2}
+                        position="static"
+                        sx={{
+                            background: 'linear-gradient(90deg, #0b2149, #002887)',
+                            padding: '0 16px'
+                        }}>
                         <Toolbar>
                             <Typography sx={{ flex: 1 }} variant="h6" component="div">
                                 Maniobra M-{id_maniobra} / {id_cp}

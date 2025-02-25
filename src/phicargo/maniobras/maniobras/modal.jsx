@@ -22,7 +22,11 @@ const Example2 = ({ show, handleClose, id_cp, x_reference, id_cliente }) => {
                 fullScreen
                 TransitionComponent={Transition}
             >
-                <AppBar sx={{ position: 'relative' }}>
+                <AppBar elevation={3} position="static"
+                    sx={{
+                        background: 'linear-gradient(90deg, #0b2149, #002887)',
+                        padding: '0 16px'
+                    }}>
                     <Toolbar>
                         <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
                             {x_reference}

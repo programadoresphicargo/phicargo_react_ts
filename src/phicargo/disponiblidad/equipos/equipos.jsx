@@ -35,6 +35,7 @@ const Disponibilidad_unidades = () => {
     const [estado, setStatus] = useState('');
     const [isUpdating, setIsUpdating] = useState(false);
     const [vehicle_id, setVehicle] = useState();
+    const [vehicle_name, setVehicleName] = useState('');
 
     const fetchData = async () => {
         setLoading(true);
@@ -109,6 +110,7 @@ const Disponibilidad_unidades = () => {
         setStatus(row.original.x_status);
         setOpenDialog(true);
         setVehicle(row.original.id)
+        setVehicleName(row.original.name2)
     };
 
     const handleUpdateStatus = async () => {
@@ -181,12 +183,15 @@ const Disponibilidad_unidades = () => {
 
     return (
         <div>
-            <ThemeProvider theme={customFontTheme}>
-                <MaterialReactTable table={table} />
-            </ThemeProvider>
+            <MaterialReactTable table={table} />
 
             <Dialog open={openDialog} onClose={() => setOpenDialog(false)} fullScreen={true}>
-                <AppBar sx={{ position: 'relative' }} elevation={0}>
+                <AppBar
+                    elevation={3} position="static"
+                    sx={{
+                        background: 'linear-gradient(90deg, #0b2149, #002887)',
+                        padding: '0 16px'
+                    }}>
                     <Toolbar>
                         <IconButton
                             edge="start"
@@ -196,24 +201,10 @@ const Disponibilidad_unidades = () => {
                         >
                             <CloseIcon />
                         </IconButton>
-                        <Button autoFocus color="inherit" onClick={() => setOpenDialog(false)}>
-                            Cerrar
-                        </Button>
+                        {vehicle_name}
                     </Toolbar>
                 </AppBar>
                 <DialogContent>
-                    <Select
-                        value={estado}
-                        onChange={(e) => setStatus(e.target.value)}
-                    >
-                        <MenuItem value="disponible">Disponible</MenuItem>
-                        <MenuItem value="viaje">Viaje</MenuItem>
-                        <MenuItem value="mantenimiento">Mantenimiento</MenuItem>
-                        <MenuItem value="maniobra">Maniobra</MenuItem>
-                    </Select>
-                    <Button onPress={handleUpdateStatus} disabled={isUpdating} color='primary'>
-                        {isUpdating ? <CircularProgress size={24} /> : 'Actualizar'}
-                    </Button>
                     <HistorialVehiculo vehicle_id={vehicle_id}></HistorialVehiculo>
                 </DialogContent>
             </Dialog>
