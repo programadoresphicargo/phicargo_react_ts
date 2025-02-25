@@ -13,6 +13,7 @@ import FormularioCostoExtra from '../maniobras/form_costos_extras';
 import { CostosExtrasContext } from '../context/context';
 import { Select, SelectItem } from "@heroui/react";
 import { DateRangePicker } from 'rsuite';
+import { getEstadoChip } from '../utils';
 
 const FoliosCostosExtras = () => {
 
@@ -146,6 +147,20 @@ const FoliosCostosExtras = () => {
       {
         accessorKey: 'fecha_factura',
         header: 'Fecha factura',
+      },
+      {
+        accessorKey: 'estado_factura',
+        header: 'Estado',
+        Cell: ({ cell }) => {
+          const estado = cell.getValue();
+          const { color, text } = getEstadoChip(estado);
+
+          return (
+            <Chip color={color} size='sm' className="text-white">
+              {text}
+            </Chip>
+          );
+        },
       },
       {
         accessorKey: 'total',

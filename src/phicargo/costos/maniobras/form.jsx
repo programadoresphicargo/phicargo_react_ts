@@ -37,25 +37,9 @@ import {
 } from 'material-react-table';
 import MonthSelector from '@/mes';
 import YearSelector from '@/año';
+import { getEstadoChip } from '../utils';
 
 const FormCE = ({ }) => {
-
-    const getEstadoChip = (estado) => {
-        switch (estado.toLowerCase()) {
-            case "draft":
-                return { color: "warning", text: "Borrador" };
-            case "open":
-                return { color: "primary", text: "Abierto" };
-            case "paid":
-                return { color: "success", text: "Pagado" };
-            case "in_payment":
-                return { color: "secondary", text: "in_payment" };
-            case "cancel":
-                return { color: "danger", text: "Cancelado" };
-            default:
-                return { color: "default", text: "Sin estado" };
-        }
-    };
 
     const { id_folio, formData, setFormData, DisabledForm } = useContext(CostosExtrasContext);
     const [open, setOpen] = React.useState(false);
