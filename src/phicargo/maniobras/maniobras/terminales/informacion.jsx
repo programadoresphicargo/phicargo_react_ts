@@ -54,11 +54,12 @@ function FormularioTerminales({ open, onClose, id_terminal }) {
 
     const registrar = () => {
         console.log(formData);
-        (VITE_PHIDES_API_URL + '/modulo_maniobras/terminales/registrar_terminal.php', formData)
+        axios.post(VITE_PHIDES_API_URL + '/modulo_maniobras/terminales/registrar_terminal.php', formData)
             .then(response => {
                 var data = response.data;
                 if (data.success) {
                     toast.success('Terminal registrada');
+                    onClose();
                 } else {
                     toast.error(data);
                 }
