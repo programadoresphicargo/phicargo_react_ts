@@ -279,6 +279,36 @@ const ViajesActivos = ({ }) => {
           );
         },
       },
+      {
+        accessorKey: 'fecha_llegada_planta',
+        header: 'Llegada a planta',
+      },
+      {
+        accessorKey: 'fecha_salida_planta',
+        header: 'Salida de planta',
+      },
+      {
+        accessorKey: 'horas_transcurridas',
+        header: 'Horas transcurridas',
+      },
+      {
+        accessorKey: 'estado_estadia',
+        header: 'Estado estadias',
+        Cell: ({ cell }) => {
+          const estado = cell.getValue();
+          let color = 'default';
+
+          if (estado === 'Generando estadías') {
+            color = 'danger';
+          }
+
+          return (
+            <Chip color={color} size='sm'>
+              {estado}
+            </Chip>
+          );
+        },
+      },
     ],
     [],
   );
