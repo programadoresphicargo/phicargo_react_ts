@@ -12,11 +12,12 @@ import MainMenuPage from '@/phicargo/menu/MainManuPage';
 import NotFoundPage from '@/phicargo/modules/core/pages/NotFoundPage';
 import PersistentDrawer from '../phicargo/monitoreo/Eventos';
 import { ReportsRoutes } from './ReportsRoutes';
+import { ServiceRequestsRoutes } from '@/phicargo/modules/service-requests/routes/ServiceRequestsRoutes';
 import ShiftsRoutes from '../phicargo/modules/shifts/routes/ShiftsRoutes';
 import { ToastContainer } from 'react-toastify';
+import { ToastProvider } from "@heroui/toast";
 import { Toaster } from 'react-hot-toast';
 import UsersManagementRoutes from '../phicargo/modules/users-management/routes/UsersManagementRoutes';
-import { ToastProvider } from "@heroui/toast";
 
 // Lazy load the components
 const CartasPorte = lazy(
@@ -300,6 +301,9 @@ export const PrivateRoutes = () => {
 
         {/* Módulo de turnos */}
         {ShiftsRoutes()}
+
+        {/* Solicitudes de Servicio */}
+        {ServiceRequestsRoutes()}
 
         {/* Ruta para manejar rutas no válidas */}
         <Route path="*" element={<NotFoundPage />} />
