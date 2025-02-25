@@ -231,6 +231,19 @@ const FoliosCostosExtras = () => {
           </Button>
         </Box>
 
+        <Box sx={{ width: '200px' }}>
+          <Button
+            color="success"
+            className='text-white'
+            fullWidth
+            onPress={() => {
+              fetchData();
+            }}
+          >
+            Actualizar
+          </Button>
+        </Box>
+
         <Box sx={{ width: '250px' }}>
           <Select
             label="Sucursal"
