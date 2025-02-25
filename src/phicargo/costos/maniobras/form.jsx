@@ -217,7 +217,7 @@ const FormCE = ({ }) => {
                     <Input
                         label="Referencia factura"
                         value={formData.referencia_factura ?? ""}
-                        isDisabled={DisabledForm}
+                        isDisabled={true}
                         variant={"underlined"}>
                     </Input>
                     <div className="flex justify-between mt-4">
