@@ -37,3 +37,7 @@
     transform: rotate(360deg);
   }
 }
+
+.rs-picker-daterange-menu {
+  z-index: 3000 !important;
+}

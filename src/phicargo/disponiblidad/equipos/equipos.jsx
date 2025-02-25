@@ -4,7 +4,6 @@ import {
     DialogTitle,
     DialogContent,
     DialogActions,
-    Button,
     MenuItem,
     Select,
     CircularProgress,
@@ -17,7 +16,15 @@ import {
 } from 'material-react-table';
 import { toast } from 'react-toastify';
 import ManiobrasNavBar from '../../maniobras/Navbar';
-import { Chip } from "@heroui/react";
+import { Chip, Button } from "@heroui/react";
+import HistorialVehiculo from './historial';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import CloseIcon from '@mui/icons-material/Close';
+import Slide from '@mui/material/Slide';
+
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const Disponibilidad_unidades = () => {
@@ -27,6 +34,7 @@ const Disponibilidad_unidades = () => {
     const [selectedRow, setSelectedRow] = useState(null);
     const [estado, setStatus] = useState('');
     const [isUpdating, setIsUpdating] = useState(false);
+    const [vehicle_id, setVehicle] = useState();
 
     const fetchData = async () => {
         setLoading(true);
@@ -79,7 +87,7 @@ const Disponibilidad_unidades = () => {
 
                     return (
                         <Chip className={badgeClass} style={{ width: '100px' }}>
-                            {estado} {/* Cambiado {{ estado }} a {estado} */}
+                            {estado}
                         </Chip>
                     );
                 },
@@ -100,6 +108,7 @@ const Disponibilidad_unidades = () => {
         setSelectedRow(row.original);
         setStatus(row.original.x_status);
         setOpenDialog(true);
+        setVehicle(row.original.id)
     };
 
     const handleUpdateStatus = async () => {
@@ -144,7 +153,7 @@ const Disponibilidad_unidades = () => {
         },
         state: { isLoading: isLoading2 },
         muiTableBodyRowProps: ({ row }) => ({
-            onClick: () => handleRowClick(row), // Abre el diálogo al hacer clic en la fila
+            onClick: () => handleRowClick(row),
             style: {
                 cursor: 'pointer',
             },
@@ -176,11 +185,24 @@ const Disponibilidad_unidades = () => {
                 <MaterialReactTable table={table} />
             </ThemeProvider>
 
-            <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
-                <DialogTitle>Actualizar Estado del Vehículo</DialogTitle>
+            <Dialog open={openDialog} onClose={() => setOpenDialog(false)} fullScreen={true}>
+                <AppBar sx={{ position: 'relative' }} elevation={0}>
+                    <Toolbar>
+                        <IconButton
+                            edge="start"
+                            color="inherit"
+                            onClick={() => setOpenDialog(false)}
+                            aria-label="close"
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                        <Button autoFocus color="inherit" onClick={() => setOpenDialog(false)}>
+                            Cerrar
+                        </Button>
+                    </Toolbar>
+                </AppBar>
                 <DialogContent>
                     <Select
-                        fullWidth
                         value={estado}
                         onChange={(e) => setStatus(e.target.value)}
                     >
@@ -189,13 +211,11 @@ const Disponibilidad_unidades = () => {
                         <MenuItem value="mantenimiento">Mantenimiento</MenuItem>
                         <MenuItem value="maniobra">Maniobra</MenuItem>
                     </Select>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setOpenDialog(false)}>Cancelar</Button>
-                    <Button onClick={handleUpdateStatus} disabled={isUpdating}>
+                    <Button onPress={handleUpdateStatus} disabled={isUpdating} color='primary'>
                         {isUpdating ? <CircularProgress size={24} /> : 'Actualizar'}
                     </Button>
-                </DialogActions>
+                    <HistorialVehiculo vehicle_id={vehicle_id}></HistorialVehiculo>
+                </DialogContent>
             </Dialog>
         </div>
     );

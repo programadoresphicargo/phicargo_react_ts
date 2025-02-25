@@ -11,7 +11,7 @@ const CostosExtrasProvider = ({ children }) => {
         id_folio: null,
         status: 'borrador',
         facturado: false,
-        ref_factura: null,
+        referencia_factura: null,
     });
 
     const [DisabledForm, setDisabledForm] = useState(false);

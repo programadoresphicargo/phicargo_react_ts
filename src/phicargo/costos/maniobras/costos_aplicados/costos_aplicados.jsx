@@ -194,7 +194,7 @@ const ServiciosAplicadosCE = ({ onClose }) => {
         enableEditing: true,
         editDisplayMode: 'modal',
         positionActionsColumn: 'last',
-        state: { showLoadingOverlay: loading },
+        state: { showProgressBars: loading },
         initialState: {
             density: 'compact',
             pagination: { pageSize: 80 },
@@ -247,7 +247,11 @@ const ServiciosAplicadosCE = ({ onClose }) => {
                     flexWrap: 'wrap',
                 }}
             >
-                <h1 className='text-primary'>Costos extras</h1>
+                <h1
+                    className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
+                >
+                    Costos extras
+                </h1>
                 <Button onPress={handleClickOpen} color="primary" size="md" isDisabled={DisabledForm} startContent={<i class="bi bi-plus-lg"></i>}>
                     Añadir costo extra
                 </Button>

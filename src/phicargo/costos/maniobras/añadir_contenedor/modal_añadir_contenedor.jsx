@@ -1,4 +1,3 @@
-import { DateRangePicker, Select, SelectItem } from "@heroui/react";
 import {
     MaterialReactTable,
     useMaterialReactTable,
@@ -12,32 +11,20 @@ import { CostosExtrasContext } from '../../context/context';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import MonthSelector from '@/mes';
-import YearSelector from '@/año';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { toast } from 'react-toastify';
+import 'rsuite/dist/rsuite-no-reset.min.css';
+import { DateRangePicker } from 'rsuite';
+import MonthSelector from '@/mes';
+import YearSelector from '@/año';
+const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const AñadirContenedor = ({ show, handleClose }) => {
-
-    const now = new Date();
-
-    const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
-    const firstDayDate = firstDay.toISOString().split('T')[0];
-
-    const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-    const lastDayDate = lastDay.toISOString().split('T')[0];
-
-
-    const [value, setValue] = React.useState({
-        start: parseDate(firstDayDate),
-        end: parseDate(lastDayDate),
-    });
 
     const { id_folio, CartasPorte, setCPS } = useContext(CostosExtrasContext);
 
     const [data, setData] = useState([]);
     const [isLoading2, setILoading] = useState();
-    const [range, setRange] = useState(null);
 
     const currentMonth = String(new Date().getMonth() + 1).padStart(2, '0');
     const [selectedMonth, setSelectedMonth] = useState(currentMonth);
@@ -53,21 +40,36 @@ const AñadirContenedor = ({ show, handleClose }) => {
         setSelectedYear(event.target.value);
     };
 
+
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchData = async (month, year,) => {
+            if (!selectedMonth || !selectedYear) return;
+
             try {
                 setILoading(true);
-                const response = await odooApi.get(`/tms_waybill/get_by_date_range/${value.start}/${value.end}`);
-                setData(response.data);
+                const response = await fetch(VITE_PHIDES_API_URL + '/modulo_maniobras/programacion/get_registros2.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ month, year }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error en la respuesta de la API');
+                }
+
+                const jsonData = await response.json();
+                setData(jsonData); // Actualiza el estado con los datos obtenidos
             } catch (error) {
                 console.error('Error al obtener los datos:', error);
             } finally {
-                setILoading(false);
+                setILoading(false); // Asegúrate de que setILoading se ejecute siempre
             }
         };
 
-        fetchData();
-    }, [value]);
+        fetchData(selectedMonth, selectedYear);
+    }, [selectedMonth, selectedYear]);
 
     const añadir_contenedor = (data) => {
         setCPS(prevCartasPorte => [...prevCartasPorte, data]);
@@ -169,7 +171,13 @@ const AñadirContenedor = ({ show, handleClose }) => {
         renderTopToolbarCustomActions: ({ table }) => (
             <Box display="flex" alignItems="center" m={2}>
                 <Box sx={{ flexGrow: 1, mr: 2 }}>
-                    <DateRangePicker label="Fecha" value={value} onChange={setValue} variant='bordered' />
+                    <MonthSelector
+                        selectedMonth={selectedMonth}
+                        handleChange={handleChange}
+                    />
+                </Box>
+                <Box sx={{ flexGrow: 1, mr: 2 }}>
+                    <YearSelector selectedYear={selectedYear} handleChange={handleChangeYear}></YearSelector>
                 </Box>
             </Box>
         ),
@@ -180,8 +188,8 @@ const AñadirContenedor = ({ show, handleClose }) => {
             <Dialog
                 open={show}
                 onClose={handleClose}
-                fullWidth="xl"
-                maxWidth="xl"
+                fullWidth={true}
+                maxWidth='lg'
             >
                 <DialogTitle id="example-custom-modal-styling-title">
                     Cartas porte

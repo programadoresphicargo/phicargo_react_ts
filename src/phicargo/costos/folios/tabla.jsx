@@ -12,6 +12,7 @@ import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import FormularioCostoExtra from '../maniobras/form_costos_extras';
 import { CostosExtrasContext } from '../context/context';
 import { Select, SelectItem } from "@heroui/react";
+import { DateRangePicker } from 'rsuite';
 
 const FoliosCostosExtras = () => {
 
@@ -139,8 +140,12 @@ const FoliosCostosExtras = () => {
         },
       },
       {
-        accessorKey: 'ref_factura',
+        accessorKey: 'referencia_factura',
         header: 'Referencia factura',
+      },
+      {
+        accessorKey: 'fecha_factura',
+        header: 'Fecha factura',
       },
       {
         accessorKey: 'total',

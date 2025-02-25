@@ -727,7 +727,7 @@
     "@react-types/datepicker" "3.10.0"
     "@react-types/shared" "3.27.0"
 
-"@heroui/date-picker@2.3.13":
+"@heroui/date-picker@^2.3.13", "@heroui/date-picker@2.3.13":
   version "2.3.13"
   resolved "https://registry.npmjs.org/@heroui/date-picker/-/date-picker-2.3.13.tgz"
   integrity sha512-VQNnBKL4CvK0HzqvOB38piOijAwnwKoHdzuqpd/9CsX7ReMjQFFzpkYXceoEh/s52i2Jsl1NqaC2RSrM10cPdg==

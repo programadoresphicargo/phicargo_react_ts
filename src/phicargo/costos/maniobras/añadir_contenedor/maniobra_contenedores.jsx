@@ -13,9 +13,9 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { toast } from 'react-toastify';
 import { Card, CardBody } from "@heroui/react";
-import { CostosExtrasContext } from '../../context/context';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { ViajeContext } from '@/phicargo/viajes/context/viajeContext';
+import { CostosExtrasContext } from '../../context/context';
 
 const CostosExtrasContenedores = ({ }) => {
 
@@ -56,6 +56,7 @@ const CostosExtrasContenedores = ({ }) => {
             setLoading(false);
         } catch (error) {
             console.error('Error al obtener los datos:', error);
+            setLoading(false);
         } finally {
             setLoading(false);
         }
@@ -63,13 +64,14 @@ const CostosExtrasContenedores = ({ }) => {
 
     const fetchDataCP = async () => {
         try {
-            toast.success('Obteniendo cartas porte de viaje');
             setLoading(true);
+            toast.success('Obteniendo cartas porte de viaje');
             const response = await odooApi.get('/tms_waybill/get_by_travel_id/' + id_viaje);
             setCPS(response.data);
             setLoading(false);
         } catch (error) {
             console.error('Error al obtener los datos:', error);
+            setLoading(false);
         } finally {
             setLoading(false);
         }
@@ -121,8 +123,12 @@ const CostosExtrasContenedores = ({ }) => {
                     flexWrap: 'wrap',
                 }}
             >
-                <h1>Cartas porte</h1>
-                <Button color='primary' onPress={handleShowModal} isDisabled={DisabledForm} startContent={<i class="bi bi-plus-lg"></i>}>Añadir carta porte</Button>
+                <h1
+                    className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
+                >
+                    Cartas porte
+                </h1>
+                <Button color='primary' onPress={handleShowModal} isDisabled={DisabledForm} startContent={<i className="bi bi-plus-lg"></i>}>Añadir carta porte</Button>
             </Box>
         ),
     });

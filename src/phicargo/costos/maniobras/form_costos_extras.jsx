@@ -2,25 +2,20 @@ import { Autocomplete, AutocompleteItem } from "@heroui/react";
 import { Card, CardBody } from "@heroui/react";
 import { Container, filledInputClasses } from '@mui/material';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import { Button } from "@heroui/react";
 import CostosExtrasContenedores from './añadir_contenedor/maniobra_contenedores';
 import { CostosExtrasContext } from '../context/context';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import Dialog from '@mui/material/Dialog';
 import FormCE from './form';
 import Grid from '@mui/material/Grid2';
 import LinearProgress from '@mui/material/LinearProgress';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import ManiobraContenedores from './añadir_contenedor/maniobra_contenedores';
 import ServiciosAplicadosCE from './costos_aplicados/costos_aplicados';
 import Slide from '@mui/material/Slide';
 import Stack from '@mui/material/Stack';
 import Swal from 'sweetalert2';
-import TextField from '@mui/material/TextField';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { User } from "@heroui/react";
@@ -30,6 +25,7 @@ import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { toast } from 'react-toastify';
 import { useAuthContext } from '@/phicargo/modules/auth/hooks';
 import TimeLineCE from "./linea_tiempo";
+import { DateRangePicker } from "@heroui/react";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -71,10 +67,13 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
 
             setIsEditing(false);
             const data = response.data[0];
+            console.log(data);
 
             setFormData({
                 id_folio: data.id_folio,
-                ref_factura: data.ref_factura || null,
+                referencia_factura: data.referencia_factura || null,
+                fecha_factura: data.fecha_factura || null,
+                estado_factura: data.estado_factura || null,
                 status: data.status || null,
                 usuario_creacion: data.usuario_creacion || null,
                 fecha_creacion: data.fecha_creacion || null,
@@ -101,7 +100,7 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
         if (!id_folio) {
             setFormData({
                 id_folio: null,
-                ref_factura: null,
+                referencia_factura: null,
                 status: null,
                 facturado: false,
             });
@@ -290,7 +289,12 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
                 onClose={handleClose}
                 TransitionComponent={Transition}
             >
-                <AppBar sx={{ position: 'relative' }} elevation={0}>
+                <AppBar elevation={2}
+                    sx={{
+                        background: 'linear-gradient(90deg, #0b2149, #002887)',
+                        padding: '0 16px',
+                        position: 'static'
+                    }}>
                     <Toolbar>
                         <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
                             CE-{id_folio}
@@ -366,7 +370,6 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
                         <Grid size={12} container spacing={1}>
                             <Grid size={8}>
                                 <CostosExtrasContenedores></CostosExtrasContenedores>
-                                <FormCE></FormCE>
                             </Grid>
                             <Grid size={4}>
                                 <TimeLineCE></TimeLineCE>
@@ -375,6 +378,10 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
 
                         <Grid size={12} className={"mt-2"}>
                             <ServiciosAplicadosCE></ServiciosAplicadosCE>
+                        </Grid>
+
+                        <Grid size={6} className={"mt-2"}>
+                            <FormCE></FormCE>
                         </Grid>
 
                     </Grid>

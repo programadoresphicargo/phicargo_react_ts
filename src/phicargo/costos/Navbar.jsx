@@ -40,7 +40,7 @@ function CENavBar() {
 
     return (
         <>
-            <AppBar position="static"
+            <AppBar position="static" elevation={2}
                 sx={{
                     background: 'linear-gradient(90deg, #0b2149, #002887)',
                     padding: '0 16px'

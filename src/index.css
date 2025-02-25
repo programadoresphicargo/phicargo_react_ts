@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,26 +7,39 @@
   z-index: 20000 !important;
 }
 
+.rs-picker-daterange-menu {
+  z-index: 2000 !important;  /* Asegúrate de que esté por encima del MUI Dialog */
+}
+
 /* Estilo minimalista para la scrollbar */
 ::-webkit-scrollbar {
-  width: 12px; /* Ancho de la scrollbar */
-  height: 12px; /* Alto de la scrollbar horizontal */
+  width: 12px;
+  /* Ancho de la scrollbar */
+  height: 12px;
+  /* Alto de la scrollbar horizontal */
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent; /* Fondo del track transparente */
-  margin: 2px; /* Margen alrededor del track para separación */
+  background: transparent;
+  /* Fondo del track transparente */
+  margin: 2px;
+  /* Margen alrededor del track para separación */
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.2); /* Thumb oscuro pero translúcido */
-  border-radius: 10px; /* Bordes redondeados */
-  border: 2px solid transparent; /* Espacio alrededor del thumb */
-  background-clip: padding-box; /* Clip para crear separación */
+  background: rgba(0, 0, 0, 0.2);
+  /* Thumb oscuro pero translúcido */
+  border-radius: 10px;
+  /* Bordes redondeados */
+  border: 2px solid transparent;
+  /* Espacio alrededor del thumb */
+  background-clip: padding-box;
+  /* Clip para crear separación */
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.4); /* Thumb un poco más oscuro al pasar el mouse */
+  background: rgba(0, 0, 0, 0.4);
+  /* Thumb un poco más oscuro al pasar el mouse */
 }
 
 .ant-image-preview-wrap {
