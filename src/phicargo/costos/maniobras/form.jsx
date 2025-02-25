@@ -163,9 +163,7 @@ const FormCE = ({ }) => {
         },
         muiTableContainerProps: {
             sx: {
-                borderRadius: '8px',
-                overflow: 'hidden',
-                maxHeight: 'calc(100vh - 210px)',
+                maxHeight: 'calc(100vh - 200px)',
             },
         },
         muiTableBodyRowProps: ({ row }) => ({
