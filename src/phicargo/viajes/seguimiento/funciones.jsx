@@ -124,7 +124,6 @@ export const useJourneyDialogs = () => {
 
             if (response.data === 1) {
                 toast.success('Proceso correcto.', { id: loadingToast });
-                getHistorialEstatus();
                 getViaje(id_viaje);
 
                 if (id_estatus == 1) {
@@ -163,7 +162,6 @@ export const useJourneyDialogs = () => {
 
             if (response.data === 1) {
                 toast.success('Proceso correcto.', { id: loadingToast });
-                getHistorialEstatus();
                 getViaje(id_viaje);
 
             } else {

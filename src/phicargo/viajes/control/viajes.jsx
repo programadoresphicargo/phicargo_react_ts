@@ -24,6 +24,7 @@ import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { Popover, PopoverTrigger, PopoverContent, useDisclosure } from "@heroui/react";
 import DetencionesViajesActivos from '../detenciones/detenciones_modal';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
+import Travel from './viaje';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -449,6 +450,8 @@ const ViajesActivos = ({ }) => {
         table={table}
       />
 
+      <Travel open={open} handleClose={handleClose}></Travel>
+      
       <Dialog
         open={openMasivo}
         fullScreen={true}
@@ -474,32 +477,6 @@ const ViajesActivos = ({ }) => {
           </Toolbar>
         </AppBar>
         <ViajesActivosMasivo></ViajesActivosMasivo>
-      </Dialog>
-
-      <Dialog
-        fullScreen
-        open={open}
-        onClose={handleClose}
-        TransitionComponent={Transition}
-      >
-        <AppBar sx={{ position: 'relative', backgroundColor: 'white' }} elevation={0}>
-          <Toolbar>
-            <IconButton
-              edge="start"
-              color="black"
-              onClick={handleClose}
-              aria-label="close"
-            >
-              <CloseIcon />
-            </IconButton>
-            <Typography sx={{ ml: 2, flex: 1, color: 'black' }} variant="h6" component="div">
-            </Typography>
-            <Button autoFocus color="primary" onPress={handleClose}>
-              Salir
-            </Button>
-          </Toolbar>
-        </AppBar>
-        <Viaje></Viaje>
       </Dialog>
     </>
   );
