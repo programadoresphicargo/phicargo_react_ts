@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import {
-    Button,
     Dialog,
     DialogActions,
     DialogContent,
@@ -8,13 +7,12 @@ import {
     Box,
     Grid,
     TextField,
-    Card,
-    CardContent,
     Typography,
 } from "@mui/material";
 import axios from "axios";
 import { toast } from 'react-toastify';
 import { useAuthContext } from "../../modules/auth/hooks";
+import { Button, Card, CardBody, Input, Textarea } from "@heroui/react";
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 export default function ReporteOperador({ id_reporte, open, onClose }) {
@@ -68,8 +66,6 @@ export default function ReporteOperador({ id_reporte, open, onClose }) {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        console.log("Datos del formulario:", formData);
 
         try {
             setLoading(true);
@@ -111,9 +107,8 @@ export default function ReporteOperador({ id_reporte, open, onClose }) {
                         <div className="col-sm-auto">
                             <Button
                                 disabled={formData.atendido == true ? true : false}
-                                variant="contained"
-                                color="error"
-                                onClick={handleSubmit}
+                                color="danger"
+                                onPress={handleSubmit}
                             >
                                 Atender
                             </Button>
@@ -126,76 +121,68 @@ export default function ReporteOperador({ id_reporte, open, onClose }) {
                     <Grid container spacing={2}>
                         <Grid item xs={12} lg={6}>
                             <Card>
-                                <CardContent>
+                                <CardBody>
                                     <Box mb={3}>
-                                        <input type="text" id="id_reporte" name="id_reporte" value={formData.id_reporte} disabled />
+                                        <Input type="text"
+                                            id="id_reporte"
+                                            label="ID reporte"
+                                            variant="bordered"
+                                            value={formData.id_reporte}
+                                            disabled />
                                     </Box>
-                                    <Box mb={3}>
-                                        <Typography variant="subtitle1">Fecha del reporte</Typography>
-                                        <TextField
+                                    <Box mb={2}>
+                                        <Input
                                             fullWidth
                                             id="fecha_creacion"
-                                            name="fecha_creacion"
-                                            size="small"
-                                            variant="standard"
+                                            label="Fecha creacion"
+                                            variant="bordered"
                                             disabled
                                             value={formData.fecha_creacion}
                                             onChange={handleInputChange}
                                         />
                                     </Box>
-                                    <Box mb={3}>
-                                        <Typography variant="subtitle1">Referencia de viaje</Typography>
-                                        <TextField
-                                            fullWidth
+                                    <Box mb={2}>
+                                        <Input
                                             id="referencia"
-                                            name="referencia"
-                                            size="small"
-                                            variant="standard"
+                                            label="Referencia de viaje"
+                                            variant="bordered"
                                             disabled
                                             value={formData.referencia}
                                             onChange={handleInputChange}
                                         />
                                     </Box>
-                                    <Box mb={3}>
-                                        <Typography variant="subtitle1">Operador</Typography>
-                                        <TextField
-                                            fullWidth
+                                    <Box mb={2}>
+                                        <Input
                                             id="nombre_operador"
-                                            name="nombre_operador"
-                                            size="small"
-                                            variant="standard"
+                                            label="Operador"
+                                            variant="bordered"
                                             disabled
                                             value={formData.nombre_operador}
                                             onChange={handleInputChange}
                                         />
                                     </Box>
-                                    <Box mb={3}>
-                                        <Typography variant="subtitle1">Unidad</Typography>
-                                        <TextField
-                                            fullWidth
+                                    <Box mb={2}>
+                                        <Input
                                             id="unidad"
-                                            name="unidad"
-                                            size="small"
-                                            variant="standard"
+                                            label="Unidad"
+                                            variant="bordered"
                                             disabled
                                             value={formData.unidad}
                                             onChange={handleInputChange}
                                         />
                                     </Box>
-                                </CardContent>
+                                </CardBody>
                             </Card>
                         </Grid>
 
                         <Grid item xs={12} lg={6}>
                             <Card>
-                                <CardContent>
+                                <CardBody>
                                     <Box mb={3}>
-                                        <Typography variant="subtitle1">Comentarios del operador</Typography>
-                                        <TextField
-                                            fullWidth
+                                        <Textarea
                                             id="comentarios_operador"
-                                            name="comentarios_operador"
-                                            variant="outlined"
+                                            label="Comentarios operador"
+                                            variant="bordered"
                                             multiline
                                             rows={4}
                                             disabled
@@ -204,53 +191,45 @@ export default function ReporteOperador({ id_reporte, open, onClose }) {
                                         />
                                     </Box>
                                     <Box mb={3}>
-                                        <Typography variant="subtitle1">Comentarios del monitorista</Typography>
-                                        <TextField
+                                        <Textarea
                                             disabled={formData.atendido == true ? true : false}
-                                            fullWidth
                                             id="comentarios_monitorista"
-                                            name="comentarios_monitorista"
-                                            variant="outlined"
+                                            label="Comentarios Monitorista"
+                                            variant="bordered"
                                             multiline
-                                            rows={4}
+                                            rows={5}
                                             value={formData.comentarios_monitorista}
                                             onChange={handleInputChange}
                                         />
                                     </Box>
                                     <Box mb={3}>
-                                        <Typography variant="subtitle1">Atendido por</Typography>
-                                        <TextField
-                                            fullWidth
+                                        <Input
                                             id="usuario_resolvio"
-                                            name="usuario_resolvio"
-                                            size="small"
-                                            variant="standard"
+                                            label="Usuario resolvio"
+                                            variant="bordered"
                                             disabled
                                             value={formData.usuario_resolvio}
                                             onChange={handleInputChange}
                                         />
                                     </Box>
                                     <Box mb={3}>
-                                        <Typography variant="subtitle1">Fecha de atención</Typography>
-                                        <TextField
-                                            fullWidth
+                                        <Input
                                             id="fecha_atendido"
-                                            name="fecha_atendido"
-                                            size="small"
-                                            variant="standard"
+                                            label="Fecha atendido"
+                                            variant="bordered"
                                             disabled
                                             value={formData.fecha_atendido}
                                             onChange={handleInputChange}
                                         />
                                     </Box>
-                                </CardContent>
+                                </CardBody>
                             </Card>
                         </Grid>
                     </Grid>
                 </form>
             </DialogContent>
             <DialogActions>
-                <Button onClick={onClose}>Salir</Button>
+                <Button onPress={onClose} color="danger">Salir</Button>
             </DialogActions>
         </Dialog>
     );

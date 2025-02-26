@@ -24,6 +24,7 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
+import odooApi from '@/phicargo/modules/core/api/odoo-api';
 
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
@@ -40,12 +41,12 @@ const Disponibilidad_unidades = () => {
     const fetchData = async () => {
         setLoading(true);
         try {
-            const response = await fetch(VITE_PHIDES_API_URL + '/disponibilidad/equipos/getEquipos.php');
-            const jsonData = await response.json();
-            setData(jsonData);
+            const response = await odooApi.get('/vehicles/latest-operations/');
+            setData(response.data);
             setLoading(false);
         } catch (error) {
             console.error('Error al obtener los datos:', error);
+            setLoading(false);
         }
     };
 
@@ -56,38 +57,28 @@ const Disponibilidad_unidades = () => {
     const columns = useMemo(
         () => [
             {
-                accessorKey: 'name2',
+                accessorKey: 'vehicle_name',
                 header: 'Vehículo',
-            },
-            {
-                accessorKey: 'serial_number',
-                header: 'Número de serie',
             },
             {
                 accessorKey: 'license_plate',
                 header: 'Placas',
             },
             {
-                accessorKey: 'fleet_type',
-                header: 'Tipo de vehiculo',
-            },
-            {
                 accessorKey: 'x_status',
                 header: 'Estado',
                 Cell: ({ cell }) => {
                     const estado = cell.getValue() || 'desconocido';
-                    let badgeClass = 'badge rounded-pill text-white ';
+                    let badgeClass = 'default';
 
                     if (estado === 'viaje') {
-                        badgeClass += 'bg-primary';
+                        badgeClass = 'primary';
                     } else if (estado === 'maniobra') {
-                        badgeClass += 'bg-danger';
-                    } else {
-                        badgeClass += 'bg-secondary';
+                        badgeClass = 'danger';
                     }
 
                     return (
-                        <Chip className={badgeClass} style={{ width: '100px' }}>
+                        <Chip color={badgeClass} size='sm'>
                             {estado}
                         </Chip>
                     );
@@ -98,8 +89,24 @@ const Disponibilidad_unidades = () => {
                 header: 'Viaje',
             },
             {
-                accessorKey: 'x_maniobra',
-                header: 'Maniobra',
+                accessorKey: 'last_travel_end_date',
+                header: 'Finalización',
+            },
+            {
+                accessorKey: 'operador_viaje',
+                header: 'Operador',
+            },
+            {
+                accessorKey: 'last_maniobra_id',
+                header: 'ID Maniobra',
+            },
+            {
+                accessorKey: 'last_maniobra_end_date',
+                header: 'Finalización maniobra',
+            },
+            {
+                accessorKey: 'operador_maniobra',
+                header: 'Operador maniobra',
             },
         ],
         [],
@@ -109,8 +116,8 @@ const Disponibilidad_unidades = () => {
         setSelectedRow(row.original);
         setStatus(row.original.x_status);
         setOpenDialog(true);
-        setVehicle(row.original.id)
-        setVehicleName(row.original.name2)
+        setVehicle(row.original.vehicle_id)
+        setVehicleName(row.original.vehicle_name)
     };
 
     const handleUpdateStatus = async () => {
