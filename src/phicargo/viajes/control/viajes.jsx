@@ -23,6 +23,7 @@ import ViajesActivosMasivo from '../envio_masivo/viajes_activos';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { Popover, PopoverTrigger, PopoverContent, useDisclosure } from "@heroui/react";
 import DetencionesViajesActivos from '../detenciones/detenciones_modal';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -348,6 +349,7 @@ const ViajesActivos = ({ }) => {
     enableColumnPinning: true,
     enableStickyHeader: true,
     positionGlobalFilter: "right",
+    localization: MRT_Localization_ES,
     muiSearchTextFieldProps: {
       placeholder: `Buscar en ${data.length} viajes`,
       sx: { minWidth: '300px' },
