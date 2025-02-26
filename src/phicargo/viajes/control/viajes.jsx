@@ -341,9 +341,9 @@ const ViajesActivos = ({ }) => {
           }, [data]);
 
           return (
-            <Chip className="text-white" color='success' size='sm' style={{ width: '150px' }}>
+            <p>
               {detenciones}
-            </Chip>
+            </p>
           );
         },
       },
