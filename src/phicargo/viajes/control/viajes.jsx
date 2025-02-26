@@ -330,7 +330,7 @@ const ViajesActivos = ({ }) => {
                   }
                 });
 
-                setDetenciones(response.data[0]?.total_detention_minutes ?? 'No disponible');
+                setDetenciones(response.data[0]?.total_detention_minutes ?? '0');
               } catch (error) {
                 console.error('Error', error);
                 setDetenciones('Error');
