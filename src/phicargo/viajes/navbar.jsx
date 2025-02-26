@@ -18,6 +18,9 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import Notificaciones from './panel_notificaciones/panel';
 import ProblemasOperadores from './problemas_operadores/panel';
 import AppsIcon from '@mui/icons-material/Apps';
+import {
+    useDisclosure,
+} from "@heroui/react";
 
 const pages = [
     { name: 'ACTIVOS', path: '/viajes' },
@@ -40,11 +43,7 @@ function NavbarViajes() {
     };
 
 
-    const [openPanelNotificaciones, setPanelNotificaciones] = React.useState(false);
-
-    const toggleDrawer = (newOpen) => () => {
-        setPanelNotificaciones(newOpen);
-    };
+    const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
     const [openPanelPO, setPanelPO] = React.useState(false);
 
@@ -160,7 +159,7 @@ function NavbarViajes() {
                                 size="large"
                                 aria-label="show 17 new notifications"
                                 color="inherit"
-                                onClick={toggleDrawer(true)}
+                                onClick={onOpen}
                             >
                                 <Badge badgeContent={1} color="error">
                                     <NotificationsIcon />
@@ -172,7 +171,7 @@ function NavbarViajes() {
                 </Container>
             </AppBar>
 
-            <Notificaciones open={openPanelNotificaciones} toggleDrawer={toggleDrawer}></Notificaciones>
+            <Notificaciones isOpen={isOpen} onOpen={onOpen} onOpenChange={onOpenChange}></Notificaciones>
             <ProblemasOperadores open={openPanelPO} toggleDrawer={toggleDrawer2}></ProblemasOperadores>
         </>
     );

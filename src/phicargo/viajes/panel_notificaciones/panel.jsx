@@ -23,7 +23,7 @@ import {
     useDisclosure,
 } from "@heroui/react";
 
-export default function Notificaciones({ open, toggleDrawer }) {
+export default function Notificaciones({ isOpen, onOpen, onOpenChange }) {
 
     const [estatus, setEstatus] = React.useState([]);
     const [isLoading, setLoading] = React.useState(false);
@@ -61,8 +61,8 @@ export default function Notificaciones({ open, toggleDrawer }) {
             <Travel open={openTravel} handleClose={handleClose}></Travel>
             <div>
                 <Drawer
-                    isOpen={open}
-                    size='xl'
+                    isOpen={isOpen}
+                    size='lg'
                     motionProps={{
                         variants: {
                             enter: {
@@ -77,7 +77,7 @@ export default function Notificaciones({ open, toggleDrawer }) {
                             },
                         },
                     }}
-                    onOpenChange={toggleDrawer}
+                    onOpenChange={onOpenChange}
                 >
                     <DrawerContent>
                         {(onClose) => (
