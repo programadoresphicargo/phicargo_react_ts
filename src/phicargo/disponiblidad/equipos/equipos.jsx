@@ -86,27 +86,45 @@ const Disponibilidad_unidades = () => {
             },
             {
                 accessorKey: 'referencia_viaje',
-                header: 'Viaje',
+                header: 'Ultimo viaje',
+                muiTableBodyCellProps: {
+                    sx: { backgroundColor: '#ffeb3b', fontFamily: 'Inter', },
+                },
             },
             {
                 accessorKey: 'last_travel_end_date',
                 header: 'Finalización',
+                muiTableBodyCellProps: {
+                    sx: { backgroundColor: '#ffeb3b', fontFamily: 'Inter', },
+                },
             },
             {
                 accessorKey: 'operador_viaje',
                 header: 'Operador',
+                muiTableBodyCellProps: {
+                    sx: { backgroundColor: '#ffeb3b', fontFamily: 'Inter', },
+                },
             },
             {
                 accessorKey: 'last_maniobra_id',
                 header: 'ID Maniobra',
+                muiTableBodyCellProps: {
+                    sx: { backgroundColor: '#81c784', fontFamily: 'Inter', },
+                },
             },
             {
                 accessorKey: 'last_maniobra_end_date',
                 header: 'Finalización maniobra',
+                muiTableBodyCellProps: {
+                    sx: { backgroundColor: '#81c784', fontFamily: 'Inter', },
+                },
             },
             {
                 accessorKey: 'operador_maniobra',
                 header: 'Operador maniobra',
+                muiTableBodyCellProps: {
+                    sx: { backgroundColor: '#81c784', fontFamily: 'Inter', },
+                },
             },
         ],
         [],
@@ -183,7 +201,7 @@ const Disponibilidad_unidades = () => {
         },
         muiTableContainerProps: {
             sx: {
-                maxHeight: 'calc(100vh - 176px)',
+                maxHeight: 'calc(100vh - 160px)',
             },
         },
     });
