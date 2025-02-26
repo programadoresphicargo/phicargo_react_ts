@@ -289,7 +289,7 @@ const ViajesActivos = ({ }) => {
       },
       {
         accessorKey: 'horas_transcurridas',
-        header: 'Horas transcurridas',
+        header: 'Horas en planta',
       },
       {
         accessorKey: 'estado_estadia',
@@ -309,6 +309,52 @@ const ViajesActivos = ({ }) => {
           );
         },
       },
+      {
+        accessorKey: 'a',
+        header: 'Detenido ruta->planta',
+        Cell: ({ row }) => {
+          const [detenciones, setDetenciones] = React.useState([]);
+          const vehicle_id = row.original.vehicle_id;
+          const fecha_inicio = row.original.fecha_inicio;
+          const llegada_planta = row.original.fecha_llegada_planta ?? new Date().toISOString();
+
+          React.useEffect(() => {
+            const calcularDetenciones = async () => {
+
+              try {
+                const response = await odooApi.get('/detenciones/by_vehicle_id_acumulado/', {
+                  params: {
+                    vehicle_id: vehicle_id,
+                    date_start: fecha_inicio,
+                    date_end: llegada_planta
+                  }
+                });
+
+                setDetenciones(response.data[0]?.total_detention_minutes ?? 'No disponible');
+              } catch (error) {
+                console.error('Error', error);
+                setDetenciones('Error');
+              }
+            };
+
+            calcularDetenciones();
+          }, [data]);
+
+          return (
+            <Chip className="text-white" color='success' size='sm' style={{ width: '150px' }}>
+              {detenciones}
+            </Chip>
+          );
+        },
+      },
+      {
+        accessorKey: 'b',
+        header: 'Detenido planta',
+      },
+      {
+        accessorKey: 'c',
+        header: 'Detenido salida->patio',
+      }
     ],
     [],
   );
