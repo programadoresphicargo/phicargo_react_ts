@@ -12,7 +12,6 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import CorreosElectronicosViaje from './correos/correos_electronicos';
 import Slide from '@mui/material/Slide';
-import LinearProgress from '@mui/material/LinearProgress';
 import { Button } from "@heroui/button";
 import { ViajeContext } from './context/viajeContext';
 import { useJourneyDialogs } from './seguimiento/funciones';
@@ -20,7 +19,7 @@ import IndexCambioEquipo from './cambio_equipo/documentacion';
 import Map from './mapa/mapa';
 import Notificaciones from './panel_notificaciones/panel';
 import Checklist from './checklist/checklist';
-import { Chip } from "@heroui/react";
+import { Chip, Progress } from "@heroui/react";
 import { CostosExtrasProvider } from '../costos/context/context';
 import Detenciones from './detenciones/detenciones';
 import FoliosCostosExtras from '../costos/folios/tabla';
@@ -51,7 +50,6 @@ const Viaje = ({ }) => {
     }
   };
 
-
   const handleCloseCorreos = () => {
     setOpenCorreos(false);
   };
@@ -60,7 +58,7 @@ const Viaje = ({ }) => {
     <>
       {isLoading && (
         <Box sx={{ width: '100%' }}>
-          <LinearProgress />
+          <Progress isIndeterminate aria-label="Loading..." size="sm" />
         </Box>
       )}
 

@@ -24,7 +24,7 @@ import Contenedores from "../contenedores/contenedores";
 export default function BasicButtons2() {
 
     const { iniciar_viaje, finalizar_viaje, liberar_resguardo, reactivar_viaje, comprobar_operador, comprobar_disponibilidad } = useJourneyDialogs();
-    const { id_viaje, viaje, correosLigados } = useContext(ViajeContext);
+    const { id_viaje, viaje, correosLigados, isLoading } = useContext(ViajeContext);
 
     const [open, setOpen] = React.useState(false);
 
@@ -48,19 +48,19 @@ export default function BasicButtons2() {
                                 <div>
                                     <Stack spacing={1} direction="row">
                                         {viaje.estado == null && (
-                                            <Button color="primary" onClick={comprobar_disponibilidad} isDisabled={correosLigados}><i class="bi bi-play-fill"></i> Iniciar viaje</Button>
+                                            <Button color="primary" onPress={comprobar_disponibilidad} isDisabled={correosLigados || isLoading}><i class="bi bi-play-fill"></i> Iniciar viaje</Button>
                                         )}
                                         {['ruta', 'planta', 'retorno'].includes(viaje.estado) && (
-                                            <Button color="danger" onClick={finalizar_viaje} isDisabled={correosLigados}><i class="bi bi-stop-fill"></i> Finalizar viaje</Button>
+                                            <Button color="danger" onPress={finalizar_viaje} isDisabled={correosLigados || isLoading}><i class="bi bi-stop-fill"></i> Finalizar viaje</Button>
                                         )}
-                                        <Button color="success" onClick={handleClickOpen} className="text-white" isDisabled={correosLigados}>
+                                        <Button color="success" onPress={handleClickOpen} className="text-white" isDisabled={correosLigados || isLoading}>
                                             <i className="bi bi-send-plus-fill"></i> Nuevo estatus
                                         </Button>
                                         {viaje.estado == 'resguardo' && (
-                                            <Button color="primary" onClick={liberar_resguardo} isDisabled={correosLigados}>Liberar resguardo</Button>
+                                            <Button color="primary" onPress={liberar_resguardo} isDisabled={correosLigados || isLoading}>Liberar resguardo</Button>
                                         )}
                                         {viaje.estado == 'finalizado' && (
-                                            <Button color="success" onClick={reactivar_viaje} className="text-white" isDisabled={correosLigados}>Reactivar viaje</Button>
+                                            <Button color="success" onPress={reactivar_viaje} className="text-white" isDisabled={correosLigados || isLoading}>Reactivar viaje</Button>
                                         )}
                                     </Stack>
                                 </div>
