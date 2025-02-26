@@ -124,6 +124,7 @@ export default function BasicButtons2() {
                         <CardHeader>
                             <p>Historial de estatus</p>
                         </CardHeader>
+                        <Divider></Divider>
                         <CardBody>
                             <EstatusHistorial fetchData={iniciar_viaje}></EstatusHistorial>
                         </CardBody>

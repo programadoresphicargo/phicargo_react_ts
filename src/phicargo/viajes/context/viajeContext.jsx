@@ -94,17 +94,6 @@ const ViajeProvider = ({ children }) => {
         }
     };
 
-    const [estatusHistorial, setHistorial] = useState([]);
-
-    const getHistorialEstatus = async () => {
-        try {
-            const response = await odooApi.get('/reportes_estatus_viajes/by_id_viaje/' + id_viaje);
-            setHistorial(response.data);
-        } catch (error) {
-            console.error('Error al obtener los datos:', error);
-        }
-    };
-
     return (
         <ViajeContext.Provider value={{
             id_viaje,
@@ -114,8 +103,6 @@ const ViajeProvider = ({ children }) => {
             comprobacion_correos,
             correosLigados,
             isLoading,
-            estatusHistorial,
-            getHistorialEstatus
         }}>
             {children}
         </ViajeContext.Provider>
