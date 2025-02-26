@@ -56,8 +56,10 @@ const Detenciones = ({ }) => {
     for (let i = 0; i < keys.length - 1; i++) {
       const date_start = data[keys[i]];
       const date_end = data[keys[i + 1]];
-      console.log(data[keys[i]]);
-      console.log(data[keys[i]]);
+
+      if (date_start && (date_end === null || date_end === undefined)) {
+        date_end = new Date().toISOString();
+      }
 
       const url = `/detenciones/by_vehicle_id/`;
 
@@ -72,10 +74,9 @@ const Detenciones = ({ }) => {
 
         console.log(`Datos entre ${keys[i]} y ${keys[i + 1]}:`, response.data);
 
-        // Procesamos los datos y agregamos el rango de fechas
         const formattedData = response.data.map((item) => ({
           ...item,
-          rango_fechas: `${keys[i]} - ${keys[i + 1]}`, // Agrupación por rango
+          rango_fechas: `${keys[i]} - ${keys[i + 1]}`,
         }));
 
         newDetenciones.push(...formattedData);
