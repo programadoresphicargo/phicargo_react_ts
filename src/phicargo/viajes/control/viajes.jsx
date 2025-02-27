@@ -153,41 +153,6 @@ const ViajesActivos = ({ }) => {
         accessorKey: 'vehiculo',
         header: 'Vehiculo',
         id: 'vehiculo',
-        Cell: ({ row }) => {
-          const id_viaje = row.original.id_viaje;
-          const vehiculo = row.original.vehiculo;
-          const vehicle_id = row.original.vehicle_id; // Asegúrate de que esté disponible
-          const [color, setColor] = React.useState('');
-
-          React.useEffect(() => {
-            const consultarDetencion = async () => {
-              try {
-                const response = await odooApi.get('/detenciones/consultar_detencion/' + vehicle_id);
-
-                if (response.data && response.data.length > 0) {
-                  if (response.data[0].detenido_mas_15_min === true) {
-                    setColor('danger');
-                  } else {
-                    setColor('default');
-                  }
-                } else {
-                  setColor('default');
-                }
-              } catch (error) {
-                console.error('Error en la petición:', error);
-                setColor('default');
-              }
-            };
-
-            consultarDetencion();
-          }, [vehicle_id, data]);
-
-          return (
-            <Chip color={color} size="sm">
-              {vehiculo}
-            </Chip>
-          );
-        },
       },
       {
         accessorKey: 'operador',
