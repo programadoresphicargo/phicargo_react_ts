@@ -29,7 +29,12 @@ const EstatusDropdown = ({ id_viaje, ultimo_estatus }) => {
     return (
         <Dropdown isOpen={isOpen} onOpenChange={handleOpen}>
             <DropdownTrigger>
-                <Button disabled={isLoading} color='primary' size="sm">
+                <Button
+                    disabled={isLoading}
+                    color="primary"
+                    size="sm"
+                    startContent={!isLoading &&  <i class="bi bi-caret-down-fill"></i>}
+                >
                     {isLoading ? <Spinner size="sm" /> : ultimo_estatus}
                 </Button>
             </DropdownTrigger>
