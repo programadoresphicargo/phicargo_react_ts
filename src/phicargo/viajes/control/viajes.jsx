@@ -379,7 +379,7 @@ const ViajesActivos = ({ }) => {
 
         <Button color='danger' className='text-white' startContent={<i class="bi bi-sign-stop"></i>} onPress={() => handleOpen()}>Unidades detenidas</Button>
 
-      </Box>
+      </Box >
     ),
   });
 

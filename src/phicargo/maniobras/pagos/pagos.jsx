@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import customFontTheme from '../../../theme';
-import Button from '@mui/material/Button';
 import Nomina_form from './form_pago';
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
 import ManiobrasNavBar from '../Navbar';
+import { Box } from '@mui/system';
+import { Button } from '@heroui/react';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const Nominas = () => {
@@ -138,15 +139,28 @@ const Nominas = () => {
         fontSize: '14px',
       },
     },
+    muiTableContainerProps: {
+      sx: {
+        maxHeight: 'calc(100vh - 200px)',
+      },
+    },
+    renderTopToolbarCustomActions: ({ table }) => (
+      <Box
+        sx={{
+          display: 'flex',
+          gap: '16px',
+          padding: '8px',
+          alignItems: 'center',
+        }}
+      >
+        <Button color='primary' onPress={handleShowModal}>Nuevo registro de pago</Button>
+      </Box >
+    ),
   });
 
   return (
     <div>
       <ManiobrasNavBar />
-      <div className='m-2'>
-        < h1 className='text-white'>Nominas</h1>
-        <Button variant="contained" onClick={handleShowModal}>Nuevo registro de pago</Button>
-      </div>
       <Nomina_form
         show={modalShow}
         handleClose={handleCloseModal}

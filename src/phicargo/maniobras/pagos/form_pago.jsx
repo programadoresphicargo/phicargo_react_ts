@@ -14,7 +14,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
+import { Button, Card, CardBody } from '@heroui/react';
 import { ToastContainer, toast } from 'react-toastify';
 import Formulariomaniobra from '../maniobras/formulario_maniobra';
 import * as XLSX from 'xlsx';
@@ -230,6 +230,26 @@ const Nomina_form = ({ show, handleClose, id_pago, id_operador, fecha_inicio, fe
         },
         enableRowSelection: true,
         columnFilterDisplayMode: 'popover',
+        muiTablePaperProps: {
+            elevation: 0,
+            sx: {
+                borderRadius: '0',
+            },
+        },
+        muiTableHeadCellProps: {
+            sx: {
+                fontFamily: 'Inter',
+                fontWeight: 'Bold',
+                fontSize: '14px',
+            },
+        },
+        muiTableBodyCellProps: {
+            sx: {
+                fontFamily: 'Inter',
+                fontWeight: 'normal',
+                fontSize: '14px',
+            },
+        },
         muiTableBodyRowProps: ({ row }) => ({
             onClick: ({ event }) => {
                 handleShowModal();
@@ -269,7 +289,10 @@ const Nomina_form = ({ show, handleClose, id_pago, id_operador, fecha_inicio, fe
 
             <Dialog open={show} onClose={handleClose} fullScreen>
 
-                <AppBar sx={{ position: 'relative' }}>
+                <AppBar sx={{
+                    background: 'linear-gradient(90deg, #0b2149, #002887)',
+                    padding: '0 16px'
+                }} position='static' elevation={0}>
                     <Toolbar>
                         <IconButton
                             edge="start"
@@ -288,7 +311,7 @@ const Nomina_form = ({ show, handleClose, id_pago, id_operador, fecha_inicio, fe
                 <DialogContent>
 
                     <div className="flex flex-wrap gap-2 items-center mt-5 mb-5">
-                        <Button variant="contained" onClick={registrar_pago} size='sm'>Guardar</Button>
+                        <Button color='primary' onPress={registrar_pago}>Guardar nomina</Button>
                     </div>
 
                     <Box sx={{ flexGrow: 1 }} mb={4}>
@@ -333,7 +356,11 @@ const Nomina_form = ({ show, handleClose, id_pago, id_operador, fecha_inicio, fe
                         </Grid>
                     </Box>
 
-                    <MaterialReactTable table={table} />
+                    <Card>
+                        <CardBody>
+                            <MaterialReactTable table={table} />
+                        </CardBody>
+                    </Card>
 
                 </DialogContent>
             </Dialog>

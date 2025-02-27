@@ -6,7 +6,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 import { Box } from '@mui/material';
-import { Chip } from "@heroui/react";
+import { Chip, Button } from "@heroui/react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -191,7 +191,7 @@ const Maniobras = ({ estado_maniobra }) => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
-    state: { isLoading: isLoading2 },
+    state: { showProgressBars: isLoading2 },
     enableColumnPinning: true,
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
@@ -249,6 +249,7 @@ const Maniobras = ({ estado_maniobra }) => {
           alignItems: 'center',
         }}
       >
+        <Button color="primary" size='sm' isLoading={isLoading2} onPress={() => fetchData()}>Refrescar</Button>
       </Box >
     ),
   });
