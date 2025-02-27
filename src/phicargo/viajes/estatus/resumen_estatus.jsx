@@ -31,6 +31,7 @@ const EstatusDropdown = ({ id_viaje, ultimo_estatus }) => {
             <DropdownTrigger>
                 <Button
                     disabled={isLoading}
+                    isLoading={isLoading}
                     color="primary"
                     size="sm"
                     startContent={!isLoading &&  <i class="bi bi-caret-down-fill"></i>}
