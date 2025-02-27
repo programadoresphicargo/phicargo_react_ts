@@ -42,6 +42,9 @@ const ControlViajesFinalizados = lazy(
 const ControlEstatusOperativos = lazy(
   () => import('../phicargo/control_estatus/ControlEstatusOperativos'),
 );
+const EnvioMasivoViajes = lazy(
+  () => import('../phicargo/viajes/envio_masivo/index'),
+);
 const CorreosElectronicos = lazy(
   () => import('../phicargo/correos_electronicos/correos_electronicos'),
 );
@@ -175,6 +178,15 @@ export const PrivateRoutes = () => {
           element={
             <Suspense fallback={<LoadingPage />}>
               <ControlEstatusOperativos />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/envio_masivo_viajes"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <EnvioMasivoViajes />
             </Suspense>
           }
         />

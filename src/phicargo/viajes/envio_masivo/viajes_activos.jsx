@@ -13,6 +13,8 @@ import Swal from 'sweetalert2';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { useAuthContext } from '@/phicargo/modules/auth/hooks';
 import { Dropdown, DropdownMenu, DropdownTrigger, DropdownItem } from "@heroui/react";
+import NavbarViajes from '../navbar';
+import { Spinner } from "@heroui/spinner";
 
 const ViajesActivosMasivo = ({ }) => {
   const [allData, setAllData] = useState([]);
@@ -153,31 +155,49 @@ const ViajesActivosMasivo = ({ }) => {
           const id_viaje = cell.row.original.id_viaje;
           const ultimo_estatus = cell.getValue() || '';
           const [items, setItems] = useState([]);
+          const [isOpen, setIsOpen] = useState(false);
+          const [isLoading, setIsLoading] = useState(false);
 
-          useEffect(() => {
-            odooApi.get("/reportes_estatus_viajes/by_id_viaje/" + id_viaje)
+          const fetchItems = () => {
+            setIsLoading(true);
+            odooApi.get(`/reportes_estatus_viajes/by_id_viaje/${id_viaje}`)
               .then((response) => {
                 setItems(response.data);
               })
               .catch((error) => {
                 console.error("Error al obtener los items:", error);
+              })
+              .finally(() => {
+                setIsLoading(false);
               });
-          }, []);
+          };
+
+          const handleOpen = (open) => {
+            setIsOpen(open);
+            if (open) fetchItems();
+          };
 
           return (
-            <Dropdown>
+            <Dropdown isOpen={isOpen} onOpenChange={handleOpen}>
               <DropdownTrigger>
-                <Button variant="bordered">{ultimo_estatus}</Button>
+                <Button disabled={isLoading} color='primary'>
+                  {isLoading ? <Spinner size="sm" /> : ultimo_estatus}
+                </Button>
               </DropdownTrigger>
-              <DropdownMenu aria-label="Dynamic Actions" items={items}>
-                {(item) => (
-                  <DropdownItem
-                    key={item.nombre_estatus}
-                  >
-                    {item.nombre_estatus}
-                  </DropdownItem>
-                )}
-              </DropdownMenu>
+              {isLoading ? (
+                <div className="flex justify-center p-2">
+                  <Spinner color="warning" label="Loading..." />
+                </div>
+              ) : (
+                <DropdownMenu aria-label="Dynamic Actions" items={items} className="max-h-[400px] overflow-auto">
+                  {(item) => (
+                    <DropdownItem key={item.nombre_estatus}>
+                      <p className="text-tiny uppercase font-bold">{item.nombre_estatus}</p>
+                      <small className="text-default-500">{item.primera_fecha_envio}</small>
+                    </DropdownItem>
+                  )}
+                </DropdownMenu>
+              )}
             </Dropdown>
           );
         },
@@ -315,7 +335,10 @@ const ViajesActivosMasivo = ({ }) => {
     ),
   });
 
-  return <MaterialReactTable table={table} />;
+  return (
+    <>
+      <MaterialReactTable table={table} />
+    </>);
 };
 
 export default ViajesActivosMasivo;

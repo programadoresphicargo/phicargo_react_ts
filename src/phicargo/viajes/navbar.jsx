@@ -27,6 +27,7 @@ const pages = [
     { name: 'FINALIZADOS', path: '/viajesfinalizados' },
     { name: 'PROGRAMACIÓN', path: '/viajesprogramados' },
     { name: 'CONTROL ESTATUS', path: '/controlestatus' },
+    { name: 'ENVIO MASIVO', path: '/envio_masivo_viajes' },
 ];
 
 function NavbarViajes() {
