@@ -8,8 +8,6 @@ import {
     Select,
     CircularProgress,
 } from '@mui/material';
-import { ThemeProvider } from '@mui/material/styles';
-import customFontTheme from '../../../theme';
 import {
     MaterialReactTable,
     useMaterialReactTable,
@@ -17,7 +15,6 @@ import {
 import { toast } from 'react-toastify';
 import ManiobrasNavBar from '../../maniobras/Navbar';
 import { Chip, Button } from "@heroui/react";
-import HistorialVehiculo from './historial';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
@@ -25,6 +22,7 @@ import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import IndexHistorial from '.';
 
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
@@ -230,7 +228,7 @@ const Disponibilidad_unidades = () => {
                     </Toolbar>
                 </AppBar>
                 <DialogContent>
-                    <HistorialVehiculo vehicle_id={vehicle_id}></HistorialVehiculo>
+                    <IndexHistorial vehicle_id={vehicle_id}></IndexHistorial>
                 </DialogContent>
             </Dialog>
         </div>

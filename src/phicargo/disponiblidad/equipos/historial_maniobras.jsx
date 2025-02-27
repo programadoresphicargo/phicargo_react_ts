@@ -23,7 +23,7 @@ import { Tabs, Tab, Card, CardBody } from "@heroui/react";
 import Formulariomaniobra from '@/phicargo/maniobras/maniobras/formulario_maniobra';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
-const HistorialVehiculo = ({ vehicle_id }) => {
+const HistorialManiobrasVehiculo = ({ vehicle_id }) => {
     const [isLoading2, setLoading] = useState();
     const [data, setData] = useState([]);
     const [modalShow, setModalShow] = useState(false);
@@ -226,24 +226,7 @@ const HistorialVehiculo = ({ vehicle_id }) => {
     });
 
     return (<>
-        <div>
-            <Tabs aria-label="Options" color="primary">
-                <Tab key="maniobras" title="Maniobras">
-                    <Card>
-                        <CardBody>
-                            <MaterialReactTable table={table} />
-                        </CardBody>
-                    </Card>
-                </Tab>
-                <Tab key="viajes" title="Viajes (proximamente)" disabled={true}>
-                    <Card>
-                        <CardBody>
-                            <MaterialReactTable table={table} />
-                        </CardBody>
-                    </Card>
-                </Tab>
-            </Tabs>
-        </div>
+        <MaterialReactTable table={table} />
 
         <Formulariomaniobra
             show={modalShow}
@@ -257,4 +240,4 @@ const HistorialVehiculo = ({ vehicle_id }) => {
     );
 };
 
-export default HistorialVehiculo;
+export default HistorialManiobrasVehiculo;
