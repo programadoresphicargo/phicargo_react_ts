@@ -299,6 +299,11 @@ const ViajesActivosMasivo = ({ }) => {
         fontSize: '14px',
       },
     },
+    muiTableContainerProps: {
+      sx: {
+        maxHeight: 'calc(100vh - 200px)',
+      },
+    },
     muiTableBodyCellProps: ({ row }) => ({
       sx: {
         backgroundColor: row.subRows?.length ? '#0456cf' : '#FFFFFF',
