@@ -86,7 +86,7 @@ const Disponibilidad_unidades = () => {
             },
             {
                 accessorKey: 'referencia_viaje',
-                header: 'Ultimo viaje',
+                header: 'Último viaje',
                 muiTableBodyCellProps: {
                     sx: { backgroundColor: '#ffeb3b', fontFamily: 'Inter', },
                 },
@@ -114,14 +114,14 @@ const Disponibilidad_unidades = () => {
             },
             {
                 accessorKey: 'last_maniobra_end_date',
-                header: 'Finalización maniobra',
+                header: 'Finalización',
                 muiTableBodyCellProps: {
                     sx: { backgroundColor: '#81c784', fontFamily: 'Inter', },
                 },
             },
             {
                 accessorKey: 'operador_maniobra',
-                header: 'Operador maniobra',
+                header: 'Operador',
                 muiTableBodyCellProps: {
                     sx: { backgroundColor: '#81c784', fontFamily: 'Inter', },
                 },
