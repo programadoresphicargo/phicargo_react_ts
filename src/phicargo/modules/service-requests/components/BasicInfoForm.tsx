@@ -12,7 +12,7 @@ import { useGetWaybillCategory } from '../hooks/queries';
 
 export const BasicInfoForm = () => {
   const { form } = useCreateServiceContext();
-  const { control } = form;
+  const { control, setValue } = form;
 
   const { isLoading, selection } = useGetWaybillCategory();
 
@@ -34,8 +34,8 @@ export const BasicInfoForm = () => {
               { label: 'México', id: 2 },
             ]}
             size="small"
-            // required
-            // rules={{ required: 'Elija una sucursal por favor' }}
+            required
+            rules={{ required: 'Elija una sucursal por favor' }}
           />
           <SelectElement
             control={control}
@@ -46,14 +46,16 @@ export const BasicInfoForm = () => {
               { label: 'Phicargo', id: 2 },
             ]}
             size="small"
-            // required
-            // rules={{ required: 'Elija una compañia por favor' }}
+            required
+            rules={{ required: 'Elija una compañia por favor' }}
           />
           <DatePickerElement
             control={control}
             name="dateOrder"
             label="Fecha"
             inputProps={{ size: 'small' }}
+            required
+            rules={{ required: 'Elija una fecha por favor' }}
           />
         </div>
         <hr className="my-6 border-gray-300" />
@@ -68,32 +70,35 @@ export const BasicInfoForm = () => {
             autocompleteProps={{
               size: 'small',
               getOptionKey: (option) => option?.id,
+              onChange: (_, value) => {
+                setValue('waybillCategory', value?.id || (null as unknown as number));
+              },
             }}
             options={selection}
             loading={isLoading}
-            // required
-            // rules={{ required: 'Elija una categoría por favor' }}
+            required
+            rules={{ required: 'Elija una categoría por favor' }}
           />
           <ContactsSearchInput
             control={control}
             name="partnerId"
             label="Cliente"
-            // required
-            // rules={{ required: 'Cliente requerido' }}
+            required
+            rules={{ required: 'Cliente requerido' }}
           />
           <ContactsSearchInput
             control={control}
             name="partnerOrderId"
             label="Contacto"
-            // required
-            // rules={{ required: 'Cliente requerido' }}
+            required
+            rules={{ required: 'Cliente requerido' }}
           />
           <ContactsSearchInput
             control={control}
             name="departureAddressId"
             label="Dirección Origen"
-            // required
-            // rules={{ required: 'Dirección de origen requerida' }}
+            required
+            rules={{ required: 'Dirección de origen requerida' }}
           />
           <TextFieldElement
             control={control}
@@ -116,15 +121,15 @@ export const BasicInfoForm = () => {
             control={control}
             name="partnerInvoiceId"
             label="Dirección Facturación"
-            // required
-            // rules={{ required: 'Dirección de factura requerida' }}
+            required
+            rules={{ required: 'Dirección de factura requerida' }}
           />
           <ContactsSearchInput
             control={control}
             name="arrivalAddressId"
             label="Dirección Destino"
-            // required
-            // rules={{ required: 'Dirección destino requerida' }}
+            required
+            rules={{ required: 'Dirección destino requerida' }}
           />
         </div>
         <hr className="my-6 border-gray-300" />
@@ -140,13 +145,16 @@ export const BasicInfoForm = () => {
               { label: 'RT', id: 'rt' },
             ]}
             size="small"
-            // rules={{ required: 'Este campo es requerido' }}
+            required
+            rules={{ required: 'Este campo es requerido' }}
           />
           <TextFieldElement
             control={control}
             name="xCodigoPostal"
             label="Código Postal"
             size="small"
+            required
+            rules={{ required: 'Este campo es requerido' }}
           />
           <TextFieldElement
             control={control}

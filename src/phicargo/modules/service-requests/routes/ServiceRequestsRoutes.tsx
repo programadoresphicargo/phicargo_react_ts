@@ -4,7 +4,6 @@ import { Suspense, lazy } from 'react';
 import { LoadingPage } from '../../core/pages/LoadingPage';
 import ServiceRequestsLayout from '../layout/ServiceRequestsLayout';
 
-const ServiceRequestPage = lazy(() => import('../pages/ServiceRequestPage'));
 const CreteServiceRequestPage = lazy(() => import('../pages/CreteServiceRequestPage'));
 
 export const ServiceRequestsRoutes = () => {

@@ -9,11 +9,24 @@ import { ExtraServicesForm } from './ExtraServicesForm';
 import { GoodsTable } from './goods/GoodsTable';
 import { LinesTable } from './lines/LinesTable';
 import { ServiceDetailsForm } from './ServiceDetailsForm';
+import { SubmitHandler } from 'react-hook-form';
+import { WaybillCreate } from '../models';
 import { useCreateServiceContext } from '../hooks/useCreateServiceContext';
+import { useCreateServiceMutation } from '../hooks/queries';
 
 export const CreateServiceView = () => {
-  const { activeStep, steps, handleBack, handleNext, handleReset } =
+  const { activeStep, steps, handleBack, handleNext, form } =
     useCreateServiceContext();
+
+  const { handleSubmit } = form;
+
+  const { createServiceMutation } = useCreateServiceMutation();
+
+  const onSubmit: SubmitHandler<WaybillCreate> = (data) => {
+    console.log(data);
+    createServiceMutation.mutate(data);
+  }
+  
 
   return (
     <>
@@ -45,8 +58,9 @@ export const CreateServiceView = () => {
             color="primary"
             variant="contained"
             size="small"
-            onClick={handleNext}
+            onClick={activeStep === steps.length - 1 ? handleSubmit(onSubmit) : handleNext}
             endIcon={<ArrowForwardIosIcon />}
+            disabled={createServiceMutation.isPending}
           >
             {activeStep === steps.length - 1 ? 'Crear' : 'Siguiente'}
           </Button>
@@ -56,12 +70,8 @@ export const CreateServiceView = () => {
       {activeStep === steps.length ? (
         <>
           <Typography sx={{ mt: 2, mb: 1 }}>
-            All steps completed - you&apos;re finished
+            All steps completed
           </Typography>
-          <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-            <Box sx={{ flex: '1 1 auto' }} />
-            <Button onClick={handleReset}>Reset</Button>
-          </Box>
         </>
       ) : (
         <div className="mt-4">

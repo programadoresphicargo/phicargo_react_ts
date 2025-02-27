@@ -7,6 +7,7 @@ import {
 } from '@mui/material';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { Button } from '@/components/ui/Button';
 import { ShippedProductCreate } from '../../models';
 import { useGetTransportableProducts } from '../../hooks/queries';
@@ -58,6 +59,7 @@ export const ServiceForm = ({ onClose, product, addProduct }: Props) => {
             loading={isLoading}
             options={selection}
             autocompleteProps={{
+              getOptionKey: (option) => option.id,
               onChange: (_, value) => {
                 setValue('productId', value?.id || (null as unknown as number));
               },
@@ -121,6 +123,7 @@ export const ServiceForm = ({ onClose, product, addProduct }: Props) => {
             size="small"
             type="submit"
             onClick={handleSubmit(onSubmit)}
+            startIcon={<AddCircleIcon />}
           >
             Agregar
           </Button>

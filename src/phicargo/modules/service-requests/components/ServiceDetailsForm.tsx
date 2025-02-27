@@ -1,4 +1,4 @@
-import { AutocompleteElement, CheckboxElement, SelectElement } from 'react-hook-form-mui';
+import { AutocompleteElement, CheckboxElement, SelectElement, TextFieldElement } from 'react-hook-form-mui';
 import { Card, CardContent } from '@mui/material';
 
 import { useCreateServiceContext } from '../hooks/useCreateServiceContext';
@@ -19,22 +19,21 @@ export const ServiceDetailsForm = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
           <AutocompleteElement
             control={control}
-            name="xRutaBel"
-            label="Ruta Programada"
+            name="xRutaDestino"
+            label="Ruta Destino"
             loading={isLoading}
             textFieldProps={{ placeholder: 'Ruta' }}
             options={selection}
             autocompleteProps={{
               onChange: (_, value) => {
-                setValue('xRutaBel', value?.id || (null as unknown as number));
+                setValue('xRutaDestino', value?.id || (null as unknown as number));
               },
             }}
           />
-          <SelectElement
+          <TextFieldElement
             control={control}
-            name="xRutaDestino"
-            label="Ruta Destino"
-            options={[]}
+            name="xRutaBel"
+            label="Ruta Programada"
           />
           <SelectElement
             control={control}

@@ -49,7 +49,7 @@ export interface WaybillCreateApi {
   
   // Scheduled Route
   x_ruta_bel: string | null;
-  x_ruta_destino: string | null;
+  x_ruta_destino: number | null;
   x_tipo_bel: string;
   x_tipo2_bel: string;
   x_modo_bel: string;

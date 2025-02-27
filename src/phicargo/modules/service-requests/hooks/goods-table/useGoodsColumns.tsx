@@ -19,6 +19,7 @@ export const useGoodsColumns = () => {
         accessorFn: (row) => row.satProductId,
         header: 'Producto SAT',
         id: 'satProductId',
+        Cell: ({ row }) => row.original.satProductId?.name,
       },
       {
         accessorFn: (row) => row.quantity,
@@ -29,11 +30,13 @@ export const useGoodsColumns = () => {
         accessorFn: (row) => row.satUomId,
         header: 'UDM SAT',
         id: 'satUomId',
+        Cell: ({ row }) => row.original.satUomId?.name,
       },
       {
         accessorFn: (row) => row.weightCharge,
         header: 'Peso',
         id: 'weightCharge',
+        
       },
       {
         accessorFn: (row) => row.hazardousMaterial,
@@ -44,11 +47,13 @@ export const useGoodsColumns = () => {
         accessorFn: (row) => row.hazardousKeyProductId,
         header: 'Clave de material peligroso',
         id: 'hazardousKeyProductId',
+        Cell: ({ row }) => row.original.hazardousKeyProductId?.name,
       },
       {
         accessorFn: (row) => row.tipoEmbalajeId,
         header: 'Tipo de empaque',
         id: 'tipoEmbalajeId',
+        Cell: ({ row }) => row.original.tipoEmbalajeId?.name,
       },
     ],
     [],

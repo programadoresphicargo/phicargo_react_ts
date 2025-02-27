@@ -1,6 +1,7 @@
 import type {
   Route,
   WaybillCategory,
+  WaybillCreate,
   WaybillItem,
   WaybillTransportableProduct,
 } from '../models';
@@ -10,13 +11,30 @@ import type {
   WaybillItemApi,
   WaybillTransportableProductApi,
 } from '../models/api';
+import { ServiceRequestAdapter, WaybillAdapter } from '../adapters';
 
 import { AxiosError } from 'axios';
-import { WaybillAdapter } from '../adapters';
 import { WaybillItemKey } from '../types';
 import odooApi from '../../core/api/odoo-api';
 
 export class WaybillService {
+  public static async createService(data: WaybillCreate) {
+    const body = ServiceRequestAdapter.toWaybillCreate(data);
+    console.log(body);
+    try {
+      const response = await odooApi.post('/service-request/', body);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      if (error instanceof AxiosError) {
+        throw new Error(
+          error.response?.data?.detail || 'Error al crear el servicio',
+        );
+      }
+      throw new Error('Error al crear el servicio');
+    }
+  }
+
   public static async getCategories(): Promise<WaybillCategory[]> {
     try {
       const response = await odooApi.get<WaybillCategoryApi[]>(

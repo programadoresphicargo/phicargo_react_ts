@@ -1,3 +1,4 @@
+import { ComplementCpCreate, WaybillItem } from '../../models';
 import {
   DialogActions,
   DialogContent,
@@ -7,20 +8,20 @@ import {
 import { SelectElement, TextFieldElement } from 'react-hook-form-mui';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { Button } from '@/components/ui/Button';
-import { ComplementCpCreate } from '../../models';
 import { WaybillItemSearchInput } from './WaybillItemSearchInput';
 
 const initialValues: ComplementCpCreate = {
   description: '',
-  satProductId: 0,
-  quantity: 0,
-  satUomId: 0,
+  satProductId: '' as unknown as WaybillItem,
+  quantity: 1,
+  satUomId: '' as unknown as WaybillItem,
   dimensionsCharge: '',
-  weightCharge: 0,
+  weightCharge: 1,
   hazardousMaterial: 'NO',
   hazardousKeyProductId: null,
-  tipoEmbalajeId: null
+  tipoEmbalajeId: null,
 };
 
 interface Props {
@@ -133,17 +134,15 @@ export const GoodForm = ({ onClose, good, addGood }: Props) => {
             name="tipoEmbalajeId"
             label="Tipo de Embalaje"
           />
-          <div className="flex items-center justify-center">
-            <SelectElement
-              control={control}
-              name="hazardousMaterial"
-              label="Es peligroso"
-              options={[
-                { label: 'Si', value: 'SI' },
-                { label: 'No', value: 'NO' },
-              ]}
-            />
-          </div>
+          <SelectElement
+            control={control}
+            name="hazardousMaterial"
+            label="Es peligroso"
+            options={[
+              { label: 'Si', id: 'SI' },
+              { label: 'No', id: 'NO' },
+            ]}
+          />
           {isDangerous && (
             <WaybillItemSearchInput
               itemType="hazardous-material"
@@ -172,6 +171,7 @@ export const GoodForm = ({ onClose, good, addGood }: Props) => {
             size="small"
             type="submit"
             onClick={handleSubmit(onSubmit)}
+            startIcon={<AddCircleIcon />}
           >
             Agregar
           </Button>

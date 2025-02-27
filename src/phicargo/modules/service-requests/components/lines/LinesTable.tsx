@@ -26,6 +26,11 @@ export const LinesTable = () => {
     setValue('shippedProducts', [...services, newProduct]);
   };
 
+  const removeProduct = (index: number) => {
+    const newServices = services.filter((_, i) => i !== index);
+    setValue('shippedProducts', newServices);
+  };
+
   const table = useMaterialReactTable<ShippedProductCreate>({
     columns,
     data: services,
@@ -46,7 +51,7 @@ export const LinesTable = () => {
           </IconButton>
         </Tooltip>
         <Tooltip title="Eliminar">
-          <IconButton color="error" onClick={() => {}}>
+          <IconButton color="error" onClick={() => removeProduct(row.index)}>
             <DeleteIcon />
           </IconButton>
         </Tooltip>
