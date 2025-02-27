@@ -1,45 +1,30 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import {
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogActions,
-    Button,
-    MenuItem,
-    Select,
-    CircularProgress,
-} from '@mui/material';
-import { ThemeProvider } from '@mui/material/styles';
-import customFontTheme from '../../../theme';
+import React, { useState, useEffect, useMemo, useContext } from 'react';
 import {
     MaterialReactTable,
     useMaterialReactTable,
 } from 'material-react-table';
 import { toast } from 'react-toastify';
-import ManiobrasNavBar from '../../maniobras/Navbar';
 import { Chip } from "@heroui/react";
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { Tabs, Tab, Card, CardBody } from "@heroui/react";
-import Formulariomaniobra from '@/phicargo/maniobras/maniobras/formulario_maniobra';
-const { VITE_PHIDES_API_URL } = import.meta.env;
+import Travel from '@/phicargo/viajes/control/viaje';
+import { ViajeContext } from '@/phicargo/viajes/context/viajeContext';
 
 const HistorialViajesVehiculo = ({ vehicle_id }) => {
-    const [isLoading2, setLoading] = useState();
-    const [data, setData] = useState([]);
-    const [modalShow, setModalShow] = useState(false);
-    const [id_maniobra, setIdmaniobra] = useState('');
-    const [id_cp, setIdcp] = useState('');
-    const [idCliente, setClienteID] = useState('');
 
-    const handleShowModal = (id_maniobra, id_cp) => {
+    const { id_viaje, viaje, getViaje, loading, error, ActualizarIDViaje } = useContext(ViajeContext);
+    const [isLoading, setLoading] = useState();
+    const [data, setData] = useState([]);
+    const [open, setModalShow] = useState(false);
+
+    const handleShowModal = (id_viaje) => {
+        ActualizarIDViaje(id_viaje);
+        getViaje(id_viaje);
         setModalShow(true);
-        setIdmaniobra(id_maniobra);
-        setIdcp(id_cp);
     };
 
     const handleCloseModal = () => {
         setModalShow(false);
-        fetchData();
     };
 
     const fetchData = async () => {
@@ -110,7 +95,7 @@ const HistorialViajesVehiculo = ({ vehicle_id }) => {
             density: 'compact',
             pagination: { pageSize: 80 },
         },
-        state: { isLoading: isLoading2 },
+        state: { isLoading: isLoading },
         muiTableHeadCellProps: {
             sx: {
                 fontFamily: 'Inter',
@@ -140,8 +125,7 @@ const HistorialViajesVehiculo = ({ vehicle_id }) => {
             onClick: ({ event }) => {
                 if (row.subRows?.length) {
                 } else {
-                    handleShowModal(row.original.id_maniobra, row.original.id);
-                    setClienteID(row.original.id_cliente);
+                    handleShowModal(row.original.id);
                 }
             },
             style: {
@@ -150,18 +134,11 @@ const HistorialViajesVehiculo = ({ vehicle_id }) => {
         }),
     });
 
-    return (<>
-        <MaterialReactTable table={table} />
-
-        <Formulariomaniobra
-            show={modalShow}
-            handleClose={handleCloseModal}
-            id_maniobra={id_maniobra}
-            id_cp={id_cp}
-            id_cliente={idCliente}
-            form_deshabilitado={true}
-        />
-    </>
+    return (
+        <>
+            <MaterialReactTable table={table} />
+            <Travel open={open} handleClose={handleCloseModal}></Travel>
+        </>
     );
 };
 

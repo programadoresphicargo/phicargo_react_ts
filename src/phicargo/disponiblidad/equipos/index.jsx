@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Tabs, Tab, Card, CardBody } from "@heroui/react";
 import HistorialManiobrasVehiculo from './historial_maniobras';
 import HistorialViajesVehiculo from './historial_viajes';
+import { ViajeProvider } from '@/phicargo/viajes/context/viajeContext';
 
 const IndexHistorial = ({ vehicle_id }) => {
 
@@ -10,7 +11,9 @@ const IndexHistorial = ({ vehicle_id }) => {
             <Tab key="viajes" title="Viajes" disabled={true}>
                 <Card>
                     <CardBody>
-                        <HistorialViajesVehiculo vehicle_id={vehicle_id}></HistorialViajesVehiculo>
+                        <ViajeProvider>
+                            <HistorialViajesVehiculo vehicle_id={vehicle_id}></HistorialViajesVehiculo>
+                        </ViajeProvider>
                     </CardBody>
                 </Card>
             </Tab>
