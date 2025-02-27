@@ -54,10 +54,15 @@ const Detenciones = ({ }) => {
     const newDetenciones = [];
 
     for (let i = 0; i < keys.length - 1; i++) {
-      const date_start = data[keys[i]];
-      const date_end = data[keys[i + 1]];
+      let date_start = data[keys[i]];
+      let date_end = data[keys[i + 1]];
 
-      if (date_start && (date_end === null || date_end === undefined)) {
+      if (!date_start) {
+        console.warn(`Saltando solicitud: date_start es inválido en ${keys[i]}`);
+        continue;
+      }
+
+      if (!date_end) {
         date_end = new Date().toISOString();
       }
 
