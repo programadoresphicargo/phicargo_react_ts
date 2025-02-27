@@ -93,7 +93,7 @@ function PanelEnvio({ open, cerrar, id_reporte, estatusSeleccionado, comentarios
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await odooApi.get('/estatus_operativos/monitoreo/');
+        const response = await odooApi.get('/estatus_operativos/tipo/viaje');
         setData(response.data);
         setLoading(false);
       } catch (error) {

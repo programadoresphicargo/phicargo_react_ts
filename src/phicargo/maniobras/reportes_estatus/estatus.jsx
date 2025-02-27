@@ -10,6 +10,8 @@ import { Avatar } from "@heroui/react";
 import { Badge, Chip } from "@heroui/react";
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import EstatusHistorialAgrupado from './estatus_agrupados';
+import { Stack } from 'rsuite';
+import { toast } from 'react-toastify';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -21,6 +23,7 @@ function EstatusHistorialManiobras({ id_maniobra }) {
     const [id_reporte, setReporte] = React.useState(0);
     const [open, setOpen] = React.useState(false);
     const [scroll, setScroll] = React.useState('paper');
+    const [isLoading, setLoading] = React.useState(false);
 
     const handleClickOpen = (id_registro, scrollType) => {
         setOpen(true);
@@ -33,10 +36,14 @@ function EstatusHistorialManiobras({ id_maniobra }) {
     };
 
     const getHistorialEstatus = async () => {
+        toast.success('Obteniendo historial');
         try {
+            setLoading(true);
             const response = await odooApi.get('/estatus_maniobras/estatus_by_id_maniobra/' + id_maniobra)
             setHistorial(response.data);
+            setLoading(false);
         } catch (error) {
+            setLoading(false);
             console.error('Error al obtener los datos:', error);
         }
     };
@@ -47,6 +54,9 @@ function EstatusHistorialManiobras({ id_maniobra }) {
 
     return (
         <>
+            <Stack className='mb-3'>
+                <Button color='primary' onPress={getHistorialEstatus} isLoading={isLoading}>Actualizar historial</Button>
+            </Stack>
             <Dialog
                 open={open}
                 TransitionComponent={Transition}

@@ -1,50 +1,53 @@
-import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import TextField from '@mui/material/TextField';
 import axios from 'axios';
-import { Grid, Card, CardContent, Typography } from '@mui/material';
+import { Card, CardFooter, CardBody } from "@heroui/react";
+import { Grid, Typography, Box } from '@mui/material';
 import { styled } from '@mui/system';
 import CardMedia from '@mui/material/CardMedia';
 import React, { useState, useCallback, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { toast } from 'react-toastify';
 import { useAuthContext } from '@/phicargo/modules/auth/hooks';
+import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import { Button, Textarea } from '@heroui/react';
+import { CircularProgress } from "@heroui/progress";
 const { VITE_PHIDES_API_URL } = import.meta.env;
-
-const CustomCard = styled(Card)(({ isSelected }) => ({
-    backgroundColor: isSelected ? '#b3e5fc' : '#ffffff',
-    cursor: 'pointer',
-    transition: 'background-color 0.3s',
-    '&:hover': {
-        backgroundColor: isSelected ? '#81d4fa' : '#f5f5f5',
-    },
-}));
 
 export default function PanelEstatus({ id_maniobra, open, handleClose }) {
 
     const { session } = useAuthContext();
     const [data, setData] = useState([]);
-    const [selectedCard, setSelectedCard] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isLoadingEnvio, setIsLoadingEnvio] = useState(false);
+    const [estatus_seleccionado, setEstatusSeleccionado] = useState(null);
     const [comentarios, setComentarios] = useState('');
     const [files, setFiles] = useState([]);
+
+    const handleSelectCard = (id) => {
+        setEstatusSeleccionado(id);
+    };
 
     const handleComentariosChange = (event) => {
         setComentarios(event.target.value);
     };
 
     useEffect(() => {
-        axios.get(VITE_PHIDES_API_URL + '/modulo_maniobras/panel_envio/getEstatus.php')
+        setIsLoading(true);
+        odooApi.get('/estatus_operativos/tipo/maniobra')
             .then((response) => {
                 setData(response.data);
             })
             .catch((error) => {
-                console.error('Error fetching data:', error);
+                console.error('Error al obtener datos:', error);
+            })
+            .finally(() => {
+                setIsLoading(false);
             });
-    }, []);
+    }, [open]);
 
     const handleCardClick = (id) => {
         setSelectedCard(id);
@@ -65,17 +68,17 @@ export default function PanelEstatus({ id_maniobra, open, handleClose }) {
         setFiles((prevFiles) => prevFiles.filter((file) => file.name !== fileName));
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const enviar_estatus = async () => {
+        setIsLoadingEnvio(true);
 
-        if (selectedCard == null) {
+        if (estatus_seleccionado == null) {
             toast.error('Por favor selecciona un estatus.');
         }
 
         const formData = new FormData();
         formData.append('id_usuario', session.user.id);
         formData.append('id_maniobra', id_maniobra);
-        formData.append('id_estatus', selectedCard);
+        formData.append('id_estatus', estatus_seleccionado);
         formData.append('comentarios', comentarios);
         files.forEach((file) => formData.append('file[]', file));
 
@@ -90,14 +93,18 @@ export default function PanelEstatus({ id_maniobra, open, handleClose }) {
 
             if (data.success) {
                 toast.success(data.message);
-                setSelectedCard(null);
+                setEstatusSeleccionado(null);
                 setComentarios('');
                 setFiles([]);
+                handleClose();
             } else {
                 toast.error(data.message);
             }
 
+            setIsLoadingEnvio(false);
+
         } catch (error) {
+            setIsLoadingEnvio(false);
             console.error('Error subiendo el archivo', error);
             toast.error('Error subiendo el archivo' + error);
         }
@@ -144,20 +151,23 @@ export default function PanelEstatus({ id_maniobra, open, handleClose }) {
                         Seleccionar estatus
                     </Typography>
 
-                    <Grid container spacing={2}>
-                        {data.map((item) => (
-                            <Grid item xs={12} sm={6} md={3} key={item.id}>
-                                <CustomCard
-                                    isSelected={selectedCard === item.id_estatus}
-                                    onClick={() => handleCardClick(item.id_estatus)}
-                                >
-                                    <CardContent>
-                                        <Typography variant="">{item.nombre_estatus}</Typography>
-                                    </CardContent>
-                                </CustomCard>
-                            </Grid>
-                        ))}
-                    </Grid>
+                    <Box>
+                        <div className="gap-4 grid grid-cols-2 sm:grid-cols-4 p-4">
+                            {data.map((item, index) => (
+                                <Card shadow="sm" key={index} isPressable
+                                    onPress={() => handleSelectCard(item.id_estatus)}
+                                    style={{
+                                        border: estatus_seleccionado === item.id_estatus ? '2px solid blue' : 'none',
+                                    }}>
+                                    <CardBody className="overflow-visible flex items-center justify-center">
+                                    </CardBody>
+                                    <CardFooter className="text-small justify-center">
+                                        <b>{item.nombre_estatus}</b>
+                                    </CardFooter>
+                                </Card>
+                            ))}
+                        </div>
+                    </Box>
 
                     <Typography variant="h5" gutterBottom className='mt-5'>
                         Evidencias
@@ -177,23 +187,20 @@ export default function PanelEstatus({ id_maniobra, open, handleClose }) {
 
                     <div style={{ display: 'flex', flexWrap: 'wrap' }}>{thumbs}</div>
 
-                    <Typography variant="h5" gutterBottom className='mt-5'>
-                        Añadir comentarios
-                    </Typography>
-                    <TextField
+                    <Textarea
                         fullWidth
                         label="Comentarios"
                         id="comentarios_estatus"
-                        multiline
-                        rows={4}
+                        variant='bordered'
                         value={comentarios}
                         onChange={handleComentariosChange}
+                        className='mt-5'
                     />
 
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} variant='contained'>Cancelar</Button>
-                    <Button onClick={handleSubmit} variant='contained'>
+                    <Button onPress={handleClose} color='danger'>Cancelar</Button>
+                    <Button onPress={enviar_estatus} color='primary' isLoading={isLoadingEnvio}>
                         Enviar estatus
                     </Button>
                 </DialogActions>

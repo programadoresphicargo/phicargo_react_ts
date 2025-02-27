@@ -54,7 +54,6 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
 
     const { session } = useAuthContext();
     const [formDisabled, setFormDisabled] = useState(true);
-    const [htmlContent, setHtmlContent] = useState('');
     const [values, setValues] = useState({ addedValues: [], removedValues: [] });
     const [Loading, setLoading] = useState(false);
     const controller = new AbortController();
@@ -72,29 +71,6 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
             correos_desligados: newValues.removedValues,
         }));
     };
-
-    const cargarHistorial = useCallback(() => {
-        axios
-            .post(VITE_PHIDES_API_URL + "/modulo_maniobras/panel_envio/historial/historial.php?id_maniobra=" + id_maniobra, { signal: controller.signal })
-            .then((response) => {
-                setHtmlContent(response.data);
-            })
-            .catch((error) => {
-                if (error.name !== 'AbortError') {
-                    console.error('Error al cargar el historial:', error);
-                }
-            });
-    }, [id_maniobra]);
-
-    useEffect(() => {
-        if (show) {
-            cargarHistorial();
-        }
-
-        return () => {
-            controller.abort();
-        };
-    }, [show, cargarHistorial]);
 
     const [buttonsVisibility, setButtonsVisibility] = useState({
         registrar: false,
@@ -318,11 +294,8 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
         }
     };
 
-    // Función de validación para actualizar maniobra
-    const validar_form_actualizar = (e) => {
-        e.preventDefault();
 
-
+    const validar_form_actualizar = () => {
         actualizar_maniobra();
 
     };
@@ -616,7 +589,6 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
 
     const handleClosePE = () => {
         setOpenPanelEstatus(false);
-        cargarHistorial();
     };
 
     return (
@@ -649,7 +621,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                             <Typography sx={{ flex: 1 }} variant="h6" component="div">
                                 Maniobra M-{id_maniobra} / {id_cp}
                             </Typography>
-                            <Button autoFocus color="inherit" onClick={handleClose}>
+                            <Button autoFocus color="inherit" onPress={handleClose}>
                                 Cerrar
                             </Button>
                         </Toolbar>
@@ -663,28 +635,29 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                     <Tab label="Documentación" value="2" />
                                 </TabList>
                             </Box>
+
+                            {Loading && (
+                                <Box sx={{ width: '100%' }} visibility={false}>
+                                    <LinearProgress />
+                                </Box>
+                            )}
+
                             <TabPanel value="1">
                                 <Card>
                                     <CardBody>
-                                        <Grid container m={2}>
+                                        <Grid container mb={2}>
                                             <Grid lg={12} xs={12} m={1}>
                                                 <Stack spacing={1} direction="row">
-                                                    {buttonsVisibility.registrar && <Button color="primary" onClick={validar_form} disableElevation isLoading={Loading}>Registrar</Button>}
-                                                    {buttonsVisibility.cancelar && <Button color="primary" onClick={handleOpenDialog} disableElevation>Cancelar</Button>}
-                                                    {buttonsVisibility.guardar_maniobra && <Button color="primary" onClick={validar_form_actualizar} disableElevation isLoading={Loading}>Guardar cambios</Button>}
-                                                    {buttonsVisibility.editar_maniobra && <Button color="primary" onClick={toggleForm} disableElevation>Editar formulario</Button>}
-                                                    {buttonsVisibility.iniciar && <Button color="primary" onClick={comprobar_equipo} disableElevation>Iniciar</Button>}
-                                                    {buttonsVisibility.finalizar && <Button color="primary" onClick={finalizar_maniobra} disableElevation>Finalizar</Button>}
-                                                    {buttonsVisibility.enviar_estatus && <Button color="primary" onClick={handleClickOpenPE} disableElevation>Enviar nuevo estatus</Button>}
-                                                    {buttonsVisibility.reactivar && <Button color="primary" onClick={reactivar_maniobra} disableElevation>Reactivar maniobra</Button>}
+                                                    {buttonsVisibility.registrar && <Button color="primary" onPress={validar_form} isLoading={Loading}>Registrar</Button>}
+                                                    {buttonsVisibility.cancelar && <Button color="primary" onPress={handleOpenDialog} color="danger" startContent={<i class="bi bi-x-circle"></i>}>Cancelar</Button>}
+                                                    {buttonsVisibility.guardar_maniobra && <Button color="success" onPress={validar_form_actualizar} isLoading={Loading} className='text-white' startContent={<i class="bi bi-floppy"></i>}>Guardar cambios</Button>}
+                                                    {buttonsVisibility.editar_maniobra && <Button color="primary" onPress={toggleForm} startContent={<i class="bi bi-pen"></i>}>Editar</Button>}
+                                                    {buttonsVisibility.iniciar && <Button color="success" onPress={comprobar_equipo} className='text-white' startContent={<i class="bi bi-play-fill"></i>}>Iniciar</Button>}
+                                                    {buttonsVisibility.finalizar && <Button color="primary" onPress={finalizar_maniobra} color="danger" startContent={<i class="bi bi-stop-fill"></i>}>Finalizar</Button>}
+                                                    {buttonsVisibility.enviar_estatus && <Button color="primary" onPress={handleClickOpenPE} color="success" className='text-white' startContent={<i class="bi bi-send-fill"></i>}>Enviar nuevo estatus</Button>}
+                                                    {buttonsVisibility.reactivar && <Button color="primary" onPress={reactivar_maniobra}>Reactivar maniobra</Button>}
                                                 </Stack>
                                             </Grid>
-
-                                            {Loading && (
-                                                <Box sx={{ width: '100%' }} visibility={false}>
-                                                    <LinearProgress />
-                                                </Box>
-                                            )}
 
                                             <Grid lg={6} xs={12}>
                                                 <Card>
