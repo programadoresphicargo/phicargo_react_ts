@@ -1,9 +1,9 @@
-import type { Good } from '../../models';
+import type { ComplementCpCreate } from '../../models';
 import type { MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
 
 export const useGoodsColumns = () => {
-  const columns = useMemo<MRT_ColumnDef<Good>[]>(
+  const columns = useMemo<MRT_ColumnDef<ComplementCpCreate>[]>(
     () => [
       {
         accessorFn: (row) => row.description,
@@ -11,14 +11,14 @@ export const useGoodsColumns = () => {
         id: 'description',
       },
       {
-        accessorFn: (row) => row.dimensions,
+        accessorFn: (row) => row.dimensionsCharge,
         header: 'Dimensiones',
-        id: 'dimensions',
+        id: 'dimensionsCharge',
       },
       {
-        accessorFn: (row) => row.goodSatId,
+        accessorFn: (row) => row.satProductId,
         header: 'Producto SAT',
-        id: 'goodSatId',
+        id: 'satProductId',
       },
       {
         accessorFn: (row) => row.quantity,
@@ -26,29 +26,29 @@ export const useGoodsColumns = () => {
         id: 'quantity',
       },
       {
-        accessorFn: (row) => row.udmSatId,
+        accessorFn: (row) => row.satUomId,
         header: 'UDM SAT',
-        id: 'udmSatId',
+        id: 'satUomId',
       },
       {
-        accessorFn: (row) => row.weight,
+        accessorFn: (row) => row.weightCharge,
         header: 'Peso',
-        id: 'weight',
+        id: 'weightCharge',
       },
       {
-        accessorFn: (row) => row.isDangerous,
+        accessorFn: (row) => row.hazardousMaterial,
         header: 'Es peligroso',
-        id: 'isDangerous',
+        id: 'hazardousMaterial',
       },
       {
-        accessorFn: (row) => row.hazardousMaterialKey,
+        accessorFn: (row) => row.hazardousKeyProductId,
         header: 'Clave de material peligroso',
-        id: 'hazardousMaterialKey',
+        id: 'hazardousKeyProductId',
       },
       {
-        accessorFn: (row) => row.packagingTypeId,
+        accessorFn: (row) => row.tipoEmbalajeId,
         header: 'Tipo de empaque',
-        id: 'packagingTypeId',
+        id: 'tipoEmbalajeId',
       },
     ],
     [],

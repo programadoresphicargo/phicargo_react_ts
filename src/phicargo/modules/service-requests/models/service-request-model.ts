@@ -95,3 +95,113 @@ export interface ServiceRequestCreate {
   notes: Notes;
 }
 
+
+export interface WaybillCreate {
+  // Begin
+  storeId: number;
+  companyId: number;
+  waybillCategory: number;
+  
+  partnerId: number;
+  partnerOrderId: number;
+  departureAddressId: number;
+  
+  xCodigoPostal: string;
+  xReferenceOwr: string;
+
+  xReference: string | null;
+  xReference2: string | null;
+  
+  xRutaAutorizada: string | null;
+  dateOrder: Dayjs;
+  expectedDateDelivery: string | null;
+
+  currencyId: number;
+
+  partnerInvoiceId: number | null;
+  arrivalAddressId: number | null;
+
+  clientOrderRef: string | null;
+
+  uploadPoint: string | null;
+  downloadPoint: string | null;
+
+  xEjecutivo: string | null;
+  dangerousCargo: boolean;
+
+  xParadasAutorizadas: string | null;
+ 
+  xNumeroCotizacion: string | null;
+  xTarifa: number | null;
+
+  // Delivery Data
+  // Programado
+  dateStart: Dayjs | null;  
+  xDateArrivalShed: Dayjs | null;
+
+  // Load data
+  xSubclienteBel: string | null;
+  xContactoSubcliente: string | null;
+  xTelefonoSubcliente: string | null;
+  xCorreoSubcliente: string | null;
+
+  
+  // Customs Agent
+  xNombreAgencia: string | null;
+  xTelefonoAa: string | null;
+  xEmailAa: string | null;
+
+  // Custodia
+  xCustodiaBel: string | null;
+  xNombreCustodios: string | null;
+  xEmpresaCustodia: string | null;
+  xTelefonoCustodios: string | null;
+  xDatosUnidad: string | null;
+
+    // Service Data
+    xRutaBel: number | null;
+    xRutaDestino: number | null;
+    xTipoBel: string;
+    xTipo2Bel: string;
+    xModoBel: string;
+
+  // Extra services
+  xAlmacenaje: boolean;
+  xBarrasLogisticas: boolean;
+  xConexionRefrigerado: boolean;
+  xDesconsolidacion: boolean;
+  xFumigacion: boolean;
+  xManiobraCargaDescarga: boolean;
+  xPesaje: boolean;
+  xPruebaCovid: boolean;
+  xReparto: boolean;
+  xResguardo: boolean;
+  xSeguro: boolean;
+
+  xEpp: string | null;
+  xEspecificacionesEspeciales: string | null;
+  
+  shippedProducts: ShippedProductCreate[];
+  complementCp: ComplementCpCreate[];
+}
+
+
+export interface ComplementCpCreate {
+  description: string;
+  satProductId: number;
+  quantity: number;
+  satUomId: number;
+  dimensionsCharge: string;
+  weightCharge: number;
+  hazardousMaterial: string;
+  hazardousKeyProductId: number | null;
+  tipoEmbalajeId: number | null;
+}
+
+export interface ShippedProductCreate {
+  productId: number;
+  productUomQtyEst: number;
+  weightEstimation: number;
+  notes: string;
+}
+

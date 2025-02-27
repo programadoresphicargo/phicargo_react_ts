@@ -15,6 +15,7 @@ export const useGetWaybillCategory = () => {
     return (waybillCategoryQuery.data || []).map((item) => ({
       label: item.name,
       id: item.id,
+      key: item.id,
     }));
   }, [waybillCategoryQuery.data]);
 

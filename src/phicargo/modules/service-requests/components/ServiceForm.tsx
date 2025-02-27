@@ -31,6 +31,17 @@ export const ServiceForm = () => {
         required
         rules={{ required: 'Elija una sucursal por favor' }}
       />
+      <SelectElement
+        control={control}
+        name="companyId"
+        label="Compañía"
+        options={[
+          { label: 'Belchez', id: 1 },
+          { label: 'Phicargo', id: 2 },
+        ]}
+        required
+        rules={{ required: 'Elija una compañia por favor' }}
+      />
       <AutocompleteElement
         control={control}
         name="categoryId"

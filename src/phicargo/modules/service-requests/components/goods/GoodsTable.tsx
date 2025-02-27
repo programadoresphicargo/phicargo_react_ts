@@ -4,28 +4,29 @@ import {
   useMaterialReactTable,
 } from 'material-react-table';
 
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { Button } from '@/components/ui/Button';
+import { ComplementCpCreate } from '../../models';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { Good } from '../../models';
 import { GoodForm } from './GoodForm';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
+import { useCreateServiceContext } from '../../hooks/useCreateServiceContext';
 import { useGoodsColumns } from '../../hooks/goods-table/useGoodsColumns';
-import { useServiceRequestFormContext } from '../../hooks/useServiceRequestFormContext';
 
 export const GoodsTable = () => {
   const columns = useGoodsColumns();
 
-  const { form } = useServiceRequestFormContext();
+  const { form } = useCreateServiceContext();
   const { watch, setValue } = form;
 
-  const goods = watch('goods') ?? [];
+  const goods = watch('complementCp') ?? [];
 
-  const addGood = (newGood: Good) => {
-    setValue('goods', [...goods, newGood]);
+  const addGood = (newGood: ComplementCpCreate) => {
+    setValue('complementCp', [...goods, newGood]);
   };
 
-  const table = useMaterialReactTable<Good>({
+  const table = useMaterialReactTable<ComplementCpCreate>({
     columns,
     data: goods,
     localization: MRT_Localization_ES,
@@ -34,7 +35,7 @@ export const GoodsTable = () => {
     enableEditing: true,
     muiTableContainerProps: {
       sx: {
-        minHeight: '500px',
+        minHeight: 'calc(100vh - 315px)',
       },
     },
     renderRowActions: ({ row, table }) => (
@@ -54,9 +55,11 @@ export const GoodsTable = () => {
     renderTopToolbarCustomActions: ({ table }) => (
       <Button
         variant="contained"
+        size='small'
         onClick={() => {
           table.setCreatingRow(true);
         }}
+        startIcon={<AddCircleIcon />}
       >
         Añadir Mercancía
       </Button>

@@ -4,28 +4,29 @@ import {
   useMaterialReactTable,
 } from 'material-react-table';
 
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { Button } from '@/components/ui/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import { ServiceCreate } from '../../models';
 import { ServiceForm } from './ServiceForm';
+import { ShippedProductCreate } from '../../models';
+import { useCreateServiceContext } from '../../hooks/useCreateServiceContext';
 import { useLinesColumns } from '../../hooks/lines-table/useLinesColumns';
-import { useServiceRequestFormContext } from '../../hooks/useServiceRequestFormContext';
 
 export const LinesTable = () => {
   const columns = useLinesColumns();
 
-  const { form } = useServiceRequestFormContext();
+  const { form } = useCreateServiceContext();
   const { watch, setValue } = form;
 
-  const services = watch('services') ?? [];
+  const services = watch('shippedProducts') ?? [];
 
-  const addService = (newService: ServiceCreate) => {
-    setValue('services', [...services, newService]);
+  const addProduct = (newProduct: ShippedProductCreate) => {
+    setValue('shippedProducts', [...services, newProduct]);
   };
 
-  const table = useMaterialReactTable<ServiceCreate>({
+  const table = useMaterialReactTable<ShippedProductCreate>({
     columns,
     data: services,
     localization: MRT_Localization_ES,
@@ -34,7 +35,7 @@ export const LinesTable = () => {
     enableEditing: true,
     muiTableContainerProps: {
       sx: {
-        minHeight: '500px',
+        minHeight: 'calc(100vh - 315px)',
       },
     },
     renderRowActions: ({ row, table }) => (
@@ -54,9 +55,11 @@ export const LinesTable = () => {
     renderTopToolbarCustomActions: ({ table }) => (
       <Button
         variant="contained"
+        size='small'
         onClick={() => {
           table.setCreatingRow(true);
         }}
+        startIcon={<AddCircleIcon />}
       >
         Añadir Servicio
       </Button>
@@ -74,7 +77,7 @@ export const LinesTable = () => {
     renderCreateRowDialogContent: ({ table }) => (
       <ServiceForm
         onClose={() => table.setCreatingRow(null)}
-        addService={addService}
+        addProduct={addProduct}
       />
     ),
     renderEditRowDialogContent: undefined,

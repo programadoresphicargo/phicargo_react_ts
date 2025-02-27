@@ -1,52 +1,59 @@
 import { Card, CardContent } from '@mui/material';
-import { CheckboxElement, TextFieldElement } from 'react-hook-form-mui';
+import { SelectElement, TextFieldElement } from 'react-hook-form-mui';
 
-import { useServiceRequestFormContext } from '../hooks/useServiceRequestFormContext';
+import { useCreateServiceContext } from '../hooks/useCreateServiceContext';
 
 export const EscortForm = () => {
-  const { form } = useServiceRequestFormContext();
+
+  const { form } = useCreateServiceContext();
+
   const { control, watch } = form;
 
-  const escorted = watch('escort.escorted');
+  const escorted = watch('xCustodiaBel') === 'SI';
 
   return (
     <Card elevation={4} sx={{ borderRadius: 2 }}>
       <CardContent>
         <form className="grid grid-cols-3 md:grid-cols-3 gap-4">
-          <CheckboxElement
+          <SelectElement
             control={control}
-            name="escort.escorted"
-            label="Agencia Aduanal"
-          />
+            name="xCustodiaBel"
+            label="Custodia"
+            size='small'
+            options={[
+              { label: 'Si', id: 'SI' },
+              { label: 'No', id: 'NO' },
+            ]}
+            />
 
           <TextFieldElement
             control={control}
             disabled={!escorted}
-            name="escort.names"
-            required={escorted}
-            label="Nombres de los custodios"
-          />
+            name="xNombreCustodios"
+            size='small'
+            label="Nombre de los custodios"
+            />
 
           <TextFieldElement
             control={control}
             disabled={!escorted}
-            name="escort.phone"
-            required={escorted}
-            label="Teléfono"
-          />
-          <TextFieldElement
-            control={control}
-            disabled={!escorted}
-            name="escort.company"
-            required={escorted}
+            name="xEmpresaCustodia"
+            size='small'
             label="Empresa que realiza la custodia"
-          />
+            />
           <TextFieldElement
             control={control}
             disabled={!escorted}
-            name="escort.details"
-            required={escorted}
-            label="Modelo, color y placas del vehículo"
+            name="xTelefonoCustodios"
+            size='small'
+            label="Teléfono de los custodios"
+            />
+          <TextFieldElement
+            control={control}
+            disabled={!escorted}
+            name="xDatosUnidad"
+            size='small'
+            label="Datos de la unidad"
           />
         </form>
       </CardContent>

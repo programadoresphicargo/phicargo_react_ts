@@ -1,81 +1,106 @@
-import type { Dayjs } from 'dayjs';
+export interface WaybillCreateApi {
+  // Begin
+  store_id: number;
+  company_id: number;
+  waybill_category: number;
+  
+  partner_id: number;
+  partner_order_id: number;
+  departure_address_id: number;
+  
+  upload_point: string | null;
+  download_point: string | null;
+  
+  x_codigo_postal: string;
+  x_reference_owr: string;
 
-export interface ServiceCreate {
-  serviceId: number;
-  estamatedWeight: number;
-  containerRefrence: string;
+  x_reference: string | null;
+  x_reference_2: string | null;
+  
+  x_ruta_autorizada: string | null;
+  date_order: string;
+  expected_date_delivery: string | null;
+
+  currency_id: number;
+
+  partner_invoice_id: number | null;
+  arrival_address_id: number | null;
+
+  client_order_ref: string | null;
+
+  x_ejecutivo: string | null;
+  dangerous_cargo: boolean;
+
+  x_paradas_autorizadas: string | null;
+ 
+  x_numero_cotizacion: string | null;
+  x_tarifa: number | null;
+
+  // Delivery Data
+  // Programado
+  date_start: string | null;  
+  x_date_arrival_shed: string | null;
+
+  // Load data
+  x_subcliente_bel: string | null;
+  x_contacto_subcliente: string | null;
+  x_telefono_subcliente: string | null;
+  x_correo_subcliente: string | null;
+  
+  // Scheduled Route
+  x_ruta_bel: string | null;
+  x_ruta_destino: string | null;
+  x_tipo_bel: string;
+  x_tipo2_bel: string;
+  x_modo_bel: string;
+
+  // Customs Agent
+  x_nombre_agencia: string | null;
+  x_telefono_aa: string | null;
+  x_email_aa: string | null;
+
+  // Custodia
+  x_custodia_bel: string | null;
+  x_nombre_custodios: string | null;
+  x_empresa_custodia: string | null;
+  x_telefono_custodios: string | null;
+  x_datos_unidad: string | null;
+
+  // Extra services
+  x_almacenaje: boolean;
+  x_barras_logisticas: boolean;
+  x_conexion_refrigerado: boolean;
+  x_desconsolidacion: boolean;
+  x_fumigacion: boolean;
+  x_maniobra_carga_descarga: boolean;
+  x_pesaje: boolean;
+  x_prueba_covid: boolean;
+  x_reparto: boolean;
+  x_resguardo: boolean;
+  x_seguro: boolean;
+
+  x_epp: string | null;
+  x_especificaciones_especiales: string | null;
+  
+  shipped_products: ShippedProductApi[];
+  complement_cp: ComplementCpApi[];
 }
 
-export interface CustomsAgent {
-  agency: string | null;
-  phone: string | null;
-  email: string | null;
-}
-
-export interface DeliveryData {
-  routeStart: Dayjs;
-  arriveDate: Dayjs;
-  company: string | null;
-  contactExecutive: string | null;
-  phone: string | null;
-  email: string | null;
-  routeId: number | null;
-  loadingPoint: string | null;
-  unloadingPoint: string | null;
-  postalCode: string;
-  authorizedRoute: string | null;
-  authorizedStops: string | null;
-}
-
-export interface Good {
+export interface ComplementCpApi {
   description: string;
+  sat_product_id: number;
   quantity: number;
-  udmSatId: number;
-  isDangerous: boolean;
-  packagingTypeId: number;
-  dimensions: string;
-  goodSatId: number;
-  weight: number;
-  hazardousMaterialKey: string;
+  sat_uom_id: number;
+  weight_charge: number;
+  hazardous_material: string;
+  hazardous_key_product_id: number | null;
+  tipo_embalaje_id: number | null;
 }
 
-export interface Escort {
-  escorted: boolean;
-  names: string | null;
-  phone: string | null;
-  company: string | null;
-  details: string | null;
-}
-
-export interface Notes {
-  specialEquipment: string | null;
-  notes: string | null;
-}
-
-export interface ServiceRequestCreate {
-  branchId: number;
-  categoryId: number;
-  loadType: string;
-  originAddressId: number;
-  OwRtReference: string;
-  clientExecutive: string;
-  tariff: string | null;
-  clientId: number;
-  modality: string;
-  serviceType: string;
-  destinationAddressId: number;
-  invoiceReference: string;
-  quotationNumber: string | null;
-  isDangerous: boolean;
-
-  extraServicesIds: number[];
-
-  services: ServiceCreate[];
-
-  deliveryData: DeliveryData;
-  goods: Good[];
-  customsAgent: CustomsAgent;
-  escort: Escort;
-  notes: Notes;
+export interface ShippedProductApi {
+  product_id: number;
+  product_uom_qty_est: number;
+  weight_estimation: number;
+  notes: string;
 }
 

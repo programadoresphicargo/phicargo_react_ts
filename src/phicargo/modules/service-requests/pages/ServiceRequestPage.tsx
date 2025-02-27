@@ -3,11 +3,11 @@ import { ServiceRequestFormProvider } from '../context/ServiceRequestFormContext
 
 const ServiceRequestPage = () => {
   return (
-    <div className="p-2">
+    <section className="p-4">
       <ServiceRequestFormProvider>
         <ServiceRequestForm />
       </ServiceRequestFormProvider>
-    </div>
+    </section>
   );
 };
 

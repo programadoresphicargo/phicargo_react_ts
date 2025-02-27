@@ -8,30 +8,31 @@ import {
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { Button } from '@/components/ui/Button';
-import { ServiceCreate } from '../../models';
+import { ShippedProductCreate } from '../../models';
 import { useGetTransportableProducts } from '../../hooks/queries';
 
-const initialValues: ServiceCreate = {
+const initialValues: ShippedProductCreate = {
   productId: '' as unknown as number,
-  estamatedWeight: null as unknown as number,
+  weightEstimation: null as unknown as number,
+  productUomQtyEst: 1,
   notes: '',
 };
 
 interface Props {
   onClose: () => void;
-  addService: (service: ServiceCreate) => void;
-  service?: ServiceCreate;
+  addProduct: (newProduct: ShippedProductCreate) => void;
+  product?: ShippedProductCreate;
 }
 
-export const ServiceForm = ({ onClose, service, addService }: Props) => {
+export const ServiceForm = ({ onClose, product, addProduct }: Props) => {
   const { control, handleSubmit, setValue } = useForm({
-    defaultValues: service || initialValues,
+    defaultValues: product || initialValues,
   });
 
   const { selection, isLoading } = useGetTransportableProducts();
 
-  const onSubmit: SubmitHandler<ServiceCreate> = (data) => {
-    addService(data);
+  const onSubmit: SubmitHandler<ShippedProductCreate> = (data) => {
+    addProduct(data);
     onClose();
   };
 
@@ -67,7 +68,7 @@ export const ServiceForm = ({ onClose, service, addService }: Props) => {
 
           <TextFieldElement
             control={control}
-            name="estamatedWeight"
+            name="weightEstimation"
             label="Peso Estimado"
             placeholder="Peso estimado de la carga en toneladas"
             type="number"
@@ -80,6 +81,16 @@ export const ServiceForm = ({ onClose, service, addService }: Props) => {
             }}
             required
             rules={{ required: 'Peso estimado requerido' }}
+          />
+
+          <TextFieldElement
+            control={control}
+            name="productUomQtyEst"
+            label="Cantidad Estimada"
+            placeholder="Cantidad estimada de la carga"
+            type="number"
+            required
+            rules={{ required: 'Cantidad estimada requerido' }}
           />
 
           <TextFieldElement

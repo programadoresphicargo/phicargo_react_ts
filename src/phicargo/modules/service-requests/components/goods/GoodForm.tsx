@@ -1,42 +1,42 @@
-import { CheckboxElement, TextFieldElement } from 'react-hook-form-mui';
 import {
   DialogActions,
   DialogContent,
   DialogTitle,
   InputAdornment,
 } from '@mui/material';
+import { SelectElement, TextFieldElement } from 'react-hook-form-mui';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { Button } from '@/components/ui/Button';
-import { Good } from '../../models';
+import { ComplementCpCreate } from '../../models';
 import { WaybillItemSearchInput } from './WaybillItemSearchInput';
 
-const initialValues: Good = {
+const initialValues: ComplementCpCreate = {
   description: '',
-  quantity: null as unknown as number,
-  udmSatId: null as unknown as number,
-  isDangerous: false,
-  packagingTypeId: null as unknown as number,
-  dimensions: '',
-  goodSatId: null as unknown as number,
-  weight: null as unknown as number,
-  hazardousMaterialKey: null as unknown as number,
+  satProductId: 0,
+  quantity: 0,
+  satUomId: 0,
+  dimensionsCharge: '',
+  weightCharge: 0,
+  hazardousMaterial: 'NO',
+  hazardousKeyProductId: null,
+  tipoEmbalajeId: null
 };
 
 interface Props {
   onClose: () => void;
-  addGood: (good: Good) => void;
-  good?: Good;
+  addGood: (good: ComplementCpCreate) => void;
+  good?: ComplementCpCreate;
 }
 
 export const GoodForm = ({ onClose, good, addGood }: Props) => {
-  const { control, handleSubmit, watch } = useForm<Good>({
+  const { control, handleSubmit, watch } = useForm<ComplementCpCreate>({
     defaultValues: good || initialValues,
   });
 
-  const isDangerous = watch('isDangerous');
+  const isDangerous = watch('hazardousMaterial') === 'SI';
 
-  const onSubmit: SubmitHandler<Good> = (data) => {
+  const onSubmit: SubmitHandler<ComplementCpCreate> = (data) => {
     addGood(data);
     onClose();
   };
@@ -76,7 +76,7 @@ export const GoodForm = ({ onClose, good, addGood }: Props) => {
 
           <TextFieldElement
             control={control}
-            name="dimensions"
+            name="dimensionsCharge"
             label="Dimensiones"
             placeholder="0/0/0"
             slotProps={{
@@ -97,7 +97,7 @@ export const GoodForm = ({ onClose, good, addGood }: Props) => {
           />
           <TextFieldElement
             control={control}
-            name="weight"
+            name="weightCharge"
             label="Peso"
             placeholder="Peso en kilogramos"
             type="number"
@@ -114,7 +114,7 @@ export const GoodForm = ({ onClose, good, addGood }: Props) => {
           <WaybillItemSearchInput
             itemType="sat-product"
             control={control}
-            name="goodSatId"
+            name="satProductId"
             label="Producto SAT"
             required
             rules={{ required: 'Producto SAT requerido' }}
@@ -122,7 +122,7 @@ export const GoodForm = ({ onClose, good, addGood }: Props) => {
           <WaybillItemSearchInput
             itemType="sat-uom"
             control={control}
-            name="udmSatId"
+            name="satUomId"
             label="Unidad de Medida SAT"
             required
             rules={{ required: 'Unidad de Medida SAT requerida' }}
@@ -130,23 +130,25 @@ export const GoodForm = ({ onClose, good, addGood }: Props) => {
           <WaybillItemSearchInput
             itemType="packaging-type"
             control={control}
-            name="packagingTypeId"
+            name="tipoEmbalajeId"
             label="Tipo de Embalaje"
-            required
-            rules={{ required: 'Tipo de embalaje requerido' }}
           />
           <div className="flex items-center justify-center">
-            <CheckboxElement
+            <SelectElement
               control={control}
-              name="isDangerous"
+              name="hazardousMaterial"
               label="Es peligroso"
+              options={[
+                { label: 'Si', value: 'SI' },
+                { label: 'No', value: 'NO' },
+              ]}
             />
           </div>
           {isDangerous && (
             <WaybillItemSearchInput
               itemType="hazardous-material"
               control={control}
-              name="hazardousMaterialKey"
+              name="hazardousKeyProductId"
               label="Material Peligroso"
               required
               rules={{ required: 'Material peligroso requerido' }}

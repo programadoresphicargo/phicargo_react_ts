@@ -1,12 +1,12 @@
 import type { MRT_ColumnDef } from 'material-react-table';
-import type { ServiceCreate } from '../../models';
+import type { ShippedProductCreate } from '../../models';
 import { useGetTransportableProducts } from '../queries';
 import { useMemo } from 'react';
 
 export const useLinesColumns = () => {
   const { selection } = useGetTransportableProducts();
 
-  const columns = useMemo<MRT_ColumnDef<ServiceCreate>[]>(
+  const columns = useMemo<MRT_ColumnDef<ShippedProductCreate>[]>(
     () => [
       {
         accessorFn: (row) => row.productId,
@@ -20,10 +20,15 @@ export const useLinesColumns = () => {
         },
       },
       {
-        accessorFn: (row) => row.estamatedWeight,
+        accessorFn: (row) => row.weightEstimation,
         header: 'Peso Estimado',
         id: 'estamatedWeight',
-        Cell: ({ row }) => `${row.original.estamatedWeight} TON`,
+        Cell: ({ row }) => `${row.original.weightEstimation} TON`,
+      },
+      {
+        accessorFn: (row) => row.productUomQtyEst,
+        header: 'Cantidad Estimada',
+        id: 'estamatedQuantity',
       },
       {
         accessorFn: (row) => row.notes,

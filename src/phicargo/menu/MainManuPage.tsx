@@ -14,6 +14,7 @@ import maniobras_img from '../../assets/menu/maniobras.png';
 import monitoreo_img from '../../assets/menu/monitoreo.png';
 import operadores_img from '../../assets/menu/operadores.png';
 import reportesImg from '../../assets/menu/reportes.png';
+import shipingcontainer from '../../assets/menu/shiping-container.png';
 import turnos_img from '../../assets/menu/turnos.png';
 import { useAuthContext } from '../modules/auth/hooks';
 import usuarios_img from '../../assets/menu/usuarios.png';
@@ -109,7 +110,7 @@ const menuItems: MenuItemType[] = [
     requiredPermissions: [203],
   },
   {
-    icon: dashboardIcon,
+    icon: shipingcontainer,
     label: 'Solicitudes de Servicio',
     link: '/solicitudes-servicio',
     requiredPermissions: [],
