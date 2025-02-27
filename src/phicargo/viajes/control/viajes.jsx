@@ -25,6 +25,7 @@ import { Popover, PopoverTrigger, PopoverContent, useDisclosure } from "@heroui/
 import DetencionesViajesActivos from '../detenciones/detenciones_modal';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import Travel from './viaje';
+import EstatusDropdown from '../estatus/resumen_estatus';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -141,6 +142,12 @@ const ViajesActivos = ({ }) => {
       {
         accessorKey: 'ultimo_estatus_enviado',
         header: 'Último estatus',
+        Cell: ({ cell }) => (
+          <EstatusDropdown
+            id_viaje={cell.row.original.id_viaje}
+            ultimo_estatus={cell.getValue() || ''}
+          />
+        ),
       },
       {
         accessorKey: 'vehiculo',
@@ -451,7 +458,7 @@ const ViajesActivos = ({ }) => {
       />
 
       <Travel open={open} handleClose={handleClose}></Travel>
-      
+
       <Dialog
         open={openMasivo}
         fullScreen={true}
