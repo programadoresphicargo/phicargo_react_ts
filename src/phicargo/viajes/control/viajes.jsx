@@ -287,31 +287,6 @@ const ViajesActivos = ({ }) => {
     [],
   );
 
-  useEffect(() => {
-    if (data.length > 1) {
-      const fetchData = async () => {
-        const requests = data.map((row) => ConsultarVelocidad(row.id_viaje, row.vehicle_id));
-        await Promise.allSettled(requests);
-      };
-
-      fetchData();
-    }
-  }, [data]);
-
-  const ConsultarVelocidad = async (id_viaje, vehicle_id) => {
-    try {
-      const response = await odooApi.get(`/detenciones/consultar_detencion/${vehicle_id}`);
-
-      setBlinkRows((prev) => ({
-        ...prev,
-        [id_viaje]: response.data?.[0]?.detenido_mas_15_min ?? false
-      }));
-    } catch (error) {
-      console.error('Error en la petición:', error);
-      setBlinkRows((prev) => ({ ...prev, [id_viaje]: false }));
-    }
-  };
-
   const table = useMaterialReactTable({
     columns,
     data,
