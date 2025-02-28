@@ -286,9 +286,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
         return validarCampos() && comprobacion_correos() && comprobacion_trailer_dolly();
     };
 
-    const validar_form = (e) => {
-        e.preventDefault();
-
+    const validar_form = () => {
         if (validarFormulario()) {
             registrar_maniobra();
         }

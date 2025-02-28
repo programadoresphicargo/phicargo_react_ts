@@ -17,8 +17,7 @@ const FormularioCorreo = ({ open, handleClose, id_cliente }) => {
     const [tipoCorreo, setTipoCorreo] = React.useState('');
 
     // Función para manejar el envío de los datos
-    const handleSubmit = async (event) => {
-        event.preventDefault();
+    const handleSubmit = async () => {
 
         // Crear un objeto FormData para enviar los datos como POST
         const formData = new FormData();
