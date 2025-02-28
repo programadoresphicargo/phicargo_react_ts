@@ -159,6 +159,8 @@ const Maniobras = ({ estado_maniobra }) => {
           <EstatusDropdownManiobra
             id_maniobra={cell.row.original.id_maniobra}
             ultimo_estatus={cell.getValue() || ''}
+            usuario_ultimo_estatus={cell.row.original.usuario_ultimo_estatus}
+            fecha_ultimo_estatus={cell.row.original.fecha_ultimo_estatus}
           />
         ),
       },

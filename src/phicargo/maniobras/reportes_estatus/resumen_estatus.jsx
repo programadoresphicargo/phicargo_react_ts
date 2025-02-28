@@ -3,7 +3,7 @@ import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button, Spinner 
 import odooApi from "@/phicargo/modules/core/api/odoo-api";
 import { User, Link } from "@heroui/react";
 
-const EstatusDropdownManiobra = ({ id_maniobra, ultimo_estatus }) => {
+const EstatusDropdownManiobra = ({ id_maniobra, ultimo_estatus, usuario_ultimo_estatus, fecha_ultimo_estatus }) => {
     const [items, setItems] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -38,8 +38,8 @@ const EstatusDropdownManiobra = ({ id_maniobra, ultimo_estatus }) => {
                         avatarProps={{
                             src: "https://th.bing.com/th/id/OIP.9_MptOLxjJEGSGukPt9FWQHaHa?w=1920&h=1920&rs=1&pid=ImgDetMain",
                         }}
-                        description={ultimo_estatus}
-                        name={ultimo_estatus}
+                        description={`${usuario_ultimo_estatus} - ${fecha_ultimo_estatus}`}
+                        name={`${ultimo_estatus}`}
                     />
                 )}
 
@@ -54,7 +54,7 @@ const EstatusDropdownManiobra = ({ id_maniobra, ultimo_estatus }) => {
                         <DropdownItem
                             key={item.nombre_estatus}
                             description={item.fecha_hora}>
-                            {item.nombre_estatus} / {item.nombre}
+                            {item.nombre_estatus}
                         </DropdownItem>
                     )}
                 </DropdownMenu>
