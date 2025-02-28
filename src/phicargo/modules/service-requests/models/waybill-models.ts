@@ -29,3 +29,8 @@ export interface WaybillItem {
   code: string;
   name: string;
 }
+
+export interface Partner {
+  id: number;
+  name: string;
+}

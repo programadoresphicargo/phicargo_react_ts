@@ -25,6 +25,7 @@ export const ServiceDetailsForm = () => {
             textFieldProps={{ placeholder: 'Ruta' }}
             options={selection}
             autocompleteProps={{
+              getOptionKey: (option) => option.id,
               onChange: (_, value) => {
                 setValue('xRutaDestino', value?.id || (null as unknown as number));
               },

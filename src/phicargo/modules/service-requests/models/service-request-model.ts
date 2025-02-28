@@ -1,35 +1,10 @@
+import { BranchSimple, CompanySimple } from '../../core/models';
+import type { Partner, WaybillCategory, WaybillItem } from './waybill-models';
+
 import type { Contact } from '../../contacts/models';
 import type { Dayjs } from 'dayjs';
-import type { WaybillItem } from './waybill-models';
 
-export interface ServiceCreate {
-  productId: number;
-  estamatedWeight: number;
-  notes: string;
-}
-
-export interface Good {
-  description: string;
-  quantity: number;
-  udmSatId: number;
-  isDangerous: boolean;
-  packagingTypeId: number;
-  dimensions: string;
-  goodSatId: number;
-  weight: number;
-  hazardousMaterialKey: number;
-}
-
-export interface WaybillCreate {
-  // Begin
-  storeId: number;
-  companyId: number;
-  waybillCategory: number;
-
-  partnerId: Contact;
-  partnerOrderId: Contact;
-  departureAddressId: Contact;
-
+export interface WaybillBase {
   xCodigoPostal: string;
   xReferenceOwr: string;
 
@@ -39,11 +14,6 @@ export interface WaybillCreate {
   xRutaAutorizada: string | null;
   dateOrder: Dayjs;
   expectedDateDelivery: Dayjs | null;
-
-  currencyId: number;
-
-  partnerInvoiceId: Contact | null;
-  arrivalAddressId: Contact | null;
 
   clientOrderRef: string | null;
 
@@ -103,6 +73,36 @@ export interface WaybillCreate {
 
   xEpp: string | null;
   xEspecificacionesEspeciales: string | null;
+}
+
+export interface Waybill extends WaybillBase {
+  id: number;
+  sequence_id: number;
+  state: string;
+  branch: BranchSimple;
+  company: CompanySimple;
+  category: WaybillCategory;
+  client: Partner;
+  partnerOrder: Partner;
+  departureAddress: Partner;
+  partnerInvoice: Partner;
+  arrivalAddress: Partner;
+}
+
+export interface WaybillCreate extends WaybillBase {
+  // Begin
+  storeId: number;
+  companyId: number;
+  waybillCategory: number;
+
+  partnerId: Contact;
+  partnerOrderId: Contact;
+  departureAddressId: Contact;
+
+  currencyId: number;
+
+  partnerInvoiceId: Contact | null;
+  arrivalAddressId: Contact | null;
 
   shippedProducts: ShippedProductCreate[];
   complementCp: ComplementCpCreate[];
@@ -125,5 +125,23 @@ export interface ShippedProductCreate {
   productUomQtyEst: number;
   weightEstimation: number;
   notes: string;
+}
+
+export interface ServiceCreate {
+  productId: number;
+  estamatedWeight: number;
+  notes: string;
+}
+
+export interface Good {
+  description: string;
+  quantity: number;
+  udmSatId: number;
+  isDangerous: boolean;
+  packagingTypeId: number;
+  dimensions: string;
+  goodSatId: number;
+  weight: number;
+  hazardousMaterialKey: number;
 }
 

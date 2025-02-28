@@ -1,13 +1,7 @@
-export interface WaybillCreateApi {
-  // Begin
-  store_id: number;
-  company_id: number;
-  waybill_category: number;
-  
-  partner_id: number;
-  partner_order_id: number;
-  departure_address_id: number;
-  
+import { BranchSimple, CompanySimple } from "@/phicargo/modules/core/models";
+import { PartnerApi, WaybillCategoryApi } from "./waybill-models";
+
+export interface WaybillBaseApi {
   upload_point: string | null;
   download_point: string | null;
   
@@ -20,11 +14,6 @@ export interface WaybillCreateApi {
   x_ruta_autorizada: string | null;
   date_order: string;
   expected_date_delivery: string | null;
-
-  currency_id: number;
-
-  partner_invoice_id: number | null;
-  arrival_address_id: number | null;
 
   client_order_ref: string | null;
 
@@ -81,7 +70,37 @@ export interface WaybillCreateApi {
 
   x_epp: string | null;
   x_especificaciones_especiales: string | null;
+}
+
+export interface WaybillApi extends WaybillBaseApi {
+  id: number;
+  sequence_id: number;
+  state: string;
+  branch: BranchSimple;
+  company: CompanySimple;
+  category: WaybillCategoryApi;
+
+  client: PartnerApi;
+  partner_order: PartnerApi;
+  departure_address: PartnerApi;
+  partner_invoice: PartnerApi;
+  arrival_address: PartnerApi;
+}
+
+export interface WaybillCreateApi extends WaybillBaseApi {
+  store_id: number;
+  company_id: number;
+  waybill_category: number;
   
+  partner_id: number;
+  partner_order_id: number;
+  departure_address_id: number;
+  
+  currency_id: number;
+
+  partner_invoice_id: number | null;
+  arrival_address_id: number | null;
+
   shipped_products: ShippedProductApi[];
   complement_cp: ComplementCpApi[];
 }

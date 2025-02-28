@@ -4,7 +4,10 @@ import { Suspense, lazy } from 'react';
 import { LoadingPage } from '../../core/pages/LoadingPage';
 import ServiceRequestsLayout from '../layout/ServiceRequestsLayout';
 
-const CreteServiceRequestPage = lazy(() => import('../pages/CreteServiceRequestPage'));
+const ServiceRequestsPage = lazy(() => import('../pages/ServiceRequestsPage'));
+const CreteServiceRequestPage = lazy(
+  () => import('../pages/CreteServiceRequestPage'),
+);
 
 export const ServiceRequestsRoutes = () => {
   return (
@@ -14,7 +17,7 @@ export const ServiceRequestsRoutes = () => {
         path="solicitudes"
         element={
           <Suspense fallback={<LoadingPage />}>
-            <h1>Solicitudes</h1>
+            <ServiceRequestsPage />
           </Suspense>
         }
       />
@@ -22,7 +25,6 @@ export const ServiceRequestsRoutes = () => {
         path="nueva-solicitud"
         element={
           <Suspense fallback={<LoadingPage />}>
-            {/* <ServiceRequestPage /> */}
             <CreteServiceRequestPage />
           </Suspense>
         }

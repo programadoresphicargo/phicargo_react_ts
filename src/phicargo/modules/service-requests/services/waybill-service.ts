@@ -1,5 +1,6 @@
 import type {
   Route,
+  Waybill,
   WaybillCategory,
   WaybillCreate,
   WaybillItem,
@@ -7,6 +8,7 @@ import type {
 } from '../models';
 import type {
   RouteApi,
+  WaybillApi,
   WaybillCategoryApi,
   WaybillItemApi,
   WaybillTransportableProductApi,
@@ -18,6 +20,30 @@ import { WaybillItemKey } from '../types';
 import odooApi from '../../core/api/odoo-api';
 
 export class WaybillService {
+  public static async getServiceRequests(
+    [startDate, endDate]: [Date, Date],
+  ): Promise<Waybill[]> {
+
+    const strStartDate = startDate.toISOString().split('T')[0];
+    const strEndDate = endDate.toISOString().split('T')[0];
+
+    const url = `/service-request/?start_date=${strStartDate}&end_date=${strEndDate}`;
+
+    try {
+      const response = await odooApi.get<WaybillApi[]>(url);
+      return response.data.map(ServiceRequestAdapter.toWaybill);
+    } catch (error) {
+      console.log(error);
+      if (error instanceof AxiosError) {
+        throw new Error(
+          error.response?.data?.detail ||
+            'Error al obtener las solicitudes de servicio',
+        );
+      }
+      throw new Error('Error al obtener las solicitudes de servicio');
+    }
+  }
+
   public static async createService(data: WaybillCreate) {
     const body = ServiceRequestAdapter.toWaybillCreate(data);
     console.log(body);

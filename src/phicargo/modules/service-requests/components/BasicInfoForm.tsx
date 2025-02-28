@@ -8,11 +8,19 @@ import { Card, CardContent } from '@mui/material';
 import { ContactsSearchInput } from '../../contacts/components/inputs/ContactsSearchInput';
 import { DatePickerElement } from 'react-hook-form-mui/date-pickers';
 import { useCreateServiceContext } from '../hooks/useCreateServiceContext';
+import { useEffect } from 'react';
 import { useGetWaybillCategory } from '../hooks/queries';
 
 export const BasicInfoForm = () => {
   const { form } = useCreateServiceContext();
-  const { control, setValue } = form;
+  const { control, setValue, watch } = form;
+
+  const client = watch('partnerId');
+
+  useEffect(() => {
+    setValue('partnerOrderId', client);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [client]);
 
   const { isLoading, selection } = useGetWaybillCategory();
 

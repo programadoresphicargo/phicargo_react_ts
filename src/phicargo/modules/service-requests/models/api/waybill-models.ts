@@ -24,3 +24,8 @@ export interface WaybillItemApi {
   name: string;
 }
 
+export interface PartnerApi {
+  id: number;
+  name: string;
+}
+
