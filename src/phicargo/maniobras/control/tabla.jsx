@@ -12,6 +12,7 @@ import {
   useMaterialReactTable,
 } from 'material-react-table';
 import { width } from '@mui/system';
+import EstatusDropdownManiobra from '../reportes_estatus/resumen_estatus';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const Maniobras = ({ estado_maniobra }) => {
@@ -70,6 +71,7 @@ const Maniobras = ({ estado_maniobra }) => {
       {
         accessorKey: 'id_maniobra',
         header: 'ID Maniobra',
+        size: 50,
       },
       {
         accessorKey: 'sucursal',
@@ -137,6 +139,17 @@ const Maniobras = ({ estado_maniobra }) => {
         size: 150,
       },
       {
+        accessorKey: 'ultimo_estatus',
+        header: 'Último estatus enviado',
+        size: 300,
+        Cell: ({ cell }) => (
+          <EstatusDropdownManiobra
+            id_maniobra={cell.row.original.id_maniobra}
+            ultimo_estatus={cell.getValue() || ''}
+          />
+        ),
+      },
+      {
         accessorKey: 'fecha_activacion',
         header: 'Fecha de inicio',
         size: 150,
@@ -150,19 +163,6 @@ const Maniobras = ({ estado_maniobra }) => {
         accessorKey: 'x_ejecutivo_viaje_bel',
         header: 'Ejecutivo',
         size: 150,
-      },
-      {
-        accessorKey: 'ultimo_estatus',
-        header: 'Ultimo estatus enviado',
-        size: 150,
-        Cell: ({ cell }) => {
-          const value = cell.getValue();
-          return (
-            <Chip className={`badge bg-success rounded-pill text-white`} style={{ width: '120px' }}>
-              {value}
-            </Chip>
-          );
-        },
       },
       {
         accessorKey: 'cartas_porte',

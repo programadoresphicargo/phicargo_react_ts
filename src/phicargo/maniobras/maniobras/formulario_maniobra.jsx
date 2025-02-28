@@ -3,7 +3,7 @@ import MyComponent from './selects_flota';
 import axios from 'axios';
 import SelectOperador from './select_operador';
 import ManiobraContenedores from './añadir_contenedor/maniobra_contenedores';
-import { User } from "@heroui/react";
+import { CardHeader, Divider, User } from "@heroui/react";
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Dialog from '@mui/material/Dialog';
@@ -625,20 +625,27 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                         </Toolbar>
                     </AppBar>
 
+                    {Loading && (
+                        <Box sx={{ width: '100%' }} visibility={false}>
+                            <LinearProgress />
+                        </Box>
+                    )}
+
                     <Box sx={{ width: '100%', typography: 'body1' }}>
                         <TabContext value={value}>
-                            <Box>
-                                <TabList onChange={handleChangeTab}>
+                            <Box sx={{ borderColor: 'divider', backgroundColor: '#002887', color: 'white' }}>
+                                <TabList onChange={handleChangeTab}
+                                    textColor="inherit"
+                                    sx={{
+                                        '& .MuiTabs-indicator': {
+                                            backgroundColor: 'white',
+                                            height: '3px',
+                                        }
+                                    }}>
                                     <Tab label="Formulario" value="1" />
                                     <Tab label="Documentación" value="2" />
                                 </TabList>
                             </Box>
-
-                            {Loading && (
-                                <Box sx={{ width: '100%' }} visibility={false}>
-                                    <LinearProgress />
-                                </Box>
-                            )}
 
                             <TabPanel value="1">
                                 <Card>
@@ -659,6 +666,10 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
 
                                             <Grid lg={6} xs={12}>
                                                 <Card>
+                                                    <CardHeader>
+                                                        Datos de la maniobra
+                                                    </CardHeader>
+                                                    <Divider></Divider>
                                                     <CardBody>
                                                         <form>
                                                             <Grid container spacing={3}>
