@@ -139,6 +139,8 @@ const TimeLineCE = ({ }) => {
                                     Cancelado
                                 </Typography>
                                 <Typography>{formData.usuario_cancelacion}</Typography>
+                                <Typography>{formData.motivo_cancelacion}</Typography>
+                                <Typography>{formData.comentarios_cancelacion}</Typography>
                             </TimelineContent>
                         </TimelineItem>
                     </Timeline>

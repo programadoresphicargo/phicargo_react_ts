@@ -26,9 +26,10 @@ import { toast } from 'react-toastify';
 import { useAuthContext } from '@/phicargo/modules/auth/hooks';
 import TimeLineCE from "./linea_tiempo";
 import { DateRangePicker } from "@heroui/react";
+import CancelFolio from "./cancelar_folio";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
+    return <Slide direction="left" ref={ref} {...props} />;
 });
 
 const FormularioCostoExtra = ({ show, handleClose }) => {
@@ -36,6 +37,15 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
     const { id_folio, setIDFolio, CartasPorte, CartasPorteEliminadas, CostosExtras, setCostosExtras, CostosExtrasEliminados, setCostosExtrasEliminados, formData, setFormData, DisabledForm, setDisabledForm } = useContext(CostosExtrasContext);
     const [Loading, setLoading] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
+    const [CancelDialog, setCancelDialog] = useState(false);
+
+    const openCancelDialog = () => {
+        setCancelDialog(true);
+    }
+
+    const closeCancelDialog = () => {
+        setCancelDialog(false);
+    }
 
     const editar_registro = () => {
         setIsEditing(true);
@@ -86,6 +96,8 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
 
                 usuario_cancelacion: data.usuario_cancelacion || null,
                 fecha_cancelacion: data.fecha_cancelacion || null,
+                motivo_cancelacion: data.motivo_cancelacion || null,
+                comentarios_cancelacion: data.comentarios_cancelacion || null,
             });
 
             fetchCE();
@@ -258,29 +270,6 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
         });
     }
 
-    const cancelar_folio = () => {
-        Swal.fire({
-            title: '¿Estás seguro?',
-            text: '¿Deseas cancelar este folio?',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Sí, cancelar',
-            cancelButtonText: 'Cancelar',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                odooApi.post('/folios_costos_extras/cancelar/' + id_folio)
-                    .then(response => {
-                        fetchData();
-                        toast.success('El folio ha sido cancelado.');
-                    })
-                    .catch(error => {
-                        toast.error('Error, Hubo un problema al cancelar el folio:' + error);
-                    });
-            }
-        });
-    }
-
     return (
         <>
             <Dialog
@@ -325,7 +314,7 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
                                         )}
 
                                         {(formData.status === "borrador" || formData.status === 'confirmado') && (
-                                            <Button color="danger" onPress={cancelar_folio} startContent={<i class="bi bi-x-circle"></i>}>
+                                            <Button color="danger" onPress={openCancelDialog} startContent={<i class="bi bi-x-circle"></i>}>
                                                 Cancelar
                                             </Button>
                                         )}
@@ -387,6 +376,12 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
                     </Grid>
                 </Box>
             </Dialog>
+
+            <CancelFolio
+                open={CancelDialog}
+                onClose={closeCancelDialog}
+                fetchData={fetchData}>
+            </CancelFolio>
         </>
     );
 };
