@@ -103,6 +103,27 @@ const Maniobras = ({ estado_maniobra }) => {
         },
       },
       {
+        accessorKey: 'terminal',
+        header: 'Terminal',
+      },
+      {
+        accessorKey: 'unidad',
+        header: 'Unidad',
+        Cell: ({ cell }) => {
+          const value = cell.getValue();
+          return (
+            <Chip color='primary'>
+              {value}
+            </Chip>
+          );
+        },
+      },
+      {
+        accessorKey: 'nombre_operador',
+        header: 'Operador',
+        size: 150,
+      },
+      {
         accessorKey: 'tipo_maniobra',
         header: 'Tipo de maniobra',
         Cell: ({ cell }) => {
@@ -126,24 +147,8 @@ const Maniobras = ({ estado_maniobra }) => {
 
       },
       {
-        accessorKey: 'terminal',
-        header: 'Terminal',
-      },
-      {
-        accessorKey: 'unidad',
-        header: 'Unidad',
-        Cell: ({ cell }) => {
-          const value = cell.getValue();
-          return (
-            <Chip color='primary'>
-              {value}
-            </Chip>
-          );
-        },
-      },
-      {
-        accessorKey: 'nombre_operador',
-        header: 'Operador',
+        accessorKey: 'contenedores_ids',
+        header: 'Contenedor',
         size: 150,
       },
       {
@@ -175,11 +180,6 @@ const Maniobras = ({ estado_maniobra }) => {
       {
         accessorKey: 'cartas_porte',
         header: 'Cartas porte',
-        size: 150,
-      },
-      {
-        accessorKey: 'contenedores_ids',
-        header: 'Contenedor',
         size: 150,
       },
       {
