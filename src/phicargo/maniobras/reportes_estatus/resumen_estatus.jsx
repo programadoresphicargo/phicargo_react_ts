@@ -35,6 +35,7 @@ const EstatusDropdownManiobra = ({ id_maniobra, ultimo_estatus }) => {
                     className="text-white"
                     color="success"
                     size="sm"
+                    radius="lg"
                     startContent={!isLoading && <i class="bi bi-caret-down-fill"></i>}
                 >
                     {isLoading ? <Spinner size="sm" /> : ultimo_estatus}

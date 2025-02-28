@@ -108,7 +108,7 @@ const Maniobras = ({ estado_maniobra }) => {
         Cell: ({ cell }) => {
           const value = cell.getValue();
 
-          let variant = 'secondary';
+          let variant = 'default';
           if (value === 'retiro') {
             variant = 'success';
           } else if (value === 'ingreso') {
@@ -118,7 +118,7 @@ const Maniobras = ({ estado_maniobra }) => {
           }
 
           return (
-            <Chip className={`badge bg-${variant} rounded-pill text-white`} size='sm'>
+            <Chip color={variant} className="text-white">
               {value}
             </Chip>
           );
@@ -132,6 +132,14 @@ const Maniobras = ({ estado_maniobra }) => {
       {
         accessorKey: 'unidad',
         header: 'Unidad',
+        Cell: ({ cell }) => {
+          const value = cell.getValue();
+          return (
+            <Chip color='primary'>
+              {value}
+            </Chip>
+          );
+        },
       },
       {
         accessorKey: 'nombre_operador',

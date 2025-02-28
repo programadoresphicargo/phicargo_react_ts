@@ -109,7 +109,6 @@ const ViajesActivos = ({ }) => {
           return (
             <Chip
               color={badgeClass}
-              size="sm"
               className="text-white"
             >
               {estatus_viaje.charAt(0).toUpperCase() + estatus_viaje.slice(1)}
@@ -122,18 +121,18 @@ const ViajesActivos = ({ }) => {
         header: 'Modalidad',
         Cell: ({ cell }) => {
           const tipoMovimiento = cell.getValue() || '';
-          let badgeClass = 'badge rounded-pill text-white ';
+          let badgeClass = 'default';
 
           if (tipoMovimiento === 'imp') {
-            badgeClass += 'bg-warning';
+            badgeClass = 'warning';
           } else if (tipoMovimiento === 'exp') {
-            badgeClass += 'bg-danger';
+            badgeClass = 'danger';
           } else {
-            badgeClass += 'bg-primary';
+            badgeClass = 'primary';
           }
 
           return (
-            <Chip className={badgeClass} style={{ width: '60px' }} size='sm'>
+            <Chip color={badgeClass} className="text-white">
               {tipoMovimiento.charAt(0).toUpperCase() + tipoMovimiento.slice(1)}
             </Chip>
           );
@@ -158,12 +157,11 @@ const ViajesActivos = ({ }) => {
         accessorKey: 'operador',
         header: 'Operador',
         Cell: ({ cell }) => {
-          const tipoMovimiento = cell.getValue();
-          let badgeClass = 'text-white bg-primary';
+          const value = cell.getValue();
 
           return (
-            <Chip className={badgeClass} size='sm'>
-              {tipoMovimiento.charAt(0).toUpperCase() + tipoMovimiento.slice(1)}
+            <Chip color='primary'>
+              {value}
             </Chip>
           );
         },
@@ -212,7 +210,7 @@ const ViajesActivos = ({ }) => {
           }, [row.original.codigo_postal, row.original.id_sucursal]);
 
           return (
-            <Chip className="text-white" color='success' size='sm' style={{ width: '150px' }}>
+            <Chip className="text-white" color='success'>
               {distancia !== null ? distancia : 'Cargando...'}
             </Chip>
           );
@@ -235,20 +233,20 @@ const ViajesActivos = ({ }) => {
         accessorKey: 'tipo_armado',
         header: 'Armado',
         Cell: ({ cell }) => {
-          const tipoMovimiento = cell.getValue() || '';
-          let badgeClass = 'badge rounded-pill text-white ';
+          const value = cell.getValue() || '';
+          let badgeClass = 'default';
 
-          if (tipoMovimiento === 'single') {
-            badgeClass += 'bg-success';
-          } else if (tipoMovimiento === 'full') {
-            badgeClass += 'bg-danger';
+          if (value === 'single') {
+            badgeClass = 'success';
+          } else if (value === 'full') {
+            badgeClass = 'danger';
           } else {
-            badgeClass += 'bg-primary';
+            badgeClass = 'primary';
           }
 
           return (
-            <Chip className={badgeClass} size='sm'>
-              {tipoMovimiento.charAt(0).toUpperCase() + tipoMovimiento.slice(1)}
+            <Chip color={badgeClass}>
+              {value.charAt(0).toUpperCase() + value.slice(1)}
             </Chip>
           );
         },

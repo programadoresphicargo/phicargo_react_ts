@@ -32,6 +32,7 @@ const EstatusDropdown = ({ id_viaje, ultimo_estatus }) => {
                 <Button
                     disabled={isLoading}
                     isLoading={isLoading}
+                    radius="lg"
                     color="primary"
                     size="sm"
                     startContent={!isLoading &&  <i class="bi bi-caret-down-fill"></i>}
