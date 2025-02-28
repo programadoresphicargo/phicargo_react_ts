@@ -21,7 +21,7 @@ import Viaje from '../viaje';
 import { ViajeContext } from '../context/viajeContext';
 import ViajesActivosMasivo from '../envio_masivo/viajes_activos';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
-import { Popover, PopoverTrigger, PopoverContent, useDisclosure } from "@heroui/react";
+import { Popover, PopoverTrigger, PopoverContent, useDisclosure, User } from "@heroui/react";
 import DetencionesViajesActivos from '../detenciones/detenciones_modal';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import Travel from './viaje';
@@ -160,9 +160,12 @@ const ViajesActivos = ({ }) => {
           const value = cell.getValue();
 
           return (
-            <Chip color='primary'>
-              {value}
-            </Chip>
+            <User
+              avatarProps={{
+                src: "https://th.bing.com/th/id/R.b79d045f4b512cd239bcd4bbf4065aac?rik=gdIMsJ5mwf2Ikw&pid=ImgRaw&r=0",
+              }}
+              name={value}
+            />
           );
         },
       },
