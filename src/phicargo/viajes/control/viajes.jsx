@@ -162,6 +162,7 @@ const ViajesActivos = ({ }) => {
           return (
             <User
               avatarProps={{
+                size: "sm",
                 src: "https://th.bing.com/th/id/R.b79d045f4b512cd239bcd4bbf4065aac?rik=gdIMsJ5mwf2Ikw&pid=ImgRaw&r=0",
               }}
               name={value}
