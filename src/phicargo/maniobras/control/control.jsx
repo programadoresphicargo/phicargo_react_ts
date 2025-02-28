@@ -31,7 +31,7 @@ export default function control_maniobras() {
                             }}
                         >
                             <Tab label="ACTIVAS" value="1" sx={{ fontFamily: 'Inter' }} />
-                            <Tab label="BORRADOR" value="2" sx={{ fontFamily: 'Inter' }} />
+                            <Tab label="PROGRAMADAS" value="2" sx={{ fontFamily: 'Inter' }} />
                             <Tab label="FINALIZADAS" value="3" sx={{ fontFamily: 'Inter' }} />
                             <Tab label="PENDIENTES POR ASIGNAR" value="4" sx={{ fontFamily: 'Inter' }} />
                         </TabList>
