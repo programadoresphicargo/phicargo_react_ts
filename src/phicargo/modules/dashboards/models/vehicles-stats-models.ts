@@ -10,8 +10,15 @@ export interface DistanceByVehicle {
   distance: number;
 }
 
+export interface AvailableSummary {
+  available: number;
+  noDriver: number;
+  maintenance: number;
+}
+
 export interface VehicleStats {
   revenueByVehicle: RevenueByVehicle[];
   distanceByVehicle: DistanceByVehicle[];
+  availableSummary: AvailableSummary;
 }
 

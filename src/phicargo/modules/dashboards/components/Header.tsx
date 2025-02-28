@@ -1,32 +1,18 @@
-import 'rsuite/dist/rsuite-no-reset.min.css';
-
 import { ChangeEvent, useState } from 'react';
-import { IconButton, Tooltip } from '@mui/material';
-import {
-  Select,
-  SelectItem,
-  SharedSelection,
-} from "@heroui/react";
+import { Select, SelectItem, SharedSelection } from '@heroui/react';
 
 import { BiBuildings } from 'react-icons/bi';
-import { DateRangePicker } from 'rsuite';
+import { DatePicker } from './DatePicker';
 import { IoMapOutline } from 'react-icons/io5';
-import RefreshIcon from '@mui/icons-material/Refresh';
-import dayjs from 'dayjs';
 import { useDateRangeContext } from '../hooks/useDateRangeContext';
-import { useRefetchFn } from '../hooks/useRefetchFn';
-
-const { after } = DateRangePicker;
 
 export const Header = () => {
-  const { month, setMonth, setBranchId, setCompanyId, branchId, companyId } =
+  const { setBranchId, setCompanyId, branchId, companyId } =
     useDateRangeContext();
   const [companyValue, setCompanyValue] = useState<SharedSelection>(
     new Set([]),
   );
   const [branchValue, setBranchValue] = useState<SharedSelection>(new Set([]));
-
-  const refetchFn = useRefetchFn();
 
   const handleCompanySelect = (event: ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value;
@@ -81,28 +67,7 @@ export const Header = () => {
           <SelectItem key={2}>{'MÉXICO'}</SelectItem>
         </Select>
       </div>
-      <div className="flex flex-row gap-2 border-2 items-center border-slate-300 rounded-xl p-1 shadow-md">
-        <div className="flex flex-row items-center rounded-xl">
-          <Tooltip arrow title="Refrescar">
-            <IconButton size="small" onClick={() => refetchFn()}>
-              <RefreshIcon />
-            </IconButton>
-          </Tooltip>
-        </div>
-        <DateRangePicker
-          hoverRange="month"
-          oneTap
-          showOneCalendar
-          placeholder="Selecciona Un Mes"
-          size="sm"
-          format="dd/MM/yyyy"
-          character=" - "
-          showWeekNumbers
-          value={month}
-          onChange={setMonth}
-          shouldDisableDate={after(dayjs().endOf('month').toDate())}
-        />
-      </div>
+      <DatePicker />
     </div>
   );
 };

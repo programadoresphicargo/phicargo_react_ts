@@ -40,7 +40,7 @@ const options: ChartOptions<'bar'> = {
       },
       ticks: {
         font: {
-          size: 15,
+          size: 13,
         },
       },
     },
@@ -95,7 +95,7 @@ export const DistanceByVehiclesChart = (props: Props) => {
     <ChartCard
       title={`Distancia Recorrida Por Unidad ${monthYearName}`}
       isLoading={isLoading && !chartData}
-      customHeight="65rem"
+      customHeight="100rem"
       downloadFn={() => toExcel.exportData(data?.distanceByVehicle || [])}
     >
       {chartData && <Bar data={chartData} options={options} />}
