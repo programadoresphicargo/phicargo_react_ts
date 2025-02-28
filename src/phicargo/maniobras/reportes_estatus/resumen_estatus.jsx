@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button, Spinner } from "@heroui/react";
 import odooApi from "@/phicargo/modules/core/api/odoo-api";
+import { User, Link } from "@heroui/react";
 
 const EstatusDropdownManiobra = ({ id_maniobra, ultimo_estatus }) => {
     const [items, setItems] = useState([]);
@@ -29,17 +30,19 @@ const EstatusDropdownManiobra = ({ id_maniobra, ultimo_estatus }) => {
     return (
         <Dropdown isOpen={isOpen} onOpenChange={handleOpen}>
             <DropdownTrigger>
-                <Button
-                    disabled={isLoading}
-                    isLoading={isLoading}
-                    className="text-white"
-                    color="success"
-                    size="sm"
-                    radius="lg"
-                    startContent={!isLoading && <i class="bi bi-caret-down-fill"></i>}
-                >
-                    {isLoading ? <Spinner size="sm" /> : ultimo_estatus}
-                </Button>
+
+                {isLoading ? (
+                    <Spinner size="sm" />
+                ) : (
+                    <User
+                        avatarProps={{
+                            src: "https://th.bing.com/th/id/OIP.9_MptOLxjJEGSGukPt9FWQHaHa?w=1920&h=1920&rs=1&pid=ImgDetMain",
+                        }}
+                        description={ultimo_estatus}
+                        name={ultimo_estatus}
+                    />
+                )}
+
             </DropdownTrigger>
             {isLoading ? (
                 <div className="flex justify-center p-2">
