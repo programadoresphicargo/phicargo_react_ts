@@ -40,7 +40,6 @@ export default function Accesos() {
                     <TabPanel value="1" sx={{ padding: 0, margin: 0 }}><Maniobras estado_maniobra={'peatonal'} /></TabPanel>
                     <TabPanel value="2" sx={{ padding: 0, margin: 0 }}> <Maniobras estado_maniobra={'vehicular'} /></TabPanel>
                     <TabPanel value="3" sx={{ padding: 0, margin: 0 }}><Maniobras estado_maniobra={'archivado'} /></TabPanel>
-                    <TabPanel value="4" sx={{ padding: 0, margin: 0 }}></TabPanel>
                 </TabContext>
             </Box>
         </>
