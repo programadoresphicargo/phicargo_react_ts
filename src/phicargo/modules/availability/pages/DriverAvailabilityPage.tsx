@@ -11,6 +11,41 @@ import {
   type ExportConfig,
 } from '../../core/utilities/export-to-excel';
 
+const DriverAvailabilityPage = () => {
+  const navigate = useNavigate();
+
+  const {
+    driversQuery: { data: drivers, isFetching, isLoading, refetch },
+  } = useDriverQueries();
+
+  const state = useTableState({
+    tableId: 'availability-drivers-table',
+  });
+
+  const { columns } = useDriversColumns();
+
+  const table = useBaseTable({
+    columns,
+    data: drivers || [],
+    state,
+    isLoading,
+    progressBars: isFetching,
+    refetch,
+    onDoubleClickFn: (id) => navigate(`detalles/${id}`),
+    memoMode: 'cells',
+    onExportExcel: (data) => toExcel.exportData(data),
+  });
+
+  return (
+    <>
+      <MaterialTableBase table={table} />
+      <Outlet />
+    </>
+  );
+};
+
+export default DriverAvailabilityPage;
+
 const exportConf: ExportConfig<Driver> = {
   fileName: 'Operadores',
   withDate: true,
@@ -35,38 +70,4 @@ const exportConf: ExportConfig<Driver> = {
 };
 
 const toExcel = new ExportToExcel(exportConf);
-
-const DriverAvailabilityPage = () => {
-  const navigate = useNavigate();
-
-  const {
-    driversQuery: { data: drivers, isFetching, refetch },
-  } = useDriverQueries();
-
-  const state = useTableState({
-    tableId: 'availability-drivers-table',
-  });
-
-  const { columns } = useDriversColumns();
-
-  const table = useBaseTable({
-    columns,
-    data: drivers || [],
-    state,
-    isLoading: isFetching,
-    refetch,
-    onDoubleClickFn: (id) => navigate(`detalles/${id}`),
-    memoMode: 'cells',
-    onExportExcel: (data) => toExcel.exportData(data),
-  });
-
-  return (
-    <>
-      <MaterialTableBase table={table} />
-      <Outlet />
-    </>
-  );
-};
-
-export default DriverAvailabilityPage;
 

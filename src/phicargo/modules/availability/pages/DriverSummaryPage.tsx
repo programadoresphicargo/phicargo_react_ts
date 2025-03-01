@@ -6,27 +6,14 @@ import { useDriversSummaryColumns } from '../hooks/useDriversSummaryColumns';
 import { useMemo } from 'react';
 import { useTableState } from '../../core/hooks/useTableState';
 import type { DriverWithRealStatus } from '../models/driver-model';
-import { type ExportConfig, ExportToExcel } from '../../core/utilities/export-to-excel';
-
-const exportConf: ExportConfig<DriverWithRealStatus> = {
-  fileName: 'Resumen Operadores',
-  withDate: true,
-  sheetName: 'Resumen Operadores',
-  columns: [
-    { accessorFn: (data) => data.name, header: 'OPERADOR' },
-    { accessorFn: (data) => data.job.name, header: 'TIPO' },
-    { accessorFn: (data) => data.realStatus, header: 'ESTATUS REAL' },
-    { accessorFn: (data) => data.travel?.name, header: 'VIAJE' },
-    { accessorFn: (data) => data.maneuver?.type, header: 'MANIOBRA' },
-    { accessorFn: (data) => data.maneuver?.id, header: 'ID MANIOBRA' },
-  ],
-};
-
-const toExcel = new ExportToExcel(exportConf);
+import {
+  type ExportConfig,
+  ExportToExcel,
+} from '../../core/utilities/export-to-excel';
 
 const DriverSummaryPage = () => {
   const {
-    driversQuery: { data: drivers, isFetching, refetch },
+    driversQuery: { data: drivers, isFetching, isLoading, refetch },
   } = useDriverQueries();
 
   const state = useTableState({
@@ -44,7 +31,8 @@ const DriverSummaryPage = () => {
     columns,
     data: driversWithStatus || [],
     state,
-    isLoading: isFetching,
+    isLoading,
+    progressBars: isFetching,
     refetch,
     memoMode: 'cells',
     onExportExcel: (data) => toExcel.exportData(data),
@@ -55,3 +43,18 @@ const DriverSummaryPage = () => {
 
 export default DriverSummaryPage;
 
+const exportConf: ExportConfig<DriverWithRealStatus> = {
+  fileName: 'Resumen Operadores',
+  withDate: true,
+  sheetName: 'Resumen Operadores',
+  columns: [
+    { accessorFn: (data) => data.name, header: 'OPERADOR' },
+    { accessorFn: (data) => data.job.name, header: 'TIPO' },
+    { accessorFn: (data) => data.realStatus, header: 'ESTATUS REAL' },
+    { accessorFn: (data) => data.travel?.name, header: 'VIAJE' },
+    { accessorFn: (data) => data.maneuver?.type, header: 'MANIOBRA' },
+    { accessorFn: (data) => data.maneuver?.id, header: 'ID MANIOBRA' },
+  ],
+};
+
+const toExcel = new ExportToExcel(exportConf);

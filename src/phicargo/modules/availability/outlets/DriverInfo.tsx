@@ -1,10 +1,20 @@
-import { Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/react";
+import {
+  Card,
+  CardBody,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalHeader,
+  Tab,
+  Tabs,
+} from '@heroui/react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useMemo, useState } from 'react';
 
 import DriverInfoForm from '../components/DriverInfoForm';
 import DriverModalHeader from '../components/DriverModalHeader';
 import DriverPermissions from '../components/DriverPermissions';
+import { ManeuverDriverTimeline } from '../../drivers/components/ManeuverDriverTimeline';
 import UnavailiabilityCreateModal from '../components/UnavailiabilityCreateModal';
 import { useDriverQueries } from '../hooks/useDriverQueries';
 
@@ -37,13 +47,24 @@ const DriverInfo = () => {
               <ModalHeader className="flex items-center justify-around bg-[#dadfeb] pb-2">
                 <DriverModalHeader driver={driver} />
               </ModalHeader>
-              <ModalBody className="flex flex-col md:flex-row bg-gray-400 p-4 gap-4">
-                <div className="w-full md:w-1/2">
-                  {driver && <DriverPermissions driver={driver} />}
-                </div>
-                <div className="w-full md:w-1/2">
-                  <DriverInfoForm driver={driver} />
-                </div>
+              <ModalBody className="bg-gray-400 p-4">
+                <Tabs aria-label="Options">
+                  <Tab key="permissions" title="Permisos">
+                    {driver && <DriverPermissions driver={driver} />}
+                  </Tab>
+                  <Tab key="driver-form" title="Información">
+                    <DriverInfoForm driver={driver} />
+                  </Tab>
+                  <Tab key="meneuvers" title="Maniobras">
+                    <Card>
+                      <CardBody className="h-96 overflow-y-auto">
+                        {driver && (
+                          <ManeuverDriverTimeline driverId={driver!.id} />
+                        )}
+                      </CardBody>
+                    </Card>
+                  </Tab>
+                </Tabs>
               </ModalBody>
             </>
           )}

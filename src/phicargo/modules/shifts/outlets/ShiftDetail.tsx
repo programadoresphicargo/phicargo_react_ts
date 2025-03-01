@@ -13,7 +13,7 @@ import { EditShiftForm } from '../components/EditShiftForm';
 import { FaEdit } from 'react-icons/fa';
 import { FiAlertCircle } from 'react-icons/fi';
 import { HiQueueList } from 'react-icons/hi2';
-import { ManeuverTimeline } from '../components/ManeuverTimeline';
+import { ManeuverDriverTimeline } from "../../drivers/components/ManeuverDriverTimeline";
 import { MdOutlineArchive } from 'react-icons/md';
 import { MdOutlineLock } from 'react-icons/md';
 import { MdOutlineLockOpen } from 'react-icons/md';
@@ -130,7 +130,7 @@ const ShiftDetail = () => {
                   </div>
 
                   <div className="w-7/12 border-2 rounded-lg p-3 max-h-[445px] overflow-y-auto">
-                    {shift && <ManeuverTimeline driverId={shift.driver.id} />}
+                    {shift && <ManeuverDriverTimeline driverId={shift.driver.id} />}
                   </div>
                 </div>
               </ModalBody>

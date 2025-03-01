@@ -44,6 +44,7 @@ export interface DriverApi extends DriverBaseApi {
 
   tms_travel: TravelSimpleApi | null;
   maniobra: ManeuverSimpleApi | null;
+  last_maneuver: ManeuverSimpleApi | null;
 }
 
 export interface DriverEditApi {
