@@ -25,7 +25,7 @@ export default function control_maniobras() {
                             textColor="inherit"
                             sx={{
                                 '& .MuiTabs-indicator': {
-                                    backgroundColor: 'white', 
+                                    backgroundColor: 'white',
                                     height: '3px',
                                 }
                             }}
@@ -39,7 +39,7 @@ export default function control_maniobras() {
                     <TabPanel value="1" sx={{ padding: 0, margin: 0 }}><Maniobras estado_maniobra={'activa'} /></TabPanel>
                     <TabPanel value="2" sx={{ padding: 0, margin: 0 }}><Maniobras estado_maniobra={'borrador'} /></TabPanel>
                     <TabPanel value="3" sx={{ padding: 0, margin: 0 }}> <Maniobras estado_maniobra={'finalizada'} /></TabPanel>
-                    <TabPanel value="4" sx={{ padding: 0, margin: 0 }}><Maniobras estado_maniobra={'mp'} /></TabPanel>
+                    <TabPanel value="4" sx={{ padding: 0, margin: 0 }}><Maniobras estado_maniobra={''} /></TabPanel>
                 </TabContext>
             </Box>
         </>

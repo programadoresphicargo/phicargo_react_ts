@@ -13,24 +13,12 @@ import {
 } from 'material-react-table';
 import { width } from '@mui/system';
 import EstatusDropdownManiobra from '../reportes_estatus/resumen_estatus';
+import odooApi from '@/phicargo/modules/core/api/odoo-api';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const Maniobras = ({ estado_maniobra }) => {
 
-  const [grouping, setGrouping] = useState([]);
-
-  useEffect(() => {
-    console.log('Agrupación actual:', grouping);
-    // Aquí puedes realizar cualquier acción adicional cuando cambia la agrupación
-  }, [grouping]);
-
-  const handleGroupChange = (event) => {
-    const value = event.target.value;
-    setGrouping(value); // value es un array de strings
-  };
-
   const [data, setData] = useState([]);
-
   const [isLoading2, setLoading] = useState();
   const [modalShow, setModalShow] = useState(false);
   const [id_maniobra, setIdmaniobra] = useState('');
@@ -50,15 +38,16 @@ const Maniobras = ({ estado_maniobra }) => {
 
 
   const fetchData = async () => {
-
     try {
       setLoading(true);
-      const response = await fetch(VITE_PHIDES_API_URL + '/modulo_maniobras/control/tabla.php?estado_maniobra=' + estado_maniobra);
-      const jsonData = await response.json();
-      setData(jsonData);
+      const response = await odooApi.get('/maneuvers/estado/', {
+        params: { estado: estado_maniobra }
+      });
+      setData(response.data);
       setLoading(false);
     } catch (error) {
       console.error('Error al obtener los datos:', error);
+      setLoading(false);
     }
   };
 
