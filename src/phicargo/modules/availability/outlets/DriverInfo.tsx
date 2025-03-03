@@ -48,7 +48,7 @@ const DriverInfo = () => {
                 <DriverModalHeader driver={driver} />
               </ModalHeader>
               <ModalBody className="bg-gray-400 p-4">
-                <Tabs aria-label="Options">
+                <Tabs aria-label="Options" classNames={{ panel: 'p-0' }}>
                   <Tab key="permissions" title="Permisos">
                     {driver && <DriverPermissions driver={driver} />}
                   </Tab>

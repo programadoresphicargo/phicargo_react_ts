@@ -113,7 +113,7 @@ const menuItems: MenuItemType[] = [
     icon: shipingcontainer,
     label: 'Solicitudes de Servicio',
     link: '/solicitudes-servicio',
-    requiredPermissions: [],
+    requiredPermissions: [204],
   },
 ];
 
