@@ -31,7 +31,7 @@ const options: ChartOptions<'bar'> = {
       },
       ticks: {
         font: {
-          size: 10,
+          size: 12,
         },
       },
     },
@@ -97,7 +97,7 @@ export const ArrivalsStatusDriverChart = (props: Props) => {
     <ChartCard
       title={`Llegadas por operador ${monthYearName}`}
       isLoading={isLoading && !chartData}
-      customHeight="70rem"
+      customHeight="100rem"
       downloadFn={() => toExcel.exportData(data?.arrivalStatusDrivers || [])}
     >
       {chartData && <Bar data={chartData} options={options} />}
