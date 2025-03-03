@@ -68,6 +68,17 @@ export const driverToLocal = (driver: DriverApi): Driver => ({
         id: driver.maniobra.id_maniobra,
         type: driver.maniobra.tipo_maniobra,
         status: driver.maniobra.estado_maniobra,
+        finishedDate: null,
+      }
+    : null,
+  lastManeuver: driver.last_maneuver
+    ? {
+        id: driver.last_maneuver.id_maniobra,
+        type: driver.last_maneuver.tipo_maniobra,
+        status: driver.last_maneuver.estado_maniobra,
+        finishedDate: driver.last_maneuver.fecha_finalizada
+          ? dayjs(driver.last_maneuver.fecha_finalizada)
+          : null,
       }
     : null,
 });

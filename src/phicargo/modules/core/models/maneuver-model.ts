@@ -24,12 +24,14 @@ export interface ManeuverSimple {
   id: number;
   type: string;
   status: 'activa' | 'cancelada' | 'borrador' | 'finalizada';
+  finishedDate: Dayjs | null;
 }
 
 export interface ManeuverSimpleApi {
   id_maniobra: number;
   tipo_maniobra: string;
   estado_maniobra: 'activa' | 'cancelada' | 'borrador' | 'finalizada';
+  fecha_finalizada: string | null;
 }
 
 export interface Maneuver {

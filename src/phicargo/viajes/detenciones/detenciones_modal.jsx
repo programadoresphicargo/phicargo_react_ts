@@ -1,16 +1,17 @@
-import { Card, CardBody, CardHeader, Modal, ModalContent, ModalBody, ModalHeader } from "@heroui/react";
+import { Card, CardBody, CardHeader, Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
+
 import Box from '@mui/material/Box';
 import { Button } from "@heroui/button";
-import { addToast } from "@heroui/react";
 import { Chip } from "@heroui/react";
 import { Link } from "@heroui/react";
 import Slide from '@mui/material/Slide';
 import { Typography } from '@mui/material';
+import { addToast } from "@heroui/react";
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 
 const DetencionesViajesActivos = ({ isOpen, close }) => {
@@ -179,12 +180,7 @@ const DetencionesViajesActivos = ({ isOpen, close }) => {
       sx: {
         borderRadius: '8px',
         overflow: 'hidden',
-        maxHeight: 'calc(100vh)',
-      },
-    },
-    muiTableContainerProps: {
-      sx: {
-        maxHeight: 'calc(100vh - 300px)',
+        maxHeight: 'calc(100vh - 300px)'
       },
     },
     muiTableBodyCellProps: ({ row }) => ({

@@ -16,6 +16,7 @@ interface UseTableConfig<T extends MRT_RowData> {
   data: T[];
   state: TableState;
   isLoading: boolean;
+  progressBars?: boolean;
   refetch: () => void;
   onDoubleClickFn?: (id: number | string) => void;
   initialState?: Partial<MRT_TableState<T>>;
@@ -30,6 +31,7 @@ export const useBaseTable = <T extends MRT_RowData>({
   data,
   state,
   isLoading,
+  progressBars,
   refetch,
   onDoubleClickFn,
   initialState = {
@@ -68,6 +70,7 @@ export const useBaseTable = <T extends MRT_RowData>({
     initialState,
     state: {
       isLoading,
+      showProgressBars: progressBars,
       columnFilters: state.columnFilters,
       globalFilter: state.globalFilter,
       sorting: state.sorting,

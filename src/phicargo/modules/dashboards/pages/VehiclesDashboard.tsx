@@ -1,3 +1,4 @@
+import { AvailableSummaryChart } from '../components/vehicles/AvailableSummaryChart';
 import { CategoryScale } from 'chart.js';
 import Chart from 'chart.js/auto';
 import { DistanceByVehiclesChart } from '../components/vehicles/DistanceByVehiclesChart';
@@ -12,6 +13,13 @@ const VehiclesDashboard = () => {
   return (
     <div className="p-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
+        <AvailableSummaryChart 
+          isLoading={vehiclesStatsQuery.isFetching}
+          data={vehiclesStatsQuery.data}
+        />
+        <div>
+          
+        </div>
         <RevenueByVehicleChart
           isLoading={vehiclesStatsQuery.isFetching}
           data={vehiclesStatsQuery.data}

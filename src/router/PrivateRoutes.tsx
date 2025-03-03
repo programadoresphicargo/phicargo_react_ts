@@ -6,17 +6,16 @@ import { Suspense, lazy } from 'react';
 import AccesoForm from '../phicargo/accesos/formulario';
 import AvailabilityRoutes from '../phicargo/modules/availability/routes/AvailabilityRoutes';
 import DashboardsRoutes from '@/phicargo/modules/dashboards/routes/DashboardRoutes';
-import EventosPendientes from '@/phicargo/monitoreo/Eventos_pendientes';
 import { LoadingPage } from '../phicargo/modules/core/pages/LoadingPage';
 import MainMenuPage from '@/phicargo/menu/MainManuPage';
 import NotFoundPage from '@/phicargo/modules/core/pages/NotFoundPage';
-import PersistentDrawer from '../phicargo/monitoreo/Eventos';
 import { ReportsRoutes } from './ReportsRoutes';
+import { ServiceRequestsRoutes } from '@/phicargo/modules/service-requests/routes/ServiceRequestsRoutes';
 import ShiftsRoutes from '../phicargo/modules/shifts/routes/ShiftsRoutes';
 import { ToastContainer } from 'react-toastify';
+import { ToastProvider } from '@heroui/toast';
 import { Toaster } from 'react-hot-toast';
 import UsersManagementRoutes from '../phicargo/modules/users-management/routes/UsersManagementRoutes';
-import { ToastProvider } from "@heroui/toast";
 
 // Lazy load the components
 const CartasPorte = lazy(
@@ -57,9 +56,7 @@ const FoliosCostosExtras = lazy(
 const TiposCostosExtras = lazy(
   () => import('../phicargo/costos/tipos_costos_extras/costos_extras'),
 );
-const Estadias = lazy(
-  () => import('../phicargo/estadias/Control')
-);
+const Estadias = lazy(() => import('../phicargo/estadias/Control'));
 const Accesos = lazy(() => import('../phicargo/accesos/Accesos'));
 const EntregaMonitoreo = lazy(() => import('../phicargo/monitoreo/monitoreo'));
 
@@ -75,9 +72,11 @@ const AsignacionUnidades = lazy(
 const ControlOperadores = lazy(
   () => import('../phicargo/operadores/ControlUsuarios'),
 );
-const BonosOperadores = lazy(
-  () => import('../phicargo/bonos/BonosIndex'),
+const BonosOperadores = lazy(() => import('../phicargo/bonos/BonosIndex'));
+const EventosPendientes = lazy(
+  () => import('@/phicargo/monitoreo/Eventos_pendientes'),
 );
+const PersistentDrawer = lazy(() => import('../phicargo/monitoreo/Eventos'));
 
 export const PrivateRoutes = () => {
   return (
@@ -96,8 +95,8 @@ export const PrivateRoutes = () => {
             <Suspense fallback={<LoadingPage />}>
               <FoliosCostosExtras />
             </Suspense>
-          }>
-        </Route>
+          }
+        ></Route>
 
         <Route
           path="/tipos_costos_extras"
@@ -105,8 +104,8 @@ export const PrivateRoutes = () => {
             <Suspense fallback={<LoadingPage />}>
               <TiposCostosExtras />
             </Suspense>
-          }>
-        </Route>
+          }
+        ></Route>
 
         <Route
           path="/cartas-porte"
@@ -227,7 +226,6 @@ export const PrivateRoutes = () => {
           }
         />
 
-
         <Route
           path="/Accesos"
           element={
@@ -259,7 +257,9 @@ export const PrivateRoutes = () => {
         <Route
           path="/Monitorista"
           element={
-            <PersistentDrawer id_entrega={undefined} onClose={undefined} />
+            <Suspense fallback={<LoadingPage />}>
+              <PersistentDrawer id_entrega={undefined} onClose={undefined} />
+            </Suspense>
           }
         />
 
@@ -278,7 +278,8 @@ export const PrivateRoutes = () => {
             <Suspense fallback={<LoadingPage />}>
               <ReporteDetencionesViajes />
             </Suspense>
-          } />
+          }
+        />
 
         <Route
           path="/asignacion"
@@ -312,6 +313,9 @@ export const PrivateRoutes = () => {
 
         {/* Módulo de turnos */}
         {ShiftsRoutes()}
+
+        {/* Solicitudes de Servicio */}
+        {ServiceRequestsRoutes()}
 
         {/* Ruta para manejar rutas no válidas */}
         <Route path="*" element={<NotFoundPage />} />

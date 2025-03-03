@@ -9,6 +9,7 @@ import type {
   VehicleUpdateApi,
 } from '../../models/api/vehicle-model-api';
 
+import dayjs from 'dayjs';
 import { driverSimpleToLocal } from '../drivers/driver-mapper';
 
 /**
@@ -52,6 +53,9 @@ export const vehicleToLocal = (vehicle: VehicleApi): Vehicle => ({
         id: vehicle.maniobra.id_maniobra,
         type: vehicle.maniobra.tipo_maniobra,
         status: vehicle.maniobra.estado_maniobra,
+        finishedDate: vehicle.maniobra.fecha_finalizada 
+          ? dayjs(vehicle.maniobra.fecha_finalizada)
+          : null,
       }
     : null,
   maintenanceRecord: vehicle.maintenance_records

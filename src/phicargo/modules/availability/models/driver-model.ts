@@ -38,6 +38,7 @@ export interface Driver extends DriverBase {
 
   travel: TravelSimple | null;
   maneuver: ManeuverSimple | null;
+  lastManeuver: ManeuverSimple | null;
 }
 
 export type DriverSimple = Pick<
