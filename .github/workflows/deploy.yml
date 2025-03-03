@@ -69,8 +69,19 @@ jobs:
           port: 22
           script: |
             gunzip ~/workspace/phicargo-react/phicargo-react-image.tar.gz
+
+            docker compose -f docker-compose.prod.yml down || exit 1
+            cd ~/workspace/phicargo-react 
+
+            CURRENT_IMAGE=$(docker images -q phicargo-react:latest)
+            if [ -n "$CURRENT_IMAGE" ]; then
+              echo "Eliminando imagen actual: $CURRENT_IMAGE"
+              docker rmi -f $CURRENT_IMAGE
+            else
+              echo "No se encontró una imagen actual para phicargo-react:latest."
+            fi
+            
             docker load -i ~/workspace/phicargo-react/phicargo-react-image.tar
             rm ~/workspace/phicargo-react/phicargo-react-image.tar
-            cd ~/workspace/phicargo-react
-            docker compose -f docker-compose.prod.yml down || exit 1
+            
             docker compose -f docker-compose.prod.yml up -d || docker compose -f docker-compose.prod.yml down
