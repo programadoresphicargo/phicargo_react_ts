@@ -1,14 +1,24 @@
 import type {
   BranchRevenue,
   ClientRevenue,
+  MonthlyDataByClient,
   MonthlyRevenueByClient,
+  MontlyContainersByClient,
   WaybillStats,
+  YearlyContainersByClient,
+  YearlyDataByClient,
+  YearlyRevenueByClient,
 } from '../models/waybill-stats-model';
 import type {
   BranchRevenueApi,
   ClientRevenueApi,
+  MonthlyDataByClientApi,
   MonthlyRevenueByClientApi,
+  MontlyContainersByClientApi,
   WaybillStatsApi,
+  YearlyContainersByClientApi,
+  YearlyDataByClientApi,
+  YearlyRevenueByClientApi,
 } from '../models/api/waybill-stats-model-api';
 
 import { MonthType } from '../models/travels-stats-models';
@@ -29,26 +39,12 @@ const months: MonthType[] = [
 ];
 
 export class WaybillStatsAdapter {
-  static toBranchRevenue(data: BranchRevenueApi): BranchRevenue {
-    return {
-      branch: data.branch,
-      amount: data.amount,
-    };
-  }
-
-  static toClientRevenue(data: ClientRevenueApi): ClientRevenue {
+  static toMonthlyDataByClient(
+    data: MonthlyDataByClientApi,
+  ): MonthlyDataByClient {
     return {
       client: data.client,
-      amount: data.amount,
-    };
-  }
-
-  static toMonthlyRevenueByClient(
-    data: MonthlyRevenueByClientApi,
-  ): MonthlyRevenueByClient {
-    return {
-      client: data.client,
-      total: data.total,
+      average: data.average,
       january: data.january,
       february: data.february,
       march: data.march,
@@ -61,6 +57,58 @@ export class WaybillStatsAdapter {
       october: data.october,
       november: data.november,
       december: data.december,
+    };
+  }
+
+  static toYearlyDataByClient(data: YearlyDataByClientApi): YearlyDataByClient {
+    return {
+      client: data.client,
+      average: data.average,
+      2022: data.year_2022,
+      2023: data.year_2023,
+      2024: data.year_2024,
+      2025: data.year_2025,
+      2026: data.year_2026,
+      2027: data.year_2027,
+      2028: data.year_2028,
+      2029: data.year_2029,
+      2030: data.year_2030,
+    };
+  }
+
+  static toMonthlyRevenueByClient(
+    data: MonthlyRevenueByClientApi,
+  ): MonthlyRevenueByClient {
+    return {
+      ...WaybillStatsAdapter.toMonthlyDataByClient(data),
+      total: data.total,
+    };
+  }
+
+  static toMonthlyContainersByClient(
+    data: MontlyContainersByClientApi,
+  ): MontlyContainersByClient {
+    return {
+      ...WaybillStatsAdapter.toMonthlyDataByClient(data),
+      containers: data.containers,
+    };
+  }
+
+  static toYearlyRevenueByClient(
+    data: YearlyRevenueByClientApi,
+  ): YearlyRevenueByClient {
+    return {
+      ...WaybillStatsAdapter.toYearlyDataByClient(data),
+      total: data.total,
+    };
+  }
+
+  static toYearlyContainersByClient(
+    data: YearlyContainersByClientApi,
+  ): YearlyContainersByClient {
+    return {
+      ...WaybillStatsAdapter.toYearlyDataByClient(data),
+      containers: data.containers,
     };
   }
 
@@ -101,6 +149,20 @@ export class WaybillStatsAdapter {
         year: item.year,
         amount: item.amount,
       })),
+    };
+  }
+
+  static toBranchRevenue(data: BranchRevenueApi): BranchRevenue {
+    return {
+      branch: data.branch,
+      amount: data.amount,
+    };
+  }
+
+  static toClientRevenue(data: ClientRevenueApi): ClientRevenue {
+    return {
+      client: data.client,
+      amount: data.amount,
     };
   }
 }

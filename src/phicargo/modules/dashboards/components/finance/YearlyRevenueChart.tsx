@@ -1,9 +1,18 @@
 import { ChartData, ChartOptions } from 'chart.js';
+import {
+  ExportConfig,
+  ExportToExcel,
+} from '@/phicargo/modules/core/utilities/export-to-excel';
+import {
+  WaybillStats,
+  YearlyRevenueByClient,
+} from '../../models/waybill-stats-model';
 import { useEffect, useState } from 'react';
 
 import { ChartCard } from '../ChartCard';
 import { Line } from 'react-chartjs-2';
-import { WaybillStats } from '../../models/waybill-stats-model';
+import { WaybillStatsService } from '../../services/waybill-stats-service';
+import { useDateRangeContext } from '../../hooks/useDateRangeContext';
 
 const options: ChartOptions<'line'> = {
   responsive: true,
@@ -54,6 +63,7 @@ interface Props {
 export const YearlyRevenueChart = (props: Props) => {
   const { isLoading, data } = props;
   const [chartData, setChartData] = useState<ChartData<'line'> | null>(null);
+  const { branchId, companyId } = useDateRangeContext();
 
   useEffect(() => {
     if (!data) return;
@@ -78,12 +88,51 @@ export const YearlyRevenueChart = (props: Props) => {
   }, [data]);
 
   return (
-    <ChartCard
-      title={`Ingresos anuales`}
+    <ChartCard 
+      title={`Ingresos anuales`} 
       isLoading={isLoading || !chartData}
+      downloadFn={() => exportYearlyRevenues(companyId, branchId)}
     >
       {chartData && <Line data={chartData} options={options} />}
     </ChartCard>
   );
+};
+
+const exportYearlyRevenues = async (
+  companyId: number | null,
+  branchId: number | null,
+) => {
+  try {
+    const exportConf: ExportConfig<YearlyRevenueByClient> = {
+      fileName: `Ingresos por cliente`,
+      withDate: false,
+      sheetName: 'Ingresos por cliente',
+      columns: [
+        { accessorFn: (data) => data.client, header: 'Cliente' },
+        { accessorFn: (data) => data.total, header: 'Total' },
+        { accessorFn: (data) => data.average, header: 'Promedio' },
+        { accessorFn: (data) => data[2022], header: '2022' },
+        { accessorFn: (data) => data[2023], header: '2023' },
+        { accessorFn: (data) => data[2024], header: '2024' },
+        { accessorFn: (data) => data[2025], header: '2025' },
+        { accessorFn: (data) => data[2026], header: '2026' },
+        { accessorFn: (data) => data[2027], header: '2027' },
+        { accessorFn: (data) => data[2028], header: '2028' },
+        { accessorFn: (data) => data[2029], header: '2029' },
+        { accessorFn: (data) => data[2030], header: '2030' },
+      ],
+    };
+
+    const toExcel = new ExportToExcel(exportConf);
+
+    const data = await WaybillStatsService.getYearlyRevenueByClient(
+      companyId,
+      branchId,
+    );
+
+    toExcel.exportData(data);
+  } catch (error) {
+    console.error(error);
+  }
 };
 
