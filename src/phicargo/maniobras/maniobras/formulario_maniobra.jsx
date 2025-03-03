@@ -1,41 +1,42 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import MyComponent from './selects_flota';
-import axios from 'axios';
-import SelectOperador from './select_operador';
-import ManiobraContenedores from './añadir_contenedor/maniobra_contenedores';
+import { Autocomplete, AutocompleteItem } from "@heroui/react";
+import { Card, CardBody } from "@heroui/react";
 import { CardHeader, Divider, User } from "@heroui/react";
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import Dialog from '@mui/material/Dialog';
+import { Container, filledInputClasses } from '@mui/material';
+import React, { useCallback, useEffect, useState } from 'react';
+
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
+import AutocompleteManager from './correos_electronicos/correos_electronicos';
+import Box from '@mui/material/Box';
+import { Button } from "@heroui/react";
+import CancelarManiobraDialog from './cancelar_maniobra';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import Dialog from '@mui/material/Dialog';
+import DocumentacionManiobra from '../documentacion/documentacion';
+import EstatusHistorialManiobras from '../reportes_estatus/estatus';
+import Grid from '@mui/material/Grid';
+import LinearProgress from '@mui/material/LinearProgress';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import ManiobraContenedores from './añadir_contenedor/maniobra_contenedores';
+import MyComponent from './selects_flota';
+import PanelEstatus from './envio_estatus/panel';
+import SelectOperador from './select_operador';
+import SelectTerminal from './select_terminal';
 import Slide from '@mui/material/Slide';
 import Stack from '@mui/material/Stack';
-import { Button } from "@heroui/react";
-import AutocompleteManager from './correos_electronicos/correos_electronicos';
-import CancelarManiobraDialog from './cancelar_maniobra';
-import { toast } from 'react-toastify';
-import { Card, CardBody } from "@heroui/react";
-import SelectTerminal from './select_terminal';
-import { Container, filledInputClasses } from '@mui/material';
-import LinearProgress from '@mui/material/LinearProgress';
 import Swal from 'sweetalert2';
-import TextField from '@mui/material/TextField';
-import dayjs from 'dayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import PanelEstatus from './envio_estatus/panel';
-import { useAuthContext } from '@/phicargo/modules/auth/hooks';
-import EstatusHistorialManiobras from '../reportes_estatus/estatus';
-import { Autocomplete, AutocompleteItem } from "@heroui/react";
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import DocumentacionManiobra from '../documentacion/documentacion';
+import TextField from '@mui/material/TextField';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import axios from 'axios';
+import dayjs from 'dayjs';
+import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import { toast } from 'react-toastify';
+import { useAuthContext } from '@/phicargo/modules/auth/hooks';
 
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
@@ -654,12 +655,12 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                             <Grid lg={12} xs={12} m={1}>
                                                 <Stack spacing={1} direction="row">
                                                     {buttonsVisibility.registrar && <Button color="primary" onPress={validar_form} isLoading={Loading}>Registrar</Button>}
-                                                    {buttonsVisibility.cancelar && <Button color="primary" onPress={handleOpenDialog} color="danger" startContent={<i class="bi bi-x-circle"></i>}>Cancelar</Button>}
+                                                    {buttonsVisibility.cancelar && <Button onPress={handleOpenDialog} color="danger" startContent={<i class="bi bi-x-circle"></i>}>Cancelar</Button>}
                                                     {buttonsVisibility.guardar_maniobra && <Button color="success" onPress={validar_form_actualizar} isLoading={Loading} className='text-white' startContent={<i class="bi bi-floppy"></i>}>Guardar cambios</Button>}
                                                     {buttonsVisibility.editar_maniobra && <Button color="primary" onPress={toggleForm} startContent={<i class="bi bi-pen"></i>}>Editar</Button>}
                                                     {buttonsVisibility.iniciar && <Button color="success" onPress={comprobar_equipo} className='text-white' startContent={<i class="bi bi-play-fill"></i>}>Iniciar</Button>}
-                                                    {buttonsVisibility.finalizar && <Button color="primary" onPress={finalizar_maniobra} color="danger" startContent={<i class="bi bi-stop-fill"></i>}>Finalizar</Button>}
-                                                    {buttonsVisibility.enviar_estatus && <Button color="primary" onPress={handleClickOpenPE} color="success" className='text-white' startContent={<i class="bi bi-send-fill"></i>}>Enviar nuevo estatus</Button>}
+                                                    {buttonsVisibility.finalizar && <Button onPress={finalizar_maniobra} color="danger" startContent={<i class="bi bi-stop-fill"></i>}>Finalizar</Button>}
+                                                    {buttonsVisibility.enviar_estatus && <Button onPress={handleClickOpenPE} color="success" className='text-white' startContent={<i class="bi bi-send-fill"></i>}>Enviar nuevo estatus</Button>}
                                                     {buttonsVisibility.reactivar && <Button color="primary" onPress={reactivar_maniobra}>Reactivar maniobra</Button>}
                                                 </Stack>
                                             </Grid>
