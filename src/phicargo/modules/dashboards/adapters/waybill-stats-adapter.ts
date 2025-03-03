@@ -11,6 +11,23 @@ import type {
   WaybillStatsApi,
 } from '../models/api/waybill-stats-model-api';
 
+import { MonthType } from '../models/travels-stats-models';
+
+const months: MonthType[] = [
+  'ENE',
+  'FEB',
+  'MAR',
+  'ABR',
+  'MAY',
+  'JUN',
+  'JUL',
+  'AGO',
+  'SEP',
+  'OCT',
+  'NOV',
+  'DIC',
+];
+
 export class WaybillStatsAdapter {
   static toBranchRevenue(data: BranchRevenueApi): BranchRevenue {
     return {
@@ -55,9 +72,35 @@ export class WaybillStatsAdapter {
       clientRevenue: data.clients_revenues.map(
         WaybillStatsAdapter.toClientRevenue,
       ),
-      monthlyRevenuesByClient: data.monthly_revenues_by_client.map(
-        WaybillStatsAdapter.toMonthlyRevenueByClient,
+      monthlyContainersCountSummary: data.monthly_containers_count_summary.map(
+        (item) => ({
+          month: months[item.month - 1],
+          containers: item.containers,
+        }),
       ),
+      pastYearMonthlyContainersCountSummary:
+        data.past_year_monthly_containers_count_summary.map((item) => ({
+          month: months[item.month - 1],
+          containers: item.containers,
+        })),
+      yearlyContainersCountSummary: data.yearly_containers_count_summary.map(
+        (item) => ({
+          year: item.year,
+          containers: item.containers,
+        }),
+      ),
+      monthlyRevenue: data.monthly_revenues.map((item) => ({
+        month: months[item.month - 1],
+        amount: item.amount,
+      })),
+      pastYearMonthlyRevenues: data.past_year_monthly_revenues.map((item) => ({
+        month: months[item.month - 1],
+        amount: item.amount,
+      })),
+      yearlyRevenue: data.yearly_revenues.map((item) => ({
+        year: item.year,
+        amount: item.amount,
+      })),
     };
   }
 }
