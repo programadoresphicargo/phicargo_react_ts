@@ -149,7 +149,6 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
 
     const fetchCorreosLigados = async (id_maniobra) => {
         try {
-            toast.success('Obteniendo correos maniobra M-' + id_maniobra);
             const response = await odooApi.get(`/maniobras/correos/ligados/${id_maniobra}`);
             const correos = response.data;
 
