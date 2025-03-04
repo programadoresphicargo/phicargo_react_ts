@@ -151,6 +151,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
         try {
             const response = await odooApi.get(`/maniobras/correos/ligados/${id_maniobra}`);
             const correos = response.data;
+            console.log(correos);
 
             setFormData(prevFormData => ({
                 ...prevFormData,
@@ -194,12 +195,29 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                         correos_ligados: [],
                         correos_desligados: []
                     });
+
+                    odooApi.get(`/maniobras/correos/ligados/${id_maniobra}`)
+                        .then(response => {
+                            const correos = response.data;
+                            console.log(correos);
+
+                            setFormData(prevFormData => ({
+                                ...prevFormData,
+                                correos_ligados: correos,
+                                correos_desligados: [],
+                            }));
+                        })
+                        .catch(error => {
+                            console.error('Error al obtener los correos ligados:', error);
+                        });
+
                     toggleButtonsVisibility(data.estado_maniobra);
                 })
                 .catch((error) => {
                     toast.error('Error al obtener datos de maniobra:' + error);
                 });
         } else {
+            setIDManiobra(0);
             setFormDisabled(false);
             setFormData({
                 id_cp: id_cp,
@@ -221,7 +239,6 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
             });
             toggleButtonsVisibility('registrar');
         }
-        fetchCorreosLigados(id_maniobra);
     }, [id_maniobra]);
 
     const [errors, setErrors] = useState({});
