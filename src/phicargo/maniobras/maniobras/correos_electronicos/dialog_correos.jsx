@@ -29,7 +29,6 @@ const CorreosLigadosManiobra = ({ open, handleClose }) => {
     useEffect(() => {
         if (open) {
             fetchCorreos();
-            fetchCorreosLigados();
         }
     }, [open]);
 
@@ -40,22 +39,6 @@ const CorreosLigadosManiobra = ({ open, handleClose }) => {
             setCorreosCliente(response.data);
         } catch (error) {
             console.error('Error al obtener los correos:', error);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    const fetchCorreosLigados = async () => {
-        try {
-            setIsLoading(true);
-            const response = await odooApi.get(`/maniobras/correos/ligados/${id_maniobra}`);
-            setFormData(prevFormData => ({
-                ...prevFormData,
-                correos_ligados: response.data || [],
-                correos_desligados: [],
-            }));
-        } catch (error) {
-            console.error('Error al obtener los correos ligados:', error);
         } finally {
             setIsLoading(false);
         }

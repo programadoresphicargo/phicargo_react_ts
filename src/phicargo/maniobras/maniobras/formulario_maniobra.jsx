@@ -147,6 +147,31 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
         { key: 'pesaje', label: 'pesaje' }
     ];
 
+    const fetchCorreosLigados = async (id_maniobra) => {
+        if (!id_maniobra) {
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                correos_ligados: [],
+                correos_desligados: [],
+            }));
+            return;
+        }
+
+        try {
+            const response = await odooApi.get(`/maniobras/correos/ligados/${id_maniobra}`);
+            const correos = Array.isArray(response.data) ? response.data : [];
+
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                correos_ligados: correos,
+                correos_desligados: [],
+            }));
+        } catch (error) {
+            console.error('Error al obtener los correos ligados:', error.message || error);
+        }
+    };
+
+
     useEffect(() => {
         if (id_maniobra) {
             setFormDisabled(true);
@@ -205,6 +230,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
             });
             toggleButtonsVisibility('registrar');
         }
+        fetchCorreosLigados(id_maniobra);
     }, [id_maniobra]);
 
     const [errors, setErrors] = useState({});
