@@ -63,8 +63,9 @@ const ReporteCumplimiento = () => {
       { accessorKey: 'llegada_planta', header: 'Llegada planta', size: 150 },
       { accessorKey: 'diferencia_llegada_planta', header: 'Diferencia', size: 150 },
       { accessorKey: 'salida_planta', header: 'Salida planta', size: 150 },
-      { accessorKey: 'horas_estadia_real', header: 'Tiempo en planta', size: 150 },
+      { accessorKey: 'horas_estadia_real', header: 'Tiempo en planta (horas)', size: 150 },
       { accessorKey: 'horas_excedidas', header: 'Horas excedidas', size: 150 },
+      { accessorKey: 'cortes_cobrados', header: 'Cortes', size: 150 },
     ],
     [],
   );

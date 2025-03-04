@@ -29,18 +29,6 @@ const EstadiasForm = ({ id_viaje, referencia, onClose }) => {
         }
     };
 
-    const getTiemposViaje = async () => {
-        try {
-            setLoading(true);
-            const response = await odooApi.get(`/tms_travel/tiempos_viaje//` + id_viaje);
-            setData(response.data);
-            setLoading(false);
-        } catch (error) {
-            setLoading(false);
-            toast.error("Error de conexión: " + error.message);
-        }
-    };
-
     const [loadingSaldo, setLoadingSaldo] = useState(false);
 
     const [formData, setFormData] = useState({
@@ -58,12 +46,12 @@ const EstadiasForm = ({ id_viaje, referencia, onClose }) => {
 
     return (
         <>
-            {loadingSaldo ? ( // Muestra solo el loader mientras loadingSaldo sea true
-                <Grid container spacing={2} className="mb-5" justifyContent="center" alignItems="center" style={{ height: '100vh' }}>
+            {loading ? ( // Muestra solo el loader mientras loadingSaldo sea true
+                <Grid container spacing={2} className="mb-5" justifyContent="center" alignItems="center" style={{ height: '80vh' }}>
                     <Grid item>
                         <Progress
                             isIndeterminate
-                            label="Obteniendo saldo..."
+                            label="Obteniendo información"
                             className="mt-3"
                             size="lg"
                         />
@@ -91,6 +79,7 @@ const EstadiasForm = ({ id_viaje, referencia, onClose }) => {
                                 <TableColumn>Tiempo diferencia</TableColumn>
                                 <TableColumn>Salida de planta</TableColumn>
                                 <TableColumn>Tiempo en planta</TableColumn>
+                                <TableColumn>Cortes estadias</TableColumn>
                             </TableHeader>
                             <TableBody>
                                 <TableRow key="1">
@@ -99,45 +88,10 @@ const EstadiasForm = ({ id_viaje, referencia, onClose }) => {
                                     <TableCell>{data[0]?.diferencia_llegada_planta}</TableCell>
                                     <TableCell>{data[0]?.salida_planta}</TableCell>
                                     <TableCell>{data[0]?.horas_estadia_real}</TableCell>
+                                    <TableCell>{data[0]?.cortes_cobrados}</TableCell>
                                 </TableRow>
                             </TableBody>
                         </Table>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <NumberInput
-                            label='Horas permitidas'
-                            variant="bordered"
-                            aria-label="Amount"
-                            defaultValue={8}
-                            placeholder="Enter the amount"
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <NumberInput
-                            label='Precio por hora'
-                            variant="bordered"
-                            aria-label="Amount"
-                            defaultValue={0}
-                            placeholder="Enter the amount"
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <NumberInput
-                            label='Horas a cobrar'
-                            variant="bordered"
-                            aria-label="Amount"
-                            defaultValue={0}
-                            placeholder="Enter the amount"
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <NumberInput
-                            label='Total a cobrar'
-                            variant="bordered"
-                            aria-label="Amount"
-                            defaultValue={1024}
-                            placeholder="Enter the amount"
-                        />
                     </Grid>
                 </Grid>
             )}
