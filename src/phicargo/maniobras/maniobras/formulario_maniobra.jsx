@@ -443,9 +443,8 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                 popup: 'custom-swal',
             },
         }).then((result) => {
-            setLoading(true);
             if (result.isConfirmed) {
-                // Crear las variables con URLSearchParams
+                setLoading(true);
                 const postData = new URLSearchParams();
                 postData.append('id_maniobra', id_maniobra);
                 postData.append('id_usuario', session.user.id);
