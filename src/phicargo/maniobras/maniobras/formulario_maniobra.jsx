@@ -168,12 +168,21 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
         if (id_maniobra) {
             setFormDisabled(true);
             setIDManiobra(id_maniobra);
-            odooApi.get(`/maniobras/by_id/${id_maniobra}`)
-                .then((response) => {
-                    const data = response.data[0];
-                    console.log('datos de maniobra');
-                    console.log(data);
-                    console.log(data.estado_maniobra);
+
+            // Hacer ambas peticiones en paralelo
+            Promise.all([
+                odooApi.get(`/maniobras/by_id/${id_maniobra}`),
+                odooApi.get(`/maniobras/correos/ligados/${id_maniobra}`)
+            ])
+                .then(([maniobraRes, correosRes]) => {
+                    const data = maniobraRes.data[0] || {};
+                    const correos = correosRes.data || [];
+
+                    console.log('Datos de maniobra:', data);
+                    console.log('Estado maniobra:', data.estado_maniobra);
+                    console.log('Correos ligados:', correos);
+
+                    // Actualizar el estado con todos los datos obtenidos
                     setFormData({
                         id_maniobra: data.id_maniobra || '',
                         id_usuario: session.user.id,
@@ -192,33 +201,21 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                         usuario_activo: data.usuarioactivacion || '',
                         usuario_finalizo: data.usuariofinalizacion || '',
                         estado_maniobra: data.estado_maniobra || '',
-                        correos_ligados: [],
+                        correos_ligados: correos,
                         correos_desligados: []
                     });
 
-                    odooApi.get(`/maniobras/correos/ligados/${id_maniobra}`)
-                        .then(response => {
-                            const correos = response.data;
-                            console.log(correos);
-
-                            setFormData(prevFormData => ({
-                                ...prevFormData,
-                                correos_ligados: correos,
-                                correos_desligados: [],
-                            }));
-                        })
-                        .catch(error => {
-                            console.error('Error al obtener los correos ligados:', error);
-                        });
-
                     toggleButtonsVisibility(data.estado_maniobra);
                 })
-                .catch((error) => {
-                    toast.error('Error al obtener datos de maniobra:' + error);
+                .catch(error => {
+                    console.error('Error al obtener datos de maniobra:', error);
+                    toast.error('Error al obtener datos de maniobra.');
                 });
         } else {
             setIDManiobra(0);
             setFormDisabled(false);
+
+            // Datos base para inicializar el formulario en caso de no haber maniobra
             setFormData({
                 id_cp: id_cp,
                 id_usuario: session.user.id,
@@ -237,6 +234,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                 correos_ligados: [],
                 correos_desligados: []
             });
+
             toggleButtonsVisibility('registrar');
         }
     }, [id_maniobra]);
