@@ -15,6 +15,7 @@ import { Button, Select, SelectItem, Chip } from "@heroui/react";
 import YearSelector from '@/año';
 import { toast } from 'react-toastify';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import { ManiobraProvider } from '../context/viajeContext';
 
 const CartasPorte = () => {
   const [isLoading2, setLoading] = useState();
@@ -241,14 +242,16 @@ const CartasPorte = () => {
 
   return (
     <div>
-      <ManiobrasNavBar />
-      <MaterialReactTable key={selectedTab} table={table} />
-      <Example2
-        show={modalShow}
-        handleClose={handleCloseModal}
-        id_cp={modalContent}
-        x_reference={x_reference}
-        id_cliente={partner_id} />
+      <ManiobraProvider>
+        <ManiobrasNavBar />
+        <MaterialReactTable key={selectedTab} table={table} />
+        <Example2
+          show={modalShow}
+          handleClose={handleCloseModal}
+          id_cp={modalContent}
+          x_reference={x_reference}
+          id_cliente={partner_id} />
+      </ManiobraProvider>
     </div >
   );
 };

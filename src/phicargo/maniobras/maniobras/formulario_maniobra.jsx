@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
 import MyComponent from './selects_flota';
 import axios from 'axios';
 import SelectOperador from './select_operador';
@@ -13,7 +13,6 @@ import Typography from '@mui/material/Typography';
 import Slide from '@mui/material/Slide';
 import Stack from '@mui/material/Stack';
 import { Button } from "@heroui/react";
-import AutocompleteManager from './correos_electronicos/correos_electronicos';
 import CancelarManiobraDialog from './cancelar_maniobra';
 import { toast } from 'react-toastify';
 import { Card, CardBody } from "@heroui/react";
@@ -36,6 +35,8 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import DocumentacionManiobra from '../documentacion/documentacion';
+import CorreosLigadosManiobra from './correos_electronicos/dialog_correos';
+import { ManiobraContext } from '../context/viajeContext';
 
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
@@ -52,24 +53,16 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente }) => {
 
+    const { setIDManiobra, setIDCliente, addedValues, setAddedValues, removedValues, setRemovedValues, formData, setFormData, formDisabled, setFormDisabled } = useContext(ManiobraContext);
+
     const { session } = useAuthContext();
-    const [formDisabled, setFormDisabled] = useState(true);
-    const [values, setValues] = useState({ addedValues: [], removedValues: [] });
     const [Loading, setLoading] = useState(false);
     const controller = new AbortController();
     const [value, setValue] = React.useState('1');
+    setIDCliente(id_cliente);
 
     const handleChangeTab = (event, newValue) => {
         setValue(newValue);
-    };
-
-    const handleValuesChange = (newValues) => {
-        setValues(newValues);
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            correos_ligados: newValues.addedValues,
-            correos_desligados: newValues.removedValues,
-        }));
     };
 
     const [buttonsVisibility, setButtonsVisibility] = useState({
@@ -154,31 +147,11 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
         { key: 'pesaje', label: 'pesaje' }
     ];
 
-    const [formData, setFormData] = useState({
-        id_maniobra: id_maniobra,
-        id_usuario: session.user.id,
-        id_cp: id_cp,
-        id_cliente: id_cliente,
-        id_terminal: '',
-        tipo_maniobra: '',
-        operador_id: '',
-        vehicle_id: '',
-        trailer1_id: '',
-        trailer2_id: '',
-        dolly_id: '',
-        inicio_programado: '',
-        usuario_registro: '',
-        usuario_activo: '',
-        usuario_finalizo: '',
-        estado_maniobra: '',
-        correos_ligados: [],
-        correos_desligados: []
-    });
-
     useEffect(() => {
         if (id_maniobra) {
             setFormDisabled(true);
-            odooApi.get(`/maneuvers/get_by_id/${id_maniobra}`)
+            setIDManiobra(id_maniobra);
+            odooApi.get(`/maniobras/by_id/${id_maniobra}`)
                 .then((response) => {
                     const data = response.data[0];
                     console.log('datos de maniobra');
@@ -294,8 +267,9 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
 
 
     const validar_form_actualizar = () => {
-        actualizar_maniobra();
-
+        if (validarFormulario()) {
+            actualizar_maniobra();
+        }
     };
 
     const handleChange = (newValue) => {
@@ -362,6 +336,11 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                     handleClose();
                     setFormDisabled(true);
                     toggleButtonsVisibility('borrador');
+                    setFormData(prevFormData => ({
+                        ...prevFormData,
+                        correos_ligados: [],
+                        correos_desligados: [],
+                    }));
                 } else {
                     toast.error('Respuesta inesperada del servidor: ' + data);
                 }
@@ -392,7 +371,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
         }).then((result) => {
             if (result.isConfirmed) {
                 console.log(formData.id_maniobra);
-                odooApi.get('/maneuvers/reactivar_maniobra/' + formData.id_maniobra)
+                odooApi.get('/maniobras/reactivar/' + formData.id_maniobra)
                     .then((response) => {
                         if (response.data.status === 'success') {
                             toast.success(response.data.message);
@@ -589,10 +568,22 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
         setOpenPanelEstatus(false);
     };
 
+    const [openCL, setCL] = React.useState(false);
+
+    const handleClickOpenCL = () => {
+        setCL(true);
+    };
+
+    const handleCloseCL = () => {
+        setCL(false);
+    };
+
     return (
         <>
             <PanelEstatus id_maniobra={id_maniobra} open={openPanelEstatus} handleClose={handleClosePE}>
             </PanelEstatus>
+            <CorreosLigadosManiobra open={openCL} handleClose={handleCloseCL}></CorreosLigadosManiobra>
+
             <CancelarManiobraDialog
                 open={dialogOpen}
                 handleClose={handleCloseDialog}
@@ -651,7 +642,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                 <Card>
                                     <CardBody>
                                         <Grid container mb={2}>
-                                            <Grid lg={12} xs={12} m={1}>
+                                            <Grid lg={12} xs={12}>
                                                 <Stack spacing={1} direction="row">
                                                     {buttonsVisibility.registrar && <Button color="primary" onPress={validar_form} isLoading={Loading}>Registrar</Button>}
                                                     {buttonsVisibility.cancelar && <Button color="primary" onPress={handleOpenDialog} color="danger" startContent={<i class="bi bi-x-circle"></i>}>Cancelar</Button>}
@@ -661,6 +652,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                                     {buttonsVisibility.finalizar && <Button color="primary" onPress={finalizar_maniobra} color="danger" startContent={<i class="bi bi-stop-fill"></i>}>Finalizar</Button>}
                                                     {buttonsVisibility.enviar_estatus && <Button color="primary" onPress={handleClickOpenPE} color="success" className='text-white' startContent={<i class="bi bi-send-fill"></i>}>Enviar nuevo estatus</Button>}
                                                     {buttonsVisibility.reactivar && <Button color="primary" onPress={reactivar_maniobra}>Reactivar maniobra</Button>}
+                                                    <Button color="primary" onPress={handleClickOpenCL} startContent={<i class="bi bi-envelope-at-fill"></i>}>Correos electronicos</Button>
                                                 </Stack>
                                             </Grid>
 
@@ -818,7 +810,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                                 ) : ''}
                                             </Grid>
 
-                                            <Grid xs={12} lg={6} p={1}>
+                                            <Grid xs={12} lg={6}>
                                                 {formData.estado_maniobra != null ? (
                                                     <Card elevation={0}>
                                                         <CardBody>
@@ -835,9 +827,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                                                 )}
                                                             </div>
 
-                                                            <AutocompleteManager onValuesChange={handleValuesChange} id_maniobra={id_maniobra} id_cliente={id_cliente} disabled={formDisabled} />
-
-                                                            <div className="flex gap-4 items-center mt-5">
+                                                            <div className="flex gap-4 items-center">
                                                                 {formData.usuario_activo !== '' && (
                                                                     <User
                                                                         name="Iniciada por"

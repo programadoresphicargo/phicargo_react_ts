@@ -45,7 +45,7 @@ const HistorialManiobrasVehiculo = ({ vehicle_id }) => {
     const fetchData = async () => {
         try {
             setLoading(true);
-            const response = await odooApi.get('/maneuvers/history/' + vehicle_id);
+            const response = await odooApi.get('/maniobras/historial_vehicular/' + vehicle_id);
             setData(response.data);
             setLoading(false);
         } catch (error) {

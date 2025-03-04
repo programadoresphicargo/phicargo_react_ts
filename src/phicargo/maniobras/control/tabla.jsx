@@ -14,7 +14,6 @@ import {
 import { width } from '@mui/system';
 import EstatusDropdownManiobra from '../reportes_estatus/resumen_estatus';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
-const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const Maniobras = ({ estado_maniobra }) => {
 
@@ -40,7 +39,7 @@ const Maniobras = ({ estado_maniobra }) => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await odooApi.get('/maneuvers/estado/', {
+      const response = await odooApi.get('/maniobras/by_estado/', {
         params: { estado: estado_maniobra }
       });
       setData(response.data);

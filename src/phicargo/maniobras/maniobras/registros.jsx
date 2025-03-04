@@ -22,7 +22,7 @@ const Registromaniobras = ({ id_cp, id_cliente }) => {
     const fetchData = useCallback(async () => {
         try {
             setILoading(true);
-            const response = await odooApi.get('/maneuvers/get_by_id_cp/' + id_cp);
+            const response = await odooApi.get('/maniobras/by_id_cp/' + id_cp);
             setData(response.data);
             setILoading(false);
         } catch (error) {

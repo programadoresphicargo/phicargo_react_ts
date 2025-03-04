@@ -17,7 +17,7 @@ const CancelarManiobraDialog = ({ open, handleClose, id_maniobra }) => {
 
         setLoading(true);
 
-        odooApi.get(`/maneuvers/cancelar_maniobra/` + id_maniobra)
+        odooApi.get(`/maniobras/cancelar/` + id_maniobra)
             .then((response) => {
                 setLoading(false);
                 if (response.data.status === 'success') {
