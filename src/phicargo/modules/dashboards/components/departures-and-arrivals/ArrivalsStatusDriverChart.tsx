@@ -13,7 +13,6 @@ import {
 import { useEffect, useState } from 'react';
 
 import { Bar } from 'react-chartjs-2';
-import { ChartActions } from '../../types';
 import { ChartCard } from '../ChartCard';
 import { ChartData } from 'chart.js';
 import { ChartOptions } from 'chart.js';
@@ -26,17 +25,19 @@ const options: ChartOptions<'bar'> = {
   scales: {
     y: {
       beginAtZero: true,
+      stacked: true,
       grid: {
         display: false,
       },
       ticks: {
         font: {
-          size: 10,
+          size: 12,
         },
       },
     },
     x: {
       position: 'bottom',
+      stacked: true,
       grid: {
         display: false,
       },
@@ -59,20 +60,6 @@ export const ArrivalsStatusDriverChart = (props: Props) => {
   const [chartData, setChartData] = useState<ChartData<'bar'> | null>(null);
   const { monthYearName } = useDateRangeContext();
 
-  const [selectedAction, setSelectedAction] = useState<
-    'arrivalLate' | 'arrivalEarly'
-  >('arrivalLate');
-
-  const actions: ChartActions[] = [
-    {
-      action: 'Llegadas Tarde',
-      handler: () => setSelectedAction('arrivalLate'),
-    },
-    {
-      action: 'Llegadas Temprano',
-      handler: () => setSelectedAction('arrivalEarly'),
-    },
-  ];
 
   useEffect(() => {
     if (!data) return;
@@ -81,8 +68,8 @@ export const ArrivalsStatusDriverChart = (props: Props) => {
       labels: data.arrivalStatusDrivers.map((item) => item.driver),
       datasets: [
         {
-          label: 'Estatus de Llegada',
-          data: data.arrivalStatusDrivers.map((item) => item[selectedAction]),
+          label: 'Tarde',
+          data: data.arrivalStatusDrivers.map((item) => item.arrivalLate),
           borderWidth: 2,
           borderRadius: 10,
           backgroundColor: getBackgroundColors(
@@ -90,20 +77,27 @@ export const ArrivalsStatusDriverChart = (props: Props) => {
           ),
           borderColor: getBorderColors(data.arrivalStatusDrivers.length),
         },
+        {
+          label: 'Temprano',
+          data: data.arrivalStatusDrivers.map((item) => item.arrivalEarly),
+          borderWidth: 2,
+          borderRadius: 10,
+          backgroundColor: getBackgroundColors(
+            data.arrivalStatusDrivers.length,
+          ).reverse(),
+          borderColor: getBorderColors(data.arrivalStatusDrivers.length).reverse(),
+        },
       ],
     };
 
     setChartData(chartData);
-  }, [data, selectedAction]);
+  }, [data]);
 
   return (
     <ChartCard
-      title={`Llegadas ${
-        selectedAction === 'arrivalLate' ? 'Tarde' : 'temprano'
-      } ${monthYearName}`}
+      title={`Llegadas por operador ${monthYearName}`}
       isLoading={isLoading && !chartData}
-      customHeight="70rem"
-      actions={actions}
+      customHeight="100rem"
       downloadFn={() => toExcel.exportData(data?.arrivalStatusDrivers || [])}
     >
       {chartData && <Bar data={chartData} options={options} />}

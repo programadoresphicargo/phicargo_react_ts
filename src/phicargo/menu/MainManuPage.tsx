@@ -7,14 +7,15 @@ import MenuItem from './MenuItem';
 import Toolbar from '@mui/material/Toolbar';
 import accesos_img from '../../assets/menu/accesos.png';
 import bonos_img from '../../assets/menu/bonos.png';
+import ce_img from '../../assets/menu/costos_extras.png';
 import correo_img from '../../assets/menu/correo.png';
 import dashboardIcon from '../../assets/menu/dashboardIcon.png';
 import maniobras_img from '../../assets/menu/maniobras.png';
 import monitoreo_img from '../../assets/menu/monitoreo.png';
 import operadores_img from '../../assets/menu/operadores.png';
 import reportesImg from '../../assets/menu/reportes.png';
+import shipingcontainer from '../../assets/menu/shiping-container.png';
 import turnos_img from '../../assets/menu/turnos.png';
-import ce_img from '../../assets/menu/costos_extras.png';
 import { useAuthContext } from '../modules/auth/hooks';
 import usuarios_img from '../../assets/menu/usuarios.png';
 import viajes_img from '../../assets/menu/viajes.png';
@@ -107,6 +108,12 @@ const menuItems: MenuItemType[] = [
     label: 'Dashboard',
     link: '/dashboards',
     requiredPermissions: [203],
+  },
+  {
+    icon: shipingcontainer,
+    label: 'Solicitudes de Servicio',
+    link: '/solicitudes-servicio',
+    requiredPermissions: [204],
   },
 ];
 

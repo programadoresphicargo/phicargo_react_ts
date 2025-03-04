@@ -1,5 +1,5 @@
 import { ActivePermissionCell } from '../components/ui/ActivePermissionCell';
-import { Chip } from "@heroui/react";
+import { Chip } from '@heroui/react';
 import type { DriverWithRealStatus } from '../models/driver-model';
 import JobChip from '../components/ui/JobChip';
 import type { MRT_ColumnDef } from 'material-react-table';
@@ -19,9 +19,7 @@ export const useDriversSummaryColumns = () => {
         accessorKey: 'name',
         header: 'Operador',
         Cell: ({ cell }) => (
-          <span className="font-bold">
-            {cell.getValue<string>()}
-          </span>
+          <span className="font-bold">{cell.getValue<string>()}</span>
         ),
       },
       {
@@ -48,9 +46,7 @@ export const useDriversSummaryColumns = () => {
         Cell: ({ cell, row }) => {
           const value = cell.getValue<string>();
           return value === 'N/A' ? (
-            <span className="text-gray-400">
-              {cell.getValue<string>()}
-            </span>
+            <span className="text-gray-400">{cell.getValue<string>()}</span>
           ) : (
             <TravelCell travel={row.original?.travel} />
           );
@@ -62,9 +58,7 @@ export const useDriversSummaryColumns = () => {
         Cell: ({ cell, row }) => {
           const value = cell.getValue<string>();
           return value === 'N/A' ? (
-            <span className="text-gray-400">
-              {cell.getValue<string>()}
-            </span>
+            <span className="text-gray-400">{cell.getValue<string>()}</span>
           ) : (
             <ManeuverCell maneuver={row.original?.maneuver} />
           );
@@ -73,6 +67,39 @@ export const useDriversSummaryColumns = () => {
       {
         header: 'Permiso Activo',
         Cell: ({ row }) => <ActivePermissionCell driver={row.original} />,
+      },
+      {
+        header: 'Última Maniobra',
+        Cell: ({ row }) => {
+          const value = row.original.lastManeuver?.id;
+          return value ? (
+            <span className="font-bold">{value}</span>
+          ) : (
+            <span className="text-gray-400">{'N/A'}</span>
+          );
+        },
+      },
+      {
+        header: 'Tipo U. Maniobra',
+        Cell: ({ row }) => {
+          const value = row.original.lastManeuver?.type;
+          return value ? (
+            <span className="font-bold uppercase">{value}</span>
+          ) : (
+            <span className="text-gray-400">{'N/A'}</span>
+          );
+        },
+      },
+      {
+        header: 'Fecha U. Maniobra',
+        Cell: ({ row }) => {
+          const value = row.original?.lastManeuver?.finishedDate;
+          return value ? (
+            <span className="font-bold uppercase">{value.format('DD/MM/YYYY hh:mm A')}</span>
+          ) : (
+            <span className="text-gray-400">{'N/A'}</span>
+          );
+        },
       },
     ],
     [],

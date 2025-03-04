@@ -6,6 +6,7 @@ import { CheckboxInput } from '../../core/components/inputs/CheckboxInput';
 import { DatePickerInput } from '../../core/components/inputs/DatePickerInput';
 import { SelectInput } from '../../core/components/inputs/SelectInput';
 import { TextInput } from '../../core/components/inputs/TextInput';
+import { useAuthContext } from "../../auth/hooks";
 import { useDriverQueries } from '../hooks/useDriverQueries';
 import { useMemo } from 'react';
 
@@ -15,6 +16,8 @@ const initialStateForm: DriverEdit = {
   jobId: undefined,
   modality: 'full',
   isDangerous: 'NO',
+  isActive: true,
+  hireDate: null,
 };
 
 interface Props {
@@ -31,10 +34,15 @@ const transformDriverToForm = (driver: Driver): DriverEdit => ({
   hireDate: driver.hireDate,
 });
 
-const disabled = false;
 
 const DriverInfoForm = (props: Props) => {
   const { driver } = props;
+
+  const { session } = useAuthContext();
+
+  const { user } = session || {};
+
+  const disabled = !user?.permissions.includes(205) || true;
 
   const {
     driverUpdateMutattion: { mutate: updateDriver, isPending },

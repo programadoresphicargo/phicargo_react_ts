@@ -20,6 +20,7 @@ export const CheckboxInput = <T extends FieldValues>(
             isSelected={value}
             onChange={() => onChange(!value)}
             className={className}
+            isDisabled={props.isDisabled}
           >
             {label}
           </Checkbox>

@@ -68,9 +68,9 @@ jobs:
           key: ${{ secrets.VPS_PRIVATE_KEY }}
           port: 22
           script: |
+            cd ~/workspace/phicargo-react 
             gunzip ~/workspace/phicargo-react/phicargo-react-image.tar.gz
             docker load -i ~/workspace/phicargo-react/phicargo-react-image.tar
             rm ~/workspace/phicargo-react/phicargo-react-image.tar
-            cd ~/workspace/phicargo-react
             docker compose -f docker-compose.prod.yml down || exit 1
             docker compose -f docker-compose.prod.yml up -d || docker compose -f docker-compose.prod.yml down
