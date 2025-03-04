@@ -357,37 +357,41 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
             });
     };
 
-    const actualizar_maniobra = () => {
-        setLoading(true);
-        axios.post(VITE_PHIDES_API_URL + '/modulo_maniobras/maniobra/actualizar_maniobra.php', formData)
-            .then((response) => {
-                const data = response.data;
-                setLoading(false);
-                if (data.success) {
-                    toast.success('Datos actualizados correctamente.');
-                    handleClose();
-                    setFormDisabled(true);
-                    toggleButtonsVisibility('borrador');
-                    setFormData(prevFormData => ({
-                        ...prevFormData,
-                        correos_ligados: [],
-                        correos_desligados: [],
-                    }));
-                } else {
-                    toast.error('Respuesta inesperada del servidor: ' + data);
-                }
-            })
-            .catch((error) => {
-                setLoading(false);
-                console.error('Error en la solicitud:', error);
-                if (error.response) {
-                    toast.error('Respuesta de error del servidor:' + error.response.data);
-                } else if (error.request) {
-                    toast.error('No se recibió respuesta del servidor:' + error.request);
-                } else {
-                    toast.error('Error al configurar la solicitud:' + error.message);
-                }
-            });
+    const actualizar_maniobra = async () => {
+        try {
+            setLoading(true);
+            const response = await axios.post(`${VITE_PHIDES_API_URL}/modulo_maniobras/maniobra/actualizar_maniobra.php`, formData);
+            setLoading(false);
+
+            const { success, message } = response.data;
+
+            if (success) {
+                toast.success('Datos actualizados correctamente.');
+                handleClose();
+                setFormDisabled(true);
+                toggleButtonsVisibility('borrador');
+
+                // Reiniciar solo correos ligados y desligados
+                setFormData(prevFormData => ({
+                    ...prevFormData,
+                    correos_ligados: [],
+                    correos_desligados: [],
+                }));
+            } else {
+                toast.error(`Error en la actualización: ${message || 'Respuesta inesperada del servidor'}`);
+            }
+        } catch (error) {
+            setLoading(false);
+            console.error('Error en la solicitud:', error);
+
+            if (error.response) {
+                toast.error(`Error del servidor: ${error.response.data}`);
+            } else if (error.request) {
+                toast.error('No se recibió respuesta del servidor.');
+            } else {
+                toast.error(`Error en la solicitud: ${error.message}`);
+            }
+        }
     };
 
     const reactivar_maniobra = () => {
