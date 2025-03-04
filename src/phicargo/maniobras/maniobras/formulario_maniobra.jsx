@@ -148,18 +148,10 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
     ];
 
     const fetchCorreosLigados = async (id_maniobra) => {
-        if (!id_maniobra) {
-            setFormData(prevFormData => ({
-                ...prevFormData,
-                correos_ligados: [],
-                correos_desligados: [],
-            }));
-            return;
-        }
-
         try {
+            toast.success('Obteniendo correos maniobra M-' + id_maniobra);
             const response = await odooApi.get(`/maniobras/correos/ligados/${id_maniobra}`);
-            const correos = Array.isArray(response.data) ? response.data : [];
+            const correos = response.data;
 
             setFormData(prevFormData => ({
                 ...prevFormData,
