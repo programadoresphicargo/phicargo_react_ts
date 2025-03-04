@@ -115,6 +115,7 @@ const CorreosLigadosManiobra = ({ open, handleClose }) => {
                         label="Correos electrónicos"
                         placeholder="Selecciona los correos"
                         variant="bordered"
+                        isDisabled={formDisabled}
                         onChange={handleAdd}
                     >
                         {correosCliente.map((correo) => (
