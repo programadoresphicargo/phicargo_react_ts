@@ -1,46 +1,42 @@
 import React, { useState, useEffect, useCallback, useContext } from 'react';
-import MyComponent from './selects_flota';
 import axios from 'axios';
-import SelectOperador from './select_operador';
 import ManiobraContenedores from './añadir_contenedor/maniobra_contenedores';
 import { CardHeader, Divider, User } from "@heroui/react";
 import { Container, filledInputClasses } from '@mui/material';
-import React, { useCallback, useEffect, useState } from 'react';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import AppBar from '@mui/material/AppBar';
 import AutocompleteManager from './correos_electronicos/correos_electronicos';
 import Box from '@mui/material/Box';
 import { Button } from "@heroui/react";
-import CancelarManiobraDialog from './cancelar_maniobra';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import Dialog from '@mui/material/Dialog';
 import DocumentacionManiobra from '../documentacion/documentacion';
 import EstatusHistorialManiobras from '../reportes_estatus/estatus';
-import Grid from '@mui/material/Grid';
 import LinearProgress from '@mui/material/LinearProgress';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import ManiobraContenedores from './añadir_contenedor/maniobra_contenedores';
 import MyComponent from './selects_flota';
 import PanelEstatus from './envio_estatus/panel';
 import SelectOperador from './select_operador';
 import SelectTerminal from './select_terminal';
 import Slide from '@mui/material/Slide';
 import Stack from '@mui/material/Stack';
-import { Button } from "@heroui/react";
 import CancelarManiobraDialog from './cancelar_maniobra';
 import { toast } from 'react-toastify';
 import { Card, CardBody } from "@heroui/react";
-import SelectTerminal from './select_terminal';
-import { Container, filledInputClasses } from '@mui/material';
-import LinearProgress from '@mui/material/LinearProgress';
 import Swal from 'sweetalert2';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import DocumentacionManiobra from '../documentacion/documentacion';
 import CorreosLigadosManiobra from './correos_electronicos/dialog_correos';
 import { ManiobraContext } from '../context/viajeContext';
+import { useAuthContext } from '@/phicargo/modules/auth/hooks';
+import { Toolbar } from '@mui/material';
+import { Typography } from '@mui/material';
+import { Autocomplete, AutocompleteItem } from '@heroui/react';
+import dayjs from 'dayjs';
+import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import Grid from '@mui/material/Grid2';
 
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
@@ -586,6 +582,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
         <>
             <PanelEstatus id_maniobra={id_maniobra} open={openPanelEstatus} handleClose={handleClosePE}>
             </PanelEstatus>
+
             <CorreosLigadosManiobra open={openCL} handleClose={handleCloseCL}></CorreosLigadosManiobra>
 
             <CancelarManiobraDialog
@@ -643,225 +640,221 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                             </Box>
 
                             <TabPanel value="1">
-                                <Card>
-                                    <CardBody>
-                                        <Grid container mb={2}>
-                                            <Grid lg={12} xs={12}>
-                                                <Stack spacing={1} direction="row">
-                                                    {buttonsVisibility.registrar && <Button color="primary" onPress={validar_form} isLoading={Loading}>Registrar</Button>}
-                                                    {buttonsVisibility.cancelar && <Button onPress={handleOpenDialog} color="danger" startContent={<i class="bi bi-x-circle"></i>}>Cancelar</Button>}
-                                                    {buttonsVisibility.guardar_maniobra && <Button color="success" onPress={validar_form_actualizar} isLoading={Loading} className='text-white' startContent={<i class="bi bi-floppy"></i>}>Guardar cambios</Button>}
-                                                    {buttonsVisibility.editar_maniobra && <Button color="primary" onPress={toggleForm} startContent={<i class="bi bi-pen"></i>}>Editar</Button>}
-                                                    {buttonsVisibility.iniciar && <Button color="success" onPress={comprobar_equipo} className='text-white' startContent={<i class="bi bi-play-fill"></i>}>Iniciar</Button>}
-                                                    {buttonsVisibility.finalizar && <Button onPress={finalizar_maniobra} color="danger" startContent={<i class="bi bi-stop-fill"></i>}>Finalizar</Button>}
-                                                    {buttonsVisibility.enviar_estatus && <Button onPress={handleClickOpenPE} color="success" className='text-white' startContent={<i class="bi bi-send-fill"></i>}>Enviar nuevo estatus</Button>}
-                                                    {buttonsVisibility.reactivar && <Button color="primary" onPress={reactivar_maniobra}>Reactivar maniobra</Button>}
-                                                    <Button color="primary" onPress={handleClickOpenCL} startContent={<i class="bi bi-envelope-at-fill"></i>}>Correos electronicos</Button>
-                                                </Stack>
-                                            </Grid>
 
-                                            <Grid lg={6} xs={12}>
-                                                <Card>
-                                                    <CardHeader>
-                                                        Datos de la maniobra
-                                                    </CardHeader>
-                                                    <Divider></Divider>
-                                                    <CardBody>
-                                                        <form>
-                                                            <Grid container spacing={3}>
-                                                                <Grid item xs={12} lg={6}>
-                                                                    <SelectTerminal
-                                                                        label={'Terminal'}
-                                                                        id="id_terminal"
-                                                                        name="id_terminal"
-                                                                        onChange={handleSelectChange}
-                                                                        value={formData.id_terminal}
-                                                                        disabled={formDisabled}
-                                                                        error_terminal={errors['id_terminal']}
-                                                                    />
-                                                                </Grid>
-                                                                <Grid item xs={12} lg={6}>
-                                                                    <Autocomplete
-                                                                        isRequired
-                                                                        label="Tipo de maniobra"
-                                                                        id="tipo_maniobra"
-                                                                        name="tipo_maniobra"
-                                                                        variant='bordered'
-                                                                        onSelectionChange={(e) => (handleSelectChange(e, 'tipo_maniobra'))}
-                                                                        defaultItems={options_tipo_maniobra}
-                                                                        selectedKey={String(formData.tipo_maniobra)}
-                                                                        isDisabled={formDisabled}
-                                                                        isInvalid={errors['tipo_maniobra'] ? true : false}
-                                                                        errorMessage={errors['tipo_maniobra']}
-                                                                    >
-                                                                        {(item) => <AutocompleteItem key={item.key}>{item.label}</AutocompleteItem>}
-                                                                    </Autocomplete>
-                                                                </Grid>
-                                                                <Grid item xs={12} lg={6}>
-                                                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                                        <DateTimePicker
-                                                                            slotProps={{
-                                                                                textField: {
-                                                                                    size: 'small', fullWidth: true, error: errors['inicio_programado'],
-                                                                                    helperText: errors['inicio_programado']
-                                                                                }
-                                                                            }}
-                                                                            id="inicio_programado"
-                                                                            name="inicio_programado"
-                                                                            label="Inicio programado"
-                                                                            size="small"
-                                                                            value={dayjs(formData.inicio_programado)}
-                                                                            disabled={formDisabled}
-                                                                            onChange={handleChange}
-                                                                            renderInput={(params) => (
-                                                                                <TextField
-                                                                                    {...params}
-                                                                                    error={errors['inicio_programado']}
-                                                                                    helperText={errors.inicio_programado}
-                                                                                    size="small"
-                                                                                    fullWidth
-                                                                                />
-                                                                            )}
-                                                                        />
-                                                                    </LocalizationProvider>
-                                                                </Grid>
-                                                                <Grid item xs={12} lg={6}>
-                                                                    <SelectOperador
-                                                                        label={'Operador'}
-                                                                        id={'operador_id'}
-                                                                        name={'operador_id'}
-                                                                        onChange={handleSelectChange}
-                                                                        value={formData.operador_id}
-                                                                        disabled={formDisabled}
-                                                                    />
-                                                                </Grid>
-                                                                <Grid item xs={12} lg={6}>
-                                                                    <MyComponent
-                                                                        label={'Vehiculo'}
-                                                                        id={'vehicle_id'}
-                                                                        name={'vehicle_id'}
-                                                                        onChange={handleSelectChange}
-                                                                        value={formData.vehicle_id}
-                                                                        tipo={'tractor'}
-                                                                        disabled={formDisabled}
-                                                                    />
-                                                                </Grid>
-                                                                <Grid item xs={12} lg={6}>
-                                                                    <MyComponent
-                                                                        label={'Remolque 1'}
-                                                                        id={'trailer1_id'}
-                                                                        name={'trailer1_id'}
-                                                                        onChange={handleSelectChange}
-                                                                        value={formData.trailer1_id}
-                                                                        tipo={'trailer'}
-                                                                        disabled={formDisabled}
-                                                                    />
-                                                                </Grid>
-                                                                <Grid item xs={12} lg={6}>
-                                                                    <MyComponent
-                                                                        label={'Remolque 2'}
-                                                                        id={'trailer2_id'}
-                                                                        name={'trailer2_id'}
-                                                                        onChange={handleSelectChange}
-                                                                        value={formData.trailer2_id}
-                                                                        tipo={'trailer'}
-                                                                        disabled={formDisabled}
-                                                                    />
-                                                                </Grid>
-                                                                <Grid item xs={12} lg={6}>
-                                                                    <MyComponent
-                                                                        label={'Dolly'}
-                                                                        id={'dolly_id'}
-                                                                        name={'dolly_id'}
-                                                                        onChange={handleSelectChange}
-                                                                        value={formData.dolly_id}
-                                                                        tipo={'dolly'}
-                                                                        disabled={formDisabled}
-                                                                    />
-                                                                </Grid>
-                                                                <Grid item xs={12} lg={6}>
-                                                                    <MyComponent
-                                                                        label={'Motogenerador 1'}
-                                                                        id={'motogenerador_1'}
-                                                                        name={'motogenerador_1'}
-                                                                        onChange={handleSelectChange}
-                                                                        value={formData.motogenerador_1}
-                                                                        tipo={'other'}
-                                                                        disabled={formDisabled}
-                                                                    />
-                                                                </Grid>
-                                                                <Grid item xs={12} lg={6}>
-                                                                    <MyComponent
-                                                                        label={'Motogenerador 2'}
-                                                                        id={'motogenerador_2'}
-                                                                        name={'motogenerador_2'}
-                                                                        onChange={handleSelectChange}
-                                                                        value={formData.motogenerador_2}
-                                                                        tipo={'other'}
-                                                                        disabled={formDisabled}
-                                                                    />
-                                                                </Grid>
-                                                            </Grid>
-                                                        </form>
-                                                    </CardBody>
-                                                </Card>
+                                <Grid container mb={2}>
+                                    <Grid size={12}>
+                                        <Stack spacing={1} direction="row" className='mb-4'>
+                                            {buttonsVisibility.registrar && <Button color="primary" onPress={validar_form} isLoading={Loading}>Registrar</Button>}
+                                            {buttonsVisibility.cancelar && <Button onPress={handleOpenDialog} color="danger" startContent={<i class="bi bi-x-circle"></i>}>Cancelar</Button>}
+                                            {buttonsVisibility.guardar_maniobra && <Button color="success" onPress={validar_form_actualizar} isLoading={Loading} className='text-white' startContent={<i class="bi bi-floppy"></i>}>Guardar cambios</Button>}
+                                            {buttonsVisibility.editar_maniobra && <Button color="primary" onPress={toggleForm} startContent={<i class="bi bi-pen"></i>}>Editar</Button>}
+                                            {buttonsVisibility.iniciar && <Button color="success" onPress={comprobar_equipo} className='text-white' startContent={<i class="bi bi-play-fill"></i>}>Iniciar</Button>}
+                                            {buttonsVisibility.finalizar && <Button onPress={finalizar_maniobra} color="danger" startContent={<i class="bi bi-stop-fill"></i>}>Finalizar</Button>}
+                                            {buttonsVisibility.enviar_estatus && <Button onPress={handleClickOpenPE} color="success" className='text-white' startContent={<i class="bi bi-send-fill"></i>}>Enviar nuevo estatus</Button>}
+                                            {buttonsVisibility.reactivar && <Button color="primary" onPress={reactivar_maniobra}>Reactivar maniobra</Button>}
+                                            <Button color="primary" onPress={handleClickOpenCL} startContent={<i class="bi bi-envelope-at-fill"></i>}>Correos electronicos</Button>
+                                        </Stack>
+                                    </Grid>
 
-                                                {id_maniobra != null ? (
-                                                    <div className='mt-4'>
-                                                        <ManiobraContenedores
-                                                            id_maniobra={id_maniobra} />
+                                    <Grid size={{ xs: 12, md: 6 }}>
+                                        <Card>
+                                            <CardHeader>
+                                                Datos de la maniobra
+                                            </CardHeader>
+                                            <Divider></Divider>
+                                            <CardBody>
+                                                <Grid container spacing={3}>
+                                                    <Grid size={{ xs: 12, md: 6 }}>
+                                                        <SelectTerminal
+                                                            label={'Terminal'}
+                                                            id="id_terminal"
+                                                            name="id_terminal"
+                                                            onChange={handleSelectChange}
+                                                            value={formData.id_terminal}
+                                                            disabled={formDisabled}
+                                                            error_terminal={errors['id_terminal']}
+                                                        />
+                                                    </Grid>
+                                                    <Grid size={{ xs: 12, md: 6 }}>
+                                                        <Autocomplete
+                                                            isRequired
+                                                            label="Tipo de maniobra"
+                                                            id="tipo_maniobra"
+                                                            name="tipo_maniobra"
+                                                            variant='bordered'
+                                                            onSelectionChange={(e) => (handleSelectChange(e, 'tipo_maniobra'))}
+                                                            defaultItems={options_tipo_maniobra}
+                                                            selectedKey={String(formData.tipo_maniobra)}
+                                                            isDisabled={formDisabled}
+                                                            isInvalid={errors['tipo_maniobra'] ? true : false}
+                                                            errorMessage={errors['tipo_maniobra']}
+                                                        >
+                                                            {(item) => <AutocompleteItem key={item.key}>{item.label}</AutocompleteItem>}
+                                                        </Autocomplete>
+                                                    </Grid>
+                                                    <Grid size={{ xs: 12, md: 6 }}>
+                                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                            <DateTimePicker
+                                                                slotProps={{
+                                                                    textField: {
+                                                                        size: 'small', fullWidth: true, error: errors['inicio_programado'],
+                                                                        helperText: errors['inicio_programado']
+                                                                    }
+                                                                }}
+                                                                id="inicio_programado"
+                                                                name="inicio_programado"
+                                                                label="Inicio programado"
+                                                                size="small"
+                                                                value={dayjs(formData.inicio_programado)}
+                                                                disabled={formDisabled}
+                                                                onChange={handleChange}
+                                                                renderInput={(params) => (
+                                                                    <TextField
+                                                                        {...params}
+                                                                        error={errors['inicio_programado']}
+                                                                        helperText={errors.inicio_programado}
+                                                                        size="small"
+                                                                        fullWidth
+                                                                    />
+                                                                )}
+                                                            />
+                                                        </LocalizationProvider>
+                                                    </Grid>
+                                                    <Grid size={{ xs: 12, md: 6 }}>
+                                                        <SelectOperador
+                                                            label={'Operador'}
+                                                            id={'operador_id'}
+                                                            name={'operador_id'}
+                                                            onChange={handleSelectChange}
+                                                            value={formData.operador_id}
+                                                            disabled={formDisabled}
+                                                        />
+                                                    </Grid>
+                                                    <Grid size={{ xs: 12, md: 6 }}>
+                                                        <MyComponent
+                                                            label={'Vehiculo'}
+                                                            id={'vehicle_id'}
+                                                            name={'vehicle_id'}
+                                                            onChange={handleSelectChange}
+                                                            value={formData.vehicle_id}
+                                                            tipo={'tractor'}
+                                                            disabled={formDisabled}
+                                                        />
+                                                    </Grid>
+                                                    <Grid size={{ xs: 12, md: 6 }}>
+                                                        <MyComponent
+                                                            label={'Remolque 1'}
+                                                            id={'trailer1_id'}
+                                                            name={'trailer1_id'}
+                                                            onChange={handleSelectChange}
+                                                            value={formData.trailer1_id}
+                                                            tipo={'trailer'}
+                                                            disabled={formDisabled}
+                                                        />
+                                                    </Grid>
+                                                    <Grid size={{ xs: 12, md: 6 }}>
+                                                        <MyComponent
+                                                            label={'Remolque 2'}
+                                                            id={'trailer2_id'}
+                                                            name={'trailer2_id'}
+                                                            onChange={handleSelectChange}
+                                                            value={formData.trailer2_id}
+                                                            tipo={'trailer'}
+                                                            disabled={formDisabled}
+                                                        />
+                                                    </Grid>
+                                                    <Grid size={{ xs: 12, md: 6 }}>
+                                                        <MyComponent
+                                                            label={'Dolly'}
+                                                            id={'dolly_id'}
+                                                            name={'dolly_id'}
+                                                            onChange={handleSelectChange}
+                                                            value={formData.dolly_id}
+                                                            tipo={'dolly'}
+                                                            disabled={formDisabled}
+                                                        />
+                                                    </Grid>
+                                                    <Grid size={{ xs: 12, md: 6 }}>
+                                                        <MyComponent
+                                                            label={'Motogenerador 1'}
+                                                            id={'motogenerador_1'}
+                                                            name={'motogenerador_1'}
+                                                            onChange={handleSelectChange}
+                                                            value={formData.motogenerador_1}
+                                                            tipo={'other'}
+                                                            disabled={formDisabled}
+                                                        />
+                                                    </Grid>
+                                                    <Grid size={{ xs: 12, md: 6 }}>
+                                                        <MyComponent
+                                                            label={'Motogenerador 2'}
+                                                            id={'motogenerador_2'}
+                                                            name={'motogenerador_2'}
+                                                            onChange={handleSelectChange}
+                                                            value={formData.motogenerador_2}
+                                                            tipo={'other'}
+                                                            disabled={formDisabled}
+                                                        />
+                                                    </Grid>
+                                                </Grid>
+                                            </CardBody>
+                                        </Card>
+
+                                        {id_maniobra != null ? (
+                                            <div className='mt-4'>
+                                                <ManiobraContenedores
+                                                    id_maniobra={id_maniobra} />
+                                            </div>
+                                        ) : ''}
+                                    </Grid>
+
+                                    <Grid size={{ xs: 12, md: 6 }}>
+                                        {formData.estado_maniobra != null ? (
+                                            <Card elevation={0}>
+                                                <CardBody>
+                                                    <div className='mb-3'>
+                                                        {formData.usuario_activo !== '' && (
+                                                            <User
+                                                                name="Usuario registro"
+                                                                isBordered color="primary"
+                                                                description={formData.usuario_registro}
+                                                                avatarProps={{
+                                                                    src: ""
+                                                                }}
+                                                            />
+                                                        )}
                                                     </div>
-                                                ) : ''}
-                                            </Grid>
 
-                                            <Grid xs={12} lg={6}>
-                                                {formData.estado_maniobra != null ? (
-                                                    <Card elevation={0}>
-                                                        <CardBody>
-                                                            <div className='mb-3'>
-                                                                {formData.usuario_activo !== '' && (
-                                                                    <User
-                                                                        name="Usuario registro"
-                                                                        isBordered color="primary"
-                                                                        description={formData.usuario_registro}
-                                                                        avatarProps={{
-                                                                            src: ""
-                                                                        }}
-                                                                    />
-                                                                )}
-                                                            </div>
+                                                    <div className="flex gap-4 items-center">
+                                                        {formData.usuario_activo !== '' && (
+                                                            <User
+                                                                name="Iniciada por"
+                                                                isBordered color="primary"
+                                                                description={formData.usuario_activo}
+                                                                avatarProps={{
+                                                                    src: ""
+                                                                }}
+                                                            />
+                                                        )}
+                                                        {formData.usuario_finalizo !== '' && (
+                                                            <User
+                                                                name="Finalizada por"
+                                                                description={formData.usuario_finalizo}
+                                                                avatarProps={{
+                                                                    src: ""
+                                                                }}
+                                                            />
+                                                        )}
+                                                    </div>
+                                                </CardBody>
+                                                <CardBody>
+                                                    <EstatusHistorialManiobras id_maniobra={id_maniobra}></EstatusHistorialManiobras>
+                                                </CardBody>
+                                            </Card>
+                                        ) : ''}
+                                    </Grid>
+                                </Grid>
 
-                                                            <div className="flex gap-4 items-center">
-                                                                {formData.usuario_activo !== '' && (
-                                                                    <User
-                                                                        name="Iniciada por"
-                                                                        isBordered color="primary"
-                                                                        description={formData.usuario_activo}
-                                                                        avatarProps={{
-                                                                            src: ""
-                                                                        }}
-                                                                    />
-                                                                )}
-                                                                {formData.usuario_finalizo !== '' && (
-                                                                    <User
-                                                                        name="Finalizada por"
-                                                                        description={formData.usuario_finalizo}
-                                                                        avatarProps={{
-                                                                            src: ""
-                                                                        }}
-                                                                    />
-                                                                )}
-                                                            </div>
-                                                        </CardBody>
-                                                        <CardBody>
-                                                            <EstatusHistorialManiobras id_maniobra={id_maniobra}></EstatusHistorialManiobras>
-                                                        </CardBody>
-                                                    </Card>
-                                                ) : ''}
-                                            </Grid>
-                                        </Grid>
-                                    </CardBody>
-                                </Card>
                             </TabPanel>
                             <TabPanel value="2">
                                 <Card>
