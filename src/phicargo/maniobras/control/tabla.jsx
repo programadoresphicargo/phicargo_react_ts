@@ -14,6 +14,22 @@ import {
 import { width } from '@mui/system';
 import EstatusDropdownManiobra from '../reportes_estatus/resumen_estatus';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import Dialog from '@mui/material/Dialog';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemButton from '@mui/material/ListItemButton';
+import List from '@mui/material/List';
+import Divider from '@mui/material/Divider';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import CloseIcon from '@mui/icons-material/Close';
+import Slide from '@mui/material/Slide';
+import EnviosMasivosManiobras from '../envio_masivo';
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const Maniobras = ({ estado_maniobra }) => {
 
@@ -247,10 +263,21 @@ const Maniobras = ({ estado_maniobra }) => {
           alignItems: 'center',
         }}
       >
-        <Button color="primary" size='sm' isLoading={isLoading2} onPress={() => fetchData()}>Refrescar</Button>
+        <Button color="primary" isLoading={isLoading2} onPress={() => fetchData()}>Refrescar</Button>
+        <Button color="success" onPress={() => handleClickOpen()} className='text-white'>Envio masivo</Button>
       </Box >
     ),
   });
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <div>
@@ -267,6 +294,39 @@ const Maniobras = ({ estado_maniobra }) => {
           <MaterialReactTable table={table} />
         </div>
       </LocalizationProvider>
+
+      <Dialog
+        fullScreen
+        open={open}
+        onClose={handleClose}
+        TransitionComponent={Transition}
+      >
+        <AppBar
+          elevation={0}
+          sx={{
+            background: 'linear-gradient(90deg, #0b2149, #002887)',
+            padding: '0 16px',
+            position: 'static'
+          }}>
+          <Toolbar>
+            <IconButton
+              edge="start"
+              color="inherit"
+              onClick={handleClose}
+              aria-label="close"
+            >
+              <CloseIcon />
+            </IconButton>
+            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+              Envio masivo de estatus
+            </Typography>
+            <Button autoFocus color="inherit" onClick={handleClose}>
+              save
+            </Button>
+          </Toolbar>
+        </AppBar>
+        <EnviosMasivosManiobras></EnviosMasivosManiobras>
+      </Dialog>
     </div >
   );
 

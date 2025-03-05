@@ -2,18 +2,28 @@ import React, { useState, useEffect } from "react";
 import { Grid, Stack } from "@mui/material";
 import { toast } from "react-toastify";
 import odooApi from "../modules/core/api/odoo-api";
-import { Input, Button, DateInput, DatePicker, Chip } from "@heroui/react";
+import { Input, Button, DateInput, DatePicker, Chip, Divider } from "@heroui/react";
 import { useDateFormatter } from "@react-aria/i18n";
 import { parseDate, getLocalTimeZone, today } from "@internationalized/date";
-import { Progress } from "@heroui/react";
+import { Progress, Card, CardBody, CardHeader } from "@heroui/react";
 import { NumberInput } from "@heroui/react";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@heroui/react";
+import {
+    Modal,
+    ModalContent,
+    ModalHeader,
+    ModalBody,
+    ModalFooter,
+    useDisclosure,
+} from "@heroui/react";
+import { CostosExtrasProvider } from "../costos/context/context";
+import FormularioCostoExtra from "../costos/maniobras/form_costos_extras";
 
-const EstadiasForm = ({ id_viaje, referencia, onClose }) => {
+const EstadiasForm = ({ id_viaje, referencia }) => {
 
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState([]);
-    const [tiemposViaje, SeTiemposViaje] = useState([]);
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
     const getDatos = async () => {
         try {
@@ -46,7 +56,7 @@ const EstadiasForm = ({ id_viaje, referencia, onClose }) => {
 
     return (
         <>
-            {loading ? ( // Muestra solo el loader mientras loadingSaldo sea true
+            {loading ? (
                 <Grid container spacing={2} className="mb-5" justifyContent="center" alignItems="center" style={{ height: '80vh' }}>
                     <Grid item>
                         <Progress
@@ -57,14 +67,10 @@ const EstadiasForm = ({ id_viaje, referencia, onClose }) => {
                         />
                     </Grid>
                 </Grid>
-            ) : ( // Cuando loadingSaldo sea false, muestra el Grid principal
+            ) : (
                 <Grid container spacing={2} className="mb-5">
                     <Grid item xs={12}>
                         <Chip color="primary" size="lg">{data[0]?.travel_name}</Chip>
-                        <Stack spacing={1} direction="row" className="mt-2">
-                            <Button color="danger">Cancelar</Button>
-                            <Button color="success" className="text-white">Guadar cobro</Button>
-                        </Stack>
                         <div className="mt-3">
                             <p>Cliente: {data[0]?.cliente}</p>
                             <p>Horas estadias permitidas: {data[0]?.horas_estadias}</p>
@@ -72,29 +78,43 @@ const EstadiasForm = ({ id_viaje, referencia, onClose }) => {
                         </div>
                     </Grid>
                     <Grid item xs={12}>
-                        <Table aria-label="Example static collection table" fullWidth={true}>
-                            <TableHeader>
-                                <TableColumn>Llegada a planta programada</TableColumn>
-                                <TableColumn>Llegada a planta real reportada</TableColumn>
-                                <TableColumn>Tiempo diferencia</TableColumn>
-                                <TableColumn>Salida de planta</TableColumn>
-                                <TableColumn>Tiempo en planta</TableColumn>
-                                <TableColumn>Cortes estadias</TableColumn>
-                            </TableHeader>
-                            <TableBody>
-                                <TableRow key="1">
-                                    <TableCell>{data[0]?.llegada_planta_programada}</TableCell>
-                                    <TableCell>{data[0]?.llegada_planta}</TableCell>
-                                    <TableCell>{data[0]?.diferencia_llegada_planta}</TableCell>
-                                    <TableCell>{data[0]?.salida_planta}</TableCell>
-                                    <TableCell>{data[0]?.horas_estadia_real}</TableCell>
-                                    <TableCell>{data[0]?.cortes_cobrados}</TableCell>
-                                </TableRow>
-                            </TableBody>
-                        </Table>
+                        <Card>
+                            <CardHeader>
+                                <Button color="primary" onPress={onOpen}>Crear costo extra</Button>
+                            </CardHeader>
+                            <Divider></Divider>
+                            <CardBody>
+                                <Table aria-label="Example static collection table" fullWidth={true}>
+                                    <TableHeader>
+                                        <TableColumn>Llegada a planta programada</TableColumn>
+                                        <TableColumn>Llegada a planta real reportada</TableColumn>
+                                        <TableColumn>Tiempo diferencia</TableColumn>
+                                        <TableColumn>Salida de planta</TableColumn>
+                                        <TableColumn>Tiempo en planta</TableColumn>
+                                        <TableColumn>Cortes estadias</TableColumn>
+                                    </TableHeader>
+                                    <TableBody>
+                                        <TableRow key="1">
+                                            <TableCell>{data[0]?.llegada_planta_programada}</TableCell>
+                                            <TableCell>{data[0]?.llegada_planta}</TableCell>
+                                            <TableCell>{data[0]?.diferencia_llegada_planta}</TableCell>
+                                            <TableCell>{data[0]?.salida_planta}</TableCell>
+                                            <TableCell>{data[0]?.horas_estadia_real}</TableCell>
+                                            <TableCell>{data[0]?.cortes_cobrados}</TableCell>
+                                        </TableRow>
+                                    </TableBody>
+                                </Table>
+                            </CardBody>
+                        </Card>
                     </Grid>
                 </Grid>
             )}
+
+
+            <CostosExtrasProvider>
+                <FormularioCostoExtra show={isOpen} handleClose={onClose}></FormularioCostoExtra>
+            </CostosExtrasProvider>
+
         </>
     );
 };

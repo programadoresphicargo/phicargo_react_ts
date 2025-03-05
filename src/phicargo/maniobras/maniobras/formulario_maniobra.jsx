@@ -175,7 +175,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                 odooApi.get(`/maniobras/correos/ligados/${id_maniobra}`)
             ])
                 .then(([maniobraRes, correosRes]) => {
-                    const data = maniobraRes.data[0] || {};
+                    const data = maniobraRes.data || {};
                     const correos = correosRes.data || [];
 
                     console.log('Datos de maniobra:', data);
