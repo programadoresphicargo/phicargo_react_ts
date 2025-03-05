@@ -22,7 +22,6 @@ const ManiobrasActivasMasivos = ({ }) => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [data, setData] = useState([]);
   const [options, setOptions] = useState([]);
-  const [selectedEjecutivo, setSelectedEjecutivo] = useState('');
 
   const fetchData = async () => {
     try {
@@ -42,21 +41,6 @@ const ManiobrasActivasMasivos = ({ }) => {
   useEffect(() => {
     fetchData();
   }, []);
-
-  const handleSelectChange = (event) => {
-    const selectedValue = event.target.value;
-    setSelectedEjecutivo(selectedValue);
-
-    if (selectedValue) {
-      setData(allData.filter(item => item.ejecutivo && item.ejecutivo.includes(selectedValue)));
-    } else {
-      setData(allData);
-    }
-  };
-
-  const getUniqueEjecutivos = () => {
-    return [...new Set(allData.map(item => item.ejecutivo))];
-  };
 
   const fetchEstatus = async () => {
     try {
@@ -193,6 +177,8 @@ const ManiobrasActivasMasivos = ({ }) => {
           <EstatusDropdownManiobra
             id_maniobra={cell.row.original.id_maniobra}
             ultimo_estatus={cell.getValue() || ''}
+            usuario_ultimo_estatus={cell.row.original.usuario_ultimo_estatus}
+            fecha_ultimo_estatus={cell.row.original.fecha_ultimo_estatus}
           />
         ),
       },
@@ -264,7 +250,7 @@ const ManiobrasActivasMasivos = ({ }) => {
     enableStickyHeader: true,
     positionGlobalFilter: "right",
     muiSearchTextFieldProps: {
-      placeholder: `Buscar en ${data.length} viajes`,
+      placeholder: `Buscar en ${data.length} maniobras`,
       sx: { minWidth: '300px' },
       variant: 'outlined',
     },
@@ -319,13 +305,6 @@ const ManiobrasActivasMasivos = ({ }) => {
         <Button onPress={() => fetchData()} color="primary" isLoading={isLoading}>
           Refrescar
         </Button>
-
-        <select onChange={handleSelectChange} value={selectedEjecutivo} className='form-control'>
-          <option value="">Todos los ejecutivos</option>
-          {getUniqueEjecutivos().map((ejecutivo, index) => (
-            <option key={index} value={ejecutivo}>{ejecutivo}</option>
-          ))}
-        </select>
       </Box>
     ),
   });
