@@ -1,3 +1,5 @@
+import { MonthlyDataByClientApi, YearlyDataByClientApi } from "./waybill-stats-model-api";
+
 export interface ByBranchApi {
   branch: string;
   pods_sent: number;
@@ -72,3 +74,11 @@ export interface TravelStatsApi {
   yearly_travels_count_summary: YearTravelsCountApi[];
 }
 
+
+export interface MonthlyTravelsByClientApi extends MonthlyDataByClientApi {
+  total_travels: number;
+}
+
+export interface YearlyTravelsByClientApi extends YearlyDataByClientApi {
+  total_travels: number;
+}

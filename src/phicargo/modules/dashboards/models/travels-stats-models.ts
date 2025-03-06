@@ -1,3 +1,4 @@
+import { MonthlyDataByClient, YearlyDataByClient } from "./waybill-stats-model";
 
 export interface ByBranch {
   branch: string;
@@ -70,4 +71,12 @@ export interface TravelStats {
   monthlyTravelsCountSummary: MonthTravelsCount[];
   pastYearTravelsCountSummary: MonthTravelsCount[];
   yearTravelsCountSummary: YearTravelsCount[];
+}
+
+export interface MonthlyTravelsByClient extends MonthlyDataByClient {
+  totalTravels: number;
+}
+
+export interface YearlyTravelsByClient extends YearlyDataByClient {
+  totalTravels: number;
 }

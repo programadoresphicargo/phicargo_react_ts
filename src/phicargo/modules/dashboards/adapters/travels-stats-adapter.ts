@@ -8,8 +8,10 @@ import type {
   ByTrafficExecutive,
   MonthTravelsCount,
   MonthType,
+  MonthlyTravelsByClient,
   TravelStats,
   YearTravelsCount,
+  YearlyTravelsByClient,
 } from '../models/travels-stats-models';
 import type {
   ByBranchApi,
@@ -19,9 +21,13 @@ import type {
   ByRouteApi,
   ByTrafficExecutiveApi,
   MonthTravelsCountApi,
+  MonthlyTravelsByClientApi,
   TravelStatsApi,
   YearTravelsCountApi,
 } from '../models/api/travels-stats-models-api';
+
+import { WaybillStatsAdapter } from './waybill-stats-adapter';
+import { YearlyTravelsByClientApi } from '../models/api/travels-stats-models-api';
 
 const getBranchCode = (branch: string): string => {
   branch = branch.toLowerCase();
@@ -137,4 +143,22 @@ export const travelsStatsToLocal = (stats: TravelStatsApi): TravelStats => ({
     yearTravelsCountToLocal,
   ),
 });
+
+export const toMonthlyTravelsByClient = (
+  data: MonthlyTravelsByClientApi,
+): MonthlyTravelsByClient => {
+  return {
+    ...WaybillStatsAdapter.toMonthlyDataByClient(data),
+    totalTravels: data.total_travels,
+  };
+};
+
+export const toYearlyTravelsByClient = (
+  data: YearlyTravelsByClientApi,
+): YearlyTravelsByClient => {
+  return {
+    ...WaybillStatsAdapter.toYearlyDataByClient(data),
+    totalTravels: data.total_travels,
+  };
+};
 
