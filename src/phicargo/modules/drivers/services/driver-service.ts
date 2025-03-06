@@ -8,7 +8,7 @@ export class DriverService {
   public static async getManeuversByDriverId(
     driverId: number,
   ): Promise<Maneuver[]> {
-    const url = `/maneuvers/by_driver/${driverId}`;
+    const url = `/maniobras/by_driver/${driverId}`;
 
     try {
       const response = await odooApi.get<ManeuverApi[]>(url);

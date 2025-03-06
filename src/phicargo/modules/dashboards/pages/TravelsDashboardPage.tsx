@@ -1,14 +1,15 @@
 import { CategoryScale } from 'chart.js';
 import Chart from 'chart.js/auto';
 import { FrequentRoutesChart } from '../components/travels/FrequentRoutesChart';
+import { MonthlyTravelsChart } from '../components/travels/MonthlyTravelsChart';
 import { PodsDeliveredChart } from '../components/travels/PodsDeliveredChart';
 import { TravelIndicators } from '../components/travels/TravelIndicators';
 import { TravelsByCargoType } from '../components/travels/TravelsByCargoType';
 import { TravelsByCategoryChart } from '../components/travels/TravelsByCategoryChart';
 import { TravelsByClientChart } from '../components/travels/TravelsByClientChart';
 import { TravelsByConstruction } from '../components/travels/TravelsByConstruction';
-import { TravelsByMonthChart } from '../components/travels/TravelsByMonthChart';
 import { TravelsByTrafficExecutive } from '../components/travels/TravelsByTrafficExecutive';
+import { YearlyTravelsChart } from '../components/travels/YearlyTravelsChart';
 import { useTravelStatsQueries } from '../hooks/useTravelStatsQueries';
 
 Chart.register(CategoryScale);
@@ -46,7 +47,11 @@ const TravelsDashboardPage = () => {
           isLoading={travelStatsQuery.isFetching}
           data={travelStatsQuery.data}
         />
-        <TravelsByMonthChart
+        <MonthlyTravelsChart
+          isLoading={travelStatsQuery.isFetching}
+          data={travelStatsQuery.data}
+        />
+        <YearlyTravelsChart 
           isLoading={travelStatsQuery.isFetching}
           data={travelStatsQuery.data}
         />

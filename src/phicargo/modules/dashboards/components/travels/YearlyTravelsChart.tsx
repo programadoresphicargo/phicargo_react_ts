@@ -1,10 +1,9 @@
 import { ChartData, ChartOptions } from 'chart.js';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { ChartCard } from '../ChartCard';
 import { Line } from 'react-chartjs-2';
 import { TravelStats } from '../../models/travels-stats-models';
-import dayjs from 'dayjs';
 
 const options: ChartOptions<'line'> = {
   responsive: true,
@@ -39,29 +38,25 @@ interface Props {
   isLoading: boolean;
 }
 
-export const TravelsByMonthChart = (props: Props) => {
+export const YearlyTravelsChart = (props: Props) => {
   const { isLoading, data } = props;
   const [chartData, setChartData] = useState<ChartData<'line'> | null>(null);
-
-  const year = useMemo(() => {
-    return dayjs().format('YYYY');
-  }, []);
 
   useEffect(() => {
     if (!data) return;
 
     const chartData: ChartData<'line'> = {
-      labels: data.ofYear.map((month) => month.month),
+      labels: data.yearTravelsCountSummary.map((month) => month.year),
       datasets: [
         {
-          label: 'Pods entregados',
-          data: data.ofYear.map((month) => month.podsSent),
+          label: 'Viajes',
+          data: data.yearTravelsCountSummary.map((month) => month.travels),
           borderWidth: 2,
-          backgroundColor: ['rgba(75, 192, 192, 0.2)'],
-          borderColor: ['rgba(75, 192, 192, 1)'],
+          backgroundColor: ['rgba(83, 102, 255, 0.6)'],
+          borderColor: ['rgba(83, 102, 255, 1)'],
           pointStyle: 'circle',
-          pointRadius: 10,
-          pointHoverRadius: 15,
+          pointRadius: 5,
+          pointHoverRadius: 7,
         },
       ],
     };
@@ -71,7 +66,7 @@ export const TravelsByMonthChart = (props: Props) => {
 
   return (
     <ChartCard
-      title={`Viajes en el año ${year}`}
+      title={`Viajes por año`}
       isLoading={isLoading || !chartData}
     >
       {chartData && <Line data={chartData} options={options} />}

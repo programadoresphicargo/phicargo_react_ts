@@ -6,9 +6,10 @@ import type {
   ByConstructionType,
   ByRoute,
   ByTrafficExecutive,
+  MonthTravelsCount,
   MonthType,
-  OfYear,
   TravelStats,
+  YearTravelsCount,
 } from '../models/travels-stats-models';
 import type {
   ByBranchApi,
@@ -17,8 +18,9 @@ import type {
   ByConstructionTypeApi,
   ByRouteApi,
   ByTrafficExecutiveApi,
-  OfYearApi,
+  MonthTravelsCountApi,
   TravelStatsApi,
+  YearTravelsCountApi,
 } from '../models/api/travels-stats-models-api';
 
 const getBranchCode = (branch: string): string => {
@@ -82,11 +84,19 @@ const months: MonthType[] = [
   'DIC',
 ];
 
-const OfYearToLocal = (ofYear: OfYearApi): OfYear => ({
-  month: months[ofYear.month - 1],
-  podsSent: ofYear.pods_sent,
+const monthTravelsCountToLocal = (
+  data: MonthTravelsCountApi,
+): MonthTravelsCount => ({
+  month: months[data.month - 1],
+  travels: data.travels,
 });
 
+const yearTravelsCountToLocal = (
+  data: YearTravelsCountApi,
+): YearTravelsCount => ({
+  year: data.year,
+  travels: data.travels,
+});
 
 const byRouteToLocal = (data: ByRouteApi): ByRoute => ({
   route: data.route,
@@ -104,6 +114,8 @@ const byCategoryToLocal = (data: ByCategoryApi): ByCategory => ({
  * @returns Object with the data of the travels stats
  */
 export const travelsStatsToLocal = (stats: TravelStatsApi): TravelStats => ({
+  monthMeta: stats.month_meta,
+
   byBranch: stats.travels_by_branch.map(byBranchToLocal),
   byClient: stats.travels_by_client.map(ByClientToLocal),
   byTrafficExecutive: stats.travels_by_traffic_executive.map(
@@ -113,10 +125,16 @@ export const travelsStatsToLocal = (stats: TravelStatsApi): TravelStats => ({
     byConstructionTypeToLocal,
   ),
   byCargoType: stats.travels_by_cargo_type.map(byCargoTypeToLocal),
-  ofYear: stats.travels_of_year.map(OfYearToLocal),
-  monthMeta: stats.month_meta,
-
   byRoute: stats.travels_by_route.map(byRouteToLocal),
   byCategory: stats.travels_by_category.map(byCategoryToLocal),
+
+  monthlyTravelsCountSummary: stats.monthly_travels_count_summary.map(
+    monthTravelsCountToLocal,
+  ),
+  pastYearTravelsCountSummary:
+    stats.past_year_monthly_travels_count_summary.map(monthTravelsCountToLocal),
+  yearTravelsCountSummary: stats.yearly_travels_count_summary.map(
+    yearTravelsCountToLocal,
+  ),
 });
 

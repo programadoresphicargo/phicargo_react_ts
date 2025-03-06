@@ -46,16 +46,29 @@ export interface ByCategoryApi {
   travels: number;
 }
 
+export interface MonthTravelsCountApi {
+  month: number;
+  travels: number;
+}
+
+export interface YearTravelsCountApi {
+  year: number;
+  travels: number;
+}
+
 export interface TravelStatsApi {
+  month_meta: number;
+
   travels_by_branch: ByBranchApi[];
   travels_by_client: ByClientApi[];
   travels_by_traffic_executive: ByTrafficExecutiveApi[];
   travels_by_construction_type: ByConstructionTypeApi[];
   travels_by_cargo_type: ByCargoTypeApi[];
-  travels_of_year: OfYearApi[];
-  month_meta: number;
-
   travels_by_route: ByRouteApi[];
   travels_by_category: ByCategoryApi[];
+
+  monthly_travels_count_summary: MonthTravelsCountApi[];
+  past_year_monthly_travels_count_summary: MonthTravelsCountApi[];
+  yearly_travels_count_summary: YearTravelsCountApi[];
 }
 
