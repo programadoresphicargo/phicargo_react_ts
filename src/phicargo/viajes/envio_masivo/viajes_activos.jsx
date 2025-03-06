@@ -16,6 +16,11 @@ import { Dropdown, DropdownMenu, DropdownTrigger, DropdownItem } from "@heroui/r
 import NavbarViajes from '../navbar';
 import { Spinner } from "@heroui/spinner";
 import EstatusDropdown from '../estatus/resumen_estatus';
+import { DatePicker } from "@heroui/date-picker";
+import { now, getLocalTimeZone } from "@internationalized/date";
+import { parseDate } from "@internationalized/date";
+import { useDateFormatter } from "@react-aria/i18n";
+import { format } from 'date-fns';
 
 const ViajesActivosMasivo = ({ }) => {
   const [allData, setAllData] = useState([]);
@@ -99,6 +104,7 @@ const ViajesActivosMasivo = ({ }) => {
           id_viaje: row.id_viaje,
           estatus_seleccionado: row.estatus_seleccionado,
           comentarios: row.comentarios ?? '',
+          fecha_hora: row.fecha_hora ?? null
         }));
 
         console.log('Export Data:', exportData);
@@ -195,7 +201,6 @@ const ViajesActivosMasivo = ({ }) => {
             className="max-w-xs"
             label="Comentarios"
             placeholder="Comentarios"
-            rows={2}
             value={row.original.comentarios}
             onChange={(e) => {
               setData((prevData) => {
@@ -205,6 +210,28 @@ const ViajesActivosMasivo = ({ }) => {
               });
             }}
           />
+        ),
+      },
+      {
+        accessorKey: 'hora',
+        header: 'Fecha y hora estatus',
+        enableColumnPinning: true,
+        Cell: ({ row }) => (
+          <DatePicker
+            hideTimeZone
+            showMonthAndYearPickers
+            onChange={(selectedDate) => {
+              const formattedDate = format(selectedDate.toDate(getLocalTimeZone()), "yyyy-MM-dd HH:mm:ss");
+              console.log('Fecha seleccionada:', formattedDate);
+              setData((prevData) => {
+                const newData = [...prevData];
+                newData[row.index].fecha_hora = formattedDate;
+                return newData;
+              });
+            }}
+            defaultValue={now(getLocalTimeZone())}
+            className="max-w-[284px]"
+            label="Hora estatus" />
         ),
       },
       {
