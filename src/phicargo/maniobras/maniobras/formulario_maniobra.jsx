@@ -634,7 +634,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                         zIndex: 1,
                     },
                 }}>
-                <Box sx={{ flexGrow: 1 }} className='bg-soft-secondary'>
+                <Box sx={{ flexGrow: 1 }}>
 
                     <AppBar elevation={2}
                         position="static"
@@ -643,7 +643,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                             padding: '0 16px'
                         }}>
                         <Toolbar>
-                            <Typography sx={{ flex: 1 }} variant="h6" component="div">
+                            <Typography sx={{ flex: 1 }}>
                                 Maniobra M-{id_maniobra} / {id_cp}
                             </Typography>
                             <Button autoFocus color="inherit" onPress={handleClose}>
@@ -658,7 +658,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                         </Box>
                     )}
 
-                    <Box sx={{ width: '100%', typography: 'body1' }}>
+                    <Box sx={{ width: '100%' }}>
                         <TabContext value={value}>
                             <Box sx={{ borderColor: 'divider', backgroundColor: '#002887', color: 'white' }}>
                                 <TabList onChange={handleChangeTab}

@@ -228,7 +228,6 @@ const Maniobras = ({ estado_maniobra }) => {
     },
     muiTableBodyRowProps: ({ row }) => ({
       onClick: ({ event }) => {
-
         if (row.subRows?.length) {
         } else {
           handleShowModal(row.original.id_maniobra, row.original.id);
@@ -289,11 +288,8 @@ const Maniobras = ({ estado_maniobra }) => {
         id_cliente={idCliente}
         form_deshabilitado={true}
       />
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <div className="table-striped">
-          <MaterialReactTable table={table} />
-        </div>
-      </LocalizationProvider>
+
+      <MaterialReactTable table={table} />
 
       <Dialog
         fullScreen
