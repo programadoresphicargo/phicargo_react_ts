@@ -1,27 +1,13 @@
 import type {
   AvailableSummary,
-  DistanceByVehicle,
-  RevenueByVehicle,
+  DistanceAndRevenueByVehicle,
   VehicleStats,
 } from '../models/vehicles-stats-models';
 import type {
   AvailableSummaryApi,
-  DistanceByVehicleApi,
-  RevenueByVehicleApi,
+  DistanceAndRevenueByVehicleApi,
   VehicleStatsApi,
 } from '../models/api/vehicles-stats-models-api';
-
-const revenueByVehicle = (data: RevenueByVehicleApi): RevenueByVehicle => ({
-  vehicle: data.vehicle,
-  travels: data.travels,
-  amount: data.amount,
-});
-
-const distanceByVehicle = (data: DistanceByVehicleApi): DistanceByVehicle => ({
-  vehicle: data.vehicle,
-  travels: data.travels,
-  distance: data.distance,
-});
 
 const availableSummary = (data: AvailableSummaryApi): AvailableSummary => ({
   available: data.available,
@@ -29,9 +15,18 @@ const availableSummary = (data: AvailableSummaryApi): AvailableSummary => ({
   maintenance: data.maintenance,
 });
 
+const distanceAndRevenueByVehicle = (
+  data: DistanceAndRevenueByVehicleApi,
+): DistanceAndRevenueByVehicle => ({
+  vehicle: data.vehicle,
+  distance: data.distance,
+  amount: data.amount,
+});
+
 export const vehicleStatsToLocal = (stats: VehicleStatsApi): VehicleStats => ({
-  distanceByVehicle: stats.distance_by_vehicle.map(distanceByVehicle),
-  revenueByVehicle: stats.revenue_by_vehicle.map(revenueByVehicle),
+  distanceAndRevenueByVehicle: stats.distance_and_revenue_by_vehicle.map(
+    distanceAndRevenueByVehicle,
+  ),
   availableSummary: availableSummary(stats.available_summary),
 });
 

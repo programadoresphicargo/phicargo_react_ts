@@ -18,12 +18,12 @@ const AvatarProfile = () => {
           isBordered
           as="button"
           className="transition-transform"
-          color="primary"
+          color="default"
           name={session?.user.name || ''}
           size="sm"
         />
       </DropdownTrigger>
-      <DropdownMenu aria-label="Profile Actions" variant="flat">
+      <DropdownMenu aria-label="Profile Actions" variant="faded">
         <DropdownItem key="logout" color="danger" onClick={onLogout}>
           Cerrar Sesión
         </DropdownItem>

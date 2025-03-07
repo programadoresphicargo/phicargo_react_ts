@@ -1,14 +1,3 @@
-export interface RevenueByVehicle {
-  vehicle: string;
-  travels: number;
-  amount: number;
-}
-
-export interface DistanceByVehicle {
-  vehicle: string;
-  travels: number;
-  distance: number;
-}
 
 export interface AvailableSummary {
   available: number;
@@ -16,9 +5,14 @@ export interface AvailableSummary {
   maintenance: number;
 }
 
+export interface DistanceAndRevenueByVehicle {
+  vehicle: string;
+  distance: number;
+  amount: number;
+}
+
 export interface VehicleStats {
-  revenueByVehicle: RevenueByVehicle[];
-  distanceByVehicle: DistanceByVehicle[];
+  distanceAndRevenueByVehicle: DistanceAndRevenueByVehicle[];
   availableSummary: AvailableSummary;
 }
 

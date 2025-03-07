@@ -61,6 +61,22 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
         },
       },
       {
+        accessorFn: (originalRow) =>
+          originalRow.deliveryDate?.format('YYYY-MM-DD'),
+        id: 'deliveryDate',
+        filterVariant: 'date',
+        filterFn: 'between',
+        header: 'Entrega tentativa',
+        Cell: ({ row }) =>
+          row.original.deliveryDate?.format('DD/MM/YYYY') || 'N/A',
+        muiEditTextFieldProps: () => ({
+          fullWidth: true,
+          variant: 'outlined',
+          size: 'small',
+          type: 'date',
+        }),
+      },
+      {
         header: 'Tipo',
         accessorFn: (originalRow) =>
           originalRow?.vehicle?.vehicleType || 'Sin Asignar',
@@ -150,22 +166,6 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
         id: 'branch',
         header: 'Sucursal',
         enableEditing: false,
-      },
-      {
-        accessorFn: (originalRow) =>
-          originalRow.deliveryDate?.format('YYYY-MM-DD'),
-        id: 'deliveryDate',
-        filterVariant: 'date',
-        filterFn: 'between',
-        header: 'Entrega tentativa',
-        Cell: ({ row }) =>
-          row.original.deliveryDate?.format('DD/MM/YYYY') || 'N/A',
-        muiEditTextFieldProps: () => ({
-          fullWidth: true,
-          variant: 'outlined',
-          size: 'small',
-          type: 'date',
-        }),
       },
       {
         accessorFn: (originalRow) => originalRow.order,

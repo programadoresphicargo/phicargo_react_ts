@@ -35,6 +35,7 @@ export interface DriverBase {
 export interface Driver extends DriverBase {
   readonly vehicle: VehicleSimple | null;
   readonly permission: DriverPermissionSimple | null;
+  password: string | null;
 
   travel: TravelSimple | null;
   maneuver: ManeuverSimple | null;

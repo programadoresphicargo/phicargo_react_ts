@@ -4,6 +4,8 @@ interface RecordBase {
   date: Dayjs;
   simpleLoad: number;
   fullLoad: number;
+  simpleLoadLocals: number;
+  fullLoadLocals: number;
   total: number;
   meta: number;
   difference: number;
@@ -31,14 +33,20 @@ export type RecordUpdate = Partial<
     Record,
     | 'fullLoad'
     | 'simpleLoad'
+    | 'simpleLoadLocals'
+    | 'fullLoadLocals'
     | 'longTripUnits'
     | 'unloadingUnits'
     | 'observations'
   >
 >;
 
-
-export type RecordColumnComment = 'unloading' | 'long' | 'no_operator';
+export type RecordColumnComment =
+  | 'unloading'
+  | 'long'
+  | 'no_operator'
+  | 'simple_load_locals'
+  | 'full_load_locals';
 
 interface RecordCommentBase {
   recordColumn: RecordColumnComment;
@@ -55,4 +63,6 @@ export interface RecordComments {
   unloading: RecordComment | null;
   long: RecordComment | null;
   noOperator: RecordComment | null;
+  simpleLoadLocals: RecordComment | null;
+  fullLoadLocals: RecordComment | null;
 }

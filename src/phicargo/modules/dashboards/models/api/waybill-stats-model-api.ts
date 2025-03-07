@@ -18,6 +18,9 @@ export interface MonthlyDataByClientApi {
 export interface YearlyDataByClientApi {
   client: string;
   average: number;
+  year_2019: number;
+  year_2020: number;
+  year_2021: number;
   year_2022: number;
   year_2023: number;
   year_2024: number;

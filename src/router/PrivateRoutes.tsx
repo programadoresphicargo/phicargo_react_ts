@@ -5,6 +5,7 @@ import { Suspense, lazy } from 'react';
 
 import AccesoForm from '../phicargo/accesos/formulario';
 import AvailabilityRoutes from '../phicargo/modules/availability/routes/AvailabilityRoutes';
+import DOReportRoutes from '@/phicargo/modules/daily-operations-report/routes/DOReportRoutes';
 import DashboardsRoutes from '@/phicargo/modules/dashboards/routes/DashboardRoutes';
 import { LoadingPage } from '../phicargo/modules/core/pages/LoadingPage';
 import MainMenuPage from '@/phicargo/menu/MainManuPage';
@@ -69,9 +70,6 @@ const ReporteDetencionesViajes = lazy(
 );
 const AsignacionUnidades = lazy(
   () => import('../phicargo/reportes/asignacion_unidades'),
-);
-const ControlOperadores = lazy(
-  () => import('../phicargo/operadores/ControlUsuarios'),
 );
 const BonosOperadores = lazy(() => import('../phicargo/bonos/BonosIndex'));
 const EventosPendientes = lazy(
@@ -300,15 +298,6 @@ export const PrivateRoutes = () => {
           }
         />
 
-        <Route
-          path="/controloperadores"
-          element={
-            <Suspense fallback={<LoadingPage />}>
-              <ControlOperadores />
-            </Suspense>
-          }
-        />
-
         {/* Modulo de reportes */}
         {ReportsRoutes()}
 
@@ -323,6 +312,9 @@ export const PrivateRoutes = () => {
 
         {/* Módulo de turnos */}
         {ShiftsRoutes()}
+
+        {/* Reporte de Operaciones Diarias (Disponibilidad) */}
+        {DOReportRoutes()}
 
         {/* Solicitudes de Servicio */}
         {ServiceRequestsRoutes()}

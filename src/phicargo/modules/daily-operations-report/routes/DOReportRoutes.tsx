@@ -8,7 +8,7 @@ const DailyOperationsPage = lazy(() => import('../pages/DailyOperationsPage'));
 
 const DOReportRoutes = () => (
   <Route
-    path="operaciones"
+    path="operaciones-diarias"
     element={
       <ProtectedRoute
         element={

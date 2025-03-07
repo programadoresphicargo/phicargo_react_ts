@@ -81,6 +81,7 @@ export const driverToLocal = (driver: DriverApi): Driver => ({
           : null,
       }
     : null,
+  password: driver.password,
 });
 
 /**

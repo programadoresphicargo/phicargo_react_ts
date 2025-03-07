@@ -1,10 +1,7 @@
 import { formatCurrency, getProjection } from '../utils';
 import { useCollectRegisters, usePayments } from '../hooks';
 
-import { HeaderCard } from '../../core/components/ui/HeaderCard';
-
-// import Card from './Card';
-
+import { IndicatorCard } from '@/components/utils/IndicatorCard';
 
 const HeaderCards = () => {
   const {
@@ -17,7 +14,7 @@ const HeaderCards = () => {
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
-      <HeaderCard
+      <IndicatorCard
         title="Total Cobrado"
         classNames={{
           title: 'text-gray-300 text-center font-bold text-sm m-0',
@@ -35,7 +32,7 @@ const HeaderCards = () => {
               )
         }
       />
-      <HeaderCard
+      <IndicatorCard
         title="Proyección de Cobro"
         classNames={{
           title: 'text-gray-300 text-center font-bold text-sm m-0',
@@ -53,7 +50,7 @@ const HeaderCards = () => {
               )
         }
       />
-      <HeaderCard
+      <IndicatorCard
         title="Total Pagado"
         classNames={{
           title: 'text-gray-300 text-center font-bold text-sm m-0',
@@ -71,7 +68,7 @@ const HeaderCards = () => {
               )
         }
       />
-      <HeaderCard
+      <IndicatorCard
         title="Proyección de Pago"
         classNames={{
           title: 'text-gray-300 text-center font-bold text-sm m-0',

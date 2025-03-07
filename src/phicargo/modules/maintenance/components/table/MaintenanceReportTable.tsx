@@ -1,4 +1,4 @@
-import { IconButton, ListItemIcon, MenuItem, Tooltip } from '@mui/material';
+import { ListItemIcon, MenuItem } from '@mui/material';
 import {
   MRT_ColumnFiltersState,
   MRT_TableOptions,
@@ -14,7 +14,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import CompleteDialog from '../CompleteDialog';
 import InfoIcon from '@mui/icons-material/Info';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import RefreshIcon from '@mui/icons-material/Refresh';
+import { RefreshButton } from '@/phicargo/modules/core/components/ui/RefreshButton';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 
@@ -37,7 +37,7 @@ const MaintenanceReportTable = (props: MaintenanceReportTableProps) => {
   );
 
   const {
-    recordsQuery: { data: records, isFetching, refetch },
+    recordsQuery: { data: records, isFetching, refetch, isLoading },
     editRecordMutation: { mutate: updateRegister, isPending },
   } = useMaintenanceRecord(status);
 
@@ -89,7 +89,8 @@ const MaintenanceReportTable = (props: MaintenanceReportTableProps) => {
     positionActionsColumn: 'first',
     // STATE
     state: {
-      isLoading: isFetching,
+      isLoading: isLoading,
+      showProgressBars: isFetching,
       isSaving: isPending,
       columnFilters: columnFilters,
     },
@@ -127,20 +128,13 @@ const MaintenanceReportTable = (props: MaintenanceReportTableProps) => {
       </MenuItem>,
     ],
     renderTopToolbarCustomActions: () => (
-      <div className="flex flex-row gap-2">
-        <div className="flex flex-row items-center rounded-xl">
-          <Tooltip arrow title="Refrescar">
-            <IconButton onClick={() => refetch()}>
-              <RefreshIcon />
-            </IconButton>
-          </Tooltip>
-        </div>
-        <div className="flex flex-row items-center">
-          <AddButton
-            label="Añadir Servicio"
-            onPress={() => navigate('/reportes/mantenimiento/nuevo')}
-          />
-        </div>
+      <div className="flex flex-row gap-2 items-center">
+        <RefreshButton onClick={() => refetch()} />
+        <AddButton
+          label="Añadir Servicio"
+          size='sm'
+          onPress={() => navigate('/reportes/mantenimiento/nuevo')}
+        />
       </div>
     ),
     muiTablePaperProps: {

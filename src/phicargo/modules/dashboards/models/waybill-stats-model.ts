@@ -20,6 +20,10 @@ export interface MonthlyDataByClient {
 export interface YearlyDataByClient {
   client: string;
   average: number;
+
+  2019: number;
+  2020: number;
+  2021: number;
   2022: number;
   2023: number;
   2024: number;
@@ -58,7 +62,6 @@ export interface WaybillStats {
   yearlyRevenue: YearRevenue[];
 }
 
-
 export interface ClientRevenue {
   client: string;
   amount: number;
@@ -88,3 +91,4 @@ export interface YearContainersCount {
   year: number;
   containers: number;
 }
+
