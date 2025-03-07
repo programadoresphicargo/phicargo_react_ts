@@ -75,7 +75,7 @@ const CollectionTable = () => {
   const { weekSelected } = useWeekContext();
 
   const {
-    collectRegisterQuery: { data: registers, refetch, isFetching },
+    collectRegisterQuery: { data: registers, refetch, isFetching, isLoading },
     updateCollectRegisterMutation: {
       mutate: updateRegister,
       isPending: isSaving,
@@ -115,7 +115,8 @@ const CollectionTable = () => {
     enableCellActions: true,
     // STATE
     state: {
-      isLoading: isFetching,
+      isLoading: isLoading,
+      showProgressBars: isFetching,
       isSaving: isSaving,
     },
     initialState: {

@@ -37,7 +37,7 @@ const MaintenanceReportTable = (props: MaintenanceReportTableProps) => {
   );
 
   const {
-    recordsQuery: { data: records, isFetching, refetch },
+    recordsQuery: { data: records, isFetching, refetch, isLoading },
     editRecordMutation: { mutate: updateRegister, isPending },
   } = useMaintenanceRecord(status);
 
@@ -89,7 +89,8 @@ const MaintenanceReportTable = (props: MaintenanceReportTableProps) => {
     positionActionsColumn: 'first',
     // STATE
     state: {
-      isLoading: isFetching,
+      isLoading: isLoading,
+      showProgressBars: isFetching,
       isSaving: isPending,
       columnFilters: columnFilters,
     },

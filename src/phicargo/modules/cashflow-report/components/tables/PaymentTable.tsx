@@ -75,7 +75,7 @@ const PaymentTable = () => {
   const { weekSelected } = useWeekContext();
 
   const {
-    paymentsQuery: { data: payments, refetch, isFetching },
+    paymentsQuery: { data: payments, refetch, isFetching, isLoading },
     updatePaymentMutation: { mutate: updateRegister, isPending: isSaving },
     deletePaymentMutation: { mutate: deleteRegister },
   } = usePayments();
@@ -113,7 +113,8 @@ const PaymentTable = () => {
     enableCellActions: true,
     // STATE
     state: {
-      isLoading: isFetching,
+      isLoading: isLoading,
+      showProgressBars: isFetching,
       isSaving: isSaving,
     },
     initialState: {
