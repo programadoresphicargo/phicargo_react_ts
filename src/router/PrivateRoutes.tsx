@@ -69,9 +69,6 @@ const ReporteDetencionesViajes = lazy(
 const AsignacionUnidades = lazy(
   () => import('../phicargo/reportes/asignacion_unidades'),
 );
-const ControlOperadores = lazy(
-  () => import('../phicargo/operadores/ControlUsuarios'),
-);
 const BonosOperadores = lazy(() => import('../phicargo/bonos/BonosIndex'));
 const EventosPendientes = lazy(
   () => import('@/phicargo/monitoreo/Eventos_pendientes'),
@@ -286,15 +283,6 @@ export const PrivateRoutes = () => {
           element={
             <Suspense fallback={<LoadingPage />}>
               <AsignacionUnidades />
-            </Suspense>
-          }
-        />
-
-        <Route
-          path="/controloperadores"
-          element={
-            <Suspense fallback={<LoadingPage />}>
-              <ControlOperadores />
             </Suspense>
           }
         />

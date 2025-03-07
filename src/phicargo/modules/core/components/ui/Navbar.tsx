@@ -17,6 +17,7 @@ import { useState } from 'react';
 type MenuItemType = {
   name: string;
   path: string;
+  exact?: boolean;
 };
 
 interface Props {
@@ -75,7 +76,7 @@ export const Navbar = (props: Props) => {
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         {pages.map((page, i) => (
           <NavbarItem key={i}>
-            <NavbarLinkItem name={page.name} path={page.path} />
+            <NavbarLinkItem name={page.name} path={page.path} exact={page.exact} />
           </NavbarItem>
         ))}
       </NavbarContent>

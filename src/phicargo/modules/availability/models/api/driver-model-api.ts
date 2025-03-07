@@ -42,6 +42,8 @@ export interface DriverApi extends DriverBaseApi {
   vehicle: VehicleSimpleApi | null;
   permission: DriverPermissionSimpleApi | null;
 
+  password: string | null;
+
   tms_travel: TravelSimpleApi | null;
   maniobra: ManeuverSimpleApi | null;
   last_maneuver: ManeuverSimpleApi | null;

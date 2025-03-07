@@ -8,6 +8,8 @@ import UsersManagementLayout from '../layouts/UsersManagementLayout';
 const UsersManagementPage = lazy(() => import('../pages/UsersManagementPage'));
 const UserInfo = lazy(() => import('../outlets/UserInfo'));
 
+const DriversAccountsPage = lazy(() => import('../pages/DriversAccountsPage'));
+
 const userManagementPermission = 5;
 
 const UsersManagementRoutes = () => (
@@ -37,6 +39,14 @@ const UsersManagementRoutes = () => (
         }
       />
     </Route>
+    <Route
+      path="cuentas-operadores"
+      element={
+        <Suspense fallback={<LoadingPage />}>
+          <DriversAccountsPage />
+        </Suspense>
+      }
+    ></Route>
   </Route>
 );
 

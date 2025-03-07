@@ -12,7 +12,7 @@ import correo_img from '../../assets/menu/correo.png';
 import dashboardIcon from '../../assets/menu/dashboardIcon.png';
 import maniobras_img from '../../assets/menu/maniobras.png';
 import monitoreo_img from '../../assets/menu/monitoreo.png';
-import operadores_img from '../../assets/menu/operadores.png';
+// import operadores_img from '../../assets/menu/operadores.png';
 import reportesImg from '../../assets/menu/reportes.png';
 import shipingcontainer from '../../assets/menu/shiping-container.png';
 import turnos_img from '../../assets/menu/turnos.png';
@@ -72,12 +72,6 @@ const menuItems: MenuItemType[] = [
     label: 'Usuarios',
     link: '/control-usuarios',
     requiredPermissions: [5],
-  },
-  {
-    icon: operadores_img,
-    label: 'Operadores',
-    link: '/controloperadores',
-    requiredPermissions: [7],
   },
   {
     icon: viajes_img,
