@@ -24,7 +24,7 @@ const DailyReportTable = () => {
   const { month, branchId } = useGlobalContext();
 
   const {
-    recordsQuery: { data: records, isFetching, refetch, isError, error },
+    recordsQuery: { data: records, isFetching, isLoading, refetch, isError, error },
   } = useRecordsQuery(month, branchId);
 
   const {
@@ -77,7 +77,8 @@ const DailyReportTable = () => {
       pagination: { pageSize: 50, pageIndex: 0 },
     },
     state: {
-      isLoading: isFetching,
+      isLoading: isLoading,
+      showProgressBars: isFetching,
       isSaving: isPending,
     },
     // ACTIONS

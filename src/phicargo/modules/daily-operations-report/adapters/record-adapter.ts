@@ -24,6 +24,8 @@ export const recordToLocal = (record: RecordApi): Record => ({
   date: dayjs(record.record_date),
   simpleLoad: record.simple_load,
   fullLoad: record.full_load,
+  simpleLoadLocals: record.simple_load_locals,
+  fullLoadLocals: record.full_load_locals,
   total: record.total,
   meta: record.meta,
   difference: record.difference,
@@ -47,12 +49,20 @@ export const recordToLocal = (record: RecordApi): Record => ({
 export const recordUpdateToApi = (record: RecordUpdate): RecordApiUpdate => {
   const apiRecord: RecordApiUpdate = {};
 
-  if (record.simpleLoad) {
+  if (record.simpleLoad !== undefined) {
     apiRecord.simple_load = Number(record.simpleLoad);
   }
 
-  if (record.fullLoad) {
+  if (record.fullLoad !== undefined) {
     apiRecord.full_load = Number(record.fullLoad);
+  }
+
+  if (record.simpleLoadLocals !== undefined) {
+    apiRecord.simple_load_locals = Number(record.simpleLoadLocals);
+  }
+
+  if (record.fullLoadLocals !== undefined) {
+    apiRecord.full_load_locals = Number(record.fullLoadLocals);
   }
 
   if (record.unloadingUnits) {
@@ -82,11 +92,23 @@ const recordCommentsToLocal = (
   const noOperator = comments.filter(
     (comment) => comment.record_column === 'no_operator',
   )[0];
+  const simpleLoadLocals = comments.filter(
+    (comment) => comment.record_column === 'simple_load_locals',
+  )[0];
+  const fullLoadLocals = comments.filter(
+    (comment) => comment.record_column === 'full_load_locals',
+  )[0];
 
   return {
     unloading: unloading ? recordCommentToLocal(unloading) : null,
     long: long ? recordCommentToLocal(long) : null,
     noOperator: noOperator ? recordCommentToLocal(noOperator) : null,
+    simpleLoadLocals: simpleLoadLocals
+      ? recordCommentToLocal(simpleLoadLocals)
+      : null,
+    fullLoadLocals: fullLoadLocals
+      ? recordCommentToLocal(fullLoadLocals)
+      : null,
   };
 };
 

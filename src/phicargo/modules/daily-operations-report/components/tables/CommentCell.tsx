@@ -36,7 +36,6 @@ export const CommentCell = memo(
     const { editCommentMutation } = useRecords();
 
     const onSave: SubmitHandler<RecordCommentCreate> = (data) => {
-      console.log({ id: recordId, comment: data });
       editCommentMutation.mutate(
         { id: recordId, comment: data },
         {

@@ -17,26 +17,88 @@ export const useDailyReportColumns = () => {
           row.original?.date?.format('DD/MM/YYYY') || 'Sin Fecha',
       },
       {
-        accessorFn: (row) => row.fullLoad,
-        id: 'fullLoad',
-        header: 'Full',
-        size: 50,
-        enableSorting: false,
-        enableColumnFilter: false,
-        muiEditTextFieldProps: {
-          type: 'number',
-        },
+        header: 'Carretera',
+        id: 'road',
+        Header: () => (
+          <div className="border-2 w-full px-5 uppercase rounded-lg font-bold text-blue-950">
+            <span>Carretera</span>
+          </div>
+        ),
+        columns: [
+          {
+            accessorFn: (row) => row.fullLoad,
+            id: 'fullLoad',
+            header: 'Full',
+            size: 50,
+            enableSorting: false,
+            enableColumnFilter: false,
+            muiEditTextFieldProps: {
+              type: 'number',
+            },
+          },
+          {
+            accessorFn: (row) => row.simpleLoad,
+            id: 'simpleLoad',
+            header: 'Sencillo',
+            size: 50,
+            enableSorting: false,
+            enableColumnFilter: false,
+            muiEditTextFieldProps: {
+              type: 'number',
+            },
+          },
+        ],
       },
       {
-        accessorFn: (row) => row.simpleLoad,
-        id: 'simpleLoad',
-        header: 'Sencillo',
-        size: 50,
-        enableSorting: false,
-        enableColumnFilter: false,
-        muiEditTextFieldProps: {
-          type: 'number',
-        },
+        header: 'Locales',
+        id: 'local',
+        Header: () => (
+          <div className="border-2 w-full px-5 uppercase rounded-lg font-bold text-blue-950">
+            <span>Locales</span>
+          </div>
+        ),
+        columns: [
+          {
+            accessorFn: (row) => row.fullLoadLocals,
+            id: 'fullLoadLocals',
+            header: 'Full',
+            size: 50,
+            enableSorting: false,
+            enableColumnFilter: false,
+            muiEditTextFieldProps: {
+              type: 'number',
+            },
+            Cell: ({ row }) => (
+              <CommentCell
+                value={row.original.fullLoadLocals}
+                date={row.original.date}
+                recordId={row.original.id}
+                recordColumn="full_load_locals"
+                comment={row.original.comments.fullLoadLocals}
+              />
+            ),
+          },
+          {
+            accessorFn: (row) => row.simpleLoadLocals,
+            id: 'simpleLoadLocals',
+            header: 'Sencillo',
+            size: 50,
+            enableSorting: false,
+            enableColumnFilter: false,
+            muiEditTextFieldProps: {
+              type: 'number',
+            },
+            Cell: ({ row }) => (
+              <CommentCell
+                value={row.original.simpleLoadLocals}
+                date={row.original.date}
+                recordId={row.original.id}
+                recordColumn="simple_load_locals"
+                comment={row.original.comments.simpleLoadLocals}
+              />
+            ),
+          },
+        ],
       },
       {
         accessorFn: (row) => row.total,
@@ -130,7 +192,7 @@ export const useDailyReportColumns = () => {
             value={row.original.unloadingUnits}
             date={row.original.date}
             recordId={row.original.id}
-            recordColumn='unloading'
+            recordColumn="unloading"
             comment={row.original.comments.unloading}
           />
         ),
@@ -150,7 +212,7 @@ export const useDailyReportColumns = () => {
             value={row.original.longTripUnits}
             date={row.original.date}
             recordId={row.original.id}
-            recordColumn='long'
+            recordColumn="long"
             comment={row.original.comments.long}
           />
         ),
@@ -175,7 +237,7 @@ export const useDailyReportColumns = () => {
             value={row.original.unitsNoOperator}
             date={row.original.date}
             recordId={row.original.id}
-            recordColumn='no_operator'
+            recordColumn="no_operator"
             comment={row.original.comments.noOperator}
           />
         ),
