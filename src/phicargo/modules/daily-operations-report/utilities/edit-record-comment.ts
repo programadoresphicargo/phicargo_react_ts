@@ -27,6 +27,12 @@ export const editRecordComment = (
     case 'no_operator':
       existingRecord.comments.noOperator = newComment;
       break;
+    case 'full_load_locals':
+      existingRecord.comments.fullLoadLocals = newComment;
+      break;
+    case 'simple_load_locals':
+      existingRecord.comments.simpleLoadLocals = newComment;
+      break;
     default:
       throw new Error('Invalid record column');
   }
