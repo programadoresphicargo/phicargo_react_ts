@@ -8,7 +8,7 @@ export class DriverService {
   public static async getManeuversByDriverId(
     driverId: number,
   ): Promise<Maneuver[]> {
-    const url = `/maneuvers/by_driver/${driverId}`;
+    const url = `/maniobras/by_driver/${driverId}`;
 
     try {
       const response = await odooApi.get<ManeuverApi[]>(url);
@@ -21,6 +21,28 @@ export class DriverService {
         );
       }
       throw new Error('Error al obtener los maniobras');
+    }
+  }
+
+  public static async changeDriverPassword({
+    driverId,
+    password,
+  }: {
+    driverId: number;
+    password: string;
+  }): Promise<void> {
+    const url = `/drivers/drivers/${driverId}/password?new_password=${password}`;
+
+    try {
+      await odooApi.put(url);
+    } catch (error) {
+      console.log(error);
+      if (error instanceof AxiosError) {
+        throw new Error(
+          error.response?.data?.detail || 'Error al cambiar la contraseña',
+        );
+      }
+      throw new Error('Error al cambiar la contraseña');
     }
   }
 }

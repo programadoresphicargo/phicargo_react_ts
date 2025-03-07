@@ -64,6 +64,9 @@ export class WaybillStatsAdapter {
     return {
       client: data.client,
       average: data.average,
+      2019: data.year_2019,
+      2020: data.year_2020,
+      2021: data.year_2021,
       2022: data.year_2022,
       2023: data.year_2023,
       2024: data.year_2024,

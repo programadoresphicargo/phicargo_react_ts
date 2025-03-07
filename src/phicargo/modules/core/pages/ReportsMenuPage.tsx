@@ -4,12 +4,11 @@ import { Button } from "@heroui/react";
 import ReportMenuItem from '../components/ui/ReportMenuItem';
 import balanceIcon from '../../../../assets/menu/balanceIcon.png';
 import clockIcon from '../../../../assets/menu/clock.png';
-import dailyOpIcon from '../../../../assets/menu/dailyOpIcon.png';
+import detencionesIcon from '../../../../assets/menu/detenciones.png'
+import estadiasIcon from '../../../../assets/menu/estadias.png';
 import maintenanceIcon from '../../../../assets/menu/maintenanceIcon.png';
 import phoneIcon from '../../../../assets/menu/app.png';
 import reportIcon from '../../../../assets/menu/reportes.png';
-import estadiasIcon from '../../../../assets/menu/estadias.png';
-import detencionesIcon from '../../../../assets/menu/detenciones.png'
 import { useAuthContext } from '../../auth/hooks';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -39,12 +38,6 @@ const reports: MenuItemType[] = [
     path: '/reportes/balance',
     icon: balanceIcon,
     requiredPermissions: [197],
-  },
-  {
-    label: 'Operaciones Diarias',
-    path: '/reportes/operaciones',
-    icon: dailyOpIcon,
-    requiredPermissions: [201],
   },
   {
     label: 'Tiempos de salidas y llegadas',

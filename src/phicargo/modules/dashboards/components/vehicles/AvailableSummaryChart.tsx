@@ -33,8 +33,8 @@ export const AvailableSummaryChart = (props: Props) => {
         {
           data: Object.values(data.availableSummary),
           borderWidth: 2,
-          backgroundColor: getBackgroundColors(data.distanceByVehicle.length),
-          borderColor: getBorderColors(data.distanceByVehicle.length),
+          backgroundColor: getBackgroundColors(data.distanceAndRevenueByVehicle.length),
+          borderColor: getBorderColors(data.distanceAndRevenueByVehicle.length),
         },
       ],
     };

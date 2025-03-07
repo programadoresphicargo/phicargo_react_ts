@@ -1,6 +1,6 @@
 import { Checkbox } from "@heroui/react";
 import { HeaderBase } from '@/phicargo/modules/core/components/ui/HeaderBase';
-import { HeaderCard } from '@/phicargo/modules/core/components/ui/HeaderCard';
+import { IndicatorCard } from "@/components/utils/IndicatorCard";
 import { RefreshButton } from '@/phicargo/modules/core/components/ui/RefreshButton';
 import { useNavigate } from 'react-router-dom';
 import { useShiftsContext } from '../../hooks/useShiftsContext';
@@ -16,8 +16,8 @@ export const Header = () => {
   } = useTravelQueries();
   
   return (
-    <HeaderBase onBack={() => navigate('/menu')}>
-      <HeaderCard
+    <HeaderBase backRoute="/menu">
+      <IndicatorCard
         title="Descargando"
         isLoading={travelsUnloadingQuery.isFetching}
         content={travelsUnloadingQuery.data?.length || 0}
@@ -32,7 +32,7 @@ export const Header = () => {
           />
         }
       />
-      <HeaderCard
+      <IndicatorCard
         title="Bajando"
         isLoading={travelsNearQuery.isFetching}
         content={travelsNearQuery.data?.length || 0}
@@ -47,7 +47,7 @@ export const Header = () => {
           />
         }
       />
-      <HeaderCard
+      <IndicatorCard
         title="Planta"
         isLoading={travelsInPlantQuery.isFetching}
         content={travelsInPlantQuery.data?.length || 0}
@@ -63,7 +63,7 @@ export const Header = () => {
         }
       />
       <div className="flex flex-col gap-3">
-        <div className="flex flex-row gap-2 bg-gray-700 py-1.5 px-2 rounded-xl">
+        <div className="flex flex-row gap-2 bg-gray-200/20 backdrop-blur-sm py-1.5 px-2 rounded-xl">
           <Checkbox
             isSelected={branchId === 1}
             onValueChange={() => setBranchId(1)}

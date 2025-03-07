@@ -63,6 +63,7 @@ export interface SimpleData {
 export type MenuItemType = {
   name: string;
   path: string;
+  exact?: boolean;
 };
 
 export interface TableState {

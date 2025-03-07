@@ -4,48 +4,29 @@ import {
   ExportToExcel,
 } from '@/phicargo/modules/core/utilities/export-to-excel';
 import {
-  WaybillStats,
-  YearlyRevenueByClient,
-} from '../../models/waybill-stats-model';
+  TravelStats,
+  YearlyTravelsByClient,
+} from '../../models/travels-stats-models';
 import { useEffect, useState } from 'react';
 
 import { ChartCard } from '../ChartCard';
 import { Line } from 'react-chartjs-2';
-import { WaybillStatsService } from '../../services/waybill-stats-service';
+import TravelStatsServiceApi from '../../services/travel-stats-service';
 import { useDateRangeContext } from '../../hooks/useDateRangeContext';
 
 const options: ChartOptions<'line'> = {
   responsive: true,
   maintainAspectRatio: false,
-  plugins: {
-    tooltip: {
-      callbacks: {
-        label: (context) => {
-          const value = context.raw;
-          return `Ingresos: $${Number(value).toLocaleString()}`;
-        },
-      },
-    },
-  },
   scales: {
     y: {
       beginAtZero: true,
-      grid: {
-        display: false,
-      },
       ticks: {
         font: {
           size: 15,
         },
-        callback: (value) => {
-          return `$${Number(value).toLocaleString()}`;
-        },
       },
     },
     x: {
-      grid: {
-        display: false,
-      },
       ticks: {
         font: {
           size: 15,
@@ -56,11 +37,11 @@ const options: ChartOptions<'line'> = {
 };
 
 interface Props {
-  data?: WaybillStats;
+  data?: TravelStats;
   isLoading: boolean;
 }
 
-export const YearlyRevenueChart = (props: Props) => {
+export const YearlyTravelsChart = (props: Props) => {
   const { isLoading, data } = props;
   const [chartData, setChartData] = useState<ChartData<'line'> | null>(null);
   const { branchId, companyId } = useDateRangeContext();
@@ -69,14 +50,14 @@ export const YearlyRevenueChart = (props: Props) => {
     if (!data) return;
 
     const chartData: ChartData<'line'> = {
-      labels: data.yearlyRevenue.map((month) => month.year),
+      labels: data.yearTravelsCountSummary.map((month) => month.year),
       datasets: [
         {
-          label: 'Ingresos',
-          data: data.yearlyRevenue.map((month) => month.amount),
+          label: 'Viajes',
+          data: data.yearTravelsCountSummary.map((month) => month.travels),
           borderWidth: 2,
-          backgroundColor: ['rgba(153, 102, 255, 0.6)'],
-          borderColor: ['rgba(153, 102, 255, 1)'],
+          backgroundColor: ['rgba(83, 102, 255, 0.6)'],
+          borderColor: ['rgba(83, 102, 255, 1)'],
           pointStyle: 'circle',
           pointRadius: 5,
           pointHoverRadius: 7,
@@ -88,28 +69,28 @@ export const YearlyRevenueChart = (props: Props) => {
   }, [data]);
 
   return (
-    <ChartCard 
-      title={`Ingresos anuales`} 
+    <ChartCard
+      title={`Viajes por año`}
       isLoading={isLoading || !chartData}
-      downloadFn={() => exportYearlyRevenues(companyId, branchId)}
+      downloadFn={() => exportYearlyTravels(companyId, branchId)}
     >
       {chartData && <Line data={chartData} options={options} />}
     </ChartCard>
   );
 };
 
-const exportYearlyRevenues = async (
+const exportYearlyTravels = async (
   companyId: number | null,
   branchId: number | null,
 ) => {
   try {
-    const exportConf: ExportConfig<YearlyRevenueByClient> = {
-      fileName: `Ingresos por cliente`,
+    const exportConf: ExportConfig<YearlyTravelsByClient> = {
+      fileName: `Viajes anuales por cliente`,
       withDate: false,
-      sheetName: 'Ingresos por cliente',
+      sheetName: 'Viajes anuales',
       columns: [
         { accessorFn: (data) => data.client, header: 'Cliente' },
-        { accessorFn: (data) => data.total, header: 'Total' },
+        { accessorFn: (data) => data.totalTravels, header: 'Viajes' },
         { accessorFn: (data) => data.average, header: 'Promedio' },
         { accessorFn: (data) => data[2019], header: '2019' },
         { accessorFn: (data) => data[2020], header: '2020' },
@@ -128,7 +109,7 @@ const exportYearlyRevenues = async (
 
     const toExcel = new ExportToExcel(exportConf);
 
-    const data = await WaybillStatsService.getYearlyRevenueByClient(
+    const data = await TravelStatsServiceApi.getYearlyTravelsByClient(
       companyId,
       branchId,
     );
@@ -138,4 +119,3 @@ const exportYearlyRevenues = async (
     console.error(error);
   }
 };
-

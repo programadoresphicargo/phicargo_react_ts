@@ -7,6 +7,7 @@ import { Toaster } from 'react-hot-toast';
 type MenuItemType = {
   name: string;
   path: string;
+  exact?: boolean;
 };
 
 interface Props {

@@ -1,3 +1,4 @@
+import { MonthlyDataByClient, YearlyDataByClient } from "./waybill-stats-model";
 
 export interface ByBranch {
   branch: string;
@@ -34,9 +35,15 @@ export interface ByCargoType {
 }
 
 export type MonthType = 'ENE' | 'FEB' | 'MAR' | 'ABR' | 'MAY' | 'JUN' | 'JUL' | 'AGO' | 'SEP' | 'OCT' | 'NOV' | 'DIC';
-export interface OfYear {
+
+export interface MonthTravelsCount {
   month: MonthType;
-  podsSent: number;
+  travels: number;
+}
+
+export interface YearTravelsCount {
+  year: number;
+  travels: number;
 }
 
 export interface ByRoute {
@@ -50,14 +57,26 @@ export interface ByCategory {
 }
 
 export interface TravelStats {
+  monthMeta: number;
+
   byBranch: ByBranch[];
   byClient: ByClient[];
   byTrafficExecutive: ByTrafficExecutive[];
   byConstructionType: ByConstructionType[];
   byCargoType: ByCargoType[];
-  ofYear: OfYear[];
-  monthMeta: number;
 
   byRoute: ByRoute[];
   byCategory: ByCategory[];
+
+  monthlyTravelsCountSummary: MonthTravelsCount[];
+  pastYearTravelsCountSummary: MonthTravelsCount[];
+  yearTravelsCountSummary: YearTravelsCount[];
+}
+
+export interface MonthlyTravelsByClient extends MonthlyDataByClient {
+  totalTravels: number;
+}
+
+export interface YearlyTravelsByClient extends YearlyDataByClient {
+  totalTravels: number;
 }

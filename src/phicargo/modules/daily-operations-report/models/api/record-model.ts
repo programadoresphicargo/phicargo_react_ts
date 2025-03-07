@@ -4,6 +4,8 @@ interface RecordApiBase {
   record_date: string;
   simple_load: number;
   full_load: number;
+  simple_load_locals: number;
+  full_load_locals: number;
   total: number;
   meta: number;
   difference: number;
@@ -33,6 +35,8 @@ export type RecordApiUpdate = Partial<
     RecordApi,
     | 'full_load'
     | 'simple_load'
+    | 'simple_load_locals'
+    | 'full_load_locals'
     | 'long_trip_units'
     | 'unloading_units'
     | 'observations'
