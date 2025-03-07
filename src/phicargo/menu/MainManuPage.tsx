@@ -7,6 +7,7 @@ import MenuItem from './MenuItem';
 import Toolbar from '@mui/material/Toolbar';
 import accesos_img from '../../assets/menu/accesos.png';
 import bonos_img from '../../assets/menu/bonos.png';
+import calendar3d from '../../assets/menu/calendar3d.png';
 import ce_img from '../../assets/menu/costos_extras.png';
 import correo_img from '../../assets/menu/correo.png';
 import dashboardIcon from '../../assets/menu/dashboardIcon.png';
@@ -75,7 +76,7 @@ const menuItems: MenuItemType[] = [
   },
   {
     icon: viajes_img,
-    label: 'Disponibilidad',
+    label: 'Operadores y Unidades',
     link: '/disponibilidad',
     requiredPermissions: [200],
   },
@@ -102,6 +103,12 @@ const menuItems: MenuItemType[] = [
     label: 'Dashboard',
     link: '/dashboards',
     requiredPermissions: [203],
+  },
+  {
+    label: 'Disponibilidad',
+    link: '/operaciones-diarias',
+    icon: calendar3d,
+    requiredPermissions: [201],
   },
   {
     icon: shipingcontainer,

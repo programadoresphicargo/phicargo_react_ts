@@ -5,6 +5,7 @@ import { Suspense, lazy } from 'react';
 
 import AccesoForm from '../phicargo/accesos/formulario';
 import AvailabilityRoutes from '../phicargo/modules/availability/routes/AvailabilityRoutes';
+import DOReportRoutes from '@/phicargo/modules/daily-operations-report/routes/DOReportRoutes';
 import DashboardsRoutes from '@/phicargo/modules/dashboards/routes/DashboardRoutes';
 import { LoadingPage } from '../phicargo/modules/core/pages/LoadingPage';
 import MainMenuPage from '@/phicargo/menu/MainManuPage';
@@ -301,6 +302,9 @@ export const PrivateRoutes = () => {
 
         {/* Módulo de turnos */}
         {ShiftsRoutes()}
+
+        {/* Reporte de Operaciones Diarias (Disponibilidad) */}
+        {DOReportRoutes()}
 
         {/* Solicitudes de Servicio */}
         {ServiceRequestsRoutes()}

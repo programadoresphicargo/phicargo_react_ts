@@ -34,7 +34,7 @@ const Header = () => {
       }}
     >
       <div className="flex justify-between items-center flex-wrap gap-4">
-        <BackButton route="/reportes" />
+        <BackButton route="/menu" />
 
         <div className="mx-2">
           <h1 className="m-0 p-0 text-base text-gray-100 font-bold uppercase">
