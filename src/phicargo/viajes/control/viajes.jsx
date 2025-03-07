@@ -26,6 +26,8 @@ import DetencionesViajesActivos from '../detenciones/detenciones_modal';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import Travel from './viaje';
 import EstatusDropdown from '../estatus/resumen_estatus';
+import { exportToCSV } from '../utils/export';
+
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -380,6 +382,7 @@ const ViajesActivos = ({ }) => {
         </Button>
 
         <Button color='danger' className='text-white' startContent={<i class="bi bi-sign-stop"></i>} onPress={() => handleOpen()}>Unidades detenidas</Button>
+        <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "viajes_activos.csv")}>Exportar</Button>
 
       </Box >
     ),

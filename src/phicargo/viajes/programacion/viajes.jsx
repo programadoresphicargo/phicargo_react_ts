@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useContext } from 'react';
-import Button from '@mui/material/Button';
+import { Button } from '@heroui/react';
 import Dialog from '@mui/material/Dialog';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -17,6 +17,7 @@ import {
 import { ViajeContext } from '../context/viajeContext';
 import NavbarViajes from '../navbar';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import { exportToCSV } from '../utils/export';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -263,6 +264,7 @@ const ViajesProgramados = ({ }) => {
             </option>
           ))}
         </select>
+        <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "programacion_viajes.csv")}>Exportar</Button>
       </Box>
     ),
   });

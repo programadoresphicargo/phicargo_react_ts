@@ -8,6 +8,7 @@ import FormularioCostoExtra from "../costos/maniobras/form_costos_extras";
 import { CostosExtrasContext, CostosExtrasProvider } from "../costos/context/context";
 import { ViajeContext } from "../viajes/context/viajeContext";
 import { useNavigate, useLocation } from "react-router-dom";
+import FoliosCostosExtrasViaje from "../viajes/costos_extras/tabla";
 
 const EstadiasForm = () => {
     const navigate = useNavigate();
@@ -63,7 +64,7 @@ const EstadiasForm = () => {
                             <Grid item xs={12}>
                                 <Card>
                                     <CardHeader>
-                                        <Button color="primary" onPress={onOpen}>Crear costo extra</Button>
+                                        Datos del viaje
                                     </CardHeader>
                                     <Divider />
                                     <CardBody>
@@ -90,10 +91,16 @@ const EstadiasForm = () => {
                                     </CardBody>
                                 </Card>
                             </Grid>
+                            <Grid item xs={12}>
+                                <Card>
+                                    <CardBody>
+                                        <FoliosCostosExtrasViaje></FoliosCostosExtrasViaje>
+                                    </CardBody>
+                                </Card>
+                            </Grid>
                         </Grid>
                     )}
                 </Box>
-                <FormularioCostoExtra show={isOpen} handleClose={onClose} />
             </CostosExtrasProvider>
         </>
     );
