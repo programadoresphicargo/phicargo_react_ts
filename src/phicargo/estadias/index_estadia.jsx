@@ -4,15 +4,14 @@ import ResponsiveAppBar from "./Navbar";
 import { ViajeProvider } from "../viajes/context/viajeContext";
 import RegistrosEstadias from "./registros";
 import { CostosExtrasProvider } from "../costos/context/context";
+import EstadiasForm from "./estadia_form";
 import NavbarViajes from "../viajes/navbar";
 
-export default function EstadiasIndex() {
+export default function EstadiaViajeIndex() {
     return (
-        <>
-            <ViajeProvider>
-                <NavbarViajes></NavbarViajes>
-                <RegistrosEstadias></RegistrosEstadias>
-            </ViajeProvider>
-        </>
+        <ViajeProvider>
+            <NavbarViajes></NavbarViajes>
+            <EstadiasForm></EstadiasForm>
+        </ViajeProvider>
     );
 }

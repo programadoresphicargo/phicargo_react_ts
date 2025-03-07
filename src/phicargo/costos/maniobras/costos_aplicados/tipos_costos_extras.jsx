@@ -10,6 +10,7 @@ import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { CostosExtrasContext } from '../../context/context';
 
 const ServiciosExtras = ({ onClose }) => {
+
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {

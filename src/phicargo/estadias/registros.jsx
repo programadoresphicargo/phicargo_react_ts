@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useContext } from 'react';
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -16,42 +16,64 @@ import {
   useDisclosure,
 } from "@heroui/modal";
 import EstadiasForm from './estadia_form';
+import { useNavigate } from "react-router-dom";
+import dayjs from 'dayjs';
+
 const { RangePicker } = DatePicker;
 
-const ReporteCumplimiento = () => {
+const RegistrosEstadias = () => {
 
+  const navigate = useNavigate();
   const [isLoading, setLoading] = useState(false);
-  const [id_viaje, setIDViaje] = useState(0);
-
   const [dates, setDates] = useState([]);
-
-  const handleDateChange = (dates) => {
-    setDates(dates);
-  };
-
   const [data, setData] = useState([]);
+
+  // Cargar fechas guardadas en localStorage
+  useEffect(() => {
+    const savedDates = localStorage.getItem('dates');
+    if (savedDates) {
+      setDates(JSON.parse(savedDates));
+    }
+  }, []);
+
+  // Guardar fechas en localStorage cuando cambien
+  useEffect(() => {
+    if (dates && dates.length === 2) {
+      localStorage.setItem('dates', JSON.stringify(dates));
+      fetchData();  // Asegurar que siempre se ejecute la consulta al cambiar las fechas
+    }
+  }, [dates]);
+
+  // Cargar datos desde localStorage al iniciar
+  useEffect(() => {
+    const savedData = localStorage.getItem('data');
+    if (savedData) {
+      setData(JSON.parse(savedData));
+    }
+  }, []);
+
+  const handleDateChange = (newDates) => {
+    setDates(newDates);
+  };
 
   const fetchData = async () => {
     if (dates && dates.length === 2 && dates[0] && dates[1]) {
-      const startDate = dates[0].format('YYYY-MM-DD');
-      const endDate = dates[1].format('YYYY-MM-DD');
+      const startDate = dayjs(dates[0]).format('YYYY-MM-DD');
+      const endDate = dayjs(dates[1]).format('YYYY-MM-DD');
       try {
         setLoading(true);
         const response = await odooApi.get('/tms_travel/reporte_estadias/', {
           params: { fecha_inicio: startDate, fecha_fin: endDate },
         });
         setData(response.data);
-        setLoading(false);
+        localStorage.setItem('data', JSON.stringify(response.data));  // Guardar datos en localStorage
       } catch (error) {
         console.error('Error al obtener los datos:', error);
+      } finally {
         setLoading(false);
       }
     }
   };
-
-  useEffect(() => {
-    fetchData();
-  }, [dates]);
 
   const columns = useMemo(
     () => [
@@ -70,6 +92,10 @@ const ReporteCumplimiento = () => {
     [],
   );
 
+  const handleClick = (id_viaje) => {
+    navigate("/estadias_info", { state: { id_viaje: id_viaje } });
+  };
+
   const table = useMaterialReactTable({
     columns,
     data,
@@ -83,8 +109,7 @@ const ReporteCumplimiento = () => {
     },
     muiTableBodyRowProps: ({ row }) => ({
       onClick: ({ event }) => {
-        onOpen();
-        setIDViaje(row.original.travel_id)
+        handleClick(row.original.travel_id);
       },
       style: {
         cursor: 'pointer',
@@ -172,4 +197,4 @@ const ReporteCumplimiento = () => {
   );
 };
 
-export default ReporteCumplimiento;
+export default RegistrosEstadias;

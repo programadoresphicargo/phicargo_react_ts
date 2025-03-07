@@ -65,7 +65,7 @@ const CostosExtrasContenedores = ({ }) => {
     const fetchDataCP = async () => {
         try {
             setLoading(true);
-            toast.success('Obteniendo cartas porte de viaje');
+            toast.success('Obteniendo cartas porte de viaje' + id_viaje);
             const response = await odooApi.get('/tms_waybill/get_by_travel_id/' + id_viaje);
             setCPS(response.data);
             setLoading(false);
