@@ -57,6 +57,7 @@ const TiposCostosExtras = lazy(
   () => import('../phicargo/costos/tipos_costos_extras/costos_extras'),
 );
 const Estadias = lazy(() => import('../phicargo/estadias/Control'));
+const EstadiasInfo = lazy(() => import('../phicargo/estadias/index_estadia'));
 const Accesos = lazy(() => import('../phicargo/accesos/Accesos'));
 const EntregaMonitoreo = lazy(() => import('../phicargo/monitoreo/monitoreo'));
 
@@ -213,6 +214,15 @@ export const PrivateRoutes = () => {
           element={
             <Suspense fallback={<LoadingPage />}>
               <Estadias />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/estadias_info"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <EstadiasInfo />
             </Suspense>
           }
         />

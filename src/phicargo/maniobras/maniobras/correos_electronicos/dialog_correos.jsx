@@ -19,12 +19,18 @@ import {
 import { ManiobraContext } from '../../context/viajeContext';
 import FormularioCorreo from './formulario';
 import { toast } from 'react-toastify';
+import { Autocomplete, AutocompleteItem } from "@heroui/react";
 
 const CorreosLigadosManiobra = ({ open, handleClose }) => {
     const { id_maniobra, id_cliente, formData, setFormData, formDisabled, setFormDisabled } = useContext(ManiobraContext);
     const [correosCliente, setCorreosCliente] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [openF, setOpenF] = useState(false);
+
+    const cerrar = () => {
+        setOpenF(false);
+        fetchCorreos();
+    }
 
     useEffect(() => {
         if (open) {
@@ -84,7 +90,7 @@ const CorreosLigadosManiobra = ({ open, handleClose }) => {
 
     return (
         <>
-            <FormularioCorreo open={openF} handleClose={() => setOpenF(false)} />
+            <FormularioCorreo open={openF} handleClose={cerrar} />
 
             <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
                 <DialogTitle>Correos Ligados a Maniobra {id_maniobra}</DialogTitle>
@@ -93,20 +99,20 @@ const CorreosLigadosManiobra = ({ open, handleClose }) => {
                         <Button color='primary' onPress={() => setOpenF(true)}>Nuevo correo</Button>
                     </div>
 
-                    <Select
+                    <Autocomplete
                         className="mb-3"
                         label="Correos electrónicos"
                         placeholder="Selecciona los correos"
                         variant="bordered"
                         isDisabled={formDisabled}
-                        onChange={handleAdd}
+                        onSelectionChange={handleAdd}
                     >
                         {correosCliente.map((correo) => (
-                            <SelectItem key={correo.id_correo} value={correo.id_correo}>
+                            <AutocompleteItem key={correo.id_correo} value={correo.id_correo}>
                                 {correo.correo}
-                            </SelectItem>
+                            </AutocompleteItem>
                         ))}
-                    </Select>
+                    </Autocomplete>
 
                     {isLoading ? (
                         <Spinner label="Cargando correos..." />

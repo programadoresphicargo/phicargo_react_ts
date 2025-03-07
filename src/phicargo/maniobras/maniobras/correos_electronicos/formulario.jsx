@@ -1,5 +1,5 @@
-import * as React from 'react';
-import Button from '@mui/material/Button';
+import React, { useState, useEffect, useContext } from 'react';
+import { Button, Input } from '@heroui/react';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -8,36 +8,36 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import axios from 'axios';
-const { VITE_PHIDES_API_URL } = import.meta.env;
+import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import { ManiobraContext } from '../../context/viajeContext';
+import { toast } from "react-toastify";
 
-const FormularioCorreo = ({ open, handleClose, id_cliente }) => {
-    // Estados para cada campo del formulario
+const FormularioCorreo = ({ open, handleClose }) => {
+
+    const { id_maniobra, id_cliente, formData, setFormData, formDisabled, setFormDisabled } = useContext(ManiobraContext);
     const [nombreCompleto, setNombreCompleto] = React.useState('');
     const [correo, setCorreo] = React.useState('');
     const [tipoCorreo, setTipoCorreo] = React.useState('');
 
-    // Función para manejar el envío de los datos
     const handleSubmit = async () => {
-
-        // Crear un objeto FormData para enviar los datos como POST
-        const formData = new FormData();
-        formData.append('idcliente', id_cliente);
-        formData.append('nombre', nombreCompleto);
-        formData.append('correo', correo);
-        formData.append('tipo', tipoCorreo);
-
         try {
-            // Usar axios para enviar una solicitud POST con los datos de FormData
-            const response = await axios.post(VITE_PHIDES_API_URL + '/gestion_viajes/banco/consultas/ingresar_correo.php', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
+            const response = await odooApi.post("/correos/crear_correo/", {
+                id_cliente: id_cliente,
+                nombre_completo: nombreCompleto,
+                correo: correo,
+                tipo: tipoCorreo
             });
 
-            console.log('Respuesta del servidor:', response.data);
-            handleClose();  // Cerrar el modal al enviar los datos
+            if (response.data.status === "success") {
+                toast.success(response.data.message); 
+            } else {
+                toast.error(response.data.message); 
+            }
+
+            handleClose();
         } catch (error) {
-            console.error('Error al enviar los datos:', error);
+            toast.error("Error al enviar los datos");
+            console.error("Error:", error.response?.data || error);
         }
     };
 
@@ -46,33 +46,27 @@ const FormularioCorreo = ({ open, handleClose, id_cliente }) => {
             <Dialog
                 open={open}
                 onClose={handleClose}
-                PaperProps={{
-                    component: 'form',
-                    onSubmit: handleSubmit,  // Usar la función handleSubmit para el envío
-                }}
+                fullWidth={true}
+                maxWidth='sm'
             >
                 <DialogTitle>Nuevo correo electrónico</DialogTitle>
                 <DialogContent>
-                    <TextField
-                        autoFocus
-                        required
+                    <Input
                         margin="dense"
                         id="nombre_completo"
                         label="Nombre completo del contacto"
                         type="text"
                         fullWidth
-                        variant="standard"
+                        variant="bordered"
                         value={nombreCompleto}
                         onChange={(e) => setNombreCompleto(e.target.value)}
                     />
-                    <TextField
-                        required
-                        margin="dense"
+                    <Input
                         id="correo"
                         label="Correo electrónico"
                         type="email"
                         fullWidth
-                        variant="standard"
+                        variant="bordered"
                         value={correo}
                         onChange={(e) => setCorreo(e.target.value)}
                     />
@@ -89,8 +83,8 @@ const FormularioCorreo = ({ open, handleClose, id_cliente }) => {
                     </Select>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} variant='contained'>Cancelar</Button>
-                    <Button type="submit" variant='contained'>Registrar</Button>
+                    <Button onPress={handleClose} color='danger'>Cancelar</Button>
+                    <Button type="submit" color='primary' onPress={handleSubmit}>Registrar</Button>
                 </DialogActions>
             </Dialog>
         </React.Fragment>
