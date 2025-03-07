@@ -5,19 +5,20 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import axios from 'axios';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { ManiobraContext } from '../../context/viajeContext';
 import { toast } from "react-toastify";
+import { Select, SelectSection, SelectItem } from "@heroui/select";
+import { Spacer } from '@heroui/react';
 
 const FormularioCorreo = ({ open, handleClose }) => {
 
     const { id_maniobra, id_cliente, formData, setFormData, formDisabled, setFormDisabled } = useContext(ManiobraContext);
     const [nombreCompleto, setNombreCompleto] = React.useState('');
     const [correo, setCorreo] = React.useState('');
-    const [tipoCorreo, setTipoCorreo] = React.useState('');
+    const [tipoCorreo, setTipoCorreo] = React.useState('destinatario');
 
     const handleSubmit = async () => {
         try {
@@ -29,9 +30,9 @@ const FormularioCorreo = ({ open, handleClose }) => {
             });
 
             if (response.data.status === "success") {
-                toast.success(response.data.message); 
+                toast.success(response.data.message);
             } else {
-                toast.error(response.data.message); 
+                toast.error(response.data.message);
             }
 
             handleClose();
@@ -61,6 +62,7 @@ const FormularioCorreo = ({ open, handleClose }) => {
                         value={nombreCompleto}
                         onChange={(e) => setNombreCompleto(e.target.value)}
                     />
+                    <Spacer y={1} />
                     <Input
                         id="correo"
                         label="Correo electrónico"
@@ -70,17 +72,18 @@ const FormularioCorreo = ({ open, handleClose }) => {
                         value={correo}
                         onChange={(e) => setCorreo(e.target.value)}
                     />
+                    <Spacer y={1} />
                     <Select
-                        className='mt-4'
-                        variant="standard"
-                        id="tipo_correo"
-                        value={tipoCorreo}
+                        label="Tipo de correo"
+                        placeholder="Select an animal"
+                        selectedKeys={[tipoCorreo]}
+                        variant="bordered"
                         onChange={(e) => setTipoCorreo(e.target.value)}
-                        fullWidth
                     >
-                        <MenuItem value="destinatario">Destinatario</MenuItem>
-                        <MenuItem value="cc">CC</MenuItem>
+                        <SelectItem key={"destinatario"}>Destinatario</SelectItem>
+                        <SelectItem key={"cc"}>CC</SelectItem>
                     </Select>
+
                 </DialogContent>
                 <DialogActions>
                     <Button onPress={handleClose} color='danger'>Cancelar</Button>
