@@ -1,9 +1,9 @@
 import 'rsuite/dist/rsuite-no-reset.min.css';
 
 import { BackButton } from '@/components/ui/BackButton';
-import Card from './Card';
 import { Checkbox } from '@heroui/react';
 import { DateRangePicker } from 'rsuite';
+import { IndicatorCard } from '@/components/utils/IndicatorCard';
 import dayjs from 'dayjs';
 import { useGlobalContext } from '../../hook/useGlobalContext';
 import { useMemo } from 'react';
@@ -46,15 +46,15 @@ const Header = () => {
         </div>
 
         <div className="flex gap-2 flex-1">
-          <Card
+          <IndicatorCard
             title="Total de Viajes"
             content={isFetching ? '...' : dayRecord?.total || 0}
           />
-          <Card
+          <IndicatorCard
             title="Meta"
             content={isFetching ? '...' : dayRecord?.meta || 0}
           />
-          <Card
+          <IndicatorCard
             title="Diferencia"
             content={isFetching ? '...' : dayRecord?.difference || 0}
           />
