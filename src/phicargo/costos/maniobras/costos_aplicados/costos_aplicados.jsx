@@ -210,7 +210,7 @@ const ServiciosAplicadosCE = ({ onClose }) => {
         columns,
         data: CostosExtras,
         enableEditing: true,
-        editDisplayMode: 'cell',
+        editDisplayMode: 'modal',
         positionActionsColumn: 'last',
         state: { showProgressBars: loading },
         initialState: {
