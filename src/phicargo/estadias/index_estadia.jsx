@@ -10,8 +10,10 @@ import NavbarViajes from "../viajes/navbar";
 export default function EstadiaViajeIndex() {
     return (
         <ViajeProvider>
-            <NavbarViajes></NavbarViajes>
-            <EstadiasForm></EstadiasForm>
+            <CostosExtrasProvider>
+                <NavbarViajes></NavbarViajes>
+                <EstadiasForm></EstadiasForm>
+            </CostosExtrasProvider>
         </ViajeProvider>
     );
 }

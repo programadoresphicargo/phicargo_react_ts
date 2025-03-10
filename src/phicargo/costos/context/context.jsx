@@ -25,6 +25,8 @@ const CostosExtrasProvider = ({ children }) => {
 
     const [isLoading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [agregarConcepto, setAC] = useState(false);
+    const [horasEstadias, setHE] = useState(0);
 
     return (
         <CostosExtrasContext.Provider value={{
@@ -43,7 +45,11 @@ const CostosExtrasProvider = ({ children }) => {
             CostosExtras,
             setCostosExtras,
             CostosExtrasEliminados,
-            setCostosExtrasEliminados
+            setCostosExtrasEliminados,
+            agregarConcepto,
+            setAC,
+            horasEstadias, 
+            setHE
         }}>
             {children}
         </CostosExtrasContext.Provider>

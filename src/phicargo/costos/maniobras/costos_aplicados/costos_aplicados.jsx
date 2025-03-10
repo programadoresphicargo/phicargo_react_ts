@@ -28,7 +28,7 @@ import ServiciosExtras from './tipos_costos_extras';
 import Swal from 'sweetalert2';
 
 const ServiciosAplicadosCE = ({ onClose }) => {
-    const { id_folio, CostosExtras, setCostosExtras, setCostosExtrasEliminados, DisabledForm, setDisabledForm } = useContext(CostosExtrasContext);
+    const { id_folio, CostosExtras, setCostosExtras, setCostosExtrasEliminados, DisabledForm, setDisabledForm, agregarConcepto, setAC, horasEstadias, setHE } = useContext(CostosExtrasContext);
     const [loading, setLoading] = useState(false);
 
     const [open, setOpen] = useState(false);
@@ -164,6 +164,24 @@ const ServiciosAplicadosCE = ({ onClose }) => {
                 },
             },
             {
+                accessorKey: "ajuste_cobro",
+                header: "Ajuste",
+                enableEditing: true,
+                muiTableBodyCellProps: {
+                    align: 'right',
+                },
+                muiTableHeadCellProps: {
+                    align: 'right',
+                },
+                Cell: ({ row }) => {
+                    const ajusteCobro = row.getValue("ajuste_cobro") ?? row.original.subtotal ?? 0;
+                    return ajusteCobro;
+                },
+                muiTableBodyCellEditTextFieldProps: {
+                    type: "number",
+                },
+            },
+            {
                 accessorKey: 'comentarios',
                 header: 'Comentarios',
                 enableEditing: true,
@@ -294,6 +312,31 @@ const ServiciosAplicadosCE = ({ onClose }) => {
             </Box>
         ),
     });
+
+
+    const agregarServicioConExtras = () => {
+        if (agregarConcepto) {
+            const servicioConExtras = {
+                id_tipo_costo: 4,
+                descripcion: 'Estadias',
+                costo: 0,
+                cantidad: horasEstadias,
+                iva: .16,
+                retencion: 0,
+                subtotal: 0,
+                ajuste_cobro: 0,
+                comentarios: ''
+            };
+
+            setCostosExtras((prev) => [...prev, servicioConExtras]);
+        } else {
+            console.log("No se agrega el servicio debido a la condición de contexto.");
+        }
+    };
+
+    useEffect(() => {
+        agregarServicioConExtras();
+    }, []);
 
     return (
         <>

@@ -13,6 +13,7 @@ import FoliosCostosExtrasViaje from "../viajes/costos_extras/tabla";
 const EstadiasForm = () => {
     const navigate = useNavigate();
 
+    const { id_folio, CostosExtras, setCostosExtras, setCostosExtrasEliminados, DisabledForm, setDisabledForm, agregarConcepto, setAC, horasEstadias, setHE } = useContext(CostosExtrasContext);
     const { ActualizarIDViaje } = useContext(ViajeContext);
     const location = useLocation();
     const [loading, setLoading] = useState(false);
@@ -29,6 +30,7 @@ const EstadiasForm = () => {
                     params: { travel_id: id_viaje },
                 });
                 setData(response.data);
+                setHE(data[0]?.cortes_cobrados);
                 console.log(id_viaje);
             } catch (error) {
                 toast.error("Error de conexión: " + error.message);
@@ -41,67 +43,65 @@ const EstadiasForm = () => {
 
     return (
         <>
-            <CostosExtrasProvider>
-                <Box m={2}>
-                    {loading ? (
-                        <Grid container justifyContent="center" alignItems="center" style={{ height: '80vh' }}>
-                            <Grid item>
-                                <Progress isIndeterminate label="Obteniendo información" size="lg" />
-                            </Grid>
+            <Box m={2}>
+                {loading ? (
+                    <Grid container justifyContent="center" alignItems="center" style={{ height: '80vh' }}>
+                        <Grid item>
+                            <Progress isIndeterminate label="Obteniendo información" size="lg" />
                         </Grid>
-                    ) : (
-                        <Grid container spacing={2} className="mb-5">
-                            <Grid item xs={12}>
-                                <Button onPress={() => navigate(-1)} color="primary">Regresar</Button>
+                    </Grid>
+                ) : (
+                    <Grid container spacing={2} className="mb-5">
+                        <Grid item xs={12}>
+                            <Button onPress={() => navigate(-1)} color="primary">Regresar</Button>
 
-                                <Chip color="primary" size="lg">{data[0]?.travel_name}</Chip>
-                                <div className="mt-3">
-                                    <p>Cliente: {data[0]?.cliente}</p>
-                                    <p>Horas estadias permitidas: {data[0]?.horas_estadias}</p>
-                                    <p>Operador: {data[0]?.employee_name}</p>
-                                </div>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Card>
-                                    <CardHeader>
-                                        Datos del viaje
-                                    </CardHeader>
-                                    <Divider />
-                                    <CardBody>
-                                        <Table aria-label="Reporte de estadías" fullWidth>
-                                            <TableHeader>
-                                                <TableColumn>Llegada programada</TableColumn>
-                                                <TableColumn>Llegada real</TableColumn>
-                                                <TableColumn>Tiempo diferencia</TableColumn>
-                                                <TableColumn>Salida de planta</TableColumn>
-                                                <TableColumn>Tiempo en planta</TableColumn>
-                                                <TableColumn>Cortes cobrados</TableColumn>
-                                            </TableHeader>
-                                            <TableBody>
-                                                <TableRow>
-                                                    <TableCell>{data[0]?.llegada_planta_programada}</TableCell>
-                                                    <TableCell>{data[0]?.llegada_planta}</TableCell>
-                                                    <TableCell>{data[0]?.diferencia_llegada_planta}</TableCell>
-                                                    <TableCell>{data[0]?.salida_planta}</TableCell>
-                                                    <TableCell>{data[0]?.horas_estadia_real}</TableCell>
-                                                    <TableCell>{data[0]?.cortes_cobrados}</TableCell>
-                                                </TableRow>
-                                            </TableBody>
-                                        </Table>
-                                    </CardBody>
-                                </Card>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Card>
-                                    <CardBody>
-                                        <FoliosCostosExtrasViaje></FoliosCostosExtrasViaje>
-                                    </CardBody>
-                                </Card>
-                            </Grid>
+                            <Chip color="primary" size="lg">{data[0]?.travel_name}</Chip>
+                            <div className="mt-3">
+                                <p>Cliente: {data[0]?.cliente}</p>
+                                <p>Horas estadias permitidas: {data[0]?.horas_estadias}</p>
+                                <p>Operador: {data[0]?.employee_name}</p>
+                            </div>
                         </Grid>
-                    )}
-                </Box>
-            </CostosExtrasProvider>
+                        <Grid item xs={12}>
+                            <Card>
+                                <CardHeader>
+                                    Datos del viaje
+                                </CardHeader>
+                                <Divider />
+                                <CardBody>
+                                    <Table aria-label="Reporte de estadías" fullWidth>
+                                        <TableHeader>
+                                            <TableColumn>Llegada programada</TableColumn>
+                                            <TableColumn>Llegada real</TableColumn>
+                                            <TableColumn>Tiempo diferencia</TableColumn>
+                                            <TableColumn>Salida de planta</TableColumn>
+                                            <TableColumn>Tiempo en planta</TableColumn>
+                                            <TableColumn>Cortes cobrados</TableColumn>
+                                        </TableHeader>
+                                        <TableBody>
+                                            <TableRow>
+                                                <TableCell>{data[0]?.llegada_planta_programada}</TableCell>
+                                                <TableCell>{data[0]?.llegada_planta}</TableCell>
+                                                <TableCell>{data[0]?.diferencia_llegada_planta}</TableCell>
+                                                <TableCell>{data[0]?.salida_planta}</TableCell>
+                                                <TableCell>{data[0]?.horas_estadia_real}</TableCell>
+                                                <TableCell>{data[0]?.cortes_cobrados}</TableCell>
+                                            </TableRow>
+                                        </TableBody>
+                                    </Table>
+                                </CardBody>
+                            </Card>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Card>
+                                <CardBody>
+                                    <FoliosCostosExtrasViaje></FoliosCostosExtrasViaje>
+                                </CardBody>
+                            </Card>
+                        </Grid>
+                    </Grid>
+                )}
+            </Box>
         </>
     );
 };

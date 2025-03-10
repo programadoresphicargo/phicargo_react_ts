@@ -21,7 +21,7 @@ const ServiciosExtras = ({ onClose }) => {
         setOpen(false);
     };
 
-    const { CostosExtras, setCostosExtras } = useContext(CostosExtrasContext);
+    const { CostosExtras, setCostosExtras, agregarConcepto, setAC } = useContext(CostosExtrasContext);
 
     const [data, setData] = useState([]);
     const [isLoading2, setLoading] = useState();
@@ -129,6 +129,7 @@ const ServiciosExtras = ({ onClose }) => {
                     iva: .16,
                     retencion: 0,
                     subtotal: servicioSeleccionado.costo,
+                    ajuste_cobro: 0
                 };
 
                 // Actualizar el estado con el nuevo servicio

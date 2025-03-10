@@ -17,7 +17,7 @@ import { ViajeContext } from '../context/viajeContext';
 const FoliosCostosExtrasViaje = () => {
 
   const { id_viaje, getHistorialEstatus, getViaje } = useContext(ViajeContext);
-  const { id_folio, setIDFolio, CartasPorte, CartasPorteEliminadas, setCPS, setCPSEliminadas, CostosExtras, setCostosExtras, CostosExtrasEliminados, setCostosExtrasEliminados, formData, setFormData, DisabledForm, setDisabledForm } = useContext(CostosExtrasContext);
+  const { id_folio, setIDFolio, CartasPorte, CartasPorteEliminadas, setCPS, setCPSEliminadas, CostosExtras, setCostosExtras, CostosExtrasEliminados, setCostosExtrasEliminados, formData, setFormData, DisabledForm, setDisabledForm, agregarConcepto, setAC } = useContext(CostosExtrasContext);
 
   const [data, setData] = useState([]);
   const [isLoading2, setLoading] = useState();
@@ -218,6 +218,7 @@ const FoliosCostosExtrasViaje = () => {
             onPress={() => {
               handleShowModal();
               setIDFolio(null);
+              setAC(true);
             }}
           >
             Nuevo folio
