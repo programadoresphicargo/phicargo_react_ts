@@ -1,17 +1,29 @@
-export interface RevenueByDriver {
+export interface DistanceAndRevenueByDriver {
   driver: string;
-  travels: number;
+  distance: number;
   amount: number;
+  travels: number;
 }
 
-export interface DistanceByDriver {
-  driver: string;
-  travels: number;
-  distance: number;
+export interface ModalitySummary {
+  modality: string;
+  driverCount: number;
+}
+
+export interface JobSummary {
+  job: number;
+  driverCount: number;
+}
+
+export interface DangerousLicenseSummary {
+  dangerousLicense: string;
+  driverCount: number;
 }
 
 export interface DriverStats {
-  revenueByDriver: RevenueByDriver[];
-  distanceByDriver: DistanceByDriver[];
+  distanceAndRevenueByDriver: DistanceAndRevenueByDriver[];
+  modalitySummary: ModalitySummary[];
+  jobSummary: JobSummary[];
+  dangerousLicenseSummary: DangerousLicenseSummary[];
 }
 

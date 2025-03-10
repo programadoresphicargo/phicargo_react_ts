@@ -1,7 +1,9 @@
 import { CategoryScale } from 'chart.js';
 import Chart from 'chart.js/auto';
-import { DistanceByDriverChart } from '../components/drivers/DistanceByDriverChart';
-import { RevenueByDriverChart } from '../components/drivers/RevenueByDriverChart';
+import { DangerousLicenseSummaryChart } from '../components/drivers/DangerousLicenseSummaryChart';
+import { DistanceAndRevenueByDriverChart } from '../components/drivers/DistanceAndRevenueByDriverChart';
+import { JobSummaryChart } from '../components/drivers/JobSummaryChart';
+import { ModalitySummaryChart } from '../components/drivers/ModalitySummaryChart';
 import { useDriverStatsQueries } from '../hooks/useDriverStatsQueries';
 
 Chart.register(CategoryScale);
@@ -11,16 +13,24 @@ const DriverDashboardPage = () => {
 
   return (
     <div className="p-4">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
-        <div className="col-span-1 sm:col-span-2">
-          <RevenueByDriverChart
-            isLoading={driversStatsQuery.isFetching}
-            data={driversStatsQuery.data}
-          />
-        </div>
+      <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-4">
+        <ModalitySummaryChart
+          isLoading={driversStatsQuery.isFetching}
+          data={driversStatsQuery.data}
+        />
 
-        <div className="col-span-1 sm:col-span-2">
-          <DistanceByDriverChart
+        <JobSummaryChart
+          isLoading={driversStatsQuery.isFetching}
+          data={driversStatsQuery.data}
+        />
+
+        <DangerousLicenseSummaryChart
+          isLoading={driversStatsQuery.isFetching}
+          data={driversStatsQuery.data}
+        />
+
+        <div className="col-span-1 sm:col-span-3">
+          <DistanceAndRevenueByDriverChart
             isLoading={driversStatsQuery.isFetching}
             data={driversStatsQuery.data}
           />

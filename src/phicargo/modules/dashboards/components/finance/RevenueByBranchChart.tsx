@@ -30,13 +30,13 @@ const options: ChartOptions<'bar'> = {
         },
       },
     },
+    legend: {
+      display: false,
+    },
   },
   scales: {
     y: {
       beginAtZero: true,
-      grid: {
-        display: false,
-      },
       ticks: {
         font: {
           size: 15,
@@ -47,9 +47,6 @@ const options: ChartOptions<'bar'> = {
       },
     },
     x: {
-      grid: {
-        display: false,
-      },
       ticks: {
         font: {
           size: 15,

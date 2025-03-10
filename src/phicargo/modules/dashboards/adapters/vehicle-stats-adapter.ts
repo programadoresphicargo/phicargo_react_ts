@@ -21,6 +21,7 @@ const distanceAndRevenueByVehicle = (
   vehicle: data.vehicle,
   distance: data.distance,
   amount: data.amount,
+  travels: data.travels,
 });
 
 export const vehicleStatsToLocal = (stats: VehicleStatsApi): VehicleStats => ({
