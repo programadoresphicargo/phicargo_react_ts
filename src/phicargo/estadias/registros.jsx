@@ -111,6 +111,7 @@ const RegistrosEstadias = () => {
     state: { showProgressBars: isLoading },
     localization: MRT_Localization_ES,
     initialState: {
+      showColumnFilters: true,
       density: 'compact',
       pagination: { pageSize: 80 },
     },
