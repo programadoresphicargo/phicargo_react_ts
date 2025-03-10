@@ -30,8 +30,7 @@ const EstadiasForm = () => {
                     params: { travel_id: id_viaje },
                 });
                 setData(response.data);
-                setHE(data[0]?.cortes_cobrados);
-                console.log(id_viaje);
+                setHE(response.data[0]?.cortes_cobrados);
             } catch (error) {
                 toast.error("Error de conexión: " + error.message);
             } finally {
