@@ -2,6 +2,7 @@ export interface DistanceAndRevenueByVehicleApi {
   vehicle: string;
   distance: number;
   amount: number;
+  travels: number;
 }
 
 export interface AvailableSummaryApi {
