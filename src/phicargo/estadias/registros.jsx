@@ -18,6 +18,7 @@ import {
 import EstadiasForm from './estadia_form';
 import { useNavigate } from "react-router-dom";
 import dayjs from 'dayjs';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
 const { RangePicker } = DatePicker;
 
@@ -27,6 +28,7 @@ const RegistrosEstadias = () => {
   const [isLoading, setLoading] = useState(false);
   const [dates, setDates] = useState([]);
   const [data, setData] = useState([]);
+  const [filters, setFilters] = useState([{ id: 'genero_estadias', value: 'genero' }]);
 
   // Cargar fechas guardadas en localStorage
   useEffect(() => {
@@ -78,9 +80,8 @@ const RegistrosEstadias = () => {
   const columns = useMemo(
     () => [
       { accessorKey: 'travel_name', header: 'Referencia' },
-      { accessorKey: 'cliente', header: 'Cliente' },
+      { accessorKey: 'cliente', header: 'Cliente', size: 10 },
       { accessorKey: 'horas_estadias', header: 'Horas estadias' },
-      { accessorKey: 'employee_name', header: 'Operador', size: 150 },
       { accessorKey: 'llegada_planta_programada', header: 'Llegada planta programada', size: 150 },
       { accessorKey: 'llegada_planta', header: 'Llegada planta', size: 150 },
       { accessorKey: 'diferencia_llegada_planta', header: 'Diferencia', size: 150 },
@@ -88,9 +89,12 @@ const RegistrosEstadias = () => {
       { accessorKey: 'horas_estadia_real', header: 'Tiempo en planta (horas)', size: 150 },
       { accessorKey: 'horas_excedidas', header: 'Horas excedidas', size: 150 },
       { accessorKey: 'cortes_cobrados', header: 'Cortes', size: 150 },
+      { accessorKey: 'genero_estadias', header: 'Genero estadias', filterVariant: 'select', filterValue: 'genero', },
     ],
     [],
   );
+
+  useEffect(() => { console.log(filters) }, [filters]);
 
   const handleClick = (id_viaje) => {
     navigate("/estadias_info", { state: { id_viaje: id_viaje } });
@@ -102,11 +106,15 @@ const RegistrosEstadias = () => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
+    enableFacetedValues: true,
+    onColumnFiltersChange: setFilters,
     state: { showProgressBars: isLoading },
+    localization: MRT_Localization_ES,
     initialState: {
       density: 'compact',
       pagination: { pageSize: 80 },
     },
+    state: { columnFilters: filters },
     muiTableBodyRowProps: ({ row }) => ({
       onClick: ({ event }) => {
         handleClick(row.original.travel_id);
