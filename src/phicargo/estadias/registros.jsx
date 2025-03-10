@@ -153,7 +153,7 @@ const RegistrosEstadias = () => {
         }}
       >
         <RangePicker onChange={handleDateChange} />
-        <Button color="primary" onPress={exportToCSV}>
+        <Button color="success" onPress={exportToCSV} startContent={<i class="bi bi-file-earmark-excel"></i>} className='text-white'>
           Exportar
         </Button>
       </Box>
