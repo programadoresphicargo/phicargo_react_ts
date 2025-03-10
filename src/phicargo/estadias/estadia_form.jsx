@@ -30,7 +30,7 @@ const EstadiasForm = () => {
                     params: { travel_id: id_viaje },
                 });
                 setData(response.data);
-                setHE(response.data[0]?.cortes_cobrados);
+                setHE(response.data[0]?.cortes_calculados);
             } catch (error) {
                 toast.error("Error de conexión: " + error.message);
             } finally {
@@ -84,7 +84,7 @@ const EstadiasForm = () => {
                                                 <TableCell>{data[0]?.diferencia_llegada_planta}</TableCell>
                                                 <TableCell>{data[0]?.salida_planta}</TableCell>
                                                 <TableCell>{data[0]?.horas_estadia_real}</TableCell>
-                                                <TableCell>{data[0]?.cortes_cobrados}</TableCell>
+                                                <TableCell>{data[0]?.cortes_calculados}</TableCell>
                                             </TableRow>
                                         </TableBody>
                                     </Table>

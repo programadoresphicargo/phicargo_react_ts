@@ -132,6 +132,8 @@ export const useJourneyDialogs = () => {
                 } else if (id_estatus == 103) {
                     cambiar_estado_equipo('disponible');
                     cambiar_estado_operador('disponible');
+                } else if (id_estatus == 8) {
+                    calcular_estadia(id_viaje);
                 }
                 return true;
             } else {
@@ -249,6 +251,29 @@ export const useJourneyDialogs = () => {
         } catch (error) {
             toast.error('Error activando el viaje');
             throw error;
+        }
+    };
+
+    const calcular_estadia = async (id_viaje) => {
+        try {
+            const response = await odooApi.get('/tms_travel/calcular_estadia/', {
+                params: { travel_id: id_viaje },
+            });
+            const data = response.data;
+
+            if (Array.isArray(data.folios_creados) && data.folios_creados.length > 0) {
+                const folio = data.folios_creados[0];
+                toast.success(`Viaje genera estadías,  ${folio.mensaje} (ID: ${folio.id_folio})`, { duration: 10000, });
+            }
+
+            if (Array.isArray(data.viajes_sin_estadia) && data.viajes_sin_estadia.length > 0) {
+                toast.success("Viaje no genera estadías", { duration: 10000, });
+            }
+
+        } catch (error) {
+            const errorMessage = error.response?.data?.mensaje || "❌ Error al procesar la solicitud.";
+            toast.error(errorMessage);
+            console.error("Error en calcular_estadia:", error);
         }
     };
 
