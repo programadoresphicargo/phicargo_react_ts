@@ -19,6 +19,9 @@ const options: ChartOptions<'bar'> = {
         },
       },
     },
+    legend: {
+      display: false
+    }
   },
   scales: {
     y: {

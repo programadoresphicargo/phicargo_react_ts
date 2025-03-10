@@ -6,10 +6,6 @@ import {
   ExportConfig,
   ExportToExcel,
 } from '@/phicargo/modules/core/utilities/export-to-excel';
-import {
-  getBackgroundColors,
-  getBorderColors,
-} from '../../utils/charts-colors';
 import { useEffect, useState } from 'react';
 
 import { Bar } from 'react-chartjs-2';
@@ -26,9 +22,6 @@ const options: ChartOptions<'bar'> = {
     y: {
       beginAtZero: true,
       stacked: true,
-      grid: {
-        display: false,
-      },
       ticks: {
         font: {
           size: 12,
@@ -38,9 +31,6 @@ const options: ChartOptions<'bar'> = {
     x: {
       position: 'bottom',
       stacked: true,
-      grid: {
-        display: false,
-      },
       ticks: {
         font: {
           size: 15,
@@ -60,7 +50,6 @@ export const ArrivalsStatusDriverChart = (props: Props) => {
   const [chartData, setChartData] = useState<ChartData<'bar'> | null>(null);
   const { monthYearName } = useDateRangeContext();
 
-
   useEffect(() => {
     if (!data) return;
 
@@ -72,20 +61,16 @@ export const ArrivalsStatusDriverChart = (props: Props) => {
           data: data.arrivalStatusDrivers.map((item) => item.arrivalLate),
           borderWidth: 2,
           borderRadius: 10,
-          backgroundColor: getBackgroundColors(
-            data.arrivalStatusDrivers.length,
-          ),
-          borderColor: getBorderColors(data.arrivalStatusDrivers.length),
+          backgroundColor: ['rgba(255, 99, 132, 0.6)'],
+          borderColor: ['rgba(255, 99, 132, 1)'],
         },
         {
           label: 'Temprano',
           data: data.arrivalStatusDrivers.map((item) => item.arrivalEarly),
           borderWidth: 2,
           borderRadius: 10,
-          backgroundColor: getBackgroundColors(
-            data.arrivalStatusDrivers.length,
-          ).reverse(),
-          borderColor: getBorderColors(data.arrivalStatusDrivers.length).reverse(),
+          backgroundColor: 'rgba(40, 159, 64, 0.6)',
+          borderColor: ['rgba(40, 159, 64, 1)'],
         },
       ],
     };

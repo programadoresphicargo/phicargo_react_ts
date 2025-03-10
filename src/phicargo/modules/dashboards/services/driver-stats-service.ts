@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
 import { DriverStats } from '../models/driver-stats-models';
+import { DriverStatsAdapter } from '../adapters/driver-stats-adapter';
 import { DriverStatsApi } from '../models/api/driver-stats-models-api';
-import { driverStatsToLocal } from '../adapters/driver-stats-adapter';
 import odooApi from '../../core/api/odoo-api';
 
 export class DriverStatsService {
@@ -13,7 +13,7 @@ export class DriverStatsService {
 
     try {
       const response = await odooApi.get<DriverStatsApi>(url);
-      return driverStatsToLocal(response.data);
+      return DriverStatsAdapter.toDriverStats(response.data);
     } catch (error) {
       console.log(error);
       if (error instanceof AxiosError) {

@@ -21,9 +21,6 @@ const options: ChartOptions<'line'> = {
   scales: {
     y: {
       beginAtZero: true,
-      grid: {
-        display: false,
-      },
       ticks: {
         font: {
           size: 15,
@@ -31,9 +28,6 @@ const options: ChartOptions<'line'> = {
       },
     },
     x: {
-      grid: {
-        display: false,
-      },
       ticks: {
         font: {
           size: 15,

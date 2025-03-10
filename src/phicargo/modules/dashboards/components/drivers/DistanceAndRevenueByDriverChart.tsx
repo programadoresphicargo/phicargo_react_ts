@@ -1,7 +1,7 @@
-import type {
-  DistanceAndRevenueByVehicle,
-  VehicleStats,
-} from '../../models/vehicles-stats-models';
+import {
+  DistanceAndRevenueByDriver,
+  DriverStats,
+} from '../../models/driver-stats-models';
 import {
   ExportConfig,
   ExportToExcel,
@@ -80,11 +80,11 @@ const options: ChartOptions<'bar'> = {
 };
 
 interface Props {
-  data?: VehicleStats;
+  data?: DriverStats;
   isLoading: boolean;
 }
 
-export const DistanceAndRevenueByVehicleChart = (props: Props) => {
+export const DistanceAndRevenueByDriverChart = (props: Props) => {
   const { isLoading, data } = props;
   const [chartData, setChartData] = useState<ChartData<'bar'> | null>(null);
   const { monthYearName } = useDateRangeContext();
@@ -93,24 +93,24 @@ export const DistanceAndRevenueByVehicleChart = (props: Props) => {
     if (!data) return;
 
     const chartData: ChartData<'bar'> = {
-      labels: data.distanceAndRevenueByVehicle.map((item) => item.vehicle),
+      labels: data.distanceAndRevenueByDriver.map((item) => item.driver),
       datasets: [
         {
           label: 'Ingresos',
-          data: data.distanceAndRevenueByVehicle.map((item) => item.amount),
+          data: data.distanceAndRevenueByDriver.map((item) => item.amount),
           borderWidth: 2,
           borderRadius: 10,
-          backgroundColor: ['rgba(40, 159, 64, 0.6)'],
-          borderColor: ['rgba(40, 159, 64, 1)'],
+          backgroundColor: ['rgba(255, 206, 86, 0.6)'],
+          borderColor: ['rgba(255, 206, 86, 1)'],
           xAxisID: 'x',
         },
         {
           label: 'Kilómetros',
-          data: data.distanceAndRevenueByVehicle.map((item) => item.distance),
+          data: data.distanceAndRevenueByDriver.map((item) => item.distance),
           borderWidth: 2,
           borderRadius: 10,
-          backgroundColor: ['rgba(83, 102, 255, 0.6)'],
-          borderColor: ['rgba(83, 102, 255, 1)'],
+          backgroundColor: ['rgba(210, 99, 132, 0.6)'],
+          borderColor: ['rgba(210, 99, 132, 1)'],
           xAxisID: 'x2',
         },
       ],
@@ -124,19 +124,21 @@ export const DistanceAndRevenueByVehicleChart = (props: Props) => {
       title={`Ingresos y Distancia Por Unidad ${monthYearName}`}
       isLoading={isLoading && !chartData}
       customHeight="150rem"
-      downloadFn={() => toExcel.exportData(data?.distanceAndRevenueByVehicle || [])}
+      downloadFn={() =>
+        toExcel.exportData(data?.distanceAndRevenueByDriver || [])
+      }
     >
       {chartData && <Bar data={chartData} options={options} />}
     </ChartCard>
   );
 };
 
-const exportConf: ExportConfig<DistanceAndRevenueByVehicle> = {
-  fileName: `Ingresos y distancia por Unidad`,
+const exportConf: ExportConfig<DistanceAndRevenueByDriver> = {
+  fileName: `Ingresos y distancia por Operador`,
   withDate: true,
-  sheetName: 'Unidades',
+  sheetName: 'Operadores',
   columns: [
-    { accessorFn: (data) => data.vehicle, header: 'Unidad' },
+    { accessorFn: (data) => data.driver, header: 'Operador' },
     { accessorFn: (data) => data.amount, header: 'Ingresos' },
     {
       accessorFn: (data) => data.distance,

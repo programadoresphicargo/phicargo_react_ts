@@ -14,12 +14,14 @@ import { useDateRangeContext } from '../../hooks/useDateRangeContext';
 const options: ChartOptions<'bar'> = {
   responsive: true,
   maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      display: false
+    }
+  },
   scales: {
     y: {
       beginAtZero: true,
-      grid: {
-        display: false,
-      },
       ticks: {
         font: {
           size: 15,
@@ -28,9 +30,6 @@ const options: ChartOptions<'bar'> = {
     },
     x: {
       position: 'bottom',
-      grid: {
-        display: false,
-      },
       ticks: {
         font: {
           size: 15,
@@ -56,8 +55,8 @@ export const DepartureStatusChart = (props: Props) => {
     const chartData: ChartData<'bar'> = {
       labels: data.departures.map((item) => item.departureStatus),
       datasets: [
-        {
-          label: 'Estatus de Salida',
+        { 
+          label: '',
           data: data.departures.map((item) => item.travels),
           borderWidth: 2,
           borderRadius: 10,
