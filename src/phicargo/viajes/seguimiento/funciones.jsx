@@ -226,10 +226,10 @@ export const useJourneyDialogs = () => {
                         const now = new Date();
 
                         if (dateStart <= now) {
-                            errores.push(`El inicio de ruta en ${viaje.name} debe ser en el futuro.`);
+                            errores.push(`El inicio de ruta en ${viaje.name} debe programarse para una fecha y hora posteriores a la actual.`);
                         }
                         if (dateArrival <= now) {
-                            errores.push(`La llegada a planta en ${viaje.name} debe ser en el futuro.`);
+                            errores.push(`La llegada a planta en ${viaje.name} debe programarse para una fecha y hora posteriores a la actual.`);
                         }
                         if (dateStart >= dateArrival) {
                             errores.push(`La llegada a planta debe ser después del inicio de ruta en ${viaje.name}.`);
