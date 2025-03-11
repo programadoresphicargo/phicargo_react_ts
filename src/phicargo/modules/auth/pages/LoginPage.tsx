@@ -1,4 +1,4 @@
-import { Button, Image } from "@heroui/react";
+import { Button, Image } from '@heroui/react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useAuthContext, useLoginMutation } from '../hooks';
 
@@ -31,14 +31,17 @@ const LoginPage = () => {
     login(data, {
       onSuccess: () => {
         navigate(redirectTo || '/');
-      }
+      },
     });
   };
 
   return (
     <>
       <Toaster position="top-center" reverseOrder={false} />
-      <div className="bg-[#17566d] flex h-screen">
+      <div
+        className="flex h-screen"
+        style={{ background: 'linear-gradient(90deg, #0b2149, #002887)' }}
+      >
         <div className="relative w-3/5 h-full hidden lg:block">
           <img
             src={tractScania}
@@ -64,7 +67,7 @@ const LoginPage = () => {
             <div className="mb-6">
               <TextInput
                 control={control}
-                className='h-9'
+                className="h-9"
                 classNames={{
                   label: 'text-xs',
                   innerWrapper: 'bg-red',
@@ -73,11 +76,11 @@ const LoginPage = () => {
                 label="Usuario"
                 placeholder="Username"
                 rules={{ required: 'El usuario es requerido' }}
-                />
+              />
             </div>
             <div className="mb-6">
               <PasswordInput
-                className='h-9'
+                className="h-9"
                 classNames={{
                   label: 'text-xs',
                 }}
@@ -90,8 +93,9 @@ const LoginPage = () => {
             </div>
             <Button
               color="primary"
-              className="w-full mb-4 bg-[#5e0e0d] h-7 font-bold uppercase text-sm transform transition-transform duration-300"
+              className="w-full mb-4 bg-[#5e0e0d] font-bold uppercase text-sm transform transition-transform duration-300"
               type="submit"
+              size="sm"
               isLoading={isPending}
             >
               Iniciar Sesión
