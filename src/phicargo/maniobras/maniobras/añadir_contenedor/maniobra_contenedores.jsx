@@ -80,6 +80,10 @@ const ManiobraContenedores = ({ id_maniobra }) => {
                 header: 'ID',
             },
             {
+                accessorKey: 'name',
+                header: 'Carta porte',
+            },
+            {
                 accessorKey: 'x_reference',
                 header: 'Contenedor',
             },
