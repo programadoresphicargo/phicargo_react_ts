@@ -196,60 +196,66 @@ export const useJourneyDialogs = () => {
 
     const comprobar_horarios = async () => {
         try {
-            const response = await odooApi.get('/tms_waybill/get_by_travel_id/' + id_viaje);
+            const res = await odooApi.get('/tms_travel/get_by_id/' + id_viaje);
+            if (res.data[0].x_status_viaje == null || res.data[0].x_status_viaje == 'disponible') {
 
-            if (Array.isArray(response.data)) {
-                const viajes = response.data;
+                const response = await odooApi.get('/tms_waybill/get_by_travel_id/' + id_viaje);
 
-                let errores = [];
+                if (Array.isArray(response.data)) {
+                    const viajes = response.data;
 
-                viajes.forEach((viaje) => {
-                    if (!viaje.date_start || !viaje.x_date_arrival_shed) {
-                        errores.push(`Carta porte ${viaje.name} tiene fechas inválidas o vacías.`);
-                        return;
+                    let errores = [];
+
+                    viajes.forEach((viaje) => {
+                        if (!viaje.date_start || !viaje.x_date_arrival_shed) {
+                            errores.push(`Carta porte ${viaje.name} tiene fechas inválidas o vacías.`);
+                            return;
+                        }
+
+                        let dateStart = new Date(viaje.date_start.replace(" ", "T"));
+                        let dateArrival = new Date(viaje.x_date_arrival_shed.replace(" ", "T"));
+
+                        if (isNaN(dateStart.getTime()) || isNaN(dateArrival.getTime())) {
+                            errores.push(`Carta porte ${viaje.name} tiene fechas con formato inválido.`);
+                            return;
+                        }
+
+                        dateStart.setHours(dateStart.getHours() - 6);
+                        dateArrival.setHours(dateArrival.getHours() - 6);
+
+                        const now = new Date();
+
+                        if (dateStart <= now) {
+                            errores.push(`El inicio de ruta en ${viaje.name} debe ser en el futuro.`);
+                        }
+                        if (dateArrival <= now) {
+                            errores.push(`La llegada a planta en ${viaje.name} debe ser en el futuro.`);
+                        }
+                        if (dateStart >= dateArrival) {
+                            errores.push(`La llegada a planta debe ser después del inicio de ruta en ${viaje.name}.`);
+                        }
+                    });
+
+                    if (errores.length > 0) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Errores en los horarios de inicio de ruta programado y/o llegada a planta programada',
+                            html: errores.join('<br>'),
+                        });
+                        return false;
                     }
 
-                    let dateStart = new Date(viaje.date_start.replace(" ", "T"));
-                    let dateArrival = new Date(viaje.x_date_arrival_shed.replace(" ", "T"));
-
-                    if (isNaN(dateStart.getTime()) || isNaN(dateArrival.getTime())) {
-                        errores.push(`Carta porte ${viaje.name} tiene fechas con formato inválido.`);
-                        return;
-                    }
-
-                    dateStart.setHours(dateStart.getHours() - 6);
-                    dateArrival.setHours(dateArrival.getHours() - 6);
-
-                    const now = new Date();
-
-                    if (dateStart <= now) {
-                        errores.push(`El inicio de ruta en ${viaje.name} debe ser en el futuro.`);
-                    }
-                    if (dateArrival <= now) {
-                        errores.push(`La llegada a planta en ${viaje.name} debe ser en el futuro.`);
-                    }
-                    if (dateStart >= dateArrival) {
-                        errores.push(`La llegada a planta debe ser después del inicio de ruta en ${viaje.name}.`);
-                    }
-                });
-
-                if (errores.length > 0) {
+                    return true;
+                } else {
                     Swal.fire({
                         icon: 'error',
-                        title: 'Errores en los horarios de inicio de ruta programado y/o llegada a planta programada',
-                        html: errores.join('<br>'),
+                        title: 'Error en la respuesta',
+                        text: 'No se encontraron viajes o la estructura de datos no es válida.',
                     });
                     return false;
                 }
-
-                return true;
             } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error en la respuesta',
-                    text: 'No se encontraron viajes o la estructura de datos no es válida.',
-                });
-                return false;
+                return true;
             }
         } catch (error) {
             console.error('Error:', error);
