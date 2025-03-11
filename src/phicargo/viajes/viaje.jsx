@@ -25,6 +25,7 @@ import Detenciones from './detenciones/detenciones';
 import FoliosCostosExtras from '../costos/folios/tabla';
 import FoliosCostosExtrasViaje from './costos_extras/tabla';
 import { TiemposViajeProvider } from './detenciones/TiemposViajeContext';
+import { fontFamily } from '@mui/system';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -90,14 +91,14 @@ const Viaje = ({ }) => {
       <Box sx={{ width: '100%' }}>
         <TabContext value={value}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-            <TabList onChange={handleChange} aria-label="lab API tabs example">
-              <Tab label="Seguimiento" value="1" />
-              <Tab label="Checklist" value="2" />
-              <Tab label="Mapa" value="3" />
-              <Tab label="Documentos" value="4" />
-              <Tab label="Cambio de equipo" value="5" />
-              <Tab label="Detenciones" value="6" />
-              <Tab label="Costos extras" value="7" />
+            <TabList onChange={handleChange}>
+              <Tab sx={{ fontFamily: 'Inter' }} label="Seguimiento" value="1" />
+              <Tab sx={{ fontFamily: 'Inter' }} label="Checklist" value="2" />
+              <Tab sx={{ fontFamily: 'Inter' }} label="Mapa" value="3" />
+              <Tab sx={{ fontFamily: 'Inter' }} label="Documentos" value="4" />
+              <Tab sx={{ fontFamily: 'Inter' }} label="Cambio de equipo" value="5" />
+              <Tab sx={{ fontFamily: 'Inter' }} label="Detenciones" value="6" />
+              <Tab sx={{ fontFamily: 'Inter' }} label="Costos extras" value="7" />
             </TabList>
           </Box>
 
@@ -127,8 +128,8 @@ const Viaje = ({ }) => {
             </CostosExtrasProvider>
           </TabPanel>
 
-        </TabContext>
-      </Box>
+        </TabContext >
+      </Box >
 
       <Dialog
         fullWidth="md"
