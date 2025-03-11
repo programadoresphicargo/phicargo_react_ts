@@ -24,7 +24,7 @@ const MenuItem = ({ icon, label, link, isExternal = false }: Props) => {
       const input = document.createElement('input');
       input.type = 'hidden';
       input.name = 'id_usuario'; // Nombre del campo que deseas enviar
-      input.value = String(session?.user.id);   // Valor de la variable
+      input.value = String(session?.user.id); // Valor de la variable
       form.appendChild(input);
 
       // Enviar el formulario
@@ -36,25 +36,23 @@ const MenuItem = ({ icon, label, link, isExternal = false }: Props) => {
     }
   };
 
-
   return (
     <div
       onClick={handleClick}
       className="
-        flex 
-        flex-col 
-        items-center 
-        justify-center 
+        flex
+        flex-col
+        items-center
+        justify-center
         w-32
         h-32
-        rounded-2xl 
-        bg-white 
-        shadow-md 
-        cursor-pointer 
-        transform 
-        transition-transform 
-        duration-200 
-        hover:scale-105
+        rounded-2xl
+        bg-white
+        shadow-md
+        cursor-pointer
+        transition-colors
+        duration-200
+        hover:bg-gray-100
       "
     >
       <div className="mb-2.5">
@@ -66,3 +64,4 @@ const MenuItem = ({ icon, label, link, isExternal = false }: Props) => {
 };
 
 export default MenuItem;
+
