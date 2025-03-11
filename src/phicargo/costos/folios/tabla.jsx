@@ -233,7 +233,12 @@ const FoliosCostosExtras = () => {
           alignItems: 'center',
         }}
       >
-        <Box sx={{ width: '200px' }}>
+        <h1
+          className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
+        >
+          Costos extras
+        </h1>
+        <Box sx={{ width: '180px' }}>
           <Button
             color="primary"
             fullWidth
@@ -246,7 +251,7 @@ const FoliosCostosExtras = () => {
           </Button>
         </Box>
 
-        <Box sx={{ width: '200px' }}>
+        <Box sx={{ width: '180px' }}>
           <Button
             color="success"
             className='text-white'
