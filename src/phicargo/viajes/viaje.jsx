@@ -33,7 +33,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const Viaje = ({ }) => {
 
-  const { comprobar_operador } = useJourneyDialogs();
+  const { comprobar_operador, comprobar_horarios } = useJourneyDialogs();
   const { id_viaje, viaje, getViaje, loading, error, setIDViaje, isLoading } = useContext(ViajeContext);
 
   const [value, setValue] = React.useState('1');
@@ -45,6 +45,11 @@ const Viaje = ({ }) => {
   const [openCorreos, setOpenCorreos] = React.useState(false);
 
   const handleClickOpenCorreos = async () => {
+    const isHorariosCorrect = await comprobar_horarios();
+    if (!isHorariosCorrect) {
+      return;
+    }
+
     const isOperadorCorrect = await comprobar_operador();
     if (isOperadorCorrect) {
       setOpenCorreos(true);
@@ -81,7 +86,7 @@ const Viaje = ({ }) => {
           </div>
         </div>
         <div className="mt-5 flex lg:ml-4 lg:mt-0">
-          <Button color='primary' onClick={handleClickOpenCorreos}>
+          <Button color='primary' onPress={handleClickOpenCorreos}>
             <i class="bi bi-envelope-at"></i>
             Correos electronicos
           </Button>
