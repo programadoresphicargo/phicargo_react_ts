@@ -86,7 +86,7 @@ const UsersManagementPage = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 195px)',
+        maxHeight: 'calc(100vh - 173px)',
       },
     },
   });

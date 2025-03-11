@@ -144,6 +144,12 @@ const ShiftsPage = () => {
         height: 'calc(100vh - 212px)',
       },
     },
+    muiTablePaperProps: {
+      elevation: 0,
+      sx: {
+        borderRadius: '0',
+      },
+    },
     defaultColumn: {
       muiTableBodyCellProps: {
         sx: {

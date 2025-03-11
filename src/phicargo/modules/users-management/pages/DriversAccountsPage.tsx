@@ -2,17 +2,16 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import { Outlet, useNavigate } from 'react-router-dom';
 
 import { Driver } from '../../availability/models/driver-model';
 import { DriverAccountForm } from '../components/DriverAccountForm';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
+import { Outlet } from 'react-router-dom';
 import { RefreshButton } from '../../core/components/ui/RefreshButton';
 import { useDriverAccountsColumns } from '../hooks/useDriverAccountsColumns';
 import { useDriverQueries } from '../../availability/hooks/useDriverQueries';
 
 const DriversAccountsPage = () => {
-  const navigate = useNavigate();
   const columns = useDriverAccountsColumns();
 
   const { driversQuery } = useDriverQueries();
@@ -44,11 +43,6 @@ const DriversAccountsPage = () => {
       showGlobalFilter: true,
       showColumnFilters: true,
     },
-    muiTableBodyRowProps: ({ row }) => ({
-      onDoubleClick: () =>
-        navigate(`/control-usuarios/detalles/${row.original.id}`),
-      sx: { cursor: 'pointer' },
-    }),
     renderTopToolbarCustomActions: () => (
       <div className="flex flex-row gap-2">
         <RefreshButton
@@ -87,7 +81,7 @@ const DriversAccountsPage = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 195px)',
+        maxHeight: 'calc(100vh - 173px)',
       },
     },
   });

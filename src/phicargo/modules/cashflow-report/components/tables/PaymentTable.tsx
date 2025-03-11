@@ -184,6 +184,12 @@ const PaymentTable = () => {
         margin: '0',
       },
     },
+    muiTablePaperProps: {
+      elevation: 0,
+      sx: {
+        borderRadius: '0',
+      },
+    },
     muiTableContainerProps: {
       sx: {
         height: 'calc(100vh - 210px)',

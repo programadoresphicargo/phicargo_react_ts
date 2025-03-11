@@ -93,6 +93,12 @@ export const useBaseTable = <T extends MRT_RowData>({
         padding: '3px 5px',
       },
     },
+    muiTablePaperProps: {
+      elevation: 0,
+      sx: {
+        borderRadius: '0',
+      },
+    },
     muiTableBodyRowProps: onDoubleClickFn
       ? ({ row }) => ({
         onDoubleClick: () => onDoubleClickFn(row.original.id),

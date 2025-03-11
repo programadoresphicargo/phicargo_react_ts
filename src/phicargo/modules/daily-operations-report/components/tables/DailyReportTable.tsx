@@ -163,6 +163,12 @@ const DailyReportTable = () => {
         fontSize: '14px',
       },
     },
+    muiTablePaperProps: {
+      elevation: 0,
+      sx: {
+        borderRadius: '0',
+      },
+    },
     muiTableContainerProps: {
       sx: {
         height: 'calc(100vh - 200px)',

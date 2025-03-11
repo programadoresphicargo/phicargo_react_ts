@@ -72,6 +72,12 @@ const ServiceRequestsPage = () => {
         height: 'calc(100vh - 168px)',
       },
     },
+    muiTablePaperProps: {
+      elevation: 0,
+      sx: {
+        borderRadius: '0',
+      },
+    },
     defaultColumn: {
       muiTableBodyCellProps: {
         sx: {
