@@ -208,7 +208,7 @@ export const useJourneyDialogs = () => {
 
                     viajes.forEach((viaje) => {
                         if (!viaje.date_start || !viaje.x_date_arrival_shed) {
-                            errores.push(`Carta porte ${viaje.name} tiene fechas inválidas o vacías.`);
+                            errores.push(`Faltan datos en la carta porte ${viaje.name}: las fechas son inválidas o están vacías. Completa la información.`);
                             return;
                         }
 
