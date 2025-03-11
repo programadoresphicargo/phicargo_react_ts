@@ -1,8 +1,10 @@
 
 export interface AvailableSummary {
   available: number;
-  noDriver: number;
-  maintenance: number;
+  noDriverRoad: number;
+  noDriverLocal: number;
+  maintenanceRoad: number;
+  maintenanceLocal: number;
 }
 
 export interface DistanceAndRevenueByVehicle {

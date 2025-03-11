@@ -11,8 +11,10 @@ import type {
 
 const availableSummary = (data: AvailableSummaryApi): AvailableSummary => ({
   available: data.available,
-  noDriver: data.no_driver,
-  maintenance: data.maintenance,
+  noDriverRoad: data.no_driver_road,
+  noDriverLocal: data.no_driver_local,
+  maintenanceRoad: data.maintenance_road,
+  maintenanceLocal: data.maintenance_local,
 });
 
 const distanceAndRevenueByVehicle = (
