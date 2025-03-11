@@ -51,7 +51,7 @@ const EstadiasForm = () => {
                 ) : (
                     <Grid container spacing={2} className="mb-5">
                         <Grid item xs={12}>
-                            <Button onPress={() => navigate(-1)} color="primary">Regresar</Button>
+                            <Button onPress={() => navigate(-1)} color="primary" color="success" className="text-white">Regresar</Button>
 
                             <Chip color="primary" size="lg">{data[0]?.travel_name}</Chip>
                             <div className="mt-3">
