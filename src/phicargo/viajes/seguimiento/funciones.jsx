@@ -239,7 +239,7 @@ export const useJourneyDialogs = () => {
                     if (errores.length > 0) {
                         Swal.fire({
                             icon: 'error',
-                            title: 'Errores en los horarios de inicio de ruta programado y/o llegada a planta programada',
+                            title: 'Hay errores en los horarios de inicio de ruta y/o llegada a planta. Corrige los errores para continuar.',
                             html: errores.join('<br>'),
                         });
                         return false;
