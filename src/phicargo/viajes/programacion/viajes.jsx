@@ -17,7 +17,7 @@ import {
 import { ViajeContext } from '../context/viajeContext';
 import NavbarViajes from '../navbar';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
-import { exportToCSV } from '../utils/export';
+import { exportToCSV } from '../../utils/export';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;

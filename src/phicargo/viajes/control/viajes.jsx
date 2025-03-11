@@ -26,7 +26,7 @@ import DetencionesViajesActivos from '../detenciones/detenciones_modal';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import Travel from './viaje';
 import EstatusDropdown from '../estatus/resumen_estatus';
-import { exportToCSV } from '../utils/export';
+import { exportToCSV } from '../../utils/export';
 
 const { VITE_PHIDES_API_URL } = import.meta.env;
 

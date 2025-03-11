@@ -14,6 +14,7 @@ import { CostosExtrasContext } from '../context/context';
 import { Select, SelectItem } from "@heroui/react";
 import { DateRangePicker } from 'rsuite';
 import { getEstadoChip } from '../utils';
+import { exportToCSV } from '../../utils/export';
 
 const FoliosCostosExtras = () => {
 
@@ -240,6 +241,7 @@ const FoliosCostosExtras = () => {
         </h1>
         <Box sx={{ width: '180px' }}>
           <Button
+            startContent={<i class="bi bi-plus-lg"></i>}
             color="primary"
             fullWidth
             onPress={() => {
@@ -253,6 +255,7 @@ const FoliosCostosExtras = () => {
 
         <Box sx={{ width: '180px' }}>
           <Button
+            startContent={<i class="bi bi-arrow-clockwise"></i>}
             color="success"
             className='text-white'
             fullWidth
@@ -278,6 +281,9 @@ const FoliosCostosExtras = () => {
             <SelectItem key={'9'}>Manzanillo</SelectItem>
           </Select>
         </Box>
+
+        <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "costos_extras.csv")}>Exportar</Button>
+
       </Box>
 
     ),
