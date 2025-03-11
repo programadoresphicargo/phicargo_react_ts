@@ -174,11 +174,28 @@ const ServiciosAplicadosCE = ({ onClose }) => {
                     align: 'right',
                 },
                 Cell: ({ row }) => {
-                    const ajusteCobro = row.getValue("ajuste_cobro") ?? row.original.subtotal ?? 0;
-                    return ajusteCobro;
+                    // Si ajuste_cobro es null o undefined, tomar el valor de subtotal
+                    const subtotal = (() => {
+                        const costo = row.original.costo || 0;
+                        const cantidad = row.original.cantidad || 1;
+                        const iva = row.original.iva ?? 0.16;
+                        const retencion = row.original.id_tipo_costo === 1 ? (costo * cantidad) * 0.04 : 0;
+                        return (costo * cantidad) * (1 + iva) - retencion;
+                    })();
+
+                    row.original.ajuste_cobro = row.original.ajuste_cobro ?? subtotal;
+
+                    return row.original.ajuste_cobro.toLocaleString("es-MX", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                    });
                 },
                 muiTableBodyCellEditTextFieldProps: {
                     type: "number",
+                    onChange: (event) => {
+                        const value = parseFloat(event.target.value) || 0;
+                        row.original.ajuste_cobro = value; // Permitir edición manual
+                    },
                 },
             },
             {

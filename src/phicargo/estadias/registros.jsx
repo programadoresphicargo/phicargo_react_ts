@@ -152,6 +152,11 @@ const RegistrosEstadias = () => {
           flexWrap: 'wrap',
         }}
       >
+        <h1
+          className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
+        >
+          Control de estadías
+        </h1>
         <RangePicker onChange={handleDateChange} />
         <Button color="success" onPress={exportToCSV} startContent={<i class="bi bi-file-earmark-excel"></i>} className='text-white'>
           Exportar

@@ -3,7 +3,6 @@ import { Grid, Stack, Box } from "@mui/material";
 import { toast } from "react-toastify";
 import odooApi from "../modules/core/api/odoo-api";
 import { Button, Chip, Divider, Progress, Card, CardBody, CardHeader, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Modal, useDisclosure } from "@heroui/react";
-import ResponsiveAppBar from "./Navbar";
 import FormularioCostoExtra from "../costos/maniobras/form_costos_extras";
 import { CostosExtrasContext, CostosExtrasProvider } from "../costos/context/context";
 import { ViajeContext } from "../viajes/context/viajeContext";
