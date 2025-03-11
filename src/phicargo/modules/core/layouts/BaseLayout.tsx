@@ -20,7 +20,7 @@ const BaseLayout = ({ children, pages }: Props) => {
     <>
       <Toaster position="top-center" reverseOrder={false} />
       <Navbar pages={pages} />
-      <main className="flex-grow w-full">
+      <main className="flex-grow w-full bg-slate-50">
         <ErrorBoundary>
           {children}
           <Outlet />

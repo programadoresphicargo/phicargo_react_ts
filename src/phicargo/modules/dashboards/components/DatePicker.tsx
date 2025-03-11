@@ -24,8 +24,7 @@ export const DatePicker = () => {
   return (
     <div className="flex flex-row gap-4 items-center">
       <Switch
-
-        isSelected={calendarMode} 
+        isSelected={calendarMode}
         onValueChange={setCalendarMode}
         thumbIcon={({ isSelected }) =>
           isSelected ? (
@@ -34,8 +33,8 @@ export const DatePicker = () => {
             <FaCalendar className="text-blue-500" />
           )
         }
-      ></Switch>
-      <div className="flex flex-row gap-2 border-2 items-center border-slate-300 rounded-xl p-1 shadow-md">
+      />
+      <div className="flex flex-row gap-2 border-2 items-center border-slate-300 bg-white rounded-xl p-1 shadow-md">
         <div className="flex flex-row items-center rounded-xl">
           <Tooltip arrow title="Refrescar">
             <IconButton size="small" onClick={() => refetchFn()}>
@@ -44,7 +43,7 @@ export const DatePicker = () => {
           </Tooltip>
         </div>
         <DateRangePicker
-          hoverRange={calendarMode ? "week" : "month"}
+          hoverRange={calendarMode ? 'week' : 'month'}
           oneTap
           showOneCalendar
           placeholder={`Selecciona ${calendarMode ? 'semana' : 'mes'}`}

@@ -37,7 +37,7 @@ export const Header = () => {
   };
 
   return (
-    <div className="flex justify-between items-center px-4 mt-2">
+    <div className="flex justify-between items-center px-4 py-2">
       <div className="flex flex-row gap-6 items-center">
         <Select
           aria-label="company"
