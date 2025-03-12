@@ -70,7 +70,7 @@ export default function BonosModal({ isOpen, onClose }) {
                 </ModalBody>
 
                 <ModalFooter>
-                    <Button color="danger" variant="light" onClick={onClose}>
+                    <Button color="danger" variant="light" onPress={onClose}>
                         Cancelar
                     </Button>
                     <Button color="primary" onPress={handleSubmit} isLoading={loading}>
