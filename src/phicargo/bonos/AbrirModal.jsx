@@ -1,7 +1,6 @@
 
 import { useState } from "react";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Select, SelectItem } from "@heroui/react";
-import axios from "axios";
 import { toast } from 'react-toastify';
 import odooApi from "../modules/core/api/odoo-api";
 
@@ -54,7 +53,7 @@ export default function BonosModal({ isOpen, onClose }) {
             <ModalContent>
                 <ModalHeader>Seleccionar Mes y Año</ModalHeader>
                 <ModalBody>
-                    <Select label="Mes" placeholder="Selecciona un mes" onChange={(e) => setMonth(e.target.value)}>
+                    <Select label="Mes" placeholder="Selecciona un mes" onChange={(e) => setMonth(e.target.value)} variant="bordered">
                         {meses.map((mes) => (
                             <SelectItem key={mes.id} value={mes.id}>
                                 {mes.nombre}
@@ -62,7 +61,7 @@ export default function BonosModal({ isOpen, onClose }) {
                         ))}
                     </Select>
 
-                    <Select label="Año" placeholder="Selecciona un año" onChange={(e) => setYear(Number(e.target.value))}>
+                    <Select label="Año" placeholder="Selecciona un año" onChange={(e) => setYear(Number(e.target.value))} variant="bordered">
                         <SelectItem key={2026} value={2026} textValue="2026">2026</SelectItem>
                         <SelectItem key={2025} value={2025} textValue="2025">2025</SelectItem>
                         <SelectItem key={2024} value={2024} textValue="2024">2024</SelectItem>
@@ -74,7 +73,7 @@ export default function BonosModal({ isOpen, onClose }) {
                     <Button color="danger" variant="light" onClick={onClose}>
                         Cancelar
                     </Button>
-                    <Button color="primary" onClick={handleSubmit} isLoading={loading}>
+                    <Button color="primary" onPress={handleSubmit} isLoading={loading}>
                         Crear Bonos
                     </Button>
                 </ModalFooter>
