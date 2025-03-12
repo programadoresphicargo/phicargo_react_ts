@@ -220,11 +220,14 @@ export const useJourneyDialogs = () => {
                             return;
                         }
 
-                        dateStart.setHours(dateStart.getHours() - 6);
-                        dateArrival.setHours(dateArrival.getHours() - 6);
+                        // Ajusta las horas de inicio y llegada restando 6 horas
+                        // dateStart.setHours(dateStart.getHours() - 6);
+                        // dateArrival.setHours(dateArrival.getHours() - 6);
 
                         const now = new Date();
 
+                        // Validaciones de fechas
+                        /*
                         if (dateStart <= now) {
                             errores.push(`El inicio de ruta en ${viaje.name} debe programarse para una fecha y hora posteriores a la actual.`);
                         }
@@ -234,6 +237,8 @@ export const useJourneyDialogs = () => {
                         if (dateStart >= dateArrival) {
                             errores.push(`La llegada a planta debe ser después del inicio de ruta en ${viaje.name}.`);
                         }
+                        */
+
                     });
 
                     if (errores.length > 0) {
