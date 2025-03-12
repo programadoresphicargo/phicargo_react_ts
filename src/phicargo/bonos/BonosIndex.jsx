@@ -127,6 +127,12 @@ const BonosOperadores = () => {
         maxHeight: 'calc(100vh - 190px)',
       },
     },
+    muiTablePaperProps: {
+      elevation: 0,
+      sx: {
+        borderRadius: '0',
+      },
+    },
     renderTopToolbarCustomActions: ({ table }) => (
       <Box
         sx={{
@@ -153,7 +159,13 @@ const BonosOperadores = () => {
         onClose={handleClose}
         TransitionComponent={Transition}
       >
-        <AppBar sx={{ position: 'relative' }} elevation={0}>
+        <AppBar
+          elevation={0}
+          sx={{
+            position: 'relative',
+            background: 'linear-gradient(90deg, #0b2149, #002887)',
+            padding: '0 16px'
+          }}>
           <Toolbar>
             <IconButton
               edge="start"
@@ -166,7 +178,7 @@ const BonosOperadores = () => {
             <Typography sx={{ ml: 2, flex: 1 }} component="div">
               Registro de bonos {obtenerNombreMes(month)} {year}
             </Typography>
-            <Button autoFocus color="inherit" onClick={handleClose}>
+            <Button autoFocus color="inherit" onPress={handleClose}>
               Cerrar
             </Button>
           </Toolbar>
