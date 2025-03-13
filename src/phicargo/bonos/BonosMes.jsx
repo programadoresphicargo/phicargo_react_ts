@@ -19,6 +19,7 @@ import {
   useMaterialReactTable,
 } from 'material-react-table';
 import { useAuthContext } from '../modules/auth/hooks';
+import { exportToCSV } from '../utils/export';
 
 const BonosMes = ({ month, year }) => {
 
@@ -283,6 +284,12 @@ const BonosMes = ({ month, year }) => {
         )}
         <Button color="success" onPress={fetchData} sx={{ m: 1 }} className='text-white' isLoading={isLoading}>
           Refrescar
+        </Button>
+        <Button color='success'
+          className='text-white'
+          startContent={<i class="bi bi-file-earmark-excel"></i>}
+          onPress={() => exportToCSV(editedData, columns, "bonos.csv")}
+        >Exportar
         </Button>
       </Box>
     ),
