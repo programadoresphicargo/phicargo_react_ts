@@ -1,24 +1,25 @@
-import React, { useState, useEffect, useMemo, useContext } from 'react';
+import { Button, Chip } from "@heroui/react"
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import Box from '@mui/material/Box';
-import { Button, Chip } from "@heroui/react"
-import { DatePicker } from 'antd';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import {
   Modal,
-  ModalContent,
-  ModalHeader,
   ModalBody,
+  ModalContent,
   ModalFooter,
+  ModalHeader,
   useDisclosure,
 } from "@heroui/modal";
+import React, { useContext, useEffect, useMemo, useState } from 'react';
+
+import Box from '@mui/material/Box';
+import { DatePicker } from 'antd';
 import EstadiasForm from './estadia_form';
-import { useNavigate } from "react-router-dom";
-import dayjs from 'dayjs';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
+import dayjs from 'dayjs';
+import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import { useNavigate } from "react-router-dom";
 
 const { RangePicker } = DatePicker;
 
@@ -108,14 +109,13 @@ const RegistrosEstadias = () => {
     enableFilters: true,
     enableFacetedValues: true,
     onColumnFiltersChange: setFilters,
-    state: { showProgressBars: isLoading },
+    state: { showProgressBars: isLoading, columnFilters: filters },
     localization: MRT_Localization_ES,
     initialState: {
       showColumnFilters: true,
       density: 'compact',
       pagination: { pageSize: 80 },
     },
-    state: { columnFilters: filters },
     muiTableBodyRowProps: ({ row }) => ({
       onClick: ({ event }) => {
         handleClick(row.original.travel_id);
