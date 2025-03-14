@@ -1,13 +1,14 @@
-import React, { useState, useEffect, useMemo, useContext } from 'react';
-import { Box } from '@mui/material';
-import { ViajeContext } from '../../../viajes/context/viajeContext';
-import { Button } from "@heroui/button";
 import {
     MaterialReactTable,
     useMaterialReactTable,
 } from 'material-react-table';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
+
+import { Box } from '@mui/material';
+import { Button } from "@heroui/react";
 import { CostosExtrasContext } from '../../context/context';
+import { ViajeContext } from '../../../viajes/context/viajeContext';
+import odooApi from '@/phicargo/modules/core/api/odoo-api';
 
 const ServiciosExtras = ({ onClose }) => {
 

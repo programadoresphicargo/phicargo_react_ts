@@ -1,18 +1,19 @@
-import React, { useState, useEffect, useMemo, useContext } from 'react';
+import {
+  MaterialReactTable,
+  useMaterialReactTable,
+} from 'material-react-table';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
+
 import { Box } from '@mui/material';
-import { ViajeContext } from '../context/viajeContext';
-import { Button } from "@heroui/button";
+import { Button } from "@heroui/react";
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import Slide from '@mui/material/Slide';
-import {
-  MaterialReactTable,
-  useMaterialReactTable,
-} from 'material-react-table';
 import FormularioDocumentacion from './formulario';
+import Slide from '@mui/material/Slide';
+import { ViajeContext } from '../context/viajeContext';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { toast } from 'react-toastify';
 

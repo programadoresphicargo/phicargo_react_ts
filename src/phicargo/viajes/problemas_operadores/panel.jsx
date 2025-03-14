@@ -1,15 +1,16 @@
-import React, { useState, useEffect, } from 'react';
-import Drawer from '@mui/material/Drawer';
-import { Card, CardHeader, CardBody, CardFooter, Avatar, AvatarGroup, AvatarIcon, Button } from "@heroui/react"
-import { CircularProgress } from "@heroui/progress";
+import { Avatar, AvatarGroup, AvatarIcon, Button, Card, CardBody, CardFooter, CardHeader } from "@heroui/react"
+import React, { useEffect, useState, } from 'react';
+
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
+import { CircularProgress } from "@heroui/react";
 import { Container } from '@mui/material';
+import Drawer from '@mui/material/Drawer';
+import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import ReporteOperador from './reporte';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 export default function ProblemasOperadores({ open, toggleDrawer }) {

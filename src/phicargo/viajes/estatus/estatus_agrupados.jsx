@@ -1,22 +1,23 @@
-import React, { useState, useEffect, useMemo, useContext } from 'react';
-import { ViajeContext } from '../context/viajeContext';
+import { Accordion, AccordionItem, Avatar } from "@heroui/react";
+import { Card, CardBody, CardFooter, CardHeader, Chip } from "@heroui/react";
+import React, { useContext, useEffect, useMemo, useState } from 'react';
+
+import ArchivosAdjuntos from './archivos_adjuntos';
+import BotonDistanciaMapa from './enlaceDistancia';
+import BotonMapa from './botonMapa';
+import { Button } from "@heroui/react";
+import { CircularProgress } from "@heroui/react";
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import Slide from '@mui/material/Slide';
-import { Button } from "@heroui/button";
-import { Accordion, AccordionItem, Avatar } from "@heroui/react";
-import BotonMapa from './botonMapa';
-import BotonDistanciaMapa from './enlaceDistancia';
 import PanelEnvio from '../panel_envio_estatus/panel_envio';
-import { CircularProgress } from "@heroui/react";
-import ArchivosAdjuntos from './archivos_adjuntos';
+import Slide from '@mui/material/Slide';
+import { ViajeContext } from '../context/viajeContext';
 import axios from 'axios';
-import { tiempoTranscurrido } from '../../funciones/tiempo';
-import { Card, CardHeader, CardBody, CardFooter, Chip } from "@heroui/react";
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import { tiempoTranscurrido } from '../../funciones/tiempo';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 function EstatusHistorialAgrupado({ registros_agrupados }) {

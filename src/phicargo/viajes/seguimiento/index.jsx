@@ -1,25 +1,26 @@
-import React, { useState, useEffect, useContext } from "react";
-import Stack from '@mui/material/Stack';
+import { Button, ButtonGroup } from "@heroui/react";
+import { Card, Chip, Divider } from "@heroui/react";
+import { CardBody, CardHeader, Snippet } from "@heroui/react";
+import React, { useContext, useEffect, useState } from "react";
+
+import Contenedores from "../contenedores/contenedores";
+import CumplimientoOperador from "../cumplimiento_operador/cumplimiento";
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import PanelEnvio from '../panel_envio_estatus/panel_envio';
-import axios from "axios";
-import { Button, ButtonGroup } from "@heroui/button";
-import { Steps } from 'antd';
-import { Spacer } from "@heroui/spacer";
 import EstatusHistorial from "../estatus/estatus";
-import { useJourneyDialogs } from "./funciones";
-import Slide from '@mui/material/Slide';
 import EstatusViaje from "./estado_viaje";
-import { ViajeContext } from "../context/viajeContext";
-import CumplimientoOperador from "../cumplimiento_operador/cumplimiento";
-import { CardBody, CardHeader, Snippet } from "@heroui/react";
-import { fontFamily } from "@mui/system";
 import Grid from '@mui/material/Grid2';
-import { Card, Chip, Divider } from "@heroui/react";
-import Contenedores from "../contenedores/contenedores";
+import PanelEnvio from '../panel_envio_estatus/panel_envio';
+import Slide from '@mui/material/Slide';
+import { Spacer } from "@heroui/react";
+import Stack from '@mui/material/Stack';
+import { Steps } from 'antd';
+import { ViajeContext } from "../context/viajeContext";
+import axios from "axios";
+import { fontFamily } from "@mui/system";
+import { useJourneyDialogs } from "./funciones";
 
 export default function BasicButtons2() {
 

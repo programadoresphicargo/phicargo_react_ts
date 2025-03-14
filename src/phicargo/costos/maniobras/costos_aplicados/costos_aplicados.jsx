@@ -1,31 +1,32 @@
-import React, { useState, useEffect, useMemo, useContext } from 'react';
+import { Card, CardBody } from "@heroui/react";
+import {
+    MaterialReactTable,
+    useMaterialReactTable,
+} from 'material-react-table';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
+
+import AppBar from '@mui/material/AppBar';
 import { Box } from '@mui/material';
-import { Button } from "@heroui/button";
+import { Button } from "@heroui/react";
+import CloseIcon from '@mui/icons-material/Close';
+import { CostosExtrasContext } from '../../context/context';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import ServiciosExtras from './tipos_costos_extras';
 import Slide from '@mui/material/Slide';
-import {
-    MaterialReactTable,
-    useMaterialReactTable,
-} from 'material-react-table';
+import Swal from 'sweetalert2';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { toast } from 'react-toastify';
-import { Card, CardBody } from "@heroui/react";
-import ListItemText from '@mui/material/ListItemText';
-import ListItemButton from '@mui/material/ListItemButton';
-import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import CloseIcon from '@mui/icons-material/Close';
-import { CostosExtrasContext } from '../../context/context';
-import ServiciosExtras from './tipos_costos_extras';
-import Swal from 'sweetalert2';
 
 const ServiciosAplicadosCE = ({ onClose }) => {
     const { id_folio, CostosExtras, setCostosExtras, setCostosExtrasEliminados, DisabledForm, setDisabledForm, agregarConcepto, setAC, horasEstadias, setHE } = useContext(CostosExtrasContext);

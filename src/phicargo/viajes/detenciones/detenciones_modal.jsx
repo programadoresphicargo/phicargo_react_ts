@@ -6,7 +6,7 @@ import {
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 
 import Box from '@mui/material/Box';
-import { Button } from "@heroui/button";
+import { Button } from "@heroui/react";
 import { Chip } from "@heroui/react";
 import { Link } from "@heroui/react";
 import Slide from '@mui/material/Slide';

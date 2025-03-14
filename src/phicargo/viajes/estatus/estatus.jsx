@@ -1,17 +1,19 @@
-import React, { useState, useEffect, useMemo, useContext } from 'react';
-import { ViajeContext } from '../context/viajeContext';
+import { Card, CardHeader } from "@heroui/react";
+import React, { useContext, useEffect, useMemo, useState } from 'react';
+
+import { Avatar } from "@heroui/react";
+import { Badge } from "@heroui/react";
+import { Button } from "@heroui/react";
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import Slide from '@mui/material/Slide';
-import { Button } from "@heroui/button";
 import EstatusHistorialAgrupado from './estatus_agrupados';
-import { tiempoTranscurrido } from '../../funciones/tiempo';
-import { Card, CardHeader } from "@heroui/react";
-import { Avatar } from "@heroui/react";
-import { Badge } from "@heroui/react";
+import { Progress } from "@heroui/react";
+import Slide from '@mui/material/Slide';
+import { ViajeContext } from '../context/viajeContext';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
-import { Progress } from "@heroui/progress";
+import { tiempoTranscurrido } from '../../funciones/tiempo';
+
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const Transition = React.forwardRef(function Transition(props, ref) {

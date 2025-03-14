@@ -9,7 +9,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { getLocalTimeZone, now } from "@internationalized/date";
 
 import { Box } from '@mui/material';
-import { DatePicker } from "@heroui/date-picker";
+import { DatePicker } from "@heroui/react";
 import EstatusDropdown from '../estatus/resumen_estatus';
 import NavbarViajes from '../navbar';
 import Swal from 'sweetalert2';

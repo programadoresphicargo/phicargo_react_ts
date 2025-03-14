@@ -1,20 +1,21 @@
+import { Box, Grid, Typography } from '@mui/material';
+import { Button, Textarea } from '@heroui/react';
+import { Card, CardBody, CardFooter } from "@heroui/react";
+import React, { useCallback, useEffect, useState } from 'react';
+
+import CardMedia from '@mui/material/CardMedia';
+import { CircularProgress } from "@heroui/react";
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import axios from 'axios';
-import { Card, CardFooter, CardBody } from "@heroui/react";
-import { Grid, Typography, Box } from '@mui/material';
+import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { styled } from '@mui/system';
-import CardMedia from '@mui/material/CardMedia';
-import React, { useState, useCallback, useEffect } from 'react';
-import { useDropzone } from 'react-dropzone';
 import { toast } from 'react-toastify';
 import { useAuthContext } from '@/phicargo/modules/auth/hooks';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
-import { Button, Textarea } from '@heroui/react';
-import { CircularProgress } from "@heroui/progress";
+import { useDropzone } from 'react-dropzone';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 export default function PanelEstatus({ id_maniobra, open, handleClose }) {

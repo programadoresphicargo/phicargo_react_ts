@@ -1,17 +1,18 @@
-import React, { useState, useEffect, useMemo, useContext } from 'react';
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue } from "@heroui/react";
+import { Autocomplete, AutocompleteItem, Avatar } from "@heroui/react";
+import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, getKeyValue } from "@heroui/react";
+
 import { Button } from "@heroui/react";
-import { User } from "@heroui/user";
 import { Chip } from "@heroui/react";
-import { Input } from "@heroui/react";
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import FormularioCorreoGeneral from '@/phicargo/correos_electronicos/correoForm';
+import { Input } from "@heroui/react";
+import { User } from "@heroui/react";
 import { ViajeContext } from '../context/viajeContext';
-import { Autocomplete, AutocompleteItem, Avatar } from "@heroui/react";
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { toast } from 'react-toastify';
-import FormularioCorreoGeneral from '@/phicargo/correos_electronicos/correoForm';
 
 const CorreosElectronicosViaje = ({ openCorreos }) => {
 

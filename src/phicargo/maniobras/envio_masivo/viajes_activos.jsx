@@ -1,20 +1,19 @@
+import { Autocomplete, AutocompleteItem, Textarea } from "@heroui/react";
+import { Button, Chip } from "@heroui/react";
+import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import toast from 'react-hot-toast';
 import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box } from '@mui/material';
-import { Button, Chip } from "@heroui/react";
-import { Autocomplete, AutocompleteItem, Textarea } from "@heroui/react";
-import Swal from 'sweetalert2';
-
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
-import { useAuthContext } from '@/phicargo/modules/auth/hooks';
-import { Dropdown, DropdownMenu, DropdownTrigger, DropdownItem } from "@heroui/react";
-import { Spinner } from "@heroui/spinner";
 import EstatusDropdownManiobra from '../reportes_estatus/resumen_estatus';
+import { Spinner } from "@heroui/react";
+import Swal from 'sweetalert2';
+import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import toast from 'react-hot-toast';
+import { useAuthContext } from '@/phicargo/modules/auth/hooks';
 
 const ManiobrasActivasMasivos = ({ }) => {
   const [allData, setAllData] = useState([]);

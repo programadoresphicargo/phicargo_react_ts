@@ -1,27 +1,26 @@
-import React, { useState, useEffect, useMemo, useContext } from 'react';
-import { CircularProgress } from "@heroui/progress";
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import { Container } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import { tiempoTranscurrido } from '../../funciones/tiempo';
-import { Card, CardBody, CardHeader, CardFooter } from "@heroui/react";
-import { Avatar } from "@heroui/react";
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
-import Travel from '../control/viaje';
-import { ViajeContext } from '../context/viajeContext';
+import { Avatar, Card, CardBody, CardFooter, CardHeader, CircularProgress } from "@heroui/react";
 import {
-    Drawer,
-    DrawerContent,
-    DrawerHeader,
-    DrawerBody,
-    DrawerFooter,
     Button,
+    Drawer,
+    DrawerBody,
+    DrawerContent,
+    DrawerFooter,
+    DrawerHeader,
     useDisclosure,
 } from "@heroui/react";
+import React, { useContext, useEffect, useMemo, useState } from 'react';
+
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import { Container } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import Toolbar from '@mui/material/Toolbar';
+import Travel from '../control/viaje';
+import Typography from '@mui/material/Typography';
+import { ViajeContext } from '../context/viajeContext';
+import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import { tiempoTranscurrido } from '../../funciones/tiempo';
 
 export default function Notificaciones({ isOpen, onOpen, onOpenChange }) {
 

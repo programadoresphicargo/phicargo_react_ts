@@ -7,7 +7,7 @@ import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { TiemposViajeProvider, useTiemposViaje } from './TiemposViajeContext';
 
 import Box from '@mui/material/Box';
-import { Button } from "@heroui/button";
+import { Button } from "@heroui/react";
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';

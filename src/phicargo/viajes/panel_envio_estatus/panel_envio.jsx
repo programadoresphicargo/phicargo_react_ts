@@ -1,31 +1,33 @@
+import 'react-quill/dist/quill.snow.css';
+
 import {
-  Stepper,
+  Box,
+  Dialog,
+  DialogContent,
   Step,
   StepLabel,
-  Box,
-  DialogContent,
-  Dialog,
+  Stepper,
 } from '@mui/material';
-import Swal from 'sweetalert2';
-import React, { useState, useEffect, useMemo, useContext } from 'react';
-import { Card, CardBody, CardFooter, Image, Button, CardHeader, Switch } from "@heroui/react";
-import { InboxOutlined } from '@ant-design/icons';
-import { message, Upload } from 'antd';
-import { ViajeContext } from '../context/viajeContext';
-import { useJourneyDialogs } from '../seguimiento/funciones';
-import ReactQuill from 'react-quill';
-import { DialogTitle } from '@mui/material';
-import { DialogActions } from '@mui/material';
-import Slide from '@mui/material/Slide';
-import 'react-quill/dist/quill.snow.css';
-import { Progress } from "@heroui/react";
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import { Button, Card, CardBody, CardFooter, CardHeader, Image, Switch } from "@heroui/react";
+import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { Upload, message } from 'antd';
+import { getLocalTimeZone, now, today } from "@internationalized/date";
+import { parseAbsoluteToLocal, parseZonedDateTime } from "@internationalized/date";
+
 import { DatePicker } from "@heroui/react";
-import { now, getLocalTimeZone, today } from "@internationalized/date";
-import { parseDate } from "@internationalized/date";
-import { parseZonedDateTime, parseAbsoluteToLocal } from "@internationalized/date";
+import { DialogActions } from '@mui/material';
+import { DialogTitle } from '@mui/material';
 import { FormattedDate } from 'rsuite/esm/CustomProvider';
+import { InboxOutlined } from '@ant-design/icons';
+import { Progress } from "@heroui/react";
+import ReactQuill from 'react-quill';
+import Slide from '@mui/material/Slide';
+import Swal from 'sweetalert2';
+import { ViajeContext } from '../context/viajeContext';
+import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import { parseDate } from "@internationalized/date";
 import { toast } from 'react-toastify';
+import { useJourneyDialogs } from '../seguimiento/funciones';
 
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
@@ -245,7 +247,7 @@ function PanelEnvio({ open, cerrar, id_reporte, estatusSeleccionado, comentarios
                     <div className="flex gap-3">
                       <div className="flex flex-col gap-1 items-start justify-center">
                         <p className="text-md font-bold">Cambiar horario</p>
-                        <p className="text-small text-default-500 text-white">Seleccione una hora diferente en caso de que desee reportar un estatus de atención distinto al que se genera automáticamente por el sistema GPS.</p>
+                        <p className="text-small text-white">Seleccione una hora diferente en caso de que desee reportar un estatus de atención distinto al que se genera automáticamente por el sistema GPS.</p>
                       </div>
                     </div>
                   </CardHeader>

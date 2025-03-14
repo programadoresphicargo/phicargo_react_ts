@@ -1,5 +1,5 @@
+import { Button } from "@heroui/react";
 import React from 'react';
-import { Button } from "@heroui/button";
 
 function crearEnlaceDistancia(latitud, longitud, tipo, codigoPostal, sucursal) {
     let codigoPostalOrigen = codigoPostal;
