@@ -16,11 +16,13 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install dependencies
-        run: npm install
+      - name: Set up Yarn
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: install
 
       - name: Build project
-        run: npm run build
+        run: yarn build
         env:
           VITE_ENVIRONMENT: 'production'
           VITE_ODOO_API_URL: 'https://phides-api.phicargo-sistemas.online'
