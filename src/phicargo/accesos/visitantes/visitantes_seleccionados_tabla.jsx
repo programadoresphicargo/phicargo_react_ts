@@ -1,13 +1,14 @@
-import React, { useState, useEffect, useMemo, useContext } from 'react';
-import { Button } from "@heroui/button";
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { Table, TableRow } from "@heroui/react";
+
+import { AccesoContext } from '../context';
+import { Button } from '@heroui/react';
 import { Grid } from '@mui/material';
-import { TableHeader } from "@heroui/react";
+import ListadoVisitantes from './tabla';
+import { TableBody } from "@heroui/react";
 import { TableCell } from "@heroui/react";
 import { TableColumn } from "@heroui/react";
-import { TableBody } from "@heroui/react";
-import { AccesoContext } from '../context';
-import ListadoVisitantes from './tabla';
+import { TableHeader } from "@heroui/react";
 import axios from 'axios';
 
 const SelectedVisitantesTable = ({ }) => {
