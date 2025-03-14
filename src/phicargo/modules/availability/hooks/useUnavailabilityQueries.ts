@@ -29,10 +29,26 @@ export const useUnavailabilityQueries = (options: Options) => {
   const driverUnavailabilityMutation = useMutation({
     mutationFn: DriverUnavailabilityServiceApi.createDriverUnavailability,
     onSuccess: (newItem) => {
-      queryClient.setQueryData([mainKey, driverId], (prev?: DriverUnavailable[]) =>
-        prev ? [newItem, ...prev] : [newItem],
+      queryClient.setQueryData(
+        [mainKey, driverId],
+        (prev?: DriverUnavailable[]) => (prev ? [newItem, ...prev] : [newItem]),
       );
       toast.success('Creado con éxito');
+    },
+    onError: (error: Error) => {
+      toast.error(error.message);
+    },
+  });
+
+  const releaseDriverUnavailabilityMutation = useMutation({
+    mutationFn: DriverUnavailabilityServiceApi.releaseDriverUnavailability,
+    onSuccess: (newItem) => {
+      queryClient.setQueryData(
+        [mainKey, driverId],
+        (prev?: DriverUnavailable[]) =>
+          prev?.map((item) => (item.id === newItem.id ? newItem : item)),
+      );
+      toast.success('Liberado con éxito');
     },
     onError: (error: Error) => {
       toast.error(error.message);
@@ -42,5 +58,6 @@ export const useUnavailabilityQueries = (options: Options) => {
   return {
     driverUnavailabilityQuery,
     driverUnavailabilityMutation,
+    releaseDriverUnavailabilityMutation,
   };
 };

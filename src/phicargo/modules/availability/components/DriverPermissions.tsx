@@ -25,7 +25,7 @@ const DriverPermissions = (props: Props) => {
       <Card className="border max-h-96">
         <CardHeader className="flex items-center justify-between bg-gray-100">
           <div>
-            <h3 className="font-bold text-lg">Historial de Permisos</h3>
+            <h3 className="font-bold text-lg">Historial de Permisos / Castigos</h3>
           </div>
           <Button
             color="primary"
@@ -44,7 +44,7 @@ const DriverPermissions = (props: Props) => {
             <PermissionsHistory driver={driver} unavailabilities={unavailabilities} />
           ) : (
             <p className="text-sm text-gray-500">
-              No hay permisos registrados.
+              No hay permisos o castigos registrados.
             </p>
           )}
         </CardBody>

@@ -72,6 +72,26 @@ class DriverUnavailabilityServiceApi {
     }
   }
 
+  static async releaseDriverUnavailability(
+    id: number,
+  ): Promise<DriverUnavailable> {
+    try {
+      const response = await odooApi.patch(
+        `/drivers/unavailability/release/${id}`,
+      );
+      return driverUnavailabilityToLocal(response.data);
+    } catch (error) {
+      console.error(error);
+      if (error instanceof AxiosError) {
+        throw new Error(
+          error.response?.data?.detail ||
+            'Error releasing driver unavailability',
+        );
+      }
+      throw new Error('Error releasing driver unavailability');
+    }
+  }
+
   public static async getDriverVacationSummary(
     id: number,
   ): Promise<DriverVacationSummary> {
