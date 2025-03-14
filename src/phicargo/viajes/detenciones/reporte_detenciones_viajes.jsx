@@ -1,17 +1,17 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { Button } from "@heroui/button";
-import Slide from '@mui/material/Slide';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
-import { toast } from 'react-toastify';
 import { Card, CardHeader, NavbarMenu } from "@heroui/react";
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import { Typography } from '@mui/material';
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
+import React, { useEffect, useMemo, useState } from 'react';
+
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
 import NavbarViajes from '../navbar';
+import Slide from '@mui/material/Slide';
+import { Typography } from '@mui/material';
+import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import { toast } from 'react-toastify';
 
 const ReporteDetencionesViajes = () => {
   const [data, setData] = useState([]);
