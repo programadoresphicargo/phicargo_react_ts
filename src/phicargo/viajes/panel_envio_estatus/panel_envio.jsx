@@ -18,7 +18,7 @@ import { DatePicker } from "@heroui/react";
 import { DialogActions } from '@mui/material';
 import { DialogTitle } from '@mui/material';
 import { FormattedDate } from 'rsuite/esm/CustomProvider';
-import { InboxOutlined } from '@ant-design/icons';
+// import { InboxOutlined } from '@ant-design/icons';
 import { Progress } from "@heroui/react";
 import ReactQuill from 'react-quill';
 import Slide from '@mui/material/Slide';
@@ -294,7 +294,7 @@ function PanelEnvio({ open, cerrar, id_reporte, estatusSeleccionado, comentarios
                   <CardBody>
                     <Dragger {...props} style={{ fontFamily: 'Inter' }}>
                       <p className="ant-upload-drag-icon">
-                        <InboxOutlined />
+                        {/* <InboxOutlined /> */}
                       </p>
                       <p className="ant-upload-text">Haz clic o arrastra el archivo aquí para subirlo</p>
                       <p className="ant-upload-hint">Soporta múltiples archivos</p>

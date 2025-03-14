@@ -1,20 +1,10 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
+
 import FsLightbox from "fslightbox-react";
+import { Image } from "antd";
+import { Link } from "@heroui/react";
 import { Progress } from "@heroui/react";
 import { ViajeContext } from "../context/viajeContext";
-import { Image } from "antd";
-import {
-    DownloadOutlined,
-    LeftOutlined,
-    RightOutlined,
-    RotateLeftOutlined,
-    RotateRightOutlined,
-    SwapOutlined,
-    UndoOutlined,
-    ZoomInOutlined,
-    ZoomOutOutlined,
-} from '@ant-design/icons';
-import { Link } from "@heroui/react";
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 function ArchivosAdjuntos({ id_reporte }) {
