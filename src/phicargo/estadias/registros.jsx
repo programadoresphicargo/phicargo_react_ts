@@ -1,16 +1,17 @@
-import { Button, Chip } from "@heroui/react"
 import {
-  MaterialReactTable,
-  useMaterialReactTable,
-} from 'material-react-table';
-import {
+  Button,
+  Chip,
   Modal,
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
   useDisclosure,
-} from "@heroui/modal";
+} from "@heroui/react"
+import {
+  MaterialReactTable,
+  useMaterialReactTable,
+} from 'material-react-table';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 
 import Box from '@mui/material/Box';
