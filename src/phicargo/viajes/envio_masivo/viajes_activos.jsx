@@ -1,26 +1,24 @@
+import { Autocomplete, AutocompleteItem, Textarea } from "@heroui/react";
+import { Button, Chip, Spinner } from "@heroui/react";
+import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import toast from 'react-hot-toast';
 import React, { useEffect, useMemo, useState } from 'react';
+import { getLocalTimeZone, now } from "@internationalized/date";
 
 import { Box } from '@mui/material';
-import { Button, Chip } from "@heroui/react";
-import { Autocomplete, AutocompleteItem, Textarea } from "@heroui/react";
-import Swal from 'sweetalert2';
-
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
-import { useAuthContext } from '@/phicargo/modules/auth/hooks';
-import { Dropdown, DropdownMenu, DropdownTrigger, DropdownItem } from "@heroui/react";
-import NavbarViajes from '../navbar';
-import { Spinner } from "@heroui/spinner";
-import EstatusDropdown from '../estatus/resumen_estatus';
 import { DatePicker } from "@heroui/date-picker";
-import { now, getLocalTimeZone } from "@internationalized/date";
-import { parseDate } from "@internationalized/date";
-import { useDateFormatter } from "@react-aria/i18n";
+import EstatusDropdown from '../estatus/resumen_estatus';
+import NavbarViajes from '../navbar';
+import Swal from 'sweetalert2';
 import { format } from 'date-fns';
+import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import { parseDate } from "@internationalized/date";
+import toast from 'react-hot-toast';
+import { useAuthContext } from '@/phicargo/modules/auth/hooks';
+import { useDateFormatter } from "@react-aria/i18n";
 
 const ViajesActivosMasivo = ({ }) => {
   const [allData, setAllData] = useState([]);
