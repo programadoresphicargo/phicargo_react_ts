@@ -16,7 +16,7 @@
       "@emotion/styled": "^11.13.5",
       "@fontsource/roboto": "^5.1.0",
       "@heroui/date-picker": "^2.3.13",
-      "@heroui/react": "2.7.2",
+      "@heroui/react": "^2.7.2",
       "@heroui/system": "^2.4.10",
       "@heroui/theme": "^2.4.9",
       "@internationalized/date": "^3.7.0",
