@@ -88,7 +88,7 @@ const RegistrosEstadias = () => {
       { accessorKey: 'salida_planta', header: 'Salida planta', size: 150 },
       { accessorKey: 'horas_estadia_real', header: 'Tiempo en planta (horas)', size: 150 },
       { accessorKey: 'horas_excedidas', header: 'Horas excedidas', size: 150 },
-      { accessorKey: 'cortes_cobrados', header: 'Cortes', size: 150 },
+      { accessorKey: 'cortes_calculados', header: 'Cortes calculados', size: 150 },
       { accessorKey: 'genero_estadias', header: 'Genero estadias', filterVariant: 'select', filterValue: 'genero', },
     ],
     [],
@@ -152,8 +152,13 @@ const RegistrosEstadias = () => {
           flexWrap: 'wrap',
         }}
       >
+        <h1
+          className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
+        >
+          Control de estadías
+        </h1>
         <RangePicker onChange={handleDateChange} />
-        <Button color="primary" onPress={exportToCSV}>
+        <Button color="success" onPress={exportToCSV} startContent={<i class="bi bi-file-earmark-excel"></i>} className='text-white'>
           Exportar
         </Button>
       </Box>

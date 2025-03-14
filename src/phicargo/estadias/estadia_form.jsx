@@ -3,7 +3,6 @@ import { Grid, Stack, Box } from "@mui/material";
 import { toast } from "react-toastify";
 import odooApi from "../modules/core/api/odoo-api";
 import { Button, Chip, Divider, Progress, Card, CardBody, CardHeader, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Modal, useDisclosure } from "@heroui/react";
-import ResponsiveAppBar from "./Navbar";
 import FormularioCostoExtra from "../costos/maniobras/form_costos_extras";
 import { CostosExtrasContext, CostosExtrasProvider } from "../costos/context/context";
 import { ViajeContext } from "../viajes/context/viajeContext";
@@ -30,7 +29,7 @@ const EstadiasForm = () => {
                     params: { travel_id: id_viaje },
                 });
                 setData(response.data);
-                setHE(response.data[0]?.cortes_cobrados);
+                setHE(response.data[0]?.cortes_calculados);
             } catch (error) {
                 toast.error("Error de conexión: " + error.message);
             } finally {
@@ -52,7 +51,7 @@ const EstadiasForm = () => {
                 ) : (
                     <Grid container spacing={2} className="mb-5">
                         <Grid item xs={12}>
-                            <Button onPress={() => navigate(-1)} color="primary">Regresar</Button>
+                            <Button onPress={() => navigate(-1)} color="primary" color="success" className="text-white">Regresar</Button>
 
                             <Chip color="primary" size="lg">{data[0]?.travel_name}</Chip>
                             <div className="mt-3">
@@ -84,7 +83,7 @@ const EstadiasForm = () => {
                                                 <TableCell>{data[0]?.diferencia_llegada_planta}</TableCell>
                                                 <TableCell>{data[0]?.salida_planta}</TableCell>
                                                 <TableCell>{data[0]?.horas_estadia_real}</TableCell>
-                                                <TableCell>{data[0]?.cortes_cobrados}</TableCell>
+                                                <TableCell>{data[0]?.cortes_calculados}</TableCell>
                                             </TableRow>
                                         </TableBody>
                                     </Table>

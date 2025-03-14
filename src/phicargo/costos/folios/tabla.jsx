@@ -14,6 +14,8 @@ import { CostosExtrasContext } from '../context/context';
 import { Select, SelectItem } from "@heroui/react";
 import { DateRangePicker } from 'rsuite';
 import { getEstadoChip } from '../utils';
+import { exportToCSV } from '../../utils/export';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
 const FoliosCostosExtras = () => {
 
@@ -176,6 +178,7 @@ const FoliosCostosExtras = () => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
+    localization: MRT_Localization_ES,
     state: { isLoading: isLoading2 },
     enableColumnPinning: true,
     enableStickyHeader: true,
@@ -233,8 +236,14 @@ const FoliosCostosExtras = () => {
           alignItems: 'center',
         }}
       >
-        <Box sx={{ width: '200px' }}>
+        <h1
+          className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
+        >
+          Costos extras
+        </h1>
+        <Box sx={{ width: '160px' }}>
           <Button
+            startContent={<i class="bi bi-plus-lg"></i>}
             color="primary"
             fullWidth
             onPress={() => {
@@ -246,8 +255,9 @@ const FoliosCostosExtras = () => {
           </Button>
         </Box>
 
-        <Box sx={{ width: '200px' }}>
+        <Box sx={{ width: '160px' }}>
           <Button
+            startContent={<i class="bi bi-arrow-clockwise"></i>}
             color="success"
             className='text-white'
             fullWidth
@@ -259,10 +269,17 @@ const FoliosCostosExtras = () => {
           </Button>
         </Box>
 
+        <Box sx={{ width: '160px' }}>
+          <Button color='success'
+            fullWidth
+            className='text-white'
+            startContent={<i class="bi bi-file-earmark-excel"></i>}
+            onPress={() => exportToCSV(data, columns, "costos_extras.csv")}>Exportar</Button>
+        </Box>
+
         <Box sx={{ width: '250px' }}>
           <Select
             label="Sucursal"
-            size='sm'
             placeholder="Selecciona una sucursal"
             selectedKeys={[sucursal]}
             onChange={seleccionar_sucursal}
@@ -273,6 +290,7 @@ const FoliosCostosExtras = () => {
             <SelectItem key={'9'}>Manzanillo</SelectItem>
           </Select>
         </Box>
+
       </Box>
 
     ),

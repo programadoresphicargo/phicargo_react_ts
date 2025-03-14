@@ -132,6 +132,8 @@ export const useJourneyDialogs = () => {
                 } else if (id_estatus == 103) {
                     cambiar_estado_equipo('disponible');
                     cambiar_estado_operador('disponible');
+                } else if (id_estatus == 8) {
+                    calcular_estadia(id_viaje);
                 }
                 return true;
             } else {
@@ -188,6 +190,80 @@ export const useJourneyDialogs = () => {
         } catch (error) {
             console.error('Error:', error);
             toast.error('Error activando el viaje');
+            throw error;
+        }
+    };
+
+    const comprobar_horarios = async () => {
+        try {
+            const res = await odooApi.get('/tms_travel/get_by_id/' + id_viaje);
+            if (res.data[0].x_status_viaje == null || res.data[0].x_status_viaje == 'disponible') {
+
+                const response = await odooApi.get('/tms_waybill/get_by_travel_id/' + id_viaje);
+
+                if (Array.isArray(response.data)) {
+                    const viajes = response.data;
+
+                    let errores = [];
+
+                    viajes.forEach((viaje) => {
+                        if (!viaje.date_start || !viaje.x_date_arrival_shed) {
+                            errores.push(`Faltan datos en la carta porte ${viaje.name}: las fechas son inválidas o están vacías. Completa la información.`);
+                            return;
+                        }
+
+                        let dateStart = new Date(viaje.date_start.replace(" ", "T"));
+                        let dateArrival = new Date(viaje.x_date_arrival_shed.replace(" ", "T"));
+
+                        if (isNaN(dateStart.getTime()) || isNaN(dateArrival.getTime())) {
+                            errores.push(`Carta porte ${viaje.name} tiene fechas con formato inválido.`);
+                            return;
+                        }
+
+                        // Ajusta las horas de inicio y llegada restando 6 horas
+                        // dateStart.setHours(dateStart.getHours() - 6);
+                        // dateArrival.setHours(dateArrival.getHours() - 6);
+
+                        const now = new Date();
+
+                        // Validaciones de fechas
+                        /*
+                        if (dateStart <= now) {
+                            errores.push(`El inicio de ruta en ${viaje.name} debe programarse para una fecha y hora posteriores a la actual.`);
+                        }
+                        if (dateArrival <= now) {
+                            errores.push(`La llegada a planta en ${viaje.name} debe programarse para una fecha y hora posteriores a la actual.`);
+                        }
+                        if (dateStart >= dateArrival) {
+                            errores.push(`La llegada a planta debe ser después del inicio de ruta en ${viaje.name}.`);
+                        }
+                        */
+
+                    });
+
+                    if (errores.length > 0) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Hay errores en los horarios de inicio de ruta y/o llegada a planta. Corrige los errores para continuar.',
+                            html: errores.join('<br>'),
+                        });
+                        return false;
+                    }
+
+                    return true;
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error en la respuesta',
+                        text: 'No se encontraron viajes o la estructura de datos no es válida.',
+                    });
+                    return false;
+                }
+            } else {
+                return true;
+            }
+        } catch (error) {
+            console.error('Error:', error);
             throw error;
         }
     };
@@ -252,6 +328,29 @@ export const useJourneyDialogs = () => {
         }
     };
 
+    const calcular_estadia = async (id_viaje) => {
+        try {
+            const response = await odooApi.get('/tms_travel/calcular_estadia/', {
+                params: { travel_id: id_viaje },
+            });
+            const data = response.data;
+
+            if (Array.isArray(data.folios_creados) && data.folios_creados.length > 0) {
+                const folio = data.folios_creados[0];
+                toast.success(`Viaje genera estadías,  ${folio.mensaje} (ID: ${folio.id_folio})`, { duration: 10000, });
+            }
+
+            if (Array.isArray(data.viajes_sin_estadia) && data.viajes_sin_estadia.length > 0) {
+                toast.success("Viaje no genera estadías", { duration: 10000, });
+            }
+
+        } catch (error) {
+            const errorMessage = error.response?.data?.mensaje || "❌ Error al procesar la solicitud.";
+            toast.error(errorMessage);
+            console.error("Error en calcular_estadia:", error);
+        }
+    };
+
     return {
         iniciar_viaje,
         finalizar_viaje,
@@ -261,5 +360,6 @@ export const useJourneyDialogs = () => {
         reenviar_estatus,
         comprobar_operador,
         comprobar_disponibilidad,
+        comprobar_horarios
     };
 };

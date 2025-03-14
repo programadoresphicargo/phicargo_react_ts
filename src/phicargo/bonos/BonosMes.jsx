@@ -19,11 +19,27 @@ import {
   useMaterialReactTable,
 } from 'material-react-table';
 import { useAuthContext } from '../modules/auth/hooks';
+import { exportToCSV } from '../utils/export';
 
 const BonosMes = ({ month, year }) => {
 
   const { session } = useAuthContext();
   const [permisosEdicion, setPermisos] = useState([]);
+
+  const getColumnVisibility = (permisosEdicion) => ({
+    excelencia: permisosEdicion.includes(12),
+    productividad: permisosEdicion.includes(12),
+    operacion: permisosEdicion.includes(12),
+    seguridad_vial: permisosEdicion.includes(9),
+    cuidado_unidad: permisosEdicion.includes(10),
+    rendimiento: permisosEdicion.includes(10),
+    calificacion: permisosEdicion.includes(10),
+  });
+
+  useEffect(() => {
+    fetchPermisos();
+    fetchData();
+  }, []);
 
   const fetchPermisos = async () => {
     try {
@@ -31,6 +47,7 @@ const BonosMes = ({ month, year }) => {
       const response = await odooApi.get(`/users-management/permissions/` + session.user.id);
       const ids = response.data.map(permiso => permiso.permission_id);
       setPermisos(ids);
+      getColumnVisibility(permisosEdicion);
       console.log(ids);
     } catch (error) {
       console.error('Error al obtener los datos:', error);
@@ -39,7 +56,7 @@ const BonosMes = ({ month, year }) => {
 
   const fetchData = async () => {
     try {
-      toast.info('Obteniendo informacion');
+      toast.info('Obteniendo datos...');
       setIsLoading(true);
       const response = await odooApi.get(`/bonos_operadores/by_period/${month}/${year}`);
       setEditedData(response.data);
@@ -49,11 +66,6 @@ const BonosMes = ({ month, year }) => {
       console.error('Error al obtener los datos:', error);
     }
   };
-
-  useEffect(() => {
-    fetchPermisos();
-    fetchData();
-  }, []);
 
   const [isLoading, setIsLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -66,10 +78,22 @@ const BonosMes = ({ month, year }) => {
   };
 
   const guardar_bonos = async () => {
-    console.log("Datos modificados:", editedData);
+    const columnVisibility = getColumnVisibility(permisosEdicion);
+
+    const filteredData = editedData.map((row) => {
+      return Object.keys(row)
+        .filter((key) => columnVisibility[key] !== false)
+        .reduce((obj, key) => {
+          obj[key] = row[key];
+          return obj;
+        }, {});
+    });
+
+    console.log("Datos modificados (solo columnas visibles):", filteredData);
+
     try {
       setIsLoading(true);
-      const response = await odooApi.post('/bonos_operadores/update_bonos/', editedData);
+      const response = await odooApi.post('/bonos_operadores/update/', filteredData);
       if (response.data.status === "success") {
         toast.success(`✅ ${response.data.message} (${response.data.updated_records} registros)`);
         fetchData();
@@ -82,10 +106,12 @@ const BonosMes = ({ month, year }) => {
     }
   };
 
+
   const columns = [
     {
       accessorKey: "id_bono",
       header: "ID Bono",
+      hidden: true,
     },
     {
       accessorKey: "name",
@@ -208,7 +234,7 @@ const BonosMes = ({ month, year }) => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
-    state: { showProgressBars: isLoading },
+    state: { showProgressBars: isLoading, columnVisibility: getColumnVisibility(permisosEdicion) },
     initialState: {
       isLoading: isLoading,
       density: 'compact',
@@ -233,6 +259,12 @@ const BonosMes = ({ month, year }) => {
         maxHeight: 'calc(100vh - 193px)',
       },
     },
+    muiTablePaperProps: {
+      elevation: 0,
+      sx: {
+        borderRadius: '0',
+      },
+    },
     renderTopToolbarCustomActions: ({ table }) => (
       <Box
         sx={{
@@ -250,6 +282,16 @@ const BonosMes = ({ month, year }) => {
             Guardar Cambios
           </Button>
         )}
+        <Button color="success" onPress={fetchData} sx={{ m: 1 }} className='text-white' isLoading={isLoading}>
+          Refrescar
+        </Button>
+        <Button
+          color='success'
+          className='text-white'
+          startContent={<i class="bi bi-file-earmark-excel"></i>}
+          onPress={() => exportToCSV(editedData, columns, "bonos.csv")}>
+          Exportar
+        </Button>
       </Box>
     ),
   });

@@ -262,8 +262,9 @@ const Maniobras = ({ estado_maniobra }) => {
           alignItems: 'center',
         }}
       >
-        <Button color="primary" isLoading={isLoading2} onPress={() => fetchData()}>Refrescar</Button>
-        <Button color="success" onPress={() => handleClickOpen()} className='text-white'>Envio masivo</Button>
+        <h1 className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text">Control de maniobras</h1>
+        <Button color="primary" isLoading={isLoading2} onPress={() => fetchData()} startContent={<i class="bi bi-arrow-clockwise"></i>}>Refrescar</Button>
+        <Button color="success" onPress={() => handleClickOpen()} className='text-white' startContent={<i class="bi bi-send-plus"></i>}>Envio masivo</Button>
       </Box >
     ),
   });

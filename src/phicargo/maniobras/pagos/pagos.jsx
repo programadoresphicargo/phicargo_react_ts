@@ -9,6 +9,7 @@ import {
 import ManiobrasNavBar from '../Navbar';
 import { Box } from '@mui/system';
 import { Button } from '@heroui/react';
+import { ManiobraProvider } from '../context/viajeContext';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const Nominas = () => {
@@ -160,19 +161,20 @@ const Nominas = () => {
 
   return (
     <div>
-      <ManiobrasNavBar />
-      <Nomina_form
-        show={modalShow}
-        handleClose={handleCloseModal}
-        id_pago={id_pago}
-        id_operador={id_operador}
-        fecha_inicio={fecha_inicio}
-        fecha_fin={fecha_fin}
-        disabled={disabled} />
-      <ThemeProvider theme={customFontTheme}>
-        <MaterialReactTable table={table} />
-      </ThemeProvider>
-
+      <ManiobraProvider>
+        <ManiobrasNavBar />
+        <Nomina_form
+          show={modalShow}
+          handleClose={handleCloseModal}
+          id_pago={id_pago}
+          id_operador={id_operador}
+          fecha_inicio={fecha_inicio}
+          fecha_fin={fecha_fin}
+          disabled={disabled} />
+        <ThemeProvider theme={customFontTheme}>
+          <MaterialReactTable table={table} />
+        </ThemeProvider>
+      </ManiobraProvider>
     </div >
   );
 

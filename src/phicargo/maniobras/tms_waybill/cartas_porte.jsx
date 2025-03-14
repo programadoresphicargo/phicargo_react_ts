@@ -218,6 +218,13 @@ const CartasPorte = () => {
     renderTopToolbarCustomActions: ({ table }) => (
       <Box display="flex" alignItems="center" m={2}>
         <Box sx={{ flexGrow: 1, mr: 2 }}>
+          <h1
+            className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
+          >
+            Contenedores
+          </h1>
+        </Box>
+        <Box sx={{ flexGrow: 1, mr: 2 }}>
           <MonthSelector
             selectedMonth={selectedMonth}
             handleChange={handleChange}
