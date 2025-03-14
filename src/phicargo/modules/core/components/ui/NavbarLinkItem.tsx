@@ -1,5 +1,4 @@
-import { Link } from '@heroui/react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 interface Props {
   name: string;
@@ -14,7 +13,7 @@ export const NavbarLinkItem = ({ name, path, exact = false }: Props) => {
 
   return (
     <Link
-      href={path}
+      to={path}
       className={`px-4 py-2 rounded-md transition-all duration-300 ${
         isActive
           ? 'bg-gray-200/20 backdrop-blur-sm text-white text-medium shadow-md p-2 border-gray-500'
