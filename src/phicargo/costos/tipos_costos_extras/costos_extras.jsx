@@ -5,7 +5,7 @@ import {
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 
 import { Box } from '@mui/material';
-import { Button } from "@heroui/button";
+import { Button } from '@heroui/react';
 import CENavBar from '../Navbar';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
