@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useMemo, useContext } from 'react';
-import { Box } from '@mui/material';
-import { ViajeContext } from '../context/viajeContext';
 import { Button, select } from "@heroui/react";
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { Select, SelectItem } from "@heroui/react";
+// import { InboxOutlined } from '@ant-design/icons';
+import { Upload, message } from 'antd';
+
+import { Box } from '@mui/material';
 import Slide from '@mui/material/Slide';
-import { InboxOutlined } from '@ant-design/icons';
-import { message, Upload } from 'antd';
+import { ViajeContext } from '../context/viajeContext';
 import { useAuthContext } from '../../modules/auth/hooks';
 const { Dragger } = Upload;
 const { VITE_PHIDES_API_URL } = import.meta.env;
@@ -95,7 +96,7 @@ const FormularioDocumentacion = ({ onClose }) => {
 
       <Dragger {...props} style={{ fontFamily: 'Inter' }}>
         <p className="ant-upload-drag-icon">
-          <InboxOutlined />
+          {/* <InboxOutlined /> */}
         </p>
         <p className="ant-upload-text">Haz clic o arrastra el archivo aquí para subirlo</p>
         <p className="ant-upload-hint">Soporta múltiples archivos</p>
