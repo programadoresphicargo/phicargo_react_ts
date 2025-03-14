@@ -16,10 +16,13 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: Set up Yarn
         uses: borales/actions-yarn@v4
         with:
-          cmd: install
+          cmd: install # Instala las dependencias usando yarn
 
       - name: Build project
         run: yarn build
