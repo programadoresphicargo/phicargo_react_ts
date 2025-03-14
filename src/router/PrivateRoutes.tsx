@@ -14,7 +14,6 @@ import { ReportsRoutes } from './ReportsRoutes';
 import { ServiceRequestsRoutes } from '@/phicargo/modules/service-requests/routes/ServiceRequestsRoutes';
 import ShiftsRoutes from '../phicargo/modules/shifts/routes/ShiftsRoutes';
 import { ToastContainer } from 'react-toastify';
-import { ToastProvider } from '@heroui/toast';
 import { Toaster } from 'react-hot-toast';
 import UsersManagementRoutes from '../phicargo/modules/users-management/routes/UsersManagementRoutes';
 
@@ -82,7 +81,6 @@ export const PrivateRoutes = () => {
     <>
       <Toaster />
       <ToastContainer />
-      <ToastProvider></ToastProvider>
       <Routes>
         {/* Menú */}
         <Route path="/" element={<Navigate to="/menu" />} />
