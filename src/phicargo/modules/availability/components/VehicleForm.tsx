@@ -4,9 +4,12 @@ import { Vehicle, VehicleUpdate } from '../models/vehicle-model';
 import { Button } from "@heroui/react";
 import { DriverSearchInput } from '../../core/components/inputs/DriverSearchInput';
 import { SelectInput } from '../../core/components/inputs/SelectInput';
+import { useAuthContext } from '../../auth/hooks';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useVehicleQueries } from '../hooks/useVehicleQueries';
+
+const EDIT_VEHICLE_TYPE_PERMISSION = 206;
 
 const initialState: VehicleUpdate = {
   companyId: null,
@@ -34,6 +37,12 @@ interface Props {
 
 const VehicleForm = (props: Props) => {
   const { vehicle } = props;
+
+  const { session } = useAuthContext();
+  
+  const { user } = session || {};
+  
+  const editVehicleType = !user?.permissions.includes(EDIT_VEHICLE_TYPE_PERMISSION);
 
   const navigate = useNavigate();
 
@@ -130,6 +139,7 @@ const VehicleForm = (props: Props) => {
             control={control}
             name="vehicleType"
             label="Tipo de vehiculo"
+            isDisabled={editVehicleType}
             items={[
               { key: 'local', value: 'Local' },
               { key: 'carretera', value: 'Carretera' },

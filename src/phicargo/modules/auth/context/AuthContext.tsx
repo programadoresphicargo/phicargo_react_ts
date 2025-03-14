@@ -48,7 +48,7 @@ export const AuthProvider = ({ children }: ProviderProps) => {
 
   const onLogout = () => {
     setSession(null);
-    sessionStorage.removeItem('session');
+    sessionStorage.clear();
     setAuthStatus('unauthenticated');
     delete odooApi.defaults.headers.common['Authorization'];
     queryClient.clear();
