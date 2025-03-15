@@ -34,6 +34,8 @@ export interface WaybillBase {
   xTipoBel: string;
   xTipo2Bel: string;
   xModoBel: string;
+  xMedidaBel: string | null;
+  xClaseBel: string | null;
 
   // Estadisticas
   // Programado

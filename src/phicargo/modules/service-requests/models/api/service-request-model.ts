@@ -42,6 +42,8 @@ export interface WaybillBaseApi {
   x_tipo_bel: string;
   x_tipo2_bel: string;
   x_modo_bel: string;
+  x_medida_bel: string | null;
+  x_clase_bel: string | null;
 
   // Customs Agent
   x_nombre_agencia: string | null;

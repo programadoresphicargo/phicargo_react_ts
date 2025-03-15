@@ -40,6 +40,8 @@ export class ServiceRequestAdapter {
       xTipoBel: data.x_tipo_bel,
       xTipo2Bel: data.x_tipo2_bel,
       xModoBel: data.x_modo_bel,
+      xClaseBel: data.x_clase_bel,
+      xMedidaBel: data.x_medida_bel,
       dateStart: data.date_start ? dayjs(data.date_start) : null,
       xDateArrivalShed: data.x_date_arrival_shed
         ? dayjs(data.x_date_arrival_shed)
@@ -150,6 +152,8 @@ export class ServiceRequestAdapter {
       x_tipo_bel: data.xTipoBel,
       x_tipo2_bel: data.xTipo2Bel,
       x_modo_bel: data.xModoBel,
+      x_medida_bel: data.xMedidaBel,
+      x_clase_bel: data.xClaseBel,
       x_nombre_agencia: data.xNombreAgencia,
       x_telefono_aa: data.xTelefonoAa,
       x_email_aa: data.xEmailAa,
