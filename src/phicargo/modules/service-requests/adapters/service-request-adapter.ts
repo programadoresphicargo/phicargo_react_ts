@@ -78,6 +78,7 @@ export class ServiceRequestAdapter {
     return {
       ...ServiceRequestAdapter.toWaybillBase(data),
       id: data.id,
+      name: data.name,
       sequence_id: data.sequence_id,
       state: data.state,
       branch: data.branch,

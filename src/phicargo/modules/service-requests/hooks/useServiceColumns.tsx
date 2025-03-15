@@ -1,26 +1,45 @@
+import { Chip } from '@heroui/react';
 import type { MRT_ColumnDef } from 'material-react-table';
 import type { Waybill } from '../models';
+import { getWaybillStatusConfig } from '../utilities';
 import { useMemo } from 'react';
 
 export const useServiceColumns = () => {
   const columns = useMemo<MRT_ColumnDef<Waybill>[]>(
     () => [
-      { accessorKey: 'id', header: 'ID' },
-      { accessorKey: 'state', header: 'Estado' },
-      { accessorKey: 'branch.name', header: 'Sucursal' },
-      { accessorKey: 'company.name', header: 'Empresa' },
+      { accessorKey: 'xReference', header: 'Referencia / Contenedor' },
+      { accessorKey: 'name', header: 'Referencia' },
       {
-        accessorFn: (row) => row.dateOrder.format('DD/MM/YYYY'),
-        header: 'Fecha Orden',
+        accessorFn: (row) => row.dateOrder,
+        header: 'Fecha',
+        id: 'dateOrders',
+        filterVariant: 'date',
+        Cell: ({ row }) => row.original.dateOrder.format('DD/MM/YYYY'),
       },
-      { accessorKey: 'clientOrderRef', header: 'Referencia Cliente' },
-      { accessorKey: 'category.name', header: 'Categoria' },
       { accessorKey: 'client.name', header: 'Cliente' },
-      { accessorKey: 'xRutaBel', header: 'Ruta prog' },
+      { accessorKey: 'xSubclienteBel', header: 'Subcliente' },
+      { accessorKey: 'xRutaBel', header: 'Ruta Prog' },
       { accessorKey: 'xTipoBel', header: 'Tipo Armado' },
       { accessorKey: 'xModoBel', header: 'Modo' },
+      { accessorKey: 'xMedidaBel', header: 'Medida' },
+      { accessorKey: 'xClaseBel', header: 'Clase' },
       { accessorKey: 'xCustodiaBel', header: 'Custodia' },
-      { accessorKey: 'departureAddress.name', header: 'Dirección Origen' },
+      // { accessorKey: 'xMovBel', header: 'Terminal Retiro' }, TODO: Uncomment when api returns
+
+      {
+        accessorKey: 'state',
+        header: 'Status',
+        Cell: ({ row }) => {
+          const statusConf = getWaybillStatusConfig(row.original.state);
+          return statusConf ? (
+            <Chip color={statusConf.color || 'default'} size="sm">
+              {statusConf.status}
+            </Chip>
+          ) : null;
+        },
+      },
+      { accessorKey: 'branch.name', header: 'Sucursal' },
+      { accessorKey: 'company.name', header: 'Empresa' },
     ],
     [],
   );

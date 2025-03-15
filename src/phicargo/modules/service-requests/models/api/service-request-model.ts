@@ -1,6 +1,8 @@
 import { BranchSimple, CompanySimple } from "@/phicargo/modules/core/models";
 import { PartnerApi, WaybillCategoryApi } from "./waybill-models";
 
+import { WaybillStatus } from "../service-request-model";
+
 export interface WaybillBaseApi {
   upload_point: string | null;
   download_point: string | null;
@@ -76,8 +78,9 @@ export interface WaybillBaseApi {
 
 export interface WaybillApi extends WaybillBaseApi {
   id: number;
+  name: string | null;
   sequence_id: number;
-  state: string;
+  state: WaybillStatus;
   branch: BranchSimple;
   company: CompanySimple;
   category: WaybillCategoryApi;
