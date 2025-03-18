@@ -124,7 +124,9 @@ export const DistanceAndRevenueByVehicleChart = (props: Props) => {
       title={`Ingresos y Distancia Por Unidad ${monthYearName}`}
       isLoading={isLoading && !chartData}
       customHeight="150rem"
-      downloadFn={() => toExcel.exportData(data?.distanceAndRevenueByVehicle || [])}
+      downloadFn={() =>
+        toExcel.exportData(data?.distanceAndRevenueByVehicle || [])
+      }
     >
       {chartData && <Bar data={chartData} options={options} />}
     </ChartCard>
@@ -143,6 +145,7 @@ const exportConf: ExportConfig<DistanceAndRevenueByVehicle> = {
       header: 'Distancia',
     },
     { accessorFn: (data) => data.travels, header: 'Viajes' },
+    { accessorFn: (data) => data.services, header: 'Servicios' },
   ],
 };
 

@@ -1,32 +1,37 @@
-import { ExportConfig, ExportToExcel } from '@/phicargo/modules/core/utilities/export-to-excel';
+import {
+  ExportConfig,
+  ExportToExcel,
+} from '@/phicargo/modules/core/utilities/export-to-excel';
 import { useEffect, useState } from 'react';
 
+import { Bar } from 'react-chartjs-2';
 import { ChartCard } from '../ChartCard';
 import { ChartData } from 'chart.js';
 import { ChartOptions } from 'chart.js';
-import { Pie } from 'react-chartjs-2';
 import VehicleServiceApi from '@/phicargo/modules/availability/services/vehicle-service';
 import type { VehicleStats } from '../../models/vehicles-stats-models';
 
-const options: ChartOptions<'pie'> = {
+const options: ChartOptions<'bar'> = {
   responsive: true,
   maintainAspectRatio: false,
+  scales: {
+    y: {
+      beginAtZero: true,
+      ticks: {
+        font: {
+          size: 15,
+        },
+      },
+    },
+    x: {
+      ticks: {
+        font: {
+          size: 15,
+        },
+      },
+    },
+  },
 };
-
-const colors = [
-  'rgba(75, 192, 192, 0.6)',
-  'rgba(255, 159, 64, 0.6)',
-  'rgba(255, 159, 64, 0.6)',
-  'rgba(255, 99, 132, 0.6)',
-  'rgba(255, 99, 132, 0.6)',
-];
-const borderColors = [
-  'rgba(75, 192, 192, 1)',
-  'rgba(255, 159, 64, 1)',
-  'rgba(255, 159, 64, 1)',
-  'rgba(255, 99, 132, 1)',
-  'rgba(255, 99, 132, 1)',
-];
 
 interface Props {
   data?: VehicleStats;
@@ -35,25 +40,45 @@ interface Props {
 
 export const AvailableSummaryChart = (props: Props) => {
   const { isLoading, data } = props;
-  const [chartData, setChartData] = useState<ChartData<'pie'> | null>(null);
+  const [chartData, setChartData] = useState<ChartData<'bar'> | null>(null);
 
   useEffect(() => {
     if (!data) return;
 
-    const chartData: ChartData<'pie'> = {
-      labels: [
-        'Disponibles',
-        'Sin Operador (Carretera)',
-        'Sin Operador (Locales)',
-        'En Mantenimiento (Carretera)',
-        'En Mantenimiento (Locales)',
-      ],
+    const chartData: ChartData<'bar'> = {
+      labels: data.availableSummary.map((item) => item.vehicleType),
       datasets: [
         {
-          data: Object.values(data.availableSummary),
+          label: 'Todas',
+          data: data.availableSummary.map((item) => item.total),
           borderWidth: 2,
-          backgroundColor: colors,
-          borderColor: borderColors,
+          borderRadius: 10,
+          backgroundColor: ['rgba(75, 192, 192, 0.2)'],
+          borderColor: ['rgba(75, 192, 192, 1)'],
+        },
+        {
+          label: 'Disponibles',
+          data: data.availableSummary.map((item) => item.available),
+          borderWidth: 2,
+          borderRadius: 10,
+          backgroundColor: ['rgba(54, 162, 235, 0.2)'],
+          borderColor: ['rgba(54, 162, 235, 1)'],
+        },
+        {
+          label: 'Sin Operador',
+          data: data.availableSummary.map((item) => item.noDriver),
+          borderWidth: 2,
+          borderRadius: 10,
+          backgroundColor: ['rgba(255, 99, 132, 0.2)'],
+          borderColor: ['rgba(255,99,132, 1)'],
+        },
+        {
+          label: 'Mantenimiento',
+          data: data.availableSummary.map((item) => item.maintenance),
+          borderWidth: 2,
+          borderRadius: 10,
+          backgroundColor: ['rgba(255, 159, 64, 0.6)'],
+          borderColor: ['rgba(255, 159, 64, 1)'],
         },
       ],
     };
@@ -63,21 +88,20 @@ export const AvailableSummaryChart = (props: Props) => {
 
   return (
     <ChartCard
-      title={`Unidades Disponibles`}
+      title={`Disponibilidad`}
       isLoading={isLoading && !chartData}
       downloadFn={exportAvailabilityData}
     >
-      {chartData && <Pie data={chartData} options={options} />}
+      {chartData && <Bar data={chartData} options={options} />}
     </ChartCard>
   );
 };
-
 
 type AvailabilityData = {
   vehicle: string;
   status: 'Disponible' | 'Sin Operador' | 'Mantenimiento';
   type: string;
-}
+};
 
 const exportAvailabilityData = async () => {
   try {
@@ -108,8 +132,8 @@ const exportAvailabilityData = async () => {
       return {
         vehicle: vehicle.name,
         status: status as 'Disponible' | 'Sin Operador' | 'Mantenimiento',
-        type: vehicle.vehicleType!
-      }
+        type: vehicle.vehicleType!,
+      };
     });
 
     toExcel.exportData(data);

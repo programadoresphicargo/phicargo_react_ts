@@ -1,21 +1,21 @@
-
 export interface AvailableSummary {
+  vehicleType: string;
+  total: number;
   available: number;
-  noDriverRoad: number;
-  noDriverLocal: number;
-  maintenanceRoad: number;
-  maintenanceLocal: number;
+  noDriver: number;
+  maintenance: number;
 }
 
 export interface DistanceAndRevenueByVehicle {
   vehicle: string;
+  travels: number;
+  services: number;
   distance: number;
   amount: number;
-  travels: number;
 }
 
 export interface VehicleStats {
   distanceAndRevenueByVehicle: DistanceAndRevenueByVehicle[];
-  availableSummary: AvailableSummary;
+  availableSummary: AvailableSummary[];
 }
 
