@@ -101,6 +101,7 @@ type AvailabilityData = {
   vehicle: string;
   status: 'Disponible' | 'Sin Operador' | 'Mantenimiento';
   type: string;
+  driver: string | null;
 };
 
 const exportAvailabilityData = async () => {
@@ -113,6 +114,7 @@ const exportAvailabilityData = async () => {
         { accessorFn: (data) => data.vehicle, header: 'Unidad' },
         { accessorFn: (data) => data.status, header: 'Estado' },
         { accessorFn: (data) => data.type, header: 'Tipo' },
+        { accessorFn: (data) => data.driver, header: 'Operador' },
       ],
     };
 
@@ -133,6 +135,7 @@ const exportAvailabilityData = async () => {
         vehicle: vehicle.name,
         status: status as 'Disponible' | 'Sin Operador' | 'Mantenimiento',
         type: vehicle.vehicleType!,
+        driver: vehicle.driver?.name || null,
       };
     });
 
