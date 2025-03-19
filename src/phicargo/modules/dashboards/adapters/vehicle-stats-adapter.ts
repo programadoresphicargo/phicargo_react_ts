@@ -9,27 +9,38 @@ import type {
   VehicleStatsApi,
 } from '../models/api/vehicles-stats-models-api';
 
-const availableSummary = (data: AvailableSummaryApi): AvailableSummary => ({
-  available: data.available,
-  noDriverRoad: data.no_driver_road,
-  noDriverLocal: data.no_driver_local,
-  maintenanceRoad: data.maintenance_road,
-  maintenanceLocal: data.maintenance_local,
-});
+export class VehicleStatsAdapter {
+  static availableSummary(data: AvailableSummaryApi): AvailableSummary {
+    return {
+      vehicleType: data.vehicle_type,
+      total: data.total,
+      available: data.available,
+      noDriver: data.no_driver,
+      maintenance: data.maintenance,
+    };
+  }
 
-const distanceAndRevenueByVehicle = (
-  data: DistanceAndRevenueByVehicleApi,
-): DistanceAndRevenueByVehicle => ({
-  vehicle: data.vehicle,
-  distance: data.distance,
-  amount: data.amount,
-  travels: data.travels,
-});
+  static distanceAndRevenueByVehicle(
+    data: DistanceAndRevenueByVehicleApi,
+  ): DistanceAndRevenueByVehicle {
+    return {
+      vehicle: data.vehicle,
+      travels: data.travels,
+      services: data.services,
+      distance: data.distance,
+      amount: data.amount,
+    };
+  }
 
-export const vehicleStatsToLocal = (stats: VehicleStatsApi): VehicleStats => ({
-  distanceAndRevenueByVehicle: stats.distance_and_revenue_by_vehicle.map(
-    distanceAndRevenueByVehicle,
-  ),
-  availableSummary: availableSummary(stats.available_summary),
-});
+  static vehicleStatsToLocal(stats: VehicleStatsApi): VehicleStats {
+    return {
+      distanceAndRevenueByVehicle: stats.distance_and_revenue_by_vehicle.map(
+        VehicleStatsAdapter.distanceAndRevenueByVehicle,
+      ),
+      availableSummary: stats.available_summary.map(
+        VehicleStatsAdapter.availableSummary,
+      ),
+    };
+  }
+}
 

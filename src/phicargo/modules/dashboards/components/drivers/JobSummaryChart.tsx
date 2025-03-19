@@ -1,3 +1,8 @@
+import type { DriverStats, JobSummary } from '../../models/driver-stats-models';
+import {
+  ExportConfig,
+  ExportToExcel,
+} from '@/phicargo/modules/core/utilities/export-to-excel';
 import {
   getBackgroundColors,
   getBorderColors,
@@ -7,7 +12,6 @@ import { useEffect, useState } from 'react';
 import { ChartCard } from '../ChartCard';
 import { ChartData } from 'chart.js';
 import { ChartOptions } from 'chart.js';
-import type { DriverStats } from '../../models/driver-stats-models';
 import { Pie } from 'react-chartjs-2';
 
 const options: ChartOptions<'pie'> = {
@@ -46,8 +50,25 @@ export const JobSummaryChart = (props: Props) => {
     <ChartCard
       title={`Por Puesto`}
       isLoading={isLoading && !chartData}
+      downloadFn={() => exportData(data?.jobSummary || [])}
     >
       {chartData && <Pie data={chartData} options={options} />}
     </ChartCard>
   );
 };
+
+const exportData = (data: JobSummary[]) => {
+  const exportConf: ExportConfig<JobSummary> = {
+    fileName: `Operadores - Puestos`,
+    withDate: true,
+    sheetName: 'Puestos',
+    columns: [
+      { accessorFn: (data) => data.job, header: 'Puesto' },
+      { accessorFn: (data) => data.driverCount, header: 'Conteo' },
+    ],
+  };
+
+  const toExcel = new ExportToExcel(exportConf);
+  toExcel.exportData(data);
+};
+

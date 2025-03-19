@@ -10,6 +10,8 @@ import { useAuthContext } from "../../auth/hooks";
 import { useDriverQueries } from '../hooks/useDriverQueries';
 import { useMemo } from 'react';
 
+const EDIT_DRIVER_PERMISSION = 205;
+
 const initialStateForm: DriverEdit = {
   licenseId: '',
   licenseType: '',
@@ -42,7 +44,7 @@ const DriverInfoForm = (props: Props) => {
 
   const { user } = session || {};
 
-  const disabled = !user?.permissions.includes(205) || true;
+  const disabled = !user?.permissions.includes(EDIT_DRIVER_PERMISSION);
 
   const {
     driverUpdateMutattion: { mutate: updateDriver, isPending },

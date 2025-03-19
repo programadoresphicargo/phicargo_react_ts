@@ -4,6 +4,8 @@ import type { Partner, WaybillCategory, WaybillItem } from './waybill-models';
 import type { Contact } from '../../contacts/models';
 import type { Dayjs } from 'dayjs';
 
+export type WaybillStatus = 'draft' | 'cancel';
+
 export interface WaybillBase {
   xCodigoPostal: string;
   xReferenceOwr: string;
@@ -34,6 +36,8 @@ export interface WaybillBase {
   xTipoBel: string;
   xTipo2Bel: string;
   xModoBel: string;
+  xMedidaBel: string | null;
+  xClaseBel: string | null;
 
   // Estadisticas
   // Programado
@@ -77,8 +81,9 @@ export interface WaybillBase {
 
 export interface Waybill extends WaybillBase {
   id: number;
+  name: string | null;
   sequence_id: number;
-  state: string;
+  state: WaybillStatus;
   branch: BranchSimple;
   company: CompanySimple;
   category: WaybillCategory;

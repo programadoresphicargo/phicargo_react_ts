@@ -133,6 +133,8 @@ const initialValues: WaybillCreate = {
   xTipoBel: '',
   xTipo2Bel: '',
   xModoBel: '',
+  xClaseBel: '',
+  xMedidaBel: '',
   xAlmacenaje: false,
   xBarrasLogisticas: false,
   xConexionRefrigerado: false,

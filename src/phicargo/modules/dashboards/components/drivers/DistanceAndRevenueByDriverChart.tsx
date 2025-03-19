@@ -124,29 +124,31 @@ export const DistanceAndRevenueByDriverChart = (props: Props) => {
       title={`Ingresos y Distancia Por Unidad ${monthYearName}`}
       isLoading={isLoading && !chartData}
       customHeight="150rem"
-      downloadFn={() =>
-        toExcel.exportData(data?.distanceAndRevenueByDriver || [])
-      }
+      downloadFn={() => exportData(data?.distanceAndRevenueByDriver || [])}
     >
       {chartData && <Bar data={chartData} options={options} />}
     </ChartCard>
   );
 };
 
-const exportConf: ExportConfig<DistanceAndRevenueByDriver> = {
-  fileName: `Ingresos y distancia por Operador`,
-  withDate: true,
-  sheetName: 'Operadores',
-  columns: [
-    { accessorFn: (data) => data.driver, header: 'Operador' },
-    { accessorFn: (data) => data.amount, header: 'Ingresos' },
-    {
-      accessorFn: (data) => data.distance,
-      header: 'Distancia',
-    },
-    { accessorFn: (data) => data.travels, header: 'Viajes' },
-  ],
-};
+const exportData = (data: DistanceAndRevenueByDriver[]) => {
+  const exportConf: ExportConfig<DistanceAndRevenueByDriver> = {
+    fileName: `Ingresos y distancia por Operador`,
+    withDate: true,
+    sheetName: 'Operadores',
+    columns: [
+      { accessorFn: (data) => data.driver, header: 'Operador' },
+      { accessorFn: (data) => data.amount, header: 'Ingresos' },
+      {
+        accessorFn: (data) => data.distance,
+        header: 'Distancia',
+      },
+      { accessorFn: (data) => data.services, header: 'Servicios' },
+      { accessorFn: (data) => data.travels, header: 'Viajes' },
+    ],
+  };
 
-const toExcel = new ExportToExcel(exportConf);
+  const toExcel = new ExportToExcel(exportConf);
+  toExcel.exportData(data);
+};
 

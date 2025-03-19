@@ -1,8 +1,8 @@
 import { AxiosError } from 'axios';
 import { VehicleStats } from '../models/vehicles-stats-models';
+import { VehicleStatsAdapter } from '../adapters/vehicle-stats-adapter';
 import { VehicleStatsApi } from '../models/api/vehicles-stats-models-api';
 import odooApi from '../../core/api/odoo-api';
-import { vehicleStatsToLocal } from '../adapters/vehicle-stats-adapter';
 
 export class VehiclesStatsService {
   public static async getVehiclesStats(
@@ -13,7 +13,7 @@ export class VehiclesStatsService {
 
     try {
       const response = await odooApi.get<VehicleStatsApi>(url);
-      return vehicleStatsToLocal(response.data);
+      return VehicleStatsAdapter.vehicleStatsToLocal(response.data);
     } catch (error) {
       console.log(error);
       if (error instanceof AxiosError) {
@@ -26,3 +26,4 @@ export class VehiclesStatsService {
     }
   }
 }
+

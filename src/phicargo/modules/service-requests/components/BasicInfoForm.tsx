@@ -19,6 +19,8 @@ export const BasicInfoForm = () => {
 
   useEffect(() => {
     setValue('partnerOrderId', client);
+    setValue('partnerInvoiceId', client);
+    setValue('arrivalAddressId', client);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [client]);
 

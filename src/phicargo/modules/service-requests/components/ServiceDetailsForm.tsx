@@ -63,6 +63,16 @@ export const ServiceDetailsForm = () => {
               { label: 'EXP', id: 'exp' },
             ]}
           />
+          <TextFieldElement
+            control={control}
+            name="xClaseBel"
+            label="Clase"
+          />
+          <TextFieldElement
+            control={control}
+            name="xMedidaBel"
+            label="Medida"
+          />
           <CheckboxElement
             control={control}
             name="dangerousCargo"

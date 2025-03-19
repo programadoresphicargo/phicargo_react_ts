@@ -67,11 +67,11 @@ const LoginPage = () => {
             <div className="mb-6">
               <TextInput
                 control={control}
-                className="h-9"
-                classNames={{
-                  label: 'text-xs',
-                  innerWrapper: 'bg-red',
-                }}
+                // className="h-9"
+                // classNames={{
+                //   label: 'text-xs',
+                //   innerWrapper: 'bg-red',
+                // }}
                 name="username"
                 label="Usuario"
                 placeholder="Username"
@@ -80,10 +80,10 @@ const LoginPage = () => {
             </div>
             <div className="mb-6">
               <PasswordInput
-                className="h-9"
-                classNames={{
-                  label: 'text-xs',
-                }}
+                // className="h-9"
+                // classNames={{
+                //   label: 'text-xs',
+                // }}
                 control={control}
                 name="password"
                 label="Password"
