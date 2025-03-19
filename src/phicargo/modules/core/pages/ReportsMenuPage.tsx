@@ -1,10 +1,10 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import AvatarProfile from '../components/ui/AvatarProfile';
-import { Button } from "@heroui/react";
-import ReportMenuItem from '../components/ui/ReportMenuItem';
+import AvatarProfile from '@/components/ui/AvatarProfile';
+import { Button } from '@heroui/react';
+import ReportMenuItem from '@/components/ui/ReportMenuItem';
 import balanceIcon from '../../../../assets/menu/balanceIcon.png';
 import clockIcon from '../../../../assets/menu/clock.png';
-import detencionesIcon from '../../../../assets/menu/detenciones.png'
+import detencionesIcon from '../../../../assets/menu/detenciones.png';
 import estadiasIcon from '../../../../assets/menu/estadias.png';
 import maintenanceIcon from '../../../../assets/menu/maintenanceIcon.png';
 import phoneIcon from '../../../../assets/menu/app.png';
@@ -95,7 +95,7 @@ const ReportsMenuPage = () => {
           <Button
             isIconOnly
             aria-label="back"
-            size='sm'
+            size="sm"
             onPress={() => navigate('/menu')}
             className="bg-gray-100 rounded-full p-2 shadow-md hover:bg-gray-200 transition"
           >

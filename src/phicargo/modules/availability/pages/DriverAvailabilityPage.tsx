@@ -1,6 +1,5 @@
 import { Outlet, useNavigate } from 'react-router-dom';
 
-import MaterialTableBase from '../../core/components/tables/MaterialTableBase';
 import { useDriverQueries } from '../hooks/useDriverQueries';
 import { useDriversColumns } from '../hooks/useDriversColumns';
 import type { Driver } from '../models/driver-model';
@@ -9,6 +8,7 @@ import {
   type ExportConfig,
 } from '../../core/utilities/export-to-excel';
 import { useBaseTable } from '@/hooks';
+import { MaterialReactTable } from 'material-react-table';
 
 const DriverAvailabilityPage = () => {
   const navigate = useNavigate();
@@ -35,7 +35,7 @@ const DriverAvailabilityPage = () => {
 
   return (
     <>
-      <MaterialTableBase table={table} />
+      <MaterialReactTable table={table} />
       <Outlet />
     </>
   );

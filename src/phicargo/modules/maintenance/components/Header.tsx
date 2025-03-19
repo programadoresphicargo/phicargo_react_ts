@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { HeaderBase } from '../../core/components/ui/HeaderBase';
+import { HeaderBase } from '@/components/ui';
 import { IndicatorCard } from '@/components/utils/IndicatorCard';
 import { MaintenanceRecordStatus } from '../models';
 import { useMaintenanceRecord } from '../hooks';

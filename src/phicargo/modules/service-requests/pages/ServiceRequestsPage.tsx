@@ -3,6 +3,7 @@ import 'rsuite/dist/rsuite-no-reset.min.css';
 import { IconButton, Tooltip } from '@mui/material';
 import {
   MRT_GroupingState,
+  MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
 import { useEffect, useState } from 'react';
@@ -11,7 +12,6 @@ import { DateRange } from 'rsuite/esm/DateRangePicker/types';
 import { DateRangePicker } from 'rsuite';
 import { FiltersMenu } from '../components/ui/FiltersMenu';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import MaterialTableBase from '../../core/components/tables/MaterialTableBase';
 import type { Option } from '@/types';
 import { Outlet } from 'react-router-dom';
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -130,7 +130,7 @@ const ServiceRequestsPage = () => {
 
   return (
     <section className="px-4">
-      <MaterialTableBase table={table} />
+      <MaterialReactTable table={table} />
       <Outlet />
     </section>
   );

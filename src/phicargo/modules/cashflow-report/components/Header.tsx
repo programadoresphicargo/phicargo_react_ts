@@ -2,7 +2,7 @@ import { Button, Checkbox, Tab, Tabs } from '@heroui/react';
 import { useLoadPrevious, useWeekContext } from '../hooks';
 
 import AlertDialog from './AlertDialog';
-import { HeaderBase } from '../../core/components/ui/HeaderBase';
+import { HeaderBase } from '@/components/ui';
 import HeaderCards from './HeaderCards';
 import { IoReturnDownForwardOutline } from 'react-icons/io5';
 import WeekSelector from './WeekSelector';

@@ -7,7 +7,7 @@ import {
 } from "@heroui/react";
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-import AddButton from '../../core/components/ui/AddButton';
+import { AddButton } from "@/components/ui";
 import { TextInput } from '../../core/components/inputs/TextInput';
 import { WorkshopCreate } from '../models';
 import { useWorkshop } from '../hooks';
@@ -59,7 +59,7 @@ const AddWorkshop = (props: AddWorkshopProps) => {
                 <AddButton
                   color="primary"
                   onClick={handleSubmit(onSubmit)}
-                  isLoading={isPending}
+                  loading={isPending}
                   label="Crear Taller"
                 />
               </ModalFooter>

@@ -11,7 +11,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { useGetComments, useMaintenanceRecord } from '../hooks';
 import { useMemo, useState } from 'react';
 
-import AddButton from '../../core/components/ui/AddButton';
+import { AddButton } from "@/components/ui";
 import { BsBusFrontFill } from 'react-icons/bs';
 import CheckIcon from '@mui/icons-material/Check';
 import CompleteDialog from '../components/CompleteDialog';
@@ -129,7 +129,7 @@ const RecordDetails = () => {
                         label="Agregar Avance"
                         className="w-2/3"
                         color="primary"
-                        isLoading={isPending}
+                        loading={isPending}
                         onClick={handleSubmit(onSubmit)}
                       />
                       <Button
@@ -139,7 +139,7 @@ const RecordDetails = () => {
                         startContent={
                           <CheckIcon width={'1.5em'} height={'1.5em'} />
                         }
-                        onClick={() => setCompleteModal(true)}
+                        onPress={() => setCompleteModal(true)}
                       >
                         Finalizar
                       </Button>

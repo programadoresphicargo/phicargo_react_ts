@@ -4,12 +4,12 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-} from "@heroui/react";
+} from '@heroui/react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useMaintenanceRecord, useVehicles, useWorkshop } from '../hooks';
 import { useMemo, useState } from 'react';
 
-import AddButton from '../../core/components/ui/AddButton';
+import { AddButton } from '@/components/ui';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import AddWorkshop from '../components/AddWorkshop';
 import { DatePickerInput } from '../../core/components/inputs/DatePickerInput';
@@ -211,7 +211,7 @@ const CreateNewRecord = () => {
                 <AddButton
                   label="Crear"
                   onClick={handleSubmit(onSubmit)}
-                  isLoading={isPending}
+                  loading={isPending}
                 />
               </ModalFooter>
             </>

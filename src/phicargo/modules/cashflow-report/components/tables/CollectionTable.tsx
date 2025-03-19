@@ -10,7 +10,7 @@ import {
 } from 'material-react-table';
 import { useCollectRegisters, useWeekContext } from '../../hooks';
 
-import AddButton from '../../../core/components/ui/AddButton';
+import { AddButton } from '@/components/ui';
 import AlertDialog from '../AlertDialog';
 import type { CollectRegister } from '../../models';
 import ExportExcelButton from '@/components/ui/buttons/ExportExcelButton';
@@ -115,8 +115,7 @@ const CollectionTable = () => {
         </div>
         <AddButton
           label="Añadir"
-          size="sm"
-          onPress={() => navigate('/reportes/balance/collect/add')}
+          onClick={() => navigate('/reportes/balance/collect/add')}
         />
         <ExportExcelButton
           size="small"

@@ -1,23 +1,22 @@
 import { IconButton, Tooltip } from '@mui/material';
 import { Outlet, useNavigate } from 'react-router-dom';
 
-import AddButton from '../../core/components/ui/AddButton';
 import { Button } from '@heroui/react';
 import {
   ExportToExcel,
   type ExportConfig,
 } from '../../core/utilities/export-to-excel';
 import { HiQueueList } from 'react-icons/hi2';
-import MaterialTableBase from '../../core/components/tables/MaterialTableBase';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import type { Shift } from '../models/shift-model';
-import { useMaterialReactTable } from 'material-react-table';
+import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 import { useReorderShifts } from '../hooks/useReorderShifts';
 import { useShiftColumns } from '../hooks/useShiftColumns';
 import { useShiftQueries } from '../hooks/useShiftQueries';
 import { MdOutlineDangerous } from 'react-icons/md';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import ExportExcelButton from '@/components/ui/buttons/ExportExcelButton';
+import { AddButton } from '@/components/ui';
 
 const ShiftsPage = () => {
   const navigate = useNavigate();
@@ -85,9 +84,8 @@ const ShiftsPage = () => {
           </IconButton>
         </Tooltip>
         <AddButton
-          size="sm"
           label="Ingresar turno"
-          onPress={() => navigate('/turnos/crear')}
+          onClick={() => navigate('/turnos/crear')}
         />
         <Button
           size="sm"
@@ -137,7 +135,7 @@ const ShiftsPage = () => {
 
   return (
     <>
-      <MaterialTableBase table={table} />
+      <MaterialReactTable table={table} />
       <Outlet />
     </>
   );

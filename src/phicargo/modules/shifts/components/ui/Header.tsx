@@ -1,7 +1,7 @@
+import { HeaderBase, RefreshButton } from '@/components/ui';
+
 import { Checkbox } from '@heroui/react';
-import { HeaderBase } from '@/phicargo/modules/core/components/ui/HeaderBase';
 import { IndicatorCard } from '@/components/utils/IndicatorCard';
-import { RefreshButton } from '@/components/ui';
 import { useNavigate } from 'react-router-dom';
 import { useShiftsContext } from '../../hooks/useShiftsContext';
 import { useTravelQueries } from '../../hooks/useTravelQueries';

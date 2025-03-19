@@ -1,3 +1,4 @@
+import { AddButton, RefreshButton } from '@/components/ui';
 import { ListItemIcon, MenuItem } from '@mui/material';
 import {
   MRT_ColumnFiltersState,
@@ -9,12 +10,10 @@ import type { MaintenanceRecord, MaintenanceRecordStatus } from '../../models';
 import { useEffect, useState } from 'react';
 import { useMaintenanceRecord, useMaintenanceReportColumns } from '../../hooks';
 
-import AddButton from '../../../core/components/ui/AddButton';
 import CheckIcon from '@mui/icons-material/Check';
 import CompleteDialog from '../CompleteDialog';
 import InfoIcon from '@mui/icons-material/Info';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import { RefreshButton } from '@/components/ui';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 
@@ -132,8 +131,7 @@ const MaintenanceReportTable = (props: MaintenanceReportTableProps) => {
         <RefreshButton onRefresh={() => refetch()} />
         <AddButton
           label="Añadir Servicio"
-          size='sm'
-          onPress={() => navigate('/reportes/mantenimiento/nuevo')}
+          onClick={() => navigate('/reportes/mantenimiento/nuevo')}
         />
       </div>
     ),

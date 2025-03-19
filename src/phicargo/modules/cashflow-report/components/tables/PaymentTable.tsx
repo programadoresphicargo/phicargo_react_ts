@@ -10,7 +10,7 @@ import {
 } from 'material-react-table';
 import { usePayments, useWeekContext } from '../../hooks';
 
-import AddButton from '../../../core/components/ui/AddButton';
+import { AddButton } from '@/components/ui';
 import AlertDialog from '../AlertDialog';
 import ExportExcelButton from '@/components/ui/buttons/ExportExcelButton';
 import { FaRegEdit } from 'react-icons/fa';
@@ -113,8 +113,7 @@ const PaymentTable = () => {
         </div>
         <AddButton
           label="Añadir"
-          size="sm"
-          onPress={() => navigate('/reportes/balance/payment/add')}
+          onClick={() => navigate('/reportes/balance/payment/add')}
         />
         <ExportExcelButton
           size="small"

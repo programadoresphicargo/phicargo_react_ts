@@ -4,9 +4,9 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-} from "@heroui/react";
+} from '@heroui/react';
 
-import { useAuthContext } from '../../../auth/hooks';
+import { useAuthContext } from '@/phicargo/modules/auth/hooks';
 
 const AvatarProfile = () => {
   const { session, onLogout } = useAuthContext();

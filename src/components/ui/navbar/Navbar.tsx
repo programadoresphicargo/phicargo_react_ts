@@ -9,7 +9,7 @@ import {
   Navbar as NextUiNavbar,
 } from '@heroui/react';
 
-import AvatarProfile from './AvatarProfile';
+import AvatarProfile from '../AvatarProfile';
 import { BackButton } from '@/components/ui';
 import { NavbarLinkItem } from './NavbarLinkItem';
 import { useState } from 'react';
@@ -76,7 +76,11 @@ export const Navbar = (props: Props) => {
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         {pages.map((page, i) => (
           <NavbarItem key={i}>
-            <NavbarLinkItem name={page.name} path={page.path} exact={page.exact} />
+            <NavbarLinkItem
+              name={page.name}
+              path={page.path}
+              exact={page.exact}
+            />
           </NavbarItem>
         ))}
       </NavbarContent>
