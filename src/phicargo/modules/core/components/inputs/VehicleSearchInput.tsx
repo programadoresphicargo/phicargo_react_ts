@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { AutocompleteInput } from '@/phicargo/modules/core/components/inputs/AutocompleteInput';
 import { SelectItem } from '@/phicargo/modules/core/types/global-types';
 import { Vehicle } from '@/phicargo/modules/availability/models/vehicle-model';
-import { useDebounce } from '@/phicargo/modules/core/hooks';
+import { useDebounce } from '@/hooks';
 import { useVehicleQueries } from '@/phicargo/modules/availability/hooks/useVehicleQueries';
 
 const findVehicle = (vehicles: Vehicle[], term: string) => {

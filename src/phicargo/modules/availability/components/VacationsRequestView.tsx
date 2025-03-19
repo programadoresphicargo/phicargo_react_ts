@@ -4,7 +4,7 @@ import {
   ModalContent,
   ModalHeader,
   Spinner,
-} from "@heroui/react";
+} from '@heroui/react';
 
 import { Driver } from '../models/driver-model';
 import DriverUnavailabilityServiceApi from '../services/driver-unavailability-service';
@@ -12,7 +12,7 @@ import { DriverUnavailable } from '../models/driver-unavailability';
 import { PDFViewer } from '@react-pdf/renderer';
 import { VacationsRequest } from '../pdf/documents/VacationsRequest';
 import { useEffect } from 'react';
-import { useFetch } from '../../core/hooks';
+import { useFetch } from '@/hooks';
 
 interface Props {
   open: boolean;
@@ -39,8 +39,6 @@ const VacationsRequestView = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [unavailability]);
-
-  console.log(vacationSummary);
 
   return (
     <Modal size={'full'} isOpen={open} onClose={onClose}>

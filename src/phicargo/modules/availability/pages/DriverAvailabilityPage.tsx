@@ -1,14 +1,11 @@
+import { ExportConfig, ExportToExcel } from '@/utilities';
 import { Outlet, useNavigate } from 'react-router-dom';
 
+import type { Driver } from '../models/driver-model';
+import { MaterialReactTable } from 'material-react-table';
+import { useBaseTable } from '@/hooks';
 import { useDriverQueries } from '../hooks/useDriverQueries';
 import { useDriversColumns } from '../hooks/useDriversColumns';
-import type { Driver } from '../models/driver-model';
-import {
-  ExportToExcel,
-  type ExportConfig,
-} from '../../core/utilities/export-to-excel';
-import { useBaseTable } from '@/hooks';
-import { MaterialReactTable } from 'material-react-table';
 
 const DriverAvailabilityPage = () => {
   const navigate = useNavigate();

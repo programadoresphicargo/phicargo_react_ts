@@ -1,4 +1,4 @@
-import BaseLayout from '../../core/layouts/BaseLayout';
+import BaseLayout from '@/layouts/BaseLayout';
 import { MenuItemType } from '../../core/types/global-types';
 import { ReactNode } from 'react';
 

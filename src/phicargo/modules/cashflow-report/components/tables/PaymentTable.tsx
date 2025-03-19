@@ -1,7 +1,4 @@
-import {
-  ExportConfig,
-  ExportToExcel,
-} from '@/phicargo/modules/core/utilities/export-to-excel';
+import { ExportConfig, ExportToExcel } from '@/utilities';
 import { IconButton, Tooltip } from '@mui/material';
 import {
   MRT_TableOptions,

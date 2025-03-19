@@ -1,4 +1,4 @@
-import { ErrorBoundary } from '../../core/utilities/error-boundary';
+import { ErrorBoundary } from '@/components/utils/ErrorBoundary';
 import { Header } from '../components/ui/Header';
 import { Outlet } from 'react-router-dom';
 import { ReactNode } from 'react';

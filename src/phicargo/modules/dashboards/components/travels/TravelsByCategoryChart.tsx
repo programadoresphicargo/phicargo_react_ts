@@ -1,8 +1,5 @@
 import { ByCategory, TravelStats } from '../../models/travels-stats-models';
-import {
-  ExportConfig,
-  ExportToExcel,
-} from '@/phicargo/modules/core/utilities/export-to-excel';
+import { ExportConfig, ExportToExcel } from '@/utilities';
 import { useEffect, useState } from 'react';
 
 import { ChartCard } from '../ChartCard';

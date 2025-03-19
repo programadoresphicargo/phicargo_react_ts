@@ -16,7 +16,7 @@ import { SelectInput } from '../../core/components/inputs/SelectInput';
 import { TextInput } from '../../core/components/inputs/TextInput';
 import { daysSelection } from '../utils/day-selection-items';
 import toast from 'react-hot-toast';
-import { useDebounce } from '../../core/hooks';
+import { useDebounce } from "@/hooks";
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 

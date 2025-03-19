@@ -1,4 +1,4 @@
-import BaseLayout from '../../core/layouts/BaseLayout';
+import BaseLayout from '@/layouts/BaseLayout';
 import { DateRangeProvider } from '../context/DateRangeContext';
 import { Header } from '../components/Header';
 import { MenuItemType } from '../../core/types/global-types';

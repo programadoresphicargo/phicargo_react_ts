@@ -1,6 +1,6 @@
 import { Session } from '../../auth/models';
 import axios from 'axios';
-import { getEnvVariables } from '../utilities/get-env-variables';
+import { getEnvVariables } from '@/utilities';
 
 const { VITE_ODOO_API_URL } = getEnvVariables();
 

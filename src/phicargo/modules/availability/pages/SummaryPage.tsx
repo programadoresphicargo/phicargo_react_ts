@@ -1,14 +1,12 @@
+import { ExportConfig, ExportToExcel } from '@/utilities';
+
 import { MaterialReactTable } from 'material-react-table';
+import type { VehicleWithRealStatus } from '../models/vehicle-model';
 import VehiclesWithRealStatus from '../utilities/get-vehicles-real-status';
+import { useBaseTable } from '@/hooks';
 import { useMemo } from 'react';
 import { useSummaryColumns } from '../hooks/useSummaryColumns';
 import { useVehicleQueries } from '../hooks/useVehicleQueries';
-import {
-  ExportToExcel,
-  type ExportConfig,
-} from '../../core/utilities/export-to-excel';
-import type { VehicleWithRealStatus } from '../models/vehicle-model';
-import { useBaseTable } from '@/hooks';
 
 const SummaryPage = () => {
   const {

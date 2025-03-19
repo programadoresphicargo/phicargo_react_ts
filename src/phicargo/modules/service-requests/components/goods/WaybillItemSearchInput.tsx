@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react';
 import { AutocompleteElement } from 'react-hook-form-mui';
 import TurnedInIcon from '@mui/icons-material/TurnedIn';
 import type { WaybillItemKey } from '../../types';
-import { useDebounce } from '@/phicargo/modules/core/hooks';
+import { useDebounce } from '@/hooks';
 import { useGetItems } from '../../hooks/queries';
 
 interface Props<T extends FieldValues> {

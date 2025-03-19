@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { AutocompleteInput } from '@/phicargo/modules/core/components/inputs/AutocompleteInput';
 import { Driver } from '@/phicargo/modules/availability/models/driver-model';
 import { SelectItem } from '@/phicargo/modules/core/types/global-types';
-import { useDebounce } from '@/phicargo/modules/core/hooks';
+import { useDebounce } from '@/hooks';
 import { useDriverQueries } from '@/phicargo/modules/availability/hooks/useDriverQueries';
 
 const findDriver = (driver: Driver[], term: string) => {

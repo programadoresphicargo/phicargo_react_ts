@@ -1,14 +1,11 @@
-import {
-  type ExportConfig,
-  ExportToExcel,
-} from '../../core/utilities/export-to-excel';
+import { ExportConfig, ExportToExcel } from '@/utilities';
 import { Outlet, useNavigate } from 'react-router-dom';
 
 import { MaterialReactTable } from 'material-react-table';
 import type { Vehicle } from '../models/vehicle-model';
+import { useBaseTable } from '@/hooks';
 import { useVehicleColumns } from '../hooks/useVehicleColumns';
 import { useVehicleQueries } from '../hooks/useVehicleQueries';
-import { useBaseTable } from '@/hooks';
 
 const AsignacionUnidades = () => {
   const navigate = useNavigate();
