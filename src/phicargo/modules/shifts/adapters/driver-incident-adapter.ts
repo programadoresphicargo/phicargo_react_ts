@@ -8,7 +8,7 @@ import type {
   IncidenceCreateApi,
 } from '../models/api/driver-incidence-model-api';
 
-import dayjs from '../../core/utilities/dayjs-config';
+import dayjs from '@/utilities/dayjs-config';
 import { userBasicToLocal } from '../../auth/adapters';
 
 const driverInfoToLocal = (driver: DriverInfoApi): DriverInfo => ({
