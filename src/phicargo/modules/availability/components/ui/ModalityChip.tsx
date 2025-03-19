@@ -1,5 +1,5 @@
 import { Chip } from "@heroui/react";
-import { Modality } from '../../models/driver-model';
+import type { Modality } from '@/phicargo/modules/drivers/models';
 
 interface Props {
   modality: Modality;

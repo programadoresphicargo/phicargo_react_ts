@@ -3,13 +3,13 @@ import {
   useMaterialReactTable,
 } from 'material-react-table';
 
-import { Driver } from '../../availability/models/driver-model';
+import type { Driver } from '@/phicargo/modules/drivers/models';
 import { DriverAccountForm } from '../components/DriverAccountForm';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { Outlet } from 'react-router-dom';
 import { RefreshButton } from '@/components/ui';
 import { useDriverAccountsColumns } from '../hooks/useDriverAccountsColumns';
-import { useDriverQueries } from '../../availability/hooks/useDriverQueries';
+import { useDriverQueries } from '../../drivers/hooks/queries';
 
 const DriversAccountsPage = () => {
   const columns = useDriverAccountsColumns();

@@ -1,5 +1,5 @@
 import { Chip } from "@heroui/react";
-import type { Job } from '../../models/driver-model';
+import { Job } from "@/phicargo/modules/drivers/models";
 
 interface Props {
   job: Job;

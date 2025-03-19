@@ -1,29 +1,35 @@
 import { ExportConfig, ExportToExcel } from '@/utilities';
-import { Outlet, useNavigate } from 'react-router-dom';
 
-import type { Driver } from '../models/driver-model';
+import { Driver } from '../../drivers/models';
+import { DriverInformationModal } from '../../drivers/components/DriverInformationModal';
 import { MaterialReactTable } from 'material-react-table';
+import { Outlet } from 'react-router-dom';
 import { useBaseTable } from '@/hooks';
-import { useDriverQueries } from '../hooks/useDriverQueries';
+import { useDriverQueries } from '../../drivers/hooks/queries';
 import { useDriversColumns } from '../hooks/useDriversColumns';
+import { useState } from 'react';
 
 const DriverAvailabilityPage = () => {
-  const navigate = useNavigate();
 
-  const {
-    driversQuery: { data: drivers, isFetching, isLoading, refetch },
-  } = useDriverQueries();
+  const [driverInfo, setDriverInfo] = useState<Driver | null>(null);
+
+  const { driversQuery } = useDriverQueries();
 
   const { columns } = useDriversColumns();
 
+  const onOpenInfo = (driver: Driver) => {
+    setDriverInfo(driver);
+  };
+
   const table = useBaseTable<Driver>({
     columns,
-    data: drivers || [],
+    data: driversQuery.data || [],
     tableId: 'availability-drivers-table',
-    isLoading,
-    isFetching,
-    onDoubleClickFn: (id) => navigate(`detalles/${id}`),
-    refetchFn: () => refetch(),
+    isLoading: driversQuery.isLoading,
+    isFetching: driversQuery.isFetching,
+    error: driversQuery.error?.message,
+    onDoubleClickFn: onOpenInfo,
+    refetchFn: () => driversQuery.refetch(),
     exportFn: (data) => toExcel.exportData(data),
     showColumnFilters: true,
     showGlobalFilter: true,
@@ -33,6 +39,13 @@ const DriverAvailabilityPage = () => {
   return (
     <>
       <MaterialReactTable table={table} />
+      {driverInfo && (
+        <DriverInformationModal
+          open={!!driverInfo}
+          onClose={() => setDriverInfo(null)}
+          driver={driverInfo}
+        />
+      )}
       <Outlet />
     </>
   );

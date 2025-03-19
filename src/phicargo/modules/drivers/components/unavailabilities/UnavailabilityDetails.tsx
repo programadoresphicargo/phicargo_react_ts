@@ -7,9 +7,9 @@ import {
   ModalHeader,
 } from '@heroui/react';
 
-import { DriverUnavailable } from '../models/driver-unavailability';
+import type { DriverUnavailable } from '../../models';
 import dayjs from 'dayjs';
-import { useUnavailabilityQueries } from '../hooks/useUnavailabilityQueries';
+import { useUnavailabilityQueries } from '../../hooks/queries';
 
 interface Props {
   item: DriverUnavailable;
@@ -21,11 +21,13 @@ interface Props {
 const UnavailiabilityDetails = (props: Props) => {
   const { isOpen, onOpenChange, item, driverName } = props;
 
-  const { releaseDriverUnavailabilityMutation } = useUnavailabilityQueries({ driverId: item.employeeId });
+  const { releaseDriverUnavailabilityMutation } = useUnavailabilityQueries({
+    driverId: item.employeeId,
+  });
 
   const onRelease = () => {
     releaseDriverUnavailabilityMutation.mutate(item.id);
-  }
+  };
 
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center">
@@ -33,7 +35,9 @@ const UnavailiabilityDetails = (props: Props) => {
         {() => (
           <>
             <ModalHeader className="flex flex-col gap-2">
-              <h3 className="text-lg font-semibold uppercase">{item.reasonType}</h3>
+              <h3 className="text-lg font-semibold uppercase">
+                {item.reasonType}
+              </h3>
               <p className="text-sm text-gray-500">Operador: {driverName}</p>
             </ModalHeader>
             <ModalBody>

@@ -4,7 +4,7 @@ import type {
   ManeuverSimple,
   TravelSimple,
 } from '../../core/models';
-import type { DriverSimple, Modality } from './driver-model';
+import { DriverSimple, Modality } from '../../drivers/models';
 
 import type { MaintenanceRecordSimple } from '../../maintenance/models';
 import { SimpleData } from '@/types';

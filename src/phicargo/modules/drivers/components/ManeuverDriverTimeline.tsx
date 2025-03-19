@@ -1,5 +1,6 @@
-import { FiAlertCircle } from 'react-icons/fi';
-import { Spinner } from '@heroui/react';
+import { Alert, Card, CardBody, CardHeader } from '@heroui/react';
+
+import { LoadingSpinner } from '@/components/ui';
 import { useManeuverQueries } from '../hooks/queries';
 
 interface Props {
@@ -12,20 +13,25 @@ export const ManeuverDriverTimeline = ({ driverId }: Props) => {
   } = useManeuverQueries({ driverId });
 
   return (
-    <>
-      <h3 className="font-bold text-lg text-gray-800 mb-4">
-        Últimas maniobras del operador
-      </h3>
-      <div className="space-y-6">
-        {isFetching && <Spinner />}
-        {maneuvers && maneuvers.length === 0 && (
-          <div className="flex items-center justify-center gap-2 p-4 border border-gray-300 rounded-md bg-gray-100 text-gray-700">
-            <FiAlertCircle className="text-gray-500 text-xl" />
-            <span>No hay maniobras para este operador.</span>
-          </div>
-        )}
-        {maneuvers &&
-          maneuvers.length > 0 &&
+    <Card
+      classNames={{
+        base: 'shadow-none',
+        header: 'bg-gray-100 px-4 py-1',
+        body: 'overflow-y-auto h-80',
+      }}
+      radius="md"
+    >
+      <CardHeader className="flex items-center justify-between">
+        <div>
+          <h3 className="text-gray-800 font-bold text-lg">
+            Últimas maniobras del operador
+          </h3>
+        </div>
+      </CardHeader>
+      <CardBody>
+        {isFetching ? (
+          <LoadingSpinner />
+        ) : maneuvers && maneuvers.length > 0 ? (
           maneuvers.map((maneuver) => (
             <div className="relative pl-6">
               <div className="absolute top-0 left-0 w-2 h-2 bg-blue-500 rounded-full"></div>
@@ -46,9 +52,12 @@ export const ManeuverDriverTimeline = ({ driverId }: Props) => {
                 </p>
               </div>
             </div>
-          ))}
-      </div>
-    </>
+          ))
+        ) : (
+          <Alert color="warning" title="No hay maniobras para este operador" />
+        )}
+      </CardBody>
+    </Card>
   );
 };
 

@@ -2,7 +2,7 @@ import { DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { Button } from '@/components/ui';
-import { Driver } from '../../availability/models/driver-model';
+import type { Driver } from '@/phicargo/modules/drivers/models';
 import { MUIPasswordInput } from '@/components/inputs';
 import { useChangeDriverPassword } from '../../drivers/hooks/queries';
 

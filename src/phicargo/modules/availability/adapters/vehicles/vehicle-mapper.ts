@@ -9,8 +9,8 @@ import type {
   VehicleUpdateApi,
 } from '../../models/api/vehicle-model-api';
 
+import { DriverAdapter } from '../../../drivers/adapters/driver-adapter';
 import dayjs from 'dayjs';
-import { driverSimpleToLocal } from '../drivers/driver-mapper';
 
 /**
  * Mapper function to convert a VehicleBaseApi object to a VehicleBase object
@@ -64,7 +64,7 @@ export const vehicleToLocal = (vehicle: VehicleApi): Vehicle => ({
         orderService: vehicle.maintenance_records.order_service,
       }
     : null,
-  driver: vehicle.driver ? driverSimpleToLocal(vehicle.driver) : null,
+  driver: vehicle.driver ? DriverAdapter.driverSimpleToLocal(vehicle.driver) : null,
 });
 
 /**

@@ -1,11 +1,12 @@
-import { Button, Card, CardBody, CardHeader, Spinner } from "@heroui/react";
+import { Alert, LoadingSpinner } from '@/components/ui';
+import { Button, Card, CardBody, CardHeader } from '@heroui/react';
 
-import { Driver } from '../models/driver-model';
+import type { Driver } from '../../models';
 import { IoIosAddCircle } from 'react-icons/io';
 import { PermissionsHistory } from './PermissionsHistory';
 import UnavailiabilityCreateModal from './UnavailiabilityCreateModal';
 import { useState } from 'react';
-import { useUnavailabilityQueries } from '../hooks/useUnavailabilityQueries';
+import { useUnavailabilityQueries } from '../../hooks/queries';
 
 interface Props {
   driver: Driver;
@@ -22,10 +23,19 @@ const DriverPermissions = (props: Props) => {
 
   return (
     <>
-      <Card className="border max-h-96">
-        <CardHeader className="flex items-center justify-between bg-gray-100">
+      <Card
+        classNames={{
+          base: 'shadow-none',
+          header: 'bg-gray-100 px-4 py-1',
+          body: 'overflow-y-auto h-80',
+        }}
+        radius="md"
+      >
+        <CardHeader className="flex items-center justify-between">
           <div>
-            <h3 className="font-bold text-lg">Historial de Permisos / Castigos</h3>
+            <h3 className="text-gray-800 font-bold text-lg">
+              Historial de Permisos / Castigos
+            </h3>
           </div>
           <Button
             color="primary"
@@ -37,15 +47,19 @@ const DriverPermissions = (props: Props) => {
             <IoIosAddCircle />
           </Button>
         </CardHeader>
-        <CardBody className="p-4 overflow-y-auto">
+        <CardBody>
           {isFetching ? (
-            <Spinner size="sm" />
+            <LoadingSpinner />
           ) : unavailabilities && unavailabilities.length > 0 ? (
-            <PermissionsHistory driver={driver} unavailabilities={unavailabilities} />
+            <PermissionsHistory
+              driver={driver}
+              unavailabilities={unavailabilities}
+            />
           ) : (
-            <p className="text-sm text-gray-500">
-              No hay permisos o castigos registrados.
-            </p>
+            <Alert
+              color="primary"
+              title="No hay permisos ni castigos para este operador"
+            />
           )}
         </CardBody>
       </Card>

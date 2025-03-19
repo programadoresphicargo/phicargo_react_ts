@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from '@react-pdf/renderer';
 
 import { Dayjs } from 'dayjs';
-import type { DriverVacationSummary } from '../../models/driver-unavailability';
+import { DriverVacationSummary } from '@/phicargo/modules/drivers/models';
 import { SectionTitle } from './SectionTitle';
 
 const styles = StyleSheet.create({

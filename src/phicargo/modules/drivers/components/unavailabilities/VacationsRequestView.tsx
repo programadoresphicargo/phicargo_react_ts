@@ -1,3 +1,4 @@
+import type { Driver, DriverUnavailable } from '@/phicargo/modules/drivers/models';
 import {
   Modal,
   ModalBody,
@@ -6,11 +7,9 @@ import {
   Spinner,
 } from '@heroui/react';
 
-import { Driver } from '../models/driver-model';
-import DriverUnavailabilityServiceApi from '../services/driver-unavailability-service';
-import { DriverUnavailable } from '../models/driver-unavailability';
+import { DriverUnavailabilityServiceApi } from '../../services';
 import { PDFViewer } from '@react-pdf/renderer';
-import { VacationsRequest } from '../pdf/documents/VacationsRequest';
+import { VacationsRequest } from '@/phicargo/modules/availability/pdf/documents/VacationsRequest';
 import { useEffect } from 'react';
 import { useFetch } from '@/hooks';
 

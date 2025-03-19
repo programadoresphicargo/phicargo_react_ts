@@ -10,9 +10,9 @@ import type {
   VehicleState,
 } from '../vehicle-model';
 
-import type { DriverSimpleApi } from './driver-model-api';
+import { DriverSimpleApi } from '@/phicargo/modules/drivers/models/api';
 import type { MaintenanceRecordSimpleApi } from '../../../maintenance/models';
-import { Modality } from '../driver-model';
+import { Modality } from '@/phicargo/modules/drivers/models';
 
 export interface VehicleBaseApi {
   id: number;

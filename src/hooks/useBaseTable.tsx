@@ -23,7 +23,7 @@ interface Config<T extends MRT_RowData & BaseRowData>
   containerHeight?: string;
   showColumnFilters?: boolean;
   showGlobalFilter?: boolean;
-  onDoubleClickFn?: (id: number | string) => void;
+  onDoubleClickFn?: (item: T) => void;
   refetchFn?: () => void;
   exportFn?: (data: T[]) => void;
   toolbarActions?: React.ReactNode;
@@ -102,7 +102,7 @@ export const useBaseTable = <T extends MRT_RowData & BaseRowData>(
     ),
     muiTableBodyRowProps: config.onDoubleClickFn
       ? ({ row }) => ({
-          onDoubleClick: () => config.onDoubleClickFn?.(row.original.id),
+          onDoubleClick: () => config.onDoubleClickFn?.(row.original),
           sx: { cursor: 'pointer' },
         })
       : undefined,

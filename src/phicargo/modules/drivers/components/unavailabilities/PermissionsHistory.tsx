@@ -1,5 +1,5 @@
-import { Driver } from '../models/driver-model';
-import { DriverUnavailable } from '../models/driver-unavailability';
+import type { Driver, DriverUnavailable } from '../../models';
+
 import { FaInfoCircle } from 'react-icons/fa';
 import { IoDocumentTextOutline } from 'react-icons/io5';
 import { Tooltip } from '@heroui/react';

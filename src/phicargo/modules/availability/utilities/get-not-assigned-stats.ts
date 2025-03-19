@@ -1,4 +1,4 @@
-import type { Driver } from '../models/driver-model';
+import type { Driver } from '../../drivers/models';
 import type { Vehicle } from '../models/vehicle-model';
 
 type NotAssignedTypes = {

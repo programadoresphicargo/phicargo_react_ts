@@ -2,10 +2,10 @@ import { Control, FieldValues, Path } from 'react-hook-form';
 import { useEffect, useMemo, useState } from 'react';
 
 import { AutocompleteInput } from './AutocompleteInput';
-import { Driver } from '@/phicargo/modules/availability/models/driver-model';
+import type { Driver } from '@/phicargo/modules/drivers/models';
 import { SelectItem } from '@/types';
 import { useDebounce } from '@/hooks';
-import { useDriverQueries } from '@/phicargo/modules/availability/hooks/useDriverQueries';
+import { useDriverQueries } from '@/phicargo/modules/drivers/hooks/queries';
 
 const findDriver = (driver: Driver[], term: string) => {
   return driver.filter((v) =>

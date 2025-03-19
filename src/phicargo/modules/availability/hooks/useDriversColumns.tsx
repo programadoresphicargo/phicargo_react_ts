@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { type MRT_ColumnDef } from 'material-react-table';
 import ModalityChip from '../components/ui/ModalityChip';
 import StatusChip from '../components/ui/StatusChip';
-import type { Driver, Modality, Status } from '../models/driver-model';
+import type { Driver, Modality, Status } from '@/phicargo/modules/drivers/models';
 import JobChip from '../components/ui/JobChip';
 import { ManeuverCell } from '../components/ui/ManeuverCell';
 import { TravelCell } from '../components/ui/TravelCell';

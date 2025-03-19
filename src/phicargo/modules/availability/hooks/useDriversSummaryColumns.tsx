@@ -1,6 +1,6 @@
 import { ActivePermissionCell } from '../components/ui/ActivePermissionCell';
 import { Chip } from '@heroui/react';
-import type { DriverWithRealStatus } from '../models/driver-model';
+import type { DriverWithRealStatus } from '@/phicargo/modules/drivers/models';
 import JobChip from '../components/ui/JobChip';
 import type { MRT_ColumnDef } from 'material-react-table';
 import { ManeuverCell } from '../components/ui/ManeuverCell';
@@ -95,7 +95,9 @@ export const useDriversSummaryColumns = () => {
         Cell: ({ row }) => {
           const value = row.original?.lastManeuver?.finishedDate;
           return value ? (
-            <span className="font-bold uppercase">{value.format('DD/MM/YYYY hh:mm A')}</span>
+            <span className="font-bold uppercase">
+              {value.format('DD/MM/YYYY hh:mm A')}
+            </span>
           ) : (
             <span className="text-gray-400">{'N/A'}</span>
           );

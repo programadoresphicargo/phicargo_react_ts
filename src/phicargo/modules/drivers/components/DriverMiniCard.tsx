@@ -1,5 +1,5 @@
 import { BsBusFrontFill } from 'react-icons/bs';
-import type { Driver } from '../models/driver-model';
+import type { Driver } from '../models';
 import { FaRegUser } from 'react-icons/fa';
 import { FaTruckLoading } from 'react-icons/fa';
 import { GrLicense } from 'react-icons/gr';

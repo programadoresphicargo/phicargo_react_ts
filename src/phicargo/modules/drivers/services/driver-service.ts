@@ -1,10 +1,47 @@
+import type { Driver, DriverEdit, Maneuver } from '../models';
+import { DriverAdapter, maneuverToLocal } from '../adapters';
+import type { DriverApi, ManeuverApi } from '../models/api';
+
 import { AxiosError } from 'axios';
-import type { Maneuver } from '../models';
-import type { ManeuverApi } from '../models/api';
-import { maneuverToLocal } from '../adapters';
+import { UpdatableItem } from '@/types';
 import odooApi from '../../core/api/odoo-api';
 
 export class DriverService {
+  static async getAllDrivers(): Promise<Driver[]> {
+    try {
+      const response = await odooApi.get<DriverApi[]>('/drivers/');
+      return response.data.map(DriverAdapter.driverToLocal);
+    } catch (error) {
+      console.error(error);
+      if (error instanceof AxiosError) {
+        throw new Error(
+          error.response?.data?.detail || 'Error getting drivers',
+        );
+      }
+      throw new Error('Error getting drivers');
+    }
+  }
+
+  static async updateDriver({
+    id,
+    updatedItem,
+  }: UpdatableItem<DriverEdit>): Promise<Driver> {
+    const driver = DriverAdapter.driverUpdateToApi(updatedItem);
+
+    try {
+      const response = await odooApi.patch<DriverApi>(`/drivers/${id}`, driver);
+      return DriverAdapter.driverToLocal(response.data);
+    } catch (error) {
+      console.error(error);
+      if (error instanceof AxiosError) {
+        throw new Error(
+          error.response?.data?.detail || 'Error updating driver',
+        );
+      }
+      throw new Error('Error updating driver');
+    }
+  }
+
   public static async getManeuversByDriverId(
     driverId: number,
   ): Promise<Maneuver[]> {
@@ -14,7 +51,7 @@ export class DriverService {
       const response = await odooApi.get<ManeuverApi[]>(url);
       return response.data.map(maneuverToLocal);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data?.detail || 'Error al obtener los maniobras',
@@ -36,7 +73,7 @@ export class DriverService {
     try {
       await odooApi.put(url);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data?.detail || 'Error al cambiar la contraseña',

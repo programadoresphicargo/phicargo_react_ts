@@ -1,10 +1,10 @@
 import { ExportConfig, ExportToExcel } from '@/utilities';
 
-import type { DriverWithRealStatus } from '../models/driver-model';
+import { DriverWithRealStatus } from '../../drivers/models';
 import DriversWithRealStatus from '../utilities/get-drivers-real-status';
 import { MaterialReactTable } from 'material-react-table';
 import { useBaseTable } from '@/hooks';
-import { useDriverQueries } from '../hooks/useDriverQueries';
+import { useDriverQueries } from '../../drivers/hooks/queries';
 import { useDriversSummaryColumns } from '../hooks/useDriversSummaryColumns';
 import { useMemo } from 'react';
 

@@ -1,5 +1,5 @@
 import type { MRT_ColumnDef } from 'material-react-table';
-import { Modality } from '../models/driver-model';
+import type { Modality } from '@/phicargo/modules/drivers/models';
 import ModalityChip from '../components/ui/ModalityChip';
 import type { Vehicle } from '../models/vehicle-model';
 import VehicleTypeChip from '../components/ui/VehicleTypeChip';

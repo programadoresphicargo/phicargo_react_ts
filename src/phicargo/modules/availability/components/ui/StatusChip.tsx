@@ -1,5 +1,5 @@
 import { Chip } from "@heroui/react";
-import { Status } from '../../models/driver-model';
+import type { Status } from '@/phicargo/modules/drivers/models';
 
 interface Props {
   status: Status;

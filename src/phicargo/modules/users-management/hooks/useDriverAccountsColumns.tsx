@@ -1,4 +1,4 @@
-import { Driver } from '../../availability/models/driver-model';
+import type { Driver } from '@/phicargo/modules/drivers/models';
 import { MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
 

@@ -17,7 +17,6 @@ const DriverAvailabilityPage = lazy(() =>
     default: memo(module.default),
   })),
 );
-const DriverInfo = lazy(() => import('../outlets/DriverInfo'));
 const NotAssignedPage = lazy(() => import('../pages/NotAssignedPage'));
 const SummaryPage = lazy(() =>
   import('../pages/SummaryPage').then((module) => ({
@@ -75,14 +74,6 @@ const AvailabilityRoutes = () => {
           </Suspense>
         }
       >
-        <Route
-          path="detalles/:id"
-          element={
-            <Suspense fallback={<LoadingPage />}>
-              <DriverInfo />
-            </Suspense>
-          }
-        />
       </Route>
       <Route
         path="resumen-unidades"
