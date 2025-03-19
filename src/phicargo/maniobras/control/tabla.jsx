@@ -26,6 +26,8 @@ import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 import EnviosMasivosManiobras from '../envio_masivo';
+import { User } from "@heroui/react";
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -193,6 +195,25 @@ const Maniobras = ({ estado_maniobra }) => {
         header: 'Cliente',
         size: 150,
       },
+      {
+        accessorKey: 'usuario_creacion',
+        header: 'Usuario registro',
+        size: 150,
+        Cell: ({ cell }) => {
+          const nombre = cell.getValue();
+          const fecha_registro = cell.row.original.fecha_registro;
+
+          return (
+            <User
+              avatarProps={{
+                src: "",
+              }}
+              description={fecha_registro}
+              name={nombre}
+            />
+          );
+        },
+      },
     ],
     [],
   );
@@ -205,6 +226,7 @@ const Maniobras = ({ estado_maniobra }) => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
+    localization: MRT_Localization_ES,
     state: { showProgressBars: isLoading2 },
     enableColumnPinning: true,
     enableStickyHeader: true,
