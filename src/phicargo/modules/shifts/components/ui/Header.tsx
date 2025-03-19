@@ -1,7 +1,7 @@
-import { Checkbox } from "@heroui/react";
+import { Checkbox } from '@heroui/react';
 import { HeaderBase } from '@/phicargo/modules/core/components/ui/HeaderBase';
-import { IndicatorCard } from "@/components/utils/IndicatorCard";
-import { RefreshButton } from '@/phicargo/modules/core/components/ui/RefreshButton';
+import { IndicatorCard } from '@/components/utils/IndicatorCard';
+import { RefreshButton } from '@/components/ui';
 import { useNavigate } from 'react-router-dom';
 import { useShiftsContext } from '../../hooks/useShiftsContext';
 import { useTravelQueries } from '../../hooks/useTravelQueries';
@@ -9,12 +9,9 @@ import { useTravelQueries } from '../../hooks/useTravelQueries';
 export const Header = () => {
   const navigate = useNavigate();
   const { branchId, setBranchId } = useShiftsContext();
-  const {
-    travelsInPlantQuery, 
-    travelsUnloadingQuery,
-    travelsNearQuery
-  } = useTravelQueries();
-  
+  const { travelsInPlantQuery, travelsUnloadingQuery, travelsNearQuery } =
+    useTravelQueries();
+
   return (
     <HeaderBase backRoute="/menu">
       <IndicatorCard
@@ -24,10 +21,8 @@ export const Header = () => {
         infoButton
         onInfoClick={() => navigate('/turnos/unidades-descargando')}
         startContent={
-          <RefreshButton 
-            style={{ padding: 0 }} 
-            onClick={() => travelsUnloadingQuery.refetch()}
-            buttonClassName='text-emerald-400'
+          <RefreshButton
+            onRefresh={() => travelsUnloadingQuery.refetch()}
             isLoading={travelsUnloadingQuery.isPending}
           />
         }
@@ -40,9 +35,7 @@ export const Header = () => {
         onInfoClick={() => navigate('/turnos/unidades-bajando')}
         startContent={
           <RefreshButton
-            style={{ padding: 0 }}   
-            onClick={() => travelsNearQuery.refetch()}
-            buttonClassName='text-emerald-400'
+            onRefresh={() => travelsNearQuery.refetch()}
             isLoading={travelsNearQuery.isPending}
           />
         }
@@ -55,9 +48,7 @@ export const Header = () => {
         onInfoClick={() => navigate('/turnos/unidades-planta')}
         startContent={
           <RefreshButton
-            style={{ padding: 0 }}   
-            onClick={() => travelsInPlantQuery.refetch()}
-            buttonClassName='text-emerald-400'
+            onRefresh={() => travelsInPlantQuery.refetch()}
             isLoading={travelsInPlantQuery.isPending}
           />
         }

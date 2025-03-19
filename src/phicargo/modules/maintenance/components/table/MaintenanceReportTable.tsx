@@ -14,7 +14,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import CompleteDialog from '../CompleteDialog';
 import InfoIcon from '@mui/icons-material/Info';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import { RefreshButton } from '@/phicargo/modules/core/components/ui/RefreshButton';
+import { RefreshButton } from '@/components/ui';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 
@@ -129,7 +129,7 @@ const MaintenanceReportTable = (props: MaintenanceReportTableProps) => {
     ],
     renderTopToolbarCustomActions: () => (
       <div className="flex flex-row gap-2 items-center">
-        <RefreshButton onClick={() => refetch()} />
+        <RefreshButton onRefresh={() => refetch()} />
         <AddButton
           label="Añadir Servicio"
           size='sm'
