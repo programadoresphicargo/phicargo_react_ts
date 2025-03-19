@@ -16,6 +16,7 @@ import YearSelector from '@/año';
 import { toast } from 'react-toastify';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { ManiobraProvider } from '../context/viajeContext';
+import { exportToCSV } from '../../utils/export';
 
 const CartasPorte = () => {
   const [isLoading2, setLoading] = useState();
@@ -243,6 +244,14 @@ const CartasPorte = () => {
           <SelectItem key={'carta'}>Cartas porte</SelectItem>
           <SelectItem key={'solicitud'}>Solicitudes de transporte</SelectItem>
         </Select>
+        <Box sx={{ flexGrow: 1, ml: 2 }}>
+          <Button color='success'
+            className='text-white'
+            startContent={<i class="bi bi-file-earmark-excel"></i>}
+            onPress={() => exportToCSV(data, columns, "contenedores.csv")}
+          >Exportar
+          </Button>
+        </Box>
       </Box>
     ),
   });
