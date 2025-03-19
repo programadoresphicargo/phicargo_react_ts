@@ -1,11 +1,8 @@
+import { CheckboxInput, EmailInput, PasswordInput2, TextInput } from '@/components/inputs';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { Button } from "@heroui/react";
-import { CheckboxInput } from '../../core/components/inputs/CheckboxInput';
-import { EmailInput } from '../../core/components/inputs/EmailInput';
 import type { FullUser } from '../../auth/models';
-import { PasswordInput } from '../../core/components/inputs/PasswordInput';
-import { TextInput } from '../../core/components/inputs/TextInput';
 import type { UserUpdate } from '../models';
 import { useUsersQueries } from '../hooks/useUsersQueries';
 
@@ -65,7 +62,7 @@ const UserForm = (props: Props) => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <PasswordInput
+          <PasswordInput2
             control={control}
             name="password"
             label="Contraseña"
@@ -81,7 +78,7 @@ const UserForm = (props: Props) => {
         </div>
 
         <div className="flex items-center space-x-2">
-          <PasswordInput
+          <PasswordInput2
             control={control}
             name="pin"
             label="Pin"

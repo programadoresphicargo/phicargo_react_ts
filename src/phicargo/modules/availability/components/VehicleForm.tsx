@@ -1,9 +1,8 @@
+import { DriverSearchInput, SelectInput } from '@/components/inputs';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Vehicle, VehicleUpdate } from '../models/vehicle-model';
 
 import { Button } from "@heroui/react";
-import { DriverSearchInput } from '../../core/components/inputs/DriverSearchInput';
-import { SelectInput } from '../../core/components/inputs/SelectInput';
 import { useAuthContext } from '../../auth/hooks';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';

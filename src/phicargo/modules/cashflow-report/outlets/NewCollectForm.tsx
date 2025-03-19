@@ -1,3 +1,4 @@
+import { AutocompleteInput, NumberInput, SelectInput } from "@/components/inputs";
 import {
   Button,
   Modal,
@@ -9,10 +10,7 @@ import {
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useCollectRegisters, useContacts, useWeekContext } from '../hooks';
 
-import { AutocompleteInput } from '../../core/components/inputs/AutocompleteInput';
 import { FaCheck } from 'react-icons/fa';
-import NumberInput from '../../core/components/inputs/NumberInput';
-import { SelectInput } from '../../core/components/inputs/SelectInput';
 import { daysSelection } from '../utils/day-selection-items';
 import toast from 'react-hot-toast';
 import { useDebounce } from "@/hooks";

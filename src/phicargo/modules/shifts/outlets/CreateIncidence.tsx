@@ -5,16 +5,14 @@ import {
   ModalContent,
   ModalHeader,
 } from "@heroui/react";
+import { DatePickerInput, SelectInput, TextareaInput } from "@/components/inputs";
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-import { DatePickerInput } from '../../core/components/inputs/DatePickerInput';
 import { Dayjs } from 'dayjs';
 import { FaRegSave } from 'react-icons/fa';
 import type { IncidenceCreate } from '../models/driver-incidence-model';
-import { SelectInput } from '../../core/components/inputs/SelectInput';
 import { SelectItem } from "@/types";
-import { TextareaInput } from '../../core/components/inputs/TextareaInput';
 import { useIncidenceQueries } from '../hooks/useIncidenceQueries';
 import { useMemo } from 'react';
 import { useShiftQueries } from '../hooks/useShiftQueries';

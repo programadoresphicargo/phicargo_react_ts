@@ -1,22 +1,24 @@
 import {
+  AutocompleteInput,
+  NumberInput,
+  SelectInput,
+  TextInput,
+} from '@/components/inputs';
+import {
   Button,
   Modal,
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
-} from "@heroui/react";
+} from '@heroui/react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useContacts, usePayments, useWeekContext } from '../hooks';
 
-import { AutocompleteInput } from '../../core/components/inputs/AutocompleteInput';
 import { FaCheck } from 'react-icons/fa';
-import NumberInput from '../../core/components/inputs/NumberInput';
-import { SelectInput } from '../../core/components/inputs/SelectInput';
-import { TextInput } from '../../core/components/inputs/TextInput';
 import { daysSelection } from '../utils/day-selection-items';
 import toast from 'react-hot-toast';
-import { useDebounce } from "@/hooks";
+import { useDebounce } from '@/hooks';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 

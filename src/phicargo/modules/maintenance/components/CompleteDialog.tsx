@@ -6,12 +6,11 @@ import {
   ModalFooter,
   ModalHeader,
 } from "@heroui/react";
+import { DatePickerInput, SelectInput } from "@/components/inputs";
 import { SubmitHandler, useForm } from 'react-hook-form';
 import dayjs, { Dayjs } from 'dayjs';
 
-import { DatePickerInput } from '../../core/components/inputs/DatePickerInput';
 import type { MaintenanceRecordStatus } from '../models';
-import { SelectInput } from '../../core/components/inputs/SelectInput';
 import { useMaintenanceRecord } from '../hooks';
 
 interface RegisterDetailForm {

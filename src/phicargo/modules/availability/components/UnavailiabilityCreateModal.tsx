@@ -6,14 +6,12 @@ import {
   ModalFooter,
   ModalHeader,
 } from "@heroui/react";
+import { DatePickerInput, SelectInput, TextInput } from "@/components/inputs";
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-import { DatePickerInput } from '../../core/components/inputs/DatePickerInput';
 import { Dayjs } from 'dayjs';
 import { DriverUnavailabilityCreate } from '../models/driver-unavailability';
-import { SelectInput } from '../../core/components/inputs/SelectInput';
 import { SelectItem } from "@/types";
-import { TextInput } from '../../core/components/inputs/TextInput';
 import { useUnavailabilityQueries } from '../hooks/useUnavailabilityQueries';
 
 interface Props {

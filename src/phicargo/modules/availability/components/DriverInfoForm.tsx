@@ -1,11 +1,8 @@
 import { Button, Card, CardBody, CardFooter, CardHeader } from "@heroui/react";
+import { CheckboxInput, DatePickerInput, SelectInput, TextInput } from "@/components/inputs";
 import { Driver, DriverEdit } from '../models/driver-model';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-import { CheckboxInput } from '../../core/components/inputs/CheckboxInput';
-import { DatePickerInput } from '../../core/components/inputs/DatePickerInput';
-import { SelectInput } from '../../core/components/inputs/SelectInput';
-import { TextInput } from '../../core/components/inputs/TextInput';
 import { useAuthContext } from "../../auth/hooks";
 import { useDriverQueries } from '../hooks/useDriverQueries';
 import { useMemo } from 'react';

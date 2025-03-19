@@ -8,7 +8,7 @@ import {
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { AddButton } from "@/components/ui";
-import { TextInput } from '../../core/components/inputs/TextInput';
+import { TextInput } from "@/components/inputs";
 import { WorkshopCreate } from '../models';
 import { useWorkshop } from '../hooks';
 

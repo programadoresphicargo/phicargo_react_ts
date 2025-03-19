@@ -1,7 +1,7 @@
 import { Control, FieldValues, Path } from 'react-hook-form';
 import { useEffect, useMemo, useState } from 'react';
 
-import { AutocompleteInput } from '@/phicargo/modules/core/components/inputs/AutocompleteInput';
+import { AutocompleteInput } from './AutocompleteInput';
 import { Driver } from '@/phicargo/modules/availability/models/driver-model';
 import { SelectItem } from '@/types';
 import { useDebounce } from '@/hooks';

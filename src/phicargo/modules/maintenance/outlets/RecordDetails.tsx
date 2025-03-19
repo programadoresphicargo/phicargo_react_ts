@@ -19,7 +19,7 @@ import { FaRegUserCircle } from 'react-icons/fa';
 import { FaWarehouse } from 'react-icons/fa';
 import { MdOutlineSmsFailed } from 'react-icons/md';
 import NotesTimeline from '../components/NotesTimeline';
-import { TextareaInput } from '../../core/components/inputs/TextareaInput';
+import { TextareaInput } from "@/components/inputs";
 
 interface RegisterDetailForm {
   comment: string;

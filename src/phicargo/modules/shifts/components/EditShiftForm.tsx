@@ -1,11 +1,8 @@
+import { DatePickerInput, DriverSearchInput, TextareaInput, VehicleSearchInput } from '@/components/inputs';
 import { Shift, ShiftEdit } from '../models';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { Button } from "@heroui/react";
-import { DatePickerInput } from '../../core/components/inputs/DatePickerInput';
-import { DriverSearchInput } from '../../core/components/inputs/DriverSearchInput';
-import { TextareaInput } from '../../core/components/inputs/TextareaInput';
-import { VehicleSearchInput } from '../../core/components/inputs/VehicleSearchInput';
 import dayjs from 'dayjs';
 import { useShiftQueries } from '../hooks/useShiftQueries';
 

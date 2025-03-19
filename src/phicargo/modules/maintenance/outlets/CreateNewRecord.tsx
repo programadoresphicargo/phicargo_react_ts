@@ -1,3 +1,4 @@
+import { DatePickerInput, SelectInput, TextInput, TextareaInput, VehicleSearchInput } from '@/components/inputs';
 import {
   Modal,
   ModalBody,
@@ -12,14 +13,9 @@ import { useMemo, useState } from 'react';
 import { AddButton } from '@/components/ui';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import AddWorkshop from '../components/AddWorkshop';
-import { DatePickerInput } from '../../core/components/inputs/DatePickerInput';
 import { Dayjs } from 'dayjs';
 import type { MaintenanceRecordCreate } from '../models';
-import { SelectInput } from '../../core/components/inputs/SelectInput';
-import { TextInput } from '../../core/components/inputs/TextInput';
-import { TextareaInput } from '../../core/components/inputs/TextareaInput';
 import { Tooltip } from '@mui/material';
-import { VehicleSearchInput } from '../../core/components/inputs/VehicleSearchInput';
 import { useNavigate } from 'react-router-dom';
 
 const initialFormState: MaintenanceRecordCreate = {

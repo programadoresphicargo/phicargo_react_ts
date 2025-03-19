@@ -5,15 +5,11 @@ import {
   ModalContent,
   ModalHeader,
 } from "@heroui/react";
+import { DatePickerInput, DriverSearchInput, SelectInput, TextareaInput, VehicleSearchInput } from "@/components/inputs";
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-import { DatePickerInput } from '../../core/components/inputs/DatePickerInput';
-import { DriverSearchInput } from '../../core/components/inputs/DriverSearchInput';
 import { FaRegSave } from 'react-icons/fa';
-import { SelectInput } from '../../core/components/inputs/SelectInput';
 import type { ShiftCreate } from '../models';
-import { TextareaInput } from '../../core/components/inputs/TextareaInput';
-import { VehicleSearchInput } from '../../core/components/inputs/VehicleSearchInput';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 import { useShiftQueries } from '../hooks/useShiftQueries';
