@@ -4,7 +4,7 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 
-import type { UpdatableItem } from '../../core/types/global-types';
+import { UpdatableItem } from '@/types';
 import toast from 'react-hot-toast';
 
 interface ObjId {

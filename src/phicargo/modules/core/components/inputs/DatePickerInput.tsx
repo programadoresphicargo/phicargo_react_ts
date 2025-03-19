@@ -2,7 +2,7 @@ import { Controller, FieldValues } from "react-hook-form";
 import { DatePicker, DateValue } from "@heroui/react";
 import dayjs, { Dayjs } from "dayjs";
 
-import { CustomInputProps } from "../../../core/types/global-types";
+import { CustomInputProps } from "@/types";
 import { parseDateTime } from "@internationalized/date";
 import { useMemo } from "react";
 

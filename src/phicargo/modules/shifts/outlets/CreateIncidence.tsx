@@ -13,7 +13,7 @@ import { Dayjs } from 'dayjs';
 import { FaRegSave } from 'react-icons/fa';
 import type { IncidenceCreate } from '../models/driver-incidence-model';
 import { SelectInput } from '../../core/components/inputs/SelectInput';
-import { SelectItem } from '../../core/types/global-types';
+import { SelectItem } from "@/types";
 import { TextareaInput } from '../../core/components/inputs/TextareaInput';
 import { useIncidenceQueries } from '../hooks/useIncidenceQueries';
 import { useMemo } from 'react';

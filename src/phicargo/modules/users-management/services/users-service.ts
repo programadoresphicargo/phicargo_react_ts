@@ -4,7 +4,7 @@ import { fullUserToLocal, userToLocal } from '../../auth/adapters';
 import { userToApi, userUpdateToApi } from '../adapters/users-mapper';
 
 import { AxiosError } from 'axios';
-import { UpdatableItem } from '../../core/types/global-types';
+import { UpdatableItem } from '@/types';
 import odooApi from '../../core/api/odoo-api';
 
 /**

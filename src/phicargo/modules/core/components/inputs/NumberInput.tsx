@@ -1,6 +1,6 @@
 import { Controller, FieldValues } from 'react-hook-form';
 
-import { CustomInputProps } from '../../types/global-types';
+import { CustomInputProps } from '@/types';
 import { Input } from "@heroui/react";
 import { ReactNode } from 'react';
 

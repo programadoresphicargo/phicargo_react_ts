@@ -1,6 +1,6 @@
 import { Autocomplete, AutocompleteItem } from "@heroui/react";
 import { Controller, FieldValues } from 'react-hook-form';
-import { CustomInputProps, SelectItem } from '../../../core/types/global-types';
+import { CustomInputProps, SelectItem } from "@/types";
 
 interface SelectInputProps<T extends FieldValues> extends CustomInputProps<T> {
   items: SelectItem[];

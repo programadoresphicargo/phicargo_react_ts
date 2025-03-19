@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { AutocompleteInput } from '@/phicargo/modules/core/components/inputs/AutocompleteInput';
 import { Driver } from '@/phicargo/modules/availability/models/driver-model';
-import { SelectItem } from '@/phicargo/modules/core/types/global-types';
+import { SelectItem } from '@/types';
 import { useDebounce } from '@/hooks';
 import { useDriverQueries } from '@/phicargo/modules/availability/hooks/useDriverQueries';
 

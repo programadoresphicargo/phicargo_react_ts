@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { Driver } from '../models/driver-model';
 import DriverServiceApi from '../services/driver-service';
-import { SelectItem } from '../../core/types/global-types';
+import { SelectItem } from '@/types';
 import toast from 'react-hot-toast';
 import { useMemo } from 'react';
 

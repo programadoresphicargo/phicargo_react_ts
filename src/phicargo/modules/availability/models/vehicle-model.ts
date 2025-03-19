@@ -7,7 +7,7 @@ import type {
 import type { DriverSimple, Modality } from './driver-model';
 
 import type { MaintenanceRecordSimple } from '../../maintenance/models';
-import type { SimpleData } from '../../core/types/global-types';
+import { SimpleData } from '@/types';
 
 export type VehicleState = SimpleData;
 export type VehicleCategory = SimpleData;

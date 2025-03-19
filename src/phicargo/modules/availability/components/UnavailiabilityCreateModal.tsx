@@ -12,7 +12,7 @@ import { DatePickerInput } from '../../core/components/inputs/DatePickerInput';
 import { Dayjs } from 'dayjs';
 import { DriverUnavailabilityCreate } from '../models/driver-unavailability';
 import { SelectInput } from '../../core/components/inputs/SelectInput';
-import { SelectItem } from '../../core/types/global-types';
+import { SelectItem } from "@/types";
 import { TextInput } from '../../core/components/inputs/TextInput';
 import { useUnavailabilityQueries } from '../hooks/useUnavailabilityQueries';
 

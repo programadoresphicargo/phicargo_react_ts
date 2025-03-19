@@ -2,7 +2,7 @@ import { Control, FieldValues, Path } from 'react-hook-form';
 import { useEffect, useMemo, useState } from 'react';
 
 import { AutocompleteInput } from '@/phicargo/modules/core/components/inputs/AutocompleteInput';
-import { SelectItem } from '@/phicargo/modules/core/types/global-types';
+import { SelectItem } from '@/types';
 import { Vehicle } from '@/phicargo/modules/availability/models/vehicle-model';
 import { useDebounce } from '@/hooks';
 import { useVehicleQueries } from '@/phicargo/modules/availability/hooks/useVehicleQueries';

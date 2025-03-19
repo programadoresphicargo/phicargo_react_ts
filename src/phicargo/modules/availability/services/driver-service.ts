@@ -6,7 +6,7 @@ import {
 
 import { AxiosError } from 'axios';
 import type { DriverApi } from '../models/api/driver-model-api';
-import { UpdatableItem } from '../../core/types/global-types';
+import { UpdatableItem } from '@/types';
 import odooApi from '../../core/api/odoo-api';
 
 class DriverServiceApi {

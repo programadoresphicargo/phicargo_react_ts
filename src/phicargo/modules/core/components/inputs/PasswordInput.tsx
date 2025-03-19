@@ -1,7 +1,7 @@
 import { Controller, FieldValues } from 'react-hook-form';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 
-import { CustomInputProps } from '../../types/global-types';
+import { CustomInputProps } from '@/types';
 import { Input } from "@heroui/react";
 import { useState } from 'react';
 

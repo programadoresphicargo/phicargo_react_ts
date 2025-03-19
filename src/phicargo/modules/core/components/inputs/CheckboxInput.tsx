@@ -1,7 +1,7 @@
 import { Controller, FieldValues } from 'react-hook-form';
 
 import { Checkbox } from "@heroui/react";
-import { CustomInputProps } from '../../types/global-types';
+import { CustomInputProps } from '@/types';
 
 export const CheckboxInput = <T extends FieldValues>(
   props: CustomInputProps<T>,

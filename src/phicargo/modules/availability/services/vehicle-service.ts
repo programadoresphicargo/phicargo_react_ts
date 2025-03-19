@@ -5,7 +5,7 @@ import {
 } from '../adapters/vehicles/vehicle-mapper';
 
 import { AxiosError } from 'axios';
-import { UpdatableItem } from '../../core/types/global-types';
+import { UpdatableItem } from '@/types';
 import type { VehicleApi } from '../models/api/vehicle-model-api';
 import odooApi from '../../core/api/odoo-api';
 

@@ -18,7 +18,7 @@ import {
 } from '../adapters/mappers/register-mapper';
 
 import { AxiosError } from 'axios';
-import { UpdatableItem } from '../../core/types/global-types';
+import { UpdatableItem } from '@/types';
 import odooApi from '../../core/api/odoo-api';
 
 /**
