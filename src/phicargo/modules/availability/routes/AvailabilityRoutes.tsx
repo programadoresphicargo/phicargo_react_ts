@@ -2,7 +2,7 @@ import { Navigate, Route } from 'react-router-dom';
 import { Suspense, lazy, memo } from 'react';
 
 import AvailabilityLayout from '../layout/AvailabilityLayout';
-import { LoadingPage } from '../../core/pages/LoadingPage';
+import { LoadingPage } from '@/pages/LoadingPage';
 import ProtectedRoute from '@/router/ProtectedRoute';
 
 const VehicleAvailabilityPage = lazy(() =>

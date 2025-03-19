@@ -1,7 +1,7 @@
 import { Suspense, lazy } from 'react';
 
 import CashflowLayout from '../Layout/CashflowLayout';
-import { LoadingPage } from '../../core/pages/LoadingPage';
+import { LoadingPage } from '@/pages/LoadingPage';
 import ProtectedRoute from '../../../../router/ProtectedRoute';
 import { Route } from 'react-router-dom';
 

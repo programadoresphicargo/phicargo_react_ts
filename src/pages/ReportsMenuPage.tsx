@@ -9,7 +9,7 @@ import estadiasIcon from '../../../../assets/menu/estadias.png';
 import maintenanceIcon from '../../../../assets/menu/maintenanceIcon.png';
 import phoneIcon from '../../../../assets/menu/app.png';
 import reportIcon from '../../../../assets/menu/reportes.png';
-import { useAuthContext } from '../../auth/hooks';
+import { useAuthContext } from '@/phicargo/modules/auth/hooks';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
