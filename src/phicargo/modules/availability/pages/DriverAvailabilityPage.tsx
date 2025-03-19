@@ -1,15 +1,14 @@
 import { Outlet, useNavigate } from 'react-router-dom';
 
 import MaterialTableBase from '../../core/components/tables/MaterialTableBase';
-import { useBaseTable } from '../../core/hooks/useBaseTable';
 import { useDriverQueries } from '../hooks/useDriverQueries';
 import { useDriversColumns } from '../hooks/useDriversColumns';
-import { useTableState } from '../../core/hooks/useTableState';
 import type { Driver } from '../models/driver-model';
 import {
   ExportToExcel,
   type ExportConfig,
 } from '../../core/utilities/export-to-excel';
+import { useBaseTable } from '@/hooks';
 
 const DriverAvailabilityPage = () => {
   const navigate = useNavigate();
@@ -18,22 +17,20 @@ const DriverAvailabilityPage = () => {
     driversQuery: { data: drivers, isFetching, isLoading, refetch },
   } = useDriverQueries();
 
-  const state = useTableState({
-    tableId: 'availability-drivers-table',
-  });
-
   const { columns } = useDriversColumns();
 
-  const table = useBaseTable({
+  const table = useBaseTable<Driver>({
     columns,
     data: drivers || [],
-    state,
+    tableId: 'availability-drivers-table',
     isLoading,
-    progressBars: isFetching,
-    refetch,
+    isFetching,
     onDoubleClickFn: (id) => navigate(`detalles/${id}`),
-    memoMode: 'cells',
-    onExportExcel: (data) => toExcel.exportData(data),
+    refetchFn: () => refetch(),
+    exportFn: (data) => toExcel.exportData(data),
+    showColumnFilters: true,
+    showGlobalFilter: true,
+    containerHeight: 'calc(100vh - 165px)',
   });
 
   return (

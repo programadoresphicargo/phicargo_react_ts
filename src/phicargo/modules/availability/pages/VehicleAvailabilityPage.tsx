@@ -6,17 +6,12 @@ import { Outlet, useNavigate } from 'react-router-dom';
 
 import { MaterialReactTable } from 'material-react-table';
 import type { Vehicle } from '../models/vehicle-model';
-import { useBaseTable } from '../../core/hooks/useBaseTable';
-import { useTableState } from '../../core/hooks/useTableState';
 import { useVehicleColumns } from '../hooks/useVehicleColumns';
 import { useVehicleQueries } from '../hooks/useVehicleQueries';
+import { useBaseTable } from '@/hooks';
 
 const AsignacionUnidades = () => {
   const navigate = useNavigate();
-
-  const state = useTableState({
-    tableId: 'availability-vehicles-table',
-  });
 
   const { columns } = useVehicleColumns();
 
@@ -24,15 +19,18 @@ const AsignacionUnidades = () => {
     vehicleQuery: { data: vehicles, isFetching, isLoading, refetch },
   } = useVehicleQueries();
 
-  const table = useBaseTable({
+  const table = useBaseTable<Vehicle>({
     columns,
     data: vehicles || [],
-    state,
+    tableId: 'availability-vehicles-table',
     isLoading,
-    progressBars: isFetching,
-    refetch,
+    isFetching,
     onDoubleClickFn: (id) => navigate(`detalles/${id}`),
-    onExportExcel: (data) => toExcel.exportData(data),
+    refetchFn: () => refetch(),
+    exportFn: (data) => toExcel.exportData(data),
+    showColumnFilters: true,
+    showGlobalFilter: true,
+    containerHeight: 'calc(100vh - 165px)',
   });
 
   return (

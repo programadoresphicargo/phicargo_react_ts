@@ -1,6 +1,6 @@
 import 'rsuite/dist/rsuite-no-reset.min.css';
 
-import { BackButton } from '@/components/ui/BackButton';
+import { BackButton } from '@/components/ui';
 import { Checkbox } from '@heroui/react';
 import { DateRangePicker } from 'rsuite';
 import { IndicatorCard } from '@/components/utils/IndicatorCard';

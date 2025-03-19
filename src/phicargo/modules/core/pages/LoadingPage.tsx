@@ -8,7 +8,7 @@ export const LoadingPage = () => {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '100vh',
+        height: 'calc(100vh - 165px)',
       }}
     >
       <ThreeDots

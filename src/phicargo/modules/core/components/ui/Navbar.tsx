@@ -10,7 +10,7 @@ import {
 } from '@heroui/react';
 
 import AvatarProfile from './AvatarProfile';
-import { BackButton } from '@/components/ui/BackButton';
+import { BackButton } from '@/components/ui';
 import { NavbarLinkItem } from './NavbarLinkItem';
 import { useState } from 'react';
 

@@ -9,7 +9,7 @@ import { SelectElement, TextFieldElement } from 'react-hook-form-mui';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/ui';
 import { WaybillItemSearchInput } from './WaybillItemSearchInput';
 
 const initialValues: ComplementCpCreate = {

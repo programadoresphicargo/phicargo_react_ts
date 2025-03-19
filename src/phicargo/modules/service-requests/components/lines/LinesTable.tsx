@@ -5,7 +5,7 @@ import {
 } from 'material-react-table';
 
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/ui';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';

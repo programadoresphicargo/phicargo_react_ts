@@ -7,7 +7,7 @@ import type {
 } from 'material-react-table';
 import { useEffect, useRef, useState } from 'react';
 
-import { TableState } from '../types/global-types';
+import { TableState } from '@/types';
 
 const loadFromSessionStorage = (key: string) => {
   const storedValue = sessionStorage.getItem(key);

@@ -8,7 +8,7 @@ import {
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/ui';
 import { ShippedProductCreate } from '../../models';
 import { useGetTransportableProducts } from '../../hooks/queries';
 

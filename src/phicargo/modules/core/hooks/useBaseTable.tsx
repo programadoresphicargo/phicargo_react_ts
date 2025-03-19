@@ -7,9 +7,9 @@ import {
 } from 'material-react-table';
 
 import RefreshIcon from '@mui/icons-material/Refresh';
-import type { TableState } from '../types/global-types';
 import ExportExcelButton from '../components/ui/ExportExcelButton';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
+import { TableState } from '@/types';
 
 interface UseTableConfig<T extends MRT_RowData> {
   columns: MRT_ColumnDef<T>[];

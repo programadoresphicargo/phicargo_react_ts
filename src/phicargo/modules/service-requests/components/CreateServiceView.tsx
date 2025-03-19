@@ -3,7 +3,7 @@ import { Box, Card, Step, StepLabel, Stepper, Typography } from '@mui/material';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { BasicInfoForm } from './BasicInfoForm';
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/ui';
 import { ExtraInfoForm } from './ExtraInfoForm';
 import { ExtraServicesForm } from './ExtraServicesForm';
 import { GoodsTable } from './goods/GoodsTable';

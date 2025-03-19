@@ -1,7 +1,7 @@
 import { DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/ui';
 import { Driver } from '../../availability/models/driver-model';
 import { PasswordInput } from '@/components/inputs/PasswordInput';
 import { useChangeDriverPassword } from '../../drivers/hooks/queries';
