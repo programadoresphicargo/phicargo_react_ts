@@ -12,7 +12,7 @@ import { usePayments, useWeekContext } from '../../hooks';
 
 import AddButton from '../../../core/components/ui/AddButton';
 import AlertDialog from '../AlertDialog';
-import ExportExcelButton from '@/phicargo/modules/core/components/ui/ExportExcelButton';
+import ExportExcelButton from '@/components/ui/buttons/ExportExcelButton';
 import { FaRegEdit } from 'react-icons/fa';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { Payment } from '../../models';
@@ -22,51 +22,6 @@ import { isGOEWeek } from '../../utils';
 import { useNavigate } from 'react-router-dom';
 import { usePaymentTableColumns } from '../../hooks/usePaymentTableColumns';
 import { useState } from 'react';
-
-const exportConf: ExportConfig<Payment> = {
-  fileName: 'Cuantas por Pagar',
-  withDate: true,
-  columns: [
-    { accessorFn: (data) => data.providerName, header: 'Proveedor' },
-    { accessorFn: (data) => data.totalConfirmed, header: 'Confirmado' },
-    { accessorFn: (data) => data.monday.amount, header: 'Lunes Proyección' },
-    { accessorFn: (data) => data.tuesday.amount, header: 'Martes Proyección' },
-    {
-      accessorFn: (data) => data.wednesday.amount,
-      header: 'Miercoles Proyección',
-    },
-    { accessorFn: (data) => data.thursday.amount, header: 'Jueves Proyección' },
-    { accessorFn: (data) => data.friday.amount, header: 'Viernes Proyección' },
-    { accessorFn: (data) => data.saturday.amount, header: 'Sabado Proyección' },
-    {
-      accessorFn: (data) => data.monday.realAmount,
-      header: 'Lunes Confirmado',
-    },
-    {
-      accessorFn: (data) => data.tuesday.realAmount,
-      header: 'Martes Confirmado',
-    },
-    {
-      accessorFn: (data) => data.wednesday.realAmount,
-      header: 'Miercoles Confirmado',
-    },
-    {
-      accessorFn: (data) => data.thursday.realAmount,
-      header: 'Jueves Confirmado',
-    },
-    {
-      accessorFn: (data) => data.friday.realAmount,
-      header: 'Viernes Confirmado',
-    },
-    {
-      accessorFn: (data) => data.saturday.realAmount,
-      header: 'Sabado Confirmado',
-    },
-    { accessorFn: (data) => data.observations, header: 'Comentarios' },
-  ],
-};
-
-const exportTo = new ExportToExcel(exportConf);
 
 const PaymentTable = () => {
   const navigate = useNavigate();
@@ -151,20 +106,19 @@ const PaymentTable = () => {
       <div className="flex flex-row gap-2">
         <div className="flex flex-row items-center rounded-xl">
           <Tooltip arrow title="Refrescar">
-            <IconButton onClick={() => refetch()} size='small'>
+            <IconButton onClick={() => refetch()} size="small">
               <RefreshIcon />
             </IconButton>
           </Tooltip>
         </div>
         <AddButton
           label="Añadir"
-          size='sm'
+          size="sm"
           onPress={() => navigate('/reportes/balance/payment/add')}
-          />
+        />
         <ExportExcelButton
-          label="Exportar"
-          size='sm'
-          onPress={() => exportTo.exportData(payments || [])}
+          size="small"
+          onClick={() => exportTo.exportData(payments || [])}
         />
       </div>
     ),
@@ -216,3 +170,48 @@ const PaymentTable = () => {
 };
 
 export default PaymentTable;
+
+const exportConf: ExportConfig<Payment> = {
+  fileName: 'Cuantas por Pagar',
+  withDate: true,
+  columns: [
+    { accessorFn: (data) => data.providerName, header: 'Proveedor' },
+    { accessorFn: (data) => data.totalConfirmed, header: 'Confirmado' },
+    { accessorFn: (data) => data.monday.amount, header: 'Lunes Proyección' },
+    { accessorFn: (data) => data.tuesday.amount, header: 'Martes Proyección' },
+    {
+      accessorFn: (data) => data.wednesday.amount,
+      header: 'Miercoles Proyección',
+    },
+    { accessorFn: (data) => data.thursday.amount, header: 'Jueves Proyección' },
+    { accessorFn: (data) => data.friday.amount, header: 'Viernes Proyección' },
+    { accessorFn: (data) => data.saturday.amount, header: 'Sabado Proyección' },
+    {
+      accessorFn: (data) => data.monday.realAmount,
+      header: 'Lunes Confirmado',
+    },
+    {
+      accessorFn: (data) => data.tuesday.realAmount,
+      header: 'Martes Confirmado',
+    },
+    {
+      accessorFn: (data) => data.wednesday.realAmount,
+      header: 'Miercoles Confirmado',
+    },
+    {
+      accessorFn: (data) => data.thursday.realAmount,
+      header: 'Jueves Confirmado',
+    },
+    {
+      accessorFn: (data) => data.friday.realAmount,
+      header: 'Viernes Confirmado',
+    },
+    {
+      accessorFn: (data) => data.saturday.realAmount,
+      header: 'Sabado Confirmado',
+    },
+    { accessorFn: (data) => data.observations, header: 'Comentarios' },
+  ],
+};
+
+const exportTo = new ExportToExcel(exportConf);
