@@ -2,8 +2,9 @@ import { Tab, Tabs } from '@heroui/react';
 
 import type { Driver } from '../models';
 import { DriverForm } from './DriverForm';
+import { DriverIncidences } from './incidences/DriverIncidences';
+import { DriverManeuver } from './maneuvers/DriverManeuvers';
 import DriverPermissions from './unavailabilities/DriverPermissions';
-import { ManeuverDriverTimeline } from './ManeuverDriverTimeline';
 import { Modal } from '@/components';
 
 interface Props {
@@ -25,10 +26,10 @@ export const DriverInformationModal = ({ open, onClose, driver }: Props) => {
       }
       size="3xl"
     >
-      <Tabs 
+      <Tabs
         aria-label="driver-sections"
-        variant='underlined'
-        color='primary'
+        variant="underlined"
+        color="primary"
         fullWidth
         classNames={{
           panel: 'px-4',
@@ -36,16 +37,16 @@ export const DriverInformationModal = ({ open, onClose, driver }: Props) => {
         }}
       >
         <Tab key="permissions" title="Permisos">
-          {driver && <DriverPermissions driver={driver} />}
+          <DriverPermissions driver={driver} />
         </Tab>
         <Tab key="incidences" title="Incidencias">
-          <h2>Incidencias</h2>
+          <DriverIncidences driver={driver} />
         </Tab>
         <Tab key="driver-form" title="Información">
           <DriverForm driver={driver} />
         </Tab>
         <Tab key="meneuvers" title="Maniobras">
-          {driver && <ManeuverDriverTimeline driverId={driver!.id} />}
+          <DriverManeuver driverId={driver!.id} />
         </Tab>
       </Tabs>
     </Modal>

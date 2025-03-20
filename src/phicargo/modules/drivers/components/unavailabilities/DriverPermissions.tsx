@@ -1,9 +1,9 @@
-import { Alert, LoadingSpinner } from '@/components/ui';
+import { Alert, LoadingSpinner, RefreshButton } from '@/components/ui';
 import { Button, Card, CardBody, CardHeader } from '@heroui/react';
 
 import type { Driver } from '../../models';
 import { IoIosAddCircle } from 'react-icons/io';
-import { PermissionsHistory } from './PermissionsHistory';
+import { UnavailabilitiesTimeline } from './UnavailabilitiesTimeline';
 import UnavailiabilityCreateModal from './UnavailiabilityCreateModal';
 import { useState } from 'react';
 import { useUnavailabilityQueries } from '../../hooks/queries';
@@ -18,8 +18,8 @@ const DriverPermissions = (props: Props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const {
-    driverUnavailabilityQuery: { data: unavailabilities, isFetching },
-  } = useUnavailabilityQueries({ driverId: driver.id });
+    driverUnavailabilityQuery: { data: unavailabilities, isFetching, refetch },
+  } = useUnavailabilityQueries(driver.id);
 
   return (
     <>
@@ -37,21 +37,24 @@ const DriverPermissions = (props: Props) => {
               Historial de Permisos / Castigos
             </h3>
           </div>
-          <Button
-            color="primary"
-            variant="light"
-            className="text-2xl"
-            isIconOnly
-            onPress={() => setIsOpen(true)}
-          >
-            <IoIosAddCircle />
-          </Button>
+          <div className="flex items-center gap-2">
+            <RefreshButton onRefresh={() => refetch()} isLoading={isFetching} />
+            <Button
+              color="primary"
+              variant="light"
+              className="text-2xl"
+              isIconOnly
+              onPress={() => setIsOpen(true)}
+            >
+              <IoIosAddCircle />
+            </Button>
+          </div>
         </CardHeader>
         <CardBody>
           {isFetching ? (
             <LoadingSpinner />
           ) : unavailabilities && unavailabilities.length > 0 ? (
-            <PermissionsHistory
+            <UnavailabilitiesTimeline
               driver={driver}
               unavailabilities={unavailabilities}
             />

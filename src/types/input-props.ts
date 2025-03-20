@@ -7,6 +7,7 @@ export interface CustomInputProps<T extends FieldValues> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   control: Control<T, any>;
   name: Path<T>;
+  variant?: "flat" | "faded" | "bordered" | "underlined";
   className?: string;
   classNames?: SlotsToClasses<
     | 'label'

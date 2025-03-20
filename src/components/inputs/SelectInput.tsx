@@ -15,6 +15,7 @@ export const SelectInput = <T extends FieldValues>(
   const {
     control,
     name,
+    variant,
     className,
     label,
     rules,
@@ -49,7 +50,7 @@ export const SelectInput = <T extends FieldValues>(
             label={label}
             isLoading={isLoading}
             size="sm"
-            variant="flat"
+            variant={variant || 'flat'}
             scrollShadowProps={{
               isEnabled: false,
             }}

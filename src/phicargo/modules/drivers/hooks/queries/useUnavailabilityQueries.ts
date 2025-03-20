@@ -4,19 +4,13 @@ import { DriverUnavailabilityServiceApi } from '../../services';
 import { DriverUnavailable } from '../../models';
 import toast from 'react-hot-toast';
 
-interface Options {
-  driverId?: number;
-}
+const driverUnavailabilitiesKey = 'driver-unavailabilities';
 
-const mainKey = 'driver-unavailability';
-
-export const useUnavailabilityQueries = (options: Options) => {
+export const useUnavailabilityQueries = (driverId?: number) => {
   const queryClient = useQueryClient();
 
-  const { driverId } = options;
-
   const driverUnavailabilityQuery = useQuery<DriverUnavailable[]>({
-    queryKey: [mainKey, driverId],
+    queryKey: [driverUnavailabilitiesKey, driverId],
     queryFn: () =>
       DriverUnavailabilityServiceApi.getDriverUnavailabilitiesById(
         driverId as number,
@@ -30,7 +24,7 @@ export const useUnavailabilityQueries = (options: Options) => {
     mutationFn: DriverUnavailabilityServiceApi.createDriverUnavailability,
     onSuccess: (newItem) => {
       queryClient.setQueryData(
-        [mainKey, driverId],
+        [driverUnavailabilitiesKey, driverId],
         (prev?: DriverUnavailable[]) => (prev ? [newItem, ...prev] : [newItem]),
       );
       toast.success('Creado con éxito');
@@ -44,7 +38,7 @@ export const useUnavailabilityQueries = (options: Options) => {
     mutationFn: DriverUnavailabilityServiceApi.releaseDriverUnavailability,
     onSuccess: (newItem) => {
       queryClient.setQueryData(
-        [mainKey, driverId],
+        [driverUnavailabilitiesKey, driverId],
         (prev?: DriverUnavailable[]) =>
           prev?.map((item) => (item.id === newItem.id ? newItem : item)),
       );

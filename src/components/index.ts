@@ -1,2 +1,4 @@
 export * from './utils/Modal';
 export * from './utils/IndicatorCard';
+export * from './utils/AlertDialog';
+export * from './utils/SimpleModal';

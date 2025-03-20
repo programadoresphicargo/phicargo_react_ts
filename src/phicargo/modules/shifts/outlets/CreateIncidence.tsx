@@ -1,69 +1,22 @@
-import {
-  Button,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalHeader,
-} from "@heroui/react";
-import { DatePickerInput, SelectInput, TextareaInput } from "@/components/inputs";
+import { Modal, ModalBody, ModalContent, ModalHeader } from '@heroui/react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useMemo, useState } from 'react';
 
-import { Dayjs } from 'dayjs';
-import { FaRegSave } from 'react-icons/fa';
-import type { IncidenceCreate } from '../models/driver-incidence-model';
-import { SelectItem } from "@/types";
-import { useIncidenceQueries } from '../hooks/useIncidenceQueries';
-import { useMemo } from 'react';
+import { IncidenceForm } from '../../drivers/components/incidences/IncidenceForm';
+import { SaveButton } from '@/components/ui';
 import { useShiftQueries } from '../hooks/useShiftQueries';
-
-const intialState: IncidenceCreate = {
-  incidence: '',
-  comments: '',
-  startDate: null as unknown as Dayjs,
-  endDate: null as unknown as Dayjs,
-};
-
-const incidenceValues: string[] = [
-  'CONDUCIR BAJO LOS EFECTOS DEL ALCOHOL O DROGAS',
-  'VIOLACIONES DE TRAFICO',
-  'INCUMPLIMIENTO DE REGLAMENTACIONES DE SEGURIDAD',
-  'MANTENIMIENTO DEFICIENTE DEL VEHICULO',
-  'CONDUCTA AGRESIVA O IMPRUDENTE',
-  'INCUMPLIMIENTO DE NORMAS DE CARGA Y PESO',
-  'DOCUMENTACION Y REGISTROS INCORRECTOS',
-  'OPERADOR NO QUISO HACER UNA MANIOBRA',
-  'OPERADOR DEJO BOTADA LA MANIOBRA',
-  'NO TOMO EQUIPO ASIGNADO'
-];
-const incidenceType: SelectItem[] = incidenceValues.map((r) => ({ key: r, value: r }));
 
 const CreateIncidence = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { shifts } = useShiftQueries();
-  const { createIncidence } = useIncidenceQueries();
 
-  const { control, handleSubmit } = useForm<IncidenceCreate>({
-    defaultValues: intialState,
-  });
+  const [submitForm, setSubmitForm] = useState<(() => void) | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const shift = useMemo(() => {
     return shifts.find((r) => r.id === Number(id));
   }, [shifts, id]);
-
-  const onSubmit: SubmitHandler<IncidenceCreate> = (data) => {
-    if(!shift || !id) return;
-    console.log(data);
-    createIncidence.mutate({
-      driverId: shift.driver.id,
-      incidence: data,
-    }, {
-      onSuccess: () => {
-        navigate('/turnos');
-      },
-    });
-  };
 
   const onClose = () => {
     navigate('/turnos');
@@ -84,47 +37,21 @@ const CreateIncidence = () => {
               </h3>
             </ModalHeader>
             <ModalBody className="p-2">
-              <div className="flex flex-col gap-4 border-2 rounded-lg p-3">
-                <SelectInput
-                  control={control}
-                  name="incidence"
-                  label="Tipo de Incidencia"
-                  items={incidenceType}
-                  rules={{ required: 'Tipo de incidencia requerida' }}
+              {shift && (
+                <IncidenceForm
+                  driverId={shift.driver.id}
+                  setSubmit={setSubmitForm}
+                  setIsLoading={setIsLoading}
+                  onSuccessfulSubmit={onClose}
                 />
-                <TextareaInput
-                  control={control}
-                  name="comments"
-                  label="Comentarios"
-                  isUpperCase
-                  minRows={6}
-                  rules={{ required: 'Comentario requerido' }}
-                />
-                <div className="flex flex-row gap-4">
-                  <DatePickerInput 
-                    control={control}
-                    name="startDate"
-                    label="Fecha Inicio"
-                    rules={{ required: 'Fecha de inicio requerida' }}
-                  />
-
-                  <DatePickerInput 
-                    control={control}
-                    name="endDate"
-                    label="Fecha Fin"
-                    rules={{ required: 'Fecha de fin requerida' }}
-                  />
-                </div>
-              </div>
-              <Button
-                onPress={() => handleSubmit(onSubmit)()}
-                className="w-full mt-4"
-                color="primary"
-                startContent={<FaRegSave />}
-                isLoading={createIncidence.isPending}
-              >
-                Guardar
-              </Button>
+              )}
+              <SaveButton
+                onPress={() => submitForm && submitForm()}
+                fullWidth
+                variant="flat"
+                className="font-bold uppercase"
+                isLoading={isLoading}
+              />
             </ModalBody>
           </>
         )}

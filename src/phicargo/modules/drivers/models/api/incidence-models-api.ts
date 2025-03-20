@@ -1,9 +1,18 @@
-import type { DriverInfoApi } from './shift-mode-api';
+import { IncidenceType } from '../incidence-models';
 import type { UserBasicApi } from '@/phicargo/modules/auth/models';
+
+export interface DriverInfoApi {
+  id: number;
+  name: string;
+  tms_driver_license_id: string | null;
+  x_modalidad: string | null;
+  x_peligroso_lic: string | null;
+}
 
 interface IncidenceBaseApi {
   incidence: string;
   comments: string;
+  type: IncidenceType;
 }
 
 export interface IncidenceApi extends IncidenceBaseApi {
@@ -14,7 +23,7 @@ export interface IncidenceApi extends IncidenceBaseApi {
 }
 
 export interface IncidenceCreateApi extends IncidenceBaseApi {
-  start_date: string;
-  end_date: string;
+  start_date: string | null;
+  end_date: string | null;
 }
 

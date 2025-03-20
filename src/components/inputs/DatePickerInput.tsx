@@ -18,6 +18,7 @@ export const DatePickerInput = <T extends FieldValues>(
   const { 
     control, 
     name, 
+    variant,
     className, 
     label, 
     rules, 
@@ -43,7 +44,7 @@ export const DatePickerInput = <T extends FieldValues>(
           <DatePicker
             className={className}
             label={label}
-            variant="flat"
+            variant={variant || "flat"}
             hideTimeZone={hideTimeZone || true}
             showMonthAndYearPickers
             isDisabled={isDisabled}

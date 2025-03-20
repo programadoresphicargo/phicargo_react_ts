@@ -16,6 +16,7 @@ export const TextareaInput = <T extends FieldValues>(
   const {
     control,
     name,
+    variant,
     className,
     label,
     rules,
@@ -40,7 +41,7 @@ export const TextareaInput = <T extends FieldValues>(
             name={name}
             placeholder={placeholder}
             size="sm"
-            variant="flat"
+            variant={variant || 'flat'}
             maxRows={maxRows}
             minRows={minRows}
             isReadOnly={isReadOnly}

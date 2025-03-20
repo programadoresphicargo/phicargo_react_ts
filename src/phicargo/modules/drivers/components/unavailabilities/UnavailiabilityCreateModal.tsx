@@ -1,18 +1,12 @@
-import {
-  Button,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-} from "@heroui/react";
-import { DatePickerInput, SelectInput, TextInput } from "@/components/inputs";
+import { DatePickerInput, SelectInput, TextInput } from '@/components/inputs';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { Dayjs } from 'dayjs';
-import type { DriverUnavailabilityCreate } from "../../models";
-import { SelectItem } from "@/types";
-import { useUnavailabilityQueries } from "../../hooks/queries";
+import type { DriverUnavailabilityCreate } from '../../models';
+import { SaveButton } from '@/components/ui';
+import type { SelectItem } from '@/types';
+import { SimpleModal } from '@/components';
+import { useUnavailabilityQueries } from '../../hooks/queries';
 
 interface Props {
   driverId: number;
@@ -41,7 +35,7 @@ const UnavailiabilityCreateModal = (props: Props) => {
 
   const {
     driverUnavailabilityMutation: { mutate, isPending },
-  } = useUnavailabilityQueries({ driverId: driverId });
+  } = useUnavailabilityQueries(driverId);
 
   const { control, handleSubmit } = useForm<DriverUnavailabilityCreate>({
     defaultValues: initialValues,
@@ -55,52 +49,43 @@ const UnavailiabilityCreateModal = (props: Props) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center">
-      <ModalContent>
-        {() => (
-          <>
-            <ModalHeader className="flex flex-col gap-1">
-              Agregar Permiso
-            </ModalHeader>
-            <ModalBody>
-              <SelectInput
-                control={control}
-                name="reasonType"
-                label="Razón"
-                rules={{ required: 'Este campo es requerido' }}
-                items={reasonOptions}
-              />
-              <TextInput
-                control={control}
-                name="description"
-                label="Detalles"
-              />
-              <DatePickerInput
-                control={control}
-                name="startDate"
-                label="Fecha de inicio"
-                rules={{ required: 'Este campo es requerido' }}
-              />
-              <DatePickerInput
-                control={control}
-                name="endDate"
-                label="Fecha fin"
-                rules={{ required: 'Este campo es requerido' }}
-              />
-            </ModalBody>
-            <ModalFooter>
-              <Button
-                color="primary"
-                onClick={handleSubmit(onSubmit)}
-                isLoading={isPending}
-              >
-                Crear
-              </Button>
-            </ModalFooter>
-          </>
-        )}
-      </ModalContent>
-    </Modal>
+    <SimpleModal
+      isOpen={isOpen}
+      onOpenChange={onOpenChange}
+      header={<h2 className="w-full">Crear Permiso / Castigo</h2>}
+      customFooter={
+        <SaveButton
+          onPress={() => handleSubmit(onSubmit)()}
+          fullWidth
+          variant="flat"
+          className="font-bold uppercase"
+          isLoading={isPending}
+        />
+      }
+    >
+      <form className="flex flex-col gap-4">
+        <SelectInput
+          control={control}
+          name="reasonType"
+          label="Razón"
+          rules={{ required: 'Este campo es requerido' }}
+          items={reasonOptions}
+        />
+        <TextInput control={control} name="description" label="Detalles" />
+        <DatePickerInput
+          control={control}
+          name="startDate"
+          label="Fecha de inicio"
+          rules={{ required: 'Este campo es requerido' }}
+        />
+        <DatePickerInput
+          control={control}
+          name="endDate"
+          label="Fecha fin"
+          rules={{ required: 'Este campo es requerido' }}
+        />
+      </form>
+    </SimpleModal>
   );
 };
 
