@@ -1,19 +1,16 @@
-import type { Vehicle, VehicleUpdate } from '../models/vehicle-model';
-import {
-  vehicleToLocal,
-  vehicleUpdateToApi,
-} from '../adapters/vehicles/vehicle-mapper';
+import type { Vehicle, VehicleUpdate } from '../models';
 
 import { AxiosError } from 'axios';
-import { UpdatableItem } from '@/types';
-import type { VehicleApi } from '../models/api/vehicle-model-api';
+import type { UpdatableItem } from '@/types';
+import { VehicleAdapter } from '../adapters/vehicle-adapter';
+import type { VehicleApi } from '../models/api';
 import odooApi from '../../core/api/odoo-api';
 
-class VehicleServiceApi {
+export class VehicleServiceApi {
   static async getVehicles(): Promise<Vehicle[]> {
     try {
       const response = await odooApi.get<VehicleApi[]>('/vehicles/');
-      return response.data.map(vehicleToLocal);
+      return response.data.map(VehicleAdapter.vehicleToLocal);
     } catch (error) {
       console.error(error);
       if (error instanceof AxiosError) {
@@ -27,11 +24,11 @@ class VehicleServiceApi {
     id,
     updatedItem,
   }: UpdatableItem<VehicleUpdate>): Promise<Vehicle> {
-    const data = vehicleUpdateToApi(updatedItem);
+    const data = VehicleAdapter.vehicleUpdateToApi(updatedItem);
     console.log(data);
     try {
       const response = await odooApi.patch<VehicleApi>(`/vehicles/${id}`, data);
-      return vehicleToLocal(response.data);
+      return VehicleAdapter.vehicleToLocal(response.data);
     } catch (error) {
       console.error(error);
       if (error instanceof AxiosError) {
@@ -41,6 +38,4 @@ class VehicleServiceApi {
     }
   }
 }
-
-export default VehicleServiceApi;
 

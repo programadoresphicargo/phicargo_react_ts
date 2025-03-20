@@ -1,5 +1,5 @@
 import type { Driver } from '../../drivers/models';
-import type { Vehicle } from '../models/vehicle-model';
+import type { Vehicle } from '../../vehicles/models';
 
 type NotAssignedTypes = {
   vehicles: Vehicle[];

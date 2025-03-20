@@ -3,7 +3,7 @@ import { CiBoxes } from 'react-icons/ci';
 import { FaCircle } from 'react-icons/fa6';
 import { FaCogs } from 'react-icons/fa';
 import { FaRegUser } from 'react-icons/fa';
-import type { Vehicle } from '../models/vehicle-model';
+import type { Vehicle } from '../../vehicles/models';
 
 interface Props {
   vehicle: Vehicle;

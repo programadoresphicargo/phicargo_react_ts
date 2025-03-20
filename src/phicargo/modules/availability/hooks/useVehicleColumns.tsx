@@ -1,7 +1,7 @@
 import type { MRT_ColumnDef } from 'material-react-table';
 import type { Modality } from '@/phicargo/modules/drivers/models';
 import ModalityChip from '../components/ui/ModalityChip';
-import type { Vehicle } from '../models/vehicle-model';
+import type { Vehicle } from '../../vehicles/models';
 import VehicleTypeChip from '../components/ui/VehicleTypeChip';
 import { useMemo } from 'react';
 

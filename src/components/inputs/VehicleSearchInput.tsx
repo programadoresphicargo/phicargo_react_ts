@@ -3,9 +3,9 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { AutocompleteInput } from './AutocompleteInput';
 import { SelectItem } from '@/types';
-import { Vehicle } from '@/phicargo/modules/availability/models/vehicle-model';
+import type { Vehicle } from '@/phicargo/modules/vehicles/models';
 import { useDebounce } from '@/hooks';
-import { useVehicleQueries } from '@/phicargo/modules/availability/hooks/useVehicleQueries';
+import { useVehicleQueries } from '@/phicargo/modules/vehicles/hooks/queries';
 
 const findVehicle = (vehicles: Vehicle[], term: string) => {
   return vehicles.filter((v) =>

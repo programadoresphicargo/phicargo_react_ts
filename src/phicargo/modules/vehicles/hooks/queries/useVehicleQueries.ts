@@ -1,6 +1,3 @@
-import type { Vehicle } from '../models/vehicle-model';
-
-import VehicleServiceApi from '../services/vehicle-service';
 import {
   keepPreviousData,
   useMutation,
@@ -8,6 +5,8 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
+import type { Vehicle } from '../../models';
+import { VehicleServiceApi } from '../../services';
 
 const mainKey = 'vehicles';
 

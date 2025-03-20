@@ -1,14 +1,17 @@
 import { ExportConfig, ExportToExcel } from '@/utilities';
-import { Outlet, useNavigate } from 'react-router-dom';
 
 import { MaterialReactTable } from 'material-react-table';
-import type { Vehicle } from '../models/vehicle-model';
+import { Outlet } from 'react-router-dom';
+import { Vehicle } from '../../vehicles/models';
+import { VehicleInformationModal } from '../../vehicles/components/VehicleInformationModal';
 import { useBaseTable } from '@/hooks';
+import { useState } from 'react';
 import { useVehicleColumns } from '../hooks/useVehicleColumns';
-import { useVehicleQueries } from '../hooks/useVehicleQueries';
+import { useVehicleQueries } from '../../vehicles/hooks/queries';
 
 const AsignacionUnidades = () => {
-  const navigate = useNavigate();
+
+  const [vehicleInfo, setVehicleInfo] = useState<Vehicle | null>(null);
 
   const { columns } = useVehicleColumns();
 
@@ -16,13 +19,17 @@ const AsignacionUnidades = () => {
     vehicleQuery: { data: vehicles, isFetching, isLoading, refetch },
   } = useVehicleQueries();
 
+  const onOpenInfo = (vehicle: Vehicle) => {
+    setVehicleInfo(vehicle);
+  };
+
   const table = useBaseTable<Vehicle>({
     columns,
     data: vehicles || [],
     tableId: 'availability-vehicles-table',
     isLoading,
     isFetching,
-    onDoubleClickFn: (id) => navigate(`detalles/${id}`),
+    onDoubleClickFn: onOpenInfo,
     refetchFn: () => refetch(),
     exportFn: (data) => toExcel.exportData(data),
     showColumnFilters: true,
@@ -33,6 +40,13 @@ const AsignacionUnidades = () => {
   return (
     <>
       <MaterialReactTable table={table} />
+      {vehicleInfo && (
+        <VehicleInformationModal
+          open={!!vehicleInfo}
+          onClose={() => setVehicleInfo(null)}
+          vehicle={vehicleInfo}
+        />
+      )}
       <Outlet />
     </>
   );

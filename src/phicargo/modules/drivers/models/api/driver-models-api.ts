@@ -6,7 +6,7 @@ import type {
 import type { IsDangerous, Job, Modality, Status } from '../driver-models';
 
 import type { DriverPermissionSimpleApi } from './unavailability-models-api';
-import type { VehicleSimpleApi } from '@/phicargo/modules/availability/models/api/vehicle-model-api';
+import { VehicleSimpleApi } from '@/phicargo/modules/vehicles/models/api';
 
 type JobSimple = {
   id: number;

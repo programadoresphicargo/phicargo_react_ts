@@ -32,6 +32,7 @@ export const DriverInformationModal = ({ open, onClose, driver }: Props) => {
         fullWidth
         classNames={{
           panel: 'px-4',
+          tabContent: 'font-bold uppercase',
         }}
       >
         <Tab key="permissions" title="Permisos">

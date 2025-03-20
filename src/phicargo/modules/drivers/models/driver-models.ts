@@ -2,7 +2,7 @@ import type { CompanySimple, ManeuverSimple, TravelSimple } from '../../core/mod
 
 import { Dayjs } from 'dayjs';
 import { DriverPermissionSimple } from './unavailability-models';
-import { VehicleSimple } from '../../availability/models/vehicle-model';
+import { VehicleSimple } from '../../vehicles/models';
 
 export type Modality = 'full' | 'sencillo' | 'single';
 export type IsDangerous = 'SI' | 'NO';

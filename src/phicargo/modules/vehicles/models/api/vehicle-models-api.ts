@@ -4,11 +4,7 @@ import type {
   ManeuverSimpleApi,
   TravelSimpleApi,
 } from '../../../core/models';
-import type {
-  VehicleBrand,
-  VehicleCategory,
-  VehicleState,
-} from '../vehicle-model';
+import { VehicleBrand, VehicleCategory, VehicleState } from '../vehicle-models';
 
 import { DriverSimpleApi } from '@/phicargo/modules/drivers/models/api';
 import type { MaintenanceRecordSimpleApi } from '../../../maintenance/models';

@@ -2,7 +2,7 @@ import type {
   Vehicle,
   VehicleRealStatus,
   VehicleWithRealStatus,
-} from '../models/vehicle-model';
+} from '../../vehicles/models';
 
 /**
  * Utility function to determine the real status of a vehicle.
@@ -56,7 +56,7 @@ const determineRealStatus = (vehicle: Vehicle): VehicleRealStatus => {
   }
 
   return 'unknown';
-}
+};
 
 /**
  * This class is responsible for transforming a list of vehicles with defined real statuses.
