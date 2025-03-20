@@ -16,7 +16,22 @@ const ReportMenuItem = ({ icon, label, path}: MenuItemProps) => {
   return (
     <div
       onClick={handleClick}
-      className="flex flex-col items-center justify-center w-32 h-32 m-2 rounded-2xl bg-white shadow-lg cursor-pointer transition-transform transform hover:scale-105"
+      className="
+        flex 
+        flex-col 
+        items-center 
+        justify-center 
+        w-32 
+        h-32 
+        m-2 
+        rounded-2xl 
+        bg-white 
+        shadow-md 
+        cursor-pointer 
+        transition-colors
+        duration-200
+        hover:bg-gray-100
+      "
     >
       <img src={icon} alt={label} className="w-16 h-16 mb-2" />
       <div className="text-xs font-bold text-center">{label}</div>
