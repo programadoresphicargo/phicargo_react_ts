@@ -5,7 +5,7 @@ import {
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 
 import { Box } from '@mui/material';
-import { Button } from "@heroui/react";
+import { Button, Link } from "@heroui/react";
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -16,6 +16,7 @@ import Slide from '@mui/material/Slide';
 import { ViajeContext } from '../context/viajeContext';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { toast } from 'react-toastify';
+const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -144,10 +145,20 @@ const Documentacion = ({ }) => {
           flexWrap: 'wrap',
         }}
       >
-        <Button color='primary' onClick={handleClickOpen}>
+        <Button color='primary' onPress={handleClickOpen}>
           Nuevo documento
         </Button>
-      </Box>
+        <Button
+          showAnchorIcon
+          as={Link}
+          isExternal={true}
+          color="secondary"
+          href={`${apiUrl}/tms_travel/revision_ocular/checklists/pdf/` + id_viaje}
+          variant="solid"
+        >
+          Revision ocular
+        </Button>
+      </Box >
     )
   });
 

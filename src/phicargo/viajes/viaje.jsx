@@ -25,6 +25,7 @@ import { TiemposViajeProvider } from './detenciones/TiemposViajeContext';
 import { ViajeContext } from './context/viajeContext';
 import { fontFamily } from '@mui/system';
 import { useJourneyDialogs } from './seguimiento/funciones';
+import PDFReport from "./revision_ocular/formato";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
