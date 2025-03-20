@@ -13,15 +13,9 @@ const CancelFolio = ({ open, onClose, fetchData }) => {
 
     const reasons = [
         "Error en los datos",
-        "Factura duplicada",
-        "Cambio en el pedido o servicio",
-        "Pago no recibido",
-        "Factura emitida sin autorización",
-        "Cancelación de la venta o servicio",
-        "Corrección de método de pago o forma de pago",
-        "Cambio de régimen fiscal",
-        "Error en la descripción de los productos o servicios",
-        "Instrucción del cliente"
+        "Unidad no llego a tiempo a planta",
+        "Refacturación",
+        "Otros",
     ];
 
     const handleCancel = () => {
