@@ -2,6 +2,7 @@ import { Component, ErrorInfo, ReactNode } from 'react';
 
 import { IoSadOutline } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
+import { RefreshButton } from '../ui';
 import { captureException } from '@sentry/react';
 
 /**
@@ -31,6 +32,10 @@ export class ErrorBoundary extends Component<
     this.setState({ hasError: false });
   };
 
+  private fullRefresh = () => {
+    window.location.href = window.location.href.split('?')[0] + '?t=' + new Date().getTime();
+  }
+
   render() {
     if (this.state.hasError) {
       return (
@@ -57,6 +62,10 @@ export class ErrorBoundary extends Component<
               >
                 Volver al inicio
               </Link>
+              <RefreshButton
+                onRefresh={this.fullRefresh}
+                customTitle="Full refresh"
+              />
             </div>
           </div>
         </div>

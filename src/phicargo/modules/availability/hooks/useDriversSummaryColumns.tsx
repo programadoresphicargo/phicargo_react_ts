@@ -1,7 +1,7 @@
 import { ActivePermissionCell } from '../components/ui/ActivePermissionCell';
 import { Chip } from '@heroui/react';
 import type { DriverWithRealStatus } from '@/phicargo/modules/drivers/models';
-import JobChip from '../components/ui/JobChip';
+import { JobChip } from '../../drivers/components/ui/JobChip';
 import type { MRT_ColumnDef } from 'material-react-table';
 import { ManeuverCell } from '../components/ui/ManeuverCell';
 import { TravelCell } from '../components/ui/TravelCell';

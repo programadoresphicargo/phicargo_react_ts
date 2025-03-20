@@ -15,10 +15,10 @@ export class DriverService {
       console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
-          error.response?.data?.detail || 'Error getting drivers',
+          error.response?.data?.detail || 'Error al obtener los operadores',
         );
       }
-      throw new Error('Error getting drivers');
+      throw new Error('Error al obtener los operadores');
     }
   }
 
@@ -35,10 +35,10 @@ export class DriverService {
       console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
-          error.response?.data?.detail || 'Error updating driver',
+          error.response?.data?.detail || 'Error actualizando el operador',
         );
       }
-      throw new Error('Error updating driver');
+      throw new Error('Error al actualizar el operador');
     }
   }
 

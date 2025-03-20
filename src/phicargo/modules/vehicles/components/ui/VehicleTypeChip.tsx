@@ -1,4 +1,4 @@
-import { Chip } from "@heroui/react";
+import { Chip } from '@heroui/react';
 
 interface Props {
   fleetType: string;
@@ -15,17 +15,11 @@ const getJobColor = (fleetType: string) => {
   }
 };
 
-const VehicleTypeChip = ({ fleetType }: Props) => {
+export const VehicleTypeChip = ({ fleetType }: Props) => {
   return (
-    <Chip 
-      color={getJobColor(fleetType)} 
-      size="sm"
-      className='uppercase'
-    >
+    <Chip color={getJobColor(fleetType)} size="sm" className="uppercase">
       {fleetType}
     </Chip>
   );
 };
-
-export default VehicleTypeChip;
 

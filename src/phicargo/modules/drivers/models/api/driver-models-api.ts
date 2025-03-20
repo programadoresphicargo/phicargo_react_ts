@@ -3,7 +3,7 @@ import type {
   ManeuverSimpleApi,
   TravelSimpleApi,
 } from '../../../core/models';
-import type { IsDangerous, Job, Modality, Status } from '../driver-models';
+import type { DriverStatus, IsDangerous, Job, Modality } from '../driver-models';
 
 import type { DriverPermissionSimpleApi } from './unavailability-models-api';
 import { VehicleSimpleApi } from '@/phicargo/modules/vehicles/models/api';
@@ -22,7 +22,7 @@ export interface DriverBaseApi {
   no_licencia: string | null;
   x_modalidad: Modality | null;
   x_peligroso_lic: IsDangerous | null;
-  x_status: Status | null;
+  x_status: DriverStatus | null;
   x_viaje: number | null;
   x_maniobra: number | null;
   x_hire_date: string | null;

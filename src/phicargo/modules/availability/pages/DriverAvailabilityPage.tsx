@@ -10,7 +10,6 @@ import { useDriversColumns } from '../hooks/useDriversColumns';
 import { useState } from 'react';
 
 const DriverAvailabilityPage = () => {
-
   const [driverInfo, setDriverInfo] = useState<Driver | null>(null);
 
   const { driversQuery } = useDriverQueries();

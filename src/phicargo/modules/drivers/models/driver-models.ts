@@ -7,7 +7,7 @@ import { VehicleSimple } from '../../vehicles/models';
 export type Modality = 'full' | 'sencillo' | 'single';
 export type IsDangerous = 'SI' | 'NO';
 export type Job = 'OPERADOR' | 'MOVEDOR' | 'OPERADOR POSTURERO';
-export type Status = 'viaje' | 'disponible' | 'maniobra';
+export type DriverStatus = 'viaje' | 'disponible' | 'maniobra';
 
 type JobSimple = {
   id: number;
@@ -23,7 +23,7 @@ export interface DriverBase {
   noLicense: string | null;
   modality: Modality | null;
   isDangerous: IsDangerous | null;
-  readonly status: Status | null;
+  readonly status: DriverStatus | null;
   readonly travelId: number | null;
   readonly maneuverId: number | null;
   hireDate: Dayjs | null;

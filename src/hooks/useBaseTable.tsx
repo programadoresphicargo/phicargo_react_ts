@@ -70,6 +70,7 @@ export const useBaseTable = <T extends MRT_RowData & BaseRowData>(
     state: {
       isLoading: config.isLoading,
       showProgressBars: config.isFetching,
+      showAlertBanner: !!config.error,
 
       columnFilters: state.columnFilters,
       globalFilter: state.globalFilter,
