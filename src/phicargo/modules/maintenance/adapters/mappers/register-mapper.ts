@@ -15,7 +15,7 @@ import type {
   VehicleInfoApi,
 } from '../../models';
 
-import dayjs from 'dayjs';
+import dayjs from '@/utilities/dayjs-config';
 import { workshopToLocal } from './workshop-mapper';
 
 /**
@@ -44,9 +44,11 @@ const maintenanceRecordBaseToLocal = (
   record: MaintenanceRecordBaseApi,
 ): MaintenanceRecordBase => ({
   failType: record.fail_type,
-  checkIn: dayjs(record.check_in),
+  checkIn: dayjs.utc(record.check_in).tz('America/Mexico_City'),
   status: record.status,
-  deliveryDate: record.delivery_date ? dayjs(record.delivery_date) : null,
+  deliveryDate: record.delivery_date
+    ? dayjs.utc(record.delivery_date).tz('America/Mexico_City')
+    : null,
   supervisor: record.supervisor,
   comments: record.comments,
   order: record.order_service,
@@ -62,11 +64,13 @@ export const maintenanceRecordToLocal = (
 ): MaintenanceRecord => ({
   ...maintenanceRecordBaseToLocal(record),
   id: record.id,
-  checkOut: record.check_out ? dayjs(record.check_out) : null,
+  checkOut: record.check_out
+    ? dayjs.utc(record.check_out).tz('America/Mexico_City')
+    : null,
   vehicle: vehicleInfoToLocal(record.vehicle),
   workshop: workshopToLocal(record.workshop),
   lastCommentDate: record.last_comment_date
-    ? dayjs(record.last_comment_date)
+    ? dayjs.utc(record.last_comment_date).tz('America/Mexico_City')
     : null,
 });
 
@@ -142,7 +146,7 @@ export const recordCommentToLocal = (
   id: comment.id,
   recordId: comment.maintenance_record_id,
   comment: comment.comment_text,
-  createdAt: dayjs(comment.created_at),
+  createdAt: dayjs.utc(comment.created_at).tz('America/Mexico_City'),
 });
 
 /**

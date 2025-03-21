@@ -1,4 +1,5 @@
 import {
+  MRT_GroupingState,
   MRT_RowData,
   MRT_TableOptions,
   useMaterialReactTable,
@@ -27,6 +28,8 @@ interface Config<T extends MRT_RowData & BaseRowData>
   refetchFn?: () => void;
   exportFn?: (data: T[]) => void;
   toolbarActions?: React.ReactNode;
+
+  externalGrouping?: MRT_GroupingState;
 }
 
 export const useBaseTable = <T extends MRT_RowData & BaseRowData>(
@@ -34,6 +37,7 @@ export const useBaseTable = <T extends MRT_RowData & BaseRowData>(
 ) => {
   const state = useTableState({
     tableId: `${config.tableId}`,
+    externalGrouping: config.externalGrouping,
   });
 
   return useMaterialReactTable<T>({
@@ -82,7 +86,7 @@ export const useBaseTable = <T extends MRT_RowData & BaseRowData>(
     // CUSTOM ACTIONS
     renderTopToolbarCustomActions: ({ table }) => (
       <>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: '5px' }}> 
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
           {config.refetchFn && <RefreshButton onRefresh={config.refetchFn} />}
           {config.exportFn && (
             <ExportExcelButton
@@ -97,8 +101,8 @@ export const useBaseTable = <T extends MRT_RowData & BaseRowData>(
               }
             />
           )}
+          {config.toolbarActions}
         </Box>
-        {config.toolbarActions}
       </>
     ),
     muiTableBodyRowProps: config.onDoubleClickFn

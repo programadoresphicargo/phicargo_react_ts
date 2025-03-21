@@ -27,5 +27,6 @@ export interface WaybillItemApi {
 export interface PartnerApi {
   id: number;
   name: string;
+  street: string;
 }
 

@@ -13,6 +13,7 @@ import { ShippedProductCreate } from '../../models';
 import { useGetTransportableProducts } from '../../hooks/queries';
 
 const initialValues: ShippedProductCreate = {
+  id: Math.floor(Math.random() * 100),
   productId: '' as unknown as number,
   weightEstimation: null as unknown as number,
   productUomQtyEst: 1,

@@ -13,6 +13,7 @@ import { Button } from '@/components/ui';
 import { WaybillItemSearchInput } from './WaybillItemSearchInput';
 
 const initialValues: ComplementCpCreate = {
+  id: Math.floor(Math.random() * 1000),
   description: '',
   satProductId: '' as unknown as WaybillItem,
   quantity: 1,

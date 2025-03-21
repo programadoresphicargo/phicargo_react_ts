@@ -22,10 +22,11 @@ const loadFromSessionStorage = (key: string) => {
 interface UseTableOptions {
   tableId: string;
   initialColumnFilters?: MRT_ColumnFiltersState;
+  externalGrouping?: MRT_GroupingState;
 }
 
 export const useTableState = (options: UseTableOptions): TableState => {
-  const { tableId, initialColumnFilters } = options;
+  const { tableId, initialColumnFilters, externalGrouping } = options;
 
   const isFirstRender = useRef(true);
 
@@ -42,7 +43,10 @@ export const useTableState = (options: UseTableOptions): TableState => {
     () => loadFromSessionStorage(`mrt_sorting_${tableId}`) || [],
   );
   const [grouping, setGrouping] = useState<MRT_GroupingState>(
-    () => loadFromSessionStorage(`mrt_grouping_${tableId}`) || [],
+    () =>
+      loadFromSessionStorage(`mrt_grouping_${tableId}`) ||
+      externalGrouping ||
+      [],
   );
   const [columnPinning, setColumnPinning] = useState<MRT_ColumnPinningState>(
     () => loadFromSessionStorage(`mrt_collumn_pinning_${tableId}`) || [],
@@ -53,7 +57,8 @@ export const useTableState = (options: UseTableOptions): TableState => {
 
   useEffect(() => {
     isFirstRender.current = false;
-  }, []);
+    sessionStorage.setItem(`mrt_grouping_${tableId}`, JSON.stringify(grouping));
+  }, [grouping, tableId]);
 
   // Guardar los estados en sessionStorage cuando cambien
   useEffect(() => {
@@ -81,6 +86,12 @@ export const useTableState = (options: UseTableOptions): TableState => {
     if (isFirstRender.current) return;
     sessionStorage.setItem(`mrt_grouping_${tableId}`, JSON.stringify(grouping));
   }, [grouping, tableId]);
+
+  useEffect(() => {
+    if (externalGrouping) {
+      setGrouping(externalGrouping);
+    }
+  }, [externalGrouping]);
 
   useEffect(() => {
     if (isFirstRender.current) return;

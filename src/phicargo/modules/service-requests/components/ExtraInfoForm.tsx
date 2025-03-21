@@ -1,21 +1,28 @@
 import { Card, CardContent } from '@mui/material';
-import { SelectElement, TextFieldElement } from 'react-hook-form-mui';
+import { SelectElement, TextFieldElement, UseFormReturn } from 'react-hook-form-mui';
 
 import { DateTimePickerElement } from 'react-hook-form-mui/date-pickers';
-import { useCreateServiceContext } from '../hooks/useCreateServiceContext';
+import { WaybillCreate } from '../models';
 
-export const ExtraInfoForm = () => {
-  const { form } = useCreateServiceContext();
+interface Props {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  form: UseFormReturn<WaybillCreate, any, undefined>
+  maxHeight?: string
+}
+
+export const ExtraInfoForm = ({ form, maxHeight }: Props) => {
   const { control } = form;
 
   return (
     <Card
       elevation={1}
       sx={{
-        maxHeight: 'calc(100vh - 200px)',
+        borderRadius: 4,
+        padding: '2',
+        boxShadow: 2,
+        maxHeight: maxHeight ?? 'calc(100vh - 200px)',
         overflowY: 'auto',
-      }}
-      className="rounded-lg p-2 shadow-md"
+      }} 
     >
       <CardContent>
         <h2 className="text-lg font-semibold mb-4 uppercase">Progrmación</h2>

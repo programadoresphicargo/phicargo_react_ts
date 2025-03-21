@@ -33,4 +33,7 @@ export interface WaybillItem {
 export interface Partner {
   id: number;
   name: string;
+  street: string;
+  customer: boolean;
+  supplier: boolean;
 }

@@ -1,19 +1,31 @@
 import type {
   ComplementCpApi,
+  PartnerApi,
   ShippedProductApi,
   WaybillApi,
   WaybillBaseApi,
   WaybillCreateApi,
+  WaybillEditApi,
 } from '../models/api';
 import type {
   ComplementCpCreate,
+  Partner,
   ShippedProductCreate,
   Waybill,
   WaybillBase,
   WaybillCreate,
+  WaybillEdit,
 } from '../models';
 
 import dayjs from 'dayjs';
+
+const toPartner = (data: PartnerApi): Partner => ({
+  id: data.id,
+  name: data.name,
+  street: data.street,
+  customer: false,
+  supplier: false,
+})
 
 export class ServiceRequestAdapter {
   static toWaybillBase(data: WaybillBaseApi): WaybillBase {
@@ -84,11 +96,11 @@ export class ServiceRequestAdapter {
       branch: data.branch,
       company: data.company,
       category: data.category,
-      client: data.client,
-      partnerOrder: data.partner_order,
-      departureAddress: data.departure_address,
-      partnerInvoice: data.partner_invoice,
-      arrivalAddress: data.arrival_address,
+      client: toPartner(data.client),
+      partnerOrder: toPartner(data.partner_order),
+      departureAddress: toPartner(data.departure_address),
+      partnerInvoice: toPartner(data.partner_invoice),
+      arrivalAddress: toPartner(data.arrival_address),
     };
   }
 
@@ -183,6 +195,81 @@ export class ServiceRequestAdapter {
         ServiceRequestAdapter.toComplementCpCreate,
       ),
     };
+  }
+
+  public static toWaybillEdit(data: WaybillEdit): WaybillEditApi {
+
+    const waybill: WaybillEditApi = {};
+    
+    if (data.storeId) waybill.store_id = data.storeId;
+    if (data.companyId) waybill.company_id = data.companyId;
+    if (data.waybillCategory) waybill.waybill_category = data.waybillCategory;
+    if (data.partnerId) waybill.partner_id = data.partnerId.id;
+    if (data.partnerOrderId) waybill.partner_order_id = data.partnerOrderId.id;
+    if (data.departureAddressId) waybill.departure_address_id = data.departureAddressId.id;
+    if (data.uploadPoint) waybill.upload_point = data.uploadPoint;
+    if (data.downloadPoint) waybill.download_point = data.downloadPoint;
+    if (data.xCodigoPostal) waybill.x_codigo_postal = data.xCodigoPostal;
+    if (data.xReferenceOwr) waybill.x_reference_owr = data.xReferenceOwr;
+    if (data.xReference) waybill.x_reference = data.xReference;
+    if (data.xReference2) waybill.x_reference_2 = data.xReference2;
+    if (data.xRutaAutorizada) waybill.x_ruta_autorizada = data.xRutaAutorizada;
+    if (data.dateOrder) waybill.date_order = data.dateOrder.format('YYYY-MM-DD');
+    if (data.expectedDateDelivery) waybill.expected_date_delivery = data.expectedDateDelivery.format('YYYY-MM-DD');
+    if (data.currencyId) waybill.currency_id = data.currencyId;
+    if (data.partnerInvoiceId) waybill.partner_invoice_id = data.partnerInvoiceId.id;
+    if (data.arrivalAddressId) waybill.arrival_address_id = data.arrivalAddressId.id;
+    if (data.clientOrderRef) waybill.client_order_ref = data.clientOrderRef;
+    if (data.xEjecutivo) waybill.x_ejecutivo = data.xEjecutivo;
+    if (data.dangerousCargo) waybill.dangerous_cargo = data.dangerousCargo;
+    if (data.xParadasAutorizadas) waybill.x_paradas_autorizadas = data.xParadasAutorizadas;
+    if (data.xNumeroCotizacion) waybill.x_numero_cotizacion = data.xNumeroCotizacion;
+    if (data.xTarifa) waybill.x_tarifa = data.xTarifa;
+    if (data.dateStart) waybill.date_start = data.dateStart.format('YYYY-MM-DD hh:mm:ss');
+    if (data.xDateArrivalShed) waybill.x_date_arrival_shed = data.xDateArrivalShed.format('YYYY-MM-DD hh:mm:ss');
+    if (data.xSubclienteBel) waybill.x_subcliente_bel = data.xSubclienteBel;
+    if (data.xContactoSubcliente) waybill.x_contacto_subcliente = data.xContactoSubcliente;
+    if (data.xTelefonoSubcliente) waybill.x_telefono_subcliente = data.xTelefonoSubcliente; 
+    if (data.xCorreoSubcliente) waybill.x_correo_subcliente = data.xCorreoSubcliente;
+    if (data.xRutaBel) waybill.x_ruta_bel = data.xRutaBel;
+    if (data.xRutaDestino) waybill.x_ruta_destino = data.xRutaDestino;
+    if (data.xTipoBel) waybill.x_tipo_bel = data.xTipoBel;
+    if (data.xTipo2Bel) waybill.x_tipo2_bel = data.xTipo2Bel;
+    if (data.xModoBel) waybill.x_modo_bel = data.xModoBel;
+    if (data.xMedidaBel) waybill.x_medida_bel = data.xMedidaBel;
+    if (data.xClaseBel) waybill.x_clase_bel = data.xClaseBel;
+
+    if (data.xNombreAgencia) waybill.x_nombre_agencia = data.xNombreAgencia;
+    if (data.xTelefonoAa) waybill.x_telefono_aa = data.xTelefonoAa;
+
+    if (data.xEmailAa) waybill.x_email_aa = data.xEmailAa;
+    if (data.xCustodiaBel) waybill.x_custodia_bel = data.xCustodiaBel;  
+    if (data.xNombreCustodios) waybill.x_nombre_custodios = data.xNombreCustodios;
+    if (data.xEmpresaCustodia) waybill.x_empresa_custodia = data.xEmpresaCustodia;
+
+    if (data.xTelefonoCustodios) waybill.x_telefono_custodios = data.xTelefonoCustodios;
+
+    if (data.xDatosUnidad) waybill.x_datos_unidad = data.xDatosUnidad;
+    if (data.xAlmacenaje !== undefined && data.xAlmacenaje !== null) waybill.x_almacenaje = data.xAlmacenaje;
+    if (data.xBarrasLogisticas !== undefined) waybill.x_barras_logisticas = data.xBarrasLogisticas;
+    if (data.xConexionRefrigerado !== undefined) waybill.x_conexion_refrigerado = data.xConexionRefrigerado;
+    if (data.xDesconsolidacion !== undefined) waybill.x_desconsolidacion = data.xDesconsolidacion;
+    if (data.xFumigacion !== undefined) waybill.x_fumigacion = data.xFumigacion;  
+    if (data.xManiobraCargaDescarga !== undefined) waybill.x_maniobra_carga_descarga = data.xManiobraCargaDescarga;
+    if (data.xPesaje !== undefined) waybill.x_pesaje = data.xPesaje;
+
+    if (data.xPruebaCovid !== undefined) waybill.x_prueba_covid = data.xPruebaCovid;
+    if (data.xReparto !== undefined) waybill.x_reparto = data.xReparto;
+    if (data.xResguardo !== undefined) waybill.x_resguardo = data.xResguardo;
+    if (data.xSeguro !== undefined) waybill.x_seguro = data.xSeguro;
+    if (data.xEpp !== undefined) waybill.x_epp = data.xEpp;
+    if (data.xEspecificacionesEspeciales) waybill.x_especificaciones_especiales = data.xEspecificacionesEspeciales;
+
+    // if (data.shippedProducts) waybill.shipped_products = data.shippedProducts.map(ServiceRequestAdapter.toShippedProductCreate);
+    // if (data.complementCp) waybill.complement_cp = data.complementCp.map(ServiceRequestAdapter.toComplementCpCreate);
+    
+    return waybill;
+
   }
 }
 
