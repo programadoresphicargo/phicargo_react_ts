@@ -44,6 +44,7 @@ const CostosExtrasContenedores = ({ }) => {
             { accessorKey: 'id', header: 'ID' },
             { accessorKey: 'name', header: 'Cartas porte' },
             { accessorKey: 'x_reference', header: 'Contenedor' },
+            { accessorKey: 'referencia_viaje', header: 'Viaje' },
         ],
         []
     );
