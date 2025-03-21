@@ -42,9 +42,9 @@ const CostosExtrasContenedores = ({ }) => {
     const columns = useMemo(
         () => [
             { accessorKey: 'id', header: 'ID' },
+            { accessorKey: 'referencia_viaje', header: 'Viaje' },
             { accessorKey: 'name', header: 'Cartas porte' },
             { accessorKey: 'x_reference', header: 'Contenedor' },
-            { accessorKey: 'referencia_viaje', header: 'Viaje' },
         ],
         []
     );

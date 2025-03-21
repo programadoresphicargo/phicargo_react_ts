@@ -111,6 +111,10 @@ const FoliosCostosExtras = () => {
         header: 'Cliente',
       },
       {
+        accessorKey: 'referencia_viaje',
+        header: 'Viaje',
+      },
+      {
         accessorKey: 'cartas_porte',
         header: 'Cartas porte',
       },
