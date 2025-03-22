@@ -44,14 +44,8 @@ function NavbarViajes() {
         setAnchorElNav(null);
     };
 
-
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
-
-    const [openPanelPO, setPanelPO] = React.useState(false);
-
-    const toggleDrawer2 = (newOpen) => () => {
-        setPanelPO(newOpen);
-    };
+    const { isOpen: isOpenPO, onOpen: onOpenPO, onOpenChange: onOpenChangePO } = useDisclosure();
 
     const handleBackClick = () => {
         navigate("/menu");
@@ -148,9 +142,8 @@ function NavbarViajes() {
                         <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                             <IconButton
                                 size="large"
-                                aria-label="show 17 new notifications"
                                 color="inherit"
-                                onClick={toggleDrawer2(true)}
+                                onClick={onOpenPO}
                             >
                                 <Badge badgeContent={1} color="error">
                                     <NotificationsIcon />
@@ -159,7 +152,6 @@ function NavbarViajes() {
 
                             <IconButton
                                 size="large"
-                                aria-label="show 17 new notifications"
                                 color="inherit"
                                 onClick={onOpen}
                             >
@@ -174,7 +166,7 @@ function NavbarViajes() {
             </AppBar>
 
             <Notificaciones isOpen={isOpen} onOpen={onOpen} onOpenChange={onOpenChange}></Notificaciones>
-            <ProblemasOperadores open={openPanelPO} toggleDrawer={toggleDrawer2}></ProblemasOperadores>
+            <ProblemasOperadores isOpen={isOpenPO} onOpenChange={onOpenChangePO}></ProblemasOperadores>
         </>
     );
 }

@@ -13,9 +13,17 @@ import axios from "axios";
 import { toast } from 'react-toastify';
 import { useAuthContext } from "../../modules/auth/hooks";
 import { Button, Card, CardBody, Input, Textarea } from "@heroui/react";
-const { VITE_PHIDES_API_URL } = import.meta.env;
+import odooApi from "@/phicargo/modules/core/api/odoo-api";
+import {
+    Modal,
+    ModalContent,
+    ModalHeader,
+    ModalBody,
+    ModalFooter
+} from "@heroui/modal";
+import { Progress } from "@heroui/react";
 
-export default function ReporteOperador({ id_reporte, open, onClose }) {
+export default function ReporteOperador({ id_reporte, isOpen, onOpenChange }) {
 
     const { session } = useAuthContext();
     const [isLoading, setLoading] = useState(false);
@@ -37,14 +45,8 @@ export default function ReporteOperador({ id_reporte, open, onClose }) {
     const getEstatus = async () => {
         try {
             setLoading(true);
-            const response = await fetch(VITE_PHIDES_API_URL + '/viajes/problemas_operadores/getReporte.php', {
-                method: 'POST',
-                body: new URLSearchParams({
-                    id_reporte: id_reporte
-                }),
-            })
-            const jsonData = await response.json();
-            setFormData(jsonData);
+            const response = await odooApi.get('/problemas_operadores/by_id_reporte/' + id_reporte);
+            setFormData(response.data);
             setLoading(false);
         } catch (error) {
             setLoading(false);
@@ -65,172 +67,170 @@ export default function ReporteOperador({ id_reporte, open, onClose }) {
         }));
     };
 
-    const handleSubmit = async (e) => {
-
+    const AtenderReporte = async () => {
+        if (!formData.comentarios_monitorista) {
+            toast.error("El comentario del monitorista es obligatorio.");
+            return;
+        }
         try {
             setLoading(true);
-            const response = await fetch(VITE_PHIDES_API_URL + '/viajes/problemas_operadores/atenderReporte.php', {
-                method: 'POST',
-                body: JSON.stringify(formData),
+            const response = await odooApi.get(`/problemas_operadores/atender/${formData.id_reporte}`, {
+                params: {
+                    comentarios_monitorista: formData.comentarios_monitorista
+                }
             });
-            const data = await response.json();
+
+            const data = response.data;
 
             if (data.success) {
                 toast.success(data.message);
-                onClose();
+                onOpenChange(); // Cerrar modal solo si se atendió correctamente
             } else {
                 toast.error(data.message);
             }
         } catch (error) {
-            toast.error("Error en la comunicación con el servidor.");
+            toast.error("Error en la comunicación con el servidor: " + error);
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <Dialog
-            open={open}
-            onClose={onClose}
-            fullWidth={true}
-            maxWidth={"lg"}
-            aria-labelledby="responsive-dialog-title"
-        >
-            <DialogTitle>
-                <div className="page-header">
-                    <div className="row align-items-center">
-                        <div className="col-sm mb-2 mb-sm-0">
-                            <h2 className="page-header-title">
-                                Reporte: Operador tiene un problema
-                            </h2>
-                        </div>
-                        <div className="col-sm-auto">
-                            <Button
-                                disabled={formData.atendido == true ? true : false}
-                                color="danger"
-                                onPress={handleSubmit}
-                            >
-                                Atender
-                            </Button>
-                        </div>
-                    </div>
-                </div>
-            </DialogTitle>
-            <DialogContent>
-                <form id="formrpo">
-                    <Grid container spacing={2}>
-                        <Grid item xs={12} lg={6}>
-                            <Card>
-                                <CardBody>
-                                    <Box mb={3}>
-                                        <Input type="text"
-                                            id="id_reporte"
-                                            label="ID reporte"
-                                            variant="bordered"
-                                            value={formData.id_reporte}
-                                            disabled />
-                                    </Box>
-                                    <Box mb={2}>
-                                        <Input
-                                            fullWidth
-                                            id="fecha_creacion"
-                                            label="Fecha creacion"
-                                            variant="bordered"
-                                            disabled
-                                            value={formData.fecha_creacion}
-                                            onChange={handleInputChange}
-                                        />
-                                    </Box>
-                                    <Box mb={2}>
-                                        <Input
-                                            id="referencia"
-                                            label="Referencia de viaje"
-                                            variant="bordered"
-                                            disabled
-                                            value={formData.referencia}
-                                            onChange={handleInputChange}
-                                        />
-                                    </Box>
-                                    <Box mb={2}>
-                                        <Input
-                                            id="nombre_operador"
-                                            label="Operador"
-                                            variant="bordered"
-                                            disabled
-                                            value={formData.nombre_operador}
-                                            onChange={handleInputChange}
-                                        />
-                                    </Box>
-                                    <Box mb={2}>
-                                        <Input
-                                            id="unidad"
-                                            label="Unidad"
-                                            variant="bordered"
-                                            disabled
-                                            value={formData.unidad}
-                                            onChange={handleInputChange}
-                                        />
-                                    </Box>
-                                </CardBody>
-                            </Card>
-                        </Grid>
+        <>
+            <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="5xl">
+                <ModalContent>
+                    {(onClose) => (
+                        <>
+                            <ModalHeader className="flex flex-col gap-1">Operador tengo un problema</ModalHeader>
+                            {isLoading && <Progress isIndeterminate size="sm" color="danger" />}
+                            <ModalBody>
+                                <div className="page-header">
+                                    <div className="row align-items-center">
+                                        <div className="col-sm-auto">
+                                            <Button
+                                                disabled={formData.atendido == true ? true : false}
+                                                color="danger"
+                                                onPress={AtenderReporte}
+                                            >
+                                                Atender
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12} lg={6}>
+                                        <Card>
+                                            <CardBody>
+                                                <Box mb={3}>
+                                                    <Input type="text"
+                                                        id="id_reporte"
+                                                        label="ID reporte"
+                                                        variant="bordered"
+                                                        value={formData.id_reporte}
+                                                        disabled />
+                                                </Box>
+                                                <Box mb={2}>
+                                                    <Input
+                                                        fullWidth
+                                                        id="fecha_creacion"
+                                                        label="Fecha creacion"
+                                                        variant="bordered"
+                                                        disabled
+                                                        value={formData.fecha_creacion}
+                                                        onChange={handleInputChange}
+                                                    />
+                                                </Box>
+                                                <Box mb={2}>
+                                                    <Input
+                                                        id="referencia"
+                                                        label="Referencia de viaje"
+                                                        variant="bordered"
+                                                        disabled
+                                                        value={formData.referencia}
+                                                        onChange={handleInputChange}
+                                                    />
+                                                </Box>
+                                                <Box mb={2}>
+                                                    <Input
+                                                        id="nombre_operador"
+                                                        label="Operador"
+                                                        variant="bordered"
+                                                        disabled
+                                                        value={formData.nombre_operador}
+                                                        onChange={handleInputChange}
+                                                    />
+                                                </Box>
+                                                <Box mb={2}>
+                                                    <Input
+                                                        id="unidad"
+                                                        label="Unidad"
+                                                        variant="bordered"
+                                                        disabled
+                                                        value={formData.unidad}
+                                                        onChange={handleInputChange}
+                                                    />
+                                                </Box>
+                                            </CardBody>
+                                        </Card>
+                                    </Grid>
 
-                        <Grid item xs={12} lg={6}>
-                            <Card>
-                                <CardBody>
-                                    <Box mb={3}>
-                                        <Textarea
-                                            id="comentarios_operador"
-                                            label="Comentarios operador"
-                                            variant="bordered"
-                                            multiline
-                                            rows={4}
-                                            disabled
-                                            value={formData.comentarios_operador}
-                                            onChange={handleInputChange}
-                                        />
-                                    </Box>
-                                    <Box mb={3}>
-                                        <Textarea
-                                            disabled={formData.atendido == true ? true : false}
-                                            id="comentarios_monitorista"
-                                            label="Comentarios Monitorista"
-                                            variant="bordered"
-                                            multiline
-                                            rows={5}
-                                            value={formData.comentarios_monitorista}
-                                            onChange={handleInputChange}
-                                        />
-                                    </Box>
-                                    <Box mb={3}>
-                                        <Input
-                                            id="usuario_resolvio"
-                                            label="Usuario resolvio"
-                                            variant="bordered"
-                                            disabled
-                                            value={formData.usuario_resolvio}
-                                            onChange={handleInputChange}
-                                        />
-                                    </Box>
-                                    <Box mb={3}>
-                                        <Input
-                                            id="fecha_atendido"
-                                            label="Fecha atendido"
-                                            variant="bordered"
-                                            disabled
-                                            value={formData.fecha_atendido}
-                                            onChange={handleInputChange}
-                                        />
-                                    </Box>
-                                </CardBody>
-                            </Card>
-                        </Grid>
-                    </Grid>
-                </form>
-            </DialogContent>
-            <DialogActions>
-                <Button onPress={onClose} color="danger">Salir</Button>
-            </DialogActions>
-        </Dialog>
+                                    <Grid item xs={12} lg={6}>
+                                        <Card>
+                                            <CardBody>
+                                                <Box mb={3}>
+                                                    <Textarea
+                                                        id="comentarios_operador"
+                                                        label="Comentarios operador"
+                                                        variant="bordered"
+                                                        multiline
+                                                        rows={4}
+                                                        disabled
+                                                        value={formData.comentarios_operador}
+                                                        onChange={handleInputChange}
+                                                    />
+                                                </Box>
+                                                <Box mb={3}>
+                                                    <Textarea
+                                                        disabled={formData.atendido == true ? true : false}
+                                                        id="comentarios_monitorista"
+                                                        label="Comentarios Monitorista / Ejecutivo"
+                                                        variant="bordered"
+                                                        multiline
+                                                        rows={5}
+                                                        name="comentarios_monitorista"
+                                                        value={formData.comentarios_monitorista}
+                                                        onChange={handleInputChange}
+                                                    />
+                                                </Box>
+                                                <Box mb={3}>
+                                                    <Input
+                                                        id="usuario_resolvio"
+                                                        label="Usuario resolvio"
+                                                        variant="bordered"
+                                                        disabled
+                                                        value={formData.usuario_resolvio}
+                                                        onChange={handleInputChange}
+                                                    />
+                                                </Box>
+                                                <Box mb={3}>
+                                                    <Input
+                                                        id="fecha_atendido"
+                                                        label="Fecha atendido"
+                                                        variant="bordered"
+                                                        disabled
+                                                        value={formData.fecha_atendido}
+                                                        onChange={handleInputChange}
+                                                    />
+                                                </Box>
+                                            </CardBody>
+                                        </Card>
+                                    </Grid>
+                                </Grid>
+                            </ModalBody>
+                        </>
+                    )}
+                </ModalContent>
+            </Modal>
+        </>
     );
 }
