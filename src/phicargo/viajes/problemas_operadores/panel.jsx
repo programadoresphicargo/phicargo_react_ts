@@ -95,13 +95,19 @@ export default function ProblemasOperadores({ isOpen, onOpen, onOpenChange }) {
                                     </>
                                 ))}
 
-                                <ReporteOperador id_reporte={id_reporte} isOpen={openReporte} onOpenChange={handleCloseReporte}></ReporteOperador>
-
                             </DrawerBody>
+                            <DrawerFooter>
+                                <Button color="danger" variant="light" onPress={onOpenChange}>
+                                    Cerrar
+                                </Button>
+                            </DrawerFooter>
                         </>
                     )}
                 </DrawerContent>
             </Drawer>
+
+            <ReporteOperador id_reporte={id_reporte} isOpen={openReporte} onOpenChange={handleCloseReporte}></ReporteOperador>
+
         </div>
     );
 }
