@@ -27,20 +27,20 @@ export default function ProblemasOperadores({ isOpen, onOpen, onOpenChange }) {
 
     useEffect(() => {
         getEstatus();
-    }, [open]);
+    }, [isOpen]);
 
     const getEstatus = async () => {
-
         try {
             setLoading(true);
             const response = await odooApi.get('/problemas_operadores/');
             setEstatus(response.data);
-            setLoading(false);
         } catch (error) {
-            setLoading(false);
             console.error('Error al obtener los datos:', error);
+        } finally {
+            setLoading(false);
         }
     };
+
 
     const [openReporte, setOpenReporte] = React.useState(false);
 
@@ -69,30 +69,23 @@ export default function ProblemasOperadores({ isOpen, onOpen, onOpenChange }) {
                                     </div>
                                 )}
 
-                                {estatus.map((step, index) => (
-                                    <>
-                                        <Card className="m-1" onPress={() => handleClickOpen(step.id_reporte)} isPressable>
-                                            <CardBody className="px-3 text-small text-default-400">
-                                                <div className="flex gap-5">
-                                                    <Avatar
-                                                        color='danger'
-                                                        isBordered
-                                                        radius="full"
-                                                        size="md"
-                                                    />
-                                                    <div className="flex flex-col gap-1 items-start justify-center">
-                                                        <h4 className="text-small font-semibold leading-none text-default-600">{step.referencia}</h4>
-                                                        <h5 className="text-small tracking-tight text-default-400">{step.nombre_operador}</h5>
-                                                    </div>
+                                {estatus.map((step) => (
+                                    <Card key={step.id_reporte} className="m-1" onPress={() => handleClickOpen(step.id_reporte)}>
+                                        <CardBody className="px-3 text-small text-default-400">
+                                            <div className="flex gap-5">
+                                                <Avatar color='danger' isBordered radius="full" size="md" />
+                                                <div className="flex flex-col gap-1 items-start justify-center">
+                                                    <h4 className="text-small font-semibold leading-none text-default-600">{step.referencia}</h4>
+                                                    <h5 className="text-small tracking-tight text-default-400">{step.nombre_operador}</h5>
                                                 </div>
-                                            </CardBody>
-                                            <CardFooter className="gap-3">
-                                                <div className="flex gap-1">
-                                                    <p className=" text-default-400 text-small">{step.fecha_creacion}</p>
-                                                </div>
-                                            </CardFooter>
-                                        </Card>
-                                    </>
+                                            </div>
+                                        </CardBody>
+                                        <CardFooter className="gap-3">
+                                            <div className="flex gap-1">
+                                                <p className=" text-default-400 text-small">{step.fecha_creacion}</p>
+                                            </div>
+                                        </CardFooter>
+                                    </Card>
                                 ))}
 
                             </DrawerBody>
