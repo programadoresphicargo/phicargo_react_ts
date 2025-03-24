@@ -65,13 +65,20 @@ const Operadores = ({ estado }) => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await odooApi.get('/saldos/fecha_actual/' + value);
-      setFechaAnterior(response.data[0].fecha_anterior);
-      console.log(response.data[0].fecha_anterior);
+      const response = await odooApi.get(`/saldos/fecha_actual/${value}`);
+
+      if (response.data.length > 0) {
+        setFechaAnterior(response.data[0].fecha_anterior || ''); 
+        console.log("Fecha anterior:", response.data[0].fecha_anterior);
+      } else {
+        console.warn("No hay datos en la respuesta.");
+        setFechaAnterior('');
+      }
+
       setData(response.data);
-      setLoading(false);
     } catch (error) {
-      console.error('Error al obtener los datos:', error);
+      console.error("Error al obtener los datos:", error);
+    } finally {
       setLoading(false);
     }
   };
