@@ -27,7 +27,7 @@ const Operadores = ({ estado }) => {
   const [id_cuenta, setCuenta] = React.useState(0);
   const [referencia, setReferencia] = React.useState(0);
 
-  const [fechaAnterior, setFechaAnterior] = React.useState('');
+  const [fechaAnterior, setFechaAnterior] = useState('');
   const fechaActual = new Date().toISOString().split('T')[0];
   const [value, setValue] = React.useState(parseDate(fechaActual));
 
@@ -120,7 +120,7 @@ const Operadores = ({ estado }) => {
       },
       {
         accessorKey: 'saldo_anterior',
-        header: 'Saldo anterior: ' + fechaAnterior,
+        header: 'Saldo Anterior: ' + fechaAnterior,
         muiTableBodyCellProps: {
           align: 'right',
         },
