@@ -120,7 +120,7 @@ const Operadores = ({ estado }) => {
       },
       {
         accessorKey: 'saldo_anterior',
-        header: 'Saldo Anterior: ' + fechaAnterior,
+        header: `Último saldo: ${fechaAnterior}`,
         muiTableBodyCellProps: {
           align: 'right',
         },
