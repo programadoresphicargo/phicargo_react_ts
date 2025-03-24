@@ -335,7 +335,7 @@ const Operadores = ({ estado }) => {
               onChange={setValue}
             />
 
-            <h1 className='text-primary'>Última fecha de saldo: {fechaAnterior || 'N/A'}</h1>
+            <h1 className='text-primary'>Fecha saldo anterior: {fechaAnterior || 'N/A'}</h1>
 
             <Button color='primary' onPress={handleClickOpen}>Cuentas</Button>
           </div>
