@@ -6,7 +6,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import CompleteDialog from '../components/CompleteDialog';
 import type { MaintenanceRecord } from '../models';
 import { Modal } from '@/components';
-import { RecordComments } from './RecordComments';
+import { RecordComments } from './comments/RecordComments';
 import { RecordInfo } from './RecordInfo';
 import { TextareaInput } from '@/components/inputs';
 import { useMaintenanceRecord } from '../hooks';
@@ -95,9 +95,10 @@ export const RecordDetailsModal = ({ open, onClose, record }: Props) => {
           aria-label="driver-sections"
           variant="underlined"
           color="primary"
+          size='sm'
           fullWidth
           classNames={{
-            panel: 'px-4',
+            panel: 'px-4 py-1',
             tabContent: 'font-bold uppercase',
           }}
         >

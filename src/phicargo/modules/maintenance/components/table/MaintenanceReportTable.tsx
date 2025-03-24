@@ -1,10 +1,10 @@
-import { Box, IconButton, Tooltip } from '@mui/material';
+import { Box, DialogProps, IconButton, Tooltip } from '@mui/material';
 import type { MaintenanceRecord, MaintenanceRecordStatus } from '../../models';
 import { useEffect, useState } from 'react';
 import { useMaintenanceRecord, useMaintenanceReportColumns } from '../../hooks';
 
 import { AddButton } from '@/components/ui';
-import CompleteDialog from '../CompleteDialog';
+import { CreateRecordForm } from '../CreateRecordForm';
 import EditIcon from '@mui/icons-material/Edit';
 import { EditRecordForm } from '../EditRecordForm';
 import InfoIcon from '@mui/icons-material/Info';
@@ -12,7 +12,20 @@ import { MaterialReactTable } from 'material-react-table';
 import { MuiTransition } from '@/components';
 import { RecordDetailsModal } from '../RecordDetailsModal';
 import { useBaseTable } from '@/hooks';
-import { useNavigate } from 'react-router-dom';
+
+const dialogProps: DialogProps = {
+  slots: {
+    transition: MuiTransition,
+  },
+  disableEnforceFocus: true,
+  disableScrollLock: true,
+  open: true,
+  sx: {
+    '& .MuiPaper-root': {
+      borderRadius: 4,
+    },
+  },
+};
 
 interface MaintenanceReportTableProps {
   status: MaintenanceRecordStatus;
@@ -24,20 +37,13 @@ const MaintenanceReportTable = (props: MaintenanceReportTableProps) => {
 
   const [detail, setDetail] = useState<MaintenanceRecord | null>(null);
 
-  const navigate = useNavigate();
-
-  const [completeModal, setCompleteModal] = useState(false);
-  const [reigsterToFinishId, setRegisterToFinishId] = useState<number | null>(
-    null,
-  );
-
   const {
     recordsQuery: { data: records, isFetching, refetch, isLoading },
   } = useMaintenanceRecord(status);
 
   const columns = useMaintenanceReportColumns(records || []);
 
-  const table2 = useBaseTable<MaintenanceRecord>({
+  const table = useBaseTable<MaintenanceRecord>({
     columns,
     data: records || [],
     isFetching,
@@ -70,26 +76,25 @@ const MaintenanceReportTable = (props: MaintenanceReportTableProps) => {
       <AddButton
         label="Añadir Servicio"
         size="small"
-        onClick={() => navigate('/reportes/mantenimiento/nuevo')}
+        onClick={() => table.setCreatingRow(true)}
       />
     ),
-    muiEditRowDialogProps: () => ({
-      slots: {
-        transition: MuiTransition,
-      },
-      disableEnforceFocus: true,
-      disableScrollLock: true,
-      open: true,
-    }),
+    muiEditRowDialogProps: dialogProps,
+    muiCreateRowModalProps: dialogProps,
     renderEditRowDialogContent: ({ table, row }) => (
       <EditRecordForm
         onClose={() => table.setEditingRow(null)}
         record={row.original}
       />
     ),
+    renderCreateRowDialogContent: ({ table }) => (
+      <CreateRecordForm
+        onClose={() => table.setCreatingRow(null)}
+      />
+    ),
   });
 
-  const columnFilters = table2.getState().columnFilters;
+  const columnFilters = table.getState().columnFilters;
   useEffect(() => {
     const statusFilter = columnFilters.find((filter) => filter.id === 'status');
     if (statusFilter) {
@@ -102,22 +107,12 @@ const MaintenanceReportTable = (props: MaintenanceReportTableProps) => {
 
   return (
     <>
-      <MaterialReactTable table={table2} />
+      <MaterialReactTable table={table} />
       {detail && (
         <RecordDetailsModal
           open={!!detail}
           onClose={() => setDetail(null)}
           record={detail}
-        />
-      )}
-      {completeModal && reigsterToFinishId && (
-        <CompleteDialog
-          open={completeModal}
-          onClose={() => {
-            setCompleteModal(false);
-            setRegisterToFinishId(null);
-          }}
-          itemId={reigsterToFinishId}
         />
       )}
     </>

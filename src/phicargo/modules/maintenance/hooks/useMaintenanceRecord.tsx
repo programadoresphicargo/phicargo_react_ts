@@ -41,9 +41,19 @@ export const useMaintenanceRecord = (
   const editRecordMutation = useMutation({
     mutationFn: MaintenanceRecordServiceApi.editRecord,
     onSuccess: (newRecord) => {
-      queryClient.setQueryData([mainKey, status], (prev: MaintenanceRecord[]) =>
-        prev?.map((r) => (r.id === newRecord.id ? newRecord : r)),
-      );
+      if (newRecord.status !== status) {
+        queryClient.setQueryData(
+          [mainKey, status],
+          (prev: MaintenanceRecord[]) =>
+            prev?.filter((r) => r.id !== newRecord.id),
+        );
+      } else {
+        queryClient.setQueryData(
+          [mainKey, status],
+          (prev: MaintenanceRecord[]) =>
+            prev?.map((r) => (r.id === newRecord.id ? newRecord : r)),
+        );
+      }
       toast.success('Registro actualizado correctamente');
     },
     onError: () => {

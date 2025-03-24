@@ -1,14 +1,14 @@
-import { Alert, LoadingSpinner } from '@/components/ui';
-import { Card, CardBody } from '@heroui/react';
-import type {
+import { Alert, LoadingSpinner, RefreshButton } from '@/components/ui';
+import { Card, CardBody, CardHeader } from '@heroui/react';
+import {
   MaintenanceRecord,
   RecordComment,
   RecordUpdateComment,
-} from '../models';
+} from '../../models';
 
 import { CommentsTimeline } from './CommentsTimeline';
 import { UpdateCommentsTimeline } from './UpdateCommentsTimeline';
-import { useGetComments } from '../hooks';
+import { useGetComments } from '../../hooks';
 
 interface Props {
   record: MaintenanceRecord;
@@ -24,6 +24,8 @@ export const RecordComments = ({ record, type }: Props) => {
     updateCommentsQuery: {
       data: updateComments,
       isLoading: isLoadingUpdateComments,
+      isFetching,
+      refetch,
     },
   } = useGetComments(record.id);
 
@@ -67,6 +69,13 @@ export const RecordComments = ({ record, type }: Props) => {
       }}
       radius="md"
     >
+      <CardHeader className="flex items-center justify-between">
+        {type === 'update' && (
+          <div className="flex items-center gap-2">
+            <RefreshButton onRefresh={() => refetch()} isLoading={isFetching} />
+          </div>
+        )}
+      </CardHeader>
       <CardBody>
         {comments && comments.length > 0 ? (
           type === 'advance' ? (

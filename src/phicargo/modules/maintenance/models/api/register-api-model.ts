@@ -37,7 +37,7 @@ export type MaintenanceRecordUpdateApi = Partial<
   Pick<
     MaintenanceRecordCreateApi,
     'workshop_id' | 'fail_type' | 'status' | 'delivery_date' | 'supervisor'
-  > & { update_comments: string }
+  > & { update_comments: string, check_out: string }
 >;
 
 export interface RecordCommentApi {

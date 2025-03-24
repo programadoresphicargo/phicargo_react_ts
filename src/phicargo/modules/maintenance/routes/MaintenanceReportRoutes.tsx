@@ -7,8 +7,6 @@ import { Route } from 'react-router-dom';
 const MaintenanceReportPage = lazy(
   () => import('../pages/MaintenanceReportPage'),
 );
-const RecordDetails = lazy(() => import('../outlets/RecordDetails'));
-const CreateNewRecord = lazy(() => import('../outlets/CreateNewRecord'));
 
 const MaintenanceReportRoutes = () => (
   <Route
@@ -23,24 +21,7 @@ const MaintenanceReportRoutes = () => (
         requiredPermissionId={198}
       />
     }
-  >
-    <Route
-      path="detalles/:id"
-      element={
-        <Suspense fallback={null}>
-          <RecordDetails />
-        </Suspense>
-      }
-    />
-    <Route
-      path="nuevo"
-      element={
-        <Suspense fallback={null}>
-          <CreateNewRecord />
-        </Suspense>
-      }
-    />
-  </Route>
+  ></Route>
 );
 
 export default MaintenanceReportRoutes;

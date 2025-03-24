@@ -39,7 +39,7 @@ export type MaintenanceRecordUpdate = Partial<
   Pick<
     MaintenanceRecordCreate,
     'workshopId' | 'failType' | 'status' | 'deliveryDate' | 'supervisor'
-  > & { updateComments: string }
+  > & { updateComments: string, checkOut: Dayjs }
 >;
 
 export interface RecordComment {

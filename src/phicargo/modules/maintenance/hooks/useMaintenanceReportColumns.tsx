@@ -4,10 +4,9 @@ import { useMemo } from 'react';
 import { useWorkshop } from './useWorkshop';
 import type { MaintenanceRecord } from '../models';
 import { daysUtil, daysUtilNow } from '../utilities/datetime';
-import { useNavigate } from 'react-router-dom';
+import { Chip } from '@heroui/react';
 
 export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
-  const navigate = useNavigate();
 
   const {
     workshopQuery: { data: workshops },
@@ -20,22 +19,10 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
           originalRow?.vehicle?.name || 'Sin Asignar',
         id: 'name',
         header: 'Unidad',
+        size: 4,
         enableEditing: false,
-        Cell: ({ cell, row }) => {
-          return (
-            <>
-              <span
-                className='bg-blue-500 text-white font-bold px-2 py-1 rounded-md cursor-pointer hover:bg-blue-600'
-                onDoubleClick={() =>
-                  navigate(
-                    `/reportes/mantenimiento/detalles/${row.original.id}`,
-                  )
-                }
-              >
-                {cell.getValue<string>()}
-              </span>
-            </>
-          );
+        Cell: ({ cell }) => {
+          return <Chip size='sm' color="primary">{cell.getValue<string>()}</Chip>;
         },
       },
       {
@@ -50,6 +37,7 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
         header: 'Días en Taller',
         filterVariant: 'range-slider',
         enableEditing: false,
+        size: 4,
         Cell: ({ row }) => {
           if (row.original.status === 'pending') {
             return daysUtilNow(row.original.checkIn);
@@ -65,6 +53,7 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
           originalRow.deliveryDate?.format('YYYY-MM-DD'),
         id: 'deliveryDate',
         header: 'Entrega tentativa',
+        size: 4,
         Cell: ({ row }) =>
           row.original.deliveryDate?.format('DD/MM/YYYY') || 'N/A',
       },
@@ -74,11 +63,12 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
           originalRow?.vehicle?.vehicleType || 'Sin Asignar',
         id: 'type',
         enableEditing: false,
+        size: 4,
         Cell: ({ cell }) =>
           cell.getValue<string>()?.toUpperCase() || 'Sin Asignar',
       },
       {
-        accessorFn: (originalRow) => originalRow.checkIn.format('YYYY-MM-DD'),
+        accessorFn: (originalRow) => originalRow.checkIn,
         id: 'checkIn',
         header: 'Entrada',
         Cell: ({ row }) => row.original.checkIn.format('DD/MM/YYYY'),
@@ -104,8 +94,7 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
         },
       },
       {
-        accessorFn: (originalRow) =>
-          originalRow?.workshop?.id || 'Sin Asignar',
+        accessorFn: (originalRow) => originalRow?.workshop?.id || 'Sin Asignar',
         id: 'workshop',
         header: 'Taller',
         filterVariant: 'select',

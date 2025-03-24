@@ -1,5 +1,5 @@
 import { FaCalendarMinus } from 'react-icons/fa';
-import type { RecordComment } from '../models';
+import { RecordComment } from '../../models';
 
 interface Props {
   comments: RecordComment[];
@@ -15,7 +15,7 @@ export const CommentsTimeline = ({ comments }: Props) => {
               <FaCalendarMinus className="w-2.5 h-2.5 text-blue-800" />
             </span>
             <time className="flex items-center mb-1 text-lg font-semibold uppercase text-gray-900">
-              {comment.createdAt.format('MMMM DD, YYYY | HH:mm A')}
+              {comment.createdAt.format('MMMM DD, YYYY | hh:mm A')}
               {index === 0 && (
                 <span className=" text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-lg bg-blue-900 dark:text-blue-300 ms-3">
                   Último Comentario
