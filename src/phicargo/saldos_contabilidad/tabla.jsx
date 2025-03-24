@@ -67,6 +67,7 @@ const Operadores = ({ estado }) => {
       setLoading(true);
       const response = await odooApi.get('/saldos/fecha_actual/' + value);
       setFechaAnterior(response.data[0].fecha_anterior);
+      console.log(response.data[0].fecha_anterior);
       setData(response.data);
       setLoading(false);
     } catch (error) {
