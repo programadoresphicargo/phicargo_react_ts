@@ -28,6 +28,7 @@ import Slide from '@mui/material/Slide';
 import EnviosMasivosManiobras from '../envio_masivo';
 import { User } from "@heroui/react";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
+import { exportToCSV } from '../../utils/export';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -287,6 +288,7 @@ const Maniobras = ({ estado_maniobra }) => {
         <h1 className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text">Control de maniobras</h1>
         <Button color="primary" isLoading={isLoading2} onPress={() => fetchData()} startContent={<i class="bi bi-arrow-clockwise"></i>}>Refrescar</Button>
         <Button color="success" onPress={() => handleClickOpen()} className='text-white' startContent={<i class="bi bi-send-plus"></i>}>Envio masivo</Button>
+        <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, `maniobras ${estado_maniobra}.csv`)}>Exportar</Button>
       </Box >
     ),
   });
