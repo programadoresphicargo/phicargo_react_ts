@@ -1,11 +1,11 @@
 import { IconButton, Tooltip } from '@mui/material';
 import {
+  MaterialReactTable,
   type MRT_ColumnDef,
   useMaterialReactTable,
 } from 'material-react-table';
 import { Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/react";
 
-import MaterialTableBase from '../../core/components/tables/MaterialTableBase';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import type { Travel } from '../models/travels-models';
 import { FaSearchLocation } from 'react-icons/fa';
@@ -175,7 +175,7 @@ export const TravelsModal = (props: Props) => {
               </h3>
             </ModalHeader>
             <ModalBody className="p-0">
-              <MaterialTableBase table={table} />
+              <MaterialReactTable table={table} />
             </ModalBody>
           </>
         )}

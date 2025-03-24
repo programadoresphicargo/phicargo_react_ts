@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
 import { Input } from "@heroui/react";
 import { Permission } from '../models';
-import { useDebounce } from '../../core/hooks';
+import { useDebounce } from '@/hooks';
 
 const searchPermissions = (permissions: Permission[], searchTerm: string) => {
   return permissions.filter((perm) =>

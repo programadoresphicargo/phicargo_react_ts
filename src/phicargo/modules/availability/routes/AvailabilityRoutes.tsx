@@ -2,7 +2,7 @@ import { Navigate, Route } from 'react-router-dom';
 import { Suspense, lazy, memo } from 'react';
 
 import AvailabilityLayout from '../layout/AvailabilityLayout';
-import { LoadingPage } from '../../core/pages/LoadingPage';
+import { LoadingPage } from '@/pages/LoadingPage';
 import ProtectedRoute from '@/router/ProtectedRoute';
 
 const VehicleAvailabilityPage = lazy(() =>
@@ -11,13 +11,11 @@ const VehicleAvailabilityPage = lazy(() =>
   })),
 );
 
-const VehicleInfo = lazy(() => import('../outlets/VehicleInfo'));
 const DriverAvailabilityPage = lazy(() =>
   import('../pages/DriverAvailabilityPage').then((module) => ({
     default: memo(module.default),
   })),
 );
-const DriverInfo = lazy(() => import('../outlets/DriverInfo'));
 const NotAssignedPage = lazy(() => import('../pages/NotAssignedPage'));
 const SummaryPage = lazy(() =>
   import('../pages/SummaryPage').then((module) => ({
@@ -45,11 +43,8 @@ const AvailabilityRoutes = () => {
           requiredPermissionId={permission}
         />
       }
-    > 
-      <Route
-        index
-        element={<Navigate to="unidades" replace />}
-      />
+    >
+      <Route index element={<Navigate to="unidades" replace />} />
       <Route
         path="unidades"
         element={
@@ -57,16 +52,7 @@ const AvailabilityRoutes = () => {
             <VehicleAvailabilityPage />
           </Suspense>
         }
-      >
-        <Route
-          path="detalles/:id"
-          element={
-            <Suspense fallback={<LoadingPage />}>
-              <VehicleInfo />
-            </Suspense>
-          }
-        />
-      </Route>
+      ></Route>
       <Route
         path="operadores"
         element={
@@ -74,16 +60,7 @@ const AvailabilityRoutes = () => {
             <DriverAvailabilityPage />
           </Suspense>
         }
-      >
-        <Route
-          path="detalles/:id"
-          element={
-            <Suspense fallback={<LoadingPage />}>
-              <DriverInfo />
-            </Suspense>
-          }
-        />
-      </Route>
+      ></Route>
       <Route
         path="resumen-unidades"
         element={

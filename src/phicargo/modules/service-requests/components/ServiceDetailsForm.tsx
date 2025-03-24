@@ -1,17 +1,37 @@
-import { AutocompleteElement, CheckboxElement, SelectElement, TextFieldElement } from 'react-hook-form-mui';
+import {
+  AutocompleteElement,
+  CheckboxElement,
+  SelectElement,
+  TextFieldElement,
+  UseFormReturn,
+} from 'react-hook-form-mui';
 import { Card, CardContent } from '@mui/material';
 
-import { useCreateServiceContext } from '../hooks/useCreateServiceContext';
+import { WaybillCreate } from '../models';
 import { useGetRoutes } from '../hooks/queries';
 
-export const ServiceDetailsForm = () => {
-  const { form } = useCreateServiceContext();
+interface Props {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  form: UseFormReturn<WaybillCreate, any, undefined>;
+  height?: string;
+}
+
+export const ServiceDetailsForm = ({ form, height }: Props) => {
   const { control, setValue } = form;
 
   const { selection, isLoading } = useGetRoutes();
 
   return (
-    <Card elevation={1} className="rounded-lg p-2 shadow-md h-[32rem] overflow-y-auto">
+    <Card
+      elevation={1}
+      sx={{
+        borderRadius: 4,
+        padding: '2',
+        boxShadow: 2,
+        height: height ?? '32rem',
+        overflowY: 'auto',
+      }}
+    >
       <CardContent>
         <h2 className="text-lg font-semibold mb-4 uppercase">
           Datos del Servicio
@@ -27,7 +47,10 @@ export const ServiceDetailsForm = () => {
             autocompleteProps={{
               getOptionKey: (option) => option.id,
               onChange: (_, value) => {
-                setValue('xRutaDestino', value?.id || (null as unknown as number));
+                setValue(
+                  'xRutaDestino',
+                  value?.id || (null as unknown as number),
+                );
               },
             }}
           />
@@ -63,11 +86,7 @@ export const ServiceDetailsForm = () => {
               { label: 'EXP', id: 'exp' },
             ]}
           />
-          <TextFieldElement
-            control={control}
-            name="xClaseBel"
-            label="Clase"
-          />
+          <TextFieldElement control={control} name="xClaseBel" label="Clase" />
           <TextFieldElement
             control={control}
             name="xMedidaBel"

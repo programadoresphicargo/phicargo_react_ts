@@ -5,11 +5,9 @@ import {
   ModalContent,
   ModalHeader,
 } from "@heroui/react";
+import { EmailInput, PasswordInput2, TextInput } from "@/components/inputs";
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-import { EmailInput } from '../../core/components/inputs/EmailInput';
-import { PasswordInput } from '../../core/components/inputs/PasswordInput';
-import { TextInput } from '../../core/components/inputs/TextInput';
 import { UserCreate } from '../models';
 import { useUsersQueries } from '../hooks/useUsersQueries';
 
@@ -103,7 +101,7 @@ export const UserCreateForm = (props: Props) => {
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <PasswordInput
+                    <PasswordInput2
                       control={control}
                       name="password"
                       label="Contraseña"
@@ -116,7 +114,7 @@ export const UserCreateForm = (props: Props) => {
                       }}
                     />
 
-                    <PasswordInput
+                    <PasswordInput2
                       control={control}
                       name="pin"
                       label="Pin"

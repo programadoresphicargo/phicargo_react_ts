@@ -1,10 +1,10 @@
 import type { FullUser, FullUserApi, User, UserApi } from '../../auth/models';
 import { UserCreate, UserUpdate } from '../models';
 import { fullUserToLocal, userToLocal } from '../../auth/adapters';
-import { userToApi, userUpdateToApi } from '../adapters/users-mapper';
 
 import { AxiosError } from 'axios';
-import { UpdatableItem } from '../../core/types/global-types';
+import { UpdatableItem } from '@/types';
+import { UserAdapter } from '../adapters';
 import odooApi from '../../core/api/odoo-api';
 
 /**
@@ -60,7 +60,7 @@ class UsersServiceApi {
    */
   static async createUser(user: UserCreate): Promise<User> {
 
-    const userData = userToApi(user);
+    const userData = UserAdapter.userToApi(user);
 
     try {
       const response = await odooApi.post<UserApi>('/users-management/users', userData);
@@ -85,7 +85,7 @@ class UsersServiceApi {
     id,
     updatedItem,
   }: UpdatableItem<UserUpdate>): Promise<User> {
-    const data = userUpdateToApi(updatedItem);
+    const data = UserAdapter.userUpdateToApi(updatedItem);
     console.log(data);
     try {
       const response = await odooApi.patch<UserApi>(

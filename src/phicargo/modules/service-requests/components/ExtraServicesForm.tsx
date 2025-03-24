@@ -1,20 +1,27 @@
 import { Card, CardContent } from '@mui/material';
-import { CheckboxElement, TextFieldElement } from 'react-hook-form-mui';
+import { CheckboxElement, TextFieldElement, UseFormReturn } from 'react-hook-form-mui';
 
-import { useCreateServiceContext } from '../hooks/useCreateServiceContext';
+import type { WaybillCreate } from '../models';
 
-export const ExtraServicesForm = () => {
-  const { form } = useCreateServiceContext();
+interface Props {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  form: UseFormReturn<WaybillCreate, any, undefined>;
+  height?: string;
+}
+
+export const ExtraServicesForm = ({ form, height }: Props) => {
   const { control } = form;
 
   return (
     <Card
       elevation={1}
       sx={{
-        height: 'calc(100vh - 200px)',
+        borderRadius: 4,
+        padding: '2',
+        boxShadow: 2,
+        height: height ?? 'calc(100vh - 200px)',
         overflowY: 'auto',
-      }}
-      className="rounded-lg p-2 shadow-md"
+      }} 
     >
       <CardContent>
         <h2 className="text-lg font-semibold mb-4 uppercase">

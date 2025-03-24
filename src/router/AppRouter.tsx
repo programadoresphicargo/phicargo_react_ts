@@ -1,4 +1,4 @@
-import { LoadingPage } from '../phicargo/modules/core/pages/LoadingPage';
+import { LoadingPage } from '@/pages/LoadingPage';
 import { PrivateRoutes } from './PrivateRoutes';
 import { PublicRoutes } from './PublicRoutes';
 import { useAuthContext } from '../phicargo/modules/auth/hooks';
@@ -15,9 +15,7 @@ export const AppRouter = () => {
   }
 
   return (
-    <>
-      {authStatus === 'authenticated' ? <PrivateRoutes /> : <PublicRoutes />}
-    </>
+    <>{authStatus === 'authenticated' ? <PrivateRoutes /> : <PublicRoutes />}</>
   );
 };
 

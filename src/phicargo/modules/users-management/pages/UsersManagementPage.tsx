@@ -1,12 +1,11 @@
+import { AddButton, RefreshButton } from '@/components/ui';
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
 import { Outlet, useNavigate } from 'react-router-dom';
 
-import AddButton from '@/phicargo/modules/core/components/ui/AddButton';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import { RefreshButton } from '../../core/components/ui/RefreshButton';
 import { User } from '../../auth/models';
 import { UserCreateForm } from '../components/UserCreateForm';
 import { useState } from 'react';
@@ -52,12 +51,12 @@ const UsersManagementPage = () => {
     renderTopToolbarCustomActions: () => (
       <div className="flex flex-row gap-2">
         <div className="flex flex-row items-center rounded-xl">
-          <RefreshButton onClick={() => refetch()} isLoading={isFetching} />
+          <RefreshButton onRefresh={() => refetch()} isLoading={isFetching} />
         </div>
         <div className="flex flex-row items-center">
           <AddButton
             label="Crear Usuario"
-            onPress={() => setCreateModal(true)}
+            onClick={() => setCreateModal(true)}
           />
         </div>
       </div>

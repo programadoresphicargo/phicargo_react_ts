@@ -22,7 +22,7 @@ import {
 
 import { AxiosError } from 'axios';
 import { QueueApi } from '../models/api/shift-queue-model-api';
-import type { UpdatableItem } from '../../core/types/global-types';
+import { UpdatableItem } from '@/types';
 import { maneuverToLocal } from '../../core/adapters/maneuver-adapters';
 import odooApi from '../../core/api/odoo-api';
 

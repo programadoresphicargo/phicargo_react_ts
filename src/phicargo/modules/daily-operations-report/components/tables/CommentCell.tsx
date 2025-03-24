@@ -12,7 +12,7 @@ import { FaEdit } from 'react-icons/fa';
 import { FaRegSave } from 'react-icons/fa';
 import { IconButton } from '@mui/material';
 import { IoMdInformationCircle } from 'react-icons/io';
-import { TextareaInput } from '@/phicargo/modules/core/components/inputs/TextareaInput';
+import { TextareaInput } from "@/components/inputs";
 import { useRecords } from '../../hook/useRecords';
 
 interface Props {

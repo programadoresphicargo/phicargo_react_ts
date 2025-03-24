@@ -1,14 +1,11 @@
-import {
-  ExportConfig,
-  ExportToExcel,
-} from '@/phicargo/modules/core/utilities/export-to-excel';
+import { ExportConfig, ExportToExcel } from '@/utilities';
 import { useEffect, useState } from 'react';
 
 import { Bar } from 'react-chartjs-2';
 import { ChartCard } from '../ChartCard';
 import { ChartData } from 'chart.js';
 import { ChartOptions } from 'chart.js';
-import DriverServiceApi from '@/phicargo/modules/availability/services/driver-service';
+import { DriverService } from '@/phicargo/modules/drivers/services';
 import { DriverStats } from '../../models/driver-stats-models';
 
 const options: ChartOptions<'bar'> = {
@@ -114,7 +111,7 @@ const exportData = async () => {
 
     const toExcel = new ExportToExcel(exportConf);
 
-    const drivers = await DriverServiceApi.getAllDrivers();
+    const drivers = await DriverService.getAllDrivers();
 
     const data = drivers.map<DriverVehicleDistributionData>((driver) => {
       return {

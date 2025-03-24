@@ -1,9 +1,9 @@
 import { DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-import { Button } from '@/components/ui/Button';
-import { Driver } from '../../availability/models/driver-model';
-import { PasswordInput } from '@/components/inputs/PasswordInput';
+import { Button } from '@/components/ui';
+import type { Driver } from '@/phicargo/modules/drivers/models';
+import { MUIPasswordInput } from '@/components/inputs';
 import { useChangeDriverPassword } from '../../drivers/hooks/queries';
 
 type Password = {
@@ -62,7 +62,7 @@ export const DriverAccountForm = ({ onClose, driver }: Props) => {
           </p>
         </div>
         <div className="flex flex-col gap-4 mt-5">
-          <PasswordInput
+          <MUIPasswordInput
             control={control}
             name="password"
             required

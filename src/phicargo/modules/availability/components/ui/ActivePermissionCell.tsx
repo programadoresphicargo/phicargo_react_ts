@@ -1,5 +1,5 @@
 import { CellInfoPopover } from './CellInfoPopover';
-import { Driver } from '../../models/driver-model';
+import type { Driver } from '@/phicargo/modules/drivers/models';
 import { getValidPermission } from '../../utilities';
 import { memo } from 'react';
 

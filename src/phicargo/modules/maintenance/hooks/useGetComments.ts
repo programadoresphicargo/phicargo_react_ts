@@ -13,7 +13,17 @@ export const useGetComments = (registerId: number = 0) => {
     staleTime: 1000 * 60 * 5,
   });
 
+  const updateCommentsQuery = useQuery({
+    queryKey: [mainKey, 'update-comments', registerId],
+    queryFn: () =>
+      MaintenanceRecordServiceApi.getUpdateCommentsByRecordId(registerId),
+    enabled: registerId !== 0,
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 5,
+  });
+
   return {
     commentsQuery,
+    updateCommentsQuery,
   };
 };

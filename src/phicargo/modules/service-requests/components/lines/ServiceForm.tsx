@@ -8,11 +8,12 @@ import {
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/ui';
 import { ShippedProductCreate } from '../../models';
 import { useGetTransportableProducts } from '../../hooks/queries';
 
 const initialValues: ShippedProductCreate = {
+  id: Math.floor(Math.random() * 100),
   productId: '' as unknown as number,
   weightEstimation: null as unknown as number,
   productUomQtyEst: 1,

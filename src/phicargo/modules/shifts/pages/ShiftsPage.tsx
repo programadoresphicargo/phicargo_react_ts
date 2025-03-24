@@ -1,46 +1,19 @@
+import { ExportConfig, ExportToExcel } from '@/utilities';
 import { IconButton, Tooltip } from '@mui/material';
+import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 import { Outlet, useNavigate } from 'react-router-dom';
 
-import AddButton from '../../core/components/ui/AddButton';
-import { Button } from "@heroui/react";
-import {
-  ExportToExcel,
-  type ExportConfig,
-} from '../../core/utilities/export-to-excel';
-import ExportExcelButton from '../../core/components/ui/ExportExcelButton';
+import { AddButton } from '@/components/ui';
+import { Button } from '@heroui/react';
+import ExportExcelButton from '@/components/ui/buttons/ExportExcelButton';
 import { HiQueueList } from 'react-icons/hi2';
-import MaterialTableBase from '../../core/components/tables/MaterialTableBase';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
+import { MdOutlineDangerous } from 'react-icons/md';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import type { Shift } from '../models/shift-model';
-import { useMaterialReactTable } from 'material-react-table';
 import { useReorderShifts } from '../hooks/useReorderShifts';
 import { useShiftColumns } from '../hooks/useShiftColumns';
 import { useShiftQueries } from '../hooks/useShiftQueries';
-import { MdOutlineDangerous } from 'react-icons/md';
-import { MRT_Localization_ES } from 'material-react-table/locales/es';
-
-const exportConf: ExportConfig<Shift> = {
-  fileName: 'Turnos',
-  withDate: true,
-  columns: [
-    { accessorFn: (data) => data.shift, header: 'Turno', columnWidth: 50 },
-    { accessorFn: (data) => data.driver.modality, header: 'Licencia' },
-    {
-      accessorFn: (data) => (data.driver.isDangerous ? 'SI' : 'NO'),
-      header: 'Peligroso',
-    },
-    { accessorFn: (data) => data.vehicle.name, header: 'Unidad' },
-    {
-      accessorFn: (data) => data.arrivalAt.format('DD/MM/YYYY hh:mm A'),
-      header: 'Llegada',
-    },
-    { accessorFn: (data) => data.maneuver1, header: 'Maniobra #1' },
-    { accessorFn: (data) => data.maneuver2, header: 'Maniobra #2' },
-    { accessorFn: (data) => data.comments, header: 'Comentarios' },
-  ],
-};
-
-const exportTo = new ExportToExcel(exportConf);
 
 const ShiftsPage = () => {
   const navigate = useNavigate();
@@ -108,9 +81,8 @@ const ShiftsPage = () => {
           </IconButton>
         </Tooltip>
         <AddButton
-          size="sm"
           label="Ingresar turno"
-          onPress={() => navigate('/turnos/crear')}
+          onClick={() => navigate('/turnos/crear')}
         />
         <Button
           size="sm"
@@ -133,9 +105,8 @@ const ShiftsPage = () => {
           Conteo de Incidencias
         </Button>
         <ExportExcelButton
-          size="sm"
-          label="Exportar"
-          onPress={() => exportTo.exportData(data)}
+          size="small"
+          onClick={() => exportTo.exportData(data)}
         />
       </div>
     ),
@@ -161,11 +132,34 @@ const ShiftsPage = () => {
 
   return (
     <>
-      <MaterialTableBase table={table} />
+      <MaterialReactTable table={table} />
       <Outlet />
     </>
   );
 };
 
 export default ShiftsPage;
+
+const exportConf: ExportConfig<Shift> = {
+  fileName: 'Turnos',
+  withDate: true,
+  columns: [
+    { accessorFn: (data) => data.shift, header: 'Turno', columnWidth: 50 },
+    { accessorFn: (data) => data.driver.modality, header: 'Licencia' },
+    {
+      accessorFn: (data) => (data.driver.isDangerous ? 'SI' : 'NO'),
+      header: 'Peligroso',
+    },
+    { accessorFn: (data) => data.vehicle.name, header: 'Unidad' },
+    {
+      accessorFn: (data) => data.arrivalAt.format('DD/MM/YYYY hh:mm A'),
+      header: 'Llegada',
+    },
+    { accessorFn: (data) => data.maneuver1, header: 'Maniobra #1' },
+    { accessorFn: (data) => data.maneuver2, header: 'Maniobra #2' },
+    { accessorFn: (data) => data.comments, header: 'Comentarios' },
+  ],
+};
+
+const exportTo = new ExportToExcel(exportConf);
 

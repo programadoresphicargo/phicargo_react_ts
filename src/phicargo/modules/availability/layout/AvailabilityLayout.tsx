@@ -1,5 +1,5 @@
-import BaseLayout from '../../core/layouts/BaseLayout';
-import { MenuItemType } from '../../core/types/global-types';
+import BaseLayout from '@/layouts/BaseLayout';
+import { MenuItemType } from '@/types';
 import { ReactNode } from 'react';
 
 const pages: MenuItemType[] = [

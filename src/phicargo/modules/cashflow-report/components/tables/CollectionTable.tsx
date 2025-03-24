@@ -1,7 +1,4 @@
-import {
-  ExportConfig,
-  ExportToExcel,
-} from '@/phicargo/modules/core/utilities/export-to-excel';
+import { type ExportConfig, ExportToExcel } from '@/utilities';
 import { IconButton, Tooltip } from '@mui/material';
 import {
   MRT_TableOptions,
@@ -10,10 +7,10 @@ import {
 } from 'material-react-table';
 import { useCollectRegisters, useWeekContext } from '../../hooks';
 
-import AddButton from '../../../core/components/ui/AddButton';
+import { AddButton } from '@/components/ui';
 import AlertDialog from '../AlertDialog';
 import type { CollectRegister } from '../../models';
-import ExportExcelButton from '@/phicargo/modules/core/components/ui/ExportExcelButton';
+import ExportExcelButton from '@/components/ui/buttons/ExportExcelButton';
 import { FaRegEdit } from 'react-icons/fa';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -22,51 +19,6 @@ import { isGOEWeek } from '../../utils';
 import { useCollectTableColumns } from '../../hooks/useCollectTableColumns';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-
-const exportConf: ExportConfig<CollectRegister> = {
-  fileName: 'Cobranza',
-  withDate: true,
-  columns: [
-    { accessorFn: (data) => data.clientName, header: 'Cliente' },
-    { accessorFn: (data) => data.totalConfirmed, header: 'Confirmado' },
-    { accessorFn: (data) => data.monday.amount, header: 'Lunes Proyección' },
-    { accessorFn: (data) => data.tuesday.amount, header: 'Martes Proyección' },
-    {
-      accessorFn: (data) => data.wednesday.amount,
-      header: 'Miercoles Proyección',
-    },
-    { accessorFn: (data) => data.thursday.amount, header: 'Jueves Proyección' },
-    { accessorFn: (data) => data.friday.amount, header: 'Viernes Proyección' },
-    { accessorFn: (data) => data.saturday.amount, header: 'Sabado Proyección' },
-    {
-      accessorFn: (data) => data.monday.realAmount,
-      header: 'Lunes Confirmado',
-    },
-    {
-      accessorFn: (data) => data.tuesday.realAmount,
-      header: 'Martes Confirmado',
-    },
-    {
-      accessorFn: (data) => data.wednesday.realAmount,
-      header: 'Miercoles Confirmado',
-    },
-    {
-      accessorFn: (data) => data.thursday.realAmount,
-      header: 'Jueves Confirmado',
-    },
-    {
-      accessorFn: (data) => data.friday.realAmount,
-      header: 'Viernes Confirmado',
-    },
-    {
-      accessorFn: (data) => data.saturday.realAmount,
-      header: 'Sabado Confirmado',
-    },
-    { accessorFn: (data) => data.observations, header: 'Comentarios' },
-  ],
-};
-
-const exportTo = new ExportToExcel(exportConf);
 
 const CollectionTable = () => {
   const navigate = useNavigate();
@@ -160,13 +112,11 @@ const CollectionTable = () => {
         </div>
         <AddButton
           label="Añadir"
-          size='sm'
-          onPress={() => navigate('/reportes/balance/collect/add')}
-          />
-        <ExportExcelButton 
-          size='sm'
-          label="Exportar"
-          onPress={() => exportTo.exportData(registers || [])}
+          onClick={() => navigate('/reportes/balance/collect/add')}
+        />
+        <ExportExcelButton
+          size="small"
+          onClick={() => exportTo.exportData(registers || [])}
         />
       </div>
     ),
@@ -218,3 +168,48 @@ const CollectionTable = () => {
 };
 
 export default CollectionTable;
+
+const exportConf: ExportConfig<CollectRegister> = {
+  fileName: 'Cobranza',
+  withDate: true,
+  columns: [
+    { accessorFn: (data) => data.clientName, header: 'Cliente' },
+    { accessorFn: (data) => data.totalConfirmed, header: 'Confirmado' },
+    { accessorFn: (data) => data.monday.amount, header: 'Lunes Proyección' },
+    { accessorFn: (data) => data.tuesday.amount, header: 'Martes Proyección' },
+    {
+      accessorFn: (data) => data.wednesday.amount,
+      header: 'Miercoles Proyección',
+    },
+    { accessorFn: (data) => data.thursday.amount, header: 'Jueves Proyección' },
+    { accessorFn: (data) => data.friday.amount, header: 'Viernes Proyección' },
+    { accessorFn: (data) => data.saturday.amount, header: 'Sabado Proyección' },
+    {
+      accessorFn: (data) => data.monday.realAmount,
+      header: 'Lunes Confirmado',
+    },
+    {
+      accessorFn: (data) => data.tuesday.realAmount,
+      header: 'Martes Confirmado',
+    },
+    {
+      accessorFn: (data) => data.wednesday.realAmount,
+      header: 'Miercoles Confirmado',
+    },
+    {
+      accessorFn: (data) => data.thursday.realAmount,
+      header: 'Jueves Confirmado',
+    },
+    {
+      accessorFn: (data) => data.friday.realAmount,
+      header: 'Viernes Confirmado',
+    },
+    {
+      accessorFn: (data) => data.saturday.realAmount,
+      header: 'Sabado Confirmado',
+    },
+    { accessorFn: (data) => data.observations, header: 'Comentarios' },
+  ],
+};
+
+const exportTo = new ExportToExcel(exportConf);

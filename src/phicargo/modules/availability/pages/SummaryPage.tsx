@@ -1,24 +1,17 @@
+import { ExportConfig, ExportToExcel } from '@/utilities';
+
 import { MaterialReactTable } from 'material-react-table';
+import type { VehicleWithRealStatus } from '../../vehicles/models';
 import VehiclesWithRealStatus from '../utilities/get-vehicles-real-status';
-import { useBaseTable } from '../../core/hooks/useBaseTable';
+import { useBaseTable } from '@/hooks';
 import { useMemo } from 'react';
 import { useSummaryColumns } from '../hooks/useSummaryColumns';
-import { useTableState } from '../../core/hooks/useTableState';
-import { useVehicleQueries } from '../hooks/useVehicleQueries';
-import {
-  ExportToExcel,
-  type ExportConfig,
-} from '../../core/utilities/export-to-excel';
-import type { VehicleWithRealStatus } from '../models/vehicle-model';
+import { useVehicleQueries } from '../../vehicles/hooks/queries';
 
 const SummaryPage = () => {
   const {
     vehicleQuery: { data: vehicles, isFetching, isLoading, refetch },
   } = useVehicleQueries();
-
-  const state = useTableState({
-    tableId: 'availability-summary-vehicles-table',
-  });
 
   const { columns } = useSummaryColumns();
 
@@ -27,14 +20,17 @@ const SummaryPage = () => {
     return vehiclesTransformr.getVehiclesWithRealStatus();
   }, [vehicles]);
 
-  const table = useBaseTable({
+  const table = useBaseTable<VehicleWithRealStatus>({
     columns,
     data: vehiclesWithStatus || [],
-    state,
+    tableId: 'availability-summary-vehicles-table',
     isLoading,
-    progressBars: isFetching,
-    refetch,
-    onExportExcel: (data) => toExcel.exportData(data),
+    isFetching,
+    refetchFn: () => refetch(),
+    exportFn: (data) => toExcel.exportData(data),
+    showColumnFilters: true,
+    showGlobalFilter: true,
+    containerHeight: 'calc(100vh - 165px)',
   });
 
   return <MaterialReactTable table={table} />;

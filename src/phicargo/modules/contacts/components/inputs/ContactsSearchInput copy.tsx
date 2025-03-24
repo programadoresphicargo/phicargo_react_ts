@@ -9,7 +9,7 @@ import {
 
 import type { Contact } from '@/phicargo/modules/contacts/models';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-import { useDebounce } from '@/phicargo/modules/core/hooks';
+import { useDebounce } from '@/hooks';
 import { useGetContacts } from '../../hooks/queries';
 import { useState } from 'react';
 

@@ -2,15 +2,15 @@ import { IconButton, Tooltip } from '@mui/material';
 import {
   MRT_ColumnDef,
   MRT_GroupingState,
+  MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
 import { Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/react";
 
-import { Incidence } from '../models/driver-incidence-model';
+import { Incidence } from '../../drivers/models';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import MaterialTableBase from '../../core/components/tables/MaterialTableBase';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import { useIncidenceQueries } from '../hooks/useIncidenceQueries';
+import { useIncidenceQueries } from '../../drivers/hooks/queries';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
@@ -114,7 +114,7 @@ const IncidencesList = () => {
               </h3>
             </ModalHeader>
             <ModalBody className="p-0">
-              <MaterialTableBase table={table} />
+              <MaterialReactTable table={table} />
             </ModalBody>
           </>
         )}

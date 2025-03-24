@@ -1,10 +1,10 @@
 import { Suspense, lazy } from 'react';
 
 import CashflowReportRoutes from '@/phicargo/modules/cashflow-report/routes/CashflowReportRoutes';
-import { LoadingPage } from '@/phicargo/modules/core/pages/LoadingPage';
+import { LoadingPage } from '@/pages/LoadingPage';
 import MaintenanceReportRoutes from '@/phicargo/modules/maintenance/routes/MaintenanceReportRoutes';
 import ProtectedRoute from './ProtectedRoute';
-import ReportsMenuPage from '@/phicargo/modules/core/pages/ReportsMenuPage';
+import ReportsMenuPage from '@/pages/ReportsMenuPage';
 import { Route } from 'react-router-dom';
 
 const Saldos = lazy(

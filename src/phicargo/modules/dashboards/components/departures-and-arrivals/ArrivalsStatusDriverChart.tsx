@@ -2,10 +2,7 @@ import type {
   ArrivalStatusDriver,
   DepartureAndArrivalStats,
 } from '../../models/departure-and-arrival-models';
-import {
-  ExportConfig,
-  ExportToExcel,
-} from '@/phicargo/modules/core/utilities/export-to-excel';
+import { type ExportConfig, ExportToExcel } from '@/utilities';
 import { useEffect, useState } from 'react';
 
 import { Bar } from 'react-chartjs-2';

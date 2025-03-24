@@ -2,17 +2,23 @@ import {
   AutocompleteElement,
   SelectElement,
   TextFieldElement,
+  UseFormReturn,
 } from 'react-hook-form-mui';
 import { Card, CardContent } from '@mui/material';
 
 import { ContactsSearchInput } from '../../contacts/components/inputs/ContactsSearchInput';
 import { DatePickerElement } from 'react-hook-form-mui/date-pickers';
-import { useCreateServiceContext } from '../hooks/useCreateServiceContext';
+import { WaybillCreate } from '../models';
 import { useEffect } from 'react';
 import { useGetWaybillCategory } from '../hooks/queries';
 
-export const BasicInfoForm = () => {
-  const { form } = useCreateServiceContext();
+interface Props {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  form: UseFormReturn<WaybillCreate, any, undefined>
+  maxHeight?: string
+}
+
+export const BasicInfoForm = ({ form, maxHeight }: Props) => {
   const { control, setValue, watch } = form;
 
   const client = watch('partnerId');
@@ -27,10 +33,16 @@ export const BasicInfoForm = () => {
   const { isLoading, selection } = useGetWaybillCategory();
 
   return (
-    <Card elevation={1} sx={{
-      maxHeight: 'calc(100vh - 200px)',
-      overflowY: 'auto',
-    }} className="rounded-lg p-2 shadow-md">
+    <Card 
+      elevation={1} 
+      sx={{
+        borderRadius: 4,
+        padding: '2',
+        boxShadow: 2,
+        maxHeight: maxHeight ?? 'calc(100vh - 200px)',
+        overflowY: 'auto',
+      }} 
+    >
       <CardContent>
         <h2 className="text-lg font-semibold mb-4 uppercase">Información Inicial</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">

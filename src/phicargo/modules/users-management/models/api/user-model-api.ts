@@ -19,3 +19,9 @@ export interface UserCreateApi {
   passwoord: string;
   pin?: string | null;
 }
+
+export interface UserReadApi {
+  id_usuario: number;
+  nombre: string | null;
+  usuario: string | null;
+}

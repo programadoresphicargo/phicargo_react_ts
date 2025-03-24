@@ -3,6 +3,7 @@ import type {
   Waybill,
   WaybillCategory,
   WaybillCreate,
+  WaybillEdit,
   WaybillItem,
   WaybillTransportableProduct,
 } from '../models';
@@ -16,6 +17,7 @@ import type {
 import { ServiceRequestAdapter, WaybillAdapter } from '../adapters';
 
 import { AxiosError } from 'axios';
+import { UpdatableItem } from '@/types';
 import { WaybillItemKey } from '../types';
 import odooApi from '../../core/api/odoo-api';
 
@@ -58,6 +60,25 @@ export class WaybillService {
         );
       }
       throw new Error('Error al crear el servicio');
+    }
+  }
+
+  public static async updateService({ id, updatedItem }: UpdatableItem<WaybillEdit>): Promise<Waybill> {
+    const body = ServiceRequestAdapter.toWaybillEdit(updatedItem);
+    try {
+      const response = await odooApi.patch<WaybillApi>(
+        `/service-request/${id}`,
+        body,
+      );
+      return ServiceRequestAdapter.toWaybill(response.data);
+    } catch (error) {
+      console.error(error);
+      if (error instanceof AxiosError) {
+        throw new Error(
+          error.response?.data?.detail || 'Error al actualizar el servicio',
+        );
+      }
+      throw new Error('Error al actualizar el servicio');
     }
   }
 

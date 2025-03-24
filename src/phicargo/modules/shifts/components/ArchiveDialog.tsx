@@ -8,7 +8,7 @@ import {
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { MdOutlineArchive } from 'react-icons/md';
-import { SelectInput } from '../../core/components/inputs/SelectInput';
+import { SelectInput } from "@/components/inputs";
 import type { ShiftArchive } from '../models';
 import { useShiftQueries } from '../hooks/useShiftQueries';
 

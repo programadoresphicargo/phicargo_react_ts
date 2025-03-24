@@ -1,5 +1,8 @@
-import type { ByCargoType, TravelStats } from '../../models/travels-stats-models';
-import { ExportConfig, ExportToExcel } from '@/phicargo/modules/core/utilities/export-to-excel';
+import type {
+  ByCargoType,
+  TravelStats,
+} from '../../models/travels-stats-models';
+import { ExportConfig, ExportToExcel } from '@/utilities';
 import { useEffect, useState } from 'react';
 
 import { Bar } from 'react-chartjs-2';
@@ -94,9 +97,13 @@ const exportConf: ExportConfig<ByCargoType> = {
   columns: [
     { accessorFn: (data) => data.cargoType, header: 'Tipo de Carga' },
     { accessorFn: (data) => data.totalTravels, header: 'Viajes Totales' },
-    { accessorFn: (data) => data.travelsCompleted, header: 'Viajes completados' },
+    {
+      accessorFn: (data) => data.travelsCompleted,
+      header: 'Viajes completados',
+    },
     { accessorFn: (data) => data.travelsPending, header: 'Viajes pendientes' },
   ],
 };
 
 const toExcel = new ExportToExcel(exportConf);
+

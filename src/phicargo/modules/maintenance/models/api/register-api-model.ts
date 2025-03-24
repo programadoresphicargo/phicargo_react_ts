@@ -1,5 +1,6 @@
 import { BranchSimple } from '../../../core/models';
 import { MaintenanceRecordStatus } from '../maintenance-record-model';
+import { UserReadApi } from '@/phicargo/modules/users-management/models';
 import { WorkshopApi } from './workshop-api-model';
 
 export interface VehicleInfoApi {
@@ -32,25 +33,31 @@ export interface MaintenanceRecordCreateApi extends MaintenanceRecordBaseApi {
   tract_id: number;
 }
 
-export interface MaintenanceRecordUpdateApi {
-  workshop_id?: number | null;
-  fail_type?: 'MC' | 'EL' | null;
-  check_in?: string | null;
-  check_out?: string | null;
-  status?: MaintenanceRecordStatus | null;
-  delivery_date?: string | null;
-  supervisor?: string | null;
-  comments?: string | null;
-  order_service?: string | null;
-}
+export type MaintenanceRecordUpdateApi = Partial<
+  Pick<
+    MaintenanceRecordCreateApi,
+    'workshop_id' | 'fail_type' | 'status' | 'delivery_date' | 'supervisor'
+  > & { update_comments: string, check_out: string }
+>;
 
 export interface RecordCommentApi {
   id: number;
   maintenance_record_id: number;
   comment_text: string;
   created_at: string;
+  by_user: UserReadApi;
 }
 
 export interface RecordCommentCreateApi {
   comment_text: string;
+}
+
+export interface RecordUpdateCommentApi {
+  id: number;
+  maintenance_record_id: number;
+  comment: string;
+  change_date: string;
+  previous_delivery_date: string;
+  new_delivery_date: string;
+  by_user: UserReadApi;
 }

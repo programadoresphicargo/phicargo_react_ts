@@ -4,10 +4,9 @@ import { useMemo } from 'react';
 import { useWorkshop } from './useWorkshop';
 import type { MaintenanceRecord } from '../models';
 import { daysUtil, daysUtilNow } from '../utilities/datetime';
-import { useNavigate } from 'react-router-dom';
+import { Chip } from '@heroui/react';
 
 export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
-  const navigate = useNavigate();
 
   const {
     workshopQuery: { data: workshops },
@@ -20,22 +19,10 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
           originalRow?.vehicle?.name || 'Sin Asignar',
         id: 'name',
         header: 'Unidad',
+        size: 4,
         enableEditing: false,
-        Cell: ({ cell, row }) => {
-          return (
-            <>
-              <span
-                className='bg-blue-500 text-white font-bold px-2 py-1 rounded-md cursor-pointer hover:bg-blue-600'
-                onDoubleClick={() =>
-                  navigate(
-                    `/reportes/mantenimiento/detalles/${row.original.id}`,
-                  )
-                }
-              >
-                {cell.getValue<string>()}
-              </span>
-            </>
-          );
+        Cell: ({ cell }) => {
+          return <Chip size='sm' color="primary">{cell.getValue<string>()}</Chip>;
         },
       },
       {
@@ -50,6 +37,7 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
         header: 'Días en Taller',
         filterVariant: 'range-slider',
         enableEditing: false,
+        size: 4,
         Cell: ({ row }) => {
           if (row.original.status === 'pending') {
             return daysUtilNow(row.original.checkIn);
@@ -64,17 +52,10 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
         accessorFn: (originalRow) =>
           originalRow.deliveryDate?.format('YYYY-MM-DD'),
         id: 'deliveryDate',
-        filterVariant: 'date',
-        filterFn: 'between',
         header: 'Entrega tentativa',
+        size: 4,
         Cell: ({ row }) =>
           row.original.deliveryDate?.format('DD/MM/YYYY') || 'N/A',
-        muiEditTextFieldProps: () => ({
-          fullWidth: true,
-          variant: 'outlined',
-          size: 'small',
-          type: 'date',
-        }),
       },
       {
         header: 'Tipo',
@@ -82,22 +63,15 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
           originalRow?.vehicle?.vehicleType || 'Sin Asignar',
         id: 'type',
         enableEditing: false,
+        size: 4,
         Cell: ({ cell }) =>
           cell.getValue<string>()?.toUpperCase() || 'Sin Asignar',
       },
       {
-        accessorFn: (originalRow) => originalRow.checkIn.format('YYYY-MM-DD'),
+        accessorFn: (originalRow) => originalRow.checkIn,
         id: 'checkIn',
-        filterFn: 'between',
         header: 'Entrada',
         Cell: ({ row }) => row.original.checkIn.format('DD/MM/YYYY'),
-        editVariant: 'text',
-        muiEditTextFieldProps: () => ({
-          fullWidth: true,
-          variant: 'outlined',
-          size: 'small',
-          type: 'date',
-        }),
       },
       {
         accessorFn: (originalRow) => originalRow.status,
@@ -120,8 +94,7 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
         },
       },
       {
-        accessorFn: (originalRow) =>
-          originalRow?.workshop?.id || 'Sin Asignar',
+        accessorFn: (originalRow) => originalRow?.workshop?.id || 'Sin Asignar',
         id: 'workshop',
         header: 'Taller',
         filterVariant: 'select',
@@ -129,15 +102,6 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
           label: workshop.name,
           value: workshop.id,
         })),
-        editVariant: 'select',
-        editSelectOptions: (workshops || []).map((workshop) => ({
-          label: workshop.name,
-          value: workshop.id,
-        })),
-        muiEditTextFieldProps: ({ row }) => ({
-          select: true,
-          defaultValue: row.original.workshop.id,
-        }),
         Cell: ({ row }) => {
           return row.original?.workshop?.name || 'Sin Asignar';
         },
@@ -151,14 +115,6 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
           { label: 'EL', value: 'EL' },
         ],
         header: 'Tipo de falla',
-        editVariant: 'select',
-        editSelectOptions: [
-          { label: 'MC', value: 'MC' },
-          { label: 'EL', value: 'EL' },
-        ],
-        muiEditTextFieldProps: {
-          select: true,
-        },
       },
       {
         accessorFn: (originalRow) =>
@@ -177,18 +133,10 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
       {
         accessorFn: (originalRow) => originalRow.checkOut,
         id: 'checkOut',
-        filterVariant: 'date',
-        filterFn: 'between',
         header: 'Salida',
         enableEditing: false,
         Cell: ({ cell }) =>
           cell.getValue<Dayjs>()?.format('DD/MM/YYYY') || 'N/A',
-        muiEditTextFieldProps: {
-          fullWidth: true,
-          variant: 'outlined',
-          size: 'small',
-          type: 'date',
-        },
       },
 
       {
@@ -210,24 +158,6 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
             label: 'ORTIZ DIAZ CARLOS EDUARDO',
           },
         ],
-        editVariant: 'select',
-        editSelectOptions: [
-          {
-            value: 'CONTRERAS HERNANDEZ ANDRES',
-            label: 'CONTRERAS HERNANDEZ ANDRES',
-          },
-          {
-            value: 'DE LA PARRA TRUJILLO SERGIO',
-            label: 'DE LA PARRA TRUJILLO SERGIO',
-          },
-          {
-            value: 'ORTIZ DIAZ CARLOS EDUARDO',
-            label: 'ORTIZ DIAZ CARLOS EDUARDO',
-          },
-        ],
-        muiEditTextFieldProps: {
-          select: true,
-        },
       },
     ];
     // eslint-disable-next-line react-hooks/exhaustive-deps

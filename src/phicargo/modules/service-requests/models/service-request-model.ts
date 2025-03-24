@@ -113,7 +113,10 @@ export interface WaybillCreate extends WaybillBase {
   complementCp: ComplementCpCreate[];
 }
 
+export type WaybillEdit = Partial<WaybillCreate>; 
+
 export interface ComplementCpCreate {
+  id: number;
   description: string;
   satProductId: WaybillItem;
   quantity: number;
@@ -126,6 +129,7 @@ export interface ComplementCpCreate {
 }
 
 export interface ShippedProductCreate {
+  id: number;
   productId: number;
   productUomQtyEst: number;
   weightEstimation: number;

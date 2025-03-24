@@ -2,10 +2,7 @@ import type {
   DangerousLicenseSummary,
   DriverStats,
 } from '../../models/driver-stats-models';
-import {
-  ExportConfig,
-  ExportToExcel,
-} from '@/phicargo/modules/core/utilities/export-to-excel';
+import { type ExportConfig, ExportToExcel } from '@/utilities';
 import {
   getBackgroundColors,
   getBorderColors,

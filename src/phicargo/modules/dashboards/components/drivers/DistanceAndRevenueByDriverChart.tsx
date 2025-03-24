@@ -2,10 +2,7 @@ import {
   DistanceAndRevenueByDriver,
   DriverStats,
 } from '../../models/driver-stats-models';
-import {
-  ExportConfig,
-  ExportToExcel,
-} from '@/phicargo/modules/core/utilities/export-to-excel';
+import { ExportConfig, ExportToExcel } from '@/utilities';
 import { useEffect, useState } from 'react';
 
 import { Bar } from 'react-chartjs-2';

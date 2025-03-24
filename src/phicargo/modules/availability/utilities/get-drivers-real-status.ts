@@ -1,4 +1,4 @@
-import type { Driver, DriverWithRealStatus } from '../models/driver-model';
+import type { Driver, DriverWithRealStatus } from '../../drivers/models';
 
 import { getValidPermission } from './permission-valid';
 

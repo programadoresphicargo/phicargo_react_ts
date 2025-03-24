@@ -1,10 +1,6 @@
 import { Document, Page, Text, View } from '@react-pdf/renderer';
-import type {
-  DriverUnavailable,
-  DriverVacationSummary,
-} from '../../models/driver-unavailability';
+import { Driver, DriverUnavailable, DriverVacationSummary } from '@/phicargo/modules/drivers/models';
 
-import type { Driver } from '../../models/driver-model';
 import { Header } from '../components/Header';
 import { RequestedDaysData } from '../components/RequestedDaysData';
 import { RequisitionersData } from '../components/RequisitionersData';

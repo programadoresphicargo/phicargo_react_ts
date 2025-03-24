@@ -1,9 +1,8 @@
 import { Button, Image } from '@heroui/react';
+import { PasswordInput2, TextInput } from '@/components/inputs';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useAuthContext, useLoginMutation } from '../hooks';
 
-import { PasswordInput } from '../../core/components/inputs/PasswordInput';
-import { TextInput } from '../../core/components/inputs/TextInput';
 import { Toaster } from 'react-hot-toast';
 import { UserLogin } from '../models';
 import logo from '../../../../assets/img/phicargo_logo_white.png';
@@ -79,7 +78,7 @@ const LoginPage = () => {
               />
             </div>
             <div className="mb-6">
-              <PasswordInput
+              <PasswordInput2
                 // className="h-9"
                 // classNames={{
                 //   label: 'text-xs',

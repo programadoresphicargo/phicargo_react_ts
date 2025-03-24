@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 
 import { AutocompleteElement } from 'react-hook-form-mui';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-import { useDebounce } from '@/phicargo/modules/core/hooks';
+import { useDebounce } from '@/hooks';
 import { useGetContacts } from '../../hooks/queries';
 
 interface Props<T extends FieldValues> {

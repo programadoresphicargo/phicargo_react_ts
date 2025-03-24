@@ -14,7 +14,7 @@ import {
 
 import { AxiosError } from 'axios';
 import { DateRange } from 'rsuite/esm/DateRangePicker';
-import type { UpdatableItem } from '../../core/types/global-types';
+import { UpdatableItem } from '@/types';
 import dayjs from 'dayjs';
 import odooApi from '../../core/api/odoo-api';
 
