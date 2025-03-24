@@ -68,7 +68,7 @@ const Operadores = ({ estado }) => {
       const response = await odooApi.get(`/saldos/fecha_actual/${value}`);
 
       if (response.data.length > 0) {
-        setFechaAnterior(response.data[0].fecha_anterior || ''); 
+        setFechaAnterior(String(response.data[0].fecha_anterior || ''));
         console.log("Fecha anterior:", response.data[0].fecha_anterior);
       } else {
         console.warn("No hay datos en la respuesta.");
