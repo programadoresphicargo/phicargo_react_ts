@@ -9,6 +9,15 @@ interface Props extends ButtonProps {
 }
 
 export const Button = (props: Props) => {
-  return <CustomButton {...props}>{props.children}</CustomButton>;
+  return (
+    <CustomButton
+      sx={{
+        fontFamily: 'Inter',
+      }}
+      {...props}
+    >
+      {props.children}
+    </CustomButton>
+  );
 };
 

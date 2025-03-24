@@ -19,3 +19,9 @@ export interface UserCreate {
   password: string;
   pin: string | null;
 }
+
+export interface UserRead {
+  id: number;
+  name: string | null;
+  username: string | null;
+}

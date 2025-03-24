@@ -52,7 +52,6 @@ export const useBaseTable = <T extends MRT_RowData & BaseRowData>(
     enableStickyHeader: true,
     enableDensityToggle: false,
     enableFullScreenToggle: false,
-    columnFilterDisplayMode: 'subheader',
     positionToolbarAlertBanner: 'bottom',
     // PAGINATION, FILTERS, SORTING
     enableGrouping: true,

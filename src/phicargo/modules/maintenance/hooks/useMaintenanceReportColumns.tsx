@@ -64,17 +64,9 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
         accessorFn: (originalRow) =>
           originalRow.deliveryDate?.format('YYYY-MM-DD'),
         id: 'deliveryDate',
-        filterVariant: 'date',
-        filterFn: 'between',
         header: 'Entrega tentativa',
         Cell: ({ row }) =>
           row.original.deliveryDate?.format('DD/MM/YYYY') || 'N/A',
-        muiEditTextFieldProps: () => ({
-          fullWidth: true,
-          variant: 'outlined',
-          size: 'small',
-          type: 'date',
-        }),
       },
       {
         header: 'Tipo',
@@ -88,16 +80,8 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
       {
         accessorFn: (originalRow) => originalRow.checkIn.format('YYYY-MM-DD'),
         id: 'checkIn',
-        filterFn: 'between',
         header: 'Entrada',
         Cell: ({ row }) => row.original.checkIn.format('DD/MM/YYYY'),
-        editVariant: 'text',
-        muiEditTextFieldProps: () => ({
-          fullWidth: true,
-          variant: 'outlined',
-          size: 'small',
-          type: 'date',
-        }),
       },
       {
         accessorFn: (originalRow) => originalRow.status,
@@ -129,15 +113,6 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
           label: workshop.name,
           value: workshop.id,
         })),
-        editVariant: 'select',
-        editSelectOptions: (workshops || []).map((workshop) => ({
-          label: workshop.name,
-          value: workshop.id,
-        })),
-        muiEditTextFieldProps: ({ row }) => ({
-          select: true,
-          defaultValue: row.original.workshop.id,
-        }),
         Cell: ({ row }) => {
           return row.original?.workshop?.name || 'Sin Asignar';
         },
@@ -151,14 +126,6 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
           { label: 'EL', value: 'EL' },
         ],
         header: 'Tipo de falla',
-        editVariant: 'select',
-        editSelectOptions: [
-          { label: 'MC', value: 'MC' },
-          { label: 'EL', value: 'EL' },
-        ],
-        muiEditTextFieldProps: {
-          select: true,
-        },
       },
       {
         accessorFn: (originalRow) =>
@@ -177,18 +144,10 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
       {
         accessorFn: (originalRow) => originalRow.checkOut,
         id: 'checkOut',
-        filterVariant: 'date',
-        filterFn: 'between',
         header: 'Salida',
         enableEditing: false,
         Cell: ({ cell }) =>
           cell.getValue<Dayjs>()?.format('DD/MM/YYYY') || 'N/A',
-        muiEditTextFieldProps: {
-          fullWidth: true,
-          variant: 'outlined',
-          size: 'small',
-          type: 'date',
-        },
       },
 
       {
@@ -210,24 +169,6 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
             label: 'ORTIZ DIAZ CARLOS EDUARDO',
           },
         ],
-        editVariant: 'select',
-        editSelectOptions: [
-          {
-            value: 'CONTRERAS HERNANDEZ ANDRES',
-            label: 'CONTRERAS HERNANDEZ ANDRES',
-          },
-          {
-            value: 'DE LA PARRA TRUJILLO SERGIO',
-            label: 'DE LA PARRA TRUJILLO SERGIO',
-          },
-          {
-            value: 'ORTIZ DIAZ CARLOS EDUARDO',
-            label: 'ORTIZ DIAZ CARLOS EDUARDO',
-          },
-        ],
-        muiEditTextFieldProps: {
-          select: true,
-        },
       },
     ];
     // eslint-disable-next-line react-hooks/exhaustive-deps
