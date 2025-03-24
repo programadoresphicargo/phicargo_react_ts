@@ -21,6 +21,7 @@ import {
 } from 'material-react-table';
 import Cuentas from './cuentas';
 import SaldoForm from './saldoForm';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
 const Operadores = ({ estado }) => {
 
@@ -265,6 +266,7 @@ const Operadores = ({ estado }) => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
+    localization: MRT_Localization_ES,
     state: { showProgressBars: isLoading2 },
     enableColumnPinning: true,
     enableStickyHeader: true,
