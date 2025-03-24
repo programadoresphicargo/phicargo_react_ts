@@ -23,9 +23,11 @@ import Cuentas from './cuentas';
 import SaldoForm from './saldoForm';
 
 const Operadores = ({ estado }) => {
+
   const [id_cuenta, setCuenta] = React.useState(0);
   const [referencia, setReferencia] = React.useState(0);
 
+  const [fechaAnterior, setFechaAnterior] = React.useState('');
   const fechaActual = new Date().toISOString().split('T')[0];
   const [value, setValue] = React.useState(parseDate(fechaActual));
 
@@ -64,6 +66,7 @@ const Operadores = ({ estado }) => {
     try {
       setLoading(true);
       const response = await odooApi.get('/saldos/fecha_actual/' + value);
+      setFechaAnterior(response.data[0].fecha_anterior);
       setData(response.data);
       setLoading(false);
     } catch (error) {
@@ -116,7 +119,7 @@ const Operadores = ({ estado }) => {
       },
       {
         accessorKey: 'saldo_anterior',
-        header: 'Saldo anterior',
+        header: 'Saldo anterior: ' + fechaAnterior,
         muiTableBodyCellProps: {
           align: 'right',
         },
@@ -129,7 +132,7 @@ const Operadores = ({ estado }) => {
               return sum + (isNaN(numericValue) ? 0 : numericValue);
             }, 0);
 
-          if (totalGlobal === 0) return ''; // No mostrar nada si el total es 0.0
+          if (totalGlobal === 0) return '';
 
           const formattedTotal = new Intl.NumberFormat('en-US', {
             minimumFractionDigits: 2,
@@ -171,7 +174,7 @@ const Operadores = ({ estado }) => {
       },
       {
         accessorKey: 'saldo_actual',
-        header: 'Saldo Actual',
+        header: 'Saldo Actual: ' + fechaActual,
         muiTableBodyCellProps: {
           align: 'right',
         },
@@ -184,7 +187,7 @@ const Operadores = ({ estado }) => {
               return sum + (isNaN(numericValue) ? 0 : numericValue);
             }, 0);
 
-          if (totalGlobal === 0) return ''; // No mostrar nada si el total es 0.0
+          if (totalGlobal === 0) return '';
 
           const formattedTotal = new Intl.NumberFormat('en-US', {
             minimumFractionDigits: 2,
@@ -239,7 +242,7 @@ const Operadores = ({ estado }) => {
             size='sm'
             color='success'
             className='text-white'
-            onClick={() => abrirForm(row.original.id_cuenta, row.original.referencia)}
+            onPress={() => abrirForm(row.original.id_cuenta, row.original.referencia)}
           >
             <i class="bi bi-pen"></i>
           </Button>)
