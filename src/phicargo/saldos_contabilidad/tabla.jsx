@@ -32,10 +32,6 @@ const Operadores = ({ estado }) => {
   const fechaActual = new Date().toISOString().split('T')[0];
   const [value, setValue] = React.useState(parseDate(fechaActual));
 
-  const valueMenosUnDia = new Date(value);
-  valueMenosUnDia.setDate(valueMenosUnDia.getDate() - 1);
-  const formattedValueMenosUnDia = valueMenosUnDia.toISOString().split('T')[0];
-
   const [open, setOpen] = React.useState(false);
   const [open2, setOpen2] = React.useState(false);
 
@@ -70,7 +66,6 @@ const Operadores = ({ estado }) => {
 
       if (response.data.length > 0) {
         setFechaAnterior(String(response.data[0].fecha_anterior || ''));
-        console.log("Fecha anterior:", response.data[0].fecha_anterior);
       } else {
         console.warn("No hay datos en la respuesta.");
         setFechaAnterior('');
@@ -128,7 +123,7 @@ const Operadores = ({ estado }) => {
       },
       {
         accessorKey: 'saldo_anterior',
-        header: `Último: ${fechaAnterior}`,
+        header: `Último: ${fechaAnterior || 'N/A'}`,
         muiTableBodyCellProps: {
           align: 'right',
         },
@@ -183,7 +178,7 @@ const Operadores = ({ estado }) => {
       },
       {
         accessorKey: 'saldo_actual',
-        header: 'Saldo Actual: ' + fechaActual,
+        header: 'Saldo Actual: ' + `${value.year}-${value.month}-${value.day}`,
         muiTableBodyCellProps: {
           align: 'right',
         },
@@ -257,7 +252,7 @@ const Operadores = ({ estado }) => {
           </Button>)
       },
     ],
-    [],
+    [fechaActual, value]
   );
 
   const table = useMaterialReactTable({
@@ -327,14 +322,21 @@ const Operadores = ({ estado }) => {
         <div className="flex w-full flex-col gap-4">
           <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
 
-            <h1 className='text-primary'>Reporte de saldos</h1>
+            <h1
+              className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
+            >
+              Reporte de saldos
+            </h1>
+
+            <h1 className='text-primary'>Fecha saldo anterior: {fechaAnterior || 'N/A'}</h1>
+
             <DatePicker
               className="max-w-[284px]"
               label="Fecha"
               value={value}
               onChange={setValue}
             />
-            <Button color='primary' onClick={handleClickOpen}>Cuentas</Button>
+            <Button color='primary' onPress={handleClickOpen}>Cuentas</Button>
           </div>
         </div>
 
