@@ -123,7 +123,7 @@ const Operadores = ({ estado }) => {
       },
       {
         accessorKey: 'saldo_anterior',
-        header: `Último: ${fechaAnterior || 'N/A'}`,
+        header: `Saldo anterior`,
         muiTableBodyCellProps: {
           align: 'right',
         },
@@ -178,7 +178,7 @@ const Operadores = ({ estado }) => {
       },
       {
         accessorKey: 'saldo_actual',
-        header: 'Saldo Actual: ' + `${value.year}-${value.month}-${value.day}`,
+        header: 'Saldo actual: ' + `${value.year}-${value.month}-${value.day}`,
         muiTableBodyCellProps: {
           align: 'right',
         },
@@ -328,14 +328,15 @@ const Operadores = ({ estado }) => {
               Reporte de saldos
             </h1>
 
-            <h1 className='text-primary'>Fecha saldo anterior: {fechaAnterior || 'N/A'}</h1>
-
             <DatePicker
               className="max-w-[284px]"
               label="Fecha"
               value={value}
               onChange={setValue}
             />
+
+            <h1 className='text-primary'>Última fecha de saldo: {fechaAnterior || 'N/A'}</h1>
+
             <Button color='primary' onPress={handleClickOpen}>Cuentas</Button>
           </div>
         </div>
