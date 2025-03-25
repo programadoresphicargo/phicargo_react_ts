@@ -70,6 +70,12 @@ const ContactosCelulares = () => {
                 fontSize: '14px',
             },
         },
+        muiTablePaperProps: {
+            elevation: 0,
+            sx: {
+                borderRadius: '0',
+            },
+        },
         muiTableBodyCellProps: {
             sx: {
                 fontFamily: 'Inter',
