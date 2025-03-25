@@ -21,7 +21,9 @@ import AppsIcon from '@mui/icons-material/Apps';
 import {
     useDisclosure,
 } from "@heroui/react";
-import ProblemasOperadores2 from './problemas_operadores/panel copy';
+import ProblemasOperadores2 from './problemas_operadores/panel';
+import { Alert } from "@heroui/react";
+import ReportIcon from '@mui/icons-material/Report';
 
 const pages = [
     { name: 'ACTIVOS', path: '/viajes' },
@@ -54,6 +56,14 @@ function NavbarViajes() {
 
     return (
         <>
+            <div className="flex flex-col gap-4 w-full">
+                <Alert
+                    color="danger"
+                    variant="solid"
+                    title="Atención: Existen problemas de operadores pendientes de atención."
+                    radius='none'
+                />
+            </div>
             <AppBar elevation={3} position="static"
                 sx={{
                     background: 'linear-gradient(90deg, #0b2149, #002887)',
@@ -79,7 +89,7 @@ function NavbarViajes() {
                             style={{
                                 width: '175px',
                                 height: '60px',
-                                filter: 'brightness(0) invert(1)' // Esto hará que la imagen sea blanca
+                                filter: 'brightness(0) invert(1)' 
                             }}
                         />
 
@@ -147,7 +157,7 @@ function NavbarViajes() {
                                 onClick={onOpenPO}
                             >
                                 <Badge badgeContent={1} color="error">
-                                    <NotificationsIcon />
+                                    <ReportIcon />
                                 </Badge>
                             </IconButton>
 

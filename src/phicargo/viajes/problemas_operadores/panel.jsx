@@ -22,6 +22,7 @@ import { ViajeContext } from '../context/viajeContext';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { tiempoTranscurrido } from '../../funciones/tiempo';
 import ReporteOperador from "./reporte";
+import { Chip } from "@heroui/react";
 
 export default function ProblemasOperadores2({ isOpen, onOpen, onOpenChange }) {
 
@@ -115,6 +116,10 @@ export default function ProblemasOperadores2({ isOpen, onOpen, onOpenChange }) {
                                                     <div className="flex gap-1">
                                                         <p className="font-semibold text-default-400 text-small">{step.fecha_creacion}</p>
                                                     </div>
+
+                                                    {step.atendido && (
+                                                        <Chip color="success" className="text-white">Atendido</Chip>
+                                                    )}
                                                 </CardFooter>
                                             </Card>
                                         </>
