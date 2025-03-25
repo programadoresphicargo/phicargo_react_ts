@@ -57,7 +57,7 @@ export default function ProblemasOperadores({ isOpen, onOpen, onOpenChange }) {
         <div>
             <Drawer isOpen={isOpen} size={"lg"} onOpenChange={onOpenChange}
             >
-                <DrawerContent className="overflow-auto max-h-[60vh]">
+                <DrawerContent>
                     {(onClose) => (
                         <>
                             <DrawerHeader className="flex flex-col gap-1">Problemas del operador</DrawerHeader>

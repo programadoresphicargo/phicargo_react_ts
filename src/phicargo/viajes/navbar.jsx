@@ -21,6 +21,7 @@ import AppsIcon from '@mui/icons-material/Apps';
 import {
     useDisclosure,
 } from "@heroui/react";
+import ProblemasOperadores2 from './problemas_operadores/panel copy';
 
 const pages = [
     { name: 'ACTIVOS', path: '/viajes' },
@@ -166,7 +167,7 @@ function NavbarViajes() {
             </AppBar>
 
             <Notificaciones isOpen={isOpen} onOpen={onOpen} onOpenChange={onOpenChange}></Notificaciones>
-            <ProblemasOperadores isOpen={isOpenPO} onOpenChange={onOpenChangePO}></ProblemasOperadores>
+            <ProblemasOperadores2 isOpen={isOpenPO} onOpenChange={onOpenChangePO}></ProblemasOperadores2>
         </>
     );
 }
