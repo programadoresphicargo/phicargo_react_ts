@@ -43,7 +43,7 @@ export default function ProblemasOperadores2({ isOpen, onOpen, onOpenChange }) {
 
     useEffect(() => {
         getEstatus();
-    }, [open]);
+    }, [isOpen]);
 
     const getEstatus = async () => {
 
@@ -118,7 +118,7 @@ export default function ProblemasOperadores2({ isOpen, onOpen, onOpenChange }) {
                                                     </div>
 
                                                     {step.atendido && (
-                                                            <Chip color="success" className="text-white">Atendido</Chip>
+                                                        <Chip color="success" className="text-white">Atendido</Chip>
                                                     )}
                                                 </CardFooter>
                                             </Card>
