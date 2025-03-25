@@ -4,6 +4,7 @@ import { Suspense, lazy, memo } from 'react';
 import AvailabilityLayout from '../layout/AvailabilityLayout';
 import { LoadingPage } from '@/pages/LoadingPage';
 import ProtectedRoute from '@/router/ProtectedRoute';
+import ContactosCelulares from '@/phicargo/inventarioti/celulares/celulares';
 
 const VehicleAvailabilityPage = lazy(() =>
   import('../pages/VehicleAvailabilityPage').then((module) => ({
@@ -29,6 +30,9 @@ const DriverSummaryPage = lazy(() =>
 );
 const VehiclesPage = lazy(
   () => import('../../../disponiblidad/equipos/equipos'),
+);
+const Contactos = lazy(
+  () => import('../../../inventarioti/celulares/celulares'),
 );
 
 const permission = 200;
@@ -90,6 +94,14 @@ const AvailabilityRoutes = () => {
         element={
           <Suspense fallback={<LoadingPage />}>
             <VehiclesPage />
+          </Suspense>
+        }
+      />
+      <Route
+        path="contactos"
+        element={
+          <Suspense fallback={<LoadingPage />}>
+            <Contactos />
           </Suspense>
         }
       />

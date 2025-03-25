@@ -39,6 +39,7 @@ export default function ProblemasOperadores2({ isOpen, onOpen, onOpenChange }) {
 
     const handleCloseReporte = () => {
         setOpenReporte(false);
+        getEstatus();
     };
 
     useEffect(() => {
