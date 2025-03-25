@@ -1,8 +1,5 @@
 import { ChartData, ChartOptions } from 'chart.js';
-import {
-  type ExportConfig,
-  ExportToExcel,
-} from '@/phicargo/modules/core/utilities/export-to-excel';
+import { ExportConfig, ExportToExcel } from '@/utilities';
 import {
   WaybillStats,
   YearlyContainersByClient,

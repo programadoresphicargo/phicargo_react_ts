@@ -110,6 +110,8 @@ export interface WaybillCreateApi extends WaybillBaseApi {
   complement_cp: ComplementCpApi[];
 }
 
+export type WaybillEditApi = Partial<WaybillCreateApi>;
+
 export interface ComplementCpApi {
   description: string;
   sat_product_id: number;

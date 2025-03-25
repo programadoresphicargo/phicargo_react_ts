@@ -6,12 +6,11 @@ import {
   ModalContent,
   ModalHeader,
 } from "@heroui/react";
+import { DatePickerInput, TextareaInput } from "@/components/inputs";
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-import { DatePickerInput } from '../../core/components/inputs/DatePickerInput';
 import { HiQueueList } from 'react-icons/hi2';
 import { QueueCreate } from '../models';
-import { TextareaInput } from '../../core/components/inputs/TextareaInput';
 import dayjs from 'dayjs';
 import { useShiftQueueQueries } from '../hooks/useShiftQueueQueries';
 import { useState } from 'react';

@@ -1,4 +1,4 @@
-import { ErrorBoundary } from '../../core/utilities/error-boundary';
+import { ErrorBoundary } from '@/components/utils/ErrorBoundary';
 import Header from '../components/Header';
 import { Outlet } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';

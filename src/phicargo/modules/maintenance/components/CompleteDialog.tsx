@@ -1,17 +1,12 @@
-import {
-  Button,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-} from "@heroui/react";
 import { SubmitHandler, useForm } from 'react-hook-form';
 import dayjs, { Dayjs } from 'dayjs';
 
-import { DatePickerInput } from '../../core/components/inputs/DatePickerInput';
+import { Button } from '@heroui/react';
+import CheckIcon from '@mui/icons-material/Check';
+import { DatePickerElement } from 'react-hook-form-mui/date-pickers';
 import type { MaintenanceRecordStatus } from '../models';
-import { SelectInput } from '../../core/components/inputs/SelectInput';
+import { SelectElement } from 'react-hook-form-mui';
+import { SimpleModal } from '@/components';
 import { useMaintenanceRecord } from '../hooks';
 
 interface RegisterDetailForm {
@@ -37,62 +32,80 @@ const CompleteDialog = (props: CompleteDialogProps) => {
     editRecordMutation: { mutate: editRegister, isPending },
   } = useMaintenanceRecord();
 
-  const { control, handleSubmit } = useForm({
+  const { control, handleSubmit, reset } = useForm({
     defaultValues: initialFormValues,
   });
 
   const onSubmit: SubmitHandler<RegisterDetailForm> = (data) => {
-    editRegister({
-      id: itemId,
-      updatedItem: { status: data.status, checkOut: data.checkOut },
-    });
+    editRegister(
+      {
+        id: itemId,
+        updatedItem: { status: data.status, checkOut: data.checkOut },
+      },
+      {
+        onSuccess: () => {
+          reset(initialFormValues);
+          onClose();
+        },
+      },
+    );
   };
 
   return (
-    <Modal isOpen={open} size={'sm'} onClose={onClose}>
-      <ModalContent>
-        {() => (
-          <>
-            <ModalHeader className="flex flex-col pb-2 bg-[#dadfeb]">
-              <h3 className="font-bold text-xl text-center text-gray-800 uppercase">
-                Completar Registro
-              </h3>
-            </ModalHeader>
-            <ModalBody>
-              <div className="flex flex-col gap-2">
-                <SelectInput
-                  control={control}
-                  name="status"
-                  label="Estatus"
-                  items={[
-                    { value: 'Completado', key: 'completed' },
-                    { value: 'Pendiente', key: 'pending' },
-                    { value: 'Cancelado', key: 'cancelled' },
-                  ]}
-                  rules={{ required: 'Este campo es requerido' }}
-                />
+    <SimpleModal
+      isOpen={open}
+      onClose={onClose}
+      header={<h2 className="text-center">Completar Registro</h2>}
+      customFooter={
+        <>
+          <Button
+            color="danger"
+            radius="full"
+            variant="light"
+            size="sm"
+            onPress={onClose}
+          >
+            Cerrar
+          </Button>
+          <Button
+            color="success"
+            radius="full"
+            startContent={<CheckIcon sx={{ fontSize: '1.2rem' }} />}
+            className="uppercase font-bold text-gray-800"
+            size="sm"
+            onPress={() => handleSubmit(onSubmit)()}
+            isLoading={isPending}
+          >
+            Completar
+          </Button>
+        </>
+      }
+    >
+      <form className="flex flex-col gap-6 py-4 px-2">
+        <SelectElement
+          control={control}
+          name="status"
+          label="Estatus"
+          size="small"
+          required
+          options={[
+            { label: 'Completado', id: 'completed' },
+            { label: 'Pendiente', id: 'pending' },
+            { label: 'Cancelado', id: 'cancelled' },
+          ]}
+          rules={{ required: 'Este campo es requerido' }}
+        />
 
-                <DatePickerInput
-                  control={control}
-                  name="checkOut"
-                  label="Fecha de Salida"
-                  rules={{ required: 'Este campo es requerido' }}
-                />
-              </div>
-            </ModalBody>
-            <ModalFooter>
-              <Button
-                color="primary"
-                onClick={handleSubmit(onSubmit)}
-                isLoading={isPending}
-              >
-                Completar
-              </Button>
-            </ModalFooter>
-          </>
-        )}
-      </ModalContent>
-    </Modal>
+        <DatePickerElement
+          control={control}
+          name="checkOut"
+          label="Fecha de Salida"
+          inputProps={{ size: 'small' }}
+          required
+          rules={{ required: 'Este campo es requerido' }}
+        />
+      </form>
+    </SimpleModal>
   );
 };
 

@@ -1,69 +1,71 @@
-import {
-  Control,
-  FieldValues,
-  Path,
-  TextFieldElement,
-} from 'react-hook-form-mui';
-import { IconButton, InputAdornment } from '@mui/material';
+import { Controller, FieldValues } from 'react-hook-form';
+import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { CustomInputProps } from '@/types';
+import { Input } from "@heroui/react";
 import { useState } from 'react';
 
-interface Props<TData extends FieldValues> {
-  control: Control<TData>;
-  name: Path<TData>;
+interface PasswordInputProps<T extends FieldValues>
+  extends CustomInputProps<T> {
   required?: boolean;
 }
 
-export const PasswordInput = <TData extends FieldValues>({
+export const PasswordInput2 = <T extends FieldValues>({
   control,
   name,
-  required,
-}: Props<TData>) => {
-  const [showPassword, setShowPassword] = useState(false);
+  className,
+  rules,
+  classNames,
+  label = 'Contraseña',
+}: PasswordInputProps<T>) => {
+  const [isVisible, setIsVisible] = useState(false);
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>,
-  ) => {
-    event.preventDefault();
-  };
-
-  const handleMouseUpPassword = (
-    event: React.MouseEvent<HTMLButtonElement>,
-  ) => {
-    event.preventDefault();
-  };
+  const toggleVisibility = () => setIsVisible(!isVisible);
 
   return (
-    <TextFieldElement
-      control={control}
-      type={showPassword ? 'text' : 'password'}
+    <Controller
       name={name}
-      label="Contraseña"
-      fullWidth
-      required={required}
-      rules={required ? { required: 'La contraseña es requerida' } : {}}
-      slotProps={{
-        input: {
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton
-                aria-label={
-                  showPassword ? 'hide the password' : 'display the password'
-                }
-                onClick={handleClickShowPassword}
-                onMouseDown={handleMouseDownPassword}
-                onMouseUp={handleMouseUpPassword}
-                edge="end"
+      control={control}
+      rules={rules}
+        // required
+        //   ? {
+        //       required: 'Por favor, ingresa tu contraseña.',
+        //       minLength: {
+        //         value: 6,
+        //         message: 'Debe tener al menos 8 caracteres',
+        //       },
+        //     }
+        //   : undefined
+      render={({ field: { value, name, onChange }, fieldState }) => {
+        return (
+          <Input
+            label={label}
+            size="sm"
+            name={name}
+            value={value}
+            variant="faded"
+            defaultValue=""
+            onValueChange={onChange}
+            classNames={classNames}
+            endContent={
+              <button
+                className="focus:outline-none"
+                type="button"
+                onClick={toggleVisibility}
               >
-                {showPassword ? <VisibilityOff /> : <Visibility />}
-              </IconButton>
-            </InputAdornment>
-          ),
-        },
+                {isVisible ? (
+                  <FaRegEye className="text-lg pointer-events-none text-default-400" />
+                ) : (
+                  <FaRegEyeSlash className="text-lg pointer-events-none text-default-400" />
+                )}
+              </button>
+            }
+            type={isVisible ? 'text' : 'password'}
+            className={className}
+            isInvalid={fieldState.invalid}
+            errorMessage={fieldState.error ? fieldState.error.message : null}
+          />
+        );
       }}
     />
   );

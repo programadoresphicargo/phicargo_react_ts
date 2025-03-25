@@ -1,5 +1,5 @@
-import { ErrorBoundary } from '../../core/utilities/error-boundary';
-import Header from '../components/Header';
+import { ErrorBoundary } from '@/components/utils/ErrorBoundary';
+import Header from '../components/ui/Header';
 import { MaintenanceRecordStatus } from '../models';
 import { Outlet } from 'react-router-dom';
 import { ReactNode } from 'react';

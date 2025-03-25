@@ -1,22 +1,17 @@
-import {
-  type ExportConfig,
-  ExportToExcel,
-} from '../../core/utilities/export-to-excel';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { ExportConfig, ExportToExcel } from '@/utilities';
 
 import { MaterialReactTable } from 'material-react-table';
-import type { Vehicle } from '../models/vehicle-model';
-import { useBaseTable } from '../../core/hooks/useBaseTable';
-import { useTableState } from '../../core/hooks/useTableState';
+import { Outlet } from 'react-router-dom';
+import { Vehicle } from '../../vehicles/models';
+import { VehicleInformationModal } from '../../vehicles/components/VehicleInformationModal';
+import { useBaseTable } from '@/hooks';
+import { useState } from 'react';
 import { useVehicleColumns } from '../hooks/useVehicleColumns';
-import { useVehicleQueries } from '../hooks/useVehicleQueries';
+import { useVehicleQueries } from '../../vehicles/hooks/queries';
 
 const AsignacionUnidades = () => {
-  const navigate = useNavigate();
 
-  const state = useTableState({
-    tableId: 'availability-vehicles-table',
-  });
+  const [vehicleInfo, setVehicleInfo] = useState<Vehicle | null>(null);
 
   const { columns } = useVehicleColumns();
 
@@ -24,20 +19,34 @@ const AsignacionUnidades = () => {
     vehicleQuery: { data: vehicles, isFetching, isLoading, refetch },
   } = useVehicleQueries();
 
-  const table = useBaseTable({
+  const onOpenInfo = (vehicle: Vehicle) => {
+    setVehicleInfo(vehicle);
+  };
+
+  const table = useBaseTable<Vehicle>({
     columns,
     data: vehicles || [],
-    state,
+    tableId: 'availability-vehicles-table',
     isLoading,
-    progressBars: isFetching,
-    refetch,
-    onDoubleClickFn: (id) => navigate(`detalles/${id}`),
-    onExportExcel: (data) => toExcel.exportData(data),
+    isFetching,
+    onDoubleClickFn: onOpenInfo,
+    refetchFn: () => refetch(),
+    exportFn: (data) => toExcel.exportData(data),
+    showColumnFilters: true,
+    showGlobalFilter: true,
+    containerHeight: 'calc(100vh - 165px)',
   });
 
   return (
     <>
       <MaterialReactTable table={table} />
+      {vehicleInfo && (
+        <VehicleInformationModal
+          open={!!vehicleInfo}
+          onClose={() => setVehicleInfo(null)}
+          vehicle={vehicleInfo}
+        />
+      )}
       <Outlet />
     </>
   );

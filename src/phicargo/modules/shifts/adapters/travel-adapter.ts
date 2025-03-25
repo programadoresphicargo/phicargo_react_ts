@@ -1,6 +1,6 @@
 import type { Travel } from '../models/travels-models';
 import type { TravelApi } from '../models/api/travel-models-models-api';
-import dayjs from '../../core/utilities/dayjs-config';
+import dayjs from '@/utilities/dayjs-config';
 
 export const travelToLocal = (travel: TravelApi): Travel => ({
   id: travel.id,

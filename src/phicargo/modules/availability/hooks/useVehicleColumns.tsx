@@ -1,8 +1,8 @@
 import type { MRT_ColumnDef } from 'material-react-table';
-import { Modality } from '../models/driver-model';
-import ModalityChip from '../components/ui/ModalityChip';
-import type { Vehicle } from '../models/vehicle-model';
-import VehicleTypeChip from '../components/ui/VehicleTypeChip';
+import type { Modality } from '@/phicargo/modules/drivers/models';
+import { ModalityChip } from '../../drivers/components/ui/ModalityChip';
+import type { Vehicle } from '../../vehicles/models';
+import { VehicleTypeChip } from '../../vehicles/components/ui/VehicleTypeChip';
 import { useMemo } from 'react';
 
 export const useVehicleColumns = () => {
@@ -24,14 +24,18 @@ export const useVehicleColumns = () => {
           {
             value: 'N/A',
             label: 'N/A',
-          }
+          },
         ],
         Cell: ({ cell }) => {
           const value = cell.getValue<string>();
-          return value === 'N/A' 
-            ? <span className='text-gray-400'>{cell.getValue<string>()}</span>
-            : <span className='font-bold uppercase'>{cell.getValue<string>()}</span>
-        }
+          return value === 'N/A' ? (
+            <span className="text-gray-400">{cell.getValue<string>()}</span>
+          ) : (
+            <span className="font-bold uppercase">
+              {cell.getValue<string>()}
+            </span>
+          );
+        },
       },
       {
         accessorFn: (row) => (row.branch ? row.branch.name : 'N/A'),
@@ -49,21 +53,25 @@ export const useVehicleColumns = () => {
           {
             value: 'N/A',
             label: 'N/A',
-          }
+          },
         ],
         Cell: ({ cell }) => {
           const value = cell.getValue<string>();
-          return value === 'N/A' 
-            ? <span className='text-gray-400'>{cell.getValue<string>()}</span>
-            : <span className='font-bold uppercase'>{cell.getValue<string>()}</span>
-        }
+          return value === 'N/A' ? (
+            <span className="text-gray-400">{cell.getValue<string>()}</span>
+          ) : (
+            <span className="font-bold uppercase">
+              {cell.getValue<string>()}
+            </span>
+          );
+        },
       },
-      { 
-        accessorKey: 'name', 
+      {
+        accessorKey: 'name',
         header: 'Unidad',
         Cell: ({ cell }) => (
-          <span className='font-bold'>{cell.getValue<string>()}</span>
-        )  
+          <span className="font-bold">{cell.getValue<string>()}</span>
+        ),
       },
       {
         accessorFn: (row) =>
@@ -71,10 +79,16 @@ export const useVehicleColumns = () => {
         header: 'Operador asignado',
         Cell: ({ cell }) => {
           const value = cell.getValue<string>();
-          return value === 'SIN OPERADOR ASIGNADO' 
-            ? <span className='text-gray-400 text-sm'>{cell.getValue<string>()}</span>
-            : <span className='font-bold uppercase'>{cell.getValue<string>()}</span>
-        }
+          return value === 'SIN OPERADOR ASIGNADO' ? (
+            <span className="text-gray-400 text-sm">
+              {cell.getValue<string>()}
+            </span>
+          ) : (
+            <span className="font-bold uppercase">
+              {cell.getValue<string>()}
+            </span>
+          );
+        },
       },
       {
         accessorKey: 'vehicleType',
@@ -91,11 +105,13 @@ export const useVehicleColumns = () => {
           },
         ],
         Cell: ({ cell }) => (
-          <VehicleTypeChip fleetType={cell.getValue<string>() || 'SIN ASIGNAR'} />
-        )
+          <VehicleTypeChip
+            fleetType={cell.getValue<string>() || 'SIN ASIGNAR'}
+          />
+        ),
       },
-      { 
-        accessorFn: (row) => (row.loadType || 'SIN ASIGNAR'),
+      {
+        accessorFn: (row) => row.loadType || 'SIN ASIGNAR',
         header: 'Tipo de carga',
         filterVariant: 'select',
         filterSelectOptions: [
@@ -114,13 +130,15 @@ export const useVehicleColumns = () => {
         ],
         Cell: ({ cell }) => {
           const value = cell.getValue<string>();
-          return value === 'SIN ASIGNAR'
-            ? <span className='text-gray-400 text-sm'>{value}</span>
-            : <span className='font-bold uppercase'>{value}</span>
-        } 
+          return value === 'SIN ASIGNAR' ? (
+            <span className="text-gray-400 text-sm">{value}</span>
+          ) : (
+            <span className="font-bold uppercase">{value}</span>
+          );
+        },
       },
       {
-        accessorFn: (row) => (row.modality || 'SIN ASIGNAR'),
+        accessorFn: (row) => row.modality || 'SIN ASIGNAR',
         header: 'Modalidad',
         filterVariant: 'select',
         filterSelectOptions: [
@@ -139,10 +157,12 @@ export const useVehicleColumns = () => {
         ],
         Cell: ({ cell }) => {
           const value = cell.getValue<string>();
-          return value === 'SIN ASIGNAR'
-            ? <span className='text-gray-400 text-sm'>{value}</span>
-            : <ModalityChip modality={value as Modality} />
-        } 
+          return value === 'SIN ASIGNAR' ? (
+            <span className="text-gray-400 text-sm">{value}</span>
+          ) : (
+            <ModalityChip modality={value as Modality} />
+          );
+        },
       },
       {
         accessorFn: (row) => (row.state ? row.state.name : 'N/A'),

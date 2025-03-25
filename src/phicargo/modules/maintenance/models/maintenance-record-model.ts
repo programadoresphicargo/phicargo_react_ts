@@ -1,5 +1,6 @@
 import { BranchSimple } from '../../core/models';
 import { Dayjs } from 'dayjs';
+import { UserRead } from '../../users-management/models';
 import { Workshop } from './workshop.model';
 
 export type MaintenanceRecordStatus = 'pending' | 'completed' | 'cancelled';
@@ -34,27 +35,33 @@ export interface MaintenanceRecordCreate extends MaintenanceRecordBase {
   vehicleId: number;
 }
 
-export interface MaintenanceRecordUpdate {
-  workshopId?: number | null;
-  failType?: 'MC' | 'EL' | null;
-  checkIn?: Dayjs | null;
-  checkOut?: Dayjs | null;
-  status?: MaintenanceRecordStatus | null;
-  deliveryDate?: Dayjs | null;
-  supervisor?: string | null;
-  comments?: string | null;
-  order?: string | null;
-}
+export type MaintenanceRecordUpdate = Partial<
+  Pick<
+    MaintenanceRecordCreate,
+    'workshopId' | 'failType' | 'status' | 'deliveryDate' | 'supervisor'
+  > & { updateComments: string, checkOut: Dayjs }
+>;
 
 export interface RecordComment {
   id: number;
   recordId: number;
   comment: string;
   createdAt: Dayjs;
+  byUser: UserRead;
 }
 
 export interface RecordCommentCreate {
   comment: string;
+}
+
+export interface RecordUpdateComment {
+  id: number;
+  recordId: number;
+  comment: string;
+  changeDate: Dayjs;
+  previousDeliveryDate: Dayjs;
+  newDeliveryDate: Dayjs;
+  byUser: UserRead;
 }
 
 export interface RecordStats {

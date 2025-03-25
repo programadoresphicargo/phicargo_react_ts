@@ -1,7 +1,7 @@
 import { ReactNode, createContext, useMemo, useState } from 'react';
 
 import { DateRange } from 'rsuite/esm/DateRangePicker';
-import dayjs from '../../core/utilities/dayjs-config';
+import dayjs from '@/utilities/dayjs-config';
 
 type DateRangeString = {
   start: string;

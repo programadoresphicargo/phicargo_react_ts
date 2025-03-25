@@ -1,10 +1,10 @@
-import DriverMiniCard from '../components/DriverMiniCard';
+import DriverMiniCard from '../../drivers/components/DriverMiniCard';
 import NotAssignedCard from '../components/NotAssignedCard';
 import NotAssignedStats from '../utilities/get-not-assigned-stats';
-import VehicleMiniCard from '../components/VehicleMiniCard';
-import { useDriverQueries } from '../hooks/useDriverQueries';
+import VehicleMiniCard from '../../vehicles/components/VehicleMiniCard';
+import { useDriverQueries } from '../../drivers/hooks/queries';
 import { useMemo } from 'react';
-import { useVehicleQueries } from '../hooks/useVehicleQueries';
+import { useVehicleQueries } from '../../vehicles/hooks/queries';
 
 const NotAssignedPage = () => {
   const {

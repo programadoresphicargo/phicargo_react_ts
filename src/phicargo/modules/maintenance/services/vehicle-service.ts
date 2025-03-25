@@ -1,8 +1,8 @@
 import type { VehicleInfo, VehicleInfoApi } from '../models';
 
 import { AxiosError } from 'axios';
+import { MaintenaceRecordAdapter } from '../adapters/mappers/register-mapper';
 import odooApi from '../../core/api/odoo-api';
-import { vehicleInfoToLocal } from '../adapters/mappers/register-mapper';
 
 /**
  * Vehicle Service API
@@ -17,7 +17,7 @@ class VehicleServiceApi {
       const response = await odooApi.get<VehicleInfoApi[]>(
         '/maintenance-record/vehicles/all',
       );
-      return response.data.map(vehicleInfoToLocal);
+      return response.data.map(MaintenaceRecordAdapter.vehicleInfoToLocal);
     } catch (error) {
       console.log(error);
       if (error instanceof AxiosError) {

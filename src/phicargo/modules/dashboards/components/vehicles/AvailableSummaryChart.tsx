@@ -1,14 +1,11 @@
-import {
-  ExportConfig,
-  ExportToExcel,
-} from '@/phicargo/modules/core/utilities/export-to-excel';
+import { ExportConfig, ExportToExcel } from '@/utilities';
 import { useEffect, useState } from 'react';
 
 import { Bar } from 'react-chartjs-2';
 import { ChartCard } from '../ChartCard';
 import { ChartData } from 'chart.js';
 import { ChartOptions } from 'chart.js';
-import VehicleServiceApi from '@/phicargo/modules/availability/services/vehicle-service';
+import { VehicleServiceApi } from '@/phicargo/modules/vehicles/services';
 import type { VehicleStats } from '../../models/vehicles-stats-models';
 
 const options: ChartOptions<'bar'> = {

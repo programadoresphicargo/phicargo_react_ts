@@ -1,4 +1,4 @@
-import { VehicleRealStatus } from '../models/vehicle-model';
+import { VehicleRealStatus } from "../../vehicles/models";
 
 type Status = {
   key: VehicleRealStatus;

@@ -1,44 +1,50 @@
-import { Outlet, useNavigate } from 'react-router-dom';
+import { ExportConfig, ExportToExcel } from '@/utilities';
 
-import MaterialTableBase from '../../core/components/tables/MaterialTableBase';
-import { useBaseTable } from '../../core/hooks/useBaseTable';
-import { useDriverQueries } from '../hooks/useDriverQueries';
+import { Driver } from '../../drivers/models';
+import { DriverInformationModal } from '../../drivers/components/DriverInformationModal';
+import { MaterialReactTable } from 'material-react-table';
+import { Outlet } from 'react-router-dom';
+import { useBaseTable } from '@/hooks';
+import { useDriverQueries } from '../../drivers/hooks/queries';
 import { useDriversColumns } from '../hooks/useDriversColumns';
-import { useTableState } from '../../core/hooks/useTableState';
-import type { Driver } from '../models/driver-model';
-import {
-  ExportToExcel,
-  type ExportConfig,
-} from '../../core/utilities/export-to-excel';
+import { useState } from 'react';
 
 const DriverAvailabilityPage = () => {
-  const navigate = useNavigate();
+  const [driverInfo, setDriverInfo] = useState<Driver | null>(null);
 
-  const {
-    driversQuery: { data: drivers, isFetching, isLoading, refetch },
-  } = useDriverQueries();
-
-  const state = useTableState({
-    tableId: 'availability-drivers-table',
-  });
+  const { driversQuery } = useDriverQueries();
 
   const { columns } = useDriversColumns();
 
-  const table = useBaseTable({
+  const onOpenInfo = (driver: Driver) => {
+    setDriverInfo(driver);
+  };
+
+  const table = useBaseTable<Driver>({
     columns,
-    data: drivers || [],
-    state,
-    isLoading,
-    progressBars: isFetching,
-    refetch,
-    onDoubleClickFn: (id) => navigate(`detalles/${id}`),
-    memoMode: 'cells',
-    onExportExcel: (data) => toExcel.exportData(data),
+    data: driversQuery.data || [],
+    tableId: 'availability-drivers-table',
+    isLoading: driversQuery.isLoading,
+    isFetching: driversQuery.isFetching,
+    error: driversQuery.error?.message,
+    onDoubleClickFn: onOpenInfo,
+    refetchFn: () => driversQuery.refetch(),
+    exportFn: (data) => toExcel.exportData(data),
+    showColumnFilters: true,
+    showGlobalFilter: true,
+    containerHeight: 'calc(100vh - 165px)',
   });
 
   return (
     <>
-      <MaterialTableBase table={table} />
+      <MaterialReactTable table={table} />
+      {driverInfo && (
+        <DriverInformationModal
+          open={!!driverInfo}
+          onClose={() => setDriverInfo(null)}
+          driver={driverInfo}
+        />
+      )}
       <Outlet />
     </>
   );

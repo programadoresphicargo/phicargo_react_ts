@@ -1,4 +1,4 @@
-import type { VehicleRealStatus, VehicleWithRealStatus } from '../models/vehicle-model';
+import { VehicleRealStatus, VehicleWithRealStatus } from "../../vehicles/models";
 
 import { Chip } from "@heroui/react";
 import type { MRT_ColumnDef } from 'material-react-table';

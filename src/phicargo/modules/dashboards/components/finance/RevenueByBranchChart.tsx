@@ -2,10 +2,7 @@ import type {
   BranchRevenue,
   WaybillStats,
 } from '../../models/waybill-stats-model';
-import {
-  ExportConfig,
-  ExportToExcel,
-} from '@/phicargo/modules/core/utilities/export-to-excel';
+import { ExportConfig, ExportToExcel } from '@/utilities';
 import {
   getBackgroundColors,
   getBorderColors,

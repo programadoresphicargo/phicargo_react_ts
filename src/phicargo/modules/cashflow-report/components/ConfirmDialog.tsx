@@ -6,14 +6,13 @@ import {
   ModalFooter,
   ModalHeader,
 } from "@heroui/react";
+import { CheckboxInput, NumberInput } from "@/components/inputs";
 import type { DaysOfWeek, WeekBase } from '../models';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useCollectRegisters, usePayments } from '../hooks';
 
-import { CheckboxInput } from '../../core/components/inputs/CheckboxInput';
 import { FaCheck } from 'react-icons/fa';
 import { IoIosAlert } from 'react-icons/io';
-import NumberInput from '../../core/components/inputs/NumberInput';
 
 interface Confirmation {
   totalAmount: boolean;

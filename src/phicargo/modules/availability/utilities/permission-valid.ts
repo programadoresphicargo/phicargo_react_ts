@@ -1,5 +1,6 @@
-import type { Driver } from '../models/driver-model';
 // import dayjs from 'dayjs';
+
+import type { Driver } from '../../drivers/models';
 
 /**
  * Function to get the valid permission of a driver
