@@ -158,6 +158,19 @@ const Documentacion = ({ }) => {
         >
           Revision ocular
         </Button>
+
+        <Button
+          showAnchorIcon
+          as={Link}
+          isExternal={true}
+          color="success"
+          className='text-white'
+          href={`${apiUrl}/tms_travel/horas_servicio/pdf/` + id_viaje}
+          variant="solid"
+        >
+          Horas de servicio
+        </Button>
+
       </Box >
     )
   });
