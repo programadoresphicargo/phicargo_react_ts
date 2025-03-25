@@ -24,6 +24,8 @@ import {
 import ProblemasOperadores2 from './problemas_operadores/panel';
 import { Alert } from "@heroui/react";
 import ReportIcon from '@mui/icons-material/Report';
+import odooApi from '../modules/core/api/odoo-api';
+import { useJourneyDialogs } from './seguimiento/funciones';
 
 const pages = [
     { name: 'ACTIVOS', path: '/viajes' },
@@ -54,16 +56,29 @@ function NavbarViajes() {
         navigate("/menu");
     };
 
+    const { getReportesNoAtendidos } = useJourneyDialogs();
+    const [numProblemasOperador, setNumPO] = useState(0);
+
+    const fetchReportes = async () => {
+        const numReportes = await getReportesNoAtendidos();
+        setNumPO(numReportes);
+    };
+
+    useEffect(() => {
+        fetchReportes();
+    });
+
     return (
         <>
-            <div className="flex flex-col gap-4 w-full">
+            {numProblemasOperador > 0 && (
                 <Alert
                     color="danger"
                     variant="solid"
                     title="Atención: Existen problemas de operadores pendientes de atención."
-                    radius='none'
+                    description={`${numProblemasOperador} reportes pendientes de atención`}
+                    radius="none"
                 />
-            </div>
+            )}
             <AppBar elevation={3} position="static"
                 sx={{
                     background: 'linear-gradient(90deg, #0b2149, #002887)',
@@ -89,7 +104,7 @@ function NavbarViajes() {
                             style={{
                                 width: '175px',
                                 height: '60px',
-                                filter: 'brightness(0) invert(1)' 
+                                filter: 'brightness(0) invert(1)'
                             }}
                         />
 
@@ -156,7 +171,7 @@ function NavbarViajes() {
                                 color="inherit"
                                 onClick={onOpenPO}
                             >
-                                <Badge badgeContent={1} color="error">
+                                <Badge badgeContent={numProblemasOperador} color="error">
                                     <ReportIcon />
                                 </Badge>
                             </IconButton>

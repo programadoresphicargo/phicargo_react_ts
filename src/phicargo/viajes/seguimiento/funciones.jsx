@@ -351,6 +351,18 @@ export const useJourneyDialogs = () => {
         }
     };
 
+    const getReportesNoAtendidos = async () => {
+        try {
+            const response = await odooApi.get('/problemas_operadores/no_atendidos/');
+            const numRegistros = response.data?.length ?? 0; 
+            return numRegistros;
+
+        } catch (error) {
+            console.error('Error al obtener los datos:', error);
+            return 0;
+        }
+    };
+
     return {
         iniciar_viaje,
         finalizar_viaje,
@@ -360,6 +372,7 @@ export const useJourneyDialogs = () => {
         reenviar_estatus,
         comprobar_operador,
         comprobar_disponibilidad,
-        comprobar_horarios
+        comprobar_horarios,
+        getReportesNoAtendidos
     };
 };
