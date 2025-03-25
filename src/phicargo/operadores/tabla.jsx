@@ -7,7 +7,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { Box, Button } from '@mui/material';
 import OperadorForm from './OperadorForm';
 import odooApi from '../modules/core/api/odoo-api';
-const { VITE_PHIDES_API_URL } = import.meta.env;
 
 import {
   MaterialReactTable,

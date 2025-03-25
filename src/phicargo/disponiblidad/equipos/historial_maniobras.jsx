@@ -21,7 +21,6 @@ import { Chip } from "@heroui/react";
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { Tabs, Tab, Card, CardBody } from "@heroui/react";
 import Formulariomaniobra from '@/phicargo/maniobras/maniobras/formulario_maniobra';
-const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const HistorialManiobrasVehiculo = ({ vehicle_id }) => {
     const [isLoading2, setLoading] = useState();
