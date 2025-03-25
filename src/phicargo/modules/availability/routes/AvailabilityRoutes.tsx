@@ -4,7 +4,6 @@ import { Suspense, lazy, memo } from 'react';
 import AvailabilityLayout from '../layout/AvailabilityLayout';
 import { LoadingPage } from '@/pages/LoadingPage';
 import ProtectedRoute from '@/router/ProtectedRoute';
-import ContactosCelulares from '@/phicargo/inventarioti/celulares/celulares';
 
 const VehicleAvailabilityPage = lazy(() =>
   import('../pages/VehicleAvailabilityPage').then((module) => ({
