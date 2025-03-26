@@ -5,7 +5,7 @@ import {
 } from 'material-react-table';
 import MonitoreoNavbar from '../../monitoreo/Navbar';
 import Box from '@mui/material/Box';
-import { Button } from "@heroui/react"
+import { Button, Chip } from "@heroui/react"
 import { DatePicker } from 'antd';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
@@ -38,7 +38,21 @@ const ContactosCelulares = () => {
             { accessorKey: 'apellido_materno', header: 'Apellido materno' },
             { accessorKey: 'apellido_paterno', header: 'Apellido paterno' },
             { accessorKey: 'nombre_dep', header: 'Departamento' },
-            { accessorKey: 'NUMERO_CELULAR', header: 'Número celular' },
+            {
+                accessorKey: 'NUMERO_CELULAR', header: 'Número celular',
+                Cell: ({ cell }) => {
+                    const estatus_viaje = cell.getValue();
+
+                    return (
+                        <Chip
+                            color="primary"
+                            size='sm'
+                        >
+                            {estatus_viaje}
+                        </Chip>
+                    );
+                },
+            },
         ],
         [],
     );
