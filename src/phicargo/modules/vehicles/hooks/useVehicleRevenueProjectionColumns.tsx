@@ -1,7 +1,7 @@
-import { Chip } from '@heroui/react';
 import { CurrencyCell } from '@/components/ui';
 import type { MRT_ColumnDef } from 'material-react-table';
 import { ModalityChip } from '../../drivers/components/ui/ModalityChip';
+import { VehicleNameCell } from '../components/ui/VehicleNameCell';
 import type { VehicleRevenueProjection } from '../models';
 import { useMemo } from 'react';
 
@@ -12,13 +12,13 @@ export const useVehicleRevenueProjectionColumns = () => {
         accessorKey: 'name',
         header: 'UNIDAD',
         size: 4,
-        Cell: ({ cell }) => {
-          return (
-            <Chip size="sm" color="primary">
-              {cell.getValue<string>()}
-            </Chip>
-          );
-        },
+        Cell: ({ row }) => (
+          <VehicleNameCell
+            vehicleId={row.original.id}
+            vehicleName={row.original.name}
+            chip
+          />
+        ),
       },
       {
         accessorKey: 'company',
@@ -79,10 +79,10 @@ export const useVehicleRevenueProjectionColumns = () => {
           />
         ),
       },
-      { 
-        accessorKey: 'status', 
+      {
+        accessorKey: 'status',
         header: 'ESTATUS',
-        size: 4
+        size: 4,
       },
       {
         accessorKey: 'monthlyTarget',

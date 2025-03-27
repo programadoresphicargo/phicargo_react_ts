@@ -1,9 +1,13 @@
-import type { Vehicle, VehicleUpdate } from '../models';
+import type {
+  Vehicle,
+  VehicleStatusChangeEvent,
+  VehicleUpdate,
+} from '../models';
+import type { VehicleApi, VehicleStatusChangeEventApi } from '../models/api';
 
 import { AxiosError } from 'axios';
 import type { UpdatableItem } from '@/types';
 import { VehicleAdapter } from '../adapters/vehicle-adapter';
-import type { VehicleApi } from '../models/api';
 import odooApi from '../../core/api/odoo-api';
 
 export class VehicleServiceApi {
@@ -29,6 +33,23 @@ export class VehicleServiceApi {
     try {
       const response = await odooApi.patch<VehicleApi>(`/vehicles/${id}`, data);
       return VehicleAdapter.vehicleToLocal(response.data);
+    } catch (error) {
+      console.error(error);
+      if (error instanceof AxiosError) {
+        throw new Error(error.response?.data?.detail || 'An error occurred');
+      }
+      throw new Error('An error occurred');
+    }
+  }
+
+  static async getStatusChangeHistoryByVehicle(
+    vehicleId: number,
+  ): Promise<VehicleStatusChangeEvent[]> {
+    try {
+      const response = await odooApi.get<VehicleStatusChangeEventApi[]>(
+        `/vehicles/status-changes-history/${vehicleId}`,
+      );
+      return response.data.map(VehicleAdapter.toVehicleStatusChangeEvent);
     } catch (error) {
       console.error(error);
       if (error instanceof AxiosError) {
