@@ -1,5 +1,11 @@
-import type { VehicleRevenueProjection } from '../models';
-import type { VehicleRevenueProjectionApi } from '../models/api';
+import type {
+  VehicleRevenueProjection,
+  VehicleRevenueProjectionByBranch,
+} from '../models';
+import type {
+  VehicleRevenueProjectionApi,
+  VehicleRevenueProjectionByBranchApi,
+} from '../models/api';
 
 export class VehicleRevenueProjectionAdapter {
   static toVehicleRevenueProjection(
@@ -21,6 +27,18 @@ export class VehicleRevenueProjectionAdapter {
       dailyTarget: data.daily_target,
       realMonthlyRevenue: data.real_monthly_revenue,
       availabilityStatus: data.availability_status,
+    };
+  }
+  static toVehicleRevenueProjectionByBranch(
+    data: VehicleRevenueProjectionByBranchApi,
+  ): VehicleRevenueProjectionByBranch {
+    return {
+      branch: data.branch,
+      monthlyTarget: data.monthly_target,
+      dailyTarget: data.daily_target,
+      totalWorkingDays: data.total_working_days,
+      idealMonthlyRevenue: data.ideal_monthly_revenue,
+      realMonthlyRevenue: data.real_monthly_revenue,
     };
   }
 }

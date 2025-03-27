@@ -1,7 +1,14 @@
+import type {
+  VehicleRevenueProjection,
+  VehicleRevenueProjectionByBranch,
+} from '../models';
+import type {
+  VehicleRevenueProjectionApi,
+  VehicleRevenueProjectionByBranchApi,
+} from '../models/api';
+
 import { AxiosError } from 'axios';
-import type { VehicleRevenueProjection } from '../models';
 import { VehicleRevenueProjectionAdapter } from '../adapters';
-import type { VehicleRevenueProjectionApi } from '../models/api';
 import odooApi from '../../core/api/odoo-api';
 
 export class VehicleRevenueProjectionService {
@@ -27,6 +34,33 @@ export class VehicleRevenueProjectionService {
       }
       throw new Error(
         'Error al obtener la proyección de ingresos de vehículos',
+      );
+    }
+  }
+  public static async getProjectionByBranch(
+    startDate: string,
+    endDate: string,
+  ): Promise<VehicleRevenueProjectionByBranch[]> {
+    const url = `/vehicles/revenue-projection-by-branch/?start_date=${startDate}&end_date=${endDate}`;
+
+    try {
+      const response = await odooApi.get<VehicleRevenueProjectionByBranchApi[]>(
+        url,
+      );
+
+      return response.data.map(
+        VehicleRevenueProjectionAdapter.toVehicleRevenueProjectionByBranch,
+      );
+    } catch (error) {
+      console.error(error);
+      if (error instanceof AxiosError) {
+        throw new Error(
+          error.response?.data?.detail ||
+            'Error al obtener la proyección de ingresos de vehículos por sucursal',
+        );
+      }
+      throw new Error(
+        'Error al obtener la proyección de ingresos de vehículos por sucursal',
       );
     }
   }

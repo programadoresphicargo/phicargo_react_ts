@@ -6,6 +6,9 @@ import dayjs from 'dayjs';
 interface VehicleRevenueProjectionContextType {
   month: DateRange | null;
   setMonth: (mounth: DateRange | null) => void;
+
+  tabSelected: string;
+  setTabSelected: (tab: string) => void;
 }
 
 const VehicleRevenueProjectionContext =
@@ -23,6 +26,8 @@ export const VehicleRevenueProjectionProvider = ({
     dayjs().endOf('month').toDate(),
   ]);
 
+  const [tabSelected, setTabSelected] = useState("by-vehicle");
+
   const setMonth = (mounth: DateRange | null) => {
     if (mounth) setValue(mounth);
   };
@@ -32,6 +37,8 @@ export const VehicleRevenueProjectionProvider = ({
       value={{
         month: value,
         setMonth,
+        tabSelected,
+        setTabSelected
       }}
     >
       {children}

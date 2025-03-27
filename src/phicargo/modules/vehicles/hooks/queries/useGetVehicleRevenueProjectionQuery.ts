@@ -1,10 +1,15 @@
-import type { VehicleRevenueProjection } from '../../models';
+import type {
+  VehicleRevenueProjection,
+  VehicleRevenueProjectionByBranch,
+} from '../../models';
+
 import { VehicleRevenueProjectionService } from '../../services';
 import dayjs from 'dayjs';
 import { useQuery } from '@tanstack/react-query';
 import { useVehicleRevenueProjectionContext } from '../useVehicleRevenueProjectionContext';
 
 const VEHICLE_RP_KEY = 'vehicle-revenue-projection';
+const VEHICLE_RP_BRANCH_KEY = 'vehicle-revenue-projection-branch';
 
 export const useGetVehicleRevenueProjectionQuery = () => {
   const { month } = useVehicleRevenueProjectionContext();
@@ -25,8 +30,20 @@ export const useGetVehicleRevenueProjectionQuery = () => {
     },
   );
 
+  const getVehicleRevenueProjectionByBranchQuery = useQuery<
+    VehicleRevenueProjectionByBranch[]
+  >({
+    queryKey: [VEHICLE_RP_BRANCH_KEY, startDate, endDate],
+    queryFn: () =>
+      VehicleRevenueProjectionService.getProjectionByBranch(startDate, endDate),
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 10,
+    enabled: !!month,
+  });
+
   return {
     getVehicleRevenueProjectionQuery,
+    getVehicleRevenueProjectionByBranchQuery,
   };
 };
 

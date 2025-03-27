@@ -18,3 +18,13 @@ export interface VehicleRevenueProjection {
   availabilityStatus: string;
 }
 
+export interface VehicleRevenueProjectionByBranch {
+  id: number;
+  branch: string;
+  monthlyTarget: number;
+  dailyTarget: number;
+  totalWorkingDays: number;
+  idealMonthlyRevenue: number;
+  realMonthlyRevenue: number;
+}
+

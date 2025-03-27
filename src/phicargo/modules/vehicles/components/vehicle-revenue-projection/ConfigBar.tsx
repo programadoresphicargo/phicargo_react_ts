@@ -1,6 +1,7 @@
 import 'rsuite/dist/rsuite-no-reset.min.css';
 
-import { Button } from '@heroui/react';
+import { Button, Tab, Tabs } from '@heroui/react';
+
 import { CreateDayOffModal } from '@/phicargo/modules/core/components';
 import { DateRangePicker } from 'rsuite';
 import dayjs from 'dayjs';
@@ -10,7 +11,8 @@ import { useVehicleRevenueProjectionContext } from '../../hooks';
 const { after } = DateRangePicker;
 
 export const ConfigBar = () => {
-  const { month, setMonth } = useVehicleRevenueProjectionContext();
+  const { month, setMonth, tabSelected, setTabSelected } =
+    useVehicleRevenueProjectionContext();
 
   const [createDayOff, setCreateDayOff] = useState(false);
 
@@ -18,14 +20,26 @@ export const ConfigBar = () => {
     <>
       <section>
         <div className="flex items-center justify-between border-b border-gray-200 pb-2 mb-2">
-          <Button
+          <Tabs
+            aria-label="Options"
             color="primary"
-            radius="full"
-            onPress={() => setCreateDayOff(true)}
+            selectedKey={tabSelected}
+            onSelectionChange={(key) => setTabSelected(key as string)}
           >
-            Registrar Día Inhabil
-          </Button>
-          <div className="">
+            <Tab key="by-vehicle" title="POR VEHICULO" />
+            <Tab key="by-branch" title="POR SUCURSAL" />
+          </Tabs>
+
+          <div className="flex items-center gap-2">
+            <Button
+              color="primary"
+              radius="full"
+              size="sm"
+              className="font-bold"
+              onPress={() => setCreateDayOff(true)}
+            >
+              Registrar Día Inhabil
+            </Button>
             <DateRangePicker
               hoverRange="month"
               oneTap

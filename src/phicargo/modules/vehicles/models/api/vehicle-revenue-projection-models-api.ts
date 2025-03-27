@@ -18,3 +18,12 @@ export interface VehicleRevenueProjectionApi {
   availability_status: string;
 }
 
+export interface VehicleRevenueProjectionByBranchApi {
+  branch: string;
+  monthly_target: number;
+  daily_target: number;
+  total_working_days: number;
+  ideal_monthly_revenue: number;
+  real_monthly_revenue: number;
+}
+
