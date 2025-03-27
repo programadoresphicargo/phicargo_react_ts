@@ -74,6 +74,18 @@ const ViajesFinalizados = ({ }) => {
     }
   };
 
+  const formatFecha = (fechaISO) => {
+    if (!fechaISO) return "";
+    return new Date(fechaISO).toLocaleString("es-MX", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
+  };
+
   useEffect(() => {
     fetchData();
   }, [mes, año]);
@@ -99,10 +111,12 @@ const ViajesFinalizados = ({ }) => {
       {
         accessorKey: 'fecha_inicio',
         header: 'Fecha de inicio',
+        Cell: ({ cell }) => formatFecha(cell.getValue()),
       },
       {
         accessorKey: 'fecha_finalizado',
         header: 'Fecha finalización',
+        Cell: ({ cell }) => formatFecha(cell.getValue()),
       },
       {
         accessorKey: 'vehiculo',
