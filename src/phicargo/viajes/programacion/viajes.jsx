@@ -18,6 +18,8 @@ import { ViajeContext } from '../context/viajeContext';
 import NavbarViajes from '../navbar';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { exportToCSV } from '../../utils/export';
+import MonthSelector from '@/mes';
+import YearSelector from '@/año';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -241,29 +243,8 @@ const ViajesProgramados = ({ }) => {
         >
           Programación de viajes
         </h1>
-        <select value={mes} onChange={handleChange} className='form-control'>
-          <option value="">Seleccione un mes</option>
-          <option value="1">Enero</option>
-          <option value="2">Febrero</option>
-          <option value="3">Marzo</option>
-          <option value="4">Abril</option>
-          <option value="5">Mayo</option>
-          <option value="6">Junio</option>
-          <option value="7">Julio</option>
-          <option value="8">Agosto</option>
-          <option value="9">Septiembre</option>
-          <option value="10">Octubre</option>
-          <option value="11">Noviembre</option>
-          <option value="12">Diciembre</option>
-        </select>
-        <select value={año} onChange={handleChangeAño} className="form-control">
-          <option value="">Seleccione un año</option>
-          {Array.from({ length: 9 }, (_, i) => (
-            <option key={i} value={2021 + i}>
-              {2021 + i}
-            </option>
-          ))}
-        </select>
+        <MonthSelector selectedMonth={mes} handleChange={handleChange}></MonthSelector>
+        <YearSelector selectedYear={año} handleChange={handleChangeAño}></YearSelector>
         <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "programacion_viajes.csv")}>Exportar</Button>
       </Box>
     ),
