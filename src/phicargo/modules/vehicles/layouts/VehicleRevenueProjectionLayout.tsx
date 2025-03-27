@@ -13,7 +13,7 @@ const VehicleRevenueProjectionLayout = ({ children }: Props) => {
     <>
       <Toaster position="top-center" reverseOrder={false} />
       <Header />
-      <main className="flex-grow w-full p-2">
+      <main className="flex-grow w-full p-2 pt-24">
         <ErrorBoundary>
           {children}
           <Outlet />
