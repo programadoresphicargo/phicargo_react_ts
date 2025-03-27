@@ -11,6 +11,11 @@ const Saldos = lazy(
   () => import('@/phicargo/saldos_contabilidad/ControlUsuarios'),
 );
 
+const VehicleRevenueProjectionPage = lazy(
+  () =>
+    import('@/phicargo/modules/vehicles/pages/VehicleRevenueProjectionPage'),
+);
+
 const reportsPermission = 4;
 
 export const ReportsRoutes = () => (
@@ -30,6 +35,16 @@ export const ReportsRoutes = () => (
 
     {/* Reporte de Cobranza */}
     {CashflowReportRoutes()}
+
+    {/* Reporte de Projeccion por unidad */}
+    <Route
+      path="proyeccion"
+      element={
+        <Suspense fallback={<LoadingPage />}>
+          <VehicleRevenueProjectionPage />
+        </Suspense>
+      }
+    />
 
     {/* Reportede de Saldos */}
     <Route

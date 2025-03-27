@@ -34,6 +34,12 @@ const reports: MenuItemType[] = [
     requiredPermissions: [198],
   },
   {
+    label: 'Proyección',
+    path: '/reportes/proyeccion',
+    icon: maintenanceIcon,
+    requiredPermissions: [],
+  },
+  {
     label: 'Balance',
     path: '/reportes/balance',
     icon: balanceIcon,
