@@ -1,4 +1,4 @@
-import { formatCurrency } from '../utils';
+import { formatCurrency } from "@/utilities";
 
 interface TotalFooterItemProps {
   total: number;

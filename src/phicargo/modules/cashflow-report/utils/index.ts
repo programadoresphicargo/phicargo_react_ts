@@ -1,4 +1,3 @@
-export * from './format-currency';
 export * from './get-default-collect-register';
 export * from './get-default-payment';
 export * from './get-env-variables';

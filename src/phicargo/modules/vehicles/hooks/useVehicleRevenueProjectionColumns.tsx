@@ -1,7 +1,7 @@
 import { Chip } from '@heroui/react';
 import type { MRT_ColumnDef } from 'material-react-table';
 import type { VehicleRevenueProjection } from '../models';
-import { formatCurrency } from '../../cashflow-report/utils';
+import { formatCurrency } from '@/utilities';
 import { useMemo } from 'react';
 
 export const useVehicleRevenueProjectionColumns = () => {
