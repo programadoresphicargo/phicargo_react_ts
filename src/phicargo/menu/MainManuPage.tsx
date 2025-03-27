@@ -1,5 +1,4 @@
-import { useEffect, useMemo } from 'react';
-
+import { useMemo } from 'react';
 import AppBar from '@mui/material/AppBar';
 import AvatarProfile from '@/components/ui/AvatarProfile';
 import { Grid } from '@mui/system';
