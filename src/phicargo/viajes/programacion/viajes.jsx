@@ -20,6 +20,7 @@ import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { exportToCSV } from '../../utils/export';
 import MonthSelector from '@/mes';
 import YearSelector from '@/año';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -189,6 +190,7 @@ const ViajesProgramados = ({ }) => {
     state: { showProgressBars: isLoading },
     enableColumnPinning: true,
     enableStickyHeader: true,
+    localization: MRT_Localization_ES,
     columnResizeMode: "onEnd",
     initialState: {
       density: 'compact',

@@ -21,6 +21,7 @@ import { toast } from 'react-toastify';
 import { exportToCSV } from '../../utils/export';
 import MonthSelector from '@/mes';
 import YearSelector from '@/año';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -195,6 +196,7 @@ const ViajesFinalizados = ({ }) => {
     enableColumnPinning: true,
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
+    localization: MRT_Localization_ES,
     initialState: {
       density: 'compact',
       showColumnFilters: true,
