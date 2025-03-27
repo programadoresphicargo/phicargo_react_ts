@@ -1,7 +1,8 @@
 import { Chip } from '@heroui/react';
+import { CurrencyCell } from '@/components/ui';
 import type { MRT_ColumnDef } from 'material-react-table';
+import { ModalityChip } from '../../drivers/components/ui/ModalityChip';
 import type { VehicleRevenueProjection } from '../models';
-import { formatCurrency } from '@/utilities';
 import { useMemo } from 'react';
 
 export const useVehicleRevenueProjectionColumns = () => {
@@ -9,7 +10,8 @@ export const useVehicleRevenueProjectionColumns = () => {
     return [
       {
         accessorKey: 'name',
-        header: 'Unidad',
+        header: 'UNIDAD',
+        size: 4,
         Cell: ({ cell }) => {
           return (
             <Chip size="sm" color="primary">
@@ -18,11 +20,32 @@ export const useVehicleRevenueProjectionColumns = () => {
           );
         },
       },
-      { accessorKey: 'company', header: 'Empresa' },
-      { accessorKey: 'branch', header: 'Sucursal' },
+      {
+        accessorKey: 'company',
+        header: 'EMPRESA',
+        Cell: ({ cell }) => {
+          return (
+            <span className="font-bold uppercase">
+              {cell.getValue<string>()}
+            </span>
+          );
+        },
+      },
+      {
+        accessorKey: 'branch',
+        header: 'SUCURSAL',
+        size: 4,
+        Cell: ({ cell }) => {
+          return (
+            <span className="font-bold uppercase">
+              {cell.getValue<string>()}
+            </span>
+          );
+        },
+      },
       {
         accessorKey: 'driver',
-        header: 'Operador',
+        header: 'OPERADOR',
         Cell: ({ cell }) => {
           const value = cell.getValue<string | null>();
           return !value ? (
@@ -34,36 +57,64 @@ export const useVehicleRevenueProjectionColumns = () => {
           );
         },
       },
-      { accessorKey: 'vehicleType', header: 'Tipo' },
-      { accessorKey: 'configType', header: 'Configuración' },
-      { accessorKey: 'status', header: 'Estatus' },
+      {
+        accessorKey: 'vehicleType',
+        header: 'TIPO',
+        size: 4,
+        Cell: ({ cell }) => {
+          return (
+            <span className="font-bold uppercase">
+              {cell.getValue<string>()}
+            </span>
+          );
+        },
+      },
+      {
+        accessorKey: 'configType',
+        header: 'CONF.',
+        size: 4,
+        Cell: ({ row }) => (
+          <ModalityChip
+            modality={row.original.configType as typeof row.original.configType}
+          />
+        ),
+      },
+      { 
+        accessorKey: 'status', 
+        header: 'ESTATUS',
+        size: 4
+      },
       {
         accessorKey: 'monthlyTarget',
-        header: 'Objetivo mensual',
-        Cell: ({ cell }) => formatCurrency(cell.getValue<number>()),
+        header: 'OBJETIVO MENS',
+        Cell: ({ cell }) => <CurrencyCell value={cell.getValue<number>()} />,
       },
       {
         accessorKey: 'idealDailyTarget',
-        header: 'Objetivo diario ideal',
-        Cell: ({ cell }) => formatCurrency(cell.getValue<number>()),
+        header: 'OBJETIVO DIARIO IDEAL',
+        Cell: ({ cell }) => <CurrencyCell value={cell.getValue<number>()} />,
+      },
+      {
+        accessorKey: 'workingDays',
+        header: 'DÍAS OPS',
       },
       {
         accessorKey: 'operationalDays',
-        header: 'Días operativos',
+        header: 'DÍAS OPS REAL',
       },
       {
         accessorKey: 'dailyTarget',
-        header: 'Objetivo diario',
-        Cell: ({ cell }) => formatCurrency(cell.getValue<number>()),
+        header: 'OBJETIVO DIARIO',
+        Cell: ({ cell }) => <CurrencyCell value={cell.getValue<number>()} />,
       },
       {
         accessorKey: 'realMonthlyRevenue',
-        header: 'Ingreso mensual real',
-        Cell: ({ cell }) => formatCurrency(cell.getValue<number>()),
+        header: 'INGRESO MENS REAL',
+        Cell: ({ cell }) => <CurrencyCell value={cell.getValue<number>()} />,
       },
       {
         accessorKey: 'availabilityStatus',
-        header: 'Estatus de disponibilidad',
+        header: 'DISPONIBILIDAD',
       },
     ];
   }, []);

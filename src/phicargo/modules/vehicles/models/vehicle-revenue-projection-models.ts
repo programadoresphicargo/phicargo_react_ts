@@ -1,3 +1,5 @@
+import type { Modality } from '../../drivers/models';
+
 export interface VehicleRevenueProjection {
   id: number;
   name: string;
@@ -5,7 +7,7 @@ export interface VehicleRevenueProjection {
   branch: string;
   driver: string;
   vehicleType: string;
-  configType: string;
+  configType: Modality;
   status: string;
   monthlyTarget: number;
   idealDailyTarget: number;
