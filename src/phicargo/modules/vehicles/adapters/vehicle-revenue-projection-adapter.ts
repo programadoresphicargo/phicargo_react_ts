@@ -33,6 +33,7 @@ export class VehicleRevenueProjectionAdapter {
     data: VehicleRevenueProjectionByBranchApi,
   ): VehicleRevenueProjectionByBranch {
     return {
+      id: data.real_monthly_revenue, // TODO: Fix this
       branch: data.branch,
       monthlyTarget: data.monthly_target,
       dailyTarget: data.daily_target,

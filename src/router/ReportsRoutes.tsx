@@ -18,6 +18,8 @@ const VehicleRevenueProjectionPage = lazy(
 
 const reportsPermission = 4;
 
+const PROJECTION_PERMISSION = 207;
+
 export const ReportsRoutes = () => (
   <Route path="/reportes">
     <Route
@@ -40,9 +42,14 @@ export const ReportsRoutes = () => (
     <Route
       path="proyeccion"
       element={
-        <Suspense fallback={<LoadingPage />}>
-          <VehicleRevenueProjectionPage />
-        </Suspense>
+        <ProtectedRoute
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <VehicleRevenueProjectionPage />
+            </Suspense>
+          }
+          requiredPermissionId={PROJECTION_PERMISSION}
+        />
       }
     />
 

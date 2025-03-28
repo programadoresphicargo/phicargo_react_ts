@@ -37,7 +37,7 @@ const reports: MenuItemType[] = [
     label: 'Proyección',
     path: '/reportes/proyeccion',
     icon: maintenanceIcon,
-    requiredPermissions: [],
+    requiredPermissions: [207],
   },
   {
     label: 'Balance',
