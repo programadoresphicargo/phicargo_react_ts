@@ -35,6 +35,7 @@ const Contactos = lazy(
 );
 
 const permission = 200;
+const EDITION_PERMISSION = 208;
 
 const AvailabilityRoutes = () => {
   return (
@@ -51,41 +52,66 @@ const AvailabilityRoutes = () => {
       <Route
         path="unidades"
         element={
-          <Suspense fallback={<LoadingPage />}>
-            <VehicleAvailabilityPage />
-          </Suspense>
+          <ProtectedRoute
+            element={
+              <Suspense fallback={<LoadingPage />}>
+                <VehicleAvailabilityPage />
+              </Suspense>
+            }
+            requiredPermissionId={EDITION_PERMISSION}
+          />
         }
       ></Route>
       <Route
         path="operadores"
         element={
-          <Suspense fallback={<LoadingPage />}>
-            <DriverAvailabilityPage />
-          </Suspense>
+          <ProtectedRoute
+            element={
+              <Suspense fallback={<LoadingPage />}>
+                <DriverAvailabilityPage />
+              </Suspense>
+            }
+            requiredPermissionId={EDITION_PERMISSION}
+          />
         }
       ></Route>
       <Route
         path="resumen-unidades"
         element={
-          <Suspense fallback={<LoadingPage />}>
-            <SummaryPage />
-          </Suspense>
+          <ProtectedRoute
+            element={
+              <Suspense fallback={<LoadingPage />}>
+                <SummaryPage />
+              </Suspense>
+            }
+            requiredPermissionId={EDITION_PERMISSION}
+          />
         }
       />
       <Route
         path="resumen-operadores"
         element={
-          <Suspense fallback={<LoadingPage />}>
-            <DriverSummaryPage />
-          </Suspense>
+          <ProtectedRoute
+            element={
+              <Suspense fallback={<LoadingPage />}>
+                <DriverSummaryPage />
+              </Suspense>
+            }
+            requiredPermissionId={EDITION_PERMISSION}
+          />
         }
       />
       <Route
         path="sin-asignar"
         element={
-          <Suspense fallback={<LoadingPage />}>
-            <NotAssignedPage />
-          </Suspense>
+          <ProtectedRoute
+            element={
+              <Suspense fallback={<LoadingPage />}>
+                <NotAssignedPage />
+              </Suspense>
+            }
+            requiredPermissionId={EDITION_PERMISSION}
+          />
         }
       />
       <Route
