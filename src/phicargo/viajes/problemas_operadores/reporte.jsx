@@ -84,7 +84,7 @@ export default function ReporteOperador({ id_reporte, isOpen, onOpenChange }) {
 
             if (data.success) {
                 toast.success(data.message);
-                onOpenChange(); // Cerrar modal solo si se atendió correctamente
+                onOpenChange(); 
             } else {
                 toast.error(data.message);
             }

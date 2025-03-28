@@ -1,5 +1,4 @@
-import { useEffect, useMemo } from 'react';
-
+import { useMemo } from 'react';
 import AppBar from '@mui/material/AppBar';
 import AvatarProfile from '@/components/ui/AvatarProfile';
 import { Grid } from '@mui/system';
@@ -21,14 +20,11 @@ import { useAuthContext } from '../modules/auth/hooks';
 import usuarios_img from '../../assets/menu/usuarios.png';
 import viajes_img from '../../assets/menu/viajes.png';
 
-const { VITE_PHIDES_API_URL } = import.meta.env;
-
 type MenuItemType = {
   icon: string;
   label: string;
   link: string;
   requiredPermissions: number[];
-  isExternal?: boolean;
 };
 
 const menuItems: MenuItemType[] = [
@@ -131,33 +127,6 @@ const MainMenuPage = () => {
     [session],
   );
 
-  useEffect(() => {
-    const checkSession = async () => {
-      try {
-        const response = await fetch(
-          VITE_PHIDES_API_URL + '/login/inicio/get_user.php',
-          {
-            credentials: 'include',
-          },
-        );
-        const data = await response.json();
-        if (data.status !== 'success') {
-          console.error(`Error: ${data.message}`);
-        }
-      } catch (error) {
-        console.error('Error checking session:', error);
-      }
-    };
-
-    const timeoutId = setTimeout(() => {
-      checkSession();
-      const intervalId = setInterval(checkSession, 60000);
-      return () => clearInterval(intervalId);
-    }, 60000); // 60000 ms = 1 minuto
-
-    return () => clearTimeout(timeoutId);
-  }, []);
-
   return (
     <main
       style={{
@@ -203,7 +172,6 @@ const MainMenuPage = () => {
                 icon={item.icon}
                 label={item.label}
                 link={item.link}
-                isExternal={item.isExternal}
               />
             ))}
           </div>

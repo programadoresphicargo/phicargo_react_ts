@@ -16,6 +16,7 @@ import Slide from '@mui/material/Slide';
 import { ViajeContext } from '../context/viajeContext';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { toast } from 'react-toastify';
+import PDFGenerator from './checklist_viaje';
 const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -145,9 +146,13 @@ const Documentacion = ({ }) => {
           flexWrap: 'wrap',
         }}
       >
+
         <Button color='primary' onPress={handleClickOpen}>
           Nuevo documento
         </Button>
+
+        <PDFGenerator></PDFGenerator>
+
         <Button
           showAnchorIcon
           as={Link}
@@ -157,6 +162,18 @@ const Documentacion = ({ }) => {
           variant="solid"
         >
           Revision ocular
+        </Button>
+
+        <Button
+          showAnchorIcon
+          as={Link}
+          isExternal={true}
+          color="success"
+          className='text-white'
+          href={`${apiUrl}/tms_travel/horas_servicio/pdf/` + id_viaje}
+          variant="solid"
+        >
+          Horas de servicio
         </Button>
       </Box >
     )

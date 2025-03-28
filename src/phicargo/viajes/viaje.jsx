@@ -1,9 +1,7 @@
 import { Button, Chip, Progress, Spacer } from "@heroui/react";
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-
 import BasicButtons2 from './seguimiento';
 import Box from '@mui/material/Box';
-import Checklist from './checklist/checklist';
 import CorreosElectronicosViaje from './correos/correos_electronicos';
 import { CostosExtrasProvider } from '../costos/context/context';
 import Detenciones from './detenciones/detenciones';
@@ -97,43 +95,39 @@ const Viaje = ({ }) => {
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <TabList onChange={handleChange}>
               <Tab sx={{ fontFamily: 'Inter' }} label="Seguimiento" value="1" />
-              <Tab sx={{ fontFamily: 'Inter' }} label="Checklist" value="2" />
-              <Tab sx={{ fontFamily: 'Inter' }} label="Mapa" value="3" />
-              <Tab sx={{ fontFamily: 'Inter' }} label="Documentos" value="4" />
-              <Tab sx={{ fontFamily: 'Inter' }} label="Cambio de equipo" value="5" />
-              <Tab sx={{ fontFamily: 'Inter' }} label="Detenciones" value="6" />
-              <Tab sx={{ fontFamily: 'Inter' }} label="Costos extras" value="7" />
+              <Tab sx={{ fontFamily: 'Inter' }} label="Mapa" value="2" />
+              <Tab sx={{ fontFamily: 'Inter' }} label="Documentos" value="3" />
+              <Tab sx={{ fontFamily: 'Inter' }} label="Cambio de equipo" value="4" />
+              <Tab sx={{ fontFamily: 'Inter' }} label="Detenciones" value="5" />
+              <Tab sx={{ fontFamily: 'Inter' }} label="Costos extras" value="6" />
             </TabList>
           </Box>
 
           <TabPanel value="1" sx={{ backgroundColor: '#f8f9fa', padding: 2 }}>
             <BasicButtons2 />
           </TabPanel>
-          <TabPanel value="2" sx={{ backgroundColor: '#f8f9fa', padding: 2 }}>
-            <Checklist />
-          </TabPanel>
-          <TabPanel value="3" sx={{ padding: 0, margin: 0 }}>
+          <TabPanel value="2" sx={{ padding: 0, margin: 0 }}>
             <Map />
           </TabPanel>
-          <TabPanel value="4" sx={{ padding: 0 }}>
+          <TabPanel value="3" sx={{ padding: 0 }}>
             <Documentacion />
           </TabPanel>
-          <TabPanel value="5" sx={{ padding: 2 }}>
+          <TabPanel value="4" sx={{ padding: 2 }}>
             <IndexCambioEquipo />
           </TabPanel>
-          <TabPanel value="6" sx={{ padding: 0 }}>
+          <TabPanel value="5" sx={{ padding: 0 }}>
             <TiemposViajeProvider>
               <Detenciones />
             </TiemposViajeProvider>
           </TabPanel>
-          <TabPanel value="7" sx={{ padding: 0 }}>
+          <TabPanel value="6" sx={{ padding: 0 }}>
             <CostosExtrasProvider>
               <FoliosCostosExtrasViaje />
             </CostosExtrasProvider>
           </TabPanel>
 
-        </TabContext >
-      </Box >
+        </TabContext>
+      </Box>
 
       <Dialog
         fullWidth="md"

@@ -21,6 +21,11 @@ import AppsIcon from '@mui/icons-material/Apps';
 import {
     useDisclosure,
 } from "@heroui/react";
+import ProblemasOperadores2 from './problemas_operadores/panel';
+import { Alert } from "@heroui/react";
+import ReportIcon from '@mui/icons-material/Report';
+import odooApi from '../modules/core/api/odoo-api';
+import { useJourneyDialogs } from './seguimiento/funciones';
 
 const pages = [
     { name: 'ACTIVOS', path: '/viajes' },
@@ -51,8 +56,29 @@ function NavbarViajes() {
         navigate("/menu");
     };
 
+    const { getReportesNoAtendidos } = useJourneyDialogs();
+    const [numProblemasOperador, setNumPO] = useState(0);
+
+    const fetchReportes = async () => {
+        const numReportes = await getReportesNoAtendidos();
+        setNumPO(numReportes);
+    };
+
+    useEffect(() => {
+        fetchReportes();
+    });
+
     return (
         <>
+            {numProblemasOperador > 0 && (
+                <Alert
+                    color="danger"
+                    variant="solid"
+                    title="Atención: Existen problemas de operadores pendientes de atención."
+                    description={`${numProblemasOperador} reportes pendientes de atención`}
+                    radius="none"
+                />
+            )}
             <AppBar elevation={3} position="static"
                 sx={{
                     background: 'linear-gradient(90deg, #0b2149, #002887)',
@@ -78,7 +104,7 @@ function NavbarViajes() {
                             style={{
                                 width: '175px',
                                 height: '60px',
-                                filter: 'brightness(0) invert(1)' // Esto hará que la imagen sea blanca
+                                filter: 'brightness(0) invert(1)'
                             }}
                         />
 
@@ -145,8 +171,8 @@ function NavbarViajes() {
                                 color="inherit"
                                 onClick={onOpenPO}
                             >
-                                <Badge badgeContent={1} color="error">
-                                    <NotificationsIcon />
+                                <Badge badgeContent={numProblemasOperador} color="error">
+                                    <ReportIcon />
                                 </Badge>
                             </IconButton>
 
@@ -166,7 +192,7 @@ function NavbarViajes() {
             </AppBar>
 
             <Notificaciones isOpen={isOpen} onOpen={onOpen} onOpenChange={onOpenChange}></Notificaciones>
-            <ProblemasOperadores isOpen={isOpenPO} onOpenChange={onOpenChangePO}></ProblemasOperadores>
+            <ProblemasOperadores2 isOpen={isOpenPO} onOpenChange={onOpenChangePO}></ProblemasOperadores2>
         </>
     );
 }
