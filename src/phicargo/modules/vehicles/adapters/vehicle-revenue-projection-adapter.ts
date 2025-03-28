@@ -22,6 +22,7 @@ export class VehicleRevenueProjectionAdapter {
       status: data.status,
       monthlyTarget: data.monthly_target,
       idealDailyTarget: data.ideal_daily_target,
+      monthDays: data.month_days,
       workingDays: data.working_days,
       operationalDays: data.operational_days,
       dailyTarget: data.daily_target,

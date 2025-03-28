@@ -11,6 +11,7 @@ export interface VehicleRevenueProjection {
   status: string;
   monthlyTarget: number;
   idealDailyTarget: number;
+  monthDays: number;
   workingDays: number;
   operationalDays: number;
   dailyTarget: number;
