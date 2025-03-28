@@ -146,9 +146,13 @@ const Documentacion = ({ }) => {
           flexWrap: 'wrap',
         }}
       >
+
         <Button color='primary' onPress={handleClickOpen}>
           Nuevo documento
         </Button>
+
+        <PDFGenerator></PDFGenerator>
+
         <Button
           showAnchorIcon
           as={Link}
@@ -171,9 +175,6 @@ const Documentacion = ({ }) => {
         >
           Horas de servicio
         </Button>
-
-        <PDFGenerator></PDFGenerator>
-
       </Box >
     )
   });

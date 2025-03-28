@@ -15,6 +15,11 @@ export const generatePDF = async (data, data_contenedores) => {
     doc.autoTable({
         head: [tableColumn],
         body: tableRows,
+        headStyles: {
+            fillColor: [0, 86, 109],
+            fontSize: 10,
+            fontStyle: 'bold',
+        },
         startY: 60,
     });
 
@@ -49,6 +54,11 @@ export const generatePDF = async (data, data_contenedores) => {
                     head: [postTableColumn],
                     body: postTableRows,
                     startY: startY,
+                    headStyles: {
+                        fillColor: [0, 86, 109],
+                        fontSize: 10,
+                        fontStyle: 'bold',
+                    },
                 });
 
                 startY = doc.lastAutoTable.finalY + 10;
@@ -66,13 +76,18 @@ export const generatePDF = async (data, data_contenedores) => {
         head: [tableColumnContenedores],
         body: tableRowsContenedores,
         startY: startY,
+        headStyles: {
+            fillColor: [0, 86, 109],
+            fontSize: 10,
+            fontStyle: 'bold',
+        },
     });
 
     startY = doc.lastAutoTable.finalY + 10;
     doc.setFontSize(14);
     doc.text(`Contenedores`, 14, startY);
     startY += 10;
-    
+
     for (const itemContenedores of data_contenedores) {
         try {
             const responseContenedores = await odooApi.get(`/tms_travel/checklist/revisiones_checklist_contenedores/id_checklist/${itemContenedores.id_checklist}`);
@@ -102,6 +117,11 @@ export const generatePDF = async (data, data_contenedores) => {
                     head: [postTableColumnContenedores],
                     body: postTableRowsContenedores,
                     startY: startY,
+                    headStyles: {
+                        fillColor: [0, 86, 109],
+                        fontSize: 10,
+                        fontStyle: 'bold',
+                    },
                 });
 
                 startY = doc.lastAutoTable.finalY + 10;
