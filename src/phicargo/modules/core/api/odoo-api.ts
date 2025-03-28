@@ -26,7 +26,12 @@ odooApi.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    if (error.response.status === 401 && !originalRequest._retry) {
+    const VALID_ROUTES = '/auth/login';
+    if (
+      error.response.status === 401 && 
+      !originalRequest._retry && 
+      window.location.pathname !== VALID_ROUTES
+    ) {
       originalRequest._retry = true;
       sessionStorage.removeItem('session');
       window.location.href = '/';
