@@ -9,6 +9,7 @@ import estadiasIcon from '../assets/menu/estadias.png';
 import maintenanceIcon from '../assets/menu/maintenanceIcon.png';
 import phoneIcon from '../assets/menu/app.png';
 import reportIcon from '../assets/menu/reportes.png';
+import revenueIcon from '../assets/menu/revenue.png';
 import { useAuthContext } from '@/phicargo/modules/auth/hooks';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -36,7 +37,7 @@ const reports: MenuItemType[] = [
   {
     label: 'Proyección',
     path: '/reportes/proyeccion',
-    icon: maintenanceIcon,
+    icon: revenueIcon,
     requiredPermissions: [207],
   },
   {
