@@ -7,6 +7,9 @@ interface VehicleRevenueProjectionContextType {
   month: DateRange | null;
   setMonth: (mounth: DateRange | null) => void;
 
+  snapshotDate: Date | null;
+  setSnapshotDate: (date: Date | null) => void;
+
   tabSelected: string;
   setTabSelected: (tab: string) => void;
 }
@@ -26,6 +29,8 @@ export const VehicleRevenueProjectionProvider = ({
     dayjs().endOf('month').toDate(),
   ]);
 
+  const [snapshotDate, setSnapshotDate] = useState<Date | null>(null);
+
   const [tabSelected, setTabSelected] = useState("by-vehicle");
 
   const setMonth = (mounth: DateRange | null) => {
@@ -37,6 +42,8 @@ export const VehicleRevenueProjectionProvider = ({
       value={{
         month: value,
         setMonth,
+        snapshotDate,
+        setSnapshotDate,
         tabSelected,
         setTabSelected
       }}

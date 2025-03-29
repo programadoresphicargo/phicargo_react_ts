@@ -1,9 +1,9 @@
 import 'rsuite/dist/rsuite-no-reset.min.css';
 
 import { Button, Tab, Tabs } from '@heroui/react';
+import { DatePicker, DateRangePicker } from 'rsuite';
 
 import { CreateDayOffModal } from '@/phicargo/modules/core/components';
-import { DateRangePicker } from 'rsuite';
 import dayjs from 'dayjs';
 import { useState } from 'react';
 import { useVehicleRevenueProjectionContext } from '../../hooks';
@@ -11,7 +11,7 @@ import { useVehicleRevenueProjectionContext } from '../../hooks';
 const { after } = DateRangePicker;
 
 export const ConfigBar = () => {
-  const { month, setMonth, tabSelected, setTabSelected } =
+  const { month, setMonth, tabSelected, setTabSelected, snapshotDate, setSnapshotDate } =
     useVehicleRevenueProjectionContext();
 
   const [createDayOff, setCreateDayOff] = useState(false);
@@ -31,6 +31,13 @@ export const ConfigBar = () => {
           </Tabs>
 
           <div className="flex items-center gap-2">
+            <DatePicker 
+              placeholder="Historial"
+              format="dd/MM/yyyy" 
+              showWeekNumbers
+              value={snapshotDate} 
+              onChange={setSnapshotDate}
+            />
             <Button
               color="primary"
               radius="full"

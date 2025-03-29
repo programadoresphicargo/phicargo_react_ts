@@ -5,18 +5,28 @@ import { VehicleRevenueProjection } from '../../models';
 import { useBaseTable } from '@/hooks';
 import { useGetVehicleRevenueProjectionQuery } from '../../hooks/queries';
 import { useVehicleRevenueProjectionColumns } from '../../hooks/useVehicleRevenueProjectionColumns';
+import { useVehicleRevenueProjectionContext } from '../../hooks';
 
 export const VehicleRevenueProjectionTable = () => {
+  const { snapshotDate } = useVehicleRevenueProjectionContext();
+
   const columns = useVehicleRevenueProjectionColumns();
-  const { getVehicleRevenueProjectionQuery } =
-    useGetVehicleRevenueProjectionQuery();
+
+  const {
+    getVehicleRevenueProjectionQuery,
+    getVehicleRevenueProjectionSnapshotQuery,
+  } = useGetVehicleRevenueProjectionQuery();
+
+  const query = snapshotDate
+    ? getVehicleRevenueProjectionSnapshotQuery
+    : getVehicleRevenueProjectionQuery;
 
   const table = useBaseTable<VehicleRevenueProjection>({
     columns,
-    data: getVehicleRevenueProjectionQuery.data || [],
-    isFetching: getVehicleRevenueProjectionQuery.isFetching,
-    isLoading: getVehicleRevenueProjectionQuery.isLoading,
-    refetchFn: getVehicleRevenueProjectionQuery.refetch,
+    data: query.data || [],
+    isFetching: query.isFetching,
+    isLoading: query.isLoading,
+    refetchFn: query.refetch,
     exportFn: (data) => toExcel.exportData(data),
     tableId: 'vehicle-revenue-projection-table',
     containerHeight: 'calc(100vh - 220px)',
@@ -29,7 +39,6 @@ export const VehicleRevenueProjectionTable = () => {
     </>
   );
 };
-
 
 const exportConf: ExportConfig<VehicleRevenueProjection> = {
   fileName: 'Proyección de Ingresos',
@@ -44,12 +53,24 @@ const exportConf: ExportConfig<VehicleRevenueProjection> = {
     { accessorFn: (data) => data.configType, header: 'CONF.' },
     { accessorFn: (data) => data.status, header: 'ESTADO' },
     { accessorFn: (data) => data.monthlyTarget, header: 'OBJETIVO MENSUAL' },
-    { accessorFn: (data) => data.idealDailyTarget, header: 'OBJETIVO DIARIO IDEAL' },
+    {
+      accessorFn: (data) => data.idealDailyTarget,
+      header: 'OBJETIVO DIARIO IDEAL',
+    },
     { accessorFn: (data) => data.workingDays, header: 'DIAS OPERATIVOS' },
-    { accessorFn: (data) => data.operationalDays, header: 'DIAS OPERATIVOS REALES' },
+    {
+      accessorFn: (data) => data.operationalDays,
+      header: 'DIAS OPERATIVOS REALES',
+    },
     { accessorFn: (data) => data.dailyTarget, header: 'OBJETIVO DIARIO' },
-    { accessorFn: (data) => data.realMonthlyRevenue, header: 'INGRESO MENSUAL REAL' },
-    { accessorFn: (data) => data.availabilityStatus, header: 'ESTATUS DE DISPONIBILIDAD' },
+    {
+      accessorFn: (data) => data.realMonthlyRevenue,
+      header: 'INGRESO MENSUAL REAL',
+    },
+    {
+      accessorFn: (data) => data.availabilityStatus,
+      header: 'ESTATUS DE DISPONIBILIDAD',
+    },
   ],
 };
 
