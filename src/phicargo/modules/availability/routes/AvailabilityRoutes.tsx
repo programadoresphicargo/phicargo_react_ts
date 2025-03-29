@@ -48,7 +48,7 @@ const AvailabilityRoutes = () => {
         />
       }
     >
-      <Route index element={<Navigate to="unidades" replace />} />
+      <Route index element={<Navigate to="contactos" replace />} />
       <Route
         path="unidades"
         element={
