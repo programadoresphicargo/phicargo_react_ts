@@ -1,7 +1,7 @@
 import { ExportConfig, ExportToExcel } from '@/utilities';
 
 import { MaterialReactTable } from 'material-react-table';
-import { VehicleRevenueProjection } from '../../models';
+import type { VehicleRevenueProjection } from '../../models';
 import { useBaseTable } from '@/hooks';
 import { useGetVehicleRevenueProjectionQuery } from '../../hooks/queries';
 import { useVehicleRevenueProjectionColumns } from '../../hooks/useVehicleRevenueProjectionColumns';

@@ -11,6 +11,8 @@ import { useVehicleRevenueProjectionContext } from '../useVehicleRevenueProjecti
 const VEHICLE_RP_KEY = 'vehicle-revenue-projection';
 const VEHICLE_RP_SNAPSHOT_KEY = 'vehicle-revenue-projection-snapshot';
 const VEHICLE_RP_BRANCH_KEY = 'vehicle-revenue-projection-branch';
+const VEHICLE_RP_SNAPSHOT_BRANCH_KEY =
+  'vehicle-revenue-projection-snapshot-branch';
 
 export const useGetVehicleRevenueProjectionQuery = () => {
   const { month, snapshotDate } = useVehicleRevenueProjectionContext();
@@ -57,10 +59,24 @@ export const useGetVehicleRevenueProjectionQuery = () => {
     enabled: !!month,
   });
 
+  const getVehicleRevenueProjectionByBranchSnapshotQuery = useQuery<
+    VehicleRevenueProjectionByBranch[]
+  >({
+    queryKey: [VEHICLE_RP_SNAPSHOT_BRANCH_KEY, strSnapshotDate],
+    queryFn: () =>
+      VehicleRevenueProjectionService.getProjectionByBranchSnapshot(
+        strSnapshotDate!,
+      ),
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 10,
+    enabled: !!strSnapshotDate,
+  });
+
   return {
     getVehicleRevenueProjectionQuery,
     getVehicleRevenueProjectionSnapshotQuery,
     getVehicleRevenueProjectionByBranchQuery,
+    getVehicleRevenueProjectionByBranchSnapshotQuery,
   };
 };
 

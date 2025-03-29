@@ -1,24 +1,32 @@
 import { ExportConfig, ExportToExcel } from '@/utilities';
 
 import { MaterialReactTable } from 'material-react-table';
-import { VehicleRevenueProjectionByBranch } from '../../models';
+import type { VehicleRevenueProjectionByBranch } from '../../models';
 import { useBaseTable } from '@/hooks';
 import { useGetVehicleRevenueProjectionQuery } from '../../hooks/queries';
 import { useVehicleRevenueProjectionByBranchColumns } from '../../hooks/useVehicleRevenueProjectionByBranchColumns';
+import { useVehicleRevenueProjectionContext } from '../../hooks';
 
 export const VehicleRevenueProjectionByBranchTable = () => {
+  const { snapshotDate } = useVehicleRevenueProjectionContext();
+
   const columns = useVehicleRevenueProjectionByBranchColumns();
-  const { getVehicleRevenueProjectionByBranchQuery } =
-    useGetVehicleRevenueProjectionQuery();
+  const {
+    getVehicleRevenueProjectionByBranchQuery,
+    getVehicleRevenueProjectionByBranchSnapshotQuery,
+  } = useGetVehicleRevenueProjectionQuery();
+
+  const query = snapshotDate
+    ? getVehicleRevenueProjectionByBranchSnapshotQuery
+    : getVehicleRevenueProjectionByBranchQuery;
 
   const table = useBaseTable<VehicleRevenueProjectionByBranch>({
     columns,
-    data: getVehicleRevenueProjectionByBranchQuery.data || [],
-    isFetching: getVehicleRevenueProjectionByBranchQuery.isFetching,
-    isLoading: getVehicleRevenueProjectionByBranchQuery.isLoading,
-    refetchFn: getVehicleRevenueProjectionByBranchQuery.refetch,
-    exportFn: () =>
-      toExcel.exportData(getVehicleRevenueProjectionByBranchQuery.data || []),
+    data: query.data || [],
+    isFetching: query.isFetching,
+    isLoading: query.isLoading,
+    refetchFn: query.refetch,
+    exportFn: (data) => toExcel.exportData(data),
     tableId: 'vehicle-revenue-projection-by-branch-table',
     containerHeight: 'calc(100vh - 280px)',
     enableRowActions: false,
