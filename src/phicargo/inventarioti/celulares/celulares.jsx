@@ -38,6 +38,7 @@ const ContactosCelulares = () => {
       { accessorKey: 'apellido_materno', header: 'Apellido materno' },
       { accessorKey: 'apellido_paterno', header: 'Apellido paterno' },
       { accessorKey: 'nombre_dep', header: 'Departamento' },
+      { accessorKey: 'puesto', header: 'Puesto' },
       {
         accessorKey: 'NUMERO_CELULAR',
         header: 'Número celular',
