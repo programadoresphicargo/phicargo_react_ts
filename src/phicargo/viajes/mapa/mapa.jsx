@@ -13,7 +13,7 @@ const customIcon = new L.Icon({
 });
 
 const lastPositionIcon = new L.Icon({
-    iconUrl: 'https://cdn-icons-png.flaticon.com/512/2554/2554978.png', // Icono distinto para la última coordenada
+    iconUrl: 'https://cdn-icons-png.flaticon.com/512/2554/2554978.png',
     iconSize: [32, 32],
     iconAnchor: [16, 32],
     popupAnchor: [0, -32]
@@ -45,7 +45,7 @@ const Map = () => {
     );
 
     return (
-        <MapContainer center={[21.9713317720013, -101.7129111380927]} zoom={5} style={{ height: '100vh', width: '100%' }}>
+        <MapContainer center={[21.9713317720013, -101.7129111380927]} zoom={5} style={{ height: '76vh', width: '100%' }}>
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
             {estatus?.map((registro, index) => (
                 <Marker key={index} position={[registro.latitud, registro.longitud]} icon={customIcon}>
