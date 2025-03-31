@@ -13,7 +13,7 @@ const customIcon = new L.Icon({
 });
 
 const lastPositionIcon = new L.Icon({
-    iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png', // Icono distinto para la última coordenada
+    iconUrl: 'https://cdn-icons-png.flaticon.com/512/2554/2554978.png', // Icono distinto para la última coordenada
     iconSize: [32, 32],
     iconAnchor: [16, 32],
     popupAnchor: [0, -32]
