@@ -1,4 +1,11 @@
-import { Button, Spinner, Tooltip } from "@heroui/react";
+import {
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Tooltip,
+} from '@heroui/react';
+import { LoadingSpinner, SaveButton } from '@/components/ui';
 import { useEffect, useState } from 'react';
 
 import { IconButton } from '@mui/material';
@@ -56,41 +63,73 @@ const UserPermissions = ({ user }: Props) => {
 
   return (
     <>
-      <div className="flex justify-between items-center mb-4">
-        <div className="flex space-x-4">
-          <div className="bg-blue-100 rounded-full hover:bg-blue-600">
-            <Tooltip
-              content="Marcar Todo"
-              placement="top"
-              color="primary"
-              showArrow
-            >
-              <IconButton aria-label="select-all" onClick={selectAll}>
-                <RiCheckboxFill className="text-blue-500" />
-              </IconButton>
-            </Tooltip>
-          </div>
+      <Card
+        classNames={{
+          base: 'shadow-none',
+          header: 'bg-gray-100 px-4 py-2',
+          body: 'overflow-y-auto h-[420px]',
+        }}
+        radius="md"
+      >
+        <CardHeader className="flex items-center justify-between">
+          <div className="flex justify-between items-center w-full">
+            <div className="flex space-x-4">
+              <div className="bg-blue-100 rounded-full hover:bg-blue-600">
+                <Tooltip
+                  content="Marcar Todo"
+                  placement="top"
+                  color="primary"
+                  showArrow
+                >
+                  <IconButton aria-label="select-all" onClick={selectAll}>
+                    <RiCheckboxFill className="text-blue-500" />
+                  </IconButton>
+                </Tooltip>
+              </div>
 
-          <div className="bg-blue-100 rounded-full hover:bg-blue-600">
-            <Tooltip
-              content="Marcar Todo"
-              placement="top"
-              color="warning"
-              showArrow
-            >
-              <IconButton aria-label="unselect-all" onClick={deselectAll}>
-                <RiCheckboxIndeterminateFill className="text-orange-400" />
-              </IconButton>
-            </Tooltip>
+              <div className="bg-blue-100 rounded-full hover:bg-blue-600">
+                <Tooltip
+                  content="Marcar Todo"
+                  placement="top"
+                  color="warning"
+                  showArrow
+                >
+                  <IconButton aria-label="unselect-all" onClick={deselectAll}>
+                    <RiCheckboxIndeterminateFill className="text-orange-400" />
+                  </IconButton>
+                </Tooltip>
+              </div>
+            </div>
+            <PermissionsSearchBar
+              permissions={permissions || []}
+              setAllPermissions={setAllPermissions}
+            />
           </div>
-        </div>
-        <PermissionsSearchBar
-          permissions={permissions || []}
-          setAllPermissions={setAllPermissions}
-        />
-      </div>
+        </CardHeader>
+        <CardBody>
+          {isFetchingPermissions || isFetchingUserPermissions ? (
+            <LoadingSpinner />
+          ) : (
+            <PermissionsList
+              permissionsList={allPermissions}
+              selectedPermissions={selectedPermissions}
+              togglePermission={togglePermission}
+            />
+          )}
+        </CardBody>
+        <CardFooter className="pt-0">
+          <SaveButton
+            onPress={onSubmit}
+            className="w-full uppercase"
+            isLoading={isPending}
+            variant="flat"
+          >
+            Guardar
+          </SaveButton>
+        </CardFooter>
+      </Card>
 
-      <div className="flex justify-center items-center transition-all duration-300 ease-in-out">
+      {/* <div className="flex justify-center items-center transition-all duration-300 ease-in-out">
         {isFetchingPermissions || isFetchingUserPermissions ? (
           <div className="min-h-[383px]">
             <Spinner />
@@ -102,13 +141,13 @@ const UserPermissions = ({ user }: Props) => {
             togglePermission={togglePermission}
           />
         )}
-      </div>
+      </div> */}
 
-      <div className=" flex justify-end">
+      {/* <div className=" flex justify-end">
         <Button color="primary" onPress={onSubmit}>
           Guardar
         </Button>
-      </div>
+      </div> */}
     </>
   );
 };
