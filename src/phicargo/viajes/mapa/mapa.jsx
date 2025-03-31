@@ -15,13 +15,13 @@ const Map = () => {
         odooApi.get(`/reportes_estatus_viajes/id_viaje/${id_viaje}`)
             .then(response => {
                 setLocations(response.data);
-                console.log('Historial');
-                console.log(response.data);
             })
             .catch(error => {
                 console.error('Error al obtener datos:', error);
             });
     }, []);
+
+    const positions = locations.map(location => [location.latitud, location.longitud]);
 
     return (
         <MapContainer center={[21.9713317720013, -101.7129111380927]} zoom={5} style={{ height: '100vh', width: '100%' }}>
@@ -31,6 +31,7 @@ const Map = () => {
                     <Popup>{location.nombre_estatus}</Popup>
                 </Marker>
             ))}
+            <Polyline positions={positions} color="blue" />
         </MapContainer>
     );
 };
