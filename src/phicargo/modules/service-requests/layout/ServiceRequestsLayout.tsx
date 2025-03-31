@@ -1,15 +1,17 @@
 import BaseLayout from '@/layouts/BaseLayout';
-import { MenuItemType } from '@/types';
+import type { MenuItemType } from '@/types';
 import { ReactNode } from 'react';
 
 const pages: MenuItemType[] = [
   {
     name: 'Solicitudes',
     path: '/solicitudes-servicio/solicitudes',
+    requiredPermissions: [],
   },
   {
     name: 'Nueva Solicitud',
     path: '/solicitudes-servicio/nueva-solicitud',
+    requiredPermissions: [],
   },
 ];
 

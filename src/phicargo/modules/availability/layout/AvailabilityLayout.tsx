@@ -1,15 +1,41 @@
 import BaseLayout from '@/layouts/BaseLayout';
-import { MenuItemType } from '@/types';
+import type { MenuItemType } from '@/types';
 import { ReactNode } from 'react';
 
+const EDITION_PERMISSION = 208;
+
 const pages: MenuItemType[] = [
-  { name: 'Unidades', path: '/disponibilidad/unidades' },
-  { name: 'Operadores', path: '/disponibilidad/operadores' },
-  { name: 'Contactos', path: '/disponibilidad/contactos' },
-  { name: 'Resumen Unidades', path: '/disponibilidad/resumen-unidades' },
-  { name: 'Resumen Operadores', path: '/disponibilidad/resumen-operadores' },
-  { name: 'Sin asignar', path: '/disponibilidad/sin-asignar' },
-  { name: 'Todos', path: '/disponibilidad/vehiculos' },
+  {
+    name: 'Unidades',
+    path: '/disponibilidad/unidades',
+    requiredPermissions: [EDITION_PERMISSION],
+  },
+  {
+    name: 'Operadores',
+    path: '/disponibilidad/operadores',
+    requiredPermissions: [EDITION_PERMISSION],
+  },
+  {
+    name: 'Contactos',
+    path: '/disponibilidad/contactos',
+    requiredPermissions: [],
+  },
+  {
+    name: 'Resumen Unidades',
+    path: '/disponibilidad/resumen-unidades',
+    requiredPermissions: [EDITION_PERMISSION],
+  },
+  {
+    name: 'Resumen Operadores',
+    path: '/disponibilidad/resumen-operadores',
+    requiredPermissions: [EDITION_PERMISSION],
+  },
+  {
+    name: 'Sin asignar',
+    path: '/disponibilidad/sin-asignar',
+    requiredPermissions: [EDITION_PERMISSION],
+  },
+  { name: 'Todos', path: '/disponibilidad/vehiculos', requiredPermissions: [] },
 ];
 
 interface Props {
@@ -21,3 +47,4 @@ const AvailabilityLayout = ({ children }: Props) => {
 };
 
 export default AvailabilityLayout;
+

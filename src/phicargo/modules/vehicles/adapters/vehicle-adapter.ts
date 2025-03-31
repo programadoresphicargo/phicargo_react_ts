@@ -1,7 +1,13 @@
-import type { Vehicle, VehicleBase, VehicleUpdate } from '../models';
+import type {
+  Vehicle,
+  VehicleBase,
+  VehicleStatusChangeEvent,
+  VehicleUpdate,
+} from '../models';
 import type {
   VehicleApi,
   VehicleBaseApi,
+  VehicleStatusChangeEventApi,
   VehicleUpdateApi,
 } from '../models/api';
 
@@ -107,6 +113,19 @@ export class VehicleAdapter {
     }
 
     return vehicleApi;
+  }
+
+  static toVehicleStatusChangeEvent(
+    data: VehicleStatusChangeEventApi,
+  ): VehicleStatusChangeEvent {
+    return {
+      id: data.id,
+      vehicleId: data.vehicle_id,
+      status: data.status,
+      previousStatus: data.previous_status,
+      startDate: dayjs(data.start_date),
+      endDate: data.end_date ? dayjs(data.end_date) : null,
+    };
   }
 }
 

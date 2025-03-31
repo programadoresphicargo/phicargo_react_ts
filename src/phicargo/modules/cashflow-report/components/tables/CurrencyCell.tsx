@@ -2,7 +2,7 @@ import type { DaysOfWeek, WeekBase } from '../../models';
 
 import AmountDetailDialog from '../AmountDetailDialog';
 import ConfirmDialog from '../ConfirmDialog';
-import { formatCurrency } from '../../utils';
+import { formatCurrency } from '@/utilities';
 import { useState } from 'react';
 
 interface CurrencyCellProps {

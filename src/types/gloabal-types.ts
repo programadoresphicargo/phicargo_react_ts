@@ -42,5 +42,6 @@ export type MenuItemType = {
   name: string;
   path: string;
   exact?: boolean;
+  requiredPermissions: number[];
 };
 

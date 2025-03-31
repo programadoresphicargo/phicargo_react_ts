@@ -1,5 +1,5 @@
 import BaseLayout from '@/layouts/BaseLayout';
-import { MenuItemType } from '@/types';
+import type { MenuItemType } from '@/types';
 import { ReactNode } from 'react';
 
 const pages: MenuItemType[] = [
@@ -7,10 +7,12 @@ const pages: MenuItemType[] = [
     name: 'Usuarios',
     path: '/control-usuarios',
     exact: true,
+    requiredPermissions: [],
   },
   {
     name: 'Cuentas Operadores',
     path: '/control-usuarios/cuentas-operadores',
+    requiredPermissions: [],
   },
 ];
 
@@ -23,3 +25,4 @@ const UsersManagementLayout = ({ children }: Props) => {
 };
 
 export default UsersManagementLayout;
+

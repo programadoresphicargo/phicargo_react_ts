@@ -10,7 +10,7 @@ import {
 import type { Amount } from '../models';
 import { FaCheck } from 'react-icons/fa';
 import { MdOutlineAttachMoney } from 'react-icons/md';
-import { formatCurrency } from '../utils';
+import { formatCurrency } from "@/utilities";
 
 interface AmountDetailDialogProps {
   onClose: () => void;

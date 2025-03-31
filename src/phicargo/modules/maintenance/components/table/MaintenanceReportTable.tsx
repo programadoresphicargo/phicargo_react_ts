@@ -56,12 +56,12 @@ const MaintenanceReportTable = (props: MaintenanceReportTableProps) => {
     positionActionsColumn: 'first',
     renderRowActions: ({ row, table }) => (
       <Box sx={{ display: 'flex' }}>
-        <Tooltip title="Edit">
+        <Tooltip title="Editar">
           <IconButton size="small" onClick={() => table.setEditingRow(row)}>
             <EditIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title="Delete">
+        <Tooltip title="Detalles">
           <IconButton
             size="small"
             color="primary"

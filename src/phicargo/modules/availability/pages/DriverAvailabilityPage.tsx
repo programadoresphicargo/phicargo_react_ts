@@ -1,6 +1,6 @@
 import { ExportConfig, ExportToExcel } from '@/utilities';
 
-import { Driver } from '../../drivers/models';
+import type { Driver } from '../../drivers/models';
 import { DriverInformationModal } from '../../drivers/components/DriverInformationModal';
 import { MaterialReactTable } from 'material-react-table';
 import { Outlet } from 'react-router-dom';

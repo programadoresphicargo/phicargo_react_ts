@@ -1,24 +1,24 @@
-import { useMemo } from 'react';
 import AppBar from '@mui/material/AppBar';
 import AvatarProfile from '@/components/ui/AvatarProfile';
 import { Grid } from '@mui/system';
-import MenuItem from './MenuItem';
 import Toolbar from '@mui/material/Toolbar';
-import accesos_img from '../../assets/menu/accesos.png';
-import bonos_img from '../../assets/menu/bonos.png';
-import calendar3d from '../../assets/menu/calendar3d.png';
-import ce_img from '../../assets/menu/costos_extras.png';
-import correo_img from '../../assets/menu/correo.png';
-import dashboardIcon from '../../assets/menu/dashboardIcon.png';
-import maniobras_img from '../../assets/menu/maniobras.png';
-import monitoreo_img from '../../assets/menu/monitoreo.png';
+import accesos_img from '../assets/menu/accesos.png';
+import bonos_img from '../assets/menu/bonos.png';
+import calendar3d from '../assets/menu/calendar3d.png';
+import ce_img from '../assets/menu/costos_extras.png';
+import correo_img from '../assets/menu/correo.png';
+import dashboardIcon from '../assets/menu/dashboardIcon.png';
+import maniobras_img from '../assets/menu/maniobras.png';
+import monitoreo_img from '../assets/menu/monitoreo.png';
 // import operadores_img from '../../assets/menu/operadores.png';
-import reportesImg from '../../assets/menu/reportes.png';
-import shipingcontainer from '../../assets/menu/shiping-container.png';
-import turnos_img from '../../assets/menu/turnos.png';
-import { useAuthContext } from '../modules/auth/hooks';
-import usuarios_img from '../../assets/menu/usuarios.png';
-import viajes_img from '../../assets/menu/viajes.png';
+import reportesImg from '../assets/menu/reportes.png';
+import shipingcontainer from '../assets/menu/shiping-container.png';
+import turnos_img from '../assets/menu/turnos.png';
+import { useAuthContext } from '@/phicargo/modules/auth/hooks';
+import { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import usuarios_img from '../assets/menu/usuarios.png';
+import viajes_img from '../assets/menu/viajes.png';
 
 type MenuItemType = {
   icon: string;
@@ -182,4 +182,67 @@ const MainMenuPage = () => {
 };
 
 export default MainMenuPage;
+
+
+interface MenuItemProps {
+  icon: string;
+  label: string;
+  link: string;
+  isExternal?: boolean;
+}
+
+const MenuItem = ({ icon, label, link, isExternal = false }: MenuItemProps) => {
+  const navigate = useNavigate();
+  const { session } = useAuthContext();
+
+  const handleClick = () => {
+    if (isExternal) {
+      // Crear un formulario dinámico
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = link;
+      form.target = '_blank';
+
+      // Añadir una variable al formulario
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = 'id_usuario'; // Nombre del campo que deseas enviar
+      input.value = String(session?.user.id); // Valor de la variable
+      form.appendChild(input);
+
+      // Enviar el formulario
+      document.body.appendChild(form);
+      form.submit();
+      document.body.removeChild(form);
+    } else {
+      navigate(link);
+    }
+  };
+
+  return (
+    <div
+      onClick={handleClick}
+      className="
+        flex
+        flex-col
+        items-center
+        justify-center
+        w-32
+        h-32
+        rounded-2xl
+        bg-white
+        shadow-md
+        cursor-pointer
+        transition-colors
+        duration-200
+        hover:bg-gray-100
+      "
+    >
+      <div className="mb-2.5">
+        <img src={icon} alt={label} className="w-20 h-20 mb-1.5" />
+      </div>
+      <div className="text-xs font-bold text-center">{label}</div>
+    </div>
+  );
+};
 

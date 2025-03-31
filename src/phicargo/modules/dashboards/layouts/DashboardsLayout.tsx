@@ -5,11 +5,19 @@ import { MenuItemType } from '@/types';
 import { ReactNode } from 'react';
 
 const pages: MenuItemType[] = [
-  { name: 'Viajes', path: '/dashboards/operaciones' },
-  { name: 'Unidades', path: '/dashboards/unidades' },
-  { name: 'Operadores', path: '/dashboards/operadores' },
-  { name: 'Llegadas Tarde', path: '/dashboards/llegadas-tarde' },
-  { name: 'Finanzas', path: '/dashboards/finanzas' },
+  { name: 'Viajes', path: '/dashboards/operaciones', requiredPermissions: [] },
+  { name: 'Unidades', path: '/dashboards/unidades', requiredPermissions: [] },
+  {
+    name: 'Operadores',
+    path: '/dashboards/operadores',
+    requiredPermissions: [],
+  },
+  {
+    name: 'Llegadas Tarde',
+    path: '/dashboards/llegadas-tarde',
+    requiredPermissions: [],
+  },
+  { name: 'Finanzas', path: '/dashboards/finanzas', requiredPermissions: [] },
 ];
 
 interface Props {

@@ -54,3 +54,12 @@ export interface VehicleUpdateApi {
   x_tipo_carga?: string | null;
 }
 
+export interface VehicleStatusChangeEventApi {
+  id: number;
+  vehicle_id: number;
+  status: string;
+  previous_status: string | null;
+  start_date: string;
+  end_date: string | null;
+}
+

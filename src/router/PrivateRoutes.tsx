@@ -8,7 +8,7 @@ import AvailabilityRoutes from '../phicargo/modules/availability/routes/Availabi
 import DOReportRoutes from '@/phicargo/modules/daily-operations-report/routes/DOReportRoutes';
 import DashboardsRoutes from '@/phicargo/modules/dashboards/routes/DashboardRoutes';
 import { LoadingPage } from '@/pages/LoadingPage';
-import MainMenuPage from '@/phicargo/menu/MainManuPage';
+import MainMenuPage from '@/pages/MainManuPage';
 import NotFoundPage from '@/pages/NotFoundPage';
 import { ReportsRoutes } from './ReportsRoutes';
 import { ServiceRequestsRoutes } from '@/phicargo/modules/service-requests/routes/ServiceRequestsRoutes';

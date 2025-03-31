@@ -1,14 +1,9 @@
 import { ErrorBoundary } from '@/components/utils/ErrorBoundary';
+import { MenuItemType } from '@/types';
 import { Navbar } from '@/components/ui';
 import { Outlet } from 'react-router-dom';
 import type { ReactNode } from 'react';
 import { Toaster } from 'react-hot-toast';
-
-type MenuItemType = {
-  name: string;
-  path: string;
-  exact?: boolean;
-};
 
 interface Props {
   pages: MenuItemType[];

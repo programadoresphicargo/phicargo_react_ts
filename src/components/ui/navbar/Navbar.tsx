@@ -8,17 +8,13 @@ import {
   NavbarMenuToggle,
   Navbar as NextUiNavbar,
 } from '@heroui/react';
+import { useMemo, useState } from 'react';
 
 import AvatarProfile from '../AvatarProfile';
 import { BackButton } from '@/components/ui';
+import type { MenuItemType } from '@/types';
 import { NavbarLinkItem } from './NavbarLinkItem';
-import { useState } from 'react';
-
-type MenuItemType = {
-  name: string;
-  path: string;
-  exact?: boolean;
-};
+import { useAuthContext } from '@/phicargo/modules/auth/hooks';
 
 interface Props {
   pages: MenuItemType[];
@@ -26,8 +22,19 @@ interface Props {
 
 export const Navbar = (props: Props) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { session } = useAuthContext();
 
   const { pages } = props;
+
+  const filteredMenuItems = useMemo(
+    () =>
+      pages.filter((item) =>
+        item.requiredPermissions.every((permission) =>
+          session?.user?.permissions?.includes(permission),
+        ),
+      ),
+    [pages, session?.user?.permissions],
+  );
 
   return (
     <NextUiNavbar
@@ -74,7 +81,7 @@ export const Navbar = (props: Props) => {
       </NavbarContent>
 
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        {pages.map((page, i) => (
+        {filteredMenuItems.map((page, i) => (
           <NavbarItem key={i}>
             <NavbarLinkItem
               name={page.name}

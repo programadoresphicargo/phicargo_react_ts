@@ -6,6 +6,7 @@ import type {
 } from '../../core/models';
 import { DriverSimple, Modality } from '../../drivers/models';
 
+import { Dayjs } from 'dayjs';
 import type { MaintenanceRecordSimple } from '../../maintenance/models';
 import { SimpleData } from '@/types';
 
@@ -72,3 +73,12 @@ export interface VehicleWithRealStatus extends Vehicle {
   readonly realStatus: VehicleRealStatus;
 }
 
+
+export interface VehicleStatusChangeEvent {
+  id: number;
+  vehicleId: number;
+  status: string;
+  previousStatus: string | null;
+  startDate: Dayjs;
+  endDate: Dayjs | null;
+}
