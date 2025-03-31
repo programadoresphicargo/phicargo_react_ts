@@ -10,7 +10,7 @@ export const PermissionsList = (props: Props) => {
   const { permissionsList, selectedPermissions, togglePermission } = props;
 
   return (
-    <ul className="space-y-2 max-h-96 min-h-96 overflow-y-auto">
+    <ul className="space-y-2">
       {permissionsList?.map((perm) => (
         <li
           key={perm.id}

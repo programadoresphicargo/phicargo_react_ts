@@ -13,6 +13,7 @@ export const TextInput = <T extends FieldValues>(
     label,
     rules,
     isDisabled,
+    variant,
     isUpperCase,
     classNames,
   } = props;
@@ -31,7 +32,7 @@ export const TextInput = <T extends FieldValues>(
             classNames={classNames}
             label={label}
             size="sm"
-            variant="flat"
+            variant={variant || 'flat'}
             name={name}
             onValueChange={(newValue) => {
               const transformedValue = isUpperCase

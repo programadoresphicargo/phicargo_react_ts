@@ -6,7 +6,6 @@ import { Route } from 'react-router-dom';
 import UsersManagementLayout from '../layouts/UsersManagementLayout';
 
 const UsersManagementPage = lazy(() => import('../pages/UsersManagementPage'));
-const UserInfo = lazy(() => import('../outlets/UserInfo'));
 
 const DriversAccountsPage = lazy(() => import('../pages/DriversAccountsPage'));
 
@@ -29,16 +28,7 @@ const UsersManagementRoutes = () => (
           <UsersManagementPage />
         </Suspense>
       }
-    >
-      <Route
-        path="detalles/:id"
-        element={
-          <Suspense fallback={null}>
-            <UserInfo />
-          </Suspense>
-        }
-      />
-    </Route>
+    ></Route>
     <Route
       path="cuentas-operadores"
       element={

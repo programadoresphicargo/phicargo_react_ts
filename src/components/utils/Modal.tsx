@@ -18,7 +18,6 @@ interface Props extends ModalProps {
 }
 
 export const Modal = (props: Props) => {
-
   const { showFooter = true } = props;
 
   return (
@@ -45,24 +44,28 @@ export const Modal = (props: Props) => {
               <ModalBody>{props.children}</ModalBody>
               {showFooter && (
                 <ModalFooter className="flex justify-between">
-                  <Button
-                    color="default"
-                    variant="light"
-                    size="sm"
-                    onPress={onClose}
-                  >
-                    Cerrar
-                  </Button>
-                  <Button
-                    color="primary"
-                    size="sm"
-                    variant="flat"
-                    className="font-bold"
-                    radius="full"
-                    onPress={onClose}
-                  >
-                    OK
-                  </Button>
+                  {props.customFooter || (
+                    <>
+                      <Button
+                        color="default"
+                        variant="light"
+                        size="sm"
+                        onPress={onClose}
+                      >
+                        Cerrar
+                      </Button>
+                      <Button
+                        color="primary"
+                        size="sm"
+                        variant="flat"
+                        className="font-bold"
+                        radius="full"
+                        onPress={onClose}
+                      >
+                        OK
+                      </Button>
+                    </>
+                  )}
                 </ModalFooter>
               )}
             </>

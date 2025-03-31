@@ -1,9 +1,16 @@
-import { CheckboxInput, EmailInput, PasswordInput2, TextInput } from '@/components/inputs';
+import { Card, CardBody, CardFooter, CardHeader } from '@heroui/react';
+import {
+  CheckboxInput,
+  EmailInput,
+  PasswordInput2,
+  TextInput,
+} from '@/components/inputs';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-import { Button } from "@heroui/react";
 import type { FullUser } from '../../auth/models';
+import { SaveButton } from '@/components/ui';
 import type { UserUpdate } from '../models';
+import { useEffect } from 'react';
 import { useUsersQueries } from '../hooks/useUsersQueries';
 
 const initialState: UserUpdate = {
@@ -23,7 +30,7 @@ interface Props {
 const UserForm = (props: Props) => {
   const { user } = props;
 
-  const { control, handleSubmit } = useForm<UserUpdate>({
+  const { control, handleSubmit, reset } = useForm<UserUpdate>({
     defaultValues: user ? (user as unknown as UserUpdate) : initialState,
   });
 
@@ -41,60 +48,82 @@ const UserForm = (props: Props) => {
       updatedItem: data,
     });
   };
+  
+  useEffect(() => {
+    if (user) {
+      reset((user as unknown as UserUpdate));
+    }
+  }, [user, reset]);
 
   return (
-    <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
-      <div className="space-y-4 max-h-[430px] min-h-[430px] overflow-y-auto">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <TextInput
-            control={control}
-            name="username"
-            label="Usuario"
-            rules={!user ? { required: 'Este campo es requerido' } : {}}
-          />
+    <Card
+      classNames={{
+        base: 'shadow-none',
+        header: 'bg-gray-100 px-4 py-1',
+        body: 'overflow-y-auto h-80',
+      }}
+      radius="md"
+    >
+      <CardHeader className="flex items-center justify-between">
+        <h3 className="text-gray-800 font-bold text-lg">Datos del Usuario</h3>
+      </CardHeader>
+      <CardBody>
+        <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <TextInput
+              control={control}
+              name="username"
+              label="Usuario"
+              rules={!user ? { required: 'Este campo es requerido' } : {}}
+            />
 
-          <TextInput
-            control={control}
-            name="name"
-            label="Nombre"
-            rules={!user ? { required: 'Este campo es requerido' } : {}}
-          />
-        </div>
+            <TextInput
+              control={control}
+              name="name"
+              label="Nombre"
+              rules={!user ? { required: 'Este campo es requerido' } : {}}
+            />
+          </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <PasswordInput2
-            control={control}
-            name="password"
-            label="Contraseña"
-            rules={!user ? { required: 'Este campo es requerido' } : {}}
-          />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <PasswordInput2
+              control={control}
+              name="password"
+              label="Contraseña"
+              rules={!user ? { required: 'Este campo es requerido' } : {}}
+            />
 
-          <EmailInput
-            control={control}
-            name="email"
-            label="Correo"
-            rules={!user ? { required: 'Este campo es requerido' } : {}}
-          />
-        </div>
+            <EmailInput
+              control={control}
+              name="email"
+              label="Correo"
+              rules={!user ? { required: 'Este campo es requerido' } : {}}
+            />
+          </div>
 
-        <div className="flex items-center space-x-2">
-          <PasswordInput2
-            control={control}
-            name="pin"
-            label="Pin"
-            rules={!user ? { required: 'Este campo es requerido' } : {}}
-            className='w-1/3'
-          />
-          <CheckboxInput control={control} name="isActive" label="Activo" />
-        </div>
-      </div>
-
-      <div className="flex justify-end">
-        <Button type="submit" color="primary" isLoading={isPending}>
+          <div className="flex items-center space-x-2">
+            <PasswordInput2
+              control={control}
+              name="pin"
+              label="Pin"
+              rules={!user ? { required: 'Este campo es requerido' } : {}}
+              className="w-1/3"
+            />
+            <CheckboxInput control={control} name="isActive" label="Activo" />
+          </div>
+        </form>
+      </CardBody>
+      <CardFooter className="pt-0">
+        <SaveButton
+          onPress={() => handleSubmit(onSubmit)()}
+          className="w-full uppercase"
+          isLoading={isPending}
+          variant="flat"
+        >
           Guardar
-        </Button>
-      </div>
-    </form>
+        </SaveButton>
+      </CardFooter>
+    </Card>
   );
 };
 
