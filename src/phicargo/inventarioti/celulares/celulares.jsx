@@ -98,7 +98,7 @@ const ContactosCelulares = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 165px)',
+        maxHeight: 'calc(100vh - 170px)',
       },
     },
     renderTopToolbarCustomActions: ({ table }) => (
