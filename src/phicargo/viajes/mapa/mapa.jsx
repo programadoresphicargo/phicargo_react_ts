@@ -16,10 +16,21 @@ const Map = () => {
     const { id_viaje } = useContext(ViajeContext);
     const [estatusHistorial, setHistorial] = useState([]);
     const [isLoading, setLoading] = useState([]);
+    const [estatus, setEstatus] = useState([]);
     const [locations, setLocations] = useState([]);
 
     useEffect(() => {
         odooApi.get(`/reportes_estatus_viajes/id_viaje/${id_viaje}`)
+            .then(response => {
+                setEstatus(response.data);
+            })
+            .catch(error => {
+                console.error('Error al obtener datos:', error);
+            });
+    }, []);
+
+    useEffect(() => {
+        odooApi.get(`/reportes_estatus_viajes/locations_by_id_viaje/${id_viaje}`)
             .then(response => {
                 setLocations(response.data);
             })
@@ -33,9 +44,9 @@ const Map = () => {
     return (
         <MapContainer center={[21.9713317720013, -101.7129111380927]} zoom={5} style={{ height: '100vh', width: '100%' }}>
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-            {locations.map((location, index) => (
-                <Marker key={index} position={[location.latitud, location.longitud]} icon={customIcon}>
-                    <Popup>{location.nombre_estatus}</Popup>
+            {estatus.map((status, index) => (
+                <Marker key={index} position={[status.latitud, status.longitud]} icon={customIcon}>
+                    <Popup>{status.nombre_estatus}</Popup>
                 </Marker>
             ))}
             <Polyline positions={positions} color="blue" />
