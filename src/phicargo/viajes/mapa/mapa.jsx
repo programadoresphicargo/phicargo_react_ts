@@ -12,6 +12,13 @@ const customIcon = new L.Icon({
     popupAnchor: [0, -32]
 });
 
+const lastPositionIcon = new L.Icon({
+    iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png', // Icono distinto para la última coordenada
+    iconSize: [32, 32],
+    iconAnchor: [16, 32],
+    popupAnchor: [0, -32]
+});
+
 const Map = () => {
     const { id_viaje } = useContext(ViajeContext);
     const [estatusHistorial, setHistorial] = useState([]);
@@ -46,6 +53,11 @@ const Map = () => {
                 </Marker>
             ))}
             <Polyline positions={positions} color="blue" />
+            {positions.length > 0 && (
+                <Marker position={positions[positions.length - 1]} icon={lastPositionIcon}>
+                    <Popup>Última posición registrada</Popup>
+                </Marker>
+            )}
         </MapContainer>
     );
 };
