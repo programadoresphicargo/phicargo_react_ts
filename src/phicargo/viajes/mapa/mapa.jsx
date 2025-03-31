@@ -5,6 +5,13 @@ import 'leaflet/dist/leaflet.css';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { ViajeContext } from '../context/viajeContext';
 
+const customIcon = new L.Icon({
+    iconUrl: 'https://static.vecteezy.com/system/resources/previews/017/178/337/original/location-map-marker-icon-symbol-on-transparent-background-free-png.png',
+    iconSize: [32, 32],
+    iconAnchor: [16, 32],
+    popupAnchor: [0, -32]
+});
+
 const Map = () => {
     const { id_viaje } = useContext(ViajeContext);
     const [estatusHistorial, setHistorial] = useState([]);
@@ -27,7 +34,7 @@ const Map = () => {
         <MapContainer center={[21.9713317720013, -101.7129111380927]} zoom={5} style={{ height: '100vh', width: '100%' }}>
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
             {locations.map((location, index) => (
-                <Marker key={index} position={[location.latitud, location.longitud]}>
+                <Marker key={index} position={[location.latitud, location.longitud]} icon={customIcon}>
                     <Popup>{location.nombre_estatus}</Popup>
                 </Marker>
             ))}
