@@ -42,7 +42,7 @@ const Map = () => {
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
             {estatus?.map((registro, index) => (
                 <Marker key={index} position={[registro.latitud, registro.longitud]} icon={customIcon}>
-                    <Popup>{registro.nombre_estatus}</Popup>
+                    <Popup>{registro.nombre_estatus} / {registro.fecha_envio}</Popup>
                 </Marker>
             ))}
             <Polyline positions={positions} color="blue" />
