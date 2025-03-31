@@ -170,7 +170,8 @@ function EstatusHistorialAgrupado({ registros_agrupados }) {
                                     <span>Sublocalidad: {step.sublocalidad}</span>
                                     <span>Calle: {step.calle}</span>
                                     <span>Codigo postal: {step.codigo_postal}</span>
-                                    <span>Fecha y hora: {step.fecha_hora}</span>
+                                    <span>Fecha GPS: {step.fecha_hora}</span>
+                                    <span>Fecha envío: {step.fecha_envio}</span>
 
                                     < ArchivosAdjuntos id_reporte={step.id_reporte} ></ArchivosAdjuntos>
 
