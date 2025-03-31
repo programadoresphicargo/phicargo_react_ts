@@ -1,6 +1,5 @@
 import { Card, CardHeader } from "@heroui/react";
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-
 import { Avatar } from "@heroui/react";
 import { Badge } from "@heroui/react";
 import { Button } from "@heroui/react";
@@ -42,13 +41,13 @@ function EstatusHistorial() {
 
     const getHistorialEstatus = async () => {
         try {
-            setLoading(true); // Cambia isLoading(true) por setLoading(true)
+            setLoading(true);
             const response = await odooApi.get(`/reportes_estatus_viajes/by_id_viaje/${id_viaje}`);
             setHistorial(response.data);
         } catch (error) {
             console.error('Error al obtener los datos:', error);
         } finally {
-            setLoading(false); // Asegura que loading se desactive incluso si hay un error
+            setLoading(false); 
         }
     };
 
