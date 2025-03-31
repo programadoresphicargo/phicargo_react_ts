@@ -1,98 +1,51 @@
-import { AddButton, RefreshButton } from '@/components/ui';
-import {
-  MaterialReactTable,
-  useMaterialReactTable,
-} from 'material-react-table';
-import { Outlet, useNavigate } from 'react-router-dom';
-
-import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import { User } from '../../auth/models';
+import { AddButton } from '@/components/ui';
+import { MaterialReactTable } from 'material-react-table';
+import { Outlet } from 'react-router-dom';
+import type { User } from '../../auth/models';
 import { UserCreateForm } from '../components/UserCreateForm';
+import { UserInformationModal } from '../components/UserInformationModal';
+import { useBaseTable } from '@/hooks';
 import { useState } from 'react';
 import { useUsersColums } from '../hooks/useUsersColumns';
 import { useUsersQueries } from '../hooks/useUsersQueries';
 
 const UsersManagementPage = () => {
-  const navigate = useNavigate();
   const { columns } = useUsersColums();
   const [createModal, setCreateModal] = useState(false);
+  const [informationModal, setInformationModal] = useState<User | null>(null);
 
   const {
-    usersQuery: { data: users, isFetching, refetch },
+    usersQuery: { data: users, isFetching, isLoading, refetch },
   } = useUsersQueries();
 
-  const table = useMaterialReactTable<User>({
-    // DATA
+  const table2 = useBaseTable<User>({
     columns,
     data: users || [],
-    localization: MRT_Localization_ES,
-    enableStickyHeader: true,
-    // PAGINATION, FILTERS, SORTING
-    enableGrouping: true,
-    enableGlobalFilter: true,
-    enableFilters: true,
-    enableDensityToggle: false,
-    enableFullScreenToggle: false,
-    enableColumnPinning: true,
-    columnResizeMode: 'onEnd',
-    // STATE
-    state: { isLoading: isFetching },
-    initialState: {
-      density: 'compact',
-      pagination: { pageSize: 100, pageIndex: 0 },
-      showGlobalFilter: true,
-      showColumnFilters: true,
-    },
-    muiTableBodyRowProps: ({ row }) => ({
-      onDoubleClick: () =>
-        navigate(`/control-usuarios/detalles/${row.original.id}`),
-      sx: { cursor: 'pointer' },
-    }),
-    renderTopToolbarCustomActions: () => (
-      <div className="flex flex-row gap-2">
-        <div className="flex flex-row items-center rounded-xl">
-          <RefreshButton onRefresh={() => refetch()} isLoading={isFetching} />
-        </div>
-        <div className="flex flex-row items-center">
-          <AddButton
-            label="Crear Usuario"
-            onClick={() => setCreateModal(true)}
-          />
-        </div>
-      </div>
+    isLoading,
+    isFetching,
+    refetchFn: refetch,
+    tableId: 'users-table',
+    containerHeight: 'calc(100vh - 173px)',
+    showGlobalFilter: true,
+    showColumnFilters: true,
+    toolbarActions: (
+      <AddButton label="Crear Usuario" onClick={() => setCreateModal(true)} />
     ),
-    muiTablePaperProps: {
-      elevation: 0,
-      sx: {
-        borderRadius: '0',
-      },
-    },
-    muiTableHeadCellProps: {
-      sx: {
-        fontFamily: 'Inter',
-        fontWeight: 'Bold',
-        fontSize: '14px',
-      },
-    },
-    muiTableBodyCellProps: {
-      sx: {
-        fontFamily: 'Inter',
-        fontWeight: 'normal',
-        fontSize: '14px',
-
-        padding: '3px 10px',
-      },
-    },
-    muiTableContainerProps: {
-      sx: {
-        maxHeight: 'calc(100vh - 173px)',
-      },
+    onDoubleClickFn: (user) => {
+      setInformationModal(user);
     },
   });
 
   return (
     <>
-      <MaterialReactTable table={table} />
+      <MaterialReactTable table={table2} />
+      {informationModal && (
+        <UserInformationModal
+          open={!!informationModal}
+          onClose={() => setInformationModal(null)}
+          user={informationModal}
+        />
+      )}
       <UserCreateForm
         open={createModal}
         onClose={() => setCreateModal(false)}

@@ -44,6 +44,10 @@ export const PermissionsSearchBar = ({
       placeholder="Buscar permisos..."
       className="mx-4"
       variant="bordered"
+      color='primary'
+      classNames={{
+        inputWrapper: 'bg-white',
+      }}
       isClearable
       onClear={() => setSearchTerm('')}
       onChange={handleSearch}
