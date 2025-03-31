@@ -71,7 +71,7 @@ const ContactosCelulares = () => {
       showColumnFilters: true,
     },
     muiTableBodyRowProps: ({ row }) => ({
-      onClick: ({ event }) => {},
+      onClick: ({ event }) => { },
       style: {
         cursor: 'pointer',
       },
@@ -109,7 +109,13 @@ const ContactosCelulares = () => {
           padding: '8px',
           flexWrap: 'wrap',
         }}
-      ></Box>
+      >
+        <h1
+          className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
+        >
+          Líneas telefónicas
+        </h1>
+      </Box>
     ),
   });
 

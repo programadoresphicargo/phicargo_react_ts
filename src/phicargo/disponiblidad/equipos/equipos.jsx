@@ -22,7 +22,9 @@ import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import Box from '@mui/material/Box';
 import IndexHistorial from '.';
+import { exportToCSV } from '../../utils/export';
 
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
@@ -202,6 +204,23 @@ const Disponibilidad_unidades = () => {
                 maxHeight: 'calc(100vh - 160px)',
             },
         },
+        renderTopToolbarCustomActions: ({ table }) => (
+            <Box
+                sx={{
+                    display: 'flex',
+                    gap: '16px',
+                    padding: '8px',
+                    flexWrap: 'wrap',
+                }}
+            >
+                <h1
+                    className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
+                >
+                    Unidades
+                </h1>
+                <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "unidades.csv")}>Exportar</Button>
+            </Box>
+        ),
     });
 
     return (
