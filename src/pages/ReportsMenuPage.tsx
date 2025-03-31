@@ -26,7 +26,7 @@ const reports: MenuItemType[] = [
     label: 'Reporte gerencial',
     path: '/reportes/saldos/',
     icon: reportIcon,
-    requiredPermissions: [],
+    requiredPermissions: [190],
   },
   {
     label: 'Mantenimiento',
@@ -50,25 +50,25 @@ const reports: MenuItemType[] = [
     label: 'Tiempos de salidas y llegadas',
     path: '/detenciones',
     icon: clockIcon,
-    requiredPermissions: [],
+    requiredPermissions: [209],
   },
   {
     label: 'Cumplimiento estatus',
     path: '/cumplimiento',
     icon: phoneIcon,
-    requiredPermissions: [],
+    requiredPermissions: [210],
   },
   {
     label: 'Reporte de estadias',
     path: '/estadias',
     icon: estadiasIcon,
-    requiredPermissions: [],
+    requiredPermissions: [211],
   },
   {
     label: 'Reporte de detenciones',
     path: '/reporte_detenciones',
     icon: detencionesIcon,
-    requiredPermissions: [],
+    requiredPermissions: [0],
   },
 ];
 
