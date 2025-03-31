@@ -39,7 +39,7 @@ const Map = () => {
             });
     }, []);
 
-    const positions = locations.map(location => [location.latitud, location.longitud]);
+    const positions = locations.map(location => [location.latitude, location.longitude]);
 
     return (
         <MapContainer center={[21.9713317720013, -101.7129111380927]} zoom={5} style={{ height: '100vh', width: '100%' }}>
