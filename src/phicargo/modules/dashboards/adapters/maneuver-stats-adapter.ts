@@ -24,7 +24,9 @@ export class ManeuverStatsAdapter {
   ): ManeuversDriverJobCount {
     return {
       driver: data.driver,
-      maneuversCount: data.maneuvers_count,
+      totalManeuvers: data.total_maneuvers,
+      maneuversLate: data.maneuvers_late,
+      maneuversOnTime: data.maneuvers_on_time,
     };
   }
 
