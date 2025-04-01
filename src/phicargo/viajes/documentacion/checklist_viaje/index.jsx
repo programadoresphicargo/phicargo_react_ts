@@ -7,6 +7,7 @@ import { ViajeContext } from "../../context/viajeContext";
 
 const PDFGenerator = () => {
     const { id_viaje, viaje, getViaje, loading, error, setIDViaje, isLoading } = useContext(ViajeContext);
+    const [dataViaje, setDataViaje] = useState([]);
     const [data, setData] = useState([]);
     const [data_contenedores, setDataContenedores] = useState([]);
 
@@ -26,10 +27,18 @@ const PDFGenerator = () => {
             .catch((error) => console.error("Error al obtener datos", error));
     }, []);
 
+    useEffect(() => {
+        odooApi.get("/tms_travel/get_by_id/" + id_viaje)
+            .then((response) => {
+                setDataViaje(response.data);
+            })
+            .catch((error) => console.error("Error al obtener datos", error));
+    }, []);
+
     return (
         <div>
             <Button
-                onPress={() => generatePDF(data, data_contenedores)}
+                onPress={() => generatePDF(dataViaje, data, data_contenedores)}
                 color="danger"
                 showAnchorIcon
                 as={Link}
