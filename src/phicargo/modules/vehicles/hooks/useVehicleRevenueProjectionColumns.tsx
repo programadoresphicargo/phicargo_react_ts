@@ -1,6 +1,8 @@
-import { CurrencyCell } from '@/components/ui';
+import { CurrencyCell, CurrencyFooterCell } from '@/components/ui';
+
 import type { MRT_ColumnDef } from 'material-react-table';
 import { ModalityChip } from '../../drivers/components/ui/ModalityChip';
+import { OperationalDaysCell } from '../components/vehicle-revenue-projection/OperationalDaysCell';
 import { VehicleNameCell } from '../components/ui/VehicleNameCell';
 import type { VehicleRevenueProjection } from '../models';
 import { useMemo } from 'react';
@@ -88,11 +90,25 @@ export const useVehicleRevenueProjectionColumns = () => {
         accessorKey: 'monthlyTarget',
         header: 'OBJETIVO MENS',
         Cell: ({ cell }) => <CurrencyCell value={cell.getValue<number>()} />,
+        Footer: ({ column }) => {
+          const total = column.getFacetedRowModel().rows.reduce(
+            (sum, row) => sum + (row.original.monthlyTarget ?? 0),
+            0,
+          );
+          return <CurrencyFooterCell value={total} />;
+        }
       },
       {
         accessorKey: 'idealDailyTarget',
         header: 'OBJETIVO DIARIO IDEAL',
         Cell: ({ cell }) => <CurrencyCell value={cell.getValue<number>()} />,
+        Footer: ({ column }) => {
+          const total = column.getFacetedRowModel().rows.reduce(
+            (sum, row) => sum + (row.original.idealDailyTarget ?? 0),
+            0,
+          );
+          return <CurrencyFooterCell value={total} />;
+        }
       },
       {
         accessorKey: 'workingDays',
@@ -101,16 +117,43 @@ export const useVehicleRevenueProjectionColumns = () => {
       {
         accessorKey: 'operationalDays',
         header: 'DÍAS OPS REAL',
+        Cell: ({ row }) => (
+          <OperationalDaysCell
+            value={row.original.operationalDays}
+            vehicleId={row.original.id}
+          />
+        ),
       },
       {
         accessorKey: 'dailyTarget',
         header: 'OBJETIVO DIARIO',
         Cell: ({ cell }) => <CurrencyCell value={cell.getValue<number>()} />,
+        Footer: ({ column }) => {
+          const total = column.getFacetedRowModel().rows.reduce(
+            (sum, row) => sum + (row.original.dailyTarget ?? 0),
+            0,
+          );
+          return <CurrencyFooterCell value={total} />;
+        }
       },
       {
         accessorKey: 'realMonthlyRevenue',
         header: 'INGRESO MENS REAL',
-        Cell: ({ cell }) => <CurrencyCell value={cell.getValue<number>()} />,
+        Cell: ({ row }) => (
+          <CurrencyCell
+            value={row.original.realMonthlyRevenue}
+            isWarning={
+              row.original.realMonthlyRevenue < row.original.monthlyTarget
+            }
+          />
+        ),
+        Footer: ({ column }) => {
+          const total = column.getFacetedRowModel().rows.reduce(
+            (sum, row) => sum + (row.original.realMonthlyRevenue ?? 0),
+            0,
+          );
+          return <CurrencyFooterCell value={total} />;
+        }
       },
       {
         accessorKey: 'availabilityStatus',
