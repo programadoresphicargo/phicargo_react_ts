@@ -65,6 +65,10 @@ const Disponibilidad_unidades = () => {
                 header: 'Placas',
             },
             {
+                accessorKey: 'tipo_vehiculo',
+                header: 'Tipo de vehiculo',
+            },
+            {
                 accessorKey: 'x_status',
                 header: 'Estado',
                 Cell: ({ cell }) => {
@@ -87,6 +91,13 @@ const Disponibilidad_unidades = () => {
             {
                 accessorKey: 'referencia_viaje',
                 header: 'Último viaje',
+                muiTableBodyCellProps: {
+                    sx: { backgroundColor: '#ffeb3b', fontFamily: 'Inter', },
+                },
+            },
+            {
+                accessorKey: 'sucursal_viaje',
+                header: 'Sucursal',
                 muiTableBodyCellProps: {
                     sx: { backgroundColor: '#ffeb3b', fontFamily: 'Inter', },
                 },
