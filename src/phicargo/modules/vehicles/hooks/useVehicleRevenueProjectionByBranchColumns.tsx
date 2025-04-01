@@ -1,4 +1,5 @@
-import { CurrencyCell } from '@/components/ui';
+import { CurrencyCell, CurrencyFooterCell } from '@/components/ui';
+
 import type { MRT_ColumnDef } from 'material-react-table';
 import type { VehicleRevenueProjectionByBranch } from '../models';
 import { useMemo } from 'react';
@@ -24,11 +25,29 @@ export const useVehicleRevenueProjectionByBranchColumns = () => {
         accessorKey: 'monthlyTarget',
         header: 'OBJETIVO MENS',
         Cell: ({ cell }) => <CurrencyCell value={cell.getValue<number>()} />,
+        Footer: ({ column }) => {
+          const total = column
+            .getFacetedRowModel()
+            .rows.reduce(
+              (sum, row) => sum + (row.original.monthlyTarget ?? 0),
+              0,
+            );
+          return <CurrencyFooterCell value={total} />;
+        },
       },
       {
         accessorKey: 'dailyTarget',
         header: 'OBJETIVO DIARIO',
         Cell: ({ cell }) => <CurrencyCell value={cell.getValue<number>()} />,
+        Footer: ({ column }) => {
+          const total = column
+            .getFacetedRowModel()
+            .rows.reduce(
+              (sum, row) => sum + (row.original.dailyTarget ?? 0),
+              0,
+            );
+          return <CurrencyFooterCell value={total} />;
+        },
       },
       {
         accessorKey: 'totalWorkingDays',
@@ -38,11 +57,29 @@ export const useVehicleRevenueProjectionByBranchColumns = () => {
         accessorKey: 'idealMonthlyRevenue',
         header: 'OBJETIVO MENS IDEAL',
         Cell: ({ cell }) => <CurrencyCell value={cell.getValue<number>()} />,
+        Footer: ({ column }) => {
+          const total = column
+            .getFacetedRowModel()
+            .rows.reduce(
+              (sum, row) => sum + (row.original.idealMonthlyRevenue ?? 0),
+              0,
+            );
+          return <CurrencyFooterCell value={total} />;
+        },
       },
       {
         accessorKey: 'realMonthlyRevenue',
         header: 'REAL MENSUAL',
         Cell: ({ cell }) => <CurrencyCell value={cell.getValue<number>()} />,
+        Footer: ({ column }) => {
+          const total = column
+            .getFacetedRowModel()
+            .rows.reduce(
+              (sum, row) => sum + (row.original.realMonthlyRevenue ?? 0),
+              0,
+            );
+          return <CurrencyFooterCell value={total} />;
+        },
       },
     ];
   }, []);
