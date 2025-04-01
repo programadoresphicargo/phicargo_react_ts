@@ -32,8 +32,8 @@ export const useJourneyDialogs = () => {
         });
     };
 
-    const finalizar_viaje = () => {
-        Swal.fire({
+    const finalizar_viaje = async () => {
+        const result = await Swal.fire({
             title: '¿Realmente quieres finalizar este viaje?',
             text: 'Esta acción no se puede deshacer',
             imageUrl: VITE_PHIDES_API_URL + '/img/status/final.gif',
@@ -45,22 +45,23 @@ export const useJourneyDialogs = () => {
             cancelButtonColor: '#d33',
             confirmButtonText: 'Sí, finalizar viaje',
             cancelButtonText: 'Cancelar',
-        }).then((result) => {
-            if (result.isConfirmed) {
-
-                if (!comprobar_estatus_viajes(id_viaje, 3)) {
-                    toast.error('No se ha registrado la llegada a planta. Debes enviarla antes de finalizar el viaje.');
-                    return;
-                }
-
-                if (!comprobar_estatus_viajes(id_viaje, 8)) {
-                    toast.error('No se ha registrado la salida de planta. Debes enviarla antes de finalizar el viaje."');
-                    return;
-                }
-
-                enviar_estatus(id_viaje, 103, [], '');
-            }
         });
+
+        if (result.isConfirmed) {
+            const estatus1 = await comprobar_estatus_viajes(id_viaje, 3);
+            if (!estatus1) {
+                toast.error('No se ha registrado la llegada a planta. Debes enviarla antes de finalizar el viaje.');
+                return;
+            }
+
+            const estatus2 = await comprobar_estatus_viajes(id_viaje, 8);
+            if (!estatus2) {
+                toast.error('No se ha registrado la salida de planta. Debes enviarla antes de finalizar el viaje.');
+                return; 
+            }
+
+            enviar_estatus(id_viaje, 103, [], '');
+        }
     };
 
     const liberar_resguardo = () => {
@@ -377,20 +378,16 @@ export const useJourneyDialogs = () => {
     const comprobar_estatus_viajes = async (id_viaje, id_estatus) => {
         try {
             const response = await odooApi.get(`/reportes_estatus_viajes/buscar_estatus/${id_viaje}/${id_estatus}`);
+            console.log(response.data.status);
 
             if (response.data.status === 'success') {
                 return true;
             } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: response.data.message,
-                });
                 return false;
             }
         } catch (error) {
             console.error('Error:', error);
-            toast.error('Error activando el viaje');
+            toast.error('Error buscando estatus');
             throw error;
         }
     };
