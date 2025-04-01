@@ -1,5 +1,5 @@
-import { CurrencyCell } from '@/components/ui';
-import { IoMdInformationCircle } from 'react-icons/io';
+import { CurrencyCell, CurrencyFooterCell } from '@/components/ui';
+
 import type { MRT_ColumnDef } from 'material-react-table';
 import { ModalityChip } from '../../drivers/components/ui/ModalityChip';
 import { OperationalDaysCell } from '../components/vehicle-revenue-projection/OperationalDaysCell';
@@ -90,11 +90,25 @@ export const useVehicleRevenueProjectionColumns = () => {
         accessorKey: 'monthlyTarget',
         header: 'OBJETIVO MENS',
         Cell: ({ cell }) => <CurrencyCell value={cell.getValue<number>()} />,
+        Footer: ({ column }) => {
+          const total = column.getFacetedRowModel().rows.reduce(
+            (sum, row) => sum + (row.original.monthlyTarget ?? 0),
+            0,
+          );
+          return <CurrencyFooterCell value={total} />;
+        }
       },
       {
         accessorKey: 'idealDailyTarget',
         header: 'OBJETIVO DIARIO IDEAL',
         Cell: ({ cell }) => <CurrencyCell value={cell.getValue<number>()} />,
+        Footer: ({ column }) => {
+          const total = column.getFacetedRowModel().rows.reduce(
+            (sum, row) => sum + (row.original.idealDailyTarget ?? 0),
+            0,
+          );
+          return <CurrencyFooterCell value={total} />;
+        }
       },
       {
         accessorKey: 'workingDays',
@@ -114,6 +128,13 @@ export const useVehicleRevenueProjectionColumns = () => {
         accessorKey: 'dailyTarget',
         header: 'OBJETIVO DIARIO',
         Cell: ({ cell }) => <CurrencyCell value={cell.getValue<number>()} />,
+        Footer: ({ column }) => {
+          const total = column.getFacetedRowModel().rows.reduce(
+            (sum, row) => sum + (row.original.dailyTarget ?? 0),
+            0,
+          );
+          return <CurrencyFooterCell value={total} />;
+        }
       },
       {
         accessorKey: 'realMonthlyRevenue',
@@ -126,6 +147,13 @@ export const useVehicleRevenueProjectionColumns = () => {
             }
           />
         ),
+        Footer: ({ column }) => {
+          const total = column.getFacetedRowModel().rows.reduce(
+            (sum, row) => sum + (row.original.realMonthlyRevenue ?? 0),
+            0,
+          );
+          return <CurrencyFooterCell value={total} />;
+        }
       },
       {
         accessorKey: 'availabilityStatus',
