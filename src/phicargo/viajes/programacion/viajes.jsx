@@ -247,6 +247,7 @@ const ViajesProgramados = ({ }) => {
         </h1>
         <MonthSelector selectedMonth={mes} handleChange={handleChange}></MonthSelector>
         <YearSelector selectedYear={año} handleChange={handleChangeAño}></YearSelector>
+        <Button color='primary' startContent={<i class="bi bi-arrow-clockwise"></i>} onPress={() => fetchData()}>Actualizar</Button>
         <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "programacion_viajes.csv")}>Exportar</Button>
       </Box>
     ),
