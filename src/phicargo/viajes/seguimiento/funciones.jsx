@@ -47,6 +47,17 @@ export const useJourneyDialogs = () => {
             cancelButtonText: 'Cancelar',
         }).then((result) => {
             if (result.isConfirmed) {
+
+                if (!comprobar_estatus_viajes(id_viaje, 3)) {
+                    toast.error('Faltan estatus por registrar: Llegada a planta.');
+                    return;
+                }
+
+                if (!comprobar_estatus_viajes(id_viaje, 8)) {
+                    toast.error('Faltan estatus por registrar: Salida de planta.');
+                    return;
+                }
+
                 enviar_estatus(id_viaje, 103, [], '');
             }
         });
@@ -354,12 +365,33 @@ export const useJourneyDialogs = () => {
     const getReportesNoAtendidos = async () => {
         try {
             const response = await odooApi.get('/problemas_operadores/no_atendidos/');
-            const numRegistros = response.data?.length ?? 0; 
+            const numRegistros = response.data?.length ?? 0;
             return numRegistros;
 
         } catch (error) {
             console.error('Error al obtener los datos:', error);
             return 0;
+        }
+    };
+
+    const comprobar_estatus_viajes = async (id_viaje, id_estatus) => {
+        try {
+            const response = await odooApi.get(`/reportes_estatus_viajes/buscar_estatus/${id_viaje}/${id_estatus}`);
+
+            if (response.data.status === 'success') {
+                return true;
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: response.data.message,
+                });
+                return false;
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            toast.error('Error activando el viaje');
+            throw error;
         }
     };
 
