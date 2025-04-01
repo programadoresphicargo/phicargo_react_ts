@@ -1,6 +1,8 @@
 import { CurrencyCell } from '@/components/ui';
+import { IoMdInformationCircle } from 'react-icons/io';
 import type { MRT_ColumnDef } from 'material-react-table';
 import { ModalityChip } from '../../drivers/components/ui/ModalityChip';
+import { OperationalDaysCell } from '../components/vehicle-revenue-projection/OperationalDaysCell';
 import { VehicleNameCell } from '../components/ui/VehicleNameCell';
 import type { VehicleRevenueProjection } from '../models';
 import { useMemo } from 'react';
@@ -101,6 +103,12 @@ export const useVehicleRevenueProjectionColumns = () => {
       {
         accessorKey: 'operationalDays',
         header: 'DÍAS OPS REAL',
+        Cell: ({ row }) => (
+          <OperationalDaysCell
+            value={row.original.operationalDays}
+            vehicleId={row.original.id}
+          />
+        ),
       },
       {
         accessorKey: 'dailyTarget',
