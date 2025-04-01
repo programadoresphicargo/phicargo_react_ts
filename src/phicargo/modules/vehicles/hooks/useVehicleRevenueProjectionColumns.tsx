@@ -110,7 +110,14 @@ export const useVehicleRevenueProjectionColumns = () => {
       {
         accessorKey: 'realMonthlyRevenue',
         header: 'INGRESO MENS REAL',
-        Cell: ({ cell }) => <CurrencyCell value={cell.getValue<number>()} />,
+        Cell: ({ row }) => (
+          <CurrencyCell
+            value={row.original.realMonthlyRevenue}
+            isWarning={
+              row.original.realMonthlyRevenue < row.original.monthlyTarget
+            }
+          />
+        ),
       },
       {
         accessorKey: 'availabilityStatus',
