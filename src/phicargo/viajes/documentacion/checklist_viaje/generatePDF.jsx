@@ -6,7 +6,7 @@ import odooApi from "@/phicargo/modules/core/api/odoo-api";
 export const generatePDF = async (dataViaje, data, data_contenedores) => {
     const doc = new jsPDF();
     const imageUrl = 'https://phi-cargo.com/wp-content/uploads/2021/05/logo-phicargo-vertical.png';
-    const texto = 'Este es un texto centrado con fondo colorido';
+    const texto = 'INSPECCIÓN DE SEGURIDAD';
 
     doc.autoTable({
         startY: 30, 

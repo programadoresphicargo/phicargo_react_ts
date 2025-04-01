@@ -87,7 +87,7 @@ const Documentacion = ({ }) => {
         Cell: ({ row }) => (
           <Button
             color='primary'
-            onClick={() => obtenerUrlPublico(row.original.id_onedrive)}
+            onPress={() => obtenerUrlPublico(row.original.id_onedrive)}
           >
             Ver archivo
           </Button>
