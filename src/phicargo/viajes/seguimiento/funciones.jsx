@@ -49,12 +49,12 @@ export const useJourneyDialogs = () => {
             if (result.isConfirmed) {
 
                 if (!comprobar_estatus_viajes(id_viaje, 3)) {
-                    toast.error('Faltan estatus por registrar: Llegada a planta.');
+                    toast.error('No se ha registrado la llegada a planta. Debes enviarla antes de finalizar el viaje.');
                     return;
                 }
 
                 if (!comprobar_estatus_viajes(id_viaje, 8)) {
-                    toast.error('Faltan estatus por registrar: Salida de planta.');
+                    toast.error('No se ha registrado la salida de planta. Debes enviarla antes de finalizar el viaje."');
                     return;
                 }
 
