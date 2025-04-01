@@ -21,16 +21,16 @@ const columns: MRT_ColumnDef<Incidence>[] = [
     id: 'driver',
   },
   {
+    accessorFn: (row) => row.createdAt.format('DD/MM/YYYY hh:mm A'),
+    header: 'Fecha',
+  },
+  {
     accessorFn: (row) => row.incidence,
     header: 'Incidencia',
   },
   {
     accessorFn: (row) => row.comments,
     header: 'Comentarios',
-  },
-  {
-    accessorFn: (row) => row.createdAt.format('DD/MM/YYYY hh:mm A'),
-    header: 'Fecha',
   },
   {
     accessorFn: (row) => row.user.username,

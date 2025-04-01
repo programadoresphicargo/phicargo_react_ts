@@ -118,7 +118,7 @@ export const DistanceAndRevenueByDriverChart = (props: Props) => {
 
   return (
     <ChartCard
-      title={`Ingresos y Distancia Por Unidad ${monthYearName}`}
+      title={`Ingresos y Distancia Por Operador ${monthYearName}`}
       isLoading={isLoading && !chartData}
       customHeight="150rem"
       downloadFn={() => exportData(data?.distanceAndRevenueByDriver || [])}

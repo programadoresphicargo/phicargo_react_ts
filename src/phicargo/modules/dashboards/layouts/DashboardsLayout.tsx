@@ -18,6 +18,7 @@ const pages: MenuItemType[] = [
     requiredPermissions: [],
   },
   { name: 'Finanzas', path: '/dashboards/finanzas', requiredPermissions: [] },
+  { name: 'Maniobras', path: '/dashboards/maniobras', requiredPermissions: [] },
 ];
 
 interface Props {
