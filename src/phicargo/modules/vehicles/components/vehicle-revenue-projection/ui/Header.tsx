@@ -23,7 +23,7 @@ const Header = () => {
         </p>
       </div>
 
-      <div className="flex gap-2 flex-1 md:mx-10">
+      <div className="flex gap-2 flex-1">
         <IndicatorCard
           title="Veracruz"
           content={

@@ -26,7 +26,7 @@ interface Props {
  */
 export const IndicatorCard = (props: Props) => {
   return (
-    <div className="bg-gray-200/20 backdrop-blur-sm rounded-lg p-2 shadow-md max-w-xs flex-1 hover:shadow-lg transition-shadow duration-300">
+    <div className="bg-gray-200/20 backdrop-blur-sm rounded-lg p-2 shadow-md flex-1 hover:shadow-lg transition-shadow duration-300">
       {props.startContent && (
         <div className="absolute top-1 left-2">{props.startContent}</div>
       )}
