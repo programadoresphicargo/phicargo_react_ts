@@ -13,6 +13,7 @@ const DriverDashboardPage = lazy(() => import('../pages/DriverDashboardPage'));
 const DepartureAndArrivalDashboardPage = lazy(
   () => import('../pages/DepartureAndArrivalDashboardPage'),
 );
+const ManeuversDashboardPage = lazy(() => import('../pages/ManeuversDashboardPage'));
 const FinanceDashbordPage = lazy(() => import('../pages/FinanceDashbordPage'));
 
 const permission = 203;
@@ -65,6 +66,14 @@ const DashboardsRoutes = () => (
       element={
         <Suspense fallback={<LoadingPage />}>
           <FinanceDashbordPage />
+        </Suspense>
+      }
+    />
+    <Route
+      path="maniobras"
+      element={
+        <Suspense fallback={<LoadingPage />}>
+          <ManeuversDashboardPage />
         </Suspense>
       }
     />
