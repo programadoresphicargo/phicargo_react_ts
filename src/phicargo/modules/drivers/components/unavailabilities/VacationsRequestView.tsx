@@ -9,7 +9,7 @@ import {
 
 import { DriverUnavailabilityServiceApi } from '../../services';
 import { PDFViewer } from '@react-pdf/renderer';
-import { VacationsRequest } from '@/phicargo/modules/availability/pdf/documents/VacationsRequest';
+import { VacationsRequest } from '@/phicargo/modules/drivers-and-vehicles/pdf/documents/VacationsRequest';
 import { useEffect } from 'react';
 import { useFetch } from '@/hooks';
 
