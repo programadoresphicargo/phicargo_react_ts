@@ -143,15 +143,11 @@ const ViajesActivos = ({ }) => {
       {
         accessorKey: 'ultimo_estatus_enviado',
         header: 'Último estatus',
-        Cell: ({ cell }) => {
-          const rowData = cell.row.original;
-
-          return (
-            <EstatusDropdown
-              data={rowData}
-            />
-          );
-        },
+        Cell: ({ cell }) => (
+          <EstatusDropdown
+            data={cell.row.original}
+          />
+        ),
       },
       {
         accessorKey: 'vehiculo',

@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button, Spinner } from "@heroui/react";
 import odooApi from "@/phicargo/modules/core/api/odoo-api";
 import { User } from "@heroui/react";
-import { Avatar, AvatarGroup, AvatarIcon } from "@heroui/avatar";
 
 const EstatusDropdown = ({ data }) => {
     const [items, setItems] = useState([]);
@@ -34,19 +33,14 @@ const EstatusDropdown = ({ data }) => {
                 {isLoading ? (
                     <Spinner size="sm" />
                 ) : (
-                    <>
-                        <div className="flex items-center gap-3">
-                            <Avatar
-                                size="sm"
-                                isBordered
-                                color={data.tipo_registrante === "operador" ? "success" : "primary"}
-                            />
-                            <div>
-                                <p className="font-semibold">{`${data.ultimo_estatus_enviado}`}</p>
-                                <span className="text-sm text-gray-500">{data.ultimo_estatus_fecha}</span>
-                            </div>
-                        </div>
-                    </>
+                    <User
+                        avatarProps={{
+                            isBordered: true,
+                            color: "primary",
+                        }}
+                        name={`${data.ultimo_estatus_enviado}`}
+                        description={`${data.ultimo_estatus_fecha}`}
+                    />
                 )}
             </DropdownTrigger>
             {isLoading ? (
