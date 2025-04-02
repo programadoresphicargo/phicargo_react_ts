@@ -1,27 +1,28 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import Slide from '@mui/material/Slide';
-import { Box } from '@mui/material';
-import OperadorForm from './saldoForm';
-import odooApi from '../modules/core/api/odoo-api';
-import { DatePicker } from "@heroui/react";
-import { parseDate, getLocalTimeZone } from "@internationalized/date";
 import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   Button,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
   useDisclosure,
 } from "@heroui/react";
-import { Chip } from "@heroui/react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
+import React, { useEffect, useMemo, useState } from 'react';
+import { getLocalTimeZone, parseDate } from "@internationalized/date";
+
+import { Box } from '@mui/material';
+import { Chip } from "@heroui/react";
 import Cuentas from './cuentas';
-import SaldoForm from './saldoForm';
+import { DatePicker } from "@heroui/react";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
+import OperadorForm from './saldoForm';
+import SaldoForm from './saldoForm';
+import Slide from '@mui/material/Slide';
+import odooApi from '@/api/odoo-api';
 
 const Operadores = ({ estado }) => {
 

@@ -1,8 +1,8 @@
+import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Select, SelectItem } from "@heroui/react";
 
-import { useState } from "react";
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Select, SelectItem } from "@heroui/react";
+import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
-import odooApi from "../modules/core/api/odoo-api";
+import { useState } from "react";
 
 const meses = [
     { id: 1, nombre: "Enero" },

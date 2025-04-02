@@ -1,9 +1,10 @@
-import React, { useEffect, useState, useContext } from "react";
-import axios from "axios";
 import { Button, Link } from "@heroui/react";
-import { generatePDF } from "./generatePDF";
-import odooApi from "@/phicargo/modules/core/api/odoo-api";
+import React, { useContext, useEffect, useState } from "react";
+
 import { ViajeContext } from "../../context/viajeContext";
+import axios from "axios";
+import { generatePDF } from "./generatePDF";
+import odooApi from '@/api/odoo-api';
 
 const PDFGenerator = () => {
     const { id_viaje, viaje, getViaje, loading, error, setIDViaje, isLoading } = useContext(ViajeContext);

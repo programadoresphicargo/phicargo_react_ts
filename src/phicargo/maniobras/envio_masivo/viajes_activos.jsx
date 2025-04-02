@@ -11,9 +11,9 @@ import { Box } from '@mui/material';
 import EstatusDropdownManiobra from '../reportes_estatus/resumen_estatus';
 import { Spinner } from "@heroui/react";
 import Swal from 'sweetalert2';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import odooApi from '@/api/odoo-api';
 import toast from 'react-hot-toast';
-import { useAuthContext } from '@/phicargo/modules/auth/hooks';
+import { useAuthContext } from "@/modules/auth/hooks";
 
 const ManiobrasActivasMasivos = ({ }) => {
   const [allData, setAllData] = useState([]);

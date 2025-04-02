@@ -1,46 +1,47 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { Button, Select, SelectItem } from "@heroui/react";
-import axios from 'axios';
-import Grid from '@mui/material/Grid';
-import { Card, CardHeader, CardBody, CardFooter, Divider, Link, Image } from "@heroui/react";
-import { toast } from 'react-toastify';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import dayjs from 'dayjs';
-import TextField from '@mui/material/TextField';
-import Timeline from '@mui/lab/Timeline';
-import TimelineItem from '@mui/lab/TimelineItem';
-import TimelineSeparator from '@mui/lab/TimelineSeparator';
-import TimelineConnector from '@mui/lab/TimelineConnector';
-import TimelineContent from '@mui/lab/TimelineContent';
-import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
-import TimelineDot from '@mui/lab/TimelineDot';
-import LaptopMacIcon from '@mui/icons-material/LaptopMac';
-import Typography from '@mui/material/Typography';
-import Checkbox from '@mui/material/Checkbox';
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import Stack from '@mui/material/Stack';
-import Validador from './validacion';
-import ModuloVehiculo from './vehiculos/modulo_vehiculo';
-import { AccesoContext } from './context';
-import ListadoEmpresas from './empresas/tabla';
-import SelectedVisitantesTable from './visitantes/visitantes_seleccionados_tabla';
-import InputAdornment from '@mui/material/InputAdornment';
-import IconButton from '@mui/material/IconButton';
-import SearchIcon from '@mui/icons-material/Search';
-import { Textarea } from "@heroui/react";
-import odooApi from '../modules/core/api/odoo-api';
-import { Input } from "@heroui/react";
-import { Progress } from "@heroui/react";
-import { Box } from '@mui/material';
 import {
     Autocomplete,
-    AutocompleteSection,
-    AutocompleteItem
+    AutocompleteItem,
+    AutocompleteSection
 } from "@heroui/react";
+import { Button, Select, SelectItem } from "@heroui/react";
+import { Card, CardBody, CardFooter, CardHeader, Divider, Image, Link } from "@heroui/react";
+import React, { useContext, useEffect, useState } from 'react';
+
+import { AccesoContext } from './context';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { Box } from '@mui/material';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import Checkbox from '@mui/material/Checkbox';
 import { ClockIcon } from '@mui/x-date-pickers';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import { Input } from "@heroui/react";
+import InputAdornment from '@mui/material/InputAdornment';
+import LaptopMacIcon from '@mui/icons-material/LaptopMac';
+import ListadoEmpresas from './empresas/tabla';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import ModuloVehiculo from './vehiculos/modulo_vehiculo';
+import { Progress } from "@heroui/react";
+import SearchIcon from '@mui/icons-material/Search';
+import SelectedVisitantesTable from './visitantes/visitantes_seleccionados_tabla';
+import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
+import { Textarea } from "@heroui/react";
+import Timeline from '@mui/lab/Timeline';
+import TimelineConnector from '@mui/lab/TimelineConnector';
+import TimelineContent from '@mui/lab/TimelineContent';
+import TimelineDot from '@mui/lab/TimelineDot';
+import TimelineItem from '@mui/lab/TimelineItem';
+import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
+import TimelineSeparator from '@mui/lab/TimelineSeparator';
+import Typography from '@mui/material/Typography';
+import Validador from './validacion';
+import axios from 'axios';
+import dayjs from 'dayjs';
+import odooApi from '@/api/odoo-api';
+import { toast } from 'react-toastify';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;

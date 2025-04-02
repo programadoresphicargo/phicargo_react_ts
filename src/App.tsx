@@ -4,7 +4,7 @@ import { useHref, useNavigate } from 'react-router-dom';
 
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { AppRouter } from './router/AppRouter';
-import { AuthProvider } from './phicargo/modules/auth/context';
+import { AuthProvider } from './modules/auth/context';
 import { HeroUIProvider } from '@heroui/react';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { QueryClientProvider } from '@tanstack/react-query';

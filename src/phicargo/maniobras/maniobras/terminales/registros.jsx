@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+
+import { Button } from "@heroui/react";
 import FormularioTerminales from './informacion';
 import ManiobrasNavBar from '../../Navbar';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
-import { Button } from "@heroui/react";
+import odooApi from '@/api/odoo-api';
 
 const Terminales = () => {
 

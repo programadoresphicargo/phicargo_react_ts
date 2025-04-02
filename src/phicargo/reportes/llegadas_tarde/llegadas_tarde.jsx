@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import { Button, Chip, DatePicker } from "@heroui/react";
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { download, generateCsv, mkConfig } from 'export-to-csv';
+import { getLocalTimeZone, parseDate } from "@internationalized/date";
+
 import Badge from 'react-bootstrap/Badge';
-import { mkConfig, generateCsv, download } from 'export-to-csv';
 import { Box } from '@mui/material';
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { Component } from "react";
-import { Button, DatePicker, Chip } from "@heroui/react";
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import ResponsiveAppBar from '@/phicargo/saldos_contabilidad/Navbar';
-import { parseDate, getLocalTimeZone } from "@internationalized/date";
-import { useDateFormatter } from "@react-aria/i18n";
+import axios from 'axios';
+import odooApi from '@/api/odoo-api';
 import { toast } from "react-toastify";
+import { useDateFormatter } from "@react-aria/i18n";
 
 const DetencionesTable = () => {
 

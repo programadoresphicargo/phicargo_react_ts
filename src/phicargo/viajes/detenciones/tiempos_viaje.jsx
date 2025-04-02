@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useMemo, useContext } from 'react';
-import { Progress, Card, CardHeader, Divider, CardBody } from "@heroui/react";
-import { ViajeContext } from '../context/viajeContext';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import { Card, CardBody, CardHeader, Divider, Progress } from "@heroui/react";
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { TiemposViajeProvider, useTiemposViaje } from './TiemposViajeContext';
+
+import { ViajeContext } from '../context/viajeContext';
+import odooApi from '@/api/odoo-api';
 
 function TiemposViajes() {
 

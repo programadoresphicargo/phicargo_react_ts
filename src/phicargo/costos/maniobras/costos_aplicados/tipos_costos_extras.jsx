@@ -8,7 +8,7 @@ import { Box } from '@mui/material';
 import { Button } from "@heroui/react";
 import { CostosExtrasContext } from '../../context/context';
 import { ViajeContext } from '../../../viajes/context/viajeContext';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import odooApi from '@/api/odoo-api';
 
 const ServiciosExtras = ({ onClose }) => {
 

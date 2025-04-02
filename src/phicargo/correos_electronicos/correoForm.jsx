@@ -1,7 +1,8 @@
-import React, { useState, useContext } from 'react';
 import { Button, Input, Select, SelectItem } from "@heroui/react";
+import React, { useContext, useState } from 'react';
+
+import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
 
 const FormularioCorreoGeneral = ({ handleClose, idCliente }) => {
   const [isLoading, setLoading] = useState(false);

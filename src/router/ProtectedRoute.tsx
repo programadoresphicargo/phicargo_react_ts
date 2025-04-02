@@ -1,7 +1,7 @@
 import { Navigate } from 'react-router-dom';
 import { ReactNode } from 'react';
 import UnauthorizedPage from '@/pages/UnauthorizedPage';
-import { useAuthContext } from '../phicargo/modules/auth/hooks';
+import { useAuthContext } from "@/modules/auth/hooks";
 
 interface Props {
   element: ReactNode;

@@ -1,16 +1,17 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import Formulariomaniobra from './formulario_maniobra';
-import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
-import { format, isValid } from 'date-fns';
 import { Button, Card, CardBody } from "@heroui/react";
-import { Chip } from "@heroui/react";
+import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { format, isValid } from 'date-fns';
+
 import { Box } from '@mui/system';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import { Chip } from "@heroui/react";
+import DocumentacionManiobra from '../documentacion/documentacion';
+import Formulariomaniobra from './formulario_maniobra';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import DocumentacionManiobra from '../documentacion/documentacion';
+import odooApi from '@/api/odoo-api';
 
 const Registromaniobras = ({ id_cp, id_cliente }) => {
     const [isLoading2, setILoading] = useState();

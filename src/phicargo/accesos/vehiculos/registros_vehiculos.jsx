@@ -1,15 +1,16 @@
-import React, { useState, useEffect, useContext, useMemo } from 'react';
-import Dialog from '@mui/material/Dialog';
-import VehiculoForm from './vehiculoForm';
-import Box from '@mui/material/Box';
-import { Button } from "@heroui/react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import { DialogContent } from '@mui/material';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
+
 import { AccesoContext } from '../context';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import Box from '@mui/material/Box';
+import { Button } from "@heroui/react";
+import Dialog from '@mui/material/Dialog';
+import { DialogContent } from '@mui/material';
+import VehiculoForm from './vehiculoForm';
+import odooApi from '@/api/odoo-api';
 
 const RegistroVehiculos = ({ onClose }) => {
   const { AñadirVehiculo } = useContext(AccesoContext);

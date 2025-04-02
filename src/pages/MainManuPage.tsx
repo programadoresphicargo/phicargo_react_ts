@@ -14,7 +14,7 @@ import monitoreo_img from '../assets/menu/monitoreo.png';
 import reportesImg from '../assets/menu/reportes.png';
 import shipingcontainer from '../assets/menu/shiping-container.png';
 import turnos_img from '../assets/menu/turnos.png';
-import { useAuthContext } from '@/phicargo/modules/auth/hooks';
+import { useAuthContext } from '@/modules/auth/hooks';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import usuarios_img from '../assets/menu/usuarios.png';

@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { ViajeContext } from '../context/viajeContext';
+import { Avatar, Badge, Card, CardHeader } from "@heroui/react";
+import React, { useContext, useEffect, useState } from 'react';
+
 import { Spinner } from "@heroui/react";
-import { Card, CardHeader, Avatar, Badge } from "@heroui/react";
+import { ViajeContext } from '../context/viajeContext';
+import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
 
 function Contenedores() {
     const { id_viaje } = useContext(ViajeContext);

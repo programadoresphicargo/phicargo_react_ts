@@ -1,19 +1,20 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import Slide from '@mui/material/Slide';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import { Box } from '@mui/material';
-import { Checkbox } from '@mui/material';
-import { Button } from "@heroui/react";
-const { VITE_PHIDES_API_URL } = import.meta.env;
-
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import odooApi from '../modules/core/api/odoo-api';
+import React, { useEffect, useMemo, useState } from 'react';
+
+import { Box } from '@mui/material';
+import { Button } from "@heroui/react";
+import { Checkbox } from '@mui/material';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Slide from '@mui/material/Slide';
+import odooApi from '@/api/odoo-api';
+const { VITE_PHIDES_API_URL } = import.meta.env;
+
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;

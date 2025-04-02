@@ -16,8 +16,9 @@ import PanelEnvio from '../panel_envio_estatus/panel_envio';
 import Slide from '@mui/material/Slide';
 import { ViajeContext } from '../context/viajeContext';
 import axios from 'axios';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import odooApi from '@/api/odoo-api';
 import { tiempoTranscurrido } from '../../funciones/tiempo';
+
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 function EstatusHistorialAgrupado({ registros_agrupados }) {

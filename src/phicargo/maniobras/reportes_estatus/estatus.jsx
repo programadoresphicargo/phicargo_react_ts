@@ -10,7 +10,7 @@ import DialogContent from '@mui/material/DialogContent';
 import EstatusHistorialAgrupado from './estatus_agrupados';
 import Slide from '@mui/material/Slide';
 import { Stack } from 'rsuite';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import odooApi from '@/api/odoo-api';
 import { tiempoTranscurrido } from '../../funciones/tiempo';
 import { toast } from 'react-toastify';
 

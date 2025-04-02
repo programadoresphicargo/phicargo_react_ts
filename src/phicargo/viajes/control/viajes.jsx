@@ -2,6 +2,7 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
+import { Popover, PopoverContent, PopoverTrigger, User, useDisclosure } from "@heroui/react";
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 
 import AppBar from '@mui/material/AppBar';
@@ -10,23 +11,22 @@ import { Box } from '@mui/material';
 import { Button } from "@heroui/react"
 import { Chip } from "@heroui/react";
 import CloseIcon from '@mui/icons-material/Close';
+import DetencionesViajesActivos from '../detenciones/detenciones_modal';
 import Dialog from '@mui/material/Dialog';
+import EstatusDropdown from '../estatus/resumen_estatus';
 import IconButton from '@mui/material/IconButton';
 import { Image } from 'antd';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import NavbarViajes from '../navbar';
 import Slide from '@mui/material/Slide';
 import Toolbar from '@mui/material/Toolbar';
+import Travel from './viaje';
 import Typography from '@mui/material/Typography';
 import Viaje from '../viaje';
 import { ViajeContext } from '../context/viajeContext';
 import ViajesActivosMasivo from '../envio_masivo/viajes_activos';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
-import { Popover, PopoverTrigger, PopoverContent, useDisclosure, User } from "@heroui/react";
-import DetencionesViajesActivos from '../detenciones/detenciones_modal';
-import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import Travel from './viaje';
-import EstatusDropdown from '../estatus/resumen_estatus';
 import { exportToCSV } from '../../utils/export';
+import odooApi from '@/api/odoo-api';
 
 const { VITE_PHIDES_API_URL } = import.meta.env;
 

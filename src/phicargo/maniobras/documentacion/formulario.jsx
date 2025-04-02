@@ -6,7 +6,8 @@ import { Upload, message } from 'antd';
 
 import { Box } from '@mui/material';
 import Slide from '@mui/material/Slide';
-import { useAuthContext } from '../../modules/auth/hooks';
+import { useAuthContext } from "@/modules/auth/hooks";
+
 const { Dragger } = Upload;
 const { VITE_PHIDES_API_URL } = import.meta.env;
 

@@ -2,8 +2,8 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { Suspense, lazy, useEffect } from 'react';
 
 import { LoadingPage } from '@/pages/LoadingPage';
-import LoginPage from '../phicargo/modules/auth/pages/LoginPage';
-import { useAuthContext } from '@/phicargo/modules/auth/hooks';
+import LoginPage from '../modules/auth/pages/LoginPage';
+import { useAuthContext } from '@/modules/auth/hooks';
 
 const UsagePoliciesPage = lazy(() => import('@/pages/UsagePoliciesPage'));
 

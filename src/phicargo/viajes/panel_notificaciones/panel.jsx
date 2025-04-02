@@ -19,7 +19,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Travel from '../control/viaje';
 import Typography from '@mui/material/Typography';
 import { ViajeContext } from '../context/viajeContext';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import odooApi from '@/api/odoo-api';
 import { tiempoTranscurrido } from '../../funciones/tiempo';
 
 export default function Notificaciones({ isOpen, onOpen, onOpenChange }) {

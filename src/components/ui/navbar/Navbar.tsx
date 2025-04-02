@@ -14,7 +14,7 @@ import AvatarProfile from '../AvatarProfile';
 import { BackButton } from '@/components/ui';
 import type { MenuItemType } from '@/types';
 import { NavbarLinkItem } from './NavbarLinkItem';
-import { useAuthContext } from '@/phicargo/modules/auth/hooks';
+import { useAuthContext } from '@/modules/auth/hooks';
 
 interface Props {
   pages: MenuItemType[];

@@ -1,7 +1,8 @@
-import jsPDF from "jspdf";
 import "jspdf-autotable";
+
 import axios from "axios";
-import odooApi from "@/phicargo/modules/core/api/odoo-api";
+import jsPDF from "jspdf";
+import odooApi from '@/api/odoo-api';
 
 export const generatePDF = async (data, data_contenedores) => {
     const doc = new jsPDF();

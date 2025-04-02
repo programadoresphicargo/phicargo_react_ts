@@ -1,18 +1,19 @@
-import React, { useState, useEffect, useContext, useMemo } from 'react';
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@heroui/react";
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure } from "@heroui/react";
-import axios from 'axios';
+import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@heroui/react";
+import { Card, CardBody, CardFooter, CardHeader, Divider, Image, Link } from "@heroui/react";
+import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/react";
+
 import Autocomplete from '@mui/material/Autocomplete';
 import Grid from '@mui/material/Grid';
-import { Card, CardHeader, CardBody, CardFooter, Divider, Link, Image } from "@heroui/react";
-import { toast } from 'react-toastify';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import { useAuthContext } from '../modules/auth/hooks';
-import odooApi from '../modules/core/api/odoo-api';
+import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import axios from 'axios';
+import odooApi from '@/api/odoo-api';
+import { toast } from 'react-toastify';
+import { useAuthContext } from "@/modules/auth/hooks";
 
 const EntregaForm2 = ({ id_entrega, onClose }) => {
 

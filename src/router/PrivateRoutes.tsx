@@ -4,18 +4,18 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
 
 import AccesoForm from '../phicargo/accesos/formulario';
-import AvailabilityRoutes from '../phicargo/modules/drivers-and-vehicles/routes/AvailabilityRoutes';
-import DOReportRoutes from '@/phicargo/modules/daily-operations-report/routes/DOReportRoutes';
-import DashboardsRoutes from '@/phicargo/modules/dashboards/routes/DashboardRoutes';
+import AvailabilityRoutes from '../modules/drivers-and-vehicles/routes/AvailabilityRoutes';
+import DOReportRoutes from '@/modules/daily-operations-report/routes/DOReportRoutes';
+import DashboardsRoutes from '@/modules/dashboards/routes/DashboardRoutes';
 import { LoadingPage } from '@/pages/LoadingPage';
 import MainMenuPage from '@/pages/MainManuPage';
 import NotFoundPage from '@/pages/NotFoundPage';
 import { ReportsRoutes } from './ReportsRoutes';
-import { ServiceRequestsRoutes } from '@/phicargo/modules/service-requests/routes/ServiceRequestsRoutes';
-import ShiftsRoutes from '../phicargo/modules/shifts/routes/ShiftsRoutes';
+import { ServiceRequestsRoutes } from '@/modules/service-requests/routes/ServiceRequestsRoutes';
+import ShiftsRoutes from '../modules/shifts/routes/ShiftsRoutes';
 import { ToastContainer } from 'react-toastify';
 import { Toaster } from 'react-hot-toast';
-import UsersManagementRoutes from '../phicargo/modules/users-management/routes/UsersManagementRoutes';
+import UsersManagementRoutes from '../modules/users-management/routes/UsersManagementRoutes';
 
 // Lazy load the components
 const CartasPorte = lazy(

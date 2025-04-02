@@ -1,30 +1,31 @@
-import React, { useState, useEffect, useMemo, useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
+
+import { Alert } from "@heroui/react";
 import AppBar from '@mui/material/AppBar';
+import AppsIcon from '@mui/icons-material/Apps';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import Badge from '@mui/material/Badge';
 import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
+import MailIcon from '@mui/icons-material/Mail';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Link, useNavigate } from 'react-router-dom';
-import { makeStyles } from '@mui/styles';
-import Badge from '@mui/material/Badge';
-import MailIcon from '@mui/icons-material/Mail';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import Notificaciones from './panel_notificaciones/panel';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import ProblemasOperadores from './problemas_operadores/panel';
-import AppsIcon from '@mui/icons-material/Apps';
+import ProblemasOperadores2 from './problemas_operadores/panel';
+import ReportIcon from '@mui/icons-material/Report';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import { makeStyles } from '@mui/styles';
+import odooApi from '@/api/odoo-api';
 import {
     useDisclosure,
 } from "@heroui/react";
-import ProblemasOperadores2 from './problemas_operadores/panel';
-import { Alert } from "@heroui/react";
-import ReportIcon from '@mui/icons-material/Report';
-import odooApi from '../modules/core/api/odoo-api';
 import { useJourneyDialogs } from './seguimiento/funciones';
 
 const pages = [

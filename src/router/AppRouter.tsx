@@ -1,7 +1,7 @@
 import { LoadingPage } from '@/pages/LoadingPage';
 import { PrivateRoutes } from './PrivateRoutes';
 import { PublicRoutes } from './PublicRoutes';
-import { useAuthContext } from '../phicargo/modules/auth/hooks';
+import { useAuthContext } from "@/modules/auth/hooks";
 
 /**
  * AppRouter de la aplicación
