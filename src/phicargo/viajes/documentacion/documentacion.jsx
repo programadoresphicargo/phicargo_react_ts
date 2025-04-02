@@ -16,7 +16,6 @@ import Slide from '@mui/material/Slide';
 import { ViajeContext } from '../context/viajeContext';
 import odooApi from '@/phicargo/modules/core/api/odoo-api';
 import { toast } from 'react-toastify';
-import PDFGenerator from './checklist_viaje';
 const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -151,7 +150,16 @@ const Documentacion = ({ }) => {
           Nuevo documento
         </Button>
 
-        <PDFGenerator></PDFGenerator>
+        <Button
+          showAnchorIcon
+          as={Link}
+          isExternal={true}
+          color="danger"
+          href={`${apiUrl}/tms_travel/checklist/pdf/` + id_viaje}
+          variant="solid"
+        >
+          Checklist
+        </Button>
 
         <Button
           showAnchorIcon
