@@ -35,11 +35,16 @@ const EstatusDropdown = ({ data }) => {
                 ) : (
                     <User
                         avatarProps={{
+                            className:"text-white",
                             isBordered: true,
-                            color: "primary",
+                            color: data.tipo_registrante === "operador"
+                                ? "success"
+                                : data.tipo_registrante === "administrador"
+                                    ? "warning"
+                                    : "primary",
                         }}
                         name={`${data.ultimo_estatus_enviado}`}
-                        description={`${data.ultimo_estatus_fecha}`}
+                        description={`${data.nombre_registrante} ${data.ultimo_estatus_fecha}`}
                     />
                 )}
             </DropdownTrigger>
