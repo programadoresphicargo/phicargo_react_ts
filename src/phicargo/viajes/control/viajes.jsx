@@ -143,12 +143,15 @@ const ViajesActivos = ({ }) => {
       {
         accessorKey: 'ultimo_estatus_enviado',
         header: 'Último estatus',
-        Cell: ({ cell }) => (
-          <EstatusDropdown
-            id_viaje={cell.row.original.id_viaje}
-            ultimo_estatus={cell.getValue() || ''}
-          />
-        ),
+        Cell: ({ cell }) => {
+          const rowData = cell.row.original;
+
+          return (
+            <EstatusDropdown
+              data={rowData}
+            />
+          );
+        },
       },
       {
         accessorKey: 'vehiculo',
@@ -251,8 +254,8 @@ const ViajesActivos = ({ }) => {
           }
 
           return (
-            <Chip color={badgeClass}>
-              {value.charAt(0).toUpperCase() + value.slice(1)}
+            <Chip color={badgeClass} className="text-white">
+              {value}
             </Chip>
           );
         },

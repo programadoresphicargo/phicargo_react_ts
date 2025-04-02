@@ -2,15 +2,16 @@ import { useState } from "react";
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button, Spinner } from "@heroui/react";
 import odooApi from "@/phicargo/modules/core/api/odoo-api";
 import { User } from "@heroui/react";
+import { Avatar, AvatarGroup, AvatarIcon } from "@heroui/avatar";
 
-const EstatusDropdown = ({ id_viaje, ultimo_estatus }) => {
+const EstatusDropdown = ({ data }) => {
     const [items, setItems] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
     const fetchItems = () => {
         setIsLoading(true);
-        odooApi.get(`/reportes_estatus_viajes/by_id_viaje/${id_viaje}`)
+        odooApi.get(`/reportes_estatus_viajes/by_id_viaje/${data.id_viaje}`)
             .then((response) => {
                 setItems(response.data);
             })
@@ -33,12 +34,19 @@ const EstatusDropdown = ({ id_viaje, ultimo_estatus }) => {
                 {isLoading ? (
                     <Spinner size="sm" />
                 ) : (
-                    <User
-                        avatarProps={{
-                            src: "https://th.bing.com/th/id/OIP.9_MptOLxjJEGSGukPt9FWQHaHa?w=1920&h=1920&rs=1&pid=ImgDetMain",
-                        }}
-                        name={`${ultimo_estatus}`}
-                    />
+                    <>
+                        <div className="flex items-center gap-3">
+                            <Avatar
+                                size="sm"
+                                isBordered
+                                color={data.tipo_registrante === "operador" ? "success" : "primary"}
+                            />
+                            <div>
+                                <p className="font-semibold">{`${data.ultimo_estatus_enviado}`}</p>
+                                <span className="text-sm text-gray-500">{data.ultimo_estatus_fecha}</span>
+                            </div>
+                        </div>
+                    </>
                 )}
             </DropdownTrigger>
             {isLoading ? (
