@@ -158,7 +158,7 @@ const Documentacion = ({ }) => {
           href={`${apiUrl}/tms_travel/checklist/pdf/` + id_viaje}
           variant="solid"
         >
-          Checklist
+          Checklist de viaje
         </Button>
 
         <Button
