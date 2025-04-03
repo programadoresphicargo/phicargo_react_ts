@@ -37,7 +37,7 @@ import axios from 'axios';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import { useAuthContext } from "@/modules/auth/hooks";
-import days from 'dayjs'
+import dayjs from 'dayjs';
 
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
