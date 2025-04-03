@@ -1,42 +1,43 @@
-import React, { useState, useEffect, useCallback, useContext } from 'react';
-import axios from 'axios';
-import ManiobraContenedores from './añadir_contenedor/maniobra_contenedores';
+import { Autocomplete, AutocompleteItem } from '@heroui/react';
+import { Card, CardBody } from "@heroui/react";
 import { CardHeader, Divider, User } from "@heroui/react";
 import { Container, filledInputClasses } from '@mui/material';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
+
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import AppBar from '@mui/material/AppBar';
 import AutocompleteManager from './correos_electronicos/correos_electronicos';
 import Box from '@mui/material/Box';
 import { Button } from "@heroui/react";
+import CancelarManiobraDialog from './cancelar_maniobra';
+import CorreosLigadosManiobra from './correos_electronicos/dialog_correos';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import Dialog from '@mui/material/Dialog';
 import DocumentacionManiobra from '../documentacion/documentacion';
 import EstatusHistorialManiobras from '../reportes_estatus/estatus';
+import Grid from '@mui/material/Grid2';
 import LinearProgress from '@mui/material/LinearProgress';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import ManiobraContenedores from './añadir_contenedor/maniobra_contenedores';
+import { ManiobraContext } from '../context/viajeContext';
 import MyComponent from './selects_flota';
 import PanelEstatus from './envio_estatus/panel';
 import SelectOperador from './select_operador';
 import SelectTerminal from './select_terminal';
 import Slide from '@mui/material/Slide';
 import Stack from '@mui/material/Stack';
-import CancelarManiobraDialog from './cancelar_maniobra';
-import { toast } from 'react-toastify';
-import { Card, CardBody } from "@heroui/react";
 import Swal from 'sweetalert2';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import CorreosLigadosManiobra from './correos_electronicos/dialog_correos';
-import { ManiobraContext } from '../context/viajeContext';
-import { useAuthContext } from '@/phicargo/modules/auth/hooks';
 import { Toolbar } from '@mui/material';
 import { Typography } from '@mui/material';
-import { Autocomplete, AutocompleteItem } from '@heroui/react';
-import dayjs from 'dayjs';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
-import Grid from '@mui/material/Grid2';
+import axios from 'axios';
+import odooApi from '@/api/odoo-api';
+import { toast } from 'react-toastify';
+import { useAuthContext } from "@/modules/auth/hooks";
+import days from 'dayjs'
 
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
