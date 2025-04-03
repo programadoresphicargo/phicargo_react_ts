@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+
 import { Autocomplete } from '@mui/material';
 import TextField from '@mui/material/TextField';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import axios from 'axios';
+import odooApi from '@/api/odoo-api';
 
 const SelectTerminal = ({ label, id, name, onChange, value, disabled, error_terminal }) => {
     const [options, setOptions] = useState([]);

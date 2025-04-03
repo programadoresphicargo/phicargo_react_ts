@@ -1,7 +1,8 @@
+import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Spinner } from "@heroui/react";
+import { Link, User } from "@heroui/react";
+
+import odooApi from '@/api/odoo-api';
 import { useState } from "react";
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button, Spinner } from "@heroui/react";
-import odooApi from "@/phicargo/modules/core/api/odoo-api";
-import { User, Link } from "@heroui/react";
 
 const EstatusDropdownManiobra = ({ id_maniobra, ultimo_estatus, usuario_ultimo_estatus, fecha_ultimo_estatus }) => {
     const [items, setItems] = useState([]);

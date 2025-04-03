@@ -12,17 +12,17 @@ import React, { useContext, useEffect, useMemo, useState } from 'react';
 
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
+import { Chip } from "@heroui/react";
 import { Container } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
+import ReporteOperador from "./reporte";
 import Toolbar from '@mui/material/Toolbar';
 import Travel from '../control/viaje';
 import Typography from '@mui/material/Typography';
 import { ViajeContext } from '../context/viajeContext';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import odooApi from '@/api/odoo-api';
 import { tiempoTranscurrido } from '../../funciones/tiempo';
-import ReporteOperador from "./reporte";
-import { Chip } from "@heroui/react";
 
 export default function ProblemasOperadores2({ isOpen, onOpen, onOpenChange }) {
 

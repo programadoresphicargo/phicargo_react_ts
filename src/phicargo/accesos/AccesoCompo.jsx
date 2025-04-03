@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+
 import { AccesoContext } from "./context";
 import axios from 'axios';
+import odooApi from '@/api/odoo-api';
 import { toast } from "react-toastify";
-import { useAuthContext } from "../modules/auth/hooks";
-import odooApi from "../modules/core/api/odoo-api";
+import { useAuthContext } from "@/modules/auth/hooks";
 
 const AccesoCompo = ({ children }) => {
     const { session } = useAuthContext();

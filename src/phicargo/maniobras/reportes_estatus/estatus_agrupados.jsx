@@ -13,7 +13,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import axios from 'axios';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import odooApi from '@/api/odoo-api';
 import { tiempoTranscurrido } from '../../funciones/tiempo';
 
 function EstatusHistorialAgrupado({ id_reporte }) {

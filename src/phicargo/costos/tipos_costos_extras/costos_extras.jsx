@@ -14,7 +14,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import FormularioNewCE from './formulario';
 import Slide from '@mui/material/Slide';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 
 const TiposCostosExtras = ({ }) => {

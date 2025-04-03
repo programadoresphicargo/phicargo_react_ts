@@ -1,25 +1,26 @@
-import React, { useState, useEffect, useContext } from 'react';
+import { Autocomplete, AutocompleteItem } from "@heroui/react";
+import {
+    Button,
+    Select,
+    SelectItem,
+    Spinner,
+    Table,
+    TableBody,
+    TableCell,
+    TableColumn,
+    TableHeader,
+    TableRow
+} from "@heroui/react";
+import React, { useContext, useEffect, useState } from 'react';
+
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
-import {
-    Button,
-    Table,
-    TableHeader,
-    TableColumn,
-    TableBody,
-    TableRow,
-    TableCell,
-    Spinner,
-    Select,
-    SelectItem
-} from "@heroui/react";
-import { ManiobraContext } from '../../context/viajeContext';
 import FormularioCorreo from './formulario';
+import { ManiobraContext } from '../../context/viajeContext';
+import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
-import { Autocomplete, AutocompleteItem } from "@heroui/react";
 
 const CorreosLigadosManiobra = ({ open, handleClose }) => {
     const { id_maniobra, id_cliente, formData, setFormData, formDisabled, setFormDisabled } = useContext(ManiobraContext);

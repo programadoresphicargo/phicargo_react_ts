@@ -1,27 +1,28 @@
-import React, { useState, useEffect } from "react";
 import {
+    Box,
     Dialog,
     DialogActions,
     DialogContent,
     DialogTitle,
-    Box,
     Grid,
     TextField,
     Typography,
 } from "@mui/material";
-import axios from "axios";
-import { toast } from 'react-toastify';
-import { useAuthContext } from "../../modules/auth/hooks";
 import { Button, Card, CardBody, Input, Textarea } from "@heroui/react";
-import odooApi from "@/phicargo/modules/core/api/odoo-api";
 import {
     Modal,
-    ModalContent,
-    ModalHeader,
     ModalBody,
-    ModalFooter
+    ModalContent,
+    ModalFooter,
+    ModalHeader
 } from "@heroui/modal";
+import React, { useEffect, useState } from "react";
+
 import { Progress } from "@heroui/react";
+import axios from "axios";
+import odooApi from '@/api/odoo-api';
+import { toast } from 'react-toastify';
+import { useAuthContext } from "@/modules/auth/hooks";
 
 export default function ReporteOperador({ id_reporte, isOpen, onOpenChange }) {
 

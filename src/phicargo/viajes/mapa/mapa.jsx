@@ -1,9 +1,11 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-import axios from 'axios';
-import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
+
+import { MapContainer, Marker, Polyline, Popup, TileLayer } from 'react-leaflet';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
+
 import { ViajeContext } from '../context/viajeContext';
+import axios from 'axios';
+import odooApi from '@/api/odoo-api';
 
 const customIcon = new L.Icon({
     iconUrl: 'https://static.vecteezy.com/system/resources/previews/017/178/337/original/location-map-marker-icon-symbol-on-transparent-background-free-png.png',

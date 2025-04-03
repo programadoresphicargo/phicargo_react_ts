@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Autocomplete, AutocompleteItem } from "@heroui/react";
+import React, { useEffect, useState } from 'react';
+
 import TextField from '@mui/material/TextField';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import axios from 'axios';
+import odooApi from '@/api/odoo-api';
 
 const SelectOperador = ({ label, id, name, onChange, value, disabled, error_operador }) => {
     const [options, setOptions] = useState([]);

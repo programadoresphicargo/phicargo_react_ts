@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import { Card, CardBody } from "@heroui/react";
+import React, { useEffect, useState } from 'react';
+
 import Autocomplete from '@mui/material/Autocomplete';
-import TextField from '@mui/material/TextField';
-import axios from 'axios';
 import Avatar from '@mui/material/Avatar';
+import { Button } from "@heroui/react";
 import Chip from '@mui/material/Chip';
 import FormularioCorreo from './formulario';
-import { Card, CardBody } from "@heroui/react";
-import { Button } from "@heroui/react";
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import TextField from '@mui/material/TextField';
+import axios from 'axios';
+import odooApi from '@/api/odoo-api';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const AutocompleteManager = ({ onValuesChange, id_maniobra, id_cliente, disabled }) => {

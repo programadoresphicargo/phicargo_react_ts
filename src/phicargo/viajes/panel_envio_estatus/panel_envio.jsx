@@ -24,7 +24,7 @@ import ReactQuill from 'react-quill';
 import Slide from '@mui/material/Slide';
 import Swal from 'sweetalert2';
 import { ViajeContext } from '../context/viajeContext';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import odooApi from '@/api/odoo-api';
 import { parseDate } from "@internationalized/date";
 import { toast } from 'react-toastify';
 import { useJourneyDialogs } from '../seguimiento/funciones';

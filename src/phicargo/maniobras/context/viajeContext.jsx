@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
+
 import axios from "axios";
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import odooApi from '@/api/odoo-api';
 
 const ManiobraContext = React.createContext();
 

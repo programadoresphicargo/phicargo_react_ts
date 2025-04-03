@@ -1,19 +1,19 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import Slide from '@mui/material/Slide';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import { Box } from '@mui/material';
-import { Button } from "@heroui/react";
-
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import MonitoreoNavbar from '../monitoreo/Navbar';
-import odooApi from '../modules/core/api/odoo-api';
+import React, { useEffect, useMemo, useState } from 'react';
+
+import { Box } from '@mui/material';
+import { Button } from "@heroui/react";
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 import FormularioCorreoGeneral from './correoForm';
+import MonitoreoNavbar from '../monitoreo/Navbar';
+import Slide from '@mui/material/Slide';
+import odooApi from '@/api/odoo-api';
 
 const CorreosElectronicos = ({ estado }) => {
 

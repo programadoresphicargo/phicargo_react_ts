@@ -17,7 +17,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import axios from 'axios';
 import dayjs from 'dayjs';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 
 const Transition = React.forwardRef(function Transition(props, ref) {

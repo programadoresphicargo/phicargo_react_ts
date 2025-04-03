@@ -1,33 +1,34 @@
-import { useState, useEffect } from "react";
-import { TextField, MenuItem, InputLabel, FormControl, Grid } from "@mui/material";
-import { Button } from "@heroui/react";
-import axios from "axios";
-import { toast } from 'react-toastify';
-import Stack from '@mui/material/Stack';
-import CardMedia from '@mui/material/CardMedia';
-import CardContent from '@mui/material/CardContent';
-import CardActions from '@mui/material/CardActions';
-import Avatar from '@mui/material/Avatar';
-import Paper from '@mui/material/Paper';
-import { green, pink } from '@mui/material/colors';
-import Timeline from '@mui/lab/Timeline';
-import TimelineItem from '@mui/lab/TimelineItem';
-import TimelineSeparator from '@mui/lab/TimelineSeparator';
-import TimelineConnector from '@mui/lab/TimelineConnector';
+import { Autocomplete, AutocompleteItem, Select, SelectItem } from "@heroui/react"
+import { Card, CardBody, CardFooter, CardHeader, Divider } from "@heroui/react";
+import { FormControl, Grid, InputLabel, MenuItem, TextField } from "@mui/material";
 import TimelineContent, { timelineContentClasses } from '@mui/lab/TimelineContent';
-import TimelineDot from '@mui/lab/TimelineDot';
 import TimelineOppositeContent, {
     timelineOppositeContentClasses,
 } from '@mui/lab/TimelineOppositeContent';
+import { green, pink } from '@mui/material/colors';
+import { useEffect, useState } from "react";
+
+import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
-import LinearProgress from '@mui/material/LinearProgress';
+import { Button } from "@heroui/react";
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
 import CircularProgress from '@mui/material/CircularProgress';
-import { useAuthContext } from "../modules/auth/hooks";
 import { Input } from "@heroui/react";
-import { Card, CardHeader, CardFooter, CardBody, Divider } from "@heroui/react";
+import LinearProgress from '@mui/material/LinearProgress';
+import Paper from '@mui/material/Paper';
+import Stack from '@mui/material/Stack';
 import { Textarea } from "@heroui/react";
-import odooApi from "../modules/core/api/odoo-api";
-import { Select, SelectItem, Autocomplete, AutocompleteItem } from "@heroui/react"
+import Timeline from '@mui/lab/Timeline';
+import TimelineConnector from '@mui/lab/TimelineConnector';
+import TimelineDot from '@mui/lab/TimelineDot';
+import TimelineItem from '@mui/lab/TimelineItem';
+import TimelineSeparator from '@mui/lab/TimelineSeparator';
+import axios from "axios";
+import odooApi from '@/api/odoo-api';
+import { toast } from 'react-toastify';
+import { useAuthContext } from "@/modules/auth/hooks";
 
 const DetalleForm = ({ id_evento, onClose }) => {
 

@@ -11,11 +11,12 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import axios from 'axios';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import odooApi from '@/api/odoo-api';
 import { styled } from '@mui/system';
 import { toast } from 'react-toastify';
-import { useAuthContext } from '@/phicargo/modules/auth/hooks';
+import { useAuthContext } from "@/modules/auth/hooks";
 import { useDropzone } from 'react-dropzone';
+
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 export default function PanelEstatus({ id_maniobra, open, handleClose }) {

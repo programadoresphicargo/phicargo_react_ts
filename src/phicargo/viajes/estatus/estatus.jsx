@@ -1,5 +1,6 @@
 import { Card, CardHeader } from "@heroui/react";
 import React, { useContext, useEffect, useMemo, useState } from 'react';
+
 import { Avatar } from "@heroui/react";
 import { Badge } from "@heroui/react";
 import { Button } from "@heroui/react";
@@ -10,7 +11,7 @@ import EstatusHistorialAgrupado from './estatus_agrupados';
 import { Progress } from "@heroui/react";
 import Slide from '@mui/material/Slide';
 import { ViajeContext } from '../context/viajeContext';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import odooApi from '@/api/odoo-api';
 import { tiempoTranscurrido } from '../../funciones/tiempo';
 
 const { VITE_PHIDES_API_URL } = import.meta.env;

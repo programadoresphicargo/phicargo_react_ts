@@ -1,4 +1,5 @@
 import {
+  MRT_DensityState,
   MRT_GroupingState,
   MRT_RowData,
   MRT_TableOptions,
@@ -21,6 +22,7 @@ interface Config<T extends MRT_RowData & BaseRowData>
   isLoading: boolean;
   isFetching: boolean;
   error?: string | null;
+  density?: MRT_DensityState;
   containerHeight?: string;
   showColumnFilters?: boolean;
   showGlobalFilter?: boolean;
@@ -67,7 +69,7 @@ export const useBaseTable = <T extends MRT_RowData & BaseRowData>(
     initialState: {
       showColumnFilters: config.showColumnFilters,
       showGlobalFilter: config.showGlobalFilter,
-      density: 'compact',
+      density: config.density ?? 'compact',
       pagination: { pageSize: 100, pageIndex: 0 },
     },
     state: {

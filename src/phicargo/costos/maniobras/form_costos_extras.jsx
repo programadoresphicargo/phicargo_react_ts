@@ -2,11 +2,14 @@ import { Autocomplete, AutocompleteItem } from "@heroui/react";
 import { Card, CardBody } from "@heroui/react";
 import { Container, filledInputClasses } from '@mui/material';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
+
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import { Button } from "@heroui/react";
+import CancelFolio from "./cancelar_folio";
 import CostosExtrasContenedores from './añadir_contenedor/maniobra_contenedores';
 import { CostosExtrasContext } from '../context/context';
+import { DateRangePicker } from "@heroui/react";
 import Dialog from '@mui/material/Dialog';
 import FormCE from './form';
 import Grid from '@mui/material/Grid2';
@@ -16,17 +19,15 @@ import ServiciosAplicadosCE from './costos_aplicados/costos_aplicados';
 import Slide from '@mui/material/Slide';
 import Stack from '@mui/material/Stack';
 import Swal from 'sweetalert2';
+import TimeLineCE from "./linea_tiempo";
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { User } from "@heroui/react";
 import axios from 'axios';
 import dayjs from 'dayjs';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
-import { useAuthContext } from '@/phicargo/modules/auth/hooks';
-import TimeLineCE from "./linea_tiempo";
-import { DateRangePicker } from "@heroui/react";
-import CancelFolio from "./cancelar_folio";
+import { useAuthContext } from "@/modules/auth/hooks";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="left" ref={ref} {...props} />;

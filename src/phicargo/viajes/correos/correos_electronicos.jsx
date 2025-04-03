@@ -11,7 +11,7 @@ import FormularioCorreoGeneral from '@/phicargo/correos_electronicos/correoForm'
 import { Input } from "@heroui/react";
 import { User } from "@heroui/react";
 import { ViajeContext } from '../context/viajeContext';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 
 const CorreosElectronicosViaje = ({ openCorreos }) => {

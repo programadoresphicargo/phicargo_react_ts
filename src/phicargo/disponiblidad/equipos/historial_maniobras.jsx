@@ -1,26 +1,27 @@
-import React, { useState, useEffect, useMemo } from 'react';
 import {
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogActions,
     Button,
+    CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
     MenuItem,
     Select,
-    CircularProgress,
 } from '@mui/material';
-import { ThemeProvider } from '@mui/material/styles';
-import customFontTheme from '../../../theme';
+import { Card, CardBody, Tab, Tabs } from "@heroui/react";
 import {
     MaterialReactTable,
     useMaterialReactTable,
 } from 'material-react-table';
-import { toast } from 'react-toastify';
-import ManiobrasNavBar from '../../maniobras/Navbar';
+import React, { useEffect, useMemo, useState } from 'react';
+
 import { Chip } from "@heroui/react";
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
-import { Tabs, Tab, Card, CardBody } from "@heroui/react";
 import Formulariomaniobra from '@/phicargo/maniobras/maniobras/formulario_maniobra';
+import ManiobrasNavBar from '../../maniobras/Navbar';
+import { ThemeProvider } from '@mui/material/styles';
+import customFontTheme from '../../../theme';
+import odooApi from '@/api/odoo-api';
+import { toast } from 'react-toastify';
 
 const HistorialManiobrasVehiculo = ({ vehicle_id }) => {
     const [isLoading2, setLoading] = useState();

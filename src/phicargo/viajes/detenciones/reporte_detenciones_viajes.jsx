@@ -10,7 +10,7 @@ import Grid from '@mui/material/Grid';
 import NavbarViajes from '../navbar';
 import Slide from '@mui/material/Slide';
 import { Typography } from '@mui/material';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 
 const ReporteDetencionesViajes = () => {

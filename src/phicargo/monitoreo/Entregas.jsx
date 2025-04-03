@@ -1,33 +1,32 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { DialogContent } from '@mui/material';
-import dayjs from 'dayjs';
-import Dialog from '@mui/material/Dialog';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemButton from '@mui/material/ListItemButton';
-import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import CloseIcon from '@mui/icons-material/Close';
-import Slide from '@mui/material/Slide';
 import { Card, CardBody, CardHeader } from "@heroui/react";
-import CardActions from '@mui/material/CardActions';
-import PersistentDrawerRight from './Eventos';
-import { toast } from 'react-toastify';
-import axios from 'axios';
-import { Box } from '@mui/material';
-import { Button } from "@heroui/react";
-import { Chip } from "@heroui/react";
-
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import AuthContext from '../modules/auth/context/AuthContext';
-import { useAuthContext } from '../modules/auth/hooks';
-import odooApi from '../modules/core/api/odoo-api';
+import React, { useEffect, useMemo, useState } from 'react';
+
+import AppBar from '@mui/material/AppBar';
+import { Box } from '@mui/material';
+import { Button } from "@heroui/react";
+import CardActions from '@mui/material/CardActions';
+import { Chip } from "@heroui/react";
+import CloseIcon from '@mui/icons-material/Close';
+import Dialog from '@mui/material/Dialog';
+import { DialogContent } from '@mui/material';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import PersistentDrawerRight from './Eventos';
+import Slide from '@mui/material/Slide';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import axios from 'axios';
+import dayjs from 'dayjs';
+import odooApi from '@/api/odoo-api';
+import { toast } from 'react-toastify';
+import { useAuthContext } from "@/modules/auth/hooks";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
