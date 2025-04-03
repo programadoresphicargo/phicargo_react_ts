@@ -1,8 +1,8 @@
 import { Suspense, lazy } from 'react';
 
-import CashflowReportRoutes from '@/phicargo/modules/cashflow-report/routes/CashflowReportRoutes';
+import CashflowReportRoutes from '@/modules/cashflow-report/routes/CashflowReportRoutes';
 import { LoadingPage } from '@/pages/LoadingPage';
-import MaintenanceReportRoutes from '@/phicargo/modules/maintenance/routes/MaintenanceReportRoutes';
+import MaintenanceReportRoutes from '@/modules/maintenance/routes/MaintenanceReportRoutes';
 import ProtectedRoute from './ProtectedRoute';
 import ReportsMenuPage from '@/pages/ReportsMenuPage';
 import { Route } from 'react-router-dom';
@@ -13,7 +13,7 @@ const Saldos = lazy(
 
 const VehicleRevenueProjectionPage = lazy(
   () =>
-    import('@/phicargo/modules/vehicles/pages/VehicleRevenueProjectionPage'),
+    import('@/modules/vehicles/pages/VehicleRevenueProjectionPage'),
 );
 
 const reportsPermission = 4;

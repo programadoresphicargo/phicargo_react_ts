@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+
 import { Button } from "@heroui/react";
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { InputOtp } from "@heroui/react";
 import TextField from '@mui/material/TextField';
 import axios from 'axios';
+import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
-import { InputOtp } from "@heroui/react";
-import odooApi from '../modules/core/api/odoo-api';
 
 const Validador = ({ id_acceso, estado_acceso, open, handleClose }) => {
 

@@ -36,9 +36,9 @@ import YearSelector from '@/año';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import { getEstadoChip } from '../utils';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
-import { useAuthContext } from '@/phicargo/modules/auth/hooks';
+import { useAuthContext } from "@/modules/auth/hooks";
 
 const FormCE = ({ }) => {
 

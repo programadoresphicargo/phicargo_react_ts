@@ -1,13 +1,14 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { TextField, MenuItem, InputLabel, FormControl, Grid, Grid2 } from "@mui/material";
-import axios from "axios";
-import { toast } from 'react-toastify';
-import Stack from '@mui/material/Stack';
-import odooApi from "../modules/core/api/odoo-api";
-import { Input } from "@heroui/react";
+import { Autocomplete, AutocompleteItem, DatePicker, Select, SelectItem } from "@heroui/react";
+import { FormControl, Grid, Grid2, InputLabel, MenuItem, TextField } from "@mui/material";
+import React, { useEffect, useMemo, useState } from 'react';
+import { getLocalTimeZone, parseDate } from "@internationalized/date";
+
 import { Button } from "@heroui/react";
-import { DatePicker, Select, SelectItem, Autocomplete, AutocompleteItem } from "@heroui/react";
-import { parseDate, getLocalTimeZone } from "@internationalized/date";
+import { Input } from "@heroui/react";
+import Stack from '@mui/material/Stack';
+import axios from "axios";
+import odooApi from '@/api/odoo-api';
+import { toast } from 'react-toastify';
 
 const CuentaForm = ({ id_cuenta, onClose }) => {
     const fechaActual = new Date().toISOString().split('T')[0];

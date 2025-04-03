@@ -7,7 +7,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import FoliosCostosExtrasViaje from "../viajes/costos_extras/tabla";
 import FormularioCostoExtra from "../costos/maniobras/form_costos_extras";
 import { ViajeContext } from "../viajes/context/viajeContext";
-import odooApi from "../modules/core/api/odoo-api";
+import odooApi from '@/api/odoo-api';
 import { toast } from "react-toastify";
 
 const EstadiasForm = () => {

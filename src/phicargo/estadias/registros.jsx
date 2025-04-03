@@ -19,7 +19,7 @@ import { DatePicker } from 'antd';
 import EstadiasForm from './estadia_form';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import dayjs from 'dayjs';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import odooApi from '@/api/odoo-api';
 import { useNavigate } from "react-router-dom";
 
 const { RangePicker } = DatePicker;

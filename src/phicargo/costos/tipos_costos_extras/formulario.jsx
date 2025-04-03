@@ -6,7 +6,7 @@ import { Upload, message } from 'antd';
 import { Box } from '@mui/material';
 import { Input } from "@heroui/react";
 import Slide from '@mui/material/Slide';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import odooApi from '@/api/odoo-api';
 
 const FormularioNewCE = ({ onClose, id_tipo_costo }) => {
 

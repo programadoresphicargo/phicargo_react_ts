@@ -1,10 +1,11 @@
-import { useState } from "react";
-import { TextField, MenuItem, Select, InputLabel, FormControl, Grid } from "@mui/material";
-import axios from "axios";
-import { toast } from 'react-toastify';
+import { FormControl, Grid, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+
 import { Button } from "@heroui/react";
-import { useAuthContext } from "@/phicargo/modules/auth/hooks";
-import odooApi from "@/phicargo/modules/core/api/odoo-api";
+import axios from "axios";
+import odooApi from '@/api/odoo-api';
+import { toast } from 'react-toastify';
+import { useAuthContext } from "@/modules/auth/hooks";
+import { useState } from "react";
 
 const VehiculoForm = ({ onClose }) => {
     const { session } = useAuthContext();

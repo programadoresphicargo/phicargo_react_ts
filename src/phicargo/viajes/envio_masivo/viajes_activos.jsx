@@ -14,10 +14,10 @@ import EstatusDropdown from '../estatus/resumen_estatus';
 import NavbarViajes from '../navbar';
 import Swal from 'sweetalert2';
 import { format } from 'date-fns';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import odooApi from '@/api/odoo-api';
 import { parseDate } from "@internationalized/date";
 import toast from 'react-hot-toast';
-import { useAuthContext } from '@/phicargo/modules/auth/hooks';
+import { useAuthContext } from "@/modules/auth/hooks";
 import { useDateFormatter } from "@react-aria/i18n";
 
 const ViajesActivosMasivo = ({ }) => {

@@ -6,7 +6,6 @@ import {
 import React, { useEffect, useMemo, useState } from 'react';
 
 import AppBar from '@mui/material/AppBar';
-import AuthContext from '../modules/auth/context/AuthContext';
 import { Box } from '@mui/material';
 import { Button } from "@heroui/react";
 import CardActions from '@mui/material/CardActions';
@@ -28,9 +27,9 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import axios from 'axios';
 import dayjs from 'dayjs';
-import odooApi from '../modules/core/api/odoo-api';
+import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
-import { useAuthContext } from '../modules/auth/hooks';
+import { useAuthContext } from "../../modules/auth/hooks/useAuthContext";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;

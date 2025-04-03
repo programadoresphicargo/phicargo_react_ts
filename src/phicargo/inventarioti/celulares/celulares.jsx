@@ -9,7 +9,7 @@ import Box from '@mui/material/Box';
 import { DatePicker } from 'antd';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import MonitoreoNavbar from '../../monitoreo/Navbar';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import odooApi from '@/api/odoo-api';
 
 const ContactosCelulares = () => {
   const [isLoading, setLoading] = useState(false);

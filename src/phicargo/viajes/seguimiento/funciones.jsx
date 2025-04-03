@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useMemo, useContext } from 'react';
-import Swal from 'sweetalert2';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
+
+import Swal from 'sweetalert2';
 import { ViajeContext } from '../context/viajeContext';
 import axios from "axios";
-import { useAuthContext } from '../../modules/auth/hooks';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import odooApi from '@/api/odoo-api';
+import { useAuthContext } from "@/modules/auth/hooks";
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 export const useJourneyDialogs = () => {

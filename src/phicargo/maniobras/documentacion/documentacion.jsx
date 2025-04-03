@@ -13,8 +13,9 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import FormularioDocumentacionManiobra from './formulario';
 import Slide from '@mui/material/Slide';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
+
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const Transition = React.forwardRef(function Transition(props, ref) {

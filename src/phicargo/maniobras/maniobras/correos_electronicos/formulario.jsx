@@ -11,7 +11,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { Spacer } from '@heroui/react';
 import TextField from '@mui/material/TextField';
 import axios from 'axios';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import odooApi from '@/api/odoo-api';
 import { toast } from "react-toastify";
 
 const FormularioCorreo = ({ open, handleClose }) => {

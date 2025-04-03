@@ -2,10 +2,10 @@ import { Control, FieldValues, Path } from 'react-hook-form';
 import { useEffect, useMemo, useState } from 'react';
 
 import { AutocompleteInput } from './AutocompleteInput';
-import type { Driver } from '@/phicargo/modules/drivers/models';
+import type { Driver } from '@/modules/drivers/models';
 import { SelectItem } from '@/types';
 import { useDebounce } from '@/hooks';
-import { useDriverQueries } from '@/phicargo/modules/drivers/hooks/queries';
+import { useDriverQueries } from '@/modules/drivers/hooks/queries';
 
 const findDriver = (driver: Driver[], term: string) => {
   return driver.filter((v) =>
@@ -63,7 +63,7 @@ export const DriverSearchInput = <T extends FieldValues>(props: Props<T>) => {
       isLoading={driversQuery.isFetching}
       searchInput={searchTerm ? searchTerm : driver?.name || ''}
       setSearchInput={setSearchTerm}
-      rules={ required ? { required: 'Operador obligatorio' } : {} }
+      rules={required ? { required: 'Operador obligatorio' } : {}}
       isDisabled={isDisabled}
     />
   );

@@ -1,14 +1,15 @@
-import React, { useState, useEffect, useMemo, useContext } from 'react';
+import { Card, CardBody, Tab, Tabs } from "@heroui/react";
 import {
     MaterialReactTable,
     useMaterialReactTable,
 } from 'material-react-table';
-import { toast } from 'react-toastify';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
+
 import { Chip } from "@heroui/react";
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
-import { Tabs, Tab, Card, CardBody } from "@heroui/react";
 import Travel from '@/phicargo/viajes/control/viaje';
 import { ViajeContext } from '@/phicargo/viajes/context/viajeContext';
+import odooApi from '@/api/odoo-api';
+import { toast } from 'react-toastify';
 
 const HistorialViajesVehiculo = ({ vehicle_id }) => {
 

@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
-import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
 import { Button, Input } from "@heroui/react";
-import odooApi from "@/phicargo/modules/core/api/odoo-api";
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import React, { useEffect, useState } from "react";
+import { ToastContainer, toast } from 'react-toastify';
+
+import axios from 'axios';
+import odooApi from '@/api/odoo-api';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 function FormularioTerminales({ open, onClose, id_terminal }) {

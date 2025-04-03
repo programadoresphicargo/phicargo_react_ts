@@ -22,7 +22,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { button } from "@heroui/theme";
 import dayjs from 'dayjs';
-import odooApi from '../modules/core/api/odoo-api';
+import odooApi from '@/api/odoo-api';
 import { width } from '@mui/system';
 
 const Transition = React.forwardRef(function Transition(props, ref) {

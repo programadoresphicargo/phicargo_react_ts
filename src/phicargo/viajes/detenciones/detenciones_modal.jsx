@@ -12,7 +12,7 @@ import { Link } from "@heroui/react";
 import Slide from '@mui/material/Slide';
 import { Typography } from '@mui/material';
 import { addToast } from "@heroui/react";
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import odooApi from '@/api/odoo-api';
 
 const DetencionesViajesActivos = ({ isOpen, close }) => {
 

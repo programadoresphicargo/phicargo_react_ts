@@ -1,3 +1,4 @@
+import { Button, Link } from "@heroui/react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -5,17 +6,18 @@ import {
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 
 import { Box } from '@mui/material';
-import { Button, Link } from "@heroui/react";
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import FormularioDocumentacion from './formulario';
+import PDFGenerator from './checklist_viaje';
 import Slide from '@mui/material/Slide';
 import { ViajeContext } from '../context/viajeContext';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
+
 const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
 const Transition = React.forwardRef(function Transition(props, ref) {

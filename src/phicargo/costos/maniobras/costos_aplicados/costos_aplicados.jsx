@@ -25,7 +25,7 @@ import Slide from '@mui/material/Slide';
 import Swal from 'sweetalert2';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 
 const ServiciosAplicadosCE = ({ onClose }) => {

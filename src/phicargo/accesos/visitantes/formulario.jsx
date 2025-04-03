@@ -1,15 +1,16 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext, useState } from 'react';
+
+import { AccesoContext } from '../context';
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import TextField from '@mui/material/TextField';
 import axios from 'axios';
+import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
-import { AccesoContext } from '../context';
-import { useAuthContext } from '@/phicargo/modules/auth/hooks';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
+import { useAuthContext } from "@/modules/auth/hooks";
 
 export default function FormVisitante({ open, handleClose }) {
 

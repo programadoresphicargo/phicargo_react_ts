@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-import audioFile from '../../assets/audio/estatus_operador.mp3';
-import audioDetenciones from '../../assets/audio/detencion.mp3';
-import { useAuthContext } from "../modules/auth/hooks";
-import { user } from "@heroui/react";
+
 import { addToast } from "@heroui/react";
+import audioDetenciones from '../../assets/audio/detencion.mp3';
+import audioFile from '../../assets/audio/estatus_operador.mp3';
+import { useAuthContext } from "@/modules/auth/hooks";
+import { user } from "@heroui/react";
 const { VITE_WEBSOCKET_SERVER } = import.meta.env;
 
 const WebSocketWithToast = () => {

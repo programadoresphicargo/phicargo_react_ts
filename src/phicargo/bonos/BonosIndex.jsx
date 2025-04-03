@@ -1,27 +1,28 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import { Button, Chip } from "@heroui/react"
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import Box from '@mui/material/Box';
-import { Button, Chip } from "@heroui/react"
-import { DatePicker } from 'antd';
-import odooApi from '@/phicargo/modules/core/api/odoo-api';
-import NavbarViajes from '../viajes/navbar';
-import Dialog from '@mui/material/Dialog';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemButton from '@mui/material/ListItemButton';
-import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
+import React, { useEffect, useMemo, useState } from 'react';
+
 import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import CloseIcon from '@mui/icons-material/Close';
-import Slide from '@mui/material/Slide';
 import BonosMes from './BonosMes';
 import BonosModal from './AbrirModal';
+import Box from '@mui/material/Box';
+import CloseIcon from '@mui/icons-material/Close';
+import { DatePicker } from 'antd';
+import Dialog from '@mui/material/Dialog';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
 import NavbarBonos from './navbar';
+import NavbarViajes from '../viajes/navbar';
+import Slide from '@mui/material/Slide';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import odooApi from '@/api/odoo-api';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
