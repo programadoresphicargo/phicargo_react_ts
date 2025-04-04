@@ -18,9 +18,12 @@ const { RangePicker } = DatePicker;
 
 const ReporteCumplimientoEjecutivo = () => {
 
+    const today = new Date();
+    const todayStr = today.toISOString().split("T")[0];
+
     const [dates, setDates] = React.useState({
-        start: parseDate("2025-04-01"),
-        end: parseDate("2025-04-08"),
+        start: parseDate(todayStr),
+        end: parseDate(todayStr),
     });
 
     const [columnOrder, setColumnOrder] = useState([]);
