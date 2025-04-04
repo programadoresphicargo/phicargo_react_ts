@@ -10,14 +10,20 @@ import odooApi from '@/api/odoo-api';
 import NavbarViajes from '@/phicargo/viajes/navbar';
 import { ViajeProvider } from '@/phicargo/viajes/context/viajeContext';
 import { Slider } from "@heroui/react";
+import { DateRangePicker } from "@heroui/react";
+import { parseDate, getLocalTimeZone } from "@internationalized/date";
 
 const { RangePicker } = DatePicker;
 
 const ReporteCumplimientoEjecutivo = () => {
 
+    const [dates, setDates] = React.useState({
+        start: parseDate("2025-04-01"),
+        end: parseDate("2025-04-08"),
+    });
+
     const [columnOrder, setColumnOrder] = useState([]);
     const [isLoading, setLoading] = useState(false);
-    const [dates, setDates] = useState([]);
     const [value, setValue] = React.useState([0, 24]);
 
 
@@ -28,31 +34,29 @@ const ReporteCumplimientoEjecutivo = () => {
     const [data, setData] = useState([]);
 
     const fetchData = async () => {
-        if (dates && dates.length === 2 && dates[0] && dates[1]) {
-            const startDate = dates[0].format('YYYY-MM-DD');
-            const endDate = dates[1].format('YYYY-MM-DD');
-            try {
-                setLoading(true);
-                const response = await odooApi.get('/tms_travel/reporte_cumplimiento_estatus_ejecutivos/', {
-                    params: {
-                        hora_inicio: value[0],
-                        hora_fin: value[1],
-                        fecha_inicio: startDate,
-                        fecha_fin: endDate,
-                    },
-                });
-                setData(response.data);
-                setLoading(false);
-            } catch (error) {
-                console.error('Error al obtener los datos:', error);
-                setLoading(false);
-            }
+        const startDate = dates.start;
+        const endDate = dates.end;
+        try {
+            setLoading(true);
+            const response = await odooApi.get('/tms_travel/reporte_cumplimiento_estatus_ejecutivos/', {
+                params: {
+                    hora_inicio: value[0],
+                    hora_fin: value[1],
+                    fecha_inicio: startDate,
+                    fecha_fin: endDate,
+                },
+            });
+            setData(response.data);
+            setLoading(false);
+        } catch (error) {
+            console.error('Error al obtener los datos:', error);
+            setLoading(false);
         }
     };
 
     useEffect(() => {
         fetchData();
-    }, [JSON.stringify(dates), JSON.stringify(value)]);
+    }, [dates, value]);
 
     useEffect(() => {
         if (data.length > 0) {
@@ -106,7 +110,7 @@ const ReporteCumplimientoEjecutivo = () => {
         },
         muiTableContainerProps: {
             sx: {
-                maxHeight: 'calc(100vh - 300px)',
+                maxHeight: 'calc(100vh - 230px)',
             },
         },
         renderTopToolbarCustomActions: ({ table }) => (
@@ -115,7 +119,9 @@ const ReporteCumplimientoEjecutivo = () => {
                     display: 'flex',
                     gap: '16px',
                     padding: '8px',
-                    flexWrap: 'wrap',
+                    alignItems: 'center',
+                    flexWrap: 'nowrap',
+                    overflowX: 'auto',
                 }}
             >
 
@@ -125,10 +131,15 @@ const ReporteCumplimientoEjecutivo = () => {
                     Cumplimiento de estatus
                 </h1>
 
-                <RangePicker onChange={handleDateChange} />
+                <DateRangePicker
+                    className="max-w-xs"
+                    label="Date range (controlled)"
+                    value={dates}
+                    variant='bordered'
+                    onChange={setDates} />
 
                 <Slider
-                    className="max-w-md"
+                    className="max-w-xs"
                     value={value}
                     onChange={setValue}
                     label="Hora"
