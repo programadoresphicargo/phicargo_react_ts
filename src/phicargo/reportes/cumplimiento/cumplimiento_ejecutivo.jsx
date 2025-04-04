@@ -118,6 +118,13 @@ const ReporteCumplimientoEjecutivo = () => {
                     flexWrap: 'wrap',
                 }}
             >
+
+                <h1
+                    className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
+                >
+                    Cumplimiento de estatus
+                </h1>
+
                 <RangePicker onChange={handleDateChange} />
 
                 <Slider
@@ -129,7 +136,9 @@ const ReporteCumplimientoEjecutivo = () => {
                     minValue={0}
                     step={1}
                 />
-                
+
+                <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "viajes_activos.csv")}>Exportar</Button>
+
             </Box>
 
         ),
