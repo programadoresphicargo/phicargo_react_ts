@@ -4,7 +4,7 @@ import {
 } from 'material-react-table';
 import React, { useEffect, useMemo, useState, useContext } from 'react';
 import Box from '@mui/material/Box';
-import { Button } from "@heroui/react"
+import { Button, Chip } from "@heroui/react"
 import { DatePicker } from 'antd';
 import odooApi from '@/api/odoo-api';
 import NavbarViajes from '@/phicargo/viajes/navbar';
@@ -71,11 +71,28 @@ const ReporteCumplimientoEjecutivo = () => {
 
         return columnOrder
             .filter((key) => !key.includes('20_min'))
-            .map((key) => ({
-                accessorKey: key,
-                header: key.replace(/_/g, " ").toUpperCase(),
-                size: 150
-            }));
+            .map((key) => {
+                const isHora = /^\d{1,2}:\d{2}$/.test(key);
+
+                return {
+                    accessorKey: key,
+                    header: key.replace(/_/g, " ").toUpperCase(),
+                    size: 150,
+                    Cell: ({ cell }) => {
+                        const value = cell.getValue();
+
+                        if (isHora && value) {
+                            return (
+                                <Chip color={"primary"} size="md">
+                                    {value}
+                                </Chip>
+                            );
+                        }
+
+                        return value ?? "";
+                    },
+                };
+            });
     }, [data, columnOrder, value]);
 
     const table = useMaterialReactTable({
