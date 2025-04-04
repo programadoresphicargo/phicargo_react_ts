@@ -15,9 +15,11 @@ const { RangePicker } = DatePicker;
 
 const ReporteCumplimientoEjecutivo = () => {
 
+    const [columnOrder, setColumnOrder] = useState([]);
     const [isLoading, setLoading] = useState(false);
-
     const [dates, setDates] = useState([]);
+    const [value, setValue] = React.useState([0, 24]);
+
 
     const handleDateChange = (dates) => {
         setDates(dates);
@@ -31,7 +33,14 @@ const ReporteCumplimientoEjecutivo = () => {
             const endDate = dates[1].format('YYYY-MM-DD');
             try {
                 setLoading(true);
-                const response = await odooApi.get('/tms_travel/reporte_cumplimiento_estatus_ejecutivos/?hora_inicio=7&hora_fin=24&fecha_inicio=2025-04-01&fecha_fin=2025-04-30');
+                const response = await odooApi.get('/tms_travel/reporte_cumplimiento_estatus_ejecutivos/', {
+                    params: {
+                        hora_inicio: value[0],
+                        hora_fin: value[1],
+                        fecha_inicio: startDate,
+                        fecha_fin: endDate,
+                    },
+                });
                 setData(response.data);
                 setLoading(false);
             } catch (error) {
@@ -43,19 +52,26 @@ const ReporteCumplimientoEjecutivo = () => {
 
     useEffect(() => {
         fetchData();
-    }, [dates]);
+    }, [JSON.stringify(dates), JSON.stringify(value)]);
+
+    useEffect(() => {
+        if (data.length > 0) {
+            const orderedKeys = Object.keys(data[0]);
+            setColumnOrder(orderedKeys);
+        }
+    }, [data, value]);
 
     const columns = useMemo(() => {
-        if (!data || data.length === 0) return [];
+        if (!data || data.length === 0 || columnOrder.length === 0) return [];
 
-        return Object.keys(data[0])
+        return columnOrder
             .filter((key) => !key.includes('20_min'))
             .map((key) => ({
                 accessorKey: key,
                 header: key.replace(/_/g, " ").toUpperCase(),
                 size: 150
             }));
-    }, [data]);
+    }, [data, columnOrder, value]);
 
     const table = useMaterialReactTable({
         columns,
@@ -90,7 +106,7 @@ const ReporteCumplimientoEjecutivo = () => {
         },
         muiTableContainerProps: {
             sx: {
-                maxHeight: 'calc(100vh - 260px)',
+                maxHeight: 'calc(100vh - 300px)',
             },
         },
         renderTopToolbarCustomActions: ({ table }) => (
@@ -106,13 +122,16 @@ const ReporteCumplimientoEjecutivo = () => {
 
                 <Slider
                     className="max-w-md"
-                    defaultValue={[9, 18]}
+                    value={value}
+                    onChange={setValue}
                     label="Hora"
                     maxValue={24}
                     minValue={0}
                     step={1}
                 />
+                
             </Box>
+
         ),
     });
 
