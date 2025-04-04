@@ -35,6 +35,7 @@ const pages = [
     { name: 'CONTROL ESTATUS', path: '/controlestatus' },
     { name: 'ESTADIAS', path: '/estadias' },
     { name: 'ENVIO MASIVO', path: '/envio_masivo_viajes' },
+    { name: 'CUMPLIMIENTO ESTATUS', path: '/cumplimiento_estatus_ejecutivos' },
 ];
 
 function NavbarViajes() {
