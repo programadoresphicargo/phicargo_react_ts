@@ -12,6 +12,7 @@ import { ViajeProvider } from '@/phicargo/viajes/context/viajeContext';
 import { Slider } from "@heroui/react";
 import { DateRangePicker } from "@heroui/react";
 import { parseDate, getLocalTimeZone } from "@internationalized/date";
+import { exportToCSV } from '../../utils/export';
 
 const { RangePicker } = DatePicker;
 
@@ -133,7 +134,7 @@ const ReporteCumplimientoEjecutivo = () => {
 
                 <DateRangePicker
                     className="max-w-xs"
-                    label="Date range (controlled)"
+                    label="Fecha"
                     value={dates}
                     variant='bordered'
                     onChange={setDates} />
@@ -148,7 +149,7 @@ const ReporteCumplimientoEjecutivo = () => {
                     step={1}
                 />
 
-                <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "viajes_activos.csv")}>Exportar</Button>
+                <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "reporte_estatus.csv")}>Exportar</Button>
 
             </Box>
 
