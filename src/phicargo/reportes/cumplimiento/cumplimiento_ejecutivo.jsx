@@ -103,6 +103,7 @@ const ReporteCumplimientoEjecutivo = () => {
         enableFilters: true,
         state: { showProgressBars: isLoading },
         initialState: {
+            showColumnFilters: true,
             density: 'compact',
             pagination: { pageSize: 80 },
         },
