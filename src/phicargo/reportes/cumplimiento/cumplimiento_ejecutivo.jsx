@@ -13,6 +13,7 @@ import { Slider } from "@heroui/react";
 import { DateRangePicker } from "@heroui/react";
 import { parseDate, getLocalTimeZone } from "@internationalized/date";
 import { exportToCSV } from '../../utils/export';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
 const { RangePicker } = DatePicker;
 
@@ -104,6 +105,7 @@ const ReporteCumplimientoEjecutivo = () => {
         enableGrouping: true,
         enableGlobalFilter: true,
         enableFilters: true,
+        localization: MRT_Localization_ES,
         state: { showProgressBars: isLoading },
         initialState: {
             showColumnFilters: true,
