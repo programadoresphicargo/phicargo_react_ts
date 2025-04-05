@@ -14,6 +14,8 @@ import { DateRangePicker } from "@heroui/react";
 import { parseDate, getLocalTimeZone } from "@internationalized/date";
 import { exportToCSV } from '../../utils/export';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
+import { User } from "@heroui/react";
+const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const { RangePicker } = DatePicker;
 
@@ -75,6 +77,7 @@ const ReporteCumplimientoEjecutivo = () => {
 
         return columnOrder
             .filter((key) => !key.includes('20_min'))
+            .filter((key) => !key.includes('fecha_envio'))
             .map((key) => {
                 const isHora = /^\d{1,2}:\d{2}$/.test(key);
 
@@ -82,14 +85,22 @@ const ReporteCumplimientoEjecutivo = () => {
                     accessorKey: key,
                     header: key.replace(/_/g, " ").toUpperCase(),
                     size: 150,
-                    Cell: ({ cell }) => {
+                    Cell: ({ cell, row }) => {
                         const value = cell.getValue();
+                        const fechaEnvio = row.original?.[`${key}_fecha_envio`];
+                        const min20 = row.original?.[`${key}_first_20_min`];
 
                         if (isHora && value) {
                             return (
-                                <Chip color={"primary"} size="md">
-                                    {value}
-                                </Chip>
+                                <User
+                                    avatarProps={{
+                                        color: min20 != null ? 'danger' : 'primary',
+                                        isBordered: true,
+                                        src: '',
+                                    }}
+                                    description={fechaEnvio}
+                                    name={value}
+                                />
                             );
                         }
 

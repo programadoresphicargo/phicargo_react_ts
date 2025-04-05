@@ -97,7 +97,7 @@ function EstatusHistorial() {
                         };
 
                         return (
-                            <Card className="mb-2 w-full" isPressable onClick={() => handleClickOpen(step.id_reportes_agrupados, "body")}>
+                            <Card className="mb-2 w-full" isPressable onPress={() => handleClickOpen(step.id_reportes_agrupados, "body")}>
                                 <CardHeader className="justify-between">
                                     <div className="flex gap-5">
                                         <Badge color="danger" content={step.registros} placement="top-right" isInvisible={step.registros > 1 ? false : true}>
