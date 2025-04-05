@@ -8,18 +8,30 @@ import { Button, Chip } from "@heroui/react"
 import { DatePicker } from 'antd';
 import odooApi from '@/api/odoo-api';
 import NavbarViajes from '@/phicargo/viajes/navbar';
-import { ViajeProvider } from '@/phicargo/viajes/context/viajeContext';
+import { ViajeContext, ViajeProvider } from '@/phicargo/viajes/context/viajeContext';
 import { Slider } from "@heroui/react";
 import { DateRangePicker } from "@heroui/react";
 import { parseDate, getLocalTimeZone } from "@internationalized/date";
 import { exportToCSV } from '../../utils/export';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { User } from "@heroui/react";
+import Travel from '@/phicargo/viajes/control/viaje';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const { RangePicker } = DatePicker;
 
 const ReporteCumplimientoEjecutivo = () => {
+
+    const { id_viaje, viaje, getViaje, loading, error, ActualizarIDViaje } = useContext(ViajeContext);
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     const today = new Date();
     const todayStr = today.toISOString().split("T")[0];
@@ -79,6 +91,7 @@ const ReporteCumplimientoEjecutivo = () => {
             .filter((key) => !key.includes('20_min'))
             .filter((key) => !key.includes('fecha_envio'))
             .filter((key) => !key.includes('imagen'))
+            .filter((key) => !key.includes('id_viaje'))
             .map((key) => {
                 const isHora = /^\d{1,2}:\d{2}$/.test(key);
 
@@ -127,9 +140,12 @@ const ReporteCumplimientoEjecutivo = () => {
             pagination: { pageSize: 80 },
         },
         muiTableBodyRowProps: ({ row }) => ({
-            onClick: ({ event }) => { },
             style: {
                 cursor: 'pointer',
+            },
+            onClick: ({ event }) => {
+                handleClickOpen();
+                ActualizarIDViaje(row.original.id_viaje);
             },
         }),
         muiTableHeadCellProps: {
@@ -187,6 +203,7 @@ const ReporteCumplimientoEjecutivo = () => {
                 />
 
                 <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "reporte_estatus.csv")}>Exportar</Button>
+                <Button color='primary' className='text-white' startContent={<i class="bi bi-arrow-clockwise"></i>} onPress={() => fetchData()}>Recargar</Button>
 
             </Box>
 
@@ -198,6 +215,7 @@ const ReporteCumplimientoEjecutivo = () => {
             <ViajeProvider>
                 <NavbarViajes></NavbarViajes>
                 <MaterialReactTable table={table} />
+                <Travel open={open} handleClose={handleClose}></Travel>
             </ViajeProvider>
         </div>
     );

@@ -78,7 +78,7 @@ const EventosPendientes = lazy(
   () => import('@/phicargo/monitoreo/Eventos_pendientes'),
 );
 const PersistentDrawer = lazy(() => import('../phicargo/monitoreo/Eventos'));
-const CumplimientoEjecutivos = lazy(() => import('../phicargo/reportes/cumplimiento/cumplimiento_ejecutivo'));
+const CumplimientoEjecutivos = lazy(() => import('../phicargo/reportes/cumplimiento/index_cumplimiento_ejecutivo'));
 export const PrivateRoutes = () => {
   return (
     <>
