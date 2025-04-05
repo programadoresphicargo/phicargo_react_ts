@@ -78,6 +78,7 @@ const ReporteCumplimientoEjecutivo = () => {
         return columnOrder
             .filter((key) => !key.includes('20_min'))
             .filter((key) => !key.includes('fecha_envio'))
+            .filter((key) => !key.includes('imagen'))
             .map((key) => {
                 const isHora = /^\d{1,2}:\d{2}$/.test(key);
 
@@ -89,6 +90,7 @@ const ReporteCumplimientoEjecutivo = () => {
                         const value = cell.getValue();
                         const fechaEnvio = row.original?.[`${key}_fecha_envio`];
                         const min20 = row.original?.[`${key}_first_20_min`];
+                        const imagen = row.original?.[`${key}_imagen`];
 
                         if (isHora && value) {
                             return (
@@ -97,7 +99,7 @@ const ReporteCumplimientoEjecutivo = () => {
                                         color: min20 != null ? 'danger' : 'primary',
                                         isBordered: true,
                                         size: 'sm',
-                                        src: '',
+                                        src: VITE_PHIDES_API_URL + `/img/status/${imagen}`,
                                     }}
                                     description={fechaEnvio}
                                     name={value}
