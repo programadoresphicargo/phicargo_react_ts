@@ -98,6 +98,7 @@ const ReporteCumplimientoEjecutivo = () => {
                 return {
                     accessorKey: key,
                     header: key.replace(/_/g, " ").toUpperCase(),
+                    enableColumnPinning: true,
                     size: 150,
                     Cell: ({ cell, row }) => {
                         const value = cell.getValue();
@@ -133,8 +134,10 @@ const ReporteCumplimientoEjecutivo = () => {
         enableGlobalFilter: true,
         enableFilters: true,
         localization: MRT_Localization_ES,
+        enableColumnPinning: true,
         state: { showProgressBars: isLoading },
         initialState: {
+            columnPinning: { left: ['referencia', 'estatus', 'nombre'] },
             showColumnFilters: true,
             density: 'compact',
             pagination: { pageSize: 80 },
