@@ -96,6 +96,7 @@ const ReporteCumplimientoEjecutivo = () => {
                                     avatarProps={{
                                         color: min20 != null ? 'danger' : 'primary',
                                         isBordered: true,
+                                        size: 'sm',
                                         src: '',
                                     }}
                                     description={fechaEnvio}
