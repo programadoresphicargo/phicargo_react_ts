@@ -72,6 +72,9 @@ const Viaje = ({ }) => {
           </h1>
           <div className="sm:space-x-3 mt-3">
             <span>
+              ID: {id_viaje}
+            </span>
+            <span>
               {viaje.vehiculo}
             </span>
             <span>
