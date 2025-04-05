@@ -46,6 +46,11 @@ function EstatusHistorialAgrupado({ registros_agrupados }) {
     }, [registros_agrupados]);
 
     const getEstatus = async () => {
+
+        if (registros_agrupados.length === 0) {
+            return;
+        }
+
         try {
             setLoading(true);
             const response = await odooApi.get('/reportes_estatus_viajes/by_id_reportes/' + registros_agrupados);
