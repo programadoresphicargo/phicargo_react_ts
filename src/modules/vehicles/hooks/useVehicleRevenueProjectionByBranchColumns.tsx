@@ -23,7 +23,7 @@ export const useVehicleRevenueProjectionByBranchColumns = () => {
       },
       {
         accessorKey: 'monthlyTarget',
-        header: 'OBJETIVO MENS',
+        header: 'OBJETIVO MENS IDEAL',
         Cell: ({ cell }) => <CurrencyCell value={cell.getValue<number>()} />,
         Footer: ({ column }) => {
           const total = column
@@ -37,7 +37,7 @@ export const useVehicleRevenueProjectionByBranchColumns = () => {
       },
       {
         accessorKey: 'dailyTarget',
-        header: 'OBJETIVO DIARIO',
+        header: 'OBJETIVO DIARIO IDEAL',
         Cell: ({ cell }) => <CurrencyCell value={cell.getValue<number>()} />,
         Footer: ({ column }) => {
           const total = column
@@ -55,7 +55,7 @@ export const useVehicleRevenueProjectionByBranchColumns = () => {
       },
       {
         accessorKey: 'idealMonthlyRevenue',
-        header: 'OBJETIVO MENS IDEAL',
+        header: 'OBJETIVO MENS',
         Cell: ({ cell }) => <CurrencyCell value={cell.getValue<number>()} />,
         Footer: ({ column }) => {
           const total = column
