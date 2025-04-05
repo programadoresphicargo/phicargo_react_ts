@@ -54,7 +54,7 @@ export class MaintenaceRecordAdapter {
       checkIn: dayjs.utc(record.check_in).tz('America/Mexico_City'),
       status: record.status,
       deliveryDate: record.delivery_date
-        ? dayjs.utc(record.delivery_date).tz('America/Mexico_City')
+        ? dayjs(record.delivery_date)
         : null,
       supervisor: record.supervisor,
       comments: record.comments,
@@ -79,7 +79,7 @@ export class MaintenaceRecordAdapter {
       vehicle: MaintenaceRecordAdapter.vehicleInfoToLocal(record.vehicle),
       workshop: workshopToLocal(record.workshop),
       lastCommentDate: record.last_comment_date
-        ? dayjs.utc(record.last_comment_date).tz('America/Mexico_City')
+        ? dayjs(record.last_comment_date)
         : null,
     };
   }
@@ -153,7 +153,7 @@ export class MaintenaceRecordAdapter {
       id: comment.id,
       recordId: comment.maintenance_record_id,
       comment: comment.comment_text,
-      createdAt: dayjs.utc(comment.created_at).tz('America/Mexico_City'),
+      createdAt: dayjs(comment.created_at),
       byUser: UserAdapter.userReadToLocal(comment.by_user),
     };
   }
