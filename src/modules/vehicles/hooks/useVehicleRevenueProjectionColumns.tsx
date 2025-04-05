@@ -88,7 +88,7 @@ export const useVehicleRevenueProjectionColumns = () => {
       },
       {
         accessorKey: 'monthlyTarget',
-        header: 'OBJETIVO MENS',
+        header: 'OBJETIVO MENS IDEAL',
         Cell: ({ cell }) => <CurrencyCell value={cell.getValue<number>()} />,
         Footer: ({ column }) => {
           const total = column.getFacetedRowModel().rows.reduce(
@@ -126,7 +126,7 @@ export const useVehicleRevenueProjectionColumns = () => {
       },
       {
         accessorKey: 'dailyTarget',
-        header: 'OBJETIVO DIARIO',
+        header: 'OBJETIVO MENSUAL',
         Cell: ({ cell }) => <CurrencyCell value={cell.getValue<number>()} />,
         Footer: ({ column }) => {
           const total = column.getFacetedRowModel().rows.reduce(
