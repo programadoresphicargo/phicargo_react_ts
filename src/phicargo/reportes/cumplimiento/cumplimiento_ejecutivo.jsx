@@ -96,7 +96,7 @@ const ReporteCumplimientoEjecutivo = () => {
                             return (
                                 <User
                                     avatarProps={{
-                                        color: min20 != null ? 'danger' : 'primary',
+                                        color: min20 == null ? 'danger' : 'primary',
                                         isBordered: true,
                                         size: 'sm',
                                         src: VITE_PHIDES_API_URL + `/img/status/${imagen}`,
