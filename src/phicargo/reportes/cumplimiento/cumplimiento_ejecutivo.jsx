@@ -8,7 +8,7 @@ import { Button, Chip } from "@heroui/react"
 import { DatePicker } from 'antd';
 import odooApi from '@/api/odoo-api';
 import NavbarViajes from '@/phicargo/viajes/navbar';
-import { ViajeContext, ViajeProvider } from '@/phicargo/viajes/context/viajeContext';
+import { ViajeContext } from '@/phicargo/viajes/context/viajeContext';
 import { Slider } from "@heroui/react";
 import { DateRangePicker } from "@heroui/react";
 import { parseDate, getLocalTimeZone } from "@internationalized/date";
@@ -22,7 +22,7 @@ const { RangePicker } = DatePicker;
 
 const ReporteCumplimientoEjecutivo = () => {
 
-    const { id_viaje, viaje, getViaje, loading, error, ActualizarIDViaje } = useContext(ViajeContext);
+    const { id_viaje, ActualizarIDViaje } = useContext(ViajeContext);
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
@@ -147,8 +147,8 @@ const ReporteCumplimientoEjecutivo = () => {
                 cursor: 'pointer',
             },
             onClick: ({ event }) => {
-                handleClickOpen();
                 ActualizarIDViaje(row.original.id_viaje);
+                handleClickOpen();
             },
         }),
         muiTableHeadCellProps: {
@@ -214,13 +214,11 @@ const ReporteCumplimientoEjecutivo = () => {
     });
 
     return (
-        <div>
-            <ViajeProvider>
-                <NavbarViajes></NavbarViajes>
-                <MaterialReactTable table={table} />
-                <Travel open={open} handleClose={handleClose}></Travel>
-            </ViajeProvider>
-        </div>
+        <>
+            <NavbarViajes></NavbarViajes>
+            <MaterialReactTable table={table} />
+            <Travel open={open} handleClose={handleClose}></Travel>
+        </>
     );
 };
 
