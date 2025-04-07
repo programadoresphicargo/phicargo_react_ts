@@ -1,4 +1,4 @@
-export const getMonthName = (monthNumber: number) => {
+export const getMonthName = (monthNumber: number, short: boolean = false) => {
   if (monthNumber < 1 || monthNumber > 12) {
     return 'Mes inválido';
   }
@@ -17,6 +17,26 @@ export const getMonthName = (monthNumber: number) => {
     'Noviembre',
     'Diciembre',
   ];
+
+  const shortMonthNames = [
+    'ENE',
+    'FEB',
+    'MAR',
+    'ABR',
+    'MAY',
+    'JUN',
+    'JUL',
+    'AGO',
+    'SEP',
+    'OCT',
+    'NOV',
+    'DIC',
+  ];
+
+  if (short) {
+    return shortMonthNames[monthNumber - 1];
+  }
+
   return monthNames[monthNumber - 1];
 };
 
