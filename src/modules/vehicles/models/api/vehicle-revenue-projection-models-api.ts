@@ -32,6 +32,7 @@ export interface VehicleRevenueProjectionByBranchHistoryApi {
   branch: string;
   month_start: string;
   month_end: string;
+  month: number;
   monthly_target: number;
   daily_target: number;
   total_working_days: number;

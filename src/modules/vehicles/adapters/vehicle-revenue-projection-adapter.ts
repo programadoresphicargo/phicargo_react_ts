@@ -10,6 +10,7 @@ import type {
 
 import { VehicleRevenueProjectionByBranchHistory } from '../models/vehicle-revenue-projection-models';
 import dayjs from 'dayjs';
+import { getMonthName } from '@/utilities';
 
 export class VehicleRevenueProjectionAdapter {
   static toVehicleRevenueProjection(
@@ -55,6 +56,7 @@ export class VehicleRevenueProjectionAdapter {
       branch: data.branch,
       monthStart: dayjs(data.month_start),
       monthEnd: dayjs(data.month_end),
+      month: getMonthName(data.month, true),
       monthlyTarget: data.monthly_target,
       dailyTarget: data.daily_target,
       totalWorkingDays: data.total_working_days,

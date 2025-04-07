@@ -35,6 +35,7 @@ export interface VehicleRevenueProjectionByBranchHistory {
   branch: string;
   monthStart: Dayjs;
   monthEnd: Dayjs;
+  month: string;
   monthlyTarget: number;
   dailyTarget: number;
   totalWorkingDays: number;
