@@ -188,7 +188,13 @@ const ReporteCumplimientoEjecutivo = () => {
         },
         muiTableContainerProps: {
             sx: {
-                maxHeight: 'calc(100vh - 230px)',
+                maxHeight: 'calc(100vh - 235px)',
+            },
+        },
+        muiTablePaperProps: {
+            elevation: 0,
+            sx: {
+                borderRadius: '0',
             },
         },
         renderTopToolbarCustomActions: ({ table }) => (
