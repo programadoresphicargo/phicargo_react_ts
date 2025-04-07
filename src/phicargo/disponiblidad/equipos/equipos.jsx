@@ -90,6 +90,14 @@ const Disponibilidad_unidades = () => {
                 },
             },
             {
+                accessorKey: 'ultimo_uso',
+                header: 'Último uso',
+            },
+            {
+                accessorKey: 'ultimo_uso_fecha',
+                header: 'Último uso fecha',
+            },
+            {
                 accessorKey: 'referencia_viaje',
                 header: 'Último viaje',
                 muiTableBodyCellProps: {
