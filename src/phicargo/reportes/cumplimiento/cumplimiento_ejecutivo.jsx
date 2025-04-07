@@ -204,21 +204,20 @@ const ReporteCumplimientoEjecutivo = () => {
             >
 
                 <h1
-                    className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
+                    className="flex-1 min-w-[300px] tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
                 >
-                    Cumplimiento de estatus
+                    Cumplimiento de estatus de viajes
                 </h1>
 
                 <DateRangePicker
-                    className="max-w-xs"
                     label="Fecha"
                     value={dates}
                     variant='bordered'
                     onChange={setDates} />
 
                 <Slider
+                    className="flex-1 min-w-[300px]"
                     fullWidth
-                    className="max-w-sm"
                     value={value}
                     onChange={setValue}
                     label="Hora"
