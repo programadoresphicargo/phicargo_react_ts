@@ -2,9 +2,8 @@ import { Button, ButtonGroup } from "@heroui/react";
 import { Card, Chip, Divider } from "@heroui/react";
 import { CardBody, CardHeader, Snippet } from "@heroui/react";
 import React, { useContext, useEffect, useState } from "react";
-
 import Contenedores from "../contenedores/contenedores";
-import CumplimientoOperador from "../cumplimiento/cumplimiento";
+import CumplimientoOperador from "../cumplimiento_operador/cumplimiento";
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
