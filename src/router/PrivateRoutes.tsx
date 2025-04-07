@@ -78,7 +78,9 @@ const EventosPendientes = lazy(
   () => import('@/phicargo/monitoreo/Eventos_pendientes'),
 );
 const PersistentDrawer = lazy(() => import('../phicargo/monitoreo/Eventos'));
-const CumplimientoEjecutivos = lazy(() => import('../phicargo/reportes/cumplimiento/index_cumplimiento_ejecutivo'));
+const CumplimientoEjecutivosViajes = lazy(() => import('../phicargo/reportes/cumplimiento/index_cumplimiento_ejecutivo'));
+const CumplimientoEjecutivosManiobras = lazy(() => import('../phicargo/reportes/cumplimiento/index_cumplimiento_ejecutivo_maniobra'));
+
 export const PrivateRoutes = () => {
   return (
     <>
@@ -194,7 +196,16 @@ export const PrivateRoutes = () => {
           path="/cumplimiento_estatus_ejecutivos"
           element={
             <Suspense fallback={<LoadingPage />}>
-              <CumplimientoEjecutivos />
+              <CumplimientoEjecutivosViajes />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/cumplimiento_estatus_ejecutivos_maniobras"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <CumplimientoEjecutivosManiobras />
             </Suspense>
           }
         />

@@ -18,7 +18,7 @@ import Travel from '@/phicargo/viajes/control/viaje';
 import { ViajeContext } from '@/phicargo/viajes/context/viajeContext';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
-const ReporteCumplimientoEjecutivo = () => {
+const ReporteCumplimientoEjecutivoManiobra = () => {
 
     const { id_viaje, viaje, getViaje, loading, error, ActualizarIDViaje } = useContext(ViajeContext);
     const [open, setOpen] = React.useState(false);
@@ -212,7 +212,7 @@ const ReporteCumplimientoEjecutivo = () => {
                 <h1
                     className="flex-1 min-w-[300px] tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
                 >
-                    Cumplimiento de estatus en viajes
+                    Cumplimiento de estatus en maniobra
                 </h1>
 
                 <DateRangePicker
@@ -249,4 +249,4 @@ const ReporteCumplimientoEjecutivo = () => {
     );
 };
 
-export default ReporteCumplimientoEjecutivo;
+export default ReporteCumplimientoEjecutivoManiobra;

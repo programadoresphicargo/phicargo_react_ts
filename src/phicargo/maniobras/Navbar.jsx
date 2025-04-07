@@ -23,6 +23,7 @@ const pages = [
     { name: 'TERMINALES', path: '/terminales' },
     { name: 'PRECIOS', path: '/precios' },
     { name: 'DISPONIBILIDAD', path: '/disponibilidad' },
+    { name: 'CUMPLIMIENTO ESTATUS', path: '/cumplimiento_estatus_ejecutivos_maniobras' },
 ];
 
 function ManiobrasNavBar() {

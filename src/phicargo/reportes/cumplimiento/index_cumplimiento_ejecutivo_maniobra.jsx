@@ -7,15 +7,15 @@ import Box from '@mui/material/Box';
 import odooApi from '@/api/odoo-api';
 import NavbarViajes from '@/phicargo/viajes/navbar';
 import { ViajeProvider } from '@/phicargo/viajes/context/viajeContext';
-import ReporteCumplimientoEjecutivo from './cumplimiento_ejecutivos_viajes';
+import ReporteCumplimientoEjecutivoManiobra from './cumplimiento_ejecutivos_maniobra';
 
-const ReporteCumplimientoEjecutivoIndex = () => {
+const ReporteCumplimientoEjecutivoManiobraIndex = () => {
 
     return (
         <ViajeProvider>
-            <ReporteCumplimientoEjecutivo></ReporteCumplimientoEjecutivo>
+            <ReporteCumplimientoEjecutivoManiobra></ReporteCumplimientoEjecutivoManiobra>
         </ViajeProvider>
     );
 };
 
-export default ReporteCumplimientoEjecutivoIndex;
+export default ReporteCumplimientoEjecutivoManiobraIndex;
