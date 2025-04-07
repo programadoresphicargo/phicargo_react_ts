@@ -137,7 +137,7 @@ const ReporteCumplimientoEjecutivo = () => {
                             );
                         }
 
-                        return value ?? "";
+                        return (value ?? "").toUpperCase();
                     }
                 };
             });
