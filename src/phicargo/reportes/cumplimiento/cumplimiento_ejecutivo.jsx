@@ -135,7 +135,7 @@ const ReporteCumplimientoEjecutivo = () => {
         enableColumnPinning: true,
         state: { showProgressBars: isLoading },
         initialState: {
-            columnPinning: { left: ['referencia', 'estatus', 'nombre'] },
+            columnPinning: { left: ['referencia', 'estatus', 'nombre', 'sucursal'] },
             showColumnFilters: true,
             density: 'compact',
             pagination: { pageSize: 80 },
@@ -191,7 +191,7 @@ const ReporteCumplimientoEjecutivo = () => {
                     onChange={setDates} />
 
                 <Slider
-                    className="max-w-xs"
+                    fullWidth
                     value={value}
                     onChange={setValue}
                     label="Hora"
@@ -200,8 +200,8 @@ const ReporteCumplimientoEjecutivo = () => {
                     step={1}
                 />
 
-                <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "reporte_estatus.csv")}>Exportar</Button>
-                <Button color='primary' className='text-white' startContent={<i class="bi bi-arrow-clockwise"></i>} onPress={() => fetchData()}>Recargar</Button>
+                <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "reporte_estatus.csv")} fullWidth>Exportar</Button>
+                <Button color='primary' className='text-white' startContent={<i class="bi bi-arrow-clockwise"></i>} onPress={() => fetchData()} fullWidth>Recargar</Button>
 
             </Box>
 
