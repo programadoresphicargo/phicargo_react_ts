@@ -104,6 +104,24 @@ const ReporteCumplimientoEjecutivo = () => {
                         const min20 = row.original?.[`${key}_first_20_min`];
                         const imagen = row.original?.[`${key}_imagen`];
 
+                        if (key === 'estatus') {
+                            return (
+                                <Chip
+                                    className='text-white'
+                                    color={
+                                        value === 'ruta' ? 'primary'
+                                            : value === 'planta' ? 'success'
+                                                : value === 'retorno' ? 'warning'
+                                                    : value === 'finalizado' ? 'secondary'
+                                                        : 'default'
+                                    }
+                                    variant="solid"
+                                >
+                                    {value}
+                                </Chip>
+                            );
+                        }
+
                         if (isHora && value) {
                             return (
                                 <User
@@ -120,7 +138,7 @@ const ReporteCumplimientoEjecutivo = () => {
                         }
 
                         return value ?? "";
-                    },
+                    }
                 };
             });
     }, [data, columnOrder, value]);
@@ -192,6 +210,7 @@ const ReporteCumplimientoEjecutivo = () => {
 
                 <Slider
                     fullWidth
+                    className="max-w-sm"
                     value={value}
                     onChange={setValue}
                     label="Hora"
