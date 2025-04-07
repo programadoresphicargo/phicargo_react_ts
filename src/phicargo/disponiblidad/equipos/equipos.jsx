@@ -101,49 +101,49 @@ const Disponibilidad_unidades = () => {
                 accessorKey: 'referencia_viaje',
                 header: 'Último viaje',
                 muiTableBodyCellProps: {
-                    sx: { backgroundColor: '#ffeb3b', fontFamily: 'Inter', fontSize: '12px', },
+                    sx: { backgroundColor: '#007ffb', fontFamily: 'Inter', fontSize: '12px', color: 'white' },
                 },
             },
             {
                 accessorKey: 'sucursal_viaje',
                 header: 'Sucursal',
                 muiTableBodyCellProps: {
-                    sx: { backgroundColor: '#ffeb3b', fontFamily: 'Inter', fontSize: '12px', },
+                    sx: { backgroundColor: '#007ffb', fontFamily: 'Inter', fontSize: '12px', color: 'white' },
                 },
             },
             {
                 accessorKey: 'last_travel_end_date',
                 header: 'Finalización',
                 muiTableBodyCellProps: {
-                    sx: { backgroundColor: '#ffeb3b', fontFamily: 'Inter', fontSize: '12px', },
+                    sx: { backgroundColor: '#007ffb', fontFamily: 'Inter', fontSize: '12px', color: 'white' },
                 },
             },
             {
                 accessorKey: 'operador_viaje',
                 header: 'Operador',
                 muiTableBodyCellProps: {
-                    sx: { backgroundColor: '#ffeb3b', fontFamily: 'Inter', fontSize: '12px', },
+                    sx: { backgroundColor: '#007ffb', fontFamily: 'Inter', fontSize: '12px', color: 'white' },
                 },
             },
             {
                 accessorKey: 'last_maniobra_id',
                 header: 'ID Maniobra',
                 muiTableBodyCellProps: {
-                    sx: { backgroundColor: '#81c784', fontFamily: 'Inter', fontSize: '12px', },
+                    sx: { backgroundColor: '#004cc4', fontFamily: 'Inter', fontSize: '12px', color: 'white' },
                 },
             },
             {
                 accessorKey: 'last_maniobra_end_date',
                 header: 'Finalización',
                 muiTableBodyCellProps: {
-                    sx: { backgroundColor: '#81c784', fontFamily: 'Inter', fontSize: '12px', },
+                    sx: { backgroundColor: '#004cc4', fontFamily: 'Inter', fontSize: '12px', color: 'white' },
                 },
             },
             {
                 accessorKey: 'operador_maniobra',
                 header: 'Operador',
                 muiTableBodyCellProps: {
-                    sx: { backgroundColor: '#81c784', fontFamily: 'Inter', fontSize: '12px', },
+                    sx: { backgroundColor: '#004cc4', fontFamily: 'Inter', fontSize: '12px', color: 'white' },
                 },
             },
         ],
