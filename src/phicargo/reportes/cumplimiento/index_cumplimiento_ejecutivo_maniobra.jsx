@@ -8,13 +8,14 @@ import odooApi from '@/api/odoo-api';
 import NavbarViajes from '@/phicargo/viajes/navbar';
 import { ViajeProvider } from '@/phicargo/viajes/context/viajeContext';
 import ReporteCumplimientoEjecutivoManiobra from './cumplimiento_ejecutivos_maniobra';
+import { ManiobraProvider } from '@/phicargo/maniobras/context/viajeContext';
 
 const ReporteCumplimientoEjecutivoManiobraIndex = () => {
 
     return (
-        <ViajeProvider>
+        <ManiobraProvider>
             <ReporteCumplimientoEjecutivoManiobra></ReporteCumplimientoEjecutivoManiobra>
-        </ViajeProvider>
+        </ManiobraProvider>
     );
 };
 

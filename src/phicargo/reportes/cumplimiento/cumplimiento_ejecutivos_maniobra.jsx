@@ -15,25 +15,27 @@ import { exportToCSV } from '../../utils/export';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { User } from "@heroui/react";
 import Travel from '@/phicargo/viajes/control/viaje';
-import { ViajeContext } from '@/phicargo/viajes/context/viajeContext';
 import ManiobrasNavBar from '@/phicargo/maniobras/Navbar';
+import Formulariomaniobra from '@/phicargo/maniobras/maniobras/formulario_maniobra';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const ReporteCumplimientoEjecutivoManiobra = () => {
 
-    const { id_viaje, viaje, getViaje, loading, error, ActualizarIDViaje } = useContext(ViajeContext);
-    const [open, setOpen] = React.useState(false);
+    const [modalShow, setModalShow] = React.useState(false);
 
-    useEffect(() => {
-        getViaje(id_viaje);
-    }, [id_viaje]);
+    const [id_maniobra, setIdmaniobra] = useState('');
+    const [id_cp, setIdcp] = useState('');
+    const [idCliente, setClienteID] = useState('');
 
-    const handleClickOpen = () => {
-        setOpen(true);
+    const handleShowModal = (id_maniobra, id_cp) => {
+        setModalShow(true);
+        setIdmaniobra(id_maniobra);
+        setIdcp(id_cp);
     };
 
-    const handleClose = () => {
-        setOpen(false);
+    const handleCloseModal = () => {
+        setModalShow(false);
+        fetchData();
     };
 
     const today = new Date();
@@ -94,6 +96,8 @@ const ReporteCumplimientoEjecutivoManiobra = () => {
             .filter((key) => !key.includes('20_min'))
             .filter((key) => !key.includes('fecha_hora'))
             .filter((key) => !key.includes('imagen'))
+            .filter((key) => !key.includes('id'))
+            .filter((key) => !key.includes('id_cliente'))
             .map((key) => {
                 const isHora = /^\d{1,2}:\d{2}$/.test(key);
 
@@ -164,8 +168,9 @@ const ReporteCumplimientoEjecutivoManiobra = () => {
         },
         muiTableBodyRowProps: ({ row }) => ({
             onClick: ({ event }) => {
-                handleClickOpen();
-                ActualizarIDViaje(row.original.id_viaje);
+                alert(row.original.id);
+                handleShowModal(row.original.id_maniobra, row.original.id);
+                setClienteID(row.original.id_cliente);
             },
             style: {
                 cursor: 'pointer',
@@ -243,7 +248,14 @@ const ReporteCumplimientoEjecutivoManiobra = () => {
         <>
             <ManiobrasNavBar></ManiobrasNavBar>
             <MaterialReactTable table={table} />
-            <Travel open={open} handleClose={handleClose}></Travel>
+            <Formulariomaniobra
+                show={modalShow}
+                handleClose={handleCloseModal}
+                id_maniobra={id_maniobra}
+                id_cp={id_cp}
+                id_cliente={idCliente}
+                form_deshabilitado={true}
+            />
         </>
     );
 };
