@@ -4,7 +4,7 @@ import { CardBody, CardHeader, Snippet } from "@heroui/react";
 import React, { useContext, useEffect, useState } from "react";
 
 import Contenedores from "../contenedores/contenedores";
-import CumplimientoOperador from "../cumplimiento_operador/cumplimiento";
+import CumplimientoOperador from "../cumplimiento/cumplimiento";
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';

@@ -249,7 +249,7 @@ const Maniobras = ({ estado_maniobra }) => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 230px)',
+        maxHeight: 'calc(100vh - 250px)',
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
