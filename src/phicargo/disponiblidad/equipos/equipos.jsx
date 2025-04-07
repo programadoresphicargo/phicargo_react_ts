@@ -83,8 +83,8 @@ const Disponibilidad_unidades = () => {
                     }
 
                     return (
-                        <Chip color={badgeClass} size='sm'>
-                            {estado}
+                        <Chip color={badgeClass} size='sm' className="text-white">
+                            <strong>{estado.toUpperCase()}</strong>
                         </Chip>
                     );
                 },
@@ -92,6 +92,25 @@ const Disponibilidad_unidades = () => {
             {
                 accessorKey: 'ultimo_uso',
                 header: 'Último uso',
+                Cell: ({ cell }) => {
+                    const estado = cell.getValue();
+
+                    if (!estado) return null;
+
+                    let badgeClass = 'default';
+
+                    if (estado === 'viaje') {
+                        badgeClass = 'primary';
+                    } else if (estado === 'maniobra') {
+                        badgeClass = 'danger';
+                    }
+
+                    return (
+                        <Chip color={badgeClass} size='sm'>
+                            <strong>{estado.toUpperCase()}</strong>
+                        </Chip>
+                    );
+                },
             },
             {
                 accessorKey: 'ultimo_uso_fecha',
