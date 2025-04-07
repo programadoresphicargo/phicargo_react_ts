@@ -208,7 +208,9 @@ const Maniobras = ({ estado_maniobra }) => {
           return (
             <User
               avatarProps={{
-                src: "",
+                size: 'sm',
+                color: 'primary',
+                isBordered: true,
               }}
               description={fecha_registro}
               name={nombre}

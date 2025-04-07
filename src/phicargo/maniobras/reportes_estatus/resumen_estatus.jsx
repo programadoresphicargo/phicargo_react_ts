@@ -37,7 +37,9 @@ const EstatusDropdownManiobra = ({ id_maniobra, ultimo_estatus, usuario_ultimo_e
                 ) : (
                     <User
                         avatarProps={{
-                            src: "https://th.bing.com/th/id/OIP.9_MptOLxjJEGSGukPt9FWQHaHa?w=1920&h=1920&rs=1&pid=ImgDetMain",
+                            size: 'sm',
+                            color: 'primary',
+                            isBordered: true,
                         }}
                         description={`${usuario_ultimo_estatus} - ${fecha_ultimo_estatus}`}
                         name={`${ultimo_estatus}`}
