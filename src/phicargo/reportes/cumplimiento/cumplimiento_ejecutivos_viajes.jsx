@@ -158,7 +158,7 @@ const ReporteCumplimientoEjecutivo = () => {
         enableStickyHeader: true,
         state: { showProgressBars: isLoading },
         initialState: {
-            columnPinning: { left: ['referencia', 'estatus', 'nombre', 'sucursal'] },
+            columnPinning: { left: ['referencia', 'sucursal', 'estatus', 'nombre'] },
             showColumnFilters: true,
             density: 'compact',
             pagination: { pageSize: 80 },
