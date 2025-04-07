@@ -91,24 +91,32 @@ export const useVehicleRevenueProjectionColumns = () => {
         header: 'OBJETIVO MENS IDEAL',
         Cell: ({ cell }) => <CurrencyCell value={cell.getValue<number>()} />,
         Footer: ({ column }) => {
-          const total = column.getFacetedRowModel().rows.reduce(
-            (sum, row) => sum + (row.original.monthlyTarget ?? 0),
-            0,
-          );
+          const total = column
+            .getFacetedRowModel()
+            .rows.reduce(
+              (sum, row) => sum + (row.original.monthlyTarget ?? 0),
+              0,
+            );
           return <CurrencyFooterCell value={total} />;
-        }
+        },
+        aggregationFn: 'sum',
+        AggregatedCell: ({ cell }) => (
+          <CurrencyCell value={cell.getValue<number>()} />
+        ),
       },
       {
         accessorKey: 'idealDailyTarget',
         header: 'OBJETIVO DIARIO IDEAL',
         Cell: ({ cell }) => <CurrencyCell value={cell.getValue<number>()} />,
         Footer: ({ column }) => {
-          const total = column.getFacetedRowModel().rows.reduce(
-            (sum, row) => sum + (row.original.idealDailyTarget ?? 0),
-            0,
-          );
+          const total = column
+            .getFacetedRowModel()
+            .rows.reduce(
+              (sum, row) => sum + (row.original.idealDailyTarget ?? 0),
+              0,
+            );
           return <CurrencyFooterCell value={total} />;
-        }
+        },
       },
       {
         accessorKey: 'workingDays',
@@ -126,15 +134,21 @@ export const useVehicleRevenueProjectionColumns = () => {
       },
       {
         accessorKey: 'dailyTarget',
-        header: 'OBJETIVO MENSUAL',
+        header: 'OBJETIVO MENS',
         Cell: ({ cell }) => <CurrencyCell value={cell.getValue<number>()} />,
         Footer: ({ column }) => {
-          const total = column.getFacetedRowModel().rows.reduce(
-            (sum, row) => sum + (row.original.dailyTarget ?? 0),
-            0,
-          );
+          const total = column
+            .getFacetedRowModel()
+            .rows.reduce(
+              (sum, row) => sum + (row.original.dailyTarget ?? 0),
+              0,
+            );
           return <CurrencyFooterCell value={total} />;
-        }
+        },
+        aggregationFn: 'sum',
+        AggregatedCell: ({ cell }) => (
+          <CurrencyCell value={cell.getValue<number>()} />
+        ),
       },
       {
         accessorKey: 'realMonthlyRevenue',
@@ -148,12 +162,18 @@ export const useVehicleRevenueProjectionColumns = () => {
           />
         ),
         Footer: ({ column }) => {
-          const total = column.getFacetedRowModel().rows.reduce(
-            (sum, row) => sum + (row.original.realMonthlyRevenue ?? 0),
-            0,
-          );
+          const total = column
+            .getFacetedRowModel()
+            .rows.reduce(
+              (sum, row) => sum + (row.original.realMonthlyRevenue ?? 0),
+              0,
+            );
           return <CurrencyFooterCell value={total} />;
-        }
+        },
+        aggregationFn: 'sum',
+        AggregatedCell: ({ cell }) => (
+          <CurrencyCell value={cell.getValue<number>()} />
+        ),
       },
       {
         accessorKey: 'availabilityStatus',

@@ -29,7 +29,7 @@ export const VehicleRevenueProjectionTable = () => {
     refetchFn: query.refetch,
     exportFn: (data) => toExcel.exportData(data),
     tableId: 'vehicle-revenue-projection-table',
-    containerHeight: 'calc(100vh - 220px)',
+    containerHeight: 'calc(100vh - 282px)',
     enableRowActions: false,
   });
 
@@ -52,7 +52,7 @@ const exportConf: ExportConfig<VehicleRevenueProjection> = {
     { accessorFn: (data) => data.vehicleType, header: 'TIPO' },
     { accessorFn: (data) => data.configType, header: 'CONF.' },
     { accessorFn: (data) => data.status, header: 'ESTADO' },
-    { accessorFn: (data) => data.monthlyTarget, header: 'OBJETIVO MENSUAL' },
+    { accessorFn: (data) => data.monthlyTarget, header: 'OBJETIVO MENSUAL IDEAL' },
     {
       accessorFn: (data) => data.idealDailyTarget,
       header: 'OBJETIVO DIARIO IDEAL',
@@ -62,7 +62,7 @@ const exportConf: ExportConfig<VehicleRevenueProjection> = {
       accessorFn: (data) => data.operationalDays,
       header: 'DIAS OPERATIVOS REALES',
     },
-    { accessorFn: (data) => data.dailyTarget, header: 'OBJETIVO DIARIO' },
+    { accessorFn: (data) => data.dailyTarget, header: 'OBJETIVO MENSUAL' },
     {
       accessorFn: (data) => data.realMonthlyRevenue,
       header: 'INGRESO MENSUAL REAL',
