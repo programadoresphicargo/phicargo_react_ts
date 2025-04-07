@@ -212,7 +212,7 @@ const ReporteCumplimientoEjecutivo = () => {
                 <h1
                     className="flex-1 min-w-[300px] tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
                 >
-                    Cumplimiento de estatus de viajes
+                    Cumplimiento de estatus en viajes
                 </h1>
 
                 <DateRangePicker
