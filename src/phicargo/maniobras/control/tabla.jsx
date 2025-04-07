@@ -222,8 +222,6 @@ const Maniobras = ({ estado_maniobra }) => {
     [],
   );
 
-  const manualGrouping = ['nombre_operador'];
-
   const table = useMaterialReactTable({
     columns,
     data,
@@ -235,7 +233,6 @@ const Maniobras = ({ estado_maniobra }) => {
     enableColumnPinning: true,
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
-    grouping: manualGrouping,
     initialState: {
       columnVisibility: {
         id_maniobra: false,
