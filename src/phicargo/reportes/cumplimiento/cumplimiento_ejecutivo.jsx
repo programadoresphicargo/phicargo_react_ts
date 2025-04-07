@@ -1,8 +1,8 @@
+import React, { useEffect, useMemo, useState, useContext } from 'react';
 import {
     MaterialReactTable,
     useMaterialReactTable,
 } from 'material-react-table';
-import React, { useEffect, useMemo, useState, useContext } from 'react';
 import Box from '@mui/material/Box';
 import { Button, Chip } from "@heroui/react"
 import { DatePicker } from 'antd';
@@ -20,7 +20,7 @@ const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const ReporteCumplimientoEjecutivo = () => {
 
-    const { id_viaje, ActualizarIDViaje } = useContext(ViajeContext);
+    const { id_viaje, viaje, getViaje, loading, error, ActualizarIDViaje } = useContext(ViajeContext);
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
@@ -141,12 +141,9 @@ const ReporteCumplimientoEjecutivo = () => {
             pagination: { pageSize: 80 },
         },
         muiTableBodyRowProps: ({ row }) => ({
-            style: {
-                cursor: 'pointer',
-            },
             onClick: ({ event }) => {
-                ActualizarIDViaje(row.original.id_viaje);
                 handleClickOpen();
+                ActualizarIDViaje(row.original.id_viaje);
             },
         }),
         muiTableHeadCellProps: {
@@ -213,6 +210,7 @@ const ReporteCumplimientoEjecutivo = () => {
 
     return (
         <>
+            <NavbarViajes></NavbarViajes>
             <MaterialReactTable table={table} />
             <Travel open={open} handleClose={handleClose}></Travel>
         </>

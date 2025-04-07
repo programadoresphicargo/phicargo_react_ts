@@ -44,6 +44,11 @@ export default function ReporteOperador({ id_reporte, isOpen, onOpenChange }) {
     });
 
     const getEstatus = async () => {
+
+        if (id_reporte == '') {
+            return;
+        }
+
         try {
             setLoading(true);
             const response = await odooApi.get('/problemas_operadores/by_id_reporte/' + id_reporte);
@@ -85,7 +90,7 @@ export default function ReporteOperador({ id_reporte, isOpen, onOpenChange }) {
 
             if (data.success) {
                 toast.success(data.message);
-                onOpenChange(); 
+                onOpenChange();
             } else {
                 toast.error(data.message);
             }

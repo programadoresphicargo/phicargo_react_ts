@@ -13,7 +13,6 @@ const ReporteCumplimientoEjecutivoIndex = () => {
 
     return (
         <ViajeProvider>
-            <NavbarViajes></NavbarViajes>
             <ReporteCumplimientoEjecutivo></ReporteCumplimientoEjecutivo>
         </ViajeProvider>
     );

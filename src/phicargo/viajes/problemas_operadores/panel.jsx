@@ -51,7 +51,6 @@ export default function ProblemasOperadores2({ isOpen, onOpen, onOpenChange }) {
         try {
             setLoading(true);
             const response = await odooApi.get('/problemas_operadores/');
-            console.log(response.data);
             setEstatus(response.data);
             setLoading(false);
         } catch (error) {
