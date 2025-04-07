@@ -1,9 +1,10 @@
 import { CategoryScale } from 'chart.js';
 import Chart from 'chart.js/auto';
 import { FrequentRoutesChart } from '../components/travels/FrequentRoutesChart';
+import { MonthProjectionChart } from '../components/travels/MonthProjectionChart';
 import { MonthlyTravelsChart } from '../components/travels/MonthlyTravelsChart';
 import { PodsDeliveredChart } from '../components/travels/PodsDeliveredChart';
-import { ProjectionChart } from '../components/travels/ProjectionChart';
+import { ProjectionHistoryChart } from '../components/travels/ProjectionHistoryChart';
 import { TravelIndicators } from '../components/travels/TravelIndicators';
 import { TravelsByCargoType } from '../components/travels/TravelsByCargoType';
 import { TravelsByCategoryChart } from '../components/travels/TravelsByCategoryChart';
@@ -29,7 +30,7 @@ const TravelsDashboardPage = () => {
           data={travelStatsQuery.data}
         />
 
-        <ProjectionChart />
+        <MonthProjectionChart />
 
         <div className="row-span-2">
           <TravelsByTrafficExecutive
@@ -38,6 +39,7 @@ const TravelsDashboardPage = () => {
           />
         </div>
 
+        <ProjectionHistoryChart />
         <TravelsByConstruction
           isLoading={travelStatsQuery.isFetching}
           data={travelStatsQuery.data}

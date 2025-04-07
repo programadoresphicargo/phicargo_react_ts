@@ -32,7 +32,7 @@ const options: ChartOptions<'line'> = {
   },
 };
 
-export const ProjectionChart = () => {
+export const ProjectionHistoryChart = () => {
   const [chartData, setChartData] = useState<ChartData<'line'> | null>(null);
   const { branchId, companyId, monthString } = useDateRangeContext();
 
