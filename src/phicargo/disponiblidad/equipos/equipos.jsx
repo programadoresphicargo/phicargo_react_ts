@@ -240,7 +240,7 @@ const Disponibilidad_unidades = () => {
         },
         muiTableContainerProps: {
             sx: {
-                maxHeight: 'calc(100vh - 170px)',
+                maxHeight: 'calc(100vh - 175px)',
             },
         },
         renderTopToolbarCustomActions: ({ table }) => (
