@@ -6,7 +6,6 @@ import ProtectedRoute from '@/router/ProtectedRoute';
 import { Route } from 'react-router-dom';
 
 const CollectView = lazy(() => import('../outlets/CollectView'));
-const NewCollectForm = lazy(() => import('../outlets/NewCollectForm'));
 const PaymentView = lazy(() => import('../outlets/PaymentView'));
 const NewPaymentForm = lazy(() => import('../outlets/NewPaymentForm'));
 
@@ -29,16 +28,7 @@ const CashflowReportRoutes = () => (
           <CollectView />
         </Suspense>
       }
-    >
-      <Route
-        path="add"
-        element={
-          <Suspense fallback={null}>
-            <NewCollectForm />
-          </Suspense>
-        }
-      />
-    </Route>
+    ></Route>
     <Route
       path="payment"
       element={

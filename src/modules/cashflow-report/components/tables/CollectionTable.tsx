@@ -1,37 +1,29 @@
 import { type ExportConfig, ExportToExcel } from '@/utilities';
-import { IconButton, Tooltip } from '@mui/material';
-import {
-  MRT_TableOptions,
-  MaterialReactTable,
-  useMaterialReactTable,
-} from 'material-react-table';
+import { IconButton } from '@mui/material';
+import { MRT_TableOptions, MaterialReactTable } from 'material-react-table';
 import { useCollectRegisters, useWeekContext } from '../../hooks';
 
 import { AddButton } from '@/components/ui';
-import AlertDialog from '../AlertDialog';
 import type { CollectRegister } from '../../models';
-import ExportExcelButton from '@/components/ui/buttons/ExportExcelButton';
 import { FaRegEdit } from 'react-icons/fa';
-import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import RefreshIcon from '@mui/icons-material/Refresh';
 import { RiDeleteRow } from 'react-icons/ri';
 import { isGOEWeek } from '../../utils';
 import { useCollectTableColumns } from '../../hooks/useCollectTableColumns';
-import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { useBaseTable } from '@/hooks';
+import NewCollectForm from '../NewCollectForm';
+import { AlertDialog } from '@/components';
 
 const CollectionTable = () => {
-  const navigate = useNavigate();
   const [deleteId, setDeleteId] = useState<number | null>(null);
+
+  const [openAdd, setOpenAdd] = useState(false);
 
   const { weekSelected } = useWeekContext();
 
   const {
     collectRegisterQuery: { data: registers, refetch, isFetching, isLoading },
-    updateCollectRegisterMutation: {
-      mutate: updateRegister,
-      isPending: isSaving,
-    },
+    updateCollectRegisterMutation: { mutate: updateRegister },
     deleteCollectRegisterMutation: { mutate: deleteRegister },
   } = useCollectRegisters();
 
@@ -46,39 +38,22 @@ const CollectionTable = () => {
       table.setEditingRow(null);
     };
 
-  const table = useMaterialReactTable<CollectRegister>({
-    // DATA
+  const table = useBaseTable<CollectRegister>({
     columns,
     data: registers || [],
-    localization: MRT_Localization_ES,
-    enableStickyHeader: true,
+    tableId: 'collect-registers',
+    isLoading,
+    isFetching,
+    refetchFn: refetch,
+    exportFn: () => exportTo.exportData(registers || []),
+    containerHeight: 'calc(100vh - 210px)',
     enableStickyFooter: true,
-    // PAGINATION, FILTERS, SORTING
-    enableGrouping: true,
-    enableGlobalFilter: true,
-    enableFilters: true,
-    enableDensityToggle: false,
-    getRowId: (row) => row.id as unknown as string,
+    enableRowActions: true,
+    positionActionsColumn: 'first',
+    stickyRightActions: true,
     editDisplayMode: 'row',
     enableEditing: true,
     onEditingRowSave: handleSaveRegisters,
-    enableRowActions: true,
-    positionActionsColumn: 'first',
-    enableCellActions: true,
-    // STATE
-    state: {
-      isLoading: isLoading,
-      showProgressBars: isFetching,
-      isSaving: isSaving,
-    },
-    initialState: {
-      density: 'compact',
-      pagination: { pageSize: 100, pageIndex: 0 },
-      columnPinning: {
-        right: ['mrt-row-actions'],
-      },
-    },
-    // CUSTOMIZATIONS
     renderRowActions: ({ row, table }) => (
       <div className="flex items-center gap-1 py-0.5">
         <IconButton
@@ -95,72 +70,34 @@ const CollectionTable = () => {
           aria-label="delete-action"
           size="small"
           onClick={() => setDeleteId(Number(row.id))}
-          disabled={!isGOEWeek(weekSelected!)}
+          // disabled={!isGOEWeek(weekSelected!)}
         >
           <RiDeleteRow />
         </IconButton>
       </div>
     ),
-    renderTopToolbarCustomActions: () => (
-      <div className="flex flex-row gap-2">
-        <div className="flex flex-row items-center rounded-xl">
-          <Tooltip arrow title="Refrescar">
-            <IconButton onClick={() => refetch()} size="small">
-              <RefreshIcon />
-            </IconButton>
-          </Tooltip>
-        </div>
-        <AddButton
-          label="Añadir"
-          onClick={() => navigate('/reportes/balance/collect/add')}
-        />
-        <ExportExcelButton
-          size="small"
-          onClick={() => exportTo.exportData(registers || [])}
-        />
-      </div>
+    toolbarActions: (
+      <>
+        <AddButton label="Añadir" onClick={() => setOpenAdd(true)} />
+      </>
     ),
-    muiTableHeadCellProps: {
-      sx: {
-        fontFamily: 'Inter',
-        fontWeight: 'Bold',
-        fontSize: '12px',
-      },
-    },
-    muiTableBodyCellProps: {
-      sx: {
-        fontFamily: 'Inter',
-        fontWeight: 'normal',
-        fontSize: '12px',
-        padding: '0 2px',
-        margin: '0',
-      },
-    },
-    muiTablePaperProps: {
-      elevation: 0,
-      sx: {
-        borderRadius: '0',
-      },
-    },
-    muiTableContainerProps: {
-      sx: {
-        height: 'calc(100vh - 210px)',
-      },
-    },
   });
 
   return (
     <>
       <MaterialReactTable table={table} />
+      <NewCollectForm open={openAdd} onClose={() => setOpenAdd(false)} />
       {deleteId && (
         <AlertDialog
-          alert="Eliminar Registro"
-          description="¿Estás seguro de eliminar este registro?"
+          open={Boolean(deleteId)}
+          title="Eliminar Registro"
+          message="¿Estás seguro de eliminar este registro?"
+          severity='danger'
           onConfirm={() => {
             deleteRegister(deleteId);
             setDeleteId(null);
           }}
-          onClose={() => setDeleteId(null)}
+          onOpenChange={() => setDeleteId(null)}
         />
       )}
     </>
@@ -213,3 +150,4 @@ const exportConf: ExportConfig<CollectRegister> = {
 };
 
 const exportTo = new ExportToExcel(exportConf);
+
