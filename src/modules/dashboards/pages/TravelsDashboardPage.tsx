@@ -3,6 +3,7 @@ import Chart from 'chart.js/auto';
 import { FrequentRoutesChart } from '../components/travels/FrequentRoutesChart';
 import { MonthlyTravelsChart } from '../components/travels/MonthlyTravelsChart';
 import { PodsDeliveredChart } from '../components/travels/PodsDeliveredChart';
+import { ProjectionChart } from '../components/travels/ProjectionChart';
 import { TravelIndicators } from '../components/travels/TravelIndicators';
 import { TravelsByCargoType } from '../components/travels/TravelsByCargoType';
 import { TravelsByCategoryChart } from '../components/travels/TravelsByCategoryChart';
@@ -27,6 +28,8 @@ const TravelsDashboardPage = () => {
           isLoading={travelStatsQuery.isFetching}
           data={travelStatsQuery.data}
         />
+
+        <ProjectionChart />
 
         <div className="row-span-2">
           <TravelsByTrafficExecutive
