@@ -15,6 +15,14 @@ interface Props {
   customOkText?: string;
   customCancelText?: string;
   openButtonText?: string;
+  buttonVariant?:
+    | 'light'
+    | 'solid'
+    | 'bordered'
+    | 'flat'
+    | 'faded'
+    | 'shadow'
+    | 'ghost';
   openButtonIcon?: React.ReactNode;
   severity?:
     | 'success'
@@ -45,7 +53,7 @@ export const AlertDialog = (props: Props) => {
           color={props.severity || 'warning'}
           onPress={() => props.onOpenChange(true)}
           size="sm"
-          variant="light"
+          variant={props.buttonVariant || 'light'}
           isIconOnly={props.iconOnly}
           isDisabled={props.openDisabled}
         >

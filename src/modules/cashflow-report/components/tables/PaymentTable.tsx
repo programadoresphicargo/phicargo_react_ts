@@ -1,34 +1,28 @@
 import { ExportConfig, ExportToExcel } from '@/utilities';
-import { IconButton, Tooltip } from '@mui/material';
-import {
-  MRT_TableOptions,
-  MaterialReactTable,
-  useMaterialReactTable,
-} from 'material-react-table';
+import { MRT_TableOptions, MaterialReactTable } from 'material-react-table';
 import { usePayments, useWeekContext } from '../../hooks';
 
 import { AddButton } from '@/components/ui';
-import AlertDialog from '../AlertDialog';
-import ExportExcelButton from '@/components/ui/buttons/ExportExcelButton';
+import { AlertDialog } from '@/components';
 import { FaRegEdit } from 'react-icons/fa';
-import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import { Payment } from '../../models';
-import RefreshIcon from '@mui/icons-material/Refresh';
+import { IconButton } from '@mui/material';
+import NewPaymentForm from '../NewPaymentForm';
+import type { Payment } from '../../models';
 import { RiDeleteRow } from 'react-icons/ri';
 import { isGOEWeek } from '../../utils';
-import { useNavigate } from 'react-router-dom';
+import { useBaseTable } from '@/hooks';
 import { usePaymentTableColumns } from '../../hooks/usePaymentTableColumns';
 import { useState } from 'react';
 
 const PaymentTable = () => {
-  const navigate = useNavigate();
   const [deleteId, setDeleteId] = useState<number | null>(null);
+  const [openAdd, setOpenAdd] = useState(false);
 
   const { weekSelected } = useWeekContext();
 
   const {
     paymentsQuery: { data: payments, refetch, isFetching, isLoading },
-    updatePaymentMutation: { mutate: updateRegister, isPending: isSaving },
+    updatePaymentMutation: { mutate: updateRegister },
     deletePaymentMutation: { mutate: deleteRegister },
   } = usePayments();
 
@@ -44,39 +38,22 @@ const PaymentTable = () => {
       table.setEditingRow(null);
     };
 
-  const table = useMaterialReactTable<Payment>({
-    // DATA
+  const table = useBaseTable<Payment>({
     columns,
     data: payments || [],
-    localization: MRT_Localization_ES,
-    enableStickyHeader: true,
+    tableId: 'payment-registers',
+    isLoading,
+    isFetching,
+    refetchFn: refetch,
+    exportFn: () => exportTo.exportData(payments || []),
+    containerHeight: 'calc(100vh - 210px)',
     enableStickyFooter: true,
-    // PAGINATION, FILTERS, SORTING
-    enableGrouping: true,
-    enableGlobalFilter: true,
-    enableFilters: true,
-    enableDensityToggle: false,
-    getRowId: (row) => row.id as unknown as string,
+    enableRowActions: true,
+    positionActionsColumn: 'first',
+    stickyRightActions: true,
     editDisplayMode: 'row',
     enableEditing: true,
     onEditingRowSave: handleSaveRegisters,
-    enableRowActions: true,
-    positionActionsColumn: 'first',
-    enableCellActions: true,
-    // STATE
-    state: {
-      isLoading: isLoading,
-      showProgressBars: isFetching,
-      isSaving: isSaving,
-    },
-    initialState: {
-      density: 'compact',
-      pagination: { pageSize: 100, pageIndex: 0 },
-      columnPinning: {
-        right: ['mrt-row-actions'],
-      },
-    },
-    // CUSTOMIZATIONS
     renderRowActions: ({ row, table }) => (
       <div className="flex items-center gap-1 py-0.5">
         <IconButton
@@ -99,66 +76,28 @@ const PaymentTable = () => {
         </IconButton>
       </div>
     ),
-    renderTopToolbarCustomActions: () => (
-      <div className="flex flex-row gap-2">
-        <div className="flex flex-row items-center rounded-xl">
-          <Tooltip arrow title="Refrescar">
-            <IconButton onClick={() => refetch()} size="small">
-              <RefreshIcon />
-            </IconButton>
-          </Tooltip>
-        </div>
-        <AddButton
-          label="Añadir"
-          onClick={() => navigate('/reportes/balance/payment/add')}
-        />
-        <ExportExcelButton
-          size="small"
-          onClick={() => exportTo.exportData(payments || [])}
-        />
-      </div>
+    toolbarActions: (
+      <>
+        <AddButton label="Añadir" onClick={() => setOpenAdd(true)} />
+      </>
     ),
-    muiTableHeadCellProps: {
-      sx: {
-        fontFamily: 'Inter',
-        fontWeight: 'Bold',
-        fontSize: '12px',
-      },
-    },
-    muiTableBodyCellProps: {
-      sx: {
-        fontFamily: 'Inter',
-        fontWeight: 'normal',
-        fontSize: '12px',
-        padding: '0 2px',
-        margin: '0',
-      },
-    },
-    muiTablePaperProps: {
-      elevation: 0,
-      sx: {
-        borderRadius: '0',
-      },
-    },
-    muiTableContainerProps: {
-      sx: {
-        height: 'calc(100vh - 210px)',
-      },
-    },
   });
 
   return (
     <>
       <MaterialReactTable table={table} />
+      <NewPaymentForm open={openAdd} onClose={() => setOpenAdd(false)} />
       {deleteId && (
         <AlertDialog
-          alert="Eliminar Registro"
-          description="¿Estás seguro de eliminar este registro?"
+          open={Boolean(deleteId)}
+          title="Eliminar Registro"
+          message="¿Estás seguro de eliminar este registro?"
+          severity="danger"
           onConfirm={() => {
             deleteRegister(deleteId);
             setDeleteId(null);
           }}
-          onClose={() => setDeleteId(null)}
+          onOpenChange={() => setDeleteId(null)}
         />
       )}
     </>
@@ -211,3 +150,4 @@ const exportConf: ExportConfig<Payment> = {
 };
 
 const exportTo = new ExportToExcel(exportConf);
+

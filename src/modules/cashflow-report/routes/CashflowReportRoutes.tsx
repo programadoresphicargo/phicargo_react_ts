@@ -7,7 +7,6 @@ import { Route } from 'react-router-dom';
 
 const CollectView = lazy(() => import('../outlets/CollectView'));
 const PaymentView = lazy(() => import('../outlets/PaymentView'));
-const NewPaymentForm = lazy(() => import('../outlets/NewPaymentForm'));
 
 const PERMISSION_ID = 197;
 
@@ -36,16 +35,7 @@ const CashflowReportRoutes = () => (
           <PaymentView />
         </Suspense>
       }
-    >
-      <Route
-        path="add"
-        element={
-          <Suspense fallback={null}>
-            <NewPaymentForm />
-          </Suspense>
-        }
-      />
-    </Route>
+    ></Route>
   </Route>
 );
 
