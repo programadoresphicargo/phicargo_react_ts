@@ -11,7 +11,7 @@ const EstatusDropdownManiobra = ({ id_maniobra, ultimo_estatus, usuario_ultimo_e
 
     const fetchItems = () => {
         setIsLoading(true);
-        odooApi.get(`/estatus_maniobras/estatus_by_id_maniobra/${id_maniobra}`)
+        odooApi.get(`/reportes_estatus_maniobras/estatus_by_id_maniobra/${id_maniobra}`)
             .then((response) => {
                 setItems(response.data);
             })

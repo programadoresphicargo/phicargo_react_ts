@@ -43,7 +43,7 @@ function EstatusHistorialAgrupado({ id_reporte }) {
 
         try {
             setLoading(true);
-            const response = await odooApi.get('/estatus_maniobras/estatus_by_id_reporte/' + id_reporte);
+            const response = await odooApi.get('/reportes_estatus_maniobras/estatus_by_id_reporte/' + id_reporte);
             setEstatus(response.data);
             setLoading(false);
         } catch (error) {

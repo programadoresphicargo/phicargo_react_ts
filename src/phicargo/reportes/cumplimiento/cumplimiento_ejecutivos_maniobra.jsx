@@ -59,7 +59,7 @@ const ReporteCumplimientoEjecutivoManiobra = () => {
         const endDate = dates.end;
         try {
             setLoading(true);
-            const response = await odooApi.get('/tms_travel/reporte_cumplimiento_estatus_ejecutivos/', {
+            const response = await odooApi.get('/reportes_estatus_maniobras/reporte_cumplimiento_estatus_ejecutivos/', {
                 params: {
                     hora_inicio: value[0],
                     hora_fin: value[1],
@@ -91,9 +91,8 @@ const ReporteCumplimientoEjecutivoManiobra = () => {
 
         return columnOrder
             .filter((key) => !key.includes('20_min'))
-            .filter((key) => !key.includes('fecha_envio'))
+            .filter((key) => !key.includes('fecha_hora'))
             .filter((key) => !key.includes('imagen'))
-            .filter((key) => !key.includes('id_viaje'))
             .map((key) => {
                 const isHora = /^\d{1,2}:\d{2}$/.test(key);
 
@@ -104,22 +103,21 @@ const ReporteCumplimientoEjecutivoManiobra = () => {
                     size: 150,
                     Cell: ({ cell, row }) => {
                         const value = cell.getValue();
-                        const fechaEnvio = row.original?.[`${key}_fecha_envio`];
+                        const fechaEnvio = row.original?.[`${key}_fecha_hora`];
                         const min20 = row.original?.[`${key}_first_20_min`];
                         const imagen = row.original?.[`${key}_imagen`];
 
-                        if (key === 'estatus') {
+                        if (key === 'estado_maniobra') {
                             return (
                                 <Chip
                                     className='text-white'
                                     color={
-                                        value === 'ruta' ? 'primary'
-                                            : value === 'planta' ? 'success'
-                                                : value === 'retorno' ? 'warning'
-                                                    : value === 'finalizado' ? 'secondary'
-                                                        : 'default'
+                                        value === 'activa' ? 'success'
+                                            : value === 'finalizada' ? 'secondary'
+                                                : 'default'
                                     }
                                     variant="solid"
+                                    size='sm'
                                 >
                                     {value}
                                 </Chip>
@@ -141,7 +139,7 @@ const ReporteCumplimientoEjecutivoManiobra = () => {
                             );
                         }
 
-                        return (value ?? "").toUpperCase();
+                        return value ?? "";
                     }
                 };
             });
@@ -158,7 +156,7 @@ const ReporteCumplimientoEjecutivoManiobra = () => {
         enableStickyHeader: true,
         state: { showProgressBars: isLoading },
         initialState: {
-            columnPinning: { left: ['referencia', 'estatus', 'nombre', 'sucursal'] },
+            columnPinning: { left: ['id_maniobra', 'estado_maniobra', 'nombre', 'contenedores', 'tipo_maniobra'] },
             showColumnFilters: true,
             density: 'compact',
             pagination: { pageSize: 80 },
@@ -176,14 +174,14 @@ const ReporteCumplimientoEjecutivoManiobra = () => {
             sx: {
                 fontFamily: 'Inter',
                 fontWeight: 'Bold',
-                fontSize: '14px',
+                fontSize: '12px',
             },
         },
         muiTableBodyCellProps: {
             sx: {
                 fontFamily: 'Inter',
                 fontWeight: 'normal',
-                fontSize: '14px',
+                fontSize: '12px',
             },
         },
         muiTableContainerProps: {

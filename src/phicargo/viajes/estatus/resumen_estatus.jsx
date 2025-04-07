@@ -36,6 +36,7 @@ const EstatusDropdown = ({ data }) => {
                 ) : (
                     <User
                         avatarProps={{
+                            size: 'sm',
                             className: "text-white",
                             isBordered: true,
                             color:

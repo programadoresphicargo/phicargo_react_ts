@@ -39,7 +39,7 @@ function EstatusHistorialManiobras({ id_maniobra }) {
     const getHistorialEstatus = async () => {
         try {
             setLoading(true);
-            const response = await odooApi.get('/estatus_maniobras/estatus_by_id_maniobra/' + id_maniobra)
+            const response = await odooApi.get('/reportes_estatus_maniobras/estatus_by_id_maniobra/' + id_maniobra)
             setHistorial(response.data);
             setLoading(false);
         } catch (error) {

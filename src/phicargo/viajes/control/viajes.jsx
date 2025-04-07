@@ -110,6 +110,7 @@ const ViajesActivos = ({ }) => {
 
           return (
             <Chip
+              size="sm"
               color={badgeClass}
               className="text-white"
             >
@@ -134,7 +135,7 @@ const ViajesActivos = ({ }) => {
           }
 
           return (
-            <Chip color={badgeClass} className="text-white">
+            <Chip color={badgeClass} className="text-white" size="sm">
               {tipoMovimiento.charAt(0).toUpperCase() + tipoMovimiento.slice(1)}
             </Chip>
           );
@@ -250,7 +251,7 @@ const ViajesActivos = ({ }) => {
           }
 
           return (
-            <Chip color={badgeClass} className="text-white">
+            <Chip color={badgeClass} className="text-white" size="sm">
               {value}
             </Chip>
           );
@@ -333,7 +334,7 @@ const ViajesActivos = ({ }) => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 200px)',
+        maxHeight: 'calc(100vh - 210px)',
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
@@ -346,7 +347,7 @@ const ViajesActivos = ({ }) => {
       sx: {
         fontFamily: 'Inter',
         fontWeight: 'normal',
-        fontSize: '14px',
+        fontSize: '12px',
       },
     }),
     renderTopToolbarCustomActions: ({ table }) => (
