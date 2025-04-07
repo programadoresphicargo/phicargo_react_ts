@@ -16,6 +16,7 @@ import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { User } from "@heroui/react";
 import Travel from '@/phicargo/viajes/control/viaje';
 import { ViajeContext } from '@/phicargo/viajes/context/viajeContext';
+import ManiobrasNavBar from '@/phicargo/maniobras/Navbar';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const ReporteCumplimientoEjecutivoManiobra = () => {
@@ -240,7 +241,7 @@ const ReporteCumplimientoEjecutivoManiobra = () => {
 
     return (
         <>
-            <NavbarViajes></NavbarViajes>
+            <ManiobrasNavBar></ManiobrasNavBar>
             <MaterialReactTable table={table} />
             <Travel open={open} handleClose={handleClose}></Travel>
         </>
