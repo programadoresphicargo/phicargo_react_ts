@@ -151,6 +151,7 @@ const ReporteCumplimientoEjecutivo = () => {
         enableFilters: true,
         localization: MRT_Localization_ES,
         enableColumnPinning: true,
+        enableStickyHeader: true,
         state: { showProgressBars: isLoading },
         initialState: {
             columnPinning: { left: ['referencia', 'estatus', 'nombre', 'sucursal'] },
