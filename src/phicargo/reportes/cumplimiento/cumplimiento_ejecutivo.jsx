@@ -23,6 +23,10 @@ const ReporteCumplimientoEjecutivo = () => {
     const { id_viaje, viaje, getViaje, loading, error, ActualizarIDViaje } = useContext(ViajeContext);
     const [open, setOpen] = React.useState(false);
 
+    useEffect(() => {
+        getViaje(id_viaje);
+    }, [id_viaje]);
+
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -163,6 +167,9 @@ const ReporteCumplimientoEjecutivo = () => {
             onClick: ({ event }) => {
                 handleClickOpen();
                 ActualizarIDViaje(row.original.id_viaje);
+            },
+            style: {
+                cursor: 'pointer',
             },
         }),
         muiTableHeadCellProps: {
