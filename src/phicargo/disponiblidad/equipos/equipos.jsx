@@ -101,49 +101,49 @@ const Disponibilidad_unidades = () => {
                 accessorKey: 'referencia_viaje',
                 header: 'Último viaje',
                 muiTableBodyCellProps: {
-                    sx: { backgroundColor: '#ffeb3b', fontFamily: 'Inter', },
+                    sx: { backgroundColor: '#ffeb3b', fontFamily: 'Inter', fontSize: '12px', },
                 },
             },
             {
                 accessorKey: 'sucursal_viaje',
                 header: 'Sucursal',
                 muiTableBodyCellProps: {
-                    sx: { backgroundColor: '#ffeb3b', fontFamily: 'Inter', },
+                    sx: { backgroundColor: '#ffeb3b', fontFamily: 'Inter', fontSize: '12px', },
                 },
             },
             {
                 accessorKey: 'last_travel_end_date',
                 header: 'Finalización',
                 muiTableBodyCellProps: {
-                    sx: { backgroundColor: '#ffeb3b', fontFamily: 'Inter', },
+                    sx: { backgroundColor: '#ffeb3b', fontFamily: 'Inter', fontSize: '12px', },
                 },
             },
             {
                 accessorKey: 'operador_viaje',
                 header: 'Operador',
                 muiTableBodyCellProps: {
-                    sx: { backgroundColor: '#ffeb3b', fontFamily: 'Inter', },
+                    sx: { backgroundColor: '#ffeb3b', fontFamily: 'Inter', fontSize: '12px', },
                 },
             },
             {
                 accessorKey: 'last_maniobra_id',
                 header: 'ID Maniobra',
                 muiTableBodyCellProps: {
-                    sx: { backgroundColor: '#81c784', fontFamily: 'Inter', },
+                    sx: { backgroundColor: '#81c784', fontFamily: 'Inter', fontSize: '12px', },
                 },
             },
             {
                 accessorKey: 'last_maniobra_end_date',
                 header: 'Finalización',
                 muiTableBodyCellProps: {
-                    sx: { backgroundColor: '#81c784', fontFamily: 'Inter', },
+                    sx: { backgroundColor: '#81c784', fontFamily: 'Inter', fontSize: '12px', },
                 },
             },
             {
                 accessorKey: 'operador_maniobra',
                 header: 'Operador',
                 muiTableBodyCellProps: {
-                    sx: { backgroundColor: '#81c784', fontFamily: 'Inter', },
+                    sx: { backgroundColor: '#81c784', fontFamily: 'Inter', fontSize: '12px', },
                 },
             },
         ],
@@ -209,14 +209,14 @@ const Disponibilidad_unidades = () => {
             sx: {
                 fontFamily: 'Inter',
                 fontWeight: 'Bold',
-                fontSize: '14px',
+                fontSize: '12px',
             },
         },
         muiTableBodyCellProps: {
             sx: {
                 fontFamily: 'Inter',
                 fontWeight: 'normal',
-                fontSize: '14px',
+                fontSize: '12px',
             },
         },
         muiTableContainerProps: {
@@ -238,7 +238,7 @@ const Disponibilidad_unidades = () => {
                 >
                     Unidades
                 </h1>
-                <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "unidades.csv")}>Exportar</Button>
+                <Button size="sm" color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "unidades.csv")}>Exportar</Button>
             </Box>
         ),
     });
