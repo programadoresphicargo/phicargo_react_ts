@@ -370,6 +370,7 @@ const ViajesActivos = ({ }) => {
           color='success'
           isDisabled={false}
           onPress={() => setMasivoOpen(true)}
+          size='sm'
         >Envio masivo
         </Button>
         <Button
@@ -378,11 +379,12 @@ const ViajesActivos = ({ }) => {
           color='primary'
           isDisabled={false}
           onPress={() => fetchData()}
+          size='sm'
         >Actualizar tablero
         </Button>
 
-        <Button color='danger' className='text-white' startContent={<i class="bi bi-sign-stop"></i>} onPress={() => handleOpen()}>Unidades detenidas</Button>
-        <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "viajes_activos.csv")}>Exportar</Button>
+        <Button color='danger' className='text-white' startContent={<i class="bi bi-sign-stop"></i>} onPress={() => handleOpen()} size='sm'>Unidades detenidas</Button>
+        <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "viajes_activos.csv")} size='sm'>Exportar</Button>
 
       </Box >
     ),
