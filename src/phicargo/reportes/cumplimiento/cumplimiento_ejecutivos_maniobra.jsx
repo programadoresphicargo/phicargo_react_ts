@@ -168,7 +168,6 @@ const ReporteCumplimientoEjecutivoManiobra = () => {
         },
         muiTableBodyRowProps: ({ row }) => ({
             onClick: ({ event }) => {
-                alert(row.original.id);
                 handleShowModal(row.original.id_maniobra, row.original.id);
                 setClienteID(row.original.id_cliente);
             },
