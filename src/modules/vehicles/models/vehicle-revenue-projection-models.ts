@@ -1,3 +1,4 @@
+import { Dayjs } from 'dayjs';
 import type { Modality } from '../../drivers/models';
 
 export interface VehicleRevenueProjection {
@@ -22,6 +23,18 @@ export interface VehicleRevenueProjection {
 export interface VehicleRevenueProjectionByBranch {
   id: number;
   branch: string;
+  monthlyTarget: number;
+  dailyTarget: number;
+  totalWorkingDays: number;
+  idealMonthlyRevenue: number;
+  realMonthlyRevenue: number;
+}
+
+export interface VehicleRevenueProjectionByBranchHistory {
+  id: number;
+  branch: string;
+  monthStart: Dayjs;
+  monthEnd: Dayjs;
   monthlyTarget: number;
   dailyTarget: number;
   totalWorkingDays: number;

@@ -28,3 +28,14 @@ export interface VehicleRevenueProjectionByBranchApi {
   real_monthly_revenue: number;
 }
 
+export interface VehicleRevenueProjectionByBranchHistoryApi {
+  branch: string;
+  month_start: string;
+  month_end: string;
+  monthly_target: number;
+  daily_target: number;
+  total_working_days: number;
+  ideal_monthly_revenue: number;
+  real_monthly_revenue: number;
+}
+
