@@ -120,7 +120,7 @@ const Maniobras = ({ estado_maniobra }) => {
         Cell: ({ cell }) => {
           const value = cell.getValue();
           return (
-            <Chip color='primary'>
+            <Chip color='primary' size="sm">
               {value}
             </Chip>
           );
@@ -147,7 +147,7 @@ const Maniobras = ({ estado_maniobra }) => {
           }
 
           return (
-            <Chip color={variant} className="text-white">
+            <Chip color={variant} className="text-white" size="sm">
               {value}
             </Chip>
           );
@@ -235,6 +235,9 @@ const Maniobras = ({ estado_maniobra }) => {
     columnResizeMode: "onEnd",
     grouping: manualGrouping,
     initialState: {
+      columnVisibility: {
+        id_maniobra: false,
+      },
       density: 'compact',
       showColumnFilters: true,
       pagination: { pageSize: 80 },
@@ -266,14 +269,14 @@ const Maniobras = ({ estado_maniobra }) => {
       sx: {
         fontFamily: 'Inter',
         fontWeight: 'Bold',
-        fontSize: '14px',
+        fontSize: '12px',
       },
     },
     muiTableBodyCellProps: {
       sx: {
         fontFamily: 'Inter',
         fontWeight: 'normal',
-        fontSize: '14px',
+        fontSize: '12px',
       },
     },
 
@@ -287,9 +290,9 @@ const Maniobras = ({ estado_maniobra }) => {
         }}
       >
         <h1 className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text">Control de maniobras</h1>
-        <Button color="primary" isLoading={isLoading2} onPress={() => fetchData()} startContent={<i class="bi bi-arrow-clockwise"></i>}>Refrescar</Button>
-        <Button color="success" onPress={() => handleClickOpen()} className='text-white' startContent={<i class="bi bi-send-plus"></i>}>Envio masivo</Button>
-        <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, `maniobras ${estado_maniobra}.csv`)}>Exportar</Button>
+        <Button color="primary" isLoading={isLoading2} onPress={() => fetchData()} startContent={<i class="bi bi-arrow-clockwise"></i>} size="sm">Refrescar</Button>
+        <Button color="success" onPress={() => handleClickOpen()} className='text-white' startContent={<i class="bi bi-send-plus"></i>} size="sm">Envio masivo</Button>
+        <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, `maniobras ${estado_maniobra}.csv`)} size="sm">Exportar</Button>
       </Box >
     ),
   });
