@@ -5,7 +5,12 @@ import type {
 import type {
   VehicleRevenueProjectionApi,
   VehicleRevenueProjectionByBranchApi,
+  VehicleRevenueProjectionByBranchHistoryApi,
 } from '../models/api';
+
+import { VehicleRevenueProjectionByBranchHistory } from '../models/vehicle-revenue-projection-models';
+import dayjs from 'dayjs';
+import { getMonthName } from '@/utilities';
 
 export class VehicleRevenueProjectionAdapter {
   static toVehicleRevenueProjection(
@@ -36,6 +41,22 @@ export class VehicleRevenueProjectionAdapter {
     return {
       id: data.real_monthly_revenue, // TODO: Fix this
       branch: data.branch,
+      monthlyTarget: data.monthly_target,
+      dailyTarget: data.daily_target,
+      totalWorkingDays: data.total_working_days,
+      idealMonthlyRevenue: data.ideal_monthly_revenue,
+      realMonthlyRevenue: data.real_monthly_revenue,
+    };
+  }
+  static toVehicleRevenueProjectionByBranchHistory(
+    data: VehicleRevenueProjectionByBranchHistoryApi,
+  ): VehicleRevenueProjectionByBranchHistory {
+    return {
+      id: data.real_monthly_revenue, // TODO: Fix this
+      branch: data.branch,
+      monthStart: dayjs(data.month_start),
+      monthEnd: dayjs(data.month_end),
+      month: getMonthName(data.month, true),
       monthlyTarget: data.monthly_target,
       dailyTarget: data.daily_target,
       totalWorkingDays: data.total_working_days,

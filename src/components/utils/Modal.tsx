@@ -26,7 +26,7 @@ export const Modal = (props: Props) => {
         scrollBehavior="inside"
         backdrop="opaque"
         classNames={{
-          body: 'bg-gray-200 p-0 gap-0',
+          body: 'bg-gray-100 p-0 gap-0',
           backdrop: 'bg-gray-500/30 backdrop-opacity-30',
           base: 'text-gray-900 shadow-lg',
           header:

@@ -18,6 +18,7 @@ export const NumberInput = <T extends FieldValues>(
     className,
     label,
     rules,
+    variant,
     isDisabled,
     placeholder,
     startContent,
@@ -38,7 +39,7 @@ export const NumberInput = <T extends FieldValues>(
             label={label}
             placeholder={placeholder}
             size="sm"
-            variant="flat"
+            variant={variant || 'flat'}
             name={name}
             startContent={startContent}
             endContent={endContent}

@@ -8,7 +8,7 @@ import { useState } from 'react';
 interface CurrencyCellProps {
   value: number | string;
   confirmationRequired?: boolean;
-  type?: "collect" | "payment";
+  type?: 'collect' | 'payment';
   item?: WeekBase & { id: number };
   dayOfWeek?: DaysOfWeek;
   customColor?: string;
@@ -37,14 +37,15 @@ const CurrencyCell = (props: CurrencyCellProps) => {
     <>
       <span
         className={`inline-block py-0.5 px-1 rounded text-xs font-bold text-right select-none cursor-pointer`}
-        style={{ backgroundColor: customColor || "#f0f8ff", color: "#333" }}
+        style={{ backgroundColor: customColor || '#f0f8ff', color: '#333' }}
         onDoubleClick={handleDoubleClick}
       >
         {formatCurrency(value || 0)}
       </span>
 
-      {open && item && type && dayOfWeek && (
+      {item && type && dayOfWeek && (
         <ConfirmDialog
+          open={open}
           onClose={() => setOpen(false)}
           item={item}
           type={type}
@@ -52,8 +53,9 @@ const CurrencyCell = (props: CurrencyCellProps) => {
         />
       )}
 
-      {openDetails && item && dayOfWeek && (
+      {item && dayOfWeek && (
         <AmountDetailDialog
+          open={openDetails}
           onClose={() => setOpenDetails(false)}
           amount={item[dayOfWeek]}
         />
