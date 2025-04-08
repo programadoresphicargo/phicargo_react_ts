@@ -166,7 +166,7 @@ const Documentacion = ({ }) => {
           as={Link}
           isExternal={true}
           color="secondary"
-          href={`${apiUrl}/tms_travel/revision_ocular/checklists/pdf/` + id_viaje}
+          href={`${apiUrl}/tms_travel/revision_ocular/bitacoras/pdf/` + id_viaje}
           variant="solid"
         >
           Revision ocular
