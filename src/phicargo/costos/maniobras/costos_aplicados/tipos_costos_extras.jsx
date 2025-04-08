@@ -130,6 +130,7 @@ const ServiciosExtras = ({ onClose }) => {
                     iva: .16,
                     retencion: 0,
                     subtotal: servicioSeleccionado.costo,
+                    total: servicioSeleccionado.costo,
                     ajuste_cobro: 0
                 };
 
