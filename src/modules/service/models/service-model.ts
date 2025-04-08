@@ -2,6 +2,8 @@ import type { BranchSimple, CompanySimple } from '@/modules/core/models';
 
 import type { Dayjs } from 'dayjs';
 
+export type WaybillStatus = 'draft' | 'cancel' | 'confirmed' | 'approved';
+
 export interface Category {
   id: number;
   name: string;
@@ -35,7 +37,7 @@ export interface WaybillService {
   id: number;
   name: string | null;
   dateOrder: Dayjs;
-  state: string;
+  state: WaybillStatus;
   cfdiComplemento: string;
   branch: BranchSimple;
   company: CompanySimple;

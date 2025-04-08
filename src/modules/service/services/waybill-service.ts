@@ -5,6 +5,7 @@ import type {
   WaybillCreate,
   WaybillEdit,
   WaybillItem,
+  WaybillService as WaybillServiceModel,
   WaybillTransportableProduct,
 } from '../models';
 import type {
@@ -30,7 +31,7 @@ export class WaybillService {
   public static async getWaybillServices([startDate, endDate]: [
     Date,
     Date,
-  ]): Promise<WaybillService[]> {
+  ]): Promise<WaybillServiceModel[]> {
     const strStartDate = startDate.toISOString().split('T')[0];
     const strEndDate = endDate.toISOString().split('T')[0];
 
