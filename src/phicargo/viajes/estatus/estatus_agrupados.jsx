@@ -18,8 +18,6 @@ import { ViajeContext } from '../context/viajeContext';
 import axios from 'axios';
 import odooApi from '@/api/odoo-api';
 import { tiempoTranscurrido } from '../../funciones/tiempo';
-import { DatePicker } from "@heroui/react";
-import { now, getLocalTimeZone } from "@internationalized/date";
 
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
@@ -158,6 +156,7 @@ function EstatusHistorialAgrupado({ registros_agrupados }) {
                                     <div className="flex gap-5">
                                         <Avatar
                                             isBordered
+                                            radius="full"
                                             size="md"
                                             src={VITE_PHIDES_API_URL + "/img/operador.png"}
                                         />
@@ -167,13 +166,6 @@ function EstatusHistorialAgrupado({ registros_agrupados }) {
                                         </div>
                                     </div>
 
-                                    <DatePicker
-                                        hideTimeZone
-                                        showMonthAndYearPickers
-                                        label="Event Date"
-                                        variant="bordered"
-                                    />
-                                    
                                     {tiempoTranscurrido(step.fecha_hora)}
                                 </CardHeader>
                                 <CardBody className="text-small text-default-500">
@@ -191,13 +183,7 @@ function EstatusHistorialAgrupado({ registros_agrupados }) {
 
                                 </CardBody>
                                 <CardFooter className="gap-3">
-
-                                    <Button color="success" className='text-white me-2' variant="solid" onPress={() => alert()}>
-                                        <i class="bi bi-pen"></i>
-                                        Editar horario
-                                    </Button>
-
-                                    <Button color="success" className='text-white me-2' variant="solid" onPress={() => handleClickOpen(step.id_reporte)}>
+                                    <Button color="success" className='text-white me-2' variant="solid" onClick={() => handleClickOpen(step.id_reporte)}>
                                         <i class="bi bi-reply"></i>
                                         Reenviar
                                     </Button>
