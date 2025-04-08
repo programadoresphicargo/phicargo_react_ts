@@ -122,7 +122,7 @@ export class VehicleRevenueProjectionService {
     startDate: string,
     endDate: string,
   ): Promise<VehicleRevenueProjectionByBranchHistory[]> {
-    const url = `/vehicles/revenue-projection-by-branch/history/?start_date=${startDate}&end_date=${endDate}`;
+    const url = `/vehicles/revenue-projection-by-branch/history?start_date=${startDate}&end_date=${endDate}`;
 
     try {
       const response = await odooApi.get<
