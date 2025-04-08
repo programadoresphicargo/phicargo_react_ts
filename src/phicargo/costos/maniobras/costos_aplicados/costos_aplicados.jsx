@@ -154,6 +154,28 @@ const ServiciosAplicadosCE = ({ onClose }) => {
                 Cell: ({ row }) => {
                     const costo = row.original.costo || 0;
                     const cantidad = row.original.cantidad || 1;
+                    const retencion = row.original.id_tipo_costo === 1 ? (costo * cantidad) * 0.04 : 0;
+
+                    const subtotal = (costo * cantidad) - retencion;
+                    return subtotal.toLocaleString("es-MX", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                    });
+                },
+            },
+            {
+                accessorKey: "total",
+                header: "Total",
+                enableEditing: false,
+                muiTableBodyCellProps: {
+                    align: 'right',
+                },
+                muiTableHeadCellProps: {
+                    align: 'right',
+                },
+                Cell: ({ row }) => {
+                    const costo = row.original.costo || 0;
+                    const cantidad = row.original.cantidad || 1;
                     const iva = row.original.iva ?? 0.16;
                     const retencion = row.original.id_tipo_costo === 1 ? (costo * cantidad) * 0.04 : 0;
 
@@ -258,20 +280,14 @@ const ServiciosAplicadosCE = ({ onClose }) => {
             sx: {
                 fontFamily: 'Inter',
                 fontWeight: 'Bold',
-                fontSize: '14px',
+                fontSize: '12px',
             },
         },
         muiTableBodyCellProps: {
             sx: {
                 fontFamily: 'Inter',
                 fontWeight: 'normal',
-                fontSize: '14px',
-            },
-        },
-        muiTableContainerProps: {
-            sx: {
-                borderRadius: '8px',
-                overflow: 'hidden',
+                fontSize: '12px',
             },
         },
         renderTopToolbarCustomActions: ({ table }) => (

@@ -221,14 +221,14 @@ const FoliosCostosExtras = () => {
       sx: {
         fontFamily: 'Inter',
         fontWeight: 'Bold',
-        fontSize: '14px',
+        fontSize: '12px',
       },
     },
     muiTableBodyCellProps: {
       sx: {
         fontFamily: 'Inter',
         fontWeight: 'normal',
-        fontSize: '14px',
+        fontSize: '12px',
       },
     },
 
