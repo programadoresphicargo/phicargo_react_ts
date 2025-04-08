@@ -78,6 +78,7 @@ const ServiciosAplicadosCE = ({ onClose }) => {
                 accessorKey: 'descripcion',
                 header: 'Descripción',
                 enableEditing: false,
+                size: 1,
             },
             {
                 accessorKey: 'costo',
