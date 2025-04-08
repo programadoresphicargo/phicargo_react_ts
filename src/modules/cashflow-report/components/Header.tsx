@@ -1,10 +1,9 @@
-import { Button, Checkbox, Tab, Tabs } from '@heroui/react';
+import { Checkbox, Tab, Tabs } from '@heroui/react';
 import { useLoadPrevious, useWeekContext } from '../hooks';
 
-import AlertDialog from './AlertDialog';
+import { AlertDialog } from '@/components';
 import { HeaderBase } from '@/components/ui';
 import HeaderCards from './HeaderCards';
-import { IoReturnDownForwardOutline } from 'react-icons/io5';
 import WeekSelector from './WeekSelector';
 import { isSameWeek } from '../utils';
 import { useNavigate } from 'react-router-dom';
@@ -14,7 +13,7 @@ const Header = () => {
   const navigate = useNavigate();
   const { activeWeekId, weekSelected, companySelected, onCompanyChange } =
     useWeekContext();
-  const { loadPrevious, isPending } = useLoadPrevious();
+  const { loadPrevious } = useLoadPrevious();
 
   const [loadPreviousConfirm, setLoadPreviousConfirm] = useState(false);
 
@@ -65,34 +64,29 @@ const Header = () => {
 
         <div className="flex bg-gray-200/20 backdrop-blur-sm mr-4 py-1.5 px-2 rounded-xl flex-col gap-2 w-1/6 min-w-[150px]">
           <WeekSelector />
-          <Button
-            color="primary"
-            onPress={() => setLoadPreviousConfirm(true)}
-            isLoading={isPending}
-            isDisabled={!isSameWeek(weekSelected!)}
-            startContent={<IoReturnDownForwardOutline />}
-            className="uppercase font-bold"
-            size="sm"
-          >
-            Traer Anteriores
-          </Button>
+          <AlertDialog
+            open={loadPreviousConfirm}
+            onOpenChange={setLoadPreviousConfirm}
+            openButtonText={'Traer Anteriores'}
+            buttonVariant="solid"
+            severity={'warning'}
+            title={'¿Confirmar la carga?'}
+            message={
+              '¿Estás seguro cargar los pagos pendientes de la semana pasada?'
+            }
+            onConfirm={onLoadPreviousWeek}
+            openDisabled={!isSameWeek(weekSelected!)}
+            tooltipMessage={'Traer Anteriores'}
+          />
         </div>
 
         <div className="flex gap-4 flex-wrap justify-center flex-1">
           <HeaderCards />
         </div>
       </HeaderBase>
-
-      {loadPreviousConfirm && (
-        <AlertDialog
-          alert="¿Confirmar la carga?"
-          description="¿Estás seguro cargar los pagos pendientes de la semana pasada?"
-          onConfirm={onLoadPreviousWeek}
-          onClose={() => setLoadPreviousConfirm(false)}
-        />
-      )}
     </>
   );
 };
 
 export default Header;
+

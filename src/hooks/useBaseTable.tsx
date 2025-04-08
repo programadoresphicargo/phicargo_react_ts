@@ -32,6 +32,7 @@ interface Config<T extends MRT_RowData & BaseRowData>
   toolbarActions?: React.ReactNode;
 
   externalGrouping?: MRT_GroupingState;
+  stickyRightActions?: boolean;
 }
 
 export const useBaseTable = <T extends MRT_RowData & BaseRowData>(
@@ -71,6 +72,9 @@ export const useBaseTable = <T extends MRT_RowData & BaseRowData>(
       showGlobalFilter: config.showGlobalFilter,
       density: config.density ?? 'compact',
       pagination: { pageSize: 100, pageIndex: 0 },
+      columnPinning: {
+        right: config.stickyRightActions ? ['mrt-row-actions'] : [],
+      },
     },
     state: {
       isLoading: config.isLoading,

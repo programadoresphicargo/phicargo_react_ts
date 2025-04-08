@@ -21,6 +21,7 @@ export const AutocompleteInput = <T extends FieldValues>(
     label,
     rules,
     items,
+    variant,
     isDisabled,
     placeholder,
     isLoading,
@@ -58,7 +59,7 @@ export const AutocompleteInput = <T extends FieldValues>(
             value={value}
             items={items}
             label={label}
-            variant="flat"
+            variant={variant || 'flat'}
             onInputChange={setSearchInput}
             isDisabled={isDisabled}
             placeholder={placeholder}
