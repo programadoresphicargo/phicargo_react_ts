@@ -158,8 +158,7 @@ const ViajesActivosMasivo = ({ }) => {
         header: 'Último estatus enviado',
         Cell: ({ cell }) => (
           <EstatusDropdown
-            id_viaje={cell.row.original.id_viaje}
-            ultimo_estatus={cell.getValue() || ''}
+            data={cell.row.original}
           />
         ),
       },
