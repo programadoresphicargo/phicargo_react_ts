@@ -50,5 +50,22 @@ export class PosturasService {
       throw new Error('Error al crear la postura');
     }
   }
+
+  public static async finishPostura(vehicleId: number): Promise<Postura> {
+    try {
+      const response = await odooApi.patch<PosturaApi>(
+        `/vehicles/postura/${vehicleId}/finish`,
+      );
+      return PosturaAdapter.toPostura(response.data);
+    } catch (error) {
+      console.error(error);
+      if (error instanceof AxiosError) {
+        throw new Error(
+          error.response?.data.detail || 'Error al finalizar la postura',
+        );
+      }
+      throw new Error('Error al finalizar la postura');
+    }
+  }
 }
 
