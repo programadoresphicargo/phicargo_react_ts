@@ -63,6 +63,14 @@ export const VehicleStatusChangeHistory = ({
                     )}
                   </>
                 </span>
+                {item.deliveryDate && (
+                  <span className="block mb-2 text-medium font-normal leading-none text-gray-600 uppercase">
+                    Fecha de entrega:{' '}
+                    <time className="time">
+                      {item.deliveryDate.format('DD/MM/YYYY')}
+                    </time>
+                  </span>
+                )}
                 {item.previousStatus && (
                   <p className="mb-4 text-base font-normal text-gray-600 uppercase">
                     Previo:{' '}
