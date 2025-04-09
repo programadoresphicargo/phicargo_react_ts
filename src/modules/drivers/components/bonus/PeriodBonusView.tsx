@@ -76,7 +76,6 @@ export const PeriodBonusView = ({ open, onClose, month, year }: Props) => {
     state: {
       isLoading: driverBonusQuery.isLoading,
       showProgressBars: driverBonusQuery.isFetching,
-      columnVisibility: getColumnVisibility(session?.user.permissions || []),
     },
     initialState: {
       density: 'compact',
