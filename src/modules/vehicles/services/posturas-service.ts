@@ -11,7 +11,7 @@ export class PosturasService {
   ): Promise<Postura[]> {
     try {
       const response = await odooApi.get<PosturaApi[]>(
-        `vehicles/posturas/${vehicleId}`,
+        `/vehicles/postura/${vehicleId}`,
       );
       return response.data.map(PosturaAdapter.toPostura);
     } catch (error) {
@@ -25,15 +25,18 @@ export class PosturasService {
     }
   }
 
-  public static async createPostura(
-    vehicleId: number,
-    data: PosturaCreate,
-  ): Promise<Postura> {
+  public static async createPostura({
+    vehicleId,
+    data,
+  }: {
+    vehicleId: number;
+    data: PosturaCreate;
+  }): Promise<Postura> {
     const body = PosturaAdapter.toPosturaCreateApi(data);
 
     try {
       const response = await odooApi.post<PosturaApi>(
-        `vehicles/posturas/${vehicleId}`,
+        `/vehicles/postura/${vehicleId}`,
         body,
       );
       return PosturaAdapter.toPostura(response.data);

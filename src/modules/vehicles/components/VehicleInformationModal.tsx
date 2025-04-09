@@ -1,7 +1,7 @@
 import { Tab, Tabs } from '@heroui/react';
 
 import { Modal } from '@/components';
-import PostureForm from './PostureForm';
+import { Posturas } from './Posturas';
 import type { Vehicle } from '../models';
 import VehicleForm from './VehicleForm';
 
@@ -38,7 +38,7 @@ export const VehicleInformationModal = ({ open, onClose, vehicle }: Props) => {
           <VehicleForm vehicle={vehicle} />
         </Tab>
         <Tab key="posture-form" title="Posturas">
-          <PostureForm vehicle={vehicle} />
+          <Posturas vehicle={vehicle} />
         </Tab>
       </Tabs>
     </Modal>
