@@ -7,12 +7,15 @@ import {
 import type { Postura, PosturaCreate, Vehicle } from '../../vehicles/models';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import dayjs, { Dayjs } from 'dayjs';
+import {
+  useCreatePosturaMutation,
+  useFinishPosturaMutation,
+} from '../hooks/mutations';
 
 import { AlertDialog } from '@/components';
 import { FaCalendarMinus } from 'react-icons/fa';
 import { IoMdExit } from 'react-icons/io';
 import { SaveButton } from '@/components/ui';
-import { useCreatePosturaMutation } from '../hooks/mutations';
 import { useGetPosturasByVehicleQuery } from '../hooks/queries';
 import { useState } from 'react';
 
@@ -38,6 +41,7 @@ export const Posturas = ({ vehicle }: Props) => {
     vehicle.id,
   );
   const { createPosturaMutation } = useCreatePosturaMutation();
+  const { finishPosturaMutation } = useFinishPosturaMutation();
 
   const onSubmit: SubmitHandler<PosturaCreate> = (data) => {
     if (createPosturaMutation.isPending) return;
@@ -52,6 +56,15 @@ export const Posturas = ({ vehicle }: Props) => {
         },
       },
     );
+  };
+
+  const onFinishPostura = (posturaId: number) => {
+    if (finishPosturaMutation.isPending) return;
+    finishPosturaMutation.mutate(posturaId, {
+      onSuccess: () => {
+        setItemSelected(null);
+      },
+    });
   };
 
   return (
@@ -107,7 +120,7 @@ export const Posturas = ({ vehicle }: Props) => {
                       <AlertDialog
                         title="Terminar Postura"
                         message="¿Está seguro que desea terminar la postura"
-                        onConfirm={() => {}}
+                        onConfirm={() => onFinishPostura(item.id)}
                         iconOnly
                         onOpenChange={(isOpen) =>
                           setItemSelected(isOpen ? item : null)
