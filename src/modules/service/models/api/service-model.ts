@@ -1,5 +1,7 @@
 import type { BranchSimple, CompanySimple } from '@/modules/core/models';
 
+import type { WaybillStatus } from '../service-model';
+
 export interface CategoryApi {
   id: number;
   name: string;
@@ -33,7 +35,7 @@ export interface WaybillServiceApi {
   id: number;
   name: string | null;
   date_order: string;
-  state: string;
+  state: WaybillStatus;
   cfdi_complemento: string;
   branch: BranchSimple;
   company: CompanySimple;

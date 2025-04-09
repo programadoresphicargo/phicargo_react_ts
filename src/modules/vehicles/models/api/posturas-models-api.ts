@@ -2,6 +2,8 @@ import type { UserReadApi } from '@/modules/users-management/models';
 
 interface PosturaBaseApi {
   reason: string;
+  start_date: string;
+  end_date: string;
 }
 
 export interface PosturaApi extends PosturaBaseApi {
