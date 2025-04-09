@@ -61,5 +61,6 @@ export interface VehicleStatusChangeEventApi {
   previous_status: string | null;
   start_date: string;
   end_date: string | null;
+  delivery_date: string | null;
 }
 

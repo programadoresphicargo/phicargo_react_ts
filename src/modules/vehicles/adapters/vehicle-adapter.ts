@@ -125,6 +125,7 @@ export class VehicleAdapter {
       previousStatus: data.previous_status,
       startDate: dayjs(data.start_date),
       endDate: data.end_date ? dayjs(data.end_date) : null,
+      deliveryDate: data.delivery_date ? dayjs(data.delivery_date) : null,
     };
   }
 }

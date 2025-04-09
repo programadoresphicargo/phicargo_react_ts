@@ -81,4 +81,5 @@ export interface VehicleStatusChangeEvent {
   previousStatus: string | null;
   startDate: Dayjs;
   endDate: Dayjs | null;
+  deliveryDate: Dayjs | null;
 }
