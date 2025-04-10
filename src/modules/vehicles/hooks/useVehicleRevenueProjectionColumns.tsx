@@ -176,6 +176,24 @@ export const useVehicleRevenueProjectionColumns = () => {
         ),
       },
       {
+        header: 'PORCENTAJE',
+        Cell: ({ row }) => {
+          const percentage =
+            (row.original.realMonthlyRevenue /
+              (row.original.dailyTarget || 1)) *
+            100;
+          return (
+            <span
+              className={`font-bold ${
+                percentage < 100 ? 'text-red-500' : 'text-green-500'
+              }`}
+            >
+              {percentage.toFixed(2)}%
+            </span>
+          );
+        }
+      },
+      {
         accessorKey: 'availabilityStatus',
         header: 'DISPONIBILIDAD',
       },
