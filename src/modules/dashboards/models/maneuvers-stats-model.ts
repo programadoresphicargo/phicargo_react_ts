@@ -17,6 +17,7 @@ export interface ManeuversTerminalCount {
 
 export interface ManeuverStats {
   maneuversLate: ManeuverStateCount[];
+  todayManeuversLate: ManeuverStateCount[];
   maneuversByOperator: ManeuversDriverJobCount[];
   maneuversByMover: ManeuversDriverJobCount[];
   maneuversByTerminal: ManeuversTerminalCount[];

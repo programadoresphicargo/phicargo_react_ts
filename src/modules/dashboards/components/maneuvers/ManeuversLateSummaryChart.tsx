@@ -19,35 +19,38 @@ const options: ChartOptions<'pie'> = {
 interface Props {
   data?: ManeuverStats;
   isLoading: boolean;
+  today?: boolean;
 }
 
 export const ManeuversLateSummaryChart = (props: Props) => {
-  const { isLoading, data } = props;
+  const { isLoading, data, today } = props;
   const [chartData, setChartData] = useState<ChartData<'pie'> | null>(null);
 
+  const meneuvers = today ? data?.todayManeuversLate : data?.maneuversLate;
+
   useEffect(() => {
-    if (!data) return;
+    if (!meneuvers) return;
 
     const chartData: ChartData<'pie'> = {
-      labels: data.maneuversLate.map((item) => item.state),
+      labels: meneuvers.map((item) => item.state),
       datasets: [
         {
-          data: data.maneuversLate.map((item) => item.maneuversCount),
+          data: meneuvers.map((item) => item.maneuversCount),
           borderWidth: 2,
-          backgroundColor: getBackgroundColors(data.maneuversLate.length),
-          borderColor: getBorderColors(data.maneuversLate.length),
+          backgroundColor: getBackgroundColors(meneuvers.length),
+          borderColor: getBorderColors(meneuvers.length),
         },
       ],
     };
 
     setChartData(chartData);
-  }, [data]);
+  }, [meneuvers]);
 
   return (
     <ChartCard
-      title={`Maniobras Tarde`}
+      title={today ? 'Maniobras Hoy' : 'Maniobras Tarde'}
       isLoading={isLoading && !chartData}
-      downloadFn={() => exportData(data?.maneuversLate || [])}
+      downloadFn={() => exportData(meneuvers || [])}
     >
       {chartData && <Pie data={chartData} options={options} />}
     </ChartCard>
