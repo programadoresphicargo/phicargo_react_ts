@@ -1,5 +1,7 @@
+import type { DriverPosturaSimple, Modality } from '@/modules/drivers/models';
+
+import { DriverPosturaCell } from '@/modules/vehicles/components/ui/DriverPosturaCell';
 import type { MRT_ColumnDef } from 'material-react-table';
-import type { Modality } from '@/modules/drivers/models';
 import { ModalityChip } from '../../drivers/components/ui/ModalityChip';
 import type { Vehicle } from '../../vehicles/models';
 import { VehicleTypeChip } from '../../vehicles/components/ui/VehicleTypeChip';
@@ -91,19 +93,16 @@ export const useVehicleColumns = () => {
         },
       },
       {
-        accessorFn: (row) =>
-          row.driverPostura ? row.driverPostura.name : 'N/A',
+        accessorFn: (row) => row.driverPostura,
         header: 'Postura Activa',
         Cell: ({ cell }) => {
-          const value = cell.getValue<string>();
-          return value === 'N/A' ? (
+          const value = cell.getValue<DriverPosturaSimple | null>();
+          return !value ? (
             <span className="text-gray-400 text-sm">
-              {cell.getValue<string>()}
+              N/A
             </span>
           ) : (
-            <span className="font-bold uppercase">
-              {cell.getValue<string>()}
-            </span>
+            <DriverPosturaCell driverPostura={value} />
           );
         },
       },
