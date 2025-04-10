@@ -10,8 +10,10 @@ export interface AvailableSummaryApi {
   vehicle_type: string;
   total: number;
   available: number;
-  no_driver: number;
-  maintenance: number;
+  no_driver_no_postura: number;
+  no_driver_postura: number;
+  maintenance_no_driver: number;
+  maintenance_driver: number;
 }
 
 export interface VehicleStatsApi {

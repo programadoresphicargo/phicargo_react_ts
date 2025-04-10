@@ -15,8 +15,10 @@ export class VehicleStatsAdapter {
       vehicleType: data.vehicle_type,
       total: data.total,
       available: data.available,
-      noDriver: data.no_driver,
-      maintenance: data.maintenance,
+      noDriverNoPostura: data.no_driver_no_postura,
+      noDriverPostura: data.no_driver_postura,
+      maintenanceNoDriver: data.maintenance_no_driver,
+      maintenanceDriver: data.maintenance_driver,
     };
   }
 
