@@ -165,6 +165,18 @@ const Documentacion = ({ }) => {
           showAnchorIcon
           as={Link}
           isExternal={true}
+          className="text-white"
+          color="warning"
+          href={`${apiUrl}/tms_travel/checklist/18puntos/pdf/` + id_viaje}
+          variant="solid"
+        >
+          Inspección vigilancia
+        </Button>
+
+        <Button
+          showAnchorIcon
+          as={Link}
+          isExternal={true}
           color="secondary"
           href={`${apiUrl}/tms_travel/revision_ocular/bitacoras/pdf/` + id_viaje}
           variant="solid"
