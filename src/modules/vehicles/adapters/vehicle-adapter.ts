@@ -73,6 +73,9 @@ export class VehicleAdapter {
       driver: vehicle.driver
         ? DriverAdapter.driverSimpleToLocal(vehicle.driver)
         : null,
+      driverPostura: vehicle.driver_postura
+        ? DriverAdapter.toDriverPosturaSimple(vehicle.driver_postura)
+        : null,
     };
   }
 

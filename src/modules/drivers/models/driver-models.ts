@@ -1,4 +1,8 @@
-import type { CompanySimple, ManeuverSimple, TravelSimple } from '../../core/models';
+import type {
+  CompanySimple,
+  ManeuverSimple,
+  TravelSimple,
+} from '../../core/models';
 
 import { Dayjs } from 'dayjs';
 import { DriverPermissionSimple } from './unavailability-models';
@@ -47,6 +51,11 @@ export type DriverSimple = Pick<
   'id' | 'name' | 'licenseType' | 'licenseId' | 'modality' | 'status' | 'job'
 >;
 
+export type DriverPosturaSimple = Pick<DriverBase, 'id' | 'name' | 'job'> & {
+  startDate: Dayjs;
+  endDate: Dayjs;
+};
+
 export interface DriverEdit {
   jobId?: number | null;
   licenseId?: string | null;
@@ -60,3 +69,4 @@ export interface DriverEdit {
 export interface DriverWithRealStatus extends Driver {
   readonly realStatus: string;
 }
+

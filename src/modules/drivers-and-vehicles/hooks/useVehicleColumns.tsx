@@ -91,6 +91,23 @@ export const useVehicleColumns = () => {
         },
       },
       {
+        accessorFn: (row) =>
+          row.driverPostura ? row.driverPostura.name : 'N/A',
+        header: 'Postura Activa',
+        Cell: ({ cell }) => {
+          const value = cell.getValue<string>();
+          return value === 'N/A' ? (
+            <span className="text-gray-400 text-sm">
+              {cell.getValue<string>()}
+            </span>
+          ) : (
+            <span className="font-bold uppercase">
+              {cell.getValue<string>()}
+            </span>
+          );
+        },
+      },
+      {
         accessorKey: 'vehicleType',
         header: 'Tipo de vehículo',
         filterVariant: 'select',
