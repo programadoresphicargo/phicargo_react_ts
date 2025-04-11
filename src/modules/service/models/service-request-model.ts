@@ -3,8 +3,7 @@ import type { Partner, WaybillCategory, WaybillItem } from './waybill-models';
 
 import type { Contact } from '../../contacts/models';
 import type { Dayjs } from 'dayjs';
-
-export type WaybillStatus = 'draft' | 'cancel';
+import { WaybillStatus } from './service-model';
 
 export interface WaybillBase {
   xCodigoPostal: string;
@@ -113,7 +112,7 @@ export interface WaybillCreate extends WaybillBase {
   complementCp: ComplementCpCreate[];
 }
 
-export type WaybillEdit = Partial<WaybillCreate>; 
+export type WaybillEdit = Partial<WaybillCreate>;
 
 export interface ComplementCpCreate {
   id: number;

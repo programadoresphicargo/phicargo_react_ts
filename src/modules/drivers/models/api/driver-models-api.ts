@@ -3,7 +3,12 @@ import type {
   ManeuverSimpleApi,
   TravelSimpleApi,
 } from '../../../core/models';
-import type { DriverStatus, IsDangerous, Job, Modality } from '../driver-models';
+import type {
+  DriverStatus,
+  IsDangerous,
+  Job,
+  Modality,
+} from '../driver-models';
 
 import type { DriverPermissionSimpleApi } from './unavailability-models-api';
 import type { VehicleSimpleApi } from '@/modules/vehicles/models/api';
@@ -42,6 +47,14 @@ export type DriverSimpleApi = Pick<
   | 'job'
 >;
 
+export type DriverPosturaSimpleApi = Pick<
+  DriverBaseApi,
+  'id' | 'name' | 'job'
+> & {
+  start_date: string;
+  end_date: string;
+};
+
 export interface DriverApi extends DriverBaseApi {
   vehicle: VehicleSimpleApi | null;
   permission: DriverPermissionSimpleApi | null;
@@ -62,3 +75,4 @@ export interface DriverEditApi {
   active?: boolean | null;
   x_hire_date?: string | null;
 }
+

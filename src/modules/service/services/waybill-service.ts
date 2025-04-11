@@ -5,6 +5,7 @@ import type {
   WaybillCreate,
   WaybillEdit,
   WaybillItem,
+  WaybillService as WaybillServiceModel,
   WaybillTransportableProduct,
 } from '../models';
 import type {
@@ -12,9 +13,14 @@ import type {
   WaybillApi,
   WaybillCategoryApi,
   WaybillItemApi,
+  WaybillServiceApi,
   WaybillTransportableProductApi,
 } from '../models/api';
-import { ServiceRequestAdapter, WaybillAdapter } from '../adapters';
+import {
+  ServiceAdapter,
+  ServiceRequestAdapter,
+  WaybillAdapter,
+} from '../adapters';
 
 import { AxiosError } from 'axios';
 import { UpdatableItem } from '@/types';
@@ -22,10 +28,33 @@ import { WaybillItemKey } from '../types';
 import odooApi from '@/api/odoo-api';
 
 export class WaybillService {
-  public static async getServiceRequests(
-    [startDate, endDate]: [Date, Date],
-  ): Promise<Waybill[]> {
+  public static async getWaybillServices([startDate, endDate]: [
+    Date,
+    Date,
+  ]): Promise<WaybillServiceModel[]> {
+    const strStartDate = startDate.toISOString().split('T')[0];
+    const strEndDate = endDate.toISOString().split('T')[0];
 
+    const url = `/tms_waybill/services?start_date=${strStartDate}&end_date=${strEndDate}`;
+
+    try {
+      const response = await odooApi.get<WaybillServiceApi[]>(url);
+      return response.data.map(ServiceAdapter.toWaybillService);
+    } catch (error) {
+      console.log(error);
+      if (error instanceof AxiosError) {
+        throw new Error(
+          error.response?.data?.detail || 'Error al obtener los servicios',
+        );
+      }
+      throw new Error('Error al obtener los servicios');
+    }
+  }
+
+  public static async getServiceRequests([startDate, endDate]: [
+    Date,
+    Date,
+  ]): Promise<Waybill[]> {
     const strStartDate = startDate.toISOString().split('T')[0];
     const strEndDate = endDate.toISOString().split('T')[0];
 
@@ -63,7 +92,10 @@ export class WaybillService {
     }
   }
 
-  public static async updateService({ id, updatedItem }: UpdatableItem<WaybillEdit>): Promise<Waybill> {
+  public static async updateService({
+    id,
+    updatedItem,
+  }: UpdatableItem<WaybillEdit>): Promise<Waybill> {
     const body = ServiceRequestAdapter.toWaybillEdit(updatedItem);
     try {
       const response = await odooApi.patch<WaybillApi>(

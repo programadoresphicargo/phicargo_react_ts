@@ -4,13 +4,18 @@ import { ReactNode } from 'react';
 
 const pages: MenuItemType[] = [
   {
+    name: 'Servicios',
+    path: '/servicios',
+    requiredPermissions: [],
+  },
+  {
     name: 'Solicitudes',
-    path: '/solicitudes-servicio/solicitudes',
+    path: '/servicios/solicitudes',
     requiredPermissions: [],
   },
   {
     name: 'Nueva Solicitud',
-    path: '/solicitudes-servicio/nueva-solicitud',
+    path: '/servicios/nueva-solicitud',
     requiredPermissions: [],
   },
 ];

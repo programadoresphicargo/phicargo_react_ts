@@ -2,6 +2,7 @@ import { CurrencyCell, CurrencyFooterCell } from '@/components/ui';
 
 import type { MRT_ColumnDef } from 'material-react-table';
 import type { VehicleRevenueProjectionByBranch } from '../models';
+import { formatPercentage } from '@/utilities';
 import { useMemo } from 'react';
 
 export const useVehicleRevenueProjectionByBranchColumns = () => {
@@ -79,6 +80,79 @@ export const useVehicleRevenueProjectionByBranchColumns = () => {
               0,
             );
           return <CurrencyFooterCell value={total} />;
+        },
+      },
+      {
+        accessorKey: 'extraCosts',
+        header: 'COSTOS EXTRA',
+        Cell: ({ cell }) => <CurrencyCell value={cell.getValue<number>()} />,
+        Footer: ({ column }) => {
+          const total = column
+            .getFacetedRowModel()
+            .rows.reduce(
+              (sum, row) => sum + (row.original.realMonthlyRevenue ?? 0),
+              0,
+            );
+          return <CurrencyFooterCell value={total} />;
+        },
+      },
+      {
+        header: 'TOTAL RECAUDADO',
+        Cell: ({ row }) => {
+          const realRevenue = row.original.realMonthlyRevenue ?? 0;
+          const extraCosts = row.original.extraCosts ?? 0;
+          return <CurrencyCell value={realRevenue + extraCosts} />;
+        },
+        Footer: ({ column }) => {
+          const total = column.getFacetedRowModel().rows.reduce((sum, row) => {
+            const realRevenue = row.original.realMonthlyRevenue ?? 0;
+            const extraCosts = row.original.extraCosts ?? 0;
+            return sum + realRevenue + extraCosts;
+          }, 0);
+          return <CurrencyFooterCell value={total} />;
+        },
+      },
+      {
+        header: 'PORCENTAJE',
+        Cell: ({ row }) => {
+          const idealMonthlyRevenue = row.original.idealMonthlyRevenue ?? 0;
+          const revenue =
+            (row.original.realMonthlyRevenue ?? 0) +
+            (row.original.extraCosts ?? 0);
+
+          return (
+            <span className="font-bold uppercase">
+              {formatPercentage(revenue / idealMonthlyRevenue, true)}
+            </span>
+          );
+        },
+        Footer: ({ column }) => {
+          const idealMonthlyRevenue = column
+            .getFacetedRowModel()
+            .rows.reduce(
+              (sum, row) => sum + (row.original.idealMonthlyRevenue ?? 0),
+              0,
+            );
+          const realMonthlyRevenue = column
+            .getFacetedRowModel()
+            .rows.reduce(
+              (sum, row) =>
+                sum +
+                ((row.original.realMonthlyRevenue ?? 0) +
+                  (row.original.extraCosts ?? 0)),
+              0,
+            );
+
+          return (
+            <div className="p-1 border-t-2 border-t-gray-300 text-lg text-left font-bold">
+              <p className="m-0">
+                {formatPercentage(
+                  realMonthlyRevenue / idealMonthlyRevenue,
+                  true,
+                )}
+              </p>
+            </div>
+          );
         },
       },
     ];

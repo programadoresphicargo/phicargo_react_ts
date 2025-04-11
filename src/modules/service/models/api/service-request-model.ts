@@ -1,7 +1,7 @@
 import type { BranchSimple, CompanySimple } from "@/modules/core/models";
 import type { PartnerApi, WaybillCategoryApi } from "./waybill-models";
 
-import { WaybillStatus } from "../service-request-model";
+import { WaybillStatus } from "../service-model";
 
 export interface WaybillBaseApi {
   upload_point: string | null;

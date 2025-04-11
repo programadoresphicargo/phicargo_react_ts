@@ -15,6 +15,8 @@ interface WaybillStatusConf {
 export const waybillStatusConf: WaybillStatusConf[] = [
   { keyStatus: 'draft', status: 'Pendiente', color: 'warning' },
   { keyStatus: 'cancel', status: 'Cancelado', color: 'danger' },
+  { keyStatus: 'approved', status: 'Aprovada', color: 'success' },
+  { keyStatus: 'confirmed', status: 'Confirmado', color: 'primary' },
 ];
 
 export const getWaybillStatusConfig = (
