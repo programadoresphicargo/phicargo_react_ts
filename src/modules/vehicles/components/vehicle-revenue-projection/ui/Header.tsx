@@ -2,6 +2,7 @@ import { HeaderBase } from '@/components/ui';
 import { IndicatorCard } from '@/components/utils/IndicatorCard';
 import { formatCurrency } from '@/utilities';
 import { useGetVehicleRevenueProjectionQuery } from '../../../hooks/queries';
+import { useMemo } from 'react';
 
 const Header = () => {
   const {
@@ -11,6 +12,20 @@ const Header = () => {
   const veracruz = data?.find((item) => item.branch === 'VER');
   const manzanillo = data?.find((item) => item.branch === 'MZN');
   const mexico = data?.find((item) => item.branch === 'MEX');
+
+  const veracruzRevenue = useMemo(
+    () => (veracruz?.realMonthlyRevenue ?? 0) + (veracruz?.extraCosts ?? 0),
+    [veracruz],
+  );
+
+  const manzanilloRevenue = useMemo(
+    () => (manzanillo?.realMonthlyRevenue ?? 0) + (manzanillo?.extraCosts ?? 0),
+    [manzanillo],
+  );
+  const mexicoRevenue = useMemo(
+    () => (mexico?.realMonthlyRevenue ?? 0) + (mexico?.extraCosts ?? 0),
+    [mexico],
+  );
 
   return (
     <HeaderBase backRoute="/reportes" fixed>
@@ -28,7 +43,7 @@ const Header = () => {
           title="Veracruz"
           content={
             <CardContent
-              real={veracruz?.realMonthlyRevenue ?? 0}
+              real={veracruzRevenue}
               ideal={veracruz?.idealMonthlyRevenue ?? 0}
             />
           }
@@ -38,7 +53,7 @@ const Header = () => {
           title="Manzanillo"
           content={
             <CardContent
-              real={manzanillo?.realMonthlyRevenue ?? 0}
+              real={manzanilloRevenue}
               ideal={manzanillo?.idealMonthlyRevenue ?? 0}
             />
           }
@@ -48,7 +63,7 @@ const Header = () => {
           title="México"
           content={
             <CardContent
-              real={mexico?.realMonthlyRevenue ?? 0}
+              real={mexicoRevenue}
               ideal={mexico?.idealMonthlyRevenue ?? 0}
             />
           }

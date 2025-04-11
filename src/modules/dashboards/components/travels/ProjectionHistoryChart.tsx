@@ -70,7 +70,7 @@ export const ProjectionHistoryChart = () => {
           label: 'VER REAL',
           data: data
             .filter((item) => item.branch === 'VER')
-            .map((item) => item.realMonthlyRevenue),
+            .map((item) => item.total),
           borderWidth: 2,
           backgroundColor: ['rgba(40, 159, 64, 0.6)'],
           borderColor: ['rgba(40, 159, 64, 1)'],
@@ -95,7 +95,7 @@ export const ProjectionHistoryChart = () => {
           label: 'MZN REAL',
           data: data
             .filter((item) => item.branch === 'MZN')
-            .map((item) => item.realMonthlyRevenue),
+            .map((item) => item.total),
           borderWidth: 2,
           backgroundColor: ['rgba(255, 206, 86, 0.6)'],
           borderColor: ['rgba(255, 206, 86, 1)'],
@@ -120,7 +120,7 @@ export const ProjectionHistoryChart = () => {
           label: 'MEX REAL',
           data: data
             .filter((item) => item.branch === 'MEX')
-            .map((item) => item.realMonthlyRevenue),
+            .map((item) => item.total),
           borderWidth: 2,
           backgroundColor: ['rgba(83, 102, 255, 0.6)'],
           borderColor: ['rgba(83, 102, 255, 1)'],

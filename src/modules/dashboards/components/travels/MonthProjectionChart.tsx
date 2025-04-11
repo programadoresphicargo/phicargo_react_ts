@@ -69,7 +69,7 @@ export const MonthProjectionChart = () => {
             const lastRecord = data
               .filter((item) => item.branch === branch)
               .slice(-1)[0];
-            return lastRecord ? lastRecord.realMonthlyRevenue : 0;
+            return lastRecord ? lastRecord.total : 0;
           }),
           backgroundColor: 'rgba(255, 99, 132, 0.8)',
           borderColor: 'rgba(255, 99, 132, 1)',
