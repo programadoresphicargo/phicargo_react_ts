@@ -36,7 +36,7 @@ function EstatusHistorialAgrupado({ registros_agrupados }) {
     const [enabledPickers, setEnabledPickers] = useState(Array(estatus.length).fill(false));
     const [pickerValues, setPickerValues] = useState([Array(estatus.length).fill(null)]);
     const { session } = useAuthContext();
-    
+
     const handleClickOpen = (id_reporte) => {
         setOpen(true);
         getEstatusReenvio(id_reporte);
@@ -162,10 +162,8 @@ function EstatusHistorialAgrupado({ registros_agrupados }) {
                             isBordered
                             startContent={
                                 <Avatar
-                                    style={{ zIndex: 1 }}
                                     isBordered
                                     color="primary"
-                                    radius="xl"
                                     src={VITE_PHIDES_API_URL + `/img/status/${step.imagen}`}
                                 />
                             }
