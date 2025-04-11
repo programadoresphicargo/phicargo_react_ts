@@ -1,6 +1,6 @@
 import { Card, CardHeader } from "@heroui/react";
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-
+import { toast } from 'react-toastify';
 import { Avatar } from "@heroui/react";
 import { Badge } from "@heroui/react";
 import { Button } from "@heroui/react";
@@ -13,7 +13,8 @@ import Slide from '@mui/material/Slide';
 import { ViajeContext } from '../context/viajeContext';
 import odooApi from '@/api/odoo-api';
 import { tiempoTranscurrido } from '../../funciones/tiempo';
-
+import { DatePicker } from "@heroui/react";
+import { parseZonedDateTime, parseAbsoluteToLocal } from "@internationalized/date";
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -38,6 +39,7 @@ function EstatusHistorial() {
 
     const handleClose = () => {
         setOpen(false);
+        getHistorialEstatus();
     };
 
     const getHistorialEstatus = async () => {
@@ -48,7 +50,7 @@ function EstatusHistorial() {
         } catch (error) {
             console.error('Error al obtener los datos:', error);
         } finally {
-            setLoading(false); 
+            setLoading(false);
         }
     };
 

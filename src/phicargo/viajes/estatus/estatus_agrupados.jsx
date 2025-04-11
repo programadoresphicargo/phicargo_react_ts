@@ -1,7 +1,6 @@
 import { Accordion, AccordionItem, Avatar } from "@heroui/react";
 import { Card, CardBody, CardFooter, CardHeader, Chip } from "@heroui/react";
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-
 import ArchivosAdjuntos from './archivos_adjuntos';
 import BotonDistanciaMapa from './enlaceDistancia';
 import BotonMapa from './botonMapa';
@@ -15,9 +14,12 @@ import DialogTitle from '@mui/material/DialogTitle';
 import PanelEnvio from '../panel_envio_estatus/panel_envio';
 import Slide from '@mui/material/Slide';
 import { ViajeContext } from '../context/viajeContext';
-import axios from 'axios';
 import odooApi from '@/api/odoo-api';
 import { tiempoTranscurrido } from '../../funciones/tiempo';
+import { DatePicker } from "@heroui/react";
+import { parseZonedDateTime, parseAbsoluteToLocal } from "@internationalized/date";
+import { toast } from 'react-toastify';
+import { useAuthContext } from "@/modules/auth/hooks";
 
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
@@ -31,7 +33,10 @@ function EstatusHistorialAgrupado({ registros_agrupados }) {
     const [comentarios, setComentarios] = useState('');
     const [estatus_seleccionado, setEstatusSeleccionado] = useState(null);
     const [fileList, setFileList] = useState([]);
-
+    const [enabledPickers, setEnabledPickers] = useState(Array(estatus.length).fill(false));
+    const [pickerValues, setPickerValues] = useState([Array(estatus.length).fill(null)]);
+    const { session } = useAuthContext();
+    
     const handleClickOpen = (id_reporte) => {
         setOpen(true);
         getEstatusReenvio(id_reporte);
@@ -59,6 +64,20 @@ function EstatusHistorialAgrupado({ registros_agrupados }) {
         } catch (error) {
             setLoading(false);
             console.error('Error al obtener los datos:', error);
+        }
+    };
+
+    const ActualizarFechaEstatus = async (id_reporte, fecha_hora) => {
+        try {
+            const response = await odooApi.post('/reportes_estatus_viajes/actualizar_estatus_fecha/' + id_reporte + '/' + fecha_hora);
+            if (response.data.status == 'success') {
+                toast.success(response.data.message);
+            } else {
+                toast.error(response.data.message);
+            }
+        } catch (error) {
+            setLoading(false);
+            toast.error('Error al obtener los datos:' + error);
         }
     };
 
@@ -166,7 +185,52 @@ function EstatusHistorialAgrupado({ registros_agrupados }) {
                                         </div>
                                     </div>
 
-                                    {tiempoTranscurrido(step.fecha_hora)}
+                                    <div key={index} className="flex items-center gap-2">
+
+                                        {session?.user?.permissions?.includes(150) && (
+                                            <Button
+                                                color={enabledPickers[index] ? "primary" : "success"}
+                                                size="sm"
+                                                className="text-white"
+                                                onPress={() => {
+                                                    const newStates = [...enabledPickers];
+                                                    newStates[index] = !newStates[index];
+                                                    setEnabledPickers(newStates);
+
+                                                    if (enabledPickers[index]) {
+                                                        const newValue = pickerValues[index];
+                                                        const year = newValue.year;
+                                                        const month = String(newValue.month).padStart(2, '0');
+                                                        const day = String(newValue.day).padStart(2, '0');
+                                                        const hour = String(newValue.hour).padStart(2, '0');
+                                                        const minute = String(newValue.minute).padStart(2, '0');
+                                                        const second = String(newValue.second).padStart(2, '0');
+                                                        const formatted = `${year}-${month}-${day} ${hour}:${minute}:${second}`;
+
+                                                        ActualizarFechaEstatus(step.id_reporte, formatted);
+                                                    }
+                                                }}
+                                            >
+                                                {enabledPickers[index] ? "Guardar" : "Editar"}
+                                            </Button>
+                                        )}
+
+                                        <DatePicker
+                                            className="max-w-xs"
+                                            hideTimeZone
+                                            isDisabled={!enabledPickers[index]}
+                                            defaultValue={parseZonedDateTime(step.fecha_envio + "[America/Mexico_city]")}
+                                            size="sm"
+                                            variant="bordered"
+                                            onChange={(newValue) => {
+                                                const newValues = [...pickerValues];
+                                                newValues[index] = newValue;
+                                                setPickerValues(newValues);
+                                                console.log("Nuevo valor:", newValue?.toString()); // Puedes formatearlo si quieres
+                                            }}
+                                        />
+                                    </div>
+
                                 </CardHeader>
                                 <CardBody className="text-small text-default-500">
                                     <span>Referencia reporte: {step.id_reporte}</span>
