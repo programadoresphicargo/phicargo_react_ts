@@ -39,5 +39,7 @@ export interface VehicleRevenueProjectionByBranchHistoryApi {
   total_working_days: number;
   ideal_monthly_revenue: number;
   real_monthly_revenue: number;
+  extra_costs: number;
+  total: number;
 }
 
