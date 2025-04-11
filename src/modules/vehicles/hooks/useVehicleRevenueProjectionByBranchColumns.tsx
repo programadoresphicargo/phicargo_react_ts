@@ -83,14 +83,46 @@ export const useVehicleRevenueProjectionByBranchColumns = () => {
         },
       },
       {
+        accessorKey: 'extraCosts',
+        header: 'COSTOS EXTRA',
+        Cell: ({ cell }) => <CurrencyCell value={cell.getValue<number>()} />,
+        Footer: ({ column }) => {
+          const total = column
+            .getFacetedRowModel()
+            .rows.reduce(
+              (sum, row) => sum + (row.original.realMonthlyRevenue ?? 0),
+              0,
+            );
+          return <CurrencyFooterCell value={total} />;
+        },
+      },
+      {
+        header: 'TOTAL RECAUDADO',
+        Cell: ({ row }) => {
+          const realRevenue = row.original.realMonthlyRevenue ?? 0;
+          const extraCosts = row.original.extraCosts ?? 0;
+          return <CurrencyCell value={realRevenue + extraCosts} />;
+        },
+        Footer: ({ column }) => {
+          const total = column.getFacetedRowModel().rows.reduce((sum, row) => {
+            const realRevenue = row.original.realMonthlyRevenue ?? 0;
+            const extraCosts = row.original.extraCosts ?? 0;
+            return sum + realRevenue + extraCosts;
+          }, 0);
+          return <CurrencyFooterCell value={total} />;
+        },
+      },
+      {
         header: 'PORCENTAJE',
         Cell: ({ row }) => {
           const idealMonthlyRevenue = row.original.idealMonthlyRevenue ?? 0;
-          const realMonthlyRevenue = row.original.realMonthlyRevenue ?? 0;
+          const revenue =
+            (row.original.realMonthlyRevenue ?? 0) +
+            (row.original.extraCosts ?? 0);
 
           return (
             <span className="font-bold uppercase">
-              {formatPercentage(realMonthlyRevenue / idealMonthlyRevenue, true)}
+              {formatPercentage(revenue / idealMonthlyRevenue, true)}
             </span>
           );
         },
@@ -104,7 +136,10 @@ export const useVehicleRevenueProjectionByBranchColumns = () => {
           const realMonthlyRevenue = column
             .getFacetedRowModel()
             .rows.reduce(
-              (sum, row) => sum + (row.original.realMonthlyRevenue ?? 0),
+              (sum, row) =>
+                sum +
+                ((row.original.realMonthlyRevenue ?? 0) +
+                  (row.original.extraCosts ?? 0)),
               0,
             );
 
