@@ -2,8 +2,10 @@ export interface AvailableSummary {
   vehicleType: string;
   total: number;
   available: number;
-  noDriver: number;
-  maintenance: number;
+  noDriverNoPostura: number;
+  noDriverPostura: number;
+  maintenanceNoDriver: number;
+  maintenanceDriver: number;
 }
 
 export interface DistanceAndRevenueByVehicle {

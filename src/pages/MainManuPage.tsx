@@ -108,8 +108,8 @@ const menuItems: MenuItemType[] = [
   },
   {
     icon: shipingcontainer,
-    label: 'Solicitudes de Servicio',
-    link: '/solicitudes-servicio',
+    label: 'Servicios',
+    link: '/servicios',
     requiredPermissions: [204],
   },
 ];

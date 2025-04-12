@@ -5,4 +5,5 @@ export * from './useGetItems';
 export * from './useCreateServiceMutation';
 export * from './useEditServiceMutation';
 export * from './useGetServices';
+export * from './useGetWaybillServicesQuery';
 

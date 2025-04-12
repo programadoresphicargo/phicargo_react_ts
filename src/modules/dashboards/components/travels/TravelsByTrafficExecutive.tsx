@@ -75,7 +75,7 @@ export const TravelsByTrafficExecutive = (props: Props) => {
           backgroundColor: ['rgba(255, 159, 64, 0.2)'],
           borderColor: ['rgba(255, 159, 64, 1)'],
         },
-        {
+        { 
           label: 'Viajes Completados',
           data: data.byTrafficExecutive.map((item) => item.travelsCompleted),
           borderWidth: 2,
@@ -84,7 +84,7 @@ export const TravelsByTrafficExecutive = (props: Props) => {
           borderColor: ['rgba(54, 162, 235, 1)'],
         },
         {
-          label: 'Viajes',
+          label: 'Viajes Pendientes',
           data: data.byTrafficExecutive.map((item) => item.travelsPending),
           borderWidth: 2,
           borderRadius: 10,

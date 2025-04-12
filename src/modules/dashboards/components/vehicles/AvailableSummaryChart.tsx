@@ -14,6 +14,7 @@ const options: ChartOptions<'bar'> = {
   scales: {
     y: {
       beginAtZero: true,
+      stacked: true,
       ticks: {
         font: {
           size: 15,
@@ -21,6 +22,7 @@ const options: ChartOptions<'bar'> = {
       },
     },
     x: {
+      stacked: true,
       ticks: {
         font: {
           size: 15,
@@ -52,6 +54,7 @@ export const AvailableSummaryChart = (props: Props) => {
           borderRadius: 10,
           backgroundColor: ['rgba(75, 192, 192, 0.2)'],
           borderColor: ['rgba(75, 192, 192, 1)'],
+          stack: 'Stack 0',
         },
         {
           label: 'Disponibles',
@@ -60,22 +63,43 @@ export const AvailableSummaryChart = (props: Props) => {
           borderRadius: 10,
           backgroundColor: ['rgba(54, 162, 235, 0.2)'],
           borderColor: ['rgba(54, 162, 235, 1)'],
+          stack: 'Stack 1',
         },
         {
           label: 'Sin Operador',
-          data: data.availableSummary.map((item) => item.noDriver),
+          data: data.availableSummary.map((item) => item.noDriverNoPostura),
           borderWidth: 2,
           borderRadius: 10,
           backgroundColor: ['rgba(255, 99, 132, 0.2)'],
           borderColor: ['rgba(255,99,132, 1)'],
+          stack: 'Stack 2',
         },
         {
-          label: 'Mantenimiento',
-          data: data.availableSummary.map((item) => item.maintenance),
+          label: 'Sin Operador (Postura)',
+          data: data.availableSummary.map((item) => item.noDriverPostura),
+          borderWidth: 2,
+          borderRadius: 10,
+          backgroundColor: ['rgba(54, 162, 235, 0.2)'],
+          borderColor: ['rgba(54, 162, 235, 1)'],
+          stack: 'Stack 2',
+        },
+        {
+          label: 'Mantenimiento (Sin Operador)',
+          data: data.availableSummary.map((item) => item.maintenanceNoDriver),
           borderWidth: 2,
           borderRadius: 10,
           backgroundColor: ['rgba(255, 159, 64, 0.6)'],
           borderColor: ['rgba(255, 159, 64, 1)'],
+          stack: 'Stack 3',
+        },
+        {
+          label: 'Mantenimiento (Con Operador)',
+          data: data.availableSummary.map((item) => item.maintenanceDriver),
+          borderWidth: 2,
+          borderRadius: 10,
+          backgroundColor: ['rgba(75, 192, 192, 0.2)'],
+          borderColor: ['rgba(75, 192, 192, 1)'],
+          stack: 'Stack 3',
         },
       ],
     };
@@ -99,6 +123,7 @@ type AvailabilityData = {
   status: 'Disponible' | 'Sin Operador' | 'Mantenimiento';
   type: string;
   driver: string | null;
+  driverPostura: string | null;
 };
 
 const exportAvailabilityData = async () => {
@@ -112,6 +137,7 @@ const exportAvailabilityData = async () => {
         { accessorFn: (data) => data.status, header: 'Estado' },
         { accessorFn: (data) => data.type, header: 'Tipo' },
         { accessorFn: (data) => data.driver, header: 'Operador' },
+        { accessorFn: (data) => data.driverPostura, header: 'Postura Activa' },
       ],
     };
 
@@ -133,6 +159,7 @@ const exportAvailabilityData = async () => {
         status: status as 'Disponible' | 'Sin Operador' | 'Mantenimiento',
         type: vehicle.vehicleType!,
         driver: vehicle.driver?.name || null,
+        driverPostura: vehicle.driverPostura?.name || null, 
       };
     });
 

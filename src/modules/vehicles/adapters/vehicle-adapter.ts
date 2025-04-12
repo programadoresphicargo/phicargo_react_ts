@@ -73,6 +73,9 @@ export class VehicleAdapter {
       driver: vehicle.driver
         ? DriverAdapter.driverSimpleToLocal(vehicle.driver)
         : null,
+      driverPostura: vehicle.driver_postura
+        ? DriverAdapter.toDriverPosturaSimple(vehicle.driver_postura)
+        : null,
     };
   }
 
@@ -125,6 +128,7 @@ export class VehicleAdapter {
       previousStatus: data.previous_status,
       startDate: dayjs(data.start_date),
       endDate: data.end_date ? dayjs(data.end_date) : null,
+      deliveryDate: data.delivery_date ? dayjs(data.delivery_date) : null,
     };
   }
 }

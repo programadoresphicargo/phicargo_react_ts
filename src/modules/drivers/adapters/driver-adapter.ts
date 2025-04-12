@@ -1,8 +1,15 @@
-import type { Driver, DriverBase, DriverEdit, DriverSimple } from '../models';
+import type {
+  Driver,
+  DriverBase,
+  DriverEdit,
+  DriverPosturaSimple,
+  DriverSimple,
+} from '../models';
 import type {
   DriverApi,
   DriverBaseApi,
   DriverEditApi,
+  DriverPosturaSimpleApi,
   DriverSimpleApi,
 } from '../models/api';
 
@@ -101,6 +108,18 @@ export class DriverAdapter {
     };
   }
 
+  static toDriverPosturaSimple(
+    driver: DriverPosturaSimpleApi,
+  ): DriverPosturaSimple {
+    return {
+      id: driver.id,
+      name: driver.name,
+      job: driver.job,
+      startDate: dayjs(driver.start_date),
+      endDate: dayjs(driver.end_date),
+    };
+  }
+
   /**
    * Mapper function to convert a DriverEdit object to a DriverEditApi object
    * @param driver DriverEdit object from the local state
@@ -140,3 +159,4 @@ export class DriverAdapter {
     return driverApi;
   }
 }
+

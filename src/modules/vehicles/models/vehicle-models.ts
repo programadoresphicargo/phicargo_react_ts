@@ -4,7 +4,7 @@ import type {
   ManeuverSimple,
   TravelSimple,
 } from '../../core/models';
-import { DriverSimple, Modality } from '../../drivers/models';
+import { DriverPosturaSimple, DriverSimple, Modality } from '../../drivers/models';
 
 import { Dayjs } from 'dayjs';
 import type { MaintenanceRecordSimple } from '../../maintenance/models';
@@ -37,6 +37,7 @@ export interface Vehicle extends VehicleBase {
   maneuver: ManeuverSimple | null;
   maintenanceRecord: MaintenanceRecordSimple | null;
   driver: DriverSimple | null;
+  driverPostura: DriverPosturaSimple | null;
 }
 
 export interface VehicleSimple {
@@ -81,4 +82,5 @@ export interface VehicleStatusChangeEvent {
   previousStatus: string | null;
   startDate: Dayjs;
   endDate: Dayjs | null;
+  deliveryDate: Dayjs | null;
 }

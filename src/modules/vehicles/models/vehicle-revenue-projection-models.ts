@@ -28,6 +28,7 @@ export interface VehicleRevenueProjectionByBranch {
   totalWorkingDays: number;
   idealMonthlyRevenue: number;
   realMonthlyRevenue: number;
+  extraCosts: number;
 }
 
 export interface VehicleRevenueProjectionByBranchHistory {
@@ -41,5 +42,7 @@ export interface VehicleRevenueProjectionByBranchHistory {
   totalWorkingDays: number;
   idealMonthlyRevenue: number;
   realMonthlyRevenue: number;
+  extraCosts: number;
+  total: number;
 }
 

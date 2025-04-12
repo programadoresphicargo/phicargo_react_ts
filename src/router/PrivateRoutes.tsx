@@ -11,7 +11,7 @@ import { LoadingPage } from '@/pages/LoadingPage';
 import MainMenuPage from '@/pages/MainManuPage';
 import NotFoundPage from '@/pages/NotFoundPage';
 import { ReportsRoutes } from './ReportsRoutes';
-import { ServiceRequestsRoutes } from '@/modules/service-requests/routes/ServiceRequestsRoutes';
+import { ServiceRequestsRoutes } from '@/modules/service/routes/ServiceRequestsRoutes';
 import ShiftsRoutes from '../modules/shifts/routes/ShiftsRoutes';
 import { ToastContainer } from 'react-toastify';
 import { Toaster } from 'react-hot-toast';

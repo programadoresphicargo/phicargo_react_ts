@@ -4,9 +4,9 @@ import type {
   ManeuverSimpleApi,
   TravelSimpleApi,
 } from '../../../core/models';
+import { DriverPosturaSimpleApi, DriverSimpleApi } from '@/modules/drivers/models/api';
 import { VehicleBrand, VehicleCategory, VehicleState } from '../vehicle-models';
 
-import { DriverSimpleApi } from '@/modules/drivers/models/api';
 import type { MaintenanceRecordSimpleApi } from '../../../maintenance/models';
 import type { Modality } from '@/modules/drivers/models';
 
@@ -33,6 +33,7 @@ export interface VehicleApi extends VehicleBaseApi {
   maniobra: ManeuverSimpleApi | null;
   maintenance_records: MaintenanceRecordSimpleApi | null;
   driver: DriverSimpleApi | null;
+  driver_postura: DriverPosturaSimpleApi | null;
 }
 
 export interface VehicleSimpleApi {
@@ -61,5 +62,6 @@ export interface VehicleStatusChangeEventApi {
   previous_status: string | null;
   start_date: string;
   end_date: string | null;
+  delivery_date: string | null;
 }
 
