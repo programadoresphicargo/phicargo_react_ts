@@ -6,6 +6,7 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import type { MotumEvent } from '../../models';
 import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
 import RoomIcon from '@mui/icons-material/Room';
+import { useMotumEventsQueries } from '../../hooks/queries';
 
 interface Props {
   toggleDrawer: (open: boolean) => () => void;
@@ -14,8 +15,11 @@ interface Props {
 }
 
 export const MotumEventsList = ({ toggleDrawer, isLoading, events }: Props) => {
+
+   const { attendMotumEventMutation } = useMotumEventsQueries();
+
   const onAttend = (eventId: number) => {
-    console.log(eventId);
+    attendMotumEventMutation.mutate(eventId);
   };
 
   return (
@@ -74,6 +78,7 @@ export const MotumEventsList = ({ toggleDrawer, isLoading, events }: Props) => {
                   e.stopPropagation();
                   onAttend(event.id);
                 }}
+                disabled={attendMotumEventMutation.isPending}
               >
                 Atender
               </Button>
