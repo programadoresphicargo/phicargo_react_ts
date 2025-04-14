@@ -4,7 +4,10 @@ import type {
   ManeuverSimpleApi,
   TravelSimpleApi,
 } from '../../../core/models';
-import { DriverPosturaSimpleApi, DriverSimpleApi } from '@/modules/drivers/models/api';
+import {
+  DriverPosturaSimpleApi,
+  DriverSimpleApi,
+} from '@/modules/drivers/models/api';
 import { VehicleBrand, VehicleCategory, VehicleState } from '../vehicle-models';
 
 import type { MaintenanceRecordSimpleApi } from '../../../maintenance/models';
@@ -63,5 +66,18 @@ export interface VehicleStatusChangeEventApi {
   start_date: string;
   end_date: string | null;
   delivery_date: string | null;
+}
+
+export interface MotumEventAPI {
+  id: number;
+  event_type: number;
+  event: string;
+  event_type_name: string;
+  event_description: string;
+  vehicle_id: number;
+  created_at: string;
+  status: string;
+  latitude: number;
+  longitude: number;
 }
 
