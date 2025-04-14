@@ -174,7 +174,7 @@ const ViajesActivos = ({ }) => {
       },
       {
         accessorKey: 'codigo_postal',
-        header: 'Distancia con cliente',
+        header: 'Distancia',
         Cell: ({ row }) => {
           const [distancia, setDistancia] = React.useState(null);
 
@@ -186,29 +186,19 @@ const ViajesActivos = ({ }) => {
               const idSucursal = row.original.id_sucursal;
 
               try {
-                // Llama al API enviando los datos necesarios
-                const response = await fetch(VITE_PHIDES_API_URL + '/viajes/funciones/calcularDistancia.php', {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded', // Suponiendo que PHP maneja este tipo de contenido
-                  },
-                  body: new URLSearchParams({
-                    placas: placas,
-                    estado: estado,
+                const response = await odooApi.get('/tms_travel/codigos_postales/distancia_coordenadas/', {
+                  params: {
                     codigo_postal: codigoPostal,
-                    id_sucursal: idSucursal,
-                  }),
+                    vehicle_id: 7081,
+                    velocidad_kmh: 70
+                  },
                 });
 
-                if (!response.ok) {
-                  throw new Error(`Error del servidor: ${response.status}`);
-                }
-
-                const text = await response.text(); // Procesa la respuesta como texto
-                setDistancia(text); // Guarda el texto directamente en el estado
+                const data = response.data;
+                setDistancia(data);
               } catch (error) {
                 console.error('Error al calcular la distancia:', error);
-                setDistancia('Error');
+                setDistancia({ distancia_km: 'Error' });
               }
             };
 
@@ -216,11 +206,13 @@ const ViajesActivos = ({ }) => {
           }, [row.original.codigo_postal, row.original.id_sucursal]);
 
           return (
-            <Chip className="text-white" color='success'>
-              {distancia !== null ? distancia : 'Cargando...'}
+            <Chip className="text-white" color="primary">
+              {distancia
+                ? `${distancia.distancia_km} km | ${distancia.tiempo_estimado_horas} h`
+                : 'Cargando...'}
             </Chip>
           );
-        },
+        }
       },
       {
         accessorKey: 'ejecutivo',

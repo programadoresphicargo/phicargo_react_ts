@@ -46,7 +46,8 @@ const ReporteCumplimiento = () => {
     const columns = useMemo(
         () => [
             { accessorKey: 'referencia', header: 'Referencia' },
-            { accessorKey: 'name', header: 'Operador', size: 150 },
+            { accessorKey: 'id_usuario', header: 'Operador', size: 150 },
+            { accessorKey: 'nombre_operador', header: 'Operador', size: 150 },
             { accessorKey: 'fecha_inicio', header: 'Fecha inicio', size: 150 },
             { accessorKey: 'estatus_enviados', header: 'Estatus enviados', size: 150 },
             { accessorKey: 'porcentaje_estatus', header: 'Porcentaje de cumplimiento', size: 150 },
