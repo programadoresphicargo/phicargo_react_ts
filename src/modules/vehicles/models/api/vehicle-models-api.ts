@@ -74,7 +74,7 @@ export interface MotumEventAPI {
   event: string;
   event_type_name: string;
   event_description: string;
-  vehicle_id: number;
+  vehicle_name: string;
   created_at: string;
   status: string;
   latitude: number;

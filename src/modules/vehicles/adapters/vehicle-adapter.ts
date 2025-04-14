@@ -141,7 +141,7 @@ export class VehicleAdapter {
       event: data.event,
       eventTypeName: data.event_type_name,
       eventDescription: data.event_description,
-      vehicleId: data.vehicle_id,
+      vehicleName: data.vehicle_name,
       createdAt: dayjs.utc(data.created_at).tz('America/Mexico_City'),
       status: data.status,
       latitude: data.latitude,

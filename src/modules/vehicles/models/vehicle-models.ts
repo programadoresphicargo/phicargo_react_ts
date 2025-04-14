@@ -94,7 +94,7 @@ export interface MotumEvent {
   event: string;
   eventTypeName: string;
   eventDescription: string | null;
-  vehicleId: number;
+  vehicleName: string;
   createdAt: Dayjs;
   status: string;
   latitude: number;

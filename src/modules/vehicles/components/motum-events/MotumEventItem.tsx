@@ -53,7 +53,7 @@ export const MotumEventItem = ({ event }: Props) => {
             color="primary"
             sx={{ fontStyle: 'italic' }}
           >
-            Estado: {event.status}
+            Estado: {event.status} | Unidad: {event.vehicleName}
           </Typography>
         </Box>
         <IconButton
