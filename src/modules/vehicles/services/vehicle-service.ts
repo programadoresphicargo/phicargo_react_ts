@@ -81,10 +81,11 @@ export class VehicleServiceApi {
     }
   }
 
-  static async attendMotumEvent(eventId: number): Promise<MotumEvent> {
+  static async attendMotumEvent({ id, updatedItem }: UpdatableItem<{comment: string}>): Promise<MotumEvent> {
     try {
       const response = await odooApi.patch<MotumEventAPI>(
-        `/vehicles/alerts-motum/${eventId}/attend`,
+        `/vehicles/alerts-motum/${id}/attend`,
+        updatedItem,
       );
       return VehicleAdapter.toMotumEvent(response.data);
     } catch (error) {
