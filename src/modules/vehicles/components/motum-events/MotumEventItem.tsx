@@ -109,6 +109,7 @@ export const MotumEventItem = ({ event }: Props) => {
                 display: 'flex',
                 justifyContent: 'space-between',
                 gap: 3,
+                width: '100%',
               }}
             >
               <Button
@@ -125,7 +126,7 @@ export const MotumEventItem = ({ event }: Props) => {
                 {'Cancelar'}
               </Button>
               <Button
-                variant="outlined"
+                variant="contained"
                 size="small"
                 startIcon={<SaveIcon />}
                 color={'primary'}

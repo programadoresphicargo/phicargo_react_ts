@@ -1,4 +1,4 @@
-import { Badge, IconButton } from '@mui/material';
+import { Badge, IconButton, Tab, Tabs } from '@mui/material';
 
 import Drawer from '@mui/material/Drawer';
 import { MotumEventsList } from './MotumEventsList';
@@ -8,6 +8,11 @@ import { useState } from 'react';
 
 export const MotumAlertsPanel = () => {
   const [open, setOpen] = useState(false);
+  const [value, setValue] = useState('alerts');
+
+  const handleChange = (_: React.SyntheticEvent, newValue: string) => {
+    setValue(newValue);
+  };  
 
   const { getMotumEventsQuery } = useMotumEventsQueries();
 
@@ -35,6 +40,17 @@ export const MotumAlertsPanel = () => {
           },
         }}
       >
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          textColor="primary"
+          variant="fullWidth"
+          indicatorColor="primary"
+          aria-label="motum-alerts-tabs"
+        >
+          <Tab value="alerts" label="Sin Atender" />
+          <Tab value="history" label="Historial" />
+        </Tabs>
         <MotumEventsList
           toggleDrawer={toggleDrawer}
           isLoading={getMotumEventsQuery.isLoading}

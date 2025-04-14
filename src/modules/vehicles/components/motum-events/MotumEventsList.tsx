@@ -12,7 +12,7 @@ interface Props {
 export const MotumEventsList = ({ toggleDrawer, isLoading, events }: Props) => {
   return (
     <Box
-      sx={{ width: 350, p: 2 }}
+      sx={{ width: 400, p: 2 }}
       role="presentation"
       onClick={toggleDrawer(false)}
     >
