@@ -60,6 +60,7 @@ const Estadias = lazy(() => import('../phicargo/estadias/Control'));
 const EstadiasInfo = lazy(() => import('../phicargo/estadias/index_estadia'));
 const Accesos = lazy(() => import('../phicargo/accesos/Accesos'));
 const EntregaMonitoreo = lazy(() => import('../phicargo/monitoreo/monitoreo'));
+const CodigosPostales = lazy(() => import('../phicargo/viajes/codigos_postales/index'));
 
 const DetencionesTable = lazy(
   () => import('../phicargo/reportes/llegadas_tarde/llegadas_tarde'),
@@ -197,6 +198,16 @@ export const PrivateRoutes = () => {
           element={
             <Suspense fallback={<LoadingPage />}>
               <CumplimientoEjecutivosViajes />
+            </Suspense>
+          }
+        />
+
+
+        <Route
+          path="/codigos_postales"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <CodigosPostales></CodigosPostales>
             </Suspense>
           }
         />

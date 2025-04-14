@@ -36,6 +36,7 @@ const pages = [
     { name: 'ESTADIAS', path: '/estadias' },
     { name: 'ENVIO MASIVO', path: '/envio_masivo_viajes' },
     { name: 'CUMPLIMIENTO ESTATUS', path: '/cumplimiento_estatus_ejecutivos' },
+    { name: 'CODIGOS POSTALES', path: '/codigos_postales' },
 ];
 
 function NavbarViajes() {
