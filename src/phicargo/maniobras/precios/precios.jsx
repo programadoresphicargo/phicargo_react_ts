@@ -54,24 +54,8 @@ const Precios_maniobras = () => {
   const columns = useMemo(
     () => [
       {
-        accessorKey: 'numero_contenedores',
-        header: 'Número de contenedores',
-      },
-      {
-        accessorKey: 'peligroso',
-        header: 'Peligroso',
-        size: 150,
-        Cell: ({ cell }) => {
-          const value = cell.getValue();
-          var respuesta = '';
-          if (value == true) {
-            respuesta = 'SI';
-          } else {
-            respuesta = 'NO';
-
-          }
-          return respuesta;
-        }
+        accessorKey: 'clave',
+        header: 'Clave',
       },
       {
         accessorKey: 'precio',
