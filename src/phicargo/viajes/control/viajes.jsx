@@ -202,13 +202,13 @@ const ViajesActivos = ({ }) => {
                   setError(data.error);
                   setDistancia(null);
                 } else {
-                  setError(null); 
-                  setDistancia(data); 
+                  setError(null);
+                  setDistancia(data);
                 }
               } catch (error) {
                 console.error('Error al calcular la distancia:', error);
-                setError('Error al obtener la distancia');
-                setDistancia(null); 
+                setError('Error al obtener la distancia' + error);
+                setDistancia(null);
               }
             };
 
