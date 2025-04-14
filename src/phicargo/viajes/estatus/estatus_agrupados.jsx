@@ -20,6 +20,7 @@ import { DatePicker } from "@heroui/react";
 import { parseZonedDateTime, parseAbsoluteToLocal } from "@internationalized/date";
 import { toast } from 'react-toastify';
 import { useAuthContext } from "@/modules/auth/hooks";
+import Viaje from "../viaje";
 
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
@@ -251,7 +252,7 @@ function EstatusHistorialAgrupado({ registros_agrupados }) {
                                     </Button>
 
                                     <BotonMapa latitud={step.latitud} longitud={step.longitud}></BotonMapa>
-                                    <BotonDistanciaMapa></BotonDistanciaMapa>
+                                    <BotonDistanciaMapa latitud={step.latitud} longitud={step.longitud}></BotonDistanciaMapa>
                                 </CardFooter>
                             </Card>
 

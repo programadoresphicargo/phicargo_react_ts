@@ -1,22 +1,23 @@
 import { Button } from "@heroui/react";
-import React from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { ViajeContext } from "../context/viajeContext";
 
 function crearEnlaceDistancia(latitud, longitud, tipo, codigoPostal, sucursal) {
     let codigoPostalOrigen = codigoPostal;
 
-    if (tipo === 'imp') {
-        if (sucursal === '[VER] Veracruz (Matriz)') {
-            codigoPostalOrigen = '91808';
-        } else if (sucursal === '[MZN] Manzanillo (Sucursal)') {
-            codigoPostalOrigen = '28219';
-        }
+    if (sucursal === 1) {
+        codigoPostalOrigen = '91808';
+    } else if (sucursal === 9) {
+        codigoPostalOrigen = '28219';
     }
 
     return `https://www.google.com.mx/maps/dir/${latitud},${longitud}/${codigoPostalOrigen}/`;
 }
 
-function BotonDistanciaMapa({ latitud, longitud, tipo, codigoPostal, sucursal }) {
-    const enlace = crearEnlaceDistancia(latitud, longitud, tipo, codigoPostal, sucursal);
+function BotonDistanciaMapa({ latitud, longitud, tipo }) {
+    const { id_viaje, viaje } = useContext(ViajeContext);
+
+    const enlace = crearEnlaceDistancia(latitud, longitud, tipo, viaje.x_codigo_postal, viaje.store_id);
 
     return (
         <Button
