@@ -174,31 +174,41 @@ const ViajesActivos = ({ }) => {
       },
       {
         accessorKey: 'codigo_postal',
-        header: 'Distancia',
+        header: 'Distancia (50km/h)',
         Cell: ({ row }) => {
           const [distancia, setDistancia] = React.useState(null);
+          const [error, setError] = React.useState(null);
+
 
           React.useEffect(() => {
             const calcularDistancia = async () => {
-              const placas = row.original.placas;
-              const estado = row.original.x_status_viajel;
               const codigoPostal = row.original.codigo_postal;
+              const vehicle_id = row.original.vehicle_id;
+              const estado = row.original.x_status_viajel;
               const idSucursal = row.original.id_sucursal;
 
               try {
                 const response = await odooApi.get('/tms_travel/codigos_postales/distancia_coordenadas/', {
                   params: {
                     codigo_postal: codigoPostal,
-                    vehicle_id: 7081,
-                    velocidad_kmh: 70
+                    vehicle_id: vehicle_id,
+                    velocidad_kmh: 50
                   },
                 });
 
-                const data = response.data;
-                setDistancia(data);
+                const data = await response.data;
+
+                if (data.error) {
+                  setError(data.error);
+                  setDistancia(null);
+                } else {
+                  setError(null); 
+                  setDistancia(data); 
+                }
               } catch (error) {
                 console.error('Error al calcular la distancia:', error);
-                setDistancia({ distancia_km: 'Error' });
+                setError('Error al obtener la distancia');
+                setDistancia(null); 
               }
             };
 
@@ -206,10 +216,8 @@ const ViajesActivos = ({ }) => {
           }, [row.original.codigo_postal, row.original.id_sucursal]);
 
           return (
-            <Chip className="text-white" color="primary">
-              {distancia
-                ? `${distancia.distancia_km} km | ${distancia.tiempo_estimado_horas} h`
-                : 'Cargando...'}
+            <Chip className="text-white" color={error ? 'danger' : 'primary'} size='sm'>
+              {error ? error : (distancia ? `A ${distancia.distancia_km} km / ${distancia.tiempo_estimado_horas} h` : 'Cargando...')}
             </Chip>
           );
         }
