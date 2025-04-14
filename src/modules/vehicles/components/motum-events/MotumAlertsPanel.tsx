@@ -17,12 +17,24 @@ export const MotumAlertsPanel = () => {
 
   return (
     <div>
-      <Badge badgeContent={getMotumEventsQuery.data?.length} color="primary">
+      <Badge badgeContent={getMotumEventsQuery.data?.length} color="warning">
         <IconButton color="warning" onClick={toggleDrawer(true)}>
           <WarningAmberIcon />
         </IconButton>
       </Badge>
-      <Drawer open={open} onClose={toggleDrawer(false)} anchor="right">
+      <Drawer
+        open={open}
+        onClose={toggleDrawer(false)}
+        anchor="right"
+        slotProps={{
+          paper: {
+            sx: {
+              borderTopLeftRadius: 16,
+              borderBottomLeftRadius: 16,
+            },
+          },
+        }}
+      >
         <MotumEventsList
           toggleDrawer={toggleDrawer}
           isLoading={getMotumEventsQuery.isLoading}
