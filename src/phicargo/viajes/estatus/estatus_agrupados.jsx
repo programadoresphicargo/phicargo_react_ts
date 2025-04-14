@@ -245,7 +245,7 @@ function EstatusHistorialAgrupado({ registros_agrupados }) {
 
                                 </CardBody>
                                 <CardFooter className="gap-3">
-                                    <Button color="success" className='text-white me-2' variant="solid" onClick={() => handleClickOpen(step.id_reporte)}>
+                                    <Button color="success" className='text-white me-2' variant="solid" onPress={() => handleClickOpen(step.id_reporte)}>
                                         <i class="bi bi-reply"></i>
                                         Reenviar
                                     </Button>

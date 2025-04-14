@@ -207,7 +207,7 @@ const ViajesActivos = ({ }) => {
                 }
               } catch (error) {
                 console.error('Error al calcular la distancia:', error);
-                setError('Error al obtener la distancia' + error);
+                setError('Error al obtener la distancia');
                 setDistancia(null);
               }
             };

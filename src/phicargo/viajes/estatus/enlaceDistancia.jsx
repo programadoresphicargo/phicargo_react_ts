@@ -20,8 +20,9 @@ function BotonDistanciaMapa({ latitud, longitud, tipo, codigoPostal, sucursal })
 
     return (
         <Button
-            onClick={() => window.open(enlace, '_blank')}
+            onPress={() => window.open(enlace, '_blank')}
             className='text-white'
+            color="secondary"
         >
             <i class="bi bi-geo-alt"></i>
             Ver Ruta en Google Maps
