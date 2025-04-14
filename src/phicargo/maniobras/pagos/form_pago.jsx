@@ -175,6 +175,10 @@ const Nomina_form = ({ show, handleClose, id_pago, id_operador, fecha_inicio, fe
                 header: 'TIPO ARMADO',
             },
             {
+                accessorKey: 'x_modo_bel',
+                header: 'MODO',
+            },
+            {
                 accessorKey: 'maniobra_peligrosa',
                 header: 'PELIGROSO',
             },
