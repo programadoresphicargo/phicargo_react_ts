@@ -3,7 +3,7 @@ import { Card, CardBody } from "@heroui/react";
 import { CardHeader, Divider, User } from "@heroui/react";
 import { Container, filledInputClasses } from '@mui/material';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-
+import { Textarea } from "@heroui/react";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import AppBar from '@mui/material/AppBar';
 import AutocompleteManager from './correos_electronicos/correos_electronicos';
@@ -203,7 +203,8 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                         usuario_finalizo: data.usuariofinalizacion || '',
                         estado_maniobra: data.estado_maniobra || '',
                         correos_ligados: correos,
-                        correos_desligados: []
+                        correos_desligados: [],
+                        comentarios: data.comentarios || '',
                     });
 
                     toggleButtonsVisibility(data.estado_maniobra);
@@ -216,7 +217,6 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
             setIDManiobra(0);
             setFormDisabled(false);
 
-            // Datos base para inicializar el formulario en caso de no haber maniobra
             setFormData({
                 id_cp: id_cp,
                 id_usuario: session.user.id,
@@ -233,7 +233,8 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                 inicio_programado: '',
                 estado_maniobra: '',
                 correos_ligados: [],
-                correos_desligados: []
+                correos_desligados: [],
+                comentarios: ''
             });
 
             toggleButtonsVisibility('registrar');
@@ -309,6 +310,13 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
         setFormData((prevData) => ({
             ...prevData,
             inicio_programado: newValue.format('YYYY-MM-DD HH:mm'),
+        }));
+    };
+
+    const handleChangeComentarios = (newValue) => {
+        setFormData((prevData) => ({
+            ...prevData,
+            comentarios: newValue,
         }));
     };
 
@@ -829,6 +837,18 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                                             value={formData.motogenerador_2}
                                                             tipo={'other'}
                                                             disabled={formDisabled}
+                                                        />
+                                                    </Grid>
+
+                                                    <Grid size={{ xs: 12, md: 12 }}>
+                                                        <Textarea
+                                                            isDisabled={formDisabled}
+                                                            label="Comentarios"
+                                                            labelPlacement="outside"
+                                                            placeholder="Ingresar un comentario (opcional)"
+                                                            variant="bordered"
+                                                            value={formData.comentarios}
+                                                            onValueChange={handleChangeComentarios}
                                                         />
                                                     </Grid>
                                                 </Grid>

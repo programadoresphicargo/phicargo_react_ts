@@ -29,7 +29,8 @@ const ManiobraProvider = ({ children }) => {
         usuario_finalizo: '',
         estado_maniobra: '',
         correos_ligados: [],
-        correos_desligados: []
+        correos_desligados: [],
+        comentarios: ''
     });
 
     return (
