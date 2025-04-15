@@ -8,7 +8,12 @@ import {
   DriverPosturaSimpleApi,
   DriverSimpleApi,
 } from '@/modules/drivers/models/api';
-import { MotumEventStatus, VehicleBrand, VehicleCategory, VehicleState } from '../vehicle-models';
+import {
+  MotumEventStatus,
+  VehicleBrand,
+  VehicleCategory,
+  VehicleState,
+} from '../vehicle-models';
 
 import type { MaintenanceRecordSimpleApi } from '../../../maintenance/models';
 import type { Modality } from '@/modules/drivers/models';
@@ -83,5 +88,6 @@ export interface MotumEventAPI {
   longitude: number;
   attended_at: string | null;
   attended_by: string | null;
+  comment: string | null;
 }
 

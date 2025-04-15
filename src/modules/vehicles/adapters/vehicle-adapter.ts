@@ -150,6 +150,7 @@ export class VehicleAdapter {
         ? dayjs.utc(data.attended_at).tz('America/Mexico_City')
         : null,
       attendedBy: data.attended_by,
+      comment: data.comment,
     };
   }
 }

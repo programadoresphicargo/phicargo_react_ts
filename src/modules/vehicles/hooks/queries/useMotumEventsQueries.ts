@@ -1,22 +1,34 @@
+import { MotumEvent, MotumEventStatus } from '../../models';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { MotumEvent } from '../../models';
 import { VehicleServiceApi } from '../../services';
 import toast from 'react-hot-toast';
 
-export const useMotumEventsQueries = () => {
+interface Conf {
+  status?: MotumEventStatus;
+  startDate?: string;
+  endDate?: string;
+}
+
+export const useMotumEventsQueries = (conf: Conf) => {
+  const { status = 'pending', startDate, endDate } = conf;
+
   const queryClient = useQueryClient();
 
   const getMotumEventsQuery = useQuery({
-    queryKey: ['motum-events'],
-    queryFn: () => VehicleServiceApi.getMotumEvents(),
+    queryKey: ['motum-events', status, startDate, endDate],
+    queryFn: () => VehicleServiceApi.getMotumEvents(status),
   });
 
   const attendMotumEventMutation = useMutation({
     mutationFn: VehicleServiceApi.attendMotumEvent,
     onSuccess: (eventAttended) => {
-      queryClient.setQueryData<MotumEvent[]>(['motum-events'], (prev) =>
-        prev?.filter((event) => event.id !== eventAttended.id),
+      queryClient.invalidateQueries({
+        queryKey: ['motum-events', 'attended', startDate, endDate],
+      });
+      queryClient.setQueryData<MotumEvent[]>(
+        ['motum-events', 'pending', startDate, endDate],
+        (prev) => prev?.filter((event) => event.id !== eventAttended.id),
       );
       toast.success(
         `Evento ${eventAttended.eventTypeName} atendido correctamente`,

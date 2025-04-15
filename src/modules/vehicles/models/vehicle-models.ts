@@ -105,5 +105,6 @@ export interface MotumEvent {
   longitude: number;
   attendedAt: Dayjs | null;
   attendedBy: string | null;
+  comment: string | null;
 }
 
