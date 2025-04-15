@@ -1,10 +1,12 @@
 import type {
+  MotumEvent,
   Vehicle,
   VehicleBase,
   VehicleStatusChangeEvent,
   VehicleUpdate,
 } from '../models';
 import type {
+  MotumEventAPI,
   VehicleApi,
   VehicleBaseApi,
   VehicleStatusChangeEventApi,
@@ -129,6 +131,26 @@ export class VehicleAdapter {
       startDate: dayjs(data.start_date),
       endDate: data.end_date ? dayjs(data.end_date) : null,
       deliveryDate: data.delivery_date ? dayjs(data.delivery_date) : null,
+    };
+  }
+
+  static toMotumEvent(data: MotumEventAPI): MotumEvent {
+    return {
+      id: data.id,
+      eventType: data.event_type,
+      event: data.event,
+      eventTypeName: data.event_type_name,
+      eventDescription: data.event_description,
+      vehicleName: data.vehicle_name,
+      createdAt: dayjs.utc(data.created_at).tz('America/Mexico_City'),
+      status: data.status,
+      latitude: data.latitude,
+      longitude: data.longitude,
+      attendedAt: data.attended_at
+        ? dayjs.utc(data.attended_at).tz('America/Mexico_City')
+        : null,
+      attendedBy: data.attended_by,
+      comment: data.comment,
     };
   }
 }

@@ -4,7 +4,11 @@ import type {
   ManeuverSimple,
   TravelSimple,
 } from '../../core/models';
-import { DriverPosturaSimple, DriverSimple, Modality } from '../../drivers/models';
+import {
+  DriverPosturaSimple,
+  DriverSimple,
+  Modality,
+} from '../../drivers/models';
 
 import { Dayjs } from 'dayjs';
 import type { MaintenanceRecordSimple } from '../../maintenance/models';
@@ -18,7 +22,7 @@ export interface VehicleBase {
   readonly id: number;
   readonly name: string;
   licensePlate: string | null;
-  serialNumber: string | null;  
+  serialNumber: string | null;
   fleetType: string | null;
   status: string;
   vehicleType: string | null;
@@ -74,7 +78,6 @@ export interface VehicleWithRealStatus extends Vehicle {
   readonly realStatus: VehicleRealStatus;
 }
 
-
 export interface VehicleStatusChangeEvent {
   id: number;
   vehicleId: number;
@@ -84,3 +87,24 @@ export interface VehicleStatusChangeEvent {
   endDate: Dayjs | null;
   deliveryDate: Dayjs | null;
 }
+
+// Motum events
+
+export type MotumEventStatus = 'pending' | 'attended'
+
+export interface MotumEvent {
+  id: number;
+  eventType: number;
+  event: string;
+  eventTypeName: string;
+  eventDescription: string | null;
+  vehicleName: string;
+  createdAt: Dayjs;
+  status: MotumEventStatus;
+  latitude: number;
+  longitude: number;
+  attendedAt: Dayjs | null;
+  attendedBy: string | null;
+  comment: string | null;
+}
+
