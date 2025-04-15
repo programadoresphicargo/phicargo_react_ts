@@ -14,7 +14,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 import NavbarViajes from "../navbar";
 import Slide from '@mui/material/Slide';
 import { toast } from 'react-toastify';
-import NavbarViajes from "../navbar";
 import odooApi from "@/api/odoo-api";
 
 const CodigosPostales = ({ }) => {
