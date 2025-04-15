@@ -4,16 +4,17 @@ import {
   useMaterialReactTable,
 } from 'material-react-table';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
+
 import { Box } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import NavbarViajes from "../navbar";
 import Slide from '@mui/material/Slide';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
-import NavbarViajes from "../navbar";
 
 const CodigosPostales = ({ }) => {
 
@@ -91,10 +92,6 @@ const CodigosPostales = ({ }) => {
       sx: {
         borderRadius: '8px',
         overflow: 'hidden',
-      },
-    },
-    muiTableContainerProps: {
-      sx: {
         maxHeight: 'calc(100vh - 210px)',
       },
     },
