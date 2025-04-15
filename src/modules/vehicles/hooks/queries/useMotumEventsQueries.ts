@@ -18,6 +18,7 @@ export const useMotumEventsQueries = (conf: Conf) => {
   const getMotumEventsQuery = useQuery({
     queryKey: ['motum-events', status, startDate, endDate],
     queryFn: () => VehicleServiceApi.getMotumEvents(status, startDate, endDate),
+    staleTime: 1000 * 60 * 2,
   });
 
   const attendMotumEventMutation = useMutation({
