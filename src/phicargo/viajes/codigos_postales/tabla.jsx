@@ -11,14 +11,14 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
-import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import NavbarViajes from "../navbar";
+import odooApi from "@/api/odoo-api";
 
 const CodigosPostales = ({ }) => {
 
   const [data, setData] = useState([]);
-  const [isLoading2, setLoading] = useState();
+  const [isLoading, setLoading] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -59,7 +59,7 @@ const CodigosPostales = ({ }) => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
-    state: { isLoading: isLoading2 },
+    state: { isLoading: isLoading },
     enableColumnPinning: true,
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
@@ -85,12 +85,6 @@ const CodigosPostales = ({ }) => {
         fontFamily: 'Inter',
         fontWeight: 'normal',
         fontSize: '14px',
-      },
-    },
-    muiTableContainerProps: {
-      sx: {
-        borderRadius: '8px',
-        overflow: 'hidden',
       },
     },
     muiTableContainerProps: {
