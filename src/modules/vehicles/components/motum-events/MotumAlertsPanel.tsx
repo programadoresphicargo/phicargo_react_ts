@@ -1,4 +1,4 @@
-import { Badge, IconButton, Tab, Tabs } from '@mui/material';
+import { Badge, IconButton, Tab, Tabs, Tooltip } from '@mui/material';
 import { useMemo, useState } from 'react';
 
 import Drawer from '@mui/material/Drawer';
@@ -32,17 +32,14 @@ export const MotumAlertsPanel = () => {
   };
 
   return (
-    <div>
-      <Badge badgeContent={getMotumEventsQuery.data?.length} color="warning">
-        <IconButton
-          sx={{ p: 0.5 }}
-          size="small"
-          color="warning"
-          onClick={toggleDrawer(true)}
-        >
-          <WarningAmberIcon />
-        </IconButton>
-      </Badge>
+    <>
+      <Tooltip title="Alertas Motum" arrow>
+        <Badge badgeContent={getMotumEventsQuery.data?.length} color="warning">
+          <IconButton color="inherit" onClick={toggleDrawer(true)}>
+            <WarningAmberIcon />
+          </IconButton>
+        </Badge>
+      </Tooltip>
       <Drawer
         open={open}
         onClose={toggleDrawer(false)}
@@ -82,7 +79,7 @@ export const MotumAlertsPanel = () => {
           />
         )}
       </Drawer>
-    </div>
+    </>
   );
 };
 

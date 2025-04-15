@@ -1,7 +1,6 @@
 import { ExportConfig, ExportToExcel } from '@/utilities';
 
 import { MaterialReactTable } from 'material-react-table';
-import { MotumAlertsPanel } from '@/modules/vehicles/components/motum-events/MotumAlertsPanel';
 import { Outlet } from 'react-router-dom';
 import { Vehicle } from '../../vehicles/models';
 import { VehicleInformationModal } from '../../vehicles/components/VehicleInformationModal';
@@ -36,9 +35,6 @@ const AsignacionUnidades = () => {
     showColumnFilters: true,
     showGlobalFilter: true,
     containerHeight: 'calc(100vh - 165px)',
-    toolbarActions: (
-      <MotumAlertsPanel />
-    )
   });
 
   return (
