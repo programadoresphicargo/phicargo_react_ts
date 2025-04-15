@@ -88,6 +88,10 @@ export interface VehicleStatusChangeEvent {
   deliveryDate: Dayjs | null;
 }
 
+// Motum events
+
+export type MotumEventStatus = 'pending' | 'attended'
+
 export interface MotumEvent {
   id: number;
   eventType: number;
@@ -96,8 +100,10 @@ export interface MotumEvent {
   eventDescription: string | null;
   vehicleName: string;
   createdAt: Dayjs;
-  status: string;
+  status: MotumEventStatus;
   latitude: number;
   longitude: number;
+  attendedAt: Dayjs | null;
+  attendedBy: string | null;
 }
 
