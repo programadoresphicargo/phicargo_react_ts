@@ -25,7 +25,7 @@ export const MotumEventItem = ({ event }: Props) => {
     },
   });
 
-  const { attendMotumEventMutation } = useMotumEventsQueries();
+  const { attendMotumEventMutation } = useMotumEventsQueries({});
 
   const onAttend: SubmitHandler<{ comment: string }> = (data) => {
     attendMotumEventMutation.mutate({
