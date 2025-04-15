@@ -66,11 +66,16 @@ export class VehicleServiceApi {
 
   static async getMotumEvents(
     status: string = 'pending',
+    startDate: string | null = null,
+    endDate: string | null = null,
   ): Promise<MotumEvent[]> {
+    let url = `/vehicles/alerts-motum/?status=${status}`;
+    if (startDate && endDate) {
+      url += `&start_date=${startDate}&end_date=${endDate}`;
+    }
+
     try {
-      const response = await odooApi.get<MotumEventAPI[]>(
-        `/vehicles/alerts-motum/?status=${status}`,
-      );
+      const response = await odooApi.get<MotumEventAPI[]>(url);
       return response.data.map(VehicleAdapter.toMotumEvent);
     } catch (error) {
       console.error(error);
@@ -81,7 +86,10 @@ export class VehicleServiceApi {
     }
   }
 
-  static async attendMotumEvent({ id, updatedItem }: UpdatableItem<{comment: string}>): Promise<MotumEvent> {
+  static async attendMotumEvent({
+    id,
+    updatedItem,
+  }: UpdatableItem<{ comment: string }>): Promise<MotumEvent> {
     try {
       const response = await odooApi.patch<MotumEventAPI>(
         `/vehicles/alerts-motum/${id}/attend`,
