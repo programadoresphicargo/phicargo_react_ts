@@ -99,7 +99,7 @@ const ReporteCumplimientoEjecutivoManiobra = () => {
             .filter((key) => !key.includes('id'))
             .filter((key) => !key.includes('id_cliente'))
             .map((key) => {
-                const isHora = /^\d{1,2}:\d{2}$/.test(key);
+                const isHora = /^\d{4}-\d{2}-\d{2}_\d{2}:\d{2}$/.test(key);
 
                 return {
                     accessorKey: key,
