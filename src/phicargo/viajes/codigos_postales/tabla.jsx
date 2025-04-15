@@ -24,7 +24,7 @@ const CodigosPostales = ({ }) => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await odooApi.get('/tms_travel/codigos_postales');
+      const response = await odooApi.get('/tms_travel/codigos_postales/');
       setData(response.data);
       setLoading(false);
     } catch (error) {
