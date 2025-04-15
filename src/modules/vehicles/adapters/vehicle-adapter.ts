@@ -146,6 +146,10 @@ export class VehicleAdapter {
       status: data.status,
       latitude: data.latitude,
       longitude: data.longitude,
+      attendedAt: data.attended_at
+        ? dayjs.utc(data.attended_at).tz('America/Mexico_City')
+        : null,
+      attendedBy: data.attended_by,
     };
   }
 }
