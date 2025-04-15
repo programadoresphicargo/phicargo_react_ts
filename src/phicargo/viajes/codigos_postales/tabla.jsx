@@ -91,11 +91,6 @@ const CodigosPostales = ({ }) => {
     },
     muiTableContainerProps: {
       sx: {
-<<<<<<< HEAD
-=======
-        borderRadius: '8px',
-        overflow: 'hidden',
->>>>>>> 933165944c8c99ed4bae79b0cad306c36e513a7c
         maxHeight: 'calc(100vh - 210px)',
       },
     },
