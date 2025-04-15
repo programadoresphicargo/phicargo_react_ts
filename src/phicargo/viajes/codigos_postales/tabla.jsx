@@ -4,12 +4,14 @@ import {
   useMaterialReactTable,
 } from 'material-react-table';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
+
 import { Box } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import NavbarViajes from "../navbar";
 import Slide from '@mui/material/Slide';
 import { toast } from 'react-toastify';
 import NavbarViajes from "../navbar";
@@ -89,6 +91,11 @@ const CodigosPostales = ({ }) => {
     },
     muiTableContainerProps: {
       sx: {
+<<<<<<< HEAD
+=======
+        borderRadius: '8px',
+        overflow: 'hidden',
+>>>>>>> 933165944c8c99ed4bae79b0cad306c36e513a7c
         maxHeight: 'calc(100vh - 210px)',
       },
     },
