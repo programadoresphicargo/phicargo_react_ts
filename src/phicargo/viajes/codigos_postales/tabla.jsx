@@ -93,6 +93,11 @@ const CodigosPostales = ({ }) => {
         overflow: 'hidden',
       },
     },
+    muiTableContainerProps: {
+      sx: {
+        maxHeight: 'calc(100vh - 210px)',
+      },
+    },
     renderTopToolbarCustomActions: ({ table }) => (
       <Box
         sx={{
