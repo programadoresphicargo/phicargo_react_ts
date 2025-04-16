@@ -28,6 +28,8 @@ import dayjs from 'dayjs';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import { useAuthContext } from "@/modules/auth/hooks";
+import { Link } from "@heroui/react";
+const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="left" ref={ref} {...props} />;
@@ -349,6 +351,12 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
                                                 isLoading={Loading}
                                             >
                                                 Guardar cambios
+                                            </Button>
+                                        )}
+
+                                        {id_folio != null && (
+                                            <Button color="danger" startContent={<i class="bi bi-filetype-pdf"></i>} showAnchorIcon href={`${apiUrl}/tms_travel/estadias/cortes/${id_folio}`} as={Link} isExternal={true}>
+                                                Cortes PDF
                                             </Button>
                                         )}
 
