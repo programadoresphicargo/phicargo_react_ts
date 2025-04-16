@@ -45,9 +45,6 @@ export class ManeuverStatsAdapter {
       maneuversLate: data.maneuvers_late.map((item) =>
         ManeuverStatsAdapter.toManeuverStateCount(item),
       ),
-      todayManeuversLate: data.today_maneuvers_late.map((item) =>
-        ManeuverStatsAdapter.toManeuverStateCount(item),
-      ),
       maneuversByOperator: data.maneuvers_by_operator.map((item) =>
         ManeuverStatsAdapter.toManeuversDriverJobCount(item),
       ),
