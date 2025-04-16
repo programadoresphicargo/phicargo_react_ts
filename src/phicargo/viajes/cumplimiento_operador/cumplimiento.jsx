@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useMemo, useContext } from 'react';
 import { Progress } from "@heroui/react";
 import { ViajeContext } from '../context/viajeContext';
-const { VITE_PHIDES_API_URL } = import.meta.env;
+import odooApi from '@/api/odoo-api';
+import { User, Link } from "@heroui/react";
 
 function CumplimientoOperador() {
 
@@ -14,20 +15,16 @@ function CumplimientoOperador() {
     }, []);
 
     const getEstatus = async () => {
-
         try {
             setLoading(true);
-            const response = await fetch(VITE_PHIDES_API_URL + '/aplicacion/viajes/porcentaje_cumplimiento.php', {
-                method: 'POST',
-                body: new URLSearchParams({
+            const response = await odooApi.get('/reportes_estatus_viajes/cumplimiento_estatus_operadores/', {
+                params: {
                     id_viaje: id_viaje,
                     id_operador: viaje.id_operador
-                }),
-            })
-            const jsonData = await response.json();
-            const data = await jsonData[0];
-
-            setValue(data.porcentaje_cumplimiento);
+                }
+            });
+            const data = await response.data;
+            setValue(data[0].porcentaje_estatus);
             setLoading(false);
         } catch (error) {
             setLoading(false);

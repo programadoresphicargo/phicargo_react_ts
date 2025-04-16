@@ -29,7 +29,12 @@ const ReporteCumplimiento = () => {
             const endDate = dates[1].format('YYYY-MM-DD');
             try {
                 setLoading(true);
-                const response = await odooApi.get('/reportes_estatus_viajes/cumplimiento_estatus_operadores/' + startDate + '/' + endDate);
+                const response = await odooApi.get('/reportes_estatus_viajes/cumplimiento_estatus_operadores/', {
+                    params: {
+                        fecha_inicio: startDate,
+                        fecha_fin: endDate
+                    }
+                });
                 setData(response.data);
                 setLoading(false);
             } catch (error) {
@@ -46,7 +51,7 @@ const ReporteCumplimiento = () => {
     const columns = useMemo(
         () => [
             { accessorKey: 'referencia', header: 'Referencia' },
-            { accessorKey: 'id_usuario', header: 'Operador', size: 150 },
+            { accessorKey: 'id_usuario', header: 'ID Usuario', size: 150 },
             { accessorKey: 'nombre_operador', header: 'Operador', size: 150 },
             { accessorKey: 'fecha_inicio', header: 'Fecha inicio', size: 150 },
             { accessorKey: 'estatus_enviados', header: 'Estatus enviados', size: 150 },
