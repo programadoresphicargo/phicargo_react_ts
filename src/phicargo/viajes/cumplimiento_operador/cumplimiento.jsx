@@ -7,12 +7,14 @@ import { User, Link } from "@heroui/react";
 function CumplimientoOperador() {
 
     const { id_viaje, viaje } = useContext(ViajeContext);
-    const [value, setValue] = React.useState(0);
+    const [value, setValue] = React.useState(0.0);
     const [isLoading, setLoading] = React.useState(false);
 
     useEffect(() => {
-        getEstatus();
-    }, []);
+        if (id_viaje && viaje?.id_operador) {
+            getEstatus();
+        }
+    }, [id_viaje, viaje?.id_operador]);
 
     const getEstatus = async () => {
         console.log(id_viaje);
@@ -26,7 +28,9 @@ function CumplimientoOperador() {
                 }
             });
             const data = await response.data;
-            setValue(data[0].porcentaje_estatus);
+            if (Array.isArray(data) && data.length > 0) {
+                setValue(data[0].porcentaje_estatus);
+            }
             setLoading(false);
         } catch (error) {
             setLoading(false);
@@ -37,15 +41,21 @@ function CumplimientoOperador() {
 
     return (
         <>
-            {viaje.id_operador}
-            <Progress
-                aria-label="Downloading..."
-                size="md"
-                value={value}
-                color="primary"
-                showValueLabel={true}
-                className="max-w-md"
-            />
+            {isLoading ? (
+                <div>Cargando cumplimiento...</div>
+            ) : (
+                <>
+                    {viaje.id_operador}
+                    <Progress
+                        aria-label="Downloading..."
+                        size="md"
+                        value={value}
+                        color="primary"
+                        showValueLabel={true}
+                        className="max-w-md"
+                    />
+                </>
+            )}
         </>
     )
 }
