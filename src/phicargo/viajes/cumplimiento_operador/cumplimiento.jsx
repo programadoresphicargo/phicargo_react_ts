@@ -15,6 +15,8 @@ function CumplimientoOperador() {
     }, []);
 
     const getEstatus = async () => {
+        console.log(id_viaje);
+        console.log(viaje.id_operador);
         try {
             setLoading(true);
             const response = await odooApi.get('/reportes_estatus_viajes/cumplimiento_estatus_operadores/', {
@@ -35,6 +37,7 @@ function CumplimientoOperador() {
 
     return (
         <>
+            {viaje.id_operador}
             <Progress
                 aria-label="Downloading..."
                 size="md"
