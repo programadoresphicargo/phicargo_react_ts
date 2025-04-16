@@ -1,6 +1,7 @@
 import { useDepartureAndArrivalQueries } from './useDepartureAndArrivalQueries';
 import { useDriverStatsQueries } from './useDriverStatsQueries';
 import { useLocation } from 'react-router-dom';
+import { useManeuversStatsQueries } from './useManeuversStatsQueries';
 import { useMemo } from 'react';
 import { useTravelStatsQueries } from './useTravelStatsQueries';
 import { useVehiclesStatsQueries } from './useVehiclesStatsQueries';
@@ -14,6 +15,7 @@ export const useRefetchFn = () => {
   const { driversStatsQuery } = useDriverStatsQueries();
   const { departureAndArrivalQuery } = useDepartureAndArrivalQueries();
   const { waybillStatsQuery } = useWaybillStatsQueries();
+  const { maneuversStatsQuery } = useManeuversStatsQueries();
 
   const refetchFn = useMemo(() => {
     if (pathname.includes('/dashboards/operaciones')) {
@@ -26,6 +28,8 @@ export const useRefetchFn = () => {
       return departureAndArrivalQuery.refetch;
     } else if (pathname.includes('/dashboards/finanzas')) {
       return waybillStatsQuery.refetch;
+    } else if (pathname.includes('/dashboards/maniobras')) {
+      return maneuversStatsQuery.refetch;
     } else {
       return () => {};
     }
