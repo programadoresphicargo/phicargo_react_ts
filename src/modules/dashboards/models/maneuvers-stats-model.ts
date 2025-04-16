@@ -8,6 +8,7 @@ export interface ManeuversDriverJobCount {
   totalManeuvers: number;
   maneuversLate: number;
   maneuversOnTime: number;
+  maneuversLost: number;
 }
 
 export interface ManeuversTerminalCount {

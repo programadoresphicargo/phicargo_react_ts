@@ -27,6 +27,7 @@ export class ManeuverStatsAdapter {
       totalManeuvers: data.total_maneuvers,
       maneuversLate: data.maneuvers_late,
       maneuversOnTime: data.maneuvers_on_time,
+      maneuversLost: data.maneuvers_lost,
     };
   }
 
