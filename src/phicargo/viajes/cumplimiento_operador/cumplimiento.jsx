@@ -45,7 +45,6 @@ function CumplimientoOperador() {
                 <div>Cargando cumplimiento...</div>
             ) : (
                 <>
-                    {viaje.id_operador}
                     <Progress
                         aria-label="Downloading..."
                         size="md"
