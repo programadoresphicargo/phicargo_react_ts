@@ -94,7 +94,7 @@ const ServiciosAplicadosCE = ({ onClose }) => {
             {
                 accessorKey: 'cantidad',
                 header: 'Cantidad',
-                enableEditing: true,
+                enableEditing: (row) => row.original.id_tipo_costo !== 4,
                 muiTableBodyCellProps: {
                     align: 'right',
                 },

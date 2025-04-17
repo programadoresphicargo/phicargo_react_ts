@@ -41,6 +41,7 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
     const [Loading, setLoading] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [CancelDialog, setCancelDialog] = useState(false);
+    const { session } = useAuthContext();
 
     const openCancelDialog = () => {
         setCancelDialog(true);
@@ -316,11 +317,13 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
                                             </Button>
                                         )}
 
-                                        {(formData.status === "borrador" || formData.status === 'confirmado') && (
-                                            <Button color="danger" onPress={openCancelDialog} startContent={<i class="bi bi-x-circle"></i>}>
-                                                Cancelar
-                                            </Button>
-                                        )}
+                                        {session?.user?.permissions?.includes(151) &&
+                                            (formData.status === "borrador" || formData.status === "confirmado") && (
+                                                <Button color="danger" onPress={openCancelDialog} startContent={<i className="bi bi-x-circle"></i>}>
+                                                    Cancelar
+                                                </Button>
+                                            )
+                                        }
 
                                         {formData.status === 'borrador' && (
                                             <Button color="success" onPress={confirmar_folio} className='text-white' startContent={<i class="bi bi-check-lg"></i>}>
