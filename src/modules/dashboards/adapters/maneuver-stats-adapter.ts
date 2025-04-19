@@ -27,6 +27,7 @@ export class ManeuverStatsAdapter {
       totalManeuvers: data.total_maneuvers,
       maneuversLate: data.maneuvers_late,
       maneuversOnTime: data.maneuvers_on_time,
+      maneuversLost: data.maneuvers_lost,
     };
   }
 
@@ -42,9 +43,6 @@ export class ManeuverStatsAdapter {
   static toManeuverStats(data: ManeuverStatsApi): ManeuverStats {
     return {
       maneuversLate: data.maneuvers_late.map((item) =>
-        ManeuverStatsAdapter.toManeuverStateCount(item),
-      ),
-      todayManeuversLate: data.today_maneuvers_late.map((item) =>
         ManeuverStatsAdapter.toManeuverStateCount(item),
       ),
       maneuversByOperator: data.maneuvers_by_operator.map((item) =>

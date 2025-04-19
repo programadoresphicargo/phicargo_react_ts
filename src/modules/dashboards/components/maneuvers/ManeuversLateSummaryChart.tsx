@@ -1,5 +1,8 @@
 import { ExportConfig, ExportToExcel } from '@/utilities';
-import type { ManeuverStateCount, ManeuverStats } from '../../models/maneuvers-stats-model';
+import type {
+  ManeuverStateCount,
+  ManeuverStats,
+} from '../../models/maneuvers-stats-model';
 import {
   getBackgroundColors,
   getBorderColors,
@@ -26,31 +29,29 @@ export const ManeuversLateSummaryChart = (props: Props) => {
   const { isLoading, data, today } = props;
   const [chartData, setChartData] = useState<ChartData<'pie'> | null>(null);
 
-  const meneuvers = today ? data?.todayManeuversLate : data?.maneuversLate;
-
   useEffect(() => {
-    if (!meneuvers) return;
+    if (!data) return;
 
     const chartData: ChartData<'pie'> = {
-      labels: meneuvers.map((item) => item.state),
+      labels: data.maneuversLate.map((item) => item.state),
       datasets: [
         {
-          data: meneuvers.map((item) => item.maneuversCount),
+          data: data.maneuversLate.map((item) => item.maneuversCount),
           borderWidth: 2,
-          backgroundColor: getBackgroundColors(meneuvers.length),
-          borderColor: getBorderColors(meneuvers.length),
+          backgroundColor: getBackgroundColors(data.maneuversLate.length),
+          borderColor: getBorderColors(data.maneuversLate.length),
         },
       ],
     };
 
     setChartData(chartData);
-  }, [meneuvers]);
+  }, [data]);
 
   return (
     <ChartCard
       title={today ? 'Maniobras Hoy' : 'Maniobras Tarde'}
       isLoading={isLoading && !chartData}
-      downloadFn={() => exportData(meneuvers || [])}
+      downloadFn={() => exportData(data?.maneuversLate || [])}
     >
       {chartData && <Pie data={chartData} options={options} />}
     </ChartCard>

@@ -8,6 +8,7 @@ export interface ManeuversDriverJobCountApi {
   total_maneuvers: number;
   maneuvers_late: number;
   maneuvers_on_time: number;
+  maneuvers_lost: number;
 }
 
 export interface ManeuversTerminalCountApi {
@@ -17,7 +18,6 @@ export interface ManeuversTerminalCountApi {
 
 export interface ManeuverStatsApi {
   maneuvers_late: ManeuverStateCountApi[];
-  today_maneuvers_late: ManeuverStateCountApi[];
   maneuvers_by_operator: ManeuversDriverJobCountApi[];
   maneuvers_by_mover: ManeuversDriverJobCountApi[];
   maneuvers_by_terminal: ManeuversTerminalCountApi[];
