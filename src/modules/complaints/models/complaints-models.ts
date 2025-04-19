@@ -6,6 +6,9 @@ interface Customer {
   name: string;
 }
 
+export type ComplaintStatus = 'open' | 'closed' | 'in_process';
+export type ComplaintPriority = 'low' | 'medium' | 'high';
+
 export interface ComplaintBase {
   phicargoCompany: string;
   responsible: string;
@@ -13,7 +16,7 @@ export interface ComplaintBase {
   complaintType: string;
   complaintDescription: string;
   complaintSuggestion: string;
-  priority: string;
+  priority: ComplaintPriority;
   response: string | null;
   responseDate: Dayjs | null;
 }
@@ -24,7 +27,7 @@ export interface ComplaintCreate extends ComplaintBase {
 
 export interface Complaint extends ComplaintBase {
   id: number;
-  status: string;
+  status: ComplaintStatus;
   complaintDate: Dayjs;
   createdBy: UserRead;
   customer: Customer | null;

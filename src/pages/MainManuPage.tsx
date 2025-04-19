@@ -112,6 +112,12 @@ const menuItems: MenuItemType[] = [
     link: '/servicios',
     requiredPermissions: [204],
   },
+  // {
+  //   icon: shipingcontainer,
+  //   label: 'Quejas',
+  //   link: '/quejas',
+  //   requiredPermissions: [],
+  // },
 ];
 
 const MainMenuPage = () => {
