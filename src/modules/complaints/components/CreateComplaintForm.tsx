@@ -58,8 +58,6 @@ export const CreateComplaintForm = ({ onClose }: Props) => {
   } = useCreateComplaintMutation();
 
   const onSubmit: SubmitHandler<ComplaintCreate> = (data) => {
-    console.log(data);
-
     mutate(data, {
       onSuccess: () => {
         onClose();
