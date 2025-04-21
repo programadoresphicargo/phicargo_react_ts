@@ -23,6 +23,7 @@ import { useAuthContext } from "@/modules/auth/hooks";
 import Viaje from "../viaje";
 
 const { VITE_PHIDES_API_URL } = import.meta.env;
+const { VITE_ODOO_API_URL } = import.meta.env;
 
 function EstatusHistorialAgrupado({ registros_agrupados }) {
 
@@ -165,7 +166,7 @@ function EstatusHistorialAgrupado({ registros_agrupados }) {
                                 <Avatar
                                     isBordered
                                     color="primary"
-                                    src={VITE_PHIDES_API_URL + `/img/status/${step.imagen}`}
+                                    src={VITE_ODOO_API_URL + `/img/status/${step.imagen}`}
                                 />
                             }
                         >
@@ -176,7 +177,7 @@ function EstatusHistorialAgrupado({ registros_agrupados }) {
                                             isBordered
                                             radius="full"
                                             size="md"
-                                            src={VITE_PHIDES_API_URL + "/img/operador.png"}
+                                            src={VITE_ODOO_API_URL + "/img/operador.png"}
                                         />
                                         <div className="flex flex-col gap-1 items-start justify-center">
                                             <h4 className="text-small font-semibold leading-none text-default-600">Enviado por</h4>
@@ -264,7 +265,7 @@ function EstatusHistorialAgrupado({ registros_agrupados }) {
                                                 isBordered
                                                 radius="full"
                                                 size="md"
-                                                src={VITE_PHIDES_API_URL + "/img/operador.png"}
+                                                src={VITE_ODOO_API_URL + "/img/operador.png"}
                                             />
                                             <div className="flex flex-col gap-1 items-start justify-center">
                                                 <h4 className="text-small font-semibold leading-none text-default-600">Añadio un comentario</h4>
@@ -292,7 +293,7 @@ function EstatusHistorialAgrupado({ registros_agrupados }) {
                                                 isBordered
                                                 radius="full"
                                                 size="md"
-                                                src={VITE_PHIDES_API_URL + "/img/operador.png"}
+                                                src={VITE_ODOO_API_URL + "/img/operador.png"}
                                             />
                                             <div className="flex flex-col gap-1 items-start justify-center">
                                                 <h4 className="text-small font-semibold leading-none text-default-600">Enviado por</h4>

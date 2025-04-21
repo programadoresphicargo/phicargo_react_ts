@@ -16,7 +16,7 @@ import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { User } from "@heroui/react";
 import Travel from '@/phicargo/viajes/control/viaje';
 import { ViajeContext } from '@/phicargo/viajes/context/viajeContext';
-const { VITE_PHIDES_API_URL } = import.meta.env;
+const { VITE_ODOO_API_URL } = import.meta.env;
 
 const ReporteCumplimientoEjecutivo = () => {
 
@@ -133,7 +133,7 @@ const ReporteCumplimientoEjecutivo = () => {
                                         color: min20 == null ? 'danger' : 'primary',
                                         isBordered: true,
                                         size: 'sm',
-                                        src: VITE_PHIDES_API_URL + `/img/status/${imagen}`,
+                                        src: VITE_ODOO_API_URL + `/assets/trafico/estatus_operativos/${imagen}`,
                                     }}
                                     description={fechaEnvio}
                                     name={value}
