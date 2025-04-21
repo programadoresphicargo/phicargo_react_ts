@@ -28,8 +28,7 @@ import odooApi from '@/api/odoo-api';
 import { parseDate } from "@internationalized/date";
 import { toast } from 'react-toastify';
 import { useJourneyDialogs } from '../seguimiento/funciones';
-
-const { VITE_PHIDES_API_URL } = import.meta.env;
+const { VITE_ODOO_API_URL } = import.meta.env;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -132,7 +131,7 @@ function PanelEnvio({ open, cerrar, id_reporte, estatusSeleccionado, comentarios
       cancelButtonColor: '#d33',
       confirmButtonText: 'Sí, enviar',
       cancelButtonText: 'Cancelar',
-      imageUrl: VITE_PHIDES_API_URL + '/img/status/start.png',
+      imageUrl: VITE_ODOO_API_URL + '/assets/trafico/estatus_operativos/start.png',
       imageWidth: 150,
       imageHeight: 150,
       imageAlt: 'Imagen de confirmación',
@@ -165,7 +164,7 @@ function PanelEnvio({ open, cerrar, id_reporte, estatusSeleccionado, comentarios
       cancelButtonColor: '#d33',
       confirmButtonText: 'Sí, enviar',
       cancelButtonText: 'Cancelar',
-      imageUrl: VITE_PHIDES_API_URL + '/img/status/start.png',
+      imageUrl: VITE_ODOO_API_URL + '/assets/trafico/estatus_operativos/start.png',
       imageWidth: 150,
       imageHeight: 150,
       imageAlt: 'Imagen de confirmación',
@@ -224,7 +223,7 @@ function PanelEnvio({ open, cerrar, id_reporte, estatusSeleccionado, comentarios
                       <CardBody className="overflow-visible flex items-center justify-center">
                         <Image
                           isZoomed
-                          src={VITE_PHIDES_API_URL + '/img/status/' + item.imagen}
+                          src={VITE_ODOO_API_URL + '/assets/trafico/estatus_operativos/' + item.imagen}
                           style={{ width: '80px' }}
                         />
                       </CardBody>

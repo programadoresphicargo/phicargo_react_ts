@@ -15,7 +15,7 @@ import odooApi from '@/api/odoo-api';
 import { tiempoTranscurrido } from '../../funciones/tiempo';
 import { DatePicker } from "@heroui/react";
 import { parseZonedDateTime, parseAbsoluteToLocal } from "@internationalized/date";
-const { VITE_PHIDES_API_URL } = import.meta.env;
+const { VITE_ODOO_API_URL } = import.meta.env;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -108,7 +108,7 @@ function EstatusHistorial() {
                                                 isBordered
                                                 radius="full"
                                                 size="md"
-                                                src={VITE_PHIDES_API_URL + `/img/status/${step.imagen}`}
+                                                src={VITE_ODOO_API_URL + `/assets/trafico/estatus_operativos/${step.imagen}`}
                                             />
                                         </Badge>
                                         <div className="flex flex-col gap-1 items-start justify-center">

@@ -28,8 +28,6 @@ import ViajesActivosMasivo from '../envio_masivo/viajes_activos';
 import { exportToCSV } from '../../utils/export';
 import odooApi from '@/api/odoo-api';
 
-const { VITE_PHIDES_API_URL } = import.meta.env;
-
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
