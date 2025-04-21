@@ -1,5 +1,6 @@
 import type { ComplaintPriority, ComplaintStatus } from '../complaints-models';
 
+import { ComplaintActionCreateApi } from './complaint-actions-models-api';
 import type { UserReadApi } from '@/modules/users-management/models';
 
 interface Customer {
@@ -17,16 +18,19 @@ export interface ComplaintBaseApi {
   priority: ComplaintPriority;
   response: string | null;
   response_date: string | null;
+  origin: string;
+  complaint_date: string;
 }
 
 export interface ComplaintCreateApi extends ComplaintBaseApi {
   customer_id: number;
+  actions: ComplaintActionCreateApi[];
 }
 
 export interface ComplaintApi extends ComplaintBaseApi {
   id: number;
   status: ComplaintStatus;
-  complaint_date: string;
+  created_at: string;
   created_by: UserReadApi;
   customer: Customer | null;
 }

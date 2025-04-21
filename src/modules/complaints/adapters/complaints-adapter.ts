@@ -1,6 +1,7 @@
 import type { Complaint, ComplaintCreate } from '../models/complaints-models';
 import type { ComplaintApi, ComplaintCreateApi } from '../models/api';
 
+import { ComplaintActionsAdapter } from './complaint-actions-adapter';
 import { UserAdapter } from '@/modules/users-management/adapters';
 import dayjs from 'dayjs';
 
@@ -21,6 +22,8 @@ export class ComplaintsAdapter {
       priority: data.priority,
       response: data.response,
       responseDate: data.response_date ? dayjs(data.response_date) : null,
+      origin: data.origin,
+      createdAt: dayjs(data.created_at),
     };
   }
 
@@ -38,6 +41,11 @@ export class ComplaintsAdapter {
       response_date: data.responseDate
         ? data.responseDate.format('YYYY-MM-DD')
         : null,
+      origin: data.origin,
+      complaint_date: data.complaintDate.format('YYYY-MM-DD'),
+      actions: data.actions.map(
+        ComplaintActionsAdapter.toComplaintActionCreateApi,
+      ),
     };
   }
 }

@@ -1,3 +1,4 @@
+import { ComplaintActionCreate } from './complaint-actions-models';
 import type { Dayjs } from 'dayjs';
 import type { UserRead } from '@/modules/users-management/models';
 
@@ -19,16 +20,21 @@ export interface ComplaintBase {
   priority: ComplaintPriority;
   response: string | null;
   responseDate: Dayjs | null;
+  origin: string;
+  complaintDate: Dayjs;
 }
 
 export interface ComplaintCreate extends ComplaintBase {
   customerId: number;
+  actions: ComplaintActionCreate[];
 }
+
+export type ComplaintUpdate = Partial<ComplaintCreate>;
 
 export interface Complaint extends ComplaintBase {
   id: number;
   status: ComplaintStatus;
-  complaintDate: Dayjs;
+  createdAt: Dayjs;
   createdBy: UserRead;
   customer: Customer | null;
 }
