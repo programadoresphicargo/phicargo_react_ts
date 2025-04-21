@@ -23,6 +23,7 @@ interface Props<T extends FieldValues> {
   label: string;
   placeholder?: string;
   required?: boolean;
+  initialInputValue?: string;
 }
 
 export const ContactsSearchInputMatch = <T extends FieldValues>({
@@ -32,8 +33,9 @@ export const ContactsSearchInputMatch = <T extends FieldValues>({
   rules,
   placeholder,
   required,
+  initialInputValue
 }: Props<T>) => {
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState(initialInputValue ?? '');
 
   const debouncedInput = useDebounce(inputValue, 400);
   const { contactsQuery } = useGetContacts(debouncedInput);
