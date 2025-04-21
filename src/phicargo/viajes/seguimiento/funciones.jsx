@@ -7,6 +7,7 @@ import axios from "axios";
 import odooApi from '@/api/odoo-api';
 import { useAuthContext } from "@/modules/auth/hooks";
 const { VITE_PHIDES_API_URL } = import.meta.env;
+const { VITE_ODOO_API_URL } = import.meta.env;
 
 export const useJourneyDialogs = () => {
 
@@ -22,7 +23,7 @@ export const useJourneyDialogs = () => {
             cancelButtonColor: '#d33',
             confirmButtonText: 'Sí, iniciar viaje',
             cancelButtonText: 'Cancelar',
-            imageUrl: VITE_PHIDES_API_URL + '/img/status/start.png',
+            imageUrl: VITE_ODOO_API_URL + '/assets/trafico/estatus_operativos/start.png',
             imageWidth: 150,
             imageHeight: 150,
             imageAlt: 'Imagen de confirmación',
@@ -37,7 +38,7 @@ export const useJourneyDialogs = () => {
         const result = await Swal.fire({
             title: '¿Realmente quieres finalizar este viaje?',
             text: 'Esta acción no se puede deshacer',
-            imageUrl: VITE_PHIDES_API_URL + '/img/status/final.gif',
+            imageUrl: VITE_ODOO_API_URL + '/assets/trafico/estatus_operativos/final.gif',
             imageWidth: 200,
             imageHeight: 200,
             imageAlt: 'Imagen',
@@ -86,7 +87,7 @@ export const useJourneyDialogs = () => {
         Swal.fire({
             title: '¿Realmente quieres reactivar este viaje?',
             text: 'Esta acción no se puede deshacer',
-            imageUrl: VITE_PHIDES_API_URL + '/img/status/final.gif',
+            imageUrl: VITE_ODOO_API_URL + '/assets/trafico/estatus_operativos/final.gif',
             imageWidth: 200,
             imageHeight: 200,
             imageAlt: 'Imagen',
