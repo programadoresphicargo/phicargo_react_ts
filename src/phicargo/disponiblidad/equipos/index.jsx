@@ -3,6 +3,7 @@ import { Tabs, Tab, Card, CardBody } from "@heroui/react";
 import HistorialManiobrasVehiculo from './historial_maniobras';
 import HistorialViajesVehiculo from './historial_viajes';
 import { ViajeProvider } from '@/phicargo/viajes/context/viajeContext';
+import { ManiobraProvider } from '@/phicargo/maniobras/context/viajeContext';
 
 const IndexHistorial = ({ vehicle_id }) => {
 
@@ -20,7 +21,9 @@ const IndexHistorial = ({ vehicle_id }) => {
             <Tab key="maniobras" title="Maniobras">
                 <Card>
                     <CardBody>
-                        <HistorialManiobrasVehiculo vehicle_id={vehicle_id}></HistorialManiobrasVehiculo>
+                        <ManiobraProvider>
+                            <HistorialManiobrasVehiculo vehicle_id={vehicle_id}></HistorialManiobrasVehiculo>
+                        </ManiobraProvider>
                     </CardBody>
                 </Card>
             </Tab>
