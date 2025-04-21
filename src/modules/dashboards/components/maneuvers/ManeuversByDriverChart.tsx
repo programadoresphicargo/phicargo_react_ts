@@ -90,6 +90,14 @@ export const ManeuversByDriverChart = (props: Props) => {
           backgroundColor: ['rgba(40, 159, 64, 0.6)'],
           borderColor: ['rgba(40, 159, 64, 1)'],
         },
+        {
+          label: 'Perdidas',
+          data: stats.map((item) => item.maneuversLost),
+          borderWidth: 2,
+          borderRadius: 10,
+          backgroundColor: ['rgba(255, 99, 132, 0.6)'],
+          borderColor: ['rgba(255, 99, 132, 1)'],
+        },
       ],
     };
 
@@ -120,6 +128,7 @@ const exportData = (data: ManeuversDriverJobCount[]) => {
       { accessorFn: (data) => data.totalManeuvers, header: 'Maniobras' },
       { accessorFn: (data) => data.maneuversLate, header: 'Tarde' },
       { accessorFn: (data) => data.maneuversOnTime, header: 'A tiempo' },
+      { accessorFn: (data) => data.maneuversLost, header: 'Perdida' },
     ],
   };
 

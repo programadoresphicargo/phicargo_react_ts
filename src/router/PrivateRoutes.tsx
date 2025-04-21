@@ -5,6 +5,7 @@ import { Suspense, lazy } from 'react';
 
 import AccesoForm from '../phicargo/accesos/formulario';
 import AvailabilityRoutes from '../modules/drivers-and-vehicles/routes/AvailabilityRoutes';
+import ComplaintsRoutes from '@/modules/complaints/routes/ComplaintsRoutes';
 import DOReportRoutes from '@/modules/daily-operations-report/routes/DOReportRoutes';
 import DashboardsRoutes from '@/modules/dashboards/routes/DashboardRoutes';
 import { LoadingPage } from '@/pages/LoadingPage';
@@ -350,6 +351,9 @@ export const PrivateRoutes = () => {
 
         {/* Solicitudes de Servicio */}
         {ServiceRequestsRoutes()}
+
+        {/* Módulo de quejas */}
+        {ComplaintsRoutes()}
 
         {/* Ruta para manejar rutas no válidas */}
         <Route path="*" element={<NotFoundPage />} />
