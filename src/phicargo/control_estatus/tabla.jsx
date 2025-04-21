@@ -13,7 +13,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import odooApi from '@/api/odoo-api';
-const { VITE_PHIDES_API_URL } = import.meta.env;
+const { VITE_ODOO_API_URL } = import.meta.env;
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -57,16 +57,18 @@ const EstatusOperativos = ({ estado }) => {
   const cambiarPermiso = async (id_estatus, columna, estado) => {
     try {
       setLoading(true);
-      const response = await fetch(VITE_PHIDES_API_URL + '/control_estatus/cambiarPermiso.php', {
-        method: 'POST',
-        body: new URLSearchParams({
+      const response = await odooApi.post('/estatus_operativos/cambiar_permisos/', {
+        params: {
           id_estatus: id_estatus,
           columna: columna,
           estado: estado
-        })
+        }
       });
       setLoading(false);
-      fetchData();
+      if (response.data.success === true) {
+        fetchData();
+      } else {
+      }
     } catch (error) {
       console.error('Error al obtener los datos:', error);
     }
@@ -92,7 +94,7 @@ const EstatusOperativos = ({ estado }) => {
             <img
               height={50}
               width={50}
-              src={VITE_PHIDES_API_URL + `/img/status/${imagen}`} />
+              src={VITE_ODOO_API_URL + `/assets/trafico/estatus_operativos/${imagen}`} />
           );
         },
       },
