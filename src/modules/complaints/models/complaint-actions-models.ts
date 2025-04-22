@@ -14,12 +14,19 @@ export interface ComplaintActionBase {
   commitmentDate: Dayjs;
 }
 
-export type ComplaintActionCreate = ComplaintActionBase;
-
 export interface ComplaintAction extends ComplaintActionBase {
   id: number;
   status: ComplaintActionStatus;
   createdAt: Dayjs;
   createdBy: UserRead;
 }
+
+export type ComplaintActionCreate = ComplaintActionBase;
+
+export type ComplaintActionUpdate = Partial<
+  Pick<
+    ComplaintAction,
+    'status' | 'commitmentDate' | 'actionPlan' | 'responsible'
+  >
+>;
 

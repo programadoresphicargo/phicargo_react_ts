@@ -1,8 +1,13 @@
 import type {
   ComplaintAction,
   ComplaintActionCreate,
+  ComplaintActionUpdate,
 } from '../models/complaint-actions-models';
-import type { ComplaintActionApi, ComplaintActionCreateApi } from '../models/api';
+import type {
+  ComplaintActionApi,
+  ComplaintActionCreateApi,
+  ComplaintActionUpdateApi,
+} from '../models/api';
 
 import { UserAdapter } from '@/modules/users-management/adapters';
 import dayjs from 'dayjs';
@@ -30,6 +35,26 @@ export class ComplaintActionsAdapter {
       responsible: data.responsible,
       commitment_date: data.commitmentDate.format('YYYY-MM-DD'),
     };
+  }
+
+  static toComplaintActionUpdateApi(
+    data: ComplaintActionUpdate,
+  ): ComplaintActionUpdateApi {
+    const complaint: ComplaintActionUpdateApi = {};
+
+    if (data.actionPlan) {
+      complaint.action_plan = data.actionPlan;
+    }
+    if (data.responsible) {
+      complaint.responsible = data.responsible;
+    }
+    if (data.status) {
+      complaint.status = data.status;
+    }
+    if (data.commitmentDate) {
+      complaint.commitment_date = data.commitmentDate.format('YYYY-MM-DD');
+    }
+    return complaint;
   }
 }
 
