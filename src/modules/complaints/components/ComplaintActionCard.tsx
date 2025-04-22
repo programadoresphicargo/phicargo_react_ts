@@ -1,19 +1,13 @@
 import { Chip } from '@mui/material';
 import type { ComplaintAction } from '../models';
 import { UpdateActionStatusOptions } from './UpdateActionStatusOptions';
-import { getComplaintActionStatusConfig } from '../utilities';
-import { useMemo } from 'react';
+import { complaintActionStatus } from '../utilities';
 
 interface Props {
   action: ComplaintAction;
 }
 
 export const ComplaintActionCard = ({ action }: Props) => {
-  const statusConf = useMemo(
-    () => getComplaintActionStatusConfig(action.status),
-    [action],
-  );
-
   return (
     <>
       <div className="flex flex-row gap-3 p-3 mx-2 border rounded-md">
@@ -23,10 +17,10 @@ export const ComplaintActionCard = ({ action }: Props) => {
             <h3 className="text-lg font-semibold text-gray-800 uppercase">
               {action.responsible}{' '}
               <Chip
-                label={statusConf?.status}
-                color={statusConf?.color}
+                label={complaintActionStatus.getLabel(action.status)}
+                color={complaintActionStatus.getColor(action.status)}
                 variant="outlined"
-                size='small'
+                size="small"
               />
             </h3>
             <span className="text-sm text-gray-500">

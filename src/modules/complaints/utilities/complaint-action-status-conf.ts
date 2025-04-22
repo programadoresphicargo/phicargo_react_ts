@@ -1,28 +1,12 @@
+import { KeyLabel, type KeyLabelConf } from '@/utilities';
 import type { ComplaintActionStatus } from '../models';
 
-interface ComplaintActionStatusConf {
-  key: ComplaintActionStatus;
-  status: string;
-  color:
-    | 'default'
-    | 'primary'
-    | 'secondary'
-    | 'error'
-    | 'info'
-    | 'success'
-    | 'warning';
-}
-
-export const complaintActionStatusConf: ComplaintActionStatusConf[] = [
-  { key: 'canceled', status: 'Cancelado', color: 'error' },
-  { key: 'in_progress', status: 'En Proceso', color: 'warning' },
-  { key: 'completed', status: 'Completado', color: 'success' },
-  { key: 'pending', status: 'Pendiente', color: 'info' },
+export const conf: KeyLabelConf<ComplaintActionStatus>[] = [
+  { key: 'canceled', label: 'Cancelado', color: 'error' },
+  { key: 'in_progress', label: 'En Proceso', color: 'warning' },
+  { key: 'completed', label: 'Completado', color: 'success' },
+  { key: 'pending', label: 'Pendiente', color: 'info' },
 ];
 
-export const getComplaintActionStatusConfig = (
-  key: ComplaintActionStatus,
-): ComplaintActionStatusConf | undefined => {
-  return complaintActionStatusConf.find((conf) => conf.key === key);
-};
+export const complaintActionStatus = new KeyLabel(conf);
 
