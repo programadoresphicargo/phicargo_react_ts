@@ -20,6 +20,7 @@ import { DatePickerElement } from 'react-hook-form-mui/date-pickers';
 import { TextFieldElement } from 'react-hook-form-mui';
 import dayjs from 'dayjs';
 import { useGetComplaintActionsQuery } from '../hooks/queries';
+import { useUpdateComplaintMutation } from '../hooks/mutations';
 
 interface Props {
   onClose: () => void;
@@ -35,8 +36,17 @@ export const EditComplaintForm = ({ onClose, complaint }: Props) => {
     getComplaintActionsQuery: { data: actions, isLoading },
   } = useGetComplaintActionsQuery(complaint.id);
 
+  const {
+    updateComplaintMutation: { mutate, isPending },
+  } = useUpdateComplaintMutation();
+
   const onSubmit: SubmitHandler<ComplaintCreate> = (data) => {
-    console.log(data);
+    if (isPending) return;
+
+    mutate({
+      id: complaint.id,
+      updatedItem: data,
+    });
   };
 
   return (
@@ -59,7 +69,7 @@ export const EditComplaintForm = ({ onClose, complaint }: Props) => {
             textTransform: 'uppercase',
           }}
         >
-          Editar { complaint.phicargoCompany }
+          Editar {complaint.phicargoCompany}
         </Typography>
         <Box sx={{ display: 'flex', gap: '1rem' }}>
           <MuiCloseButton onClick={onClose} />
@@ -68,6 +78,7 @@ export const EditComplaintForm = ({ onClose, complaint }: Props) => {
       <DialogContent>
         <section className="flex flex-row gap-4 mt-6">
           <section className="flex flex-col gap-4 border p-4 rounded-md w-1/2 overflow-y-auto h-[calc(100vh-250px)]">
+            {/* TODO: Mostrar los demas datos del complaint */}
             <form className="flex flex-col gap-4 mt-6">
               <TextFieldElement
                 control={control}
@@ -116,7 +127,7 @@ export const EditComplaintForm = ({ onClose, complaint }: Props) => {
         </Button>
         <MuiSaveButton
           variant="contained"
-          // loading={isPending}
+          loading={isPending}
           loadingPosition="end"
           onClick={handleSubmit(onSubmit)}
         />

@@ -9,7 +9,7 @@ import type { ComplaintActionApi, ComplaintApi } from '../models/api';
 import { ComplaintActionsAdapter, ComplaintsAdapter } from '../adapters';
 
 import { AxiosError } from 'axios';
-import { UpdatableItem } from '@/types';
+import type { UpdatableItem } from '@/types';
 import odooApi from '@/api/odoo-api';
 
 export class ComplaintsService {
