@@ -3,6 +3,7 @@ import type {
   ComplaintAction,
   ComplaintActionUpdate,
   ComplaintCreate,
+  ComplaintUpdate,
 } from '../models';
 import type { ComplaintActionApi, ComplaintApi } from '../models/api';
 import { ComplaintActionsAdapter, ComplaintsAdapter } from '../adapters';
@@ -40,6 +41,28 @@ export class ComplaintsService {
         );
       }
       throw new Error('Error al crear la queja');
+    }
+  }
+
+  static async updateComplaint({
+    id,
+    updatedItem,
+  }: UpdatableItem<ComplaintUpdate>): Promise<Complaint> {
+    const body = ComplaintsAdapter.toComplaintUpdateApi(updatedItem);
+    try {
+      const response = await odooApi.patch<ComplaintApi>(
+        `/complaints/${id}`,
+        body,
+      );
+      return ComplaintsAdapter.toComplaint(response.data);
+    } catch (error) {
+      console.error(error);
+      if (error instanceof AxiosError) {
+        throw new Error(
+          error.response?.data.detail || 'Error al actualizar la queja',
+        );
+      }
+      throw new Error('Error al actualizar la queja');
     }
   }
 
