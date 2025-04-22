@@ -1,5 +1,13 @@
-import type { Complaint, ComplaintCreate } from '../models/complaints-models';
-import type { ComplaintApi, ComplaintCreateApi } from '../models/api';
+import type {
+  Complaint,
+  ComplaintCreate,
+  ComplaintUpdate,
+} from '../models/complaints-models';
+import type {
+  ComplaintApi,
+  ComplaintCreateApi,
+  ComplaintUpdateApi,
+} from '../models/api';
 
 import { ComplaintActionsAdapter } from './complaint-actions-adapter';
 import { UserAdapter } from '@/modules/users-management/adapters';
@@ -47,6 +55,49 @@ export class ComplaintsAdapter {
         ComplaintActionsAdapter.toComplaintActionCreateApi,
       ),
     };
+  }
+
+  static toComplaintUpdateApi(data: ComplaintUpdate): ComplaintUpdateApi {
+    const complaint: ComplaintUpdateApi = {};
+
+    if (data.phicargoCompany) {
+      complaint.phicargo_company = data.phicargoCompany;
+    }
+    if (data.responsible) {
+      complaint.responsible = data.responsible;
+    }
+    if (data.area) {
+      complaint.area = data.area;
+    }
+    if (data.complaintType) {
+      complaint.complaint_type = data.complaintType;
+    }
+    if (data.complaintDescription) {
+      complaint.complaint_description = data.complaintDescription;
+    }
+    if (data.complaintSuggestion) {
+      complaint.complaint_suggestion = data.complaintSuggestion;
+    }
+    if (data.priority) {
+      complaint.priority = data.priority;
+    }
+    if (data.response) {
+      complaint.response = data.response;
+    }
+    if (data.responseDate) {
+      complaint.response_date = data.responseDate.format('YYYY-MM-DD');
+    }
+    if (data.origin) {
+      complaint.origin = data.origin;
+    }
+    if (data.complaintDate) {
+      complaint.complaint_date = data.complaintDate.format('YYYY-MM-DD');
+    }
+    if (data.status) {
+      complaint.status = data.status;
+    }
+
+    return complaint;
   }
 }
 

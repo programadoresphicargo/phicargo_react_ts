@@ -27,6 +27,10 @@ export interface ComplaintCreateApi extends ComplaintBaseApi {
   actions: ComplaintActionCreateApi[];
 }
 
+export type ComplaintUpdateApi = Partial<ComplaintBaseApi> & {
+  status?: ComplaintStatus;
+};
+
 export interface ComplaintApi extends ComplaintBaseApi {
   id: number;
   status: ComplaintStatus;
