@@ -3,7 +3,7 @@ import { Dayjs } from 'dayjs';
 import { UserRead } from '../../users-management/models';
 import { Workshop } from './workshop.model';
 
-export type MaintenanceRecordStatus = 'pending' | 'completed' | 'cancelled';
+export type MaintenanceRecordStatus = 'pending' | 'completed' | 'cancelled' | 'programmed';
 
 export interface VehicleInfo {
   id: number;

@@ -5,7 +5,7 @@ import { Tab, Tabs } from '@heroui/react';
 import CheckIcon from '@mui/icons-material/Check';
 import CompleteDialog from '../components/CompleteDialog';
 import type { MaintenanceRecord } from '../models';
-import { Modal } from '@/components';
+import { MuiModal } from '@/components';
 import { RecordComments } from './comments/RecordComments';
 import { RecordInfo } from './RecordInfo';
 import { TextareaInput } from '@/components/inputs';
@@ -49,19 +49,17 @@ export const RecordDetailsModal = ({ open, onClose, record }: Props) => {
 
   return (
     <>
-      <Modal
-        scrollBehavior="inside"
-        isOpen={open}
-        onOpenChange={onClose}
-        showFooter={false}
+      <MuiModal
+        open={open}
+        onClose={onClose}
+        maxWidth="md"
         header={
           <h2 className="uppercase font-thin">
             Detalles: <span className="font-bold">{record.vehicle.name}</span>
           </h2>
         }
-        size="3xl"
       >
-        <div className="flex flex-row justify-between p-4">
+        <div className="flex flex-row justify-between gap-4 p-4">
           <RecordInfo record={record} />
           <div>
             <TextareaInput
@@ -109,7 +107,7 @@ export const RecordDetailsModal = ({ open, onClose, record }: Props) => {
             <RecordComments record={record} type="update" />
           </Tab>
         </Tabs>
-      </Modal>
+      </MuiModal>
 
       <CompleteDialog
         open={completeModal}

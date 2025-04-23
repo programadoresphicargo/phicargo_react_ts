@@ -1,8 +1,15 @@
-import type { Complaint, ComplaintCreate } from '../models';
+import type {
+  Complaint,
+  ComplaintAction,
+  ComplaintActionUpdate,
+  ComplaintCreate,
+  ComplaintUpdate,
+} from '../models';
+import type { ComplaintActionApi, ComplaintApi } from '../models/api';
+import { ComplaintActionsAdapter, ComplaintsAdapter } from '../adapters';
 
 import { AxiosError } from 'axios';
-import type { ComplaintApi } from '../models/api';
-import { ComplaintsAdapter } from '../adapters';
+import type { UpdatableItem } from '@/types';
 import odooApi from '@/api/odoo-api';
 
 export class ComplaintsService {
@@ -34,6 +41,72 @@ export class ComplaintsService {
         );
       }
       throw new Error('Error al crear la queja');
+    }
+  }
+
+  static async updateComplaint({
+    id,
+    updatedItem,
+  }: UpdatableItem<ComplaintUpdate>): Promise<Complaint> {
+    const body = ComplaintsAdapter.toComplaintUpdateApi(updatedItem);
+    try {
+      const response = await odooApi.patch<ComplaintApi>(
+        `/complaints/${id}`,
+        body,
+      );
+      return ComplaintsAdapter.toComplaint(response.data);
+    } catch (error) {
+      console.error(error);
+      if (error instanceof AxiosError) {
+        throw new Error(
+          error.response?.data.detail || 'Error al actualizar la queja',
+        );
+      }
+      throw new Error('Error al actualizar la queja');
+    }
+  }
+
+  static async getComplaintActionsByComplaint(
+    complaintId: number,
+  ): Promise<ComplaintAction[]> {
+    try {
+      const response = await odooApi.get<ComplaintActionApi[]>(
+        `/complaints/${complaintId}/actions`,
+      );
+      return response.data.map(ComplaintActionsAdapter.toComplaintAction);
+    } catch (error) {
+      console.error(error);
+      if (error instanceof AxiosError) {
+        throw new Error(
+          error.response?.data.detail ||
+            'Error al obtener las acciones de la queja',
+        );
+      }
+      throw new Error('Error al obtener las acciones de la queja');
+    }
+  }
+
+  static async updateComplaintAction({
+    id,
+    updatedItem,
+  }: UpdatableItem<ComplaintActionUpdate>): Promise<ComplaintAction> {
+    const body =
+      ComplaintActionsAdapter.toComplaintActionUpdateApi(updatedItem);
+    try {
+      const response = await odooApi.patch<ComplaintActionApi>(
+        `/complaints/actions/${id}`,
+        body,
+      );
+      return ComplaintActionsAdapter.toComplaintAction(response.data);
+    } catch (error) {
+      console.error(error);
+      if (error instanceof AxiosError) {
+        throw new Error(
+          error.response?.data.detail ||
+            'Error al actualizar la acción de la queja',
+        );
+      }
+      throw new Error('Error al actualizar la acción de la queja');
     }
   }
 }
