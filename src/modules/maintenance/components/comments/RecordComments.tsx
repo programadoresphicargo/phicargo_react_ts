@@ -70,11 +70,9 @@ export const RecordComments = ({ record, type }: Props) => {
       radius="md"
     >
       <CardHeader className="flex items-center justify-between">
-        {type === 'update' && (
-          <div className="flex items-center gap-2">
-            <RefreshButton onRefresh={() => refetch()} isLoading={isFetching} />
-          </div>
-        )}
+        <div className="flex items-center gap-2">
+          <RefreshButton onRefresh={() => refetch()} isLoading={isFetching} />
+        </div>
       </CardHeader>
       <CardBody>
         {comments && comments.length > 0 ? (
