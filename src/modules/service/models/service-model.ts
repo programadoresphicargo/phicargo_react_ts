@@ -21,6 +21,7 @@ export interface Travel {
   status: string;
   driver: string | null;
   vehicle: string | null;
+  state: string | null;
 }
 
 export interface Maneuver {

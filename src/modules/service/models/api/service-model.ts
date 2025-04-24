@@ -19,6 +19,7 @@ export interface TravelApi {
   x_status_viaje: string;
   driver: string | null;
   vehicle: string | null;
+  state: string | null;
 }
 
 export interface ManeuverApi {
