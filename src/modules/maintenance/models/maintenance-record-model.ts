@@ -1,9 +1,13 @@
-import { BranchSimple } from '../../core/models';
-import { Dayjs } from 'dayjs';
-import { UserRead } from '../../users-management/models';
-import { Workshop } from './workshop.model';
+import type { BranchSimple } from '../../core/models';
+import type { Dayjs } from 'dayjs';
+import type { UserRead } from '../../users-management/models';
+import type { Workshop } from './workshop.model';
 
-export type MaintenanceRecordStatus = 'pending' | 'completed' | 'cancelled' | 'programmed';
+export type MaintenanceRecordStatus =
+  | 'pending'
+  | 'completed'
+  | 'cancelled'
+  | 'programmed';
 
 export interface VehicleInfo {
   id: number;
@@ -13,7 +17,7 @@ export interface VehicleInfo {
 }
 
 export interface MaintenanceRecordBase {
-  failType: 'MC' | 'EL';
+  failType: 'MC' | 'EL' | 'PV';
   checkIn: Dayjs;
   status: MaintenanceRecordStatus;
   deliveryDate: Dayjs | null;
@@ -38,8 +42,14 @@ export interface MaintenanceRecordCreate extends MaintenanceRecordBase {
 export type MaintenanceRecordUpdate = Partial<
   Pick<
     MaintenanceRecordCreate,
-    'workshopId' | 'failType' | 'status' | 'deliveryDate' | 'supervisor'
-  > & { updateComments: string, checkOut: Dayjs }
+    | 'workshopId'
+    | 'failType'
+    | 'status'
+    | 'deliveryDate'
+    | 'supervisor'
+    | 'checkIn'
+    | 'order'
+  > & { updateComments: string; checkOut: Dayjs }
 >;
 
 export interface RecordComment {
@@ -67,6 +77,7 @@ export interface RecordUpdateComment {
 export interface RecordStats {
   pending: number;
   completed: number;
+  programmed: number;
 }
 
 export interface MaintenanceRecordSimpleApi {

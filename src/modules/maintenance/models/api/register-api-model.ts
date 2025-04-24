@@ -11,7 +11,7 @@ export interface VehicleInfoApi {
 }
 
 export interface MaintenanceRecordBaseApi {
-  fail_type: 'MC' | 'EL';
+  fail_type: 'MC' | 'EL' | 'PV';
   check_in: string;
   status: MaintenanceRecordStatus;
   delivery_date: string | null;
@@ -36,8 +36,14 @@ export interface MaintenanceRecordCreateApi extends MaintenanceRecordBaseApi {
 export type MaintenanceRecordUpdateApi = Partial<
   Pick<
     MaintenanceRecordCreateApi,
-    'workshop_id' | 'fail_type' | 'status' | 'delivery_date' | 'supervisor'
-  > & { update_comments: string, check_out: string }
+    | 'workshop_id'
+    | 'fail_type'
+    | 'status'
+    | 'delivery_date'
+    | 'supervisor'
+    | 'check_in'
+    | 'order_service'
+  > & { update_comments: string; check_out: string }
 >;
 
 export interface RecordCommentApi {
@@ -61,3 +67,4 @@ export interface RecordUpdateCommentApi {
   new_delivery_date: string;
   by_user: UserReadApi;
 }
+
