@@ -66,9 +66,12 @@ export const CreateRecordForm = ({ onClose }: Props) => {
     addRecordMutation: { mutate: addRegister, isPending },
   } = useMaintenanceRecord();
 
-  const { control, handleSubmit, setValue } = useForm<MaintenanceRecordCreate>({
-    defaultValues: initialFormState,
-  });
+  const { control, handleSubmit, setValue, watch } =
+    useForm<MaintenanceRecordCreate>({
+      defaultValues: initialFormState,
+    });
+
+  const checkIn = watch('checkIn');
 
   const onSubmit: SubmitHandler<MaintenanceRecordCreate> = (data) => {
     addRegister(data, {
@@ -135,6 +138,7 @@ export const CreateRecordForm = ({ onClose }: Props) => {
             options={[
               { label: 'MC', id: 'MC' },
               { label: 'EL', id: 'EL' },
+              { label: 'PV', id: 'PV' },
             ]}
           />
 
@@ -199,8 +203,13 @@ export const CreateRecordForm = ({ onClose }: Props) => {
             name="order"
             label="Order de Servicio"
             size="small"
-            required
-            rules={{ required: 'Orden de Servicio requerida' }}
+            required={!checkIn.isAfter(dayjs())}
+            rules={{
+              required: {
+                value: !checkIn.isAfter(dayjs()),
+                message: 'Orden de Servicio requerida',
+              },
+            }}
           />
 
           <TextFieldElement
