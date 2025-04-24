@@ -59,10 +59,13 @@ export const useWaybillServicesColumns = () => {
         Cell: ({ cell }) => (
           <BasicTextCell
             value={cell.getValue<string>()}
-            className="block font-bold uppercase text-blue-600"
+            className="block font-bold text-sm uppercase text-blue-600"
             fallback="Sin viaje"
           />
         ),
+        muiTableBodyCellProps: {
+          sx: { backgroundColor: '#e2e8f0', padding: '3px 5px' },
+        },
       },
       {
         accessorKey: 'travel.status',
@@ -70,10 +73,13 @@ export const useWaybillServicesColumns = () => {
         Cell: ({ cell }) => (
           <BasicTextCell
             value={cell.getValue<string>()}
-            className="block font-bold uppercase text-blue-600"
+            className="block font-bold text-xs uppercase text-blue-600"
             fallback="Sin estado"
           />
         ),
+        muiTableBodyCellProps: {
+          sx: { backgroundColor: '#e2e8f0', padding: '3px 5px' },
+        },
       },
       {
         accessorKey: 'travel.state',
@@ -88,6 +94,9 @@ export const useWaybillServicesColumns = () => {
             />
           ) : null;
         },
+        muiTableBodyCellProps: {
+          sx: { backgroundColor: '#e2e8f0', padding: '3px 5px' },
+        },
       },
       {
         header: 'Maniobras',
@@ -97,6 +106,9 @@ export const useWaybillServicesColumns = () => {
             value={row.original.maneuvers.length}
           />
         ),
+        muiTableBodyCellProps: {
+          sx: { backgroundColor: '#f4f4f5', padding: '3px 5px' },
+        },
       },
       {
         header: 'Ultima Maniobra',
@@ -111,10 +123,13 @@ export const useWaybillServicesColumns = () => {
           return (
             <BasicTextCell
               value={value}
-              className="block font-bold uppercase text-indigo-600"
+              className="block font-bold uppercase text-xs text-indigo-600"
               fallback="Sin maniobras"
             />
           );
+        },
+        muiTableBodyCellProps: {
+          sx: { backgroundColor: '#f4f4f5', padding: '3px 5px' },
         },
       },
       {
