@@ -45,6 +45,8 @@ export const EditRecordForm = ({ onClose, record }: Props) => {
   const { editRecordMutation } = useMaintenanceRecord();
 
   const deliveryDate = watch('deliveryDate');
+  const order = watch('order');
+  const status = watch('status');
 
   const onSubmit: SubmitHandler<MaintenanceRecordUpdate> = (data) => {
     editRecordMutation.mutate(
@@ -127,8 +129,20 @@ export const EditRecordForm = ({ onClose, record }: Props) => {
             options={[
               { label: 'MC', id: 'MC' },
               { label: 'EL', id: 'EL' },
+              { label: 'PV', id: 'PV' },
             ]}
           />
+
+          {status && status === 'programmed' && (
+            <DatePickerElement
+              control={control}
+              name="checkIn"
+              label="Fecha de Ingreso"
+              inputProps={{
+                size: 'small',
+              }}
+            />
+          )}
 
           <DatePickerElement
             control={control}
@@ -151,6 +165,15 @@ export const EditRecordForm = ({ onClose, record }: Props) => {
               rules={{ required: 'Requerido si cambias la fecha de entrega' }}
             />
           )}
+
+          {!order && (
+            <TextFieldElement
+              control={control}
+              name="order"
+              label="Order de Servicio"
+              size="small"
+            />
+          )}
         </form>
       </DialogContent>
       <DialogActions
@@ -164,11 +187,12 @@ export const EditRecordForm = ({ onClose, record }: Props) => {
         <Button variant="outlined" color="error" size="small" onClick={onClose}>
           Cancelar
         </Button>
-        <MuiSaveButton 
-          variant="contained" 
+        <MuiSaveButton
+          variant="contained"
           loading={editRecordMutation.isPending}
-          loadingPosition='end'
-          onClick={handleSubmit(onSubmit)} />
+          loadingPosition="end"
+          onClick={handleSubmit(onSubmit)}
+        />
       </DialogActions>
     </>
   );
@@ -182,6 +206,9 @@ const transformRecordToRecordEdit = (
     failType: data.failType,
     supervisor: data.supervisor,
     workshopId: data.workshop.id,
+    order: data.order,
+    checkIn: data.checkIn,
+    status: data.status,
   };
 };
 
