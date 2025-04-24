@@ -122,6 +122,7 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
         filterSelectOptions: [
           { label: 'MC', value: 'MC' },
           { label: 'EL', value: 'EL' },
+          { label: 'PV', value: 'PV' },
         ],
         header: 'Tipo de falla',
       },
