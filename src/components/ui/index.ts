@@ -6,4 +6,5 @@ export * from './LoadingSpinner';
 export * from './Alert';
 export * from './CurrencyCell';
 export * from './CurrencyFooterCell';
+export * from './BasicTextCell';
 
