@@ -1,6 +1,5 @@
 import type { BranchSimple, CompanySimple } from '@/modules/core/models';
-
-import type { WaybillStatus } from '../service-model';
+import type { TravelState, WaybillStatus } from '../service-model';
 
 export interface CategoryApi {
   id: number;
@@ -19,6 +18,7 @@ export interface TravelApi {
   x_status_viaje: string;
   driver: string | null;
   vehicle: string | null;
+  state: TravelState;
 }
 
 export interface ManeuverApi {

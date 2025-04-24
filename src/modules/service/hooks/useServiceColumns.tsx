@@ -1,8 +1,8 @@
-import { Chip } from '@heroui/react';
+import { Chip } from '@mui/material';
 import type { MRT_ColumnDef } from 'material-react-table';
 import type { Waybill } from '../models';
-import { getWaybillStatusConfig } from '../utilities';
 import { useMemo } from 'react';
+import { waybillStatus } from '../utilities';
 
 export const useServiceColumns = () => {
   const columns = useMemo<MRT_ColumnDef<Waybill>[]>(
@@ -30,11 +30,13 @@ export const useServiceColumns = () => {
         accessorKey: 'state',
         header: 'Status',
         Cell: ({ row }) => {
-          const statusConf = getWaybillStatusConfig(row.original.state);
-          return statusConf ? (
-            <Chip color={statusConf.color || 'default'} size="sm">
-              {statusConf.status}
-            </Chip>
+          const status = row.original.state;
+          return status ? (
+            <Chip
+              label={waybillStatus.getLabel(status)}
+              color={waybillStatus.getColor(status)}
+              size="small"
+            />
           ) : null;
         },
       },

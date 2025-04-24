@@ -1,12 +1,12 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
 import dayjs, { Dayjs } from 'dayjs';
 
-import { Button } from '@heroui/react';
+import { Button } from '@/components/ui';
 import CheckIcon from '@mui/icons-material/Check';
 import { DatePickerElement } from 'react-hook-form-mui/date-pickers';
 import type { MaintenanceRecordStatus } from '../models';
+import { MuiSimpleModal } from '@/components';
 import { SelectElement } from 'react-hook-form-mui';
-import { SimpleModal } from '@/components';
 import { useMaintenanceRecord } from '../hooks';
 
 interface RegisterDetailForm {
@@ -52,29 +52,28 @@ const CompleteDialog = (props: CompleteDialogProps) => {
   };
 
   return (
-    <SimpleModal
-      isOpen={open}
+    <MuiSimpleModal
+      open={open}
       onClose={onClose}
+      disableEnforceFocus
       header={<h2 className="text-center">Completar Registro</h2>}
       customFooter={
         <>
           <Button
-            color="danger"
-            radius="full"
-            variant="light"
-            size="sm"
-            onPress={onClose}
+            color="error"
+            variant="text"
+            size="small"
+            onClick={onClose}
           >
             Cerrar
           </Button>
           <Button
             color="success"
-            radius="full"
-            startContent={<CheckIcon sx={{ fontSize: '1.2rem' }} />}
-            className="uppercase font-bold text-gray-800"
-            size="sm"
-            onPress={() => handleSubmit(onSubmit)()}
-            isLoading={isPending}
+            variant="contained"
+            startIcon={<CheckIcon sx={{ fontSize: '1.2rem' }} />}
+            size="small"
+            onClick={() => handleSubmit(onSubmit)()}
+            loading={isPending}
           >
             Completar
           </Button>
@@ -87,6 +86,13 @@ const CompleteDialog = (props: CompleteDialogProps) => {
           name="status"
           label="Estatus"
           size="small"
+          slotProps={{
+            select: {
+              MenuProps: {
+                disablePortal: true,
+              }
+            }
+          }}
           required
           options={[
             { label: 'Completado', id: 'completed' },
@@ -105,7 +111,7 @@ const CompleteDialog = (props: CompleteDialogProps) => {
           rules={{ required: 'Este campo es requerido' }}
         />
       </form>
-    </SimpleModal>
+    </MuiSimpleModal>
   );
 };
 

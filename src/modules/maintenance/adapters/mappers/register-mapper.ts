@@ -53,9 +53,7 @@ export class MaintenaceRecordAdapter {
       failType: record.fail_type,
       checkIn: dayjs.utc(record.check_in).tz('America/Mexico_City'),
       status: record.status,
-      deliveryDate: record.delivery_date
-        ? dayjs(record.delivery_date)
-        : null,
+      deliveryDate: record.delivery_date ? dayjs(record.delivery_date) : null,
       supervisor: record.supervisor,
       comments: record.comments,
       order: record.order_service,
@@ -132,13 +130,19 @@ export class MaintenaceRecordAdapter {
         .format('YYYY-MM-DDTHH:mm:ss');
     }
     if (record.checkOut) {
-      data.check_out = record.checkOut.utc().format('YYYY-MM-DDTHH:mm:ss');
+      data.check_out = record.checkOut.format('YYYY-MM-DDTHH:mm:ss');
     }
     if (record.supervisor) {
       data.supervisor = record.supervisor;
     }
     if (record.updateComments) {
       data.update_comments = record.updateComments;
+    }
+    if (record.checkIn) {
+      data.check_in = record.checkIn.format('YYYY-MM-DDTHH:mm:ss');
+    }
+    if (record.order) {
+      data.order_service = record.order;
     }
     return data;
   }
@@ -189,3 +193,4 @@ export class MaintenaceRecordAdapter {
     };
   }
 }
+

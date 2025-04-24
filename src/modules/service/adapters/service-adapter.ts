@@ -33,6 +33,7 @@ export class ServiceAdapter {
             status: data.travel.x_status_viaje,
             driver: data.travel.driver,
             vehicle: data.travel.vehicle,
+            state: data.travel.state,
           }
         : null,
       maneuvers: data.maneuvers.map((maneuver) => ({

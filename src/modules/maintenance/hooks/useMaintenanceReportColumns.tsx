@@ -4,10 +4,10 @@ import { useMemo } from 'react';
 import { useWorkshop } from './useWorkshop';
 import type { MaintenanceRecord } from '../models';
 import { daysUtil, daysUtilNow } from '../utilities/datetime';
-import { Chip } from '@heroui/react';
+import { Chip } from '@mui/material';
+import { maintenanceStatus } from '../utilities';
 
 export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
-
   const {
     workshopQuery: { data: workshops },
   } = useWorkshop();
@@ -22,7 +22,13 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
         size: 4,
         enableEditing: false,
         Cell: ({ cell }) => {
-          return <Chip size='sm' color="primary">{cell.getValue<string>()}</Chip>;
+          return (
+            <Chip
+              label={cell.getValue<string>()}
+              size="small"
+              color="primary"
+            />
+          );
         },
       },
       {
@@ -82,15 +88,18 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
           { label: 'Pendiente', value: 'pending' },
           { label: 'Completado', value: 'completed' },
           { label: 'Cancelado', value: 'caceled' },
+          { label: 'Programado', value: 'programmed' },
         ],
         header: 'Estatus',
         Cell: ({ cell }) => {
           const status = cell.getValue<MaintenanceRecord['status']>();
-          return status === 'pending'
-            ? 'Pendiente'
-            : status === 'cancelled'
-            ? 'Cancelado'
-            : 'Completado';
+          return (
+            <Chip
+              label={maintenanceStatus.getLabel(status)}
+              color={maintenanceStatus.getColor(status)}
+              size="small"
+            />
+          );
         },
       },
       {
@@ -113,6 +122,7 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
         filterSelectOptions: [
           { label: 'MC', value: 'MC' },
           { label: 'EL', value: 'EL' },
+          { label: 'PV', value: 'PV' },
         ],
         header: 'Tipo de falla',
       },
@@ -165,3 +175,4 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
 
   return columns;
 };
+

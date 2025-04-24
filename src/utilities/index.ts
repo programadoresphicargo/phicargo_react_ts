@@ -5,4 +5,5 @@ export * from './dayjs-config';
 export * from './format-currency';
 export * from './get-month-name';
 export * from './format-percentage';
+export * from './key-value-conf';
 

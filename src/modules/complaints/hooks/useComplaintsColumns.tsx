@@ -1,6 +1,8 @@
+import { Chip } from '@mui/material';
 import type { Complaint } from '../models';
-import { Dayjs } from 'dayjs';
+import type { Dayjs } from 'dayjs';
 import type { MRT_ColumnDef } from 'material-react-table';
+import { complaintStatus } from '../utilities';
 import { useMemo } from 'react';
 
 export const useComplaintsColumns = () => {
@@ -28,12 +30,22 @@ export const useComplaintsColumns = () => {
         header: 'Tipo de Queja',
       },
       {
-        accessorKey: 'complaintDescription',
-        header: 'Descripción',
+        accessorKey: 'origin',
+        header: 'Origen',
       },
       {
         accessorKey: 'status',
         header: 'Estatuss',
+        Cell: ({ row }) => {
+          const status = row.original.status;
+          return (
+            <Chip
+              label={complaintStatus.getLabel(status)}
+              color={complaintStatus.getColor(status)}
+              size="small"
+            />
+          );
+        },
       },
     ];
   }, []);

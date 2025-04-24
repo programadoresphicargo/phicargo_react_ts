@@ -4,6 +4,14 @@ import type { Dayjs } from 'dayjs';
 
 export type WaybillStatus = 'draft' | 'cancel' | 'confirmed' | 'approved';
 
+export type TravelState =
+  | 'draft'
+  | 'progress'
+  | 'stop'
+  | 'done'
+  | 'closed'
+  | 'cancel';
+
 export interface Category {
   id: number;
   name: string;
@@ -21,6 +29,7 @@ export interface Travel {
   status: string;
   driver: string | null;
   vehicle: string | null;
+  state: TravelState;
 }
 
 export interface Maneuver {

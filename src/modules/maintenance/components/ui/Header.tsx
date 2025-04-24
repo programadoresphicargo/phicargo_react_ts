@@ -94,9 +94,15 @@ const Header = (props: Props) => {
           content={count?.completed || 0}
           isLoading={isFetching}
         />
+        <IndicatorCard
+          title="Programados"
+          content={count?.programmed || 0}
+          isLoading={isFetching}
+        />
       </div>
     </HeaderBase>
   );
 };
 
 export default Header;
+
