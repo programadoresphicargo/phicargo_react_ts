@@ -31,12 +31,54 @@ const pages = [
   { name: 'ACTIVOS', path: '/viajes' },
   { name: 'FINALIZADOS', path: '/viajesfinalizados' },
   { name: 'PROGRAMACIÓN', path: '/viajesprogramados' },
-  { name: 'CONTROL ESTATUS', path: '/controlestatus' },
-  { name: 'ESTADIAS', path: '/estadias' },
+  {
+    name: 'ESTATUS OPERATIVOS',
+    subpages: [
+      { name: 'Control de estatus', path: '/controlestatus' },
+      { name: 'Reporte cumplimiento estatus', path: '/cumplimiento_estatus_ejecutivos' },
+    ],
+  },
+  {
+    name: 'ESTADIAS',
+    subpages: [
+      { name: 'Estadías', path: '/estadias' },
+      { name: 'Pago operadores', path: '/pagos_estadias_operadores' },
+    ],
+  },
   { name: 'ENVIO MASIVO', path: '/envio_masivo_viajes' },
-  { name: 'CUMPLIMIENTO ESTATUS', path: '/cumplimiento_estatus_ejecutivos' },
-    { name: 'CODIGOS POSTALES', path: '/codigos_postales' },
+  { name: 'CODIGOS POSTALES', path: '/codigos_postales' },
 ];
+
+function SubMenu({ title, items }) {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+
+  const handleOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  return (
+    <>
+      <Button
+        sx={{ my: 2, color: 'white', display: 'block', fontFamily: 'inter' }}
+        onClick={handleOpen}
+      >
+        {title}
+      </Button>
+      <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+        {items.map(({ name, path }) => (
+          <MenuItem key={name} onClick={handleClose} component={Link} to={path}>
+            {name}
+          </MenuItem>
+        ))}
+      </Menu>
+    </>
+  );
+}
 
 function NavbarViajes() {
   const navigate = useNavigate();
@@ -159,26 +201,20 @@ function NavbarViajes() {
             </Box>
 
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-              {pages.map(({ name, path }) => (
-                <Button
-                  key={name}
-                  onClick={handleCloseNavMenu}
-                  sx={{
-                    my: 2,
-                    color: 'white',
-                    display: 'block',
-                    fontFamily: 'inter',
-                    '&:hover': {
-                      color: 'white', // Cambia el color del texto al pasar el cursor
-                      backgroundColor: 'rgba(255, 255, 255, 0.1)', // Opcional: cambia el fondo
-                    },
-                  }}
-                  component={Link}
-                  to={path}
-                >
-                  {name}
-                </Button>
-              ))}
+              {pages.map((page) =>
+                page.subpages ? (
+                  <SubMenu key={page.name} title={page.name} items={page.subpages} />
+                ) : (
+                  <Button
+                    key={page.name}
+                    sx={{ my: 2, color: 'white', display: 'block', fontFamily: 'inter' }}
+                    component={Link}
+                    to={page.path}
+                  >
+                    {page.name}
+                  </Button>
+                )
+              )}
             </Box>
 
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>

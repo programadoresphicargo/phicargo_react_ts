@@ -1,10 +1,10 @@
 import { Avatar, Badge, Card, CardHeader } from "@heroui/react";
 import React, { useContext, useEffect, useState } from 'react';
-
-import { Spinner } from "@heroui/react";
+import { Snippet } from "@heroui/snippet";
 import { ViajeContext } from '../context/viajeContext';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
+import { Spinner } from "@heroui/spinner";
 
 function Contenedores() {
     const { id_viaje } = useContext(ViajeContext);
@@ -46,9 +46,12 @@ function Contenedores() {
                                     src={'https://cdn-icons-png.flaticon.com/512/6260/6260181.png'}
                                 />
                                 <div className="flex flex-col gap-1 items-start justify-center">
-                                    <h4 className="text-small font-semibold leading-none text-default-600">{step.x_reference}</h4>
+                                    <h4 className="text-small font-semibold leading-none text-default-600">{step.name}</h4>
                                     <h5 className="text-small tracking-tight text-default-400">
-                                        {step.x_medida_bel}
+                                        <Snippet size="sm">{step.x_reference}</Snippet>
+                                    </h5>
+                                    <h5 className="text-small tracking-tight text-default-400">
+                                        Medida: {step.x_medida_bel}
                                     </h5>
                                 </div>
                             </div>
