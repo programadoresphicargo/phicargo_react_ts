@@ -132,7 +132,7 @@ export class MaintenaceRecordAdapter {
         .format('YYYY-MM-DDTHH:mm:ss');
     }
     if (record.checkOut) {
-      data.check_out = record.checkOut.utc().format('YYYY-MM-DDTHH:mm:ss');
+      data.check_out = record.checkOut.format('YYYY-MM-DDTHH:mm:ss');
     }
     if (record.supervisor) {
       data.supervisor = record.supervisor;

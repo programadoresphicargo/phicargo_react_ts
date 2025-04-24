@@ -72,6 +72,7 @@ class MaintenanceRecordServiceApi {
     const newRecord =
       MaintenaceRecordAdapter.maintenanceRecordUpdateToApi(updatedItem);
     const url = `/maintenance-record/${id}`;
+
     try {
       const response = await odooApi.patch<MaintenanceRecordApi>(
         url,
