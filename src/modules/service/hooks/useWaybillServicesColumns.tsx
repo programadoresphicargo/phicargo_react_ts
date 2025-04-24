@@ -90,6 +90,7 @@ export const useWaybillServicesColumns = () => {
             <Chip
               label={travelStatus.getLabel(status)}
               color={travelStatus.getColor(status)}
+              variant="outlined"
               size="small"
             />
           ) : null;
