@@ -5,10 +5,13 @@ import {
   TextareaInput,
 } from '@/components/inputs';
 import type { IncidenceCreate, IncidenceType } from '../../models';
+import {
+  LEGAL_INCIDENCE_OPTIONS,
+  OPERATIVE_INCIDENCE_OPTIONS,
+} from '../../utilities';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 
-import { INCIDENCE_OPTIONS } from '../../utilities';
 import { useIncidenceQueries } from '../../hooks/queries';
 
 const intialState: IncidenceCreate = {
@@ -41,7 +44,9 @@ export const IncidenceForm = ({
     defaultValues: intialState,
   });
 
-  // Función de envío
+  const incidenceOptions =
+    selectedType === 'legal' ? LEGAL_INCIDENCE_OPTIONS : OPERATIVE_INCIDENCE_OPTIONS;
+
   const submit: SubmitHandler<IncidenceCreate> = (data) => {
     createIncidence.mutate(
       {
@@ -89,7 +94,7 @@ export const IncidenceForm = ({
         name="incidence"
         variant="faded"
         label="Tipo de Incidencia"
-        items={INCIDENCE_OPTIONS}
+        items={incidenceOptions}
         rules={{ required: 'Tipo de incidencia requerida' }}
       />
       <TextareaInput
