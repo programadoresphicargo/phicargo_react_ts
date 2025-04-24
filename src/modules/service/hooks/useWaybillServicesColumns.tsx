@@ -1,9 +1,10 @@
+import { travelStatus, waybillStatus } from '../utilities';
+
 import { BasicTextCell } from '@/components/ui';
-import { Chip } from '@heroui/react';
+import { Chip } from '@mui/material';
 import type { MRT_ColumnDef } from 'material-react-table';
 import { ManeuversCell } from '../components/ui/ManeuversCell';
 import type { WaybillService } from '../models';
-import { getWaybillStatusConfig } from '../utilities';
 import { useMemo } from 'react';
 
 export const useWaybillServicesColumns = () => {
@@ -42,11 +43,13 @@ export const useWaybillServicesColumns = () => {
         accessorKey: 'state',
         header: 'Status',
         Cell: ({ row }) => {
-          const statusConf = getWaybillStatusConfig(row.original.state);
-          return statusConf ? (
-            <Chip color={statusConf.color || 'default'} size="sm">
-              {statusConf.status}
-            </Chip>
+          const status = row.original.state;
+          return status ? (
+            <Chip
+              label={waybillStatus.getLabel(status)}
+              color={waybillStatus.getColor(status)}
+              size="small"
+            />
           ) : null;
         },
       },
@@ -71,6 +74,20 @@ export const useWaybillServicesColumns = () => {
             fallback="Sin estado"
           />
         ),
+      },
+      {
+        accessorKey: 'travel.state',
+        header: 'Estado Odoo',
+        Cell: ({ row }) => {
+          const status = row.original.travel?.state;
+          return status ? (
+            <Chip
+              label={travelStatus.getLabel(status)}
+              color={travelStatus.getColor(status)}
+              size="small"
+            />
+          ) : null;
+        },
       },
       {
         header: 'Maniobras',
