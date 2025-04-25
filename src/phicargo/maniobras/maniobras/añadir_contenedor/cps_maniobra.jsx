@@ -27,6 +27,7 @@ const ManiobraContenedores = ({ id_maniobra }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                toast.info('Obteniendo contenedores.');
                 setLoading(true);
                 const response = await odooApi.get('/maniobras/contenedores/' + id_maniobra);
                 setFormData(prevFormData => ({
@@ -48,7 +49,6 @@ const ManiobraContenedores = ({ id_maniobra }) => {
 
     const handleCloseModal = () => {
         setModalShow(false);
-        fetchData();
     };
 
 

@@ -67,13 +67,14 @@ const AñadirContenedor = ({ show, handleClose, id_maniobra }) => {
     }, [selectedMonth, selectedYear]);
 
     const añadir_contenedor = (data) => {
+        toast.success('Añadiendo contenedor');
         setFormData(prev => {
             const yaExiste = prev.cps_ligadas?.some(item => item.id === data.id);
             if (yaExiste) {
                 toast.warn('Este contenedor ya ha sido añadido.');
                 return prev;
             }
-
+            handleClose();
             return {
                 ...prev,
                 cps_ligadas: [...(prev.cps_ligadas || []), data],
@@ -146,7 +147,7 @@ const AñadirContenedor = ({ show, handleClose, id_maniobra }) => {
         enableRowActions: true,
         displayColumnDefOptions: {
             'mrt-row-actions': {
-                header: 'Seleccionar', 
+                header: 'Seleccionar',
                 size: 100,
             },
         },
