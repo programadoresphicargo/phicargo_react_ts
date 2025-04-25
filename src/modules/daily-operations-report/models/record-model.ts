@@ -18,6 +18,7 @@ interface RecordBase {
   totalUnits: number;
   observations: string;
   comments: RecordComments;
+  motorGenerators: number;
 }
 
 export interface Record extends RecordBase {
@@ -38,6 +39,7 @@ export type RecordUpdate = Partial<
     | 'longTripUnits'
     | 'unloadingUnits'
     | 'observations'
+    | 'motorGenerators'
   >
 >;
 

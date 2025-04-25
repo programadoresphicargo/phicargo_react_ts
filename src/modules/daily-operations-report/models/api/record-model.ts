@@ -18,6 +18,7 @@ interface RecordApiBase {
   total_units: number;
   observations: string;
   comments: RecordCommentApi[];
+  motor_generators: number;
 }
 
 export interface RecordApi extends RecordApiBase {
@@ -40,6 +41,7 @@ export type RecordApiUpdate = Partial<
     | 'long_trip_units'
     | 'unloading_units'
     | 'observations'
+    | 'motor_generators'
   >
 >;
 
