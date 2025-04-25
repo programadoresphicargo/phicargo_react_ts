@@ -103,6 +103,7 @@ export const useDailyReportColumns = () => {
       {
         accessorFn: (row) => row.motorGenerators,
         header: 'MG',
+        id: 'motorGenerators',
         size: 50,
         enableEditing: true,
         enableSorting: false,

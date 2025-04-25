@@ -71,6 +71,10 @@ export class AvailibilityAdapter {
       apiRecord.observations = record.observations;
     }
 
+    if (record.motorGenerators !== undefined) {
+      apiRecord.motor_generators = Number(record.motorGenerators);
+    }
+
     return apiRecord;
   }
 
