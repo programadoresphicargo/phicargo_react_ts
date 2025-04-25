@@ -67,7 +67,7 @@ export const IncidenceForm = ({
       setSubmit(() => handleSubmit(submit));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setSubmit, handleSubmit]);
+  }, [setSubmit, handleSubmit, selectedType]);
 
   useEffect(() => {
     if (setIsLoading) {
