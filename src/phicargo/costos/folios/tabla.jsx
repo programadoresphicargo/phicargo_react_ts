@@ -184,7 +184,7 @@ const FoliosCostosExtras = () => {
     enableGlobalFilter: true,
     enableFilters: true,
     localization: MRT_Localization_ES,
-    state: { isLoading: isLoading2 },
+    state: { showProgressBars: isLoading2 },
     enableColumnPinning: true,
     enableStickyHeader: true,
     columnResizeMode: "onEnd",

@@ -48,6 +48,9 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
                 params: { travel_id: travel_id },
             });
             setData(response.data[0]);
+            setHorasPagar(response.data[0].horas_planta - response.data[0].horas_estadias);
+            setTotal(0);
+            setMotivo("");
             setLoading(false);
         } catch (error) {
             console.error('Error al obtener los datos:', error);
