@@ -200,8 +200,6 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                     estado_maniobra: data.estado_maniobra || '',
                     correos_ligados: correos,
                     correos_desligados: [],
-                    cps_ligadas: [],
-                    cps_desligadas: [],
                     comentarios: data.comentarios || '',
                 });
 
