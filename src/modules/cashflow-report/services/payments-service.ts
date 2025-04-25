@@ -31,7 +31,7 @@ class PaymentServiceApi {
       );
       return response.data.map(paymentToLocal);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data.detail || 'Error al obtener registros',
@@ -54,10 +54,10 @@ class PaymentServiceApi {
         '/accounting_report/payments',
         body,
       );
-      console.log(response.data);
+      console.error(response.data);
       return paymentToLocal(response.data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data.detail || 'Error al crear registro',
@@ -84,7 +84,7 @@ class PaymentServiceApi {
       );
       return paymentToLocal(response.data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data.detail || 'Error al actualizar registro',
@@ -104,7 +104,7 @@ class PaymentServiceApi {
       await odooApi.delete(`/accounting_report/payments/${id}`);
       return true;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data.detail || 'Error al eliminar registro',
@@ -130,7 +130,7 @@ class PaymentServiceApi {
       );
       return paymentToLocal(response.data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data.detail || 'Error al confirmar pago',
@@ -160,7 +160,7 @@ class PaymentServiceApi {
       );
       return response.data;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data.detail || 'Error al cargar registros',
