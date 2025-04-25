@@ -15,14 +15,14 @@ import { toast } from 'react-toastify';
 import { Card, CardBody } from "@heroui/react";
 import odooApi from '@/api/odoo-api';
 import { ManiobraContext } from '../../context/viajeContext';
-const { VITE_PHIDES_API_URL } = import.meta.env;
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
 const ManiobraContenedores = ({ id_maniobra }) => {
     const [modalShow, setModalShow] = useState(false);
     const [openDialog, setOpenDialog] = useState(false);
     const [isLoading, setLoading] = useState(false);
     const [selectedId, setSelectedId] = useState(null);
-    const { formData, setFormData } = useContext(ManiobraContext);
+    const { formData, setFormData, formDisabled } = useContext(ManiobraContext);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -111,6 +111,7 @@ const ManiobraContenedores = ({ id_maniobra }) => {
         enableGrouping: true,
         enableGlobalFilter: true,
         enableFilters: true,
+        localization: MRT_Localization_ES,
         state: { showProgressBars: isLoading },
         initialState: {
             density: 'compact',
@@ -122,12 +123,11 @@ const ManiobraContenedores = ({ id_maniobra }) => {
                 boxShadow: 'none',
             },
         },
+        positionActionsColumn: 'last',
         enableRowActions: true,
         renderRowActions: ({ row }) => (
             <Box>
-                <IconButton onClick={() => handleOpenDialog(row.original.id)}>
-                    <DeleteIcon />
-                </IconButton>
+                <Button onPress={() => handleOpenDialog(row.original.id)} startContent={<DeleteIcon />} size='sm' color='primary'></Button>
             </Box>
         ),
         muiTableBodyRowProps: ({ row }) => ({

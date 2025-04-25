@@ -18,7 +18,7 @@ import EstatusHistorialManiobras from '../reportes_estatus/estatus';
 import Grid from '@mui/material/Grid2';
 import LinearProgress from '@mui/material/LinearProgress';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import ManiobraContenedores from './añadir_contenedor/cps_maniobra';
+import ManiobraContenedores from './contenedores/cps_maniobra';
 import { ManiobraContext } from '../context/viajeContext';
 import MyComponent from './selects_flota';
 import PanelEstatus from './envio_estatus/panel';
