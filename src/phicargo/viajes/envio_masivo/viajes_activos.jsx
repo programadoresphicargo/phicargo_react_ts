@@ -105,15 +105,12 @@ const ViajesActivosMasivo = ({ }) => {
           fecha_hora: row.fecha_hora ?? null
         }));
 
-        console.log('Export Data:', exportData);
-
         try {
           setLoading(true);
           const response = await odooApi.post('/tms_travel/envio_masivo/', exportData);
           setLoading(false);
 
           if (response.data) {
-            console.log('Respuesta de la API:', response.data);
 
             response.data.forEach((item) => {
               if (item.status === 'Correo enviado correctamente') {

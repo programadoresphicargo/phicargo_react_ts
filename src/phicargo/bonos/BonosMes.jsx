@@ -7,23 +7,22 @@ import {
   ModalFooter,
   ModalHeader,
   useDisclosure,
-} from "@heroui/react";
-import { Chip, DatePicker } from "@heroui/react";
+} from '@heroui/react';
+import { Chip, DatePicker } from '@heroui/react';
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
 import React, { useEffect, useMemo, useState } from 'react';
-import { getLocalTimeZone, parseDate } from "@internationalized/date";
+import { getLocalTimeZone, parseDate } from '@internationalized/date';
 
 import Slide from '@mui/material/Slide';
 import { exportToCSV } from '../utils/export';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
-import { useAuthContext } from "@/modules/auth/hooks";
+import { useAuthContext } from '@/modules/auth/hooks';
 
 const BonosMes = ({ month, year }) => {
-
   const { session } = useAuthContext();
   const [permisosEdicion, setPermisos] = useState([]);
 
@@ -45,11 +44,12 @@ const BonosMes = ({ month, year }) => {
   const fetchPermisos = async () => {
     try {
       toast.info('Obteniendo permisos');
-      const response = await odooApi.get(`/users-management/permissions/` + session.user.id);
-      const ids = response.data.map(permiso => permiso.permission_id);
+      const response = await odooApi.get(
+        `/users-management/permissions/` + session.user.id,
+      );
+      const ids = response.data.map((permiso) => permiso.permission_id);
       setPermisos(ids);
       getColumnVisibility(permisosEdicion);
-      console.log(ids);
     } catch (error) {
       console.error('Error al obtener los datos:', error);
     }
@@ -59,7 +59,9 @@ const BonosMes = ({ month, year }) => {
     try {
       toast.info('Obteniendo datos...');
       setIsLoading(true);
-      const response = await odooApi.get(`/bonos_operadores/by_period/${month}/${year}`);
+      const response = await odooApi.get(
+        `/bonos_operadores/by_period/${month}/${year}`,
+      );
       setEditedData(response.data);
       setIsLoading(false);
     } catch (error) {
@@ -90,13 +92,16 @@ const BonosMes = ({ month, year }) => {
         }, {});
     });
 
-    console.log("Datos modificados (solo columnas visibles):", filteredData);
-
     try {
       setIsLoading(true);
-      const response = await odooApi.post('/bonos_operadores/update/', filteredData);
-      if (response.data.status === "success") {
-        toast.success(`✅ ${response.data.message} (${response.data.updated_records} registros)`);
+      const response = await odooApi.post(
+        '/bonos_operadores/update/',
+        filteredData,
+      );
+      if (response.data.status === 'success') {
+        toast.success(
+          `✅ ${response.data.message} (${response.data.updated_records} registros)`,
+        );
         fetchData();
       }
       setIsEditing(false);
@@ -107,30 +112,29 @@ const BonosMes = ({ month, year }) => {
     }
   };
 
-
   const columns = [
     {
-      accessorKey: "id_bono",
-      header: "ID Bono",
+      accessorKey: 'id_bono',
+      header: 'ID Bono',
       hidden: true,
     },
     {
-      accessorKey: "name",
-      header: "Operador",
+      accessorKey: 'name',
+      header: 'Operador',
     },
     {
-      accessorKey: "km_recorridos",
-      header: "Km recorridos",
+      accessorKey: 'km_recorridos',
+      header: 'Km recorridos',
     },
     {
-      accessorKey: "excelencia",
-      header: "Excelencia",
+      accessorKey: 'excelencia',
+      header: 'Excelencia',
       Cell: ({ row, cell }) =>
         isEditing && permisosEdicion.includes(12) ? (
           <TextField
-            variant='standard'
+            variant="standard"
             value={editedData[row.index].excelencia}
-            onChange={(e) => handleEditChange(e, row.index, "excelencia")}
+            onChange={(e) => handleEditChange(e, row.index, 'excelencia')}
             size="small"
           />
         ) : (
@@ -138,14 +142,14 @@ const BonosMes = ({ month, year }) => {
         ),
     },
     {
-      accessorKey: "productividad",
-      header: "Productividad",
+      accessorKey: 'productividad',
+      header: 'Productividad',
       Cell: ({ row, cell }) =>
         isEditing && permisosEdicion.includes(12) ? (
           <TextField
-            variant='standard'
+            variant="standard"
             value={editedData[row.index].productividad}
-            onChange={(e) => handleEditChange(e, row.index, "productividad")}
+            onChange={(e) => handleEditChange(e, row.index, 'productividad')}
             size="small"
           />
         ) : (
@@ -153,14 +157,14 @@ const BonosMes = ({ month, year }) => {
         ),
     },
     {
-      accessorKey: "operacion",
-      header: "Operacion",
+      accessorKey: 'operacion',
+      header: 'Operacion',
       Cell: ({ row, cell }) =>
         isEditing && permisosEdicion.includes(12) ? (
           <TextField
-            variant='standard'
+            variant="standard"
             value={editedData[row.index].operacion}
-            onChange={(e) => handleEditChange(e, row.index, "operacion")}
+            onChange={(e) => handleEditChange(e, row.index, 'operacion')}
             size="small"
           />
         ) : (
@@ -168,14 +172,14 @@ const BonosMes = ({ month, year }) => {
         ),
     },
     {
-      accessorKey: "seguridad_vial",
-      header: "Seguridad vial",
+      accessorKey: 'seguridad_vial',
+      header: 'Seguridad vial',
       Cell: ({ row, cell }) =>
         isEditing && permisosEdicion.includes(9) ? (
           <TextField
-            variant='standard'
+            variant="standard"
             value={editedData[row.index].seguridad_vial}
-            onChange={(e) => handleEditChange(e, row.index, "seguridad_vial")}
+            onChange={(e) => handleEditChange(e, row.index, 'seguridad_vial')}
             size="small"
           />
         ) : (
@@ -183,14 +187,14 @@ const BonosMes = ({ month, year }) => {
         ),
     },
     {
-      accessorKey: "cuidado_unidad",
-      header: "Cuidado unidad",
+      accessorKey: 'cuidado_unidad',
+      header: 'Cuidado unidad',
       Cell: ({ row, cell }) =>
         isEditing && permisosEdicion.includes(10) ? (
           <TextField
-            variant='standard'
+            variant="standard"
             value={editedData[row.index].cuidado_unidad}
-            onChange={(e) => handleEditChange(e, row.index, "cuidado_unidad")}
+            onChange={(e) => handleEditChange(e, row.index, 'cuidado_unidad')}
             size="small"
           />
         ) : (
@@ -198,14 +202,14 @@ const BonosMes = ({ month, year }) => {
         ),
     },
     {
-      accessorKey: "rendimiento",
-      header: "Rendimiento",
+      accessorKey: 'rendimiento',
+      header: 'Rendimiento',
       Cell: ({ row, cell }) =>
         isEditing && permisosEdicion.includes(10) ? (
           <TextField
-            variant='standard'
+            variant="standard"
             value={editedData[row.index].rendimiento}
-            onChange={(e) => handleEditChange(e, row.index, "rendimiento")}
+            onChange={(e) => handleEditChange(e, row.index, 'rendimiento')}
             size="small"
           />
         ) : (
@@ -213,14 +217,14 @@ const BonosMes = ({ month, year }) => {
         ),
     },
     {
-      accessorKey: "calificacion",
-      header: "Calificación",
+      accessorKey: 'calificacion',
+      header: 'Calificación',
       Cell: ({ row, cell }) =>
         isEditing && permisosEdicion.includes(10) ? (
           <TextField
-            variant='standard'
+            variant="standard"
             value={editedData[row.index].calificacion}
-            onChange={(e) => handleEditChange(e, row.index, "calificacion")}
+            onChange={(e) => handleEditChange(e, row.index, 'calificacion')}
             size="small"
           />
         ) : (
@@ -235,7 +239,10 @@ const BonosMes = ({ month, year }) => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
-    state: { showProgressBars: isLoading, columnVisibility: getColumnVisibility(permisosEdicion) },
+    state: {
+      showProgressBars: isLoading,
+      columnVisibility: getColumnVisibility(permisosEdicion),
+    },
     initialState: {
       isLoading: isLoading,
       density: 'compact',
@@ -275,22 +282,39 @@ const BonosMes = ({ month, year }) => {
           flexWrap: 'wrap',
         }}
       >
-        <Button onPress={() => setIsEditing(!isEditing)} sx={{ m: 1 }} color="primary">
-          {isEditing ? "Cancelar Edición" : "Editar"}
+        <Button
+          onPress={() => setIsEditing(!isEditing)}
+          sx={{ m: 1 }}
+          color="primary"
+        >
+          {isEditing ? 'Cancelar Edición' : 'Editar'}
         </Button>
         {isEditing && (
-          <Button color="success" onPress={guardar_bonos} sx={{ m: 1 }} className='text-white' isLoading={isLoading}>
+          <Button
+            color="success"
+            onPress={guardar_bonos}
+            sx={{ m: 1 }}
+            className="text-white"
+            isLoading={isLoading}
+          >
             Guardar Cambios
           </Button>
         )}
-        <Button color="success" onPress={fetchData} sx={{ m: 1 }} className='text-white' isLoading={isLoading}>
+        <Button
+          color="success"
+          onPress={fetchData}
+          sx={{ m: 1 }}
+          className="text-white"
+          isLoading={isLoading}
+        >
           Refrescar
         </Button>
         <Button
-          color='success'
-          className='text-white'
+          color="success"
+          className="text-white"
           startContent={<i class="bi bi-file-earmark-excel"></i>}
-          onPress={() => exportToCSV(editedData, columns, "bonos.csv")}>
+          onPress={() => exportToCSV(editedData, columns, 'bonos.csv')}
+        >
           Exportar
         </Button>
       </Box>
@@ -305,3 +329,4 @@ const BonosMes = ({ month, year }) => {
 };
 
 export default BonosMes;
+
