@@ -41,7 +41,7 @@ export class WaybillService {
       const response = await odooApi.get<WaybillServiceApi[]>(url);
       return response.data.map(ServiceAdapter.toWaybillService);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data?.detail || 'Error al obtener los servicios',
@@ -64,7 +64,7 @@ export class WaybillService {
       const response = await odooApi.get<WaybillApi[]>(url);
       return response.data.map(ServiceRequestAdapter.toWaybill);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data?.detail ||
@@ -77,7 +77,7 @@ export class WaybillService {
 
   public static async createService(data: WaybillCreate) {
     const body = ServiceRequestAdapter.toWaybillCreate(data);
-    console.log(body);
+    console.error(body);
     try {
       const response = await odooApi.post('/service-request/', body);
       return response.data;

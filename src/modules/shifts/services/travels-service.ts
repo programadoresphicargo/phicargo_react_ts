@@ -22,7 +22,7 @@ class TravelServiceApi {
       );
       return response.data.map(travelToLocal);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data?.detail ||
@@ -45,7 +45,7 @@ class TravelServiceApi {
       );
       return response.data.map(travelToLocal);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data?.detail ||
@@ -68,7 +68,7 @@ class TravelServiceApi {
       const response = await odooApi.get<TravelApi[]>(url);
       return response.data.map(travelToLocal);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data?.detail ||

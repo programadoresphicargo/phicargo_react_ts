@@ -51,9 +51,6 @@ export const useCollectTableColumns = (data: CollectRegister[]) => {
         enableEditing: false,
         maxSize: 150,
         Footer: () => {
-          const confirmedMounts = data.map((item) => item.totalConfirmed);
-          const total = data.reduce((acc, curr) => acc + curr.totalConfirmed, 0);
-          console.log({ confirmedMounts, total });
           return (
             <TotalFooterItem
               total={data.reduce((acc, curr) => acc + curr.totalConfirmed, 0)}

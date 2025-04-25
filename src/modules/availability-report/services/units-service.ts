@@ -2,7 +2,7 @@ import { AxiosError } from 'axios';
 import type { UnitIndicators } from '../models/unit-indicators-model';
 import type { UnitIndicatorsApi } from '../models/api/unit-indicators-model';
 import odooApi from '@/api/odoo-api';
-import { unitIndicatorsToLocal } from '../adapters/units-adapters';
+import { unitIndicatorsToLocal } from '../adapters';
 
 export interface IUnitsService {
   /**
@@ -18,7 +18,6 @@ class UnitsService implements IUnitsService {
 
     try {
       const response = await odooApi.get<UnitIndicatorsApi>(url);
-      console.log(response.data);
       return unitIndicatorsToLocal(response.data);
     } catch (error) {
       console.error(error);

@@ -32,7 +32,7 @@ class CollectServiceApi {
       const response = await odooApi<CollectRegisterApi[]>(url);
       return response.data.map(collectRegisterToLocal);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data.detail || 'Error al obtener registros',
@@ -58,7 +58,7 @@ class CollectServiceApi {
       );
       return collectRegisterToLocal(response.data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data.detail || 'Error al crear registro',
@@ -85,7 +85,7 @@ class CollectServiceApi {
       );
       return collectRegisterToLocal(response.data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data.detail || 'Error al actualizar registro',
@@ -105,7 +105,7 @@ class CollectServiceApi {
       await odooApi.delete(`/accounting_report/collects/${registerId}`);
       return true;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data.detail || 'Error al eliminar registro',
@@ -131,7 +131,7 @@ class CollectServiceApi {
       );
       return collectRegisterToLocal(response.data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data.detail || 'Error al eliminar registro',
@@ -161,7 +161,7 @@ class CollectServiceApi {
       );
       return true;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data.detail || 'Error al cargar registros',

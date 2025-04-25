@@ -1,6 +1,6 @@
 import { FaCalendarMinus } from 'react-icons/fa';
 import type { Incidence } from '../../models';
-import { getIncidenceTypeConfig } from '../../utilities';
+import { incidenceType } from '../../utilities';
 
 interface Props {
   incidences: Incidence[];
@@ -18,7 +18,7 @@ export const IncidencesTimeline = ({ incidences }: Props) => {
             <h3 className="flex items-center mb-1 text-lg font-semibold text-gray-900">
               {incidence.incidence}
               <span className=" text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-lg bg-blue-900 dark:text-blue-300 ms-3">
-                {getIncidenceTypeConfig(incidence.type)?.type}
+                {incidenceType.getLabel(incidence.type)}
               </span>
             </h3>
             <time className="block mb-2 text-sm font-normal leading-none text-gray-600 uppercase">

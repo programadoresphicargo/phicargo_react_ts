@@ -15,7 +15,7 @@ export class DriverStatsService {
       const response = await odooApi.get<DriverStatsApi>(url);
       return DriverStatsAdapter.toDriverStats(response.data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data?.detail ||

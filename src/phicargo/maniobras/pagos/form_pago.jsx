@@ -1,30 +1,33 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import Swal from 'sweetalert2';
-import axios from 'axios';
-import SelectOperador from '../maniobras/select_operador';
-import Dialog from '@mui/material/Dialog';
-import { jsPDF } from 'jspdf';
-import autoTable from 'jspdf-autotable';
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import DialogContent from '@mui/material/DialogContent';
-import AppBar from '@mui/material/AppBar';
-import Typography from '@mui/material/Typography';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import { Button, Card, CardBody } from '@heroui/react';
-import { ToastContainer, toast } from 'react-toastify';
-import Formulariomaniobra from '../maniobras/formulario_maniobra';
 import * as XLSX from 'xlsx';
-const { VITE_PHIDES_API_URL } = import.meta.env;
 
+import { Button, Card, CardBody } from '@heroui/react';
 import {
     MaterialReactTable,
     useMaterialReactTable,
 } from 'material-react-table';
+import React, { useEffect, useMemo, useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import CloseIcon from '@mui/icons-material/Close';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import Formulariomaniobra from '../maniobras/formulario_maniobra';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import SelectOperador from '../maniobras/select_operador';
+import Swal from 'sweetalert2';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import autoTable from 'jspdf-autotable';
+import axios from 'axios';
 import { daDK } from '@mui/x-date-pickers/locales';
+import { jsPDF } from 'jspdf';
+
+const { VITE_PHIDES_API_URL } = import.meta.env;
+
 
 const Nomina_form = ({ show, handleClose, id_pago, id_operador, fecha_inicio, fecha_fin, disabled }) => {
 
@@ -47,7 +50,6 @@ const Nomina_form = ({ show, handleClose, id_pago, id_operador, fecha_inicio, fe
 
     useEffect(() => {
         if (form.operador_id && form.periodo_inicio && form.periodo_fin) {
-            console.log('Form has changed:', form);
             fetchData();
         }
     }, [form]);
@@ -108,7 +110,6 @@ const Nomina_form = ({ show, handleClose, id_pago, id_operador, fecha_inicio, fe
             ...form,
             operador_id: selectedOption ? selectedOption : ''
         });
-        console.log('Form has changed:', form);
     };
 
     const handleInputChange = (e) => {
@@ -116,7 +117,6 @@ const Nomina_form = ({ show, handleClose, id_pago, id_operador, fecha_inicio, fe
             ...form,
             [e.target.name]: e.target.value
         });
-        console.log('Form has changed:', form);
     };
 
     const [data, setData] = useState([]);
@@ -136,13 +136,12 @@ const Nomina_form = ({ show, handleClose, id_pago, id_operador, fecha_inicio, fe
             })
             .catch((error) => {
                 setLoading(false);
-                console.log('Error en la solicitud:' + error);
                 if (error.response) {
                     toast.error('Respuesta de error del servidor:' + error.response.data);
                 } else if (error.request) {
                     toast.error('No se recibió respuesta del servidor:' + error.request);
                 } else {
-                    console.log('Error al configurar la solicitud:' + error.message);
+                    console.error('Error al configurar la solicitud:' + error.message);
                 }
             });
     };

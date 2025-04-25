@@ -12,7 +12,7 @@ export class ContactsService {
       const response = await odooApi.get<ContactApi[]>(url);
       return response.data.map(ContactsAdapter.toContact);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data.detail || 'Error al obtener los contactos',

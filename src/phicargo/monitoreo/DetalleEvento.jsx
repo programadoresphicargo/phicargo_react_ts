@@ -157,7 +157,6 @@ const DetalleForm = ({ id_evento, onClose }) => {
         setIsLoading(true);
         odooApi.get('/eventos/atender_evento/' + formData.id_evento)
             .then(response => {
-                console.log("Datos enviados exitosamente:", response.data);
                 onClose();
                 setIsLoading(false);
             })

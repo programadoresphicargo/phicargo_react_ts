@@ -37,7 +37,7 @@ export class WaybillStatsService {
       const response = await odooApi.get<WaybillStatsApi>(url);
       return WaybillStatsAdapter.toWaybilStats(response.data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data?.detail ||
@@ -67,7 +67,7 @@ export class WaybillStatsService {
       const response = await odooApi.get<MonthlyRevenueByClientApi[]>(url);
       return response.data.map(WaybillStatsAdapter.toMonthlyRevenueByClient);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data?.detail ||
@@ -97,7 +97,7 @@ export class WaybillStatsService {
       const response = await odooApi.get<MontlyContainersByClientApi[]>(url);
       return response.data.map(WaybillStatsAdapter.toMonthlyContainersByClient);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data?.detail ||
@@ -127,7 +127,7 @@ export class WaybillStatsService {
       const response = await odooApi.get<YearlyRevenueByClientApi[]>(url);
       return response.data.map(WaybillStatsAdapter.toYearlyRevenueByClient);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data?.detail ||
@@ -155,7 +155,7 @@ export class WaybillStatsService {
       const response = await odooApi.get<YearlyContainersByClientApi[]>(url);
       return response.data.map(WaybillStatsAdapter.toYearlyContainersByClient);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data?.detail ||

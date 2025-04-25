@@ -15,7 +15,7 @@ export class DepartureAndArrivalService {
       const response = await odooApi.get<DepartureAndArrivalStatsApi>(url);
       return departureAndArrivalStatsToLocal(response.data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data?.detail ||

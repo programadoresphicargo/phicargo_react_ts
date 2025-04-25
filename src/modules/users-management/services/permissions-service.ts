@@ -48,7 +48,7 @@ class PermissionsServiceApi {
       );
       return response.data.map(permissionUserToLocal);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data?.detail ||

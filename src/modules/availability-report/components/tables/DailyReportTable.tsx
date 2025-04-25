@@ -12,7 +12,7 @@ import { useEffect } from 'react';
 import { useGlobalContext } from '../../hook/useGlobalContext';
 import { useRecordsQuery } from '../../hook/useRecordsQuery';
 import { useRecords } from '../../hook/useRecords';
-import { Record } from '../../models/record-model';
+import { Record } from '../../models';
 import { useDailyReportColumns } from '../../hook/useDailyReportTable';
 import toast from 'react-hot-toast';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';

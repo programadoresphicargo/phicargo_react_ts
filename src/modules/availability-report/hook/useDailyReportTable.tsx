@@ -1,4 +1,4 @@
-import type { Record } from '../models/record-model';
+import type { Record } from '../models';
 import { type MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
 import { CommentCell } from '../components/tables/CommentCell';
@@ -99,6 +99,15 @@ export const useDailyReportColumns = () => {
             ),
           },
         ],
+      },
+      {
+        accessorFn: (row) => row.motorGenerators,
+        header: 'MG',
+        id: 'motorGenerators',
+        size: 50,
+        enableEditing: true,
+        enableSorting: false,
+        enableColumnFilter: false,
       },
       {
         accessorFn: (row) => row.total,
@@ -256,3 +265,4 @@ export const useDailyReportColumns = () => {
 
   return { columns };
 };
+

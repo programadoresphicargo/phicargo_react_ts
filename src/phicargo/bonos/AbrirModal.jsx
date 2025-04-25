@@ -35,7 +35,6 @@ export default function BonosModal({ isOpen, onClose }) {
         try {
             setLoading(true);
             const response = await odooApi.post(`/bonos_operadores/create_bonos/${month}/${year}`);
-            console.log("Respuesta:", response.data);
             if (response.data.status == 'success') {
                 toast.success(response.data.message);
                 onClose();

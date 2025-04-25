@@ -4,7 +4,7 @@ import type {
   RecordColumnComment,
   RecordComment,
   RecordCommentCreate,
-} from '../../models/record-model';
+} from '../../models';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import dayjs, { Dayjs } from 'dayjs';
 
