@@ -151,7 +151,6 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
     useEffect(() => {
         const fetchManiobraData = async (id) => {
             try {
-                toast.info('Obteniendo datos de maniobra.');
                 const response = await odooApi.get(`/maniobras/by_id/${id}`);
                 return response.data || {};
             } catch (error) {
@@ -163,7 +162,6 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
 
         const fetchCorreosLigados = async (id) => {
             try {
-                toast.info('Obteniendo correos');
                 const response = await odooApi.get(`/maniobras/correos/ligados/${id}`);
                 console.log(response.data);
                 return response.data || [];
