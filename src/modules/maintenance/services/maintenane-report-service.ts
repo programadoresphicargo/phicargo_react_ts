@@ -32,7 +32,7 @@ class MaintenanceRecordServiceApi {
         MaintenaceRecordAdapter.maintenanceRecordToLocal,
       );
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data.detail || 'Error al obtener registros',
@@ -55,7 +55,7 @@ class MaintenanceRecordServiceApi {
       );
       return MaintenaceRecordAdapter.maintenanceRecordToLocal(response.data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data.detail || 'Error al crear registro',
@@ -80,7 +80,7 @@ class MaintenanceRecordServiceApi {
       );
       return MaintenaceRecordAdapter.maintenanceRecordToLocal(response.data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data.detail || 'Error al editar registro',
@@ -145,7 +145,7 @@ class MaintenanceRecordServiceApi {
       );
       return MaintenaceRecordAdapter.recordCommentToLocal(response.data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data.detail || 'Error al crear comentario',

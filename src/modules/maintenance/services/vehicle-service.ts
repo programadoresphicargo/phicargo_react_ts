@@ -19,7 +19,7 @@ class VehicleServiceApi {
       );
       return response.data.map(MaintenaceRecordAdapter.vehicleInfoToLocal);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data.detail || 'Error al obtener registros',

@@ -42,7 +42,7 @@ class ShiftServiceApi {
       const response = await odooApi.get<ShiftApi[]>(url);
       return response.data.map(shiftToLocal);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data?.detail || 'Error al obtener los turnos',
@@ -68,7 +68,7 @@ class ShiftServiceApi {
       const response = await odooApi.put<ShiftApi>(url, data);
       return shiftToLocal(response.data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data?.detail || 'Error al editar el turno',
@@ -93,7 +93,7 @@ class ShiftServiceApi {
       const response = await odooApi.put<ShiftApi[]>(url, data);
       return response.data.map(shiftToLocal);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data?.detail || 'Error al archivar el turno',
@@ -114,7 +114,7 @@ class ShiftServiceApi {
       const response = await odooApi.patch('/shifts/shifts/reorder', data);
       return response.data;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data?.detail || 'Error al reordenar los turnos',
@@ -139,7 +139,7 @@ class ShiftServiceApi {
       );
       return shiftToLocal(response.data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data?.detail || 'Error al crear el turno',
@@ -160,7 +160,7 @@ class ShiftServiceApi {
       const response = await odooApi.get<QueueApi[]>(url);
       return response.data.map(shiftQueueToLocal);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data?.detail || 'Error al obtener las colas',
@@ -188,7 +188,7 @@ class ShiftServiceApi {
       const response = await odooApi.post(url, data);
       return shiftQueueToLocal(response.data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data?.detail || 'Error al encolar el turno',
@@ -208,7 +208,7 @@ class ShiftServiceApi {
     try {
       await odooApi.put(url);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data?.detail || 'Error al liberar el turno',
@@ -232,7 +232,7 @@ class ShiftServiceApi {
       const response = await odooApi.get<ManeuverApi[]>(url);
       return response.data.map(maneuverToLocal);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data?.detail || 'Error al obtener los maniobras',

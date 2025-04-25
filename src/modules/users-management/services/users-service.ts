@@ -86,7 +86,6 @@ class UsersServiceApi {
     updatedItem,
   }: UpdatableItem<UserUpdate>): Promise<User> {
     const data = UserAdapter.userUpdateToApi(updatedItem);
-    console.log(data);
     try {
       const response = await odooApi.patch<UserApi>(
         `/users-management/users/${id}`,

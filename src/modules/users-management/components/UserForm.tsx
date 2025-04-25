@@ -42,7 +42,6 @@ const UserForm = (props: Props) => {
     if (!user) {
       return;
     }
-    // console.log(data);
     updateUser({
       id: user?.id,
       updatedItem: data,

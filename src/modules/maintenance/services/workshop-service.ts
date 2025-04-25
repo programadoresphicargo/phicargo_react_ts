@@ -19,7 +19,7 @@ class WorkshopServiceApi {
       );
       return response.data.map(workshopToLocal);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data.detail || 'Error al obtener registros',
@@ -42,7 +42,7 @@ class WorkshopServiceApi {
       );
       return response.data;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(error.response?.data.detail || 'Error al crear taller');
       }

@@ -37,7 +37,6 @@ export const QueueDialog = ({ isOpen, onClose, shiftId }: Props) => {
 
   const onSubmit: SubmitHandler<QueueCreate> = async (data) => {
     if (!shiftId) return;
-    console.log(data);
     if (releaseNextDay) {
       data.releaseDate = dayjs().add(1, 'day').hour(9).minute(0).second(0);
     } else {
