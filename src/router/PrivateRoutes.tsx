@@ -6,7 +6,7 @@ import { Suspense, lazy } from 'react';
 import AccesoForm from '../phicargo/accesos/formulario';
 import AvailabilityRoutes from '../modules/drivers-and-vehicles/routes/AvailabilityRoutes';
 import ComplaintsRoutes from '@/modules/complaints/routes/ComplaintsRoutes';
-import DOReportRoutes from '@/modules/daily-operations-report/routes/DOReportRoutes';
+import DOReportRoutes from '@/modules/availability-report/routes/DOReportRoutes';
 import DashboardsRoutes from '@/modules/dashboards/routes/DashboardRoutes';
 import { LoadingPage } from '@/pages/LoadingPage';
 import MainMenuPage from '@/pages/MainManuPage';
