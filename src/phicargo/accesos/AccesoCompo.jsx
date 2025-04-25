@@ -54,8 +54,6 @@ const AccesoCompo = ({ children }) => {
             return;
         }
 
-        console.log(visitantes);
-
         const selectedVisitor = visitantes.find(option => option.id_visitante === value);
 
         if (selectedVisitor) {
