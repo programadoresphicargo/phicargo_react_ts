@@ -1,25 +1,10 @@
+import { KeyLabel, type KeyLabelConf } from '@/utilities';
 import type { IncidenceType } from '../models';
 
-interface IncidenceTypeConf {
-  key: IncidenceType;
-  type: string;
-  color:
-    | 'default'
-    | 'primary'
-    | 'secondary'
-    | 'error'
-    | 'info'
-    | 'success'
-    | 'warning';
-}
-
-export const incidenceTypeConf: IncidenceTypeConf[] = [
-  { key: 'operative', type: 'Operativa', color: 'warning' },
-  { key: 'legal', type: 'Legal', color: 'error' },
+export const conf: KeyLabelConf<IncidenceType>[] = [
+  { key: 'legal', label: 'Legal', color: 'primary' },
+  { key: 'operative', label: 'Operativa', color: 'secondary' },
 ];
 
-export const getIncidenceTypeConfig = (
-  type: IncidenceType,
-): IncidenceTypeConf | undefined => {
-  return incidenceTypeConf.find((conf) => conf.key === type);
-};
+export const incidenceType = new KeyLabel(conf);
+

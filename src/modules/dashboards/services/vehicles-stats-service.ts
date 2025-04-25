@@ -15,7 +15,7 @@ export class VehiclesStatsService {
       const response = await odooApi.get<VehicleStatsApi>(url);
       return VehicleStatsAdapter.vehicleStatsToLocal(response.data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data?.detail ||

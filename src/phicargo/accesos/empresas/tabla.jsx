@@ -98,7 +98,6 @@ const ListadoEmpresas = ({ open, handleClose }) => {
 
         if (row.subRows?.length) {
         } else {
-          console.log(row.original.id_empresa);
           setFormData((prevData) => ({
             ...prevData,
             ['id_empresa']: row.original.id_empresa,

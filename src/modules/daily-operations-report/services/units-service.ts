@@ -18,7 +18,6 @@ class UnitsService implements IUnitsService {
 
     try {
       const response = await odooApi.get<UnitIndicatorsApi>(url);
-      console.log(response.data);
       return unitIndicatorsToLocal(response.data);
     } catch (error) {
       console.error(error);

@@ -94,7 +94,6 @@ const ListadoVisitantes = ({ open, handleClose }) => {
 
         if (row.subRows?.length) {
         } else {
-          console.log(row.original.id_visitante);
           AñadirVisitanteAcceso(row.original.id_visitante);
           handleClose();
         }

@@ -226,13 +226,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
         }));
     };
 
-    useEffect(() => {
-        console.log("Visitantes añadidos:", addedVisitors);
-        console.log("Visitantes eliminados:", removedVisitors);
-    }, [addedVisitors, removedVisitors]);
-
     const registrar_acceso = async (e) => {
-        console.log(formData);
         const validationErrors = validateForm();
 
         if (Object.keys(validationErrors).length === 0) {
@@ -269,7 +263,6 @@ const AccesoForm = ({ id_acceso, onClose }) => {
     };
 
     const actualizar_acceso = async (e) => {
-        console.log(formData);
         const dataToSend = {
             data: formData,
             visitantes_agregados: addedVisitors,
@@ -281,7 +274,6 @@ const AccesoForm = ({ id_acceso, onClose }) => {
         try {
             setIsLoading(true);
             const response = await odooApi.post('/accesos/actualizar_acceso/' + id_acceso, dataToSend);
-            console.log('Respuesta del servidor:', response.data);
             if (response.data.status === "success") {
                 toast.success(`Acceso A-${response.data.id_insertado} actualizado correctamente.`);
                 onClose();
