@@ -2,10 +2,9 @@ import {
     MaterialReactTable,
     useMaterialReactTable,
 } from 'material-react-table';
-import React, { useEffect, useMemo, useState } from 'react';
-
+import React, { useEffect, useMemo, useState, useContext } from 'react';
 import { Box } from '@mui/material';
-import Button from '@mui/material/Button';
+import { Button } from '@heroui/react';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -14,12 +13,14 @@ import { toast } from 'react-toastify';
 import { Select, SelectItem } from "@heroui/react";
 import MonthSelector from '@/mes';
 import YearSelector from '@/año';
+import { ManiobraContext } from '../../context/viajeContext';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const AñadirContenedor = ({ show, handleClose, id_maniobra }) => {
 
     const [data, setData] = useState([]);
     const [isLoading2, setILoading] = useState();
+    const { formData, setFormData } = useContext(ManiobraContext);
 
     const currentMonth = String(new Date().getMonth() + 1).padStart(2, '0');
     const [selectedMonth, setSelectedMonth] = useState(currentMonth);
@@ -37,7 +38,7 @@ const AñadirContenedor = ({ show, handleClose, id_maniobra }) => {
 
     useEffect(() => {
         const fetchData = async (month, year,) => {
-            if (!selectedMonth || !selectedYear) return; 
+            if (!selectedMonth || !selectedYear) return;
 
             try {
                 setILoading(true);
@@ -46,7 +47,7 @@ const AñadirContenedor = ({ show, handleClose, id_maniobra }) => {
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ month, year }), 
+                    body: JSON.stringify({ month, year }),
                 });
 
                 if (!response.ok) {
@@ -54,38 +55,30 @@ const AñadirContenedor = ({ show, handleClose, id_maniobra }) => {
                 }
 
                 const jsonData = await response.json();
-                setData(jsonData); // Actualiza el estado con los datos obtenidos
+                setData(jsonData);
             } catch (error) {
                 console.error('Error al obtener los datos:', error);
             } finally {
-                setILoading(false); // Asegúrate de que setILoading se ejecute siempre
+                setILoading(false);
             }
         };
 
         fetchData(selectedMonth, selectedYear);
     }, [selectedMonth, selectedYear]);
 
-    const añadir_contenedor = (id_cp) => {
-        axios.post(VITE_PHIDES_API_URL + '/modulo_maniobras/maniobra/añadir_contenedor.php?id_maniobra=' + id_maniobra + '&id_cp=' + id_cp,)
-            .then((response) => {
-                const data = response.data;
-                if (data.success) {
-                    toast.success('Contenedor añadido correctamente');
-                    handleClose();
-                } else {
-                    toast.error('Respuesta inesperada del servidor:' + data.error);
-                }
-            })
-            .catch((error) => {
-                console.error('Error en la solicitud:', error);
-                if (error.response) {
-                    toast.error('Respuesta de error del servidor:' + error.response.status);
-                } else if (error.request) {
-                    toast.error('Respuesta de error del servidor:' + error.request);
-                } else {
-                    toast.error('Error al configurar la solicitud:' + error.message);
-                }
-            });
+    const añadir_contenedor = (data) => {
+        setFormData(prev => {
+            const yaExiste = prev.cps_ligadas?.some(item => item.id === data.id);
+            if (yaExiste) {
+                toast.warn('Este contenedor ya ha sido añadido.');
+                return prev;
+            }
+
+            return {
+                ...prev,
+                cps_ligadas: [...(prev.cps_ligadas || []), data],
+            };
+        });
     };
 
     const columns = useMemo(
@@ -101,7 +94,8 @@ const AñadirContenedor = ({ show, handleClose, id_maniobra }) => {
             {
                 accessorKey: 'cliente',
                 header: 'Cliente',
-            }, {
+            },
+            {
                 accessorKey: 'x_ejecutivo_viaje_bel',
                 header: 'Ejecutivo de viaje',
                 size: 150,
@@ -110,7 +104,8 @@ const AñadirContenedor = ({ show, handleClose, id_maniobra }) => {
                 accessorKey: 'x_reference',
                 header: 'Contenedor',
                 size: 150,
-            }, {
+            },
+            {
                 accessorKey: 'date_order',
                 header: 'Fecha',
                 size: 150,
@@ -145,19 +140,19 @@ const AñadirContenedor = ({ show, handleClose, id_maniobra }) => {
         },
         muiTableBodyCellProps: {
             sx: {
-                borderBottom: '1px solid #e0e0e0', // Añade un borde entre columnas
+                borderBottom: '1px solid #e0e0e0',
             },
         },
         enableRowActions: true,
         displayColumnDefOptions: {
             'mrt-row-actions': {
-                header: 'Seleccionar', //change header text
-                size: 100, //make actions column wider
+                header: 'Seleccionar', 
+                size: 100,
             },
         },
         renderRowActions: ({ row }) => (
             <Box>
-                <Button variant="contained" onClick={() => añadir_contenedor(row.original.id_cp)}>
+                <Button color='primary' onPress={() => añadir_contenedor(row.original)} size='sm'>
                     Añadir
                 </Button>
             </Box>
@@ -173,10 +168,10 @@ const AñadirContenedor = ({ show, handleClose, id_maniobra }) => {
                 fontWeight: 'normal',
                 fontSize: '24px',
                 backgroundColor: row.getIsGrouped() ? '#246cd0' : 'inherit',
-                color: 'white', // Corrige el color a 'white'
+                color: 'white',
             },
             style: {
-                cursor: 'pointer', // Cambia el cursor al pasar sobre la fila
+                cursor: 'pointer',
             },
         }),
         renderTopToolbarCustomActions: ({ table }) => (

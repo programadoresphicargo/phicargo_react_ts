@@ -18,7 +18,7 @@ import EstatusHistorialManiobras from '../reportes_estatus/estatus';
 import Grid from '@mui/material/Grid2';
 import LinearProgress from '@mui/material/LinearProgress';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import ManiobraContenedores from './añadir_contenedor/maniobra_contenedores';
+import ManiobraContenedores from './añadir_contenedor/cps_maniobra';
 import { ManiobraContext } from '../context/viajeContext';
 import MyComponent from './selects_flota';
 import PanelEstatus from './envio_estatus/panel';
@@ -148,98 +148,95 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
         { key: 'pesaje', label: 'pesaje' }
     ];
 
-    const fetchCorreosLigados = async (id_maniobra) => {
-        try {
-            const response = await odooApi.get(`/maniobras/correos/ligados/${id_maniobra}`);
-            const correos = response.data;
-            console.log(correos);
-
-            setFormData(prevFormData => ({
-                ...prevFormData,
-                correos_ligados: correos,
-                correos_desligados: [],
-            }));
-        } catch (error) {
-            console.error('Error al obtener los correos ligados:', error.message || error);
-        }
-    };
-
-
     useEffect(() => {
-        if (id_maniobra) {
-            setFormDisabled(true);
-            setIDManiobra(id_maniobra);
+        const fetchManiobraData = async (id) => {
+            try {
+                const response = await odooApi.get(`/maniobras/by_id/${id}`);
+                return response.data || {};
+            } catch (error) {
+                console.error('Error al obtener maniobra:', error);
+                toast.error('Error al obtener maniobra.');
+                return {};
+            }
+        };
 
-            // Hacer ambas peticiones en paralelo
-            Promise.all([
-                odooApi.get(`/maniobras/by_id/${id_maniobra}`),
-                odooApi.get(`/maniobras/correos/ligados/${id_maniobra}`)
-            ])
-                .then(([maniobraRes, correosRes]) => {
-                    const data = maniobraRes.data || {};
-                    const correos = correosRes.data || [];
+        const fetchCorreosLigados = async (id) => {
+            try {
+                toast.info('Obteniendo correos');
+                const response = await odooApi.get(`/maniobras/correos/ligados/${id}`);
+                console.log(response.data);
+                return response.data || [];
+            } catch (error) {
+                console.error('Error al obtener correos:', error);
+                toast.error('Error al obtener correos.');
+                return [];
+            }
+        };
 
-                    console.log('Datos de maniobra:', data);
-                    console.log('Estado maniobra:', data.estado_maniobra);
-                    console.log('Correos ligados:', correos);
+        const cargarDatos = async () => {
+            if (id_maniobra) {
+                setFormDisabled(true);
+                setIDManiobra(id_maniobra);
 
-                    // Actualizar el estado con todos los datos obtenidos
-                    setFormData({
-                        id_maniobra: data.id_maniobra || '',
-                        id_usuario: session.user.id,
-                        id_cp: data.id_cp || '',
-                        id_terminal: data.id_terminal || '',
-                        tipo_maniobra: data.tipo_maniobra || '',
-                        operador_id: data.operador_id || '',
-                        vehicle_id: data.vehicle_id || '',
-                        trailer1_id: data.trailer1_id || '',
-                        trailer2_id: data.trailer2_id || '',
-                        dolly_id: data.dolly_id || '',
-                        motogenerador_1: data.motogenerador_1 || '',
-                        motogenerador_2: data.motogenerador_2 || '',
-                        inicio_programado: data.inicio_programado || '',
-                        usuario_registro: data.usuarioregistro || '',
-                        usuario_activo: data.usuarioactivacion || '',
-                        usuario_finalizo: data.usuariofinalizacion || '',
-                        estado_maniobra: data.estado_maniobra || '',
-                        correos_ligados: correos,
-                        correos_desligados: [],
-                        comentarios: data.comentarios || '',
-                    });
+                const correos = await fetchCorreosLigados(id_maniobra);
+                const data = await fetchManiobraData(id_maniobra);
 
-                    toggleButtonsVisibility(data.estado_maniobra);
-                })
-                .catch(error => {
-                    console.error('Error al obtener datos de maniobra:', error);
-                    toast.error('Error al obtener datos de maniobra.');
+                setFormData({
+                    id_maniobra: data.id_maniobra || '',
+                    id_usuario: session.user.id,
+                    id_terminal: data.id_terminal || '',
+                    tipo_maniobra: data.tipo_maniobra || '',
+                    operador_id: data.operador_id || null,
+                    vehicle_id: data.vehicle_id || null,
+                    trailer1_id: data.trailer1_id || null,
+                    trailer2_id: data.trailer2_id || null,
+                    dolly_id: data.dolly_id || null,
+                    motogenerador_1: data.motogenerador_1 || null,
+                    motogenerador_2: data.motogenerador_2 || null,
+                    inicio_programado: data.inicio_programado || '',
+                    usuario_registro: data.usuarioregistro || '',
+                    usuario_activo: data.usuarioactivacion || '',
+                    usuario_finalizo: data.usuariofinalizacion || '',
+                    estado_maniobra: data.estado_maniobra || '',
+                    correos_ligados: correos,
+                    correos_desligados: [],
+                    cps_ligadas: [],
+                    cps_desligadas: [],
+                    comentarios: data.comentarios || '',
                 });
-        } else {
-            setIDManiobra(0);
-            setFormDisabled(false);
 
-            setFormData({
-                id_cp: id_cp,
-                id_usuario: session.user.id,
-                id_terminal: '',
-                id_cliente: '',
-                tipo_maniobra: '',
-                operador_id: '',
-                vehicle_id: '',
-                trailer1_id: '',
-                trailer2_id: '',
-                dolly_id: '',
-                motogenerador_1: '',
-                motogenerador_2: '',
-                inicio_programado: '',
-                estado_maniobra: '',
-                correos_ligados: [],
-                correos_desligados: [],
-                comentarios: ''
-            });
+                toggleButtonsVisibility(data.estado_maniobra);
+            } else {
+                setIDManiobra(0);
+                setFormDisabled(false);
 
-            toggleButtonsVisibility('registrar');
-        }
-    }, [id_maniobra]);
+                setFormData({
+                    id_usuario: session.user.id,
+                    id_terminal: '',
+                    id_cliente: '',
+                    tipo_maniobra: '',
+                    operador_id: null,
+                    vehicle_id: null,
+                    trailer1_id: null,
+                    trailer2_id: null,
+                    dolly_id: null,
+                    motogenerador_1: null,
+                    motogenerador_2: null,
+                    inicio_programado: '',
+                    estado_maniobra: '',
+                    correos_ligados: [],
+                    correos_desligados: [],
+                    cps_ligadas: [{ "id": id_cp }],
+                    comentarios: ''
+                });
+
+                toggleButtonsVisibility('registrar');
+            }
+        };
+
+        cargarDatos();
+    }, [id_maniobra, show]);
+
 
     const [errors, setErrors] = useState({});
     const validateFields = () => {
@@ -323,7 +320,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
     const handleSelectChange = (selectedOption, name) => {
         setFormData((prevData) => ({
             ...prevData,
-            [name]: selectedOption ? selectedOption : '',
+            [name]: selectedOption ? selectedOption : null,
         }));
         console.log('Datos del formulario actualizados:', formData);
     };
@@ -339,14 +336,23 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
     };
 
     const registrar_maniobra = () => {
+
+        const dataSend = {
+            data: formData,
+            correos_ligados: formData.correos_ligados,
+            cps_ligadas: formData.cps_ligadas
+        }
+
         setLoading(true);
-        axios.post(VITE_PHIDES_API_URL + '/modulo_maniobras/maniobra/registrar_maniobra.php', formData)
+        odooApi.post('/maniobras/create/', dataSend)
             .then((response) => {
                 const data = response.data;
                 setLoading(false);
-                if (data.success) {
+                if (data.status == "success") {
                     toast.success('El registro ha sido exitoso.');
                     handleClose();
+                } else if (data.status == "error") {
+                    toast.error('Error: ' + data.message);
                 } else if (data.error) {
                     toast.error('Error: ' + data.error);
                 } else {
@@ -368,26 +374,34 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
 
     const actualizar_maniobra = async () => {
         try {
+
+            const dataSend = {
+                data: formData,
+                correos_ligados: formData.correos_ligados,
+                correos_desligados: formData.correos_desligados,
+                cps_ligadas: formData.cps_ligadas,
+                cps_desligadas: formData.cps_desligadas
+            }
+
             setLoading(true);
-            const response = await axios.post(`${VITE_PHIDES_API_URL}/modulo_maniobras/maniobra/actualizar_maniobra.php`, formData);
+            const response = await odooApi.post(`/maniobras/update/${id_maniobra}`, dataSend);
             setLoading(false);
 
-            const { success, message } = response.data;
-
-            if (success) {
+            const data = response.data;
+            setLoading(false);
+            if (data.status == "success") {
                 toast.success('Datos actualizados correctamente.');
                 handleClose();
                 setFormDisabled(true);
                 toggleButtonsVisibility('borrador');
 
-                // Reiniciar solo correos ligados y desligados
                 setFormData(prevFormData => ({
                     ...prevFormData,
                     correos_ligados: [],
                     correos_desligados: [],
                 }));
             } else {
-                toast.error(`Error en la actualización: ${message || 'Respuesta inesperada del servidor'}`);
+                toast.error(`Error en la actualización: Respuesta inesperada del servidor'}`);
             }
         } catch (error) {
             setLoading(false);
