@@ -151,6 +151,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
     useEffect(() => {
         const fetchManiobraData = async (id) => {
             try {
+                toast.info('Obteniendo datos de maniobra.');
                 const response = await odooApi.get(`/maniobras/by_id/${id}`);
                 return response.data || {};
             } catch (error) {
@@ -181,7 +182,8 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                 const correos = await fetchCorreosLigados(id_maniobra);
                 const data = await fetchManiobraData(id_maniobra);
 
-                setFormData({
+                setFormData(prev => ({
+                    ...prev,
                     id_maniobra: data.id_maniobra || '',
                     id_usuario: session.user.id,
                     id_terminal: data.id_terminal || '',
@@ -200,8 +202,9 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                     estado_maniobra: data.estado_maniobra || '',
                     correos_ligados: correos,
                     correos_desligados: [],
+                    cps_desligadas: [],
                     comentarios: data.comentarios || '',
-                });
+                }));
 
                 toggleButtonsVisibility(data.estado_maniobra);
             } else {
