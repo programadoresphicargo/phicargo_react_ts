@@ -1,4 +1,4 @@
-import type { Record } from '../models/record-model';
+import type { Record } from '../models';
 import dayjs from 'dayjs';
 
 /**

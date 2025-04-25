@@ -1,4 +1,4 @@
-import type { RecordColumnComment } from '../record-model';
+import type { RecordColumnComment } from '../availability-models';
 
 interface RecordApiBase {
   record_date: string;

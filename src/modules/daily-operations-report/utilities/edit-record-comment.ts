@@ -1,4 +1,4 @@
-import type { Record, RecordComment } from '../models/record-model';
+import type { Record, RecordComment } from '../models';
 
 /**
  * Function to edit a record comment

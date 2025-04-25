@@ -3,37 +3,18 @@ import type {
   RecordComment,
   RecordCommentCreate,
   RecordUpdate,
-} from '../models/record-model';
-import type { RecordApi, RecordCommentApi } from '../models/api/record-model';
-import {
-  recordCommentToApi,
-  recordCommentToLocal,
-  recordToLocal,
-  recordUpdateToApi,
-} from '../adapters/record-adapter';
+} from '../models';
+import type { RecordApi, RecordCommentApi } from '../models/api';
 
+import { AvailibilityAdapter } from '../adapters';
 import { AxiosError } from 'axios';
 import { DateRange } from 'rsuite/esm/DateRangePicker';
 import { UpdatableItem } from '@/types';
 import dayjs from 'dayjs';
 import odooApi from '@/api/odoo-api';
 
-export interface IRecordService {
-  /**
-   * Obtiene los registros
-   * @returns Array con los registros
-   */
-  getRecords: (monthRange: DateRange, branchId: number) => Promise<Record[]>;
-  /**
-   * Edita un registro
-   * @param updateItem Objeto con el id del registro a editar y los datos a actualizar
-   * @returns Objeto con los datos del registro editado
-   */
-  editRecord: (updateItem: UpdatableItem<RecordUpdate>) => Promise<Record[]>;
-}
-
-class RecordService implements IRecordService {
-  public async getRecords(
+export class AvailabilityService {
+  public static async getRecords(
     monthRange: DateRange,
     branchId: number,
   ): Promise<Record[]> {
@@ -44,7 +25,7 @@ class RecordService implements IRecordService {
 
     try {
       const response = await odooApi.get<RecordApi[]>(url);
-      return response.data.map(recordToLocal);
+      return response.data.map(AvailibilityAdapter.recordToLocal);
     } catch (error) {
       console.error(error);
       if (error instanceof AxiosError) {
@@ -56,16 +37,16 @@ class RecordService implements IRecordService {
     }
   }
 
-  public async editRecord({
+  public static async editRecord({
     id,
     updatedItem,
   }: UpdatableItem<RecordUpdate>): Promise<Record[]> {
-    const newRecord = recordUpdateToApi(updatedItem);
+    const newRecord = AvailibilityAdapter.recordUpdateToApi(updatedItem);
     const url = `/daily_operations_report/${id}`;
 
     try {
       const response = await odooApi.put<RecordApi[]>(url, newRecord);
-      return response.data.map(recordToLocal);
+      return response.data.map(AvailibilityAdapter.recordToLocal);
     } catch (error) {
       console.error(error);
       if (error instanceof AxiosError) {
@@ -77,7 +58,7 @@ class RecordService implements IRecordService {
     }
   }
 
-  public async updateRecordDataById({
+  public static async updateRecordDataById({
     branchId,
     date,
   }: {
@@ -87,7 +68,7 @@ class RecordService implements IRecordService {
     const url = `/daily_operations_report/update_units/${branchId}?record_date=${date}`;
     try {
       const response = await odooApi.put<RecordApi[]>(url);
-      return response.data.map(recordToLocal);
+      return response.data.map(AvailibilityAdapter.recordToLocal);
     } catch (error) {
       console.error(error);
       if (error instanceof AxiosError) {
@@ -99,7 +80,7 @@ class RecordService implements IRecordService {
     }
   }
 
-  public async editComment({
+  public static async editComment({
     id,
     comment,
   }: {
@@ -108,11 +89,11 @@ class RecordService implements IRecordService {
   }): Promise<RecordComment> {
     const url = `/daily_operations_report/${id}/comment`;
 
-    const data = recordCommentToApi(comment);
+    const data = AvailibilityAdapter.recordCommentToApi(comment);
 
     try {
       const response = await odooApi.put<RecordCommentApi>(url, data);
-      return recordCommentToLocal(response.data);
+      return AvailibilityAdapter.recordCommentToLocal(response.data);
     } catch (error) {
       console.error(error);
       if (error instanceof AxiosError) {
@@ -125,4 +106,4 @@ class RecordService implements IRecordService {
   }
 }
 
-export default RecordService;
+

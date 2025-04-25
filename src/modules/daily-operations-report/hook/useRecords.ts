@@ -1,13 +1,12 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import type { Record } from '../models/record-model';
-import RecordService from '../services/record-service';
+import { AvailabilityService } from '../services';
+import type { Record } from '../models';
 import { editRecordComment } from '../utilities/edit-record-comment';
 import toast from 'react-hot-toast';
 import { useGlobalContext } from './useGlobalContext';
 
 const mainKey = 'records';
-const recordService = new RecordService();
 
 /**
  * Custom hook para las queries de los registros
@@ -27,44 +26,64 @@ export const useRecords = () => {
   // });
 
   const updateRecordMutation = useMutation({
-    mutationFn: recordService.editRecord,
+    mutationFn: AvailabilityService.editRecord,
     onMutate: async (item) => {
       await queryClient.cancelQueries({ queryKey: [mainKey, month, branchId] });
 
-      const previousItems = queryClient.getQueryData<Record[]>([mainKey, month, branchId]);
+      const previousItems = queryClient.getQueryData<Record[]>([
+        mainKey,
+        month,
+        branchId,
+      ]);
 
-      queryClient.setQueryData([mainKey, month, branchId], (prevItems: Record[] | undefined) => {
-        if (!prevItems) return [];
+      queryClient.setQueryData(
+        [mainKey, month, branchId],
+        (prevItems: Record[] | undefined) => {
+          if (!prevItems) return [];
 
-        return prevItems.map((i) =>
-          i.id === item.id ? { ...i, ...item.updatedItem } : i,
-        );
-      });
+          return prevItems.map((i) =>
+            i.id === item.id ? { ...i, ...item.updatedItem } : i,
+          );
+        },
+      );
 
       return { previousItems };
     },
     onSuccess: (updatedItems) => {
-      queryClient.setQueryData([mainKey, month, branchId], (prevItems: Record[] | undefined) => {
-        if (!prevItems) return [];
+      queryClient.setQueryData(
+        [mainKey, month, branchId],
+        (prevItems: Record[] | undefined) => {
+          if (!prevItems) return [];
 
-        return prevItems.map((i) => updatedItems.find((ui) => ui.id === i.id) || i);
-      });
+          return prevItems.map(
+            (i) => updatedItems.find((ui) => ui.id === i.id) || i,
+          );
+        },
+      );
       toast.success('Registro actualizado con éxito');
     },
     onError: (err, _variables, context) => {
-      queryClient.setQueryData([mainKey, month, branchId], context?.previousItems);
+      queryClient.setQueryData(
+        [mainKey, month, branchId],
+        context?.previousItems,
+      );
       toast.error(err.message || 'Error al actualizar el registro');
     },
   });
 
   const updateRecordDataMutation = useMutation({
-    mutationFn: recordService.updateRecordDataById,
+    mutationFn: AvailabilityService.updateRecordDataById,
     onSuccess: (updatedItems) => {
-      queryClient.setQueryData([mainKey, month, branchId], (prevItems: Record[] | undefined) => {
-        if (!prevItems) return [];
+      queryClient.setQueryData(
+        [mainKey, month, branchId],
+        (prevItems: Record[] | undefined) => {
+          if (!prevItems) return [];
 
-        return prevItems.map((i) => updatedItems.find((ui) => ui.id === i.id) || i);
-      });
+          return prevItems.map(
+            (i) => updatedItems.find((ui) => ui.id === i.id) || i,
+          );
+        },
+      );
       toast.success('Registro actualizado con éxito');
     },
     onError: (err) => {
@@ -73,7 +92,7 @@ export const useRecords = () => {
   });
 
   const editCommentMutation = useMutation({
-    mutationFn: recordService.editComment,
+    mutationFn: AvailabilityService.editComment,
     onSuccess: (comment, { id }) => {
       queryClient.setQueryData([mainKey, month, branchId], (data: Record[]) => {
         return editRecordComment(data, id, comment);
@@ -91,3 +110,4 @@ export const useRecords = () => {
     editCommentMutation,
   };
 };
+

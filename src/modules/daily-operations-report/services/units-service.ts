@@ -2,7 +2,7 @@ import { AxiosError } from 'axios';
 import type { UnitIndicators } from '../models/unit-indicators-model';
 import type { UnitIndicatorsApi } from '../models/api/unit-indicators-model';
 import odooApi from '@/api/odoo-api';
-import { unitIndicatorsToLocal } from '../adapters/units-adapters';
+import { unitIndicatorsToLocal } from '../adapters';
 
 export interface IUnitsService {
   /**

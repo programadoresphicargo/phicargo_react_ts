@@ -4,13 +4,13 @@ import type {
   RecordCommentCreate,
   RecordComments,
   RecordUpdate,
-} from '../models/record-model';
+} from '../models';
 import type {
   RecordApi,
   RecordApiUpdate,
   RecordCommentApi,
   RecordCommentCreateApi,
-} from '../models/api/record-model';
+} from '../models/api';
 
 import dayjs from 'dayjs';
 
