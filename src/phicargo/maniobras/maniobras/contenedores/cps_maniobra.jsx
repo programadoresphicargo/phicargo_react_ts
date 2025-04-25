@@ -127,7 +127,7 @@ const ManiobraContenedores = ({ id_maniobra }) => {
         enableRowActions: true,
         renderRowActions: ({ row }) => (
             <Box>
-                <Button onPress={() => handleOpenDialog(row.original.id)} startContent={<DeleteIcon />} size='sm' color='primary'></Button>
+                <Button onPress={() => handleOpenDialog(row.original.id)} startContent={<DeleteIcon />} size='sm' color='primary' isDisabled={formDisabled}></Button>
             </Box>
         ),
         muiTableBodyRowProps: ({ row }) => ({
