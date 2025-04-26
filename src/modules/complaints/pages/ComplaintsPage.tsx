@@ -2,7 +2,7 @@ import { AddButton } from '@/components/ui';
 import type { Complaint } from '../models';
 import { CreateComplaintForm } from '../components/CreateComplaintForm';
 import { DialogProps } from '@mui/material';
-import { EditComplaintForm } from '../components/EditComplaintForm';
+import { EditComplaint } from '../components/EditComplaint';
 import { MaterialReactTable } from 'material-react-table';
 import { MuiTransition } from '@/components';
 import { useBaseTable } from '@/hooks';
@@ -53,7 +53,7 @@ const ComplaintsPage = () => {
     muiEditRowDialogProps: dialogProps,
     muiCreateRowModalProps: dialogProps,
     renderEditRowDialogContent: ({ table, row }) => (
-      <EditComplaintForm
+      <EditComplaint
         onClose={() => table.setEditingRow(null)}
         complaint={row.original}
       />
