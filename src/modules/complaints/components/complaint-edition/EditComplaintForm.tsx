@@ -1,11 +1,11 @@
-import type { Complaint, ComplaintUpdate } from '../models';
+import type { Complaint, ComplaintUpdate } from '../../models';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-import { ComplaintInfo } from './ComplaintInfo';
+import { ComplaintInfo } from '../ComplaintInfo';
 import { DatePickerElement } from 'react-hook-form-mui/date-pickers';
 import { MuiSaveButton } from '@/components/ui';
 import { TextFieldElement } from 'react-hook-form-mui';
-import { useUpdateComplaintMutation } from '../hooks/mutations';
+import { useUpdateComplaintMutation } from '../../hooks/mutations';
 
 interface Props {
   complaint: Complaint;

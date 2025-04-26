@@ -15,13 +15,13 @@ import {
 import { Button, MuiCloseButton, MuiSaveButton } from '@/components/ui';
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 
-import { COMPLAINT_TYPES } from '../utilities';
-import type { ComplaintCreate } from '../models';
+import { COMPLAINT_TYPES } from '../../utilities';
+import type { ComplaintCreate } from '../../models';
 import { ContactsSearchInputMatch } from '@/modules/contacts/components/inputs/ContactsSearchInputMatch';
 import { CreateActionsForm } from './CreateActionsForm';
 import { DatePickerElement } from 'react-hook-form-mui/date-pickers';
 import dayjs from 'dayjs';
-import { useCreateComplaintMutation } from '../hooks/mutations';
+import { useCreateComplaintMutation } from '../../hooks/mutations';
 
 const initialFormState: ComplaintCreate = {
   customerId: null as unknown as number,

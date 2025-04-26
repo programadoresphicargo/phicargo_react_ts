@@ -1,7 +1,7 @@
 import { Control, Path, TextFieldElement } from 'react-hook-form-mui';
 
 import { Button } from '@/components/ui';
-import { ComplaintActionCreate } from '../models';
+import { ComplaintActionCreate } from '../../models';
 import { DatePickerElement } from 'react-hook-form-mui/date-pickers';
 
 interface ComplaintActionCreateForm {

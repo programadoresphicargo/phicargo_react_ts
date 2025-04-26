@@ -1,4 +1,4 @@
-import { ComplaintActionCreate, ComplaintCreate } from '../models';
+import type { ComplaintActionCreate, ComplaintCreate } from '../../models';
 import {
   Control,
   FieldArrayMethodProps,

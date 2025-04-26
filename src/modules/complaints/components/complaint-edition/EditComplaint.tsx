@@ -7,7 +7,7 @@ import {
 } from '@mui/material';
 import { Button, MuiCloseButton } from '@/components/ui';
 
-import type { Complaint } from '../models';
+import type { Complaint } from '../../models';
 import { EditComplaintActions } from './EditComplaintActions';
 import { EditComplaintForm } from './EditComplaintForm';
 

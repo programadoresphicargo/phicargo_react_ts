@@ -1,10 +1,13 @@
+import { Box, DialogProps, IconButton, Tooltip } from '@mui/material';
+
 import { AddButton } from '@/components/ui';
 import type { Complaint } from '../models';
-import { CreateComplaintForm } from '../components/CreateComplaintForm';
-import { DialogProps } from '@mui/material';
-import { EditComplaint } from '../components/EditComplaint';
+import { CreateComplaintForm } from '../components/complaint-creation/CreateComplaintForm';
+import { EditComplaint } from '../components/complaint-edition/EditComplaint';
+import EditIcon from '@mui/icons-material/Edit';
 import { MaterialReactTable } from 'material-react-table';
 import { MuiTransition } from '@/components';
+import UpdateIcon from '@mui/icons-material/Update';
 import { useBaseTable } from '@/hooks';
 import { useComplaintsColumns } from '../hooks';
 import { useGetComplaintsQuery } from '../hooks/queries';
@@ -49,6 +52,20 @@ const ComplaintsPage = () => {
         size="small"
         onClick={() => table.setCreatingRow(true)}
       />
+    ),
+    renderRowActions: ({ row, table }) => (
+      <Box>
+        <Tooltip title="Editar">
+          <IconButton size="small" onClick={() => table.setEditingRow(row)}>
+            <EditIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Actualizar status">
+          <IconButton size="small" color="primary">
+            <UpdateIcon />
+          </IconButton>
+        </Tooltip>
+      </Box>
     ),
     muiEditRowDialogProps: dialogProps,
     muiCreateRowModalProps: dialogProps,

@@ -1,12 +1,12 @@
 import { Alert, LoadingSpinner, MuiSaveButton } from '@/components/ui';
-import type { Complaint, ComplaintActionCreate } from '../models';
+import type { Complaint, ComplaintActionCreate } from '../../models';
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 
-import { ComplaintActionCard } from './ComplaintActionCard';
-import { CreateActionsForm } from './CreateActionsForm';
+import { ComplaintActionCard } from '../ComplaintActionCard';
+import { CreateActionsForm } from '../complaint-creation/CreateActionsForm';
 import { Typography } from '@mui/material';
-import { useCreateComplaintActionsMutation } from '../hooks/mutations';
-import { useGetComplaintActionsQuery } from '../hooks/queries';
+import { useCreateComplaintActionsMutation } from '../../hooks/mutations';
+import { useGetComplaintActionsQuery } from '../../hooks/queries';
 
 interface ComplaintActionCreateForm {
   actions: ComplaintActionCreate[];
