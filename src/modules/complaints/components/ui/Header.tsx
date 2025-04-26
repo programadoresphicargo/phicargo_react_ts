@@ -6,7 +6,7 @@ const Header = () => {
     <HeaderBase backRoute="/reportes">
       <div className="mx-8">
         <h1 className="m-0 p-0 text-xl text-gray-100 font-bold">
-          Quejas De Clientes
+          No Conformidades
         </h1>
       </div>
 
