@@ -5,7 +5,6 @@ import { ComplaintInfo } from './ComplaintInfo';
 import { DatePickerElement } from 'react-hook-form-mui/date-pickers';
 import { MuiSaveButton } from '@/components/ui';
 import { TextFieldElement } from 'react-hook-form-mui';
-import dayjs from 'dayjs';
 import { useUpdateComplaintMutation } from '../hooks/mutations';
 
 interface Props {
@@ -86,6 +85,6 @@ const transformComplaintToComplaintUpdate = (
   responsible: complaint.responsible,
   area: complaint.area,
   response: complaint.response,
-  responseDate: complaint.responseDate || dayjs(),
+  responseDate: complaint.responseDate || null,
 });
 

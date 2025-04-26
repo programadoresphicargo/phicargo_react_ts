@@ -51,7 +51,7 @@ export const EditComplaintActions = ({ complaint }: Props) => {
   };
 
   return (
-    <section className="flex flex-col gap-2 w-1/2 overflow-y-auto h-[calc(100vh-250px)]">
+    <section className="flex flex-col gap-2 border rounded-md p-1 w-1/2 overflow-y-auto h-[calc(100vh-250px)]">
       <Typography sx={{ textAlign: 'center' }} variant="h6">
         Plan de Acción
       </Typography>
