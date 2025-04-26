@@ -38,6 +38,8 @@ import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import { useAuthContext } from "@/modules/auth/hooks";
 import dayjs from 'dayjs';
+import { DatePicker } from "@heroui/react";
+import { parseDate, parseDateTime, getLocalTimeZone } from "@internationalized/date";
 
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
@@ -209,7 +211,8 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                 setIDManiobra(0);
                 setFormDisabled(false);
 
-                setFormData({
+                setFormData(prev => ({
+                    ...prev,
                     id_usuario: session.user.id,
                     id_terminal: '',
                     id_cliente: '',
@@ -221,13 +224,12 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                     dolly_id: null,
                     motogenerador_1: null,
                     motogenerador_2: null,
-                    inicio_programado: '',
                     estado_maniobra: '',
                     correos_ligados: [],
                     correos_desligados: [],
                     cps_ligadas: [{ "id": id_cp }],
                     comentarios: ''
-                });
+                }));
 
                 toggleButtonsVisibility('registrar');
             }
@@ -307,6 +309,21 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
             ...prevData,
             inicio_programado: newValue.format('YYYY-MM-DD HH:mm'),
         }));
+    };
+
+    const update_inicio_programado = (newValue) => {
+        const date = newValue.toDate(getLocalTimeZone());
+        const formatted = date.getFullYear() +
+            '-' + String(date.getMonth() + 1).padStart(2, '0') +
+            '-' + String(date.getDate()).padStart(2, '0') +
+            'T' + String(date.getHours()).padStart(2, '0') +
+            ':' + String(date.getMinutes()).padStart(2, '0') +
+            ':' + String(date.getSeconds()).padStart(2, '0');
+        setFormData((prevData) => ({
+            ...prevData,
+            inicio_programado: formatted,
+        }));
+        console.log(formatted);
     };
 
     const handleChangeComentarios = (newValue) => {
@@ -749,33 +766,17 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                                         </Autocomplete>
                                                     </Grid>
                                                     <Grid size={{ xs: 12, md: 6 }}>
-                                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                            <DateTimePicker
-                                                                slotProps={{
-                                                                    textField: {
-                                                                        size: 'small', fullWidth: true, error: errors['inicio_programado'],
-                                                                        helperText: errors['inicio_programado']
-                                                                    }
-                                                                }}
-                                                                id="inicio_programado"
-                                                                name="inicio_programado"
-                                                                label="Inicio programado"
-                                                                size="small"
-                                                                value={dayjs(formData.inicio_programado)}
-                                                                disabled={formDisabled}
-                                                                onChange={handleChange}
-                                                                renderInput={(params) => (
-                                                                    <TextField
-                                                                        {...params}
-                                                                        error={errors['inicio_programado']}
-                                                                        helperText={errors.inicio_programado}
-                                                                        size="small"
-                                                                        fullWidth
-                                                                    />
-                                                                )}
-                                                            />
-                                                        </LocalizationProvider>
+
+                                                        <DatePicker
+                                                            label="Inicio programado"
+                                                            variant="bordered"
+                                                            showMonthAndYearPickers
+                                                            value={parseDateTime(formData.inicio_programado)}
+                                                            onChange={update_inicio_programado}
+                                                            isDisabled={formDisabled}
+                                                        />
                                                     </Grid>
+
                                                     <Grid size={{ xs: 12, md: 6 }}>
                                                         <SelectOperador
                                                             label={'Operador'}
