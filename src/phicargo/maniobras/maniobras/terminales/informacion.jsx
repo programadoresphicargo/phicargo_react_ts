@@ -1,7 +1,7 @@
 import { Button, Input } from "@heroui/react";
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import React, { useEffect, useState } from "react";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 import axios from 'axios';
 import odooApi from '@/api/odoo-api';
@@ -9,28 +9,50 @@ const { VITE_PHIDES_API_URL } = import.meta.env;
 
 function FormularioTerminales({ open, onClose, id_terminal }) {
 
+    const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState({
         id_terminal: id_terminal,
         terminal: '',
     });
 
     useEffect(() => {
-        const fetchVehiculoData = async () => {
+        const fetchTerminalData = async () => {
             try {
-                const response = await odooApi.get('/terminales_maniobras/by_id_terminal/' + id_terminal);
-                const data = response.data[0];
+                toast.info('Obteniendo terminal...');
+                setIsLoading(true);
+                const response = await odooApi.get('/maniobras/terminales/by_id_terminal/' + id_terminal);
+                const data = response.data;
+
                 setFormData(prevState => ({
                     ...prevState,
                     id_terminal: id_terminal,
-                    terminal: data.terminal,
+                    terminal: data?.terminal || "",  // Si no existe terminal, pon ""
                 }));
+
             } catch (error) {
                 console.error("Error al obtener los datos del terminal:", error);
+
+                // También podrías resetear en caso de error
+                setFormData(prevState => ({
+                    ...prevState,
+                    id_terminal: id_terminal,
+                    terminal: "",
+                }));
+
+            } finally {
+                setIsLoading(false);
             }
         };
 
         if (id_terminal !== 0) {
-            fetchVehiculoData();
+            fetchTerminalData();
+        } else {
+            // Si id_terminal es 0, resetea el formulario también
+            setFormData(prevState => ({
+                ...prevState,
+                id_terminal: 0,
+                terminal: "",
+            }));
         }
     }, [id_terminal]);
 
@@ -44,23 +66,32 @@ function FormularioTerminales({ open, onClose, id_terminal }) {
 
     const actualizar = () => {
         console.log(formData);
-        axios.post(VITE_PHIDES_API_URL + '/modulo_maniobras/terminales/actualizar_terminal.php', formData)
+        setIsLoading(true);
+        odooApi.post('/maniobras/terminales/update/' + id_terminal, formData)
             .then(response => {
-                console.log('Respuesta del servidor:', response.data);
+                if (response.data.status === "success") {
+                    toast.success(response.data.message);
+                }
+                setIsLoading(false);
             })
             .catch(error => {
-                console.error('Error:', error);
+                toast.error('Error:' + error);
+                setIsLoading(false);
             });
     };
 
     const registrar = () => {
+        if (formData.terminal === "") {
+            return toast.error("Ingresa un valor para terminal");
+        }
         console.log(formData);
-        axios.post(VITE_PHIDES_API_URL + '/modulo_maniobras/terminales/registrar_terminal.php', formData)
+        odooApi.post('/maniobras/terminales/create/', formData)
             .then(response => {
-                var data = response.data;
-                if (data.success) {
-                    toast.success('Terminal registrada');
+                if (response.data.status === "success") {
+                    toast.success(response.data.message);
                     onClose();
+                } else if (response.data.status === "error") {
+                    toast.error(response.data.message);
                 } else {
                     toast.error(data);
                 }
@@ -72,25 +103,42 @@ function FormularioTerminales({ open, onClose, id_terminal }) {
 
     return (
         <div>
-            <Dialog open={open} onClose={onClose}
+            <Dialog
+                open={open}
+                onClose={onClose}
                 fullWidth="sm"
-                maxWidth="sm">
+                maxWidth="sm"
+            >
                 <DialogTitle></DialogTitle>
                 <DialogContent>
                     <DialogContentText>
 
-                        <form id="formpostura">
-                            <Button type="button" color="primary" onPress={registrar}>Guardar</Button>
-                            <Input
-                                label='Nombre terminal'
-                                variant="bordered"
-                                type="text"
-                                className="form-control"
-                                id="terminal"
-                                name="terminal"
-                                value={formData.terminal}
-                                onChange={handleInputChange} />
-                        </form>
+                        <div className="flex flex-wrap gap-2 items-center mb-3">
+                            {id_terminal === 0 && (
+                                <Button type="button" color="primary" onPress={registrar} isLoading={isLoading}>Guardar</Button>
+                            )}
+                            {id_terminal !== 0 && (
+                                <Button
+                                    type="button"
+                                    color="success"
+                                    onPress={actualizar}
+                                    isLoading={isLoading}
+                                    className="text-white"
+                                >
+                                    Actualizar
+                                </Button>
+                            )}
+                        </div>
+
+                        <Input
+                            label='Nombre terminal'
+                            variant="bordered"
+                            type="text"
+                            id="terminal"
+                            name="terminal"
+                            value={formData.terminal}
+                            onChange={handleInputChange}
+                        />
 
                     </DialogContentText>
                 </DialogContent>
