@@ -14,7 +14,7 @@ const SelectTerminal = ({ label, id, name, onChange, value, disabled, error_term
         setLoading(true);
 
         odooApi
-            .get('/terminales_maniobras/')
+            .get('/maniobras/terminales/')
             .then(response => {
                 const data = response.data.map(item => ({
                     key: Number(item.id_terminal),
