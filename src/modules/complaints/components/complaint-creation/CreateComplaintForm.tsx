@@ -15,13 +15,13 @@ import {
 import { Button, MuiCloseButton, MuiSaveButton } from '@/components/ui';
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { COMPLAINT_TYPES } from '../utilities';
-import type { ComplaintCreate } from '../models';
+import { COMPLAINT_TYPES } from '../../utilities';
+import type { ComplaintCreate } from '../../models';
 import { ContactsSearchInputMatch } from '@/modules/contacts/components/inputs/ContactsSearchInputMatch';
+import { CreateActionsForm } from './CreateActionsForm';
 import { DatePickerElement } from 'react-hook-form-mui/date-pickers';
 import dayjs from 'dayjs';
-import { useCreateComplaintMutation } from '../hooks/mutations';
+import { useCreateComplaintMutation } from '../../hooks/mutations';
 
 const initialFormState: ComplaintCreate = {
   customerId: null as unknown as number,
@@ -239,70 +239,17 @@ export const CreateComplaintForm = ({ onClose }: Props) => {
               ]}
             />
           </section>
-          <section className="flex flex-col gap-2 w-1/2 overflow-y-auto h-[calc(100vh-250px)]">
-            <Typography sx={{textAlign: 'center'}} variant="h6">Plan de Acción</Typography>
+          <section className="flex flex-col gap-2 border px-2 rounded-md w-1/2 overflow-y-auto h-[calc(100vh-250px)]">
+            <Typography sx={{ textAlign: 'center' }} variant="h6">
+              Plan de Acción
+            </Typography>
 
-            {fields.map((field, index) => (
-              <div
-                key={field.id}
-                className="flex flex-col gap-4 border p-4 rounded-md"
-              >
-                <TextFieldElement
-                  control={control}
-                  name={`actions.${index}.actionPlan`}
-                  label="Acción"
-                  size="small"
-                  required
-                  multiline
-                  minRows={3}
-                  rules={{ required: 'Acción requerida' }}
-                />
-                <TextFieldElement
-                  control={control}
-                  name={`actions.${index}.responsible`}
-                  label="Responsable"
-                  size="small"
-                  required
-                  rules={{ required: 'Responsable requerido' }}
-                />
-                <DatePickerElement
-                  control={control}
-                  name={`actions.${index}.commitmentDate`}
-                  label="Fecha Compromiso"
-                  inputProps={{
-                    size: 'small',
-                  }}
-                  required
-                  rules={{ required: 'Fecha Compromiso requerida' }}
-                />
-
-                <div className="flex justify-end">
-                  <Button
-                    onClick={() => remove(index)}
-                    variant="text"
-                    color="error"
-                    size="small"
-                  >
-                    Eliminar acción
-                  </Button>
-                </div>
-              </div>
-            ))}
-
-            <Button
-              onClick={() =>
-                append({
-                  actionPlan: '',
-                  responsible: '',
-                  commitmentDate: dayjs(),
-                })
-              }
-              variant="contained"
-              startIcon={<AddCircleIcon />}
-              size="small"
-            >
-              Agregar acción
-            </Button>
+            <CreateActionsForm
+              fields={fields}
+              control={control}
+              remove={remove}
+              append={append}
+            />
           </section>
         </form>
       </DialogContent>

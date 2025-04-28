@@ -1,6 +1,6 @@
 import { Chip } from '@mui/material';
 import type { ComplaintAction } from '../models';
-import { UpdateActionStatusOptions } from './UpdateActionStatusOptions';
+import { UpdateActionStatusOptions } from './complaint-edition/UpdateActionStatusOptions';
 import { complaintActionStatus } from '../utilities';
 
 interface Props {

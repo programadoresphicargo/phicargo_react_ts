@@ -9,9 +9,9 @@ import {
 import AutoModeIcon from '@mui/icons-material/AutoMode';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import { ComplaintActionStatus } from '../models';
+import { ComplaintActionStatus } from '../../models';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { useUpdateComplaintActionMutation } from '../hooks/mutations';
+import { useUpdateComplaintActionMutation } from '../../hooks/mutations';
 
 interface Props {
   actionId: number;
