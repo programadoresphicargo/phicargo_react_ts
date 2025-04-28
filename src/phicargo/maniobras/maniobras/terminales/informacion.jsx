@@ -2,10 +2,8 @@ import { Button, Input } from "@heroui/react";
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import React, { useEffect, useState } from "react";
 import { toast } from 'react-toastify';
-
 import axios from 'axios';
 import odooApi from '@/api/odoo-api';
-const { VITE_PHIDES_API_URL } = import.meta.env;
 
 function FormularioTerminales({ open, onClose, id_terminal }) {
 
@@ -26,13 +24,12 @@ function FormularioTerminales({ open, onClose, id_terminal }) {
                 setFormData(prevState => ({
                     ...prevState,
                     id_terminal: id_terminal,
-                    terminal: data?.terminal || "",  // Si no existe terminal, pon ""
+                    terminal: data?.terminal || "", 
                 }));
 
             } catch (error) {
                 console.error("Error al obtener los datos del terminal:", error);
 
-                // También podrías resetear en caso de error
                 setFormData(prevState => ({
                     ...prevState,
                     id_terminal: id_terminal,
@@ -47,7 +44,6 @@ function FormularioTerminales({ open, onClose, id_terminal }) {
         if (id_terminal !== 0) {
             fetchTerminalData();
         } else {
-            // Si id_terminal es 0, resetea el formulario también
             setFormData(prevState => ({
                 ...prevState,
                 id_terminal: 0,
