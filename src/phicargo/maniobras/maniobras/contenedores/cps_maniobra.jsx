@@ -159,7 +159,7 @@ const ManiobraContenedores = ({ id_maniobra }) => {
             <Card>
                 <CardBody>
                     <div>
-                        <Button color='primary' onPress={handleShowModal}>
+                        <Button color='primary' onPress={handleShowModal} isDisabled={formDisabled}>
                             Añadir contenedor
                         </Button>
                         <AñadirContenedor
