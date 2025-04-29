@@ -379,7 +379,7 @@ export const useJourneyDialogs = () => {
 
     const comprobar_estatus_viajes = async (id_viaje, id_estatus) => {
         try {
-            const response = await odooApi.get(`/reportes_estatus_viajes/buscar_estatus/${id_viaje}/${id_estatus}`);
+            const response = await odooApi.get(`/tms_travel/reportes_estatus_viajes/buscar_estatus/${id_viaje}/${id_estatus}`);
             console.log(response.data.status);
 
             if (response.data.status === 'success') {
