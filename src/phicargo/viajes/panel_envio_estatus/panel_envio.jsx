@@ -126,6 +126,10 @@ function PanelEnvio({ open, cerrar, id_reporte, estatusSeleccionado, comentarios
         setLoadingSE(true);
         const success = await enviar_estatus(id_viaje, estatus_seleccionado, fileList, comentarios, NuevaFecha);
         if (success) {
+          setEstatusSeleccionado("");
+          setContenido("");
+          setFileList([]);
+          setActiveStep(0);
           cerrar();
         } else {
           toast.error("El envío del estatus falló.");
