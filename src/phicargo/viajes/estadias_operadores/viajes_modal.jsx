@@ -42,9 +42,9 @@ function ListViajes({ open, handleClose, setDataTravel }) {
             setLoading(true);
             const response = await odooApi.get(`/tms_travel/completed_travels/${mes}/${año}`);
             setData(response.data);
-            setLoading(false);
         } catch (error) {
             console.error('Error al obtener los datos:', error);
+            toast.error('Error al obtener los viajes');
         } finally {
             setLoading(false);
         }
@@ -159,10 +159,10 @@ function ListViajes({ open, handleClose, setDataTravel }) {
                 maxHeight: 'calc(100vh - 210px)',
             },
         },
-        muiTableBodyRowProps: (cell) => ({
-            onClick: (event) => {
-                console.log(cell.row.original);
-                setDataTravel([cell.row.original]);
+        muiTableBodyRowProps: ({ row }) => ({
+            onClick: () => {
+                console.log(row.original);
+                setDataTravel([row.original]);
                 handleClose();
             },
         }),

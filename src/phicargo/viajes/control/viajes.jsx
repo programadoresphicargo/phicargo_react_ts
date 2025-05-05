@@ -117,7 +117,7 @@ const ViajesActivos = ({ }) => {
         },
       },
       {
-        accessorKey: 'tipo',
+        accessorKey: 'modo',
         header: 'Modalidad',
         Cell: ({ cell }) => {
           const tipoMovimiento = cell.getValue() || '';
