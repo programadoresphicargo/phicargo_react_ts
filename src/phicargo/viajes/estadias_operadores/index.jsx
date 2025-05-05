@@ -1,5 +1,5 @@
 import { Avatar, Badge, Card, CardHeader } from "@heroui/react";
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useMemo } from 'react';
 import { Spinner } from "@heroui/react";
 import { ViajeContext } from '../context/viajeContext';
 import odooApi from '@/api/odoo-api';
@@ -14,6 +14,13 @@ import { Button } from "@heroui/react";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@heroui/react";
 import { Select, SelectItem } from "@heroui/react";
 import { NumberInput } from "@heroui/react";
+import ListViajes from "./viajes_modal";
+import {
+    MaterialReactTable,
+    useMaterialReactTable,
+} from 'material-react-table';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
+import { Box } from '@mui/material';
 
 function EstadiasOperadores({ open, handleClose, datapago }) {
 
@@ -21,6 +28,7 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
     const CartasPorte = context?.CartasPorte || [];
 
     const [data, setData] = useState([]);
+    const [dataTravel, setDataTravel] = useState([]);
     const [isLoading, setLoading] = useState(false);
     const [isLoadingRegistro, setLoadingRegistro] = useState(false);
 
@@ -45,7 +53,7 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
         try {
             setLoading(true);
             const response = await odooApi.get('/tms_travel/reporte_estadias/', {
-                params: { travel_id: travel_id },
+                params: { travel_id: dataTravel[0]?.id_viaje },
             });
             setData(response.data[0]);
             setHorasPagar(response.data[0].horas_planta - response.data[0].horas_estadias);
@@ -168,6 +176,117 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
         }
     }, [open]);
 
+    const [openOP, setOpenOP] = React.useState(false);
+
+    const handleClickOpenEO = () => {
+        setOpenOP(true);
+    };
+
+    const handleCloseEO = () => {
+        setOpenOP(false);
+        fetchData();
+    };
+
+    const columns = useMemo(
+        () => [
+            {
+                accessorKey: 'name',
+                header: 'Referencia',
+            },
+            {
+                accessorKey: 'cartas_porte',
+                header: 'Cartas porte',
+            },
+            {
+                accessorKey: 'vehiculo',
+                header: 'Vehiculo',
+            },
+            {
+                accessorKey: 'operador',
+                header: 'Operador',
+            },
+            {
+                accessorKey: 'contenedores',
+                header: 'Contenedores',
+            },
+        ],
+        [],
+    );
+
+    const table = useMaterialReactTable({
+        columns,
+        data: dataTravel,
+        enableGrouping: true,
+        enableGlobalFilter: true,
+        enableFilters: true,
+        state: { showProgressBars: isLoading },
+        enableColumnPinning: true,
+        enableStickyHeader: true,
+        positionGlobalFilter: "right",
+        localization: MRT_Localization_ES,
+        muiSearchTextFieldProps: {
+            placeholder: `Buscar en ${data.length} viajes`,
+            sx: { minWidth: '300px' },
+            variant: 'outlined',
+        },
+        columnResizeMode: "onEnd",
+        initialState: {
+            showGlobalFilter: true,
+            columnVisibility: {
+                empresa: false,
+            },
+            density: 'compact',
+            expanded: true,
+            showColumnFilters: true,
+            pagination: { pageSize: 80 },
+        },
+        muiTablePaperProps: {
+            elevation: 0,
+            sx: {
+                borderRadius: '0',
+            },
+        },
+        muiTableHeadCellProps: {
+            sx: {
+                fontFamily: 'Inter',
+                fontWeight: 'Bold',
+                fontSize: '14px',
+            },
+        },
+        muiTableContainerProps: {
+            sx: {
+                maxHeight: 'calc(100vh - 210px)',
+            },
+        },
+        muiTableBodyRowProps: (cell) => ({
+            onClick: (event) => {
+            },
+        }),
+        muiTableBodyCellProps: ({ row }) => ({
+            sx: {
+                fontFamily: 'Inter',
+                fontWeight: 'normal',
+            },
+        }),
+        renderTopToolbarCustomActions: ({ table }) => (
+            <Box
+                sx={{
+                    display: 'flex',
+                    gap: '16px',
+                    padding: '8px',
+                    flexWrap: 'wrap',
+                }}
+            >
+                <h1
+                    className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
+                >
+                    Viaje estadia
+                </h1>
+                <Button onPress={handleClickOpenEO} color="primary">Añadir viaje</Button>
+            </Box >
+        ),
+    });
+
     return (
         <>
             <Dialog
@@ -186,6 +305,11 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
                     {"Pago de estadias a operador"}
                 </DialogTitle>
                 <DialogContent>
+
+                    <MaterialReactTable
+                        table={table}
+                    />
+
                     {isLoading ? (
                         <Spinner />
                     ) : (
@@ -277,6 +401,8 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
 
                 </DialogContent>
             </Dialog >
+
+            <ListViajes open={openOP} handleClose={handleCloseEO} setDataTravel={setDataTravel}></ListViajes>
         </>
     );
 }

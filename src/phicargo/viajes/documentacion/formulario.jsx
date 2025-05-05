@@ -7,6 +7,7 @@ import Slide from '@mui/material/Slide';
 import { ViajeContext } from '../context/viajeContext';
 import { useAuthContext } from "@/modules/auth/hooks";
 import odooApi from "@/api/odoo-api";
+import toast from 'react-hot-toast';
 
 const { Dragger } = Upload;
 
@@ -55,15 +56,15 @@ const FormularioDocumentacion = ({ onClose }) => {
       const response = await odooApi.post('/tms_travel/enviar_documentacion/', data);
       setLoading(false);
       if (response.data.status == "success") {
-        message.success(response.data.message);
+        toast.success(response.data.message);
         setFileList([]);
         onClose();
       } else {
-        message.error(`Error: ${response.data.message}`);
+        toast.error(response.data.message);
       }
     } catch (error) {
       setLoading(false);
-      message.error('Error en la solicitud de subida');
+      toast.error('Error en la solicitud de subida');
     }
   };
 

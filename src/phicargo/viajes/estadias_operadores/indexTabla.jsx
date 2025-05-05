@@ -216,6 +216,15 @@ const PagosEstadiasOperadores = ({ }) => {
                 </h1>
                 <Button
                     className='text-white'
+                    startContent={<i class="bi bi-plus-lg"></i>}
+                    color='success'
+                    isDisabled={false}
+                    onPress={() => handleClickOpenEO()}
+                    size='sm'
+                >Nuevo registro
+                </Button>
+                <Button
+                    className='text-white'
                     startContent={<i class="bi bi-arrow-clockwise"></i>}
                     color='primary'
                     isDisabled={false}
