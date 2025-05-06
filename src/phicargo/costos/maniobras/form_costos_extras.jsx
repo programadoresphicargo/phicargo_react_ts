@@ -2,7 +2,6 @@ import { Autocomplete, AutocompleteItem } from "@heroui/react";
 import { Card, CardBody } from "@heroui/react";
 import { Container, filledInputClasses } from '@mui/material';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import { Button } from "@heroui/react";
