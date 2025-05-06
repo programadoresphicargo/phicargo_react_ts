@@ -68,6 +68,10 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
     };
 
     const fetchPago = async () => {
+        if (datapago.id_pago == null) {
+            return;
+        }
+
         try {
             toast.info('Obteniendo folio: ' + datapago.id_pago);
             setLoading(true);
