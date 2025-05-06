@@ -46,8 +46,9 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
     const handleSelectionChange = (e) => setMotivo(e.target.value);
 
     const fetchData = async () => {
-        toast.info('Obteniendo datos de viaje');
         if (!data[0]?.id_viaje) return;
+        toast.info('Obteniendo datos de viaje');
+
         try {
             setLoading(true);
             const response = await odooApi.get('/tms_travel/reporte_estadias/', {
@@ -214,7 +215,6 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
 
     const handleCloseEO = () => {
         setOpenOP(false);
-        fetchData();
     };
 
     return (
