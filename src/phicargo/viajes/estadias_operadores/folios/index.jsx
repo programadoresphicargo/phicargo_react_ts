@@ -27,10 +27,9 @@ import { DatePicker } from "@heroui/react";
 import { parseDate, getLocalTimeZone } from "@internationalized/date";
 import { useDateFormatter } from "@react-aria/i18n";
 import dayjs from 'dayjs';
+import { Progress } from "@heroui/react";
 
 function EstadiasOperadores({ open, handleClose, datapago }) {
-
-    let formatter = useDateFormatter({ dateStyle: "full" });
 
     const [data, setData] = useState([]);
     const [isLoading, setLoading] = useState(false);
@@ -39,6 +38,7 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
     const [horas_pagar, setHorasPagar] = useState(0);
     const [total, setTotal] = useState(0);
     const [motivo, setMotivo] = useState("");
+
     const today = new Date();
     const todayString = today.toISOString().slice(0, 10);
     const [value, setValue] = React.useState(parseDate(todayString));
@@ -67,7 +67,6 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
 
     const fetchPago = async () => {
         if (datapago == null) {
-            toast.success('Nuevo registro');
             setData([]);
             setHorasPagar(0);
             setTotal(0);
@@ -76,6 +75,7 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
             return;
         }
         try {
+            toast.info('Obteniendo folio: ' + datapago.id_pago);
             setLoading(true);
             const response = await odooApi.get(`/tms_travel/pagos_estadias_operadores/by_id_pago/${datapago.id_pago}`);
             const info = response.data;
@@ -221,8 +221,11 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
                 }}
             >
                 <DialogTitle>
-                    {"Pago de estadias a operador"}
+                    Calculo de pago de estadias
                 </DialogTitle>
+                {isLoading && (
+                    <Progress isIndeterminate aria-label="Loading..." size="sm" />
+                )}
                 <DialogContent>
                     <Stack spacing={1} direction="row">
 
@@ -259,11 +262,14 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
                     <Card className="mt-2">
                         <CardHeader>
                             <Stack spacing={1} direction="row">
-                                <h1>Datos del viaje</h1>
-                                <Button onPress={handleClickOpenEO} color="primary" size="lg">Añadir viaje</Button>
+                                <h1
+                                    className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
+                                >
+                                    Viaje
+                                </h1>
+                                <Button onPress={handleClickOpenEO} color="primary" size="lg" fullWidth>Añadir viaje</Button>
                                 <DatePicker
                                     variant="bordered"
-                                    className="max-w-[284px]"
                                     label="Fecha"
                                     value={value}
                                     onChange={setValue}
@@ -279,7 +285,6 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
                                         <p>VIAJE: {data?.travel_name}</p>
                                         <p>OPERADOR: {data?.employee_name}</p>
                                         <p>CARTAS PORTE: {data?.cartas_porte}</p>
-                                        <p>CONTENEDORES: {data?.contenedores}</p>
                                     </div>
                                 </div>
                             </div>
@@ -288,7 +293,11 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
 
                     <Card className="mt-2">
                         <CardHeader>
-                            Calculo de pago de estadias
+                            <h1
+                                className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
+                            >
+                                Calculo de pago de estadias
+                            </h1>
                         </CardHeader>
                         <Divider></Divider>
                         <CardBody>

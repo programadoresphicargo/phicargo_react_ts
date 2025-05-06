@@ -35,9 +35,10 @@ const PagosEstadiasOperadores = ({ }) => {
             setLoading(true);
             const response = await odooApi.get('/tms_travel/pagos_estadias_operadores/');
             setData(response.data);
-            setLoading(false);
         } catch (error) {
             console.error('Error al obtener los datos:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -119,20 +120,20 @@ const PagosEstadiasOperadores = ({ }) => {
                 accessorKey: 'estado',
                 header: 'Estado',
                 Cell: ({ cell }) => {
-                    const tipoMovimiento = cell.getValue() || '';
+                    const estado = cell.getValue() || '';
                     let badgeClass = 'default';
 
-                    if (tipoMovimiento === 'confirmado') {
+                    if (estado === 'confirmado') {
                         badgeClass = 'success';
-                    } else if (tipoMovimiento === 'borrador') {
+                    } else if (estado === 'borrador') {
                         badgeClass = 'warning';
-                    } else if (tipoMovimiento === 'cancelado') {
+                    } else if (estado === 'cancelado') {
                         badgeClass = 'danger';
                     }
 
                     return (
                         <Chip color={badgeClass} className="text-white" size="sm">
-                            {tipoMovimiento}
+                            {estado}
                         </Chip>
                     );
                 },
@@ -160,10 +161,6 @@ const PagosEstadiasOperadores = ({ }) => {
         columnResizeMode: "onEnd",
         initialState: {
             showGlobalFilter: true,
-            columnVisibility: {
-                empresa: false,
-            },
-            hiddenColumns: ["empresa"],
             density: 'compact',
             expanded: true,
             showColumnFilters: true,
