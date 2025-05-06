@@ -124,7 +124,6 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
     };
 
     const actualizar_pago = async () => {
-        console.log("actualizar" + data?.travel_id);
 
         const payload = {
             id_viaje: data?.id_viaje,
