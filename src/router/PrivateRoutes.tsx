@@ -58,10 +58,10 @@ const TiposCostosExtras = lazy(
   () => import('../phicargo/costos/tipos_costos_extras/costos_extras'),
 );
 const PagosEstadiasOperadores = lazy(
-  () => import('../phicargo/viajes/estadias_operadores/folios'),
+  () => import('../phicargo/viajes/estadias_operadores/folios/folios'),
 );
 const PeriodosPagosEstadiasOperadores = lazy(
-  () => import('../phicargo/viajes/estadias_operadores/periodos'),
+  () => import('../phicargo/viajes/estadias_operadores/periodos/periodos'),
 );
 const Estadias = lazy(() => import('../phicargo/estadias/Control'));
 const EstadiasInfo = lazy(() => import('../phicargo/estadias/index_estadia'));

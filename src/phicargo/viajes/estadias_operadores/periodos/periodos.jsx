@@ -10,27 +10,31 @@ import { Box } from '@mui/material';
 import { Button } from "@heroui/react"
 import { Chip } from "@heroui/react";
 import CloseIcon from '@mui/icons-material/Close';
-import DetencionesViajesActivos from '../detenciones/detenciones_modal';
+import DetencionesViajesActivos from '../../detenciones/detenciones_modal';
 import Dialog from '@mui/material/Dialog';
-import EstatusDropdown from '../estatus/resumen_estatus';
+import EstatusDropdown from '../../estatus/resumen_estatus';
 import IconButton from '@mui/material/IconButton';
 import { Image } from 'antd';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import NavbarViajes from '../navbar';
+import NavbarViajes from '../../navbar';
 import Slide from '@mui/material/Slide';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { exportToCSV } from '../../utils/export';
+import { exportToCSV } from '../../../utils/export';
 import odooApi from '@/api/odoo-api';
-import { ViajeProvider } from '../context/viajeContext';
-import EstadiasOperadores from '.';
+import { ViajeProvider } from '../../context/viajeContext';
+import EstadiasOperadores from '../folios';
 import AbrirPeriodo from './modal_periodo';
+import PagosPeriodo from './folios_pago';
 
 const PagosEstadiasOperadores = ({ }) => {
 
     const [folio, setFolio] = React.useState([]);
     const [data, setData] = useState([]);
     const [isLoading, setLoading] = useState(false);
+
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
 
     const fetchData = async () => {
         try {
@@ -59,6 +63,16 @@ const PagosEstadiasOperadores = ({ }) => {
         setFolio(null);
     };
 
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
     const columns = useMemo(
         () => [
             {
@@ -68,6 +82,14 @@ const PagosEstadiasOperadores = ({ }) => {
             {
                 accessorKey: 'date_end',
                 header: 'Fecha fin',
+            },
+            {
+                accessorKey: 'usuario',
+                header: 'Nombre',
+            },
+            {
+                accessorKey: 'fecha_creacion',
+                header: 'Fecha creacion',
             },
         ],
         [],
@@ -122,8 +144,9 @@ const PagosEstadiasOperadores = ({ }) => {
 
         muiTableBodyRowProps: ({ row }) => ({
             onClick: () => {
-                handleClickOpenEO();
-                setFolio(row.original);
+                handleClickOpen();
+                setStartDate(row.original.date_start);
+                setEndDate(row.original.date_end);
             },
         }),
         muiTableBodyCellProps: ({ row }) => ({
@@ -187,6 +210,7 @@ const PagosEstadiasOperadores = ({ }) => {
                 />
 
                 <AbrirPeriodo open={openOP} handleClose={handleCloseEO} datapago={folio}></AbrirPeriodo>
+                <PagosPeriodo open={open} handleClose={handleClose} startDate={startDate} endDate={endDate}></PagosPeriodo>
 
             </ViajeProvider>
         </>

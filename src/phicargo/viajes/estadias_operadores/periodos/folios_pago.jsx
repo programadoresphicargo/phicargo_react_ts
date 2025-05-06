@@ -10,22 +10,26 @@ import { Box } from '@mui/material';
 import { Button } from "@heroui/react"
 import { Chip } from "@heroui/react";
 import CloseIcon from '@mui/icons-material/Close';
-import DetencionesViajesActivos from '../detenciones/detenciones_modal';
+import DetencionesViajesActivos from '../../detenciones/detenciones_modal';
 import Dialog from '@mui/material/Dialog';
-import EstatusDropdown from '../estatus/resumen_estatus';
+import EstatusDropdown from '../../estatus/resumen_estatus';
 import IconButton from '@mui/material/IconButton';
 import { Image } from 'antd';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import NavbarViajes from '../navbar';
+import NavbarViajes from '../../navbar';
 import Slide from '@mui/material/Slide';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { exportToCSV } from '../../utils/export';
+import { exportToCSV } from '../../../utils/export';
 import odooApi from '@/api/odoo-api';
-import { ViajeProvider } from '../context/viajeContext';
-import EstadiasOperadores from '.';
+import { ViajeProvider } from '../../context/viajeContext';
+import EstadiasOperadores from '../folios';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
-const PagosEstadiasOperadores = ({ }) => {
+const PagosPeriodo = ({ open, handleClose, startDate, endDate }) => {
 
     const [folio, setFolio] = React.useState([]);
     const [data, setData] = useState([]);
@@ -34,7 +38,12 @@ const PagosEstadiasOperadores = ({ }) => {
     const fetchData = async () => {
         try {
             setLoading(true);
-            const response = await odooApi.get('/tms_travel/pagos_estadias_operadores/');
+            const response = await odooApi.get('/tms_travel/pagos_estadias_operadores/date_range/', {
+                params: {
+                    date_start: startDate,
+                    date_end: endDate
+                }
+            });
             setData(response.data);
             setLoading(false);
         } catch (error) {
@@ -44,7 +53,7 @@ const PagosEstadiasOperadores = ({ }) => {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [open]);
 
     const [openOP, setOpenOP] = React.useState(false);
 
@@ -249,17 +258,30 @@ const PagosEstadiasOperadores = ({ }) => {
 
     return (
         <>
-            <ViajeProvider>
-                <NavbarViajes></NavbarViajes>
-                <MaterialReactTable
-                    table={table}
-                />
+            <Dialog
+                fullWidth={true}
+                maxWidth={"xl"}
+                open={open}
+                onClose={handleClose}
+                sx={{
+                    '& .MuiPaper-root': {
+                        borderRadius: '30px',
+                        boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.0)',
+                    },
+                }}
+            >
+                <DialogTitle>
+                </DialogTitle>
+                <DialogContent>
+                    <MaterialReactTable
+                        table={table}
+                    />
+                </DialogContent>
+            </Dialog >
 
-                <EstadiasOperadores open={openOP} handleClose={handleCloseEO} datapago={folio}></EstadiasOperadores>
-
-            </ViajeProvider>
+            <EstadiasOperadores open={openOP} handleClose={handleCloseEO} datapago={folio}></EstadiasOperadores>
         </>
     );
 };
 
-export default PagosEstadiasOperadores;
+export default PagosPeriodo;

@@ -1,7 +1,7 @@
 import { Avatar, Badge, Card, CardBody, CardHeader, Divider } from "@heroui/react";
 import React, { useContext, useEffect, useState, useMemo } from 'react';
 import { Spinner } from "@heroui/react";
-import { ViajeContext } from '../context/viajeContext';
+import { ViajeContext } from '../../context/viajeContext';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import Dialog from '@mui/material/Dialog';
@@ -13,7 +13,7 @@ import { CostosExtrasContext } from "@/phicargo/costos/context/context";
 import { Button } from "@heroui/react";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@heroui/react";
 import { NumberInput } from "@heroui/react";
-import ListViajes from "./viajes_modal";
+import ListViajes from "../viajes_modal";
 import {
     MaterialReactTable,
     useMaterialReactTable,
@@ -23,8 +23,14 @@ import { Box } from '@mui/material';
 import { TextField, MenuItem } from '@mui/material';
 import { Select, SelectItem } from "@heroui/react";
 import Stack from '@mui/material/Stack';
+import { DatePicker } from "@heroui/react";
+import { parseDate, getLocalTimeZone } from "@internationalized/date";
+import { useDateFormatter } from "@react-aria/i18n";
+import dayjs from 'dayjs';
 
 function EstadiasOperadores({ open, handleClose, datapago }) {
+
+    let formatter = useDateFormatter({ dateStyle: "full" });
 
     const [data, setData] = useState([]);
     const [isLoading, setLoading] = useState(false);
@@ -33,6 +39,9 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
     const [horas_pagar, setHorasPagar] = useState(0);
     const [total, setTotal] = useState(0);
     const [motivo, setMotivo] = useState("");
+    const today = new Date();
+    const todayString = today.toISOString().slice(0, 10);
+    const [value, setValue] = React.useState(parseDate(todayString));
 
     const handleSelectionChange = (e) => setMotivo(e.target.value);
 
@@ -59,10 +68,11 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
     const fetchPago = async () => {
         if (datapago == null) {
             toast.success('Nuevo registro');
-            setData([]); // ← Limpiar el array
+            setData([]);
             setHorasPagar(0);
             setTotal(0);
             setMotivo("");
+            setValue(parseDate(todayString));
             return;
         }
         try {
@@ -73,6 +83,7 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
             setHorasPagar(info.horas_pagar);
             setTotal(info.total);
             setMotivo(info.motivo);
+            setValue(parseDate(info.fecha));
         } catch (error) {
             console.error('Error al obtener los datos:', error);
             toast.error('Error al obtener el pago.');
@@ -95,10 +106,9 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
             return;
         }
 
-        console.log(data);
-
         const payload = {
-            id_viaje: data?.travel_id,
+            id_viaje: data[0]?.travel_id,
+            fecha: dayjs(value).format('YYYY-MM-DD'),
             horas_pagar,
             total,
             motivo,
@@ -120,9 +130,10 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
     };
 
     const actualizar_pago = async () => {
+        console.log("actualizar" + data?.travel_id);
 
         const payload = {
-            id_viaje: data?.travel_id,
+            id_viaje: datapago?.travel_id,
             horas_pagar,
             total,
             motivo
@@ -247,8 +258,17 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
 
                     <Card className="mt-2">
                         <CardHeader>
-                            <h1>Datos del viaje</h1>
-                            <Button onPress={handleClickOpenEO} color="primary">Añadir viaje</Button>
+                            <Stack spacing={1} direction="row">
+                                <h1>Datos del viaje</h1>
+                                <Button onPress={handleClickOpenEO} color="primary" size="lg">Añadir viaje</Button>
+                                <DatePicker
+                                    variant="bordered"
+                                    className="max-w-[284px]"
+                                    label="Fecha"
+                                    value={value}
+                                    onChange={setValue}
+                                />
+                            </Stack>
                         </CardHeader>
                         <Divider></Divider>
                         <CardBody>
