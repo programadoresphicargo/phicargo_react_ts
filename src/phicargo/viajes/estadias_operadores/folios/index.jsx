@@ -164,6 +164,22 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
         }
     };
 
+    const pagar_folio = async () => {
+        try {
+            setLoadingRegistro(true);
+            toast.warning('Cambiando estado a folio...');
+            const response = await odooApi.post(`/tms_travel/pagos_estadias_operadores/pagar/${datapago.id_pago}`);
+            if (response.data.status === "success") {
+                toast.success(response.data.message);
+                handleClose();
+            }
+        } catch (error) {
+            toast.error('Error al confirmar el pago: ' + error.message);
+        } finally {
+            setLoadingRegistro(false);
+        }
+    };
+
     const cancelar_pago = async () => {
         try {
             setLoadingRegistro(true);
@@ -250,6 +266,12 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
                         {data.estado == 'borrador' && (
                             <Button color="warning" onPress={confirmar_pago} isLoading={isLoadingRegistro} className="text-white">
                                 Confirmar pago
+                            </Button>
+                        )}
+
+                        {data.estado == 'confirmado' && (
+                            <Button color="success" onPress={pagar_folio} isLoading={isLoadingRegistro} className="text-white">
+                                Pagar
                             </Button>
                         )}
                     </Stack>

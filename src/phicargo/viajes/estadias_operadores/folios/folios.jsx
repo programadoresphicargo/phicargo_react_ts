@@ -129,6 +129,8 @@ const PagosEstadiasOperadores = ({ }) => {
                         badgeClass = 'warning';
                     } else if (estado === 'cancelado') {
                         badgeClass = 'danger';
+                    } else if (estado === 'pagado') {
+                        badgeClass = 'primary';
                     }
 
                     return (
