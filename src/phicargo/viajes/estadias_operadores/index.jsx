@@ -1,4 +1,4 @@
-import { Avatar, Badge, Card, CardHeader } from "@heroui/react";
+import { Avatar, Badge, Card, CardBody, CardHeader, Divider } from "@heroui/react";
 import React, { useContext, useEffect, useState, useMemo } from 'react';
 import { Spinner } from "@heroui/react";
 import { ViajeContext } from '../context/viajeContext';
@@ -20,15 +20,13 @@ import {
 } from 'material-react-table';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { Box } from '@mui/material';
-import { TextField, MenuItem, Select } from '@mui/material';
+import { TextField, MenuItem } from '@mui/material';
+import { Select, SelectItem } from "@heroui/react";
+import Stack from '@mui/material/Stack';
 
 function EstadiasOperadores({ open, handleClose, datapago }) {
 
-    const context = useContext(CostosExtrasContext);
-    const CartasPorte = context?.CartasPorte || [];
-
     const [data, setData] = useState([]);
-    const [dataTravel, setDataTravel] = useState([]);
     const [isLoading, setLoading] = useState(false);
     const [isLoadingRegistro, setLoadingRegistro] = useState(false);
 
@@ -39,11 +37,11 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
     const handleSelectionChange = (e) => setMotivo(e.target.value);
 
     const fetchData = async () => {
-        if (!dataTravel[0]?.id_viaje) return;
+        if (!data[0]?.id_viaje) return;
         try {
             setLoading(true);
             const response = await odooApi.get('/tms_travel/reporte_estadias/', {
-                params: { travel_id: dataTravel[0].id_viaje },
+                params: { travel_id: data[0].id_viaje },
             });
             const info = response.data[0];
             setData(info);
@@ -59,7 +57,14 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
     };
 
     const fetchPago = async () => {
-        if (!datapago?.id_pago) return;
+        if (datapago == null) {
+            toast.success('Nuevo registro');
+            setData([]); // ← Limpiar el array
+            setHorasPagar(0);
+            setTotal(0);
+            setMotivo("");
+            return;
+        }
         try {
             setLoading(true);
             const response = await odooApi.get(`/tms_travel/pagos_estadias_operadores/by_id_pago/${datapago.id_pago}`);
@@ -68,7 +73,6 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
             setHorasPagar(info.horas_pagar);
             setTotal(info.total);
             setMotivo(info.motivo);
-            setDataTravel([info]); // ← este valor se usa para la tabla
         } catch (error) {
             console.error('Error al obtener los datos:', error);
             toast.error('Error al obtener el pago.');
@@ -78,15 +82,23 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
     };
 
     const registrar_pago_estadia = async () => {
-        if (!horas_pagar || !total || !motivo) {
+        if (
+            !horas_pagar || horas_pagar < 0 ||
+            !total || total < 0 ||
+            !motivo
+        ) {
             if (!horas_pagar) toast.error('Ingresa un valor para las horas a pagar.');
+            if (horas_pagar < 0) toast.error('Las horas a pagar no pueden ser negativas.');
             if (!total) toast.error('Ingresa un valor para el total.');
+            if (total < 0) toast.error('El total no puede ser negativo.');
             if (!motivo) toast.error('Ingresa un motivo de pago de estadías.');
             return;
         }
 
-        const data = {
-            id_viaje: CartasPorte[0]?.travel_id,
+        console.log(data);
+
+        const payload = {
+            id_viaje: data?.travel_id,
             horas_pagar,
             total,
             motivo,
@@ -95,7 +107,7 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
         try {
             setLoadingRegistro(true);
             toast.warning('Registrando pago...');
-            const response = await odooApi.post('/tms_travel/pagos_estadias_operadores/create/', data);
+            const response = await odooApi.post('/tms_travel/pagos_estadias_operadores/create/', payload);
             if (response.data.status === "success") {
                 toast.success(`${response.data.message}, Folio: ${response.data.data.id_pago}`);
                 handleClose();
@@ -108,8 +120,9 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
     };
 
     const actualizar_pago = async () => {
-        const data = {
-            id_viaje: datapago.id_viaje,
+
+        const payload = {
+            id_viaje: data?.travel_id,
             horas_pagar,
             total,
             motivo
@@ -117,8 +130,8 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
 
         try {
             setLoadingRegistro(true);
-            toast.warning('Actualizando pago...');
-            const response = await odooApi.patch(`/tms_travel/pagos_estadias_operadores/update/${datapago.id_pago}`, data);
+            toast.info('Actualizando folio...');
+            const response = await odooApi.patch(`/tms_travel/pagos_estadias_operadores/update/${datapago.id_pago}`, payload);
             if (response.data.status === "success") {
                 toast.success(response.data.message);
                 handleClose();
@@ -133,7 +146,7 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
     const confirmar_pago = async () => {
         try {
             setLoadingRegistro(true);
-            toast.warning('Confirmando pago...');
+            toast.warning('Confirmando folio...');
             const response = await odooApi.post(`/tms_travel/pagos_estadias_operadores/confirmar/${datapago.id_pago}`);
             if (response.data.status === "success") {
                 toast.success(response.data.message);
@@ -146,213 +159,41 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
         }
     };
 
+    const cancelar_pago = async () => {
+        try {
+            setLoadingRegistro(true);
+            toast.warning('Cancelando folio...');
+            const response = await odooApi.post(`/tms_travel/pagos_estadias_operadores/cancelar/${datapago.id_pago}`);
+            if (response.data.status === "success") {
+                toast.success(response.data.message);
+                handleClose();
+            }
+        } catch (error) {
+            toast.error('Error al confirmar el pago: ' + error.message);
+        } finally {
+            setLoadingRegistro(false);
+        }
+    };
+
     useEffect(() => {
-        console.log("Nuevo dataTravel:", dataTravel);
-        if (dataTravel[0]?.id_viaje) {
+        console.log("Nuevo:", data);
+        if (data[0]?.id_viaje) {
             fetchData();
         }
-    }, [dataTravel]);
+    }, [data]);
+
+    useEffect(() => {
+        fetchPago();
+    }, [open]);
 
     const [openOP, setOpenOP] = useState(false);
 
     const handleClickOpenEO = () => setOpenOP(true);
+
     const handleCloseEO = () => {
         setOpenOP(false);
         fetchData();
     };
-
-    const columns = useMemo(() => [
-        { accessorKey: 'name', header: 'Referencia' },
-        { accessorKey: 'cartas_porte', header: 'Cartas porte' },
-        { accessorKey: 'vehiculo', header: 'Vehiculo' },
-        { accessorKey: 'operador', header: 'Operador' },
-        { accessorKey: 'contenedores', header: 'Contenedores' },
-    ], []);
-
-    const columns2 = useMemo(
-        () => [
-            {
-                accessorKey: 'llegada_planta',
-                header: 'Llegada a planta',
-            },
-            {
-                accessorKey: 'salida_planta',
-                header: 'Salida de planta',
-            },
-            {
-                accessorKey: 'horas_planta',
-                header: 'Horas en planta',
-            },
-            {
-                accessorKey: 'horas_estadias',
-                header: 'Horas libres',
-            },
-            {
-                accessorKey: 'horas_pagar',
-                header: 'Horas a pagar',
-                Cell: ({ cell }) => (
-                    <TextField
-                        type="number"
-                        variant="standard"
-                        value={cell.getValue() ?? ''}
-                        onChange={(e) => setHorasPagar(Number(e.target.value))}
-                    />
-                ),
-            },
-            {
-                accessorKey: 'total',
-                header: 'Total',
-                Cell: ({ cell }) => (
-                    <TextField
-                        type="number"
-                        variant="standard"
-                        value={cell.getValue() ?? ''}
-                        onChange={(e) => setTotal(Number(e.target.value))}
-                    />
-                ),
-            },
-            {
-                accessorKey: 'motivo',
-                header: 'Motivo',
-                Cell: ({ cell }) => (
-                    <Select
-                        variant="standard"
-                        value={cell.getValue() ?? ''}
-                        onChange={(e) => handleSelectionChange(e)}
-                        displayEmpty
-                    >
-                        <MenuItem value="demora_descarga">Demora en descarga</MenuItem>
-                        <MenuItem value="demora_carga">Demora en carga</MenuItem>
-                    </Select>
-                ),
-            },
-        ],
-        [horas_pagar, total, motivo]
-    );
-
-    const dataTabla = [
-        {
-            llegada_planta: data?.llegada_planta,
-            salida_planta: data?.salida_planta,
-            horas_planta: data?.horas_planta,
-            horas_estadias: data?.horas_estadias,
-            horas_pagar: horas_pagar,
-            total: total,
-            motivo: motivo,
-        },
-    ];
-
-
-    const table = useMaterialReactTable({
-        columns,
-        data: dataTravel,
-        enableGrouping: true,
-        enableGlobalFilter: true,
-        enableFilters: true,
-        state: { showProgressBars: isLoading },
-        enableColumnPinning: true,
-        enableStickyHeader: true,
-        positionGlobalFilter: "right",
-        localization: MRT_Localization_ES,
-        muiSearchTextFieldProps: {
-            placeholder: `Buscar en ${dataTravel.length} viajes`,
-            sx: { minWidth: '300px' },
-            variant: 'outlined',
-        },
-        columnResizeMode: "onEnd",
-        initialState: {
-            showGlobalFilter: true,
-            columnVisibility: { empresa: false },
-            density: 'compact',
-            expanded: true,
-            showColumnFilters: true,
-            pagination: { pageSize: 80 },
-        },
-        muiTablePaperProps: {
-            elevation: 0,
-            sx: { borderRadius: 0 },
-        },
-        muiTableHeadCellProps: {
-            sx: {
-                fontFamily: 'Inter',
-                fontWeight: 'Bold',
-                fontSize: '14px',
-            },
-        },
-        muiTableContainerProps: {
-            sx: {
-                maxHeight: 'calc(100vh - 210px)',
-            },
-        },
-        muiTableBodyRowProps: () => ({
-            onClick: () => { },
-        }),
-        muiTableBodyCellProps: () => ({
-            sx: {
-                fontFamily: 'Inter',
-                fontWeight: 'normal',
-            },
-        }),
-        renderTopToolbarCustomActions: () => (
-            <Box sx={{ display: 'flex', gap: '16px', padding: '8px', flexWrap: 'wrap' }}>
-                <h1 className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text">
-                    Viaje estadía
-                </h1>
-                <Button onPress={handleClickOpenEO} color="primary">Añadir viaje</Button>
-            </Box>
-        ),
-    });
-
-
-    const table2 = useMaterialReactTable({
-        columns: columns2,
-        data: dataTabla,
-        enableGrouping: true,
-        enableGlobalFilter: true,
-        enableFilters: true,
-        enableColumnPinning: true,
-        enableStickyHeader: true,
-        positionGlobalFilter: "right",
-        localization: MRT_Localization_ES,
-        columnResizeMode: "onEnd",
-        initialState: {
-            showGlobalFilter: true,
-            density: 'compact',
-            expanded: true,
-            showColumnFilters: true,
-            pagination: { pageSize: 80 },
-        },
-        muiTablePaperProps: {
-            elevation: 0,
-            sx: { borderRadius: 0 },
-        },
-        muiTableHeadCellProps: {
-            sx: {
-                fontFamily: 'Inter',
-                fontWeight: 'Bold',
-                fontSize: '14px',
-            },
-        },
-        muiTableContainerProps: {
-            sx: {
-                maxHeight: 'calc(100vh - 210px)',
-            },
-        },
-        muiTableBodyCellProps: () => ({
-            sx: {
-                fontFamily: 'Inter',
-                fontWeight: 'normal',
-            },
-        }),
-        renderTopToolbarCustomActions: () => (
-            <Box sx={{ display: 'flex', gap: '16px', padding: '8px', flexWrap: 'wrap' }}>
-                <h1 className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text">
-                    Viaje estadía
-                </h1>
-                <Button onPress={handleClickOpenEO} color="primary">Añadir viaje</Button>
-            </Box>
-        ),
-    });
 
     return (
         <>
@@ -372,59 +213,121 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
                     {"Pago de estadias a operador"}
                 </DialogTitle>
                 <DialogContent>
+                    <Stack spacing={1} direction="row">
 
-                    <MaterialReactTable
-                        table={table}
-                    />
+                        {!datapago && (
+                            <Button color="primary" onPress={registrar_pago_estadia} isLoading={isLoadingRegistro}>
+                                Registrar pago
+                            </Button>
+                        )}
 
-                    <MaterialReactTable
-                        table={table2}
-                    />
+                        {datapago && data.estado === 'borrador' && (
+                            <Button
+                                color="success"
+                                onPress={actualizar_pago}
+                                isLoading={isLoadingRegistro}
+                                className="text-white"
+                            >
+                                Actualizar
+                            </Button>
+                        )}
 
-                    {isLoading ? (
-                        <Spinner />
-                    ) : (
-                        <>
+                        {data.estado == 'borrador' && (
+                            <Button color="danger" onPress={cancelar_pago} isLoading={isLoadingRegistro}>
+                                Cancelar pago
+                            </Button>
+                        )}
 
-                            <DialogActions>
-                                <Button onPress={handleClose}>Cerrar</Button>
+                        {data.estado == 'borrador' && (
+                            <Button color="warning" onPress={confirmar_pago} isLoading={isLoadingRegistro} className="text-white">
+                                Confirmar pago
+                            </Button>
+                        )}
+                    </Stack>
 
-                                {!datapago && (
-                                    <Button color="primary" onPress={registrar_pago_estadia} isLoading={isLoadingRegistro}>
-                                        Registrar pago
-                                    </Button>
-                                )}
+                    <Card className="mt-2">
+                        <CardHeader>
+                            <h1>Datos del viaje</h1>
+                            <Button onPress={handleClickOpenEO} color="primary">Añadir viaje</Button>
+                        </CardHeader>
+                        <Divider></Divider>
+                        <CardBody>
+                            <div className="container">
+                                <div className="row">
+                                    <div className="col">
+                                        <p>Folio No.: {datapago?.id_pago}</p>
+                                        <p>VIAJE: {data?.travel_name}</p>
+                                        <p>OPERADOR: {data?.employee_name}</p>
+                                        <p>CARTAS PORTE: {data?.cartas_porte}</p>
+                                        <p>CONTENEDORES: {data?.contenedores}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </CardBody>
+                    </Card>
 
-                                {datapago && (
-                                    <Button
-                                        color="success"
-                                        onPress={actualizar_pago}
-                                        isLoading={isLoadingRegistro}
-                                        className="text-white"
-                                    >
-                                        Actualizar
-                                    </Button>
-                                )}
-
-                                {data.estado == 'borrador' && (
-                                    <Button color="danger" onPress={registrar_pago_estadia} isLoading={isLoadingRegistro}>
-                                        Cancelar pago
-                                    </Button>
-                                )}
-
-                                {data.estado == 'borrador' && (
-                                    <Button color="success" onPress={confirmar_pago} isLoading={isLoadingRegistro} className="text-white">
-                                        Confirmar pago
-                                    </Button>
-                                )}
-                            </DialogActions>
-
-                        </>)}
+                    <Card className="mt-2">
+                        <CardHeader>
+                            Calculo de pago de estadias
+                        </CardHeader>
+                        <Divider></Divider>
+                        <CardBody>
+                            <Table aria-label="Example static collection table">
+                                <TableHeader>
+                                    <TableColumn>Llegada a planta</TableColumn>
+                                    <TableColumn>Salida de planta</TableColumn>
+                                    <TableColumn>Horas en planta</TableColumn>
+                                    <TableColumn>Horas libres</TableColumn>
+                                    <TableColumn>Horas a pagar</TableColumn>
+                                    <TableColumn>Total</TableColumn>
+                                    <TableColumn>Motivo</TableColumn>
+                                </TableHeader>
+                                <TableBody>
+                                    <TableRow key="1">
+                                        <TableCell>{data?.llegada_planta}</TableCell>
+                                        <TableCell>{data?.salida_planta}</TableCell>
+                                        <TableCell>{data?.horas_planta}</TableCell>
+                                        <TableCell>{data?.horas_estadias}</TableCell>
+                                        <TableCell>
+                                            <NumberInput
+                                                isDisabled={data?.estado == 'confirmado' ? true : false}
+                                                className="max-w-xs"
+                                                defaultValue={horas_pagar}
+                                                value={horas_pagar}
+                                                onValueChange={setHorasPagar}
+                                            />
+                                        </TableCell>
+                                        <TableCell>
+                                            <NumberInput
+                                                className="max-w-xs"
+                                                isDisabled={data?.estado == 'confirmado' ? true : false}
+                                                defaultValue={total}
+                                                value={total}
+                                                onValueChange={setTotal} />
+                                        </TableCell>
+                                        <TableCell>
+                                            <Select
+                                                isDisabled={data?.estado == 'confirmado' ? true : false}
+                                                className="max-w-xs"
+                                                label="Motivo"
+                                                selectedKeys={[motivo]}
+                                                variant="flat"
+                                                onChange={handleSelectionChange}
+                                            >
+                                                <SelectItem key={"demora_descarga"}>Demora en descarga</SelectItem>
+                                                <SelectItem key={"demora_carga"}>Demora en Carga</SelectItem>
+                                            </Select>
+                                        </TableCell>
+                                    </TableRow>
+                                </TableBody>
+                            </Table>
+                        </CardBody>
+                    </Card>
 
                 </DialogContent>
             </Dialog >
 
-            <ListViajes open={openOP} handleClose={handleCloseEO} setDataTravel={setDataTravel}></ListViajes>
+            <ListViajes open={openOP} handleClose={handleCloseEO} setDataTravel={setData}></ListViajes>
         </>
     );
 }

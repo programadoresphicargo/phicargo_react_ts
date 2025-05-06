@@ -24,35 +24,18 @@ import { exportToCSV } from '../../utils/export';
 import odooApi from '@/api/odoo-api';
 import { ViajeProvider } from '../context/viajeContext';
 import EstadiasOperadores from '.';
+import AbrirPeriodo from './modal_periodo';
 
 const PagosEstadiasOperadores = ({ }) => {
 
-    const [info_pago, setInfoPago] = React.useState([]);
-    const [open, setOpen] = React.useState(false);
-    const [openMasivo, setMasivoOpen] = React.useState(false);
-    const [blinkRows, setBlinkRows] = useState({});
-
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-        fetchData();
-    };
-
-    const handleClose2 = () => {
-        setMasivoOpen(false);
-        fetchData();
-    };
-
+    const [folio, setFolio] = React.useState([]);
     const [data, setData] = useState([]);
     const [isLoading, setLoading] = useState(false);
 
     const fetchData = async () => {
         try {
             setLoading(true);
-            const response = await odooApi.get('/tms_travel/pagos_estadias_operadores/');
+            const response = await odooApi.get('/tms_travel/periodos_pagos_estadias_operadores/');
             setData(response.data);
             setLoading(false);
         } catch (error) {
@@ -73,69 +56,18 @@ const PagosEstadiasOperadores = ({ }) => {
     const handleCloseEO = () => {
         setOpenOP(false);
         fetchData();
+        setFolio(null);
     };
 
     const columns = useMemo(
         () => [
             {
-                accessorKey: 'id_pago',
-                header: 'Folio',
+                accessorKey: 'date_start',
+                header: 'Fecha inicio',
             },
             {
-                accessorKey: 'travel_name',
-                header: 'Viaje',
-            },
-            {
-                accessorKey: 'cartas_porte',
-                header: 'Cartas porte',
-            },
-            {
-                accessorKey: 'cliente',
-                header: 'Cliente',
-            },
-            {
-                accessorKey: 'employee_name',
-                header: 'Operador',
-            },
-            {
-                accessorKey: 'llegada_planta',
-                header: 'Llegada planta',
-            },
-            {
-                accessorKey: 'salida_planta',
-                header: 'Salida planta',
-            },
-            {
-                accessorKey: 'horas_planta',
-                header: 'Horas en planta',
-            },
-            {
-                accessorKey: 'horas_estadias',
-                header: 'Horas libres',
-            },
-            {
-                accessorKey: 'horas_pagar',
-                header: 'Horas a pagar',
-            },
-            {
-                accessorKey: 'total',
-                header: 'Total',
-            },
-            {
-                accessorKey: 'motivo',
-                header: 'Motivo',
-            },
-            {
-                accessorKey: 'usuario_creacion',
-                header: 'Usuario',
-            },
-            {
-                accessorKey: 'fecha_creacion',
-                header: 'Fecha creación',
-            },
-            {
-                accessorKey: 'estado',
-                header: 'Estado',
+                accessorKey: 'date_end',
+                header: 'Fecha fin',
             },
         ],
         [],
@@ -187,10 +119,11 @@ const PagosEstadiasOperadores = ({ }) => {
                 maxHeight: 'calc(100vh - 210px)',
             },
         },
-        muiTableBodyRowProps: (cell) => ({
-            onClick: (event) => {
+
+        muiTableBodyRowProps: ({ row }) => ({
+            onClick: () => {
                 handleClickOpenEO();
-                setInfoPago(cell.row.original);
+                setFolio(row.original);
             },
         }),
         muiTableBodyCellProps: ({ row }) => ({
@@ -212,14 +145,16 @@ const PagosEstadiasOperadores = ({ }) => {
                 <h1
                     className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
                 >
-                    Pagos estadías operadores
+                    Periodos de pagos estadías operadores
                 </h1>
                 <Button
                     className='text-white'
                     startContent={<i class="bi bi-plus-lg"></i>}
                     color='success'
                     isDisabled={false}
-                    onPress={() => handleClickOpenEO()}
+                    onPress={() => {
+                        handleClickOpenEO();
+                    }}
                     size='sm'
                 >Nuevo registro
                 </Button>
@@ -232,7 +167,13 @@ const PagosEstadiasOperadores = ({ }) => {
                     size='sm'
                 >Actualizar tablero
                 </Button>
-                <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "viajes_activos.csv")} size='sm'>Exportar</Button>
+                <Button color='success'
+                    className='text-white'
+                    startContent={<i class="bi bi-file-earmark-excel"></i>}
+                    onPress={() => exportToCSV(data, columns, "viajes_activos.csv")}
+                    size='sm'>
+                    Exportar
+                </Button>
             </Box >
         ),
     });
@@ -245,7 +186,7 @@ const PagosEstadiasOperadores = ({ }) => {
                     table={table}
                 />
 
-                <EstadiasOperadores open={openOP} handleClose={handleCloseEO} datapago={info_pago}></EstadiasOperadores>
+                <AbrirPeriodo open={openOP} handleClose={handleCloseEO} datapago={folio}></AbrirPeriodo>
 
             </ViajeProvider>
         </>
