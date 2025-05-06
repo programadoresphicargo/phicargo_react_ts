@@ -1,4 +1,4 @@
-import { Avatar, Badge, Card, CardBody, CardHeader, Divider } from "@heroui/react";
+import { Avatar, Badge, Card, CardBody, CardHeader, Divider, Input } from "@heroui/react";
 import React, { useContext, useEffect, useState, useMemo } from 'react';
 import { Spinner } from "@heroui/react";
 import { ViajeContext } from '../../context/viajeContext';
@@ -284,26 +284,18 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
                                 >
                                     Viaje
                                 </h1>
-                                <Button onPress={handleClickOpenEO} color="primary" size="lg" fullWidth>Añadir viaje</Button>
-                                <DatePicker
-                                    variant="bordered"
-                                    label="Fecha"
-                                    value={value}
-                                    onChange={setValue}
-                                />
+                                <Button onPress={handleClickOpenEO} color="primary" size="sm" fullWidth>Ingresar viaje</Button>
                             </Stack>
                         </CardHeader>
                         <Divider></Divider>
                         <CardBody>
-                            <div className="container">
-                                <div className="row">
-                                    <div className="col">
-                                        <p>Folio No.: {datapago?.id_pago}</p>
-                                        <p>VIAJE: {data?.travel_name}</p>
-                                        <p>OPERADOR: {data?.employee_name}</p>
-                                        <p>CARTAS PORTE: {data?.cartas_porte}</p>
-                                    </div>
-                                </div>
+                            <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+                                <Input label="Folio No." value={datapago?.id_pago} />
+                                <Input label="Viaje" value={data?.travel_name} />
+                                <Input label="Operador" value={data?.employee_name} />
+                                <Input label="Cartas porte" value={data?.cartas_porte} />
+                                <DatePicker label="Fecha" value={value} onChange={setValue}
+                                />
                             </div>
                         </CardBody>
                     </Card>
