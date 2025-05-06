@@ -189,7 +189,6 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
         if (datapago != null) {
             fetchPago();
         } else {
-            toast.error('jiji');
             setData([]);
         }
     }, [open]);
