@@ -29,7 +29,6 @@ import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import { useAuthContext } from "@/modules/auth/hooks";
 import { Link } from "@heroui/react";
-import EstadiasOperadores from "@/phicargo/viajes/estadias_operadores";
 const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -275,16 +274,6 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
         });
     }
 
-    const [openOP, setOpenOP] = React.useState(false);
-
-    const handleClickOpenEO = () => {
-        setOpenOP(true);
-    };
-
-    const handleCloseEO = () => {
-        setOpenOP(false);
-    };
-
 
     return (
         <>
@@ -375,12 +364,6 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
                                             </Button>
                                         )}
 
-                                        {id_folio != null && (
-                                            <Button color="success" startContent={<i class="bi bi-plus-lg"></i>} className="text-white" onPress={handleClickOpenEO}>
-                                                Crear estadias operador
-                                            </Button>
-                                        )}
-
                                     </Stack>
                                 </CardBody>
                             </Card>
@@ -413,7 +396,6 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
                 fetchData={fetchData}>
             </CancelFolio>
 
-            <EstadiasOperadores open={openOP} handleClose={handleCloseEO}></EstadiasOperadores>
         </>
     );
 };
