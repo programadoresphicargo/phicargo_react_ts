@@ -10,7 +10,6 @@ import { Box } from '@mui/material';
 import { Button } from "@heroui/react"
 import { Chip } from "@heroui/react";
 import CloseIcon from '@mui/icons-material/Close';
-import DetencionesViajesActivos from '../../detenciones/detenciones_modal';
 import Dialog from '@mui/material/Dialog';
 import EstatusDropdown from '../../estatus/resumen_estatus';
 import IconButton from '@mui/material/IconButton';
@@ -23,7 +22,7 @@ import Typography from '@mui/material/Typography';
 import { exportToCSV } from '../../../utils/export';
 import odooApi from '@/api/odoo-api';
 import { ViajeProvider } from '../../context/viajeContext';
-import EstadiasOperadores from '..';
+import EstadiasOperadores from '.';
 
 const PagosEstadiasOperadores = ({ }) => {
 
