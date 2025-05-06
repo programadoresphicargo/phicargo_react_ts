@@ -46,6 +46,7 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
     const handleSelectionChange = (e) => setMotivo(e.target.value);
 
     const fetchData = async () => {
+        toast.info('Obteniendo datos de viaje');
         if (!data[0]?.id_viaje) return;
         try {
             setLoading(true);
@@ -66,14 +67,6 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
     };
 
     const fetchPago = async () => {
-        if (datapago == null) {
-            setData([]);
-            setHorasPagar(0);
-            setTotal(0);
-            setMotivo("");
-            setValue(parseDate(todayString));
-            return;
-        }
         try {
             toast.info('Obteniendo folio: ' + datapago.id_pago);
             setLoading(true);
@@ -93,6 +86,7 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
     };
 
     const registrar_pago_estadia = async () => {
+        console.log('registrar maniobra' + data);
         if (
             !horas_pagar || horas_pagar < 0 ||
             !total || total < 0 ||
@@ -107,7 +101,7 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
         }
 
         const payload = {
-            id_viaje: data[0]?.travel_id,
+            id_viaje: data?.travel_id,
             fecha: dayjs(value).format('YYYY-MM-DD'),
             horas_pagar,
             total,
@@ -133,7 +127,8 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
         console.log("actualizar" + data?.travel_id);
 
         const payload = {
-            id_viaje: datapago?.travel_id,
+            id_viaje: data?.id_viaje,
+            fecha: dayjs(value).format('YYYY-MM-DD'),
             horas_pagar,
             total,
             motivo
@@ -187,14 +182,16 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
     };
 
     useEffect(() => {
-        console.log("Nuevo:", data);
-        if (data[0]?.id_viaje) {
-            fetchData();
-        }
+        fetchData();
     }, [data]);
 
     useEffect(() => {
-        fetchPago();
+        if (datapago != null) {
+            fetchPago();
+        } else {
+            toast.error('jiji');
+            setData([]);
+        }
     }, [open]);
 
     const [openOP, setOpenOP] = useState(false);
