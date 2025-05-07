@@ -43,7 +43,7 @@ const ManiobrasActivasMasivos = ({ }) => {
 
   const fetchEstatus = async () => {
     try {
-      const response = await odooApi.get('/estatus_operativos/tipo/maniobra');
+      const response = await odooApi.get('/estatus_operativos/tipo/maniobra/monitoreo');
       const data = response.data.map((item) => ({
         key: item.id_estatus,
         label: item.nombre_estatus,

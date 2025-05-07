@@ -39,7 +39,7 @@ export default function PanelEstatus({ id_maniobra, open, handleClose }) {
 
     useEffect(() => {
         setIsLoading(true);
-        odooApi.get('/estatus_operativos/tipo/maniobra')
+        odooApi.get('/estatus_operativos/tipo/maniobra/monitoreo')
             .then((response) => {
                 setData(response.data);
             })
