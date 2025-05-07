@@ -177,36 +177,6 @@ const Disponibilidad_unidades = () => {
         setVehicleName(row.original.vehicle_name)
     };
 
-    const handleUpdateStatus = async () => {
-        setIsUpdating(true);
-        try {
-            const response = await fetch(VITE_PHIDES_API_URL + '/disponibilidad/equipos/guardar_cambios.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    id: selectedRow.id,
-                    estado: estado,
-                }),
-            });
-
-            const result = await response.json();
-            if (result.success) {
-                toast.success('Estado actualizado con éxito');
-                setOpenDialog(false);
-                fetchData();
-            } else {
-                toast.error('Error al actualizar el estado');
-            }
-        } catch (error) {
-            console.error('Error en la actualización:', error);
-            toast.error('Error en la actualización');
-        } finally {
-            setIsUpdating(false);
-        }
-    };
-
     const table = useMaterialReactTable({
         columns,
         data,
