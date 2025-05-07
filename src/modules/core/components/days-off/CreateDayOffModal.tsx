@@ -7,11 +7,11 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { Button } from '@heroui/react';
 import { DatePickerElement } from 'react-hook-form-mui/date-pickers';
-import { DayOffCreate } from '../models';
+import { DayOffCreate } from '../../models';
 import { MuiSimpleModal } from '@/components';
 import { SaveButton } from '@/components/ui';
 import dayjs from 'dayjs';
-import { useCreateDayOffMutation } from '../hooks/mutations';
+import { useCreateDayOffMutation } from '../../hooks/mutations';
 
 const initialValues: DayOffCreate = {
   type: 'feriado',
