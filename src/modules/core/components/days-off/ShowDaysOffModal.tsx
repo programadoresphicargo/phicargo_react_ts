@@ -20,7 +20,7 @@ export const ShowDaysOffModal = ({ open, onClose, startDate, endDate }: Props) =
     <MuiSimpleModal
       open={open}
       onClose={onClose}
-      header="Crear Día Inhábil"
+      header="Días Inhábiles del Mes"
       customFooter={
         <>
           <Button
@@ -35,7 +35,7 @@ export const ShowDaysOffModal = ({ open, onClose, startDate, endDate }: Props) =
         </>
       }
     >
-      <div className="p-4">
+      <div className="p-6">
         {isLoading && <LoadingSpinner />}
         {data && data.length === 0 && (
           <Alert
