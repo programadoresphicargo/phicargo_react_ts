@@ -32,7 +32,7 @@ const Documentacion = ({ }) => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await odooApi.get('/archivos/get_archivos_viaje/' + id_viaje);
+      const response = await odooApi.get('/archivos/get_archivos/tms_travel/' + id_viaje);
       setData(response.data);
       setLoading(false);
     } catch (error) {

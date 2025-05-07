@@ -13,7 +13,6 @@ import {
     useMaterialReactTable,
 } from 'material-react-table';
 import React, { useEffect, useMemo, useState } from 'react';
-
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import CloseIcon from '@mui/icons-material/Close';
@@ -26,8 +25,6 @@ import Typography from '@mui/material/Typography';
 import { exportToCSV } from '../../utils/export';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
-
-const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const Disponibilidad_unidades = () => {
     const [isLoading2, setLoading] = useState();

@@ -16,8 +16,6 @@ import Slide from '@mui/material/Slide';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 
-const { VITE_PHIDES_API_URL } = import.meta.env;
-
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -30,15 +28,8 @@ const DocumentacionManiobra = ({ id_maniobra }) => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const formData = new FormData();
-      formData.append('id_maniobra', id_maniobra);
-
-      const response = await fetch(VITE_PHIDES_API_URL + '/modulo_maniobras/documentacion/getDocumentos.php', {
-        method: 'POST',
-        body: formData,
-      });
-      const result = await response.json();
-      setData(result);
+      const response = await odooApi.get('/archivos/get_archivos/maniobras/' + id_maniobra);
+      setData(response.data);
       setLoading(false);
     } catch (error) {
       console.error('Error al obtener los datos:', error);
