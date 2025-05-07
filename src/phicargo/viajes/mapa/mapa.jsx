@@ -29,14 +29,14 @@ const Map = () => {
 
     useEffect(() => {
         if (!id_viaje) return;
-        odooApi.get(`/reportes_estatus_viajes/id_viaje/${id_viaje}`)
+        odooApi.get(`/tms_travel/reportes_estatus_viajes/id_viaje/${id_viaje}`)
             .then(response => setEstatus(response.data))
             .catch(error => console.error('Error al obtener datos:', error));
     }, [id_viaje]);
 
     useEffect(() => {
         if (!id_viaje) return;
-        odooApi.get(`/reportes_estatus_viajes/locations_by_id_viaje/${id_viaje}`)
+        odooApi.get(`/tms_travel/reportes_estatus_viajes/locations_by_id_viaje/${id_viaje}`)
             .then(response => setLocations(response.data))
             .catch(error => console.error('Error al obtener datos:', error));
     }, [id_viaje]);

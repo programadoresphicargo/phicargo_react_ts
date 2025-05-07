@@ -2,13 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+.custom-range-picker-popup {
+  z-index: 2000 !important;
+  /* o más alto según tu modal */
+}
 
 .swal2-container {
   z-index: 20000 !important;
 }
 
 .rs-picker-daterange-menu {
-  z-index: 2000 !important;  /* Asegúrate de que esté por encima del MUI Dialog */
+  z-index: 2000 !important;
+  /* Asegúrate de que esté por encima del MUI Dialog */
 }
 
 /* Estilo minimalista para la scrollbar */

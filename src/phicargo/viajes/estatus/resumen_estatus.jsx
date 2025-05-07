@@ -11,7 +11,7 @@ const EstatusDropdown = ({ data }) => {
 
     const fetchItems = () => {
         setIsLoading(true);
-        odooApi.get(`/reportes_estatus_viajes/by_id_viaje/${data.id_viaje}`)
+        odooApi.get(`/tms_travel/reportes_estatus_viajes/by_id_viaje/${data.id_viaje}`)
             .then((response) => {
                 setItems(response.data);
             })

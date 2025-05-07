@@ -59,7 +59,7 @@ export const useJourneyDialogs = () => {
             const estatus2 = await comprobar_estatus_viajes(id_viaje, 8);
             if (!estatus2) {
                 toast.error('No se ha registrado la salida de planta. Debes enviarla antes de finalizar el viaje.');
-                return; 
+                return;
             }
 
             enviar_estatus(id_viaje, 103, [], '');
@@ -124,38 +124,44 @@ export const useJourneyDialogs = () => {
             data.append('id_viaje', id_viaje);
             data.append('id_estatus', id_estatus);
             data.append('comentarios', comentarios);
-            data.append('id_usuario', session.user.id);
 
             if (nueva_fecha) {
                 data.append('nueva_fecha', nueva_fecha);
             }
 
-            archivos.forEach((file) => {
-                data.append('files[]', file);
+            archivos.forEach((fileWrapper) => {
+                if (fileWrapper.originFileObj instanceof File) {
+                    data.append('files', fileWrapper.originFileObj);
+                }
             });
 
-            const response = await axios.post(VITE_PHIDES_API_URL + '/viajes/algoritmos/envio_manual.php', data);
+            const response = await odooApi.post('/tms_travel/reportes_estatus_viajes/envio_estatus/', data);
 
-            if (response.data === 1) {
-                toast.success('Proceso correcto.', { id: loadingToast });
-                getViaje(id_viaje);
+            toast.success(response.data.message, { id: loadingToast });
+            getViaje(id_viaje);
 
-                if (id_estatus == 1) {
-                    cambiar_estado_equipo('viaje');
-                    cambiar_estado_operador('viaje');
-                } else if (id_estatus == 103) {
-                    cambiar_estado_equipo('disponible');
-                    cambiar_estado_operador('disponible');
-                } else if (id_estatus == 8) {
-                    calcular_estadia(id_viaje);
-                }
-                return true;
-            } else {
-                toast.error('Error: ' + response.data, { id: loadingToast, duration: 10000 });
-                return false;
+            if (id_estatus == 1) {
+                cambiar_estado_equipo('viaje');
+                cambiar_estado_operador('viaje');
+            } else if (id_estatus == 103) {
+                cambiar_estado_equipo('disponible');
+                cambiar_estado_operador('disponible');
+            } else if (id_estatus == 8) {
+                calcular_estadia(id_viaje);
             }
+
+            return true;
+
         } catch (error) {
-            toast.error('Error catch: ' + (error.message || error.toString()), { id: loadingToast });
+            let mensajeError = 'Ocurrió un error inesperado.';
+
+            if (error.response && error.response.data && error.response.data.detail) {
+                mensajeError = error.response.data.detail;
+            } else if (error.message) {
+                mensajeError = error.message;
+            }
+
+            toast.error('Error: ' + mensajeError, { id: loadingToast, duration: 10000 });
             return false;
         }
     };
@@ -379,7 +385,7 @@ export const useJourneyDialogs = () => {
 
     const comprobar_estatus_viajes = async (id_viaje, id_estatus) => {
         try {
-            const response = await odooApi.get(`/reportes_estatus_viajes/buscar_estatus/${id_viaje}/${id_estatus}`);
+            const response = await odooApi.get(`/tms_travel/reportes_estatus_viajes/buscar_estatus/${id_viaje}/${id_estatus}`);
             console.log(response.data.status);
 
             if (response.data.status === 'success') {

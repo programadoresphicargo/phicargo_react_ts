@@ -29,7 +29,7 @@ const ReporteCumplimiento = () => {
             const endDate = dates[1].format('YYYY-MM-DD');
             try {
                 setLoading(true);
-                const response = await odooApi.get('/reportes_estatus_viajes/cumplimiento_estatus_operadores/', {
+                const response = await odooApi.get('/tms_travel/reportes_estatus_viajes/cumplimiento_estatus_operadores/', {
                     params: {
                         fecha_inicio: startDate,
                         fecha_fin: endDate

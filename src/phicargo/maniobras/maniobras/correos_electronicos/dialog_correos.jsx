@@ -94,7 +94,7 @@ const CorreosLigadosManiobra = ({ open, handleClose }) => {
             <FormularioCorreo open={openF} handleClose={cerrar} />
 
             <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
-                <DialogTitle>Correos Ligados a Maniobra {id_maniobra}</DialogTitle>
+                <DialogTitle>Correos Ligados a Maniobra M-{id_maniobra}</DialogTitle>
                 <DialogContent>
                     <div className='mb-3'>
                         <Button color='primary' onPress={() => setOpenF(true)}>Nuevo correo</Button>

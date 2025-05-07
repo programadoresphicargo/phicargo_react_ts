@@ -100,23 +100,22 @@ const ViajesActivosMasivo = ({ }) => {
       if (result.isConfirmed) {
         const exportData = data.map((row) => ({
           id_viaje: row.id_viaje,
-          estatus_seleccionado: row.estatus_seleccionado,
+          id_estatus: row.estatus_seleccionado,
           comentarios: row.comentarios ?? '',
           fecha_hora: row.fecha_hora ?? null
         }));
 
         try {
           setLoading(true);
-          const response = await odooApi.post('/tms_travel/envio_masivo/', exportData);
+          const response = await odooApi.post('/tms_travel/reportes_estatus_viajes/envio_masivo/', exportData);
           setLoading(false);
 
           if (response.data) {
-
             response.data.forEach((item) => {
-              if (item.status === 'Correo enviado correctamente') {
-                toast.success(`Viaje ${item.id_viaje}: Correo enviado con éxito`);
+              if (item.status === 'success') {
+                toast.success(item.message);
               } else {
-                toast.error(`Viaje ${item.id_viaje}: ${item.status}`);
+                toast.error(`Error en el envio.`);
               }
             });
 

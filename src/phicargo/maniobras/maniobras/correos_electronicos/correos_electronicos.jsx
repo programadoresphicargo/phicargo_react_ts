@@ -58,6 +58,7 @@ const AutocompleteManager = ({ onValuesChange, id_maniobra, id_cliente, disabled
                 }));
                 setAddedValues(data);
                 setInitialValues(data);
+                alert();
             })
             .catch(err => {
                 console.log(err);
@@ -84,7 +85,7 @@ const AutocompleteManager = ({ onValuesChange, id_maniobra, id_cliente, disabled
         <Card>
             <CardBody>
                 <div className='mb-5'>
-                    <Button color='primary' onClick={handleClickOpen2}>Nuevo correo</Button>
+                    <Button color='primary' onPress={handleClickOpen2}>Nuevo correo</Button>
                 </div>
                 <FormularioCorreo open={open2} handleClose={handleClose2} id_cliente={id_cliente}></FormularioCorreo>
                 <Autocomplete

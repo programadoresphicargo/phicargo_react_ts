@@ -11,8 +11,9 @@ const Terminales = () => {
     const [open, setOpen] = useState(false);
     const [id_terminal, setIDTerminal] = useState(0);
 
-    const handleClickOpen = () => {
+    const handleClickOpen = (id_terminal) => {
         setOpen(true);
+        setIDTerminal(id_terminal);
     };
 
     const handleClose = () => {
@@ -26,7 +27,7 @@ const Terminales = () => {
     const fetchData = useCallback(async () => {
         try {
             setILoading(true);
-            const response = await odooApi.get('/terminales_maniobras/');
+            const response = await odooApi.get('/maniobras/terminales/');
             setData(response.data);
             setILoading(false);
         } catch (error) {
@@ -79,8 +80,7 @@ const Terminales = () => {
         },
         muiTableBodyRowProps: ({ row }) => ({
             onClick: () => {
-                handleClickOpen();
-                setIDTerminal(row.original.id_terminal);
+                handleClickOpen(row.original.id_terminal);
             },
             style: {
                 cursor: 'pointer',
@@ -112,8 +112,8 @@ const Terminales = () => {
         <div>
             <ManiobrasNavBar />
             <div className="flex flex-wrap gap-2 items-center p-2">
-                <Button color='primary' onPress={handleClickOpen}>
-                    Ingresar terminal
+                <Button color="primary" onPress={() => handleClickOpen(0)}>
+                    Nueva
                 </Button>
             </div>
             <MaterialReactTable table={table} />

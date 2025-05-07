@@ -45,7 +45,7 @@ function EstatusHistorial() {
     const getHistorialEstatus = async () => {
         try {
             setLoading(true);
-            const response = await odooApi.get(`/reportes_estatus_viajes/by_id_viaje/${id_viaje}`);
+            const response = await odooApi.get(`/tms_travel/reportes_estatus_viajes/by_id_viaje/${id_viaje}`);
             setHistorial(response.data);
         } catch (error) {
             console.error('Error al obtener los datos:', error);

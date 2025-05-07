@@ -59,7 +59,7 @@ const ReporteCumplimientoEjecutivo = () => {
         const endDate = dates.end;
         try {
             setLoading(true);
-            const response = await odooApi.get('/reportes_estatus_viajes/reporte_cumplimiento_estatus_ejecutivos/', {
+            const response = await odooApi.get('/tms_travel/reportes_estatus_viajes/reporte_cumplimiento_estatus_ejecutivos/', {
                 params: {
                     hora_inicio: value[0],
                     hora_fin: value[1],

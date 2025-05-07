@@ -8,7 +8,7 @@ import {
   StepLabel,
   Stepper,
 } from '@mui/material';
-import { Button, Card, CardBody, CardFooter, CardHeader, Image, Switch } from "@heroui/react";
+import { Button, Card, CardBody, CardFooter, CardHeader, Image, Switch, Textarea } from "@heroui/react";
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { Upload, message } from 'antd';
 import { getLocalTimeZone, now, today } from "@internationalized/date";
@@ -74,22 +74,6 @@ function PanelEnvio({ open, cerrar, id_reporte, estatusSeleccionado, comentarios
   const [data, setData] = useState([]);
   const [isLoading, setLoading] = useState();
 
-  const modules = {
-    toolbar: [
-      [{ header: [1, 2, false] }],
-      ['bold', 'italic', 'underline', 'strike'],
-      [{ list: 'ordered' }, { list: 'bullet' }],
-      ['link', 'image'],
-      [{ align: [] }],
-      ['clean'],
-    ],
-  };
-
-  const formats = [
-    'header', 'bold', 'italic', 'underline', 'strike',
-    'list', 'bullet', 'link', 'image', 'align',
-  ];
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -142,6 +126,10 @@ function PanelEnvio({ open, cerrar, id_reporte, estatusSeleccionado, comentarios
         setLoadingSE(true);
         const success = await enviar_estatus(id_viaje, estatus_seleccionado, fileList, comentarios, NuevaFecha);
         if (success) {
+          setEstatusSeleccionado("");
+          setContenido("");
+          setFileList([]);
+          setActiveStep(0);
           cerrar();
         } else {
           toast.error("El envío del estatus falló.");
@@ -271,16 +259,12 @@ function PanelEnvio({ open, cerrar, id_reporte, estatusSeleccionado, comentarios
                     </div>
                   </CardHeader>
                   <CardBody>
-                    <div class="quill-custom">
-                      <ReactQuill
-                        class="js-quill"
-                        value={comentarios}
-                        onChange={setContenido}
-                        modules={modules}
-                        formats={formats}
-                        placeholder="Escribe aquí el contenido..."
-                      />
-                    </div>
+                    <Textarea
+                      label="Comentarios"
+                      variant='bordered'
+                      value={comentarios}
+                      onValueChange={setContenido}>
+                    </Textarea>
                   </CardBody>
                 </Card>
 

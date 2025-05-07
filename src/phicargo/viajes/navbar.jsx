@@ -42,7 +42,8 @@ const pages = [
     name: 'ESTADIAS',
     subpages: [
       { name: 'Estadías', path: '/estadias' },
-      { name: 'Pago operadores', path: '/pagos_estadias_operadores' },
+      { name: 'Periodos de pago', path: '/periodos_pagos_estadias_operadores' },
+      { name: 'Folios de pago estadias operadores', path: '/pagos_estadias_operadores' },
     ],
   },
   { name: 'ENVIO MASIVO', path: '/envio_masivo_viajes' },

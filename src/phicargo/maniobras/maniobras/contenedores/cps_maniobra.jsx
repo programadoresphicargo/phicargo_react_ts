@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useContext } from 'react';
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
-import AñadirContenedor from './modal_añadir_contenedor';
+import AñadirContenedor from './modal_cps';
 import axios from 'axios';
 import { Button } from "@heroui/react";
 import Box from '@mui/material/Box';
@@ -13,27 +13,34 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { toast } from 'react-toastify';
 import { Card, CardBody } from "@heroui/react";
-const { VITE_PHIDES_API_URL } = import.meta.env;
+import odooApi from '@/api/odoo-api';
+import { ManiobraContext } from '../../context/viajeContext';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
 const ManiobraContenedores = ({ id_maniobra }) => {
     const [modalShow, setModalShow] = useState(false);
-    const [data, setData] = useState([]);
     const [openDialog, setOpenDialog] = useState(false);
+    const [isLoading, setLoading] = useState(false);
     const [selectedId, setSelectedId] = useState(null);
-
-    const fetchData = useCallback(async () => {
-        try {
-            const response = await fetch(VITE_PHIDES_API_URL + '/modulo_maniobras/maniobra/get_maniobra_contenedores.php?id_maniobra=' + id_maniobra);
-            const jsonData = await response.json();
-            setData(jsonData);
-        } catch (error) {
-            console.error('Error al obtener los datos:', error);
-        }
-    }, [id_maniobra]);
+    const { formData, setFormData, formDisabled } = useContext(ManiobraContext);
 
     useEffect(() => {
+        const fetchData = async () => {
+            try {
+                setLoading(true);
+                const response = await odooApi.get('/maniobras/contenedores/' + id_maniobra);
+                setFormData(prevFormData => ({
+                    ...prevFormData,
+                    cps_ligadas: response.data || [],
+                }));
+                setLoading(false);
+            } catch (error) {
+                console.error('Error al obtener los datos:', error);
+            }
+        };
+
         fetchData();
-    }, [fetchData]);
+    }, [id_maniobra]);
 
     const handleShowModal = () => {
         setModalShow(true);
@@ -41,9 +48,10 @@ const ManiobraContenedores = ({ id_maniobra }) => {
 
     const handleCloseModal = () => {
         setModalShow(false);
-        fetchData();
     };
 
+
+    //Dialog para confirmar borrado
     const handleOpenDialog = (id) => {
         setSelectedId(id);
         setOpenDialog(true);
@@ -55,29 +63,27 @@ const ManiobraContenedores = ({ id_maniobra }) => {
     };
 
     const confirmarBorrado = () => {
-        if (selectedId) {
-            axios.post(VITE_PHIDES_API_URL + '/modulo_maniobras/maniobra/borrar_contenedor.php?id=' + selectedId)
-                .then((response) => {
-                    const data = response.data;
-                    if (data.success) {
-                        toast.success('El registro ha sido exitoso.');
-                        fetchData();
-                    } else {
-                        toast.error(data);
-                    }
-                })
-                .catch((error) => {
-                    toast.error(error);
-                });
+        const contenedor = formData.cps_ligadas.find(c => c.id === selectedId);
+
+        if (contenedor) {
+            // Eliminar de cps_ligadas y añadir a cps_desligadas
+            setFormData(prev => ({
+                ...prev,
+                cps_ligadas: prev.cps_ligadas.filter(c => c.id !== selectedId),
+                cps_desligadas: [...(prev.cps_desligadas || []), contenedor],
+            }));
         }
-        handleCloseDialog();
+
+        setOpenDialog(false);
+        setSelectedId(null);
+        toast.info('Contenedor marcado para eliminación. Recuerda guardar los cambios.');
     };
 
     const columns = useMemo(
         () => [
             {
                 accessorKey: 'id',
-                header: 'ID',
+                header: 'ID Carta',
             },
             {
                 accessorKey: 'name',
@@ -101,10 +107,12 @@ const ManiobraContenedores = ({ id_maniobra }) => {
 
     const table = useMaterialReactTable({
         columns,
-        data,
+        data: formData.cps_ligadas || [],
         enableGrouping: true,
         enableGlobalFilter: true,
         enableFilters: true,
+        localization: MRT_Localization_ES,
+        state: { showProgressBars: isLoading },
         initialState: {
             density: 'compact',
             pagination: { pageSize: 80 },
@@ -115,12 +123,11 @@ const ManiobraContenedores = ({ id_maniobra }) => {
                 boxShadow: 'none',
             },
         },
+        positionActionsColumn: 'last',
         enableRowActions: true,
         renderRowActions: ({ row }) => (
             <Box>
-                <IconButton onClick={() => handleOpenDialog(row.original.id)}>
-                    <DeleteIcon />
-                </IconButton>
+                <Button onPress={() => handleOpenDialog(row.original.id)} startContent={<DeleteIcon />} size='sm' color='primary' isDisabled={formDisabled}></Button>
             </Box>
         ),
         muiTableBodyRowProps: ({ row }) => ({
@@ -152,7 +159,7 @@ const ManiobraContenedores = ({ id_maniobra }) => {
             <Card>
                 <CardBody>
                     <div>
-                        <Button color='primary' onClick={handleShowModal}>
+                        <Button color='primary' onPress={handleShowModal} isDisabled={formDisabled}>
                             Añadir contenedor
                         </Button>
                         <AñadirContenedor
@@ -165,19 +172,16 @@ const ManiobraContenedores = ({ id_maniobra }) => {
                         <Dialog
                             open={openDialog}
                             onClose={handleCloseDialog}
+                            fullWidth
+                            maxWidth={"sm"}
                         >
                             <DialogTitle>¿Estás seguro?</DialogTitle>
-                            <DialogContent>
-                                <DialogContentText>
-                                    No podrás revertir esto!
-                                </DialogContentText>
-                            </DialogContent>
                             <DialogActions>
-                                <Button onClick={handleCloseDialog} color="primary">
+                                <Button onPress={handleCloseDialog} color="default" className="text-white">
                                     Cancelar
                                 </Button>
-                                <Button onClick={confirmarBorrado} color="secondary">
-                                    Sí, bórralo!
+                                <Button onPress={confirmarBorrado} color="primary">
+                                    Sí, borrar
                                 </Button>
                             </DialogActions>
                         </Dialog>

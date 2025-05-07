@@ -58,7 +58,10 @@ const TiposCostosExtras = lazy(
   () => import('../phicargo/costos/tipos_costos_extras/costos_extras'),
 );
 const PagosEstadiasOperadores = lazy(
-  () => import('../phicargo/viajes/estadias_operadores/indexTabla'),
+  () => import('../phicargo/viajes/estadias_operadores/folios/folios'),
+);
+const PeriodosPagosEstadiasOperadores = lazy(
+  () => import('../phicargo/viajes/estadias_operadores/periodos/periodos'),
 );
 const Estadias = lazy(() => import('../phicargo/estadias/Control'));
 const EstadiasInfo = lazy(() => import('../phicargo/estadias/index_estadia'));
@@ -119,6 +122,15 @@ export const PrivateRoutes = () => {
           element={
             <Suspense fallback={<LoadingPage />}>
               <PagosEstadiasOperadores></PagosEstadiasOperadores>
+            </Suspense>
+          }
+        ></Route>
+
+        <Route
+          path="/periodos_pagos_estadias_operadores"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <PeriodosPagosEstadiasOperadores></PeriodosPagosEstadiasOperadores>
             </Suspense>
           }
         ></Route>

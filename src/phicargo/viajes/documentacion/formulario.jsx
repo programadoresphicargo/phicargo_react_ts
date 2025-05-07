@@ -1,16 +1,15 @@
 import { Button, select } from "@heroui/react";
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { Select, SelectItem } from "@heroui/react";
-// import { InboxOutlined } from '@ant-design/icons';
 import { Upload, message } from 'antd';
-
 import { Box } from '@mui/material';
 import Slide from '@mui/material/Slide';
 import { ViajeContext } from '../context/viajeContext';
 import { useAuthContext } from "@/modules/auth/hooks";
+import odooApi from "@/api/odoo-api";
+import toast from 'react-hot-toast';
 
 const { Dragger } = Upload;
-const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -20,7 +19,7 @@ const FormularioDocumentacion = ({ onClose }) => {
 
   const { session } = useAuthContext();
   const { id_viaje, viaje, getViaje, loading, error, setIDViaje, isLoading } = useContext(ViajeContext);
-  const [tipo_doc, setSelectedValue] = useState('');
+  const [tipo_archivo, setSelectedValue] = useState('');
   const [fileList, setFileList] = useState([]);
 
   const [Loading, setLoading] = useState(false);
@@ -28,6 +27,9 @@ const FormularioDocumentacion = ({ onClose }) => {
   const props = {
     name: 'file',
     multiple: true,
+    onChange(info) {
+      setFileList(info.fileList);
+    },
     beforeUpload: (file) => {
       setFileList((prevFileList) => [...prevFileList, file]);
       return false;
@@ -38,34 +40,31 @@ const FormularioDocumentacion = ({ onClose }) => {
     },
   };
 
-  const handleUpload = async () => {
+  const enviar_documentacion = async () => {
     setLoading(true);
-    const formData = new FormData();
-    formData.append('id_viaje', id_viaje);
-    formData.append('tipo_doc', tipo_doc);
-    formData.append('id_usuario', session.user.id);
-    fileList.forEach((file) => {
-      formData.append('files[]', file);
+    const data = new FormData();
+    data.append('id_viaje', id_viaje);
+    data.append('tipo_archivo', tipo_archivo);
+
+    fileList.forEach((fileWrapper) => {
+      if (fileWrapper.originFileObj instanceof File) {
+        data.append('files', fileWrapper.originFileObj);
+      }
     });
 
     try {
-      const response = await fetch(VITE_PHIDES_API_URL + '/viajes/documentacion/enviarDocumentos.php', {
-        method: 'POST',
-        body: formData,
-      });
-
-      const data = await response.json();
+      const response = await odooApi.post('/tms_travel/enviar_documentacion/', data);
       setLoading(false);
-      if (data.status == "success") {
-        message.success(data.message);
+      if (response.data.status == "success") {
+        toast.success(response.data.message);
         setFileList([]);
         onClose();
       } else {
-        message.error(`Error: ${data.message}`);
+        toast.error(response.data.message);
       }
     } catch (error) {
       setLoading(false);
-      message.error('Error en la solicitud de subida');
+      toast.error('Error en la solicitud de subida');
     }
   };
 
@@ -75,9 +74,9 @@ const FormularioDocumentacion = ({ onClose }) => {
       <Button
         isLoading={Loading}
         color="primary"
-        onClick={handleUpload}
+        onPress={enviar_documentacion}
         style={{ marginTop: 16 }}
-        isDisabled={fileList.length === 0 || tipo_doc === ''}
+        isDisabled={fileList.length === 0 || tipo_archivo === ''}
       >
         Subir Archivos
       </Button>

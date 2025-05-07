@@ -60,7 +60,7 @@ function EstatusHistorialAgrupado({ registros_agrupados }) {
 
         try {
             setLoading(true);
-            const response = await odooApi.get('/reportes_estatus_viajes/by_id_reportes/' + registros_agrupados);
+            const response = await odooApi.get('/tms_travel/reportes_estatus_viajes/by_id_reportes/' + registros_agrupados);
             setEstatus(response.data);
             setLoading(false);
         } catch (error) {
@@ -71,7 +71,7 @@ function EstatusHistorialAgrupado({ registros_agrupados }) {
 
     const ActualizarFechaEstatus = async (id_reporte, fecha_hora) => {
         try {
-            const response = await odooApi.post('/reportes_estatus_viajes/actualizar_estatus_fecha/' + id_reporte + '/' + fecha_hora);
+            const response = await odooApi.post('/tms_travel/reportes_estatus_viajes/actualizar_estatus_fecha/' + id_reporte + '/' + fecha_hora);
             if (response.data.status == 'success') {
                 toast.success(response.data.message);
             } else {
