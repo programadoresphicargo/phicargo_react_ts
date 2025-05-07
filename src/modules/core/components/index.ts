@@ -1,1 +1,1 @@
-export * from './CreateDayOffModal';
+export * from './days-off/CreateDayOffModal';
