@@ -46,6 +46,7 @@ export class VehicleRevenueProjectionAdapter {
       totalWorkingDays: data.total_working_days,
       idealMonthlyRevenue: data.ideal_monthly_revenue,
       realMonthlyRevenue: data.real_monthly_revenue,
+      realMonthlyRevenueLocal: data.real_monthly_revenue_local,
       extraCosts: data.extra_costs,
     };
   }

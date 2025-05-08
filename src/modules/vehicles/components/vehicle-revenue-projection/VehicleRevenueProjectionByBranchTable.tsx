@@ -59,6 +59,15 @@ const exportConf: ExportConfig<VehicleRevenueProjectionByBranch> = {
       accessorFn: (data) => data.realMonthlyRevenue,
       header: 'INGRESO MENSUAL REAL',
     },
+    {
+      accessorFn: (data) => data.realMonthlyRevenueLocal,
+      header: 'INGRESO MENSUAL LOCAL REAL',
+    },
+    {
+      accessorFn: (data) => data.extraCosts,
+      header: 'COSTOS EXTRA',
+    },
+      
   ],
 };
 
