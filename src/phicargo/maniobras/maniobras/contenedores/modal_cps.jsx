@@ -15,7 +15,6 @@ import MonthSelector from '@/mes';
 import YearSelector from '@/año';
 import { ManiobraContext } from '../../context/viajeContext';
 import odooApi from '@/api/odoo-api';
-const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const AñadirContenedor = ({ show, handleClose, id_maniobra }) => {
 

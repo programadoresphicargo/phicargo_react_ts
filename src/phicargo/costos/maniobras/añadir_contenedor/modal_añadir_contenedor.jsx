@@ -20,8 +20,6 @@ import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
-const { VITE_PHIDES_API_URL } = import.meta.env;
-
 const AñadirContenedor = ({ show, handleClose }) => {
 
     const { id_folio, CartasPorte, setCPS } = useContext(CostosExtrasContext);
