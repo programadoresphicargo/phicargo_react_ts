@@ -26,6 +26,7 @@ export interface VehicleRevenueProjectionByBranchApi {
   total_working_days: number;
   ideal_monthly_revenue: number;
   real_monthly_revenue: number;
+  real_monthly_revenue_local: number;
   extra_costs: number;
 }
 
