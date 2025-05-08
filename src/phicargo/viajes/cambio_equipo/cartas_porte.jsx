@@ -5,7 +5,6 @@ import customFontTheme from '../../../theme';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
-const { VITE_PHIDES_API_URL } = import.meta.env;
 
 import {
   MaterialReactTable,
@@ -47,7 +46,7 @@ const ContenedoresCambio = ({ setSelectedItems, onClose }) => {
     if (!month || selectedTab === undefined) return;
     setLoading(true);
     try {
-      const response = await fetch(VITE_PHIDES_API_URL + '/modulo_maniobras/programacion/get_registros.php', {
+      const response = await fetch('/modulo_maniobras/programacion/get_registros.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

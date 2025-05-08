@@ -17,8 +17,6 @@ import Slide from '@mui/material/Slide';
 import { ViajeContext } from '../context/viajeContext';
 import axios from 'axios';
 
-const { VITE_PHIDES_API_URL } = import.meta.env;
-
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -138,7 +136,7 @@ const IndexCambioEquipo = ({ }) => {
     Data.append('contenedores', JSON.stringify(data));
 
     try {
-      const response = await fetch(VITE_PHIDES_API_URL + '/viajes/cambios/guardar.php', {
+      const response = await fetch('/viajes/cambios/guardar.php', {
         method: 'POST',
         body: Data,
       });
@@ -155,7 +153,7 @@ const IndexCambioEquipo = ({ }) => {
 
   useEffect(() => {
     if (id_viaje) {
-      axios.get(VITE_PHIDES_API_URL + `/viajes/cambios/getEquipo.php?id_viaje=${id_viaje}`)
+      axios.get(`/viajes/cambios/getEquipo.php?id_viaje=${id_viaje}`)
         .then((response) => {
           const data = response.data[0];
           setFormData({
@@ -171,7 +169,7 @@ const IndexCambioEquipo = ({ }) => {
           toast.error('Error al obtener datos de maniobra:' + error);
         });
 
-      axios.get(VITE_PHIDES_API_URL + `/viajes/cambios/getCartas.php?id_viaje=${id_viaje}`)
+      axios.get(`/viajes/cambios/getCartas.php?id_viaje=${id_viaje}`)
         .then((response) => {
           const data = response.data;
           setSelectedItems(data);
