@@ -14,6 +14,7 @@ import { Select, SelectItem } from "@heroui/react";
 import MonthSelector from '@/mes';
 import YearSelector from '@/año';
 import { ManiobraContext } from '../../context/viajeContext';
+import odooApi from '@/api/odoo-api';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const AñadirContenedor = ({ show, handleClose, id_maniobra }) => {
@@ -42,20 +43,8 @@ const AñadirContenedor = ({ show, handleClose, id_maniobra }) => {
 
             try {
                 setILoading(true);
-                const response = await fetch(VITE_PHIDES_API_URL + '/modulo_maniobras/programacion/get_registros2.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ month, year }),
-                });
-
-                if (!response.ok) {
-                    throw new Error('Error en la respuesta de la API');
-                }
-
-                const jsonData = await response.json();
-                setData(jsonData);
+                const response = await odooApi.get('/tms_waybill/get_waybills/' + month + '/' + year);
+                setData(response.data);
             } catch (error) {
                 console.error('Error al obtener los datos:', error);
             } finally {
@@ -123,6 +112,7 @@ const AñadirContenedor = ({ show, handleClose, id_maniobra }) => {
         enableGlobalFilter: false,
         enableFilters: true,
         state: {
+            showProgressBars: isLoading2,
             isLoading: isLoading2,
             showColumnFilters: true
         },
@@ -139,9 +129,24 @@ const AñadirContenedor = ({ show, handleClose, id_maniobra }) => {
             density: 'compact',
             pagination: { pageSize: 80 },
         },
+        muiTablePaperProps: {
+            elevation: 0,
+            sx: {
+                borderRadius: '0',
+            },
+        },
+        muiTableHeadCellProps: {
+            sx: {
+                fontFamily: 'Inter',
+                fontWeight: 'Bold',
+                fontSize: '12px',
+            },
+        },
         muiTableBodyCellProps: {
             sx: {
-                borderBottom: '1px solid #e0e0e0',
+                fontFamily: 'Inter',
+                fontWeight: 'normal',
+                fontSize: '12px',
             },
         },
         enableRowActions: true,

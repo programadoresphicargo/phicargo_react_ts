@@ -18,6 +18,7 @@ import MonthSelector from '@/mes';
 import YearSelector from '@/año';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
@@ -49,24 +50,12 @@ const AñadirContenedor = ({ show, handleClose }) => {
 
             try {
                 setILoading(true);
-                const response = await fetch(VITE_PHIDES_API_URL + '/modulo_maniobras/programacion/get_registros2.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ month, year }),
-                });
-
-                if (!response.ok) {
-                    throw new Error('Error en la respuesta de la API');
-                }
-
-                const jsonData = await response.json();
-                setData(jsonData); // Actualiza el estado con los datos obtenidos
+                const response = await odooApi.get('/tms_waybill/get_waybills/' + month + '/' + year);
+                setData(response.data);
             } catch (error) {
                 console.error('Error al obtener los datos:', error);
             } finally {
-                setILoading(false); // Asegúrate de que setILoading se ejecute siempre
+                setILoading(false);
             }
         };
 
@@ -109,6 +98,7 @@ const AñadirContenedor = ({ show, handleClose }) => {
         enableGrouping: true,
         enableGlobalFilter: false,
         enableFilters: true,
+        localization: MRT_Localization_ES,
         state: {
             isLoading: isLoading2,
             showColumnFilters: true,
@@ -191,7 +181,7 @@ const AñadirContenedor = ({ show, handleClose }) => {
                 open={show}
                 onClose={handleClose}
                 fullWidth={true}
-                maxWidth='lg'
+                maxWidth='xl'
             >
                 <DialogTitle id="example-custom-modal-styling-title">
                     Cartas porte

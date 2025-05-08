@@ -1,7 +1,6 @@
 import { Card, CardBody } from "@heroui/react";
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
-
 import AñadirContenedor from './modal_añadir_contenedor';
 import Box from '@mui/material/Box';
 import { Button } from "@heroui/react";
