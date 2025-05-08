@@ -83,6 +83,20 @@ export const useVehicleRevenueProjectionByBranchColumns = () => {
         },
       },
       {
+        accessorKey: 'realMonthlyRevenueLocal',
+        header: 'REAL MENSUAL LOCAL',
+        Cell: ({ cell }) => <CurrencyCell value={cell.getValue<number>()} />,
+        Footer: ({ column }) => {
+          const total = column
+            .getFacetedRowModel()
+            .rows.reduce(
+              (sum, row) => sum + (row.original.realMonthlyRevenueLocal ?? 0),
+              0,
+            );
+          return <CurrencyFooterCell value={total} />;
+        },
+      },
+      {
         accessorKey: 'extraCosts',
         header: 'COSTOS EXTRA',
         Cell: ({ cell }) => <CurrencyCell value={cell.getValue<number>()} />,
@@ -101,13 +115,17 @@ export const useVehicleRevenueProjectionByBranchColumns = () => {
         Cell: ({ row }) => {
           const realRevenue = row.original.realMonthlyRevenue ?? 0;
           const extraCosts = row.original.extraCosts ?? 0;
-          return <CurrencyCell value={realRevenue + extraCosts} />;
+          const realRevenueLocal = row.original.realMonthlyRevenueLocal ?? 0;
+          return (
+            <CurrencyCell value={realRevenue + extraCosts + realRevenueLocal} />
+          );
         },
         Footer: ({ column }) => {
           const total = column.getFacetedRowModel().rows.reduce((sum, row) => {
             const realRevenue = row.original.realMonthlyRevenue ?? 0;
             const extraCosts = row.original.extraCosts ?? 0;
-            return sum + realRevenue + extraCosts;
+            const realRevenueLocal = row.original.realMonthlyRevenueLocal ?? 0;
+            return sum + realRevenue + extraCosts + realRevenueLocal;
           }, 0);
           return <CurrencyFooterCell value={total} />;
         },
@@ -118,7 +136,8 @@ export const useVehicleRevenueProjectionByBranchColumns = () => {
           const idealMonthlyRevenue = row.original.idealMonthlyRevenue ?? 0;
           const revenue =
             (row.original.realMonthlyRevenue ?? 0) +
-            (row.original.extraCosts ?? 0);
+            (row.original.extraCosts ?? 0) +
+            (row.original.realMonthlyRevenueLocal ?? 0);
 
           return (
             <span className="font-bold uppercase">
@@ -139,7 +158,8 @@ export const useVehicleRevenueProjectionByBranchColumns = () => {
               (sum, row) =>
                 sum +
                 ((row.original.realMonthlyRevenue ?? 0) +
-                  (row.original.extraCosts ?? 0)),
+                  (row.original.extraCosts ?? 0) +
+                  (row.original.realMonthlyRevenueLocal ?? 0)),
               0,
             );
 
