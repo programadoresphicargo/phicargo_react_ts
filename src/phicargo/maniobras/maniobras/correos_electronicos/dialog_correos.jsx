@@ -93,7 +93,22 @@ const CorreosLigadosManiobra = ({ open, handleClose }) => {
         <>
             <FormularioCorreo open={openF} handleClose={cerrar} />
 
-            <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                maxWidth="md"
+                fullWidth
+                sx={{
+                    '& .MuiPaper-root': {
+                        borderRadius: '25px',
+                        boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.0)',
+                    },
+                }}
+                BackdropProps={{
+                    sx: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                    },
+                }}>
                 <DialogTitle>Correos Ligados a Maniobra M-{id_maniobra}</DialogTitle>
                 <DialogContent>
                     <div className='mb-3'>
@@ -116,7 +131,9 @@ const CorreosLigadosManiobra = ({ open, handleClose }) => {
                     </Autocomplete>
 
                     {isLoading ? (
-                        <Spinner label="Cargando correos..." />
+                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '300px' }}>
+                            <Spinner label="Cargando correos..." />
+                        </div>
                     ) : (
                         <Table aria-label="Correos ligados a maniobra" isStriped isCompact>
                             <TableHeader>

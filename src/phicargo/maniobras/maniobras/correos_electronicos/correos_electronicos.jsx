@@ -9,7 +9,6 @@ import FormularioCorreo from './formulario';
 import TextField from '@mui/material/TextField';
 import axios from 'axios';
 import odooApi from '@/api/odoo-api';
-const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const AutocompleteManager = ({ onValuesChange, id_maniobra, id_cliente, disabled }) => {
     const [options, setOptions] = useState([]);
@@ -46,30 +45,10 @@ const AutocompleteManager = ({ onValuesChange, id_maniobra, id_cliente, disabled
         fetchCorreos();
     }, [id_cliente]);
 
-    useEffect(() => {
-        const baseUrl = VITE_PHIDES_API_URL + `/modulo_maniobras/correos/correos_ligados.php?id_maniobra=${id_maniobra}`;
-
-        axios.get(baseUrl)
-            .then(response => {
-                const data = response.data.map(item => ({
-                    id: item.id,
-                    value: item.id_correo,
-                    title: item.correo,
-                }));
-                setAddedValues(data);
-                setInitialValues(data);
-                alert();
-            })
-            .catch(err => {
-                console.log(err);
-            });
-    }, [id_maniobra]);
-
     const handleAdd = (event, newValue) => {
         const removed = initialValues.filter(item => !newValue.includes(item));
         const added = newValue.filter(item => !initialValues.some(initial => initial.value === item.value));
 
-        // Actualiza solo los valores añadidos y removidos correctamente
         setAddedValues(newValue);
         setRemovedValues(removed);
 
