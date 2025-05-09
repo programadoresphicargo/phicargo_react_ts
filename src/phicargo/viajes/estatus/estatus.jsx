@@ -15,6 +15,7 @@ import odooApi from '@/api/odoo-api';
 import { tiempoTranscurrido } from '../../funciones/tiempo';
 import { DatePicker } from "@heroui/react";
 import { parseZonedDateTime, parseAbsoluteToLocal } from "@internationalized/date";
+import { Stack } from "rsuite";
 const { VITE_ODOO_API_URL } = import.meta.env;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -61,6 +62,9 @@ function EstatusHistorial() {
 
     return (
         <>
+            <Stack className="mb-2">
+                <Button color="primary" onPress={() => getHistorialEstatus()} startContent={<i class="bi bi-arrow-clockwise"></i>}>Refrescar</Button>
+            </Stack>
             <Dialog
                 open={open}
                 TransitionComponent={Transition}
