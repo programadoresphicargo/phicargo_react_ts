@@ -1,4 +1,4 @@
-import { Avatar, Card, CardBody, CardFooter, CardHeader, CircularProgress } from "@heroui/react";
+import { Avatar, Card, CardBody, CardFooter, CardHeader, CircularProgress, Progress } from "@heroui/react";
 import {
     Button,
     Drawer,
@@ -43,7 +43,6 @@ export default function Notificaciones({ isOpen, onOpen, onOpenChange }) {
     }, [open]);
 
     const getEstatus = async () => {
-
         try {
             setLoading(true);
             const response = await odooApi.get('/notificaciones/estatus_operadores/');
@@ -82,13 +81,10 @@ export default function Notificaciones({ isOpen, onOpen, onOpenChange }) {
                         <>
                             <DrawerHeader className="flex flex-col gap-1">Notificaciones</DrawerHeader>
                             <DrawerBody>
-
                                 <ul class="list-group list-group-flush navbar-card-list-group">
 
                                     {isLoading && (
-                                        <div style={{ marginTop: '20px' }} className="d-flex justify-content-center">
-                                            <CircularProgress size="lg" aria-label="Loading..." />
-                                        </div>
+                                        <Progress isIndeterminate aria-label="Loading..." size="sm" />
                                     )}
 
                                     {estatus.map((step, index) => (
