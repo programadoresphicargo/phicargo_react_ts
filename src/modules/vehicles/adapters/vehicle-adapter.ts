@@ -1,5 +1,6 @@
 import type {
   MotumEvent,
+  Trailer,
   Vehicle,
   VehicleBase,
   VehicleStatusChangeEvent,
@@ -7,6 +8,7 @@ import type {
 } from '../models';
 import type {
   MotumEventAPI,
+  TrailerApi,
   VehicleApi,
   VehicleBaseApi,
   VehicleStatusChangeEventApi,
@@ -81,6 +83,45 @@ export class VehicleAdapter {
     };
   }
 
+  static toTrailer(trailer: TrailerApi): Trailer {
+    return {
+      id: trailer.id,
+      name: trailer.name2,
+      licensePlate: trailer.license_plate,
+      serialNumber: trailer.serial_number,
+      fleetType: trailer.fleet_type,
+      status: trailer.x_status,
+
+      state: trailer.state,
+      category: trailer.category || null,
+      brand: trailer.brand || null,
+
+      travel: trailer.tms_travel
+        ? {
+            id: trailer.tms_travel.id,
+            name: trailer.tms_travel.name,
+            status: trailer.tms_travel.x_status_viaje,
+          }
+        : null,
+      maneuver: trailer.maniobra
+        ? {
+            id: trailer.maniobra.id_maniobra,
+            type: trailer.maniobra.tipo_maniobra,
+            status: trailer.maniobra.estado_maniobra,
+            finishedDate: trailer.maniobra.fecha_finalizada
+              ? dayjs(trailer.maniobra.fecha_finalizada)
+              : null,
+          }
+        : null,
+      driver: trailer.driver
+        ? DriverAdapter.driverSimpleToLocal(trailer.driver)
+        : null,
+      driverPostura: trailer.driver_postura
+        ? DriverAdapter.toDriverPosturaSimple(trailer.driver_postura)
+        : null,
+    };
+  }
+
   /**
    * Mapper function to convert a VehicleUpdateApi object to a VehicleUpdate object
    * @param vehicle Vehicle object
@@ -146,9 +187,7 @@ export class VehicleAdapter {
       status: data.status,
       latitude: data.latitude,
       longitude: data.longitude,
-      attendedAt: data.attended_at
-        ? dayjs(data.attended_at)
-        : null,
+      attendedAt: data.attended_at ? dayjs(data.attended_at) : null,
       attendedBy: data.attended_by,
       comment: data.comment,
     };

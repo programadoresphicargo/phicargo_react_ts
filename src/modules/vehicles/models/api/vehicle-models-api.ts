@@ -4,11 +4,11 @@ import type {
   ManeuverSimpleApi,
   TravelSimpleApi,
 } from '../../../core/models';
-import {
+import type {
   DriverPosturaSimpleApi,
   DriverSimpleApi,
 } from '@/modules/drivers/models/api';
-import {
+import type {
   MotumEventStatus,
   VehicleBrand,
   VehicleCategory,
@@ -71,6 +71,26 @@ export interface VehicleStatusChangeEventApi {
   start_date: string;
   end_date: string | null;
   delivery_date: string | null;
+}
+
+// Trailer models
+
+export interface TrailerApi {
+  id: number;
+  name2: string;
+  license_plate: string | null;
+  serial_number: string | null;
+  fleet_type: string | null;
+  x_status: string;
+
+  state: VehicleState | null;
+  category: VehicleCategory | null;
+  brand: VehicleBrand | null;
+
+  tms_travel: TravelSimpleApi | null;
+  maniobra: ManeuverSimpleApi | null;
+  driver: DriverSimpleApi | null;
+  driver_postura: DriverPosturaSimpleApi | null;
 }
 
 // Motum events
