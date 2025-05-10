@@ -42,7 +42,7 @@ const DocumentacionManiobra = ({ id_maniobra }) => {
 
   const obtenerUrlPublico = async (idOnedrive) => {
     try {
-      const response = await odooApi.post('/onedrive/generate_link/' + idOnedrive);
+      const response = await odooApi.get('/onedrive/generate_link/' + idOnedrive);
       if (response.data) {
         window.open(response.data, '_blank');
       } else {
