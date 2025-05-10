@@ -27,6 +27,8 @@ export interface CustomInputProps<T extends FieldValues> {
     RegisterOptions<T, Path<T>>,
     'valueAsNumber' | 'valueAsDate' | 'setValueAs' | 'disabled'
   >;
+  size?: "sm" | "md" | "lg";
   isDisabled?: boolean;
+  readOnly?: boolean;
   isUpperCase?: boolean;
 }

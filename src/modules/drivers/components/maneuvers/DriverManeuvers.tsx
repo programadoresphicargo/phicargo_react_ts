@@ -18,7 +18,7 @@ export const DriverManeuver = ({ driverId }: Props) => {
     <Card
       classNames={{
         base: 'shadow-none',
-        header: 'bg-gray-100 px-4 py-1',
+        header: 'bg-gray-200 px-4 py-1',
         body: 'overflow-y-auto h-80',
       }}
       radius="md"
