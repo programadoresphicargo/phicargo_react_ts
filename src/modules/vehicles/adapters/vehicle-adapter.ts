@@ -1,6 +1,7 @@
 import type {
   MotumEvent,
   Trailer,
+  TrailerDriverAssignment,
   Vehicle,
   VehicleBase,
   VehicleStatusChangeEvent,
@@ -9,6 +10,7 @@ import type {
 import type {
   MotumEventAPI,
   TrailerApi,
+  TrailerDriverAssignmentApi,
   VehicleApi,
   VehicleBaseApi,
   VehicleStatusChangeEventApi,
@@ -122,6 +124,15 @@ export class VehicleAdapter {
     };
   }
 
+  static toTrailerDriverAssignmentApi(
+    data: TrailerDriverAssignment,
+  ): TrailerDriverAssignmentApi {
+    return {
+      driver_id: data.driverId,
+      trailer_id: data.trailerId,
+    };
+  }
+
   /**
    * Mapper function to convert a VehicleUpdateApi object to a VehicleUpdate object
    * @param vehicle Vehicle object
@@ -144,10 +155,6 @@ export class VehicleAdapter {
 
     if (vehicle.driverId) {
       vehicleApi.x_operador_asignado = vehicle.driverId;
-    }
-
-    if (vehicle.trailerDriverId !== undefined) {
-      vehicleApi.x_trailer_driver = vehicle.trailerDriverId;
     }
 
     if (vehicle.vehicleType) {

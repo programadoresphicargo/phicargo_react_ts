@@ -4,11 +4,11 @@ import { VehicleServiceApi } from '../../services';
 import { useMemo } from 'react';
 import type { SelectItem } from '@/types';
 
-const mainKey = 'vehicles-trailers';
+export const TRAILERS_QUERY_KEY = 'vehicles-trailers';
 
 export const useGetTrailersQuery = () => {
   const getTrailersQuery = useQuery<Trailer[]>({
-    queryKey: [mainKey],
+    queryKey: [TRAILERS_QUERY_KEY],
     queryFn: VehicleServiceApi.getTrailers,
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 10,

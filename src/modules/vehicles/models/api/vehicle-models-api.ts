@@ -58,7 +58,6 @@ export interface VehicleUpdateApi {
   x_sucursal?: number | null;
   state_id?: number | null;
   x_operador_asignado?: number | null;
-  x_trailer_driver?: number | null;
   x_tipo_vehiculo?: string | null;
   x_modalidad?: Modality | null;
   x_tipo_carga?: string | null;
@@ -92,6 +91,11 @@ export interface TrailerApi {
   maniobra: ManeuverSimpleApi | null;
   driver: DriverSimpleApi | null;
   driver_postura: DriverPosturaSimpleApi | null;
+}
+
+export interface TrailerDriverAssignmentApi {
+  driver_id: number | null;
+  trailer_id: number;
 }
 
 // Motum events

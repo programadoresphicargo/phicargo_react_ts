@@ -1,6 +1,7 @@
 import type {
   MotumEvent,
   Trailer,
+  TrailerDriverAssignment,
   Vehicle,
   VehicleStatusChangeEvent,
   VehicleUpdate,
@@ -35,6 +36,40 @@ export class VehicleServiceApi {
     try {
       const response = await odooApi.get<TrailerApi[]>('/vehicles/trailers/');
       return response.data.map(VehicleAdapter.toTrailer);
+    } catch (error) {
+      console.error(error);
+      if (error instanceof AxiosError) {
+        throw new Error(error.response?.data?.detail || 'An error occurred');
+      }
+      throw new Error('An error occurred');
+    }
+  }
+
+  static async getTrailersByDriver(driverId: number): Promise<Trailer[]> {
+    try {
+      const response = await odooApi.get<TrailerApi[]>(
+        `/vehicles/trailers/driver/${driverId}`,
+      );
+      return response.data.map(VehicleAdapter.toTrailer);
+    } catch (error) {
+      console.error(error);
+      if (error instanceof AxiosError) {
+        throw new Error(error.response?.data?.detail || 'An error occurred');
+      }
+      throw new Error('An error occurred');
+    }
+  }
+
+  static async trailerDriverAssignment({
+    id,
+    updatedItem,
+  }: UpdatableItem<TrailerDriverAssignment>): Promise<void> {
+    if (!id) return;
+
+    const body = VehicleAdapter.toTrailerDriverAssignmentApi(updatedItem);
+
+    try {
+      await odooApi.patch(`/vehicles/trailers/${id}`, body);
     } catch (error) {
       console.error(error);
       if (error instanceof AxiosError) {

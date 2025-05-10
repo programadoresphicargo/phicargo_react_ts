@@ -58,7 +58,6 @@ export interface VehicleUpdate {
   branchId?: number | null;
   stateId?: number | null;
   driverId?: number | null;
-  trailerDriverId?: number | null;
   vehicleType?: string | null;
   modality?: Modality | null;
   typeLoad?: string | null;
@@ -107,6 +106,11 @@ export interface Trailer {
   maneuver: ManeuverSimple | null;
   driver: DriverSimple | null;
   driverPostura: DriverPosturaSimple | null;
+}
+
+export interface TrailerDriverAssignment {
+  driverId: number | null;
+  trailerId: number;
 }
 
 // Motum events
