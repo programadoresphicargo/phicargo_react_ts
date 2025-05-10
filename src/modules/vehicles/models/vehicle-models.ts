@@ -88,6 +88,31 @@ export interface VehicleStatusChangeEvent {
   deliveryDate: Dayjs | null;
 }
 
+// Trailer models
+
+export interface Trailer {
+  readonly id: number;
+  readonly name: string;
+  licensePlate: string | null;
+  serialNumber: string | null;
+  fleetType: string | null;
+  status: string;
+
+  state: VehicleState | null;
+  category: VehicleCategory | null;
+  brand: VehicleBrand | null;
+
+  travel: TravelSimple | null;
+  maneuver: ManeuverSimple | null;
+  driver: DriverSimple | null;
+  driverPostura: DriverPosturaSimple | null;
+}
+
+export interface TrailerDriverAssignment {
+  driverId: number | null;
+  trailerId: number;
+}
+
 // Motum events
 
 export type MotumEventStatus = 'pending' | 'attended'

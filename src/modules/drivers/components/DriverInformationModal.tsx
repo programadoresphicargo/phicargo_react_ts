@@ -6,6 +6,7 @@ import { DriverIncidences } from './incidences/DriverIncidences';
 import { DriverManeuver } from './maneuvers/DriverManeuvers';
 import DriverPermissions from './unavailabilities/DriverPermissions';
 import { Modal } from '@/components';
+import { TrailerAssignment } from './TrailerAssignment';
 
 interface Props {
   open: boolean;
@@ -44,6 +45,9 @@ export const DriverInformationModal = ({ open, onClose, driver }: Props) => {
         </Tab>
         <Tab key="driver-form" title="Información">
           <DriverForm driver={driver} />
+        </Tab>
+        <Tab key="trailer-assign" title="Remolques">
+          <TrailerAssignment driver={driver} />
         </Tab>
         <Tab key="meneuvers" title="Maniobras">
           <DriverManeuver driverId={driver!.id} />
