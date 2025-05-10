@@ -29,5 +29,6 @@ export interface CustomInputProps<T extends FieldValues> {
   >;
   size?: "sm" | "md" | "lg";
   isDisabled?: boolean;
+  readOnly?: boolean;
   isUpperCase?: boolean;
 }

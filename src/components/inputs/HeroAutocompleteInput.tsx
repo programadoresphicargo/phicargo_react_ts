@@ -19,6 +19,7 @@ export const HeroAutocompleteInput = <T extends FieldValues>(
     placeholder,
     label,
     isDisabled,
+    readOnly,
     isLoading,
     isVirtualized,
     variant,
@@ -48,6 +49,7 @@ export const HeroAutocompleteInput = <T extends FieldValues>(
           label={label}
           placeholder={placeholder}
           isDisabled={isDisabled}
+          isReadOnly={readOnly}
           variant={variant || 'flat'}
           isLoading={isLoading}
           isVirtualized={isVirtualized}

@@ -3,7 +3,7 @@ import { HeroAutocompleteInput } from '@/components/inputs';
 import type { Driver } from '../models';
 import { useForm } from 'react-hook-form';
 
-import { SaveButton } from '@/components/ui';
+import { Alert, SaveButton } from '@/components/ui';
 import {
   useGetTrailersByDriverQuery,
   useGetTrailersQuery,
@@ -12,36 +12,27 @@ import { useEffect, useMemo } from 'react';
 import { Trailer } from '@/modules/vehicles/models';
 import { useTrailerDriverAssignmentMutation } from '@/modules/vehicles/hooks/mutations';
 import toast from 'react-hot-toast';
+import { useAuthContext } from '@/modules/auth/hooks';
+
+const EDIT_DRIVER_TRAILER = 212;
 
 interface TrailerAssignmentForm {
   trailer1Id: number | null;
   trailer2Id: number | null;
 }
 
-const initialStateForm: TrailerAssignmentForm = {
-  trailer1Id: null,
-  trailer2Id: null,
-};
-
 interface Props {
   driver: Driver;
 }
 
-const transformDriverTrailersToTrailerAssignment = (
-  trailers?: Trailer[],
-): TrailerAssignmentForm => {
-  if (!trailers) return initialStateForm;
-
-  const trailer1Id = trailers[0]?.id || null;
-  const trailer2Id = trailers[1]?.id || null;
-  return {
-    trailer1Id: trailer1Id ? (String(trailer1Id) as unknown as number) : null,
-    trailer2Id: trailer2Id ? (String(trailer2Id) as unknown as number) : null,
-  };
-};
-
 export const TrailerAssignment = (props: Props) => {
   const { driver } = props;
+
+  const { session } = useAuthContext();
+
+  const { user } = session || {};
+
+  const disabled = !user?.permissions.includes(EDIT_DRIVER_TRAILER);
 
   const { trailerOptions, isLoading, getTrailersQuery } = useGetTrailersQuery();
 
@@ -156,6 +147,7 @@ export const TrailerAssignment = (props: Props) => {
               label="Remolque 1"
               placeholder="Selecciona un remolque"
               items={trailerOptions}
+              readOnly={disabled}
               isLoading={isLoading}
             />
 
@@ -166,7 +158,7 @@ export const TrailerAssignment = (props: Props) => {
                 handleSubmit((data) => onSubmit(data, 'trailer1Id'))()
               }
               className="w-full uppercase"
-              isDisabled={mutation.isPending}
+              isDisabled={mutation.isPending || disabled}
               variant="flat"
             >
               Guardar Remolque 1
@@ -178,8 +170,11 @@ export const TrailerAssignment = (props: Props) => {
               control={control}
               name="trailer2Id"
               label="Remolque 1"
+              readOnly={disabled}
               isDisabled={
-                driver?.modality === 'single' || driver?.modality === 'sencillo'
+                driver?.modality === 'single' ||
+                driver?.modality === 'sencillo' ||
+                driver?.modality === null
               }
               placeholder="Selecciona un remolque"
               items={trailerOptions}
@@ -196,7 +191,9 @@ export const TrailerAssignment = (props: Props) => {
               isDisabled={
                 driver?.modality === 'single' ||
                 driver?.modality === 'sencillo' ||
-                mutation.isPending
+                driver?.modality === null ||
+                mutation.isPending ||
+                disabled
               }
               variant="flat"
             >
@@ -204,10 +201,34 @@ export const TrailerAssignment = (props: Props) => {
             </SaveButton>
           </div>
         </form>
+        {disabled && (
+          <Alert
+            title="No tienes permisos para editar la asignación de remolques"
+            description="Contacta a un administrador para obtener acceso."
+            color="warning"
+          />
+        )}
       </CardBody>
       <CardFooter className="pt-0"></CardFooter>
     </Card>
   );
+};
+
+const transformDriverTrailersToTrailerAssignment = (
+  trailers?: Trailer[],
+): TrailerAssignmentForm => {
+  if (!trailers)
+    return {
+      trailer1Id: null,
+      trailer2Id: null,
+    };
+
+  const trailer1Id = trailers[0]?.id || null;
+  const trailer2Id = trailers[1]?.id || null;
+  return {
+    trailer1Id: trailer1Id ? (String(trailer1Id) as unknown as number) : null,
+    trailer2Id: trailer2Id ? (String(trailer2Id) as unknown as number) : null,
+  };
 };
 
 const TrailerInfo = ({ trailer }: { trailer?: Trailer | null }) => {
