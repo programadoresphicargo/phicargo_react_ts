@@ -46,7 +46,7 @@ const Documentacion = ({ }) => {
 
   const obtenerUrlPublico = async (idOnedrive) => {
     try {
-      const response = await odooApi.get('/onedrive/generate_link/' + idOnedrive);
+      const response = await odooApi.post('/onedrive/generate_link/' + idOnedrive);
       if (response.data.url) {
         window.open(response.data.url, '_blank');
       } else {
