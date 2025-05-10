@@ -146,6 +146,10 @@ export class VehicleAdapter {
       vehicleApi.x_operador_asignado = vehicle.driverId;
     }
 
+    if (vehicle.trailerDriverId !== undefined) {
+      vehicleApi.x_trailer_driver = vehicle.trailerDriverId;
+    }
+
     if (vehicle.vehicleType) {
       vehicleApi.x_tipo_vehiculo = vehicle.vehicleType;
     }

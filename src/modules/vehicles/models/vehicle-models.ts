@@ -58,6 +58,7 @@ export interface VehicleUpdate {
   branchId?: number | null;
   stateId?: number | null;
   driverId?: number | null;
+  trailerDriverId?: number | null;
   vehicleType?: string | null;
   modality?: Modality | null;
   typeLoad?: string | null;
