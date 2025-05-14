@@ -30,7 +30,6 @@ import dayjs from 'dayjs';
 import { Progress } from "@heroui/react";
 
 function EstadiasOperadores({ open, handleClose, datapago }) {
-
     const [data, setData] = useState([]);
     const [isLoading, setLoading] = useState(false);
     const [isLoadingRegistro, setLoadingRegistro] = useState(false);
@@ -57,7 +56,7 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
             const info = response.data[0];
             setData(info);
             setHorasPagar(info.horas_planta - info.horas_estadias);
-            setTotal(0);
+            setTotal((info.horas_planta - info.horas_estadias) * 33.34);
             setMotivo("");
         } catch (error) {
             console.error('Error al obtener los datos:', error);
@@ -244,7 +243,7 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
                 <DialogContent>
                     <Stack spacing={1} direction="row">
 
-                        {!datapago && (
+                        {datapago == "" || datapago == null && (
                             <Button color="primary" onPress={registrar_pago_estadia} isLoading={isLoadingRegistro}>
                                 Registrar pago
                             </Button>
@@ -332,7 +331,7 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
                                         <TableCell>{data?.horas_estadias}</TableCell>
                                         <TableCell>
                                             <NumberInput
-                                                isDisabled={data?.estado == 'confirmado' ? true : false}
+                                                isDisabled={true}
                                                 className="max-w-xs"
                                                 defaultValue={horas_pagar}
                                                 value={horas_pagar}
@@ -341,9 +340,9 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
                                         </TableCell>
                                         <TableCell>
                                             <NumberInput
+                                                isDisabled={true}
                                                 className="max-w-xs"
-                                                isDisabled={data?.estado == 'confirmado' ? true : false}
-                                                defaultValue={total}
+                                                defaultValue={horas_pagar * 33.34}
                                                 value={total}
                                                 onValueChange={setTotal} />
                                         </TableCell>
