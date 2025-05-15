@@ -59,7 +59,7 @@ const Maniobras = ({ estado_maniobra }) => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await odooApi.get('/maniobras/by_estado/', {
+      const response = await odooApi.get('/maniobras/estado/', {
         params: { estado: estado_maniobra }
       });
       setData(response.data);

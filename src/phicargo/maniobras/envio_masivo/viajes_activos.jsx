@@ -25,7 +25,7 @@ const ManiobrasActivasMasivos = ({ }) => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await odooApi.get('/maniobras/by_estado/', {
+      const response = await odooApi.get('/maniobras/estado/', {
         params: { estado: 'activa' }
       });
       setAllData(response.data);
