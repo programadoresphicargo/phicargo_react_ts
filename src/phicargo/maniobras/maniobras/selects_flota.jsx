@@ -12,7 +12,7 @@ const MyComponent = ({ label, id, name, onChange, value, tipo, disabled, error_f
 
     useEffect(() => {
         setLoading(true);
-        odooApi.get(`/vehicles/by_fleet_type/${tipo}`)
+        odooApi.get(`/vehicles/fleet_type/${tipo}`)
             .then(response => {
                 const data = response.data.map(item => ({
                     key: item.id,
