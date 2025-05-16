@@ -37,7 +37,7 @@ const CorreosElectronicosViaje = ({ openCorreos }) => {
   const getCorreosLigados = async () => {
     try {
       setLoading(true);
-      const response = await odooApi.get('/correos_viajes/get_correos_by_id_viaje/' + id_viaje);
+      const response = await odooApi.get('/tms_travel/correos/id_viaje/' + id_viaje);
       setCorreosLigados(response.data);
     } catch (error) {
       console.error('Error al obtener los datos:', error);
@@ -50,7 +50,7 @@ const CorreosElectronicosViaje = ({ openCorreos }) => {
   const enlazarCorreo = async (id_correo) => {
     try {
       setLoading(true);
-      const response = await odooApi.get(`/correos_viajes/enlazar_correo/${id_viaje}/${id_correo}`);
+      const response = await odooApi.get(`tms_travel/correos/enlazar/${id_viaje}/${id_correo}`);
       if (response.data.success) {
         toast.success(response.data.message);
         getCorreosLigados();
@@ -65,10 +65,10 @@ const CorreosElectronicosViaje = ({ openCorreos }) => {
     }
   };
 
-  const desvincularCorreo = async (id) => {
+  const desvincularCorreo = async (id_correo) => {
     try {
       setLoading(true);
-      const response = await odooApi.get('/correos_viajes/desvincular_correo/' + id);
+      const response = await odooApi.get('/tms_travel/correos/desvincular/' + id_correo);
       getCorreosLigados();
       comprobacion_correos();
     } catch (error) {

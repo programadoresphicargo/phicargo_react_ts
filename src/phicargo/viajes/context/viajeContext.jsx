@@ -20,7 +20,7 @@ const ViajeProvider = ({ children }) => {
     }
 
     const comprobacion_correos = async () => {
-        odooApi.get('/correos_viajes/get_correos_by_id_viaje/' + id_viaje)
+        odooApi.get('/tms_travel/correos/id_viaje/' + id_viaje)
             .then(response => {
                 if (response.data.length > 0) {
                     toast.success('Correos ligados.');
@@ -31,7 +31,7 @@ const ViajeProvider = ({ children }) => {
                 }
             })
             .catch(error => {
-                toast.error('Error: ');
+                toast.error('Error: ' + error);
                 ActualizarCorreosLigados(true);
             });
     };
@@ -40,7 +40,7 @@ const ViajeProvider = ({ children }) => {
         id: null,
         name: '0',
         store_id: 1,
-        x_codigo_postal: 0, 
+        x_codigo_postal: 0,
         estado: 'disponible',
         id_cliente: '0',
         cliente: ' ',
