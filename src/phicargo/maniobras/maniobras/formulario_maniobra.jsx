@@ -471,7 +471,8 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
     };
 
     const comprobar_equipo = () => {
-        axios.post(VITE_PHIDES_API_URL + '/modulo_maniobras/codigos/comprobar_disponibilidad.php?id_maniobra=' + id_maniobra)
+        toast.info('Comprobando disponibilidad de equipo');
+        odooApi.get('/maniobras/comprobar_disponibilidad_equipo/' + id_maniobra)
             .then((response) => {
                 const datos = response.data;
                 if (Array.isArray(datos) && datos.length > 0) {
