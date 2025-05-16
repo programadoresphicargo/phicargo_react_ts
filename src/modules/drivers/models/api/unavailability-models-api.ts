@@ -14,6 +14,7 @@ export type DriverUnavailabilityCreateApi = Omit<
 
 export interface DriverUnavailableApi extends DriverUnavailabilityBaseApi {
   id: number;
+  is_active: boolean;
 }
 
 export type DriverPermissionSimpleApi = Pick<
