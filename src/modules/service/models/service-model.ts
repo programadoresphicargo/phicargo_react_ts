@@ -48,7 +48,7 @@ export interface WaybillService {
   dateOrder: Dayjs;
   state: WaybillStatus;
   cfdiComplemento: string;
-  branch: BranchSimple;
+  branch: BranchSimple | null;
   company: CompanySimple;
   category: Category | null;
   client: Client;
