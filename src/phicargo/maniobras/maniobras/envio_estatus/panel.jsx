@@ -17,11 +17,8 @@ import { toast } from 'react-toastify';
 import { useAuthContext } from "@/modules/auth/hooks";
 import { useDropzone } from 'react-dropzone';
 
-const { VITE_PHIDES_API_URL } = import.meta.env;
-
 export default function PanelEstatus({ id_maniobra, open, handleClose }) {
 
-    const { session } = useAuthContext();
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isLoadingEnvio, setIsLoadingEnvio] = useState(false);
@@ -71,29 +68,25 @@ export default function PanelEstatus({ id_maniobra, open, handleClose }) {
     };
 
     const enviar_estatus = async () => {
-        setIsLoadingEnvio(true);
 
         if (estatus_seleccionado == null) {
             toast.error('Por favor selecciona un estatus.');
+            return;
         }
 
         const formData = new FormData();
-        formData.append('id_usuario', session.user.id);
         formData.append('id_maniobra', id_maniobra);
         formData.append('id_estatus', estatus_seleccionado);
         formData.append('comentarios', comentarios);
         files.forEach((file) => formData.append('file[]', file));
+        setIsLoadingEnvio(true);
 
         try {
-            toast.success('Enviando correo espere...');
-            const response = await axios.post(VITE_PHIDES_API_URL + '/modulo_maniobras/panel_envio/guardar_estatus.php', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
+            toast.info('Enviando correo espere...');
+            const response = await odooApi.post('/maniobras/reportes_estatus_maniobras/envio_estatus/', formData);
             const data = response.data;
 
-            if (data.success) {
+            if (data.status == 'success') {
                 toast.success(data.message);
                 setEstatusSeleccionado(null);
                 setComentarios('');
@@ -107,8 +100,7 @@ export default function PanelEstatus({ id_maniobra, open, handleClose }) {
 
         } catch (error) {
             setIsLoadingEnvio(false);
-            console.error('Error subiendo el archivo', error);
-            toast.error('Error subiendo el archivo' + error);
+            toast.error('Error enviando el archivo' + error);
         }
     };
 

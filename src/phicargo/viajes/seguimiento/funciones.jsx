@@ -123,6 +123,7 @@ export const useJourneyDialogs = () => {
             const data = new FormData();
             data.append('id_viaje', id_viaje);
             data.append('id_estatus', id_estatus);
+            data.append('id_usuario', session.user.id);
             data.append('comentarios', comentarios);
 
             if (nueva_fecha) {
