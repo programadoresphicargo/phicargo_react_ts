@@ -1,18 +1,18 @@
 import { useMemo } from 'react';
 import { type MRT_ColumnDef } from 'material-react-table';
 import type {
-  Driver,
   Modality,
-  DriverStatus,
+  DriverWithRealStatus,
 } from '@/modules/drivers/models';
 import { ManeuverCell } from '../components/ui/ManeuverCell';
 import { TravelCell } from '../components/ui/TravelCell';
-import { DriverStatusChip } from '../../drivers/components/ui/DriverStatusChip';
 import { JobChip } from '../../drivers/components/ui/JobChip';
 import { ModalityChip } from '../../drivers/components/ui/ModalityChip';
+import { getDriverRealStatusConf } from '../utilities';
+import { Chip } from '@heroui/react';
 
 export const useDriversColumns = () => {
-  const columns = useMemo<MRT_ColumnDef<Driver>[]>(
+  const columns = useMemo<MRT_ColumnDef<DriverWithRealStatus>[]>(
     () => [
       {
         accessorKey: 'name',
@@ -104,11 +104,17 @@ export const useDriversColumns = () => {
         ],
       },
       {
-        accessorFn: (row) => row.status,
+        accessorFn: (row) => row.realStatus,
         header: 'Estado',
-        Cell: ({ cell }) => (
-          <DriverStatusChip status={cell.getValue<DriverStatus>()} />
-        ),
+        Cell: ({ cell }) => {
+          const status = cell.getValue<string>();
+          const conf = getDriverRealStatusConf(status);
+          return (
+            <Chip color={conf.color} size="sm">
+              {conf.label}
+            </Chip>
+          );
+        },
       },
       {
         accessorFn: (row) => (row.travel ? row.travel.name : null),
@@ -142,3 +148,4 @@ export const useDriversColumns = () => {
     columns,
   };
 };
+
