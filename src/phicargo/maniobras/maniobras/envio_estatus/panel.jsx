@@ -16,6 +16,7 @@ import { styled } from '@mui/system';
 import { toast } from 'react-toastify';
 import { useAuthContext } from "@/modules/auth/hooks";
 import { useDropzone } from 'react-dropzone';
+const { VITE_PHIDES_API_URL } = import.meta.env;
 
 export default function PanelEstatus({ id_maniobra, open, handleClose }) {
 
@@ -89,7 +90,9 @@ export default function PanelEstatus({ id_maniobra, open, handleClose }) {
                 },
             });
 
-            if (data.status == 'success') {
+            const data = response.data;
+
+            if (data.success) {
                 toast.success(data.message);
                 setEstatusSeleccionado(null);
                 setComentarios('');
