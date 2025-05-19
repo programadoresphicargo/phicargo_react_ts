@@ -141,13 +141,7 @@ export const useJourneyDialogs = () => {
             toast.success(response.data.message, { id: loadingToast });
             getViaje(id_viaje);
 
-            if (id_estatus == 1) {
-                cambiar_estado_equipo('viaje');
-                cambiar_estado_operador('viaje');
-            } else if (id_estatus == 103) {
-                cambiar_estado_equipo('disponible');
-                cambiar_estado_operador('disponible');
-            } else if (id_estatus == 8) {
+            if (id_estatus == 8) {
                 calcular_estadia(id_viaje);
             }
 
@@ -315,36 +309,6 @@ export const useJourneyDialogs = () => {
         } catch (error) {
             console.error('Error:', error);
             toast.error('Error catch' + error);
-            throw error;
-        }
-    };
-
-    const cambiar_estado_equipo = async (estado) => {
-        try {
-            const response = await odooApi.get(`/tms_travel/cambiar_estado_equipo/${id_viaje}/${estado}`);
-            if (response.data.success) {
-                toast.success(response.data.message, { duration: 10000, });
-            } else {
-                toast.error(response.data.message, { duration: 10000, });
-            }
-
-        } catch (error) {
-            toast.error('Error activando el viaje');
-            throw error;
-        }
-    };
-
-    const cambiar_estado_operador = async (estado) => {
-        try {
-            const response = await odooApi(`/tms_travel/cambiar_estado_operador/${id_viaje}/${estado}`);
-            if (response.data.success) {
-                toast.success(response.data.message, { duration: 10000, });
-            } else {
-                toast.error(response.data.message, { duration: 10000, });
-            }
-
-        } catch (error) {
-            toast.error('Error activando el viaje');
             throw error;
         }
     };
