@@ -1,34 +1,42 @@
 import { ExportConfig, ExportToExcel } from '@/utilities';
 
-import type { Driver } from '../../drivers/models';
+import type { Driver, DriverWithRealStatus } from '../../drivers/models';
 import { DriverInformationModal } from '../../drivers/components/DriverInformationModal';
 import { MaterialReactTable } from 'material-react-table';
 import { Outlet } from 'react-router-dom';
 import { useBaseTable } from '@/hooks';
 import { useDriverQueries } from '../../drivers/hooks/queries';
 import { useDriversColumns } from '../hooks/useDriversColumns';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import DriversWithRealStatus from '../utilities/get-drivers-real-status';
 
 const DriverAvailabilityPage = () => {
   const [driverInfo, setDriverInfo] = useState<Driver | null>(null);
 
-  const { driversQuery } = useDriverQueries();
+  const { 
+    driversQuery: { data: drivers, isFetching, isLoading, refetch, error },
+   } = useDriverQueries();
 
   const { columns } = useDriversColumns();
+
+  const driversWithStatus = useMemo(() => {
+    const vehiclesTransformer = new DriversWithRealStatus(drivers || []);
+    return vehiclesTransformer.getVehiclesWithRealStatus();
+  }, [drivers]);
 
   const onOpenInfo = (driver: Driver) => {
     setDriverInfo(driver);
   };
 
-  const table = useBaseTable<Driver>({
+  const table = useBaseTable<DriverWithRealStatus>({
     columns,
-    data: driversQuery.data || [],
+    data: driversWithStatus || [],
     tableId: 'availability-drivers-table',
-    isLoading: driversQuery.isLoading,
-    isFetching: driversQuery.isFetching,
-    error: driversQuery.error?.message,
+    isLoading: isLoading,
+    isFetching: isFetching,
+    error: error?.message,
     onDoubleClickFn: onOpenInfo,
-    refetchFn: () => driversQuery.refetch(),
+    refetchFn: () => refetch(),
     exportFn: (data) => toExcel.exportData(data),
     showColumnFilters: true,
     showGlobalFilter: true,

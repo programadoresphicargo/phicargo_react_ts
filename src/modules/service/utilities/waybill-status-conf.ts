@@ -4,7 +4,7 @@ import { KeyLabel, type KeyLabelConf } from '@/utilities';
 const conf: KeyLabelConf<WaybillStatus>[] = [
   { key: 'draft', label: 'Pendiente', color: 'warning' },
   { key: 'cancel', label: 'Cancelado', color: 'error' },
-  { key: 'approved', label: 'Aprovada', color: 'success' },
+  { key: 'approved', label: 'Aprobada', color: 'success' },
   { key: 'confirmed', label: 'Confirmado', color: 'primary' },
 ];
 
