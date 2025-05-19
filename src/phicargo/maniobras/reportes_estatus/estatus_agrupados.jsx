@@ -1,9 +1,6 @@
 import { Accordion, AccordionItem, Avatar } from "@heroui/react";
 import { Card, CardBody, CardFooter, CardHeader, Chip } from "@heroui/react";
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-
-import BotonDistanciaMapa from '@/phicargo/viajes/estatus/enlaceDistancia';
-import BotonMapa from '@/phicargo/viajes/estatus/botonMapa';
 import { Button } from "@heroui/react";
 import { CircularProgress } from "@heroui/react";
 import Dialog from '@mui/material/Dialog';
@@ -43,7 +40,7 @@ function EstatusHistorialAgrupado({ id_reporte }) {
 
         try {
             setLoading(true);
-            const response = await odooApi.get('/reportes_estatus_maniobras/estatus_by_id_reporte/' + id_reporte);
+            const response = await odooApi.get('/maniobras/reportes_estatus_maniobras/id_reporte/' + id_reporte);
             setEstatus(response.data);
             setLoading(false);
         } catch (error) {
@@ -101,8 +98,6 @@ function EstatusHistorialAgrupado({ id_reporte }) {
                                         <span>Fecha y hora: {step.fecha_hora}</span>
                                     </CardBody>
                                     <CardFooter className="gap-3">
-                                        <BotonMapa latitud={step.latitud} longitud={step.longitud} />
-                                        <BotonDistanciaMapa />
                                     </CardFooter>
                                 </Card>
                             </div>

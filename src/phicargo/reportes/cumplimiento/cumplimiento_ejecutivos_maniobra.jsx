@@ -62,7 +62,7 @@ const ReporteCumplimientoEjecutivoManiobra = () => {
         const endDate = dates.end;
         try {
             setLoading(true);
-            const response = await odooApi.get('/reportes_estatus_maniobras/reporte_cumplimiento_estatus_ejecutivos/', {
+            const response = await odooApi.get('/maniobras/reportes_estatus_maniobras/reporte_cumplimiento_estatus_ejecutivos/', {
                 params: {
                     hora_inicio: value[0],
                     hora_fin: value[1],

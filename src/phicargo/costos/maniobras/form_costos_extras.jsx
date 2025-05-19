@@ -28,6 +28,7 @@ import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import { useAuthContext } from "@/modules/auth/hooks";
 import { Link } from "@heroui/react";
+import FormularioArchivos from "@/phicargo/archivos/formulario";
 const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -41,6 +42,7 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [CancelDialog, setCancelDialog] = useState(false);
     const { session } = useAuthContext();
+    const [open, setOpen] = useState(false);
 
     const openCancelDialog = () => {
         setCancelDialog(true);
@@ -363,6 +365,12 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
                                             </Button>
                                         )}
 
+                                        {id_folio != null && (
+                                            <Button color="success" startContent={<i class="bi bi-filetype-pdf"></i>} className="text-white" onPress={() => setOpen(true)}>
+                                                Adjuntos
+                                            </Button>
+                                        )}
+
                                     </Stack>
                                 </CardBody>
                             </Card>
@@ -394,6 +402,14 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
                 onClose={closeCancelDialog}
                 fetchData={fetchData}>
             </CancelFolio>
+
+            <FormularioArchivos
+                open={open}
+                onClose={() => setOpen(false)}
+                ruta={'/folios_costos_extras/'}
+                tabla={'folios_costos_extras'}
+                id={id_folio}>
+            </FormularioArchivos>
 
         </>
     );
