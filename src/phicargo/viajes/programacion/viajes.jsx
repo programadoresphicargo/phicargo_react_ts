@@ -76,6 +76,26 @@ const ViajesProgramados = ({ }) => {
     fetchData();
   }, [mes, año]);
 
+  const { cantidadRojo, cantidadAmarillo } = useMemo(() => {
+    let rojo = 0;
+    let amarillo = 0;
+    const ahora = new Date();
+
+    data.forEach((item) => {
+      const inicio = new Date(item.inicio_programado);
+      const diffMs = inicio - ahora;
+      const diffHoras = diffMs / (1000 * 60 * 60);
+
+      if (diffMs < 0) {
+        rojo++;
+      } else if (diffHoras <= 1) {
+        amarillo++;
+      }
+    });
+
+    return { cantidadRojo: rojo, cantidadAmarillo: amarillo };
+  }, [data]);
+
   const columns = useMemo(
     () => [
       {
@@ -139,20 +159,20 @@ const ViajesProgramados = ({ }) => {
         header: 'Armado',
         Cell: ({ cell }) => {
           const tipoMovimiento = cell.getValue();
-          let badgeClass = 'badge rounded-pill ';
+          let badgeClass = '';
 
           if (tipoMovimiento === 'single') {
-            badgeClass += 'bg-success';
+            badgeClass = 'success';
           } else if (tipoMovimiento === 'full') {
-            badgeClass += 'bg-danger';
+            badgeClass = 'danger';
           } else {
-            badgeClass += 'bg-primary';
+            badgeClass = 'primary';
           }
 
           return (
-            <span className={badgeClass} style={{ width: '60px' }}>
+            <Chip color={badgeClass} style={{ width: '60px' }} className={'text-white'}>
               {tipoMovimiento}
-            </span>
+            </Chip>
           );
         },
       },
@@ -161,20 +181,20 @@ const ViajesProgramados = ({ }) => {
         header: 'Modalidad',
         Cell: ({ cell }) => {
           const tipoMovimiento = cell.getValue();
-          let badgeClass = 'badge rounded-pill ';
+          let badgeClass = '';
 
           if (tipoMovimiento === 'imp') {
-            badgeClass += 'bg-warning';
+            badgeClass = 'warning';
           } else if (tipoMovimiento === 'exp') {
-            badgeClass += 'bg-danger';
+            badgeClass = 'danger';
           } else {
-            badgeClass += 'bg-primary';
+            badgeClass = 'primary';
           }
 
           return (
-            <span className={badgeClass} style={{ width: '60px' }}>
+            <Chip color={badgeClass} style={{ width: '60px' }} className={"text-white"}>
               {tipoMovimiento}
-            </span>
+            </Chip>
           );
         },
       },
@@ -204,15 +224,36 @@ const ViajesProgramados = ({ }) => {
         borderRadius: '0',
       },
     },
-    muiTableBodyRowProps: ({ row }) => ({
-      onClick: ({ event }) => {
-        handleClickOpen();
-        ActualizarIDViaje(row.original.id_viaje);
+    muiTableBodyRowProps: ({ row }) => {
+      const inicioProgramado = new Date(row.original.inicio_programado);
+      const ahora = new Date();
+      const diferenciaMs = inicioProgramado - ahora;
+      const diferenciaHoras = diferenciaMs / (1000 * 60 * 60);
+
+      let backgroundColor = 'inherit'; // valor por defecto
+
+      if (diferenciaMs < 0) {
+        backgroundColor = '#f31260'; // rojo si ya pasó
+      } else if (diferenciaHoras <= 1) {
+        backgroundColor = '#f5a524'; // amarillo si falta 1 hora o menos
+      }
+
+      return {
+        onClick: () => {
+          handleClickOpen();
+          ActualizarIDViaje(row.original.id_viaje);
+        },
+        style: {
+          color: '#ffcccc',
+          cursor: 'pointer',
+        },
+      };
+    },
+    muiTableContainerProps: {
+      sx: {
+        maxHeight: 'calc(100vh - 210px)',
       },
-      style: {
-        cursor: 'pointer',
-      },
-    }),
+    },
     muiTableHeadCellProps: {
       sx: {
         fontFamily: 'Inter',
@@ -220,17 +261,32 @@ const ViajesProgramados = ({ }) => {
         fontSize: '14px',
       },
     },
-    muiTableBodyCellProps: {
-      sx: {
-        fontFamily: 'Inter',
-        fontWeight: 'normal',
-        fontSize: '14px',
-      },
-    },
-    muiTableContainerProps: {
-      sx: {
-        maxHeight: 'calc(100vh - 210px)',
-      },
+    muiTableBodyCellProps: ({ row }) => {
+      const inicioProgramado = new Date(row.original.inicio_programado);
+      const ahora = new Date();
+      const diferenciaMs = inicioProgramado - ahora;
+      const diferenciaHoras = diferenciaMs / (1000 * 60 * 60);
+
+      let backgroundColor = '';
+      let ColorText = '';
+
+      if (diferenciaMs < 0) {
+        backgroundColor = '#f31260';
+        ColorText = '#FFFFFF';
+      } else if (diferenciaHoras <= 1) {
+        backgroundColor = '#f5a524';
+        ColorText = '#FFFFFF';
+      }
+
+      return {
+        sx: {
+          backgroundColor: backgroundColor,
+          color: ColorText,
+          fontFamily: 'Inter',
+          fontWeight: 'normal',
+          fontSize: '12px',
+        },
+      }
     },
     renderTopToolbarCustomActions: ({ table }) => (
       <Box
@@ -248,9 +304,15 @@ const ViajesProgramados = ({ }) => {
         </h1>
         <MonthSelector selectedMonth={mes} handleChange={handleChange}></MonthSelector>
         <YearSelector selectedYear={año} handleChange={handleChangeAño}></YearSelector>
+        <Chip color="danger" className="text-white" size='lg'>
+          Retrasados: {cantidadRojo}
+        </Chip>
+        <Chip color="warning" className="text-white" size='lg'>
+          Proximos a salir: {cantidadAmarillo}
+        </Chip>
         <Button color='primary' startContent={<i class="bi bi-arrow-clockwise"></i>} onPress={() => fetchData()}>Actualizar</Button>
         <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "programacion_viajes.csv")}>Exportar</Button>
-      </Box>
+      </Box >
     ),
   });
 
