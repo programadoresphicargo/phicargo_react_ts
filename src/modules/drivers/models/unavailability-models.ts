@@ -16,6 +16,7 @@ export type DriverUnavailabilityCreate = Omit<
 
 export interface DriverUnavailable extends DriverUnavailabilityBase {
   readonly id: number;
+  isActive: boolean;
 }
 
 export type DriverPermissionSimple = Pick<

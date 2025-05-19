@@ -37,7 +37,7 @@ export interface WaybillServiceApi {
   date_order: string;
   state: WaybillStatus;
   cfdi_complemento: string;
-  branch: BranchSimple;
+  branch: BranchSimple | null;
   company: CompanySimple;
   category: CategoryApi | null;
   client: ClientApi;

@@ -25,6 +25,7 @@ export class UnavailabilityAdapter {
       reasonType: unavailiability.reason_type,
       description: unavailiability.description || '',
       vacationDocId: unavailiability.vacation_doc_id,
+      isActive: unavailiability.is_active,
     };
   }
 

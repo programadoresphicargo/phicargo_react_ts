@@ -6,7 +6,6 @@ import { IoDocumentTextOutline } from 'react-icons/io5';
 import { IoMdExit } from 'react-icons/io';
 import { Tooltip } from '@heroui/react';
 import VacationsRequestView from './VacationsRequestView';
-import dayjs from 'dayjs';
 import { useState } from 'react';
 import { useUnavailabilityQueries } from '../../hooks/queries';
 
@@ -51,6 +50,11 @@ export const UnavailabilitiesTimeline = ({
                     Última
                   </span>
                 )}
+                {!item.isActive && (
+                  <span className=" text-orange-200 text-sm font-medium me-2 px-2.5 py-0.5 rounded-lg bg-orange-900 ms-3">
+                    Liberado / Cancelado
+                  </span>
+                )}
                 <div className="flex items-center gap-2 ml-auto">
                   {item.reasonType === 'vacaciones' && item.vacationDocId && (
                     <Tooltip content="Ver PDF">
@@ -73,7 +77,7 @@ export const UnavailabilitiesTimeline = ({
                     open={itemSelected?.id === item.id}
                     tooltipMessage="Liberar"
                     openButtonIcon={<IoMdExit className="text-xl" />}
-                    openDisabled={!item.endDate.isAfter(dayjs())}
+                    openDisabled={!item.isActive}
                   />
                 </div>
               </h3>
