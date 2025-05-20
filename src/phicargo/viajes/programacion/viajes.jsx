@@ -137,10 +137,6 @@ const ViajesProgramados = ({ }) => {
         header: 'Carta porte',
       },
       {
-        accessorKey: 'ejecutivo',
-        header: 'Ejecutivo',
-      },
-      {
         accessorKey: 'vehiculo',
         header: 'Vehiculo',
       },
