@@ -93,15 +93,18 @@ const ViajesActivos = ({ }) => {
           return (
             <>
               {Referencia}
-              {cell.row.original.ejecutivo == 'OLIVA TORRES JESUS ANGEL ROMAN' && (
-                <Chip
-                  size="sm"
-                  color="warning"
-                  className='text-white'
-                >
-                  Viaje local
-                </Chip>)
-              }
+              {(
+                cell.row.original.ejecutivo === 'OLIVA TORRES JESUS ANGEL ROMAN' ||
+                cell.row.original.ejecutivo === 'Abraham Josué Barrientos López '
+              ) && (
+                  <Chip
+                    size="sm"
+                    color="warning"
+                    className="text-white"
+                  >
+                    Viaje local
+                  </Chip>
+                )}
             </>
           );
         },

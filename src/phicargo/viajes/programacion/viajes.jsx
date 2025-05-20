@@ -105,10 +105,32 @@ const ViajesProgramados = ({ }) => {
       {
         accessorKey: 'sucursal',
         header: 'Sucursal',
+
       },
       {
         accessorKey: 'name',
         header: 'Referencia',
+        Cell: ({ cell }) => {
+          const Referencia = cell.getValue();
+
+          return (
+            <>
+              {Referencia}
+              {(
+                cell.row.original.ejecutivo === 'OLIVA TORRES JESUS ANGEL ROMAN' ||
+                cell.row.original.ejecutivo === 'Abraham Josué Barrientos López '
+              ) && (
+                  <Chip
+                    size="sm"
+                    color="warning"
+                    className="text-white"
+                  >
+                    Viaje local
+                  </Chip>
+                )}
+            </>
+          );
+        },
       },
       {
         accessorKey: 'carta_porte',
@@ -153,6 +175,10 @@ const ViajesProgramados = ({ }) => {
       {
         accessorKey: 'contenedores',
         header: 'Contenedores',
+      },
+      {
+        accessorKey: 'ejecutivo',
+        header: 'Ejecutivo',
       },
       {
         accessorKey: 'tipo_armado',
