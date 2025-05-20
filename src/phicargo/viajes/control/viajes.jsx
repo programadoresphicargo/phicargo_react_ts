@@ -87,6 +87,24 @@ const ViajesActivos = ({ }) => {
       {
         accessorKey: 'name',
         header: 'Referencia',
+        Cell: ({ cell }) => {
+          const Referencia = cell.getValue();
+
+          return (
+            <>
+              {Referencia}
+              {cell.row.original.ejecutivo == 'OLIVA TORRES JESUS ANGEL ROMAN' && (
+                <Chip
+                  size="sm"
+                  color="warning"
+                  className='text-white'
+                >
+                  Viaje local
+                </Chip>)
+              }
+            </>
+          );
+        },
       },
       {
         accessorKey: 'x_status_viaje',
