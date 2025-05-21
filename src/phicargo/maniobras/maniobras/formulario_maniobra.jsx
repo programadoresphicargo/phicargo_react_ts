@@ -41,8 +41,6 @@ import dayjs from 'dayjs';
 import { DatePicker } from "@heroui/react";
 import { parseDate, parseDateTime, getLocalTimeZone } from "@internationalized/date";
 
-const { VITE_PHIDES_API_URL } = import.meta.env;
-
 const fieldValidations = {
     id_terminal: { required: true, message: 'El campo Terminal es requerido' },
     tipo_maniobra: { required: true, message: 'El campo Tipo de Maniobra es requerido' },
@@ -523,19 +521,19 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                 setLoading(true);
                 const postData = new URLSearchParams();
                 postData.append('id_maniobra', id_maniobra);
+                postData.append('id_estatus', 255);
                 postData.append('id_usuario', session.user.id);
 
-                axios.post(VITE_PHIDES_API_URL + '/modulo_maniobras/maniobra/activar_maniobra.php', postData)
+                odooApi.post('/maniobras/reportes_estatus_maniobras/envio_estatus/', postData)
                     .then((response) => {
                         setLoading(false);
                         const data = response.data;
-                        if (data.success) {
+                        if (data.status == "success") {
                             Swal.fire(
                                 '¡Activada!',
-                                'La maniobra ha sido activada',
+                                data.message,
                                 'success'
                             );
-                            enviar_correo(id_maniobra, 255, 'Iniciando maniobra');
                             handleClose();
                         } else {
                             Swal.fire(
@@ -561,6 +559,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
 
         const postData = new URLSearchParams();
         postData.append('id_maniobra', id_maniobra);
+        postData.append('id_estatus', 256);
         postData.append('id_usuario', session.user.id);
 
         Swal.fire({
@@ -574,16 +573,15 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
-                axios.post(VITE_PHIDES_API_URL + '/modulo_maniobras/maniobra/finalizar_maniobra.php', postData)
+                odooApi.post('/maniobras/reportes_estatus_maniobras/envio_estatus/', postData)
                     .then((response) => {
                         const data = response.data;
-                        if (data.success) {
+                        if (data.status == "success") {
                             Swal.fire(
                                 '¡Finalizada!',
-                                'Maniobra finalizada.',
+                                data.message,
                                 'success'
                             );
-                            enviar_correo(id_maniobra, 256, 'Finalizando maniobra');
                             handleClose();
                         } else {
                             console.error(data.error);
@@ -603,33 +601,6 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                     });
             }
         });
-    };
-
-    const enviar_correo = async (id_maniobra, id_estatus, comentarios) => {
-        const formData = new FormData();
-        formData.append('id_maniobra', id_maniobra);
-        formData.append('id_estatus', id_estatus);
-        formData.append('comentarios', comentarios);
-        formData.append('id_usuario', session.user.id);
-
-        try {
-            toast.success('Enviando correo espere...');
-            const response = await axios.post(VITE_PHIDES_API_URL + '/modulo_maniobras/correos/envio_correo.php', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
-            const data = response.data;
-
-            if (data.success) {
-                toast.success(data.message);
-            } else {
-                toast.error(data.message);
-            }
-
-        } catch (error) {
-            toast.error('Error subiendo el archivo' + error);
-        }
     };
 
     const [openPanelEstatus, setOpenPanelEstatus] = React.useState(false);
