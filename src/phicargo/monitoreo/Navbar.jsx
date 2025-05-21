@@ -13,6 +13,7 @@ import Menu from '@mui/material/Menu';
 import { Link } from 'react-router-dom';
 import { Typography } from '@mui/material';
 import { Button } from '@mui/material';
+import logo from '../../assets/img/phicargo-vertical.png';
 
 const pages = [
     { name: 'EVENTOS PENDIENTES', path: '/EventosPendientes' },
@@ -53,7 +54,7 @@ function MonitoreoNavbar() {
                     </IconButton>
 
                     <img className='m-2'
-                        src="https://phi-cargo.com/wp-content/uploads/2021/05/logo-phicargo-vertical.png"
+                        src={logo}
                         alt="Descripción de la imagen"
                         style={{
                             width: '175px',

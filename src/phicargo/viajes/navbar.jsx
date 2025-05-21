@@ -26,6 +26,7 @@ import { makeStyles } from '@mui/styles';
 import odooApi from '@/api/odoo-api';
 import { useDisclosure } from '@heroui/react';
 import { useJourneyDialogs } from './seguimiento/funciones';
+import logo from '../../assets/img/phicargo-vertical.png';
 
 const pages = [
   { name: 'ACTIVOS', path: '/viajes' },
@@ -150,7 +151,7 @@ function NavbarViajes() {
 
             <img
               className="m-2"
-              src="https://phi-cargo.com/wp-content/uploads/2021/05/logo-phicargo-vertical.png"
+              src={logo}
               alt="Descripción de la imagen"
               style={{
                 width: '175px',

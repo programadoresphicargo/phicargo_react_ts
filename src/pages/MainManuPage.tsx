@@ -19,6 +19,7 @@ import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import usuarios_img from '../assets/menu/usuarios.png';
 import viajes_img from '../assets/menu/viajes.png';
+import logo from '../assets/img/phicargo-vertical.png';
 
 type MenuItemType = {
   icon: string;
@@ -163,7 +164,7 @@ const MainMenuPage = () => {
       >
         <div className="flex justify-center items-center">
           <img
-            src="https://phi-cargo.com/wp-content/uploads/2021/05/logo-phicargo-vertical.png"
+            src={logo}
             alt="Logo Phi Cargo"
             className="w-72 sm:w-60 md:w-80 lg:w-[400px] h-auto object-contain"
           />

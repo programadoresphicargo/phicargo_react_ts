@@ -14,6 +14,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
 import Badge from '@mui/material/Badge';
 import AppsIcon from '@mui/icons-material/Apps';
+import logo from '../../assets/img/phicargo-vertical.png';
 
 function NavbarBonos() {
 
@@ -47,7 +48,7 @@ function NavbarBonos() {
                         </IconButton>
 
                         <img className='m-2'
-                            src="https://phi-cargo.com/wp-content/uploads/2021/05/logo-phicargo-vertical.png"
+                            src={logo}
                             alt="Descripción de la imagen"
                             style={{
                                 width: '175px',

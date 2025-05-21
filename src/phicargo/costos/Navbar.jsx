@@ -15,6 +15,7 @@ import { makeStyles } from '@mui/styles';
 import { Navigate } from 'react-router-dom';
 import WebSocketWithToast from '../websocket/websocket';
 import AppsIcon from '@mui/icons-material/Apps';
+import logo from '../../assets/img/phicargo-vertical.png';
 
 const pages = [
     { name: 'FOLIOS', path: '/folios_costos_extras' },
@@ -60,12 +61,12 @@ function CENavBar() {
                         </IconButton>
 
                         <img className='m-2'
-                            src="https://phi-cargo.com/wp-content/uploads/2021/05/logo-phicargo-vertical.png"
+                            src={logo}
                             alt="Descripción de la imagen"
                             style={{
                                 width: '175px',
                                 height: '60px',
-                                filter: 'brightness(0) invert(1)' 
+                                filter: 'brightness(0) invert(1)'
                             }}
                         />
 

@@ -6,6 +6,7 @@ import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
+import logo from '../../assets/img/phicargo-vertical.png';
 
 function ResponsiveAppBar() {
 
@@ -37,7 +38,7 @@ function ResponsiveAppBar() {
 
                     {/* Logo de la empresa */}
                     <img className='m-2'
-                        src="https://phi-cargo.com/wp-content/uploads/2021/05/logo-phicargo-vertical.png"
+                        src={logo}
                         alt="Descripción de la imagen"
                         style={{
                             width: '140px',

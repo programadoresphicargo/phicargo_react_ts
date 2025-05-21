@@ -15,6 +15,7 @@ import { BackButton } from '@/components/ui';
 import type { MenuItemType } from '@/types';
 import { NavbarLinkItem } from './NavbarLinkItem';
 import { useAuthContext } from '@/modules/auth/hooks';
+import logo from '../../../assets/img/phicargo-vertical.png';
 
 interface Props {
   pages: MenuItemType[];
@@ -58,7 +59,7 @@ export const Navbar = (props: Props) => {
       <NavbarContent className="sm:hidden pr-3" justify="center">
         <NavbarBrand>
           <img
-            src="https://phi-cargo.com/wp-content/uploads/2021/05/logo-phicargo-vertical.png"
+            src={logo}
             alt="logo phicargo"
             // style={{
             //   height: '50px',
@@ -74,7 +75,7 @@ export const Navbar = (props: Props) => {
         <NavbarBrand>
           <img
             className="ml-4 h-12 filter brightness-0 invert"
-            src="https://phi-cargo.com/wp-content/uploads/2021/05/logo-phicargo-vertical.png"
+            src={logo}
             alt="logo phicargo"
           />
         </NavbarBrand>
