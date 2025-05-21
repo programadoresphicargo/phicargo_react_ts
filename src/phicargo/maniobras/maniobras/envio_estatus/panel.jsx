@@ -1,5 +1,5 @@
 import { Box, Grid, Typography } from '@mui/material';
-import { Button, Textarea } from '@heroui/react';
+import { Button, Textarea, user } from '@heroui/react';
 import { Card, CardBody, CardFooter } from "@heroui/react";
 import React, { useCallback, useEffect, useState } from 'react';
 
@@ -12,11 +12,11 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import axios from 'axios';
 import odooApi from '@/api/odoo-api';
-import { styled } from '@mui/system';
 import { toast } from 'react-toastify';
 import { useAuthContext } from "@/modules/auth/hooks";
-import { useDropzone } from 'react-dropzone';
-const { VITE_PHIDES_API_URL } = import.meta.env;
+import { Upload, message } from 'antd';
+
+const { Dragger } = Upload;
 
 export default function PanelEstatus({ id_maniobra, open, handleClose }) {
 
@@ -25,7 +25,8 @@ export default function PanelEstatus({ id_maniobra, open, handleClose }) {
     const [isLoadingEnvio, setIsLoadingEnvio] = useState(false);
     const [estatus_seleccionado, setEstatusSeleccionado] = useState(null);
     const [comentarios, setComentarios] = useState('');
-    const [files, setFiles] = useState([]);
+    const [fileList, setFileList] = useState([]);
+    const { session } = useAuthContext();
 
     const handleSelectCard = (id) => {
         setEstatusSeleccionado(id);
@@ -53,19 +54,20 @@ export default function PanelEstatus({ id_maniobra, open, handleClose }) {
         setSelectedCard(id);
     };
 
-    const onDrop = useCallback((acceptedFiles) => {
-        setFiles((prevFiles) => [
-            ...prevFiles,
-            ...acceptedFiles.map((file) =>
-                Object.assign(file, {
-                    preview: URL.createObjectURL(file),
-                })
-            ),
-        ]);
-    }, []);
-
-    const removeFile = (fileName) => {
-        setFiles((prevFiles) => prevFiles.filter((file) => file.name !== fileName));
+    const props = {
+        name: 'file',
+        multiple: true,
+        onChange(info) {
+            setFileList(info.fileList);
+        },
+        beforeUpload: (file) => {
+            setFileList((prevFileList) => [...prevFileList, file]);
+            return false;
+        },
+        fileList,
+        onRemove: (file) => {
+            setFileList((prevFileList) => prevFileList.filter((f) => f.uid !== file.uid));
+        },
     };
 
     const enviar_estatus = async () => {
@@ -78,25 +80,25 @@ export default function PanelEstatus({ id_maniobra, open, handleClose }) {
         const formData = new FormData();
         formData.append('id_maniobra', id_maniobra);
         formData.append('id_estatus', estatus_seleccionado);
+        formData.append('id_usuario', session.user.id);
         formData.append('comentarios', comentarios);
-        files.forEach((file) => formData.append('file[]', file));
+        fileList.forEach((fileWrapper) => {
+            if (fileWrapper.originFileObj instanceof File) {
+                formData.append('files', fileWrapper.originFileObj);
+            }
+        });
         setIsLoadingEnvio(true);
 
         try {
             toast.info('Enviando correo espere...');
-            const response = await axios.post(VITE_PHIDES_API_URL + '/modulo_maniobras/panel_envio/guardar_estatus.php', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
-
+            const response = await odooApi.post('/maniobras/reportes_estatus_maniobras/envio_estatus/', formData);
             const data = response.data;
 
-            if (data.success) {
+            if (data.status == "success") {
                 toast.success(data.message);
                 setEstatusSeleccionado(null);
                 setComentarios('');
-                setFiles([]);
+                setFileList([]);
                 handleClose();
             } else {
                 toast.error(data.message);
@@ -109,29 +111,6 @@ export default function PanelEstatus({ id_maniobra, open, handleClose }) {
             toast.error('Error enviando el archivo' + error);
         }
     };
-
-    const { getRootProps, getInputProps } = useDropzone({
-        onDrop,
-        accept: 'image/*', // Aceptar solo imágenes
-        multiple: true, // Permitir múltiples archivos
-    });
-
-    const thumbs = files.map((file) => (
-        <div key={file.name} style={{ margin: '10px' }}>
-            <Card sx={{ maxWidth: 120 }}>
-                <CardMedia
-                    component="img"
-                    alt={file.name}
-                    height="140"
-                    width="140"
-                    image={file.preview}
-                />
-                <CardContent>
-                    <Button variant="text" onClick={() => removeFile(file.name)}>Borrar</Button>
-                </CardContent>
-            </Card>
-        </div>
-    ));
 
     return (
         <React.Fragment>
@@ -172,20 +151,12 @@ export default function PanelEstatus({ id_maniobra, open, handleClose }) {
                     <Typography variant="h5" gutterBottom className='mt-5'>
                         Evidencias
                     </Typography>
-                    <div
-                        {...getRootProps()}
-                        style={{
-                            border: '2px dashed #ccc',
-                            padding: '20px',
-                            textAlign: 'center',
-                            cursor: 'pointer',
-                        }}
-                    >
-                        <input {...getInputProps()} />
-                        <p>Arrastra y suelta algunos archivos aquí, o haz clic para seleccionarlos</p>
-                    </div>
 
-                    <div style={{ display: 'flex', flexWrap: 'wrap' }}>{thumbs}</div>
+                    <Dragger {...props} style={{ fontFamily: 'Inter' }}>
+                        <p className="ant-upload-drag-icon"></p>
+                        <p className="ant-upload-text">Haz clic o arrastra el archivo aquí para subirlo</p>
+                        <p className="ant-upload-hint">Soporta múltiples archivos</p>
+                    </Dragger>
 
                     <Textarea
                         fullWidth
