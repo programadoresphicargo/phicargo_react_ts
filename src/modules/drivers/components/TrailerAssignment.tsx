@@ -19,6 +19,7 @@ const EDIT_DRIVER_TRAILER = 212;
 interface TrailerAssignmentForm {
   trailer1Id: number | null;
   trailer2Id: number | null;
+  dollyId: number | null;
 }
 
 interface Props {
@@ -35,17 +36,29 @@ export const TrailerAssignment = (props: Props) => {
   const disabled = !user?.permissions.includes(EDIT_DRIVER_TRAILER);
 
   const { trailerOptions, isLoading, getTrailersQuery } = useGetTrailersQuery();
+  const {
+    trailerOptions: dollyOptions,
+    isLoading: isLoadingDolly,
+    getTrailersQuery: getDollyTrailersQuery,
+  } = useGetTrailersQuery('dolly');
 
   const {
     getTrailersByDriverQuery: { data: driverTrailers },
-  } = useGetTrailersByDriverQuery(driver.id);
+  } = useGetTrailersByDriverQuery(driver.id, 'trailer');
+
+  const {
+    getTrailersByDriverQuery: { data: driverDolly },
+  } = useGetTrailersByDriverQuery(driver.id, 'dolly');
 
   const { trailerDriverAssignmentMutation: mutation } =
     useTrailerDriverAssignmentMutation();
 
   const formData = useMemo(() => {
-    return transformDriverTrailersToTrailerAssignment(driverTrailers);
-  }, [driverTrailers]);
+    return transformDriverTrailersToTrailerAssignment(
+      driverTrailers,
+      driverDolly,
+    );
+  }, [driverTrailers, driverDolly]);
 
   const { control, handleSubmit, watch, reset } =
     useForm<TrailerAssignmentForm>({
@@ -68,6 +81,13 @@ export const TrailerAssignment = (props: Props) => {
         (trailer) => trailer.id === Number(trailer2Id),
       ),
     [getTrailersQuery.data, trailer2Id],
+  );
+
+  const dollyId = watch('dollyId');
+  const dolly = useMemo(
+    () =>
+      getDollyTrailersQuery.data?.find((dolly) => dolly.id === Number(dollyId)),
+    [getDollyTrailersQuery.data, dollyId],
   );
 
   const onSubmit = (
@@ -139,7 +159,7 @@ export const TrailerAssignment = (props: Props) => {
         </h3>
       </CardHeader>
       <CardBody>
-        <form className="grid grid-cols-2 gap-4">
+        <form className="grid grid-cols-3 gap-4">
           <div className="flex flex-col gap-4">
             <HeroAutocompleteInput
               control={control}
@@ -200,6 +220,33 @@ export const TrailerAssignment = (props: Props) => {
               Guardar Remolque 2
             </SaveButton>
           </div>
+
+          {driver?.modality === 'full' && (
+            <div className="flex flex-col gap-4">
+              <HeroAutocompleteInput
+                control={control}
+                name="dollyId"
+                label="Dolly"
+                readOnly={disabled}
+                placeholder="Selecciona un dolly"
+                items={dollyOptions}
+                isLoading={isLoadingDolly}
+              />
+
+              <TrailerInfo trailer={dolly} />
+
+              <SaveButton
+                onPress={() =>
+                  handleSubmit((data) => onSubmit(data, 'dollyId'))()
+                }
+                className="w-full uppercase"
+                isDisabled={disabled}
+                variant="flat"
+              >
+                Guardar Dolly
+              </SaveButton>
+            </div>
+          )}
         </form>
         {disabled && (
           <Alert
@@ -216,96 +263,77 @@ export const TrailerAssignment = (props: Props) => {
 
 const transformDriverTrailersToTrailerAssignment = (
   trailers?: Trailer[],
+  dolly?: Trailer[],
 ): TrailerAssignmentForm => {
-  if (!trailers)
-    return {
-      trailer1Id: null,
-      trailer2Id: null,
-    };
-
-  const trailer1Id = trailers[0]?.id || null;
-  const trailer2Id = trailers[1]?.id || null;
+  const trailer1Id = (trailers ?? [])[0]?.id || null;
+  const trailer2Id = (trailers ?? [])[1]?.id || null;
+  const dollyId = dolly?.[0]?.id || null;
   return {
     trailer1Id: trailer1Id ? (String(trailer1Id) as unknown as number) : null,
     trailer2Id: trailer2Id ? (String(trailer2Id) as unknown as number) : null,
+    dollyId: dollyId ? (String(dollyId) as unknown as number) : null,
   };
 };
 
 const TrailerInfo = ({ trailer }: { trailer?: Trailer | null }) => {
+  if (!trailer) {
+    return (
+      <div className="bg-blue-50/50 border border-blue-100 rounded-lg p-4 text-center animate-fade-in">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-8 w-8 mx-auto text-blue-400"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.5}
+            d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+          />
+        </svg>
+        <h4 className="mt-2 text-sm font-medium text-blue-800">
+          No hay remolque seleccionado
+        </h4>
+        <p className="text-xs text-blue-600 mt-1">
+          Selecciona un remolque para ver su información
+        </p>
+      </div>
+    );
+  }
+
   return (
-    <>
-      {trailer ? (
-        <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-200 animate-fade-in">
-          <h3 className="font-medium text-gray-800 mb-2 flex items-center gap-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 text-blue-500"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
-              <path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1v-1a1 1 0 011-1h2a1 1 0 011 1v1a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H19a1 1 0 001-1V5a1 1 0 00-1-1H3z" />
-            </svg>
-            Información del remolque
-          </h3>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <div className="flex flex-col">
-              <span className="text-xs font-medium text-gray-500">Nombre</span>
-              <span className="text-sm text-gray-800">{trailer.name}</span>
-            </div>
-
-            <div className="flex flex-col">
-              <span className="text-xs font-medium text-gray-500">
-                Operador
-              </span>
-              <span
-                className={`text-sm ${
-                  trailer.driver?.name ? 'text-gray-800' : 'text-gray-400'
-                }`}
-              >
-                {trailer.driver?.name || 'Sin operador asignado'}
-              </span>
-            </div>
-
-            <div className="flex flex-col">
-              <span className="text-xs font-medium text-gray-500">Tipo</span>
-              <span className="text-sm text-gray-800">{trailer.fleetType}</span>
-            </div>
-
-            <div className="flex flex-col">
-              <span className="text-xs font-medium text-gray-500">Estatus</span>
-              <span className="text-sm text-gray-800 uppercase">
-                {trailer.status}
-              </span>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <div className="bg-blue-50/50 border border-blue-100 rounded-lg p-4 text-center animate-fade-in">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-8 w-8 mx-auto text-blue-400"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={1.5}
-              d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-            />
-          </svg>
-          <h4 className="mt-2 text-sm font-medium text-blue-800">
-            No hay remolque seleccionado
-          </h4>
-          <p className="text-xs text-blue-600 mt-1">
-            Selecciona un remolque para ver su información
-          </p>
-        </div>
-      )}
-    </>
+    <div className="bg-white rounded-lg shadow-sm p-3 border border-gray-200 animate-fade-in">
+      <h3 className="font-medium text-gray-800 mb-2 flex items-center gap-2">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-5 w-5 text-blue-500"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
+          <path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1v-1a1 1 0 011-1h2a1 1 0 011 1v1a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H19a1 1 0 001-1V5a1 1 0 00-1-1H3z" />
+        </svg>
+        Información
+      </h3>
+      <ul className="text-sm text-gray-800 space-y-1">
+        <li>
+          <span className="font-medium text-gray-500">Operador: </span>
+          {trailer.driver?.name || (
+            <span className="text-gray-400">Sin operador asignado</span>
+          )}
+        </li>
+        <li>
+          <span className="font-medium text-gray-500">Tipo: </span>
+          {trailer.fleetType}
+        </li>
+        <li>
+          <span className="font-medium text-gray-500">Estatus: </span>
+          <span className="uppercase">{trailer.status}</span>
+        </li>
+      </ul>
+    </div>
   );
 };
 

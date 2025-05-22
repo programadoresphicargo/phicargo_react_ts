@@ -32,9 +32,12 @@ export class VehicleServiceApi {
     }
   }
 
-  static async getTrailers(): Promise<Trailer[]> {
+  static async getTrailers(fleetType: 'trailer' | 'dolly'): Promise<Trailer[]> {
+
+    const url = `/vehicles/trailers/?fleet_type=${fleetType}`;
+
     try {
-      const response = await odooApi.get<TrailerApi[]>('/vehicles/trailers/');
+      const response = await odooApi.get<TrailerApi[]>(url);
       return response.data.map(VehicleAdapter.toTrailer);
     } catch (error) {
       console.error(error);
@@ -45,10 +48,10 @@ export class VehicleServiceApi {
     }
   }
 
-  static async getTrailersByDriver(driverId: number): Promise<Trailer[]> {
+  static async getTrailersByDriver(driverId: number, fleetType: 'trailer' | 'dolly'): Promise<Trailer[]> {
     try {
       const response = await odooApi.get<TrailerApi[]>(
-        `/vehicles/trailers/driver/${driverId}`,
+        `/vehicles/trailers/driver/${driverId}?fleet_type=${fleetType}`,
       );
       return response.data.map(VehicleAdapter.toTrailer);
     } catch (error) {
