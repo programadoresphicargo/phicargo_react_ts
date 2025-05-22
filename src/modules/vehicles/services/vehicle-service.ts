@@ -1,4 +1,5 @@
 import type {
+  Fleet,
   MotumEvent,
   Trailer,
   TrailerDriverAssignment,
@@ -7,6 +8,7 @@ import type {
   VehicleUpdate,
 } from '../models';
 import type {
+  FleetApi,
   MotumEventAPI,
   TrailerApi,
   VehicleApi,
@@ -90,6 +92,19 @@ export class VehicleServiceApi {
     try {
       const response = await odooApi.patch<VehicleApi>(`/vehicles/${id}`, data);
       return VehicleAdapter.vehicleToLocal(response.data);
+    } catch (error) {
+      console.error(error);
+      if (error instanceof AxiosError) {
+        throw new Error(error.response?.data?.detail || 'An error occurred');
+      }
+      throw new Error('An error occurred');
+    }
+  }
+
+  static async getFleet(): Promise<Fleet[]> {
+    try {
+      const response = await odooApi.get<FleetApi[]>('/vehicles/latest-operations/');
+      return response.data.map(VehicleAdapter.toFleet);
     } catch (error) {
       console.error(error);
       if (error instanceof AxiosError) {

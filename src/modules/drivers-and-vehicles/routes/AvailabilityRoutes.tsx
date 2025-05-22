@@ -27,8 +27,8 @@ const DriverSummaryPage = lazy(() =>
     default: memo(module.default),
   })),
 );
-const VehiclesPage = lazy(
-  () => import('@/phicargo/disponiblidad/equipos/equipos'),
+const FleetPage = lazy(
+  () => import('../pages/FleetPage'),
 );
 const Contactos = lazy(
   () => import('@/phicargo/inventarioti/celulares/celulares'),
@@ -118,7 +118,7 @@ const AvailabilityRoutes = () => {
         path="vehiculos"
         element={
           <Suspense fallback={<LoadingPage />}>
-            <VehiclesPage />
+            <FleetPage />
           </Suspense>
         }
       />
