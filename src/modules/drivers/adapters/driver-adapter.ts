@@ -57,6 +57,7 @@ export class DriverAdapter {
             status: driver.vehicle.x_status,
             modality: driver.vehicle.x_modalidad,
             loadType: driver.vehicle.x_tipo_carga,
+            branch: driver.vehicle.branch,
           }
         : null,
       permission: driver.permission

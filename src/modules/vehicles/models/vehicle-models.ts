@@ -51,6 +51,7 @@ export interface VehicleSimple {
   status: string;
   modality: string | null;
   loadType: string | null;
+  branch: string | null;
 }
 
 export interface VehicleUpdate {

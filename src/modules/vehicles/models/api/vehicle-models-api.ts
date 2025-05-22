@@ -51,6 +51,7 @@ export interface VehicleSimpleApi {
   x_status: string;
   x_modalidad: string | null;
   x_tipo_carga: string | null;
+  branch: string | null;
 }
 
 export interface VehicleUpdateApi {
