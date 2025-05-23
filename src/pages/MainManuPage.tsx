@@ -20,6 +20,7 @@ import { useNavigate } from 'react-router-dom';
 import usuarios_img from '../assets/menu/usuarios.png';
 import viajes_img from '../assets/menu/viajes.png';
 import logo from '../assets/img/phicargo-vertical.png';
+import complaintIcon from '../assets/menu/complaints-icon.png';
 
 type MenuItemType = {
   icon: string;
@@ -113,12 +114,12 @@ const menuItems: MenuItemType[] = [
     link: '/servicios',
     requiredPermissions: [204],
   },
-  // {
-  //   icon: shipingcontainer,
-  //   label: 'Quejas',
-  //   link: '/quejas',
-  //   requiredPermissions: [],
-  // },
+  {
+    icon: complaintIcon,
+    label: 'Quejas',
+    link: '/quejas',
+    requiredPermissions: [213],
+  },
 ];
 
 const MainMenuPage = () => {
@@ -189,7 +190,6 @@ const MainMenuPage = () => {
 };
 
 export default MainMenuPage;
-
 
 interface MenuItemProps {
   icon: string;
