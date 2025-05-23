@@ -37,7 +37,7 @@ export const EditComplaint = ({ onClose, complaint }: Props) => {
             textTransform: 'uppercase',
           }}
         >
-          Editar {complaint.phicargoCompany}
+          Editar #{complaint.id}
         </Typography>
         <Box sx={{ display: 'flex', gap: '1rem' }}>
           <MuiCloseButton onClick={onClose} />
