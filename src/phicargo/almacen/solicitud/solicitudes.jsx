@@ -1,0 +1,227 @@
+import {
+  MaterialReactTable,
+  useMaterialReactTable,
+} from 'material-react-table';
+import { Popover, PopoverContent, PopoverTrigger, User, useDisclosure } from "@heroui/react";
+import React, { useContext, useEffect, useMemo, useState } from 'react';
+import AppBar from '@mui/material/AppBar';
+import { Avatar } from "@heroui/react";
+import { Box, Stack } from '@mui/material';
+import { Button } from "@heroui/react"
+import { Chip } from "@heroui/react";
+import CloseIcon from '@mui/icons-material/Close';
+import IconButton from '@mui/material/IconButton';
+import { Image } from 'antd';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
+import Slide from '@mui/material/Slide';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import { exportToCSV } from '../../utils/export';
+import odooApi from '@/api/odoo-api';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import EPP from '../epp/epp';
+import SolicitudForm from './form';
+
+const SolicitudesEPP = ({ }) => {
+
+  const [id_solicitud, setIDSolicitud] = React.useState(null);
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    fetchData();
+  };
+
+  const [data, setData] = useState([]);
+  const [isLoading, setLoading] = useState(false);
+
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const response = await odooApi.get('/tms_travel/solicitudes_epp/');
+      setData(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error al obtener los datos:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const columns = useMemo(
+    () => [
+      {
+        accessorKey: 'id_solicitud',
+        header: 'Solicitud',
+      },
+      {
+        accessorKey: 'referencia_viaje',
+        header: 'Viaje',
+      },
+      {
+        accessorKey: 'operador',
+        header: 'Operador',
+      },
+      {
+        accessorKey: 'nombre_usuario',
+        header: 'Solicitador por',
+      },
+      {
+        accessorKey: 'fecha_solicitud',
+        header: 'Fecha de solicitud',
+      },
+      {
+        accessorKey: 'estado',
+        header: 'Estado',
+      },
+    ],
+    [],
+  );
+
+  const table = useMaterialReactTable({
+    columns,
+    data,
+    enableGrouping: true,
+    enableGlobalFilter: true,
+    enableFilters: true,
+    state: { showProgressBars: isLoading },
+    enableColumnPinning: true,
+    enableStickyHeader: true,
+    positionGlobalFilter: "right",
+    localization: MRT_Localization_ES,
+    muiSearchTextFieldProps: {
+      placeholder: `Buscar en ${data.length} solicitud`,
+      sx: { minWidth: '300px' },
+      variant: 'outlined',
+    },
+    columnResizeMode: "onEnd",
+    initialState: {
+      showGlobalFilter: true,
+      columnVisibility: {
+        empresa: false,
+      },
+      hiddenColumns: ["empresa"],
+      density: 'compact',
+      expanded: true,
+      showColumnFilters: true,
+      pagination: { pageSize: 80 },
+    },
+    muiTablePaperProps: {
+      elevation: 0,
+      sx: {
+        borderRadius: '0',
+      },
+    },
+    muiTableHeadCellProps: {
+      sx: {
+        fontFamily: 'Inter',
+        fontWeight: 'Bold',
+        fontSize: '14px',
+      },
+    },
+    muiTableContainerProps: {
+      sx: {
+        maxHeight: 'calc(100vh - 210px)',
+      },
+    },
+    muiTableBodyRowProps: ({ row }) => ({
+      onClick: ({ event }) => {
+        handleClickOpen();
+        setIDSolicitud(row.original.id_solicitud);
+      },
+    }),
+    muiTableBodyCellProps: ({ row }) => ({
+      sx: {
+        fontFamily: 'Inter',
+        fontWeight: 'normal',
+        fontSize: '12px',
+      },
+    }),
+    renderTopToolbarCustomActions: ({ table }) => (
+      <Box
+        sx={{
+          display: 'flex',
+          gap: '16px',
+          padding: '8px',
+          flexWrap: 'wrap',
+        }}
+      >
+        <h2
+          className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
+        >
+          Solicitudes equipo de protección personal
+        </h2>
+
+        <Button
+          className='text-white'
+          startContent={<i class="bi bi-plus-lg"></i>}
+          color='primary'
+          isDisabled={false}
+          onPress={() => fetchData()}
+          size='sm'
+        >
+          Nueva solicitud
+        </Button>
+
+        <Button
+          className='text-white'
+          startContent={<i class="bi bi-arrow-clockwise"></i>}
+          color='primary'
+          isDisabled={false}
+          onPress={() => fetchData()}
+          size='sm'
+        >Actualizar tablero
+        </Button>
+
+        <Button
+          color='success'
+          className='text-white'
+          startContent={<i class="bi bi-file-earmark-excel"></i>}
+          onPress={() => exportToCSV(data, columns, "viajes_activos.csv")}
+          size='sm'>
+          Exportar
+        </Button>
+
+      </Box >
+    ),
+  });
+
+  return (
+    <>
+      <MaterialReactTable
+        table={table}
+      />
+
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        maxWidth="xl"
+      >
+        <DialogTitle id="alert-dialog-title">
+          Folio: {id_solicitud}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            <SolicitudForm id_epp={id_solicitud} open={open} handleClose={handleClose}></SolicitudForm>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onPress={handleClose}>Cancelar</Button>
+          <Button onPress={handleClose} autoFocus>Aceptar</Button>
+        </DialogActions>
+      </Dialog>
+    </>
+  );
+};
+
+export default SolicitudesEPP;

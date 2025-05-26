@@ -1,12 +1,10 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
-
 import Swal from 'sweetalert2';
 import { ViajeContext } from '../context/viajeContext';
 import axios from "axios";
 import odooApi from '@/api/odoo-api';
 import { useAuthContext } from "@/modules/auth/hooks";
-const { VITE_PHIDES_API_URL } = import.meta.env;
 const { VITE_ODOO_API_URL } = import.meta.env;
 
 export const useJourneyDialogs = () => {
@@ -171,11 +169,12 @@ export const useJourneyDialogs = () => {
             data.append('id_estatus', id_estatus);
             data.append('comentarios', comentarios);
             data.append('id_usuario', session.user.id);
+
             archivos.forEach((file) => {
                 data.append('files[]', file);
             });
 
-            const response = await axios.post(VITE_PHIDES_API_URL + '/viajes/algoritmos/reenvio.php', data);
+            const response = await odooApi.post('/viajes/algoritmos/reenvio.php', data);
 
             if (response.data === 1) {
                 toast.success('Proceso correcto.', { id: loadingToast });

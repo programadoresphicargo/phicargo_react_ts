@@ -20,6 +20,7 @@ import { useNavigate } from 'react-router-dom';
 import usuarios_img from '../assets/menu/usuarios.png';
 import viajes_img from '../assets/menu/viajes.png';
 import logo from '../assets/img/phicargo-vertical.png';
+import almacen from '../assets/menu/almacen.png';
 
 type MenuItemType = {
   icon: string;
@@ -112,6 +113,12 @@ const menuItems: MenuItemType[] = [
     label: 'Servicios',
     link: '/servicios',
     requiredPermissions: [204],
+  },
+  {
+    icon: almacen,
+    label: 'Almacen',
+    link: '/Almacen',
+    requiredPermissions: [],
   },
   // {
   //   icon: shipingcontainer,

@@ -317,7 +317,7 @@ function PanelEnvio({ open, cerrar, id_reporte, estatusSeleccionado, comentarios
                   Enviar estatus
                 </Button>
               ) : (
-                <Button variant="contained" color="success" onPress={confirmar_reenvio}>
+                <Button color="success" onPress={confirmar_reenvio} className='text-white'>
                   Reenviar estatus
                 </Button>
               )}

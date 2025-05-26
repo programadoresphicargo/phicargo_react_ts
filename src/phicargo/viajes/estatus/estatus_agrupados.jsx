@@ -22,7 +22,6 @@ import { toast } from 'react-toastify';
 import { useAuthContext } from "@/modules/auth/hooks";
 import Viaje from "../viaje";
 
-const { VITE_PHIDES_API_URL } = import.meta.env;
 const { VITE_ODOO_API_URL } = import.meta.env;
 
 function EstatusHistorialAgrupado({ registros_agrupados }) {
@@ -84,22 +83,15 @@ function EstatusHistorialAgrupado({ registros_agrupados }) {
     };
 
     const getEstatusReenvio = async (id_reporte) => {
+        toast.info('Obteniendo estatus...');
         try {
-            const response = await fetch(VITE_PHIDES_API_URL + '/viajes/reenvio_estatus/getEstatus.php', {
-                method: 'POST',
-                body: new URLSearchParams({
-                    id_reporte: id_reporte,
-                }),
-            })
-            const jsonData = await response.json();
-            const data = await jsonData[0];
-
-            setIDReporte(data.id_reporte);
-            setEstatusSeleccionado(data.id_estatus);
-            setComentarios(data.comentarios_estatus);
+            const response = await odooApi.get('/tms_travel/reportes_estatus_viajes/id_reporte/' + id_reporte);
+            setIDReporte(response.data.id_reporte);
+            setEstatusSeleccionado(response.data.id_estatus);
+            setComentarios(response.data.comentarios_estatus);
 
         } catch (error) {
-            console.error('Error al obtener los datos:', error);
+            toast.error('Error al obtener los datos:', error);
         }
     };
 

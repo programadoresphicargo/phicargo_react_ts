@@ -66,6 +66,8 @@ const PeriodosPagosEstadiasOperadores = lazy(
 const Estadias = lazy(() => import('../phicargo/estadias/Control'));
 const EstadiasInfo = lazy(() => import('../phicargo/estadias/index_estadia'));
 const Accesos = lazy(() => import('../phicargo/accesos/Accesos'));
+const Almacen = lazy(() => import('../phicargo/almacen/solicitud/index'));
+const EPP = lazy(() => import('../phicargo/almacen/epp/epp'));
 const EntregaMonitoreo = lazy(() => import('../phicargo/monitoreo/monitoreo'));
 const CodigosPostales = lazy(() => import('../phicargo/viajes/codigos_postales/index'));
 
@@ -299,6 +301,25 @@ export const PrivateRoutes = () => {
             </Suspense>
           }
         />
+
+        <Route
+          path="/Almacen"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <Almacen />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/EPP"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <EPP />
+            </Suspense>
+          }
+        />
+
         <Route
           path="/AccesoForm"
           element={<AccesoForm id_acceso={undefined} onClose={undefined} />}
