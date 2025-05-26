@@ -20,11 +20,7 @@ import { useNavigate } from 'react-router-dom';
 import usuarios_img from '../assets/menu/usuarios.png';
 import viajes_img from '../assets/menu/viajes.png';
 import logo from '../assets/img/phicargo-vertical.png';
-<<<<<<< HEAD
 import almacen from '../assets/menu/almacen.png';
-=======
-import complaintIcon from '../assets/menu/complaints-icon.png';
->>>>>>> 240867d4bf969567d8248bb57dbbaedb668c1560
 
 type MenuItemType = {
   icon: string;
