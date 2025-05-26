@@ -51,6 +51,7 @@ export interface VehicleSimple {
   status: string;
   modality: string | null;
   loadType: string | null;
+  branch: string | null;
 }
 
 export interface VehicleUpdate {
@@ -111,6 +112,31 @@ export interface Trailer {
 export interface TrailerDriverAssignment {
   driverId: number | null;
   trailerId: number;
+}
+
+// Fleet models
+
+export interface Fleet {
+  id: number;
+  name: string;
+  licensePlate: string | null;
+  status: string | null;
+  sucursalViaje: string | null;
+  tipoVehiculo: string | null;
+  fleetType: string | null;
+  trailerDriver: string | null;
+  driver: string | null;
+  lastTravelId: number | null;
+  referenciaViaje: string | null;
+  lastTravelEndDate: Dayjs | null;
+  storeId: number | null;
+  operadorViaje: string | null;
+  lastManeuverId: number | null;
+  tipoManeuver: string | null;
+  lastManeuverEndDate: Dayjs | null;
+  operadorManeuver: string | null;
+  ultimoUso: string | null;
+  ultimoUsoFecha: Dayjs | null;
 }
 
 // Motum events

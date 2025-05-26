@@ -1,4 +1,5 @@
 import type {
+  Fleet,
   MotumEvent,
   Trailer,
   TrailerDriverAssignment,
@@ -7,6 +8,7 @@ import type {
   VehicleUpdate,
 } from '../models';
 import type {
+  FleetApi,
   MotumEventAPI,
   TrailerApi,
   VehicleApi,
@@ -32,9 +34,12 @@ export class VehicleServiceApi {
     }
   }
 
-  static async getTrailers(): Promise<Trailer[]> {
+  static async getTrailers(fleetType: 'trailer' | 'dolly'): Promise<Trailer[]> {
+
+    const url = `/vehicles/trailers/?fleet_type=${fleetType}`;
+
     try {
-      const response = await odooApi.get<TrailerApi[]>('/vehicles/trailers/');
+      const response = await odooApi.get<TrailerApi[]>(url);
       return response.data.map(VehicleAdapter.toTrailer);
     } catch (error) {
       console.error(error);
@@ -45,10 +50,10 @@ export class VehicleServiceApi {
     }
   }
 
-  static async getTrailersByDriver(driverId: number): Promise<Trailer[]> {
+  static async getTrailersByDriver(driverId: number, fleetType: 'trailer' | 'dolly'): Promise<Trailer[]> {
     try {
       const response = await odooApi.get<TrailerApi[]>(
-        `/vehicles/trailers/driver/${driverId}`,
+        `/vehicles/trailers/driver/${driverId}?fleet_type=${fleetType}`,
       );
       return response.data.map(VehicleAdapter.toTrailer);
     } catch (error) {
@@ -87,6 +92,19 @@ export class VehicleServiceApi {
     try {
       const response = await odooApi.patch<VehicleApi>(`/vehicles/${id}`, data);
       return VehicleAdapter.vehicleToLocal(response.data);
+    } catch (error) {
+      console.error(error);
+      if (error instanceof AxiosError) {
+        throw new Error(error.response?.data?.detail || 'An error occurred');
+      }
+      throw new Error('An error occurred');
+    }
+  }
+
+  static async getFleet(): Promise<Fleet[]> {
+    try {
+      const response = await odooApi.get<FleetApi[]>('/vehicles/latest-operations/');
+      return response.data.map(VehicleAdapter.toFleet);
     } catch (error) {
       console.error(error);
       if (error instanceof AxiosError) {

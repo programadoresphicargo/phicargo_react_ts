@@ -51,6 +51,7 @@ export interface VehicleSimpleApi {
   x_status: string;
   x_modalidad: string | null;
   x_tipo_carga: string | null;
+  branch: string | null;
 }
 
 export interface VehicleUpdateApi {
@@ -71,6 +72,31 @@ export interface VehicleStatusChangeEventApi {
   start_date: string;
   end_date: string | null;
   delivery_date: string | null;
+}
+
+// Fleet models
+
+export interface FleetApi {
+  vehicle_id: number;
+  vehicle_name: string;
+  license_plate: string | null;
+  x_status: string | null;
+  sucursal_viaje: string | null;
+  tipo_vehiculo: string | null;
+  fleet_type: string | null;
+  trailer_driver: string | null;
+  driver: string | null;
+  last_travel_id: number | null;
+  referencia_viaje: string | null;
+  last_travel_end_date: string | null;
+  store_id: number | null;
+  operador_viaje: string | null;
+  last_maniobra_id: number | null;
+  tipo_maniobra: string | null;
+  last_maniobra_end_date: string | null;
+  operador_maniobra: string | null;
+  ultimo_uso: string | null;
+  ultimo_uso_fecha: string | null;
 }
 
 // Trailer models

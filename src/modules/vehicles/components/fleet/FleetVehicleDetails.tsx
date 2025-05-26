@@ -1,11 +1,15 @@
-import React, { useState, useEffect, useMemo } from 'react';
 import { Tabs, Tab, Card, CardBody } from '@heroui/react';
-import HistorialManiobrasVehiculo from './historial_maniobras';
-import HistorialViajesVehiculo from './historial_viajes';
 import { ViajeProvider } from '@/phicargo/viajes/context/viajeContext';
 import { ManiobraProvider } from '@/phicargo/maniobras/context/viajeContext';
+import HistorialViajesVehiculo from '@/phicargo/disponiblidad/equipos/historial_viajes';
+import { Fleet } from '../../models';
+import HistorialManiobrasVehiculo from '@/phicargo/disponiblidad/equipos/historial_maniobras';
 
-const IndexHistorial = ({ vehicle_id }) => {
+interface Props {
+  vehicle: Fleet;
+}
+
+export const FleetVehicleDetails = ({ vehicle }: Props) => {
   return (
     <>
       <Tabs aria-label="Options" color="primary">
@@ -13,9 +17,7 @@ const IndexHistorial = ({ vehicle_id }) => {
           <Card>
             <CardBody>
               <ViajeProvider>
-                <HistorialViajesVehiculo
-                  vehicle_id={vehicle_id}
-                ></HistorialViajesVehiculo>
+                <HistorialViajesVehiculo vehicle_id={vehicle.id} />
               </ViajeProvider>
             </CardBody>
           </Card>
@@ -24,9 +26,7 @@ const IndexHistorial = ({ vehicle_id }) => {
           <Card>
             <CardBody>
               <ManiobraProvider>
-                <HistorialManiobrasVehiculo
-                  vehicle_id={vehicle_id}
-                ></HistorialManiobrasVehiculo>
+                <HistorialManiobrasVehiculo vehicle_id={vehicle.id} />
               </ManiobraProvider>
             </CardBody>
           </Card>
@@ -35,6 +35,4 @@ const IndexHistorial = ({ vehicle_id }) => {
     </>
   );
 };
-
-export default IndexHistorial;
 

@@ -1,4 +1,9 @@
-import { Box, DialogProps, IconButton, Tooltip } from '@mui/material';
+import {
+  Box,
+  DialogProps,
+  IconButton,
+  Tooltip,
+} from '@mui/material';
 
 import { AddButton } from '@/components/ui';
 import type { Complaint } from '../models';
@@ -11,6 +16,8 @@ import UpdateIcon from '@mui/icons-material/Update';
 import { useBaseTable } from '@/hooks';
 import { useComplaintsColumns } from '../hooks';
 import { useGetComplaintsQuery } from '../hooks/queries';
+import { useState } from 'react';
+import { UpdateComplaintStatus } from '../components/complaint-edition/UpdateComplaintStatus';
 
 const dialogProps: DialogProps = {
   slots: {
@@ -28,6 +35,8 @@ const dialogProps: DialogProps = {
 };
 
 const ComplaintsPage = () => {
+  const [itemToUpdate, setItemToUpdate] = useState<Complaint | null>(null);
+
   const {
     getComplaintsQuery: { data, isLoading, isFetching, refetch },
   } = useGetComplaintsQuery();
@@ -61,7 +70,11 @@ const ComplaintsPage = () => {
           </IconButton>
         </Tooltip>
         <Tooltip title="Actualizar status">
-          <IconButton size="small" color="primary">
+          <IconButton
+            size="small"
+            color="primary"
+            onClick={() => setItemToUpdate(row.original)}
+          >
             <UpdateIcon />
           </IconButton>
         </Tooltip>
@@ -83,6 +96,11 @@ const ComplaintsPage = () => {
   return (
     <>
       <MaterialReactTable table={table} />
+
+      <UpdateComplaintStatus
+        complaint={itemToUpdate}
+        onClose={() => setItemToUpdate(null)}
+      />
     </>
   );
 };

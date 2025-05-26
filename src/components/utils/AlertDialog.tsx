@@ -38,9 +38,12 @@ interface Props {
   onOpenChange: (isOpen: boolean) => void;
   openDisabled?: boolean;
   tooltipMessage?: string;
+  withOpenButton?: boolean;
 }
 
 export const AlertDialog = (props: Props) => {
+  const { withOpenButton = true } = props;
+
   const handleConfirm = () => {
     props.onConfirm();
     props.onOpenChange(false);
@@ -48,18 +51,20 @@ export const AlertDialog = (props: Props) => {
 
   return (
     <>
-      <Tooltip content={props.tooltipMessage || 'Abrir'}>
-        <Button
-          color={props.severity || 'warning'}
-          onPress={() => props.onOpenChange(true)}
-          size="sm"
-          variant={props.buttonVariant || 'light'}
-          isIconOnly={props.iconOnly}
-          isDisabled={props.openDisabled}
-        >
-          {props.iconOnly ? props.openButtonIcon : props.openButtonText}
-        </Button>
-      </Tooltip>
+      {withOpenButton && (
+        <Tooltip content={props.tooltipMessage || 'Abrir'}>
+          <Button
+            color={props.severity || 'warning'}
+            onPress={() => props.onOpenChange(true)}
+            size="sm"
+            variant={props.buttonVariant || 'light'}
+            isIconOnly={props.iconOnly}
+            isDisabled={props.openDisabled}
+          >
+            {props.iconOnly ? props.openButtonIcon : props.openButtonText}
+          </Button>
+        </Tooltip>
+      )}
       <Modal
         isOpen={props.open}
         placement="top-center"

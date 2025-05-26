@@ -1,4 +1,5 @@
 import type {
+  Fleet,
   MotumEvent,
   Trailer,
   TrailerDriverAssignment,
@@ -8,6 +9,7 @@ import type {
   VehicleUpdate,
 } from '../models';
 import type {
+  FleetApi,
   MotumEventAPI,
   TrailerApi,
   TrailerDriverAssignmentApi,
@@ -21,11 +23,7 @@ import { DriverAdapter } from '../../drivers/adapters';
 import dayjs from 'dayjs';
 
 export class VehicleAdapter {
-  /**
-   * Mapper function to convert a VehicleBaseApi object to a VehicleBase object
-   * @param vehicle Object of type VehicleBaseApi
-   * @returns Object of type VehicleBase
-   */
+
   static vehicleBaseToLocal(vehicle: VehicleBaseApi): VehicleBase {
     return {
       id: vehicle.id,
@@ -45,11 +43,6 @@ export class VehicleAdapter {
     };
   }
 
-  /**
-   * Mapper function to convert a VehicleApi object to a Vehicle object
-   * @param vehicle Object of type VehicleApi
-   * @returns Object of type Vehicle
-   */
   static vehicleToLocal(vehicle: VehicleApi): Vehicle {
     return {
       ...VehicleAdapter.vehicleBaseToLocal(vehicle),
@@ -133,11 +126,6 @@ export class VehicleAdapter {
     };
   }
 
-  /**
-   * Mapper function to convert a VehicleUpdateApi object to a VehicleUpdate object
-   * @param vehicle Vehicle object
-   * @returns VehicleUpdate object to be used in the form
-   */
   static vehicleUpdateToApi(vehicle: VehicleUpdate): VehicleUpdateApi {
     const vehicleApi: VehicleUpdateApi = {};
 
@@ -183,6 +171,37 @@ export class VehicleAdapter {
       startDate: dayjs(data.start_date),
       endDate: data.end_date ? dayjs(data.end_date) : null,
       deliveryDate: data.delivery_date ? dayjs(data.delivery_date) : null,
+    };
+  }
+
+  static toFleet(data: FleetApi): Fleet {
+    return {
+      id: data.vehicle_id,
+      name: data.vehicle_name,
+      licensePlate: data.license_plate,
+      status: data.x_status,
+      sucursalViaje: data.sucursal_viaje,
+      tipoVehiculo: data.tipo_vehiculo,
+      fleetType: data.fleet_type,
+      trailerDriver: data.trailer_driver,
+      driver: data.driver,
+      lastTravelId: data.last_travel_id,
+      referenciaViaje: data.referencia_viaje,
+      lastTravelEndDate: data.last_travel_end_date
+        ? dayjs(data.last_travel_end_date)
+        : null,
+      storeId: data.store_id,
+      operadorViaje: data.operador_viaje,
+      lastManeuverId: data.last_maniobra_id,
+      tipoManeuver: data.tipo_maniobra,
+      lastManeuverEndDate: data.last_maniobra_end_date
+        ? dayjs(data.last_maniobra_end_date)
+        : null,
+      operadorManeuver: data.operador_maniobra,
+      ultimoUso: data.ultimo_uso,
+      ultimoUsoFecha: data.ultimo_uso_fecha
+        ? dayjs(data.ultimo_uso_fecha)
+        : null,
     };
   }
 
