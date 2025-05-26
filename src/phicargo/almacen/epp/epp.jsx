@@ -29,11 +29,12 @@ import { useAlmacen } from '../contexto/contexto';
 const EPP = ({ }) => {
 
   const
-    { eepAñadido,
-      setEPPAñadido,
-      eepRemovido,
-      setEPPRemovdo
+    { epp, setEPP,
+      eppAdded, setEPPAdded,
+      eppRemoved, setEPPRemoved,
+      eppUpdated, setEPPUpdated
     } = useAlmacen();
+
   const [id_epp, setIDEpp] = React.useState(null);
   const [open, setOpen] = React.useState(false);
 
@@ -148,7 +149,9 @@ const EPP = ({ }) => {
     },
     muiTableBodyRowProps: ({ row }) => ({
       onClick: ({ event }) => {
-        setEPPAñadido(prev => [...prev, row.original]);
+        const newItem = { id: Date.now(), isNew: true, ...row.original, cantidad: 1 };
+        setEPP(prev => [...prev, newItem]);
+        setEPPAdded(prev => [...eppAdded, newItem]);
         handleClose();
       },
     }),

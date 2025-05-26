@@ -28,11 +28,12 @@ import { useAlmacen } from '../../contexto/contexto';
 const EPPSolicitados = ({ }) => {
 
   const
-    { eepAñadido,
-      setEPPAñadido,
-      eepRemovido,
-      setEPPRemovdo
+    { epp, setEPP,
+      eppAdded, setEPPAdded,
+      eppRemoved, setEPPRemoved,
+      eppUpdated, setEPPUpdated
     } = useAlmacen();
+
   const [id_solicitud, setIDSolicitud] = React.useState(null);
   const [open, setOpen] = React.useState(false);
 
@@ -68,10 +69,12 @@ const EPPSolicitados = ({ }) => {
       {
         accessorKey: 'id_epp',
         header: 'ID',
+        enableEditing: false,
       },
       {
         accessorKey: 'nombre',
         header: 'Nombre',
+        enableEditing: false,
       },
       {
         accessorKey: 'cantidad',
@@ -81,19 +84,33 @@ const EPPSolicitados = ({ }) => {
     [],
   );
 
+  const deleteRow = (id) => {
+    const rowToDelete = epp.find(row => row.id === id);
+    if (!rowToDelete) return;
+
+    setEPP(epp.filter(row => row.id !== id));
+    if (!rowToDelete.isNew) {
+      setEPPRemoved([...eppRemoved, { id: id }])
+    } else {
+      setEPPAdded(eppAdded.filter(row => row.id !== id));
+    }
+  };
+
   const table = useMaterialReactTable({
     columns,
-    data: eepAñadido,
+    data: epp,
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
+    enableEditing: true,
+    positionActionsColumn: 'last',
     state: { showProgressBars: isLoading },
     enableColumnPinning: true,
     enableStickyHeader: true,
     positionGlobalFilter: "right",
     localization: MRT_Localization_ES,
     muiSearchTextFieldProps: {
-      placeholder: `Buscar en ${data.length} solicitud`,
+      placeholder: `Buscador`,
       sx: { minWidth: '300px' },
       variant: 'outlined',
     },
@@ -165,6 +182,58 @@ const EPPSolicitados = ({ }) => {
         </Button>
 
       </Box >
+    ),
+    onEditingRowSave: ({ row, values, exitEditingMode }) => {
+      const updatedData = [...epp];
+      const updatedRow = { ...row.original, ...values };
+
+      updatedRow.cantidad = parseFloat(updatedRow.cantidad) || 1;
+      updatedData[row.index] = updatedRow;
+      setEPP(updatedData);
+
+      if (updatedRow.isNew) {
+        // Si es nuevo, actualízalo en el array de nuevos
+        setEPPAdded((prev) => {
+          const exists = prev.find((r) => r.tempId === updatedRow.tempId);
+          if (exists) {
+            return prev.map((r) => r.tempId === updatedRow.tempId ? updatedRow : r);
+          } else {
+            return [...prev, updatedRow];
+          }
+        });
+      } else {
+        // Si ya está en BD, márcalo como editado
+        setEPPUpdated((prev) => {
+          const exists = prev.find((r) => r.id === updatedRow.id);
+          if (exists) {
+            return prev.map((r) => r.id === updatedRow.id ? updatedRow : r);
+          } else {
+            return [...prev, updatedRow];
+          }
+        });
+      }
+
+      exitEditingMode();
+      toast.success('Registro actualizado');
+    },
+    renderRowActions: ({ row, table }) => (
+      <Box sx={{ display: 'flex', gap: '8px' }}>
+        <Button
+          color="primary"
+          size="sm"
+          className='text-white'
+          onPress={() => table.setEditingRow(row)}
+        >
+          Editar
+        </Button>
+        <Button
+          color="danger"
+          size="sm"
+          onPress={() => deleteRow(row.original.id)}
+        >
+          Eliminar
+        </Button>
+      </Box>
     ),
   });
 

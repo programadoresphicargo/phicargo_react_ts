@@ -3,16 +3,18 @@ import { createContext, useContext, useState } from 'react';
 const AlmacenContext = createContext();
 
 export const AlmacenProvider = ({ children }) => {
-    const [eepAñadido, setEPPAñadido] = useState([]);
-    const [eepRemovido, setEPPRemovdo] = useState([]);
+    const [epp, setEPP] = useState([]);
+    const [eppUpdated, setEPPUpdated] = useState([]);
+    const [eppAdded, setEPPAdded] = useState([]);
+    const [eppRemoved, setEPPRemoved] = useState([]);
 
     return (
         <AlmacenContext.Provider
             value={{
-                eepAñadido,
-                setEPPAñadido,
-                eepRemovido,
-                setEPPRemovdo
+                epp, setEPP,
+                eppUpdated, setEPPUpdated,
+                eppAdded, setEPPAdded,
+                eppRemoved, setEPPRemoved
             }}>
             {children}
         </AlmacenContext.Provider>

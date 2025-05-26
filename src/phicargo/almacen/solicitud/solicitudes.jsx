@@ -136,8 +136,8 @@ const SolicitudesEPP = ({ }) => {
     },
     muiTableBodyRowProps: ({ row }) => ({
       onClick: ({ event }) => {
-        handleClickOpen();
         setIDSolicitud(row.original.id_solicitud);
+        handleClickOpen();
       },
     }),
     muiTableBodyCellProps: ({ row }) => ({
@@ -167,7 +167,10 @@ const SolicitudesEPP = ({ }) => {
           startContent={<i class="bi bi-plus-lg"></i>}
           color='primary'
           isDisabled={false}
-          onPress={() => fetchData()}
+          onPress={() => {
+            setIDSolicitud(null);
+            handleClickOpen();
+          }}
           size='sm'
         >
           Nueva solicitud
@@ -202,24 +205,7 @@ const SolicitudesEPP = ({ }) => {
         table={table}
       />
 
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        maxWidth="xl"
-      >
-        <DialogTitle id="alert-dialog-title">
-          Folio: {id_solicitud}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            <SolicitudForm id_epp={id_solicitud} open={open} handleClose={handleClose}></SolicitudForm>
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onPress={handleClose}>Cancelar</Button>
-          <Button onPress={handleClose} autoFocus>Aceptar</Button>
-        </DialogActions>
-      </Dialog>
+      <SolicitudForm id_solicitud={id_solicitud} open={open} handleClose={handleClose}></SolicitudForm>
     </>
   );
 };

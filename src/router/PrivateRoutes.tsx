@@ -67,7 +67,7 @@ const Estadias = lazy(() => import('../phicargo/estadias/Control'));
 const EstadiasInfo = lazy(() => import('../phicargo/estadias/index_estadia'));
 const Accesos = lazy(() => import('../phicargo/accesos/Accesos'));
 const Almacen = lazy(() => import('../phicargo/almacen/solicitud/index'));
-const EPP = lazy(() => import('../phicargo/almacen/epp/epp'));
+const EPP = lazy(() => import('../phicargo/almacen/epp/index'));
 const EntregaMonitoreo = lazy(() => import('../phicargo/monitoreo/monitoreo'));
 const CodigosPostales = lazy(() => import('../phicargo/viajes/codigos_postales/index'));
 
