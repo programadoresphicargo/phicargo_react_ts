@@ -118,7 +118,7 @@ const menuItems: MenuItemType[] = [
     icon: almacen,
     label: 'Almacen',
     link: '/Almacen',
-    requiredPermissions: [],
+    requiredPermissions: [300],
   },
   // {
   //   icon: shipingcontainer,
