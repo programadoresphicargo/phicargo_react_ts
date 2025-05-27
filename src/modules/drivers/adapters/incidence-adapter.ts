@@ -1,5 +1,9 @@
 import type { DriverInfo, Incidence, IncidenceCreate } from '../models';
-import type { DriverInfoApi, IncidenceApi, IncidenceCreateApi } from '../models/api';
+import type {
+  DriverInfoApi,
+  IncidenceApi,
+  IncidenceCreateApi,
+} from '../models/api';
 
 import dayjs from '@/utilities/dayjs-config';
 import { userBasicToLocal } from '../../auth/adapters';
@@ -31,8 +35,12 @@ export class IncidenceAdapter {
     return {
       incidence: incidence.incidence,
       comments: incidence.comments,
-      start_date: incidence.startDate ? incidence.startDate.format('YYYY-MM-DD') : null,
-      end_date: incidence.endDate ? incidence.endDate.format('YYYY-MM-DD') : null,
+      start_date: incidence.startDate
+        ? incidence.startDate.format('YYYY-MM-DD')
+        : null,
+      end_date: incidence.endDate
+        ? incidence.endDate.format('YYYY-MM-DD')
+        : null,
       type: incidence.type,
     };
   }
