@@ -11,6 +11,7 @@ import dashboardIcon from '../assets/menu/dashboardIcon.png';
 import maniobras_img from '../assets/menu/maniobras.png';
 import monitoreo_img from '../assets/menu/monitoreo.png';
 // import operadores_img from '../../assets/menu/operadores.png';
+import incidentsImg from '../assets/menu/incidents.png';
 import reportesImg from '../assets/menu/reportes.png';
 import shipingcontainer from '../assets/menu/shiping-container.png';
 import turnos_img from '../assets/menu/turnos.png';
@@ -118,6 +119,12 @@ const menuItems: MenuItemType[] = [
     icon: almacen,
     label: 'Almacen',
     link: '/Almacen',
+    requiredPermissions: [],
+  },
+  {
+    icon: incidentsImg,
+    label: 'Incidencias',
+    link: '/incidencias',
     requiredPermissions: [],
   },
   // {
