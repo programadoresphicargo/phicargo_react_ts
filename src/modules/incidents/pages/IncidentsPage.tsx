@@ -21,7 +21,7 @@ const IncidentsPage = () => {
     refetchFn: () => refetch(),
     showColumnFilters: true,
     showGlobalFilter: true,
-    containerHeight: 'calc(100vh - 165px)',
+    containerHeight: 'calc(100vh - 210px)',
   });
 
   return (
