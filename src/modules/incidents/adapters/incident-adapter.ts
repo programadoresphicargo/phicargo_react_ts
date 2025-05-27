@@ -1,8 +1,9 @@
-import type { DriverInfo, Incident, IncidentCreate } from '../models';
+import type { DriverInfo, Incident, IncidentCreate, VehicleInfo } from '../models';
 import type {
   DriverInfoApi,
   IncidentApi,
   IncidentCreateApi,
+  VehicleInfoApi,
 } from '../models/api';
 
 import dayjs from '@/utilities/dayjs-config';
@@ -19,14 +20,30 @@ export class IncidentAdapter {
     };
   }
 
+  static vehicleInfoToLocal(vehicle: VehicleInfoApi): VehicleInfo {
+    return {
+      id: vehicle.id,
+      name: vehicle.name2,
+      licensePlate: vehicle.license_plate,
+      fleetType: vehicle.fleet_type,
+      status: vehicle.x_status,
+    };
+  }
+
   static driverIncidentToLocal(incident: IncidentApi): Incident {
     return {
       id: incident.id,
       incident: incident.incidence,
       comments: incident.comments,
+      incidentDate: incident.incident_date ? dayjs(incident.incident_date) : null,
+      damageCost: incident.damage_cost,
+      isDriverResponsible: incident.is_driver_responsible,
       createdAt: dayjs(incident.created_at),
       user: userBasicToLocal(incident.user),
       driver: IncidentAdapter.driverInfoToLocal(incident.driver),
+      vehicle: incident.vehicle
+        ? IncidentAdapter.vehicleInfoToLocal(incident.vehicle)
+        : null,
       type: incident.type,
     };
   }
@@ -40,6 +57,12 @@ export class IncidentAdapter {
         : null,
       end_date: incident.endDate ? incident.endDate.format('YYYY-MM-DD') : null,
       type: incident.type,
+      vehicle_id: incident.vehicleId ?? null,
+      incident_date: incident.incidentDate
+        ? incident.incidentDate.format('YYYY-MM-DD')
+        : null,
+      damage_cost: incident.damageCost ?? null,
+      is_driver_responsible: incident.isDriverResponsible,
     };
   }
 }

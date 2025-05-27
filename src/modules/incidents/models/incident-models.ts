@@ -1,7 +1,7 @@
 import type { Dayjs } from 'dayjs';
 import type { UserBasic } from '../../auth/models';
 
-export type IncidentType = 'operative' | 'legal';
+export type IncidentType = 'operative' | 'legal' | 'cleaning' | 'maintenance';
 
 export interface DriverInfo {
   id: number;
@@ -11,10 +11,21 @@ export interface DriverInfo {
   isDangerous: boolean;
 }
 
+export interface VehicleInfo {
+  id: number;
+  name: string;
+  licensePlate: string | null;
+  fleetType: string | null;
+  status: string | null;
+}
+
 interface IncidentBase {
   incident: string;
   comments: string;
   type: IncidentType;
+  incidentDate: Dayjs | null;
+  damageCost: number | null;
+  isDriverResponsible: boolean;
 }
 
 export interface Incident extends IncidentBase {
@@ -22,10 +33,12 @@ export interface Incident extends IncidentBase {
   createdAt: Dayjs;
   user: UserBasic;
   driver: DriverInfo;
+  vehicle: VehicleInfo | null;
 }
 
 export interface IncidentCreate extends IncidentBase {
   startDate: Dayjs | null;
   endDate: Dayjs | null;
+  vehicleId?: number | null;
 }
 
