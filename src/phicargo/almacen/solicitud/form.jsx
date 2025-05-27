@@ -1,5 +1,5 @@
 import {
-    Input, Progress, Button, Card, CardBody
+    Input, Progress, Button, Card, CardBody, Textarea
 } from "@heroui/react";
 import React, { useEffect, useState } from 'react';
 import Dialog from '@mui/material/Dialog';
@@ -11,18 +11,25 @@ import odooApi from '@/api/odoo-api';
 import toast from 'react-hot-toast';
 import EPPSolicitados from "./epps_solicitud/epps";
 import ViajeEPP from "./viaje/viaje";
-import { Stack } from "@mui/material";
+import { AppBar, Stack } from "@mui/material";
 import { useAlmacen } from "../contexto/contexto";
+import HistorialCambios from "./cambios/epps";
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import CloseIcon from '@mui/icons-material/Close';
+import Slide from '@mui/material/Slide';
 
 const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
-    const [data, setData] = useState({ nombre: '' });
+    const [data, setData] = useState([]);
     const [isLoading, setLoading] = useState(false);
     const [isSaving, setSaving] = useState(false);
     const
         { epp, setEPP,
             eppAdded, setEPPAdded,
             eppRemoved, setEPPRemoved,
-            eppUpdated, setEPPUpdated
+            eppUpdated, setEPPUpdated,
+            isDisabled, setDisabled
         } = useAlmacen();
 
     const fetchData = async () => {
@@ -108,18 +115,25 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
     }, [open, id_solicitud]);
 
     return (
-        <Dialog open={open} onClose={handleClose} maxWidth="xl" fullWidth sx={{
-            '& .MuiPaper-root': {
-                borderRadius: '25px',
-                boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.0)',
-            },
-        }}
-            BackdropProps={{
-                sx: {
-                    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                },
-            }}>
-            <DialogTitle>{id_solicitud ? `Editar solicitud (ID: ${id_solicitud})` : 'Nueva solicitud :)'}</DialogTitle>
+        <Dialog open={open} onClose={handleClose} maxWidth="xl" fullScreen>
+            <AppBar sx={{ position: 'relative' }} elevation={0}>
+                <Toolbar>
+                    <IconButton
+                        edge="start"
+                        color="inherit"
+                        onClick={handleClose}
+                        aria-label="close"
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                    <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+                        {id_solicitud ? `Editar solicitud (ID: ${id_solicitud})` : 'Nueva solicitud :)'}
+                    </Typography>
+                    <Button autoFocus color="inherit" onClick={handleClose}>
+                        Cerrar
+                    </Button>
+                </Toolbar>
+            </AppBar>
 
             {isLoading ? (
                 <Progress isIndeterminate size="sm" />
@@ -127,8 +141,9 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
                 <DialogContent>
                     <DialogContentText>
 
-                        <Stack spacing={1} direction="row">
+                        <Stack spacing={1} direction="row" className="mb-5">
                             <Button
+                                size="sm"
                                 onPress={handleSave}
                                 color={id_solicitud ? 'success' : 'primary'}
                                 isDisabled={isSaving}
@@ -136,23 +151,23 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
                             >
                                 {isSaving ? 'Guardando...' : id_solicitud ? 'Actualizar' : 'Registrar'}
                             </Button>
-                            <Button color='success' className='text-white' onPress={() => cambiarEstado('pendiente')}>Asignar</Button>
-                            <Button color='warning' className="text-white" onPress={() => cambiarEstado('entregado')}>Devuelto</Button>
-                            <Button color='danger'>Responsiva</Button>
-                            <Button color='danger'>Cancelar</Button>
+                            <Button color='success' className='text-white' onPress={() => cambiarEstado('pendiente')} size="sm">Asignar</Button>
+                            <Button color='warning' className="text-white" onPress={() => cambiarEstado('entregado')} size="sm">Devuelto</Button>
+                            <Button color='danger' size="sm">Responsiva</Button>
+                            <Button color='danger' size="sm">Cancelar</Button>
                         </Stack>
 
-                        <Card className="mt-5">
-                            <CardBody>
-                                <ViajeEPP></ViajeEPP>
-                            </CardBody>
-                        </Card>
-
-                        <Card className="mt-5">
-                            <CardBody>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div className="md:col-span-2 grid grid-cols-1 gap-4 rounded shadow">
+                                <ViajeEPP id_viaje={data?.id_viaje}></ViajeEPP>
+                                <Textarea label="Comentarios" variant="bordered" value={data?.observaciones}></Textarea>
                                 <EPPSolicitados></EPPSolicitados>
-                            </CardBody>
-                        </Card>
+                            </div>
+
+                            <div className="p-4 rounded shadow">
+                                <HistorialCambios cambios={data?.mails || []} />
+                            </div>
+                        </div>
 
                     </DialogContentText>
                 </DialogContent>

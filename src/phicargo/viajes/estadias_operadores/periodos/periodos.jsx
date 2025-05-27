@@ -26,6 +26,8 @@ import { ViajeProvider } from '../../context/viajeContext';
 import EstadiasOperadores from '../folios';
 import AbrirPeriodo from './modal_periodo';
 import PagosPeriodo from './folios_pago';
+import { Link } from '@heroui/react';
+const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
 const PagosEstadiasOperadores = ({ }) => {
 
@@ -90,6 +92,25 @@ const PagosEstadiasOperadores = ({ }) => {
             {
                 accessorKey: 'fecha_creacion',
                 header: 'Fecha creacion',
+            },
+            {
+                header: "Acciones",
+                Cell: ({ row }) => {
+                    const id = row.original.id; // asegúrate que esta clave esté disponible
+                    return (
+                        <Button
+                            showAnchorIcon
+                            as={Link}
+                            isExternal={true}
+                            className="text-white"
+                            color="warning"
+                            href={`${apiUrl}/tms_travel/periodos_pagos_estadias_operadores/comprobante/` + id}
+                            variant="solid"
+                        >
+                            PDF
+                        </Button>
+                    );
+                },
             },
         ],
         [],

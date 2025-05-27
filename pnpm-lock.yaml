@@ -71,6 +71,9 @@ importers:
       '@react-pdf/renderer':
         specifier: ^4.1.6
         version: 4.3.0(react@18.3.1)
+      '@react-stately/data':
+        specifier: ^3.13.0
+        version: 3.13.0(react@18.3.1)
       '@sentry/react':
         specifier: ^8.48.0
         version: 8.55.0(react@18.3.1)
@@ -1903,6 +1906,11 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
+  '@react-stately/data@3.13.0':
+    resolution: {integrity: sha512-7LYPxVbWB6tvmLYKO19H5G5YtXV6eKCSXisOUiL9fVnOcGOPDK5z310sj9TP5vaX7zVPtwy0lDBUrZuRfhvQIQ==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
   '@react-stately/datepicker@3.13.0':
     resolution: {integrity: sha512-I0Y/aQraQyRLMWnh5tBZMiZ0xlmvPjFErXnQaeD7SdOYUHNtQS4BAQsMByQrMfg8uhOqUTKlIh7xEZusuqYWOA==}
     peerDependencies:
@@ -2094,6 +2102,11 @@ packages:
 
   '@react-types/shared@3.28.0':
     resolution: {integrity: sha512-9oMEYIDc3sk0G5rysnYvdNrkSg7B04yTKl50HHSZVbokeHpnU0yRmsDaWb9B/5RprcKj8XszEk5guBO8Sa/Q+Q==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  '@react-types/shared@3.29.1':
+    resolution: {integrity: sha512-KtM+cDf2CXoUX439rfEhbnEdAgFZX20UP2A35ypNIawR7/PFFPjQDWyA2EnClCcW/dLWJDEPX2U8+EJff8xqmQ==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
@@ -7247,6 +7260,12 @@ snapshots:
       '@swc/helpers': 0.5.15
       react: 18.3.1
 
+  '@react-stately/data@3.13.0(react@18.3.1)':
+    dependencies:
+      '@react-types/shared': 3.29.1(react@18.3.1)
+      '@swc/helpers': 0.5.15
+      react: 18.3.1
+
   '@react-stately/datepicker@3.13.0(react@18.3.1)':
     dependencies:
       '@internationalized/date': 3.7.0
@@ -7508,6 +7527,10 @@ snapshots:
       react: 18.3.1
 
   '@react-types/shared@3.28.0(react@18.3.1)':
+    dependencies:
+      react: 18.3.1
+
+  '@react-types/shared@3.29.1(react@18.3.1)':
     dependencies:
       react: 18.3.1
 

@@ -7,6 +7,7 @@ export const AlmacenProvider = ({ children }) => {
     const [eppUpdated, setEPPUpdated] = useState([]);
     const [eppAdded, setEPPAdded] = useState([]);
     const [eppRemoved, setEPPRemoved] = useState([]);
+    const [isDisabled, setDisabled] = useState(false);
 
     return (
         <AlmacenContext.Provider
@@ -14,7 +15,8 @@ export const AlmacenProvider = ({ children }) => {
                 epp, setEPP,
                 eppUpdated, setEPPUpdated,
                 eppAdded, setEPPAdded,
-                eppRemoved, setEPPRemoved
+                eppRemoved, setEPPRemoved,
+                isDisabled, setDisabled
             }}>
             {children}
         </AlmacenContext.Provider>
