@@ -17,6 +17,7 @@ import ShiftsRoutes from '../modules/shifts/routes/ShiftsRoutes';
 import { ToastContainer } from 'react-toastify';
 import { Toaster } from 'react-hot-toast';
 import UsersManagementRoutes from '../modules/users-management/routes/UsersManagementRoutes';
+import IncidentsRoutes from '@/modules/incidents/routes/IncidentsRoutes';
 
 // Lazy load the components
 const CartasPorte = lazy(
@@ -399,6 +400,9 @@ export const PrivateRoutes = () => {
 
         {/* Módulo de quejas */}
         {ComplaintsRoutes()}
+
+        {/* Módulo de incidencias */}
+        {IncidentsRoutes()}
 
         {/* Ruta para manejar rutas no válidas */}
         <Route path="*" element={<NotFoundPage />} />
