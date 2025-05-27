@@ -7,6 +7,7 @@ import { useBaseTable } from '@/hooks';
 import { useDriverQueries } from '../../drivers/hooks/queries';
 import { useDriversSummaryColumns } from '../hooks/useDriversSummaryColumns';
 import { useMemo } from 'react';
+import { getDriverRealStatusConf } from '../utilities';
 
 const DriverSummaryPage = () => {
   const {
@@ -43,9 +44,11 @@ const exportConf: ExportConfig<DriverWithRealStatus> = {
   withDate: true,
   sheetName: 'Resumen Operadores',
   columns: [
+    { accessorFn: (data) => data.id, header: 'ID DEL OPERADOR' },
     { accessorFn: (data) => data.name, header: 'OPERADOR' },
     { accessorFn: (data) => data.job.name, header: 'TIPO' },
     { accessorFn: (data) => data.realStatus, header: 'ESTATUS REAL' },
+    { accessorFn: (data) => getDriverRealStatusConf(data.realStatus).label, header: 'ESTATUS_REAL' },
     { accessorFn: (data) => data.travel?.name, header: 'VIAJE' },
     { accessorFn: (data) => data.maneuver?.type, header: 'MANIOBRA' },
     { accessorFn: (data) => data.maneuver?.id, header: 'ID MANIOBRA' },
