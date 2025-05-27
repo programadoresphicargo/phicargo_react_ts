@@ -83,6 +83,30 @@ const SolicitudesEPP = ({ }) => {
       {
         accessorKey: 'estado',
         header: 'Estado',
+        Cell: ({ cell }) => {
+          const estado = cell.getValue();
+          let badgeClass = 'default';
+
+          if (estado === 'pendiente') {
+            badgeClass = 'danger';
+          } else if (estado === 'entregado') {
+            badgeClass = 'success';
+          } else if (estado === 'retorno') {
+            badgeClass = 'warning';
+          } else if (estado === 'resguardo') {
+            badgeClass = 'secondary';
+          }
+
+          return (
+            <Chip
+              size="sm"
+              color={badgeClass}
+              className="text-white"
+            >
+              {estado}
+            </Chip>
+          );
+        },
       },
     ],
     [],

@@ -82,6 +82,23 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
         }
     };
 
+    const cambiarEstado = async (estado) => {
+        setSaving(true);
+        try {
+            const response = await odooApi.put('/tms_travel/solicitudes_epp/estado/' + estado + '/' + id_solicitud);
+            if (response.data.status == 'success') {
+                toast.success(response.data.message);
+            } else {
+                toast.error(response.data.message);
+            }
+            handleClose();
+        } catch (error) {
+            toast.error('Error al guardar:', error);
+        } finally {
+            setSaving(false);
+        }
+    };
+
     useEffect(() => {
         if (open && id_solicitud !== null) {
             fetchData();
@@ -119,8 +136,8 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
                             >
                                 {isSaving ? 'Guardando...' : id_solicitud ? 'Actualizar' : 'Registrar'}
                             </Button>
-                            <Button color='success' className='text-white'>Confirmar</Button>
-                            <Button color='warning' className="text-white">Salida de equipo</Button>
+                            <Button color='success' className='text-white' onPress={() => cambiarEstado('pendiente')}>Asignar</Button>
+                            <Button color='warning' className="text-white" onPress={() => cambiarEstado('entregado')}>Devuelto</Button>
                             <Button color='danger'>Responsiva</Button>
                             <Button color='danger'>Cancelar</Button>
                         </Stack>
