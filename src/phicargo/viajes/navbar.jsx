@@ -28,6 +28,7 @@ import { useDisclosure } from '@heroui/react';
 import { useJourneyDialogs } from './seguimiento/funciones';
 import logo from '../../assets/img/phicargo-vertical.png';
 import { useAuthContext } from '@/modules/auth/hooks';
+import AvatarProfile from '@/components/ui/AvatarProfile';
 
 const pages = [
   { name: 'ACTIVOS', path: '/viajes', permiso: 500 },
@@ -246,7 +247,13 @@ function NavbarViajes() {
               </IconButton>
 
               <MotumAlertsPanel />
+
             </Box>
+
+            <Box sx={{ display: { xs: 'flex', md: 'flex' } }}>
+              <AvatarProfile></AvatarProfile>
+            </Box>
+
           </Toolbar>
         </Container>
       </AppBar>

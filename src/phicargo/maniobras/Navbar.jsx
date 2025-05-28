@@ -16,6 +16,7 @@ import { Navigate } from 'react-router-dom';
 import WebSocketWithToast from '../websocket/websocket';
 import AppsIcon from '@mui/icons-material/Apps';
 import logo from '../../assets/img/phicargo-vertical.png';
+import AvatarProfile from '@/components/ui/AvatarProfile';
 
 const pages = [
     { name: 'CONTENEDORES', path: '/cartas-porte' },
@@ -125,6 +126,10 @@ function ManiobrasNavBar() {
                                     {name}
                                 </Button>
                             ))}
+                        </Box>
+
+                        <Box sx={{ display: { xs: 'flex', md: 'flex' } }}>
+                            <AvatarProfile></AvatarProfile>
                         </Box>
 
                     </Toolbar>
