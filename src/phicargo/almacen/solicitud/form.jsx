@@ -21,11 +21,11 @@ import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 
 const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
-    const [data, setData] = useState([]);
     const [isLoading, setLoading] = useState(false);
     const [isSaving, setSaving] = useState(false);
     const
-        { epp, setEPP,
+        { modoEdicion, setModoEdicion,
+            data, setData, epp, setEPP,
             eppAdded, setEPPAdded,
             eppRemoved, setEPPRemoved,
             eppUpdated, setEPPUpdated,
@@ -46,14 +46,19 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
         }
     };
 
+    const handleChange = (e) => {
+        setData((prev) => ({
+            ...prev,
+            observaciones: e,
+        }));
+    };
+
     const handleSave = async () => {
         setSaving(true);
         try {
             if (id_solicitud === null) {
                 const payload = {
-                    data: {
-                        id_viaje: 74566,
-                    },
+                    data: data,
                     epp: eppAdded
                 };
 
@@ -65,9 +70,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
                 }
             } else {
                 const payload = {
-                    data: {
-                        id_viaje: 74566,
-                    },
+                    data: data,
                     eppAdded: eppAdded,
                     eppRemoved: eppRemoved,
                     eppUpdated: eppUpdated
@@ -86,6 +89,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
             toast.error('Error al guardar:', error);
         } finally {
             setSaving(false);
+            setModoEdicion(false);
         }
     };
 
@@ -114,9 +118,17 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
         }
     }, [open, id_solicitud]);
 
+    const handleEdit = () => {
+        setModoEdicion(true);
+    };
+
     return (
         <Dialog open={open} onClose={handleClose} maxWidth="xl" fullScreen>
-            <AppBar sx={{ position: 'relative' }} elevation={0}>
+            <AppBar elevation={0} sx={{
+                background: 'linear-gradient(90deg, #0b2149, #002887)',
+                padding: '0 16px',
+                position: 'relative'
+            }}>
                 <Toolbar>
                     <IconButton
                         edge="start"
@@ -142,15 +154,36 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
                     <DialogContentText>
 
                         <Stack spacing={1} direction="row" className="mb-5">
-                            <Button
-                                size="sm"
-                                onPress={handleSave}
-                                color={id_solicitud ? 'success' : 'primary'}
-                                isDisabled={isSaving}
-                                className={id_solicitud ? 'text-white' : ''}
-                            >
-                                {isSaving ? 'Guardando...' : id_solicitud ? 'Actualizar' : 'Registrar'}
-                            </Button>
+                            {!id_solicitud && (
+                                <Button
+                                    size="sm"
+                                    onPress={handleSave}
+                                    color={'primary'}
+                                    isDisabled={isSaving}
+                                >
+                                    {isSaving ? 'Guardando...' : 'Registrar'}
+                                </Button>
+                            )}
+                            {!modoEdicion && (
+                                <Button
+                                    size="sm"
+                                    color="primary"
+                                    onPress={handleEdit}
+                                >
+                                    Editar
+                                </Button>
+                            )}
+                            {modoEdicion && (
+                                <Button
+                                    size="sm"
+                                    onPress={handleSave}
+                                    color={id_solicitud ? 'success' : 'primary'}
+                                    isDisabled={isSaving}
+                                    className={id_solicitud ? 'text-white' : ''}
+                                >
+                                    {isSaving ? 'Guardando...' : id_solicitud ? 'Actualizar' : 'Registrar'}
+                                </Button>
+                            )}
                             <Button color='success' className='text-white' onPress={() => cambiarEstado('pendiente')} size="sm">Asignar</Button>
                             <Button color='warning' className="text-white" onPress={() => cambiarEstado('entregado')} size="sm">Devuelto</Button>
                             <Button color='danger' size="sm">Responsiva</Button>
@@ -158,15 +191,37 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
                         </Stack>
 
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div className="md:col-span-2 grid grid-cols-1 gap-4 rounded shadow">
-                                <ViajeEPP id_viaje={data?.id_viaje}></ViajeEPP>
-                                <Textarea label="Comentarios" variant="bordered" value={data?.observaciones}></Textarea>
-                                <EPPSolicitados></EPPSolicitados>
+                            <div className="md:col-span-2 grid grid-cols-1 gap-4">
+                                <Card>
+                                    <CardBody>
+                                        <ViajeEPP id_viaje={data?.id_viaje}></ViajeEPP>
+                                    </CardBody>
+                                </Card>
+
+                                <Card>
+                                    <CardBody>
+                                        <Textarea label="Comentarios"
+                                            variant="faded"
+                                            value={data?.observaciones}
+                                            onValueChange={handleChange}
+                                            isDisabled={!modoEdicion}>
+                                        </Textarea>
+                                    </CardBody>
+                                </Card>
+
+                                <Card>
+                                    <CardBody>
+                                        <EPPSolicitados></EPPSolicitados>
+                                    </CardBody>
+                                </Card>
                             </div>
 
-                            <div className="p-4 rounded shadow">
-                                <HistorialCambios cambios={data?.mails || []} />
-                            </div>
+                            <Card>
+                                <CardBody>
+                                    <HistorialCambios cambios={data?.mails || []} />
+                                </CardBody>
+                            </Card>
+
                         </div>
 
                     </DialogContentText>

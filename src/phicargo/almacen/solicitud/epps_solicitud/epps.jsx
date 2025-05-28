@@ -28,7 +28,8 @@ import { useAlmacen } from '../../contexto/contexto';
 const EPPSolicitados = ({ }) => {
 
   const
-    { epp, setEPP,
+    { modoEdicion, setModoEdicion,
+      epp, setEPP,
       eppAdded, setEPPAdded,
       eppRemoved, setEPPRemoved,
       eppUpdated, setEPPUpdated
@@ -177,6 +178,7 @@ const EPPSolicitados = ({ }) => {
           isDisabled={false}
           onPress={() => handleClickOpen()}
           size='sm'
+          isDisabled={!modoEdicion}
         >
           Añadir
         </Button>
@@ -223,6 +225,7 @@ const EPPSolicitados = ({ }) => {
           size="sm"
           className='text-white'
           onPress={() => table.setEditingRow(row)}
+          isDisabled={!modoEdicion}
         >
           Editar
         </Button>
@@ -230,6 +233,7 @@ const EPPSolicitados = ({ }) => {
           color="danger"
           size="sm"
           onPress={() => deleteRow(row.original.id)}
+          isDisabled={!modoEdicion}
         >
           Eliminar
         </Button>

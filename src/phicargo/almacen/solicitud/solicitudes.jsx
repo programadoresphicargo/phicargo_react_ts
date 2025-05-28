@@ -93,8 +93,6 @@ const SolicitudesEPP = ({ }) => {
             badgeClass = 'success';
           } else if (estado === 'retorno') {
             badgeClass = 'warning';
-          } else if (estado === 'resguardo') {
-            badgeClass = 'secondary';
           }
 
           return (
@@ -107,6 +105,10 @@ const SolicitudesEPP = ({ }) => {
             </Chip>
           );
         },
+      },
+      {
+        accessorKey: 'observaciones',
+        header: 'Observaciones',
       },
     ],
     [],

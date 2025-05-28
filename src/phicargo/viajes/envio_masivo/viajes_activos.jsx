@@ -27,6 +27,7 @@ const ViajesActivosMasivo = ({ }) => {
   const [data, setData] = useState([]);
   const [options, setOptions] = useState([]);
   const [selectedEjecutivo, setSelectedEjecutivo] = useState('');
+  const { session } = useAuthContext();
 
   const fetchData = async () => {
     try {
@@ -101,6 +102,7 @@ const ViajesActivosMasivo = ({ }) => {
         const exportData = data.map((row) => ({
           id_viaje: row.id_viaje,
           id_estatus: row.estatus_seleccionado,
+          id_usuario: session.user.id,
           comentarios: row.comentarios ?? '',
           fecha_hora: row.fecha_hora ?? null
         }));

@@ -23,9 +23,19 @@ import { Autocomplete, AutocompleteItem } from "@heroui/react";
 import { useAsyncList } from "@react-stately/data";
 
 const ViajeEPP = ({ id_viaje }) => {
-
+  const
+    { modoEdicion, setModoEdicion,
+      data, setData, epp, setEPP,
+      eppAdded, setEPPAdded,
+      eppRemoved, setEPPRemoved,
+      eppUpdated, setEPPUpdated,
+      isDisabled, setDisabled
+    } = useAlmacen();
   const [id_solicitud, setIDSolicitud] = React.useState(null);
   const [open, setOpen] = React.useState(false);
+  const viajePorDefectoId = id_viaje;
+  const [selectedKey, setSelectedKey] = useState(viajePorDefectoId);
+  const [selectedItem, setSelectedItem] = useState(null);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -36,12 +46,12 @@ const ViajeEPP = ({ id_viaje }) => {
     fetchData();
   };
 
-  const [data, setData] = useState([]);
+  const [dataViaje, setDataViaje] = useState([]);
 
   const fetchData = async (id) => {
     try {
       const response = await odooApi.get('/tms_travel/get_by_id/' + id);
-      setData(response.data[0]);
+      setDataViaje(response.data[0]);
     } catch (error) {
       console.error('Error al obtener los datos:', error);
     }
@@ -53,17 +63,12 @@ const ViajeEPP = ({ id_viaje }) => {
         const res = await odooApi.get(`/tms_travel/get_by_id/${viajePorDefectoId}`);
         const item = res.data[0];
         setSelectedItem(item);
-        list.setFilterText(item.name); // ¡Aquí está el truco!
-        setData(item); // Ya que es el mismo objeto
+        list.setFilterText(item.name);
+        setDataViaje(item);
       }
     };
-
     cargarViajeInicial();
-  }, []);
-
-  const viajePorDefectoId = id_viaje;
-  const [selectedKey, setSelectedKey] = useState(viajePorDefectoId);
-  const [selectedItem, setSelectedItem] = useState(null);
+  }, [viajePorDefectoId]);
 
   useEffect(() => {
     if (selectedKey) {
@@ -87,12 +92,16 @@ const ViajeEPP = ({ id_viaje }) => {
   });
 
   const handleSelection = (key) => {
-    const item = list.items.find((i) => i.id === key);
+    const item = list.items.find((i) => i.id == key);
     if (item) {
       setSelectedKey(key);
       setSelectedItem(item);
       list.setFilterText(item.name); // Actualiza el input visible
       fetchData(key);
+      setData((prev) => ({
+        ...prev,
+        id_viaje: key,
+      }));
     }
   };
 
@@ -103,17 +112,16 @@ const ViajeEPP = ({ id_viaje }) => {
 
           <Autocomplete
             selectedKey={selectedKey}
-            onSelectionChange={(key) => {
-              setSelectedKey(key);
-            }}
+            onSelectionChange={handleSelection}
             inputValue={list.filterText}
             onInputChange={list.setFilterText}
             isLoading={list.isLoading}
             items={list.items}
             label="Viaje"
             placeholder="Buscar viaje..."
-            variant="bordered"
+            variant="faded"
             className="max-w-xs"
+            isDisabled={!modoEdicion}
           >
             {(item) => (
               <AutocompleteItem key={item.id} className="capitalize">
@@ -122,8 +130,8 @@ const ViajeEPP = ({ id_viaje }) => {
             )}
           </Autocomplete>
 
-          <Input label="Operador" value={data?.employee?.name ?? ''} variant='bordered' disabled={false}></Input>
-          <Input label="Vehiculo" value={data?.vehicle?.name ?? ''} variant='bordered' disabled={false}></Input>
+          <Input label="Operador" value={dataViaje?.employee?.name ?? ''} variant="faded" isDisabled={!modoEdicion}></Input>
+          <Input label="Vehiculo" value={dataViaje?.vehicle?.name ?? ''} variant="faded" isDisabled={!modoEdicion}></Input>
         </div>
       </div>
 
