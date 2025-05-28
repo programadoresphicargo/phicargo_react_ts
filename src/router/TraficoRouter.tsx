@@ -15,9 +15,9 @@ const RedireccionViajes = () => {
         if (session?.user.permissions.includes(500)) {
             navigate("/ViajesActivos", { replace: true });
         } else if (session?.user.permissions.includes(501)) {
-            navigate("/ViajesProgramados", { replace: true });
-        } else if (session?.user.permissions.includes(502)) {
             navigate("/ViajesFinalizados", { replace: true });
+        } else if (session?.user.permissions.includes(502)) {
+            navigate("/ViajesProgramados", { replace: true });
         } else if (session?.user.permissions.includes(503)) {
             navigate("/estadias", { replace: true });
         } else {
