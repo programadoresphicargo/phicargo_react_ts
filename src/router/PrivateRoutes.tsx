@@ -17,6 +17,8 @@ import ShiftsRoutes from '../modules/shifts/routes/ShiftsRoutes';
 import { ToastContainer } from 'react-toastify';
 import { Toaster } from 'react-hot-toast';
 import UsersManagementRoutes from '../modules/users-management/routes/UsersManagementRoutes';
+import RedireccionViajes from './TraficoRouter';
+import ViajesActivos from '@/phicargo/viajes/control/viajes';
 
 // Lazy load the components
 const CartasPorte = lazy(
@@ -90,6 +92,7 @@ const EventosPendientes = lazy(
 const PersistentDrawer = lazy(() => import('../phicargo/monitoreo/Eventos'));
 const CumplimientoEjecutivosViajes = lazy(() => import('../phicargo/reportes/cumplimiento/index_cumplimiento_ejecutivo'));
 const CumplimientoEjecutivosManiobras = lazy(() => import('../phicargo/reportes/cumplimiento/index_cumplimiento_ejecutivo_maniobra'));
+const Redireccion = lazy(() => import('../router/TraficoRouter'));
 
 export const PrivateRoutes = () => {
   return (
@@ -182,10 +185,20 @@ export const PrivateRoutes = () => {
           path="/Viajes"
           element={
             <Suspense fallback={<LoadingPage />}>
-              <ControlViajesActivos />
+              <Redireccion></Redireccion>
             </Suspense>
           }
         />
+
+        <Route
+          path="/ViajesActivos"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <ControlViajesActivos></ControlViajesActivos>
+            </Suspense>
+          }
+        />
+
         <Route
           path="/ViajesFinalizados"
           element={

@@ -27,11 +27,12 @@ import odooApi from '@/api/odoo-api';
 import { useDisclosure } from '@heroui/react';
 import { useJourneyDialogs } from './seguimiento/funciones';
 import logo from '../../assets/img/phicargo-vertical.png';
+import { useAuthContext } from '@/modules/auth/hooks';
 
 const pages = [
-  { name: 'ACTIVOS', path: '/viajes' },
-  { name: 'FINALIZADOS', path: '/viajesfinalizados' },
-  { name: 'PROGRAMACIÓN', path: '/viajesprogramados' },
+  { name: 'ACTIVOS', path: '/viajes', permiso: 500 },
+  { name: 'FINALIZADOS', path: '/viajesfinalizados', permiso: 501 },
+  { name: 'PROGRAMACIÓN', path: '/viajesprogramados', permiso: 502 },
   {
     name: 'ESTATUS OPERATIVOS',
     subpages: [
@@ -40,7 +41,7 @@ const pages = [
     ],
   },
   {
-    name: 'ESTADIAS',
+    name: 'ESTADIAS', permiso: 503,
     subpages: [
       { name: 'Estadías', path: '/estadias' },
       { name: 'Periodos de pago', path: '/periodos_pagos_estadias_operadores' },
@@ -85,6 +86,7 @@ function SubMenu({ title, items }) {
 function NavbarViajes() {
   const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const { session } = useAuthContext();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -203,10 +205,21 @@ function NavbarViajes() {
             </Box>
 
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-              {pages.map((page) =>
-                page.subpages ? (
-                  <SubMenu key={page.name} title={page.name} items={page.subpages} />
-                ) : (
+              {pages.map((page) => {
+
+                if (page.permiso && !session?.user.permissions.includes(page.permiso)) return null;
+
+                if (page.subpages) {
+                  return (
+                    <SubMenu
+                      key={page.name}
+                      title={page.name}
+                      items={page.subpages}
+                    />
+                  );
+                }
+
+                return (
                   <Button
                     key={page.name}
                     sx={{ my: 2, color: 'white', display: 'block', fontFamily: 'inter' }}
@@ -215,8 +228,8 @@ function NavbarViajes() {
                   >
                     {page.name}
                   </Button>
-                )
-              )}
+                );
+              })}
             </Box>
 
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
