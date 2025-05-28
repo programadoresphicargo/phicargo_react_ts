@@ -20,6 +20,7 @@ import { ViajeContext } from "../context/viajeContext";
 import axios from "axios";
 import { fontFamily } from "@mui/system";
 import { useJourneyDialogs } from "./funciones";
+import Custodia from "../custodia/custodia";
 
 export default function BasicButtons2() {
 
@@ -39,6 +40,8 @@ export default function BasicButtons2() {
     return (
         <>
             <Grid container spacing={2}>
+
+                <Custodia></Custodia>
 
                 <Grid item size={12}>
                     <Card>

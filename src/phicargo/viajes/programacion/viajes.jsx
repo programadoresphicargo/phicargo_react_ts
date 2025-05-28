@@ -145,6 +145,29 @@ const ViajesProgramados = ({ }) => {
         header: 'Operador',
       },
       {
+        accessorKey: 'custodia',
+        header: 'Custodia',
+        Cell: ({ cell }) => {
+          const value = cell.getValue();
+
+          if (value !== 'yes') return null;
+
+          return (
+            <div
+              style={{
+                backgroundColor: '#4caf50', // verde
+                color: 'white',
+                padding: '6px 12px',
+                borderRadius: '12px',
+                textAlign: 'center',
+              }}
+            >
+              Yes
+            </div>
+          );
+        },
+      },
+      {
         accessorKey: 'estado_correos',
         header: 'Correos ligados',
         Cell: ({ cell }) => {
