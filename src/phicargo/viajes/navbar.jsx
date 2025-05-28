@@ -34,13 +34,6 @@ const pages = [
   { name: 'FINALIZADOS', path: '/viajesfinalizados', permiso: 501 },
   { name: 'PROGRAMACIÓN', path: '/viajesprogramados', permiso: 502 },
   {
-    name: 'ESTATUS OPERATIVOS',
-    subpages: [
-      { name: 'Control de estatus', path: '/controlestatus' },
-      { name: 'Reporte cumplimiento estatus', path: '/cumplimiento_estatus_ejecutivos' },
-    ],
-  },
-  {
     name: 'ESTADIAS', permiso: 503,
     subpages: [
       { name: 'Estadías', path: '/estadias' },
@@ -48,7 +41,14 @@ const pages = [
       { name: 'Folios de pago estadias operadores', path: '/pagos_estadias_operadores' },
     ],
   },
-  { name: 'ENVIO MASIVO', path: '/envio_masivo_viajes' },
+  {
+    name: 'ESTATUS OPERATIVOS', permiso: 500,
+    subpages: [
+      { name: 'Control de estatus', path: '/controlestatus' },
+      { name: 'Reporte cumplimiento estatus', path: '/cumplimiento_estatus_ejecutivos' },
+    ],
+  },
+  { name: 'ENVIO MASIVO', path: '/envio_masivo_viajes', permiso: 500 },
   { name: 'CODIGOS POSTALES', path: '/codigos_postales' },
 ];
 
