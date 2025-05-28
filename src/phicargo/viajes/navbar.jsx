@@ -47,10 +47,10 @@ const pages = [
     subpages: [
       { name: 'Control de estatus', path: '/controlestatus' },
       { name: 'Reporte cumplimiento estatus', path: '/cumplimiento_estatus_ejecutivos' },
+      { name: 'Codigos postales', path: '/codigos_postales' },
     ],
   },
   { name: 'ENVIO MASIVO', path: '/envio_masivo_viajes', permiso: 500 },
-  { name: 'CODIGOS POSTALES', path: '/codigos_postales' },
 ];
 
 function SubMenu({ title, items }) {
