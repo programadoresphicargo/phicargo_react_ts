@@ -17,8 +17,6 @@ import ShiftsRoutes from '../modules/shifts/routes/ShiftsRoutes';
 import { ToastContainer } from 'react-toastify';
 import { Toaster } from 'react-hot-toast';
 import UsersManagementRoutes from '../modules/users-management/routes/UsersManagementRoutes';
-import RedireccionViajes from './TraficoRouter';
-import ViajesActivos from '@/phicargo/viajes/control/viajes';
 
 // Lazy load the components
 const CartasPorte = lazy(
