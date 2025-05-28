@@ -1,4 +1,3 @@
-import type { SelectItem } from '@/types';
 
 export const OPERATIVE_INCIDENCES: string[] = [
   'INCUMPLIMIENTO DE REGLAMENTO DE SEGURIDAD',
@@ -20,16 +19,16 @@ export const LEGAL_INCIDENCES: string[] = [
   'OTRO',
 ];
 
-export const LEGAL_INCIDENCE_OPTIONS: SelectItem[] = LEGAL_INCIDENCES.map(
+export const LEGAL_INCIDENCE_OPTIONS = LEGAL_INCIDENCES.map(
   (r) => ({
-    key: r,
-    value: r,
+    id: r,
+    label: r,
   }),
 );
 
-export const OPERATIVE_INCIDENCE_OPTIONS: SelectItem[] =
+export const OPERATIVE_INCIDENCE_OPTIONS =
   OPERATIVE_INCIDENCES.map((r) => ({
-    key: r,
-    value: r,
+    id: r,
+    label: r,
   }));
 

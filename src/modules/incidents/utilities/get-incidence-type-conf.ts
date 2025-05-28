@@ -1,5 +1,5 @@
 import { KeyLabel, type KeyLabelConf } from '@/utilities';
-import type { IncidenceType } from '../models';
+import type { IncidenceType } from '../../drivers/models';
 
 export const conf: KeyLabelConf<IncidenceType>[] = [
   { key: 'legal', label: 'Legal', color: 'primary' },

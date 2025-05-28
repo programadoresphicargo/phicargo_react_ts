@@ -8,7 +8,7 @@ import type { IncidenceCreate, IncidenceType } from '../../models';
 import {
   LEGAL_INCIDENCE_OPTIONS,
   OPERATIVE_INCIDENCE_OPTIONS,
-} from '../../utilities';
+} from '../../../incidents/utilities';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 
@@ -94,7 +94,10 @@ export const IncidenceForm = ({
         name="incidence"
         variant="faded"
         label="Tipo de Incidencia"
-        items={incidenceOptions}
+        items={incidenceOptions.map((option) => ({
+          key: option.id,
+          value: option.label,
+        }))}
         rules={{ required: 'Tipo de incidencia requerida' }}
       />
       <TextareaInput

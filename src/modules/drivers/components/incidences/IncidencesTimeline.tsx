@@ -1,6 +1,6 @@
 import { FaCalendarMinus } from 'react-icons/fa';
 import type { Incidence } from '../../models';
-import { incidenceType } from '../../utilities';
+import { incidenceType } from '../../../incidents/utilities';
 
 interface Props {
   incidences: Incidence[];
