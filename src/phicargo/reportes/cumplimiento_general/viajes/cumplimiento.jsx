@@ -81,36 +81,156 @@ const ReporteCumplimientoV = () => {
     const columns = useMemo(
         () => [
             {
-                accessorKey: 'id_viaje',
+                accessorKey: 'name',
                 header: 'Viaje',
+            },
+            {
+                accessorKey: 'operador',
+                header: 'Operador',
             },
             {
                 accessorKey: 'inicio_viaje',
                 header: 'Inicio de viaje',
+                Cell: ({ row }) => {
+                    const nombre = row.original.inicio_viaje;
+                    const fecha = row.original.fecha_inicio_viaje;
+
+                    return (
+                        <>
+                            {nombre != null && (
+                                <User
+                                    description={fecha}
+                                    name={nombre}></User>
+                            )}
+                        </>
+                    );
+                },
             },
             {
                 accessorKey: 'llegada_planta',
                 header: 'Llegada a planta',
+                Cell: ({ row }) => {
+                    const nombre = row.original.llegada_planta;
+                    const fecha = row.original.fecha_llegada_planta;
+
+                    return (
+                        <>
+                            {nombre != null && (
+                                <User
+                                    description={fecha}
+                                    name={nombre}></User>
+                            )}
+                        </>
+                    );
+                },
             },
             {
                 accessorKey: 'ingreso_planta',
                 header: 'Ingreso a planta',
+                Cell: ({ row }) => {
+                    const nombre = row.original.ingreso_planta;
+                    const fecha = row.original.fecha_ingreso_planta;
+
+                    return (
+                        <>
+                            {nombre != null && (
+                                <User
+                                    description={fecha}
+                                    name={nombre}></User>
+                            )}
+                        </>
+                    );
+                },
             },
             {
                 accessorKey: 'asignacion_rampa',
                 header: 'Asignación de rampa',
+                Cell: ({ row }) => {
+                    const nombre = row.original.asignacion_rampa;
+                    const fecha = row.original.fecha_asignacion_rampa;
+
+                    return (
+                        <>
+                            {nombre != null && (
+                                <User
+                                    description={fecha}
+                                    name={nombre}></User>
+                            )}
+                        </>
+                    );
+                },
             },
             {
                 accessorKey: 'inicio_carga_descarga',
                 header: 'Inicio de carga o descarga',
+                Cell: ({ row }) => {
+                    const nombre = row.original.inicio_carga_descarga;
+                    const fecha = row.original.fecha_inicio_carga_descarga;
+
+                    return (
+                        <>
+                            {nombre != null && (
+                                <User
+                                    description={fecha}
+                                    name={nombre}></User>
+                            )}
+                        </>
+                    );
+                },
             },
             {
                 accessorKey: 'fin_carga_descarga',
                 header: 'Fin de carga o descarga',
+                Cell: ({ row }) => {
+                    const nombre = row.original.fin_carga_descarga;
+                    const fecha = row.original.fecha_fin_carga_descarga;
+
+                    return (
+                        <>
+                            {nombre != null && (
+                                <User
+                                    description={fecha}
+                                    name={nombre}></User>
+                            )}
+                        </>
+                    );
+                },
             },
             {
                 accessorKey: 'salida_planta',
                 header: 'Salida de planta',
+                Cell: ({ row }) => {
+                    const nombre = row.original.salida_planta;
+                    const fecha = row.original.fecha_salida_planta;
+
+                    return (
+                        <>
+                            {nombre != null && (
+                                <User
+                                    description={fecha}
+                                    name={nombre}></User>
+                            )}
+                        </>
+                    );
+                },
+            },
+            {
+                accessorKey: 'viaje_finalizado',
+                header: 'Viaje finalizado',
+                Cell: ({ row }) => {
+                    const nombre = row.original.viaje_finalizado;
+                    const fecha = row.original.fecha_viaje_finalizado;
+
+                    return (
+                        <>
+                            {nombre != null && (
+                                <User
+                                    description={fecha}
+                                    name={nombre}></User>
+                            )}
+                        </>
+                    );
+                },
             },
             {
                 accessorKey: 'estatus_enviados',
