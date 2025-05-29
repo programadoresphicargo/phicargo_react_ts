@@ -127,12 +127,20 @@ const ReporteCumplimientoV = () => {
                         <>
                             {nombre != null && (
                                 <User
+                                    avatarProps={{
+                                        color: 'primary',
+                                        isBordered: true,
+                                    }}
                                     description={fecha}
                                     name={nombre}></User>
                             )}
                         </>
                     );
                 },
+            },
+            {
+                accessorKey: 'fecha_inicio_viaje',
+                header: 'Fecha inicio de viaje',
             },
             {
                 accessorKey: 'llegada_planta',
@@ -145,12 +153,20 @@ const ReporteCumplimientoV = () => {
                         <>
                             {nombre != null && (
                                 <User
+                                    avatarProps={{
+                                        color: 'primary',
+                                        isBordered: true,
+                                    }}
                                     description={fecha}
                                     name={nombre}></User>
                             )}
                         </>
                     );
                 },
+            },
+            {
+                accessorKey: 'fecha_llegada_planta',
+                header: 'Fecha Llegada a planta',
             },
             {
                 accessorKey: 'ingreso_planta',
@@ -163,12 +179,20 @@ const ReporteCumplimientoV = () => {
                         <>
                             {nombre != null && (
                                 <User
+                                    avatarProps={{
+                                        color: 'primary',
+                                        isBordered: true,
+                                    }}
                                     description={fecha}
                                     name={nombre}></User>
                             )}
                         </>
                     );
                 },
+            },
+            {
+                accessorKey: 'fecha_ingreso_planta',
+                header: 'Fecha Ingreso a planta',
             },
             {
                 accessorKey: 'asignacion_rampa',
@@ -181,12 +205,20 @@ const ReporteCumplimientoV = () => {
                         <>
                             {nombre != null && (
                                 <User
+                                    avatarProps={{
+                                        color: 'primary',
+                                        isBordered: true,
+                                    }}
                                     description={fecha}
                                     name={nombre}></User>
                             )}
                         </>
                     );
                 },
+            },
+            {
+                accessorKey: 'fecha_asignacion_rampa',
+                header: 'Fecha asignacion rampa',
             },
             {
                 accessorKey: 'inicio_carga_descarga',
@@ -199,12 +231,20 @@ const ReporteCumplimientoV = () => {
                         <>
                             {nombre != null && (
                                 <User
+                                    avatarProps={{
+                                        color: 'primary',
+                                        isBordered: true,
+                                    }}
                                     description={fecha}
                                     name={nombre}></User>
                             )}
                         </>
                     );
                 },
+            },
+            {
+                accessorKey: 'fecha_inicio_carga_descarga',
+                header: 'Fecha inicio carga o descarga',
             },
             {
                 accessorKey: 'fin_carga_descarga',
@@ -217,12 +257,20 @@ const ReporteCumplimientoV = () => {
                         <>
                             {nombre != null && (
                                 <User
+                                    avatarProps={{
+                                        color: 'primary',
+                                        isBordered: true,
+                                    }}
                                     description={fecha}
                                     name={nombre}></User>
                             )}
                         </>
                     );
                 },
+            },
+            {
+                accessorKey: 'fecha_fin_carga_descarga',
+                header: 'Fecha fin carga descarga',
             },
             {
                 accessorKey: 'salida_planta',
@@ -235,12 +283,20 @@ const ReporteCumplimientoV = () => {
                         <>
                             {nombre != null && (
                                 <User
+                                    avatarProps={{
+                                        color: 'primary',
+                                        isBordered: true,
+                                    }}
                                     description={fecha}
                                     name={nombre}></User>
                             )}
                         </>
                     );
                 },
+            },
+            {
+                accessorKey: 'fecha_salida_planta',
+                header: 'Fecha salida de planta',
             },
             {
                 accessorKey: 'viaje_finalizado',
@@ -253,12 +309,20 @@ const ReporteCumplimientoV = () => {
                         <>
                             {nombre != null && (
                                 <User
+                                    avatarProps={{
+                                        color: 'primary',
+                                        isBordered: true,
+                                    }}
                                     description={fecha}
                                     name={nombre}></User>
                             )}
                         </>
                     );
                 },
+            },
+            {
+                accessorKey: 'fecha_viaje_finalizado',
+                header: 'Fecha fin de viaje',
             },
             {
                 accessorKey: 'estatus_enviados',
@@ -282,6 +346,16 @@ const ReporteCumplimientoV = () => {
         enableStickyHeader: true,
         state: { showProgressBars: isLoading },
         initialState: {
+            columnVisibility: {
+                fecha_inicio_viaje: false,
+                fecha_llegada_planta: false,
+                fecha_ingreso_planta: false,
+                fecha_asignacion_rampa: false,
+                fecha_inicio_carga_descarga: false,
+                fecha_fin_carga_descarga: false,
+                fecha_salida_planta: false,
+                fecha_viaje_finalizado: false
+            },
             columnPinning: { left: ['referencia', 'sucursal', 'estatus', 'nombre'] },
             showColumnFilters: true,
             density: 'compact',
