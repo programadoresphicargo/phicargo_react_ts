@@ -44,10 +44,8 @@ const ReporteCumplimientoV = () => {
         end: parseDate(todayStr),
     });
 
-    const [columnOrder, setColumnOrder] = useState([]);
     const [isLoading, setLoading] = useState(false);
     const [value, setValue] = React.useState([0, 24]);
-
 
     const handleDateChange = (dates) => {
         setDates(dates);
