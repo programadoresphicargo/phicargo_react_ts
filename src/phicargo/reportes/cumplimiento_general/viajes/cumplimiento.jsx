@@ -87,6 +87,36 @@ const ReporteCumplimientoV = () => {
                 header: 'Operador',
             },
             {
+                accessorKey: 'x_status_viaje',
+                header: 'Estado',
+                Cell: ({ cell }) => {
+                    const estatus_viaje = cell.getValue();
+                    let badgeClass = '';
+
+                    if (estatus_viaje === 'ruta') {
+                        badgeClass = 'primary';
+                    } else if (estatus_viaje === 'planta') {
+                        badgeClass = 'success';
+                    } else if (estatus_viaje === 'retorno') {
+                        badgeClass = 'warning';
+                    } else if (estatus_viaje === 'resguardo') {
+                        badgeClass = 'secondary';
+                    } else if (estatus_viaje === 'finalizado') {
+                        badgeClass = 'default';
+                    }
+
+                    return (
+                        <Chip
+                            size="sm"
+                            color={badgeClass}
+                            className="text-white"
+                        >
+                            {estatus_viaje.charAt(0).toUpperCase() + estatus_viaje.slice(1)}
+                        </Chip>
+                    );
+                },
+            },
+            {
                 accessorKey: 'inicio_viaje',
                 header: 'Inicio de viaje',
                 Cell: ({ row }) => {
