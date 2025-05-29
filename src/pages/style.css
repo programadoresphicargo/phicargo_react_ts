@@ -1,6 +1,6 @@
 .bg {
     animation: slide 3s ease-in-out infinite alternate;
-    background-image: linear-gradient(-60deg, #0c244c 50%, #06257a 50%);
+    background-image: linear-gradient(-60deg, #a50000 50%, #bc0404 50%);
     bottom: 0;
     left: -50%;
     opacity: .5;
@@ -16,7 +16,7 @@
 }
 
 .bg3 {
-    animation-duration: 5s;
+    animation-duration: 4s;
 }
 
 .content {
@@ -28,10 +28,6 @@
     text-align: center;
     top: 50%;
     transform: translate(-50%, -50%);
-}
-
-h1 {
-    font-family: monospace;
 }
 
 @keyframes slide {
