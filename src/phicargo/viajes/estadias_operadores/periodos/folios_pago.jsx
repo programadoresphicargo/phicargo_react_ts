@@ -29,7 +29,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
-const PagosPeriodo = ({ open, handleClose, startDate, endDate }) => {
+const PagosPeriodo = ({ open, handleClose, id_usuario, startDate, endDate }) => {
 
     const [folio, setFolio] = React.useState([]);
     const [data, setData] = useState([]);
@@ -40,6 +40,7 @@ const PagosPeriodo = ({ open, handleClose, startDate, endDate }) => {
             setLoading(true);
             const response = await odooApi.get('/tms_travel/pagos_estadias_operadores/date_range/', {
                 params: {
+                    id_usuario: id_usuario,
                     date_start: startDate,
                     date_end: endDate
                 }

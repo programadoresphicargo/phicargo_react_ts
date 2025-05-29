@@ -35,6 +35,7 @@ const PagosEstadiasOperadores = ({ }) => {
     const [data, setData] = useState([]);
     const [isLoading, setLoading] = useState(false);
 
+    const [id_usuario, setIDUsuario] = useState(0);
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
 
@@ -166,6 +167,7 @@ const PagosEstadiasOperadores = ({ }) => {
         muiTableBodyRowProps: ({ row }) => ({
             onClick: () => {
                 handleClickOpen();
+                setIDUsuario(row.original.id_usuario);
                 setStartDate(row.original.date_start);
                 setEndDate(row.original.date_end);
             },
@@ -231,7 +233,7 @@ const PagosEstadiasOperadores = ({ }) => {
                 />
 
                 <AbrirPeriodo open={openOP} handleClose={handleCloseEO} datapago={folio}></AbrirPeriodo>
-                <PagosPeriodo open={open} handleClose={handleClose} startDate={startDate} endDate={endDate}></PagosPeriodo>
+                <PagosPeriodo open={open} handleClose={handleClose} id_usuario={id_usuario} startDate={startDate} endDate={endDate}></PagosPeriodo>
 
             </ViajeProvider>
         </>

@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import { ThreeDots } from '@agney/react-loading';
+import './style.css';
 
 export const LoadingPage = () => {
   return (
@@ -11,11 +11,11 @@ export const LoadingPage = () => {
         height: 'calc(100vh - 165px)',
       }}
     >
-      <ThreeDots
-        // @ts-expect-error no hay tipos
-        width="80"
-        height="80"
-      />
+      <div className="bg"></div>
+      <div className="bg bg2"></div>
+      <div className="bg bg3"></div>
+      <div className="content">
+      </div>
     </Box>
   );
 };
