@@ -120,12 +120,12 @@ const menuItems: MenuItemType[] = [
     link: '/Almacen',
     requiredPermissions: [300],
   },
-  // {
-  //   icon: shipingcontainer,
-  //   label: 'Quejas',
-  //   link: '/quejas',
-  //   requiredPermissions: [],
-  // },
+  {
+    icon: shipingcontainer,
+    label: 'Quejas',
+    link: '/quejas',
+    requiredPermissions: [],
+  },
 ];
 
 const MainMenuPage = () => {
