@@ -47,6 +47,7 @@ const pages = [
     subpages: [
       { name: 'Control de estatus', path: '/controlestatus' },
       { name: 'Reporte cumplimiento estatus', path: '/cumplimiento_estatus_ejecutivos' },
+      { name: 'Reporte cumplimiento estatus general', path: '/cumplimiento_estatus_viajes_general' },
       { name: 'Codigos postales', path: '/codigos_postales' },
     ],
   },

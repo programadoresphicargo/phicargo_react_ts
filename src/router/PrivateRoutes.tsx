@@ -91,6 +91,7 @@ const PersistentDrawer = lazy(() => import('../phicargo/monitoreo/Eventos'));
 const CumplimientoEjecutivosViajes = lazy(() => import('../phicargo/reportes/cumplimiento/index_cumplimiento_ejecutivo'));
 const CumplimientoEjecutivosManiobras = lazy(() => import('../phicargo/reportes/cumplimiento/index_cumplimiento_ejecutivo_maniobra'));
 const Redireccion = lazy(() => import('../router/TraficoRouter'));
+const RGV = lazy(() => import('../phicargo/reportes/cumplimiento_general/viajes/index_cumplimiento'));
 
 export const PrivateRoutes = () => {
   return (
@@ -240,6 +241,14 @@ export const PrivateRoutes = () => {
           }
         />
 
+        <Route
+          path="/cumplimiento_estatus_viajes_general"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <RGV></RGV>
+            </Suspense>
+          }
+        />
 
         <Route
           path="/codigos_postales"
