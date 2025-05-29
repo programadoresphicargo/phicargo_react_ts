@@ -197,17 +197,6 @@ const ReporteCumplimientoV = () => {
                     variant='bordered'
                     onChange={setDates} />
 
-                <Slider
-                    className="flex-1 min-w-[300px]"
-                    fullWidth
-                    value={value}
-                    onChange={setValue}
-                    label="Hora"
-                    maxValue={24}
-                    minValue={0}
-                    step={1}
-                />
-
                 <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "reporte_estatus.csv")} fullWidth>Exportar</Button>
                 <Button color='primary' className='text-white' startContent={<i class="bi bi-arrow-clockwise"></i>} onPress={() => fetchData()} fullWidth>Recargar</Button>
 
