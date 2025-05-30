@@ -140,6 +140,30 @@ const ReporteCumplimientoV = () => {
                 },
             },
             {
+                accessorKey: 'ultimo_estatus_enviado',
+                header: 'Ultimo estatus enviado',
+                Cell: ({ row }) => {
+                    const estatus = row.original.ultimo_estatus_enviado;
+                    const nombre = row.original.fecha_ultimo_estatus;
+                    const fecha = row.original.ultimo_estatus_usuario;
+
+                    return (
+                        <>
+                            {nombre != null && (
+                                <User
+                                    avatarProps={{
+                                        size: 'sm',
+                                        color: 'secondary',
+                                        isBordered: true,
+                                    }}
+                                    description={nombre + ' \n ' + fecha}
+                                    name={estatus}></User>
+                            )}
+                        </>
+                    );
+                },
+            },
+            {
                 accessorKey: 'inicio_viaje',
                 header: 'Inicio de viaje',
                 Cell: ({ row }) => {
@@ -152,6 +176,7 @@ const ReporteCumplimientoV = () => {
                                 <User
                                     avatarProps={{
                                         color: 'primary',
+                                        size: 'sm',
                                         isBordered: true,
                                     }}
                                     description={fecha}
@@ -178,6 +203,7 @@ const ReporteCumplimientoV = () => {
                                 <User
                                     avatarProps={{
                                         color: 'primary',
+                                        size: 'sm',
                                         isBordered: true,
                                     }}
                                     description={fecha}
@@ -203,6 +229,7 @@ const ReporteCumplimientoV = () => {
                             {nombre != null && (
                                 <User
                                     avatarProps={{
+                                        size: 'sm',
                                         color: 'primary',
                                         isBordered: true,
                                     }}
@@ -229,6 +256,7 @@ const ReporteCumplimientoV = () => {
                             {nombre != null && (
                                 <User
                                     avatarProps={{
+                                        size: 'sm',
                                         color: 'primary',
                                         isBordered: true,
                                     }}
@@ -255,6 +283,7 @@ const ReporteCumplimientoV = () => {
                             {nombre != null && (
                                 <User
                                     avatarProps={{
+                                        size: 'sm',
                                         color: 'primary',
                                         isBordered: true,
                                     }}
@@ -281,6 +310,7 @@ const ReporteCumplimientoV = () => {
                             {nombre != null && (
                                 <User
                                     avatarProps={{
+                                        size: 'sm',
                                         color: 'primary',
                                         isBordered: true,
                                     }}
@@ -307,6 +337,7 @@ const ReporteCumplimientoV = () => {
                             {nombre != null && (
                                 <User
                                     avatarProps={{
+                                        size: 'sm',
                                         color: 'primary',
                                         isBordered: true,
                                     }}
@@ -334,6 +365,7 @@ const ReporteCumplimientoV = () => {
                                 <User
                                     avatarProps={{
                                         color: 'primary',
+                                        size: 'sm',
                                         isBordered: true,
                                     }}
                                     description={fecha}
