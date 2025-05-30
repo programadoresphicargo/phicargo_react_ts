@@ -17,6 +17,8 @@ import { User } from "@heroui/react";
 import Travel from '@/phicargo/viajes/control/viaje';
 import { ViajeContext } from '@/phicargo/viajes/context/viajeContext';
 import ReporteCumplimientoGeneralViajeIndex from './index_cumplimiento';
+import { Progress } from "@heroui/react";
+
 const { VITE_ODOO_API_URL } = import.meta.env;
 
 const ReporteCumplimientoV = () => {
@@ -331,6 +333,19 @@ const ReporteCumplimientoV = () => {
             {
                 accessorKey: 'porcentaje_cumplimiento',
                 header: 'Porcentaje cumplimiento',
+                Cell: ({ cell }) => {
+                    const porcentaje = cell.getValue();
+
+                    return (
+                        <Progress
+                            size="sm"
+                            showValueLabel={true}
+                            value={porcentaje}
+                        >
+                            {porcentaje}
+                        </Progress>
+                    );
+                },
             },
         ]
     );
