@@ -119,6 +119,27 @@ const ReporteCumplimientoV = () => {
                 },
             },
             {
+                accessorKey: 'estatus_enviados',
+                header: 'Estatus enviados',
+            },
+            {
+                accessorKey: 'porcentaje_cumplimiento',
+                header: 'Porcentaje cumplimiento',
+                Cell: ({ cell }) => {
+                    const porcentaje = cell.getValue();
+
+                    return (
+                        <Progress
+                            size="sm"
+                            showValueLabel={true}
+                            value={porcentaje}
+                        >
+                            {porcentaje}
+                        </Progress>
+                    );
+                },
+            },
+            {
                 accessorKey: 'inicio_viaje',
                 header: 'Inicio de viaje',
                 Cell: ({ row }) => {
@@ -325,27 +346,6 @@ const ReporteCumplimientoV = () => {
             {
                 accessorKey: 'fecha_viaje_finalizado',
                 header: 'Fecha fin de viaje',
-            },
-            {
-                accessorKey: 'estatus_enviados',
-                header: 'Estatus enviados',
-            },
-            {
-                accessorKey: 'porcentaje_cumplimiento',
-                header: 'Porcentaje cumplimiento',
-                Cell: ({ cell }) => {
-                    const porcentaje = cell.getValue();
-
-                    return (
-                        <Progress
-                            size="sm"
-                            showValueLabel={true}
-                            value={porcentaje}
-                        >
-                            {porcentaje}
-                        </Progress>
-                    );
-                },
             },
         ]
     );
