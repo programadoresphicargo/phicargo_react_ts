@@ -4,6 +4,7 @@ import { AxiosError } from 'axios';
 import odooApi from '@/api/odoo-api';
 import { IncidentAdapter } from '../adapters';
 import { IncidentApi } from '../models/api';
+import { FilesService } from '@/modules/core/services';
 
 /**
  * Service to manage the incidents
@@ -48,22 +49,24 @@ export class IncidentsService {
     }
   }
 
-  /**
-   * Method to create a new incidence
-   * @param param0 Object with the data to create a new incidence
-   * @returns Initial data of the incident
-   */
   public static async createIncident({
     driverId,
     incident,
+    files = [],
   }: {
     driverId: number;
     incident: IncidentCreate;
+    files?: File[];
   }): Promise<Incident> {
     const url = `/drivers/${driverId}/incidents`;
     const data = IncidentAdapter.driverIncidentToApi(incident);
     try {
       const response = await odooApi.post<IncidentApi>(url, data);
+
+      if (response.status === 201 && files && files.length > 0) {
+        await uploadFiles(files, response.data.id);
+      }
+
       return IncidentAdapter.driverIncidentToLocal(response.data);
     } catch (error) {
       console.error(error);
@@ -74,6 +77,19 @@ export class IncidentsService {
       }
       throw new Error('Error al crear la incidencia');
     }
+  }
+}
+
+async function uploadFiles(files: File[], incidenceId: number) {
+  try {
+    await FilesService.uploadFiles({
+      files,
+      route: 'incidents',
+      table: 'x_driver_incidents',
+      id: incidenceId,
+    });
+  } catch (error) {
+    console.error('Error uploading files:', error);
   }
 }
 
