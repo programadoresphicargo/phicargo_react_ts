@@ -8,6 +8,8 @@ import { Box, DialogProps, IconButton, Tooltip } from '@mui/material';
 import { MuiTransition } from '@/components';
 import InfoIcon from '@mui/icons-material/Info';
 import { AddButton } from '@/components/ui';
+import { IncidentDetailsModal } from '../components/IncidentDetailsModal';
+import { useState } from 'react';
 
 const dialogProps: DialogProps = {
   slots: {
@@ -25,7 +27,7 @@ const dialogProps: DialogProps = {
 };
 
 const IncidentsPage = () => {
-  // const [detail, setDetail] = useState<Incident | null>(null);
+  const [detail, setDetail] = useState<Incident | null>(null);
 
   const {
     incidentsQuery: { data: incidents, isFetching, isLoading, refetch, error },
@@ -46,13 +48,13 @@ const IncidentsPage = () => {
     containerHeight: 'calc(100vh - 210px)',
     enableRowActions: true,
     positionActionsColumn: 'first',
-    renderRowActions: () => (
+    renderRowActions: ({ row }) => (
       <Box sx={{ display: 'flex' }}>
         <Tooltip title="Detalles">
           <IconButton
             size="small"
             color="primary"
-            // onClick={() => setDetail(row.original)}
+            onClick={() => setDetail(row.original)}
           >
             <InfoIcon />
           </IconButton>
@@ -75,6 +77,13 @@ const IncidentsPage = () => {
   return (
     <>
       <MaterialReactTable table={table} />
+      {detail && (
+        <IncidentDetailsModal
+          open={!!detail}
+          onClose={() => setDetail(null)}
+          incident={detail}
+        />
+      )}
     </>
   );
 };
