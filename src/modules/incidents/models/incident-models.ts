@@ -1,5 +1,6 @@
 import type { Dayjs } from 'dayjs';
 import type { UserBasic } from '../../auth/models';
+import { OneDriveFile } from '@/modules/core/models';
 
 export type IncidentType = 'operative' | 'legal' | 'cleaning' | 'maintenance';
 
@@ -34,11 +35,13 @@ export interface Incident extends IncidentBase {
   user: UserBasic;
   driver: DriverInfo;
   vehicle: VehicleInfo | null;
+  evidences: OneDriveFile[];
 }
 
 export interface IncidentCreate extends IncidentBase {
   startDate: Dayjs | null;
   endDate: Dayjs | null;
   vehicleId?: number | null;
+  driverId?: number | null;
 }
 

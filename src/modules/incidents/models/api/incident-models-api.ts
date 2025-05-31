@@ -1,5 +1,6 @@
 import type { UserBasicApi } from '@/modules/auth/models';
 import { IncidentType } from '../incident-models';
+import { OneDriveFileApi } from '@/modules/core/models/api';
 
 export interface DriverInfoApi {
   id: number;
@@ -32,6 +33,7 @@ export interface IncidentApi extends IncidentBaseApi {
   user: UserBasicApi;
   driver: DriverInfoApi;
   vehicle: VehicleInfoApi | null;
+  evidences: OneDriveFileApi[];
 }
 
 export interface IncidentCreateApi extends IncidentBaseApi {
