@@ -20,7 +20,7 @@ export const useIncidentsQueries = () => {
     mutationFn: IncidentsService.createIncident,
     onSuccess: (item) => {
       queryClient.setQueryData(
-        [driverIncidentsKey, item.driver.id],
+        [driverIncidentsKey],
         (prev: Incident[]) => (prev ? [item, ...prev] : [item]),
       );
       toast.success('Incidencia creada correctamente');
