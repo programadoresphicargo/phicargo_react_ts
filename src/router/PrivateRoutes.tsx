@@ -92,6 +92,8 @@ const CumplimientoEjecutivosViajes = lazy(() => import('../phicargo/reportes/cum
 const CumplimientoEjecutivosManiobras = lazy(() => import('../phicargo/reportes/cumplimiento/index_cumplimiento_ejecutivo_maniobra'));
 const Redireccion = lazy(() => import('../router/TraficoRouter'));
 const RGV = lazy(() => import('../phicargo/reportes/cumplimiento_general/viajes/index_cumplimiento'));
+const CumplimientoManiobras = lazy(() => import('../phicargo/reportes/cumplimiento_general/maniobras/index_cumplimiento'));
+
 
 export const PrivateRoutes = () => {
   return (
@@ -237,6 +239,15 @@ export const PrivateRoutes = () => {
           element={
             <Suspense fallback={<LoadingPage />}>
               <CumplimientoEjecutivosViajes />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/cumplimiento_estatus_maniobras"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <CumplimientoManiobras></CumplimientoManiobras>
             </Suspense>
           }
         />

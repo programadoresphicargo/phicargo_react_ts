@@ -136,14 +136,19 @@ export const useJourneyDialogs = () => {
 
             const response = await odooApi.post('/tms_travel/reportes_estatus_viajes/envio_estatus/', data);
 
-            toast.success(response.data.message, { id: loadingToast });
-            getViaje(id_viaje);
+            if (response.data.status == 'success') {
+                toast.success(response.data.message, { id: loadingToast });
+                getViaje(id_viaje);
 
-            if (id_estatus == 8) {
-                calcular_estadia(id_viaje);
+                if (id_estatus == 8) {
+                    calcular_estadia(id_viaje);
+                }
+                return true;
+            } else {
+                toast.error(response.data.message, { id: loadingToast });
+                return false;
             }
 
-            return true;
 
         } catch (error) {
             let mensajeError = 'Ocurrió un error inesperado.';

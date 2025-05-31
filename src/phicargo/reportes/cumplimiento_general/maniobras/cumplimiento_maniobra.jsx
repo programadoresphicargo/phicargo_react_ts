@@ -15,27 +15,28 @@ import { exportToCSV } from '../../../utils/export';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { User } from "@heroui/react";
 import Travel from '@/phicargo/viajes/control/viaje';
-import { ViajeContext } from '@/phicargo/viajes/context/viajeContext';
-import ReporteCumplimientoGeneralViajeIndex from './index_cumplimiento';
-import { Progress } from "@heroui/react";
-
+import ManiobrasNavBar from '@/phicargo/maniobras/Navbar';
+import Formulariomaniobra from '@/phicargo/maniobras/maniobras/formulario_maniobra';
+import { Progress } from '@heroui/react';
 const { VITE_ODOO_API_URL } = import.meta.env;
 
-const ReporteCumplimientoV = () => {
+const ReporteCumplimientoManiobra = () => {
 
-    const { id_viaje, viaje, getViaje, loading, error, ActualizarIDViaje } = useContext(ViajeContext);
-    const [open, setOpen] = React.useState(false);
+    const [modalShow, setModalShow] = React.useState(false);
 
-    useEffect(() => {
-        getViaje(id_viaje);
-    }, [id_viaje]);
+    const [id_maniobra, setIdmaniobra] = useState('');
+    const [id_cp, setIdcp] = useState('');
+    const [idCliente, setClienteID] = useState('');
 
-    const handleClickOpen = () => {
-        setOpen(true);
+    const handleShowModal = (id_maniobra, id_cp) => {
+        setModalShow(true);
+        setIdmaniobra(id_maniobra);
+        setIdcp(id_cp);
     };
 
-    const handleClose = () => {
-        setOpen(false);
+    const handleCloseModal = () => {
+        setModalShow(false);
+        fetchData();
     };
 
     const today = new Date();
@@ -46,8 +47,10 @@ const ReporteCumplimientoV = () => {
         end: parseDate(todayStr),
     });
 
+    const [columnOrder, setColumnOrder] = useState([]);
     const [isLoading, setLoading] = useState(false);
     const [value, setValue] = React.useState([0, 24]);
+
 
     const handleDateChange = (dates) => {
         setDates(dates);
@@ -60,7 +63,7 @@ const ReporteCumplimientoV = () => {
         const endDate = dates.end;
         try {
             setLoading(true);
-            const response = await odooApi.get('/tms_travel/reportes_estatus_viajes/reporte_cumplimiento_estatus_viajes/', {
+            const response = await odooApi.get('/maniobras/reportes_estatus_maniobras/reporte_cumplimiento_estatus_general/', {
                 params: {
                     fecha_inicio: startDate,
                     fecha_fin: endDate,
@@ -78,33 +81,34 @@ const ReporteCumplimientoV = () => {
         fetchData();
     }, [dates, value]);
 
+    useEffect(() => {
+        if (data.length > 0) {
+            const orderedKeys = Object.keys(data[0]);
+            setColumnOrder(orderedKeys);
+        }
+    }, [data, value]);
+
     const columns = useMemo(
         () => [
             {
-                accessorKey: 'name',
-                header: 'Viaje',
+                accessorKey: 'id',
+                header: 'Maniobra',
             },
             {
                 accessorKey: 'operador',
                 header: 'Operador',
             },
             {
-                accessorKey: 'x_status_viaje',
+                accessorKey: 'estado_maniobra',
                 header: 'Estado',
                 Cell: ({ cell }) => {
                     const estatus_viaje = cell.getValue();
                     let badgeClass = '';
 
-                    if (estatus_viaje === 'ruta') {
+                    if (estatus_viaje === 'finalizada') {
                         badgeClass = 'primary';
-                    } else if (estatus_viaje === 'planta') {
+                    } else if (estatus_viaje === 'activa') {
                         badgeClass = 'success';
-                    } else if (estatus_viaje === 'retorno') {
-                        badgeClass = 'warning';
-                    } else if (estatus_viaje === 'resguardo') {
-                        badgeClass = 'secondary';
-                    } else if (estatus_viaje === 'finalizado') {
-                        badgeClass = 'default';
                     }
 
                     return (
@@ -164,11 +168,11 @@ const ReporteCumplimientoV = () => {
                 },
             },
             {
-                accessorKey: 'inicio_viaje',
-                header: 'Inicio de viaje',
+                accessorKey: 'inicio_maniobra',
+                header: 'Inicio de maniobra',
                 Cell: ({ row }) => {
-                    const nombre = row.original.inicio_viaje;
-                    const fecha = row.original.fecha_inicio_viaje;
+                    const nombre = row.original.inicio_maniobra
+                    const fecha = row.original.fecha_inicio_maniobra
 
                     return (
                         <>
@@ -187,15 +191,15 @@ const ReporteCumplimientoV = () => {
                 },
             },
             {
-                accessorKey: 'fecha_inicio_viaje',
-                header: 'Fecha inicio de viaje',
+                accessorKey: 'fecha_inicio_maniobra',
+                header: 'Fecha inicio de maniobra',
             },
             {
-                accessorKey: 'llegada_planta',
-                header: 'Llegada a planta',
+                accessorKey: 'llegada_terminal',
+                header: 'Llegada a terminal',
                 Cell: ({ row }) => {
-                    const nombre = row.original.llegada_planta;
-                    const fecha = row.original.fecha_llegada_planta;
+                    const nombre = row.original.llegada_terminal;
+                    const fecha = row.original.fecha_llegada_terminal;
 
                     return (
                         <>
@@ -214,15 +218,15 @@ const ReporteCumplimientoV = () => {
                 },
             },
             {
-                accessorKey: 'fecha_llegada_planta',
-                header: 'Fecha Llegada a planta',
+                accessorKey: 'fecha_llegada_terminal',
+                header: 'Fecha llegada terminal',
             },
             {
-                accessorKey: 'ingreso_planta',
-                header: 'Ingreso a planta',
+                accessorKey: 'ruta_fiscal',
+                header: 'Ruta fiscal',
                 Cell: ({ row }) => {
-                    const nombre = row.original.ingreso_planta;
-                    const fecha = row.original.fecha_ingreso_planta;
+                    const nombre = row.original.ruta_fiscal;
+                    const fecha = row.original.fecha_ruta_fiscal;
 
                     return (
                         <>
@@ -241,15 +245,15 @@ const ReporteCumplimientoV = () => {
                 },
             },
             {
-                accessorKey: 'fecha_ingreso_planta',
-                header: 'Fecha Ingreso a planta',
+                accessorKey: 'fecha_ruta_fiscal',
+                header: 'Fecha ruta fiscal',
             },
             {
-                accessorKey: 'asignacion_rampa',
-                header: 'Asignación de rampa',
+                accessorKey: 'modulacion',
+                header: 'Modulación',
                 Cell: ({ row }) => {
-                    const nombre = row.original.asignacion_rampa;
-                    const fecha = row.original.fecha_asignacion_rampa;
+                    const nombre = row.original.modulacion;
+                    const fecha = row.original.fecha_modulacion;
 
                     return (
                         <>
@@ -268,15 +272,15 @@ const ReporteCumplimientoV = () => {
                 },
             },
             {
-                accessorKey: 'fecha_asignacion_rampa',
-                header: 'Fecha asignacion rampa',
+                accessorKey: 'fecha_modulacion',
+                header: 'Fecha modulacion',
             },
             {
-                accessorKey: 'inicio_carga_descarga',
-                header: 'Inicio de carga o descarga',
+                accessorKey: 'salida_terminal',
+                header: 'Salida_terminal',
                 Cell: ({ row }) => {
-                    const nombre = row.original.inicio_carga_descarga;
-                    const fecha = row.original.fecha_inicio_carga_descarga;
+                    const nombre = row.original.inicio_salida_terminal;
+                    const fecha = row.original.fecha_salida_terminal;
 
                     return (
                         <>
@@ -295,69 +299,15 @@ const ReporteCumplimientoV = () => {
                 },
             },
             {
-                accessorKey: 'fecha_inicio_carga_descarga',
-                header: 'Fecha inicio carga o descarga',
+                accessorKey: 'fecha_salida_terminal',
+                header: 'Fecha salida_terminal',
             },
             {
-                accessorKey: 'fin_carga_descarga',
-                header: 'Fin de carga o descarga',
+                accessorKey: 'fin_maniobra',
+                header: 'Fin maniobra',
                 Cell: ({ row }) => {
-                    const nombre = row.original.fin_carga_descarga;
-                    const fecha = row.original.fecha_fin_carga_descarga;
-
-                    return (
-                        <>
-                            {nombre != null && (
-                                <User
-                                    avatarProps={{
-                                        size: 'sm',
-                                        color: 'primary',
-                                        isBordered: true,
-                                    }}
-                                    description={fecha}
-                                    name={nombre}></User>
-                            )}
-                        </>
-                    );
-                },
-            },
-            {
-                accessorKey: 'fecha_fin_carga_descarga',
-                header: 'Fecha fin carga descarga',
-            },
-            {
-                accessorKey: 'salida_planta',
-                header: 'Salida de planta',
-                Cell: ({ row }) => {
-                    const nombre = row.original.salida_planta;
-                    const fecha = row.original.fecha_salida_planta;
-
-                    return (
-                        <>
-                            {nombre != null && (
-                                <User
-                                    avatarProps={{
-                                        size: 'sm',
-                                        color: 'primary',
-                                        isBordered: true,
-                                    }}
-                                    description={fecha}
-                                    name={nombre}></User>
-                            )}
-                        </>
-                    );
-                },
-            },
-            {
-                accessorKey: 'fecha_salida_planta',
-                header: 'Fecha salida de planta',
-            },
-            {
-                accessorKey: 'viaje_finalizado',
-                header: 'Viaje finalizado',
-                Cell: ({ row }) => {
-                    const nombre = row.original.viaje_finalizado;
-                    const fecha = row.original.fecha_viaje_finalizado;
+                    const nombre = row.original.fin_maniobra;
+                    const fecha = row.original.fecha_fin_maniobra;
 
                     return (
                         <>
@@ -376,8 +326,8 @@ const ReporteCumplimientoV = () => {
                 },
             },
             {
-                accessorKey: 'fecha_viaje_finalizado',
-                header: 'Fecha fin de viaje',
+                accessorKey: 'fecha_fin_maniobra',
+                header: 'Fecha fin_maniobra',
             },
         ]
     );
@@ -393,25 +343,15 @@ const ReporteCumplimientoV = () => {
         enableStickyHeader: true,
         state: { showProgressBars: isLoading },
         initialState: {
-            columnVisibility: {
-                fecha_inicio_viaje: false,
-                fecha_llegada_planta: false,
-                fecha_ingreso_planta: false,
-                fecha_asignacion_rampa: false,
-                fecha_inicio_carga_descarga: false,
-                fecha_fin_carga_descarga: false,
-                fecha_salida_planta: false,
-                fecha_viaje_finalizado: false
-            },
-            columnPinning: { left: ['referencia', 'sucursal', 'estatus', 'nombre'] },
+            columnPinning: { left: ['id_maniobra', 'estado_maniobra', 'nombre', 'contenedores', 'tipo_maniobra'] },
             showColumnFilters: true,
             density: 'compact',
             pagination: { pageSize: 80 },
         },
         muiTableBodyRowProps: ({ row }) => ({
             onClick: ({ event }) => {
-                handleClickOpen();
-                ActualizarIDViaje(row.original.id_viaje);
+                handleShowModal(row.original.id_maniobra, row.original.id);
+                setClienteID(row.original.id_cliente);
             },
             style: {
                 cursor: 'pointer',
@@ -421,14 +361,14 @@ const ReporteCumplimientoV = () => {
             sx: {
                 fontFamily: 'Inter',
                 fontWeight: 'Bold',
-                fontSize: '14px',
+                fontSize: '12px',
             },
         },
         muiTableBodyCellProps: {
             sx: {
                 fontFamily: 'Inter',
                 fontWeight: 'normal',
-                fontSize: '14px',
+                fontSize: '12px',
             },
         },
         muiTableContainerProps: {
@@ -457,7 +397,7 @@ const ReporteCumplimientoV = () => {
                 <h1
                     className="flex-1 min-w-[300px] tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
                 >
-                    Cumplimiento de envío de estatus viajes
+                    Cumplimiento de estatus en maniobra
                 </h1>
 
                 <DateRangePicker
@@ -476,11 +416,18 @@ const ReporteCumplimientoV = () => {
 
     return (
         <>
-            <NavbarViajes></NavbarViajes>
+            <ManiobrasNavBar></ManiobrasNavBar>
             <MaterialReactTable table={table} />
-            <Travel open={open} handleClose={handleClose}></Travel>
+            <Formulariomaniobra
+                show={modalShow}
+                handleClose={handleCloseModal}
+                id_maniobra={id_maniobra}
+                id_cp={id_cp}
+                id_cliente={idCliente}
+                form_deshabilitado={true}
+            />
         </>
     );
 };
 
-export default ReporteCumplimientoV;
+export default ReporteCumplimientoManiobra;

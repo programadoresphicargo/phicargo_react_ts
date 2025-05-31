@@ -26,6 +26,7 @@ const pages = [
     { name: 'PRECIOS', path: '/precios' },
     { name: 'DISPONIBILIDAD', path: '/disponibilidad' },
     { name: 'CUMPLIMIENTO ESTATUS', path: '/cumplimiento_estatus_ejecutivos_maniobras' },
+    { name: 'CUMPLIMIENTO ESTATUS 2', path: '/cumplimiento_estatus_maniobras' },
 ];
 
 function ManiobrasNavBar() {
