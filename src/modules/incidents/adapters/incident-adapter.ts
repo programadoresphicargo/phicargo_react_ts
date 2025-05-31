@@ -1,4 +1,9 @@
-import type { DriverInfo, Incident, IncidentCreate, VehicleInfo } from '../models';
+import type {
+  DriverInfo,
+  Incident,
+  IncidentCreate,
+  VehicleInfo,
+} from '../models';
 import type {
   DriverInfoApi,
   IncidentApi,
@@ -8,6 +13,7 @@ import type {
 
 import dayjs from '@/utilities/dayjs-config';
 import { userBasicToLocal } from '../../auth/adapters';
+import { FilesAdapter } from '@/modules/core/adapters';
 
 export class IncidentAdapter {
   static driverInfoToLocal(driver: DriverInfoApi): DriverInfo {
@@ -35,7 +41,9 @@ export class IncidentAdapter {
       id: incident.id,
       incident: incident.incidence,
       comments: incident.comments,
-      incidentDate: incident.incident_date ? dayjs(incident.incident_date) : null,
+      incidentDate: incident.incident_date
+        ? dayjs(incident.incident_date)
+        : null,
       damageCost: incident.damage_cost,
       isDriverResponsible: incident.is_driver_responsible,
       createdAt: dayjs(incident.created_at),
@@ -45,6 +53,7 @@ export class IncidentAdapter {
         ? IncidentAdapter.vehicleInfoToLocal(incident.vehicle)
         : null,
       type: incident.type,
+      evidences: incident.evidences?.map(FilesAdapter.toOneDriveFile) ?? [],
     };
   }
 
