@@ -67,6 +67,14 @@ export const useIncidentsColumns = () => {
           return <BasicTextCell value={value} />;
         },
       },
+      {
+        header: 'Evidencias',
+        id: 'evidences',
+        Cell: ({ row }) => {
+          const value = row.original.evidences.length;;
+          return <BasicTextCell value={value} fallback='Sin evidencias' />;
+        },
+      }
     ],
     [],
   );
