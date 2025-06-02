@@ -14,10 +14,20 @@ export class IncidentsService {
    * Method to get all the incidents
    * @returns List of incidents
    */
-  public static async getAllIncidents(): Promise<Incident[]> {
-    const url = `/drivers/incidents/all`;
+  public static async getAllIncidents(startDate?: string, endDate?: string): Promise<Incident[]> {
+
+    let url = '/drivers/incidents/all';
+
+    if (startDate && endDate) {
+      url += `?start_date=${startDate}&end_date=${endDate}`;
+    }
     try {
-      const response = await odooApi.get<IncidentApi[]>(url);
+      const response = await odooApi.get<IncidentApi[]>(url, {
+        params: {
+          start_date: startDate,
+          end_date: endDate,
+        },
+      });
       return response.data.map(IncidentAdapter.driverIncidentToLocal);
     } catch (error) {
       console.error(error);
