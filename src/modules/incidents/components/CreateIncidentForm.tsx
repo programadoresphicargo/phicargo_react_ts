@@ -19,8 +19,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import type { IncidentCreate } from '../models';
 import { useVehicleQueries } from '@/modules/vehicles/hooks/queries';
 import {
-  LEGAL_INCIDENCE_OPTIONS,
-  OPERATIVE_INCIDENCE_OPTIONS,
+  getIncidentOptions,
 } from '../utilities';
 import { useState } from 'react';
 import dayjs from 'dayjs';
@@ -73,10 +72,7 @@ export const CreateIncidentForm = ({
 
   const selectedType = watch('type');
 
-  const incidenceOptions =
-    selectedType === 'legal'
-      ? LEGAL_INCIDENCE_OPTIONS
-      : OPERATIVE_INCIDENCE_OPTIONS;
+  const incidenceOptions = getIncidentOptions(selectedType);
 
   const onSubmit: SubmitHandler<IncidentCreate> = (data) => {
     if (isPending) return;
