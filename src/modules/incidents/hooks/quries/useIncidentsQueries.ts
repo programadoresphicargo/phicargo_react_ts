@@ -6,23 +6,29 @@ import { IncidentsService } from '../../services';
 
 export const DRIVER_INCIDENTS_KEY = 'driver-incidents';
 
-export const useIncidentsQueries = (driverId?: number) => {
+interface Config {
+  driverId?: number;
+  startDate?: string;
+  endDate?: string;
+}
+
+export const useIncidentsQueries = ({ driverId, startDate, endDate }: Config) => {
+
   const queryClient = useQueryClient();
 
   const incidentsQuery = useQuery<Incident[]>({
-    queryKey: [DRIVER_INCIDENTS_KEY],
-    queryFn: IncidentsService.getAllIncidents,
+    queryKey: [DRIVER_INCIDENTS_KEY, startDate, endDate],
+    queryFn: () => IncidentsService.getAllIncidents(startDate, endDate),
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 10,
   });
 
   const createIncident = useMutation({
     mutationFn: IncidentsService.createIncident,
-    onSuccess: (item) => {
-      queryClient.setQueryData(
-        [DRIVER_INCIDENTS_KEY],
-        (prev: Incident[]) => (prev ? [item, ...prev] : [item]),
-      );
+    onSuccess: () => {
+      queryClient.invalidateQueries<Incident[]>({
+        queryKey: [DRIVER_INCIDENTS_KEY, startDate, endDate]
+      });
       if (driverId) {
         queryClient.invalidateQueries({
           queryKey: [DRIVER_INCIDENTS_KEY, driverId],
