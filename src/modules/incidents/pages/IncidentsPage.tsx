@@ -69,7 +69,7 @@ const IncidentsPage = () => {
     toolbarActions: (
       <div className="flex items-center gap-4">
         <AddButton
-          label="Añadir Servicio"
+          label="Crear Incidencia"
           size="small"
           onClick={() => table.setCreatingRow(true)}
         />
