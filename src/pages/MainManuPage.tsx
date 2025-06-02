@@ -1,7 +1,3 @@
-import AppBar from '@mui/material/AppBar';
-import AvatarProfile from '@/components/ui/AvatarProfile';
-import { Grid } from '@mui/system';
-import Toolbar from '@mui/material/Toolbar';
 import accesos_img from '../assets/menu/accesos.png';
 import bonos_img from '../assets/menu/bonos.png';
 import calendar3d from '../assets/menu/calendar3d.png';
@@ -10,18 +6,22 @@ import correo_img from '../assets/menu/correo.png';
 import dashboardIcon from '../assets/menu/dashboardIcon.png';
 import maniobras_img from '../assets/menu/maniobras.png';
 import monitoreo_img from '../assets/menu/monitoreo.png';
-// import operadores_img from '../../assets/menu/operadores.png';
+import complaints from '../assets/menu/complaints.png';
 import incidentsImg from '../assets/menu/incidents.png';
 import reportesImg from '../assets/menu/reportes.png';
 import shipingcontainer from '../assets/menu/shiping-container.png';
 import turnos_img from '../assets/menu/turnos.png';
-import { useAuthContext } from '@/modules/auth/hooks';
-import { useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
 import usuarios_img from '../assets/menu/usuarios.png';
 import viajes_img from '../assets/menu/viajes.png';
 import logo from '../assets/img/phicargo-vertical.png';
 import almacen from '../assets/menu/almacen.png';
+import Toolbar from '@mui/material/Toolbar';
+import AvatarProfile from '@/components/ui/AvatarProfile';
+import AppBar from '@mui/material/AppBar';
+import { Grid } from '@mui/system';
+import { useAuthContext } from '@/modules/auth/hooks';
+import { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 type MenuItemType = {
   icon: string;
@@ -121,18 +121,19 @@ const menuItems: MenuItemType[] = [
     link: '/Almacen',
     requiredPermissions: [],
   },
+
+  {
+    icon: complaints,
+    label: 'Quejas',
+    link: '/quejas',
+    requiredPermissions: [213],
+  },
   {
     icon: incidentsImg,
     label: 'Incidencias',
     link: '/incidencias',
-    requiredPermissions: [],
+    requiredPermissions: [214],
   },
-  // {
-  //   icon: shipingcontainer,
-  //   label: 'Quejas',
-  //   link: '/quejas',
-  //   requiredPermissions: [],
-  // },
 ];
 
 const MainMenuPage = () => {
