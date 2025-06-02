@@ -39,6 +39,7 @@ export const useDriverQueries = () => {
 
   return {
     drivers: driversQuery.data || [],
+    isLoading: driversQuery.isLoading,
     AvailableDrivers,
     driversQuery,
     driverUpdateMutattion,

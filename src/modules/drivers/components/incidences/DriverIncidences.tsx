@@ -5,8 +5,8 @@ import type { Driver } from '../../models';
 import { IncidenceCreateModal } from './IncidenceCreateModal';
 import { IncidencesTimeline } from './IncidencesTimeline';
 import { IoIosAddCircle } from 'react-icons/io';
-import { useGetDriverIncidence } from '../../hooks/queries';
 import { useState } from 'react';
+import { useGetDriverIncidents } from '@/modules/incidents/hooks/quries';
 
 interface Props {
   driver: Driver;
@@ -17,7 +17,7 @@ export const DriverIncidences = (props: Props) => {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const { driverIncidences } = useGetDriverIncidence(driver.id);
+  const { driverIncidents } = useGetDriverIncidents(driver.id);
 
   return (
     <>
@@ -46,10 +46,10 @@ export const DriverIncidences = (props: Props) => {
           </Button>
         </CardHeader>
         <CardBody>
-          {driverIncidences.isFetching ? (
+          {driverIncidents.isFetching ? (
             <LoadingSpinner />
-          ) : driverIncidences.data && driverIncidences.data.length > 0 ? (
-            <IncidencesTimeline incidences={driverIncidences.data} />
+          ) : driverIncidents.data && driverIncidents.data.length > 0 ? (
+            <IncidencesTimeline incidents={driverIncidents.data} />
           ) : (
             <Alert
               color="primary"

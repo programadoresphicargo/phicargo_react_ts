@@ -8,7 +8,6 @@ import { Button } from '@heroui/react';
 import ExportExcelButton from '@/components/ui/buttons/ExportExcelButton';
 import { HiQueueList } from 'react-icons/hi2';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import { MdOutlineDangerous } from 'react-icons/md';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import type { Shift } from '../models/shift-model';
 import { useReorderShifts } from '../hooks/useReorderShifts';
@@ -93,16 +92,6 @@ const ShiftsPage = () => {
           onPress={() => navigate('/turnos/cola')}
         >
           Operadores En Cola
-        </Button>
-        <Button
-          size="sm"
-          variant="flat"
-          color="danger"
-          className="font-bold"
-          startContent={<MdOutlineDangerous />}
-          onPress={() => navigate('/turnos/incidencias')}
-        >
-          Conteo de Incidencias
         </Button>
         <ExportExcelButton
           size="small"
