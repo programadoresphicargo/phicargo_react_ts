@@ -4,13 +4,13 @@ import toast from 'react-hot-toast';
 import type { Incident } from '../../models';
 import { IncidentsService } from '../../services';
 
-export const driverIncidentsKey = 'driver-incidents';
+export const DRIVER_INCIDENTS_KEY = 'driver-incidents';
 
-export const useIncidentsQueries = () => {
+export const useIncidentsQueries = (driverId?: number) => {
   const queryClient = useQueryClient();
 
   const incidentsQuery = useQuery<Incident[]>({
-    queryKey: [driverIncidentsKey],
+    queryKey: [DRIVER_INCIDENTS_KEY],
     queryFn: IncidentsService.getAllIncidents,
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 10,
@@ -20,9 +20,14 @@ export const useIncidentsQueries = () => {
     mutationFn: IncidentsService.createIncident,
     onSuccess: (item) => {
       queryClient.setQueryData(
-        [driverIncidentsKey],
+        [DRIVER_INCIDENTS_KEY],
         (prev: Incident[]) => (prev ? [item, ...prev] : [item]),
       );
+      if (driverId) {
+        queryClient.invalidateQueries({
+          queryKey: [DRIVER_INCIDENTS_KEY, driverId],
+        });
+      }
       toast.success('Incidencia creada correctamente');
     },
     onError: (error) => {
