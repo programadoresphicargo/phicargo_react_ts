@@ -1,7 +1,7 @@
-import 'rsuite/dist/rsuite-no-reset.min.css';
+// import 'rsuite/dist/rsuite-no-reset.min.css';
 
 import { DateRange } from 'rsuite/esm/DateRangePicker';
-import { DateRangePicker } from 'rsuite';
+// import { DateRangePicker } from 'rsuite';
 import { MaterialReactTable } from 'material-react-table';
 import { Outlet } from 'react-router-dom';
 import { WaybillService } from '../models';
@@ -10,6 +10,7 @@ import { useBaseTable } from '@/hooks';
 import { useGetWaybillServicesQuery } from '../hooks/queries';
 import { useState } from 'react';
 import { useWaybillServicesColumns } from '../hooks/useWaybillServicesColumns';
+import { DateRangePicker } from '@/components/inputs';
 
 const ServicesPage = () => {
   const [dateRange, setDateRange] = useState<DateRange | null>([
