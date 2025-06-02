@@ -27,7 +27,8 @@ export const useIncidentsQueries = ({ driverId, startDate, endDate }: Config) =>
     mutationFn: IncidentsService.createIncident,
     onSuccess: () => {
       queryClient.invalidateQueries<Incident[]>({
-        queryKey: [DRIVER_INCIDENTS_KEY, startDate, endDate]
+        queryKey: [DRIVER_INCIDENTS_KEY],
+        exact: false,
       });
       if (driverId) {
         queryClient.invalidateQueries({

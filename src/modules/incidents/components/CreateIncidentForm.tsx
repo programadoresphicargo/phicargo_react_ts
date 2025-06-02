@@ -64,7 +64,7 @@ export const CreateIncidentForm = ({
 
   const {
     createIncident: { mutate, isPending },
-  } = useIncidentsQueries( driverId );
+  } = useIncidentsQueries( {driverId} );
 
   const { control, handleSubmit, setValue, watch, reset } =
     useForm<IncidentCreate>({

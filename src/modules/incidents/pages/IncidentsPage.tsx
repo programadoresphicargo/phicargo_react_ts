@@ -10,6 +10,8 @@ import InfoIcon from '@mui/icons-material/Info';
 import { AddButton } from '@/components/ui';
 import { IncidentDetailsModal } from '../components/IncidentDetailsModal';
 import { useState } from 'react';
+import { DateRangePicker } from '@/components/inputs';
+import { useIncidentsContext } from '../hooks/useIncidentsContext';
 
 const dialogProps: DialogProps = {
   slots: {
@@ -27,11 +29,14 @@ const dialogProps: DialogProps = {
 };
 
 const IncidentsPage = () => {
+
+  const { dateRange, setDateRange, formatedDateRange } = useIncidentsContext();
+
   const [detail, setDetail] = useState<Incident | null>(null);
 
   const {
     incidentsQuery: { data: incidents, isFetching, isLoading, refetch, error },
-  } = useIncidentsQueries();
+  } = useIncidentsQueries({ startDate: formatedDateRange.startDate, endDate: formatedDateRange.endDate });
 
   const columns = useIncidentsColumns();
 
@@ -62,11 +67,23 @@ const IncidentsPage = () => {
       </Box>
     ),
     toolbarActions: (
-      <AddButton
-        label="Añadir Servicio"
-        size="small"
-        onClick={() => table.setCreatingRow(true)}
-      />
+      <div className="flex items-center gap-4">
+        <AddButton
+          label="Añadir Servicio"
+          size="small"
+          onClick={() => table.setCreatingRow(true)}
+        />
+        <DateRangePicker
+          showOneCalendar
+          placeholder="Rango"
+          showWeekNumbers
+          isoWeek
+          ranges={[]}
+          value={dateRange}
+          onChange={setDateRange}
+          cleanable={false}
+        />
+      </div>
     ),
     muiCreateRowModalProps: dialogProps,
     renderCreateRowDialogContent: ({ table }) => (
@@ -89,4 +106,3 @@ const IncidentsPage = () => {
 };
 
 export default IncidentsPage;
-
