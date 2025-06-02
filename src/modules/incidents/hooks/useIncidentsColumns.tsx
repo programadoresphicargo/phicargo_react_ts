@@ -2,7 +2,8 @@ import { useMemo } from 'react';
 import { type MRT_ColumnDef } from 'material-react-table';
 import { Incident } from '../models';
 import { BasicTextCell } from '@/components/ui';
-import { Tooltip } from '@mui/material';
+import { Chip, Tooltip } from '@mui/material';
+import { incidentType } from '../utilities';
 
 export const useIncidentsColumns = () => {
   const columns = useMemo<MRT_ColumnDef<Incident>[]>(
@@ -29,9 +30,16 @@ export const useIncidentsColumns = () => {
         accessorFn: (row) => row.type,
         header: 'Tipo',
         maxSize: 50,
-        Cell: ({ cell }) => {
-          const value = cell.getValue<string>();
-          return <BasicTextCell value={value} />;
+        Cell: ({ row }) => {
+          const value = row.original.type;
+          return (
+            <Chip
+              label={incidentType.getLabel(value)}
+              color={incidentType.getColor(value)}
+              size="small"
+              variant="outlined"
+            />
+          );
         },
       },
       {
@@ -71,10 +79,10 @@ export const useIncidentsColumns = () => {
         header: 'Evidencias',
         id: 'evidences',
         Cell: ({ row }) => {
-          const value = row.original.evidences.length;;
-          return <BasicTextCell value={value} fallback='Sin evidencias' />;
+          const value = row.original.evidences.length;
+          return <BasicTextCell value={value} fallback="Sin evidencias" />;
         },
-      }
+      },
     ],
     [],
   );
