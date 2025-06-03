@@ -14,9 +14,13 @@ interface Props extends DialogProps {
   children: ReactNode;
   header: ReactNode;
   customFooter?: ReactNode;
+  showFooter?: boolean;
 }
 
 export const MuiModal = (props: Props) => {
+
+  const { showFooter = true } = props;
+
   return (
     <Dialog
       slots={{
@@ -57,21 +61,21 @@ export const MuiModal = (props: Props) => {
         />
       </DialogTitle>
       <DialogContent sx={{ padding: '0' }}>{props.children}</DialogContent>
-      <DialogActions
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          backgroundColor: '#f3f4f6',
-          textAlign: 'center',
-          padding: '10px',
-          borderTop: '1px solid',
-          borderColor: '#e5e7eb',
-          borderBottomLeftRadius: '12px',
-          borderBottomRightRadius: '12px',
-        }}
-      >
-        {props.customFooter}
-      </DialogActions>
+      {showFooter && (
+        <DialogActions
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            backgroundColor: '#f3f4f6',
+            textAlign: 'center',
+            padding: '10px',
+            borderTop: '1px solid',
+            borderColor: '#e5e7eb',
+          }}
+        >
+          {props.customFooter}
+        </DialogActions>
+      )}
     </Dialog>
   );
 };

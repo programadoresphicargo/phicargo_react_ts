@@ -9,8 +9,6 @@ const ShiftsPage = lazy(() => import('../pages/ShiftsPage'));
 const ShiftDetail = lazy(() => import('../outlets/ShiftDetail'));
 const CreateShift = lazy(() => import('../outlets/CreateShift'));
 const ShiftQueues = lazy(() => import('../outlets/ShiftQueues'));
-const CreateIncidence = lazy(() => import('../outlets/CreateIncidence'));
-const IncidencesList = lazy(() => import('../outlets/IncidencesList'));
 const TravelsNearToBranch = lazy(
   () => import('../outlets/TravelsNearToBranch'),
 );
@@ -58,22 +56,6 @@ const ShiftsRoutes = () => (
         element={
           <Suspense fallback={<LoadingPage />}>
             <ShiftQueues />
-          </Suspense>
-        }
-      />
-      <Route
-        path="incidencias"
-        element={
-          <Suspense fallback={<LoadingPage />}>
-            <IncidencesList />
-          </Suspense>
-        }
-      />
-      <Route
-        path="incidencias/crear/:id"
-        element={
-          <Suspense fallback={<LoadingPage />}>
-            <CreateIncidence />
           </Suspense>
         }
       />

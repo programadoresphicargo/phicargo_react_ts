@@ -24,7 +24,7 @@ const Header = () => {
   );
 
   return (
-    <HeaderBase backRoute="/reportes">
+    <HeaderBase backRoute="/menu">
       <div className="mx-8">
         <h1 className="m-0 p-0 text-xl text-gray-100 font-bold">
           No Conformidades

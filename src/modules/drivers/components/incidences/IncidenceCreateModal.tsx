@@ -1,7 +1,6 @@
-import { IncidenceForm } from './IncidenceForm';
-import { SaveButton } from '@/components/ui';
-import { SimpleModal } from '@/components';
-import { useState } from 'react';
+import { MuiCloseButton } from '@/components/ui';
+import { MuiSimpleModal } from '@/components';
+import { CreateIncidentForm } from '@/modules/incidents/components/CreateIncidentForm';
 
 interface Props {
   driverId: number;
@@ -12,30 +11,30 @@ interface Props {
 export const IncidenceCreateModal = (props: Props) => {
   const { driverId, isOpen, onOpenChange } = props;
 
-  const [submitForm, setSubmitForm] = useState<(() => void) | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-
   return (
-    <SimpleModal
-      isOpen={isOpen}
-      onOpenChange={onOpenChange}
-      header={<h2 className="w-full">Agregar Incidencia</h2>}
-      customFooter={
-        <SaveButton
-          onPress={() => submitForm && submitForm()}
-          fullWidth
-          variant="flat"
-          className="font-bold uppercase"
-          isLoading={isLoading}
-        />
+    <MuiSimpleModal
+      open={isOpen}
+      onClose={onOpenChange}
+      maxWidth="md"
+      header={
+        <div className="flex items-center justify-between">
+          <h2 className="w-full">Agregar Incidencia</h2>
+          <div className="flex items-center gap-2">
+            <MuiCloseButton onClick={onOpenChange} />
+          </div>
+        </div>
       }
     >
-      <IncidenceForm
+      {/* <IncidenceForm
         driverId={driverId}
         setSubmit={setSubmitForm}
         setIsLoading={setIsLoading}
         onSuccessfulSubmit={onOpenChange}
-      />
-    </SimpleModal>
+      /> */}
+      <div className="px-8 pb-4">
+        <CreateIncidentForm onCancel={onOpenChange} onSuccess={onOpenChange} driverId={driverId} />
+      </div>
+    </MuiSimpleModal>
   );
 };
+

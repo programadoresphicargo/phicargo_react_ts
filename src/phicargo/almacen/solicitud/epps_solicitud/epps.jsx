@@ -170,7 +170,6 @@ const EPPSolicitados = ({ }) => {
           className='text-white'
           startContent={<i class="bi bi-plus-lg"></i>}
           color='primary'
-          isDisabled={false}
           onPress={() => handleClickOpen()}
           size='sm'
           isDisabled={!modoEdicion}

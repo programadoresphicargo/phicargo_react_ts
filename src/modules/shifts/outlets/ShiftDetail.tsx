@@ -12,7 +12,6 @@ import { ArchiveDialog } from '../components/ArchiveDialog';
 import { DriverManeuver } from "../../drivers/components/maneuvers/DriverManeuvers";
 import { EditShiftForm } from '../components/EditShiftForm';
 import { FaEdit } from 'react-icons/fa';
-import { FiAlertCircle } from 'react-icons/fi';
 import { HiQueueList } from 'react-icons/hi2';
 import { MdOutlineArchive } from 'react-icons/md';
 import { MdOutlineLock } from 'react-icons/md';
@@ -102,7 +101,7 @@ const ShiftDetail = () => {
                   >
                     Archivar
                   </Button>
-                  <Button
+                  {/* <Button
                     size="sm"
                     variant="flat"
                     color="danger"
@@ -110,7 +109,7 @@ const ShiftDetail = () => {
                     onPress={() => navigate(`/turnos/incidencias/crear/${id}`)}
                   >
                     Registrar Incidencia
-                  </Button>
+                  </Button> */}
                   <Button
                     size="sm"
                     variant="solid"

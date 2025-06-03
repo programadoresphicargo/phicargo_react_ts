@@ -5,7 +5,7 @@ import { DriverForm } from './DriverForm';
 import { DriverIncidences } from './incidences/DriverIncidences';
 import { DriverManeuver } from './maneuvers/DriverManeuvers';
 import DriverPermissions from './unavailabilities/DriverPermissions';
-import { Modal } from '@/components';
+import { MuiModal } from '@/components';
 import { TrailerAssignment } from './TrailerAssignment';
 
 interface Props {
@@ -16,16 +16,17 @@ interface Props {
 
 export const DriverInformationModal = ({ open, onClose, driver }: Props) => {
   return (
-    <Modal
-      isOpen={open}
-      onOpenChange={onClose}
+    <MuiModal
+      open={open}
+      onClose={onClose}
       showFooter={false}
+      maxWidth="md"
+      fullWidth={true}
       header={
         <h2 className="uppercase font-thin">
           operador: <span className="font-bold">{driver.name}</span>
         </h2>
       }
-      size="3xl"
     >
       <Tabs
         aria-label="driver-sections"
@@ -53,7 +54,7 @@ export const DriverInformationModal = ({ open, onClose, driver }: Props) => {
           <DriverManeuver driverId={driver!.id} />
         </Tab>
       </Tabs>
-    </Modal>
+    </MuiModal>
   );
 };
 
