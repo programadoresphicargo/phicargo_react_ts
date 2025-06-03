@@ -124,10 +124,6 @@ export const useJourneyDialogs = () => {
             data.append('id_usuario', session.user.id);
             data.append('comentarios', comentarios);
 
-            if (nueva_fecha) {
-                data.append('nueva_fecha', nueva_fecha);
-            }
-
             archivos.forEach((fileWrapper) => {
                 if (fileWrapper.originFileObj instanceof File) {
                     data.append('files', fileWrapper.originFileObj);
