@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  font-family: 'Inter', sans-serif;
+}
+
 .custom-range-picker-popup {
   z-index: 2000 !important;
   /* o más alto según tu modal */

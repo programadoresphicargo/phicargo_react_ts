@@ -110,6 +110,42 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
         }
     };
 
+    const confirmar = async (estado) => {
+        setSaving(true);
+        try {
+            const response = await odooApi.get('/tms_travel/solicitudes_epp/confirmar/' + id_solicitud);
+            if (response.data.status == 'success') {
+                toast.success(response.data.message);
+                fetchData();
+                handleClose();
+            } else {
+                toast.error(response.data.message);
+            }
+        } catch (error) {
+            toast.error('Error al guardar:', error);
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    const entregar = async (estado) => {
+        setSaving(true);
+        try {
+            const response = await odooApi.get('/tms_travel/solicitudes_epp/entregar/' + id_solicitud);
+            if (response.data.status == 'success') {
+                toast.success(response.data.message);
+                fetchData();
+                handleClose();
+            } else {
+                toast.error(response.data.message);
+            }
+        } catch (error) {
+            toast.error('Error al guardar:', error);
+        } finally {
+            setSaving(false);
+        }
+    };
+
     useEffect(() => {
         if (open && id_solicitud !== null) {
             fetchData();
@@ -139,7 +175,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
                         <CloseIcon />
                     </IconButton>
                     <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-                        {id_solicitud ? `Editar solicitud (ID: ${id_solicitud})` : 'Nueva solicitud :)'}
+                        {id_solicitud ? `Solicitud (ID: ${id_solicitud})` : 'Nueva solicitud :)'}
                     </Typography>
                     <Button autoFocus color="inherit" onClick={handleClose}>
                         Cerrar
@@ -151,80 +187,45 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
                 <Progress isIndeterminate size="sm" />
             ) : (
                 <DialogContent>
-                    <DialogContentText>
 
-                        <Stack spacing={1} direction="row" className="mb-5">
-                            {!id_solicitud && (
-                                <Button
-                                    size="sm"
-                                    onPress={handleSave}
-                                    color={'primary'}
-                                    isDisabled={isSaving}
-                                >
-                                    {isSaving ? 'Guardando...' : 'Registrar'}
-                                </Button>
-                            )}
-                            {!modoEdicion && (
-                                <Button
-                                    size="sm"
-                                    color="primary"
-                                    onPress={handleEdit}
-                                >
-                                    Editar
-                                </Button>
-                            )}
-                            {modoEdicion && (
-                                <Button
-                                    size="sm"
-                                    onPress={handleSave}
-                                    color={id_solicitud ? 'success' : 'primary'}
-                                    isDisabled={isSaving}
-                                    className={id_solicitud ? 'text-white' : ''}
-                                >
-                                    {isSaving ? 'Guardando...' : id_solicitud ? 'Actualizar' : 'Registrar'}
-                                </Button>
-                            )}
-                            <Button color='success' className='text-white' onPress={() => cambiarEstado('pendiente')} size="sm">Asignar</Button>
-                            <Button color='warning' className="text-white" onPress={() => cambiarEstado('entregado')} size="sm">Devuelto</Button>
-                            <Button color='danger' size="sm">Responsiva</Button>
-                            <Button color='danger' size="sm">Cancelar</Button>
-                        </Stack>
+                    <Stack spacing={1} direction="row" className="mb-5">
+                        {data?.x_studio_estado == "borrador" && (
+                            <Button color='success' className='text-white' onPress={() => confirmar()}>Confirmar</Button>
+                        )}
+                        {data?.x_studio_estado == "confirmado" && (
+                            <Button color='success' className='text-white' onPress={() => entregar()}>Entregar</Button>
+                        )}
+                        {data?.x_studio_estado == "entregado" && (
+                            <Button color='success' className='text-white' onPress={() => devolver()}>Devolver a stock</Button>
+                        )}
+                    </Stack>
 
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div className="md:col-span-2 grid grid-cols-1 gap-4">
-                                <Card>
-                                    <CardBody>
-                                        <ViajeEPP id_viaje={data?.id_viaje}></ViajeEPP>
-                                    </CardBody>
-                                </Card>
-
-                                <Card>
-                                    <CardBody>
-                                        <Textarea label="Comentarios"
-                                            variant="faded"
-                                            value={data?.observaciones}
-                                            onValueChange={handleChange}
-                                            isDisabled={!modoEdicion}>
-                                        </Textarea>
-                                    </CardBody>
-                                </Card>
-
-                                <Card>
-                                    <CardBody>
-                                        <EPPSolicitados></EPPSolicitados>
-                                    </CardBody>
-                                </Card>
-                            </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="md:col-span-2 grid grid-cols-1 gap-4">
 
                             <Card>
                                 <CardBody>
-                                    <HistorialCambios cambios={data?.mails || []} />
+                                    <h2>Creado por: {data?.usuario}</h2>
+                                    <h2>Fecha de solicitud: {data?.create_date}</h2>
+                                    <h2>Operador asignado: {data?.operador}</h2>
                                 </CardBody>
                             </Card>
 
+                            <Card>
+                                <CardBody>
+                                    <EPPSolicitados></EPPSolicitados>
+                                </CardBody>
+                            </Card>
                         </div>
 
-                    </DialogContentText>
+                        <Card>
+                            <CardBody>
+                                <HistorialCambios cambios={data?.mails || []} />
+                            </CardBody>
+                        </Card>
+
+                    </div>
+
                 </DialogContent>
             )}
 

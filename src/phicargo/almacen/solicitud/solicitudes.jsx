@@ -61,54 +61,28 @@ const SolicitudesEPP = ({ }) => {
   const columns = useMemo(
     () => [
       {
-        accessorKey: 'id_solicitud',
-        header: 'Solicitud',
+        accessorKey: 'id',
+        header: 'ID',
       },
       {
-        accessorKey: 'referencia_viaje',
-        header: 'Viaje',
+        accessorKey: 'carta_porte',
+        header: 'Carta porte',
       },
       {
         accessorKey: 'operador',
         header: 'Operador',
       },
       {
-        accessorKey: 'nombre_usuario',
+        accessorKey: 'usuario',
         header: 'Solicitador por',
       },
       {
-        accessorKey: 'fecha_solicitud',
+        accessorKey: 'create_date',
         header: 'Fecha de solicitud',
       },
       {
-        accessorKey: 'estado',
+        accessorKey: 'x_studio_estado',
         header: 'Estado',
-        Cell: ({ cell }) => {
-          const estado = cell.getValue();
-          let badgeClass = 'default';
-
-          if (estado === 'pendiente') {
-            badgeClass = 'danger';
-          } else if (estado === 'entregado') {
-            badgeClass = 'success';
-          } else if (estado === 'retorno') {
-            badgeClass = 'warning';
-          }
-
-          return (
-            <Chip
-              size="sm"
-              color={badgeClass}
-              className="text-white"
-            >
-              {estado}
-            </Chip>
-          );
-        },
-      },
-      {
-        accessorKey: 'observaciones',
-        header: 'Observaciones',
       },
     ],
     [],
@@ -162,7 +136,7 @@ const SolicitudesEPP = ({ }) => {
     },
     muiTableBodyRowProps: ({ row }) => ({
       onClick: ({ event }) => {
-        setIDSolicitud(row.original.id_solicitud);
+        setIDSolicitud(row.original.id);
         handleClickOpen();
       },
     }),

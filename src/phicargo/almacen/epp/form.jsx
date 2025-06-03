@@ -66,7 +66,7 @@ const EPPForm = ({ id_epp, open, handleClose, onSaveSuccess }) => {
                     <DialogContentText>
                         <Input
                             label="Nombre"
-                            value={data.nombre}
+                            value={data.x_name}
                             onChange={(e) => setData({ ...data, nombre: e.target.value })}
                         />
                     </DialogContentText>

@@ -68,20 +68,20 @@ const EPP = ({ }) => {
   const columns = useMemo(
     () => [
       {
-        accessorKey: 'id_epp',
+        accessorKey: 'id',
         header: 'ID',
       },
       {
-        accessorKey: 'nombre',
+        accessorKey: 'x_name',
         header: 'Nombre',
       },
       {
-        accessorKey: 'fecha_creacion',
+        accessorKey: 'create_date',
         header: 'Fecha creación',
       },
       {
-        accessorKey: 'nombre_usuario',
-        header: 'Usuario',
+        accessorKey: 'x_cantidad_actual',
+        header: 'Cantidad actual',
       },
       {
         id: 'acciones',
@@ -92,7 +92,7 @@ const EPP = ({ }) => {
             color='primary'
             onPress={() => {
               handleClickOpen();
-              setIDEpp(row.original.id_epp);
+              setIDEpp(row.original.id);
             }}>
             Editar
           </Button>

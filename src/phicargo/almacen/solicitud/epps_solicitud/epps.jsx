@@ -68,17 +68,12 @@ const EPPSolicitados = ({ }) => {
   const columns = useMemo(
     () => [
       {
-        accessorKey: 'id_epp',
-        header: 'ID',
-        enableEditing: false,
-      },
-      {
-        accessorKey: 'nombre',
+        accessorKey: 'x_name',
         header: 'Nombre',
         enableEditing: false,
       },
       {
-        accessorKey: 'cantidad',
+        accessorKey: 'x_cantidad_solicitada',
         header: 'Cantidad',
       },
     ],

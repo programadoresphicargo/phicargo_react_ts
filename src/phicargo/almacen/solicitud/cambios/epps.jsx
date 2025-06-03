@@ -2,7 +2,7 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import { Popover, PopoverContent, PopoverTrigger, User, useDisclosure } from "@heroui/react";
+import { Divider, Popover, PopoverContent, PopoverTrigger, User, useDisclosure } from "@heroui/react";
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import { Avatar } from "@heroui/react";
@@ -32,10 +32,14 @@ const HistorialCambios = ({ cambios }) => {
       <div>
         <h2>Historial de cambios</h2>
         {cambios.map((cambio, index) => (
-          <p key={index}>
-            [{new Date(cambio.create_date).toLocaleString()}]
-            {` ${cambio.usuario} cambió ${cambio.field_desc} de "${cambio.old_value_char}" a "${cambio.new_value_char}"`}
-          </p>
+          <>
+            <Divider className='mt-5'></Divider>
+
+            <p key={index}>
+              [{new Date(cambio.create_date).toLocaleString()}]
+              {` ${cambio.body} ${cambio.usuario} cambió ${cambio.field_desc} de "${cambio.old_value_char}" a "${cambio.new_value_char}"`}
+            </p>
+          </>
         ))}
       </div>
     </>
