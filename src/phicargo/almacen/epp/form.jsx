@@ -50,7 +50,7 @@ const EPPForm = ({ id_epp, open, handleClose, onSaveSuccess }) => {
         if (open && id_epp !== null) {
             fetchData();
         } else if (open && id_epp === null) {
-            setData({ nombre: '' });
+            setData({ x_name: '' });
         }
     }, [open, id_epp]);
 
