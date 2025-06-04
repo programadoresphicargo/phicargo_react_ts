@@ -158,7 +158,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
                 toast.error(response.data.message);
             }
         } catch (error) {
-            toast.error('Error al guardar:', error);
+            toast.error('Error al guardar:' + error);
         } finally {
             setSaving(false);
         }
