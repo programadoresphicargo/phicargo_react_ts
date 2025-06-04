@@ -1,5 +1,5 @@
 import {
-    Input, Progress, Button
+    Input, Progress, Button, NumberInput
 } from "@heroui/react";
 import React, { useEffect, useState } from 'react';
 import Dialog from '@mui/material/Dialog';
@@ -11,7 +11,7 @@ import odooApi from '@/api/odoo-api';
 import toast from 'react-hot-toast';
 
 const EPPForm = ({ id_epp, open, handleClose, onSaveSuccess }) => {
-    const [data, setData] = useState({ nombre: '' });
+    const [data, setData] = useState({ x_name: '', x_cantidad_actual: 0 });
     const [isLoading, setLoading] = useState(false);
     const [isSaving, setSaving] = useState(false);
 
@@ -50,26 +50,32 @@ const EPPForm = ({ id_epp, open, handleClose, onSaveSuccess }) => {
         if (open && id_epp !== null) {
             fetchData();
         } else if (open && id_epp === null) {
-            // Limpia el formulario si es nuevo
             setData({ nombre: '' });
         }
     }, [open, id_epp]);
 
     return (
-        <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
+        <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
             <DialogTitle>{id_epp ? `Editar EPP (ID: ${id_epp})` : 'Nuevo EPP'}</DialogTitle>
 
             {isLoading ? (
                 <Progress isIndeterminate size="sm" />
             ) : (
                 <DialogContent>
-                    <DialogContentText>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                         <Input
                             label="Nombre"
+                            variant="bordered"
                             value={data.x_name}
-                            onChange={(e) => setData({ ...data, nombre: e.target.value })}
+                            onChange={(e) => setData({ ...data, x_name: e.target.value })}
                         />
-                    </DialogContentText>
+                        <NumberInput
+                            label="Cantidad actual"
+                            variant="bordered"
+                            value={data.x_cantidad_actual}
+                            onChange={(e) => setData({ ...data, x_cantidad_actual: e.target.value })}
+                        />
+                    </div>
                 </DialogContent>
             )}
 
