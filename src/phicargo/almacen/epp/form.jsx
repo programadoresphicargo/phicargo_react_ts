@@ -40,7 +40,7 @@ const EPPForm = ({ id_epp, open, handleClose, onSaveSuccess }) => {
             }
             handleClose();
         } catch (error) {
-            toast.error('Error al guardar:', error);
+            toast.error('Error al guardar:' + error);
         } finally {
             setSaving(false);
         }
