@@ -68,13 +68,23 @@ const EPPSolicitados = ({ }) => {
   const columns = useMemo(
     () => [
       {
-        accessorKey: 'x_name',
+        accessorKey: 'id',
+        header: 'ID',
+        enableEditing: false,
+      },
+      {
+        accessorKey: 'nombre',
         header: 'Nombre',
         enableEditing: false,
       },
       {
         accessorKey: 'x_cantidad_solicitada',
-        header: 'Cantidad',
+        header: 'Cantidad solicitada',
+        enableEditing: false,
+      },
+      {
+        accessorKey: 'x_cantidad_devuelta',
+        header: 'Cantidad devuelta',
       },
     ],
     [],
@@ -219,7 +229,6 @@ const EPPSolicitados = ({ }) => {
           size="sm"
           className='text-white'
           onPress={() => table.setEditingRow(row)}
-          isDisabled={!modoEdicion}
         >
           Editar
         </Button>
@@ -227,7 +236,6 @@ const EPPSolicitados = ({ }) => {
           color="danger"
           size="sm"
           onPress={() => deleteRow(row.original.id)}
-          isDisabled={!modoEdicion}
         >
           Eliminar
         </Button>

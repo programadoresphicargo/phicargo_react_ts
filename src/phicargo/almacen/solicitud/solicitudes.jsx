@@ -83,6 +83,30 @@ const SolicitudesEPP = ({ }) => {
       {
         accessorKey: 'x_studio_estado',
         header: 'Estado',
+        Cell: ({ cell }) => {
+          const estatus_viaje = cell.getValue();
+          let badgeClass = '';
+
+          if (estatus_viaje === 'entregado') {
+            badgeClass = 'primary';
+          } else if (estatus_viaje === 'confirmado') {
+            badgeClass = 'success';
+          } else if (estatus_viaje === 'borrador') {
+            badgeClass = 'warning';
+          } else if (estatus_viaje === 'devuelto') {
+            badgeClass = 'success';
+          }
+
+          return (
+            <Chip
+              size="sm"
+              color={badgeClass}
+              className="text-white"
+            >
+              {estatus_viaje}
+            </Chip>
+          );
+        },
       },
     ],
     [],

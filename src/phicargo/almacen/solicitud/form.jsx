@@ -110,7 +110,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
         }
     };
 
-    const confirmar = async (estado) => {
+    const confirmar = async () => {
         setSaving(true);
         try {
             const response = await odooApi.get('/tms_travel/solicitudes_epp/confirmar/' + id_solicitud);
@@ -128,10 +128,28 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
         }
     };
 
-    const entregar = async (estado) => {
+    const entregar = async () => {
         setSaving(true);
         try {
             const response = await odooApi.get('/tms_travel/solicitudes_epp/entregar/' + id_solicitud);
+            if (response.data.status == 'success') {
+                toast.success(response.data.message);
+                fetchData();
+                handleClose();
+            } else {
+                toast.error(response.data.message);
+            }
+        } catch (error) {
+            toast.error('Error al guardar:', error);
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    const devolver = async () => {
+        setSaving(true);
+        try {
+            const response = await odooApi.patch('/tms_travel/solicitudes_epp/devolver/' + id_solicitud, epp);
             if (response.data.status == 'success') {
                 toast.success(response.data.message);
                 fetchData();
@@ -205,9 +223,9 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
 
                             <Card>
                                 <CardBody>
-                                    <h2>Creado por: {data?.usuario}</h2>
-                                    <h2>Fecha de solicitud: {data?.create_date}</h2>
-                                    <h2>Operador asignado: {data?.operador}</h2>
+                                    <h2><strong>Creado por:</strong> {data?.usuario}</h2>
+                                    <h2><strong>Fecha de solicitud:</strong> {data?.create_date}</h2>
+                                    <h2><strong>Operador asignado:</strong> {data?.operador}</h2>
                                 </CardBody>
                             </Card>
 
