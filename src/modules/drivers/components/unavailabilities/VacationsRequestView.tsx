@@ -1,17 +1,12 @@
 import type { Driver, DriverUnavailable } from '@/modules/drivers/models';
-import {
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalHeader,
-  Spinner,
-} from '@heroui/react';
+import { Spinner } from '@heroui/react';
 
 import { DriverUnavailabilityServiceApi } from '../../services';
 import { PDFViewer } from '@react-pdf/renderer';
 import { VacationsRequest } from '@/modules/drivers-and-vehicles/pdf/documents/VacationsRequest';
 import { useEffect } from 'react';
 import { useFetch } from '@/hooks';
+import { MuiModal } from '@/components';
 
 interface Props {
   open: boolean;
@@ -40,33 +35,27 @@ const VacationsRequestView = ({
   }, [unavailability]);
 
   return (
-    <Modal size={'full'} isOpen={open} onClose={onClose}>
-      <ModalContent>
-        {() => (
-          <>
-            <ModalHeader className="flex flex-col gap-1 pb-0">
-              <h2 className="text-lg font-bold">Solicitud de Vacaciones</h2>
-            </ModalHeader>
-            <ModalBody>
-              {!vacationSummary && (
-                <div className="flex justify-center items-center h-96">
-                  <Spinner />
-                </div>
-              )}
-              {vacationSummary && (
-                <PDFViewer style={{ width: '100%', height: '100%' }}>
-                  <VacationsRequest
-                    driver={driver}
-                    unavailability={unavailability}
-                    vacationSummary={vacationSummary}
-                  />
-                </PDFViewer>
-              )}
-            </ModalBody>
-          </>
-        )}
-      </ModalContent>
-    </Modal>
+    <MuiModal
+      open={open}
+      onClose={onClose}
+      fullScreen
+      header={<h2 className="text-lg font-bold">Solicitud de Vacaciones</h2>}
+    >
+      {!vacationSummary && (
+        <div className="flex justify-center items-center h-96">
+          <Spinner />
+        </div>
+      )}
+      {vacationSummary && (
+        <PDFViewer style={{ width: '100%', height: '100%' }}>
+          <VacationsRequest
+            driver={driver}
+            unavailability={unavailability}
+            vacationSummary={vacationSummary}
+          />
+        </PDFViewer>
+      )}
+    </MuiModal>
   );
 };
 
