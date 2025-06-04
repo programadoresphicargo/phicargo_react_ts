@@ -32,7 +32,7 @@ const EPPForm = ({ id_epp, open, handleClose, onSaveSuccess }) => {
         setSaving(true);
         try {
             if (id_epp === null) {
-                const response = await odooApi.post('/tms_travel/epp', data);
+                const response = await odooApi.post('/tms_travel/epp/', data);
                 if (onSaveSuccess) onSaveSuccess(response.data);
             } else {
                 const response = await odooApi.put(`/tms_travel/epp/${id_epp}`, data);
