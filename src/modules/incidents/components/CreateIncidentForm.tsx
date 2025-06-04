@@ -74,6 +74,8 @@ export const CreateIncidentForm = ({
 
   const incidenceOptions = getIncidentOptions(selectedType);
 
+  const damageCostDisabled = selectedType !== 'legal' && selectedType !== 'maintenance';
+
   const onSubmit: SubmitHandler<IncidentCreate> = (data) => {
     if (isPending) return;
 
@@ -245,7 +247,7 @@ export const CreateIncidentForm = ({
               label="Coste de Daños"
               type="number"
               size="small"
-              disabled={selectedType !== 'legal'}
+              disabled={damageCostDisabled}
               rules={{
                 validate: (value) =>
                   value === null || value >= 0 || 'El coste debe ser positivo',
@@ -277,7 +279,6 @@ export const CreateIncidentForm = ({
                   setValue('vehicleId', value?.id || 0);
                 },
                 size: 'small',
-                disabled: selectedType !== 'legal',
               }}
               textFieldProps={{
                 helperText: 'Seleccionar unidad afectada, si aplica',
