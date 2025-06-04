@@ -5,7 +5,7 @@ import { Dayjs } from 'dayjs';
 import type { DriverUnavailabilityCreate } from '../../models';
 import { SaveButton } from '@/components/ui';
 import type { SelectItem } from '@/types';
-import { SimpleModal } from '@/components';
+import { MuiSimpleModal } from '@/components';
 import { useUnavailabilityQueries } from '../../hooks/queries';
 
 interface Props {
@@ -49,9 +49,9 @@ const UnavailiabilityCreateModal = (props: Props) => {
   };
 
   return (
-    <SimpleModal
-      isOpen={isOpen}
-      onOpenChange={onOpenChange}
+    <MuiSimpleModal
+      open={isOpen}
+      onClose={onOpenChange}
       header={<h2 className="w-full">Crear Permiso / Castigo</h2>}
       customFooter={
         <SaveButton
@@ -63,7 +63,7 @@ const UnavailiabilityCreateModal = (props: Props) => {
         />
       }
     >
-      <form className="flex flex-col gap-4">
+      <form className="flex flex-col gap-4 p-4">
         <SelectInput
           control={control}
           name="reasonType"
@@ -85,8 +85,9 @@ const UnavailiabilityCreateModal = (props: Props) => {
           rules={{ required: 'Este campo es requerido' }}
         />
       </form>
-    </SimpleModal>
+    </MuiSimpleModal>
   );
 };
 
 export default UnavailiabilityCreateModal;
+
