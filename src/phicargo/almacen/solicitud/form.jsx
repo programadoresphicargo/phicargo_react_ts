@@ -158,7 +158,12 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
                 toast.error(response.data.message);
             }
         } catch (error) {
-            toast.error('Error al guardar:' + error);
+            if (error.response) {
+                console.error("Error del servidor:", error.response.data.detail);
+                alert(error.response.data.detail); // o usar setErrorState
+            } else {
+                console.error("Error de red:", error.message);
+            }
         } finally {
             setSaving(false);
         }
