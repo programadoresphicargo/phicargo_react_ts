@@ -29,6 +29,7 @@ const EPPSolicitados = ({ }) => {
 
   const
     { modoEdicion, setModoEdicion,
+      data, setData,
       epp, setEPP,
       eppAdded, setEPPAdded,
       eppRemoved, setEPPRemoved,
@@ -44,26 +45,7 @@ const EPPSolicitados = ({ }) => {
 
   const handleClose = () => {
     setOpen(false);
-    fetchData();
   };
-
-  const [data, setData] = useState([]);
-  const [isLoading, setLoading] = useState(false);
-
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      const response = await odooApi.get('/tms_travel/solicitudes_epp/');
-      setData(response.data);
-      setLoading(false);
-    } catch (error) {
-      console.error('Error al obtener los datos:', error);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   const columns = useMemo(
     () => [
@@ -110,7 +92,6 @@ const EPPSolicitados = ({ }) => {
     enableFilters: true,
     enableEditing: true,
     positionActionsColumn: 'last',
-    state: { showProgressBars: isLoading },
     enableColumnPinning: true,
     enableStickyHeader: true,
     positionGlobalFilter: "right",
@@ -124,7 +105,7 @@ const EPPSolicitados = ({ }) => {
     initialState: {
       showGlobalFilter: true,
       columnVisibility: {
-        empresa: false,
+        x_cantidad_devuelta: data?.x_studio_estado == "entregado" ? true : false,
       },
       hiddenColumns: ["empresa"],
       density: 'compact',
@@ -228,16 +209,10 @@ const EPPSolicitados = ({ }) => {
           color="primary"
           size="sm"
           className='text-white'
+          isDisabled={data?.x_studio_estado == "entregado" ? false : true}
           onPress={() => table.setEditingRow(row)}
         >
           Editar
-        </Button>
-        <Button
-          color="danger"
-          size="sm"
-          onPress={() => deleteRow(row.original.id)}
-        >
-          Eliminar
         </Button>
       </Box>
     ),
