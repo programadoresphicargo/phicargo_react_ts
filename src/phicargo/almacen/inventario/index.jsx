@@ -1,6 +1,6 @@
 import React from 'react';
 import NavbarAlmacen from '../Navbar';
-import EPP from './epp';
+import EPP from './tabla';
 import { AlmacenProvider } from '../contexto/contexto';
 
 const Almacen = () => {

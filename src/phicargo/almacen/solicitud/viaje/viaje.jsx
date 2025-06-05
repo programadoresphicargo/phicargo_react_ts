@@ -17,7 +17,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
-import EPP from '../../epp/epp';
+import EPP from '../../inventario/tabla';
 import { useAlmacen } from '../../contexto/contexto';
 import { Autocomplete, AutocompleteItem } from "@heroui/react";
 import { useAsyncList } from "@react-stately/data";

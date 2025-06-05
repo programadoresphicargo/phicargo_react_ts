@@ -84,6 +84,10 @@ const EPP = ({ }) => {
         header: 'Cantidad actual',
       },
       {
+        accessorKey: 'x_tipo',
+        header: 'Tipo',
+      },
+      {
         id: 'acciones',
         header: 'Acciones',
         Cell: ({ row }) => (
@@ -174,7 +178,7 @@ const EPP = ({ }) => {
         <h1
           className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
         >
-          Equipos de protección personal
+          Inventario
         </h1>
 
         <Button

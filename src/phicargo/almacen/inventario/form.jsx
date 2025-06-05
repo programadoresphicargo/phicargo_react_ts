@@ -9,6 +9,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import odooApi from '@/api/odoo-api';
 import toast from 'react-hot-toast';
+import { Select, SelectItem } from "@heroui/react";
 
 const EPPForm = ({ id_epp, open, handleClose, onSaveSuccess }) => {
     const [data, setData] = useState({ x_name: '', x_cantidad_actual: 0 });
@@ -56,7 +57,7 @@ const EPPForm = ({ id_epp, open, handleClose, onSaveSuccess }) => {
 
     return (
         <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-            <DialogTitle>{id_epp ? `Editar EPP (ID: ${id_epp})` : 'Nuevo EPP'}</DialogTitle>
+            <DialogTitle>{id_epp ? `Editar (ID: ${id_epp})` : 'Nuevo'}</DialogTitle>
 
             {isLoading ? (
                 <Progress isIndeterminate size="sm" />
@@ -69,15 +70,27 @@ const EPPForm = ({ id_epp, open, handleClose, onSaveSuccess }) => {
                             value={data.x_name}
                             onChange={(e) => setData({ ...data, x_name: e.target.value })}
                         />
+                        
                         <NumberInput
                             label="Cantidad actual"
                             variant="bordered"
                             value={data.x_cantidad_actual}
                             onChange={(e) => setData({ ...data, x_cantidad_actual: e.target.value })}
                         />
+
+                        <Select
+                            label="Tipo"
+                            variant="bordered"
+                            selectedKeys={[data.x_tipo]}
+                        >
+                            <SelectItem key={"epp"}>Equipo de proteccion peronal</SelectItem>
+                            <SelectItem key={"amarre"}>Equipo de amarre</SelectItem>
+                        </Select>
+
                     </div>
                 </DialogContent>
-            )}
+            )
+            }
 
             <DialogActions>
                 <Button onPress={handleClose}>Cancelar</Button>
@@ -90,7 +103,7 @@ const EPPForm = ({ id_epp, open, handleClose, onSaveSuccess }) => {
                     {isSaving ? 'Guardando...' : id_epp ? 'Actualizar' : 'Registrar'}
                 </Button>
             </DialogActions>
-        </Dialog>
+        </Dialog >
     );
 };
 

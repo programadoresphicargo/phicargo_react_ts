@@ -22,7 +22,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import EPP from '../../epp/epp';
+import EPP from '../../inventario/tabla';
 import { useAlmacen } from '../../contexto/contexto';
 
 const EPPSolicitados = ({ }) => {

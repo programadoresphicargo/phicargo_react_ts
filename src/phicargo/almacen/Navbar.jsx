@@ -16,8 +16,9 @@ import { Button } from '@mui/material';
 import logo from '../../assets/img/phicargo-vertical.png';
 
 const pages = [
-    { name: 'SOLICITUDES EPP', path: '/Almacen' },
-    { name: 'PRODUCTOS', path: '/EPP' },
+    { name: 'Equipo de protección personal', path: '/Almacen' },
+    { name: 'Equipo de amarre', path: '/Almacen' },
+    { name: 'Inventario', path: '/EPP' },
 ];
 
 function NavbarAlmacen() {
