@@ -19,7 +19,7 @@ const EPPForm = ({ id_epp, open, handleClose, onSaveSuccess }) => {
         if (!id_epp) return;
         try {
             setLoading(true);
-            const response = await odooApi.get(`/tms_travel/epp/id_epp/${id_epp}`);
+            const response = await odooApi.get(`/tms_travel/inventario_equipo/id/${id_epp}`);
             setData(response.data);
         } catch (error) {
             console.error('Error al obtener los datos:', error);
@@ -32,10 +32,10 @@ const EPPForm = ({ id_epp, open, handleClose, onSaveSuccess }) => {
         setSaving(true);
         try {
             if (id_epp === null) {
-                const response = await odooApi.post('/tms_travel/epp/', data);
+                const response = await odooApi.post('/tms_travel/inventario_equipo/', data);
                 if (onSaveSuccess) onSaveSuccess(response.data);
             } else {
-                const response = await odooApi.put(`/tms_travel/epp/${id_epp}`, data);
+                const response = await odooApi.put(`/tms_travel/inventario_equipo/${id_epp}`, data);
                 if (onSaveSuccess) onSaveSuccess(response.data);
             }
             handleClose();

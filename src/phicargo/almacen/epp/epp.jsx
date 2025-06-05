@@ -53,7 +53,7 @@ const EPP = ({ }) => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await odooApi.get('/tms_travel/epp/');
+      const response = await odooApi.get('/tms_travel/inventario_equipo/');
       setData(response.data);
       setLoading(false);
     } catch (error) {

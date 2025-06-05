@@ -16,7 +16,7 @@ import { Button } from '@mui/material';
 import logo from '../../assets/img/phicargo-vertical.png';
 
 const pages = [
-    { name: 'SOLICITUDES', path: '/Almacen' },
+    { name: 'SOLICITUDES EPP', path: '/Almacen' },
     { name: 'PRODUCTOS', path: '/EPP' },
 ];
 
