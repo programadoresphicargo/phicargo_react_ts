@@ -118,7 +118,7 @@ const menuItems: MenuItemType[] = [
   {
     icon: almacen,
     label: 'Almacen',
-    link: '/Almacen',
+    link: '/solicitudes_epp',
     requiredPermissions: [300],
   },
   {

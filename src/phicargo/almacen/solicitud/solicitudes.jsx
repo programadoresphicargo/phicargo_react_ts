@@ -26,7 +26,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import EPP from '../inventario/tabla';
 import SolicitudForm from './form';
 
-const SolicitudesEPP = ({ }) => {
+const Solicitudes = ({ x_tipo }) => {
 
   const [id_solicitud, setIDSolicitud] = React.useState(null);
   const [open, setOpen] = React.useState(false);
@@ -46,7 +46,7 @@ const SolicitudesEPP = ({ }) => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await odooApi.get('/tms_travel/solicitudes_epp/');
+      const response = await odooApi.get('/tms_travel/solicitudes_equipo/tipo/' + x_tipo);
       setData(response.data);
       setLoading(false);
     } catch (error) {
@@ -183,7 +183,7 @@ const SolicitudesEPP = ({ }) => {
         <h2
           className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
         >
-          Solicitudes equipo de protección personal
+          Solicitudes
         </h2>
 
         <Button
@@ -234,4 +234,4 @@ const SolicitudesEPP = ({ }) => {
   );
 };
 
-export default SolicitudesEPP;
+export default Solicitudes;

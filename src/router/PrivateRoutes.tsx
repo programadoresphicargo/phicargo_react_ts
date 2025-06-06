@@ -67,8 +67,9 @@ const PeriodosPagosEstadiasOperadores = lazy(
 const Estadias = lazy(() => import('../phicargo/estadias/Control'));
 const EstadiasInfo = lazy(() => import('../phicargo/estadias/index_estadia'));
 const Accesos = lazy(() => import('../phicargo/accesos/Accesos'));
-const Almacen = lazy(() => import('../phicargo/almacen/solicitud/index'));
-const EPP = lazy(() => import('../phicargo/almacen/inventario/index'));
+const SolicitudesEPP = lazy(() => import('../phicargo/almacen/solicitud/index_solicitudes_epp'));
+const SolicitudesAmarre = lazy(() => import('../phicargo/almacen/solicitud/index_solicitudes_amarre'));
+const Inventario = lazy(() => import('../phicargo/almacen/inventario/index'));
 const EntregaMonitoreo = lazy(() => import('../phicargo/monitoreo/monitoreo'));
 const CodigosPostales = lazy(() => import('../phicargo/viajes/codigos_postales/index'));
 
@@ -335,19 +336,28 @@ export const PrivateRoutes = () => {
         />
 
         <Route
-          path="/Almacen"
+          path="/solicitudes_epp"
           element={
             <Suspense fallback={<LoadingPage />}>
-              <Almacen />
+              <SolicitudesEPP></SolicitudesEPP>
             </Suspense>
           }
         />
 
         <Route
-          path="/EPP"
+          path="/solicitudes_amarre"
           element={
             <Suspense fallback={<LoadingPage />}>
-              <EPP />
+              <SolicitudesAmarre></SolicitudesAmarre>
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/inventario"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <Inventario></Inventario>
             </Suspense>
           }
         />

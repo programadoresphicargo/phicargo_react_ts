@@ -36,7 +36,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
         if (!id_solicitud) return;
         try {
             setLoading(true);
-            const response = await odooApi.get(`/tms_travel/solicitudes_epp/id_solicitud/${id_solicitud}`);
+            const response = await odooApi.get(`/tms_travel/solicitudes_equipo/id_solicitud/${id_solicitud}`);
             setData(response.data);
             setEPP(response.data.epp);
         } catch (error) {
@@ -62,7 +62,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
                     epp: eppAdded
                 };
 
-                const response = await odooApi.post('/tms_travel/solicitudes_epp/', payload);
+                const response = await odooApi.post('/tms_travel/solicitudes_equipo/', payload);
                 if (response.data.status == 'success') {
                     toast.success(response.data.message);
                 } else {
@@ -75,7 +75,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
                     eppRemoved: eppRemoved,
                     eppUpdated: eppUpdated
                 };
-                const response = await odooApi.put(`/tms_travel/solicitudes_epp/${id_solicitud}`, payload);
+                const response = await odooApi.put(`/tms_travel/solicitudes_equipo/${id_solicitud}`, payload);
                 if (response.data.status == 'success') {
                     toast.success(response.data.message);
                 } else {
@@ -96,7 +96,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
     const cambiarEstado = async (estado) => {
         setSaving(true);
         try {
-            const response = await odooApi.put('/tms_travel/solicitudes_epp/estado/' + estado + '/' + id_solicitud);
+            const response = await odooApi.put('/tms_travel/solicitudes_equipo/estado/' + estado + '/' + id_solicitud);
             if (response.data.status == 'success') {
                 toast.success(response.data.message);
             } else {
@@ -113,7 +113,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
     const confirmar = async () => {
         setSaving(true);
         try {
-            const response = await odooApi.get('/tms_travel/solicitudes_epp/confirmar/' + id_solicitud);
+            const response = await odooApi.get('/tms_travel/solicitudes_equipo/confirmar/' + id_solicitud);
             if (response.data.status == 'success') {
                 toast.success(response.data.message);
                 fetchData();
@@ -131,7 +131,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
     const entregar = async () => {
         setSaving(true);
         try {
-            const response = await odooApi.get('/tms_travel/solicitudes_epp/entregar/' + id_solicitud);
+            const response = await odooApi.get('/tms_travel/solicitudes_equipo/entregar/' + id_solicitud);
             if (response.data.status == 'success') {
                 toast.success(response.data.message);
                 fetchData();
@@ -149,7 +149,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
     const devolver = async () => {
         setSaving(true);
         try {
-            const response = await odooApi.patch('/tms_travel/solicitudes_epp/devolver/' + id_solicitud, epp);
+            const response = await odooApi.patch('/tms_travel/solicitudes_equipo/devolver/' + id_solicitud, epp);
             if (response.data.status == 'success') {
                 toast.success(response.data.message);
                 fetchData();
