@@ -34,6 +34,7 @@ const pages = [
   { name: 'ACTIVOS', path: '/viajes', permiso: 500 },
   { name: 'FINALIZADOS', path: '/viajesfinalizados', permiso: 501 },
   { name: 'PROGRAMACIÓN', path: '/viajesprogramados', permiso: 502 },
+  { name: 'CORREOS', path: '/CorreosElectronicos', permiso: 103 },
   {
     name: 'ESTADIAS', permiso: 503,
     subpages: [
