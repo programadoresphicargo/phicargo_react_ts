@@ -186,7 +186,7 @@ const EPP = ({ }) => {
           startContent={<i class="bi bi-plus-lg"></i>}
           color='primary'
           isDisabled={false}
-          onPress={() => {
+          onPress={async () => {
             setIDEpp(null);
             handleClickOpen();
           }}

@@ -5,16 +5,36 @@ import React, { useEffect, useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import odooApi from '@/api/odoo-api';
 import toast from 'react-hot-toast';
 import { Select, SelectItem } from "@heroui/react";
 
 const EPPForm = ({ id_epp, open, handleClose, onSaveSuccess }) => {
-    const [data, setData] = useState({ x_name: '', x_cantidad_actual: 0 });
+    const [data, setData] = useState({
+        x_name: '',
+        x_cantidad_actual: 0,
+        x_tipo: ''
+    });
     const [isLoading, setLoading] = useState(false);
     const [isSaving, setSaving] = useState(false);
+
+    const requiredFields = ['x_name', 'x_cantidad_actual', 'x_tipo'];
+
+    const validate = (data) => {
+        const errors = {};
+        requiredFields.forEach(field => {
+            if (
+                data[field] === null ||
+                data[field] === undefined ||
+                data[field] === '' ||
+                (typeof data[field] === 'number' && isNaN(data[field]))
+            ) {
+                errors[field] = 'Este campo es obligatorio';
+            }
+        });
+        return errors;
+    };
 
     const fetchData = async () => {
         if (!id_epp) return;
@@ -30,18 +50,31 @@ const EPPForm = ({ id_epp, open, handleClose, onSaveSuccess }) => {
     };
 
     const handleSave = async () => {
+        const errors = validate(data);
+        if (Object.keys(errors).length > 0) {
+            toast.error('Por favor completa todos los campos obligatorios.');
+            return;
+        }
+
         setSaving(true);
         try {
-            if (id_epp === null) {
-                const response = await odooApi.post('/tms_travel/inventario_equipo/', data);
-                if (onSaveSuccess) onSaveSuccess(response.data);
-            } else {
-                const response = await odooApi.put(`/tms_travel/inventario_equipo/${id_epp}`, data);
-                if (onSaveSuccess) onSaveSuccess(response.data);
+            if (!data.x_name || data.x_cantidad_actual < 0 || !data.x_tipo) {
+                toast.error("Por favor completa todos los campos correctamente.");
+                setSaving(false);
+                return;
             }
+
+            let response;
+            if (id_epp === null) {
+                response = await odooApi.post('/tms_travel/inventario_equipo/', data);
+            } else {
+                response = await odooApi.put(`/tms_travel/inventario_equipo/${id_epp}`, data);
+            }
+
+            if (onSaveSuccess) onSaveSuccess(response.data);
             handleClose();
         } catch (error) {
-            toast.error('Error al guardar:' + error);
+            toast.error('Error al guardar: ' + (error?.message || JSON.stringify(error)));
         } finally {
             setSaving(false);
         }
@@ -51,7 +84,11 @@ const EPPForm = ({ id_epp, open, handleClose, onSaveSuccess }) => {
         if (open && id_epp !== null) {
             fetchData();
         } else if (open && id_epp === null) {
-            setData([]);
+            setData({
+                x_name: '',
+                x_cantidad_actual: 0,
+                x_tipo: ''
+            });
         }
     }, [open, id_epp]);
 
@@ -70,40 +107,43 @@ const EPPForm = ({ id_epp, open, handleClose, onSaveSuccess }) => {
                             value={data.x_name}
                             onChange={(e) => setData({ ...data, x_name: e.target.value })}
                         />
-                        
+
                         <NumberInput
                             label="Cantidad actual"
                             variant="bordered"
-                            value={data.x_cantidad_actual}
-                            onChange={(e) => setData({ ...data, x_cantidad_actual: e.target.value })}
+                            value={data.x_cantidad_actual || 0}
+                            onChange={(value) =>
+                                setData({ ...data, x_cantidad_actual: parseInt(value) || 0 })
+                            }
                         />
 
                         <Select
                             label="Tipo"
                             variant="bordered"
-                            selectedKeys={[data.x_tipo]}
+                            selectedKeys={data.x_tipo ? [data.x_tipo] : []}
+                            onSelectionChange={(keys) =>
+                                setData({ ...data, x_tipo: Array.from(keys)[0] })
+                            }
                         >
-                            <SelectItem key={"epp"}>Equipo de proteccion peronal</SelectItem>
-                            <SelectItem key={"amarre"}>Equipo de amarre</SelectItem>
+                            <SelectItem key="epp">Equipo de protección personal</SelectItem>
+                            <SelectItem key="amarre">Equipo de amarre</SelectItem>
                         </Select>
-
                     </div>
                 </DialogContent>
-            )
-            }
+            )}
 
             <DialogActions>
                 <Button onPress={handleClose}>Cancelar</Button>
                 <Button
                     onPress={handleSave}
                     color={id_epp ? 'success' : 'primary'}
-                    isDisabled={isSaving}
+                    isDisabled={isSaving || !data.x_name || !data.x_tipo}
                     className={id_epp ? 'text-white' : ''}
                 >
                     {isSaving ? 'Guardando...' : id_epp ? 'Actualizar' : 'Registrar'}
                 </Button>
             </DialogActions>
-        </Dialog >
+        </Dialog>
     );
 };
 
