@@ -25,6 +25,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import NavbarAlmacen from '../Navbar';
 import EPPForm from './form';
 import { useAlmacen } from '../contexto/contexto';
+import { exportToCSV } from '@/phicargo/utils/export';
 
 const EPP = ({ }) => {
 
@@ -208,7 +209,7 @@ const EPP = ({ }) => {
           color='success'
           className='text-white'
           startContent={<i class="bi bi-file-earmark-excel"></i>}
-          onPress={() => exportToCSV(data, columns, "viajes_activos.csv")}
+          onPress={() => exportToCSV(data, columns, "inventario.csv")}
           size='sm'>
           Exportar
         </Button>
