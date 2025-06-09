@@ -95,6 +95,8 @@ const Solicitudes = ({ x_tipo }) => {
             badgeClass = 'warning';
           } else if (estatus_viaje === 'devuelto') {
             badgeClass = 'success';
+          }else{
+            badgeClass = 'default';
           }
 
           return (
