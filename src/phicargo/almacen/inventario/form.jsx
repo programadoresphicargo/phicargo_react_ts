@@ -105,7 +105,9 @@ const EPPForm = ({ id_epp, open, handleClose, onSaveSuccess }) => {
                             label="Nombre"
                             variant="bordered"
                             value={data.x_name}
-                            onChange={(e) => setData({ ...data, x_name: e.target.value })}
+                            onChange={(e) =>
+                                setData({ ...data, x_name: e.target.value.toUpperCase() })
+                            }
                         />
 
                         <NumberInput
