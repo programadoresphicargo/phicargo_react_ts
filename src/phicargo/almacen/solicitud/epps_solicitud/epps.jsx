@@ -105,7 +105,7 @@ const EPPSolicitados = ({ }) => {
     initialState: {
       showGlobalFilter: true,
       columnVisibility: {
-        x_cantidad_devuelta: data?.x_studio_estado == "entregado" ? true : false,
+        x_cantidad_devuelta: data?.x_studio_estado === "entregado" || data?.x_studio_estado === "devuelto" ? true : false,
       },
       hiddenColumns: ["empresa"],
       density: 'compact',
