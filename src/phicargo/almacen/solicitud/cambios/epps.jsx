@@ -30,7 +30,6 @@ const HistorialCambios = ({ cambios }) => {
   return (
     <>
       <div>
-        <h2>Historial de cambios</h2>
         {cambios.map((cambio, index) => (
           <>
             <p key={index} className='mb-5'>

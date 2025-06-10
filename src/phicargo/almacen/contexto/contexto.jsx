@@ -5,7 +5,8 @@ const AlmacenContext = createContext();
 export const AlmacenProvider = ({ children }) => {
 
     const [data, setData] = useState({
-        id_viaje: 0,
+        id: 0,
+        x_waybill_id: 0,
         observaciones: "",
     });
     const [modoEdicion, setModoEdicion] = useState(false);

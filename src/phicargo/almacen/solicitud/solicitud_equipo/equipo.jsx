@@ -62,11 +62,12 @@ const EPPSolicitados = ({ }) => {
       {
         accessorKey: 'x_cantidad_solicitada',
         header: 'Cantidad solicitada',
-        enableEditing: false,
+        enableEditing: data?.x_studio_estado === "borrador" ? true : false,
       },
       {
         accessorKey: 'x_cantidad_devuelta',
         header: 'Cantidad devuelta',
+        enableEditing: data?.x_studio_estado === "entregado" ? true : false,
       },
     ],
     [],
@@ -165,7 +166,7 @@ const EPPSolicitados = ({ }) => {
           size='sm'
           isDisabled={!modoEdicion}
         >
-          Añadir
+          Añadir equipo
         </Button>
 
       </Box >
@@ -209,7 +210,7 @@ const EPPSolicitados = ({ }) => {
           color="primary"
           size="sm"
           className='text-white'
-          isDisabled={data?.x_studio_estado == "entregado" ? false : true}
+          isDisabled={data?.x_studio_estado == "entregado" || modoEdicion ? false : true}
           onPress={() => table.setEditingRow(row)}
         >
           Editar
@@ -228,7 +229,7 @@ const EPPSolicitados = ({ }) => {
         <DialogTitle></DialogTitle>
         <DialogContent>
           <DialogContentText>
-            <EPP></EPP>
+            <EPP close={handleClose}></EPP>
           </DialogContentText>
         </DialogContent>
         <DialogActions>

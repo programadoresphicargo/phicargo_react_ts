@@ -27,10 +27,11 @@ import EPPForm from './form';
 import { useAlmacen } from '../contexto/contexto';
 import { exportToCSV } from '@/phicargo/utils/export';
 
-const EPP = ({ }) => {
+const EPP = ({ close }) => {
 
   const
-    { epp, setEPP,
+    { data, setData,
+      epp, setEPP,
       eppAdded, setEPPAdded,
       eppRemoved, setEPPRemoved,
       eppUpdated, setEPPUpdated
@@ -48,14 +49,14 @@ const EPP = ({ }) => {
     fetchData();
   };
 
-  const [data, setData] = useState([]);
+  const [dataEquipos, setDataEquipo] = useState([]);
   const [isLoading, setLoading] = useState(false);
 
   const fetchData = async () => {
     try {
       setLoading(true);
       const response = await odooApi.get('/tms_travel/inventario_equipo/');
-      setData(response.data);
+      setDataEquipo(response.data);
       setLoading(false);
     } catch (error) {
       console.error('Error al obtener los datos:', error);
@@ -73,7 +74,7 @@ const EPP = ({ }) => {
         header: 'ID',
       },
       {
-        accessorKey: 'x_name',
+        accessorKey: 'nombre',
         header: 'Nombre',
       },
       {
@@ -109,7 +110,7 @@ const EPP = ({ }) => {
 
   const table = useMaterialReactTable({
     columns,
-    data,
+    data: dataEquipos,
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
@@ -119,7 +120,7 @@ const EPP = ({ }) => {
     positionGlobalFilter: "right",
     localization: MRT_Localization_ES,
     muiSearchTextFieldProps: {
-      placeholder: `Buscar en ${data.length} solicitud`,
+      placeholder: `Buscar en solicitud`,
       sx: { minWidth: '300px' },
       variant: 'outlined',
     },
@@ -154,10 +155,10 @@ const EPP = ({ }) => {
     },
     muiTableBodyRowProps: ({ row }) => ({
       onClick: ({ event }) => {
-        const newItem = { id: Date.now(), isNew: true, ...row.original, cantidad: 1 };
+        const newItem = { id: Date.now(), isNew: true, ...row.original, x_cantidad_solicitada: 1, x_solicitud_id: data?.id };
         setEPP(prev => [...prev, newItem]);
         setEPPAdded(prev => [...eppAdded, newItem]);
-        handleClose();
+        close();
       },
     }),
     muiTableBodyCellProps: ({ row }) => ({
@@ -209,7 +210,7 @@ const EPP = ({ }) => {
           color='success'
           className='text-white'
           startContent={<i class="bi bi-file-earmark-excel"></i>}
-          onPress={() => exportToCSV(data, columns, "inventario.csv")}
+          onPress={() => exportToCSV(dataEquipos, columns, "inventario.csv")}
           size='sm'>
           Exportar
         </Button>

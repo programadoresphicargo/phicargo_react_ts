@@ -9,7 +9,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import odooApi from '@/api/odoo-api';
 import toast from 'react-hot-toast';
-import EPPSolicitados from "./epps_solicitud/epps";
+import EPPSolicitados from "./solicitud_equipo/equipo";
 import ViajeEPP from "./viaje/viaje";
 import { AppBar, Stack } from "@mui/material";
 import { useAlmacen } from "../contexto/contexto";
@@ -72,11 +72,11 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
             } else {
                 const payload = {
                     data: data,
-                    eppAdded: eppAdded,
-                    eppRemoved: eppRemoved,
-                    eppUpdated: eppUpdated
+                    equipoAdded: eppAdded,
+                    equipoRemoved: eppRemoved,
+                    equipoUpdated: eppUpdated
                 };
-                const response = await odooApi.put(`/tms_travel/solicitudes_equipo/${id_solicitud}`, payload);
+                const response = await odooApi.patch(`/tms_travel/solicitudes_equipo/${id_solicitud}`, payload);
                 if (response.data.status == 'success') {
                     toast.success(response.data.message);
                 } else {
@@ -249,8 +249,43 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
                 <DialogContent>
 
                     <Stack spacing={1} direction="row" className="mb-5">
-                        {data?.x_studio_estado == "borrador" && (
-                            <Button color='success' className='text-white' onPress={() => confirmar()} isLoading={isLoading}>Confirmar</Button>
+
+                        {!id_solicitud && (
+                            <Button
+                                size="sm"
+                                onPress={handleSave}
+                                color="primary"
+                                isDisabled={isSaving}
+                            >
+                                {isSaving ? 'Guardando...' : 'Registrar'}
+                            </Button>
+                        )}
+
+
+                        {!modoEdicion && (
+                            <Button
+                                color="primary"
+                                onPress={handleEdit}
+                            >
+                                Editar
+                            </Button>
+                        )}
+
+                        {modoEdicion && (
+                            <Button
+                                onPress={handleSave}
+                                color={id_solicitud ? 'success' : 'primary'}
+                                isDisabled={isSaving}
+                                className={id_solicitud ? 'text-white' : ''}
+                            >
+                                {isSaving ? 'Guardando...' : id_solicitud ? 'Actualizar' : 'Registrar'}
+                            </Button>
+                        )}
+
+                        {data?.x_studio_estado === "borrador" && !modoEdicion && (
+                            <Button color="success" className="text-white" onPress={() => confirmar()} isLoading={isLoading}>
+                                Confirmar
+                            </Button>
                         )}
                         {data?.x_studio_estado == "confirmado" && (
                             <Button color='success' className='text-white' onPress={() => entregar()} isLoading={isLoading}>Entregar</Button>
@@ -286,6 +321,8 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
                         </div>
 
                         <Card>
+                            <CardHeader>Historial de cambios</CardHeader>
+                            <Divider></Divider>
                             <CardBody>
                                 <HistorialCambios cambios={data?.mails || []} />
                             </CardBody>
