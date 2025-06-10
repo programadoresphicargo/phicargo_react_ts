@@ -41,6 +41,7 @@ export interface Incident extends IncidentBase {
 export interface IncidentCreate extends IncidentBase {
   startDate: Dayjs | null;
   endDate: Dayjs | null;
+  newVehicleStateId?: number | null;
   vehicleId?: number | null;
   driverId?: number | null;
 }

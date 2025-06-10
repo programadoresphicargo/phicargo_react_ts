@@ -67,6 +67,7 @@ export class IncidentAdapter {
       end_date: incident.endDate ? incident.endDate.format('YYYY-MM-DD') : null,
       type: incident.type,
       vehicle_id: incident.vehicleId ?? null,
+      new_vehicle_state_id: incident.newVehicleStateId ?? null,
       incident_date: incident.incidentDate
         ? incident.incidentDate.format('YYYY-MM-DD')
         : null,

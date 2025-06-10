@@ -40,4 +40,5 @@ export interface IncidentCreateApi extends IncidentBaseApi {
   start_date: string | null;
   end_date: string | null;
   vehicle_id?: number | null;
+  new_vehicle_state_id?: number | null;
 }
