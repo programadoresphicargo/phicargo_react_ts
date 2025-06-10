@@ -114,7 +114,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
     const confirmar = async () => {
         const result = await Swal.fire({
             title: '¿Estás seguro?',
-            text: 'Al confirmar el equipo solicitado sera descontado del inventario.',
+            text: 'Al confirmar, este equipo se marcará como entregado y se descontará del inventario disponible.',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Sí, confirmar',
@@ -144,7 +144,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
     const entregar = async () => {
         const result = await Swal.fire({
             title: '¿Estás seguro?',
-            text: 'Al confirmar el equipo solicitado sera descontado del inventario.',
+            text: 'Entregar equipo al operador',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Sí, confirmar',
@@ -183,6 +183,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
         if (result.isConfirmed) {
             setSaving(true);
             try {
+                setLoading(true);
                 const response = await odooApi.patch('/tms_travel/solicitudes_equipo/devolver/' + id_solicitud, epp);
                 if (response.data.status === 'success') {
                     toast.success(response.data.message);
@@ -198,6 +199,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
                     console.error("Error de red:", error.message);
                 }
             } finally {
+                setLoading(false);
                 setSaving(false);
             }
         }
