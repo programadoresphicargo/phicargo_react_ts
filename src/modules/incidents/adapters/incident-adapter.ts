@@ -2,12 +2,14 @@ import type {
   DriverInfo,
   Incident,
   IncidentCreate,
+  IncidentUpdate,
   VehicleInfo,
 } from '../models';
 import type {
   DriverInfoApi,
   IncidentApi,
   IncidentCreateApi,
+  IncidentUpdateApi,
   VehicleInfoApi,
 } from '../models/api';
 
@@ -74,6 +76,38 @@ export class IncidentAdapter {
       damage_cost: incident.damageCost ?? null,
       is_driver_responsible: incident.isDriverResponsible,
     };
+  }
+
+  static driverIncidentUpdateToApi(
+    incident: IncidentUpdate
+  ): IncidentUpdateApi {
+    const data: IncidentUpdateApi = {};
+
+    if (incident.incident) {
+      data.incidence = incident.incident;
+    }
+    if (incident.comments) {
+      data.comments = incident.comments;
+    }
+    if (incident.type) {
+      data.type = incident.type;
+    }
+    if (incident.incidentDate) {  
+      data.incident_date = incident.incidentDate.format('YYYY-MM-DD');
+    }
+    if (incident.damageCost !== undefined) {
+      data.damage_cost = incident.damageCost;
+    }
+    if (incident.isDriverResponsible !== undefined) {
+      data.is_driver_responsible = incident.isDriverResponsible;
+    }
+    if (incident.vehicleId !== undefined) {
+      data.vehicle_id = incident.vehicleId ?? null;
+    }
+    if (incident.driverId !== undefined) {
+      data.driver_id = incident.driverId ?? null;
+    }
+    return data;
   }
 }
 

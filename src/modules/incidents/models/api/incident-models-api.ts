@@ -42,3 +42,8 @@ export interface IncidentCreateApi extends IncidentBaseApi {
   vehicle_id?: number | null;
   new_vehicle_state_id?: number | null;
 }
+
+export type IncidentUpdateApi = Partial<IncidentBaseApi> & {
+  vehicle_id?: number | null;
+  driver_id?: number | null;
+};
