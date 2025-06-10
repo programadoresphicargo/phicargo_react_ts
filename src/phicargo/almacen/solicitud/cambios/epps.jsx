@@ -33,10 +33,8 @@ const HistorialCambios = ({ cambios }) => {
         <h2>Historial de cambios</h2>
         {cambios.map((cambio, index) => (
           <>
-            <Divider className='mt-5'></Divider>
-
-            <p key={index}>
-              [{new Date(cambio.create_date).toLocaleString()}]
+            <p key={index} className='mb-5'>
+              <Chip color='primary' size='sm'>{new Date(cambio.create_date).toLocaleString()}</Chip>
               {` ${cambio.body} ${cambio.usuario} cambió ${cambio.field_desc} de "${cambio.old_value_char}" a "${cambio.new_value_char}"`}
             </p>
           </>

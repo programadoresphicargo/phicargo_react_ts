@@ -69,6 +69,14 @@ const Solicitudes = ({ x_tipo }) => {
         header: 'Carta porte',
       },
       {
+        accessorKey: 'referencia_viaje',
+        header: 'Viaje',
+      },
+      {
+        accessorKey: 'inicio_programado',
+        header: 'Inicio programado',
+      },
+      {
         accessorKey: 'operador',
         header: 'Operador',
       },
@@ -95,7 +103,7 @@ const Solicitudes = ({ x_tipo }) => {
             badgeClass = 'warning';
           } else if (estatus_viaje === 'devuelto') {
             badgeClass = 'success';
-          }else{
+          } else {
             badgeClass = 'default';
           }
 

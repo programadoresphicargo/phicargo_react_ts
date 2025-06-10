@@ -1,5 +1,5 @@
 import {
-    Input, Progress, Button, Card, CardBody, Textarea
+    Input, Progress, Button, Card, CardBody, Textarea, CardHeader, Divider
 } from "@heroui/react";
 import React, { useEffect, useState } from 'react';
 import Dialog from '@mui/material/Dialog';
@@ -19,6 +19,7 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
+import Swal from "sweetalert2";
 
 const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
     const [isLoading, setLoading] = useState(false);
@@ -111,61 +112,94 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
     };
 
     const confirmar = async () => {
-        setSaving(true);
-        try {
-            const response = await odooApi.get('/tms_travel/solicitudes_equipo/confirmar/' + id_solicitud);
-            if (response.data.status == 'success') {
-                toast.success(response.data.message);
-                fetchData();
-                handleClose();
-            } else {
-                toast.error(response.data.message);
+        const result = await Swal.fire({
+            title: '¿Estás seguro?',
+            text: 'Al confirmar el equipo solicitado sera descontado del inventario.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, confirmar',
+        });
+
+        if (result.isConfirmed) {
+            setSaving(true);
+            try {
+                setLoading(true);
+                const response = await odooApi.get('/tms_travel/solicitudes_equipo/confirmar/' + id_solicitud);
+                if (response.data.status == 'success') {
+                    toast.success(response.data.message);
+                    fetchData();
+                    handleClose();
+                } else {
+                    toast.error(response.data.message);
+                }
+            } catch (error) {
+                toast.error('Error al guardar:', error);
+            } finally {
+                setLoading(false);
+                setSaving(false);
             }
-        } catch (error) {
-            toast.error('Error al guardar:', error);
-        } finally {
-            setSaving(false);
         }
     };
 
     const entregar = async () => {
-        setSaving(true);
-        try {
-            const response = await odooApi.get('/tms_travel/solicitudes_equipo/entregar/' + id_solicitud);
-            if (response.data.status == 'success') {
-                toast.success(response.data.message);
-                fetchData();
-                handleClose();
-            } else {
-                toast.error(response.data.message);
+        const result = await Swal.fire({
+            title: '¿Estás seguro?',
+            text: 'Al confirmar el equipo solicitado sera descontado del inventario.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, confirmar',
+        });
+
+        if (result.isConfirmed) {
+            setSaving(true);
+            setLoading(true);
+            try {
+                const response = await odooApi.get('/tms_travel/solicitudes_equipo/entregar/' + id_solicitud);
+                if (response.data.status == 'success') {
+                    toast.success(response.data.message);
+                    fetchData();
+                    handleClose();
+                } else {
+                    toast.error(response.data.message);
+                }
+            } catch (error) {
+                toast.error('Error al guardar:', error);
+            } finally {
+                setSaving(false);
+                setLoading(false);
             }
-        } catch (error) {
-            toast.error('Error al guardar:', error);
-        } finally {
-            setSaving(false);
         }
     };
 
     const devolver = async () => {
-        setSaving(true);
-        try {
-            const response = await odooApi.patch('/tms_travel/solicitudes_equipo/devolver/' + id_solicitud, epp);
-            if (response.data.status == 'success') {
-                toast.success(response.data.message);
-                fetchData();
-                handleClose();
-            } else {
-                toast.error(response.data.message);
+        const result = await Swal.fire({
+            title: '¿Estás seguro?',
+            text: 'Retornar stock',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, confirmar',
+        });
+
+        if (result.isConfirmed) {
+            setSaving(true);
+            try {
+                const response = await odooApi.patch('/tms_travel/solicitudes_equipo/devolver/' + id_solicitud, epp);
+                if (response.data.status === 'success') {
+                    toast.success(response.data.message);
+                    fetchData();
+                    handleClose();
+                } else {
+                    toast.error(response.data.message);
+                }
+            } catch (error) {
+                if (error.response) {
+                    toast.error("Error del servidor:" + error.response.data);
+                } else {
+                    console.error("Error de red:", error.message);
+                }
+            } finally {
+                setSaving(false);
             }
-        } catch (error) {
-            if (error.response) {
-                console.error("Error del servidor:", error.response.data.detail);
-                alert(error.response.data.detail); // o usar setErrorState
-            } else {
-                console.error("Error de red:", error.message);
-            }
-        } finally {
-            setSaving(false);
         }
     };
 
@@ -209,17 +243,18 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
             {isLoading ? (
                 <Progress isIndeterminate size="sm" />
             ) : (
+
                 <DialogContent>
 
                     <Stack spacing={1} direction="row" className="mb-5">
                         {data?.x_studio_estado == "borrador" && (
-                            <Button color='success' className='text-white' onPress={() => confirmar()}>Confirmar</Button>
+                            <Button color='success' className='text-white' onPress={() => confirmar()} isLoading={isLoading}>Confirmar</Button>
                         )}
                         {data?.x_studio_estado == "confirmado" && (
-                            <Button color='success' className='text-white' onPress={() => entregar()}>Entregar</Button>
+                            <Button color='success' className='text-white' onPress={() => entregar()} isLoading={isLoading}>Entregar</Button>
                         )}
                         {data?.x_studio_estado == "entregado" && (
-                            <Button color='success' className='text-white' onPress={() => devolver()}>Devolver a stock</Button>
+                            <Button color='success' className='text-white' onPress={() => devolver()} isLoading={isLoading}>Devolver a stock</Button>
                         )}
                     </Stack>
 
@@ -227,10 +262,17 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
                         <div className="md:col-span-2 grid grid-cols-1 gap-4">
 
                             <Card>
+                                <CardHeader>
+                                    Datos de la solicitud
+                                </CardHeader>
+                                <Divider></Divider>
                                 <CardBody>
                                     <h2><strong>Creado por:</strong> {data?.usuario}</h2>
                                     <h2><strong>Fecha de solicitud:</strong> {data?.create_date}</h2>
-                                    <h2><strong>Operador asignado:</strong> {data?.operador}</h2>
+                                    <div className="mt-5">
+                                        <h2><strong>Operador asignado:</strong> {data?.operador}</h2>
+                                        <h2><strong>Inicio programado:</strong> {data?.inicio_programado}</h2>
+                                    </div>
                                 </CardBody>
                             </Card>
 
@@ -250,6 +292,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
                     </div>
 
                 </DialogContent>
+
             )}
 
             <DialogActions>
