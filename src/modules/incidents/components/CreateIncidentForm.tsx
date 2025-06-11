@@ -18,9 +18,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 
 import type { IncidentCreate } from '../models';
 import { useVehicleQueries } from '@/modules/vehicles/hooks/queries';
-import {
-  getIncidentOptions,
-} from '../utilities';
+import { getIncidentOptions } from '../utilities';
 import { useState } from 'react';
 import dayjs from 'dayjs';
 import { useIncidentsQueries } from '../hooks/quries';
@@ -39,6 +37,7 @@ const initialFormState: IncidentCreate = {
   damageCost: null,
   isDriverResponsible: true,
   vehicleId: null,
+  newVehicleStateId: null,
   driverId: null,
 };
 
@@ -63,7 +62,7 @@ export const CreateIncidentForm = ({
 
   const {
     createIncident: { mutate, isPending },
-  } = useIncidentsQueries( {driverId} );
+  } = useIncidentsQueries({ driverId });
 
   const { control, handleSubmit, setValue, watch, reset } =
     useForm<IncidentCreate>({
@@ -74,7 +73,8 @@ export const CreateIncidentForm = ({
 
   const incidenceOptions = getIncidentOptions(selectedType);
 
-  const damageCostDisabled = selectedType !== 'legal' && selectedType !== 'maintenance';
+  const damageCostDisabled =
+    selectedType !== 'legal' && selectedType !== 'maintenance';
 
   const onSubmit: SubmitHandler<IncidentCreate> = (data) => {
     if (isPending) return;
@@ -283,6 +283,23 @@ export const CreateIncidentForm = ({
               textFieldProps={{
                 helperText: 'Seleccionar unidad afectada, si aplica',
               }}
+            />
+
+            <SelectElement
+              control={control}
+              name="newVehicleStateId"
+              label="Nuevo Estado de la Unidad"
+              size="small"
+              helperText="Seleccionar el nuevo estado de la unidad, si aplica"
+              options={[
+                { id: null, label: '' },
+                { id: 8, label: 'TERMINNACIÓN DE ARRENDAMIENTO' },
+                { id: 7, label: 'ESTATUS OCRA' },
+                { id: 5, label: 'EN REPARACIÓN POR FALLAS MECÁNICAS' },
+                { id: 4, label: 'EN REPARACION POR SINIESTRO' },
+                { id: 3, label: 'BAJA POR PERDIDA TOTAL' },
+              ]}
+              // disabled={!createUnavailability || !watch('vehicleId')}
             />
           </div>
 

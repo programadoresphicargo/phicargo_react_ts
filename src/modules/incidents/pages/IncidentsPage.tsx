@@ -12,6 +12,8 @@ import { IncidentDetailsModal } from '../components/IncidentDetailsModal';
 import { useState } from 'react';
 import { DateRangePicker } from '@/components/inputs';
 import { useIncidentsContext } from '../hooks/useIncidentsContext';
+import EditIcon from '@mui/icons-material/Edit';
+import { EditIncidentModal } from '../components/EditIncidentModal';
 
 const dialogProps: DialogProps = {
   slots: {
@@ -29,14 +31,16 @@ const dialogProps: DialogProps = {
 };
 
 const IncidentsPage = () => {
-
   const { dateRange, setDateRange, formatedDateRange } = useIncidentsContext();
 
   const [detail, setDetail] = useState<Incident | null>(null);
 
   const {
     incidentsQuery: { data: incidents, isFetching, isLoading, refetch, error },
-  } = useIncidentsQueries({ startDate: formatedDateRange.startDate, endDate: formatedDateRange.endDate });
+  } = useIncidentsQueries({
+    startDate: formatedDateRange.startDate,
+    endDate: formatedDateRange.endDate,
+  });
 
   const columns = useIncidentsColumns();
 
@@ -64,6 +68,11 @@ const IncidentsPage = () => {
             <InfoIcon />
           </IconButton>
         </Tooltip>
+        <Tooltip title="Editar">
+          <IconButton size="small" onClick={() => table.setEditingRow(row)}>
+            <EditIcon />
+          </IconButton>
+        </Tooltip>
       </Box>
     ),
     toolbarActions: (
@@ -85,9 +94,16 @@ const IncidentsPage = () => {
         />
       </div>
     ),
+    muiEditRowDialogProps: dialogProps,
     muiCreateRowModalProps: dialogProps,
     renderCreateRowDialogContent: ({ table }) => (
       <CreateIncidentModal onClose={() => table.setCreatingRow(null)} />
+    ),
+    renderEditRowDialogContent: ({ table, row }) => (
+      <EditIncidentModal
+        onClose={() => table.setEditingRow(null)}
+        incident={row.original}
+      />
     ),
   });
 
@@ -106,3 +122,4 @@ const IncidentsPage = () => {
 };
 
 export default IncidentsPage;
+
