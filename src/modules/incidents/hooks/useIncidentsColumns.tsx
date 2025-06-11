@@ -58,6 +58,15 @@ export const useIncidentsColumns = () => {
         },
       },
       {
+        accessorFn: (row) => row.incidentDate,
+        header: 'Fecha de Incidencia',
+        maxSize: 50,
+        Cell: ({ row }) => {
+          const value = row.original.incidentDate?.format('DD/MM/YYYY hh:mm A');
+          return <BasicTextCell value={value} />;
+        },
+      },
+      {
         accessorFn: (row) => row.user.username,
         header: 'Usuario',
         maxSize: 50,
