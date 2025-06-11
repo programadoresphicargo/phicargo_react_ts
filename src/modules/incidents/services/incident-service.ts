@@ -95,7 +95,7 @@ export class IncidentsService {
     const url = `/drivers/incidents/${id}`;
     const data = IncidentAdapter.driverIncidentUpdateToApi(updatedItem);
     try {
-      const response = await odooApi.put<IncidentApi>(url, data);
+      const response = await odooApi.patch<IncidentApi>(url, data);
       return IncidentAdapter.driverIncidentToLocal(response.data);
     } catch (error) {
       console.error(error);
