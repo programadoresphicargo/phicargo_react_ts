@@ -1,22 +1,21 @@
-import { Incident, IncidentCreate } from '../models';
+import { Incident, IncidentCreate, IncidentUpdate } from '../models';
 
 import { AxiosError } from 'axios';
 import odooApi from '@/api/odoo-api';
 import { IncidentAdapter } from '../adapters';
 import { IncidentApi } from '../models/api';
 import { FilesService } from '@/modules/core/services';
+import { UpdatableItem } from '@/types';
 
 /**
  * Service to manage the incidents
  */
 export class IncidentsService {
-  /**
-   * Method to get all the incidents
-   * @returns List of incidents
-   */
-  public static async getAllIncidents(startDate?: string, endDate?: string): Promise<Incident[]> {
-
-    let url = '/drivers/incidents/all';
+  public static async getAllIncidents(
+    startDate?: string,
+    endDate?: string,
+  ): Promise<Incident[]> {
+    let url = '/drivers/incidents/';
 
     if (startDate && endDate) {
       url += `?start_date=${startDate}&end_date=${endDate}`;
@@ -43,7 +42,7 @@ export class IncidentsService {
   public static async getIncidentsByDriver(
     driverId: number,
   ): Promise<Incident[]> {
-    const url = `/drivers/incidents/${driverId}`;
+    const url = `/drivers/${driverId}/incidents`;
     try {
       const response = await odooApi.get<IncidentApi[]>(url);
       return response.data.map(IncidentAdapter.driverIncidentToLocal);
@@ -86,6 +85,26 @@ export class IncidentsService {
         );
       }
       throw new Error('Error al crear la incidencia');
+    }
+  }
+
+  public static async updateIncident({
+    id,
+    updatedItem,
+  }: UpdatableItem<IncidentUpdate>) {
+    const url = `/drivers/incidents/${id}`;
+    const data = IncidentAdapter.driverIncidentUpdateToApi(updatedItem);
+    try {
+      const response = await odooApi.patch<IncidentApi>(url, data);
+      return IncidentAdapter.driverIncidentToLocal(response.data);
+    } catch (error) {
+      console.error(error);
+      if (error instanceof AxiosError) {
+        throw new Error(
+          error.response?.data?.detail || 'Error al actualizar la incidencia',
+        );
+      }
+      throw new Error('Error al actualizar la incidencia');
     }
   }
 }

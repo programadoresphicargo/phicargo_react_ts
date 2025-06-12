@@ -42,9 +42,29 @@ export const useIncidentsQueries = ({ driverId, startDate, endDate }: Config) =>
     },
   });
 
+  const updateIncident = useMutation({
+    mutationFn: IncidentsService.updateIncident,
+    onSuccess: () => {
+      queryClient.invalidateQueries<Incident[]>({
+        queryKey: [DRIVER_INCIDENTS_KEY],
+        exact: false,
+      });
+      if (driverId) {
+        queryClient.invalidateQueries({
+          queryKey: [DRIVER_INCIDENTS_KEY, driverId],
+        });
+      }
+      toast.success('Incidencia actualizada correctamente');
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
   return {
     incidentsQuery,
     createIncident,
+    updateIncident,
   };
 };
 
