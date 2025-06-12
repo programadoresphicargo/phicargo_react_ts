@@ -229,7 +229,7 @@ const EPPSolicitados = ({ }) => {
         <DialogTitle></DialogTitle>
         <DialogContent>
           <DialogContentText>
-            <EPP close={handleClose}></EPP>
+            <EPP close={handleClose} tipo={data?.x_tipo}></EPP>
           </DialogContentText>
         </DialogContent>
         <DialogActions>

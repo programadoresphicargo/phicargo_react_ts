@@ -27,7 +27,7 @@ import EPPForm from './form';
 import { useAlmacen } from '../contexto/contexto';
 import { exportToCSV } from '@/phicargo/utils/export';
 
-const EPP = ({ close }) => {
+const Inventario = ({ close, tipo }) => {
 
   const
     { data, setData,
@@ -55,7 +55,7 @@ const EPP = ({ close }) => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await odooApi.get('/tms_travel/inventario_equipo/');
+      const response = await odooApi.get('/tms_travel/inventario_equipo/tipo/' + tipo);
       setDataEquipo(response.data);
       setLoading(false);
     } catch (error) {
@@ -230,4 +230,4 @@ const EPP = ({ close }) => {
   );
 };
 
-export default EPP;
+export default Inventario;

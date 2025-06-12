@@ -74,7 +74,7 @@ const Solicitudes = ({ x_tipo }) => {
       },
       {
         accessorKey: 'inicio_programado',
-        header: 'Inicio programado',
+        header: 'Inicio prog. viaje',
       },
       {
         accessorKey: 'operador',
