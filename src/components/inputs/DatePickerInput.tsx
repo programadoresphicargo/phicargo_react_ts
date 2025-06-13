@@ -15,21 +15,21 @@ interface DatePickerInputProps<T extends FieldValues>
 export const DatePickerInput = <T extends FieldValues>(
   props: DatePickerInputProps<T>
 ) => {
-  const { 
-    control, 
-    name, 
+  const {
+    control,
+    name,
     variant,
-    className, 
-    label, 
-    rules, 
-    hideTimeZone, 
+    className,
+    label,
+    rules,
+    hideTimeZone,
     initialValue,
     isDisabled
   } = props;
 
   const initial = useMemo(() => {
     if (initialValue) {
-      return parseDateTime(initialValue.format("YYYY-MM-DDTHH:mm:ss")); 
+      return parseDateTime(initialValue.format("YYYY-MM-DDTHH:mm:ss"));
     }
     return null;
   }, [initialValue])
@@ -42,6 +42,7 @@ export const DatePickerInput = <T extends FieldValues>(
         rules={rules}
         render={({ field: { name, onChange }, fieldState }) => (
           <DatePicker
+            firstDayOfWeek="mon"
             className={className}
             label={label}
             variant={variant || "flat"}

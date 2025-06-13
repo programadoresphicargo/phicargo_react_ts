@@ -740,6 +740,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                                     <Grid size={{ xs: 12, md: 6 }}>
 
                                                         <DatePicker
+                                                            firstDayOfWeek="mon"
                                                             label="Inicio programado"
                                                             variant="bordered"
                                                             showMonthAndYearPickers

@@ -240,6 +240,7 @@ function PanelEnvio({ open, cerrar, id_reporte, estatusSeleccionado, comentarios
                   </CardHeader>
                   <CardBody>
                     <DatePicker
+                      firstDayOfWeek="mon"
                       hideTimeZone
                       showMonthAndYearPickers
                       defaultValue={now(getLocalTimeZone())}

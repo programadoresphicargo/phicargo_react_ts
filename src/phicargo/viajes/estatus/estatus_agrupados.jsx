@@ -208,6 +208,7 @@ function EstatusHistorialAgrupado({ registros_agrupados }) {
                                         )}
 
                                         <DatePicker
+                                            firstDayOfWeek="mon"
                                             className="max-w-xs"
                                             hideTimeZone
                                             isDisabled={!enabledPickers[index]}
