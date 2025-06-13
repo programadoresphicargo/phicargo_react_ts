@@ -76,6 +76,9 @@ const AccesoForm = ({ id_acceso, onClose }) => {
         if (!formData.tipo_movimiento) {
             newErrors.tipo_movimiento = 'Tipo de movimiento es obligatorio';
         }
+        if (formData.tipo_movimiento == "salida" && formData.id_tipo_salida == null) {
+            newErrors.id_tipo_salida = 'Tipo de salida es obligatorio';
+        }
         if (!formData.fecha_entrada) {
             newErrors.fecha_entrada = 'Fecha de entrada es obligatoria';
         }
