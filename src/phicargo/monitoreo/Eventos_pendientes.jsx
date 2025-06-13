@@ -195,7 +195,12 @@ const EventosPendientes = () => {
       TransitionComponent={Transition}
       scroll='body'
     >
-      <AppBar sx={{ position: 'relative' }} elevation={0}>
+      <AppBar elevation={3}
+        position="static"
+        sx={{
+          background: 'linear-gradient(90deg, #0b2149, #002887)',
+          padding: '0 16px',
+        }}>
         <Toolbar>
           <IconButton
             edge="start"

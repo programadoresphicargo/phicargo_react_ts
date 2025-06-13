@@ -20,6 +20,7 @@ export default function EntregaMonitoreo() {
             <Grid container className='bg-soft-secondary' p={3}>
                 <Grid item xs={4} md={3}>
                     <Calendar
+                        firstDayOfWeek="mon"
                         value={selectedDate}
                         onChange={setSelectedDate} />
                 </Grid>

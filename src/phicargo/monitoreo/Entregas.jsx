@@ -53,7 +53,7 @@ const Entregas = ({ fecha }) => {
 
     try {
       setLoading(true);
-      const response = await odooApi.get('/entregas/get_by_entrega_fecha_abierto/'+fecha);
+      const response = await odooApi.get('/entregas/get_by_entrega_fecha_abierto/' + fecha);
       setData(response.data);
       setLoading(false);
     } catch (error) {
@@ -90,7 +90,7 @@ const Entregas = ({ fecha }) => {
       }
 
     } catch (error) {
-      toast.error('Error al obtener los datos: '  + error);
+      toast.error('Error al obtener los datos: ' + error);
     }
   };
 
@@ -206,7 +206,13 @@ const Entregas = ({ fecha }) => {
       onClose={handleClose}
       TransitionComponent={Transition}
     >
-      <AppBar sx={{ position: 'relative' }} elevation={0}>
+      <AppBar
+        elevation={3}
+        position="static"
+        sx={{
+          background: 'linear-gradient(90deg, #0b2149, #002887)',
+          padding: '0 16px',
+        }}>
         <Toolbar>
           <IconButton
             edge="start"
