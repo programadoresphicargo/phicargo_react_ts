@@ -25,8 +25,18 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import EPP from '../inventario/tabla';
 import SolicitudForm from './form';
+import { useAlmacen } from '../contexto/contexto';
 
 const AsignacionesEquipos = ({ x_tipo }) => {
+
+  const
+    { modoEdicion, setModoEdicion,
+      data, setData,
+      epp, setEPP,
+      eppAdded, setEPPAdded,
+      eppRemoved, setEPPRemoved,
+      eppUpdated, setEPPUpdated
+    } = useAlmacen();
 
   const [id_solicitud, setIDSolicitud] = React.useState(null);
   const [open, setOpen] = React.useState(false);
@@ -40,14 +50,14 @@ const AsignacionesEquipos = ({ x_tipo }) => {
     fetchData();
   };
 
-  const [data, setData] = useState([]);
+  const [dataSol, setDataSol] = useState([]);
   const [isLoading, setLoading] = useState(false);
 
   const fetchData = async () => {
     try {
       setLoading(true);
       const response = await odooApi.get('/tms_travel/asignaciones_equipo/');
-      setData(response.data);
+      setDataSol(response.data);
       setLoading(false);
     } catch (error) {
       console.error('Error al obtener los datos:', error);
@@ -112,7 +122,7 @@ const AsignacionesEquipos = ({ x_tipo }) => {
 
   const table = useMaterialReactTable({
     columns,
-    data,
+    data: dataSol,
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
@@ -122,7 +132,6 @@ const AsignacionesEquipos = ({ x_tipo }) => {
     positionGlobalFilter: "right",
     localization: MRT_Localization_ES,
     muiSearchTextFieldProps: {
-      placeholder: `Buscar en ${data.length} solicitud`,
       sx: { minWidth: '300px' },
       variant: 'outlined',
     },
@@ -191,6 +200,9 @@ const AsignacionesEquipos = ({ x_tipo }) => {
           isDisabled={false}
           onPress={() => {
             setIDSolicitud(null);
+            setEPP([]);
+            setEPPAdded([]);
+            setModoEdicion(true);
             handleClickOpen();
           }}
           size='sm'
@@ -212,7 +224,7 @@ const AsignacionesEquipos = ({ x_tipo }) => {
           color='success'
           className='text-white'
           startContent={<i class="bi bi-file-earmark-excel"></i>}
-          onPress={() => exportToCSV(data, columns, "viajes_activos.csv")}
+          onPress={() => exportToCSV(dataSol, columns, "viajes_activos.csv")}
           size='sm'>
           Exportar
         </Button>

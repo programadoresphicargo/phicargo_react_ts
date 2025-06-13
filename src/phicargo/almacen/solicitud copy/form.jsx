@@ -54,10 +54,10 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
             if (id_solicitud === null) {
                 const payload = {
                     data: data,
-                    epp: eppAdded
+                    equipoAdded: eppAdded
                 };
 
-                const response = await odooApi.post('/tms_travel/solicitudes_equipo/', payload);
+                const response = await odooApi.post('/tms_travel/asignaciones_equipo/', payload);
                 if (response.data.status == 'success') {
                     toast.success(response.data.message);
                 } else {
@@ -251,17 +251,6 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
                 <DialogContent>
 
                     <Stack spacing={1} direction="row" className="mb-5">
-
-                        {!id_solicitud && (
-                            <Button
-                                onPress={handleSave}
-                                color="primary"
-                                isDisabled={isSaving}
-                            >
-                                {isSaving ? 'Guardando...' : 'Registrar'}
-                            </Button>
-                        )}
-
 
                         {!modoEdicion && (
                             <Button

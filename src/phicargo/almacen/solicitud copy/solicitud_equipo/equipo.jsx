@@ -51,7 +51,7 @@ const EPPSolicitados = ({ }) => {
     () => [
       {
         accessorKey: 'id',
-        header: 'ID',
+        header: 'ID Line',
         enableEditing: false,
       },
       {
@@ -62,7 +62,7 @@ const EPPSolicitados = ({ }) => {
       {
         accessorKey: 'x_cantidad_solicitada',
         header: 'Cantidad solicitada',
-        enableEditing: data?.x_studio_estado === "borrador" ? true : false,
+        enableEditing: data?.estado === "borrador" ? true : false,
       },
     ],
     [],
@@ -101,7 +101,7 @@ const EPPSolicitados = ({ }) => {
     initialState: {
       showGlobalFilter: true,
       columnVisibility: {
-        x_cantidad_devuelta: data?.x_studio_estado === "entregado" || data?.x_studio_estado === "devuelto" ? true : false,
+        x_cantidad_devuelta: data?.estado === "entregado" || data?.estado === "devuelto" ? true : false,
       },
       hiddenColumns: ["empresa"],
       density: 'compact',
@@ -170,7 +170,7 @@ const EPPSolicitados = ({ }) => {
       const updatedData = [...epp];
       const updatedRow = { ...row.original, ...values };
 
-      updatedRow.cantidad = parseFloat(updatedRow.cantidad) || 1;
+      updatedRow.x_cantidad_solicitada = parseFloat(updatedRow.x_cantidad_solicitada) || 1;
       updatedData[row.index] = updatedRow;
       setEPP(updatedData);
 
@@ -205,10 +205,19 @@ const EPPSolicitados = ({ }) => {
           color="primary"
           size="sm"
           className='text-white'
-          isDisabled={data?.x_studio_estado == "entregado" || modoEdicion ? false : true}
+          isDisabled={data?.estado == "entregado" || modoEdicion ? false : true}
           onPress={() => table.setEditingRow(row)}
         >
           Editar
+        </Button>
+        <Button
+          color="danger"
+          size="sm"
+          className='text-white'
+          isDisabled={data?.estado == "entregado" || modoEdicion ? false : true}
+          onPress={() => deleteRow(row.original.id)}
+        >
+          Borrar
         </Button>
       </Box>
     ),
