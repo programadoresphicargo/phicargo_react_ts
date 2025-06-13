@@ -48,7 +48,7 @@ const Validador = ({ id_acceso, estado_acceso, open, handleClose }) => {
     const cambiar_estado = async (id_acceso) => {
         try {
             var baseUrl = '';
-            if (estado_acceso == 'espera') {
+            if (estado_acceso == 'espera' || estado_acceso == 'autorizado') {
                 baseUrl = '/accesos/validar_acceso/';
             } else if (estado_acceso == 'validado') {
                 baseUrl = '/accesos/archivar_acceso/';
