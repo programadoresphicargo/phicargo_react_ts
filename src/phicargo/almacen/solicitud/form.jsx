@@ -252,7 +252,6 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
 
                         {!id_solicitud && (
                             <Button
-                                size="sm"
                                 onPress={handleSave}
                                 color="primary"
                                 isDisabled={isSaving}
@@ -307,6 +306,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
                                     <h2><strong>Creado por:</strong> {data?.usuario}</h2>
                                     <h2><strong>Fecha de solicitud:</strong> {data?.create_date}</h2>
                                     <div className="mt-5">
+                                        <ViajeEPP id_viaje={data?.x_waybill_id}></ViajeEPP>
                                         <h2><strong>Operador asignado:</strong> {data?.operador}</h2>
                                         <h2><strong>Inicio programado:</strong> {data?.inicio_programado}</h2>
                                     </div>

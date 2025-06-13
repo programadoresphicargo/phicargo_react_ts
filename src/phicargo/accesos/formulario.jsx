@@ -42,6 +42,7 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
+import { useAuthContext } from "@/modules/auth/hooks";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -51,6 +52,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
     const [openEmpresas, setEmpresas] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isLoadingVisitantes, setIsLoadingVisitantes] = useState(false);
+    const { session } = useAuthContext();
 
     const abrirEmpresas = () => {
         setEmpresas(true);
@@ -147,27 +149,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
             if (data) {
 
                 getVisitantesAccceso();
-                setFormData({
-                    ...formData,
-                    id_acceso: data.id_acceso || 0,
-                    estado_acceso: data.estado_acceso || '',
-                    id_empresa: data.id_empresa || '',
-                    empresa: data.empresa || '',
-                    id_empresa_visitada: data.id_empresa_visitada || '',
-                    tipo_movimiento: data.tipo_movimiento || '',
-                    fecha_entrada: data.fecha_entrada || '',
-                    fecha_salida: data.fecha_salida || '',
-                    tipo_identificacion: data.tipo_identificacion || '',
-                    motivo: data.motivo || '',
-                    notas: data.notas || '',
-                    usuario_creacion: data.usuario_creacion,
-                    usuario_valido: data.usuario_valido,
-                    usuario_archivo: data.usuario_archivo,
-                    fecha_creacion: data.fecha_creacion || '',
-                    fecha_validacion: data.fecha_validacion || '',
-                    fecha_archivado: data.fecha_archivado || '',
-                    areas: data.areas || '',
-                });
+                setFormData(data);
             } else {
                 toast.error("No se encontraron datos para el acceso.");
             }
@@ -179,7 +161,21 @@ const AccesoForm = ({ id_acceso, onClose }) => {
         }
     };
 
+    const [tiposSalida, setTiposSalida] = useState([]);
+
+
+    const getTiposSalida = () => {
+        odooApi.get('/accesos/tipos_salida/')
+            .then(response => {
+                setTiposSalida(response.data);
+            })
+            .catch(err => {
+                console.error('Error al obtener la flota:', err);
+            });
+    };
+
     useEffect(() => {
+        getTiposSalida();
         if (id_acceso) {
             fetchEmpresasVisitada();
             getAcceso();
@@ -218,6 +214,15 @@ const AccesoForm = ({ id_acceso, onClose }) => {
     useEffect(() => {
         fetchEmpresasVisitada();
     }, []);
+
+    useEffect(() => {
+        if (formData.tipo_movimiento !== 'salida') {
+            setFormData((prev) => ({
+                ...prev,
+                id_tipo_salida: null, // o puedes usar undefined o '' según cómo manejes el form
+            }));
+        }
+    }, [formData.tipo_movimiento]);
 
     const handleChange = (name, value) => {
         setFormData((prevData) => ({
@@ -288,6 +293,24 @@ const AccesoForm = ({ id_acceso, onClose }) => {
         }
     };
 
+    const autorizar_acceso = async (e) => {
+        try {
+            setIsLoading(true);
+            const response = await odooApi.patch('/accesos/autorizar/' + id_acceso);
+            if (response.data.status === "success") {
+                toast.success(response.data.message);
+                onClose();
+            } else {
+                toast.error("Error al actualizar los datos.");
+            }
+            setIsLoading(false);
+        } catch (error) {
+            setIsLoading(false);
+            console.error('Error en la petición', error);
+            toast.error('Error en la conexión o al procesar los datos. ' + error);
+        }
+    };
+
     const [OpenValidador, setOpenValidador] = React.useState(false);
 
     const handleClickOpenValidador = () => {
@@ -327,6 +350,9 @@ const AccesoForm = ({ id_acceso, onClose }) => {
             {formData.estado_acceso == 'espera' && (
                 <Button onPress={handleClickOpenValidador} style={{ marginTop: '20px' }} color='primary'>Validar {formData.tipo_movimiento}</Button>
             )}
+            {session?.user?.permissions?.includes(510) && id_acceso && formData.tipo_movimiento == 'salida' && (
+                <Button onPress={autorizar_acceso} style={{ marginTop: '20px' }} color='danger'>Autorizar {formData.tipo_movimiento}</Button>
+            )}
             {formData.estado_acceso == 'validado' && (
                 <Button onPress={handleClickOpenValidador} style={{ marginTop: '20px' }} color='primary'>Archivar / Finalizar acceso</Button>
             )}
@@ -351,7 +377,6 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                     <CardBody>
 
                         <Grid container spacing={2}>
-
                             <Grid item xs={12} sm={6} md={4}>
                                 <Autocomplete
                                     id="tipo_movimiento"
@@ -368,6 +393,25 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                                     {(item) => <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>}
                                 </Autocomplete>
                             </Grid>
+
+                            {formData.tipo_movimiento == 'salida' && (
+                                <Grid item xs={12} sm={6} md={4}>
+                                    <Autocomplete
+                                        id="id_tipo_salida"
+                                        name="id_tipo_salida"
+                                        variant='bordered'
+                                        label="Tipo de salida"
+                                        selectedKey={String(formData.id_tipo_salida) || null}
+                                        onSelectionChange={(e) => handleChange('id_tipo_salida', e)}
+                                        isDisabled={disabledFom}
+                                        defaultItems={tiposSalida}
+                                        isInvalid={!!errors.id_tipo_salida}
+                                        errorMessage={errors.id_tipo_salida}
+                                    >
+                                        {(item) => <AutocompleteItem key={item.id_tipo_salida}>{item.nombre}</AutocompleteItem>}
+                                    </Autocomplete>
+                                </Grid>
+                            )}
 
                             <Grid item xs={12} sm={6} md={4}>
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>

@@ -35,11 +35,13 @@ export default function Accesos() {
                             <Tab label="PEATONAL" value="1" sx={{ fontFamily: 'Inter' }} />
                             <Tab label="VEHICULAR" value="2" sx={{ fontFamily: 'Inter' }} />
                             <Tab label="ARCHIVADOS" value="3" sx={{ fontFamily: 'Inter' }} />
+                            <Tab label="POR AUTORIZAR" value="4" sx={{ fontFamily: 'Inter' }} />
                         </TabList>
                     </Box>
                     <TabPanel value="1" sx={{ padding: 0, margin: 0 }}><Maniobras estado_maniobra={'peatonal'} /></TabPanel>
                     <TabPanel value="2" sx={{ padding: 0, margin: 0 }}> <Maniobras estado_maniobra={'vehicular'} /></TabPanel>
                     <TabPanel value="3" sx={{ padding: 0, margin: 0 }}><Maniobras estado_maniobra={'archivado'} /></TabPanel>
+                    <TabPanel value="4" sx={{ padding: 0, margin: 0 }}><Maniobras estado_maniobra={'archivado'} /></TabPanel>
                 </TabContext>
             </Box>
         </>

@@ -58,7 +58,7 @@ const Validador = ({ id_acceso, estado_acceso, open, handleClose }) => {
                 toast.success(response.data.message);
                 handleClose();
             } else {
-                toast.error("Error2: " + data.error);
+                toast.error(response.data.message);
             }
         } catch (error) {
             console.error("Error obteniendo los datos:", error);

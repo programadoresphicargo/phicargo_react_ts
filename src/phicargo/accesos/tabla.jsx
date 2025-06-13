@@ -251,7 +251,12 @@ const Maniobras = ({ estado_maniobra }) => {
       onClose={handleClose}
       TransitionComponent={Transition}
     >
-      <AppBar sx={{ position: 'relative' }} elevation={0}>
+      <AppBar elevation={0}
+        position="static"
+        sx={{
+          background: 'linear-gradient(90deg, #0b2149, #002887)',
+          padding: '0 16px',
+        }}>
         <Toolbar>
           <IconButton
             edge="start"

@@ -7,7 +7,7 @@ export const AlmacenProvider = ({ children }) => {
     const [data, setData] = useState({
         id: 0,
         x_waybill_id: 0,
-        observaciones: "",
+        x_tipo: "",
     });
     const [modoEdicion, setModoEdicion] = useState(false);
     const [epp, setEPP] = useState([]);

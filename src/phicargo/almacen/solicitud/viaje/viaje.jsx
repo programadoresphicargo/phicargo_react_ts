@@ -50,7 +50,7 @@ const ViajeEPP = ({ id_viaje }) => {
 
   const fetchData = async (id) => {
     try {
-      const response = await odooApi.get('/tms_travel/get_by_id/' + id);
+      const response = await odooApi.get('/tms_waybill/get_by_id/' + id);
       setDataViaje(response.data[0]);
     } catch (error) {
       console.error('Error al obtener los datos:', error);
@@ -60,7 +60,7 @@ const ViajeEPP = ({ id_viaje }) => {
   useEffect(() => {
     const cargarViajeInicial = async () => {
       if (viajePorDefectoId) {
-        const res = await odooApi.get(`/tms_travel/get_by_id/${viajePorDefectoId}`);
+        const res = await odooApi.get(`/tms_waybill/get_by_id/${viajePorDefectoId}`);
         const item = res.data[0];
         setSelectedItem(item);
         list.setFilterText(item.name);
@@ -78,12 +78,12 @@ const ViajeEPP = ({ id_viaje }) => {
 
   const list = useAsyncList({
     async load({ signal, filterText }) {
-      const res = await odooApi.get(`/tms_travel/name/${filterText}`);
+      const res = await odooApi.get(`/tms_waybill/name/${filterText}`);
       const items = res.data;
 
       // Asegura que el item por defecto esté incluido
       if (!filterText && !items.some((item) => item.id === viajePorDefectoId)) {
-        const defaultRes = await odooApi.get(`/tms_travel/get_by_id/${viajePorDefectoId}`);
+        const defaultRes = await odooApi.get(`/tms_waybill/get_by_id/${viajePorDefectoId}`);
         items.unshift(defaultRes.data[0]);
       }
 
@@ -100,7 +100,7 @@ const ViajeEPP = ({ id_viaje }) => {
       fetchData(key);
       setData((prev) => ({
         ...prev,
-        id_viaje: key,
+        x_waybill_id: key,
       }));
     }
   };
@@ -117,8 +117,8 @@ const ViajeEPP = ({ id_viaje }) => {
             onInputChange={list.setFilterText}
             isLoading={list.isLoading}
             items={list.items}
-            label="Viaje"
-            placeholder="Buscar viaje..."
+            label="Carta porte"
+            placeholder="Buscar referencia carta porte"
             variant="faded"
             className="max-w-xs"
             isDisabled={!modoEdicion}
@@ -129,9 +129,6 @@ const ViajeEPP = ({ id_viaje }) => {
               </AutocompleteItem>
             )}
           </Autocomplete>
-
-          <Input label="Operador" value={dataViaje?.employee?.name ?? ''} variant="faded" isDisabled={!modoEdicion}></Input>
-          <Input label="Vehiculo" value={dataViaje?.vehicle?.name ?? ''} variant="faded" isDisabled={!modoEdicion}></Input>
         </div>
       </div>
 
