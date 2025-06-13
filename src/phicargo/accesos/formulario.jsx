@@ -359,7 +359,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                     Validar {formData.tipo_movimiento}
                 </Button>
             )}
-            {session?.user?.permissions?.includes(510) && id_acceso && formData.tipo_movimiento == 'salida' && (
+            {session?.user?.permissions?.includes(510) && id_acceso && formData.tipo_movimiento == 'salida' && formData.estado_acceso === 'espera' && (
                 <Button onPress={autorizar_acceso} style={{ marginTop: '20px' }} color='danger'>Autorizar {formData.tipo_movimiento}</Button>
             )}
             {formData.estado_acceso == 'validado' && (
