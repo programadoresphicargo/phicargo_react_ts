@@ -18,7 +18,6 @@ import { ToastContainer } from 'react-toastify';
 import { Toaster } from 'react-hot-toast';
 import UsersManagementRoutes from '../modules/users-management/routes/UsersManagementRoutes';
 import IncidentsRoutes from '@/modules/incidents/routes/IncidentsRoutes';
-import AsignacionesEquipos from '@/phicargo/almacen/solicitud copy/solicitudes';
 
 // Lazy load the components
 const CartasPorte = lazy(
