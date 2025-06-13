@@ -350,8 +350,14 @@ const AccesoForm = ({ id_acceso, onClose }) => {
             {id_acceso && !disabledFom && (
                 <Button onPress={actualizar_acceso} style={{ marginTop: '20px' }} color='primary' isLoading={isLoading}>Guardar Cambios</Button>
             )}
-            {formData.estado_acceso == 'espera' && (
-                <Button onPress={handleClickOpenValidador} style={{ marginTop: '20px' }} color='primary'>Validar {formData.tipo_movimiento}</Button>
+            {(formData.estado_acceso === 'espera' || formData.estado_acceso === 'autorizado') && (
+                <Button
+                    onPress={handleClickOpenValidador}
+                    style={{ marginTop: '20px' }}
+                    color="primary"
+                >
+                    Validar {formData.tipo_movimiento}
+                </Button>
             )}
             {session?.user?.permissions?.includes(510) && id_acceso && formData.tipo_movimiento == 'salida' && (
                 <Button onPress={autorizar_acceso} style={{ marginTop: '20px' }} color='danger'>Autorizar {formData.tipo_movimiento}</Button>
