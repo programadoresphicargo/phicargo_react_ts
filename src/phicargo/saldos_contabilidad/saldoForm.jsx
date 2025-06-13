@@ -104,6 +104,7 @@ const SaldoForm = ({ id_cuenta, referencia, onClose }) => {
             </Grid>
             <Grid item xs={12}>
                 <DatePicker
+                    firstDayOfWeek="mon"
                     label="Fecha del saldo"
                     variant="bordered"
                     value={value}
