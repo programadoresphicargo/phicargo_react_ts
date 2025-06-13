@@ -183,6 +183,7 @@ const DetencionesTable = () => {
         }}
       >
         <DatePicker
+          firstDayOfWeek="mon"
           variant='bordered'
           label="Fecha inicio"
           value={fechaInicio}
@@ -190,6 +191,7 @@ const DetencionesTable = () => {
         </DatePicker>
 
         <DatePicker
+          firstDayOfWeek="mon"
           variant='bordered'
           label="Fecha fin"
           value={fechaFin}
