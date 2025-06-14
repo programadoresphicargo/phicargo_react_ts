@@ -16,18 +16,18 @@ const pages: MenuItemType[] = [
     requiredPermissions: [],
     exact: true,
   },
-  {
-    name: 'Revisión de Únidades',
-    path: '/incidencias/revision-unidades',
-    requiredPermissions: [],
-    exact: true,
-  },
-  {
-    name: 'Capacitación',
-    path: '/incidencias/capacitacion',
-    requiredPermissions: [],
-    exact: true,
-  },
+  // {
+  //   name: 'Revisión de Únidades',
+  //   path: '/incidencias/revision-unidades',
+  //   requiredPermissions: [],
+  //   exact: true,
+  // },
+  // {
+  //   name: 'Capacitación',
+  //   path: '/incidencias/capacitacion',
+  //   requiredPermissions: [],
+  //   exact: true,
+  // },
 ];
 
 interface Props {
