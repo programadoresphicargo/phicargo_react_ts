@@ -33,6 +33,7 @@ export interface IncidentApi extends IncidentBaseApi {
   user: UserBasicApi;
   driver: DriverInfoApi;
   vehicle: VehicleInfoApi | null;
+  attended_at: string | null;
   evidences: OneDriveFileApi[];
 }
 
@@ -46,4 +47,5 @@ export interface IncidentCreateApi extends IncidentBaseApi {
 export type IncidentUpdateApi = Partial<IncidentBaseApi> & {
   vehicle_id?: number | null;
   driver_id?: number | null;
+  attended_at?: string | null;
 };

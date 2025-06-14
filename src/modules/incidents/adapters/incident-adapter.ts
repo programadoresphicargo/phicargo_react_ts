@@ -55,6 +55,9 @@ export class IncidentAdapter {
         ? IncidentAdapter.vehicleInfoToLocal(incident.vehicle)
         : null,
       type: incident.type,
+      attendedAt: incident.attended_at
+        ? dayjs(incident.attended_at)
+        : null,
       evidences: incident.evidences?.map(FilesAdapter.toOneDriveFile) ?? [],
     };
   }
@@ -106,6 +109,9 @@ export class IncidentAdapter {
     }
     if (incident.driverId !== undefined) {
       data.driver_id = incident.driverId ?? null;
+    }
+    if (incident.attendedAt) {
+      data.attended_at = incident.attendedAt.format('YYYY-MM-DD');
     }
     return data;
   }
