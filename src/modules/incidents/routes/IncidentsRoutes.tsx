@@ -6,6 +6,7 @@ import IncidentsLayout from '../components/layouts/IncidentsLayout';
 import ProtectedRoute from '@/router/ProtectedRoute';
 
 const IncidentsPage = lazy(() => import('../pages/IncidentsPage'));
+const DirectionIncidentsPage = lazy(() => import('../pages/DirectionIncidentsPage'));
 
 const INCIDENTS_PERMISSION = 214;
 
@@ -24,6 +25,14 @@ const IncidentsRoutes = () => (
       element={
         <Suspense fallback={<LoadingPage />}>
           <IncidentsPage />
+        </Suspense>
+      }
+    ></Route>
+    <Route
+      path="direccion"
+      element={
+        <Suspense fallback={<LoadingPage />}>
+          <DirectionIncidentsPage />
         </Suspense>
       }
     ></Route>

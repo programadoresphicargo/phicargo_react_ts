@@ -1,9 +1,34 @@
-import { ErrorBoundary } from '@/components/utils/ErrorBoundary';
-import { Outlet } from 'react-router-dom';
 import { ReactNode } from 'react';
-import { Toaster } from 'react-hot-toast';
-import { Header } from '../ui/Header';
+import type { MenuItemType } from '@/types';
+import BaseLayout from '@/layouts/BaseLayout';
 import { IncidentsProvider } from '../../context/IncidentsContext';
+
+const pages: MenuItemType[] = [
+  {
+    name: 'Incidencias',
+    path: '/incidencias',
+    requiredPermissions: [],
+    exact: true,
+  },
+  {
+    name: 'Incidencias Dirección',
+    path: '/incidencias/direccion',
+    requiredPermissions: [],
+    exact: true,
+  },
+  // {
+  //   name: 'Revisión de Únidades',
+  //   path: '/incidencias/revision-unidades',
+  //   requiredPermissions: [],
+  //   exact: true,
+  // },
+  // {
+  //   name: 'Capacitación',
+  //   path: '/incidencias/capacitacion',
+  //   requiredPermissions: [],
+  //   exact: true,
+  // },
+];
 
 interface Props {
   children?: ReactNode;
@@ -11,18 +36,9 @@ interface Props {
 
 const IncidentsLayout = ({ children }: Props) => {
   return (
-    <>
-      <IncidentsProvider>
-        <Toaster position="top-center" reverseOrder={false} />
-        <Header />
-        <main className="flex-grow w-full">
-          <ErrorBoundary>
-            {children}
-            <Outlet />
-          </ErrorBoundary>
-        </main>
-      </IncidentsProvider>
-    </>
+    <IncidentsProvider>
+      <BaseLayout pages={pages}>{children}</BaseLayout>
+    </IncidentsProvider>
   );
 };
 

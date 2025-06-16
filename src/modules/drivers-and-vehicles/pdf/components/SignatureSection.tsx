@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
 
 const signatures: { title: string, name?: string }[] = [
   { title: 'Requisitor'},
-  { title: 'Jefe Directo', name: 'Severino Dominguez, Luis Enrique' },
+  { title: 'Jefe Directo', name: 'Miriam del Carmen González Quevedo' },
   { title: 'Gerente de Operaciones', name: 'Rivera Reyes, Josefina' },
   { title: 'Analista de Nominas,', name: 'Flores Morales Esthela' },
 ];
