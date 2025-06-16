@@ -21,6 +21,7 @@ import { Grid } from '@mui/system';
 import { useAuthContext } from '@/modules/auth/hooks';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion'
 
 type MenuItemType = {
   icon: string;
@@ -141,6 +142,27 @@ const MainMenuPage = () => {
     [session],
   );
 
+  const containerVariants = {
+    animate: {
+      transition: {
+        staggerChildren: 0.05, // tiempo entre cada item (en segundos)
+      },
+    },
+  };
+
+  const itemVariants = {
+    initial: { opacity: 0, y: 20 },
+    animate: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: "spring",
+        stiffness: 100,
+        damping: 10,
+      },
+    },
+  };
+
   return (
     <main
       style={{
@@ -177,21 +199,40 @@ const MainMenuPage = () => {
           />
         </div>
       </div>
-      <div className="flex-grow flex items-center relative lg:mx-12 z-10 -mt-10 sm:-mt-14 md:-mt-20">
-        <div className="w-full">
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-5">
-            {filteredMenuItems.map((item, index) => (
-              <MenuItem
-                key={index}
-                icon={item.icon}
-                label={item.label}
-                link={item.link}
-              />
-            ))}
+      <div className="">
+        <div className="">
+          <div className="">
+            <motion.div
+              className="grid-container"
+              variants={containerVariants}
+              initial="initial"
+              animate="animate"
+            >
+              {filteredMenuItems.map((item, index) => (
+                <motion.div
+                  key={index}
+                  variants={itemVariants}
+                  style={{
+                    padding: "10px",
+                    borderRadius: "20px",
+                    display: "flex",             // ✅ Activa flex
+                    justifyContent: "center",    // ✅ Centra horizontalmente
+                    alignItems: "center",        // ✅ Centra verticalmente
+                  }}
+                >
+                  <MenuItem
+                    key={index}
+                    icon={item.icon}
+                    label={item.label}
+                    link={item.link}
+                  />
+                </motion.div>
+              ))}
+            </motion.div>
           </div>
         </div>
       </div>
-    </main>
+    </main >
   );
 };
 

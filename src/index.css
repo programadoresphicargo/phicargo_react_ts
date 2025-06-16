@@ -61,3 +61,15 @@ body {
   z-index: 200000 !important;
   position: relative;
 }
+
+.grid-container {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(8, 1fr);
+  /* Escritorio */
+
+  /* En pantallas pequeñas, 2 columnas */
+  @media (max-width: 600px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

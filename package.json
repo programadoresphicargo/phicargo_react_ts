@@ -51,6 +51,7 @@
       "jspdf-autotable": "^3.8.4",
       "leaflet": "^1.9.4",
       "material-react-table": "^3.0.1",
+      "motion": "^12.18.1",
       "prop-types": "^15.8.1",
       "quill": "^2.0.2",
       "react": "^18.3.1",
