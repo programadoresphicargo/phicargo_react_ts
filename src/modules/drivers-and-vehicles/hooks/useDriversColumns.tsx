@@ -1,15 +1,13 @@
 import { useMemo } from 'react';
 import { type MRT_ColumnDef } from 'material-react-table';
-import type {
-  Modality,
-  DriverWithRealStatus,
-} from '@/modules/drivers/models';
+import type { Modality, DriverWithRealStatus } from '@/modules/drivers/models';
 import { ManeuverCell } from '../components/ui/ManeuverCell';
 import { TravelCell } from '../components/ui/TravelCell';
 import { JobChip } from '../../drivers/components/ui/JobChip';
 import { ModalityChip } from '../../drivers/components/ui/ModalityChip';
 import { getDriverRealStatusConf } from '../utilities';
 import { Chip } from '@heroui/react';
+import dayjs, { Dayjs } from 'dayjs';
 
 export const useDriversColumns = () => {
   const columns = useMemo<MRT_ColumnDef<DriverWithRealStatus>[]>(
@@ -70,6 +68,32 @@ export const useDriversColumns = () => {
       },
       { accessorKey: 'licenseId', header: 'Licencia' },
       { accessorKey: 'licenseType', header: 'Tipo Licencia' },
+      {
+        accessorFn: (row) => row.licenseExpiration,
+        header: 'Fecha de Expiración',
+        id: 'licenseExpiration',
+        Cell: ({ cell }) => {
+          const value = cell.getValue<Dayjs | null>();
+          return value ? (
+            <span className="text-xs">{value.format('DD/MM/YYYY')}</span>
+          ) : (
+            <span className="text-gray-400">SIN ASIGNAR</span>
+          );
+        },
+      },
+      {
+        header: 'Días por vencer',
+        id: 'daysToExpire',
+        Cell: ({ row }) => {
+          const value = row.original.licenseExpiration;
+          const daysToExpire = dayjs(value).diff(dayjs(), 'day') + 1;
+          return value ? (
+            <span className={`text-xs font-bold ${daysToExpire < 5 ? 'text-red-500' : ''}`}>{daysToExpire}</span>
+          ) : (
+            <span className="text-gray-400">SIN ASIGNAR</span>
+          );
+        },
+      },
       {
         accessorFn: (row) => row.modality,
         header: 'Modalidad',
