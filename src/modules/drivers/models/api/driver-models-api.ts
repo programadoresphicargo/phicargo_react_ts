@@ -24,6 +24,7 @@ export interface DriverBaseApi {
   active: boolean;
   tms_driver_license_id: string | null;
   tms_driver_license_type: string | null;
+  tms_driver_license_expiration: string | null;
   no_licencia: string | null;
   x_modalidad: Modality | null;
   x_peligroso_lic: IsDangerous | null;
