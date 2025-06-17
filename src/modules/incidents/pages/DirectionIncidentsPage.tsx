@@ -8,12 +8,15 @@ import { MaterialReactTable } from 'material-react-table';
 import { useMemo, useState } from 'react';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import InfoIcon from '@mui/icons-material/Info';
 import { Box, IconButton, Tooltip } from '@mui/material';
 import { MuiAlertDialog } from '@/components';
 import dayjs from 'dayjs';
+import { IncidentDetailsModal } from '../components/IncidentDetailsModal';
 
 const DirectionIncidentsPage = () => {
   const { dateRange, setDateRange, formatedDateRange } = useIncidentsContext();
+  const [detail, setDetail] = useState<Incident | null>(null);
 
   const [toAttendIncident, setToAttendIncident] = useState<Incident | null>(
     null,
@@ -88,6 +91,15 @@ const DirectionIncidentsPage = () => {
               )}
             </IconButton>
           </Tooltip>
+          <Tooltip title="Detalles">
+            <IconButton
+              size="small"
+              color="primary"
+              onClick={() => setDetail(row.original)}
+            >
+              <InfoIcon />
+            </IconButton>
+          </Tooltip>
         </Box>
       );
     },
@@ -119,6 +131,14 @@ const DirectionIncidentsPage = () => {
         message="¿Estás seguro de que deseas confirmar esta incidencia?"
         severity="info"
       />
+
+      {detail && (
+        <IncidentDetailsModal
+          open={!!detail}
+          onClose={() => setDetail(null)}
+          incident={detail}
+        />
+      )}
     </>
   );
 };
