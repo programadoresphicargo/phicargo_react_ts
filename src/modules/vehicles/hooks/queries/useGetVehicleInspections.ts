@@ -4,12 +4,13 @@ import { VehicleInspectionService } from '../../services';
 
 const VEHICLE_INSPECTION_QUERY_KEY = 'vehicles-inspections';
 
-export const useGetVehicleInspections = () => {
+export const useGetVehicleInspections = (month: number, year: number) => {
   const query = useQuery<VehicleInspection[]>({
-    queryKey: [VEHICLE_INSPECTION_QUERY_KEY],
-    queryFn: () => VehicleInspectionService.getVehicleInspections(6, 2025),
+    queryKey: [VEHICLE_INSPECTION_QUERY_KEY, month, year],
+    queryFn: () => VehicleInspectionService.getVehicleInspections(month, year),
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 10,
+    enabled: month > 0 && year > 0
   });
 
   return {

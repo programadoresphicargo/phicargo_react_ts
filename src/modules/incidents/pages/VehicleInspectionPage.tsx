@@ -3,9 +3,16 @@ import { useGetVehicleInspections } from '@/modules/vehicles/hooks/queries';
 import type { VehicleInspection } from '@/modules/vehicles/models';
 import { MaterialReactTable } from 'material-react-table';
 import { useVehicleInspectionColumns } from '../hooks/useVehicleInspectionColumns';
+import { MonthSelect, YearSelect } from '@/components/inputs';
+import { useState } from 'react';
 
 const VehicleInspectionPage = () => {
-  const { query } = useGetVehicleInspections();
+  const [month, setMonth] = useState<string | number>(
+    new Date().getMonth() + 1,
+  );
+  const [year, setYear] = useState<string | number>(new Date().getFullYear());
+
+  const { query } = useGetVehicleInspections(month as number, year as number);
 
   const columns = useVehicleInspectionColumns();
 
@@ -40,25 +47,12 @@ const VehicleInspectionPage = () => {
     //     </Tooltip>
     //   </Box>
     // ),
-    // toolbarActions: (
-    //   <div className="flex items-center gap-4">
-    //     <AddButton
-    //       label="Crear Incidencia"
-    //       size="small"
-    //       onClick={() => table.setCreatingRow(true)}
-    //     />
-    //     <DateRangePicker
-    //       showOneCalendar
-    //       placeholder="Rango"
-    //       showWeekNumbers
-    //       isoWeek
-    //       ranges={[]}
-    //       value={dateRange}
-    //       onChange={setDateRange}
-    //       cleanable={false}
-    //     />
-    //   </div>
-    // ),
+    toolbarActions: (
+      <div className="flex items-center gap-4">
+        <MonthSelect onMonthChange={setMonth} />
+        <YearSelect onYearChange={setYear} />
+      </div>
+    ),
     // muiEditRowDialogProps: dialogProps,
     // muiCreateRowModalProps: dialogProps,
     // renderCreateRowDialogContent: ({ table }) => (
@@ -87,3 +81,4 @@ const VehicleInspectionPage = () => {
 };
 
 export default VehicleInspectionPage;
+
