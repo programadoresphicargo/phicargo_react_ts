@@ -6,7 +6,12 @@ import IncidentsLayout from '../components/layouts/IncidentsLayout';
 import ProtectedRoute from '@/router/ProtectedRoute';
 
 const IncidentsPage = lazy(() => import('../pages/IncidentsPage'));
-const DirectionIncidentsPage = lazy(() => import('../pages/DirectionIncidentsPage'));
+const DirectionIncidentsPage = lazy(
+  () => import('../pages/DirectionIncidentsPage'),
+);
+const VehicleInspectionPage = lazy(
+  () => import('../pages/VehicleInspectionPage'),
+);
 
 const INCIDENTS_PERMISSION = 214;
 
@@ -33,6 +38,14 @@ const IncidentsRoutes = () => (
       element={
         <Suspense fallback={<LoadingPage />}>
           <DirectionIncidentsPage />
+        </Suspense>
+      }
+    ></Route>
+    <Route
+      path="inspeccion-unidades"
+      element={
+        <Suspense fallback={<LoadingPage />}>
+          <VehicleInspectionPage />
         </Suspense>
       }
     ></Route>

@@ -16,12 +16,12 @@ const pages: MenuItemType[] = [
     requiredPermissions: [],
     exact: true,
   },
-  // {
-  //   name: 'Revisión de Únidades',
-  //   path: '/incidencias/revision-unidades',
-  //   requiredPermissions: [],
-  //   exact: true,
-  // },
+  {
+    name: 'Revisión de Únidades',
+    path: '/incidencias/inspeccion-unidades',
+    requiredPermissions: [],
+    exact: true,
+  },
   // {
   //   name: 'Capacitación',
   //   path: '/incidencias/capacitacion',
