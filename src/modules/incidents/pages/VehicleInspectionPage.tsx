@@ -5,12 +5,32 @@ import { MaterialReactTable } from 'material-react-table';
 import { useVehicleInspectionColumns } from '../hooks/useVehicleInspectionColumns';
 import { MonthSelect, YearSelect } from '@/components/inputs';
 import { useState } from 'react';
+import { VehicleInspectionDetailModal } from '@/modules/vehicles/components/vehicle-inspections/VehicleInspectionDetailsModal';
+import InfoIcon from '@mui/icons-material/Info';
+import { Box, IconButton, Tooltip } from '@mui/material';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+
+// const dialogProps: DialogProps = {
+//   slots: {
+//     transition: MuiTransition,
+//   },
+//   disableEnforceFocus: true,
+//   disableScrollLock: true,
+//   open: true,
+//   maxWidth: 'md',
+//   sx: {
+//     '& .MuiPaper-root': {
+//       borderRadius: 4,
+//     },
+//   },
+// };
 
 const VehicleInspectionPage = () => {
   const [month, setMonth] = useState<string | number>(
     new Date().getMonth() + 1,
   );
   const [year, setYear] = useState<string | number>(new Date().getFullYear());
+  const [detail, setDetail] = useState<VehicleInspection | null>(null);
 
   const { query } = useGetVehicleInspections(month as number, year as number);
 
@@ -29,24 +49,23 @@ const VehicleInspectionPage = () => {
     containerHeight: 'calc(100vh - 170px)',
     enableRowActions: true,
     positionActionsColumn: 'first',
-    // renderRowActions: ({ row }) => (
-    //   <Box sx={{ display: 'flex' }}>
-    //     <Tooltip title="Detalles">
-    //       <IconButton
-    //         size="small"
-    //         color="primary"
-    //         onClick={() => setDetail(row.original)}
-    //       >
-    //         <InfoIcon />
-    //       </IconButton>
-    //     </Tooltip>
-    //     <Tooltip title="Editar">
-    //       <IconButton size="small" onClick={() => table.setEditingRow(row)}>
-    //         <EditIcon />
-    //       </IconButton>
-    //     </Tooltip>
-    //   </Box>
-    // ),
+    renderRowActions: ({ row }) => {
+      const value = row.original;
+      const hasInspection = !!value.inspection;
+      return (
+        <Box sx={{ display: 'flex' }}>
+          <Tooltip title={hasInspection ? 'Ver detalles' : 'Revisar Unidad'}>
+            <IconButton
+              size="small"
+              color={hasInspection ? 'primary' : 'warning'}
+              onClick={() => setDetail(value)}
+            >
+              {hasInspection ? <InfoIcon /> : <VisibilityIcon />}
+            </IconButton>
+          </Tooltip>
+        </Box>
+      );
+    },
     toolbarActions: (
       <div className="flex items-center gap-4">
         <MonthSelect onMonthChange={setMonth} />
@@ -69,13 +88,13 @@ const VehicleInspectionPage = () => {
   return (
     <>
       <MaterialReactTable table={table} />
-      {/* {detail && (
-        <IncidentDetailsModal
+      {detail && (
+        <VehicleInspectionDetailModal
           open={!!detail}
           onClose={() => setDetail(null)}
-          incident={detail}
+          vehicleInspection={detail}
         />
-      )} */}
+      )}
     </>
   );
 };
