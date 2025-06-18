@@ -13,4 +13,6 @@ export * from './VehicleSearchInput';
 export * from './DateRangePicker';
 export * from './HeroAutocompleteInput';
 export * from './FilesInput';
+export * from './MonthSelect';
+export * from './YearSelect';
 
