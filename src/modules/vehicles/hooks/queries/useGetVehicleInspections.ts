@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import type { VehicleInspection } from '../../models';
 import { VehicleInspectionService } from '../../services';
 
-const VEHICLE_INSPECTION_QUERY_KEY = 'vehicles-inspections';
+export const VEHICLE_INSPECTION_QUERY_KEY = 'vehicles-inspections';
 
 export const useGetVehicleInspections = (month: number, year: number) => {
   const query = useQuery<VehicleInspection[]>({
