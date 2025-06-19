@@ -2,7 +2,6 @@ import { useState, useMemo, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import dayjs from 'dayjs';
 import type { IncidentCreate } from '../models';
-import { useVehicleQueries } from '@/modules/vehicles/hooks/queries';
 import { getIncidentOptions } from '../utilities';
 import { useIncidentsQueries } from '../hooks/quries';
 
@@ -39,7 +38,6 @@ export function useCreateIncidentForm({
 
   const [isDirectionReport, setIsDirectionReport] = useState(false);
 
-  const { vehicleQuery } = useVehicleQueries();
   const {
     createIncident: { mutate, isPending },
   } = useIncidentsQueries({ driverId });
@@ -104,12 +102,11 @@ export function useCreateIncidentForm({
     setFiles,
     createUnavailability,
     setCreateUnavailability,
-    vehicleQuery,
     incidenceOptions,
     damageCostDisabled,
     handleSubmit,
     isPending,
-    isDirectionReport
+    isDirectionReport,
   };
 }
 

@@ -1,5 +1,4 @@
 import {
-  AutocompleteElement,
   RadioButtonGroup,
   SelectElement,
   TextareaAutosizeElement,
@@ -7,7 +6,6 @@ import {
 } from 'react-hook-form-mui';
 import { DatePickerElement } from 'react-hook-form-mui/date-pickers';
 import { Checkbox, Divider, FormControlLabel, FormGroup } from '@mui/material';
-import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
 
 import { FileUploadInput } from '@/components/inputs';
 import { Button, MuiSaveButton } from '@/components/ui';
@@ -17,6 +15,7 @@ import {
 } from '../hooks/useCreateIncidentForm';
 import { LegalDetailsSection } from './LegalDetailsSection';
 import { DriverAutocompleteInput } from '@/modules/drivers/components/DriverAutocompleteInput';
+import { VehicleAutocompleteInput } from '@/modules/vehicles/components/VehicleAutocompleteInput';
 
 interface Props {
   onCancel?: () => void;
@@ -39,7 +38,6 @@ export const CreateIncidentForm = ({
     createUnavailability,
     setCreateUnavailability,
 
-    vehicleQuery,
     incidenceOptions,
 
     damageCostDisabled,
@@ -189,33 +187,13 @@ export const CreateIncidentForm = ({
               disabled={isDirectionReport}
             />
 
-            <AutocompleteElement
+            <VehicleAutocompleteInput 
               control={control}
               name="vehicleId"
               label="Unidad Afectada"
-              options={
-                vehicleQuery.data?.map((v) => ({
-                  label: v.name,
-                  id: v.id,
-                })) || []
-              }
-              loading={vehicleQuery.isLoading}
-              autocompleteProps={{
-                getOptionKey: (option) => option.id,
-                onChange: (_, value) => {
-                  setValue('vehicleId', value?.id || 0);
-                },
-                size: 'small',
-                disabled: isDirectionReport,
-              }}
-              textFieldProps={{
-                InputProps: {
-                  endAdornment: null,
-                  startAdornment: <DirectionsBusIcon />,
-                },
-                placeholder: 'Seleccione una unidad',
-                helperText: 'Seleccionar unidad afectada, si aplica',
-              }}
+              setValue={setValue}
+              disabled={isDirectionReport}
+              helperText="Seleccionar unidad afectada, si aplica"
             />
 
             <SelectElement
