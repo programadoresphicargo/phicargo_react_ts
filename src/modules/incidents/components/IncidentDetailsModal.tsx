@@ -1,20 +1,10 @@
-import {
-  Chip,
-  CircularProgress,
-  Divider,
-  IconButton,
-  Tooltip,
-} from '@mui/material';
-import {
-  Download,
-  ErrorOutline,
-  CheckCircleOutline,
-} from '@mui/icons-material';
-import { ReactNode, useState } from 'react';
+import { Chip, Divider } from '@mui/material';
+import { ErrorOutline, CheckCircleOutline } from '@mui/icons-material';
+import { ReactNode } from 'react';
 import type { Incident } from '../models';
 import { MuiModal } from '@/components';
 import { incidentType } from '../utilities';
-import { FilesService } from '@/modules/core/services';
+import { EvidencesList } from './EvidencesList';
 
 interface Props {
   open: boolean;
@@ -23,29 +13,6 @@ interface Props {
 }
 
 export const IncidentDetailsModal = ({ open, onClose, incident }: Props) => {
-  const [loadingEvidences, setLoadingEvidences] = useState<
-    Record<string, boolean>
-  >({});
-  const [errorEvidences, setErrorEvidences] = useState<Record<string, boolean>>(
-    {},
-  );
-
-  const handleViewEvidence = async (fileId: string) => {
-    try {
-      setLoadingEvidences((prev) => ({ ...prev, [fileId]: true }));
-      setErrorEvidences((prev) => ({ ...prev, [fileId]: false }));
-
-      const url = await FilesService.getFilePublicUrl(fileId);
-
-      window.open(url, '_blank');
-    } catch (error) {
-      setErrorEvidences((prev) => ({ ...prev, [fileId]: true }));
-      console.error('Error al cargar la evidencia:', error);
-    } finally {
-      setLoadingEvidences((prev) => ({ ...prev, [fileId]: false }));
-    }
-  };
-
   return (
     <MuiModal
       open={open}
@@ -150,50 +117,7 @@ export const IncidentDetailsModal = ({ open, onClose, incident }: Props) => {
         {/* Evidencias */}
         <DetailCard title="Evidencias">
           {incident.evidences.length > 0 ? (
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2">
-              {incident.evidences.map((evidence) => (
-                <div
-                  key={evidence.idOnedrive}
-                  className="border rounded-md p-1 flex flex-col items-center hover:bg-gray-50 transition-colors"
-                >
-                  <div className="relative w-full">
-                    {/* Icono de tipo de archivo */}
-                    <div className="w-6 h-6 mx-auto flex items-center justify-center bg-gray-100 rounded">
-                      <span className="text-[0.6rem] text-gray-500 font-medium">
-                        {evidence.filename
-                          .split('.')
-                          .pop()
-                          ?.slice(0, 3)
-                          .toUpperCase()}
-                      </span>
-                    </div>
-
-                    <div className="absolute top-0 right-0">
-                      {loadingEvidences[evidence.idOnedrive] ? (
-                        <CircularProgress size={14} />
-                      ) : errorEvidences[evidence.idOnedrive] ? (
-                        <ErrorOutline color="error" fontSize="small" />
-                      ) : null}
-                    </div>
-                  </div>
-
-                  <Tooltip title={evidence.filename} placement="bottom">
-                    <p className="text-[0.65rem] text-center truncate w-full mt-1 px-1">
-                      {evidence.filename.split('.')[0]}
-                    </p>
-                  </Tooltip>
-
-                  <IconButton
-                    size="small"
-                    className="text-xs mt-0.5"
-                    onClick={() => handleViewEvidence(evidence.idOnedrive)}
-                    disabled={loadingEvidences[evidence.idOnedrive]}
-                  >
-                    <Download fontSize="small" />
-                  </IconButton>
-                </div>
-              ))}
-            </div>
+            <EvidencesList incident={incident} />
           ) : (
             <p className="text-gray-500 text-sm">No hay evidencias adjuntas</p>
           )}
