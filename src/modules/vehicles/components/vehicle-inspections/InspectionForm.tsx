@@ -53,6 +53,8 @@ export const InspectionForm = ({ vehicleId, onCancel, onSuccess }: Props) => {
     );
   };
 
+  const minInspectionDate = dayjs().startOf('month');
+
   return (
     <form className="flex flex-col gap-4">
       <SelectElement
@@ -73,6 +75,7 @@ export const InspectionForm = ({ vehicleId, onCancel, onSuccess }: Props) => {
         name="inspectionDate"
         label="Fecha de Inspección"
         disableFuture
+        minDate={minInspectionDate}
         displayWeekNumber
         required
         rules={{ required: 'Fecha de inspección requerida' }}
