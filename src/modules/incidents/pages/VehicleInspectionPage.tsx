@@ -10,6 +10,8 @@ import InfoIcon from '@mui/icons-material/Info';
 import { Box, IconButton, Tooltip } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { InspectionModal } from '@/modules/vehicles/components/vehicle-inspections/InspectionModal';
+import { VehicleInspectionHeader } from '../components/ui/VehicleInspectionHeader';
+
 
 const now = new Date();
 
@@ -35,7 +37,7 @@ const VehicleInspectionPage = () => {
     refetchFn: () => query.refetch(),
     showColumnFilters: true,
     showGlobalFilter: true,
-    containerHeight: 'calc(100vh - 182px)',
+    containerHeight: 'calc(100vh - 260px)',
     enableRowActions: true,
     positionActionsColumn: 'first',
     renderRowActions: ({ row }) => {
@@ -60,6 +62,7 @@ const VehicleInspectionPage = () => {
 
   return (
     <>
+      <VehicleInspectionHeader vehicleInspections={query.data || []} />
       <MaterialReactTable table={table} />
       {detail && (
         <VehicleInspectionDetailModal
