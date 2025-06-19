@@ -17,8 +17,6 @@ import { parseAbsoluteToLocal, parseZonedDateTime } from "@internationalized/dat
 import { DatePicker } from "@heroui/react";
 import { DialogActions } from '@mui/material';
 import { DialogTitle } from '@mui/material';
-import { FormattedDate } from 'rsuite/esm/CustomProvider';
-// import { InboxOutlined } from '@ant-design/icons';
 import { Progress } from "@heroui/react";
 import ReactQuill from 'react-quill';
 import Slide from '@mui/material/Slide';
