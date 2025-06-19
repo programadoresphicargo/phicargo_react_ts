@@ -9,6 +9,7 @@ import { VehicleInspectionDetailModal } from '@/modules/vehicles/components/vehi
 import InfoIcon from '@mui/icons-material/Info';
 import { Box, IconButton, Tooltip } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import { InspectionModal } from '@/modules/vehicles/components/vehicle-inspections/InspectionModal';
 
 // const dialogProps: DialogProps = {
 //   slots: {
@@ -31,6 +32,7 @@ const VehicleInspectionPage = () => {
   );
   const [year, setYear] = useState<string | number>(new Date().getFullYear());
   const [detail, setDetail] = useState<VehicleInspection | null>(null);
+  const [toInspect, setToInspect] = useState<VehicleInspection | null>(null);
 
   const { query } = useGetVehicleInspections(month as number, year as number);
 
@@ -58,7 +60,11 @@ const VehicleInspectionPage = () => {
             <IconButton
               size="small"
               color={hasInspection ? 'primary' : 'warning'}
-              onClick={() => setDetail(value)}
+              onClick={
+                hasInspection
+                  ? () => setDetail(value)
+                  : () => setToInspect(value)
+              }
             >
               {hasInspection ? <InfoIcon /> : <VisibilityIcon />}
             </IconButton>
@@ -93,6 +99,13 @@ const VehicleInspectionPage = () => {
           open={!!detail}
           onClose={() => setDetail(null)}
           vehicleInspection={detail}
+        />
+      )}
+      {toInspect && (
+        <InspectionModal
+          open={!!toInspect}
+          onClose={() => setToInspect(null)}
+          vehicleInspection={toInspect}
         />
       )}
     </>
