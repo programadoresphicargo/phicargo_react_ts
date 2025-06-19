@@ -39,6 +39,22 @@ export class IncidentsService {
     }
   }
 
+  public static async getIncidentById(id: number): Promise<Incident> {
+    const url = `/drivers/incidents/${id}`;
+    try {
+      const response = await odooApi.get<IncidentApi>(url);
+      return IncidentAdapter.driverIncidentToLocal(response.data);
+    } catch (error) {
+      console.error(error);
+      if (error instanceof AxiosError) {
+        throw new Error(
+          error.response?.data?.detail || 'Error al obtener la incidencia',
+        );
+      }
+      throw new Error('Error al obtener la incidencia');
+    }
+  }
+
   public static async getIncidentsByDriver(
     driverId: number,
   ): Promise<Incident[]> {
