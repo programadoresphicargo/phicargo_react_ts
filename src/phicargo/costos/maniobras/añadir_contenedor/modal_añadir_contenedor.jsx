@@ -1,5 +1,3 @@
-import 'rsuite/dist/rsuite-no-reset.min.css';
-
 import {
     MaterialReactTable,
     useMaterialReactTable,
@@ -10,7 +8,6 @@ import { getLocalTimeZone, parseDate } from "@internationalized/date";
 import { Box } from '@mui/material';
 import { Button } from "@heroui/react";
 import { CostosExtrasContext } from '../../context/context';
-import { DateRangePicker } from 'rsuite';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
