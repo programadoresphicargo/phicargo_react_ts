@@ -4,7 +4,7 @@ import { AxiosError } from 'axios';
 import odooApi from '@/api/odoo-api';
 import { IncidentAdapter } from '../adapters';
 import { IncidentApi } from '../models/api';
-import { FilesService } from '@/modules/core/services';
+import { uploadFiles } from '@/modules/core/services';
 import { UpdatableItem } from '@/types';
 
 /**
@@ -89,7 +89,7 @@ export class IncidentsService {
       const response = await odooApi.post<IncidentApi>(url, data);
 
       if (response.status === 201 && files && files.length > 0) {
-        await uploadFiles(files, response.data.id);
+        await uploadFiles(files, 'incidents', 'x_driver_incidents', response.data.id);
       }
 
       return IncidentAdapter.driverIncidentToLocal(response.data);
@@ -125,16 +125,16 @@ export class IncidentsService {
   }
 }
 
-async function uploadFiles(files: File[], incidenceId: number) {
-  try {
-    await FilesService.uploadFiles({
-      files,
-      route: 'incidents',
-      table: 'x_driver_incidents',
-      id: incidenceId,
-    });
-  } catch (error) {
-    console.error('Error uploading files:', error);
-  }
-}
+// async function uploadFiles(files: File[], incidenceId: number) {
+//   try {
+//     await FilesService.uploadFiles({
+//       files,
+//       route: 'incidents',
+//       table: 'x_driver_incidents',
+//       id: incidenceId,
+//     });
+//   } catch (error) {
+//     console.error('Error uploading files:', error);
+//   }
+// }
 
