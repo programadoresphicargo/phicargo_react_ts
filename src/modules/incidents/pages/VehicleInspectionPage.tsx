@@ -11,6 +11,8 @@ import { Box, IconButton, Tooltip } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { InspectionModal } from '@/modules/vehicles/components/vehicle-inspections/InspectionModal';
 
+const now = new Date();
+
 const VehicleInspectionPage = () => {
   const [month, setMonth] = useState<string | number>(
     new Date().getMonth() + 1,
@@ -38,23 +40,14 @@ const VehicleInspectionPage = () => {
     positionActionsColumn: 'first',
     renderRowActions: ({ row }) => {
       const value = row.original;
-      const hasInspection = !!value.inspection;
       return (
-        <Box sx={{ display: 'flex' }}>
-          <Tooltip title={hasInspection ? 'Ver detalles' : 'Revisar Unidad'}>
-            <IconButton
-              size="small"
-              color={hasInspection ? 'primary' : 'warning'}
-              onClick={
-                hasInspection
-                  ? () => setDetail(value)
-                  : () => setToInspect(value)
-              }
-            >
-              {hasInspection ? <InfoIcon /> : <VisibilityIcon />}
-            </IconButton>
-          </Tooltip>
-        </Box>
+        <RowActions
+          inspection={value}
+          year={year}
+          month={month}
+          openDetail={setDetail}
+          openInspect={setToInspect}
+        />
       );
     },
     toolbarActions: (
@@ -83,6 +76,55 @@ const VehicleInspectionPage = () => {
         />
       )}
     </>
+  );
+};
+
+const RowActions = ({
+  inspection,
+  year,
+  month,
+  openDetail,
+  openInspect,
+}: {
+  inspection: VehicleInspection;
+  year: string | number;
+  month: string | number;
+  openDetail: (value: VehicleInspection) => void;
+  openInspect: (value: VehicleInspection) => void;
+}) => {
+  const hasInspection = !!inspection.inspection;
+
+  const canInspect = year === now.getFullYear() && month === now.getMonth() + 1;
+
+  return (
+    <Box sx={{ display: 'flex' }}>
+      {hasInspection && (
+        <Tooltip title={'Ver revisión'}>
+          <span>
+            <IconButton
+              size="small"
+              color={'primary'}
+              onClick={() => openDetail(inspection)}
+            >
+              <InfoIcon />
+            </IconButton>
+          </span>
+        </Tooltip>
+      )}
+      {!hasInspection && canInspect && (
+        <Tooltip title={'Registrar revisión'}>
+          <span>
+            <IconButton
+              size="small"
+              color={'warning'}
+              onClick={() => openInspect(inspection)}
+            >
+              <VisibilityIcon />
+            </IconButton>
+          </span>
+        </Tooltip>
+      )}
+    </Box>
   );
 };
 
