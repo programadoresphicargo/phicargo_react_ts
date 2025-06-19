@@ -5,7 +5,6 @@ import type { IncidentCreate } from '../models';
 import { useVehicleQueries } from '@/modules/vehicles/hooks/queries';
 import { getIncidentOptions } from '../utilities';
 import { useIncidentsQueries } from '../hooks/quries';
-import { useDriverQueries } from '@/modules/drivers/hooks/queries';
 
 export const INCIDENT_TYPES = {
   OPERATIVE: 'operative',
@@ -41,7 +40,6 @@ export function useCreateIncidentForm({
   const [isDirectionReport, setIsDirectionReport] = useState(false);
 
   const { vehicleQuery } = useVehicleQueries();
-  const { AvailableDrivers, isLoading } = useDriverQueries();
   const {
     createIncident: { mutate, isPending },
   } = useIncidentsQueries({ driverId });
@@ -107,8 +105,6 @@ export function useCreateIncidentForm({
     createUnavailability,
     setCreateUnavailability,
     vehicleQuery,
-    AvailableDrivers,
-    isLoading,
     incidenceOptions,
     damageCostDisabled,
     handleSubmit,

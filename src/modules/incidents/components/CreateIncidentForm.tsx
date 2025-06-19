@@ -7,7 +7,6 @@ import {
 } from 'react-hook-form-mui';
 import { DatePickerElement } from 'react-hook-form-mui/date-pickers';
 import { Checkbox, Divider, FormControlLabel, FormGroup } from '@mui/material';
-import PersonIcon from '@mui/icons-material/Person';
 import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
 
 import { FileUploadInput } from '@/components/inputs';
@@ -17,6 +16,7 @@ import {
   INCIDENT_TYPES,
 } from '../hooks/useCreateIncidentForm';
 import { LegalDetailsSection } from './LegalDetailsSection';
+import { DriverAutocompleteInput } from '@/modules/drivers/components/DriverAutocompleteInput';
 
 interface Props {
   onCancel?: () => void;
@@ -40,9 +40,6 @@ export const CreateIncidentForm = ({
     setCreateUnavailability,
 
     vehicleQuery,
-    AvailableDrivers,
-
-    isLoading,
     incidenceOptions,
 
     damageCostDisabled,
@@ -84,33 +81,13 @@ export const CreateIncidentForm = ({
           />
 
           {!driverId && (
-            <AutocompleteElement
+            <DriverAutocompleteInput
               control={control}
               name="driverId"
               label="Operador"
               required
               rules={{ required: 'Operador requerido' }}
-              options={
-                AvailableDrivers.map((v) => ({
-                  label: v.value,
-                  id: v.key,
-                })) || []
-              }
-              loading={isLoading}
-              autocompleteProps={{
-                getOptionKey: (option) => option.id,
-                onChange: (_, value) => {
-                  setValue('driverId', (value?.id as number) || 0);
-                },
-                size: 'small',
-              }}
-              textFieldProps={{
-                InputProps: {
-                  endAdornment: null,
-                  startAdornment: <PersonIcon />,
-                },
-                placeholder: 'Saleccione un operador',
-              }}
+              setValue={setValue}
             />
           )}
 
