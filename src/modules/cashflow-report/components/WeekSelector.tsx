@@ -2,11 +2,11 @@ import 'rsuite/dist/rsuite-no-reset.min.css';
 
 import { useEffect, useState } from 'react';
 
-import { DateRange } from 'rsuite/esm/DateRangePicker';
-import { DateRangePicker } from 'rsuite';
 import { getWeekRange } from '../utils/get-week-range';
 import { useWeek } from '../hooks/useWeek';
 import { useWeekContext } from '../hooks';
+import type { DateRange } from 'rsuite/esm/DateRangePicker/types';
+import DateRangePicker from 'rsuite/esm/DateRangePicker/DateRangePicker';
 
 const WeekSelector = () => {
   const [value, setValue] = useState<DateRange | null>(null);

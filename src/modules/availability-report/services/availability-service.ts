@@ -8,10 +8,10 @@ import type { RecordApi, RecordCommentApi } from '../models/api';
 
 import { AvailibilityAdapter } from '../adapters';
 import { AxiosError } from 'axios';
-import { DateRange } from 'rsuite/esm/DateRangePicker';
 import { UpdatableItem } from '@/types';
 import dayjs from 'dayjs';
 import odooApi from '@/api/odoo-api';
+import type { DateRange } from 'rsuite/esm/DateRangePicker/types';
 
 export class AvailabilityService {
   public static async getRecords(

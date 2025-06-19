@@ -1,7 +1,7 @@
 import { AvailabilityService } from '../services';
-import type { DateRange } from 'rsuite/esm/DateRangePicker';
 import type { Record } from '../models';
 import { useQuery } from '@tanstack/react-query';
+import type { DateRange } from 'rsuite/esm/DateRangePicker/types';
 
 const mainKey = 'records';
 

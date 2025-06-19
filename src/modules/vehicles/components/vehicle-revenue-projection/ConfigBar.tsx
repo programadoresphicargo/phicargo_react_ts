@@ -1,7 +1,6 @@
 import 'rsuite/dist/rsuite-no-reset.min.css';
 
 import { Button, ButtonGroup, Tab, Tabs, Tooltip } from '@heroui/react';
-import { DatePicker, DateRangePicker } from 'rsuite';
 
 import { CreateDayOffModal } from '@/modules/core/components';
 import dayjs from 'dayjs';
@@ -9,6 +8,8 @@ import { useState } from 'react';
 import { useVehicleRevenueProjectionContext } from '../../hooks';
 import { FaCalendarDay } from 'react-icons/fa';
 import { ShowDaysOffModal } from '@/modules/core/components/days-off/ShowDaysOffModal';
+import DateRangePicker from 'rsuite/esm/DateRangePicker/DateRangePicker';
+import DatePicker from 'rsuite/esm/DatePicker/DatePicker';
 
 const { after } = DateRangePicker;
 

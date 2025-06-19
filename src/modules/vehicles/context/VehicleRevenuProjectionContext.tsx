@@ -1,7 +1,7 @@
 import { ReactNode, createContext, useState } from 'react';
 
-import { DateRange } from 'rsuite/esm/DateRangePicker';
 import dayjs from 'dayjs';
+import type { DateRange } from 'rsuite/esm/DateRangePicker/types';
 
 interface VehicleRevenueProjectionContextType {
   month: DateRange | null;
