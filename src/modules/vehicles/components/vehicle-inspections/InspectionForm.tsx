@@ -6,6 +6,8 @@ import { DatePickerElement } from 'react-hook-form-mui/date-pickers';
 import { Button, MuiSaveButton } from '@/components/ui';
 import { DriverAutocompleteInput } from '@/modules/drivers/components/DriverAutocompleteInput';
 import { useCreateVehicleInspectionMutation } from '../../hooks/mutations';
+import { FileUploadInput } from '@/components/inputs';
+import { useState } from 'react';
 
 const initialValues: VehicleInspectionCreate = {
   vehicleId: 0,
@@ -22,6 +24,8 @@ interface Props {
 }
 
 export const InspectionForm = ({ vehicleId, onCancel, onSuccess }: Props) => {
+  const [files, setFiles] = useState<File[]>([]);
+
   const { mutation } = useCreateVehicleInspectionMutation();
 
   const { control, handleSubmit, watch, setValue } =
@@ -35,8 +39,11 @@ export const InspectionForm = ({ vehicleId, onCancel, onSuccess }: Props) => {
     if (!vehicleId) return;
     mutation.mutate(
       {
-        ...data,
-        vehicleId,
+        data: {
+          ...data,
+          vehicleId,
+        },
+        files,
       },
       {
         onSuccess: () => {
@@ -84,14 +91,24 @@ export const InspectionForm = ({ vehicleId, onCancel, onSuccess }: Props) => {
       />
 
       {result === 'rejected' && (
-        <DriverAutocompleteInput
-          control={control}
-          name="driverId"
-          label="Operador"
-          required
-          rules={{ required: 'Operador requerido' }}
-          setValue={setValue}
-        />
+        <>
+          <DriverAutocompleteInput
+            control={control}
+            name="driverId"
+            label="Operador"
+            required
+            rules={{ required: 'Operador requerido' }}
+            setValue={setValue}
+          />
+          <div className="flex flex-col gap-4">
+            <FileUploadInput
+              files={files}
+              setFiles={setFiles}
+              acceptedFileTypes="image/jpeg, image/png"
+              label="Adjuntar evidencias"
+            />
+          </div>
+        </>
       )}
 
       <div className="flex justify-between items-center">
