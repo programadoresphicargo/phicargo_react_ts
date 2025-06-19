@@ -11,21 +11,6 @@ import { Box, IconButton, Tooltip } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { InspectionModal } from '@/modules/vehicles/components/vehicle-inspections/InspectionModal';
 
-// const dialogProps: DialogProps = {
-//   slots: {
-//     transition: MuiTransition,
-//   },
-//   disableEnforceFocus: true,
-//   disableScrollLock: true,
-//   open: true,
-//   maxWidth: 'md',
-//   sx: {
-//     '& .MuiPaper-root': {
-//       borderRadius: 4,
-//     },
-//   },
-// };
-
 const VehicleInspectionPage = () => {
   const [month, setMonth] = useState<string | number>(
     new Date().getMonth() + 1,
@@ -78,17 +63,6 @@ const VehicleInspectionPage = () => {
         <YearSelect onYearChange={setYear} />
       </div>
     ),
-    // muiEditRowDialogProps: dialogProps,
-    // muiCreateRowModalProps: dialogProps,
-    // renderCreateRowDialogContent: ({ table }) => (
-    //   <CreateIncidentModal onClose={() => table.setCreatingRow(null)} />
-    // ),
-    // renderEditRowDialogContent: ({ table, row }) => (
-    //   <EditIncidentModal
-    //     onClose={() => table.setEditingRow(null)}
-    //     incident={row.original}
-    //   />
-    // ),
   });
 
   return (

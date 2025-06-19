@@ -4,29 +4,46 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { SelectElement, TextareaAutosizeElement } from 'react-hook-form-mui';
 import { DatePickerElement } from 'react-hook-form-mui/date-pickers';
 import { Button, MuiSaveButton } from '@/components/ui';
+import { DriverAutocompleteInput } from '@/modules/drivers/components/DriverAutocompleteInput';
+import { useCreateVehicleInspectionMutation } from '../../hooks/mutations';
 
 const initialValues: VehicleInspectionCreate = {
   vehicleId: 0,
   inspectionDate: dayjs(),
   result: 'approved',
   comments: '',
+  driverId: null,
 };
 
 interface Props {
   vehicleId: number;
   onCancel?: () => void;
+  onSuccess?: () => void;
 }
 
-export const InspectionForm = ({ vehicleId, onCancel }: Props) => {
-  const { control, handleSubmit, watch } = useForm<VehicleInspectionCreate>({
-    defaultValues: initialValues,
-  });
+export const InspectionForm = ({ vehicleId, onCancel, onSuccess }: Props) => {
+  const { mutation } = useCreateVehicleInspectionMutation();
+
+  const { control, handleSubmit, watch, setValue } =
+    useForm<VehicleInspectionCreate>({
+      defaultValues: initialValues,
+    });
 
   const result = watch('result');
 
   const onSubmit: SubmitHandler<VehicleInspectionCreate> = (data) => {
     if (!vehicleId) return;
-    console.log('Form submitted with data:', data);
+    mutation.mutate(
+      {
+        ...data,
+        vehicleId,
+      },
+      {
+        onSuccess: () => {
+          onSuccess?.();
+        },
+      },
+    );
   };
 
   return (
@@ -65,6 +82,18 @@ export const InspectionForm = ({ vehicleId, onCancel }: Props) => {
           result === 'rejected' ? { required: 'Comentario requerido' } : {}
         }
       />
+
+      {result === 'rejected' && (
+        <DriverAutocompleteInput
+          control={control}
+          name="driverId"
+          label="Operador"
+          required
+          rules={{ required: 'Operador requerido' }}
+          setValue={setValue}
+        />
+      )}
+
       <div className="flex justify-between items-center">
         {onCancel && (
           <Button
@@ -80,7 +109,7 @@ export const InspectionForm = ({ vehicleId, onCancel }: Props) => {
           variant="contained"
           loadingPosition="end"
           onClick={handleSubmit(onSubmit)}
-          // loading={isPending}
+          loading={mutation.isPending}
         />
       </div>
     </form>

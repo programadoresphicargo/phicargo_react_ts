@@ -30,7 +30,7 @@ export const InspectionModal = ({
       }
     >
       <div className="p-6">
-        <InspectionForm vehicleId={vehicleInspection.id} onCancel={onClose} />
+        <InspectionForm vehicleId={vehicleInspection.id} onCancel={onClose} onSuccess={onClose} />
       </div>
     </MuiModal>
   );
