@@ -33,7 +33,7 @@ const VehicleInspectionPage = () => {
     refetchFn: () => query.refetch(),
     showColumnFilters: true,
     showGlobalFilter: true,
-    containerHeight: 'calc(100vh - 170px)',
+    containerHeight: 'calc(100vh - 182px)',
     enableRowActions: true,
     positionActionsColumn: 'first',
     renderRowActions: ({ row }) => {
