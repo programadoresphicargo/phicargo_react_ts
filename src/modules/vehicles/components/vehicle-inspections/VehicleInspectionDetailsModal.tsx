@@ -3,6 +3,10 @@ import { ReactNode } from 'react';
 import { MuiModal } from '@/components';
 import type { VehicleInspection } from '../../models';
 import { inspectionResult } from '../../utilities';
+import { useGetDriverIncidentQuery } from '@/modules/incidents/hooks/quries';
+import { CheckCircleOutline, ErrorOutline } from '@mui/icons-material';
+import { Alert, LoadingSpinner } from '@/components/ui';
+import { EvidencesList } from '@/modules/incidents/components/EvidencesList';
 
 interface Props {
   open: boolean;
@@ -15,6 +19,10 @@ export const VehicleInspectionDetailModal = ({
   onClose,
   vehicleInspection,
 }: Props) => {
+  const {
+    query: { data: incident, isLoading: loadingIncident },
+  } = useGetDriverIncidentQuery(vehicleInspection.inspection?.incidentId);
+
   return (
     <MuiModal
       open={open}
@@ -23,18 +31,18 @@ export const VehicleInspectionDetailModal = ({
       header={
         <div className="flex justify-between items-center w-full">
           <h2 className="uppercase font-thin text-lg">
-            Detalles:{' '}
+            Detalles de Revisión:{' '}
             <span className="font-bold">{vehicleInspection.driver?.name}</span>
           </h2>
         </div>
       }
     >
-      <div className="flex flex-col gap-4 p-4">
+      <div className="flex flex-col gap-4 p-4 min-w-lg">
         {/* Sección de información básica */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <DetailCard title="Información de Incidencia">
+          <DetailCard title="Información de Revisión">
             <div>
-              <p className="text-sm text-gray-500 uppercase">Tipo</p>
+              <p className="text-sm text-gray-500 uppercase">Resultado</p>
               {vehicleInspection.inspection?.result ? (
                 <Chip
                   label={inspectionResult.getLabel(
@@ -50,17 +58,19 @@ export const VehicleInspectionDetailModal = ({
               )}
             </div>
             <div>
-              <p className="text-sm text-gray-500 uppercase">Fecha</p>
+              <p className="text-sm text-gray-500 uppercase">
+                Fecha de Revisión
+              </p>
               <p>
                 {vehicleInspection.inspection?.inspectionDate?.format(
                   'DD/MM/YYYY',
                 ) || 'No especificada'}
               </p>
             </div>
-            {/* <div>
+            <div>
               <p className="text-sm text-gray-500">Responsabilidad</p>
               <div className="flex items-center gap-1">
-                {vehicleInspection.inspection?.isDriverResponsible ? (
+                {incident?.isDriverResponsible ? (
                   <>
                     <ErrorOutline color="error" sx={{ fontSize: '1.2rem' }} />
                     <span className="text-red-600">Conductor responsable</span>
@@ -78,40 +88,44 @@ export const VehicleInspectionDetailModal = ({
                 )}
               </div>
             </div>
-            <div>
-              <p className="text-sm text-gray-500">Costo de daños</p>
-              <p>
-                {incident.damageCost
-                  ? `$${incident.damageCost.toLocaleString()}`
-                  : 'No especificado'}
-              </p>
-            </div> */}
           </DetailCard>
 
-          {/* <DetailCard title="Información del Operador">
-            <div>
-              <p className="text-sm text-gray-500">Operador</p>
-              <p>
-                {incident.driver.name} ({incident.driver.license})
-              </p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-500">Vehículo</p>
-              <p>
-                {incident.vehicle
-                  ? `${incident.vehicle.name} (${incident.vehicle.licensePlate})`
-                  : 'No asignado'}
-              </p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-500">Reportado por</p>
-              <p>{incident.user.username}</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-500">Fecha de registro</p>
-              <p>{incident.createdAt.format('DD/MM/YYYY hh:mm A')}</p>
-            </div>
-          </DetailCard> */}
+          <DetailCard title="Incidencia Asociada">
+            {loadingIncident && <LoadingSpinner />}
+            {!incident && !loadingIncident && (
+              <Alert
+                title="No hay incidencia asociada"
+                description="Esta revisión no está vinculada a ninguna incidencia."
+                color="primary"
+              />
+            )}
+            {incident && (
+              <>
+                <div>
+                  <p className="text-sm text-gray-500">Operador</p>
+                  <p>
+                    {incident.driver.name} ({incident.driver.license})
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Vehículo</p>
+                  <p>
+                    {incident?.vehicle
+                      ? `${incident.vehicle.name} (${incident.vehicle.licensePlate})`
+                      : 'No asignado'}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Reportado por</p>
+                  <p>{incident?.user.username}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Fecha de registro</p>
+                  <p>{incident?.createdAt.format('DD/MM/YYYY hh:mm A')}</p>
+                </div>
+              </>
+            )}
+          </DetailCard>
         </div>
 
         {/* Comentarios */}
@@ -124,55 +138,13 @@ export const VehicleInspectionDetailModal = ({
         )}
 
         {/* Evidencias */}
-        {/* <DetailCard title="Evidencias">
-          {incident.evidences.length > 0 ? (
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2">
-              {incident.evidences.map((evidence) => (
-                <div
-                  key={evidence.idOnedrive}
-                  className="border rounded-md p-1 flex flex-col items-center hover:bg-gray-50 transition-colors"
-                >
-                  <div className="relative w-full">
-                    <div className="w-6 h-6 mx-auto flex items-center justify-center bg-gray-100 rounded">
-                      <span className="text-[0.6rem] text-gray-500 font-medium">
-                        {evidence.filename
-                          .split('.')
-                          .pop()
-                          ?.slice(0, 3)
-                          .toUpperCase()}
-                      </span>
-                    </div>
-
-                    <div className="absolute top-0 right-0">
-                      {loadingEvidences[evidence.idOnedrive] ? (
-                        <CircularProgress size={14} />
-                      ) : errorEvidences[evidence.idOnedrive] ? (
-                        <ErrorOutline color="error" fontSize="small" />
-                      ) : null}
-                    </div>
-                  </div>
-
-                  <Tooltip title={evidence.filename} placement="bottom">
-                    <p className="text-[0.65rem] text-center truncate w-full mt-1 px-1">
-                      {evidence.filename.split('.')[0]}
-                    </p>
-                  </Tooltip>
-
-                  <IconButton
-                    size="small"
-                    className="text-xs mt-0.5"
-                    onClick={() => handleViewEvidence(evidence.idOnedrive)}
-                    disabled={loadingEvidences[evidence.idOnedrive]}
-                  >
-                    <Download fontSize="small" />
-                  </IconButton>
-                </div>
-              ))}
-            </div>
+        <DetailCard title="Evidencias">
+          {incident && incident?.evidences.length > 0 ? (
+            <EvidencesList incident={incident} />
           ) : (
             <p className="text-gray-500 text-sm">No hay evidencias adjuntas</p>
           )}
-        </DetailCard> */}
+        </DetailCard>
       </div>
     </MuiModal>
   );
