@@ -21,6 +21,7 @@ export class VehicleInspectionAdapter {
       result: inspectionApi.result,
       comments: inspectionApi.comments,
       inspector: userBasicToLocal(inspectionApi.inspector),
+      incidentId: inspectionApi.incident_id
     };
   }
 
