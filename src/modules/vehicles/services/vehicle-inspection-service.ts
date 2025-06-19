@@ -1,5 +1,5 @@
 import odooApi from '@/api/odoo-api';
-import type { VehicleInspection } from '../models';
+import type { VehicleInspection, VehicleInspectionCreate } from '../models';
 import type { VehicleInspectionApi } from '../models/api';
 import { VehicleInspectionAdapter } from '../adapters';
 import { AxiosError } from 'axios';
@@ -26,6 +26,22 @@ export class VehicleInspectionService {
         throw new Error(error.response?.data?.detail || 'An error occurred');
       }
       throw new Error('An error occurred');
+    }
+  }
+
+  static async createVehicleInspection(
+    data: VehicleInspectionCreate,
+  ): Promise<void> {
+    const body = VehicleInspectionAdapter.toVehicleInspectionApi(data);
+    const url = `/vehicles/inspections/${data.vehicleId}`;
+    try {
+      await odooApi.post<void>(url, body);
+    } catch (error) {
+      console.error(error);
+      if (error instanceof AxiosError) {
+        throw new Error(error.response?.data?.detail || 'Error al crear la inspección');
+      }
+      throw new Error('Error al crear la inspección');
     }
   }
 }
