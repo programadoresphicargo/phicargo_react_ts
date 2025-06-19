@@ -65,6 +65,9 @@ export function useCreateIncidentForm({
     if (isPending) return;
     const driverIdToUse = driverId || data.driverId;
     if (!driverIdToUse) return;
+    if (isDirectionReport) {
+      data.isDriverResponsible = false;
+    }
     mutate(
       {
         driverId: driverIdToUse,
