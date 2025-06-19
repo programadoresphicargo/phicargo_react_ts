@@ -21,5 +21,6 @@ export interface VehicleInspectionApi extends VehicleBaseApi {
 
 export interface VehicleInspectionCreateApi extends VehicleInspectionBaseApi {
   vehicle_id: number;
+  driver_id?: number | null;
 }
 

@@ -23,5 +23,6 @@ export interface VehicleInspection extends VehicleBase {
 
 export interface VehicleInspectionCreate extends VehicleInspectionBase {
   vehicleId: number;
+  driverId?: number | null;
 }
 

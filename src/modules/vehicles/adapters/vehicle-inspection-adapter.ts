@@ -1,6 +1,14 @@
 import dayjs from 'dayjs';
-import type { Inspection, VehicleInspection } from '../models';
-import type { InspectionApi, VehicleInspectionApi } from '../models/api';
+import type {
+  Inspection,
+  VehicleInspection,
+  VehicleInspectionCreate,
+} from '../models';
+import type {
+  InspectionApi,
+  VehicleInspectionApi,
+  VehicleInspectionCreateApi,
+} from '../models/api';
 import { VehicleAdapter } from './vehicle-adapter';
 import { userBasicToLocal } from '@/modules/auth/adapters';
 import { IncidentAdapter } from '@/modules/incidents/adapters';
@@ -27,6 +35,18 @@ export class VehicleInspectionAdapter {
       driver: vehicleInspectionApi.driver
         ? IncidentAdapter.driverInfoToLocal(vehicleInspectionApi.driver)
         : null,
+    };
+  }
+
+  static toVehicleInspectionApi(
+    vehicleInspection: VehicleInspectionCreate,
+  ): VehicleInspectionCreateApi {
+    return {
+      inspection_date: vehicleInspection.inspectionDate.format('YYYY-MM-DD'),
+      result: vehicleInspection.result,
+      comments: vehicleInspection.comments,
+      vehicle_id: vehicleInspection.vehicleId,
+      driver_id: vehicleInspection.driverId ?? null,
     };
   }
 }
