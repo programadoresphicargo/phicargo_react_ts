@@ -335,6 +335,13 @@ const AccesoForm = ({ id_acceso, onClose }) => {
     };
 
     return (<>
+        {isLoading ? (
+            <Progress
+                isIndeterminate
+                aria-label="Loading..."
+                size="sm"
+            />
+        ) : ('')}
         <Stack spacing={2} direction="row" style={{ padding: '20px' }}>
             {id_acceso && (
                 <Typography variant="h4" style={{ marginTop: '20px' }}>
@@ -376,13 +383,6 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                         </div>
                     </CardHeader>
                     <Divider />
-                    {isLoading ? (
-                        <Progress
-                            isIndeterminate
-                            aria-label="Loading..."
-                            size="sm"
-                        />
-                    ) : ('')}
                     <CardBody>
 
                         <Grid container spacing={2}>
