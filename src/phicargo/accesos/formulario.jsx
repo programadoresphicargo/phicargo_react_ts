@@ -43,6 +43,8 @@ import dayjs from 'dayjs';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import { useAuthContext } from "@/modules/auth/hooks";
+import { DatePicker } from "@heroui/react";
+import { parseDate, parseDateTime, getLocalTimeZone } from "@internationalized/date";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -334,6 +336,21 @@ const AccesoForm = ({ id_acceso, onClose }) => {
         }));
     };
 
+    const update_fecha = (name, newValue) => {
+        const date = newValue.toDate(getLocalTimeZone());
+        const formatted = date.getFullYear() +
+            '-' + String(date.getMonth() + 1).padStart(2, '0') +
+            '-' + String(date.getDate()).padStart(2, '0') +
+            'T' + String(date.getHours()).padStart(2, '0') +
+            ':' + String(date.getMinutes()).padStart(2, '0') +
+            ':' + String(date.getSeconds()).padStart(2, '0');
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: formatted,
+        }));
+        console.log(formatted);
+    };
+
     return (<>
         {isLoading ? (
             <Progress
@@ -423,39 +440,29 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                             )}
 
                             <Grid item xs={12} sm={6} md={4}>
-                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DateTimePicker
-                                        slotProps={{
-                                            textField: {
-                                                fullWidth: true,
-                                                error: !!errors.fecha_entrada,
-                                                helperText: errors.fecha_entrada,
-                                            }
-                                        }}
-                                        label="Fecha de entrada"
-                                        value={dayjs(formData.fecha_entrada)}
-                                        onChange={(newValue) => handleChange('fecha_entrada', newValue ? newValue.toISOString() : '')}
-                                        disabled={disabledFom}
-                                    />
-                                </LocalizationProvider>
+                                <DatePicker
+                                    firstDayOfWeek="mon"
+                                    label="Fecha de entrada"
+                                    variant="bordered"
+                                    showMonthAndYearPickers
+                                    value={parseDateTime(formData.fecha_entrada)}
+                                    onChange={(newValue) => update_fecha('fecha_entrada', newValue)}
+                                    isDisabled={disabledFom}
+                                    errorMessage={errors.fecha_entrada}
+                                />
                             </Grid>
 
                             <Grid item xs={12} sm={6} md={4}>
-                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DateTimePicker
-                                        slotProps={{
-                                            textField: {
-                                                fullWidth: true,
-                                                error: !!errors.fecha_salida,
-                                                helperText: errors.fecha_salida,
-                                            }
-                                        }}
-                                        label="Fecha de salida"
-                                        value={dayjs(formData.fecha_salida)}
-                                        onChange={(newValue) => handleChange('fecha_salida', newValue ? newValue.toISOString() : '')}
-                                        disabled={disabledFom}
-                                    />
-                                </LocalizationProvider>
+                                <DatePicker
+                                    firstDayOfWeek="mon"
+                                    label="Fecha de salida"
+                                    variant="bordered"
+                                    showMonthAndYearPickers
+                                    value={parseDateTime(formData.fecha_salida)}
+                                    onChange={(newValue) => update_fecha('fecha_salida', newValue)}
+                                    isDisabled={disabledFom}
+                                    errorMessage={errors.fecha_salida}
+                                />
                             </Grid>
 
                             <Grid item xs={12} sm={6} md={4}>

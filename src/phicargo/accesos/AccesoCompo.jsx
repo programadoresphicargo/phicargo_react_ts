@@ -13,6 +13,22 @@ const AccesoCompo = ({ children }) => {
 
     const [empresas, setEmpresas] = useState([]);
 
+    const obtenerFechaLocal = () => {
+        const fecha = new Date();
+        const pad = n => n.toString().padStart(2, '0');
+
+        const anio = fecha.getFullYear();
+        const mes = pad(fecha.getMonth() + 1);
+        const dia = pad(fecha.getDate());
+        const hora = pad(fecha.getHours());
+        const minutos = pad(fecha.getMinutes());
+        const segundos = pad(fecha.getSeconds());
+
+        return `${anio}-${mes}-${dia}T${hora}:${minutos}:${segundos}`;
+    };
+
+    const fechaFormateada = obtenerFechaLocal();
+
     const [formData, setFormData] = useState({
         id_acceso: id_acceso,
         id_usuario: session.user.id,
@@ -20,8 +36,8 @@ const AccesoCompo = ({ children }) => {
         id_empresa: '',
         nombre_empresa: '',
         id_empresa_visitada: '',
-        fecha_entrada: '',
-        fecha_salida: '',
+        fecha_entrada: fechaFormateada,
+        fecha_salida: fechaFormateada,
         motivo: '',
         notas: '',
         tipo_identificacion: '',
