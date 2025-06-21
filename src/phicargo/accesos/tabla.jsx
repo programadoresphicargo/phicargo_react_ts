@@ -29,7 +29,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const Maniobras = ({ estado_maniobra }) => {
+const TablaAccesos = ({ tipo }) => {
 
   const [open, setOpen] = React.useState(false);
   const [id_acceso, setIDAcceso] = useState(0);
@@ -54,7 +54,7 @@ const Maniobras = ({ estado_maniobra }) => {
 
     try {
       setLoading(true);
-      const response = await odooApi.get('/accesos/get_by_tipo_acceso/' + estado_maniobra);
+      const response = await odooApi.get('/accesos/get_by_tipo_acceso/' + tipo);
       setData(response.data);
       setLoading(false);
     } catch (error) {
@@ -78,6 +78,10 @@ const Maniobras = ({ estado_maniobra }) => {
         Cell: ({ cell }) => (
           <span style={{ fontWeight: 'bold' }}>{cell.getValue()?.toUpperCase()}</span>
         ),
+      },
+      {
+        accessorKey: 'placas',
+        header: 'Vehiculo',
       },
       {
         accessorKey: 'tipo_movimiento',
@@ -174,6 +178,10 @@ const Maniobras = ({ estado_maniobra }) => {
     initialState: {
       density: 'compact',
       pagination: { pageSize: 80 },
+      showGlobalFilter: true,
+      columnVisibility: {
+        placas: tipo == 'vehicular' ? true : false,
+      },
     },
     muiTablePaperProps: {
       elevation: 0,
@@ -225,7 +233,7 @@ const Maniobras = ({ estado_maniobra }) => {
         <h1>Modulo de accesos</h1>
         <Button
           color='primary'
-          onClick={() =>
+          onPress={() =>
             NuevoAcceso()
           }
         >
@@ -286,4 +294,4 @@ const Maniobras = ({ estado_maniobra }) => {
 
 };
 
-export default Maniobras;
+export default TablaAccesos;

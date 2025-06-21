@@ -8,6 +8,7 @@ import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
+import TablaAccesos from "./tabla";
 
 export default function Accesos() {
 
@@ -38,10 +39,10 @@ export default function Accesos() {
                             <Tab label="POR AUTORIZAR" value="4" sx={{ fontFamily: 'Inter' }} />
                         </TabList>
                     </Box>
-                    <TabPanel value="1" sx={{ padding: 0, margin: 0 }}><Maniobras estado_maniobra={'peatonal'} /></TabPanel>
-                    <TabPanel value="2" sx={{ padding: 0, margin: 0 }}> <Maniobras estado_maniobra={'vehicular'} /></TabPanel>
-                    <TabPanel value="3" sx={{ padding: 0, margin: 0 }}><Maniobras estado_maniobra={'archivado'} /></TabPanel>
-                    <TabPanel value="4" sx={{ padding: 0, margin: 0 }}><Maniobras estado_maniobra={'autorizacion'} /></TabPanel>
+                    <TabPanel value="1" sx={{ padding: 0, margin: 0 }}><TablaAccesos tipo={'peatonal'} /></TabPanel>
+                    <TabPanel value="2" sx={{ padding: 0, margin: 0 }}><TablaAccesos tipo={'vehicular'} /></TabPanel>
+                    <TabPanel value="3" sx={{ padding: 0, margin: 0 }}><TablaAccesos tipo={'archivado'} /></TabPanel>
+                    <TabPanel value="4" sx={{ padding: 0, margin: 0 }}><TablaAccesos tipo={'autorizacion'} /></TabPanel>
                 </TabContext>
             </Box>
         </>
