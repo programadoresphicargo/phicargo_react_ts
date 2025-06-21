@@ -7,6 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/img/phicargo-vertical.png';
+import AppsIcon from '@mui/icons-material/Apps';
 
 function ResponsiveAppBar() {
 
@@ -33,7 +34,7 @@ function ResponsiveAppBar() {
                         onClick={handleBackClick}
                         sx={{ mr: 2 }}
                     >
-                        <ArrowBackIcon />
+                        <AppsIcon />
                     </IconButton>
 
                     {/* Logo de la empresa */}
