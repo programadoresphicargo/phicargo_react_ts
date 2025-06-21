@@ -24,6 +24,7 @@ export interface DriverBase {
   readonly isActive: boolean;
   licenseType: string | null;
   licenseId: string | null;
+  licenseExpiration: Dayjs | null;
   noLicense: string | null;
   modality: Modality | null;
   isDangerous: IsDangerous | null;

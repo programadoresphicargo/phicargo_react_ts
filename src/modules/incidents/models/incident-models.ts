@@ -35,6 +35,7 @@ export interface Incident extends IncidentBase {
   user: UserBasic;
   driver: DriverInfo;
   vehicle: VehicleInfo | null;
+  attendedAt: Dayjs | null;
   evidences: OneDriveFile[];
 }
 
@@ -49,5 +50,6 @@ export interface IncidentCreate extends IncidentBase {
 export type IncidentUpdate = Partial<IncidentBase> & {
   vehicleId?: number | null;
   driverId?: number | null;
+  attendedAt?: Dayjs | null;
 };
 

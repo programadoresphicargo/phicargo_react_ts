@@ -1,45 +1,21 @@
 import {
-  AutocompleteElement,
   RadioButtonGroup,
   SelectElement,
   TextareaAutosizeElement,
   CheckboxElement,
-  TextFieldElement,
 } from 'react-hook-form-mui';
 import { DatePickerElement } from 'react-hook-form-mui/date-pickers';
-import {
-  Checkbox,
-  Divider,
-  FormControlLabel,
-  FormGroup,
-  InputAdornment,
-} from '@mui/material';
-import { SubmitHandler, useForm } from 'react-hook-form';
-
-import type { IncidentCreate } from '../models';
-import { useVehicleQueries } from '@/modules/vehicles/hooks/queries';
-import { getIncidentOptions } from '../utilities';
-import { useState } from 'react';
-import dayjs from 'dayjs';
-import { useIncidentsQueries } from '../hooks/quries';
-import { useDriverQueries } from '@/modules/drivers/hooks/queries';
+import { Checkbox, Divider, FormControlLabel, FormGroup } from '@mui/material';
 
 import { FileUploadInput } from '@/components/inputs';
 import { Button, MuiSaveButton } from '@/components/ui';
-
-const initialFormState: IncidentCreate = {
-  startDate: null,
-  endDate: null,
-  incident: '',
-  comments: '',
-  type: 'operative',
-  incidentDate: dayjs(),
-  damageCost: null,
-  isDriverResponsible: true,
-  vehicleId: null,
-  newVehicleStateId: null,
-  driverId: null,
-};
+import {
+  useCreateIncidentForm,
+  INCIDENT_TYPES,
+} from '../hooks/useCreateIncidentForm';
+import { LegalDetailsSection } from './LegalDetailsSection';
+import { DriverAutocompleteInput } from '@/modules/drivers/components/DriverAutocompleteInput';
+import { VehicleAutocompleteInput } from '@/modules/vehicles/components/VehicleAutocompleteInput';
 
 interface Props {
   onCancel?: () => void;
@@ -53,60 +29,29 @@ export const CreateIncidentForm = ({
   onSuccess,
   driverId,
 }: Props) => {
-  const [files, setFiles] = useState<File[]>([]);
-
-  const [createUnavailability, setCreateUnavailability] = useState(false);
-
-  const { vehicleQuery } = useVehicleQueries();
-  const { AvailableDrivers, isLoading } = useDriverQueries();
-
   const {
-    createIncident: { mutate, isPending },
-  } = useIncidentsQueries({ driverId });
+    form: { control, handleSubmit, setValue },
 
-  const { control, handleSubmit, setValue, watch, reset } =
-    useForm<IncidentCreate>({
-      defaultValues: initialFormState,
-    });
+    files,
+    setFiles,
 
-  const selectedType = watch('type');
+    createUnavailability,
+    setCreateUnavailability,
 
-  const incidenceOptions = getIncidentOptions(selectedType);
+    incidenceOptions,
 
-  const damageCostDisabled =
-    selectedType !== 'legal' && selectedType !== 'maintenance';
+    damageCostDisabled,
 
-  const onSubmit: SubmitHandler<IncidentCreate> = (data) => {
-    if (isPending) return;
-
-    const driverIdToUse = driverId || data.driverId;
-
-    if (!driverIdToUse) return;
-
-    mutate(
-      {
-        driverId: driverIdToUse,
-        incident: {
-          ...data,
-        },
-        files: files,
-      },
-      {
-        onSuccess: () => {
-          onSuccess?.();
-          reset(initialFormState);
-          setFiles([]);
-        },
-      },
-    );
-  };
+    handleSubmit: onFormSubmit,
+    isPending,
+    isDirectionReport,
+  } = useCreateIncidentForm({ driverId, onSuccess });
 
   return (
     <form className="mt-6 transition-all duration-300 ease-in-out">
       <div
         className={`grid gap-6 transition-all duration-300 ease-in-out grid-cols-[1fr_auto_1fr]`}
       >
-        {/* Columna izquierda: campos base */}
         <div className="flex flex-col gap-4 max-w-sm">
           <RadioButtonGroup
             control={control}
@@ -115,13 +60,14 @@ export const CreateIncidentForm = ({
             required
             rules={{ required: 'Tipo de incidencia requerido' }}
             options={[
-              { id: 'operative', label: 'Operativa' },
-              { id: 'legal', label: 'Legal' },
-              { id: 'cleaning', label: 'Limpieza' },
-              { id: 'maintenance', label: 'Mantenimiento' },
+              { id: INCIDENT_TYPES.OPERATIVE, label: 'Operativa' },
+              { id: INCIDENT_TYPES.LEGAL, label: 'Legal' },
+              { id: INCIDENT_TYPES.CLEANING, label: 'Limpieza' },
+              { id: INCIDENT_TYPES.MAINTENANCE, label: 'Mantenimiento' },
             ]}
             row
           />
+
           <SelectElement
             control={control}
             name="incident"
@@ -133,26 +79,16 @@ export const CreateIncidentForm = ({
           />
 
           {!driverId && (
-            <AutocompleteElement
+            <DriverAutocompleteInput
               control={control}
               name="driverId"
               label="Operador"
-              options={
-                AvailableDrivers.map((v) => ({
-                  label: v.value,
-                  id: v.key,
-                })) || []
-              }
-              loading={isLoading}
-              autocompleteProps={{
-                getOptionKey: (option) => option.id,
-                onChange: (_, value) => {
-                  setValue('driverId', (value?.id as number) || 0);
-                },
-                size: 'small',
-              }}
+              required
+              rules={{ required: 'Operador requerido' }}
+              setValue={setValue}
             />
           )}
+
           <DatePickerElement
             control={control}
             name="incidentDate"
@@ -161,6 +97,7 @@ export const CreateIncidentForm = ({
             rules={{ required: 'Fecha de incidencia requerida' }}
             inputProps={{ size: 'small' }}
           />
+
           <TextareaAutosizeElement
             control={control}
             name="comments"
@@ -169,11 +106,13 @@ export const CreateIncidentForm = ({
             required
             rules={{ required: 'Comentario requerido' }}
           />
+
           <div className="flex flex-row items-center justify-between">
             <CheckboxElement
               control={control}
               name="isDriverResponsible"
               label="¿El operador es responsable?"
+              disabled={isDirectionReport}
             />
             <FormGroup>
               <FormControlLabel
@@ -183,6 +122,7 @@ export const CreateIncidentForm = ({
                     onChange={(e) => setCreateUnavailability(e.target.checked)}
                   />
                 }
+                disabled={isDirectionReport}
                 label="Crear Indisponibilidad"
               />
             </FormGroup>
@@ -241,48 +181,19 @@ export const CreateIncidentForm = ({
               </p>
             </div>
 
-            <TextFieldElement
+            <LegalDetailsSection
               control={control}
-              name="damageCost"
-              label="Coste de Daños"
-              type="number"
-              size="small"
-              disabled={damageCostDisabled}
-              rules={{
-                validate: (value) =>
-                  value === null || value >= 0 || 'El coste debe ser positivo',
-              }}
-              helperText="Si no se conoce el coste, dejar en blanco"
-              slotProps={{
-                input: {
-                  startAdornment: (
-                    <InputAdornment position="start">$</InputAdornment>
-                  ),
-                },
-              }}
+              damageCostDisabled={damageCostDisabled}
+              disabled={isDirectionReport}
             />
 
-            <AutocompleteElement
+            <VehicleAutocompleteInput 
               control={control}
               name="vehicleId"
               label="Unidad Afectada"
-              options={
-                vehicleQuery.data?.map((v) => ({
-                  label: v.name,
-                  id: v.id,
-                })) || []
-              }
-              loading={vehicleQuery.isLoading}
-              autocompleteProps={{
-                getOptionKey: (option) => option.id,
-                onChange: (_, value) => {
-                  setValue('vehicleId', value?.id || 0);
-                },
-                size: 'small',
-              }}
-              textFieldProps={{
-                helperText: 'Seleccionar unidad afectada, si aplica',
-              }}
+              setValue={setValue}
+              disabled={isDirectionReport}
+              helperText="Seleccionar unidad afectada, si aplica"
             />
 
             <SelectElement
@@ -291,6 +202,7 @@ export const CreateIncidentForm = ({
               label="Nuevo Estado de la Unidad"
               size="small"
               helperText="Seleccionar el nuevo estado de la unidad, si aplica"
+              disabled={isDirectionReport}
               options={[
                 { id: null, label: '' },
                 { id: 8, label: 'TERMINNACIÓN DE ARRENDAMIENTO' },
@@ -299,7 +211,6 @@ export const CreateIncidentForm = ({
                 { id: 4, label: 'EN REPARACION POR SINIESTRO' },
                 { id: 3, label: 'BAJA POR PERDIDA TOTAL' },
               ]}
-              // disabled={!createUnavailability || !watch('vehicleId')}
             />
           </div>
 
@@ -335,7 +246,7 @@ export const CreateIncidentForm = ({
         <MuiSaveButton
           variant="contained"
           loadingPosition="end"
-          onClick={handleSubmit(onSubmit)}
+          onClick={handleSubmit(onFormSubmit)}
           loading={isPending}
         />
       </div>

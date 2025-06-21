@@ -186,8 +186,8 @@ importers:
         specifier: ^3.6.0
         version: 3.6.0(react@18.3.1)
       rsuite:
-        specifier: ^5.75.0
-        version: 5.78.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^5.80.0
+        version: 5.80.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       socket.io-client:
         specifier: ^4.8.1
         version: 4.8.1
@@ -4269,8 +4269,8 @@ packages:
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
 
-  rsuite@5.78.1:
-    resolution: {integrity: sha512-OwKsAANAyUCFj0Pw0Il8OfmRaEVb5IaGFR/XC2gEa8D7wSC35K7a1qOWzfR42S8LquTBoTkbeFB3Te7MC62YSw==}
+  rsuite@5.80.0:
+    resolution: {integrity: sha512-rJ7PzHdEFiIensx3xl3hX64qto2zS69B8KAH75/ZVwJTVK1os9d8yJ7jSQtuDM+X9brMpvKZlPmJg1tVYWjBdA==}
     peerDependencies:
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
@@ -4287,8 +4287,8 @@ packages:
   scheduler@0.25.0-rc-603e6108-20241029:
     resolution: {integrity: sha512-pFwF6H1XrSdYYNLfOcGlM28/j8CGLu8IvdrxqhjWULe2bPcKiKW4CV+OWqR/9fT52mywx65l7ysNkjLKBda7eA==}
 
-  schema-typed@2.3.0:
-    resolution: {integrity: sha512-GwUKUxj2h2zPpighJfFOJD94/LDoaCUGQFWg1rJIa59VjME93u8txvaW28oScVvb7cboeKHh05lScTyGAtifeA==}
+  schema-typed@2.4.2:
+    resolution: {integrity: sha512-4eYZiheiPps+I7JEKrhm/S8OIPncXqY0lKQbvI/Agn9QMJUQ3cgfFZ2spy4Ta9Qr3xLYB3/qj4wGbsNcVwEO/w==}
 
   scroll-into-view-if-needed@3.0.10:
     resolution: {integrity: sha512-t44QCeDKAPf1mtQH3fYpWz8IM/DyvHLjs8wUvvwMYxk5moOqCzrMSxK6HQVD0QVmVjXFavoFIPRVrMuJPKAvtg==}
@@ -9890,7 +9890,7 @@ snapshots:
       react-dom: 18.3.1(react@18.3.1)
       react-is: 17.0.2
 
-  rsuite@5.78.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  rsuite@5.80.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       '@babel/runtime': 7.26.10
       '@juggle/resize-observer': 3.4.0
@@ -9908,7 +9908,7 @@ snapshots:
       react-use-set: 1.0.0(react@18.3.1)
       react-window: 1.8.11(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       rsuite-table: 5.19.1(prop-types@15.8.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      schema-typed: 2.3.0
+      schema-typed: 2.4.2
 
   run-parallel@1.2.0:
     dependencies:
@@ -9922,7 +9922,7 @@ snapshots:
 
   scheduler@0.25.0-rc-603e6108-20241029: {}
 
-  schema-typed@2.3.0:
+  schema-typed@2.4.2:
     dependencies:
       lodash: 4.17.21
 

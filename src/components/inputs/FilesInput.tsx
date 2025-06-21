@@ -5,12 +5,14 @@ interface Props {
   files: File[];
   setFiles: React.Dispatch<React.SetStateAction<File[]>>;
   acceptedFileTypes?: string;
+  label?: string;
 }
 
 export const FileUploadInput = ({
   files,
   setFiles,
   acceptedFileTypes,
+  label = 'Subir archivos',
 }: Props) => {
   const [previews, setPreviews] = useState<string[]>([]);
 
@@ -35,7 +37,7 @@ export const FileUploadInput = ({
     <>
       <label className="flex items-center justify-center gap-2 p-2 border-2 border-dashed border-blue-400 rounded-lg cursor-pointer bg-blue-50 hover:bg-blue-100 transition-colors h-14">
         <CloudUpload className="text-blue-500" fontSize="small" />
-        <span className="text-xs font-medium">Subir imágenes</span>
+        <span className="text-xs font-medium">{label}</span>
         <input
           type="file"
           className="hidden"

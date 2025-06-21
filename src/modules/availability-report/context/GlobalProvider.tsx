@@ -1,7 +1,7 @@
-import type { DateRange } from 'rsuite/esm/DateRangePicker';
 import { GlobalContext } from './GlobalContext';
 import dayjs from 'dayjs';
 import { useState } from 'react';
+import type { DateRange } from 'rsuite/esm/DateRangePicker/types';
 
 interface GlobalProviderProps {
   children: React.ReactNode;

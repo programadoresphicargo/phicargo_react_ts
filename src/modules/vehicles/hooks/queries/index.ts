@@ -7,4 +7,5 @@ export * from './useMotumEventsQueries';
 export * from './useGetTrailersQuery';
 export * from './useGetTrailersByDriverQuery';
 export * from './useFleetQueries';
+export * from './useGetVehicleInspections';
 

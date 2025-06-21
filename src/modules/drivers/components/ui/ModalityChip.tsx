@@ -25,7 +25,7 @@ export const ModalityChip = ({ modality }: Props) => {
       size="sm"
       className="uppercase text-xs"
     >
-      {modality}
+      {modality ?? 'SIN ASIGNAR'}
     </Chip>
   );
 };

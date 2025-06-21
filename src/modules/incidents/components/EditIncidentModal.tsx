@@ -36,6 +36,8 @@ export const EditIncidentModal = ({ onClose, incident }: Props) => {
     defaultValues: transformIncidentToIncidentUpdate(incident),
   });
 
+  const isDirectionReport = incident.incident === 'REPORTE A DIRECCIÓN';
+
   const selectedType = watch('type');
   const incidenceOptions = getIncidentOptions(selectedType ?? 'operative');
 
@@ -46,7 +48,9 @@ export const EditIncidentModal = ({ onClose, incident }: Props) => {
     selectedType !== 'legal' && selectedType !== 'maintenance';
 
   const onSubmit: SubmitHandler<IncidentUpdate> = (data) => {
-    console.log(data);
+    if (isDirectionReport) {
+      data.isDriverResponsible = false;
+    }
     updateIncident.mutate(
       {
         id: incident.id,
@@ -126,6 +130,9 @@ export const EditIncidentModal = ({ onClose, incident }: Props) => {
               size="small"
               required
               rules={{ required: 'Tipo de incidencia requerida' }}
+              slotProps={{
+                input: { readOnly: isDirectionReport }
+              }}
               options={incidenceOptions}
             />
 
@@ -169,6 +176,7 @@ export const EditIncidentModal = ({ onClose, incident }: Props) => {
                 control={control}
                 name="isDriverResponsible"
                 label="¿El operador es responsable?"
+                disabled={isDirectionReport}
               />
             </div>
           </div>
@@ -224,6 +232,7 @@ export const EditIncidentModal = ({ onClose, incident }: Props) => {
                   setValue('vehicleId', value?.id || 0);
                 },
                 size: 'small',
+                disabled: isDirectionReport,
               }}
               textFieldProps={{
                 helperText: 'Seleccionar unidad afectada, si aplica',

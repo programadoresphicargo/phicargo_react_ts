@@ -1,5 +1,5 @@
-import { DateRange } from 'rsuite/esm/DateRangePicker';
 import { createContext } from 'react';
+import type { DateRange } from 'rsuite/esm/DateRangePicker/types';
 
 export interface WeekContextProps {
   activeWeekId: number | null;

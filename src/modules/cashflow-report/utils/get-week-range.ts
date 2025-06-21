@@ -1,4 +1,4 @@
-import { DateRange } from 'rsuite/esm/DateRangePicker';
+import { DateRange } from "rsuite/esm/DateRangePicker/types";
 
 /**
  * Función que obtiene el rango de fechas de la semana actual

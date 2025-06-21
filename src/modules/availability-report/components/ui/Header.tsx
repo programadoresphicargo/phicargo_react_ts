@@ -2,12 +2,12 @@ import 'rsuite/dist/rsuite-no-reset.min.css';
 
 import { BackButton } from '@/components/ui';
 import { Checkbox } from '@heroui/react';
-import { DateRangePicker } from 'rsuite';
 import { IndicatorCard } from '@/components/utils/IndicatorCard';
 import dayjs from 'dayjs';
 import { useGlobalContext } from '../../hook/useGlobalContext';
 import { useMemo } from 'react';
 import { useRecordsQuery } from '../../hook/useRecordsQuery';
+import DateRangePicker from 'rsuite/esm/DateRangePicker/DateRangePicker';
 
 const { after } = DateRangePicker;
 

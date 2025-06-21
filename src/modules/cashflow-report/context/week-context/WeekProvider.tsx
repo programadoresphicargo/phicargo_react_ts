@@ -1,4 +1,4 @@
-import { DateRange } from 'rsuite/esm/DateRangePicker';
+import type { DateRange } from 'rsuite/esm/DateRangePicker/types';
 import { WeekContext } from './WeekContext';
 import { useState } from 'react';
 

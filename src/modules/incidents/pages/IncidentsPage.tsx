@@ -54,7 +54,7 @@ const IncidentsPage = () => {
     refetchFn: () => refetch(),
     showColumnFilters: true,
     showGlobalFilter: true,
-    containerHeight: 'calc(100vh - 210px)',
+    containerHeight: 'calc(100vh - 170px)',
     enableRowActions: true,
     positionActionsColumn: 'first',
     renderRowActions: ({ row }) => (

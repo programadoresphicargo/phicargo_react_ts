@@ -29,6 +29,9 @@ export class DriverAdapter {
       isActive: driver.active,
       licenseId: driver.tms_driver_license_id,
       licenseType: driver.tms_driver_license_type,
+      licenseExpiration: driver.tms_driver_license_expiration
+        ? dayjs(driver.tms_driver_license_expiration)
+        : null,
       noLicense: driver.no_licencia,
       modality: driver.x_modalidad,
       isDangerous: driver.x_peligroso_lic,

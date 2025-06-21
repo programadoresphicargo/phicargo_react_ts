@@ -4,7 +4,6 @@ import { Box, IconButton, Tooltip } from '@mui/material';
 import { useBaseTable, useSessionStorage } from '@/hooks';
 
 import { DateRange } from 'rsuite/esm/DateRangePicker/types';
-import { DateRangePicker } from 'rsuite';
 import EditIcon from '@mui/icons-material/Edit';
 import { EditServiceRequestForm } from '../components/EditServiceRequestForm';
 import { FiltersMenu } from '../components/ui/FiltersMenu';
@@ -17,6 +16,7 @@ import dayjs from 'dayjs';
 import { useGetServices } from '../hooks/queries';
 import { useServiceColumns } from '../hooks/useServiceColumns';
 import { useState } from 'react';
+import DateRangePicker from 'rsuite/esm/DateRangePicker/DateRangePicker';
 
 const filterOptions: Option<string[]>[] = [
   {

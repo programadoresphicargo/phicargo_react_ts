@@ -43,3 +43,21 @@ export class FilesService {
     }
   }
 }
+
+export async function uploadFiles(
+  files: File[],
+  route: string,
+  table: string,
+  id: number,
+) {
+  try {
+    await FilesService.uploadFiles({
+      files,
+      route: route,
+      table: table,
+      id: id,
+    });
+  } catch (error) {
+    console.error('Error uploading files:', error);
+  }
+}
