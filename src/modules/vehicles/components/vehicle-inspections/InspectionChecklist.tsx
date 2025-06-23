@@ -1,5 +1,8 @@
-import { ChecklistForm } from "@/components/utils/checklist-form/ChecklistForm";
-import type { ChecklistItem } from "@/components/utils/checklist-form/types";
+import { ChecklistForm } from '@/components/utils/checklist-form/ChecklistForm';
+import type { ChecklistItem } from '@/components/utils/checklist-form/types';
+import { FilesService } from '@/modules/core/services';
+import { useState } from 'react';
+import { VehicleInspectionQuestion } from '../../models';
 
 const checklistItems: ChecklistItem[] = [
   {
@@ -16,7 +19,8 @@ const checklistItems: ChecklistItem[] = [
   },
   {
     type: 'photo',
-    label: 'Foto exteriores (Frente, Lateral derecho, Lateral izquierdo, Atrás)',
+    label:
+      'Foto exteriores (Frente, Lateral derecho, Lateral izquierdo, Atrás)',
     name: 'fotos_exteriores',
     photoCount: 4,
   },
@@ -28,14 +32,64 @@ const checklistItems: ChecklistItem[] = [
   },
 ];
 
-export const InspectionChecklist = () => {
-  const handleSubmit = (values: Record<string, unknown>) => {
-    console.log('Checklist enviado:', values);
+interface Props {
+  onSubmit?: (values: VehicleInspectionQuestion[]) => void;
+}
+
+export const InspectionChecklist = ({ onSubmit }: Props) => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (values: Record<string, unknown>) => {
+    setIsLoading(true);
+    try {
+      const photoFields = Object.keys(values).filter(
+        (key) =>
+          values[key] !== null &&
+          typeof values[key] === 'object' &&
+          'length' in values[key],
+      );
+
+      const newValues = { ...values };
+
+      await Promise.all(
+        photoFields.map(async (field) => {
+          const files = values[field] as FileList;
+          if (files && files.length > 0) {
+            const filesArray = Array.from(files);
+            const ids = await FilesService.uploadFile(filesArray);
+            newValues[field] = ids;
+          }
+        }),
+      );
+
+      const questions: VehicleInspectionQuestion[] = Object.entries(newValues).map(
+        ([key, value]) => ({
+          question: checklistItems.find(item => item.name === key)?.label || key,
+          answer:
+            typeof value === 'string' ||
+            typeof value === 'boolean' ||
+            Array.isArray(value) ||
+            value === null
+              ? value
+              : null,
+        }),
+      );
+
+      onSubmit?.(questions);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className="">
-      <ChecklistForm items={checklistItems} onSubmit={handleSubmit} submitLabel="Finalizar Revisión" />
+    <div>
+      <ChecklistForm
+        items={checklistItems}
+        onSubmit={handleSubmit}
+        submitLabel={isLoading ? 'Cargando evidencias...' : 'Finalizar Revisión'}
+        isLoading={isLoading}
+      />
     </div>
   );
 };
+
