@@ -24,6 +24,7 @@ import { button } from "@heroui/theme";
 import dayjs from 'dayjs';
 import odooApi from '@/api/odoo-api';
 import { width } from '@mui/system';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -175,7 +176,9 @@ const TablaAccesos = ({ tipo }) => {
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
     grouping: manualGrouping,
+    localization: MRT_Localization_ES,
     initialState: {
+      showColumnFilters: true,
       density: 'compact',
       pagination: { pageSize: 80 },
       showGlobalFilter: true,
@@ -230,7 +233,11 @@ const TablaAccesos = ({ tipo }) => {
           flexWrap: 'wrap',
         }}
       >
-        <h1>Modulo de accesos</h1>
+        <h2
+          className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
+        >
+          Registro de accesos
+        </h2>
         <Button
           color='primary'
           onPress={() =>
@@ -240,7 +247,8 @@ const TablaAccesos = ({ tipo }) => {
           Nuevo registro
         </Button>
         <Button
-          color='primary'
+          color='success'
+          className="text-white"
           onPress={() =>
             fetchData()
           }
