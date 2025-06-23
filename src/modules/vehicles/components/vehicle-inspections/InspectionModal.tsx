@@ -1,6 +1,7 @@
 import { MuiModal } from '@/components';
 import type { VehicleInspection } from '../../models';
-import { InspectionForm } from './InspectionForm';
+// import { InspectionForm } from './InspectionForm';
+import { InspectionChecklist } from './InspectionChecklist';
 
 interface Props {
   open: boolean;
@@ -30,7 +31,8 @@ export const InspectionModal = ({
       }
     >
       <div className="p-6">
-        <InspectionForm vehicleId={vehicleInspection.id} onCancel={onClose} onSuccess={onClose} />
+        <InspectionChecklist />
+        {/* <InspectionForm vehicleId={vehicleInspection.id} onCancel={onClose} onSuccess={onClose} /> */}
       </div>
     </MuiModal>
   );
