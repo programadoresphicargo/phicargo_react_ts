@@ -81,8 +81,16 @@ const TablaAccesos = ({ tipo }) => {
         ),
       },
       {
+        accessorKey: 'marca',
+        header: 'Marca',
+      },
+      {
+        accessorKey: 'modelo',
+        header: 'Modelo',
+      },
+      {
         accessorKey: 'placas',
-        header: 'Vehiculo',
+        header: 'Placas',
       },
       {
         accessorKey: 'tipo_movimiento',
@@ -183,6 +191,8 @@ const TablaAccesos = ({ tipo }) => {
       pagination: { pageSize: 80 },
       showGlobalFilter: true,
       columnVisibility: {
+        marca: tipo == 'vehicular' ? true : false,
+        modelo: tipo == 'vehicular' ? true : false,
         placas: tipo == 'vehicular' ? true : false,
       },
     },
