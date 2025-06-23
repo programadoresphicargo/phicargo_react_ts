@@ -23,10 +23,33 @@ export const ChecklistForm: React.FC<ChecklistFormProps> = ({
 
   const {
     control,
-    handleSubmit: formSubmit
+    handleSubmit: formSubmit,
+    setError,
+    clearErrors,
+    watch,
   } = form;
 
+  const validatePhotos = () => {
+    let valid = true;
+    items.forEach((item) => {
+      if (item.type === 'photo' && item.photoCount) {
+        const files = watch(item.name);
+        if (!files || files === '' || typeof files !== 'object' || !('length' in files)) {
+          setError(item.name, { type: 'manual', message: 'Debes subir al menos una foto' });
+          valid = false;
+        } else if ((files as FileList).length !== item.photoCount) {
+          setError(item.name, { type: 'manual', message: `Debes subir exactamente ${item.photoCount} foto(s)` });
+          valid = false;
+        } else {
+          clearErrors(item.name);
+        }
+      }
+    });
+    return valid;
+  };
+
   const handleSubmit: SubmitHandler<Record<string, unknown>> = (data) => {
+    if (!validatePhotos()) return;
     onSubmit(data);
   };
 
