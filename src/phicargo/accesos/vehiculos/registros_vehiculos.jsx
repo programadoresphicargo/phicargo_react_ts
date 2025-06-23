@@ -115,29 +115,15 @@ const RegistroVehiculos = ({ onClose }) => {
     enableRowActions: true,
     renderRowActions: ({ row }) => (
       <Box>
-        {formData?.id_acceso != null && (
-          <Button
-            color="primary"
-            size='sm'
-            onPress={() => {
-              AñadirVehiculo(row.original.id_vehiculo);
-              onClose();
-            }}>
-            Seleccionar
-          </Button>
-        )}
-        {formData?.id_acceso == null && (
-          <Button
-            color="secondary"
-            size="sm"
-            onPress={() => {
-              NuevoVehiculo();
-              fetchDataVehiculo(row.original.id_vehiculo);
-            }}
-          >
-            Editar
-          </Button>
-        )}
+        <Button
+          color="primary"
+          size='sm'
+          onPress={() => {
+            AñadirVehiculo(row.original.id_vehiculo);
+            onClose();
+          }}>
+          Seleccionar
+        </Button>
       </Box >
     ),
     muiTableBodyRowProps: ({ row }) => ({
