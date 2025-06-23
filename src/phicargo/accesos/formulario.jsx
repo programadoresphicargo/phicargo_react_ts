@@ -121,7 +121,8 @@ const AccesoForm = ({ id_acceso, onClose }) => {
         { value: 'estacionamiento_externo', label: 'Estacionamiento Externo' },
         { value: 'perimetro_interior', label: 'Perímetro Interior' },
         { value: 'perimetro_exterior', label: 'Perímetro Exterior' },
-        { value: 'coppel', label: 'Coppel' }
+        { value: 'coppel', label: 'Coppel' },
+        { value: 'fertilizantes_tepeyac', label: 'Fertilizantes Tepeyac' }
     ];
 
     const identificationOptions = [
