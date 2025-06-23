@@ -21,7 +21,8 @@ export class VehicleInspectionAdapter {
       result: inspectionApi.result,
       comments: inspectionApi.comments,
       inspector: userBasicToLocal(inspectionApi.inspector),
-      incidentId: inspectionApi.incident_id
+      incidentId: inspectionApi.incident_id,
+      inspectionType: inspectionApi.inspection_type,
     };
   }
 
@@ -48,6 +49,8 @@ export class VehicleInspectionAdapter {
       comments: vehicleInspection.comments,
       vehicle_id: vehicleInspection.vehicleId,
       driver_id: vehicleInspection.driverId ?? null,
+      inspection_type: vehicleInspection.inspectionType,
+      checklist: vehicleInspection.checklist
     };
   }
 }

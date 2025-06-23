@@ -5,10 +5,13 @@ import type { DriverInfo } from '@/modules/incidents/models';
 
 export type InspectionResult = 'approved' | 'rejected';
 
+export type InspectionType = 'cleaning' | 'legal';
+
 export interface VehicleInspectionBase {
   inspectionDate: Dayjs;
   result: InspectionResult;
   comments: string | null;
+  inspectionType: InspectionType;
 }
 
 export interface Inspection extends VehicleInspectionBase {
@@ -25,5 +28,12 @@ export interface VehicleInspection extends VehicleBase {
 export interface VehicleInspectionCreate extends VehicleInspectionBase {
   vehicleId: number;
   driverId?: number | null;
+  checklist: VehicleInspectionQuestion[];
 }
 
+// Checklist
+
+export interface VehicleInspectionQuestion {
+  question: string;
+  answer: string | null | boolean | string[];
+}
