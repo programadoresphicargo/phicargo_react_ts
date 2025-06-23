@@ -659,9 +659,9 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                                 </TimelineSeparator>
                                 <TimelineContent sx={{ py: '12px', px: 2 }}>
                                     <Typography variant="h6" component="span" sx={{ m: 'auto 0', fontFamily: 'Inter' }}>
-                                        Archivado por
+                                        Autorizado por
                                     </Typography>
-                                    <Typography sx={{ m: 'auto 0', fontFamily: 'Inter' }}>{formData.usuario_archivo}</Typography>
+                                    <Typography sx={{ m: 'auto 0', fontFamily: 'Inter' }}>{formData.usuario_autorizo}</Typography>
                                 </TimelineContent>
                             </TimelineItem>
 
@@ -683,11 +683,12 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                                 </TimelineSeparator>
                                 <TimelineContent sx={{ py: '12px', px: 2 }}>
                                     <Typography variant="h6" component="span" sx={{ m: 'auto 0', fontFamily: 'Inter' }}>
-                                        Autorizado por
+                                        Archivado por
                                     </Typography>
-                                    <Typography sx={{ m: 'auto 0', fontFamily: 'Inter' }}>{formData.usuario_autorizo}</Typography>
+                                    <Typography sx={{ m: 'auto 0', fontFamily: 'Inter' }}>{formData.usuario_archivo}</Typography>
                                 </TimelineContent>
                             </TimelineItem>
+
                         </Timeline>
 
                     </CardBody>
