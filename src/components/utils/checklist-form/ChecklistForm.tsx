@@ -9,12 +9,14 @@ export type ChecklistFormProps = {
   items: ChecklistItem[];
   onSubmit: (values: Record<string, unknown>) => void;
   submitLabel?: string;
+  isLoading?: boolean;
 };
 
 export const ChecklistForm: React.FC<ChecklistFormProps> = ({
   items,
   onSubmit,
   submitLabel = 'Enviar',
+  isLoading = false,
 }) => {
   const form = useForm({
     defaultValues: getDefaultValues(items),
@@ -102,6 +104,7 @@ export const ChecklistForm: React.FC<ChecklistFormProps> = ({
               variant="contained"
               color="primary"
               className="w-full"
+              loading={isLoading}
             >
               {submitLabel}
             </Button>
