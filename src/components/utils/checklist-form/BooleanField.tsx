@@ -1,14 +1,13 @@
 import { Typography } from '@mui/material';
 import {
-  Control,
   FieldValues,
   Path,
   RadioButtonGroup,
   RegisterOptions,
+  useFormContext,
 } from 'react-hook-form-mui';
 
 interface Props<T extends FieldValues> {
-  control: Control<T>;
   name: Path<T>;
   label: string;
   rules?: Omit<
@@ -18,11 +17,12 @@ interface Props<T extends FieldValues> {
 }
 
 export const BooleanField = <T extends FieldValues>({
-  control,
   label,
   name,
   rules,
 }: Props<T>) => {
+  const { control } = useFormContext<T>();
+
   return (
     <>
       <Typography>{label}</Typography>
