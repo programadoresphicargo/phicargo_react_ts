@@ -11,6 +11,7 @@ import TextField from '@mui/material/TextField';
 import axios from 'axios';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
+import { useAuthContext } from '@/modules/auth/hooks';
 
 const Validador = ({ id_acceso, estado_acceso, open, handleClose }) => {
 
@@ -35,7 +36,7 @@ const Validador = ({ id_acceso, estado_acceso, open, handleClose }) => {
             const data = response.data;
             if (data.id_usuario) {
                 toast.success('Pin valido.');
-                cambiar_estado(id_acceso);
+                cambiar_estado(id_acceso, data.id_usuario);
             } else {
                 toast.error(data.error);
             }
@@ -45,7 +46,7 @@ const Validador = ({ id_acceso, estado_acceso, open, handleClose }) => {
         }
     };
 
-    const cambiar_estado = async (id_acceso) => {
+    const cambiar_estado = async (id_acceso, id_usuario) => {
         try {
             var baseUrl = '';
             if (estado_acceso == 'espera' || estado_acceso == 'autorizado') {
@@ -53,7 +54,7 @@ const Validador = ({ id_acceso, estado_acceso, open, handleClose }) => {
             } else if (estado_acceso == 'validado') {
                 baseUrl = '/accesos/archivar_acceso/';
             }
-            const response = await odooApi.get(baseUrl + id_acceso);
+            const response = await odooApi.get(baseUrl + id_acceso + '/' + id_usuario);
             if (response.data.status == 'success') {
                 toast.success(response.data.message);
                 handleClose();
