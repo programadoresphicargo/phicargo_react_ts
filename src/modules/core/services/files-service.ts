@@ -42,6 +42,31 @@ export class FilesService {
       throw new Error('Error al obtener la URL del archivo');
     }
   }
+
+  static async uploadFile(
+    files: File[], path?: string
+  ): Promise<string[]> {
+    const url = `/archivos/upload/`;
+    const formData = new FormData();
+
+    formData.append('path', path || '/');
+    files.forEach((file) => {
+      formData.append('files', file);
+    });
+    
+    try {
+      const response = await odooApi.post<string[]>(url, formData);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      if (error instanceof AxiosError) {
+        throw new Error(
+          error.response?.data?.detail || 'Error al subir los archivos',
+        );
+      }
+      throw new Error('Error al subir los archivos');
+    }
+  }
 }
 
 export async function uploadFiles(
@@ -61,3 +86,4 @@ export async function uploadFiles(
     console.error('Error uploading files:', error);
   }
 }
+
