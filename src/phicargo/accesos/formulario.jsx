@@ -362,7 +362,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
         <Stack spacing={2} direction="row" style={{ padding: '20px' }}>
             {id_acceso && (
                 <Typography variant="h4" style={{ marginTop: '20px' }}>
-                    Acceso A-{id_acceso}
+                    A-{id_acceso}
                 </Typography>
             )}
             {!id_acceso && (
@@ -662,6 +662,30 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                                         Archivado por
                                     </Typography>
                                     <Typography sx={{ m: 'auto 0', fontFamily: 'Inter' }}>{formData.usuario_archivo}</Typography>
+                                </TimelineContent>
+                            </TimelineItem>
+
+                            <TimelineItem>
+                                <TimelineOppositeContent
+                                    sx={{ m: 'auto 0' }}
+                                    align="right"
+                                    variant="body2"
+                                    color="text.secondary"
+                                >
+                                    {formData.fecha_archivado}
+                                </TimelineOppositeContent>
+                                <TimelineSeparator>
+                                    <TimelineConnector />
+                                    <TimelineDot color="primary">
+                                        <ClockIcon />
+                                    </TimelineDot>
+                                    <TimelineConnector />
+                                </TimelineSeparator>
+                                <TimelineContent sx={{ py: '12px', px: 2 }}>
+                                    <Typography variant="h6" component="span" sx={{ m: 'auto 0', fontFamily: 'Inter' }}>
+                                        Autorizado por
+                                    </Typography>
+                                    <Typography sx={{ m: 'auto 0', fontFamily: 'Inter' }}>{formData.usuario_autorizo}</Typography>
                                 </TimelineContent>
                             </TimelineItem>
                         </Timeline>
