@@ -12,6 +12,8 @@ interface Props<T extends FieldValues> {
 export const PhotoField = <T extends FieldValues>({ item, name }: Props<T>) => {
   const {
     setValue,
+    setError,
+    clearErrors,
     formState: { errors },
     watch,
   } = useFormContext();
@@ -41,6 +43,15 @@ export const PhotoField = <T extends FieldValues>({ item, name }: Props<T>) => {
     const files = e.target.files;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     setValue(name, files as any, { shouldValidate: true });
+    if (item.photoCount) {
+      if (!files || files.length === 0) {
+        setError(name, { type: 'manual', message: 'Debes subir al menos una foto' });
+      } else if (files.length !== item.photoCount) {
+        setError(name, { type: 'manual', message: `Debes subir exactamente ${item.photoCount} foto(s)` });
+      } else {
+        clearErrors(name);
+      }
+    }
   };
 
   return (
@@ -111,3 +122,4 @@ export const PhotoField = <T extends FieldValues>({ item, name }: Props<T>) => {
     </>
   );
 };
+
