@@ -98,9 +98,9 @@ const AccesoCompo = ({ children }) => {
     };
 
     const AñadirVehiculo = (id_vehiculo) => {
-        odooApi.get("/vehiculos_visitantes/get_by_id/" + id_vehiculo)
+        odooApi.get("/vehiculos_visitantes/" + id_vehiculo)
             .then(response => {
-                const data = response.data[0];
+                const data = response.data;
                 const nuevoVehiculo = {
                     id_vehiculo: data.id_vehiculo,
                     marca: data.marca,

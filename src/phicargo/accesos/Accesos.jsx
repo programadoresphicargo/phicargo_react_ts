@@ -9,6 +9,8 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import TablaAccesos from "./tabla";
+import RegistroVehiculos from "./vehiculos/registros_vehiculos";
+import AccesoCompo from "./AccesoCompo";
 
 export default function Accesos() {
 
@@ -37,12 +39,16 @@ export default function Accesos() {
                             <Tab label="VEHICULAR" value="2" sx={{ fontFamily: 'Inter' }} />
                             <Tab label="ARCHIVADOS" value="3" sx={{ fontFamily: 'Inter' }} />
                             <Tab label="POR AUTORIZAR" value="4" sx={{ fontFamily: 'Inter' }} />
+                            <Tab label="REGISTRO VEHICULOS" value="5" sx={{ fontFamily: 'Inter' }} />
                         </TabList>
                     </Box>
                     <TabPanel value="1" sx={{ padding: 0, margin: 0 }}><TablaAccesos tipo={'peatonal'} /></TabPanel>
                     <TabPanel value="2" sx={{ padding: 0, margin: 0 }}><TablaAccesos tipo={'vehicular'} /></TabPanel>
                     <TabPanel value="3" sx={{ padding: 0, margin: 0 }}><TablaAccesos tipo={'archivado'} /></TabPanel>
                     <TabPanel value="4" sx={{ padding: 0, margin: 0 }}><TablaAccesos tipo={'autorizacion'} /></TabPanel>
+                    <AccesoCompo>
+                        <TabPanel value="5" sx={{ padding: 0, margin: 0 }}><RegistroVehiculos></RegistroVehiculos></TabPanel>
+                    </AccesoCompo>
                 </TabContext>
             </Box>
         </>

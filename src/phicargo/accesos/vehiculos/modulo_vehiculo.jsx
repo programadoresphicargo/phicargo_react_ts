@@ -13,8 +13,11 @@ import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from 
 import AccesoCompo from '../AccesoCompo';
 import { AccesoContext } from '../context';
 import RegistroVehiculos from './registros_vehiculos';
-
-const ModuloVehiculo = ({disabled}) => {
+import Slide from '@mui/material/Slide';
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
+const ModuloVehiculo = ({ disabled }) => {
     const { selectVehiculos, EliminarVehiculo } = useContext(AccesoContext);
 
     const [openFormVehiculo, setOpenFormVehiculo] = React.useState(false);
@@ -77,12 +80,10 @@ const ModuloVehiculo = ({disabled}) => {
             fullWidth={false}
             maxWidth={false}
             open={openFormVehiculo}
+            TransitionComponent={Transition}
             onClose={handleCloseFormVehiculo}
-            scroll='body'
+            scroll='paper'
         >
-            <DialogTitle>
-                {"Registro de Vehiculos"}
-            </DialogTitle>
             <DialogContent>
                 <RegistroVehiculos onClose={handleCloseFormVehiculo}></RegistroVehiculos>
             </DialogContent>

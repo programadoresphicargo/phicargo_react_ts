@@ -13,7 +13,7 @@ import VehiculoForm from './vehiculoForm';
 import odooApi from '@/api/odoo-api';
 
 const RegistroVehiculos = ({ onClose }) => {
-  const { AñadirVehiculo } = useContext(AccesoContext);
+  const { AñadirVehiculo, formData } = useContext(AccesoContext);
 
   const [open, setOpen] = React.useState(false);
 
@@ -40,9 +40,22 @@ const RegistroVehiculos = ({ onClose }) => {
     }
   };
 
+  const fetchDataVehiculo = async (id_vehiculo) => {
+    try {
+      setLoading(true);
+      const response = await odooApi.get('/vehiculos_visitantes/' + id_vehiculo);
+      setDataVehicle(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error al obtener los datos:', error);
+    }
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
+
+  const [dataVehicle, setDataVehicle] = useState({});
 
   const columns = useMemo(
     () => [
@@ -88,6 +101,7 @@ const RegistroVehiculos = ({ onClose }) => {
     enableColumnPinning: true,
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
+    positionActionsColumn: 'last',
     initialState: {
       density: 'compact',
       pagination: { pageSize: 80 },
@@ -101,15 +115,29 @@ const RegistroVehiculos = ({ onClose }) => {
     enableRowActions: true,
     renderRowActions: ({ row }) => (
       <Box>
-        <Button
-          color="primary"
-          size='sm'
-          onClick={() => {
-            AñadirVehiculo(row.original.id_vehiculo);
-            onClose();
-          }}>
-          Seleccionar
-        </Button>
+        {formData?.id_acceso != null && (
+          <Button
+            color="primary"
+            size='sm'
+            onPress={() => {
+              AñadirVehiculo(row.original.id_vehiculo);
+              onClose();
+            }}>
+            Seleccionar
+          </Button>
+        )}
+        {formData?.id_acceso == null && (
+          <Button
+            color="secondary"
+            size="sm"
+            onPress={() => {
+              NuevoVehiculo();
+              fetchDataVehiculo(row.original.id_vehiculo);
+            }}
+          >
+            Editar
+          </Button>
+        )}
       </Box >
     ),
     muiTableBodyRowProps: ({ row }) => ({
@@ -136,6 +164,23 @@ const RegistroVehiculos = ({ onClose }) => {
         fontSize: '14px',
       },
     },
+    muiTableContainerProps: {
+      sx: {
+        maxHeight: 'calc(100vh - 250px)',
+      },
+    },
+    renderTopToolbarCustomActions: ({ table }) => (
+      <Box
+        sx={{
+          display: 'flex',
+          gap: '16px',
+          padding: '8px',
+          flexWrap: 'wrap',
+        }}
+      >
+        <Button color='primary' onPress={NuevoVehiculo}>Nuevo vehiculo</Button>
+      </Box>
+    ),
   });
 
   return (<>
@@ -150,8 +195,6 @@ const RegistroVehiculos = ({ onClose }) => {
         <VehiculoForm onClose={handleClose}></VehiculoForm>
       </DialogContent>
     </Dialog>
-
-    <Button color='primary' onClick={NuevoVehiculo}>Nuevo vehiculo</Button>
     <MaterialReactTable table={table} />
   </>
   );
