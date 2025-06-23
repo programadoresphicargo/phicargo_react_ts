@@ -635,6 +635,30 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                                     variant="body2"
                                     color="text.secondary"
                                 >
+                                    {formData.fecha_archivado}
+                                </TimelineOppositeContent>
+                                <TimelineSeparator>
+                                    <TimelineConnector />
+                                    <TimelineDot color="primary">
+                                        <ClockIcon />
+                                    </TimelineDot>
+                                    <TimelineConnector />
+                                </TimelineSeparator>
+                                <TimelineContent sx={{ py: '12px', px: 2 }}>
+                                    <Typography variant="h6" component="span" sx={{ m: 'auto 0', fontFamily: 'Inter' }}>
+                                        Autorizado por
+                                    </Typography>
+                                    <Typography sx={{ m: 'auto 0', fontFamily: 'Inter' }}>{formData.usuario_autorizo}</Typography>
+                                </TimelineContent>
+                            </TimelineItem>
+
+                            <TimelineItem>
+                                <TimelineOppositeContent
+                                    sx={{ m: 'auto 0' }}
+                                    align="right"
+                                    variant="body2"
+                                    color="text.secondary"
+                                >
                                     {formData.fecha_validacion}
                                 </TimelineOppositeContent>
                                 <TimelineSeparator>
@@ -651,30 +675,6 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                                     <Typography sx={{ m: 'auto 0', fontFamily: 'Inter' }}>
                                         {formData.usuario_valido}
                                     </Typography>
-                                </TimelineContent>
-                            </TimelineItem>
-
-                            <TimelineItem>
-                                <TimelineOppositeContent
-                                    sx={{ m: 'auto 0' }}
-                                    align="right"
-                                    variant="body2"
-                                    color="text.secondary"
-                                >
-                                    {formData.fecha_archivado}
-                                </TimelineOppositeContent>
-                                <TimelineSeparator>
-                                    <TimelineConnector />
-                                    <TimelineDot color="primary">
-                                        <ClockIcon />
-                                    </TimelineDot>
-                                    <TimelineConnector />
-                                </TimelineSeparator>
-                                <TimelineContent sx={{ py: '12px', px: 2 }}>
-                                    <Typography variant="h6" component="span" sx={{ m: 'auto 0', fontFamily: 'Inter' }}>
-                                        Autorizado por
-                                    </Typography>
-                                    <Typography sx={{ m: 'auto 0', fontFamily: 'Inter' }}>{formData.usuario_autorizo}</Typography>
                                 </TimelineContent>
                             </TimelineItem>
 
