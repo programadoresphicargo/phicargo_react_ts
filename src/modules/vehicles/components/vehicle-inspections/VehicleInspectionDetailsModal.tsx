@@ -88,6 +88,12 @@ export const VehicleInspectionDetailModal = ({
                 )}
               </div>
             </div>
+            <div>
+              <p className="text-sm text-gray-500">Comentarios</p>
+              <div className="flex items-center gap-1">
+                {vehicleInspection.inspection?.comments}
+              </div>
+            </div>
           </DetailCard>
 
           <DetailCard title="Incidencia Asociada">
@@ -127,15 +133,6 @@ export const VehicleInspectionDetailModal = ({
             )}
           </DetailCard>
         </div>
-
-        {/* Comentarios */}
-        {vehicleInspection.inspection?.comments && (
-          <DetailCard title="Comentarios Adicionales">
-            <p className="whitespace-pre-line uppercase">
-              {vehicleInspection.inspection?.comments}
-            </p>
-          </DetailCard>
-        )}
 
         {/* Evidencias */}
         <DetailCard title="Evidencias">
