@@ -35,7 +35,6 @@ const AccesoCompo = ({ children }) => {
         estado_acceso: '',
         id_empresa: '',
         nombre_empresa: '',
-        id_empresa_visitada: '',
         fecha_entrada: fechaFormateada,
         fecha_salida: fechaFormateada,
         motivo: '',

@@ -17,6 +17,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
 import odooApi from '@/api/odoo-api';
+import { Box } from '@mui/material';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -124,6 +125,18 @@ const ListadoEmpresas = ({ open, handleClose }) => {
         fontSize: '14px',
       },
     },
+    renderTopToolbarCustomActions: ({ table }) => (
+      <Box
+        sx={{
+          display: 'flex',
+          gap: '16px',
+          padding: '8px',
+          flexWrap: 'wrap',
+        }}
+      >
+        <Button color='primary' onPress={handleClickOpenForm}>Nueva empresa</Button>
+      </Box>
+    ),
   });
 
   const [scroll, setScroll] = React.useState('body');
@@ -148,10 +161,6 @@ const ListadoEmpresas = ({ open, handleClose }) => {
           </Button>
         </Toolbar>
       </AppBar>
-
-      <Stack spacing={2} direction="row" className='m-3'>
-        <Button color='primary' onClick={handleClickOpenForm}>Nueva empresa</Button>
-      </Stack>
       <MaterialReactTable table={table} />
     </Dialog>
 

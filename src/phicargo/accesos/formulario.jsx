@@ -45,6 +45,7 @@ import { toast } from 'react-toastify';
 import { useAuthContext } from "@/modules/auth/hooks";
 import { DatePicker } from "@heroui/react";
 import { parseDate, parseDateTime, getLocalTimeZone } from "@internationalized/date";
+import { Alert } from "@heroui/react";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -93,14 +94,13 @@ const AccesoForm = ({ id_acceso, onClose }) => {
         if (!formData.motivo) {
             newErrors.motivo = 'Motivo es obligatorio';
         }
-        if (!formData.id_empresa_visitada) {
+        if (formData.tipo_movimiento == "entrada" && !formData.id_empresa_visitada) {
             newErrors.id_empresa_visitada = 'Empresa visitada es obligatorio';
         }
-        if (!formData.tipo_identificacion) {
+        if (formData.tipo_movimiento == "entrada" && !formData.tipo_identificacion) {
             newErrors.tipo_identificacion = 'Tipo de identificación es obligatorio';
         }
-
-        if (!formData.areas) {
+        if (formData.tipo_movimiento == "entrada" && !formData.areas) {
             newErrors.areas = 'Areas es obligatorio';
         }
         return newErrors;
@@ -394,6 +394,12 @@ const AccesoForm = ({ id_acceso, onClose }) => {
         <Grid container spacing={2} style={{ padding: '20px' }}>
             <Grid item xs={12} sm={4} md={8}>
 
+                {formData.tipo_movimiento == 'salida' && (
+                    <div className="w-full flex items-center mb-3">
+                        <Alert color="danger" title={`Recuerda solicitar la validación de tu salida al departamento correspondiente. Sin esta validación, no podrás salir.`} variant="solid" />
+                    </div>
+                )}
+
                 <Card className='mb-3'>
                     <CardHeader className="flex gap-3">
                         <div className="flex flex-col">
@@ -486,71 +492,77 @@ const AccesoForm = ({ id_acceso, onClose }) => {
 
                             <SelectedVisitantesTable></SelectedVisitantesTable>
 
-                            <Grid item xs={12} sm={6} md={4}>
-                                <Autocomplete
-                                    label="Documento con el que se identifica"
-                                    id="tipo_identificacion"
-                                    name="tipo_identificacion"
-                                    variant='bordered'
-                                    selectedKey={formData.tipo_identificacion || null}
-                                    onSelectionChange={(e) => handleChange('tipo_identificacion', e)}
-                                    isDisabled={disabledFom}
-                                    defaultItems={identificationOptions}
-                                    isInvalid={!!errors.tipo_identificacion}
-                                    errorMessage={errors.tipo_identificacion}
-                                >
-                                    {(item) => <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>}
-                                </Autocomplete>
-                            </Grid>
+                            {formData.tipo_movimiento == 'entrada' && (
+                                <>
+                                    <Grid item xs={12} sm={6} md={4}>
+                                        <Autocomplete
+                                            label="Documento con el que se identifica"
+                                            id="tipo_identificacion"
+                                            name="tipo_identificacion"
+                                            variant='bordered'
+                                            selectedKey={formData.tipo_identificacion || null}
+                                            onSelectionChange={(e) => handleChange('tipo_identificacion', e)}
+                                            isDisabled={disabledFom}
+                                            defaultItems={identificationOptions}
+                                            isInvalid={!!errors.tipo_identificacion}
+                                            errorMessage={errors.tipo_identificacion}
+                                        >
+                                            {(item) => <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>}
+                                        </Autocomplete>
+                                    </Grid>
 
-                            <Grid item xs={12} sm={6} md={4}>
-                                <Autocomplete
-                                    id="id_empresa_visitada"
-                                    name="id_empresa_visitada"
-                                    label="Empresa visitada"
-                                    variant='bordered'
-                                    selectedKey={String(formData.id_empresa_visitada) || null}
-                                    onSelectionChange={(e) => handleChange('id_empresa_visitada', e)}
-                                    defaultItems={empresas_visitadas}
-                                    isDisabled={disabledFom}
-                                    isInvalid={!!errors.id_empresa_visitada}
-                                    errorMessage={errors.id_empresa_visitada}
-                                >
-                                    {(item) => <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>}
-                                </Autocomplete>
-                            </Grid>
 
-                            <Grid item xs={12} sm={6} md={4}>
-                                <Select
-                                    selectionMode="multiple"
-                                    isMultiline={true}
-                                    id="areas"
-                                    name="areas"
-                                    variant='bordered'
-                                    label="Áreas a visitar"
-                                    placeholder="Seleccionar áreas permitidas a transitar"
-                                    defaultItems={areas}
-                                    isDisabled={disabledFom}
-                                    onChange={handleSelectionChange}
-                                    selectedKeys={
-                                        formData.areas
-                                            ? formData.areas.split(',').map((key) => key.replace(/"/g, '').trim())
-                                            : []
-                                    }
-                                    isInvalid={!!errors.areas}
-                                    errorMessage={errors.areas}
-                                >
-                                    {areas.map((animal) => (
-                                        <SelectItem key={animal.value}>{animal.label}</SelectItem>
-                                    ))}
-                                </Select>
-                            </Grid>
+                                    <Grid item xs={12} sm={6} md={4}>
+                                        <Autocomplete
+                                            id="id_empresa_visitada"
+                                            name="id_empresa_visitada"
+                                            label="Empresa visitada"
+                                            variant='bordered'
+                                            selectedKey={String(formData.id_empresa_visitada) || null}
+                                            onSelectionChange={(e) => handleChange('id_empresa_visitada', e)}
+                                            defaultItems={empresas_visitadas}
+                                            isDisabled={disabledFom}
+                                            isInvalid={!!errors.id_empresa_visitada}
+                                            errorMessage={errors.id_empresa_visitada}
+                                        >
+                                            {(item) => <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>}
+                                        </Autocomplete>
+                                    </Grid>
+
+
+                                    <Grid item xs={12} sm={6} md={4}>
+                                        <Select
+                                            selectionMode="multiple"
+                                            isMultiline={true}
+                                            id="areas"
+                                            name="areas"
+                                            variant='bordered'
+                                            label="Áreas a visitar"
+                                            placeholder="Seleccionar áreas permitidas a transitar"
+                                            defaultItems={areas}
+                                            isDisabled={disabledFom}
+                                            onChange={handleSelectionChange}
+                                            selectedKeys={
+                                                formData.areas
+                                                    ? formData.areas.split(',').map((key) => key.replace(/"/g, '').trim())
+                                                    : []
+                                            }
+                                            isInvalid={!!errors.areas}
+                                            errorMessage={errors.areas}
+                                        >
+                                            {areas.map((animal) => (
+                                                <SelectItem key={animal.value}>{animal.label}</SelectItem>
+                                            ))}
+                                        </Select>
+                                    </Grid>
+                                </>
+                            )}
 
                             <Grid item xs={12} sm={6} md={8}>
                                 <Textarea
                                     id="motivo"
                                     name="motivo"
-                                    label="Motivo de entrada o salida"
+                                    label={`Motivo de ${formData?.tipo_movimiento}`}
                                     placeholder="Ingresa una descripción"
                                     variant='bordered'
                                     isDisabled={disabledFom}

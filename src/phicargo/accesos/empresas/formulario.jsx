@@ -1,7 +1,5 @@
 import React, { useContext, useState } from 'react';
-
 import { AccesoContext } from '../context';
-import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -10,6 +8,7 @@ import TextField from '@mui/material/TextField';
 import axios from 'axios';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
+import { Button } from '@heroui/react';
 
 export default function FormEmpresa({ open, handleClose }) {
     const [nombreEmpresa, setNombreEmpresa] = useState('');
@@ -71,8 +70,8 @@ export default function FormEmpresa({ open, handleClose }) {
                 />
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose}>Cancelar</Button>
-                <Button onClick={AñadirEmpresa}>Registrar</Button>
+                <Button onPress={handleClose}>Cancelar</Button>
+                <Button onPress={AñadirEmpresa} color='primary'>Registrar</Button>
             </DialogActions>
         </Dialog>
     );
