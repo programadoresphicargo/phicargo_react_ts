@@ -172,6 +172,11 @@ const RegistroVehiculos = ({ onClose }) => {
           flexWrap: 'wrap',
         }}
       >
+        <h2
+          className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
+        >
+          Registro de vehículos
+        </h2>
         <Button color='primary' onPress={NuevoVehiculo}>Nuevo vehiculo</Button>
       </Box>
     ),

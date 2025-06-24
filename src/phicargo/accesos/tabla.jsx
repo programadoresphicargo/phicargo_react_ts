@@ -30,7 +30,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const TablaAccesos = ({ tipo }) => {
+const TablaAccesos = ({ title, tipo }) => {
 
   const [open, setOpen] = React.useState(false);
   const [id_acceso, setIDAcceso] = useState(0);
@@ -246,7 +246,7 @@ const TablaAccesos = ({ tipo }) => {
         <h2
           className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
         >
-          Registro de accesos
+          {title}
         </h2>
         <Button
           color='primary'
