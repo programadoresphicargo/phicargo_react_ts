@@ -65,7 +65,7 @@ const ModuloVehiculo = ({ disabled }) => {
                                     <TableCell>{visitor.contenedor1}</TableCell>
                                     <TableCell>{visitor.contenedor2}</TableCell>
                                     <TableCell>
-                                        <Button onPress={() => EliminarVehiculo(visitor.id_vehiculo)} size='sm'>Eliminar</Button>
+                                        <Button onPress={() => EliminarVehiculo(visitor.id_vehiculo)} size='sm' isDisabled={disabled}>Eliminar</Button>
                                     </TableCell>
                                 </TableRow>
                             ))}
