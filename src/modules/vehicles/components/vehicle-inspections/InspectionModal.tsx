@@ -22,7 +22,6 @@ export const InspectionModal = ({
   const [questions, setQuestions] = useState<VehicleInspectionQuestion[]>([]);
 
   const handleChecklist = (values: VehicleInspectionQuestion[]) => {
-    console.log('Valores Checklist en InspectionModal:', values);
     setQuestions(values);
     setStep(2);
   };

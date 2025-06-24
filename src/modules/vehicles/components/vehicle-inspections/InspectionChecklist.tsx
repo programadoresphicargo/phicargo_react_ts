@@ -1,7 +1,5 @@
 import { ChecklistForm } from '@/components/utils/checklist-form/ChecklistForm';
 import type { ChecklistItem } from '@/components/utils/checklist-form/types';
-import { FilesService } from '@/modules/core/services';
-import { useState } from 'react';
 import { VehicleInspectionQuestion } from '../../models';
 
 const checklistItems: ChecklistItem[] = [
@@ -37,48 +35,17 @@ interface Props {
 }
 
 export const InspectionChecklist = ({ onSubmit }: Props) => {
-  const [isLoading, setIsLoading] = useState(false);
-
   const handleSubmit = async (values: Record<string, unknown>) => {
-    setIsLoading(true);
-    try {
-      const photoFields = Object.keys(values).filter(
-        (key) =>
-          values[key] !== null &&
-          typeof values[key] === 'object' &&
-          'length' in values[key],
-      );
+    const questions = Object.entries(values).map(([key, value]) => {
+      const checklistItem = checklistItems.find(item => item.name === key); 
 
-      const newValues = { ...values };
+      return {
+        question: checklistItem?.label || key,
+        answer: value,
+      };
+    });
 
-      await Promise.all(
-        photoFields.map(async (field) => {
-          const files = values[field] as FileList;
-          if (files && files.length > 0) {
-            const filesArray = Array.from(files);
-            const ids = await FilesService.uploadFile(filesArray);
-            newValues[field] = ids;
-          }
-        }),
-      );
-
-      const questions: VehicleInspectionQuestion[] = Object.entries(newValues).map(
-        ([key, value]) => ({
-          question: checklistItems.find(item => item.name === key)?.label || key,
-          answer:
-            typeof value === 'string' ||
-            typeof value === 'boolean' ||
-            Array.isArray(value) ||
-            value === null
-              ? value
-              : null,
-        }),
-      );
-
-      onSubmit?.(questions);
-    } finally {
-      setIsLoading(false);
-    }
+    onSubmit?.(questions);
   };
 
   return (
@@ -86,8 +53,7 @@ export const InspectionChecklist = ({ onSubmit }: Props) => {
       <ChecklistForm
         items={checklistItems}
         onSubmit={handleSubmit}
-        submitLabel={isLoading ? 'Cargando evidencias...' : 'Finalizar Revisión'}
-        isLoading={isLoading}
+        submitLabel={'Finalizar Revisión'}
       />
     </div>
   );
