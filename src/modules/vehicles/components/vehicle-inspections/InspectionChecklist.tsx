@@ -42,6 +42,7 @@ export const InspectionChecklist = ({ onSubmit }: Props) => {
       return {
         question: checklistItem?.label || key,
         answer: value,
+        questionType: checklistItem?.type as 'boolean' | 'text' | 'file',
       };
     });
 
