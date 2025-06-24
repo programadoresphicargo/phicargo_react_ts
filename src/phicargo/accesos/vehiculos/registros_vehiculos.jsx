@@ -99,7 +99,6 @@ const RegistroVehiculos = ({ onClose }) => {
     enableColumnPinning: true,
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
-    positionActionsColumn: 'last',
     localization: MRT_Localization_ES,
     initialState: {
       showColumnFilters: true,
