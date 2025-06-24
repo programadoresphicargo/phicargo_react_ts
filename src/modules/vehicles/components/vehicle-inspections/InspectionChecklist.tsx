@@ -16,14 +16,14 @@ const checklistItems: ChecklistItem[] = [
     defaultValue: 'si',
   },
   {
-    type: 'photo',
+    type: 'file',
     label:
       'Foto exteriores (Frente, Lateral derecho, Lateral izquierdo, Atrás)',
     name: 'fotos_exteriores',
     photoCount: 4,
   },
   {
-    type: 'photo',
+    type: 'file',
     label: 'Fotos interiores (Cabina, Piloto y Copiloto)',
     name: 'fotos_interiores',
     photoCount: 3,

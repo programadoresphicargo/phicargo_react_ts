@@ -1,5 +1,5 @@
 export type ChecklistItem = {
-  type: 'boolean' | 'photo' | 'text';
+  type: 'boolean' | 'file' | 'text';
   defaultValue?: string;
   label: string;
   name: string;

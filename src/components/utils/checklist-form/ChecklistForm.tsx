@@ -34,7 +34,7 @@ export const ChecklistForm: React.FC<ChecklistFormProps> = ({
   const validatePhotos = () => {
     let valid = true;
     items.forEach((item) => {
-      if (item.type === 'photo' && item.photoCount) {
+      if (item.type === 'file' && item.photoCount) {
         const files = watch(item.name);
         if (!files || files === '' || typeof files !== 'object' || !('length' in files)) {
           setError(item.name, { type: 'manual', message: 'Debes subir al menos una foto' });
@@ -65,7 +65,7 @@ export const ChecklistForm: React.FC<ChecklistFormProps> = ({
           {items.map((item) => (
             <div
               key={item.name}
-              className={item.type === 'photo' ? 'sm:col-span-2' : ''}
+              className={item.type === 'file' ? 'sm:col-span-2' : ''}
             >
               {item.type === 'boolean' ? (
                 <div className="flex items-center justify-between">
@@ -77,7 +77,7 @@ export const ChecklistForm: React.FC<ChecklistFormProps> = ({
                     }}
                   />
                 </div>
-              ) : item.type === 'photo' ? (
+              ) : item.type === 'file' ? (
                 <div>
                   <PhotoField
                     item={item}

@@ -62,7 +62,6 @@ export class VehicleInspectionAdapter {
     }
 
     const filesToUpload: File[] = [];
-    console.log('Archivos a subir:', vehicleInspection.checklist);
     const checklist = Object.entries(vehicleInspection.checklist).map(
       ([, value]) => {
         let answer = value.answer;
