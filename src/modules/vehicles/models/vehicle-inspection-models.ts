@@ -28,13 +28,20 @@ export interface VehicleInspection extends VehicleBase {
 export interface VehicleInspectionCreate extends VehicleInspectionBase {
   vehicleId: number;
   driverId?: number | null;
-  checklist: VehicleInspectionQuestion[];
+  checklist: VehicleInspectionQuestionCreate[];
 }
 
 // Checklist
 
-export interface VehicleInspectionQuestion {
+export interface VehicleInspectionQuestionBase {
   question: string;
   answer: unknown; // Puede ser boolean, string, etc.
   questionType: 'boolean' | 'text' | 'file';
 }
+
+export type VehicleInspectionQuestionCreate = VehicleInspectionQuestionBase;
+
+export interface VehicleInspectionQuestion extends VehicleInspectionQuestionBase {
+  id: number;
+}
+

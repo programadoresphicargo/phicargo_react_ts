@@ -24,15 +24,21 @@ export interface VehicleInspectionApi extends VehicleBaseApi {
 export interface VehicleInspectionCreateApi extends VehicleInspectionBaseApi {
   vehicle_id: number;
   driver_id?: number | null;
-  checklist: VehicleInspectionQuestionApi[];
+  checklist: VehicleInspectionQuestionCreateApi[];
 }
 
 // Checklist
 
-export interface VehicleInspectionQuestionApi {
+export interface VehicleInspectionQuestionBaseApi {
   question: string;
   answer: unknown;
   question_type: 'boolean' | 'text' | 'file';
+}
+
+export type VehicleInspectionQuestionCreateApi = VehicleInspectionQuestionBaseApi;
+
+export interface VehicleInspectionQuestionApi extends VehicleInspectionQuestionBaseApi {
+  id: number;
 }
 
 

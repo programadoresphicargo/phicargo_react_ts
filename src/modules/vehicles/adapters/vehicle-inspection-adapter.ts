@@ -3,11 +3,13 @@ import type {
   Inspection,
   VehicleInspection,
   VehicleInspectionCreate,
+  VehicleInspectionQuestion,
 } from '../models';
 import type {
   InspectionApi,
   VehicleInspectionApi,
   VehicleInspectionQuestionApi,
+  VehicleInspectionQuestionCreateApi,
 } from '../models/api';
 import { VehicleAdapter } from './vehicle-adapter';
 import { userBasicToLocal } from '@/modules/auth/adapters';
@@ -40,6 +42,17 @@ export class VehicleInspectionAdapter {
     };
   }
 
+  static toVehicleInspectionQuestion(
+    vehicleInspection: VehicleInspectionQuestionApi,
+  ): VehicleInspectionQuestion {
+    return {
+      id: vehicleInspection.id,
+      question: vehicleInspection.question,
+      answer: vehicleInspection.answer,
+      questionType: vehicleInspection.question_type,
+    };
+  }
+
   static toVehicleInspectionApi(
     vehicleInspection: VehicleInspectionCreate,
   ): FormData {
@@ -63,21 +76,23 @@ export class VehicleInspectionAdapter {
     }
 
     const filesToUpload: File[] = [];
-    const checklist: VehicleInspectionQuestionApi[] = Object.entries(vehicleInspection.checklist).map(
-      ([, value]) => {
-        let answer = value.answer;
-        if (typeof FileList !== 'undefined' && answer instanceof FileList) {
-          const files = Array.from(answer).filter((file): file is File => file instanceof File);
-          answer = files.map((file) => file.name);
-          filesToUpload.push(...files);
-        }
-        return {
-          question: value.question,
-          answer,
-          question_type: value.questionType
-        };
-      },
-    );
+    const checklist: VehicleInspectionQuestionCreateApi[] = Object.entries(
+      vehicleInspection.checklist,
+    ).map(([, value]) => {
+      let answer = value.answer;
+      if (typeof FileList !== 'undefined' && answer instanceof FileList) {
+        const files = Array.from(answer).filter(
+          (file): file is File => file instanceof File,
+        );
+        answer = files.map((file) => file.name);
+        filesToUpload.push(...files);
+      }
+      return {
+        question: value.question,
+        answer,
+        question_type: value.questionType,
+      };
+    });
 
     const checklistJson = JSON.stringify(checklist);
     formData.append('checklist', checklistJson);
