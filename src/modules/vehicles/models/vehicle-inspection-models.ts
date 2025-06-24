@@ -35,5 +35,5 @@ export interface VehicleInspectionCreate extends VehicleInspectionBase {
 
 export interface VehicleInspectionQuestion {
   question: string;
-  answer: string | null | boolean | string[];
+  answer: unknown; // Puede ser boolean, string, etc.
 }
