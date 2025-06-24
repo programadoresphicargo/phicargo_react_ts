@@ -1,6 +1,6 @@
 import { FormControl, Grid, InputLabel, MenuItem, TextField } from "@mui/material";
 
-import { Button, Divider, Input, Progress } from "@heroui/react";
+import { Button, Checkbox, Divider, Input, Progress } from "@heroui/react";
 import axios from "axios";
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
@@ -188,6 +188,9 @@ const VehiculoForm = ({ open, onClose, id_vehiculo }) => {
                     value={dataVehicle?.contenedor2}
                     onChange={(e) => updateDataVehicle("contenedor2", e.target.value)}
                 />
+            </Grid>
+            <Grid item xs={12} md={6}>
+                <Checkbox onValueChange={(e) => updateDataVehicle("utilitario", e)} isSelected={dataVehicle?.utilitario}>Vehículo utilitario</Checkbox>
             </Grid>
         </Grid>
     </>

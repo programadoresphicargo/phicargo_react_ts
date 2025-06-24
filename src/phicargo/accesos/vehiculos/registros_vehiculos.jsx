@@ -70,6 +70,10 @@ const RegistroVehiculos = ({ onClose }) => {
         header: 'Color',
       },
       {
+        accessorKey: 'utilitario',
+        header: 'Utilitario',
+      },
+      {
         accessorKey: 'contenedor1',
         header: 'Contenedor 1',
       },
