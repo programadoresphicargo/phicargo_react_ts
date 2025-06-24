@@ -14,8 +14,8 @@ interface Props {
 export const FilesList = ({ files }: Props) => {
   return (
     <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2">
-      {files.map((file) => (
-        <Item key={file.idOnedrive} file={file} />
+      {files.map((file, idx) => (
+        <Item key={`${file.idOnedrive}-${idx}`} file={file} />
       ))}
     </div>
   );
