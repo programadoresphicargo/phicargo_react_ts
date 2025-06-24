@@ -31,7 +31,7 @@ export interface VehicleInspectionCreateApi extends VehicleInspectionBaseApi {
 
 export interface VehicleInspectionQuestionApi {
   question: string;
-  answer: string | null | boolean | string[];
+  answer: unknown;
   question_type: 'boolean' | 'text' | 'file';
 }
 

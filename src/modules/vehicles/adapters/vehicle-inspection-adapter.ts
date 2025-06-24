@@ -7,6 +7,7 @@ import type {
 import type {
   InspectionApi,
   VehicleInspectionApi,
+  VehicleInspectionQuestionApi,
 } from '../models/api';
 import { VehicleAdapter } from './vehicle-adapter';
 import { userBasicToLocal } from '@/modules/auth/adapters';
@@ -62,7 +63,7 @@ export class VehicleInspectionAdapter {
     }
 
     const filesToUpload: File[] = [];
-    const checklist = Object.entries(vehicleInspection.checklist).map(
+    const checklist: VehicleInspectionQuestionApi[] = Object.entries(vehicleInspection.checklist).map(
       ([, value]) => {
         let answer = value.answer;
         if (typeof FileList !== 'undefined' && answer instanceof FileList) {
@@ -73,6 +74,7 @@ export class VehicleInspectionAdapter {
         return {
           question: value.question,
           answer,
+          question_type: value.questionType
         };
       },
     );
