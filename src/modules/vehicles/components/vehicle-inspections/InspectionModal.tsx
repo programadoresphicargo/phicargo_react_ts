@@ -1,5 +1,10 @@
+import { useState } from 'react';
 import { MuiModal } from '@/components';
-import type { VehicleInspection } from '../../models';
+import type {
+  VehicleInspection,
+  VehicleInspectionQuestionCreate,
+} from '../../models';
+import { InspectionChecklist } from './InspectionChecklist';
 import { InspectionForm } from './InspectionForm';
 
 interface Props {
@@ -13,6 +18,18 @@ export const InspectionModal = ({
   onClose,
   vehicleInspection,
 }: Props) => {
+  const [step, setStep] = useState(1);
+  const [questions, setQuestions] = useState<VehicleInspectionQuestionCreate[]>([]);
+
+  const handleChecklist = (values: VehicleInspectionQuestionCreate[]) => {
+    setQuestions(values);
+    setStep(2);
+  };
+
+  const handleFormSuccess = () => {
+    onClose();
+  };
+
   return (
     <MuiModal
       open={open}
@@ -30,7 +47,16 @@ export const InspectionModal = ({
       }
     >
       <div className="p-6">
-        <InspectionForm vehicleId={vehicleInspection.id} onCancel={onClose} onSuccess={onClose} />
+        {step === 1 ? (
+          <InspectionChecklist onSubmit={handleChecklist} />
+        ) : (
+          <InspectionForm
+            vehicleId={vehicleInspection.id}
+            onCancel={onClose}
+            onSuccess={handleFormSuccess}
+            checklist={questions}
+          />
+        )}
       </div>
     </MuiModal>
   );

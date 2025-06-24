@@ -1,31 +1,36 @@
 import dayjs from 'dayjs';
-import { VehicleInspectionCreate } from '../../models';
+import { VehicleInspectionCreate, VehicleInspectionQuestionCreate } from '../../models';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { SelectElement, TextareaAutosizeElement } from 'react-hook-form-mui';
 import { DatePickerElement } from 'react-hook-form-mui/date-pickers';
 import { Button, MuiSaveButton } from '@/components/ui';
 import { DriverAutocompleteInput } from '@/modules/drivers/components/DriverAutocompleteInput';
 import { useCreateVehicleInspectionMutation } from '../../hooks/mutations';
-import { FileUploadInput } from '@/components/inputs';
-import { useState } from 'react';
 
 const initialValues: VehicleInspectionCreate = {
-  vehicleId: 0,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  vehicleId: null as any,
   inspectionDate: dayjs(),
   result: 'approved',
   comments: '',
   driverId: null,
+  inspectionType: 'cleaning',
+  checklist: [],
 };
 
 interface Props {
   vehicleId: number;
   onCancel?: () => void;
   onSuccess?: () => void;
+  checklist?: VehicleInspectionQuestionCreate[];
 }
 
-export const InspectionForm = ({ vehicleId, onCancel, onSuccess }: Props) => {
-  const [files, setFiles] = useState<File[]>([]);
-
+export const InspectionForm = ({
+  vehicleId,
+  onCancel,
+  onSuccess,
+  checklist,
+}: Props) => {
   const { mutation } = useCreateVehicleInspectionMutation();
 
   const { control, handleSubmit, watch, setValue } =
@@ -39,11 +44,9 @@ export const InspectionForm = ({ vehicleId, onCancel, onSuccess }: Props) => {
     if (!vehicleId) return;
     mutation.mutate(
       {
-        data: {
-          ...data,
-          vehicleId,
-        },
-        files,
+        ...data,
+        vehicleId,
+        checklist: checklist || [],
       },
       {
         onSuccess: () => {
@@ -103,14 +106,6 @@ export const InspectionForm = ({ vehicleId, onCancel, onSuccess }: Props) => {
             rules={{ required: 'Operador requerido' }}
             setValue={setValue}
           />
-          <div className="flex flex-col gap-4">
-            <FileUploadInput
-              files={files}
-              setFiles={setFiles}
-              acceptedFileTypes="image/jpeg, image/png"
-              label="Adjuntar evidencias"
-            />
-          </div>
         </>
       )}
 

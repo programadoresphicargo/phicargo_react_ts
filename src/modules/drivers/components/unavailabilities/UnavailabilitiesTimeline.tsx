@@ -1,10 +1,10 @@
 import type { Driver, DriverUnavailable } from '../../models';
 
-import { AlertDialog } from '@/components';
+import { MuiAlertDialog } from '@/components';
 import { FaCalendarMinus } from 'react-icons/fa';
 import { IoDocumentTextOutline } from 'react-icons/io5';
 import { IoMdExit } from 'react-icons/io';
-import { Tooltip } from '@heroui/react';
+import { Button, Tooltip } from '@heroui/react';
 import VacationsRequestView from './VacationsRequestView';
 import { useState } from 'react';
 import { useUnavailabilityQueries } from '../../hooks/queries';
@@ -66,19 +66,20 @@ export const UnavailabilitiesTimeline = ({
                       </button>
                     </Tooltip>
                   )}
-                  <AlertDialog
-                    title="Liberar"
-                    message="¿Está seguro que desea liberar esta solicitud?"
-                    onConfirm={() => onRelease()}
-                    iconOnly
-                    onOpenChange={(isOpen) =>
-                      setItemSelected(isOpen ? item : null)
-                    }
-                    open={itemSelected?.id === item.id}
-                    tooltipMessage="Liberar"
-                    openButtonIcon={<IoMdExit className="text-xl" />}
-                    openDisabled={!item.isActive}
-                  />
+                  <Tooltip content={'Liberar'}>
+                    <span>
+                      <Button
+                        color={'warning'}
+                        onPress={() => setItemSelected(item)}
+                        size="sm"
+                        variant={'light'}
+                        isIconOnly
+                        isDisabled={!item.isActive}
+                      >
+                        <IoMdExit className="text-xl" />
+                      </Button>
+                    </span>
+                  </Tooltip>
                 </div>
               </h3>
               <time className="block mb-2 text-sm font-normal leading-none text-gray-600 uppercase">
@@ -100,6 +101,15 @@ export const UnavailabilitiesTimeline = ({
           unavailability={toVacationRequest}
         />
       )}
+      <MuiAlertDialog
+        open={!!itemSelected}
+        onClose={() => setItemSelected(null)}
+        onConfirm={onRelease}
+        confirmButtonText="Liberar"
+        title="Liberar solicitud"
+        message="¿Está seguro que desea liberar esta solicitud?"
+        severity="warning"
+      />
     </>
   );
 };
