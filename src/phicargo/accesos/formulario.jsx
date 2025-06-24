@@ -650,7 +650,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                             {formData.usuario_autorizo && (
                                 <TimelineItem>
                                     <TimelineOppositeContent
-                                        sx={{ m: 'auto 0' }}
+                                        sx={{ m: 'auto 0', fontFamily: 'Inter' }}
                                         align="right"
                                         variant="body2"
                                         color="text.secondary"
@@ -676,7 +676,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                             {formData.usuario_valido && (
                                 <TimelineItem>
                                     <TimelineOppositeContent
-                                        sx={{ m: 'auto 0' }}
+                                        sx={{ m: 'auto 0', fontFamily: 'Inter' }}
                                         align="right"
                                         variant="body2"
                                         color="text.secondary"
@@ -704,7 +704,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                             {formData.usuario_archivo && (
                                 <TimelineItem>
                                     <TimelineOppositeContent
-                                        sx={{ m: 'auto 0' }}
+                                        sx={{ m: 'auto 0', fontFamily: 'Inter' }}
                                         align="right"
                                         variant="body2"
                                         color="text.secondary"
