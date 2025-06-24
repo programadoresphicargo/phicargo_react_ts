@@ -51,8 +51,10 @@ export const Navbar = (props: Props) => {
       }}
     >
       <NavbarContent className="sm:hidden" justify="start">
+        <BackButton route="/menu" />
         <NavbarMenuToggle
           aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+          className='text-white'
         />
       </NavbarContent>
 
@@ -98,11 +100,17 @@ export const Navbar = (props: Props) => {
       </NavbarContent>
 
       <NavbarMenu>
-        <NavbarMenuItem>
-          <Link className="w-full" href="control-usuarios/usuarios" size="lg">
-            {'Usuarios'}
-          </Link>
-        </NavbarMenuItem>
+        {filteredMenuItems.map((page, i) => (
+          <NavbarMenuItem key={i}>
+            <Link 
+              className="w-full" 
+              href={page.path}
+              size="lg"
+            >
+              {page.name}
+            </Link>
+          </NavbarMenuItem>
+        ))}
       </NavbarMenu>
     </NextUiNavbar>
   );
