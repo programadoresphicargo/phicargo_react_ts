@@ -1,6 +1,6 @@
 import { ChecklistForm } from '@/components/utils/checklist-form/ChecklistForm';
 import type { ChecklistItem } from '@/components/utils/checklist-form/types';
-import { VehicleInspectionQuestion } from '../../models';
+import type { VehicleInspectionQuestionCreate } from '../../models';
 
 const checklistItems: ChecklistItem[] = [
   {
@@ -31,7 +31,7 @@ const checklistItems: ChecklistItem[] = [
 ];
 
 interface Props {
-  onSubmit?: (values: VehicleInspectionQuestion[]) => void;
+  onSubmit?: (values: VehicleInspectionQuestionCreate[]) => void;
 }
 
 export const InspectionChecklist = ({ onSubmit }: Props) => {
