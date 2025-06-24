@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { VehicleInspectionCreate, VehicleInspectionQuestion } from '../../models';
+import { VehicleInspectionCreate, VehicleInspectionQuestionCreate } from '../../models';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { SelectElement, TextareaAutosizeElement } from 'react-hook-form-mui';
 import { DatePickerElement } from 'react-hook-form-mui/date-pickers';
@@ -22,7 +22,7 @@ interface Props {
   vehicleId: number;
   onCancel?: () => void;
   onSuccess?: () => void;
-  checklist?: VehicleInspectionQuestion[];
+  checklist?: VehicleInspectionQuestionCreate[];
 }
 
 export const InspectionForm = ({

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { MuiModal } from '@/components';
 import type {
   VehicleInspection,
-  VehicleInspectionQuestion,
+  VehicleInspectionQuestionCreate,
 } from '../../models';
 import { InspectionChecklist } from './InspectionChecklist';
 import { InspectionForm } from './InspectionForm';
@@ -19,9 +19,9 @@ export const InspectionModal = ({
   vehicleInspection,
 }: Props) => {
   const [step, setStep] = useState(1);
-  const [questions, setQuestions] = useState<VehicleInspectionQuestion[]>([]);
+  const [questions, setQuestions] = useState<VehicleInspectionQuestionCreate[]>([]);
 
-  const handleChecklist = (values: VehicleInspectionQuestion[]) => {
+  const handleChecklist = (values: VehicleInspectionQuestionCreate[]) => {
     setQuestions(values);
     setStep(2);
   };

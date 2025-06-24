@@ -1,6 +1,7 @@
+import type { VehicleInspection } from '@/modules/vehicles/models';
+import { VehicleInspectionService } from '@/modules/vehicles/services';
 import { useQuery } from '@tanstack/react-query';
-import type { VehicleInspection } from '../../models';
-import { VehicleInspectionService } from '../../services';
+
 
 export const VEHICLE_INSPECTION_QUERY_KEY = 'vehicles-inspections';
 
