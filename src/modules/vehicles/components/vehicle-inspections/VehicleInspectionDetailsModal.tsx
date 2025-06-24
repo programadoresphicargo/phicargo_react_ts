@@ -1,12 +1,16 @@
 import { Chip, Divider } from '@mui/material';
 import { ReactNode } from 'react';
 import { MuiModal } from '@/components';
-import type { VehicleInspection } from '../../models';
+import type {
+  VehicleInspection,
+  VehicleInspectionQuestion,
+} from '../../models';
 import { inspectionResult } from '../../utilities';
 import { useGetDriverIncidentQuery } from '@/modules/incidents/hooks/quries';
 import { CheckCircleOutline, ErrorOutline } from '@mui/icons-material';
 import { Alert, LoadingSpinner } from '@/components/ui';
-import { EvidencesList } from '@/modules/incidents/components/EvidencesList';
+import { useGetInspectionChecklistQuery } from '../../hooks/queries';
+import { FilesList } from '@/components/utils/FilesList';
 
 interface Props {
   open: boolean;
@@ -23,6 +27,10 @@ export const VehicleInspectionDetailModal = ({
     query: { data: incident, isLoading: loadingIncident },
   } = useGetDriverIncidentQuery(vehicleInspection.inspection?.incidentId);
 
+  const {
+    query: { data: checklist, isLoading: loadingChecklist },
+  } = useGetInspectionChecklistQuery(vehicleInspection.inspection?.id);
+
   return (
     <MuiModal
       open={open}
@@ -37,7 +45,7 @@ export const VehicleInspectionDetailModal = ({
         </div>
       }
     >
-      <div className="flex flex-col gap-4 p-4 min-w-lg">
+      <div className="flex flex-col gap-4 p-4 w-full">
         {/* Sección de información básica */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <DetailCard title="Información de Revisión">
@@ -135,12 +143,22 @@ export const VehicleInspectionDetailModal = ({
         </div>
 
         {/* Evidencias */}
-        <DetailCard title="Evidencias">
-          {incident && incident?.evidences.length > 0 ? (
-            <EvidencesList incident={incident} />
-          ) : (
-            <p className="text-gray-500 text-sm">No hay evidencias adjuntas</p>
-          )}
+        <DetailCard title="Checklist de Revisión">
+          <div className="flex flex-col gap-2 max-h-72 overflow-y-auto">
+            {loadingChecklist && <LoadingSpinner />}
+            {!checklist && !loadingChecklist && (
+              <Alert
+                title="No hay checklist de revisión"
+                description="Esta revisión no tiene checklist asociada."
+                color="primary"
+              />
+            )}
+            {checklist &&
+              checklist.length > 0 &&
+              checklist.map((item) => (
+                <ChecklistItem key={item.id} item={item} />
+              ))}
+          </div>
         </DetailCard>
       </div>
     </MuiModal>
@@ -158,6 +176,31 @@ const DetailCard = ({ title, children }: DetailCardProps) => {
       <h3 className="font-medium text-gray-700 mb-2">{title}</h3>
       <Divider sx={{ my: 1 }} />
       <div className="space-y-3">{children}</div>
+    </div>
+  );
+};
+
+const ChecklistItem = ({ item }: { item: VehicleInspectionQuestion }) => {
+  const { id, question, answer, questionType } = item;
+
+  const isValidFileType =
+    questionType === 'file' && Array.isArray(answer) && answer.length > 0;
+
+  return (
+    <div key={id} className="flex flex-col gap-2">
+      <span>{question}</span>
+      {questionType === 'boolean' && (
+        <Chip
+          sx={{
+            textTransform: 'uppercase',
+            width: '80px',
+          }}
+          label={answer as string}
+          size="small"
+          variant="outlined"
+        />
+      )}
+      {isValidFileType && <FilesList files={answer} />}
     </div>
   );
 };
