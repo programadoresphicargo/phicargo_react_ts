@@ -195,6 +195,19 @@ const Documentacion = ({ }) => {
         >
           Horas de servicio
         </Button>
+
+        <Button
+          showAnchorIcon
+          as={Link}
+          isExternal={true}
+          color="danger"
+          className='text-white'
+          href={`${apiUrl}/tms_travel/estadias/cortes/` + 126}
+          variant="solid"
+        >
+          Corte parcial estadías
+        </Button>
+
       </Box >
     )
   });
