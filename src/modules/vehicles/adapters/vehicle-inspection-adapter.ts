@@ -14,6 +14,8 @@ import type {
 import { VehicleAdapter } from './vehicle-adapter';
 import { userBasicToLocal } from '@/modules/auth/adapters';
 import { IncidentAdapter } from '@/modules/incidents/adapters';
+import { FilesAdapter } from '@/modules/core/adapters';
+import { OneDriveFileApi } from '@/modules/core/models/api';
 
 export class VehicleInspectionAdapter {
   static toInspection(inspectionApi: InspectionApi): Inspection {
@@ -45,6 +47,26 @@ export class VehicleInspectionAdapter {
   static toVehicleInspectionQuestion(
     vehicleInspection: VehicleInspectionQuestionApi,
   ): VehicleInspectionQuestion {
+
+    const { question_type, answer } = vehicleInspection;
+
+    if (
+      question_type === 'file' && 
+      Array.isArray(answer) &&
+      answer.length > 0 &&
+      typeof answer[0] === 'object' &&
+      'id_onedrive' in answer[0]
+    ) {
+      try {
+        const aswerJson = answer.map((file: OneDriveFileApi) => {
+          return FilesAdapter.toOneDriveFile(file);
+        });
+        vehicleInspection.answer = aswerJson;
+      } catch (error) {
+        console.error('Error processing file question type:', error);
+      }
+    }
+
     return {
       id: vehicleInspection.id,
       question: vehicleInspection.question,
