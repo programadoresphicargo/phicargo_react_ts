@@ -29,9 +29,12 @@ export class VehicleInspectionService {
     }
   }
 
-  static async createVehicleInspection(data: VehicleInspectionCreate): Promise<void> {
+  static async createVehicleInspection(
+    data: VehicleInspectionCreate
+  ): Promise<void> {
     const body = VehicleInspectionAdapter.toVehicleInspectionApi(data);
     const url = `/vehicles/inspections/${data.vehicleId}`;
+
     try {
       await odooApi.post<InspectionApi>(url, body);
     } catch (error) {

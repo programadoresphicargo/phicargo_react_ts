@@ -7,7 +7,6 @@ import type {
 import type {
   InspectionApi,
   VehicleInspectionApi,
-  VehicleInspectionCreateApi,
 } from '../models/api';
 import { VehicleAdapter } from './vehicle-adapter';
 import { userBasicToLocal } from '@/modules/auth/adapters';
@@ -42,16 +41,51 @@ export class VehicleInspectionAdapter {
 
   static toVehicleInspectionApi(
     vehicleInspection: VehicleInspectionCreate,
-  ): VehicleInspectionCreateApi {
-    return {
-      inspection_date: vehicleInspection.inspectionDate.format('YYYY-MM-DD'),
-      result: vehicleInspection.result,
-      comments: vehicleInspection.comments,
-      vehicle_id: vehicleInspection.vehicleId,
-      driver_id: vehicleInspection.driverId ?? null,
-      inspection_type: vehicleInspection.inspectionType,
-      checklist: vehicleInspection.checklist
-    };
+  ): FormData {
+    const formData = new FormData();
+
+    formData.append(
+      'inspection_date',
+      vehicleInspection.inspectionDate.format('YYYY-MM-DD'),
+    );
+    formData.append('result', vehicleInspection.result);
+    formData.append('inspection_type', vehicleInspection.inspectionType);
+    if (vehicleInspection.comments) {
+      formData.append('comments', vehicleInspection.comments);
+    }
+
+    if (
+      vehicleInspection.driverId !== null &&
+      vehicleInspection.driverId !== undefined
+    ) {
+      formData.append('driver_id', String(vehicleInspection.driverId));
+    }
+
+    const filesToUpload: File[] = [];
+    console.log('Archivos a subir:', vehicleInspection.checklist);
+    const checklist = Object.entries(vehicleInspection.checklist).map(
+      ([, value]) => {
+        let answer = value.answer;
+        if (typeof FileList !== 'undefined' && answer instanceof FileList) {
+          const files = Array.from(answer).filter((file): file is File => file instanceof File);
+          answer = files.map((file) => file.name);
+          filesToUpload.push(...files);
+        }
+        return {
+          question: value.question,
+          answer,
+        };
+      },
+    );
+
+    const checklistJson = JSON.stringify(checklist);
+    formData.append('checklist', checklistJson);
+
+    filesToUpload.forEach((file) => {
+      formData.append('files', file);
+    });
+
+    return formData;
   }
 }
 
