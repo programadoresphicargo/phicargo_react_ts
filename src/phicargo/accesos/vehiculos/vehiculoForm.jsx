@@ -1,21 +1,38 @@
-import { FormControl, Grid, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { FormControl, Grid, InputLabel, MenuItem, TextField } from "@mui/material";
 
-import { Button } from "@heroui/react";
+import { Button, Divider, Input, Progress } from "@heroui/react";
 import axios from "axios";
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import { useAuthContext } from "@/modules/auth/hooks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Select, SelectItem } from "@heroui/react";
 
-const VehiculoForm = ({ onClose }) => {
+const VehiculoForm = ({ open, onClose, id_vehiculo }) => {
     const { session } = useAuthContext();
-    const [marca, setMarca] = useState("");
-    const [modelo, setModelo] = useState("");
-    const [placas, setPlacas] = useState("");
-    const [tipo_vehiculo, setTipoVehiculo] = useState("");
-    const [color, setColor] = useState("");
-    const [referencia1, setReferencia1] = useState("");
-    const [referencia2, setReferencia2] = useState("");
+
+    const [dataVehicle, setDataVehicle] = useState({});
+    const [isLoading, setLoading] = useState(false);
+
+    const fetchDataVehiculo = async (id_vehiculo) => {
+        try {
+            const response = await odooApi.get('/vehiculos_visitantes/' + id_vehiculo);
+            setDataVehicle(response.data);
+        } catch (error) {
+            console.error('Error al obtener los datos:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchDataVehiculo(id_vehiculo);
+    }, [open, id_vehiculo]);
+
+    const updateDataVehicle = (field, value) => {
+        setDataVehicle(prev => ({
+            ...prev,
+            [field]: value
+        }));
+    };
 
     const [errors, setErrors] = useState({
         marca: "",
@@ -26,141 +43,150 @@ const VehiculoForm = ({ onClose }) => {
     });
 
     const registrar_vehiculo = async () => {
+        console.log(dataVehicle);
         setErrors({ marca: "", modelo: "", placas: "", tipo_vehiculo: "", color: "" });
 
         let hasError = false;
-        if (!marca) {
+        if (!dataVehicle?.marca) {
             setErrors(prev => ({ ...prev, marca: "Marca es obligatorio" }));
             hasError = true;
         }
-        if (!modelo) {
+        if (!dataVehicle?.modelo) {
             setErrors(prev => ({ ...prev, modelo: "Modelo es obligatorio" }));
             hasError = true;
         }
-        if (!placas) {
+        if (!dataVehicle?.placas) {
             setErrors(prev => ({ ...prev, placas: "Placas son obligatorias" }));
             hasError = true;
         }
-        if (!tipo_vehiculo) {
+        if (!dataVehicle?.tipo_vehiculo) {
             setErrors(prev => ({ ...prev, tipo_vehiculo: "Tipo de vehiculo es obligatorio" }));
             hasError = true;
         }
-        if (!color) {
+        if (!dataVehicle?.color) {
             setErrors(prev => ({ ...prev, color: "Color es obligatorio" }));
             hasError = true;
         }
 
         if (hasError) return;
 
-        const vehiculoData = {
-            id_usuario: session.user.id,
-            marca,
-            modelo,
-            placas,
-            tipo_vehiculo,
-            color,
-            referencia1,
-            referencia2,
-        };
-
         try {
-            const response = await odooApi.post("/vehiculos_visitantes/crear_vehiculo_visitante/", vehiculoData);
-            if (response.data.status == 'success') {
+            setLoading(true);
+            let response; // <-- usar let porque se asigna después
+
+            if (id_vehiculo) {
+                response = await odooApi.patch("/vehiculos_visitantes/", dataVehicle);
+            } else {
+                response = await odooApi.post("/vehiculos_visitantes/crear_vehiculo_visitante/", dataVehicle);
+            }
+
+            if (response.data.status === 'success') {
                 toast.success(response.data.mensaje);
                 onClose();
             } else {
                 toast.error(response.data.message);
             }
         } catch (error) {
-            toast.error("Error enviando los datos:" + error);
+            toast.error("Error enviando los datos: " + error);
+        } finally {
+            setLoading(false); // <-- mejor usar finally para asegurar que siempre se ejecute
         }
+
+    };
+
+    const actualizar_vehiculo = async () => {
+        console.log(dataVehicle);
     };
 
     return (<>
         <Grid container spacing={2} className="mb-5">
             <Grid item xs={12}>
-                <Button color="primary" onClick={registrar_vehiculo}>
-                    Registrar vehículo
+                <Button color="primary" onPress={registrar_vehiculo} isLoading={isLoading}>
+                    {id_vehiculo ? "Actualizar" : "Registrar"}
                 </Button>
             </Grid>
+
+            {isLoading && (
+                <Progress isIndeterminate aria-label="Loading..." size="sm" />
+            )}
+
             <Grid item xs={12} md={6}>
-                <TextField
+                <Input
                     fullWidth
-                    variant="outlined"
+                    variant="bordered"
                     label="Marca"
-                    value={marca}
-                    onChange={(e) => setMarca(e.target.value)}
-                    error={!!errors.marca}
-                    helperText={errors.marca}
+                    value={dataVehicle?.marca}
+                    onChange={(e) => updateDataVehicle("marca", e.target.value)}
+                    isInvalid={!!errors.marca}
+                    errorMessage={errors.marca}
                 />
             </Grid>
             <Grid item xs={12} md={6}>
-                <TextField
+                <Input
                     fullWidth
-                    variant="outlined"
+                    variant="bordered"
                     label="Modelo"
-                    value={modelo}
-                    onChange={(e) => setModelo(e.target.value)}
-                    error={!!errors.modelo}
-                    helperText={errors.modelo}
+                    value={dataVehicle?.modelo}
+                    onChange={(e) => updateDataVehicle("modelo", e.target.value)}
+                    isInvalid={!!errors.modelo}
+                    errorMessage={errors.modelo}
                 />
             </Grid>
             <Grid item xs={12} md={6}>
-                <TextField
+                <Input
                     fullWidth
-                    variant="outlined"
+                    variant="bordered"
                     label="Placas"
-                    value={placas}
-                    onChange={(e) => setPlacas(e.target.value)}
-                    error={!!errors.placas}
-                    helperText={errors.placas}
+                    value={dataVehicle?.placas}
+                    onChange={(e) => updateDataVehicle("placas", e.target.value)}
+                    isInvalid={!!errors.placas}
+                    errorMessage={errors.placas}
                 />
             </Grid>
             <Grid item xs={12} md={6}>
-                <FormControl fullWidth variant="outlined" error={!!errors.tipo_vehiculo}>
-                    <InputLabel>Tipo de vehiculo</InputLabel>
-                    <Select
-                        value={tipo_vehiculo}
-                        onChange={(e) => setTipoVehiculo(e.target.value)}
-                        label="Tipo de vehiculo"
-                    >
-                        <MenuItem value="tractocamion">Tractocamión</MenuItem>
-                        <MenuItem value="pipa">Pipa</MenuItem>
-                        <MenuItem value="automovil">Automóvil</MenuItem>
-                        <MenuItem value="motocicleta">Motocicleta</MenuItem>
-                        <MenuItem value="camion">Camión</MenuItem>
-                        <MenuItem value="grua">Grúa</MenuItem>
-                    </Select>
-                    {errors.tipo_vehiculo && <span style={{ color: 'red' }}>{errors.tipo_vehiculo}</span>}
-                </FormControl>
+                <Select
+                    variant="bordered"
+                    selectedKeys={[dataVehicle?.tipo_vehiculo]}
+                    onChange={(e) => updateDataVehicle("tipo_vehiculo", e.target.value)}
+                    label="Tipo de vehiculo"
+                    isInvalid={!!errors.tipo_vehiculo}
+                    errorMessage={errors.tipo_vehiculo}
+                >
+                    <SelectItem key="tractocamion">Tractocamión</SelectItem>
+                    <SelectItem key="pipa">Pipa</SelectItem>
+                    <SelectItem key="automovil">Automóvil</SelectItem>
+                    <SelectItem key="motocicleta">Motocicleta</SelectItem>
+                    <SelectItem key="camion">Camión</SelectItem>
+                    <SelectItem key="grua">Grúa</SelectItem>
+                </Select>
             </Grid>
             <Grid item xs={12} md={6}>
-                <TextField
+                <Input
                     fullWidth
-                    variant="outlined"
+                    variant="bordered"
                     label="Color"
-                    value={color}
-                    onChange={(e) => setColor(e.target.value)}
-                    error={!!errors.color}
-                    helperText={errors.color}
+                    value={dataVehicle?.color}
+                    onChange={(e) => updateDataVehicle("color", e.target.value)}
+                    isInvalid={!!errors.color}
+                    errorMessage={errors.color}
                 />
             </Grid>
             <Grid item xs={12} md={6}>
-                <TextField
+                <Input
                     fullWidth
-                    variant="outlined"
+                    variant="bordered"
                     label="Referencia contenedor 1"
-                    value={referencia1}
-                    onChange={(e) => setReferencia1(e.target.value)}
+                    value={dataVehicle?.contenedor1}
+                    onChange={(e) => updateDataVehicle("contenedor1", e.target.value)}
                 />
             </Grid>
             <Grid item xs={12} md={6}>
-                <TextField
+                <Input
                     fullWidth
-                    variant="outlined"
+                    variant="bordered"
                     label="Referencia contenedor 2"
-                    value={referencia2}
-                    onChange={(e) => setReferencia2(e.target.value)}
+                    value={dataVehicle?.contenedor2}
+                    onChange={(e) => updateDataVehicle("contenedor2", e.target.value)}
                 />
             </Grid>
         </Grid>

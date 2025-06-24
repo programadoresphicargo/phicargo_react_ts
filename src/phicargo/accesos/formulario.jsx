@@ -274,28 +274,41 @@ const AccesoForm = ({ id_acceso, onClose }) => {
     };
 
     const actualizar_acceso = async (e) => {
-        const dataToSend = {
-            data: formData,
-            visitantes_agregados: addedVisitors,
-            visitantes_removidos: removedVisitors,
-            vehiculos_agregados: vehiculosAñadidos,
-            vehiculos_removidos: vehiculosEliminados
-        };
+        const validationErrors = validateForm();
+        
+        if (Object.keys(validationErrors).length === 0) {
 
-        try {
-            setIsLoading(true);
-            const response = await odooApi.post('/accesos/actualizar_acceso/' + id_acceso, dataToSend);
-            if (response.data.status === "success") {
-                toast.success(`Acceso A-${response.data.id_insertado} actualizado correctamente.`);
-                onClose();
+            if (selectedVisitantes.length > 0) {
             } else {
-                toast.error("Error al actualizar los datos.");
+                toast.error("Debes añadir al menos un visitante al acceso.");
+                return;
             }
-            setIsLoading(false);
-        } catch (error) {
-            setIsLoading(false);
-            console.error('Error en la petición', error);
-            toast.error('Error en la conexión o al procesar los datos. ' + error);
+
+            const dataToSend = {
+                data: formData,
+                visitantes_agregados: addedVisitors,
+                visitantes_removidos: removedVisitors,
+                vehiculos_agregados: vehiculosAñadidos,
+                vehiculos_removidos: vehiculosEliminados
+            };
+
+            try {
+                setIsLoading(true);
+                const response = await odooApi.post('/accesos/actualizar_acceso/' + id_acceso, dataToSend);
+                if (response.data.status === "success") {
+                    toast.success(`Acceso A-${response.data.id_insertado} actualizado correctamente.`);
+                    onClose();
+                } else {
+                    toast.error("Error al actualizar los datos.");
+                }
+                setIsLoading(false);
+            } catch (error) {
+                setIsLoading(false);
+                console.error('Error en la petición', error);
+                toast.error('Error en la conexión o al procesar los datos. ' + error);
+            }
+        } else {
+            setErrors(validationErrors);
         }
     };
 
@@ -394,9 +407,14 @@ const AccesoForm = ({ id_acceso, onClose }) => {
         <Grid container spacing={2} style={{ padding: '20px' }}>
             <Grid item xs={12} sm={4} md={8}>
 
-                {formData.tipo_movimiento == 'salida' && (
+                {(formData.tipo_movimiento == 'salida' && formData.id_empresa == 1) && (
                     <div className="w-full flex items-center mb-3">
-                        <Alert color="danger" title={`Recuerda solicitar la validación de tu salida al departamento correspondiente. Sin esta validación, no podrás salir.`} variant="solid" />
+                        <Alert
+                            color="danger"
+                            title="Es obligatorio solicitar la validación de tu salida al departamento correspondiente."
+                            description="Sin esta validación, el personal de vigilancia no podrá ver tu salida y no se te permitirá salir."
+                            variant="solid"
+                        />
                     </div>
                 )}
 

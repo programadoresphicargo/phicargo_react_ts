@@ -11,11 +11,13 @@ import Dialog from '@mui/material/Dialog';
 import { DialogContent } from '@mui/material';
 import VehiculoForm from './vehiculoForm';
 import odooApi from '@/api/odoo-api';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
 const RegistroVehiculos = ({ onClose }) => {
   const { AñadirVehiculo, formData } = useContext(AccesoContext);
 
   const [open, setOpen] = React.useState(false);
+  const [VehicleID, setVehicleID] = React.useState(0);
 
   const handleClose = () => {
     setOpen(false);
@@ -24,6 +26,7 @@ const RegistroVehiculos = ({ onClose }) => {
 
   const NuevoVehiculo = () => {
     setOpen(true);
+    setVehicleID(null);
   };
 
   const [data, setData] = useState([]);
@@ -40,22 +43,9 @@ const RegistroVehiculos = ({ onClose }) => {
     }
   };
 
-  const fetchDataVehiculo = async (id_vehiculo) => {
-    try {
-      setLoading(true);
-      const response = await odooApi.get('/vehiculos_visitantes/' + id_vehiculo);
-      setDataVehicle(response.data);
-      setLoading(false);
-    } catch (error) {
-      console.error('Error al obtener los datos:', error);
-    }
-  };
-
   useEffect(() => {
     fetchData();
   }, []);
-
-  const [dataVehicle, setDataVehicle] = useState({});
 
   const columns = useMemo(
     () => [
@@ -87,6 +77,14 @@ const RegistroVehiculos = ({ onClose }) => {
         accessorKey: 'contenedor2',
         header: 'Contenedor 2',
       },
+      {
+        accessorKey: 'nombre',
+        header: 'Registro',
+      },
+      {
+        accessorKey: 'fecha_creacion',
+        header: 'Fecha',
+      },
     ],
     [],
   );
@@ -102,7 +100,9 @@ const RegistroVehiculos = ({ onClose }) => {
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
     positionActionsColumn: 'last',
+    localization: MRT_Localization_ES,
     initialState: {
+      showColumnFilters: true,
       density: 'compact',
       pagination: { pageSize: 80 },
     },
@@ -123,6 +123,15 @@ const RegistroVehiculos = ({ onClose }) => {
             onClose();
           }}>
           Seleccionar
+        </Button>
+        <Button
+          color="secondary"
+          size='sm'
+          onPress={() => {
+            NuevoVehiculo();
+            setVehicleID(row.original.id_vehiculo);
+          }}>
+          Editar
         </Button>
       </Box >
     ),
@@ -178,7 +187,7 @@ const RegistroVehiculos = ({ onClose }) => {
       onClose={handleClose}
     >
       <DialogContent>
-        <VehiculoForm onClose={handleClose}></VehiculoForm>
+        <VehiculoForm onClose={handleClose} id_vehiculo={VehicleID}></VehiculoForm>
       </DialogContent>
     </Dialog>
     <MaterialReactTable table={table} />
