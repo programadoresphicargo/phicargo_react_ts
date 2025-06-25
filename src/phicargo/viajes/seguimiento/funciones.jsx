@@ -6,7 +6,7 @@ import axios from "axios";
 import odooApi from '@/api/odoo-api';
 import { useAuthContext } from "@/modules/auth/hooks";
 const { VITE_ODOO_API_URL } = import.meta.env;
-
+const { VITE_PHIDES_API_URL } = import.meta.env;
 export const useJourneyDialogs = () => {
 
     const { session } = useAuthContext();
@@ -175,7 +175,7 @@ export const useJourneyDialogs = () => {
                 data.append('files[]', file);
             });
 
-            const response = await odooApi.post('/viajes/algoritmos/reenvio.php', data);
+            const response = await axios.post(VITE_PHIDES_API_URL + '/viajes/algoritmos/reenvio.php', data);
 
             if (response.data === 1) {
                 toast.success('Proceso correcto.', { id: loadingToast });

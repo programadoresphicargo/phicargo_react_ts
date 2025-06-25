@@ -1,4 +1,4 @@
-import { Button, Link } from "@heroui/react";
+import { Button, DatePicker, Link, NumberInput } from "@heroui/react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -15,6 +15,9 @@ import Slide from '@mui/material/Slide';
 import { ViajeContext } from '../context/viajeContext';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
+import { InputNumber } from "rsuite";
+import { now, getLocalTimeZone } from "@internationalized/date";
+import FormularioCorte from "./corte_estadias";
 
 const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
@@ -198,12 +201,10 @@ const Documentacion = ({ }) => {
 
         <Button
           showAnchorIcon
-          as={Link}
-          isExternal={true}
           color="danger"
           className='text-white'
-          href={`${apiUrl}/tms_travel/estadias/cortes/` + 126}
           variant="solid"
+          onPress={() => setOpenCorte(true)}
         >
           Corte parcial estadías
         </Button>
@@ -221,6 +222,16 @@ const Documentacion = ({ }) => {
   const handleClose = () => {
     setOpen(false);
     fetchData();
+  };
+
+  const [openCorte, setOpenCorte] = React.useState(false);
+
+  const handleClickOpenCorte = () => {
+    setOpenCorte(true);
+  };
+
+  const handleCloseCorte = () => {
+    setOpenCorte(false);
   };
 
   return (
@@ -243,6 +254,8 @@ const Documentacion = ({ }) => {
           <FormularioDocumentacion onClose={handleClose}></FormularioDocumentacion>
         </DialogContent>
       </Dialog>
+
+      <FormularioCorte opened={openCorte} onClose={handleCloseCorte}></FormularioCorte>
     </>
   );
 };
