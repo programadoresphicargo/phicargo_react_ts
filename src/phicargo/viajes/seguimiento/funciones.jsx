@@ -164,7 +164,7 @@ export const useJourneyDialogs = () => {
         const loadingToast = toast.loading('Procesando, espere...');
 
         try {
-            const data = new URLSearchParams();
+            const data = new FormData();
             data.append('id_viaje', id_viaje);
             data.append('id_reporte', id_reporte);
             data.append('id_estatus', id_estatus);
@@ -175,7 +175,7 @@ export const useJourneyDialogs = () => {
                 data.append('files[]', file);
             });
 
-            const response = await axios.get(VITE_PHIDES_API_URL + '/viajes/algoritmos/reenvio.php', data);
+            const response = await axios.post(VITE_PHIDES_API_URL + '/viajes/algoritmos/reenvio.php', data);
 
             if (response.data === 1) {
                 toast.success('Proceso correcto.', { id: loadingToast });
