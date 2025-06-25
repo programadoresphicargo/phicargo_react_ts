@@ -155,9 +155,16 @@ const Maniobras = ({ estado_maniobra }) => {
 
       },
       {
+        accessorKey: 'modo',
+        header: 'Modo',
+      },
+      {
         accessorKey: 'contenedores_ids',
         header: 'Contenedor',
-        size: 150,
+      },
+      {
+        accessorKey: 'medidas',
+        header: 'Medidas',
       },
       {
         accessorKey: 'ultimo_estatus',
