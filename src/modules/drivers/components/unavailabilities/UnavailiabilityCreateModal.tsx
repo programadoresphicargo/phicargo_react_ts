@@ -28,6 +28,7 @@ const reasonOptions: SelectItem[] = [
   { key: 'permiso', value: 'PERMISO' },
   { key: 'castigo', value: 'CASTIGO' },
   { key: 'incidencia-capacitacion', value: 'INCIDENCIA (CAPACITACIÓN)' },
+  { key: 'falta-injustificada', value: 'FALTA INJUSTIFICADA' },
 ];
 
 const UnavailiabilityCreateModal = (props: Props) => {
