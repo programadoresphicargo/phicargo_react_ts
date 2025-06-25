@@ -44,6 +44,7 @@ export const UnavailabilitiesTimeline = ({
                 <FaCalendarMinus className="w-2.5 h-2.5 text-blue-800" />
               </span>
               <h3 className="flex items-center mb-1 text-lg font-semibold text-gray-900">
+                {/* TODO: Agregar un mapper para que sea amigable con el usuario */}
                 {item.reasonType}
                 {index === 0 && (
                   <span className=" text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-lg bg-blue-900 dark:text-blue-300 ms-3">
