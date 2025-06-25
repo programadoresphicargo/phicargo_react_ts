@@ -6,7 +6,7 @@ import axios from "axios";
 import odooApi from '@/api/odoo-api';
 import { useAuthContext } from "@/modules/auth/hooks";
 const { VITE_ODOO_API_URL } = import.meta.env;
-const { VITE_PHIDES_API_URL } = import.meta.env;
+
 export const useJourneyDialogs = () => {
 
     const { session } = useAuthContext();
@@ -164,17 +164,20 @@ export const useJourneyDialogs = () => {
         const loadingToast = toast.loading('Procesando, espere...');
 
         try {
-            const params = new URLSearchParams({
-                id_reporte: id_reporte,
-                id_viaje: id_viaje,
-                id_estatus: id_estatus,
-                id_usuario: session.user.id
+            const data = new FormData();
+            data.append('id_viaje', id_viaje);
+            data.append('id_reporte', id_reporte);
+            data.append('id_estatus', id_estatus);
+            data.append('comentarios', comentarios);
+            data.append('id_usuario', session.user.id);
+
+            archivos.forEach((file) => {
+                data.append('files[]', file);
             });
 
-            const url = `https://phides.phicargo-sistemas.online/phicargo/viajes/algoritmos/reenvio.php?${params.toString()}`;
-            const response = await axios.get(url);
-            
-            if (response.data === 1) {
+            const response = await odooApi.post('/tms_travel/reportes_estatus_viajes/envio_estatus/', data);
+
+            if (response.data.status == "success") {
                 toast.success('Proceso correcto.', { id: loadingToast });
                 getViaje(id_viaje);
 
