@@ -172,7 +172,8 @@ export const useJourneyDialogs = () => {
             });
 
             const url = `https://phides.phicargo-sistemas.online/phicargo/viajes/algoritmos/reenvio.php?${params.toString()}`;
-
+            const response = await axios.get(url);
+            
             if (response.data === 1) {
                 toast.success('Proceso correcto.', { id: loadingToast });
                 getViaje(id_viaje);
