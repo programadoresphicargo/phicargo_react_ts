@@ -157,6 +157,24 @@ const Maniobras = ({ estado_maniobra }) => {
       {
         accessorKey: 'modo',
         header: 'Modo',
+        Cell: ({ cell }) => {
+          const tipoMovimiento = cell.getValue() || '';
+          let badgeClass = 'default';
+
+          if (tipoMovimiento === 'imp') {
+            badgeClass = 'warning';
+          } else if (tipoMovimiento === 'exp') {
+            badgeClass = 'danger';
+          } else {
+            badgeClass = 'primary';
+          }
+
+          return (
+            <Chip color={badgeClass} className="text-white" size="sm">
+              {tipoMovimiento.charAt(0).toUpperCase() + tipoMovimiento.slice(1)}
+            </Chip>
+          );
+        },
       },
       {
         accessorKey: 'contenedores_ids',
