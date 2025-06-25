@@ -239,14 +239,10 @@ const ViajesActivos = ({ }) => {
 
           return (
             <Chip className="text-white" color={error ? 'danger' : 'primary'} size='sm'>
-              {error ? error : (distancia ? `A ${distancia.distancia_km} km / ${distancia.tiempo_estimado_horas} h` : 'Cargando...')}
+              {error ? error : (distancia ? `A ${distancia.distancia_km} km / ${distancia.tiempo_estimado_horas} h` : 'Calculando...')}
             </Chip>
           );
         }
-      },
-      {
-        accessorKey: 'ejecutivo',
-        header: 'Ejecutivo',
       },
       {
         accessorKey: 'nombre_cliente',
@@ -255,7 +251,10 @@ const ViajesActivos = ({ }) => {
       {
         accessorKey: 'contenedores',
         header: 'Contenedores',
-        width: "10%",
+      },
+      {
+        accessorKey: 'medida',
+        header: 'Medidas',
       },
       {
         accessorKey: 'tipo_armado',
@@ -308,6 +307,10 @@ const ViajesActivos = ({ }) => {
             </Chip>
           );
         },
+      },
+      {
+        accessorKey: 'ejecutivo',
+        header: 'Ejecutivo',
       },
     ],
     [],
