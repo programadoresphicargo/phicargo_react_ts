@@ -164,18 +164,14 @@ export const useJourneyDialogs = () => {
         const loadingToast = toast.loading('Procesando, espere...');
 
         try {
-            const data = {
+            const params = new URLSearchParams({
                 id_reporte: id_reporte,
                 id_viaje: id_viaje,
                 id_estatus: id_estatus,
                 id_usuario: session.user.id
-            };
-
-            const response = await axios.post("https://phides.phicargo-sistemas.online/phicargo/viajes/algoritmos/reenvio.php", data, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
             });
+
+            const url = `https://phides.phicargo-sistemas.online/phicargo/viajes/algoritmos/reenvio.php?${params.toString()}`;
 
             if (response.data === 1) {
                 toast.success('Proceso correcto.', { id: loadingToast });
