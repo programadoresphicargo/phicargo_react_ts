@@ -191,6 +191,10 @@ const ViajesActivos = ({ }) => {
         },
       },
       {
+        accessorKey: 'ruta',
+        header: 'Ruta',
+      },
+      {
         accessorKey: 'codigo_postal',
         header: 'Distancia (50km/h)',
         Cell: ({ row }) => {
