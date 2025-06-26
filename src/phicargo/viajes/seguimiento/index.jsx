@@ -119,6 +119,10 @@ export default function BasicButtons2() {
                                         <div>{viaje?.x_tipo_bel || '—'}</div>
                                     </div>
                                     <div>
+                                        <span className="font-semibold text-gray-600">Ruta:</span>
+                                        <div>{viaje?.route?.name || '—'}</div>
+                                    </div>
+                                    <div>
                                         <span className="font-semibold text-gray-600">Código postal:</span>
                                         <div>{viaje?.x_codigo_postal || '—'}</div>
                                     </div>
