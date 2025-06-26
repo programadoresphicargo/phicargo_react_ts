@@ -104,11 +104,11 @@ export default function BasicButtons2() {
                                     </div>
                                     <div>
                                         <span className="font-semibold text-gray-600">Inicio programado:</span>
-                                        <div>{viaje?.date_start || '—'}</div>
+                                        <div>{viaje?.inicio_programado || '—'}</div>
                                     </div>
                                     <div>
                                         <span className="font-semibold text-gray-600">Llegada a planta programada:</span>
-                                        <div>{viaje?.x_date_arrival_shed || '—'}</div>
+                                        <div>{viaje?.llegada_planta_programada || '—'}</div>
                                     </div>
                                     <div>
                                         <span className="font-semibold text-gray-600">Modo:</span>
