@@ -21,6 +21,7 @@ export const useComplaintsColumns = () => {
       },
       {
         accessorFn: (row) => row.customer?.name,
+        id: 'customerName',
         header: 'Cliente',
         Cell: ({ cell }) => cell.getValue<string>() ?? 'No especificado',
       },
