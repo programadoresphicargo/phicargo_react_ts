@@ -39,8 +39,8 @@ const DriverBonusPage = () => {
     tableId: 'driver-bonus-months',
     containerHeight: 'calc(100vh - 180px)',
     onDoubleClickFn: (row) => {
-      setMonth(row.month);
-      setYear(row.year);
+      setMonth(row.original.month);
+      setYear(row.original.year);
     },
     toolbarActions: (
       <>
