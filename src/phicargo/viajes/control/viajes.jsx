@@ -204,6 +204,14 @@ const ViajesActivos = ({ }) => {
         header: 'Ruta',
       },
       {
+        accessorKey: 'inicio_programado',
+        header: 'Inicio programado',
+      },
+      {
+        accessorKey: 'llegada_planta_programada',
+        header: 'Llegada planta programada',
+      },
+      {
         accessorKey: 'codigo_postal',
         header: 'Distancia (50km/h)',
         Cell: ({ row }) => {
@@ -381,7 +389,7 @@ const ViajesActivos = ({ }) => {
       sx: {
         fontFamily: 'Inter',
         fontWeight: 'normal',
-        fontSize: '12px',
+        fontSize: '11px',
       },
     }),
     renderTopToolbarCustomActions: ({ table }) => (
