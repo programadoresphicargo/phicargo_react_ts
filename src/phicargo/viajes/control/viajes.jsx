@@ -389,7 +389,7 @@ const ViajesActivos = ({ }) => {
       sx: {
         fontFamily: 'Inter',
         fontWeight: 'normal',
-        fontSize: '11px',
+        fontSize: '12px',
       },
     }),
     renderTopToolbarCustomActions: ({ table }) => (
