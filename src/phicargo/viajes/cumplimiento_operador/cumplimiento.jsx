@@ -17,8 +17,6 @@ function CumplimientoOperador() {
     }, [id_viaje, viaje?.id_operador]);
 
     const getEstatus = async () => {
-        console.log(id_viaje);
-        console.log(viaje.id_operador);
         try {
             setLoading(true);
             const response = await odooApi.get('/tms_travel/reportes_estatus_viajes/cumplimiento_estatus_operadores/', {

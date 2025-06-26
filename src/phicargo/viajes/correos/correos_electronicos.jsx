@@ -24,7 +24,7 @@ const CorreosElectronicosViaje = ({ openCorreos }) => {
   const getCorreosCliente = async () => {
     try {
       setLoading(true);
-      const response = await odooApi.get('/correos/get_by_id_cliente/' + viaje.id_cliente);
+      const response = await odooApi.get('/correos/get_by_id_cliente/' + viaje?.partner?.id);
       setCorreosCliente(response.data);
     } catch (error) {
       console.error('Error al obtener los datos:', error);
@@ -200,7 +200,7 @@ const CorreosElectronicosViaje = ({ openCorreos }) => {
                 </Chip>
               </TableCell>
               <TableCell>
-                <Button color='danger' size='sm' onClick={() => desvincularCorreo(visitor.id)}>
+                <Button color='danger' size='sm' onPress={() => desvincularCorreo(visitor.id)}>
                   <i class="bi bi-x-circle"></i>
                 </Button>
               </TableCell>
@@ -232,7 +232,7 @@ const CorreosElectronicosViaje = ({ openCorreos }) => {
 
         <FormularioCorreoGeneral
           handleClose={handleClose}
-          idCliente={viaje.id_cliente}>
+          idCliente={viaje?.partner?.id}>
         </FormularioCorreoGeneral>
         
       </DialogContent>

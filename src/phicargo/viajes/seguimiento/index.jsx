@@ -50,19 +50,19 @@ export default function BasicButtons2() {
 
                                 <div>
                                     <Stack spacing={1} direction="row">
-                                        {viaje.estado == null && (
+                                        {viaje?.x_status_viaje == null && (
                                             <Button color="primary" onPress={comprobar_disponibilidad} isDisabled={correosLigados || isLoading}><i class="bi bi-play-fill"></i> Iniciar viaje</Button>
                                         )}
-                                        {['ruta', 'planta', 'retorno'].includes(viaje.estado) && (
+                                        {['ruta', 'planta', 'retorno'].includes(viaje?.x_status_viaje) && (
                                             <Button color="danger" onPress={finalizar_viaje} isDisabled={correosLigados || isLoading}><i class="bi bi-stop-fill"></i> Finalizar viaje</Button>
                                         )}
                                         <Button color="success" onPress={handleClickOpen} className="text-white" isDisabled={correosLigados || isLoading}>
                                             <i className="bi bi-send-plus-fill"></i> Nuevo estatus
                                         </Button>
-                                        {viaje.estado == 'resguardo' && (
+                                        {viaje?.x_status_viaje == 'resguardo' && (
                                             <Button color="primary" onPress={liberar_resguardo} isDisabled={correosLigados || isLoading}>Liberar resguardo</Button>
                                         )}
-                                        {viaje.estado == 'finalizado' && (
+                                        {viaje?.x_status_viaje == 'finalizado' && (
                                             <Button color="success" onPress={reactivar_viaje} className="text-white" isDisabled={correosLigados || isLoading}>Reactivar viaje</Button>
                                         )}
                                     </Stack>
@@ -84,18 +84,51 @@ export default function BasicButtons2() {
                             <CardHeader>
                                 <Chip color='primary' size='lg' radius='md'>Información del viaje</Chip>
                             </CardHeader>
-                            <CardBody>
-                                <ul class="list-unstyled list-py-2 text-dark mb-0">
-                                    <li>Vehículo: {viaje.vehiculo}</li>
-                                    <li>Operador: {viaje.operador}</li>
-                                    <li>Ejecutiv@: {viaje.ejecutivo}</li>
-                                    <li>Cliente: {viaje.cliente}</li>
-                                    <li>Modo: {viaje.modo}</li>
-                                    <li>Armado: {viaje.tipo_armado}</li>
-                                    <li>Codigo postal: {viaje.x_codigo_postal}</li>
-                                    <li>Contenedores:</li>
-                                    <Snippet color="primary" variant="solid" size="sm">{viaje.contenedores}</Snippet>
-                                </ul>
+                            <CardBody className="bg-white rounded-xl shadow p-4">
+                                <div className="grid sm:grid-cols-2 gap-y-2 gap-x-4 text-gray-800 text-sm">
+                                    <div>
+                                        <span className="font-semibold text-gray-600">Vehículo:</span>
+                                        <div>{viaje?.vehicle?.name || '—'}</div>
+                                    </div>
+                                    <div>
+                                        <span className="font-semibold text-gray-600">Operador:</span>
+                                        <div>{viaje?.employee?.name || '—'}</div>
+                                    </div>
+                                    <div>
+                                        <span className="font-semibold text-gray-600">Ejecutiv@:</span>
+                                        <div>{viaje?.x_ejecutivo_viaje_bel || '—'}</div>
+                                    </div>
+                                    <div>
+                                        <span className="font-semibold text-gray-600">Cliente:</span>
+                                        <div>{viaje?.partner?.name || '—'}</div>
+                                    </div>
+                                    <div>
+                                        <span className="font-semibold text-gray-600">Inicio programado:</span>
+                                        <div>{viaje?.inicio_programado || '—'}</div>
+                                    </div>
+                                    <div>
+                                        <span className="font-semibold text-gray-600">Llegada a planta programada:</span>
+                                        <div>{viaje?.llegada_planta_programada || '—'}</div>
+                                    </div>
+                                    <div>
+                                        <span className="font-semibold text-gray-600">Modo:</span>
+                                        <div>{viaje?.x_modo_bel || '—'}</div>
+                                    </div>
+                                    <div>
+                                        <span className="font-semibold text-gray-600">Armado:</span>
+                                        <div>{viaje?.x_tipo_bel || '—'}</div>
+                                    </div>
+                                    <div>
+                                        <span className="font-semibold text-gray-600">Código postal:</span>
+                                        <div>{viaje?.x_codigo_postal || '—'}</div>
+                                    </div>
+                                    <div className="sm:col-span-2">
+                                        <span className="font-semibold text-gray-600">Contenedores:</span>
+                                        <Snippet color="primary" variant="solid" size="sm">
+                                            {viaje?.x_references || '—'}
+                                        </Snippet>
+                                    </div>
+                                </div>
                             </CardBody>
                         </Card>
                     </Grid>

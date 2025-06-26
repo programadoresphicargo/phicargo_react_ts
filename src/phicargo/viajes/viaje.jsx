@@ -68,21 +68,13 @@ const Viaje = ({ }) => {
       <div className="flex items-center justify-between p-3">
         <div className="min-w-0 flex-1">
           <h1 className="h1">
-            <Chip color='primary' size='lg' radius='md'>{viaje.name}</Chip>
+            <Chip color='primary' size='lg' radius='md'>{viaje?.name}</Chip>
           </h1>
-          <div className="sm:space-x-3 mt-3">
-            <span>
-              ID: {id_viaje}
-            </span>
-            <span>
-              {viaje.vehiculo}
-            </span>
-            <span>
-              {viaje.operador}
-            </span>
-            <span>
-              ({viaje.id_cliente}) {viaje.cliente}
-            </span>
+          <div className="sm:space-x-3 mt-3 flex flex-wrap gap-2">
+            <span>ID: {id_viaje}</span>
+            <span>Vehículo: {viaje?.vehicle?.name}</span>
+            <span>Operador: {viaje?.employee?.name}</span>
+            <span>Cliente: {viaje?.partner?.name}</span>
           </div>
         </div>
         <div className="mt-5 flex lg:ml-4 lg:mt-0">

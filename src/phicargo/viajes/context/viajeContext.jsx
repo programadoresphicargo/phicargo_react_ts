@@ -36,23 +36,7 @@ const ViajeProvider = ({ children }) => {
             });
     };
 
-    const [viaje, setViaje] = useState({
-        id: null,
-        name: '0',
-        store_id: 1,
-        x_codigo_postal: 0,
-        estado: 'disponible',
-        id_cliente: '0',
-        cliente: ' ',
-        modo: ' ',
-        armado: ' ',
-        ejecutivo: ' ',
-        vehicle_id: ' ',
-        vehiculo: '0',
-        id_operador: '0',
-        operador: '0',
-        contenedores: '0'
-    });
+    const [viaje, setViaje] = useState({});
 
     const [isLoading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -69,25 +53,9 @@ const ViajeProvider = ({ children }) => {
         try {
             setLoading(true);
             const response = await odooApi.get('/tms_travel/get_by_id/' + id_viaje);
-            const data = response.data;
+            const data = response.data[0];
             console.log(data);
-            setViaje({
-                id: data[0].id,
-                name: data[0].name,
-                store_id: data[0].store_id,
-                x_codigo_postal: data[0].x_codigo_postal,
-                id_cliente: data[0].partner.id,
-                cliente: data[0].partner.name,
-                estado: data[0].x_status_viaje,
-                id_operador: data[0].employee.id,
-                operador: data[0].employee.name,
-                vehicle_id: data[0].vehicle.id,
-                vehiculo: data[0].vehicle.name,
-                modo: data[0].x_modo_bel,
-                tipo_armado: data[0].x_tipo_bel,
-                ejecutivo: data[0].x_ejecutivo_viaje_bel,
-                contenedores: data[0].x_references,
-            });
+            setViaje(data);
             comprobacion_correos();
             setLoading(false);
         } catch (error) {

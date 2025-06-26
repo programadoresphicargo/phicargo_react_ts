@@ -14,8 +14,8 @@ const EstatusViaje = () => {
     };
 
     useEffect(() => {
-        onChange(viaje.estado);
-    }, [viaje.estado]);
+        onChange(viaje?.x_status_viaje);
+    }, [viaje?.x_status_viaje]);
 
     return (
         <>
