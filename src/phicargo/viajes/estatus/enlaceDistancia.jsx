@@ -17,7 +17,7 @@ function crearEnlaceDistancia(latitud, longitud, tipo, codigoPostal, sucursal) {
 function BotonDistanciaMapa({ latitud, longitud, tipo }) {
     const { id_viaje, viaje } = useContext(ViajeContext);
 
-    const enlace = crearEnlaceDistancia(latitud, longitud, tipo, viaje.x_codigo_postal, viaje.store_id);
+    const enlace = crearEnlaceDistancia(latitud, longitud, tipo, viaje?.x_codigo_postal, viaje?.store_id);
 
     return (
         <Button
