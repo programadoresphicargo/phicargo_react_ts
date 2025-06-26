@@ -11,10 +11,10 @@ function CumplimientoOperador() {
     const [isLoading, setLoading] = React.useState(false);
 
     useEffect(() => {
-        if (id_viaje && viaje?.id_operador) {
+        if (id_viaje && viaje?.employee?.id) {
             getEstatus();
         }
-    }, [id_viaje, viaje?.id_operador]);
+    }, [id_viaje, viaje?.employee?.id]);
 
     const getEstatus = async () => {
         try {
