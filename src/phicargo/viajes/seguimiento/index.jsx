@@ -111,6 +111,14 @@ export default function BasicButtons2() {
                                         <div>{viaje?.llegada_planta_programada || '—'}</div>
                                     </div>
                                     <div>
+                                        <span className="font-semibold text-gray-600">Inicio real de viaje:</span>
+                                        <div>{viaje?.fecha_inicio || '—'}</div>
+                                    </div>
+                                    <div>
+                                        <span className="font-semibold text-gray-600">Finalización:</span>
+                                        <div>{viaje?.fecha_finalizado || '—'}</div>
+                                    </div>
+                                    <div>
                                         <span className="font-semibold text-gray-600">Modo:</span>
                                         <div>{viaje?.x_modo_bel || '—'}</div>
                                     </div>
