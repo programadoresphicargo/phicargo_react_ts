@@ -65,6 +65,12 @@ const FormularioCorte = ({ opened, onClose }) => {
                 aria-describedby="alert-dialog-slide-description"
                 fullWidth
                 maxWidth="sm"
+                PaperProps={{
+                    sx: {
+                        boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.3)',
+                        borderRadius: 6,
+                    }
+                }}
             >
                 <DialogTitle>{"Corte parcial de estadías"}</DialogTitle>
 
