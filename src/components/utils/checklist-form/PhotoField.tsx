@@ -3,6 +3,7 @@ import type { ChecklistItem } from './types';
 import { Typography } from '@mui/material';
 import { CloudUpload, Delete } from '@mui/icons-material';
 import { useRef } from 'react';
+import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 
 interface Props<T extends FieldValues> {
   name: Path<T>;
@@ -43,6 +44,11 @@ export const PhotoField = <T extends FieldValues>({ item, name }: Props<T>) => {
     const files = e.target.files;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     setValue(name, files as any, { shouldValidate: true });
+    validatePhotoCount(files);
+  };
+
+  // Nueva función para validar el número de fotos
+  const validatePhotoCount = (files: FileList | null) => {
     if (item.photoCount) {
       if (!files || files.length === 0) {
         setError(name, { type: 'manual', message: 'Debes subir al menos una foto' });
@@ -80,13 +86,35 @@ export const PhotoField = <T extends FieldValues>({ item, name }: Props<T>) => {
               ))}
             </div>
             <label className="flex items-center justify-center cursor-pointer ml-2 flex-shrink-0">
+              <AddAPhotoIcon className="text-blue-500" fontSize="medium" />
+              <input
+                type="file"
+                accept="image/*"
+                capture="environment"
+                onChange={e => {
+                  const files = e.target.files;
+                  if (!files || files.length === 0) return;
+                  const dt = new DataTransfer();
+                  if (watchedFiles) {
+                    Array.from(watchedFiles).forEach(f => dt.items.add(f));
+                  }
+                  dt.items.add(files[0]);
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  setValue(name, dt.files as any, { shouldValidate: true });
+                  validatePhotoCount(dt.files);
+                  if (inputRef.current) inputRef.current.value = '';
+                }}
+                ref={inputRef}
+                className="hidden"
+              />
+            </label>
+            <label className="flex items-center justify-center cursor-pointer ml-3 flex-shrink-0">
               <CloudUpload className="text-blue-500" fontSize="medium" />
               <input
                 type="file"
                 accept="image/*"
                 multiple={Boolean(item.photoCount && item.photoCount > 1)}
                 onChange={handleInputChange}
-                ref={inputRef}
                 className="hidden"
               />
             </label>
@@ -94,13 +122,12 @@ export const PhotoField = <T extends FieldValues>({ item, name }: Props<T>) => {
         ) : (
           <label className="flex items-center justify-center gap-2 cursor-pointer w-full h-14">
             <CloudUpload className="text-blue-500" fontSize="small" />
-            <span className="text-xs font-medium">Subir foto(s)</span>
+            <span className="text-xs font-medium">Subir foto(s) desde galería</span>
             <input
               type="file"
               accept="image/*"
               multiple={Boolean(item.photoCount && item.photoCount > 1)}
               onChange={handleInputChange}
-              ref={inputRef}
               className="hidden"
             />
           </label>
