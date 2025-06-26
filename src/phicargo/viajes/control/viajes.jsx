@@ -172,6 +172,15 @@ const ViajesActivos = ({ }) => {
         accessorKey: 'vehiculo',
         header: 'Vehiculo',
         id: 'vehiculo',
+        Cell: ({ cell }) => {
+          const vehiculo = cell.getValue() || '';
+
+          return (
+            <Chip color={"primary"} size="sm">
+              {vehiculo}
+            </Chip>
+          );
+        },
       },
       {
         accessorKey: 'operador',
