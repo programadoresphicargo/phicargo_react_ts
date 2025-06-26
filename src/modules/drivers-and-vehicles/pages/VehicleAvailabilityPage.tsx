@@ -29,7 +29,7 @@ const AsignacionUnidades = () => {
     tableId: 'availability-vehicles-table',
     isLoading,
     isFetching,
-    onDoubleClickFn: onOpenInfo,
+    onDoubleClickFn: (row) => onOpenInfo(row.original),
     refetchFn: () => refetch(),
     exportFn: (data) => toExcel.exportData(data),
     showColumnFilters: true,

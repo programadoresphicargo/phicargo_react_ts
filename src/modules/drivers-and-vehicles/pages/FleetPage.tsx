@@ -34,7 +34,7 @@ const FleetPage = () => {
     showGlobalFilter: true,
     containerHeight: 'calc(100vh - 165px)',
     onDoubleClickFn: (row) => {
-      setVehicleToView(row);
+      setVehicleToView(row.original);
     }
   });
 

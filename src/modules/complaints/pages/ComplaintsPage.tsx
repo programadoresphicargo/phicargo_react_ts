@@ -62,6 +62,9 @@ const ComplaintsPage = () => {
         onClick={() => table.setCreatingRow(true)}
       />
     ),
+    onDoubleClickFn: (row) => {
+      table.setEditingRow(row);
+    },
     renderRowActions: ({ row, table }) => (
       <Box>
         <Tooltip title="Editar">

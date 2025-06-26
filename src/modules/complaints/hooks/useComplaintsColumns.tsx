@@ -10,9 +10,20 @@ export const useComplaintsColumns = () => {
   const columns = useMemo<MRT_ColumnDef<Complaint>[]>(() => {
     return [
       {
+        accessorKey: 'id',
+        header: 'Folio',
+        Cell: ({ cell }) => `#${cell.getValue<string>()}`,
+      },
+      {
         accessorKey: 'complaintDate',
         header: 'Fecha',
         Cell: ({ cell }) => cell.getValue<Dayjs>().format('DD/MM/YYYY'),
+      },
+      {
+        accessorFn: (row) => row.customer?.name,
+        id: 'customerName',
+        header: 'Cliente',
+        Cell: ({ cell }) => cell.getValue<string>() ?? 'No especificado',
       },
       {
         accessorKey: 'phicargoCompany',

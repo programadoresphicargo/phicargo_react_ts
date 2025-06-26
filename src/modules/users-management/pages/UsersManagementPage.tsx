@@ -31,8 +31,8 @@ const UsersManagementPage = () => {
     toolbarActions: (
       <AddButton label="Crear Usuario" onClick={() => setCreateModal(true)} />
     ),
-    onDoubleClickFn: (user) => {
-      setInformationModal(user);
+    onDoubleClickFn: (row) => {
+      setInformationModal(row.original);
     },
   });
 

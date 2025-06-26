@@ -85,7 +85,6 @@ export const PhotoField = <T extends FieldValues>({ item, name }: Props<T>) => {
                 type="file"
                 accept="image/*"
                 multiple={Boolean(item.photoCount && item.photoCount > 1)}
-                capture="environment"
                 onChange={handleInputChange}
                 ref={inputRef}
                 className="hidden"
@@ -100,7 +99,6 @@ export const PhotoField = <T extends FieldValues>({ item, name }: Props<T>) => {
               type="file"
               accept="image/*"
               multiple={Boolean(item.photoCount && item.photoCount > 1)}
-              capture="environment"
               onChange={handleInputChange}
               ref={inputRef}
               className="hidden"

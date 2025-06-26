@@ -35,7 +35,7 @@ const DriverAvailabilityPage = () => {
     isLoading: isLoading,
     isFetching: isFetching,
     error: error?.message,
-    onDoubleClickFn: onOpenInfo,
+    onDoubleClickFn: (row) => onOpenInfo(row.original),
     refetchFn: () => refetch(),
     exportFn: (data) => toExcel.exportData(data),
     showColumnFilters: true,
