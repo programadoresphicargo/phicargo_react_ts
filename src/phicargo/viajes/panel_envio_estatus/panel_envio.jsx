@@ -13,7 +13,7 @@ import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { Upload, message } from 'antd';
 import { getLocalTimeZone, now, today } from "@internationalized/date";
 import { parseAbsoluteToLocal, parseZonedDateTime } from "@internationalized/date";
-
+import { parseDate, parseDateTime } from "@internationalized/date";
 import { DatePicker } from "@heroui/react";
 import { DialogActions } from '@mui/material';
 import { DialogTitle } from '@mui/material';
@@ -23,7 +23,6 @@ import Slide from '@mui/material/Slide';
 import Swal from 'sweetalert2';
 import { ViajeContext } from '../context/viajeContext';
 import odooApi from '@/api/odoo-api';
-import { parseDate } from "@internationalized/date";
 import { toast } from 'react-toastify';
 import { useJourneyDialogs } from '../seguimiento/funciones';
 const { VITE_ODOO_API_URL } = import.meta.env;
@@ -57,7 +56,28 @@ function PanelEnvio({ open, cerrar, id_reporte, estatusSeleccionado, comentarios
     comentariosEstatus || ''
   );
 
-  const [NuevaFecha, setNuevaFecha] = React.useState(now(getLocalTimeZone()));
+  function getLocalISOString() {
+    const now = new Date();
+    const offset = now.getTimezoneOffset();
+    const localDate = new Date(now.getTime() - offset * 60 * 1000);
+    return localDate.toISOString().slice(0, 19);
+  }
+
+  const [FechaModificada, setFechaModificada] = React.useState(getLocalISOString());
+  const updateFecha = (newValue) => {
+    const date = newValue.toDate(getLocalTimeZone());
+    const formatted = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}T${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}`;
+    setFechaModificada(formatted);
+  };
+
+  const handleSwitchChange = (value) => {
+    setIsSelected(value);
+    if (!value) {
+      setFechaModificada(null);
+    } else {
+      setFechaModificada(getLocalISOString());
+    }
+  };
 
   const [fileList, setFileList] = useState(archivos || []);
 
@@ -86,6 +106,16 @@ function PanelEnvio({ open, cerrar, id_reporte, estatusSeleccionado, comentarios
     };
 
     fetchData();
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) {
+      setIsSelected(false);
+      setEstatusSeleccionado("");
+      setContenido("");
+      setFileList([]);
+      setActiveStep(0);
+    }
   }, [open]);
 
   const props = {
@@ -122,7 +152,7 @@ function PanelEnvio({ open, cerrar, id_reporte, estatusSeleccionado, comentarios
     if (result.isConfirmed) {
       try {
         setLoadingSE(true);
-        const success = await enviar_estatus(id_viaje, estatus_seleccionado, fileList, comentarios, NuevaFecha);
+        const success = await enviar_estatus(id_viaje, estatus_seleccionado, fileList, comentarios, FechaModificada);
         if (success) {
           setEstatusSeleccionado("");
           setContenido("");
@@ -227,7 +257,8 @@ function PanelEnvio({ open, cerrar, id_reporte, estatusSeleccionado, comentarios
 
                 <Card className='mb-5'>
                   <CardHeader className="justify-between bg-danger">
-                    <Switch isSelected={isSelected} onValueChange={setIsSelected}>
+                    <Switch isSelected={isSelected} onValueChange={handleSwitchChange}>
+                      Habilitar cambio de hora
                     </Switch>
                     <div className="flex gap-3">
                       <div className="flex flex-col gap-1 items-start justify-center">
@@ -241,11 +272,11 @@ function PanelEnvio({ open, cerrar, id_reporte, estatusSeleccionado, comentarios
                       firstDayOfWeek="mon"
                       hideTimeZone
                       showMonthAndYearPickers
-                      defaultValue={now(getLocalTimeZone())}
+                      defaultValue={FechaModificada ? parseDateTime(FechaModificada) : undefined}
                       label="Nueva hora"
                       variant="bordered"
                       isDisabled={!isSelected}
-                      onChange={setNuevaFecha}
+                      onChange={updateFecha}
                       maxValue={today(getLocalTimeZone())}
                     />
                   </CardBody>

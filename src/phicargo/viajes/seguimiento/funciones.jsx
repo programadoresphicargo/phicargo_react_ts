@@ -114,7 +114,7 @@ export const useJourneyDialogs = () => {
         });
     };
 
-    const enviar_estatus = async (id_viaje, id_estatus, archivos, comentarios, nueva_fecha = null) => {
+    const enviar_estatus = async (id_viaje, id_estatus, archivos, comentarios, fecha_modificada = null) => {
         const loadingToast = toast.loading('Procesando, espere...');
 
         try {
@@ -123,6 +123,10 @@ export const useJourneyDialogs = () => {
             data.append('id_estatus', id_estatus);
             data.append('id_usuario', session.user.id);
             data.append('comentarios', comentarios);
+
+            if (fecha_modificada) {
+                data.append('fecha_modificada', fecha_modificada);
+            }
 
             archivos.forEach((fileWrapper) => {
                 if (fileWrapper.originFileObj instanceof File) {
