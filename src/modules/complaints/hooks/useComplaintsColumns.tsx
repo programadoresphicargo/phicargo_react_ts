@@ -20,6 +20,11 @@ export const useComplaintsColumns = () => {
         Cell: ({ cell }) => cell.getValue<Dayjs>().format('DD/MM/YYYY'),
       },
       {
+        accessorFn: (row) => row.customer?.name,
+        header: 'Cliente',
+        Cell: ({ cell }) => cell.getValue<string>() ?? 'No especificado',
+      },
+      {
         accessorKey: 'phicargoCompany',
         header: 'Empresa',
       },
