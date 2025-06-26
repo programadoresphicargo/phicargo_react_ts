@@ -113,16 +113,16 @@ const ViajesActivos = ({ }) => {
         accessorKey: 'x_status_viaje',
         header: 'Estado',
         Cell: ({ cell }) => {
-          const estatus_viaje = cell.getValue();
+          const estatus = cell.getValue();
           let badgeClass = '';
 
-          if (estatus_viaje === 'ruta') {
+          if (estatus === 'ruta') {
             badgeClass = 'primary';
-          } else if (estatus_viaje === 'planta') {
+          } else if (estatus === 'planta') {
             badgeClass = 'success';
-          } else if (estatus_viaje === 'retorno') {
+          } else if (estatus === 'retorno') {
             badgeClass = 'warning';
-          } else if (estatus_viaje === 'resguardo') {
+          } else if (estatus === 'resguardo') {
             badgeClass = 'secondary';
           }
 
@@ -132,7 +132,7 @@ const ViajesActivos = ({ }) => {
               color={badgeClass}
               className="text-white"
             >
-              {estatus_viaje.charAt(0).toUpperCase() + estatus_viaje.slice(1)}
+              {estatus.charAt(0).toUpperCase() + estatus.slice(1)}
             </Chip>
           );
         },

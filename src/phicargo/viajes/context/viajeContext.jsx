@@ -26,7 +26,7 @@ const ViajeProvider = ({ children }) => {
                     toast.success('Correos ligados.');
                     ActualizarCorreosLigados(false);
                 } else {
-                    toast.error('No hay correos electronicos ligados a este viaje.');
+                    toast.error('No hay correos electronicos ligados.');
                     ActualizarCorreosLigados(true);
                 }
             })

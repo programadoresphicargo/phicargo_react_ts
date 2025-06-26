@@ -22,7 +22,7 @@ function CumplimientoOperador() {
             const response = await odooApi.get('/tms_travel/reportes_estatus_viajes/cumplimiento_estatus_operadores/', {
                 params: {
                     id_viaje: id_viaje,
-                    id_operador: viaje.id_operador
+                    id_operador: viaje?.employee?.id
                 }
             });
             const data = await response.data;

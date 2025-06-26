@@ -96,7 +96,7 @@ const Detenciones = ({ }) => {
   useEffect(() => {
     const fetchDataAsync = async () => {
       const updatedData = await getEstatus();
-      fetchData(viaje.vehicle_id, updatedData);
+      fetchData(viaje?.vehicle?.id, updatedData);
     };
 
     fetchDataAsync();
