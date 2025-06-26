@@ -1,6 +1,7 @@
 import {
   MRT_DensityState,
   MRT_GroupingState,
+  MRT_Row,
   MRT_RowData,
   MRT_TableOptions,
   useMaterialReactTable,
@@ -26,7 +27,7 @@ interface Config<T extends MRT_RowData & BaseRowData>
   containerHeight?: string;
   showColumnFilters?: boolean;
   showGlobalFilter?: boolean;
-  onDoubleClickFn?: (item: T) => void;
+  onDoubleClickFn?: (row: MRT_Row<T>) => void;
   refetchFn?: () => void;
   exportFn?: (data: T[]) => void;
   toolbarActions?: React.ReactNode;
@@ -112,7 +113,7 @@ export const useBaseTable = <T extends MRT_RowData & BaseRowData>(
     ),
     muiTableBodyRowProps: config.onDoubleClickFn
       ? ({ row }) => ({
-          onDoubleClick: () => config.onDoubleClickFn?.(row.original),
+          onDoubleClick: () => config.onDoubleClickFn?.(row),
           sx: { cursor: 'pointer' },
         })
       : undefined,
