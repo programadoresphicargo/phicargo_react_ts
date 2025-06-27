@@ -86,9 +86,38 @@ export default function BasicButtons2() {
                             </CardHeader>
                             <CardBody className="bg-white rounded-xl shadow p-4">
                                 <div className="grid sm:grid-cols-2 gap-y-2 gap-x-4 text-gray-800 text-sm">
+                                    {/* Sección: Equipo de viaje */}
+                                    <div className="sm:col-span-2">
+                                        <h2 className="text-base font-semibold text-gray-700 border-b pb-1 mb-2">Equipo de viaje</h2>
+                                    </div>
                                     <div>
                                         <span className="font-semibold text-gray-600">Vehículo:</span>
                                         <div>{viaje?.vehicle?.name || '—'}</div>
+                                    </div>
+                                    <div>
+                                        <span className="font-semibold text-gray-600">Remolque 1:</span>
+                                        <div>{viaje?.trailer1?.name || '—'}</div>
+                                    </div>
+                                    <div>
+                                        <span className="font-semibold text-gray-600">Remolque 2:</span>
+                                        <div>{viaje?.trailer2?.name || '—'}</div>
+                                    </div>
+                                    <div>
+                                        <span className="font-semibold text-gray-600">Dolly:</span>
+                                        <div>{viaje?.dolly?.name || '—'}</div>
+                                    </div>
+                                    <div>
+                                        <span className="font-semibold text-gray-600">Motogenerador 1:</span>
+                                        <div>{viaje?.x_motogenerador1?.name || '—'}</div>
+                                    </div>
+                                    <div>
+                                        <span className="font-semibold text-gray-600">Motogenerador 2:</span>
+                                        <div>{viaje?.x_motogenerador2?.name || '—'}</div>
+                                    </div>
+
+                                    {/* Sección: Datos del viaje */}
+                                    <div className="sm:col-span-2 mt-4">
+                                        <h2 className="text-base font-semibold text-gray-700 border-b pb-1 mb-2">Datos del viaje</h2>
                                     </div>
                                     <div>
                                         <span className="font-semibold text-gray-600">Operador:</span>
@@ -127,6 +156,10 @@ export default function BasicButtons2() {
                                         <div>{viaje?.x_tipo_bel || '—'}</div>
                                     </div>
                                     <div>
+                                        <span className="font-semibold text-gray-600">Origen:</span>
+                                        <div>{viaje?.origen || '—'}</div>
+                                    </div>
+                                    <div>
                                         <span className="font-semibold text-gray-600">Ruta:</span>
                                         <div>{viaje?.route?.name || '—'}</div>
                                     </div>
@@ -135,7 +168,7 @@ export default function BasicButtons2() {
                                         <div>{viaje?.x_codigo_postal || '—'}</div>
                                     </div>
                                     <div className="sm:col-span-2">
-                                        <span className="font-semibold text-gray-600">Contenedores:</span>
+                                        <span className="font-semibold text-gray-600 block mb-1">Contenedores:</span>
                                         <Snippet color="primary" variant="solid" size="sm">
                                             {viaje?.x_references || '—'}
                                         </Snippet>
