@@ -10,7 +10,6 @@ import { useAuthContext } from './useAuthContext';
  */
 export const useLoginMutation = () => {
   const queryClient = useQueryClient();
-
   const { setAuthStatus, setSession } = useAuthContext();
 
   const loginMutation = useMutation({
@@ -22,12 +21,22 @@ export const useLoginMutation = () => {
       queryClient.setQueryData(['session'], session);
       setAuthStatus('authenticated');
       setSession(session);
-      sessionStorage.setItem('session', JSON.stringify(session));
+
+      const userAgent = navigator.userAgent || '';
+      const isFlutterWebView = userAgent.includes('com.phicargo.admin');
+      const storage = isFlutterWebView ? localStorage : sessionStorage;
+
+      storage.setItem('session', JSON.stringify(session));
     },
     onError: (error: Error) => {
       setAuthStatus('unauthenticated');
       setSession(null);
-      sessionStorage.removeItem('session');
+
+      const userAgent = navigator.userAgent || '';
+      const isFlutterWebView = userAgent.includes('com.phicargo.admin');
+      const storage = isFlutterWebView ? localStorage : sessionStorage;
+
+      storage.removeItem('session');
       toast.error(error.message);
     },
   });
@@ -36,4 +45,3 @@ export const useLoginMutation = () => {
     loginMutation,
   };
 };
-

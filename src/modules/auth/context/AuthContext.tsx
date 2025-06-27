@@ -25,13 +25,19 @@ const initialAuthState: AuthState = {
   session: null,
   authStatus: 'unauthenticated',
   redirectTo: '/',
-  setSession: () => {},
-  setAuthStatus: () => {},
-  onLogout: () => {},
-  setRedirectTo: () => {},
+  setSession: () => { },
+  setAuthStatus: () => { },
+  onLogout: () => { },
+  setRedirectTo: () => { },
 };
 
 const AuthContext = createContext<AuthState>(initialAuthState);
+
+function getStorage() {
+  const userAgent = navigator.userAgent || '';
+  const isFlutterWebView = userAgent.includes('com.phicargo.admin');
+  return isFlutterWebView ? localStorage : sessionStorage;
+}
 
 /**
  * Provider for AuthContext
@@ -39,16 +45,17 @@ const AuthContext = createContext<AuthState>(initialAuthState);
  */
 export const AuthProvider = ({ children }: ProviderProps) => {
   const queryClient = useQueryClient();
+  const storage = getStorage();
 
   const [session, setSession] = useState<Session | null>(
-    JSON.parse(sessionStorage.getItem('session') || 'null'),
+    JSON.parse(storage.getItem('session') || 'null'),
   );
   const [authStatus, setAuthStatus] = useState<AuthStatus>('loading');
   const [redirectTo, setRedirectTo] = useState('/');
 
   const onLogout = () => {
     setSession(null);
-    sessionStorage.clear();
+    storage.removeItem('session');
     setAuthStatus('unauthenticated');
     delete odooApi.defaults.headers.common['Authorization'];
     queryClient.clear();
@@ -81,4 +88,3 @@ export const AuthProvider = ({ children }: ProviderProps) => {
 };
 
 export default AuthContext;
-
