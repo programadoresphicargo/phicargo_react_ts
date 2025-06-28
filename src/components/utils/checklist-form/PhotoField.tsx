@@ -120,17 +120,31 @@ export const PhotoField = <T extends FieldValues>({ item, name }: Props<T>) => {
             </label>
           </>
         ) : (
-          <label className="flex items-center justify-center gap-2 cursor-pointer w-full h-14">
-            <CloudUpload className="text-blue-500" fontSize="small" />
-            <span className="text-xs font-medium">Subir foto(s) desde galería</span>
-            <input
-              type="file"
-              accept="image/*"
-              multiple={Boolean(item.photoCount && item.photoCount > 1)}
-              onChange={handleInputChange}
-              className="hidden"
-            />
-          </label>
+          <div className="flex items-center justify-center gap-4 w-full h-14">
+            <label className="flex items-center justify-center gap-2 cursor-pointer">
+              <AddAPhotoIcon className="text-blue-500" fontSize="small" />
+              <span className="text-xs font-medium">Tomar foto</span>
+              <input
+                type="file"
+                accept="image/*"
+                capture="environment"
+                onChange={handleInputChange}
+                className="hidden"
+              />
+            </label>
+            <div className="w-px h-8 bg-gray-300"></div>
+            <label className="flex items-center justify-center gap-2 cursor-pointer">
+              <CloudUpload className="text-blue-500" fontSize="small" />
+              <span className="text-xs font-medium">Subir desde galería</span>
+              <input
+                type="file"
+                accept="image/*"
+                multiple={Boolean(item.photoCount && item.photoCount > 1)}
+                onChange={handleInputChange}
+                className="hidden"
+              />
+            </label>
+          </div>
         )}
       </div>
       {watchedFiles && watchedFiles.length > 0 && (
