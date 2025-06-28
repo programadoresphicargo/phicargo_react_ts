@@ -29,6 +29,7 @@ export interface VehicleInspectionCreate extends VehicleInspectionBase {
   vehicleId: number;
   driverId?: number | null;
   checklist: VehicleInspectionQuestionCreate[];
+  userPin: string;
 }
 
 // Checklist

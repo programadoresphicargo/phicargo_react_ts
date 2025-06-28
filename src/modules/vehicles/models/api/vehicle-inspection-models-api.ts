@@ -25,6 +25,7 @@ export interface VehicleInspectionCreateApi extends VehicleInspectionBaseApi {
   vehicle_id: number;
   driver_id?: number | null;
   checklist: VehicleInspectionQuestionCreateApi[];
+  user_pin: string;
 }
 
 // Checklist

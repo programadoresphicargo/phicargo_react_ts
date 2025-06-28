@@ -97,6 +97,10 @@ export class VehicleInspectionAdapter {
       formData.append('driver_id', String(vehicleInspection.driverId));
     }
 
+    if(vehicleInspection.userPin) {
+      formData.append('user_pin', vehicleInspection.userPin);
+    }
+
     const filesToUpload: File[] = [];
     const checklist: VehicleInspectionQuestionCreateApi[] = Object.entries(
       vehicleInspection.checklist,
