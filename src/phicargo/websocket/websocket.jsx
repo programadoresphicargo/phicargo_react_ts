@@ -50,23 +50,21 @@ const WebSocketWithToast = () => {
     };
 
     useEffect(() => {
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.onvoiceschanged = loadVoices;
-            loadVoices();
+        window.speechSynthesis.onvoiceschanged = loadVoices;
+        loadVoices();
 
-            const webSocket = new WebSocket(VITE_WEBSOCKET_SERVER + session.user.id);
-            webSocketRef.current = webSocket;
+        const webSocket = new WebSocket(VITE_WEBSOCKET_SERVER + session.user.id);
+        webSocketRef.current = webSocket;
 
-            webSocket.onopen = () => {
-                const message = "Conectado al servidor WebSocket";
-                addToast({
-                    title: message,
-                    color: 'primary',
-                    variant: 'solid'
-                });
-                speakMessage(message);
-                console.log("Conexión WebSocket", message);
-            }
+        webSocket.onopen = () => {
+            const message = "Conectado al servidor WebSocket";
+            addToast({
+                title: message,
+                color: 'primary',
+                variant: 'solid'
+            });
+            speakMessage(message);
+            console.log("Conexión WebSocket", message);
         };
 
         webSocket.onmessage = (event) => {
