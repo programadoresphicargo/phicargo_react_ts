@@ -395,8 +395,7 @@ const ViajesActivos = ({ }) => {
       if (diferenciaHoras > 1) {
         return {
           sx: {
-            backgroundColor: '#f31260', // rojo
-            color: '#FFFFFF',
+            backgroundColor: '#c9ffbc', // rojo
             fontFamily: 'Inter',
             fontWeight: 'normal',
             fontSize: '12px',
