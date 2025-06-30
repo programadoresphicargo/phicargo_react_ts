@@ -339,7 +339,7 @@ const ViajesActivos = ({ }) => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
-    state: { showProgressBars: isLoading },
+    state: { showProgressBars: isLoading, showSkeletons: isLoading, showLoadingOverlay: isLoading },
     enableColumnPinning: true,
     enableStickyHeader: true,
     positionGlobalFilter: "right",
