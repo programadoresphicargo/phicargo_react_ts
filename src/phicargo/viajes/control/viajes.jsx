@@ -441,7 +441,13 @@ const ViajesActivos = ({ }) => {
 
         <Button color='danger' className='text-white' startContent={<i class="bi bi-sign-stop"></i>} onPress={() => handleOpen()} size='sm'>Unidades detenidas</Button>
         <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "viajes_activos.csv")} size='sm'>Exportar</Button>
-        <Chip size="sm">Sin estatus por más de una hora</Chip>
+        <Chip
+          size="sm"
+          style={{
+            backgroundColor: '#c8d9ff'
+          }}>
+          Sin estatus por más de una hora
+        </Chip>
       </Box >
     ),
   });
