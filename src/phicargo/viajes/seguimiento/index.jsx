@@ -24,7 +24,7 @@ import Custodia from "../custodia/custodia";
 
 export default function BasicButtons2() {
 
-    const { iniciar_viaje, finalizar_viaje, liberar_resguardo, reactivar_viaje, comprobar_operador, comprobar_disponibilidad } = useJourneyDialogs();
+    const { iniciar_viaje, finalizar_viaje, liberar_resguardo, reactivar_viaje, comprobar_operador, comprobar_disponibilidad, calcular_estadia } = useJourneyDialogs();
     const { id_viaje, viaje, correosLigados, isLoading } = useContext(ViajeContext);
 
     const [open, setOpen] = React.useState(false);
@@ -65,6 +65,8 @@ export default function BasicButtons2() {
                                         {viaje?.x_status_viaje == 'finalizado' && (
                                             <Button color="success" onPress={reactivar_viaje} className="text-white" isDisabled={correosLigados || isLoading}>Reactivar viaje</Button>
                                         )}
+
+                                        <Button color="danger" onPress={calcular_estadia(id_viaje)} className="text-white">Generar estadías</Button>
                                     </Stack>
                                 </div>
 

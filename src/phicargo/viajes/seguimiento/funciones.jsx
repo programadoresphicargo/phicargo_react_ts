@@ -359,6 +359,7 @@ export const useJourneyDialogs = () => {
         comprobar_operador,
         comprobar_disponibilidad,
         comprobar_horarios,
-        getReportesNoAtendidos
+        getReportesNoAtendidos,
+        calcular_estadia
     };
 };
