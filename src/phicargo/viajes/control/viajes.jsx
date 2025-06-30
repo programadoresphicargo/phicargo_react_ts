@@ -389,17 +389,23 @@ const ViajesActivos = ({ }) => {
       if (diferenciaHoras > 1) {
         return {
           sx: {
-            backgroundColor: '#c8d9ff', // rojo
+            backgroundColor: row.subRows?.length
+              ? '#0456cf'
+              : '#c8d9ff'
+            ,
+            color: row.subRows?.length ? '#FFFFFF' : '#000000',
             fontFamily: 'Inter',
             fontWeight: 'normal',
             fontSize: '12px',
-          },
+          }
         };
       }
 
       // Si no, dejar estilo por defecto
       return {
         sx: {
+          backgroundColor: row.subRows?.length ? '#0456cf' : '#FFFFFF',
+          color: row.subRows?.length ? '#FFFFFF' : '#000000',
           fontFamily: 'Inter',
           fontWeight: 'normal',
           fontSize: '12px',
