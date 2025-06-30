@@ -1,5 +1,6 @@
 import odooApi from '@/api/odoo-api';
 import type {
+  InspectionType,
   VehicleInspection,
   VehicleInspectionCreate,
   VehicleInspectionQuestion,
@@ -16,6 +17,7 @@ export class VehicleInspectionService {
   static async getVehicleInspections(
     month: number,
     year: number,
+    inspectionType: InspectionType = 'cleaning'
   ): Promise<VehicleInspection[]> {
     try {
       const response = await odooApi.get<VehicleInspectionApi[]>(
@@ -24,6 +26,7 @@ export class VehicleInspectionService {
           params: {
             month,
             year,
+            inspection_type: inspectionType,
           },
         },
       );

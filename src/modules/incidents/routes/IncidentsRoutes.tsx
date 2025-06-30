@@ -12,6 +12,7 @@ const DirectionIncidentsPage = lazy(
 const VehicleInspectionPage = lazy(
   () => import('../pages/VehicleInspectionPage'),
 );
+const VehicleLegalInspectionPage = lazy(() => import('../pages/VehicleLegalInspectionPage'));
 
 const INCIDENTS_PERMISSION = 214;
 const DIRECTION_INCIDENTS_PERMISSION = 215;
@@ -55,6 +56,19 @@ const IncidentsRoutes = () => (
           element={
             <Suspense fallback={<LoadingPage />}>
               <VehicleInspectionPage />
+            </Suspense>
+          }
+          requiredPermissionId={VEHICLE_INSPECTION_PERMISSION}
+        />
+      }
+    ></Route>
+    <Route
+      path="inspeccion-unidades-legal"
+      element={
+        <ProtectedRoute
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <VehicleLegalInspectionPage />
             </Suspense>
           }
           requiredPermissionId={VEHICLE_INSPECTION_PERMISSION}
