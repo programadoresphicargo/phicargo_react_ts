@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import {
+  InspectionType,
   VehicleInspectionCreate,
   VehicleInspectionQuestionCreate,
 } from '../../models';
@@ -28,6 +29,7 @@ const initialValues: VehicleInspectionCreate = {
 
 interface Props {
   vehicleId: number;
+  inspectionType?: InspectionType;
   onCancel?: () => void;
   onSuccess?: () => void;
   checklist?: VehicleInspectionQuestionCreate[];
@@ -35,6 +37,7 @@ interface Props {
 
 export const InspectionForm = ({
   vehicleId,
+  inspectionType,
   onCancel,
   onSuccess,
   checklist,
@@ -50,6 +53,9 @@ export const InspectionForm = ({
 
   const onSubmit: SubmitHandler<VehicleInspectionCreate> = (data) => {
     if (!vehicleId) return;
+    if (inspectionType) {
+      data.inspectionType = inspectionType;
+    }
     mutation.mutate(
       {
         ...data,

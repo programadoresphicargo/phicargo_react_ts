@@ -21,17 +21,17 @@ const pages: MenuItemType[] = [
     exact: true,
   },
   {
-    name: 'Revisión de Únidades',
+    name: 'Revisión de Únidades (Vigilancia)',
     path: '/incidencias/inspeccion-unidades',
     requiredPermissions: [VEHICLE_INSPECTION_PERMISSION],
     exact: true,
   },
-  // {
-  //   name: 'Capacitación',
-  //   path: '/incidencias/capacitacion',
-  //   requiredPermissions: [],
-  //   exact: true,
-  // },
+  {
+    name: 'Revisión de Únidades (Legal)',
+    path: '/incidencias/inspeccion-unidades-legal',
+    requiredPermissions: [VEHICLE_INSPECTION_PERMISSION],
+    exact: true,
+  },
 ];
 
 interface Props {

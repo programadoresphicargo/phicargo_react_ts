@@ -23,6 +23,13 @@ export const useVehicleInspectionColumns = () => {
         ),
       },
       {
+        accessorKey: 'fleetType',
+        header: 'Tipo de Unidad',
+        Cell: ({ cell }) => (
+          <span className="font-bold uppercase">{cell.getValue<string>()}</span>
+        ),
+      },
+      {
         accessorFn: (row) =>
           row.driver ? row.driver.name : 'SIN OPERADOR ASIGNADO',
         header: 'Operador asignado',
