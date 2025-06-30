@@ -405,7 +405,13 @@ const ViajesActivos = ({ }) => {
       }
 
       // Si no, dejar estilo por defecto
-      return {};
+      return {
+        sx: {
+          fontFamily: 'Inter',
+          fontWeight: 'normal',
+          fontSize: '12px',
+        },
+      };
     },
     renderTopToolbarCustomActions: ({ table }) => (
       <Box
