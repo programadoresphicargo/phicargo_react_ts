@@ -9,13 +9,12 @@ import { VehicleInspectionDetailModal } from '@/modules/vehicles/components/vehi
 import InfoIcon from '@mui/icons-material/Info';
 import { Box, IconButton, Tooltip } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import { InspectionModal } from '@/modules/vehicles/components/vehicle-inspections/InspectionModal';
 import { VehicleInspectionHeader } from '../components/ui/VehicleInspectionHeader';
-
+import { LegalInspectionModal } from '@/modules/vehicles/components/vehicle-inspections/LegalInspectionModal';
 
 const now = new Date();
 
-const VehicleInspectionPage = () => {
+const VehicleLegalInspectionPage = () => {
   const [month, setMonth] = useState<string | number>(
     new Date().getMonth() + 1,
   );
@@ -23,7 +22,7 @@ const VehicleInspectionPage = () => {
   const [detail, setDetail] = useState<VehicleInspection | null>(null);
   const [toInspect, setToInspect] = useState<VehicleInspection | null>(null);
 
-  const { query } = useGetVehicleInspections(month as number, year as number);
+  const { query } = useGetVehicleInspections(month as number, year as number, 'legal');
 
   const columns = useVehicleInspectionColumns();
 
@@ -62,7 +61,10 @@ const VehicleInspectionPage = () => {
 
   return (
     <>
-      <VehicleInspectionHeader vehicleInspections={query.data || []} inspectionType='Vigilancia' />
+      <VehicleInspectionHeader
+        vehicleInspections={query.data || []}
+        inspectionType="Legal"
+      />
       <MaterialReactTable table={table} />
       {detail && (
         <VehicleInspectionDetailModal
@@ -72,7 +74,7 @@ const VehicleInspectionPage = () => {
         />
       )}
       {toInspect && (
-        <InspectionModal
+        <LegalInspectionModal
           open={!!toInspect}
           onClose={() => setToInspect(null)}
           vehicleInspection={toInspect}
@@ -131,5 +133,5 @@ const RowActions = ({
   );
 };
 
-export default VehicleInspectionPage;
+export default VehicleLegalInspectionPage;
 

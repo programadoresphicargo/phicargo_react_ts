@@ -4,10 +4,11 @@ import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import { VehicleInspection } from '@/modules/vehicles/models';
 
 interface Props {
+  inspectionType?: string;
   vehicleInspections: VehicleInspection[];
 }
 
-export const VehicleInspectionHeader = ({ vehicleInspections }: Props) => {
+export const VehicleInspectionHeader = ({ vehicleInspections, inspectionType }: Props) => {
   const totalUnits = vehicleInspections.length;
   const reviewedUnits = vehicleInspections.filter((v) => v.inspection).length;
   const pendingUnits = vehicleInspections.filter((v) => !v.inspection).length;
@@ -16,7 +17,7 @@ export const VehicleInspectionHeader = ({ vehicleInspections }: Props) => {
     <div className="bg-gray-200 px-3 py-1 shadow-sm w-full flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
       <div>
         <h1 className="tracking-tight font-semibold lg:text-2xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text">
-          Revisiones de Unidades
+          Revisiones de Unidades {inspectionType && `(${inspectionType})`}
         </h1>
         <p className="text-gray-600">
           Aquí puedes ver y gestionar las revisiones de las unidades.
