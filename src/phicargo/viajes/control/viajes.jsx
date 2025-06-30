@@ -189,13 +189,7 @@ const ViajesActivos = ({ }) => {
           const value = cell.getValue();
 
           return (
-            <User
-              avatarProps={{
-                size: "sm",
-                src: "https://th.bing.com/th/id/R.b79d045f4b512cd239bcd4bbf4065aac?rik=gdIMsJ5mwf2Ikw&pid=ImgRaw&r=0",
-              }}
-              name={value}
-            />
+            <Chip color='secondary' size='sm'>{value}</Chip>
           );
         },
       },
@@ -447,7 +441,7 @@ const ViajesActivos = ({ }) => {
 
         <Button color='danger' className='text-white' startContent={<i class="bi bi-sign-stop"></i>} onPress={() => handleOpen()} size='sm'>Unidades detenidas</Button>
         <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "viajes_activos.csv")} size='sm'>Exportar</Button>
-
+        <Chip size="sm">Sin estatus por más de una hora</Chip>
       </Box >
     ),
   });
