@@ -42,6 +42,21 @@ export const useDriversSummaryColumns = () => {
         Cell: ({ row }) => <JobChip job={row.original.job.name} />,
       },
       {
+        accessorFn: (row) => row.isDangerous,
+        header: 'Peligroso',
+        filterVariant: 'select',
+        filterSelectOptions: [
+          {
+            value: 'SI',
+            label: 'SI',
+          },
+          {
+            value: 'NO',
+            label: 'NO',
+          },
+        ],
+      },
+      {
         accessorKey: 'realStatus',
         header: 'Estatus Real',
         Cell: ({ cell }) => {
