@@ -385,13 +385,28 @@ const ViajesActivos = ({ }) => {
         ActualizarIDViaje(row.original.id_viaje);
       },
     }),
-    muiTableBodyCellProps: ({ row }) => ({
-      sx: {
-        fontFamily: 'Inter',
-        fontWeight: 'normal',
-        fontSize: '12px',
-      },
-    }),
+    muiTableBodyCellProps: ({ row }) => {
+      const ultimoEnvio = new Date(row.original.ultimo_envio_ejecutivo);
+      const ahora = new Date();
+      const diferenciaMs = ahora - ultimoEnvio; // ahora - ultimoEnvio, no al revés
+      const diferenciaHoras = diferenciaMs / (1000 * 60 * 60);
+
+      // Si han pasado más de 1 hora, aplicar estilo
+      if (diferenciaHoras > 1) {
+        return {
+          sx: {
+            backgroundColor: '#f31260', // rojo
+            color: '#FFFFFF',
+            fontFamily: 'Inter',
+            fontWeight: 'normal',
+            fontSize: '12px',
+          },
+        };
+      }
+
+      // Si no, dejar estilo por defecto
+      return {};
+    },
     renderTopToolbarCustomActions: ({ table }) => (
       <Box
         sx={{
