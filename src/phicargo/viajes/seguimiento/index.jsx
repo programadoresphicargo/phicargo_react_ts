@@ -66,7 +66,7 @@ export default function BasicButtons2() {
                                             <Button color="success" onPress={reactivar_viaje} className="text-white" isDisabled={correosLigados || isLoading}>Reactivar viaje</Button>
                                         )}
 
-                                        <Button color="danger" onPress={calcular_estadia(id_viaje)} className="text-white">Generar estadías</Button>
+                                        <Button color="danger" onPress={() => calcular_estadia(id_viaje)} className="text-white">Generar estadías</Button>
                                     </Stack>
                                 </div>
 
