@@ -19,6 +19,7 @@ import { parseDate } from "@internationalized/date";
 import toast from 'react-hot-toast';
 import { useAuthContext } from "@/modules/auth/hooks";
 import { useDateFormatter } from "@react-aria/i18n";
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
 const ViajesActivosMasivo = ({ }) => {
   const [allData, setAllData] = useState([]);
@@ -248,6 +249,7 @@ const ViajesActivosMasivo = ({ }) => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
+    localization: MRT_Localization_ES,
     state: { showProgressBars: isLoading },
     enableColumnPinning: true,
     enableStickyHeader: true,
@@ -259,6 +261,7 @@ const ViajesActivosMasivo = ({ }) => {
     },
     columnResizeMode: "onEnd",
     initialState: {
+      columnPinning: { left: ['vehiculo', 'operador'] },
       showGlobalFilter: true,
       density: 'compact',
       expanded: true,
