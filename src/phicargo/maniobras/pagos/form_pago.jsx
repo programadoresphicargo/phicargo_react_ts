@@ -314,7 +314,7 @@ const Nomina_form = ({ show, handleClose, id_pago, id_operador, fecha_inicio, fe
                 <DialogContent>
 
                     <div className="flex flex-wrap gap-2 items-center mt-5 mb-5">
-                        <Button color='primary' onPress={registrar_pago}>Guardar nomina</Button>
+                        <Button color='success' onPress={() => registrar_pago()} className='text-white'>Guardar nomina</Button>
                     </div>
 
                     <Box sx={{ flexGrow: 1 }} mb={4}>
