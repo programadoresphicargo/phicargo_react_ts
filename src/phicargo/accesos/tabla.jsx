@@ -179,7 +179,7 @@ const TablaAccesos = ({ title, tipo }) => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
-    state: { showProgressBars: isLoading2 },
+    state: { showProgressBars: isLoading2, showLoadingOverlay: isLoading2, showSkeletons: isLoading2 },
     enableColumnPinning: true,
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
