@@ -38,7 +38,7 @@ function MonitoreoNavbar() {
     };
 
     return (
-        <AppBar elevation={3}
+        <AppBar elevation={0}
             position="static"
             sx={{
                 background: 'linear-gradient(90deg, #0b2149, #002887)',
