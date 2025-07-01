@@ -19,6 +19,7 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
+import { Box } from '@mui/material';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -102,6 +103,23 @@ const ListadoVisitantes = ({ open, handleClose }) => {
         cursor: 'pointer',
       },
     }),
+    renderTopToolbarCustomActions: ({ table }) => (
+      <Box
+        sx={{
+          display: 'flex',
+          gap: '16px',
+          padding: '8px',
+          flexWrap: 'wrap',
+        }}
+      >
+        <Button color='primary' onClick={handleClickOpenForm}>Nuevo visitante</Button>
+      </Box >
+    ),
+    muiTableContainerProps: {
+      sx: {
+        maxHeight: 'calc(100vh - 250px)',
+      },
+    },
     muiTableHeadCellProps: {
       sx: {
         fontFamily: 'Inter',
@@ -118,7 +136,7 @@ const ListadoVisitantes = ({ open, handleClose }) => {
     },
   });
 
-  const [scroll, setScroll] = React.useState('body');
+  const [scroll, setScroll] = React.useState('paper');
 
   return (<>
 
@@ -127,8 +145,8 @@ const ListadoVisitantes = ({ open, handleClose }) => {
       onClose={handleClose}
       TransitionComponent={Transition}
       scroll={scroll}
+      maxWidth="lg"
       fullWidth
-      maxWidth="md"
     >
       <AppBar sx={{ position: 'relative' }} elevation={0}>
         <Toolbar>
@@ -140,10 +158,6 @@ const ListadoVisitantes = ({ open, handleClose }) => {
           </Button>
         </Toolbar>
       </AppBar>
-
-      <Stack spacing={2} direction="row" className='mb-3'>
-        <Button color='primary' onClick={handleClickOpenForm}>Nuevo visitante</Button>
-      </Stack>
       <MaterialReactTable table={table} />
     </Dialog>
 

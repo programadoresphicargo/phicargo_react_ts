@@ -125,6 +125,11 @@ const ListadoEmpresas = ({ open, handleClose }) => {
         fontSize: '14px',
       },
     },
+    muiTableContainerProps: {
+      sx: {
+        maxHeight: 'calc(100vh - 250px)',
+      },
+    },
     renderTopToolbarCustomActions: ({ table }) => (
       <Box
         sx={{
@@ -139,7 +144,7 @@ const ListadoEmpresas = ({ open, handleClose }) => {
     ),
   });
 
-  const [scroll, setScroll] = React.useState('body');
+  const [scroll, setScroll] = React.useState('paper');
 
   return (<>
 
@@ -151,7 +156,11 @@ const ListadoEmpresas = ({ open, handleClose }) => {
       fullWidth
       maxWidth="md"
     >
-      <AppBar sx={{ position: 'relative' }} elevation={0}>
+      <AppBar sx={{
+        background: 'linear-gradient(90deg, #0b2149, #002887)',
+        position: 'relative',
+        padding: '0 16px'
+      }}>
         <Toolbar>
           <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
             Registro de empresas

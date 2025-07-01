@@ -1,7 +1,8 @@
 import {
     Autocomplete,
     AutocompleteItem,
-    AutocompleteSection
+    AutocompleteSection,
+    form
 } from "@heroui/react";
 import { Button, Select, SelectItem } from "@heroui/react";
 import { Card, CardBody, CardFooter, CardHeader, Divider, Image, Link } from "@heroui/react";
@@ -258,7 +259,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                 setIsLoading(true);
                 const response = await odooApi.post('/accesos/crear_acceso/', dataToSend);
                 if (response.data.status === "success") {
-                    toast.success(`Acceso registrado correctamente.`);
+                    toast.success(response.data.message);
                     onClose();
                 } else {
                     toast.error("Error al ingresar acceso: ");
@@ -296,7 +297,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                 setIsLoading(true);
                 const response = await odooApi.post('/accesos/actualizar_acceso/' + id_acceso, dataToSend);
                 if (response.data.status === "success") {
-                    toast.success(`Acceso A-${response.data.id_insertado} actualizado correctamente.`);
+                    toast.success(response.data.message);
                     onClose();
                 } else {
                     toast.error("Error al actualizar los datos.");
@@ -407,15 +408,26 @@ const AccesoForm = ({ id_acceso, onClose }) => {
         <Grid container spacing={2} style={{ padding: '20px' }}>
             <Grid item xs={12} sm={4} md={8}>
 
-                {(formData.tipo_movimiento == 'salida' && formData.id_empresa == 1) && (
-                    <div className="w-full flex items-center mb-3">
-                        <Alert
-                            color="danger"
-                            title="Es obligatorio solicitar la validación de tu salida al departamento correspondiente."
-                            description="Sin esta validación, el personal de vigilancia no podrá ver tu salida y no se te permitirá salir."
-                            variant="solid"
-                        />
-                    </div>
+                {(formData.id_empresa === 1 || [1, 5].includes(formData.id_empresa_visitada)) && (
+                    <>
+                        <div className="w-full flex items-center mb-3">
+                            <Alert
+                                color="danger"
+                                title="Tu salida debe ser validada previamente."
+                                description="Si no se valida, vigilancia no podrá verla y no podrás salir."
+                                variant="solid"
+                            />
+                        </div>
+                        <div className="w-full flex items-center mb-3">
+                            <Alert
+                                color="danger"
+                                className="text-white"
+                                title="Las entradas vehiculares deben validarse previamente."
+                                description="Si no están validadas, vigilancia no podrá ver el acceso y no podrás ingresar."
+                                variant="solid"
+                            />
+                        </div>
+                    </>
                 )}
 
                 <Card className='mb-3'>
