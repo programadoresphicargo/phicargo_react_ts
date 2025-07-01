@@ -16,8 +16,6 @@ export const VehicleInspectionHeader = ({ vehicleInspections, inspectionType }: 
   return (
     <div className="bg-gray-200 px-3 py-1 shadow-sm w-full flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
       <div>
-        <input type="file" accept="image/*" capture="environment" />
-
         <h1 className="tracking-tight font-semibold lg:text-2xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text">
           Revisiones de Unidades {inspectionType && `(${inspectionType})`}
         </h1>
