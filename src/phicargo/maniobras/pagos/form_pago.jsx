@@ -273,9 +273,9 @@ const Nomina_form = ({ show, handleClose, id_pago, id_operador, fecha_inicio, fe
                     flexWrap: 'wrap',
                 }}
             >
-                <button onClick={() => exportToExcel(table)} className='btn btn-success'>
+                <Button onClick={() => exportToExcel(table)} className='btn btn-success' color='primary'>
                     Exportar a Excel
-                </button>
+                </Button>
             </Box>)
     });
 
