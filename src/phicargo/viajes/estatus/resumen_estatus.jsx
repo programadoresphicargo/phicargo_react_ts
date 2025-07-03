@@ -63,7 +63,7 @@ const EstatusDropdown = ({ data }) => {
                         <DropdownItem
                             key={item.nombre_estatus}
                             description={item.primera_fecha_envio}>
-                            {item.nombre_estatus} / {item.name}
+                            {item.nombre_estatus} / {item.nombre_registrante}
                         </DropdownItem>
                     )}
                 </DropdownMenu>
