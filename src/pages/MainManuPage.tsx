@@ -125,7 +125,7 @@ const menuItems: MenuItemType[] = [
     icon: incidentsImg,
     label: 'Incidencias',
     link: '/incidencias',
-    requiredPermissions: [214],
+    requiredPermissions: [214, 215, 216, 217],
   },
 ];
 
@@ -135,7 +135,7 @@ const MainMenuPage = () => {
   const filteredMenuItems = useMemo(
     () =>
       menuItems.filter((item) =>
-        item.requiredPermissions.every((permission) =>
+        item.requiredPermissions.some((permission) =>
           session?.user?.permissions?.includes(permission),
         ),
       ),
