@@ -97,8 +97,9 @@ function EstatusHistorial() {
                     {estatusHistorial.map((step, index) => {
 
                         const getBadgeClass = () => {
-                            if (step.id_usuario == 172 || step.id_usuario == 8) return "primary";
-                            if ([5, 6].includes(step.department_id)) return "success";
+                            if (step.tipo_registrante == 'automatico') return "primary";
+                            if (step.tipo_registrante == 'usuario') return "secondary";
+                            if (step.tipo_registrante == 'operador') return "success";
                             return "secondary";
                         };
 
@@ -118,7 +119,7 @@ function EstatusHistorial() {
                                         <div className="flex flex-col gap-1 items-start justify-center">
                                             <h4 className="text-small font-semibold leading-none text-default-600">{step.nombre_estatus}</h4>
                                             <h5 className="text-small tracking-tight text-default-400">
-                                                {step.department_id === 5 || step.department_id === 6 ? step.name : step.nombre}
+                                                {step.nombre_registrante}
                                             </h5>
                                         </div>
                                     </div>
