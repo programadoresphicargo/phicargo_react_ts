@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import { Avatar } from "@heroui/react";
 import { Badge } from "@heroui/react";
-import { Button } from "@heroui/react";
+import { Button, Chip } from "@heroui/react";
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -121,6 +121,9 @@ function EstatusHistorial() {
                                             <h5 className="text-small tracking-tight text-default-400">
                                                 {step.nombre_registrante}
                                             </h5>
+                                            {step.hay_reenvios == 'si' && (
+                                                <Chip color="success" className="text-white">Reenviado</Chip>
+                                            )}
                                         </div>
                                     </div>
 
