@@ -121,9 +121,6 @@ function EstatusHistorial() {
                                             <h5 className="text-small tracking-tight text-default-400">
                                                 {step.nombre_registrante}
                                             </h5>
-                                            {step.hay_reenvios == 'si' && (
-                                                <Chip color="success" className="text-white">Reenviado</Chip>
-                                            )}
                                         </div>
                                     </div>
 
