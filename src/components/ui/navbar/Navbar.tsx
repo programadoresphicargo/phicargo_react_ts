@@ -40,7 +40,7 @@ export const Navbar = (props: Props) => {
   return (
     <NextUiNavbar
       maxWidth="full"
-      height={'3.2rem'}
+      height={'4.5rem'}
       isMenuOpen={isMenuOpen}
       onMenuOpenChange={setIsMenuOpen}
       style={{
