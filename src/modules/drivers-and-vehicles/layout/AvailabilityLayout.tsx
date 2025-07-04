@@ -3,6 +3,7 @@ import type { MenuItemType } from '@/types';
 import { ReactNode } from 'react';
 
 const EDITION_PERMISSION = 208;
+const RESUMENES_PERMISSION = 220;
 
 const pages: MenuItemType[] = [
   {
@@ -23,12 +24,12 @@ const pages: MenuItemType[] = [
   {
     name: 'Resumen Unidades',
     path: '/disponibilidad/resumen-unidades',
-    requiredPermissions: [EDITION_PERMISSION],
+    requiredPermissions: [RESUMENES_PERMISSION],
   },
   {
     name: 'Resumen Operadores',
     path: '/disponibilidad/resumen-operadores',
-    requiredPermissions: [EDITION_PERMISSION],
+    requiredPermissions: [RESUMENES_PERMISSION],
   },
   {
     name: 'Sin asignar',

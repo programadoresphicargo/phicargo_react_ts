@@ -36,6 +36,7 @@ const Contactos = lazy(
 
 const permission = 200;
 const EDITION_PERMISSION = 208;
+const RESUMENES_PERMISSION = 220;
 
 const AvailabilityRoutes = () => {
   return (
@@ -84,7 +85,7 @@ const AvailabilityRoutes = () => {
                 <SummaryPage />
               </Suspense>
             }
-            requiredPermissionId={EDITION_PERMISSION}
+            requiredPermissionId={RESUMENES_PERMISSION}
           />
         }
       />
@@ -97,7 +98,7 @@ const AvailabilityRoutes = () => {
                 <DriverSummaryPage />
               </Suspense>
             }
-            requiredPermissionId={EDITION_PERMISSION}
+            requiredPermissionId={RESUMENES_PERMISSION}
           />
         }
       />
