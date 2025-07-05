@@ -47,15 +47,15 @@ import { useAuthContext } from "@/modules/auth/hooks";
 import { DatePicker } from "@heroui/react";
 import { parseDate, parseDateTime, getLocalTimeZone } from "@internationalized/date";
 import { Alert } from "@heroui/react";
-
-const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-const checkedIcon = <CheckBoxIcon fontSize="small" />;
+import { RadioGroup, Radio } from "@heroui/react";
 
 const AccesoForm = ({ id_acceso, onClose }) => {
 
     const [openEmpresas, setEmpresas] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isLoadingVisitantes, setIsLoadingVisitantes] = useState(false);
+    const [selectedMI, setSelectedMI] = React.useState(null);
+    const [selectedME, setSelectedME] = React.useState(null);
     const { session } = useAuthContext();
 
     const abrirEmpresas = () => {
@@ -103,6 +103,18 @@ const AccesoForm = ({ id_acceso, onClose }) => {
         }
         if (formData.tipo_movimiento == "entrada" && !formData.areas) {
             newErrors.areas = 'Areas es obligatorio';
+        }
+        if (selectedMI == null) {
+            newErrors.selectedMI = 'Selecciona una opción.';
+        }
+        if (selectedME == null) {
+            newErrors.selectedME = 'Selecciona una opción.';
+        }
+        if (selectedMI == 'si' && (formData?.mercancia_ingresada == "" || formData?.mercancia_ingresada == undefined)) {
+            newErrors.mercancia_ingresada = 'Ingresar una descripción de la mercancía ingresada.';
+        }
+        if (selectedME == 'si' && (formData?.mercancia_egresada == "" || formData?.mercancia_egresada == undefined)) {
+            newErrors.mercancia_egresada = 'Ingresar una descripción de la mercancía egresada.';
         }
         return newErrors;
     };
@@ -154,9 +166,11 @@ const AccesoForm = ({ id_acceso, onClose }) => {
             const response = await odooApi.get(baseUrl);
             const data = response.data[0];
             if (data) {
-
                 getVisitantesAccceso();
                 setFormData(data);
+                const tieneMercancia = data?.mercancia_ingresada?.trim();
+                setSelectedMI(tieneMercancia ? "si" : "no");
+                setSelectedME(data?.mercancia_egresada?.trim() ? "si" : "no");
             } else {
                 toast.error("No se encontraron datos para el acceso.");
             }
@@ -366,6 +380,24 @@ const AccesoForm = ({ id_acceso, onClose }) => {
         console.log(formatted);
     };
 
+    useEffect(() => {
+        if (selectedMI === 'no') {
+            setFormData(prev => ({
+                ...prev,
+                mercancia_ingresada: '',
+            }));
+        }
+    }, [selectedMI]);
+
+    useEffect(() => {
+        if (selectedME === 'no') {
+            setFormData(prev => ({
+                ...prev,
+                mercancia_egresada: '',
+            }));
+        }
+    }, [selectedME]);
+
     return (<>
         {isLoading ? (
             <Progress
@@ -384,7 +416,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                 <Button onPress={registrar_acceso} style={{ marginTop: '20px' }} color='primary' isLoading={isLoading}>Registrar</Button>
             )}
             {formData.estado_acceso !== 'archivado' && disabledFom && id_acceso && (
-                <Button onPress={EditarForm} style={{ marginTop: '20px' }} color='primary'>Editar</Button>
+                <Button onPress={EditarForm} style={{ marginTop: '20px' }} color='primary' isDisabled={isLoading}>Editar</Button>
             )}
             {id_acceso && !disabledFom && (
                 <Button onPress={actualizar_acceso} style={{ marginTop: '20px' }} color='primary' isLoading={isLoading}>Guardar Cambios</Button>
@@ -600,6 +632,57 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                                     onChange={(event) => handleChange('motivo', event.target.value)}
                                     isInvalid={!!errors.motivo}
                                     errorMessage={errors.motivo}
+                                />
+                            </Grid>
+
+                            <Grid item xs={12} sm={6} md={6}>
+                                <RadioGroup
+                                    label="¿Ingresa con equipo/mercancía?"
+                                    orientation="horizontal"
+                                    className="mb-3"
+                                    value={selectedMI}
+                                    onValueChange={setSelectedMI}
+                                    isDisabled={disabledFom}
+                                    isInvalid={!!errors.selectedMI}
+                                    errorMessage={errors.selectedMI}>
+                                    <Radio value="si">Sí</Radio>
+                                    <Radio value="no">No</Radio>
+                                </RadioGroup>
+                                <Textarea
+                                    label="Descripción"
+                                    placeholder="Ingresar descripción"
+                                    variant="bordered"
+                                    value={formData?.mercancia_ingresada}
+                                    onChange={(event) => handleChange('mercancia_ingresada', event.target.value)}
+                                    isDisabled={disabledFom}
+                                    isInvalid={!!errors.mercancia_ingresada}
+                                    errorMessage={errors.mercancia_ingresada}
+                                />
+                            </Grid>
+
+                            <Grid item xs={12} sm={6} md={6}>
+                                <RadioGroup
+                                    label="¿Sale con equipo/mercancía?"
+                                    orientation="horizontal"
+                                    className="mb-3"
+                                    value={selectedME}
+                                    onValueChange={setSelectedME}
+                                    isDisabled={disabledFom}
+                                    isInvalid={!!errors.selectedME}
+                                    errorMessage={errors.selectedME}
+                                >
+                                    <Radio value="si">Sí</Radio>
+                                    <Radio value="no">No</Radio>
+                                </RadioGroup>
+                                <Textarea
+                                    label="Descripción"
+                                    placeholder="Ingresar descripción"
+                                    variant="bordered"
+                                    value={formData?.mercancia_egresada}
+                                    onChange={(event) => handleChange('mercancia_egresada', event.target.value)}
+                                    isDisabled={disabledFom}
+                                    isInvalid={!!errors.mercancia_egresada}
+                                    errorMessage={errors.mercancia_egresada}
                                 />
                             </Grid>
 
