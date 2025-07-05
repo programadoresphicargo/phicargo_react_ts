@@ -284,6 +284,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                 toast.error('Error al enviar los datos:' + error);
             }
         } else {
+            toast.error('Faltan campos obligatorios.');
             setErrors(validationErrors);
         }
     };
@@ -323,6 +324,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                 toast.error('Error en la conexión o al procesar los datos. ' + error);
             }
         } else {
+            toast.error('Faltan campos obligatorios2.');
             setErrors(validationErrors);
         }
     };
@@ -637,7 +639,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
 
                             <Grid item xs={12} sm={6} md={6}>
                                 <RadioGroup
-                                    label="¿Ingresa con equipo/mercancía?"
+                                    label="¿Ingresa con equipo/mercancía/material?"
                                     orientation="horizontal"
                                     className="mb-3"
                                     value={selectedMI}
@@ -662,7 +664,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
 
                             <Grid item xs={12} sm={6} md={6}>
                                 <RadioGroup
-                                    label="¿Sale con equipo/mercancía?"
+                                    label="¿Sale con equipo/mercancía/material?"
                                     orientation="horizontal"
                                     className="mb-3"
                                     value={selectedME}
