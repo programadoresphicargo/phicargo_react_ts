@@ -22,6 +22,11 @@ const pages: MenuItemType[] = [
     requiredPermissions: [],
   },
   {
+    name: 'Sucursal actual',
+    path: '/disponibilidad/sucursal_actual',
+    requiredPermissions: [],
+  },
+  {
     name: 'Resumen Unidades',
     path: '/disponibilidad/resumen-unidades',
     requiredPermissions: [RESUMENES_PERMISSION],

@@ -33,7 +33,9 @@ const FleetPage = lazy(
 const Contactos = lazy(
   () => import('@/phicargo/inventarioti/celulares/celulares'),
 );
-
+const SucursalActual = lazy(
+  () => import('@/phicargo/reportes/sucursal_actual/sucursal'),
+);
 const permission = 200;
 const EDITION_PERMISSION = 208;
 const RESUMENES_PERMISSION = 220;
@@ -128,6 +130,14 @@ const AvailabilityRoutes = () => {
         element={
           <Suspense fallback={<LoadingPage />}>
             <Contactos />
+          </Suspense>
+        }
+      />
+      <Route
+        path="sucursal_actual"
+        element={
+          <Suspense fallback={<LoadingPage />}>
+            <SucursalActual></SucursalActual>
           </Suspense>
         }
       />
