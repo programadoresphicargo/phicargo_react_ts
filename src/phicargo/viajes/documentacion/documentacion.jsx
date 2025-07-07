@@ -18,6 +18,8 @@ import { toast } from 'react-toastify';
 import { InputNumber } from "rsuite";
 import { now, getLocalTimeZone } from "@internationalized/date";
 import FormularioCorte from "./corte_estadias";
+import OneDriveViewer from "./viewer";
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
 const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
@@ -31,6 +33,7 @@ const Documentacion = ({ }) => {
 
   const [data, setData] = useState([]);
   const [isLoading2, setLoading] = useState();
+  const [idOnedrive, setOnedrive] = useState('');
 
   const fetchData = async () => {
     try {
@@ -95,6 +98,18 @@ const Documentacion = ({ }) => {
           </Button>
         ),
       },
+      {
+        accessorKey: 'visualizar',
+        header: 'Visualizar',
+        Cell: ({ row }) => (
+          <Button
+            color='danger'
+            onPress={() => handleClickOpenV(row.original.id_onedrive)}
+          >
+            Visualizar
+          </Button>
+        ),
+      },
     ],
     [],
   );
@@ -109,7 +124,9 @@ const Documentacion = ({ }) => {
     enableColumnPinning: true,
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
+    localization: MRT_Localization_ES,
     initialState: {
+      showColumnFilters: true,
       density: 'compact',
       pagination: { pageSize: 80 },
     },
@@ -234,6 +251,16 @@ const Documentacion = ({ }) => {
     setOpenCorte(false);
   };
 
+  const [openV, setOpenV] = React.useState(false);
+
+  const handleClickOpenV = async (id_onedrive) => {
+    setOnedrive(id_onedrive);
+    setOpenV(true);
+  };
+
+  const handleCloseV = () => {
+    setOpenV(false);
+  };
   return (
     <>
       <div className='card p-2 rounded'>
@@ -254,6 +281,10 @@ const Documentacion = ({ }) => {
           <FormularioDocumentacion onClose={handleClose}></FormularioDocumentacion>
         </DialogContent>
       </Dialog>
+
+      <OneDriveViewer
+        open={openV} onClose={handleCloseV} id_onedrive={idOnedrive}>
+      </OneDriveViewer>
 
       <FormularioCorte opened={openCorte} onClose={handleCloseCorte}></FormularioCorte>
     </>
