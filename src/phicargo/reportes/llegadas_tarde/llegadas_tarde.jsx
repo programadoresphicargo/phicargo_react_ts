@@ -72,7 +72,7 @@ const DetencionesTable = () => {
         const valor = cell.getValue() || '';
         var clase;
 
-        if (valor === 'Llegó tarde') {
+        if (valor === 'Salio tarde') {
           clase = 'danger';
         } else if (valor === 'Va tarde') {
           clase = 'warning';
