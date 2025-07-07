@@ -650,16 +650,18 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                                     <Radio value="si">Sí</Radio>
                                     <Radio value="no">No</Radio>
                                 </RadioGroup>
-                                <Textarea
-                                    label="Descripción"
-                                    placeholder="Ingresar descripción"
-                                    variant="bordered"
-                                    value={formData?.mercancia_ingresada}
-                                    onChange={(event) => handleChange('mercancia_ingresada', event.target.value)}
-                                    isDisabled={disabledFom}
-                                    isInvalid={!!errors.mercancia_ingresada}
-                                    errorMessage={errors.mercancia_ingresada}
-                                />
+                                {selectedMI == 'si' && (
+                                    <Textarea
+                                        label="Descripción"
+                                        placeholder="Ingresar descripción"
+                                        variant="bordered"
+                                        value={formData?.mercancia_ingresada}
+                                        onChange={(event) => handleChange('mercancia_ingresada', event.target.value)}
+                                        isDisabled={disabledFom}
+                                        isInvalid={!!errors.mercancia_ingresada}
+                                        errorMessage={errors.mercancia_ingresada}
+                                    />
+                                )}
                             </Grid>
 
                             <Grid item xs={12} sm={6} md={6}>
@@ -676,16 +678,18 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                                     <Radio value="si">Sí</Radio>
                                     <Radio value="no">No</Radio>
                                 </RadioGroup>
-                                <Textarea
-                                    label="Descripción"
-                                    placeholder="Ingresar descripción"
-                                    variant="bordered"
-                                    value={formData?.mercancia_egresada}
-                                    onChange={(event) => handleChange('mercancia_egresada', event.target.value)}
-                                    isDisabled={disabledFom}
-                                    isInvalid={!!errors.mercancia_egresada}
-                                    errorMessage={errors.mercancia_egresada}
-                                />
+                                {selectedME == 'si' && (
+                                    <Textarea
+                                        label="Descripción"
+                                        placeholder="Ingresar descripción"
+                                        variant="bordered"
+                                        value={formData?.mercancia_egresada}
+                                        onChange={(event) => handleChange('mercancia_egresada', event.target.value)}
+                                        isDisabled={disabledFom}
+                                        isInvalid={!!errors.mercancia_egresada}
+                                        errorMessage={errors.mercancia_egresada}
+                                    />
+                                )}
                             </Grid>
 
                         </Grid>
