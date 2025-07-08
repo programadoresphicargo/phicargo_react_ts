@@ -51,7 +51,7 @@ const Validador = ({ id_acceso, estado_acceso, open, handleClose }) => {
             var baseUrl = '';
             if (estado_acceso == 'espera' || estado_acceso == 'autorizado') {
                 baseUrl = '/accesos/validar_acceso/';
-            } else if (estado_acceso == 'validado') {
+            } else if (estado_acceso == 'validado' || estado_acceso == 'rechazado') {
                 baseUrl = '/accesos/archivar_acceso/';
             }
             const response = await odooApi.get(baseUrl + id_acceso + '/' + id_usuario);

@@ -48,6 +48,7 @@ import { DatePicker } from "@heroui/react";
 import { parseDate, parseDateTime, getLocalTimeZone } from "@internationalized/date";
 import { Alert } from "@heroui/react";
 import { RadioGroup, Radio } from "@heroui/react";
+import Swal from 'sweetalert2';
 
 const AccesoForm = ({ id_acceso, onClose }) => {
 
@@ -330,21 +331,35 @@ const AccesoForm = ({ id_acceso, onClose }) => {
     };
 
     const autorizar_acceso = async (e) => {
-        try {
-            setIsLoading(true);
-            const response = await odooApi.patch('/accesos/autorizar/' + id_acceso);
-            if (response.data.status === "success") {
-                toast.success(response.data.message);
-                onClose();
-            } else {
-                toast.error("Error al actualizar los datos.");
+        Swal.fire({
+            title: '¿Qué deseas hacer con esta solicitud?',
+            text: "Puedes autorizar o rechazar el acceso.",
+            icon: 'question',
+            showDenyButton: true,
+            confirmButtonText: 'Autorizar',
+            denyButtonText: 'Rechazar',
+        }).then(async (result) => {
+            if (!result.isConfirmed && !result.isDenied) return;
+
+            const nuevo_estado = result.isConfirmed ? 'autorizado' : 'rechazado';
+
+            try {
+                setIsLoading(true);
+                const response = await odooApi.patch(`/accesos/estado/${id_acceso}/${nuevo_estado}`);
+
+                if (response.data.status === "success") {
+                    toast.success(response.data.message);
+                    onClose();
+                } else {
+                    toast.error("Error al actualizar los datos.");
+                }
+            } catch (error) {
+                console.error('Error en la petición', error);
+                toast.error('Error en la conexión o al procesar los datos. ' + error);
+            } finally {
+                setIsLoading(false);
             }
-            setIsLoading(false);
-        } catch (error) {
-            setIsLoading(false);
-            console.error('Error en la petición', error);
-            toast.error('Error en la conexión o al procesar los datos. ' + error);
-        }
+        });
     };
 
     const [OpenValidador, setOpenValidador] = React.useState(false);
@@ -415,13 +430,13 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                 </Typography>
             )}
             {!id_acceso && (
-                <Button onPress={registrar_acceso} style={{ marginTop: '20px' }} color='primary' isLoading={isLoading}>Registrar</Button>
+                <Button onPress={registrar_acceso} style={{ marginTop: '20px' }} color='primary' isLoading={isLoading}><i class="bi bi-floppy"></i> Registrar</Button>
             )}
             {formData.estado_acceso !== 'archivado' && disabledFom && id_acceso && (
-                <Button onPress={EditarForm} style={{ marginTop: '20px' }} color='primary' isDisabled={isLoading}>Editar</Button>
+                <Button onPress={EditarForm} style={{ marginTop: '20px' }} color='primary' isDisabled={isLoading}><i class="bi bi-pen"></i> Editar</Button>
             )}
             {id_acceso && !disabledFom && (
-                <Button onPress={actualizar_acceso} style={{ marginTop: '20px' }} color='primary' isLoading={isLoading}>Guardar Cambios</Button>
+                <Button onPress={actualizar_acceso} style={{ marginTop: '20px' }} isLoading={isLoading} color="success" className="text-white"><i class="bi bi-floppy2-fill"></i> Guardar Cambios</Button>
             )}
             {(formData.estado_acceso === 'espera' || formData.estado_acceso === 'autorizado') && (
                 <Button
@@ -433,16 +448,29 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                 </Button>
             )}
             {session?.user?.permissions?.includes(510) && id_acceso && formData.estado_acceso === 'espera' && (
-                <Button onPress={autorizar_acceso} style={{ marginTop: '20px' }} color='danger'>Autorizar {formData.tipo_movimiento}</Button>
+                <Button onPress={autorizar_acceso} style={{ marginTop: '20px' }} color='danger' isDisabled={formData.autorizado_por_id ? true : false}>Autorizar {formData.tipo_movimiento}</Button>
             )}
-            {formData.estado_acceso == 'validado' && (
-                <Button onPress={handleClickOpenValidador} style={{ marginTop: '20px' }} color='primary'>Archivar / Finalizar acceso</Button>
+            {(formData.estado_acceso == 'validado' || formData.estado_acceso == 'rechazado') && (
+                < Button onPress={handleClickOpenValidador} style={{ marginTop: '20px' }} color='primary'><i class="bi bi-folder-plus"></i> Archivar / Finalizar acceso</Button>
             )}
         </Stack >
         <Grid container spacing={2} style={{ padding: '20px' }}>
             <Grid item xs={12} sm={4} md={8}>
 
-                {(formData.id_empresa === 1 || [1, 5].includes(formData.id_empresa_visitada)) && (
+                {(formData.rechazado_por_id) && (
+                    <>
+                        <div className="w-full flex items-center mb-3">
+                            <Alert
+                                color="danger"
+                                title={`Registro rechazado, prohibir ${formData.tipo_movimiento}.`}
+                                description={`Rechazado por ${formData.usuario_rechazo}.`}
+                                variant="solid"
+                            />
+                        </div>
+                    </>
+                )}
+
+                {((formData.id_empresa === 1 || [1, 5].includes(formData.id_empresa_visitada)) && formData.estado_acceso == 'borrador') && (
                     <>
                         <div className="w-full flex items-center mb-3">
                             <Alert
@@ -824,6 +852,32 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                                             Archivado por
                                         </Typography>
                                         <Typography sx={{ m: 'auto 0', fontFamily: 'Inter' }}>{formData.usuario_archivo}</Typography>
+                                    </TimelineContent>
+                                </TimelineItem>
+                            )}
+
+                            {formData.usuario_rechazo && (
+                                <TimelineItem>
+                                    <TimelineOppositeContent
+                                        sx={{ m: 'auto 0', fontFamily: 'Inter' }}
+                                        align="right"
+                                        variant="body2"
+                                        color="text.secondary"
+                                    >
+                                        {formData.fecha_rechazado}
+                                    </TimelineOppositeContent>
+                                    <TimelineSeparator>
+                                        <TimelineConnector />
+                                        <TimelineDot color="secondary">
+                                            <ClockIcon />
+                                        </TimelineDot>
+                                        <TimelineConnector />
+                                    </TimelineSeparator>
+                                    <TimelineContent sx={{ py: '12px', px: 2 }}>
+                                        <Typography variant="h6" component="span" sx={{ m: 'auto 0', fontFamily: 'Inter' }}>
+                                            Rechazado por
+                                        </Typography>
+                                        <Typography sx={{ m: 'auto 0', fontFamily: 'Inter' }}>{formData.usuario_rechazo}</Typography>
                                     </TimelineContent>
                                 </TimelineItem>
                             )}

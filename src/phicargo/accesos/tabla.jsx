@@ -154,8 +154,12 @@ const TablaAccesos = ({ title, tipo }) => {
             badgeClass = 'warning';
           } else if (tipoMovimiento === 'validado') {
             badgeClass = 'success';
-          } else {
+          } else if (tipoMovimiento === 'autorizado') {
             badgeClass = 'primary';
+          } else if (tipoMovimiento === 'rechazado') {
+            badgeClass = 'danger';
+          } else {
+            badgeClass = 'secondary';
           }
 
           const displayText = tipoMovimiento === 'espera' ? 'En espera de validación' : tipoMovimiento;
@@ -254,7 +258,7 @@ const TablaAccesos = ({ title, tipo }) => {
             NuevoAcceso()
           }
         >
-          Nuevo registro
+          <i class="bi bi-plus-lg"></i> Nuevo registro
         </Button>
         <Button
           color='success'
