@@ -7,7 +7,6 @@ import {
 import { Button, Select, SelectItem } from "@heroui/react";
 import { Card, CardBody, CardFooter, CardHeader, Divider, Image, Link } from "@heroui/react";
 import React, { useContext, useEffect, useState } from 'react';
-
 import { AccesoContext } from './context';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Box } from '@mui/material';
@@ -470,7 +469,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                     </>
                 )}
 
-                {((formData.id_empresa === 1 || [1, 5].includes(formData.id_empresa_visitada)) && formData.estado_acceso == 'borrador') && (
+                {((formData.id_empresa === 1 || [1, 5].includes(formData.id_empresa_visitada))) && (
                     <>
                         <div className="w-full flex items-center mb-3">
                             <Alert
