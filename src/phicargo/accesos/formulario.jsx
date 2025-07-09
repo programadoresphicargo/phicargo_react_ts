@@ -9,7 +9,7 @@ import { Card, CardBody, CardFooter, CardHeader, Divider, Image, Link } from "@h
 import React, { useContext, useEffect, useState } from 'react';
 import { AccesoContext } from './context';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { Box } from '@mui/material';
+import { Box, CardContent } from '@mui/material';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import Checkbox from '@mui/material/Checkbox';
@@ -48,6 +48,7 @@ import { parseDate, parseDateTime, getLocalTimeZone } from "@internationalized/d
 import { Alert } from "@heroui/react";
 import { RadioGroup, Radio } from "@heroui/react";
 import Swal from 'sweetalert2';
+import AppCamara from "./archivos";
 
 const AccesoForm = ({ id_acceso, onClose }) => {
 
@@ -894,6 +895,16 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                     <Divider />
                     <CardFooter>
                     </CardFooter>
+                </Card>
+
+                <Card className="mt-2">
+                    <CardHeader>
+                        Añadir evidencias
+                    </CardHeader>
+                    <Divider></Divider>
+                    <CardContent>
+                        <AppCamara></AppCamara>
+                    </CardContent>
                 </Card>
             </Grid>
         </Grid >
