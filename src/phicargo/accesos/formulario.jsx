@@ -67,7 +67,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
         setEmpresas(false);
     };
 
-    const { ActualizarIDAacceso, selectVehiculos, vehiculosAñadidos, vehiculosEliminados, empresas, formData, setFormData, addedVisitors, selectedVisitantes, setSelectedVisitantes, removedVisitors, disabledFom, setFormOptions } = useContext(AccesoContext);
+    const { ActualizarIDAacceso, selectVehiculos, vehiculosAñadidos, vehiculosEliminados, empresas, formData, setFormData, addedVisitors, selectedVisitantes, setSelectedVisitantes, removedVisitors, disabledFom, setFormOptions, fileList, setFileList } = useContext(AccesoContext);
 
     const EditarForm = () => {
         setFormOptions(false);
@@ -312,6 +312,12 @@ const AccesoForm = ({ id_acceso, onClose }) => {
             };
 
             formDataToSend.append("payload", JSON.stringify(payload));
+
+            fileList.forEach((file) => {
+                if (file.originFileObj) {
+                    formDataToSend.append("files", file.originFileObj);
+                }
+            });
 
             try {
                 setIsLoading(true);
@@ -896,16 +902,17 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                     <CardFooter>
                     </CardFooter>
                 </Card>
-
-                <Card className="mt-2">
-                    <CardHeader>
-                        Añadir evidencias
-                    </CardHeader>
-                    <Divider></Divider>
-                    <CardContent>
-                        <AppCamara></AppCamara>
-                    </CardContent>
-                </Card>
+                {id_acceso && (
+                    <Card className="mt-2">
+                        <CardHeader>
+                            Añadir evidencias
+                        </CardHeader>
+                        <Divider></Divider>
+                        <CardContent>
+                            <AppCamara></AppCamara>
+                        </CardContent>
+                    </Card>
+                )}
             </Grid>
         </Grid >
         <ListadoEmpresas open={openEmpresas} handleClose={cerrarEmpresas}></ListadoEmpresas>

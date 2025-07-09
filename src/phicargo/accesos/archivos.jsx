@@ -1,87 +1,94 @@
-import React, { useState } from 'react';
-import { Upload, Image, message } from 'antd';
-
-const getBase64 = file =>
-    new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
-    });
+import React, { useCallback, useState, useContext } from 'react';
+import { useDropzone } from 'react-dropzone';
+import { AccesoContext } from './context';
+import Viewer from './viewer';
 
 const AppCamara = () => {
+    const { fileList, setFileList, disabledFom, id_acceso } = useContext(AccesoContext);
+    const [previewImage, setPreviewImage] = useState(null);
     const [previewOpen, setPreviewOpen] = useState(false);
-    const [previewImage, setPreviewImage] = useState('');
-    const [fileList, setFileList] = useState([]);
 
-    const handlePreview = async (file) => {
-        if (!file.url && !file.preview) {
-            file.preview = await getBase64(file.originFileObj);
-        }
-        setPreviewImage(file.url || file.preview);
+    const onDrop = useCallback((acceptedFiles) => {
+        if (disabledFom) return; // 🚫 No permitir si está deshabilitado
+
+        const newFiles = acceptedFiles.map(file => {
+            const url = URL.createObjectURL(file);
+            return {
+                uid: String(Date.now()),
+                name: file.name,
+                status: 'done',
+                originFileObj: file,
+                url,
+            };
+        });
+        setFileList(prev => [...prev, ...newFiles]);
+    }, [disabledFom, setFileList]);
+
+    const { getRootProps, getInputProps } = useDropzone({
+        accept: { 'image/*': [] },
+        capture: 'environment',
+        multiple: false,
+        onDrop,
+        disabled: disabledFom // 🛑 Bloquea la interacción
+    });
+
+    const handlePreview = (file) => {
+        setPreviewImage(file.url);
         setPreviewOpen(true);
     };
 
-    const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
-
     return (
-        <>
-            <Upload
-                action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
-                listType="picture-card"
-                fileList={fileList}
-                onPreview={handlePreview}
-                onChange={handleChange}
-                beforeUpload={(file) => {
-                    const isImage = file.type.startsWith('image/');
-                    if (!isImage) {
-                        message.error('¡Solo se permiten imágenes!');
-                    }
-                    return isImage || Upload.LIST_IGNORE;
+        <div>
+            <div
+                {...getRootProps()}
+                style={{
+                    border: '2px dashed #999',
+                    padding: 20,
+                    textAlign: 'center',
+                    borderRadius: 10,
+                    background: disabledFom ? '#eee' : '#fafafa',
+                    cursor: disabledFom ? 'not-allowed' : 'pointer',
+                    opacity: disabledFom ? 0.6 : 1
                 }}
             >
-                {fileList.length >= 8 ? null : (
-                    <label style={{ cursor: 'pointer' }}>
-                        <input
-                            type="file"
-                            accept="image/*"
-                            capture="environment"
-                            style={{ display: 'none' }}
-                            onChange={(e) => {
-                                const file = e.target.files[0];
-                                if (file) {
-                                    setFileList([...fileList, {
-                                        uid: String(Date.now()),
-                                        name: file.name,
-                                        status: 'done',
-                                        originFileObj: file,
-                                        url: URL.createObjectURL(file),
-                                    }]);
-                                }
+                <input {...getInputProps()} />
+                <p>{disabledFom ? 'Carga deshabilitada' : 'Haz clic o usa la cámara'}</p>
+            </div>
 
-                                // 🔧 Esto evita que se dispare automáticamente después
-                                e.target.value = null;
-                            }}
+            <div style={{ marginTop: 16, display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                {fileList.map((file, idx) => (
+                    <div key={idx} onClick={() => handlePreview(file)} style={{ cursor: 'pointer' }}>
+                        <img
+                            src={file.url}
+                            alt={file.name}
+                            style={{ width: 100, height: 100, objectFit: 'cover', borderRadius: 8 }}
                         />
-                        <div style={{ textAlign: 'center' }}>
-                            <div>Usar cámara</div>
-                        </div>
-                    </label>
-                )}
-            </Upload>
+                    </div>
+                ))}
+            </div>
 
-            {previewImage && (
-                <Image
-                    wrapperStyle={{ display: 'none' }}
-                    preview={{
-                        visible: previewOpen,
-                        onVisibleChange: visible => setPreviewOpen(visible),
-                        afterOpenChange: visible => !visible && setPreviewImage(''),
+            {previewOpen && previewImage && (
+                <div
+                    style={{
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        width: '100vw',
+                        height: '100vh',
+                        background: 'rgba(0, 0, 0, 0.8)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        zIndex: 9999,
                     }}
-                    src={previewImage}
-                />
+                    onClick={() => setPreviewOpen(false)}
+                >
+                    <img src={previewImage} alt="preview" style={{ maxWidth: '90%', maxHeight: '90%' }} />
+                </div>
             )}
-        </>
+
+            <Viewer id={id_acceso} tabla={'prueba'}></Viewer>
+        </div>
     );
 };
 

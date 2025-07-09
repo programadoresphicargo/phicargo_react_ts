@@ -10,7 +10,7 @@ const AccesoCompo = ({ children }) => {
     const { session } = useAuthContext();
     const [id_acceso, setAcceso] = useState(null);
     const [disabledFom, setFormOptions] = useState(false);
-
+    const [fileList, setFileList] = useState([]);
     const [empresas, setEmpresas] = useState([]);
 
     const obtenerFechaLocal = () => {
@@ -174,7 +174,8 @@ const AccesoCompo = ({ children }) => {
             selectedVisitantes, setSelectedVisitantes,
             addedVisitors, setAddedVisitors,
             removedVisitors, setRemovedVisitors,
-            setFormData, empresas, setEmpresas, ActualizarIDAacceso, selectVehiculos, AñadirVehiculo, EliminarVehiculo, vehiculosAñadidos, vehiculosEliminados
+            setFormData, empresas, setEmpresas, ActualizarIDAacceso, selectVehiculos, AñadirVehiculo, EliminarVehiculo, vehiculosAñadidos, vehiculosEliminados,
+            fileList, setFileList
         }}>
             {children}
         </AccesoContext.Provider>
