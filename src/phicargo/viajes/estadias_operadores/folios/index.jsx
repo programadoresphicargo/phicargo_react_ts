@@ -243,7 +243,7 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
                 <DialogContent>
                     <Stack spacing={1} direction="row">
 
-                        {datapago == "" || datapago == null && (
+                        {(datapago == "" || datapago == null) && (
                             <Button color="primary" onPress={registrar_pago_estadia} isLoading={isLoadingRegistro}>
                                 Registrar pago
                             </Button>
