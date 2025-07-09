@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Button } from "@heroui/react";
+import { Button, CardHeader } from "@heroui/react";
 import Autocomplete from '@mui/material/Autocomplete';
 import { Card, CardBody } from "@heroui/react";
 import Dialog from '@mui/material/Dialog';
@@ -32,15 +32,29 @@ const ModuloVehiculo = ({ disabled }) => {
 
     return (<>
         <Card>
-            <CardBody>
-
-                <Grid container spacing={2}>
-                    <Grid item xs={12} sm={6} md={4}>
-                        <Button color="danger" size='lg' onClick={handleClickOpenFormVehiculo} isDisabled={disabled}>
-                            Añadir vehiculo
+            <CardHeader
+                style={{
+                    background: 'linear-gradient(90deg, #0b2149, #002887)',
+                    color: 'white',
+                    fontWeight: 'bold',
+                }}
+            >
+                <Grid container alignItems="center" justifyContent="space-between">
+                    <Grid item>
+                        <h1>Vehículos visitantes</h1>
+                    </Grid>
+                    <Grid item>
+                        <Button
+                            color="primary"
+                            onPress={handleClickOpenFormVehiculo}
+                            isDisabled={disabled}
+                        >
+                            Añadir vehículo
                         </Button>
                     </Grid>
                 </Grid>
+            </CardHeader>
+            <CardBody>
 
                 <Grid item xs={12} sm={12} md={12} className='mt-2'>
                     <Table aria-label="Example static collection table" isStriped>

@@ -506,7 +506,11 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                 )}
 
                 <Card className='mb-3'>
-                    <CardHeader className="flex gap-3">
+                    <CardHeader style={{
+                        background: 'linear-gradient(90deg, #0b2149, #002887)',
+                        color: 'white',
+                        fontWeight: 'bold'
+                    }}>
                         <div className="flex flex-col">
                             <p className="text-md">Datos del acceso</p>
                         </div>
@@ -746,7 +750,11 @@ const AccesoForm = ({ id_acceso, onClose }) => {
 
             <Grid item xs={12} sm={6} md={4}>
                 <Card>
-                    <CardHeader className="flex gap-3">
+                    <CardHeader style={{
+                        background: 'linear-gradient(90deg, #0b2149, #002887)',
+                        color: 'white',
+                        fontWeight: 'bold'
+                    }}>
                         <div className="flex flex-col">
                             <p className="text-md">Historial de cambios</p>
                         </div>
@@ -904,7 +912,11 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                 </Card>
                 {id_acceso && (
                     <Card className="mt-2">
-                        <CardHeader>
+                        <CardHeader style={{
+                            background: 'linear-gradient(90deg, #0b2149, #002887)',
+                            color: 'white',
+                            fontWeight: 'bold'
+                        }}>
                             Añadir evidencias
                         </CardHeader>
                         <Divider></Divider>
