@@ -384,6 +384,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
 
     const handleCloseValidador = () => {
         setOpenValidador(false);
+        onClose();
     };
 
     const handleSelectionChange = (e) => {
