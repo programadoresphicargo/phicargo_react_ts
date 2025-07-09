@@ -300,22 +300,30 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                 return;
             }
 
-            const dataToSend = {
+            const formDataToSend = new FormData();
+
+            const payload = {
                 data: formData,
                 visitantes_agregados: addedVisitors,
                 visitantes_removidos: removedVisitors,
                 vehiculos_agregados: vehiculosAñadidos,
-                vehiculos_removidos: vehiculosEliminados
+                vehiculos_removidos: vehiculosEliminados,
             };
+
+            formDataToSend.append("payload", JSON.stringify(payload));
 
             try {
                 setIsLoading(true);
-                const response = await odooApi.post('/accesos/actualizar_acceso/' + id_acceso, dataToSend);
+                const response = await odooApi.post(`/accesos/actualizar_acceso/${id_acceso}`, formDataToSend, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                });
                 if (response.data.status === "success") {
                     toast.success(response.data.message);
                     onClose();
                 } else {
-                    toast.error("Error al actualizar los datos.");
+                    toast.error(response.data.message);
                 }
                 setIsLoading(false);
             } catch (error) {
@@ -369,7 +377,6 @@ const AccesoForm = ({ id_acceso, onClose }) => {
 
     const handleCloseValidador = () => {
         setOpenValidador(false);
-        onClose();
     };
 
     const handleSelectionChange = (e) => {

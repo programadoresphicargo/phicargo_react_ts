@@ -11,6 +11,8 @@ import axios from 'axios';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import { useAuthContext } from '@/modules/auth/hooks';
+import LockIcon from '@mui/icons-material/Lock';
+import { Box, Typography, Divider } from '@mui/material';
 
 const Validador = ({ id_acceso, estado_acceso, open, handleClose }) => {
 
@@ -69,20 +71,57 @@ const Validador = ({ id_acceso, estado_acceso, open, handleClose }) => {
         <Dialog
             open={open}
             onClose={handleClose}
-            fullWidth={true}
-            maxWidth={'xs'}
+            fullWidth
+            maxWidth="xs"
+            PaperProps={{
+                sx: {
+                    borderRadius: 4,
+                    p: 2,
+                    boxShadow: 4,
+                },
+            }}
         >
-            <DialogTitle id="alert-dialog-title">
-                {"Ingresa tu PIN"}
-            </DialogTitle>
+            <Box display="flex" alignItems="center" justifyContent="center" mb={1}>
+                <LockIcon color="primary" sx={{ fontSize: 40, mr: 1 }} />
+                <Typography variant="h6" fontWeight="bold">
+                    Verificación de Seguridad
+                </Typography>
+            </Box>
+
+            <Divider sx={{ mb: 2 }} />
+
             <DialogContent>
+                <Typography variant="subtitle1" align="center" mb={2}>
+                    Por favor, ingresa tu PIN de 4 dígitos para continuar.
+                </Typography>
 
-                <InputOtp length={4} value={pin} onValueChange={setPin} size='lg' />
-
+                <Box display="flex" justifyContent="center">
+                    <InputOtp
+                        length={4}
+                        value={pin}
+                        onValueChange={setPin}
+                        size="lg"
+                        autoFocus
+                        inputStyle={{
+                            width: '3rem',
+                            height: '3rem',
+                            fontSize: '1.5rem',
+                            borderRadius: '10px',
+                            border: '1px solid #ccc',
+                            margin: '0 0.5rem',
+                        }}
+                    />
+                </Box>
             </DialogContent>
-            <DialogActions>
-                <Button onPress={handleClose}>Cancelar</Button>
-                <Button autoFocus onPress={validar_pin} color='primary'>
+
+            <DialogActions sx={{ justifyContent: 'space-between', px: 3 }}>
+                <Button onClick={handleClose} color="secondary" variant="outlined">
+                    Cancelar
+                </Button>
+                <Button
+                    onClick={validar_pin}
+                    color="primary"
+                >
                     Validar
                 </Button>
             </DialogActions>
