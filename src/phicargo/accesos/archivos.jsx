@@ -58,6 +58,9 @@ const AppCamara = () => {
                                         url: URL.createObjectURL(file),
                                     }]);
                                 }
+
+                                // 🔧 Esto evita que se dispare automáticamente después
+                                e.target.value = null;
                             }}
                         />
                         <div style={{ textAlign: 'center' }}>
