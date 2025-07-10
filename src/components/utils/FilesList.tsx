@@ -1,7 +1,7 @@
 import { useViewFiles } from '@/modules/core/hooks';
-import { CircularProgress, IconButton, Tooltip, Backdrop } from '@mui/material';
+import { CircularProgress, IconButton, Backdrop } from '@mui/material';
 import { Download, ErrorOutline } from '@mui/icons-material';
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import odooApi from '@/api/odoo-api';
 
 export type FileItem = {
