@@ -31,9 +31,7 @@ const Item = ({ file }: { file: FileItem }) => {
   const [errorImage, setErrorImage] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
-  const extension = file.filename
-    ? file.filename.split('.').pop()?.slice(0, 3).toUpperCase()
-    : '???';
+  //const extension = file.filename ? file.filename.split('.').pop()?.slice(0, 3).toUpperCase() : '???';
   const baseName = file.filename ? file.filename.split('.')[0] : file.idOnedrive;
 
   useEffect(() => {
