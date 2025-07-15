@@ -70,7 +70,6 @@ const Accesos = lazy(() => import('../phicargo/accesos/Accesos'));
 const SolicitudesEPP = lazy(() => import('../phicargo/almacen/solicitud/index_solicitudes_epp'));
 const SolicitudesAmarre = lazy(() => import('../phicargo/almacen/solicitud/index_solicitudes_amarre'));
 const Inventario = lazy(() => import('../phicargo/almacen/inventario/index'));
-const AsigEquipos = lazy(() => import('../phicargo/almacen/solicitud copy/index_solicitudes_epp'));
 const EntregaMonitoreo = lazy(() => import('../phicargo/monitoreo/monitoreo'));
 const CodigosPostales = lazy(() => import('../phicargo/viajes/codigos_postales/index'));
 
@@ -359,15 +358,6 @@ export const PrivateRoutes = () => {
           element={
             <Suspense fallback={<LoadingPage />}>
               <Inventario></Inventario>
-            </Suspense>
-          }
-        />
-
-        <Route
-          path="/asignaciones"
-          element={
-            <Suspense fallback={<LoadingPage />}>
-              <AsigEquipos></AsigEquipos>
             </Suspense>
           }
         />
