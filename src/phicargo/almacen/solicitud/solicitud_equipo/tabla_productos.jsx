@@ -22,32 +22,13 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import NavbarAlmacen from '../Navbar';
-import EPPForm from './form';
-import { useAlmacen } from '../contexto/contexto';
-import { exportToCSV } from '@/phicargo/utils/export';
+import { useAlmacen } from '../../contexto/contexto';
 
-const Inventario = ({ close, tipo }) => {
+const TablaProductosDetalle = ({ close, tipo }) => {
 
   const
-    { data, setData,
-      epp, setEPP,
-      eppAdded, setEPPAdded,
-      eppRemoved, setEPPRemoved,
-      eppUpdated, setEPPUpdated
+    { data, setData, lineasGlobales, setLineasGlobales
     } = useAlmacen();
-
-  const [id_epp, setIDEpp] = React.useState(null);
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-    fetchData();
-  };
 
   const [dataEquipos, setDataEquipo] = useState([]);
   const [isLoading, setLoading] = useState(false);
@@ -55,7 +36,7 @@ const Inventario = ({ close, tipo }) => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await odooApi.get('/tms_travel/inventario_equipo/tipo/' + tipo);
+      const response = await odooApi.get('/tms_travel/inventario_equipo/');
       setDataEquipo(response.data);
       setLoading(false);
     } catch (error) {
@@ -74,7 +55,7 @@ const Inventario = ({ close, tipo }) => {
         header: 'ID',
       },
       {
-        accessorKey: 'nombre',
+        accessorKey: 'x_name',
         header: 'Nombre',
       },
       {
@@ -82,27 +63,8 @@ const Inventario = ({ close, tipo }) => {
         header: 'Fecha creación',
       },
       {
-        accessorKey: 'x_cantidad_actual',
-        header: 'Cantidad actual',
-      },
-      {
         accessorKey: 'x_tipo',
         header: 'Tipo',
-      },
-      {
-        id: 'acciones',
-        header: 'Acciones',
-        Cell: ({ row }) => (
-          <Button
-            size='sm'
-            color='primary'
-            onPress={() => {
-              handleClickOpen();
-              setIDEpp(row.original.id);
-            }}>
-            Editar
-          </Button>
-        ),
       },
     ],
     [],
@@ -155,10 +117,17 @@ const Inventario = ({ close, tipo }) => {
     },
     muiTableBodyRowProps: ({ row }) => ({
       onClick: ({ event }) => {
-        const newItem = { id: Date.now(), isNew: true, ...row.original, x_cantidad_solicitada: 1, x_solicitud_id: data?.id };
-        setEPP(prev => [...prev, newItem]);
-        setEPPAdded(prev => [...eppAdded, newItem]);
-        close();
+        console.log(row.original);
+        const nueva = {
+          id: -Date.now(),
+          x_solicitud_id: data.id,
+          x_producto_id: row.original.id,
+          x_name: row.original.x_name,
+          x_tipo_entrega: 'prestamo',
+          x_cantidad_solicitada: 1,
+          x_cantidad_devuelta: 0,
+        };
+        setLineasGlobales((prev) => [...prev, nueva]);
       },
     }),
     muiTableBodyCellProps: ({ row }) => ({
@@ -180,21 +149,8 @@ const Inventario = ({ close, tipo }) => {
         <h1
           className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
         >
-          Inventario
+          Productos
         </h1>
-
-        <Button
-          className='text-white'
-          startContent={<i class="bi bi-plus-lg"></i>}
-          color='primary'
-          isDisabled={false}
-          onPress={async () => {
-            setIDEpp(null);
-            handleClickOpen();
-          }}
-          size='sm'
-        >Crear
-        </Button>
 
         <Button
           className='text-white'
@@ -202,17 +158,7 @@ const Inventario = ({ close, tipo }) => {
           color='primary'
           isDisabled={false}
           onPress={() => fetchData()}
-          size='sm'
         >Actualizar tablero
-        </Button>
-
-        <Button
-          color='success'
-          className='text-white'
-          startContent={<i class="bi bi-file-earmark-excel"></i>}
-          onPress={() => exportToCSV(dataEquipos, columns, "inventario.csv")}
-          size='sm'>
-          Exportar
         </Button>
 
       </Box >
@@ -224,10 +170,8 @@ const Inventario = ({ close, tipo }) => {
       <MaterialReactTable
         table={table}
       />
-
-      <EPPForm id_epp={id_epp} open={open} handleClose={handleClose}></EPPForm>
     </>
   );
 };
 
-export default Inventario;
+export default TablaProductosDetalle;

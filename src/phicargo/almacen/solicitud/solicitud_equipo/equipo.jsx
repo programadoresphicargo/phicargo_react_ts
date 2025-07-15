@@ -22,22 +22,22 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import EPP from '../../inventario/tabla';
+import EPP from '../../inventario/tabla_productos';
 import { useAlmacen } from '../../contexto/contexto';
+import ReservasDetalle from '../reservas';
+import TablaProductosDetalle from './tabla_productos';
 
 const EPPSolicitados = ({ }) => {
 
   const
     { modoEdicion, setModoEdicion,
+      lineasGlobales, setLineasGlobales,
       data, setData,
-      epp, setEPP,
-      eppAdded, setEPPAdded,
-      eppRemoved, setEPPRemoved,
-      eppUpdated, setEPPUpdated
     } = useAlmacen();
 
   const [id_solicitud, setIDSolicitud] = React.useState(null);
   const [open, setOpen] = React.useState(false);
+  const [linea, setLinea] = React.useState([]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -45,6 +45,18 @@ const EPPSolicitados = ({ }) => {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const [open_reservas, setOpenReservas] = React.useState(false);
+
+  const handleClickOpenReservas = (data) => {
+    setOpenReservas(true);
+    setLinea(data);
+    console.log(data);
+  };
+
+  const handleCloseReservas = () => {
+    setOpenReservas(false);
   };
 
   const columns = useMemo(
@@ -55,9 +67,24 @@ const EPPSolicitados = ({ }) => {
         enableEditing: false,
       },
       {
-        accessorKey: 'nombre',
+        accessorKey: 'x_name',
         header: 'Nombre',
         enableEditing: false,
+      },
+      {
+        accessorKey: 'x_tipo_entrega',
+        header: 'Tipo de entrega',
+        editVariant: 'select',
+        editSelectOptions: ['prestamo', 'asignacion'],
+        muiEditTextFieldProps: {
+          select: true,
+          defaultValue: 'prestamo',
+        },
+        Cell: ({ cell }) => (
+          <span style={{ textTransform: 'capitalize' }}>
+            {cell.getValue()}
+          </span>
+        ),
       },
       {
         accessorKey: 'x_cantidad_solicitada',
@@ -65,29 +92,34 @@ const EPPSolicitados = ({ }) => {
         enableEditing: data?.x_studio_estado === "borrador" ? true : false,
       },
       {
-        accessorKey: 'x_cantidad_devuelta',
-        header: 'Cantidad devuelta',
-        enableEditing: data?.x_studio_estado === "entregado" ? true : false,
-      },
+        accessorKey: 'equipo_asignado',
+        header: 'Equipo asignado',
+        Cell: ({ cell, row }) => {
+          const estado = cell.getValue();
+
+          return (
+            <Button
+              size="sm"
+              color="primary"
+              className="text-white"
+              onPress={() => handleClickOpenReservas(row.original)} // puedes pasar datos de la fila si lo necesitas
+            >
+              {estado || 'Pendiente por asignar'}
+            </Button>
+          );
+        },
+      }
     ],
     [],
   );
 
-  const deleteRow = (id) => {
-    const rowToDelete = epp.find(row => row.id === id);
-    if (!rowToDelete) return;
-
-    setEPP(epp.filter(row => row.id !== id));
-    if (!rowToDelete.isNew) {
-      setEPPRemoved([...eppRemoved, { id: id }])
-    } else {
-      setEPPAdded(eppAdded.filter(row => row.id !== id));
-    }
+  const deleteReserva = (id) => {
+    setLineasGlobales(prev => prev.filter(r => r.id !== id));
   };
 
   const table = useMaterialReactTable({
     columns,
-    data: epp,
+    data: lineasGlobales,
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
@@ -163,7 +195,6 @@ const EPPSolicitados = ({ }) => {
           startContent={<i class="bi bi-plus-lg"></i>}
           color='primary'
           onPress={() => handleClickOpen()}
-          size='sm'
           isDisabled={!modoEdicion}
         >
           Añadir equipo
@@ -172,50 +203,44 @@ const EPPSolicitados = ({ }) => {
       </Box >
     ),
     onEditingRowSave: ({ row, values, exitEditingMode }) => {
-      const updatedData = [...epp];
       const updatedRow = { ...row.original, ...values };
-
       updatedRow.cantidad = parseFloat(updatedRow.cantidad) || 1;
-      updatedData[row.index] = updatedRow;
-      setEPP(updatedData);
 
-      if (updatedRow.isNew) {
-        // Si es nuevo, actualízalo en el array de nuevos
-        setEPPAdded((prev) => {
-          const exists = prev.find((r) => r.tempId === updatedRow.tempId);
-          if (exists) {
-            return prev.map((r) => r.tempId === updatedRow.tempId ? updatedRow : r);
-          } else {
-            return [...prev, updatedRow];
+      setLineasGlobales((prev) => {
+        return prev.map((r) => {
+          // Reemplazar el registro por tempId si es nuevo
+          if (r.isNew && r.tempId === updatedRow.tempId) {
+            return { ...updatedRow };
           }
-        });
-      } else {
-        // Si ya está en BD, márcalo como editado
-        setEPPUpdated((prev) => {
-          const exists = prev.find((r) => r.id === updatedRow.id);
-          if (exists) {
-            return prev.map((r) => r.id === updatedRow.id ? updatedRow : r);
-          } else {
-            return [...prev, updatedRow];
+
+          // Reemplazar el registro por ID si ya existe
+          if (!r.isNew && r.id === updatedRow.id) {
+            return { ...updatedRow };
           }
+
+          // Si no coincide, devolver sin cambios
+          return r;
         });
-      }
+      });
 
       exitEditingMode();
       toast.success('Registro actualizado');
     },
     renderRowActions: ({ row, table }) => (
-      <Box sx={{ display: 'flex', gap: '8px' }}>
-        <Button
-          color="primary"
-          size="sm"
-          className='text-white'
-          isDisabled={data?.x_studio_estado == "entregado" || modoEdicion ? false : true}
-          onPress={() => table.setEditingRow(row)}
-        >
-          Editar
-        </Button>
-      </Box>
+      <>
+        <Box sx={{ display: 'flex', gap: '8px' }}>
+          <Button
+            color="primary"
+            size="sm"
+            className='text-white'
+            isDisabled={data?.x_studio_estado == "entregado" || modoEdicion ? false : true}
+            onPress={() => table.setEditingRow(row)}
+          >
+            Editar
+          </Button>
+          <Button onPress={() => deleteReserva(row.original.id)} color='danger' size='sm' isDisabled={data?.x_studio_estado == "entregado" || modoEdicion ? false : true}>Eliminar</Button>
+        </Box>
+      </>
     ),
   });
 
@@ -229,13 +254,15 @@ const EPPSolicitados = ({ }) => {
         <DialogTitle></DialogTitle>
         <DialogContent>
           <DialogContentText>
-            <EPP close={handleClose} tipo={data?.x_tipo}></EPP>
+            <TablaProductosDetalle></TablaProductosDetalle>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onPress={handleClose}>Cancelar</Button>
         </DialogActions>
       </Dialog>
+
+      <ReservasDetalle open={open_reservas} handleClose={handleCloseReservas} data={linea || []}></ReservasDetalle>
 
     </>
   );

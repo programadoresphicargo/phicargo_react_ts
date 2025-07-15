@@ -7,25 +7,20 @@ export const AlmacenProvider = ({ children }) => {
     const [data, setData] = useState({
         id: 0,
         x_waybill_id: 0,
-        x_tipo: "",
     });
     const [modoEdicion, setModoEdicion] = useState(false);
-    const [epp, setEPP] = useState([]);
-    const [eppUpdated, setEPPUpdated] = useState([]);
-    const [eppAdded, setEPPAdded] = useState([]);
-    const [eppRemoved, setEPPRemoved] = useState([]);
+    const [lineasGlobales, setLineasGlobales] = useState([]);
     const [isDisabled, setDisabled] = useState(false);
+    const [reservasGlobales, setReservasGlobales] = useState([]);
 
     return (
         <AlmacenContext.Provider
             value={{
                 modoEdicion, setModoEdicion,
                 data, setData,
-                epp, setEPP,
-                eppUpdated, setEPPUpdated,
-                eppAdded, setEPPAdded,
-                eppRemoved, setEPPRemoved,
-                isDisabled, setDisabled
+                lineasGlobales, setLineasGlobales,
+                reservasGlobales, setReservasGlobales,
+                isDisabled, setDisabled,
             }}>
             {children}
         </AlmacenContext.Provider>

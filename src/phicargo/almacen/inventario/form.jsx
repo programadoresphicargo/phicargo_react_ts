@@ -9,144 +9,107 @@ import DialogTitle from '@mui/material/DialogTitle';
 import odooApi from '@/api/odoo-api';
 import toast from 'react-hot-toast';
 import { Select, SelectItem } from "@heroui/react";
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import CloseIcon from '@mui/icons-material/Close';
+import Slide from '@mui/material/Slide';
+import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
+import UnidadesProductos from "./unidades/tabla_unidades_productos";
+import FormProducto from "./form_producto";
 
-const EPPForm = ({ id_epp, open, handleClose, onSaveSuccess }) => {
-    const [data, setData] = useState({
-        x_name: '',
-        x_cantidad_actual: 0,
-        x_tipo: ''
-    });
-    const [isLoading, setLoading] = useState(false);
-    const [isSaving, setSaving] = useState(false);
+const IndexProducto = ({ id_producto, open, handleClose, onSaveSuccess }) => {
 
-    const requiredFields = ['x_name', 'x_cantidad_actual', 'x_tipo'];
+    const [value, setValue] = React.useState('1');
 
-    const validate = (data) => {
-        const errors = {};
-        requiredFields.forEach(field => {
-            if (
-                data[field] === null ||
-                data[field] === undefined ||
-                data[field] === '' ||
-                (typeof data[field] === 'number' && isNaN(data[field]))
-            ) {
-                errors[field] = 'Este campo es obligatorio';
-            }
-        });
-        return errors;
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
     };
+
+    const [data, setData] = useState([]);
+    const [isLoading, setLoading] = useState(false);
 
     const fetchData = async () => {
-        if (!id_epp) return;
         try {
             setLoading(true);
-            const response = await odooApi.get(`/tms_travel/inventario_equipo/id/${id_epp}`);
+            const response = await odooApi.get(`/tms_travel/inventario_equipo/id/${id_producto}`);
+            console.log(response.data)
             setData(response.data);
+            setLoading(false);
         } catch (error) {
             console.error('Error al obtener los datos:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const handleSave = async () => {
-        const errors = validate(data);
-        if (Object.keys(errors).length > 0) {
-            toast.error('Por favor completa todos los campos obligatorios.');
-            return;
-        }
-
-        setSaving(true);
-        try {
-            if (!data.x_name || data.x_cantidad_actual < 0 || !data.x_tipo) {
-                toast.error("Por favor completa todos los campos correctamente.");
-                setSaving(false);
-                return;
-            }
-
-            let response;
-            if (id_epp === null) {
-                response = await odooApi.post('/tms_travel/inventario_equipo/', data);
-            } else {
-                response = await odooApi.put(`/tms_travel/inventario_equipo/${id_epp}`, data);
-            }
-
-            if (onSaveSuccess) onSaveSuccess(response.data);
-            handleClose();
-        } catch (error) {
-            toast.error('Error al guardar: ' + (error?.message || JSON.stringify(error)));
-        } finally {
-            setSaving(false);
         }
     };
 
     useEffect(() => {
-        if (open && id_epp !== null) {
-            fetchData();
-        } else if (open && id_epp === null) {
-            setData({
-                x_name: '',
-                x_cantidad_actual: 0,
-                x_tipo: ''
-            });
-        }
-    }, [open, id_epp]);
+        fetchData();
+    }, [open]);
 
     return (
-        <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-            <DialogTitle>{id_epp ? `Editar (ID: ${id_epp})` : 'Nuevo'}</DialogTitle>
+        <Dialog open={open} onClose={handleClose} fullScreen scroll="body">
 
-            {isLoading ? (
-                <Progress isIndeterminate size="sm" />
-            ) : (
-                <DialogContent>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                        <Input
-                            label="Nombre"
-                            variant="bordered"
-                            value={data.x_name}
-                            onChange={(e) =>
-                                setData({ ...data, x_name: e.target.value.toUpperCase() })
-                            }
-                        />
-
-                        <NumberInput
-                            label="Cantidad actual"
-                            variant="bordered"
-                            value={data.x_cantidad_actual || 0}
-                            onChange={(value) =>
-                                setData({ ...data, x_cantidad_actual: parseInt(value) || 0 })
-                            }
-                        />
-
-                        <Select
-                            label="Tipo"
-                            variant="bordered"
-                            selectedKeys={data.x_tipo ? [data.x_tipo] : []}
-                            onSelectionChange={(keys) =>
-                                setData({ ...data, x_tipo: Array.from(keys)[0] })
-                            }
-                        >
-                            <SelectItem key="epp">Equipo de protección personal</SelectItem>
-                            <SelectItem key="amarre">Equipo de amarre</SelectItem>
-                        </Select>
-                    </div>
-                </DialogContent>
+            <AppBar elevation={0} sx={{
+                background: 'linear-gradient(90deg, #0b2149, #002887)',
+                padding: '0 16px',
+                position: 'relative'
+            }}>
+                <Toolbar>
+                    <IconButton
+                        edge="start"
+                        color="inherit"
+                        onClick={handleClose}
+                        aria-label="close"
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                    <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+                        {data.x_name}
+                    </Typography>
+                    <Button autoFocus color="inherit" onClick={handleClose}>
+                        Salir
+                    </Button>
+                </Toolbar>
+            </AppBar>
+            {isLoading && (
+                <Progress isIndeterminate aria-label="Loading..." size="sm" />
             )}
+            <DialogContent sx={{ width: '100%', padding: 0 }}>
+                <Box sx={{ width: '100%' }}>
+                    <TabContext value={value}>
+                        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                            <TabList onChange={handleChange} aria-label="lab API tabs example"
+                                textColor="inherit"
+                                sx={{
+                                    background: 'linear-gradient(90deg, #0b2149, #002887)',
+                                    '& .MuiTabs-indicator': {
+                                        backgroundColor: 'white',
+                                        height: '2px',
+                                    },
+                                    padding: '0 16px',
+                                }}>
+                                <Tab label="Unidades" value="1" sx={{ fontFamily: 'Inter', color: 'white' }} />
+                                <Tab label="Datos" value="2" sx={{ fontFamily: 'Inter', color: 'white' }} />
+                            </TabList>
+                        </Box>
+                        <TabPanel value="1">
+                            <UnidadesProductos data2={data || []} fetch={fetchData}></UnidadesProductos>
+                        </TabPanel>
+                        <TabPanel value="2">
+                            <FormProducto data={data || []} setData={setData}></FormProducto>
+                        </TabPanel>
+                    </TabContext>
+                </Box>
+            </DialogContent>
 
             <DialogActions>
-                <Button onPress={handleClose}>Cancelar</Button>
-                <Button
-                    onPress={handleSave}
-                    color={id_epp ? 'success' : 'primary'}
-                    isDisabled={isSaving || !data.x_name || !data.x_tipo}
-                    className={id_epp ? 'text-white' : ''}
-                >
-                    {isSaving ? 'Guardando...' : id_epp ? 'Actualizar' : 'Registrar'}
-                </Button>
             </DialogActions>
         </Dialog>
     );
 };
 
-export default EPPForm;
+export default IndexProducto;

@@ -20,17 +20,18 @@ import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 import Swal from "sweetalert2";
+import { Grid } from '@mui/material';
+import SelectOperador from "@/phicargo/maniobras/maniobras/select_operador";
 
-const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
+const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo }) => {
     const [isLoading, setLoading] = useState(false);
     const [isSaving, setSaving] = useState(false);
     const
         { modoEdicion, setModoEdicion,
-            data, setData, epp, setEPP,
-            eppAdded, setEPPAdded,
-            eppRemoved, setEPPRemoved,
-            eppUpdated, setEPPUpdated,
-            isDisabled, setDisabled
+            data, setData,
+            isDisabled, setDisabled,
+            reservasGlobales, setReservasGlobales,
+            lineasGlobales, setLineasGlobales,
         } = useAlmacen();
 
     const fetchData = async () => {
@@ -39,7 +40,9 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
             setLoading(true);
             const response = await odooApi.get(`/tms_travel/solicitudes_equipo/id_solicitud/${id_solicitud}`);
             setData(response.data);
-            setEPP(response.data.epp);
+            setLineasGlobales(response.data.lineas);
+            setReservasGlobales(response.data.reservas)
+            console.log(response.data.reservas);
         } catch (error) {
             console.error('Error al obtener los datos:', error);
         } finally {
@@ -60,7 +63,8 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
             if (id_solicitud === null) {
                 const payload = {
                     data: data,
-                    epp: eppAdded
+                    lineas: lineasGlobales,
+                    reservas: reservasGlobales
                 };
 
                 const response = await odooApi.post('/tms_travel/solicitudes_equipo/', payload);
@@ -72,9 +76,8 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
             } else {
                 const payload = {
                     data: data,
-                    equipoAdded: eppAdded,
-                    equipoRemoved: eppRemoved,
-                    equipoUpdated: eppUpdated
+                    lineas: lineasGlobales,
+                    reservas: reservasGlobales
                 };
                 const response = await odooApi.patch(`/tms_travel/solicitudes_equipo/${id_solicitud}`, payload);
                 if (response.data.status == 'success') {
@@ -83,9 +86,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
                     toast.error(response.data.message);
                 }
             }
-            setEPPAdded([]);
-            setEPPRemoved([]);
-            handleClose();
+            fetchData();
         } catch (error) {
             toast.error('Error al guardar:', error);
         } finally {
@@ -94,24 +95,37 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
         }
     };
 
-    const cambiarEstado = async (estado) => {
-        setSaving(true);
-        try {
-            const response = await odooApi.put('/tms_travel/solicitudes_equipo/estado/' + estado + '/' + id_solicitud);
-            if (response.data.status == 'success') {
-                toast.success(response.data.message);
-            } else {
-                toast.error(response.data.message);
+    const confirmar = async () => {
+        const result = await Swal.fire({
+            title: '¿Estás seguro?',
+            text: 'Al confirmar, este equipo se marcará como reservado.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, confirmar',
+        });
+
+        if (result.isConfirmed) {
+            setSaving(true);
+            try {
+                setLoading(true);
+                const response = await odooApi.patch('/tms_travel/solicitudes_equipo/confirmar/' + id_solicitud);
+                if (response.data.status == 'success') {
+                    toast.success(response.data.message);
+                    fetchData();
+                    handleClose();
+                } else {
+                    toast.error(response.data.message);
+                }
+            } catch (error) {
+                toast.error('Error al guardar:', error);
+            } finally {
+                setLoading(false);
+                setSaving(false);
             }
-            handleClose();
-        } catch (error) {
-            toast.error('Error al guardar:', error);
-        } finally {
-            setSaving(false);
         }
     };
 
-    const confirmar = async () => {
+    const reservar = async () => {
         const result = await Swal.fire({
             title: '¿Estás seguro?',
             text: 'Al confirmar, este equipo se marcará como entregado y se descontará del inventario disponible.',
@@ -124,7 +138,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
             setSaving(true);
             try {
                 setLoading(true);
-                const response = await odooApi.get('/tms_travel/solicitudes_equipo/confirmar/' + id_solicitud);
+                const response = await odooApi.patch('/tms_travel/solicitudes_equipo/reservar/' + id_solicitud);
                 if (response.data.status == 'success') {
                     toast.success(response.data.message);
                     fetchData();
@@ -171,11 +185,16 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
         }
     };
 
+    const htmlContent = reservasGlobales.map(r =>
+        `<div>Unidad: ${r.id_unidad} | Línea: ${r.id_solicitud_equipo_line} | Devuelta: ${r.devuelta ? '✅' : '❌'}</div>`
+    ).join("");
+
     const devolver = async () => {
         const result = await Swal.fire({
             title: '¿Estás seguro?',
             text: 'Retornar stock',
             icon: 'warning',
+            html: htmlContent,
             showCancelButton: true,
             confirmButtonText: 'Sí, confirmar',
         });
@@ -184,7 +203,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
             setSaving(true);
             try {
                 setLoading(true);
-                const response = await odooApi.patch('/tms_travel/solicitudes_equipo/devolver/' + id_solicitud, epp);
+                const response = await odooApi.patch('/tms_travel/solicitudes_equipo/devolver/' + id_solicitud, reservasGlobales);
                 if (response.data.status === 'success') {
                     toast.success(response.data.message);
                     fetchData();
@@ -209,12 +228,20 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
         if (open && id_solicitud !== null) {
             fetchData();
         } else if (open && id_solicitud === null) {
-            setData({ nombre: '' });
+            setData({ x_tipo: x_tipo });
         }
     }, [open, id_solicitud]);
 
     const handleEdit = () => {
         setModoEdicion(true);
+    };
+
+    const handleSelectChange = (selectedOption, name) => {
+        setData((prevData) => ({
+            ...prevData,
+            [name]: selectedOption ? selectedOption : null,
+        }));
+        console.log('Datos del formulario actualizados:', data);
     };
 
     return (
@@ -234,7 +261,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
                         <CloseIcon />
                     </IconButton>
                     <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-                        {id_solicitud ? `Solicitud (ID: ${id_solicitud})` : 'Nueva solicitud :)'}
+                        {id_solicitud ? `Solicitud (ID: ${id_solicitud})` : 'Nueva solicitud'}
                     </Typography>
                     <Button autoFocus color="inherit" onClick={handleClose}>
                         Cerrar
@@ -261,7 +288,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
                         )}
 
 
-                        {!modoEdicion && (
+                        {(!modoEdicion) && (
                             <Button
                                 color="primary"
                                 onPress={handleEdit}
@@ -281,7 +308,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
                             </Button>
                         )}
 
-                        {data?.x_studio_estado === "borrador" && !modoEdicion && (
+                        {data?.x_studio_estado === "borrador" && modoEdicion != true && (
                             <Button color="success" className="text-white" onPress={() => confirmar()} isLoading={isLoading}>
                                 Confirmar
                             </Button>
@@ -289,7 +316,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
                         {data?.x_studio_estado == "confirmado" && (
                             <Button color='success' className='text-white' onPress={() => entregar()} isLoading={isLoading}>Entregar</Button>
                         )}
-                        {data?.x_studio_estado == "entregado" && (
+                        {(data?.x_studio_estado == "entregado" && data?.es_asignacion) && (
                             <Button color='success' className='text-white' onPress={() => devolver()} isLoading={isLoading}>Devolver a stock</Button>
                         )}
                     </Stack>
@@ -303,13 +330,40 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
                                 </CardHeader>
                                 <Divider></Divider>
                                 <CardBody>
-                                    <h2><strong>Creado por:</strong> {data?.usuario}</h2>
-                                    <h2><strong>Fecha de solicitud:</strong> {data?.create_date}</h2>
-                                    <div className="mt-5">
-                                        <ViajeEPP id_viaje={data?.x_waybill_id}></ViajeEPP>
-                                        <h2><strong>Operador asignado:</strong> {data?.operador}</h2>
-                                        <h2><strong>Inicio programado:</strong> {data?.inicio_programado}</h2>
-                                    </div>
+                                    <Grid container spacing={2}>
+                                        <Grid item xs={12} sm={6}>
+                                            Creado por:
+                                            <Typography variant="body1">{data?.usuario || '---'}</Typography>
+                                        </Grid>
+
+                                        <Grid item xs={12} sm={6}>
+                                            Fecha de solicitud:
+                                            <Typography variant="body1">{data?.create_date || '---'}</Typography>
+                                        </Grid>
+
+                                        <Grid item xs={12} sm={6}>
+                                            Operador asignado:
+                                            <Typography variant="body1">{data?.operador || '---'}</Typography>
+                                        </Grid>
+
+                                        <Grid item xs={12} sm={6}>
+                                            Inicio programado de viaje:
+                                            <Typography variant="body1">{data?.inicio_programado || '---'}</Typography>
+                                        </Grid>
+
+                                        <Grid item xs={12}>
+                                            <Divider className="my-2" />
+                                        </Grid>
+
+                                        <Grid item xs={12} sm={6}>
+                                            <ViajeEPP id_viaje={data?.x_waybill_id} />
+                                        </Grid>
+
+                                        <Grid item xs={12} sm={6}>
+                                            <SelectOperador label={'Operador responsable'} name={'x_operador_id'} disabled={!modoEdicion} value={data?.x_operador_id} onChange={handleSelectChange} />
+                                        </Grid>
+
+                                    </Grid>
                                 </CardBody>
                             </Card>
 
@@ -334,9 +388,6 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess }) => {
 
             )}
 
-            <DialogActions>
-                <Button onPress={handleClose}>Cerrar</Button>
-            </DialogActions>
         </Dialog>
     );
 };

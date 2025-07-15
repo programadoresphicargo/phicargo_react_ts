@@ -17,7 +17,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
-import EPP from '../../inventario/tabla';
+import EPP from '../../inventario/tabla_productos';
 import { useAlmacen } from '../../contexto/contexto';
 import { Autocomplete, AutocompleteItem } from "@heroui/react";
 import { useAsyncList } from "@react-stately/data";
@@ -25,10 +25,7 @@ import { useAsyncList } from "@react-stately/data";
 const ViajeEPP = ({ id_viaje }) => {
   const
     { modoEdicion, setModoEdicion,
-      data, setData, epp, setEPP,
-      eppAdded, setEPPAdded,
-      eppRemoved, setEPPRemoved,
-      eppUpdated, setEPPUpdated,
+      data, setData,
       isDisabled, setDisabled
     } = useAlmacen();
   const [id_solicitud, setIDSolicitud] = React.useState(null);
@@ -120,7 +117,6 @@ const ViajeEPP = ({ id_viaje }) => {
             label="Carta porte"
             placeholder="Buscar referencia carta porte"
             variant="faded"
-            className="max-w-xs"
             isDisabled={!modoEdicion}
           >
             {(item) => (

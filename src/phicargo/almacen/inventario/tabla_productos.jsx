@@ -2,11 +2,11 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import { Popover, PopoverContent, PopoverTrigger, User, useDisclosure } from "@heroui/react";
+import { Input, Popover, PopoverContent, PopoverTrigger, User, useDisclosure } from "@heroui/react";
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import { Avatar } from "@heroui/react";
-import { Box, Stack } from '@mui/material';
+import { Box } from '@mui/material';
 import { Button } from "@heroui/react"
 import { Chip } from "@heroui/react";
 import CloseIcon from '@mui/icons-material/Close';
@@ -16,19 +16,24 @@ import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import Slide from '@mui/material/Slide';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { exportToCSV } from '../../utils/export';
 import odooApi from '@/api/odoo-api';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import EPP from '../inventario/tabla_productos';
-import SolicitudForm from './form';
+import NavbarAlmacen from '../Navbar';
+import EPPForm from './form';
+import { useAlmacen } from '../contexto/contexto';
+import { exportToCSV } from '@/phicargo/utils/export';
+import IndexProducto from './form';
+import FormProducto from './form_producto';
 
-const Solicitudes = ({ x_tipo }) => {
+const TablaProductos = ({ close, tipo }) => {
 
-  const [id_solicitud, setIDSolicitud] = React.useState(null);
+  const { data, setData } = useAlmacen();
+  const [dataForm, setDataForm] = useState([]);
+  const [id_epp, setIDEpp] = React.useState({});
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -40,14 +45,14 @@ const Solicitudes = ({ x_tipo }) => {
     fetchData();
   };
 
-  const [data, setData] = useState([]);
+  const [dataEquipos, setDataEquipo] = useState([]);
   const [isLoading, setLoading] = useState(false);
 
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await odooApi.get('/tms_travel/solicitudes_equipo/tipo/' + x_tipo);
-      setData(response.data);
+      const response = await odooApi.get('/tms_travel/inventario_equipo/');
+      setDataEquipo(response.data);
       setLoading(false);
     } catch (error) {
       console.error('Error al obtener los datos:', error);
@@ -65,58 +70,16 @@ const Solicitudes = ({ x_tipo }) => {
         header: 'ID',
       },
       {
-        accessorKey: 'carta_porte',
-        header: 'Carta porte',
-      },
-      {
-        accessorKey: 'referencia_viaje',
-        header: 'Viaje',
-      },
-      {
-        accessorKey: 'inicio_programado',
-        header: 'Inicio prog. viaje',
-      },
-      {
-        accessorKey: 'operador',
-        header: 'Operador',
-      },
-      {
-        accessorKey: 'usuario',
-        header: 'Solicitador por',
+        accessorKey: 'x_name',
+        header: 'Nombre',
       },
       {
         accessorKey: 'create_date',
-        header: 'Fecha de solicitud',
+        header: 'Fecha creación',
       },
       {
-        accessorKey: 'x_studio_estado',
-        header: 'Estado',
-        Cell: ({ cell }) => {
-          const estatus_viaje = cell.getValue();
-          let badgeClass = '';
-
-          if (estatus_viaje === 'entregado') {
-            badgeClass = 'primary';
-          } else if (estatus_viaje === 'confirmado') {
-            badgeClass = 'success';
-          } else if (estatus_viaje === 'borrador') {
-            badgeClass = 'warning';
-          } else if (estatus_viaje === 'devuelto') {
-            badgeClass = 'success';
-          } else {
-            badgeClass = 'default';
-          }
-
-          return (
-            <Chip
-              size="sm"
-              color={badgeClass}
-              className="text-white"
-            >
-              {estatus_viaje}
-            </Chip>
-          );
-        },
+        accessorKey: 'x_tipo',
+        header: 'Tipo',
       },
     ],
     [],
@@ -124,7 +87,7 @@ const Solicitudes = ({ x_tipo }) => {
 
   const table = useMaterialReactTable({
     columns,
-    data,
+    data: dataEquipos,
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
@@ -134,7 +97,7 @@ const Solicitudes = ({ x_tipo }) => {
     positionGlobalFilter: "right",
     localization: MRT_Localization_ES,
     muiSearchTextFieldProps: {
-      placeholder: `Buscar en ${data.length} solicitud`,
+      placeholder: `Buscar en solicitud`,
       sx: { minWidth: '300px' },
       variant: 'outlined',
     },
@@ -144,7 +107,6 @@ const Solicitudes = ({ x_tipo }) => {
       columnVisibility: {
         empresa: false,
       },
-      hiddenColumns: ["empresa"],
       density: 'compact',
       expanded: true,
       showColumnFilters: true,
@@ -170,8 +132,8 @@ const Solicitudes = ({ x_tipo }) => {
     },
     muiTableBodyRowProps: ({ row }) => ({
       onClick: ({ event }) => {
-        setIDSolicitud(row.original.id);
         handleClickOpen();
+        setIDEpp(row.original.id);
       },
     }),
     muiTableBodyCellProps: ({ row }) => ({
@@ -190,24 +152,22 @@ const Solicitudes = ({ x_tipo }) => {
           flexWrap: 'wrap',
         }}
       >
-        <h2
+        <h1
           className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
         >
-          Solicitudes
-        </h2>
+          Productos
+        </h1>
 
         <Button
           className='text-white'
           startContent={<i class="bi bi-plus-lg"></i>}
           color='primary'
           isDisabled={false}
-          onPress={() => {
-            setIDSolicitud(null);
-            handleClickOpen();
+          onPress={async () => {
+            setIDEpp(null);
+            handleClickOpenF();
           }}
-          size='sm'
-        >
-          Nueva solicitud
+        >Nuevo producto
         </Button>
 
         <Button
@@ -216,22 +176,23 @@ const Solicitudes = ({ x_tipo }) => {
           color='primary'
           isDisabled={false}
           onPress={() => fetchData()}
-          size='sm'
         >Actualizar tablero
-        </Button>
-
-        <Button
-          color='success'
-          className='text-white'
-          startContent={<i class="bi bi-file-earmark-excel"></i>}
-          onPress={() => exportToCSV(data, columns, "viajes_activos.csv")}
-          size='sm'>
-          Exportar
         </Button>
 
       </Box >
     ),
   });
+
+  const [openF, setOpenF] = React.useState(false);
+
+  const handleClickOpenF = () => {
+    setOpenF(true);
+  };
+
+  const handleCloseF = () => {
+    setOpenF(false);
+  };
+
 
   return (
     <>
@@ -239,9 +200,27 @@ const Solicitudes = ({ x_tipo }) => {
         table={table}
       />
 
-      <SolicitudForm id_solicitud={id_solicitud} open={open} handleClose={handleClose} x_tipo={x_tipo}></SolicitudForm>
+      <IndexProducto id_producto={id_epp} open={open} handleClose={handleClose} ></IndexProducto>
+
+      <Dialog
+        open={openF}
+        onClose={handleCloseF}
+        fullWidth
+      >
+        <DialogTitle id="responsive-dialog-title">
+          {"Nuevo producto"}
+        </DialogTitle>
+        <DialogContent>
+          <FormProducto data={dataForm} setData={setDataForm}></FormProducto>
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus onClick={handleCloseF}>
+            Cancelar
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };
 
-export default Solicitudes;
+export default TablaProductos;
