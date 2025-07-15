@@ -74,6 +74,36 @@ const ViajesActivos = ({ }) => {
     fetchData();
   }, []);
 
+  const [distancias, setDistancias] = useState({});
+
+  useEffect(() => {
+    const fetchAllDistancias = async () => {
+      const promesas = data.map(async (row) => {
+        try {
+          const res = await odooApi.get('/tms_travel/codigos_postales/distancia_coordenadas/', {
+            params: {
+              codigo_postal: row.codigo_postal,
+              vehicle_id: row.vehicle_id,
+              velocidad_kmh: 50,
+            }
+          });
+          return { id: row.id, data: res.data };
+        } catch (error) {
+          return { id: row.id, error: 'Error al obtener la distancia' };
+        }
+      });
+
+      const resultados = await Promise.all(promesas);
+      const mapa = {};
+      resultados.forEach(({ id, data, error }) => {
+        mapa[id] = error ? { error } : data;
+      });
+      setDistancias(mapa);
+    };
+
+    fetchAllDistancias();
+  }, [data]);
+
   const columns = useMemo(
     () => [
       {
@@ -209,51 +239,16 @@ const ViajesActivos = ({ }) => {
         accessorKey: 'codigo_postal',
         header: 'Distancia (50km/h)',
         Cell: ({ row }) => {
-          const [distancia, setDistancia] = React.useState(null);
-          const [error, setError] = React.useState(null);
-
-
-          React.useEffect(() => {
-            const calcularDistancia = async () => {
-              const codigoPostal = row.original.codigo_postal;
-              const vehicle_id = row.original.vehicle_id;
-              const estado = row.original.x_status_viajel;
-              const idSucursal = row.original.id_sucursal;
-
-              try {
-                const response = await odooApi.get('/tms_travel/codigos_postales/distancia_coordenadas/', {
-                  params: {
-                    codigo_postal: codigoPostal,
-                    vehicle_id: vehicle_id,
-                    velocidad_kmh: 50
-                  },
-                });
-
-                const data = await response.data;
-
-                if (data.error) {
-                  setError(data.error);
-                  setDistancia(null);
-                } else {
-                  setError(null);
-                  setDistancia(data);
-                }
-              } catch (error) {
-                console.error('Error al calcular la distancia:', error);
-                setError('Error al obtener la distancia');
-                setDistancia(null);
-              }
-            };
-
-            calcularDistancia();
-          }, [row.original.codigo_postal, row.original.id_sucursal]);
+          const resultado = distancias[row.original.id];
 
           return (
-            <Chip className="text-white" color={error ? 'danger' : 'primary'} size='sm'>
-              {error ? error : (distancia ? `A ${distancia.distancia_km} km / ${distancia.tiempo_estimado_horas} h` : 'Calculando...')}
+            <Chip className="text-white" color={resultado?.error ? 'danger' : 'primary'} size='sm'>
+              {resultado
+                ? (resultado.error ? resultado.error : `A ${resultado.distancia_km} km / ${resultado.tiempo_estimado_horas} h`)
+                : 'Calculando...'}
             </Chip>
           );
-        }
+        },
       },
       {
         accessorKey: 'nombre_cliente',
