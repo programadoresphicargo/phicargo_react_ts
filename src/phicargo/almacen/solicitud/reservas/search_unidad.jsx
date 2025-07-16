@@ -17,6 +17,9 @@ const SearchUnidad = ({ data }) => {
 
         if (!idNum || !data?.id || !data?.x_cantidad_solicitada) return;
 
+        const selectedItem = options.find((item) => item.key === idNum);
+        if (!selectedItem) return;
+
         const reservasLinea = reservasGlobales.filter(
             (r) => r.id_solicitud_equipo_line === data.id
         );
@@ -37,6 +40,7 @@ const SearchUnidad = ({ data }) => {
             id_reserva: -Date.now(), // ID temporal
             id_solicitud_equipo_line: data.id,
             id_unidad: idNum, // aseguramos que sea número
+            x_name: selectedItem.label
         };
 
         setReservasGlobales((prev) => [...prev, nueva]);

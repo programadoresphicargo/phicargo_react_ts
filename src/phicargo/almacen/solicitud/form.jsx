@@ -190,6 +190,15 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo 
     ).join("");
 
     const devolver = async () => {
+
+        const errores = reservasGlobales.filter(
+            (r) => !r.devuelta && (!r.motivo_no_devuelta || !r.comentarios_no_devuelta)
+        );
+        if (errores.length > 0) {
+            toast.error('Por favor completa motivo y comentario en reservas no devueltas.');
+            return false;
+        }
+
         const result = await Swal.fire({
             title: '¿Estás seguro?',
             text: 'Retornar stock',
