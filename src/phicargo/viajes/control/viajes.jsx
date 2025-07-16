@@ -209,48 +209,13 @@ const ViajesActivos = ({ }) => {
         accessorKey: 'codigo_postal',
         header: 'Distancia (50km/h)',
         Cell: ({ row }) => {
-          const [distancia, setDistancia] = React.useState(null);
-          const [error, setError] = React.useState(null);
-
-
-          React.useEffect(() => {
-            const calcularDistancia = async () => {
-              const codigoPostal = row.original.codigo_postal;
-              const vehicle_id = row.original.vehicle_id;
-              const estado = row.original.x_status_viajel;
-              const idSucursal = row.original.id_sucursal;
-
-              try {
-                const response = await odooApi.get('/tms_travel/codigos_postales/distancia_coordenadas/', {
-                  params: {
-                    codigo_postal: codigoPostal,
-                    vehicle_id: vehicle_id,
-                    velocidad_kmh: 50
-                  },
-                });
-
-                const data = await response.data;
-
-                if (data.error) {
-                  setError(data.error);
-                  setDistancia(null);
-                } else {
-                  setError(null);
-                  setDistancia(data);
-                }
-              } catch (error) {
-                console.error('Error al calcular la distancia:', error);
-                setError('Error al obtener la distancia');
-                setDistancia(null);
-              }
-            };
-
-            calcularDistancia();
-          }, [row.original.codigo_postal, row.original.id_sucursal]);
+          const distancia = row.original.distancia_km;
+          const tiempo_estimado_horas = row.original.tiempo_estimado_horas;
+          const observacion_ubicacion = row.original.observacion_ubicacion;
 
           return (
-            <Chip className="text-white" color={error ? 'danger' : 'primary'} size='sm'>
-              {error ? error : (distancia ? `A ${distancia.distancia_km} km / ${distancia.tiempo_estimado_horas} h` : 'Calculando...')}
+            <Chip className="text-white" color="primary" size="sm">
+              {distancia !== null && distancia !== undefined ? `${distancia} km / ${tiempo_estimado_horas} hrs` : observacion_ubicacion}
             </Chip>
           );
         }
