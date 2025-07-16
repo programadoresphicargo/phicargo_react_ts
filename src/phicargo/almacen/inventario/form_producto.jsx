@@ -11,7 +11,7 @@ import toast from 'react-hot-toast';
 import { Select, SelectItem } from "@heroui/react";
 import { Stack } from "@mui/material";
 
-const FormProducto = ({ data, setData }) => {
+const FormProducto = ({ data, setData, fetchData2 }) => {
 
     const [isLoading, setLoading] = useState(false);
     const [isSaving, setSaving] = useState(false);
@@ -57,6 +57,7 @@ const FormProducto = ({ data, setData }) => {
 
             if (response.data.status == 'success') {
                 toast.success(response.data.message);
+                fetchData2();
             } else {
                 toast.error(response.data.message);
             }

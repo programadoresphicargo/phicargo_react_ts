@@ -211,7 +211,7 @@ const TablaProductos = ({ close, tipo }) => {
           {"Nuevo producto"}
         </DialogTitle>
         <DialogContent>
-          <FormProducto data={dataForm} setData={setDataForm}></FormProducto>
+          <FormProducto data={dataForm} setData={setDataForm} fetchData2={fetchData}></FormProducto>
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick={handleCloseF}>
