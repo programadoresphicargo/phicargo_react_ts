@@ -226,12 +226,12 @@ const EPPSolicitados = ({ }) => {
               color="primary"
               size="sm"
               className='text-white'
-              isDisabled={data?.x_studio_estado != "entregado" ? false : modoEdicion ? false : true}
+              isDisabled={!modoEdicion}
               onPress={() => table.setEditingRow(row)}
             >
               Editar
             </Button>
-            <Button onPress={() => deleteReserva(row.original.id)} color='danger' size='sm' isDisabled={data?.x_studio_estado !== "entregado" || modoEdicion ? false : true}>Eliminar</Button>
+            <Button onPress={() => deleteReserva(row.original.id)} color='danger' size='sm' isDisabled={!modoEdicion}>Eliminar</Button>
           </Box>
         )}
       </>
