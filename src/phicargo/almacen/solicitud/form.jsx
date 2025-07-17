@@ -22,6 +22,7 @@ import Slide from '@mui/material/Slide';
 import Swal from "sweetalert2";
 import { Grid } from '@mui/material';
 import SelectOperador from "@/phicargo/maniobras/maniobras/select_operador";
+import EstadoSolicitud from "./estado";
 
 const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo }) => {
     const [isLoading, setLoading] = useState(false);
@@ -297,11 +298,8 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo 
                         )}
 
 
-                        {(!modoEdicion) && (
-                            <Button
-                                color="primary"
-                                onPress={handleEdit}
-                            >
+                        {(!modoEdicion && data?.x_studio_estado !== 'entregado' && data?.x_studio_estado !== 'devuelto') && (
+                            <Button color="primary" onPress={handleEdit}>
                                 Editar
                             </Button>
                         )}
@@ -328,6 +326,8 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo 
                         {(data?.x_studio_estado == "entregado" && data?.es_asignacion) && (
                             <Button color='success' className='text-white' onPress={() => devolver()} isLoading={isLoading}>Devolver a stock</Button>
                         )}
+
+                        <EstadoSolicitud></EstadoSolicitud>
                     </Stack>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

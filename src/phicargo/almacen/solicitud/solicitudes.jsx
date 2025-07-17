@@ -205,7 +205,6 @@ const Solicitudes = ({ x_tipo }) => {
             setIDSolicitud(null);
             handleClickOpen();
           }}
-          size='sm'
         >
           Nueva solicitud
         </Button>
@@ -216,7 +215,6 @@ const Solicitudes = ({ x_tipo }) => {
           color='primary'
           isDisabled={false}
           onPress={() => fetchData()}
-          size='sm'
         >Actualizar tablero
         </Button>
 
@@ -224,8 +222,7 @@ const Solicitudes = ({ x_tipo }) => {
           color='success'
           className='text-white'
           startContent={<i class="bi bi-file-earmark-excel"></i>}
-          onPress={() => exportToCSV(data, columns, "viajes_activos.csv")}
-          size='sm'>
+          onPress={() => exportToCSV(data, columns, "viajes_activos.csv")}>
           Exportar
         </Button>
 

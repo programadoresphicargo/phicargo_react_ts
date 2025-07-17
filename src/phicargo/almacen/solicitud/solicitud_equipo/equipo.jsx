@@ -62,11 +62,6 @@ const EPPSolicitados = ({ }) => {
   const columns = useMemo(
     () => [
       {
-        accessorKey: 'id',
-        header: 'ID',
-        enableEditing: false,
-      },
-      {
         accessorKey: 'x_name',
         header: 'Nombre',
         enableEditing: false,
@@ -102,6 +97,7 @@ const EPPSolicitados = ({ }) => {
               size="sm"
               color="primary"
               className="text-white"
+              isDisabled={data?.x_studio_estado == "entregado" || modoEdicion ? false : true}
               onPress={() => handleClickOpenReservas(row.original)} // puedes pasar datos de la fila si lo necesitas
             >
               {estado || 'Pendiente por asignar'}
@@ -110,7 +106,7 @@ const EPPSolicitados = ({ }) => {
         },
       }
     ],
-    [],
+    [modoEdicion],
   );
 
   const deleteReserva = (id) => {
@@ -137,10 +133,6 @@ const EPPSolicitados = ({ }) => {
     columnResizeMode: "onEnd",
     initialState: {
       showGlobalFilter: true,
-      columnVisibility: {
-        x_cantidad_devuelta: data?.x_studio_estado === "entregado" || data?.x_studio_estado === "devuelto" ? true : false,
-      },
-      hiddenColumns: ["empresa"],
       density: 'compact',
       expanded: true,
       showColumnFilters: true,
@@ -228,18 +220,20 @@ const EPPSolicitados = ({ }) => {
     },
     renderRowActions: ({ row, table }) => (
       <>
-        <Box sx={{ display: 'flex', gap: '8px' }}>
-          <Button
-            color="primary"
-            size="sm"
-            className='text-white'
-            isDisabled={data?.x_studio_estado == "entregado" || modoEdicion ? false : true}
-            onPress={() => table.setEditingRow(row)}
-          >
-            Editar
-          </Button>
-          <Button onPress={() => deleteReserva(row.original.id)} color='danger' size='sm' isDisabled={data?.x_studio_estado == "entregado" || modoEdicion ? false : true}>Eliminar</Button>
-        </Box>
+        {data?.x_studio_estado == 'borrador' && (
+          <Box sx={{ display: 'flex', gap: '8px' }}>
+            <Button
+              color="primary"
+              size="sm"
+              className='text-white'
+              isDisabled={data?.x_studio_estado != "entregado" ? false : modoEdicion ? false : true}
+              onPress={() => table.setEditingRow(row)}
+            >
+              Editar
+            </Button>
+            <Button onPress={() => deleteReserva(row.original.id)} color='danger' size='sm' isDisabled={data?.x_studio_estado !== "entregado" || modoEdicion ? false : true}>Eliminar</Button>
+          </Box>
+        )}
       </>
     ),
   });
@@ -262,7 +256,7 @@ const EPPSolicitados = ({ }) => {
         </DialogActions>
       </Dialog>
 
-      <ReservasDetalle open={open_reservas} handleClose={handleCloseReservas} data={linea || []}></ReservasDetalle>
+      <ReservasDetalle open={open_reservas} handleClose={handleCloseReservas} dataLinea={linea || []}></ReservasDetalle>
 
     </>
   );

@@ -9,15 +9,14 @@ import { Button, Select, SelectItem, Textarea, Checkbox } from '@heroui/react';
 import { useAlmacen } from '../../contexto/contexto';
 import SearchUnidad from './search_unidad';
 
-const ReservasDetalle = ({ open, handleClose, data, estado }) => {
-
-    const { reservasGlobales, setReservasGlobales, modoEdicion, setModoEdicion } = useAlmacen();
+const ReservasDetalle = ({ open, handleClose, dataLinea }) => {
+    const { reservasGlobales, setReservasGlobales, modoEdicion, setModoEdicion, data } = useAlmacen();
     const [reservasLinea, setReservasLinea] = useState([]);
 
     useEffect(() => {
-        const filtradas = reservasGlobales.filter(r => r.id_solicitud_equipo_line === data.id);
+        const filtradas = reservasGlobales.filter(r => r.id_solicitud_equipo_line === dataLinea.id);
         setReservasLinea(filtradas);
-    }, [data, reservasGlobales]);
+    }, [dataLinea, reservasGlobales]);
 
     const updateReserva = () => {
         setReservasGlobales(prev =>
@@ -152,7 +151,9 @@ const ReservasDetalle = ({ open, handleClose, data, estado }) => {
         localization: MRT_Localization_ES,
         initialState: {
             columnVisibility: {
-                devuelta: estado == 'confirmado' ? true : true,
+                devuelta: data?.x_studio_estado == 'entregado' ? true : false,
+                motivo_no_devuelta: data?.x_studio_estado == 'entregado' ? true : false,
+                comentarios_no_devuelta: data?.x_studio_estado == 'entregado' ? true : false,
             },
             density: 'compact',
             showColumnFilters: true,
@@ -180,8 +181,8 @@ const ReservasDetalle = ({ open, handleClose, data, estado }) => {
         }),
         renderTopToolbarCustomActions: () => (
             <>
-                <SearchUnidad data={data}></SearchUnidad>
-                {estado === 'confirmado' && (
+                <SearchUnidad data={dataLinea}></SearchUnidad>
+                {data?.x_studio_estado === 'entregado' && (
                     <>
                         <Button color="primary" onPress={() => marcarTodas(true)}>
                             Marcar todas
@@ -195,7 +196,16 @@ const ReservasDetalle = ({ open, handleClose, data, estado }) => {
         ),
         renderRowActions: ({ row }) => (
             <Box sx={{ display: 'flex', gap: 1 }}>
-                <Button onPress={() => deleteReserva(row.original.id_reserva)} color='danger' size='sm' isDisabled={estado == "entregado" || modoEdicion ? false : true}>Eliminar</Button>
+                {!modoEdicion && (
+                    <Button
+                        onPress={() => deleteReserva(row.original.id_reserva)}
+                        color="danger"
+                        size="sm"
+                        isDisabled={['confirmado', 'entregado'].includes(data?.x_studio_estado)}
+                    >
+                        Eliminar
+                    </Button>
+                )}
             </Box>
         ),
         enableRowActions: true,
