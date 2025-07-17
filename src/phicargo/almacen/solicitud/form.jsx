@@ -11,7 +11,7 @@ import odooApi from '@/api/odoo-api';
 import toast from 'react-hot-toast';
 import EPPSolicitados from "./solicitud_equipo/equipo";
 import ViajeEPP from "./viaje/viaje";
-import { AppBar, Stack } from "@mui/material";
+import { AppBar, CardContent, Stack } from "@mui/material";
 import { useAlmacen } from "../contexto/contexto";
 import HistorialCambios from "./cambios/epps";
 import Toolbar from '@mui/material/Toolbar';
@@ -23,10 +23,13 @@ import Swal from "sweetalert2";
 import { Grid } from '@mui/material';
 import SelectOperador from "@/phicargo/maniobras/maniobras/select_operador";
 import EstadoSolicitud from "./estado";
+import CancelarSolicitudDialog from "./cancelar";
 
 const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo }) => {
     const [isLoading, setLoading] = useState(false);
     const [isSaving, setSaving] = useState(false);
+    const [openCancelar, setOpenCancelar] = useState(false);
+
     const
         { modoEdicion, setModoEdicion,
             data, setData,
@@ -285,154 +288,181 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo 
     };
 
     return (
-        <Dialog open={open} onClose={handleClose} maxWidth="xl" fullScreen>
-            <AppBar elevation={0} sx={{
-                background: 'linear-gradient(90deg, #0b2149, #002887)',
-                padding: '0 16px',
-                position: 'relative'
-            }}>
-                <Toolbar>
-                    <IconButton
-                        edge="start"
-                        color="inherit"
-                        onClick={handleClose}
-                        aria-label="close"
-                    >
-                        <CloseIcon />
-                    </IconButton>
-                    <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-                        {id_solicitud ? `Solicitud (ID: ${id_solicitud})` : 'Nueva solicitud'}
-                    </Typography>
-                    <Button autoFocus color="inherit" onClick={handleClose}>
-                        Cerrar
-                    </Button>
-                </Toolbar>
-            </AppBar>
+        <>
+            <Dialog open={open} onClose={handleClose} maxWidth="xl" fullScreen>
+                <AppBar elevation={0} sx={{
+                    background: 'linear-gradient(90deg, #0b2149, #002887)',
+                    padding: '0 16px',
+                    position: 'relative'
+                }}>
+                    <Toolbar>
+                        <IconButton
+                            edge="start"
+                            color="inherit"
+                            onClick={handleClose}
+                            aria-label="close"
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                        <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+                            {id_solicitud ? `Solicitud (ID: ${id_solicitud})` : 'Nueva solicitud'}
+                        </Typography>
+                        <Button autoFocus color="inherit" onClick={handleClose}>
+                            Cerrar
+                        </Button>
+                    </Toolbar>
+                </AppBar>
 
-            {isLoading ? (
-                <Progress isIndeterminate size="sm" />
-            ) : (
+                {isLoading ? (
+                    <Progress isIndeterminate size="sm" />
+                ) : (
 
-                <DialogContent>
+                    <DialogContent>
 
-                    <Stack spacing={1} direction="row" className="mb-5">
+                        <Stack spacing={1} direction="row" className="mb-5">
 
-                        {!id_solicitud && (
-                            <Button
-                                onPress={handleSave}
-                                color="primary"
-                                isDisabled={isSaving}
-                            >
-                                {isSaving ? 'Guardando...' : 'Registrar'}
-                            </Button>
-                        )}
+                            {!id_solicitud && (
+                                <Button
+                                    onPress={handleSave}
+                                    color="primary"
+                                    isDisabled={isSaving}
+                                >
+                                    {isSaving ? 'Guardando...' : 'Registrar'}
+                                </Button>
+                            )}
 
 
-                        {(!modoEdicion && data?.x_studio_estado !== 'entregado' && data?.x_studio_estado !== 'devuelto') && (
-                            <Button color="primary" onPress={handleEdit}>
-                                Editar
-                            </Button>
-                        )}
+                            {(!modoEdicion && data?.x_studio_estado !== 'entregado' && data?.x_studio_estado !== 'devuelto') && (
+                                <Button color="primary" onPress={handleEdit}>
+                                    Editar
+                                </Button>
+                            )}
 
-                        {modoEdicion && (
-                            <Button
-                                onPress={handleSave}
-                                color={id_solicitud ? 'success' : 'primary'}
-                                isDisabled={isSaving}
-                                className={id_solicitud ? 'text-white' : ''}
-                            >
-                                {isSaving ? 'Guardando...' : id_solicitud ? 'Actualizar' : 'Registrar'}
-                            </Button>
-                        )}
+                            {modoEdicion && (
+                                <Button
+                                    onPress={handleSave}
+                                    color={id_solicitud ? 'success' : 'primary'}
+                                    isDisabled={isSaving}
+                                    className={id_solicitud ? 'text-white' : ''}
+                                >
+                                    {isSaving ? 'Guardando...' : id_solicitud ? 'Actualizar' : 'Registrar'}
+                                </Button>
+                            )}
+                            {data?.x_studio_estado === "borrador" && modoEdicion != true && (
+                                <Button color="success" className="text-white" onPress={() => confirmar()} isLoading={isLoading}>
+                                    Confirmar
+                                </Button>
+                            )}
+                            {data?.x_studio_estado == "confirmado" && (
+                                <Button color='warning' className='text-white' onPress={() => cambiar_borrador()} isLoading={isLoading}>Regresar a borrador</Button>
+                            )}
+                            {data?.x_studio_estado == "confirmado" && (
+                                <Button color='success' className='text-white' onPress={() => entregar()} isLoading={isLoading}>Entregar</Button>
+                            )}
+                            {(data?.x_studio_estado == "entregado" && data?.es_asignacion) && (
+                                <Button color='success' className='text-white' onPress={() => devolver()} isLoading={isLoading}>Devolver a stock</Button>
+                            )}
+                            {(!modoEdicion && data?.x_studio_estado !== 'entregado' && data?.x_studio_estado !== 'devuelto' && data?.x_studio_estado !== 'cancelada') && (
+                                <Button color="danger" className="text-white" onPress={() => setOpenCancelar(true)} isLoading={isLoading}>
+                                    Cancelar
+                                </Button>
+                            )}
 
-                        {data?.x_studio_estado === "borrador" && modoEdicion != true && (
-                            <Button color="success" className="text-white" onPress={() => confirmar()} isLoading={isLoading}>
-                                Confirmar
-                            </Button>
-                        )}
-                        {data?.x_studio_estado == "confirmado" && (
-                            <Button color='warning' className='text-white' onPress={() => cambiar_borrador()} isLoading={isLoading}>Regresar a borrador</Button>
-                        )}
-                        {data?.x_studio_estado == "confirmado" && (
-                            <Button color='success' className='text-white' onPress={() => entregar()} isLoading={isLoading}>Entregar</Button>
-                        )}
-                        {(data?.x_studio_estado == "entregado" && data?.es_asignacion) && (
-                            <Button color='success' className='text-white' onPress={() => devolver()} isLoading={isLoading}>Devolver a stock</Button>
-                        )}
+                            <div style={{ marginLeft: 'auto', width: '600px' }}>
+                                <EstadoSolicitud />
+                            </div>
+                        </Stack>
 
-                        <div style={{ marginLeft: 'auto', width: '600px' }}>
-                            <EstadoSolicitud />
-                        </div>
-                    </Stack>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div className="md:col-span-2 grid grid-cols-1 gap-4">
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div className="md:col-span-2 grid grid-cols-1 gap-4">
+                                <Card>
+                                    <CardHeader>
+                                        Datos de la solicitud
+                                    </CardHeader>
+                                    <Divider></Divider>
+                                    <CardBody>
+                                        <Grid container spacing={2}>
+                                            <Grid item xs={12} sm={6}>
+                                                Creado por:
+                                                <Typography variant="body1">{data?.usuario || '---'}</Typography>
+                                            </Grid>
+
+                                            <Grid item xs={12} sm={6}>
+                                                Fecha de solicitud:
+                                                <Typography variant="body1">{data?.create_date || '---'}</Typography>
+                                            </Grid>
+
+                                            <Grid item xs={12} sm={6}>
+                                                Operador asignado:
+                                                <Typography variant="body1">{data?.operador || '---'}</Typography>
+                                            </Grid>
+
+                                            <Grid item xs={12} sm={6}>
+                                                Inicio programado de viaje:
+                                                <Typography variant="body1">{data?.inicio_programado || '---'}</Typography>
+                                            </Grid>
+
+                                            <Grid item xs={12}>
+                                                <Divider className="my-2" />
+                                            </Grid>
+
+                                            <Grid item xs={12} sm={6}>
+                                                <ViajeEPP id_viaje={data?.x_waybill_id} />
+                                            </Grid>
+
+                                            <Grid item xs={12} sm={6}>
+                                                <SelectOperador label={'Operador responsable'} name={'x_operador_id'} disabled={!modoEdicion} value={data?.x_operador_id} onChange={handleSelectChange} />
+                                            </Grid>
+
+                                        </Grid>
+                                    </CardBody>
+                                </Card>
+
+                                <Card>
+                                    <CardBody>
+                                        <EPPSolicitados></EPPSolicitados>
+                                    </CardBody>
+                                </Card>
+                            </div>
 
                             <Card>
-                                <CardHeader>
-                                    Datos de la solicitud
-                                </CardHeader>
+                                <CardHeader>Historial de cambios</CardHeader>
                                 <Divider></Divider>
+
+                                {(data?.x_studio_estado == 'cancelada') && (
+                                    <Card className="m-3">
+                                        <CardHeader className="bg-danger text-white">
+                                            Cancelada
+                                        </CardHeader>
+                                        <Divider></Divider>
+                                        <CardContent>
+                                            <p>Motivo de cancelación: {data?.x_motivo_cancelacion}</p>
+                                            <p>Comentarios: {data?.x_comentarios_cancelacion}</p>
+                                        </CardContent>
+                                    </Card>
+                                )}
+
                                 <CardBody>
-                                    <Grid container spacing={2}>
-                                        <Grid item xs={12} sm={6}>
-                                            Creado por:
-                                            <Typography variant="body1">{data?.usuario || '---'}</Typography>
-                                        </Grid>
-
-                                        <Grid item xs={12} sm={6}>
-                                            Fecha de solicitud:
-                                            <Typography variant="body1">{data?.create_date || '---'}</Typography>
-                                        </Grid>
-
-                                        <Grid item xs={12} sm={6}>
-                                            Operador asignado:
-                                            <Typography variant="body1">{data?.operador || '---'}</Typography>
-                                        </Grid>
-
-                                        <Grid item xs={12} sm={6}>
-                                            Inicio programado de viaje:
-                                            <Typography variant="body1">{data?.inicio_programado || '---'}</Typography>
-                                        </Grid>
-
-                                        <Grid item xs={12}>
-                                            <Divider className="my-2" />
-                                        </Grid>
-
-                                        <Grid item xs={12} sm={6}>
-                                            <ViajeEPP id_viaje={data?.x_waybill_id} />
-                                        </Grid>
-
-                                        <Grid item xs={12} sm={6}>
-                                            <SelectOperador label={'Operador responsable'} name={'x_operador_id'} disabled={!modoEdicion} value={data?.x_operador_id} onChange={handleSelectChange} />
-                                        </Grid>
-
-                                    </Grid>
+                                    <HistorialCambios cambios={data?.mails || []} />
                                 </CardBody>
                             </Card>
 
-                            <Card>
-                                <CardBody>
-                                    <EPPSolicitados></EPPSolicitados>
-                                </CardBody>
-                            </Card>
                         </div>
 
-                        <Card>
-                            <CardHeader>Historial de cambios</CardHeader>
-                            <Divider></Divider>
-                            <CardBody>
-                                <HistorialCambios cambios={data?.mails || []} />
-                            </CardBody>
-                        </Card>
+                    </DialogContent>
 
-                    </div>
+                )}
 
-                </DialogContent>
+            </Dialog>
 
-            )}
-
-        </Dialog>
+            <CancelarSolicitudDialog
+                open={openCancelar}
+                onClose={() => setOpenCancelar(false)}
+                id_solicitud={id_solicitud}
+                fetchData={fetchData}
+            />
+        </>
     );
 };
 
