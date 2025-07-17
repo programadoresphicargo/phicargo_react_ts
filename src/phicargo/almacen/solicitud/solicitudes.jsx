@@ -31,7 +31,7 @@ const Solicitudes = ({ x_tipo }) => {
 
   const [id_solicitud, setIDSolicitud] = React.useState(null);
   const [open, setOpen] = React.useState(false);
-  const { modoEdicion, setModoEdicion } = useAlmacen();
+  const { modoEdicion, setModoEdicion, data, setData } = useAlmacen();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -42,14 +42,14 @@ const Solicitudes = ({ x_tipo }) => {
     fetchData();
   };
 
-  const [data, setData] = useState([]);
+  const [dataSolicitudes, setDataSolicitudes] = useState([]);
   const [isLoading, setLoading] = useState(false);
 
   const fetchData = async () => {
     try {
       setLoading(true);
       const response = await odooApi.get('/tms_travel/solicitudes_equipo/tipo/' + x_tipo);
-      setData(response.data);
+      setDataSolicitudes(response.data);
       setLoading(false);
     } catch (error) {
       console.error('Error al obtener los datos:', error);
@@ -126,7 +126,7 @@ const Solicitudes = ({ x_tipo }) => {
 
   const table = useMaterialReactTable({
     columns,
-    data,
+    data: dataSolicitudes,
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
@@ -136,7 +136,7 @@ const Solicitudes = ({ x_tipo }) => {
     positionGlobalFilter: "right",
     localization: MRT_Localization_ES,
     muiSearchTextFieldProps: {
-      placeholder: `Buscar en ${data.length} solicitud`,
+      placeholder: `Buscar en ${dataSolicitudes.length} solicitud`,
       sx: { minWidth: '300px' },
       variant: 'outlined',
     },
@@ -208,6 +208,7 @@ const Solicitudes = ({ x_tipo }) => {
             setIDSolicitud(null);
             setModoEdicion(true);
             handleClickOpen();
+            setData({});
           }}
         >
           Nueva solicitud
@@ -220,14 +221,6 @@ const Solicitudes = ({ x_tipo }) => {
           isDisabled={false}
           onPress={() => fetchData()}
         >Actualizar tablero
-        </Button>
-
-        <Button
-          color='success'
-          className='text-white'
-          startContent={<i class="bi bi-file-earmark-excel"></i>}
-          onPress={() => exportToCSV(data, columns, "viajes_activos.csv")}>
-          Exportar
         </Button>
 
       </Box >

@@ -23,13 +23,13 @@ import { useAlmacen } from '../../contexto/contexto';
 import { useAsyncList } from "@react-stately/data";
 
 const ViajeEPP = ({ id_viaje }) => {
+  console.log(id_viaje);
   const {
     modoEdicion, setModoEdicion,
     data, setData,
     isDisabled, setDisabled
   } = useAlmacen();
 
-  const [id_solicitud, setIDSolicitud] = useState(null);
   const [open, setOpen] = useState(false);
   const viajePorDefectoId = id_viaje;
   const [selectedKey, setSelectedKey] = useState(viajePorDefectoId);
@@ -84,7 +84,6 @@ const ViajeEPP = ({ id_viaje }) => {
     },
   });
 
-
   const handleSelection = (key) => {
     const item = list.items.find((i) => i.id == key);
     if (item) {
@@ -100,7 +99,7 @@ const ViajeEPP = ({ id_viaje }) => {
 
   useEffect(() => {
     const cargarViajeInicial = async () => {
-      if (!viajePorDefectoId) return; // ✅ Validación agregada
+      if (!viajePorDefectoId) return;
 
       try {
         const res = await odooApi.get(`/tms_waybill/get_by_id/${viajePorDefectoId}`);
@@ -118,6 +117,20 @@ const ViajeEPP = ({ id_viaje }) => {
     cargarViajeInicial();
   }, [viajePorDefectoId]);
 
+  // ✅ Nuevo useEffect para limpiar cuando id_viaje es null
+  useEffect(() => {
+    if (!id_viaje) {
+      setSelectedKey(null);
+      setSelectedItem(null);
+      list.setFilterText('');
+      setDataViaje([]);
+      setData((prev) => ({
+        ...prev,
+        x_waybill_id: null,
+      }));
+    }
+  }, [id_viaje]);
+
   useEffect(() => {
     if (selectedKey) {
       fetchDataById(selectedKey);
@@ -128,6 +141,7 @@ const ViajeEPP = ({ id_viaje }) => {
     <div className="w-full flex flex-col gap-4">
       <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
         <Autocomplete
+          key={selectedKey ?? 'empty'} // Fuerza reinicio visual si se limpia
           selectedKey={selectedKey}
           onSelectionChange={handleSelection}
           inputValue={list.filterText}
@@ -136,7 +150,7 @@ const ViajeEPP = ({ id_viaje }) => {
           items={list.items}
           label="Carta porte"
           placeholder="Buscar referencia carta porte"
-          variant="faded"
+          variant="bordered"
           isDisabled={!modoEdicion}
         >
           {(item) => (

@@ -273,6 +273,8 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
             fetchData();
         } else if (open && id_solicitud === null) {
             setData({ x_tipo: x_tipo });
+            setLineasGlobales([]);
+            setReservasGlobales([]);
         }
     }, [open, id_solicitud]);
 
@@ -391,10 +393,6 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                                             <Grid item xs={12} sm={6}>
                                                 Inicio programado de viaje:
                                                 <Typography variant="body1">{data?.inicio_programado || '---'}</Typography>
-                                            </Grid>
-
-                                            <Grid item xs={12}>
-                                                <Divider className="my-2" />
                                             </Grid>
 
                                             <Grid item xs={12} sm={6}>
