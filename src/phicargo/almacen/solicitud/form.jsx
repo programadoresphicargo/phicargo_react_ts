@@ -25,7 +25,7 @@ import SelectOperador from "@/phicargo/maniobras/maniobras/select_operador";
 import EstadoSolicitud from "./estado";
 import CancelarSolicitudDialog from "./cancelar";
 
-const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo }) => {
+const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo, setID }) => {
     const [isLoading, setLoading] = useState(false);
     const [isSaving, setSaving] = useState(false);
     const [openCancelar, setOpenCancelar] = useState(false);
@@ -74,6 +74,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo 
                 const response = await odooApi.post('/tms_travel/solicitudes_equipo/', payload);
                 if (response.data.status == 'success') {
                     toast.success(response.data.message);
+                    setID(response.data.data.id);
                 } else {
                     toast.error(response.data.message);
                 }
@@ -86,11 +87,11 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo 
                 const response = await odooApi.patch(`/tms_travel/solicitudes_equipo/${id_solicitud}`, payload);
                 if (response.data.status == 'success') {
                     toast.success(response.data.message);
+                    fetchData();
                 } else {
                     toast.error(response.data.message);
                 }
             }
-            fetchData();
         } catch (error) {
             toast.error('Error al guardar:', error);
         } finally {
@@ -307,7 +308,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo 
                         <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
                             {id_solicitud ? `Solicitud (ID: ${id_solicitud})` : 'Nueva solicitud'}
                         </Typography>
-                        <Button autoFocus color="inherit" onClick={handleClose}>
+                        <Button autoFocus color="inherit" onPress={handleClose}>
                             Cerrar
                         </Button>
                     </Toolbar>
@@ -320,17 +321,6 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo 
                     <DialogContent>
 
                         <Stack spacing={1} direction="row" className="mb-5">
-
-                            {!id_solicitud && (
-                                <Button
-                                    onPress={handleSave}
-                                    color="primary"
-                                    isDisabled={isSaving}
-                                >
-                                    {isSaving ? 'Guardando...' : 'Registrar'}
-                                </Button>
-                            )}
-
 
                             {(!modoEdicion && data?.x_studio_estado == 'borrador') && (
                                 <Button color="primary" onPress={handleEdit}>
@@ -362,7 +352,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo 
                             {(data?.x_studio_estado == "entregado" && data?.es_asignacion) && (
                                 <Button color='success' className='text-white' onPress={() => devolver()} isLoading={isLoading}>Devolver a stock</Button>
                             )}
-                            {(!modoEdicion && data?.x_studio_estado !== 'entregado' && data?.x_studio_estado !== 'devuelto' && data?.x_studio_estado !== 'cancelada') && (
+                            {(!modoEdicion && data?.x_studio_estado == 'borrador') && (
                                 <Button color="danger" className="text-white" onPress={() => setOpenCancelar(true)} isLoading={isLoading}>
                                     Cancelar
                                 </Button>

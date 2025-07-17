@@ -25,11 +25,13 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import EPP from '../inventario/tabla_productos';
 import SolicitudForm from './form';
+import { useAlmacen } from '../contexto/contexto';
 
 const Solicitudes = ({ x_tipo }) => {
 
   const [id_solicitud, setIDSolicitud] = React.useState(null);
   const [open, setOpen] = React.useState(false);
+  const { modoEdicion, setModoEdicion } = useAlmacen();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -171,6 +173,7 @@ const Solicitudes = ({ x_tipo }) => {
     muiTableBodyRowProps: ({ row }) => ({
       onClick: ({ event }) => {
         setIDSolicitud(row.original.id);
+        setModoEdicion(false);
         handleClickOpen();
       },
     }),
@@ -203,6 +206,7 @@ const Solicitudes = ({ x_tipo }) => {
           isDisabled={false}
           onPress={() => {
             setIDSolicitud(null);
+            setModoEdicion(true);
             handleClickOpen();
           }}
         >
@@ -236,7 +240,7 @@ const Solicitudes = ({ x_tipo }) => {
         table={table}
       />
 
-      <SolicitudForm id_solicitud={id_solicitud} open={open} handleClose={handleClose} x_tipo={x_tipo}></SolicitudForm>
+      <SolicitudForm id_solicitud={id_solicitud} open={open} handleClose={handleClose} x_tipo={x_tipo} setID={setIDSolicitud}></SolicitudForm>
     </>
   );
 };
