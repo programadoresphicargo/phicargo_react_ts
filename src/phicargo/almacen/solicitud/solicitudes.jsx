@@ -194,9 +194,9 @@ const Solicitudes = ({ x_tipo }) => {
         }}
       >
         <h2
-          className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
+          className="tracking-tight font-semibold lg:text-2xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
         >
-          Solicitudes
+          Solicitudes de equipo
         </h2>
 
         <Button
