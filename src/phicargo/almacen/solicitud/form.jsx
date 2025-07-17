@@ -25,6 +25,10 @@ import SelectOperador from "@/phicargo/maniobras/maniobras/select_operador";
 import EstadoSolicitud from "./estado";
 import CancelarSolicitudDialog from "./cancelar";
 
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
+
 const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo, setID }) => {
     const [isLoading, setLoading] = useState(false);
     const [isSaving, setSaving] = useState(false);
@@ -292,7 +296,10 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
 
     return (
         <>
-            <Dialog open={open} onClose={handleClose} maxWidth="xl" fullScreen>
+            <Dialog open={open} onClose={handleClose} maxWidth="xl" fullScreen slots={{
+                transition: Transition,
+            }}
+                keepMounted>
                 <AppBar elevation={0} sx={{
                     background: 'linear-gradient(90deg, #0b2149, #002887)',
                     padding: '0 16px',
