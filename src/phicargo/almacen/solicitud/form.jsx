@@ -186,6 +186,36 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo 
         }
     };
 
+    const cambiar_borrador = async () => {
+        const result = await Swal.fire({
+            title: '¿Estás seguro?',
+            text: 'Regresar solicitud a borrador para hacer cambios',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, confirmar',
+        });
+
+        if (result.isConfirmed) {
+            setSaving(true);
+            setLoading(true);
+            try {
+                const response = await odooApi.patch('/tms_travel/solicitudes_equipo/borrador/' + id_solicitud);
+                if (response.data.status == 'success') {
+                    toast.success(response.data.message);
+                    fetchData();
+                    handleClose();
+                } else {
+                    toast.error(response.data.message);
+                }
+            } catch (error) {
+                toast.error('Error al guardar:', error);
+            } finally {
+                setSaving(false);
+                setLoading(false);
+            }
+        }
+    };
+
     const htmlContent = reservasGlobales.map(r =>
         `<div>Unidad: ${r.id_unidad} | Línea: ${r.id_solicitud_equipo_line} | Devuelta: ${r.devuelta ? '✅' : '❌'}</div>`
     ).join("");
@@ -321,13 +351,18 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo 
                             </Button>
                         )}
                         {data?.x_studio_estado == "confirmado" && (
+                            <Button color='warning' className='text-white' onPress={() => cambiar_borrador()} isLoading={isLoading}>Regresar a borrador</Button>
+                        )}
+                        {data?.x_studio_estado == "confirmado" && (
                             <Button color='success' className='text-white' onPress={() => entregar()} isLoading={isLoading}>Entregar</Button>
                         )}
                         {(data?.x_studio_estado == "entregado" && data?.es_asignacion) && (
                             <Button color='success' className='text-white' onPress={() => devolver()} isLoading={isLoading}>Devolver a stock</Button>
                         )}
 
-                        <EstadoSolicitud></EstadoSolicitud>
+                        <div style={{ marginLeft: 'auto', width: '600px' }}>
+                            <EstadoSolicitud />
+                        </div>
                     </Stack>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
