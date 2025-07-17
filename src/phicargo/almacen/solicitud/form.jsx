@@ -332,7 +332,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo 
                             )}
 
 
-                            {(!modoEdicion && data?.x_studio_estado !== 'entregado' && data?.x_studio_estado !== 'devuelto') && (
+                            {(!modoEdicion && data?.x_studio_estado !== 'entregado' && data?.x_studio_estado !== 'devuelto' && data?.x_studio_estado !== 'cancelada') && (
                                 <Button color="primary" onPress={handleEdit}>
                                     Editar
                                 </Button>
