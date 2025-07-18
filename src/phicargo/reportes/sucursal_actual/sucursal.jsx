@@ -13,6 +13,7 @@ import axios from 'axios';
 import odooApi from '@/api/odoo-api';
 import { toast } from "react-toastify";
 import { useDateFormatter } from "@react-aria/i18n";
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
 const SucursalActual = () => {
 
@@ -103,15 +104,22 @@ const SucursalActual = () => {
     columns,
     data,
     state: { showProgressBars: isLoading },
-    columnFilterDisplayMode: 'popover',
-    paginationDisplayMode: 'pages',
-    positionToolbarAlertBanner: 'bottom',
     enableGrouping: true,
+    enableGlobalFilter: true,
+    enableFilters: true,
+    localization: MRT_Localization_ES,
+    columnResizeMode: "onEnd",
     initialState: {
       density: 'compact',
       expanded: false,
-      pagination: { pageIndex: 0, pageSize: 100 },
+      pagination: { pageSize: 80 },
       showColumnFilters: true,
+    },
+    muiTablePaperProps: {
+      elevation: 0,
+      sx: {
+        borderRadius: '0',
+      },
     },
     muiTableHeadCellProps: {
       sx: {
