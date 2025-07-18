@@ -80,14 +80,11 @@ const SucursalActual = () => {
     },
     { accessorKey: 'operador_asignado', header: 'Operador asignado', },
     {
-      accessorKey: 'dias_en_sucursal', header: 'Días en sucursal', muiTableBodyCellProps: {
-        align: 'right',
-      },
+      accessorKey: 'dias_en_sucursal', header: 'Días en sucursal'
     },
-    { accessorKey: 'primer_viaje_misma_sucursal', header: 'Primer viaje' },
-    { accessorKey: 'ultimo_viaje', header: 'Último viaje' },
     { accessorKey: 'fecha_primer_viaje', header: 'Desde' },
-    { accessorKey: 'desde_fecha', header: 'Hasta' },
+    { accessorKey: 'primer_viaje', header: 'Primer viaje' },
+    { accessorKey: 'ultimo_viaje', header: 'Último viaje' },
   ];
 
   const table = useMaterialReactTable({
