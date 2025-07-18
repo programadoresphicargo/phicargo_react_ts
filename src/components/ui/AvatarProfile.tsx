@@ -5,6 +5,7 @@ import {
   DropdownMenu,
   DropdownTrigger,
 } from '@heroui/react';
+import { User } from "@heroui/react";
 
 import { useAuthContext } from '@/modules/auth/hooks';
 
@@ -14,13 +15,14 @@ const AvatarProfile = () => {
   return (
     <Dropdown placement="bottom-end">
       <DropdownTrigger>
-        <Avatar
-          isBordered
-          as="button"
-          className="transition-transform"
-          color="default"
+        <User
+          avatarProps={{
+            isBordered: true,
+            src: "https://cdn-icons-png.flaticon.com/512/3177/3177440.png",
+            size: 'sm'
+          }}
+          description={session?.user.role || ''}
           name={session?.user.name || ''}
-          size="sm"
         />
       </DropdownTrigger>
       <DropdownMenu aria-label="Profile Actions" variant="faded">
