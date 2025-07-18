@@ -12,7 +12,7 @@ import shipingcontainer from '../assets/menu/shiping-container.png';
 import turnos_img from '../assets/menu/turnos.png';
 import usuarios_img from '../assets/menu/usuarios.png';
 import viajes_img from '../assets/menu/viajes.png';
-import logo from '../assets/img/phicargo-vertical.png';
+import logo from '../assets/img/phicargo_logo_white.png';
 import almacen from '../assets/menu/almacen.png';
 import Toolbar from '@mui/material/Toolbar';
 import AvatarProfile from '@/components/ui/AvatarProfile';
@@ -21,7 +21,8 @@ import { Grid } from '@mui/system';
 import { useAuthContext } from '@/modules/auth/hooks';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion'
+import { motion } from 'framer-motion';
+import fondo2 from '../assets/img/tract_scannia.jpg';
 
 type MenuItemType = {
   icon: string;
@@ -39,7 +40,7 @@ const menuItems: MenuItemType[] = [
   },
   {
     icon: viajes_img,
-    label: 'Control de viajes',
+    label: 'Viajes',
     link: '/viajes',
     requiredPermissions: [1],
   },
@@ -127,6 +128,12 @@ const menuItems: MenuItemType[] = [
     link: '/incidencias',
     requiredPermissions: [214, 215, 216, 217],
   },
+  {
+    icon: incidentsImg,
+    label: 'Menu2',
+    link: '/menu2',
+    requiredPermissions: [],
+  },
 ];
 
 const MainMenuPage = () => {
@@ -166,10 +173,12 @@ const MainMenuPage = () => {
   return (
     <main
       style={{
-        backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 400"><rect width="1920" height="400" fill="%23D9DEEA" /><mask id="mask0" mask-type="alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="1920" height="400"><rect width="1920" height="400" fill="%23D9DEEA" /></mask><g mask="url(%23mask0)"><path d="M1059.48 308.024C1152.75 57.0319 927.003 -103.239 802.47 -152.001L1805.22 -495.637L2095.53 351.501L1321.23 616.846C1195.12 618.485 966.213 559.015 1059.48 308.024Z" fill="%23C0CBDD" /><path d="M1333.22 220.032C1468.66 -144.445 1140.84 -377.182 960 -447.991L2416.14 -947L2837.71 283.168L1713.32 668.487C1530.19 670.868 1197.78 584.509 1333.22 220.032Z" fill="%238192B0" /></g></svg>')`,
+        backgroundImage: `
+        linear-gradient(90deg, rgba(11, 33, 73, 0.95), rgba(0, 40, 135, 0.95)),
+        url(${fondo2})`,
         backgroundSize: 'cover',
+        backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
-        backgroundPosition: 'top',
         minHeight: '100vh',
       }}
     >
@@ -188,50 +197,46 @@ const MainMenuPage = () => {
         </Toolbar>
       </AppBar>
       <div
-        className="flex items-center justify-center mb-8 sm:mb-12 px-4 relative z-10"
-        style={{ minHeight: '30vh' }}
+        className="flex items-center justify-center"
+        style={{ minHeight: '25vh' }}
       >
         <div className="flex justify-center items-center">
           <img
             src={logo}
             alt="Logo Phi Cargo"
-            className="w-72 sm:w-60 md:w-80 lg:w-[400px] h-auto object-contain"
+            className="w-72 sm:w-60 md:w-80 lg:w-[350px] h-auto object-contain"
           />
         </div>
       </div>
-      <div className="">
-        <div className="">
-          <div className="">
-            <motion.div
-              className="grid-container"
-              variants={containerVariants}
-              initial="initial"
-              animate="animate"
-            >
-              {filteredMenuItems.map((item, index) => (
-                <motion.div
-                  key={index}
-                  variants={itemVariants}
-                  style={{
-                    padding: "10px",
-                    borderRadius: "20px",
-                    display: "flex",             // ✅ Activa flex
-                    justifyContent: "center",    // ✅ Centra horizontalmente
-                    alignItems: "center",        // ✅ Centra verticalmente
-                  }}
-                >
-                  <MenuItem
-                    key={index}
-                    icon={item.icon}
-                    label={item.label}
-                    link={item.link}
-                  />
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </div>
-      </div>
+
+      <motion.div
+        className="grid-container"
+        variants={containerVariants}
+        initial="initial"
+        animate="animate"
+      >
+        {filteredMenuItems.map((item, index) => (
+          <motion.div
+            key={index}
+            variants={itemVariants}
+            style={{
+              padding: "10px",
+              borderRadius: "20px",
+              display: "flex",             // ✅ Activa flex
+              justifyContent: "center",    // ✅ Centra horizontalmente
+              alignItems: "center",        // ✅ Centra verticalmente
+            }}
+          >
+            <MenuItem
+              key={index}
+              icon={item.icon}
+              label={item.label}
+              link={item.link}
+            />
+          </motion.div>
+        ))}
+      </motion.div>
+
     </main >
   );
 };
@@ -242,61 +247,43 @@ interface MenuItemProps {
   icon: string;
   label: string;
   link: string;
-  isExternal?: boolean;
 }
 
-const MenuItem = ({ icon, label, link, isExternal = false }: MenuItemProps) => {
+const MenuItem = ({ icon, label, link, }: MenuItemProps) => {
   const navigate = useNavigate();
-  const { session } = useAuthContext();
 
   const handleClick = () => {
-    if (isExternal) {
-      // Crear un formulario dinámico
-      const form = document.createElement('form');
-      form.method = 'POST';
-      form.action = link;
-      form.target = '_blank';
-
-      // Añadir una variable al formulario
-      const input = document.createElement('input');
-      input.type = 'hidden';
-      input.name = 'id_usuario'; // Nombre del campo que deseas enviar
-      input.value = String(session?.user.id); // Valor de la variable
-      form.appendChild(input);
-
-      // Enviar el formulario
-      document.body.appendChild(form);
-      form.submit();
-      document.body.removeChild(form);
-    } else {
-      navigate(link);
-    }
+    navigate(link);
   };
 
   return (
     <div
       onClick={handleClick}
       className="
-        flex
-        flex-col
-        items-center
-        justify-center
-        w-32
-        h-32
-        rounded-2xl
-        bg-white
-        shadow-md
-        cursor-pointer
-        transition-colors
-        duration-200
-        hover:bg-gray-100
-      "
+    flex
+    flex-col
+    items-center
+    justify-center
+    w-32
+    h-32
+    rounded-2xl
+    bg-white/10
+    shadow-lg
+    backdrop-blur-md
+    border
+    border-white/20
+    cursor-pointer
+    transition
+    duration-300
+    hover:bg-white/20
+  "
     >
       <div className="mb-2.5">
         <img src={icon} alt={label} className="w-20 h-20 mb-1.5" />
       </div>
-      <div className="text-xs font-bold text-center">{label}</div>
+      <div className="text-xs font-bold text-white text-center">{label}</div>
     </div>
+
   );
 };
 
