@@ -78,7 +78,7 @@ const SucursalActual = () => {
         );
       },
     },
-    { accessorKey: 'operador_ultimo_viaje', header: 'Operador último viaje', },
+    { accessorKey: 'operador_asignado', header: 'Operador asignado', },
     {
       accessorKey: 'dias_en_sucursal', header: 'Días en sucursal', muiTableBodyCellProps: {
         align: 'right',
