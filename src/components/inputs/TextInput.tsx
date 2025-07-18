@@ -9,7 +9,6 @@ export const TextInput = <T extends FieldValues>(
   const {
     control,
     name,
-    className,
     label,
     rules,
     isDisabled,
