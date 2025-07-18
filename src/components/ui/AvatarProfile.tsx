@@ -1,5 +1,4 @@
 import {
-  Avatar,
   Dropdown,
   DropdownItem,
   DropdownMenu,
