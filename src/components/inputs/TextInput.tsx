@@ -27,12 +27,12 @@ export const TextInput = <T extends FieldValues>(
         render={({ field: { onChange, name, value }, fieldState }) => (
           <Input
             type="text"
-            className={className}
             isDisabled={isDisabled}
             classNames={classNames}
             label={label}
+            color='primary'
             size="sm"
-            variant={variant || 'flat'}
+            variant={variant || "faded"}
             name={name}
             onValueChange={(newValue) => {
               const transformedValue = isUpperCase

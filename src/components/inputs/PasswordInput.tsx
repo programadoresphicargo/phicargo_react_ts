@@ -46,7 +46,7 @@ export const PasswordInput2 = <T extends FieldValues>({
             variant="faded"
             defaultValue=""
             onValueChange={onChange}
-            classNames={classNames}
+            color='primary'
             endContent={
               <button
                 className="focus:outline-none"
@@ -61,7 +61,6 @@ export const PasswordInput2 = <T extends FieldValues>({
               </button>
             }
             type={isVisible ? 'text' : 'password'}
-            className={className}
             isInvalid={fieldState.invalid}
             errorMessage={fieldState.error ? fieldState.error.message : null}
           />

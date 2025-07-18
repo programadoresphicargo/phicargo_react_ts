@@ -1,0 +1,66 @@
+.bg_login {
+    animation: slide 30s ease-in-out infinite alternate;
+    background-image: linear-gradient(-60deg, #002689 50%, #042464 50%);
+    bottom: 0;
+    left: -50%;
+    opacity: .5;
+    position: fixed;
+    right: -50%;
+    top: 0;
+    z-index: -1;
+}
+
+.bg2_login {
+    animation-direction: alternate-reverse;
+    animation-duration: 30s;
+}
+
+.bg3_login {
+    animation-duration: 30s;
+}
+
+@keyframes slide {
+    0% {
+        transform: translateX(-25%);
+    }
+
+    100% {
+        transform: translateX(25%);
+    }
+}
+
+.bg_fondo {
+    background-image: url('../../../assets/img/tract_scannia.jpg');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+.glass {
+    background-color: rgba(255, 255, 255, 0.1);
+    /* fondo semitransparente */
+    backdrop-filter: blur(10px);
+    /* difumina el fondo */
+    -webkit-backdrop-filter: blur(10px);
+    /* soporte para Safari */
+    border-radius: 1rem;
+    /* bordes redondeados */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    /* borde sutil */
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+    /* sombra para profundidad */
+}
+
+.content_login {
+    width: 500px;
+    height: auto;
+    left: 50%;
+    padding: 10vmin;
+    position: fixed;
+    text-align: center;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+}
