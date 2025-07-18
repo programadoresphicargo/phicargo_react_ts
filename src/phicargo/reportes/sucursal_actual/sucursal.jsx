@@ -78,7 +78,19 @@ const SucursalActual = () => {
         );
       },
     },
-    { accessorKey: 'operador_asignado', header: 'Operador asignado', },
+    {
+      accessorKey: 'operador_asignado',
+      header: 'Operador asignado',
+      Cell: ({ cell }) => {
+        const valor = cell.getValue() || 'SIN OPERADOR ASIGNADO';
+
+        return (
+          <h1>
+            {valor}
+          </h1>
+        );
+      },
+    },
     {
       accessorKey: 'dias_en_sucursal', header: 'Días en sucursal'
     },
