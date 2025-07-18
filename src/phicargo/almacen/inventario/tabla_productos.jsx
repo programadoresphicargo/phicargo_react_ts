@@ -81,6 +81,27 @@ const TablaProductos = ({ close, tipo }) => {
         accessorKey: 'x_tipo',
         header: 'Tipo',
       },
+      {
+        accessorKey: 'disponible',
+        header: 'Disponible',
+      },
+      {
+        accessorKey: 'reservado',
+        header: 'Reservado',
+      },
+      {
+        accessorKey: 'total_unidades',
+        header: 'Total',
+        Cell: ({ cell }) => {
+          const cantidad = cell.getValue() || '0';
+
+          return (
+            <Chip className="text-white" color="primary" size="sm">
+              {cantidad}
+            </Chip>
+          );
+        }
+      },
     ],
     [],
   );
