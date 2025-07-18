@@ -57,7 +57,7 @@ const SucursalActual = () => {
   const columns = [
     { accessorKey: 'vehiculo', header: 'Vehiculo', },
     {
-      accessorKey: 'sucursal', header: 'Sucursal', Cell: ({ cell }) => {
+      accessorKey: 'sucursal_nombre', header: 'Sucursal', Cell: ({ cell }) => {
         const valor = cell.getValue() || '';
         var clase;
 
