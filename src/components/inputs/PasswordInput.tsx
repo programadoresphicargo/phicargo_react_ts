@@ -13,9 +13,7 @@ interface PasswordInputProps<T extends FieldValues>
 export const PasswordInput2 = <T extends FieldValues>({
   control,
   name,
-  className,
   rules,
-  classNames,
   label = 'Contraseña',
 }: PasswordInputProps<T>) => {
   const [isVisible, setIsVisible] = useState(false);
