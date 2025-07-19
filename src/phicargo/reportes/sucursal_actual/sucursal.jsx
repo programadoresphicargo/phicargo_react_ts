@@ -66,8 +66,6 @@ const SucursalActual = () => {
           clase = 'danger';
         } else if (valor === 'Veracruz (Matriz)') {
           clase = 'success';
-        } else if (valor === 'Llegó temprano') {
-          clase = 'primary';
         } else {
           clase = 'primary';
         }
