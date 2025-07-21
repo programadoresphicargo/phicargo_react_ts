@@ -160,7 +160,7 @@ function EstatusHistorialAgrupado() {
                                 <Avatar
                                     isBordered
                                     color="primary"
-                                    src={VITE_ODOO_API_URL + `/img/status/${step.imagen}`}
+                                    src={VITE_ODOO_API_URL + `/assets/trafico/estatus_operativos/${step.imagen}`}
                                 />
                             }
                         >
