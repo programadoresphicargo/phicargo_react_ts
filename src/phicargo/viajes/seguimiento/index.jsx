@@ -70,7 +70,7 @@ export default function BasicButtons2() {
                                     </Stack>
                                 </div>
 
-                                <div style={{ width: '45%' }}>
+                                <div style={{ width: '55%' }}>
                                     <EstatusViaje></EstatusViaje>
                                 </div>
 

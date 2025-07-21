@@ -18,28 +18,19 @@ import { parseZonedDateTime, parseAbsoluteToLocal } from "@internationalized/dat
 import { Stack } from "rsuite";
 const { VITE_ODOO_API_URL } = import.meta.env;
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-});
-
 function EstatusHistorial() {
 
-    const { id_viaje } = useContext(ViajeContext);
-    const [id_reportes_agrupados, setEstatusAgrupados] = useState([]);
+    const { id_viaje, drawerOpen, setDrawerOpen, id_reportes_agrupados, setEstatusAgrupados } = useContext(ViajeContext);
     const [estatusHistorial, setHistorial] = useState([]);
     const [isLoading, setLoading] = useState([]);
 
-    const [open, setOpen] = React.useState(false);
-    const [scroll, setScroll] = React.useState('paper');
-
-    const handleClickOpen = (id_registros, scrollType) => {
-        setOpen(true);
-        setScroll(scrollType);
+    const handleClickOpen = (id_registros) => {
+        console.log(id_registros);
         setEstatusAgrupados(id_registros);
+        setDrawerOpen(true);
     };
 
     const handleClose = () => {
-        setOpen(false);
         getHistorialEstatus();
     };
 
@@ -65,30 +56,6 @@ function EstatusHistorial() {
             <Stack className="mb-2">
                 <Button color="primary" onPress={() => getHistorialEstatus()} startContent={<i class="bi bi-arrow-clockwise"></i>}>Refrescar</Button>
             </Stack>
-            <Dialog
-                open={open}
-                TransitionComponent={Transition}
-                scroll={scroll}
-                keepMounted
-                onClose={handleClose}
-                fullWidth={true}
-                maxWidth={"md"}
-                sx={{
-                    '& .MuiPaper-root': {
-                        borderRadius: '20px',
-                        boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.0)',
-                    },
-                }}
-                BackdropProps={{
-                    sx: {
-                        backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                    },
-                }}
-            >
-                <DialogContent dividers={scroll === 'paper'}>
-                    <EstatusHistorialAgrupado registros_agrupados={id_reportes_agrupados}></EstatusHistorialAgrupado>
-                </DialogContent>
-            </Dialog>
 
             {isLoading ? (
                 <Progress size="sm" isIndeterminate color="primary" />
@@ -104,7 +71,7 @@ function EstatusHistorial() {
                         };
 
                         return (
-                            <Card className="mb-2 w-full" isPressable onPress={() => handleClickOpen(step.id_reportes_agrupados, "body")}>
+                            <Card className="mb-2 w-full" isPressable onPress={() => handleClickOpen(step.id_reportes_agrupados)}>
                                 <CardHeader className="justify-between">
                                     <div className="flex gap-5">
                                         <Badge color="danger" content={step.registros} placement="top-right" isInvisible={step.registros > 1 ? false : true}>

@@ -1,4 +1,4 @@
-import { Accordion, AccordionItem, Avatar } from "@heroui/react";
+import { Accordion, AccordionItem, Avatar, Progress } from "@heroui/react";
 import { Card, CardBody, CardFooter, CardHeader, Chip } from "@heroui/react";
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import ArchivosAdjuntos from './archivos_adjuntos';
@@ -24,8 +24,9 @@ import Viaje from "../viaje";
 
 const { VITE_ODOO_API_URL } = import.meta.env;
 
-function EstatusHistorialAgrupado({ registros_agrupados }) {
+function EstatusHistorialAgrupado() {
 
+    const { id_reportes_agrupados, setEstatusAgrupados } = useContext(ViajeContext);
     const [open, setOpen] = React.useState(false);
     const [estatus, setEstatus] = React.useState([]);
     const [isLoading, setLoading] = React.useState(false);
@@ -49,17 +50,18 @@ function EstatusHistorialAgrupado({ registros_agrupados }) {
 
     useEffect(() => {
         getEstatus();
-    }, [registros_agrupados]);
+        console.log(id_reportes_agrupados);
+    }, [id_reportes_agrupados]);
 
     const getEstatus = async () => {
 
-        if (registros_agrupados.length === 0) {
+        if (id_reportes_agrupados.length === 0) {
             return;
         }
 
         try {
             setLoading(true);
-            const response = await odooApi.get('/tms_travel/reportes_estatus_viajes/by_id_reportes/' + registros_agrupados);
+            const response = await odooApi.get('/tms_travel/reportes_estatus_viajes/by_id_reportes/' + id_reportes_agrupados);
             setEstatus(response.data);
             setLoading(false);
         } catch (error) {
@@ -129,7 +131,7 @@ function EstatusHistorialAgrupado({ registros_agrupados }) {
 
             {isLoading && (
                 <div style={{ marginTop: '20px' }} className="d-flex justify-content-center">
-                    <CircularProgress size="lg" aria-label="Loading..." />
+                    <Progress isIndeterminate size="sm"></Progress>
                 </div>
             )}
 
