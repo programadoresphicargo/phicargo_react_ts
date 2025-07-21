@@ -21,12 +21,14 @@ import { parseZonedDateTime, parseAbsoluteToLocal } from "@internationalized/dat
 import { toast } from 'react-toastify';
 import { useAuthContext } from "@/modules/auth/hooks";
 import Viaje from "../viaje";
+import CloseIcon from '@mui/icons-material/Close';
+import { IconButton, Box } from '@mui/material';
 
 const { VITE_ODOO_API_URL } = import.meta.env;
 
 function EstatusHistorialAgrupado() {
 
-    const { id_reportes_agrupados, setEstatusAgrupados } = useContext(ViajeContext);
+    const { id_reportes_agrupados, setEstatusAgrupados, setDrawerOpen } = useContext(ViajeContext);
     const [open, setOpen] = React.useState(false);
     const [estatus, setEstatus] = React.useState([]);
     const [isLoading, setLoading] = React.useState(false);
@@ -133,7 +135,18 @@ function EstatusHistorialAgrupado() {
     return (
         <>
             <DialogTitle sx={{ m: 0, p: 2, fontFamily: 'Inter' }} id="customized-dialog-title">
-                Detalle de estatus
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <span>Detalle de estatus</span>
+                    <IconButton
+                        aria-label="cerrar"
+                        onClick={() => setDrawerOpen(false)}
+                        sx={{
+                            color: (theme) => theme.palette.grey[500],
+                        }}
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                </Box>
             </DialogTitle>
 
             {isLoading && (
