@@ -123,6 +123,13 @@ function EstatusHistorialAgrupado() {
         }
     };
 
+    const getBadgeClass = (tipo_registrante) => {
+        if (tipo_registrante == 'automatico') return "primary";
+        if (tipo_registrante == 'usuario') return "secondary";
+        if (tipo_registrante == 'operador') return "success";
+        return "secondary";
+    };
+
     return (
         <>
             <DialogTitle sx={{ m: 0, p: 2, fontFamily: 'Inter' }} id="customized-dialog-title">
@@ -159,7 +166,7 @@ function EstatusHistorialAgrupado() {
                             startContent={
                                 <Avatar
                                     isBordered
-                                    color="primary"
+                                    color={`${getBadgeClass(step.tipo_registrante)}`}
                                     src={VITE_ODOO_API_URL + `/assets/trafico/estatus_operativos/${step.imagen}`}
                                 />
                             }
@@ -168,14 +175,14 @@ function EstatusHistorialAgrupado() {
                                 <CardHeader className="justify-between">
                                     <div className="flex gap-5">
                                         <Avatar
+                                            color={`${getBadgeClass(step.tipo_registrante)}`}
                                             isBordered
                                             radius="full"
                                             size="md"
-                                            src={VITE_ODOO_API_URL + "/img/operador.png"}
                                         />
                                         <div className="flex flex-col gap-1 items-start justify-center">
                                             <h4 className="text-small font-semibold leading-none text-default-600">Enviado por</h4>
-                                            <h5 className="text-small tracking-tight text-default-400">{step.name}</h5>
+                                            <h5 className="text-small tracking-tight text-default-400">{step.nombre_registrante}</h5>
                                         </div>
                                     </div>
 
