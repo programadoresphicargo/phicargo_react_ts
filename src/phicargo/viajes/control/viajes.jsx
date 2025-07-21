@@ -35,7 +35,7 @@ const ViajesActivos = ({ }) => {
 
   const [open, setOpen] = React.useState(false);
   const [openMasivo, setMasivoOpen] = React.useState(false);
-  const { id_viaje, viaje, getViaje, loading, error, ActualizarIDViaje } = useContext(ViajeContext);
+  const { id_viaje, viaje, getViaje, loading, error, ActualizarIDViaje, setDrawerOpen } = useContext(ViajeContext);
   const [blinkRows, setBlinkRows] = useState({});
 
   useEffect(() => {
@@ -342,6 +342,7 @@ const ViajesActivos = ({ }) => {
       onClick: ({ event }) => {
         handleClickOpen();
         ActualizarIDViaje(row.original.id_viaje);
+        setDrawerOpen(false);
       },
     }),
     muiTableBodyCellProps: ({ row }) => {
