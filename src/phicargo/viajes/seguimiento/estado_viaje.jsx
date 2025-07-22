@@ -24,7 +24,6 @@ const EstatusViaje = () => {
                 style={{ fontFamily: 'Inter' }}
                 type="navigation"
                 current={current}
-                onChange={onChange}
                 className="site-navigation-steps"
                 items={[
                     {
