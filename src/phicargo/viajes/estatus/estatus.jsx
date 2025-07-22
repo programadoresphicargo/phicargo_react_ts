@@ -1,4 +1,4 @@
-import { Card, CardHeader } from "@heroui/react";
+import { Card, CardHeader, Input } from "@heroui/react";
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import { Avatar } from "@heroui/react";
@@ -21,7 +21,10 @@ const { VITE_ODOO_API_URL } = import.meta.env;
 function EstatusHistorial() {
 
     const { id_viaje, drawerOpen, setDrawerOpen, id_reportes_agrupados, setEstatusAgrupados } = useContext(ViajeContext);
+
     const [estatusHistorial, setHistorial] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
+
     const [isLoading, setLoading] = useState([]);
 
     const handleClickOpen = (id_registros) => {
@@ -33,6 +36,11 @@ function EstatusHistorial() {
     const handleClose = () => {
         getHistorialEstatus();
     };
+
+    const filteredHistorial = estatusHistorial.filter((item) =>
+        item.nombre_estatus?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.nombre_registrante?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     const getHistorialEstatus = async () => {
         try {
@@ -54,14 +62,33 @@ function EstatusHistorial() {
     return (
         <>
             <Stack className="mb-2">
-                <Button color="primary" onPress={() => getHistorialEstatus()} startContent={<i class="bi bi-arrow-clockwise"></i>}>Refrescar</Button>
+                <Button
+                    color="primary"
+                    size="sm"
+                    onPress={() => getHistorialEstatus()}
+                    startContent={<i class="bi bi-arrow-clockwise"></i>}>
+                    Refrescar historial
+                </Button>
             </Stack>
+
+            <Input
+                radius="full"
+                className="mb-5"
+                isClearable
+                label="Buscador"
+                color="primary"
+                fullWidth
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onClear={() => setSearchTerm('')}
+                startContent={<i class="bi bi-search"></i>}
+            />
 
             {isLoading ? (
                 <Progress size="sm" isIndeterminate color="primary" />
             ) : (
                 <ol className="step">
-                    {estatusHistorial.map((step, index) => {
+                    {filteredHistorial.map((step, index) => {
 
                         const getBadgeClass = () => {
                             if (step.tipo_registrante == 'automatico') return "primary";
