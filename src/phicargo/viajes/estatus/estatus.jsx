@@ -24,6 +24,7 @@ function EstatusHistorial() {
 
     const [estatusHistorial, setHistorial] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
+    const [sortOrder, setSortOrder] = useState('desc');
 
     const [isLoading, setLoading] = useState([]);
 
@@ -41,6 +42,16 @@ function EstatusHistorial() {
         item.nombre_estatus?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.nombre_registrante?.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    const sortedHistorial = [...filteredHistorial].sort((a, b) => {
+        const fechaA = new Date(a.ultima_fecha_envio);
+        const fechaB = new Date(b.ultima_fecha_envio);
+        return sortOrder === 'asc' ? fechaA - fechaB : fechaB - fechaA;
+    });
+
+    const toggleSortOrder = () => {
+        setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+    };
 
     const getHistorialEstatus = async () => {
         try {
@@ -73,22 +84,32 @@ function EstatusHistorial() {
 
             <Input
                 radius="full"
-                className="mb-5"
+                className="w-full mb-2"
                 isClearable
                 label="Buscador"
                 color="primary"
                 fullWidth
+                size="lg" // puedes cambiarlo por "md" o "sm" si quieres más compacto
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 onClear={() => setSearchTerm('')}
-                startContent={<i class="bi bi-search"></i>}
+                startContent={<i className="bi bi-search"></i>}
             />
+
+            <Button
+                onPress={toggleSortOrder}
+                color="primary"
+                size="sm" // tamaño reducido
+                className="w-fit self-end mb-3" // ancho mínimo y alineado a la derecha
+            >
+                Ordenar: {sortOrder === 'asc' ? 'Ascendente' : 'Descendente'}
+            </Button>
 
             {isLoading ? (
                 <Progress size="sm" isIndeterminate color="primary" />
             ) : (
                 <ol className="step">
-                    {filteredHistorial.map((step, index) => {
+                    {sortedHistorial.map((step, index) => {
 
                         const getBadgeClass = () => {
                             if (step.tipo_registrante == 'automatico') return "primary";
