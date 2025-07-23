@@ -88,7 +88,11 @@ const Viaje = ({ }) => {
       <Box sx={{ width: '100%' }}>
         <TabContext value={value}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-            <TabList onChange={handleChange}>
+            <TabList
+              onChange={handleChange}
+              variant="scrollable"
+              scrollButtons="auto"
+              allowScrollButtonsMobile>
               <Tab sx={{ fontFamily: 'Inter' }} label="Seguimiento" value="1" />
               <Tab sx={{ fontFamily: 'Inter' }} label="Mapa" value="2" />
               <Tab sx={{ fontFamily: 'Inter' }} label="Documentos" value="3" />
