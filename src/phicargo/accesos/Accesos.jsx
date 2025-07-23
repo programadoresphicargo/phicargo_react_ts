@@ -27,6 +27,9 @@ export default function Accesos() {
                 <TabContext value={value}>
                     <Box sx={{ borderColor: 'divider', backgroundColor: '#002887', color: 'white' }}>
                         <TabList
+                            variant="scrollable"
+                            scrollButtons="auto"
+                            allowScrollButtonsMobile
                             onChange={handleChange}
                             textColor="inherit"
                             sx={{
