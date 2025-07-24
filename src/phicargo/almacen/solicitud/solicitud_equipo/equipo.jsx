@@ -26,6 +26,7 @@ import EPP from '../../inventario/tabla_productos';
 import { useAlmacen } from '../../contexto/contexto';
 import ReservasDetalle from '../reservas';
 import TablaProductosDetalle from './tabla_productos';
+import toast from 'react-hot-toast';
 
 const EPPSolicitados = ({ }) => {
 
@@ -71,6 +72,7 @@ const EPPSolicitados = ({ }) => {
         header: 'Tipo de entrega',
         editVariant: 'select',
         editSelectOptions: ['prestamo', 'asignacion'],
+        enableEditing: () => modoEdicion && data?.x_studio_estado === "borrador",
         muiEditTextFieldProps: {
           select: true,
           defaultValue: 'prestamo',
@@ -84,11 +86,12 @@ const EPPSolicitados = ({ }) => {
       {
         accessorKey: 'x_cantidad_solicitada',
         header: 'Cantidad solicitada',
-        enableEditing: data?.x_studio_estado === "borrador" ? true : false,
+        enableEditing: () => modoEdicion && data?.x_studio_estado === "borrador",
       },
       {
         accessorKey: 'equipo_asignado',
         header: 'Equipo asignado',
+        enableEditing: false,
         Cell: ({ cell, row }) => {
           const estado = cell.getValue();
 
@@ -103,6 +106,23 @@ const EPPSolicitados = ({ }) => {
               {estado || 'Pendiente por asignar'}
             </Button>
           );
+        },
+      },
+      {
+        accessorKey: 'delete',
+        header: 'Borrar',
+        enableEditing: false,
+        Cell: ({ cell, row, table }) => {
+          return data?.x_studio_estado === 'borrador' ? (
+            <Button
+              onPress={() => deleteReserva(row.original.id)}
+              color='danger'
+              size='sm'
+              isDisabled={!modoEdicion}
+            >
+              Eliminar
+            </Button>
+          ) : null; // no muestra nada si no está en borrador
         },
       }
     ],
@@ -120,6 +140,7 @@ const EPPSolicitados = ({ }) => {
     enableGlobalFilter: true,
     enableFilters: true,
     enableEditing: true,
+    editDisplayMode: "table",
     positionActionsColumn: 'last',
     enableColumnPinning: true,
     enableStickyHeader: true,
@@ -156,10 +177,6 @@ const EPPSolicitados = ({ }) => {
         maxHeight: 'calc(100vh - 210px)',
       },
     },
-    muiTableBodyRowProps: ({ row }) => ({
-      onClick: ({ event }) => {
-      },
-    }),
     muiTableBodyCellProps: ({ row }) => ({
       sx: {
         fontFamily: 'Inter',
@@ -194,48 +211,29 @@ const EPPSolicitados = ({ }) => {
 
       </Box >
     ),
-    onEditingRowSave: ({ row, values, exitEditingMode }) => {
-      const updatedRow = { ...row.original, ...values };
-      updatedRow.cantidad = parseFloat(updatedRow.cantidad) || 1;
+    muiTableBodyCellProps: ({ cell, row, table }) => ({
+      onBlur: (event) => {
+        if (modoEdicion && data?.x_studio_estado === 'borrador') {
+          const newValue = event.target.value;
+          const columnId = cell.column.id;
+          // Clona el original y actualiza el valor de la celda editada
+          const updatedRow = {
+            ...row.original,
+            [columnId]: columnId === 'cantidad' ? parseFloat(newValue) || 1 : newValue,
+          };
 
-      setLineasGlobales((prev) => {
-        return prev.map((r) => {
-          // Reemplazar el registro por tempId si es nuevo
-          if (r.isNew && r.tempId === updatedRow.tempId) {
-            return { ...updatedRow };
-          }
+          setLineasGlobales((prev) =>
+            prev.map((r) => {
+              if (r.isNew && r.tempId === updatedRow.tempId) return { ...updatedRow };
+              if (!r.isNew && r.id === updatedRow.id) return { ...updatedRow };
+              return r;
+            })
+          );
 
-          // Reemplazar el registro por ID si ya existe
-          if (!r.isNew && r.id === updatedRow.id) {
-            return { ...updatedRow };
-          }
-
-          // Si no coincide, devolver sin cambios
-          return r;
-        });
-      });
-
-      exitEditingMode();
-      toast.success('Registro actualizado');
-    },
-    renderRowActions: ({ row, table }) => (
-      <>
-        {data?.x_studio_estado == 'borrador' && (
-          <Box sx={{ display: 'flex', gap: '8px' }}>
-            <Button
-              color="primary"
-              size="sm"
-              className='text-white'
-              isDisabled={!modoEdicion}
-              onPress={() => table.setEditingRow(row)}
-            >
-              Editar
-            </Button>
-            <Button onPress={() => deleteReserva(row.original.id)} color='danger' size='sm' isDisabled={!modoEdicion}>Eliminar</Button>
-          </Box>
-        )}
-      </>
-    ),
+          toast.success(`Campo "${columnId}" actualizado`);
+        }
+      }
+    }),
   });
 
   return (
