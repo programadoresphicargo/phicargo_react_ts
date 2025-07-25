@@ -13,6 +13,7 @@ import { Stack } from 'rsuite';
 import odooApi from '@/api/odoo-api';
 import { tiempoTranscurrido } from '../../funciones/tiempo';
 import { toast } from 'react-toastify';
+const { VITE_ODOO_API_URL } = import.meta.env;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -100,13 +101,17 @@ function EstatusHistorialManiobras({ id_maniobra }) {
                                             color={`${getBadgeClass()}`}
                                             isBordered
                                             radius="full"
-                                            size="md"
-                                            src={`/img/status/`}
+                                            size="sm"
+                                            src={VITE_ODOO_API_URL + `/assets/trafico/estatus_operativos/${step.imagen}`}
                                         />
                                     </Badge>
                                     <div className="flex flex-col gap-1 items-start justify-center">
                                         <h4 className="text-small font-semibold leading-none text-default-600">{step.nombre_estatus}</h4>
-                                        <Chip color='success' className='text-white' size='sm'>{step.comentarios_estatus}</Chip>
+                                        {step.comentarios_estatus != '' && (
+                                            <Chip color='success' className='text-white' size='sm'>
+                                                {step.comentarios_estatus}
+                                            </Chip>
+                                        )}
                                         <h5 className="text-small tracking-tight text-default-400">
                                             {step.nombre}
                                         </h5>
