@@ -24,7 +24,6 @@ const pages = [
     { name: 'NOMINAS', path: '/nominas' },
     { name: 'TERMINALES', path: '/terminales' },
     { name: 'PRECIOS', path: '/precios' },
-    { name: 'DISPONIBILIDAD', path: '/disponibilidad' },
     { name: 'CUMPLIMIENTO ESTATUS', path: '/cumplimiento_estatus_ejecutivos_maniobras' },
     { name: 'CUMPLIMIENTO ESTATUS 2', path: '/cumplimiento_estatus_maniobras' },
 ];
