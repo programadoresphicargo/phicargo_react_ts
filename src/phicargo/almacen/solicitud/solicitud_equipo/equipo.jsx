@@ -213,10 +213,12 @@ const EPPSolicitados = ({ }) => {
     ),
     muiTableBodyCellProps: ({ cell, row, table }) => ({
       onBlur: (event) => {
-        if (modoEdicion && data?.x_studio_estado === 'borrador') {
+        const columnId = cell.column.id;
+        const isEditable = cell.column.columnDef?.enableEditing;
+
+        if (modoEdicion && isEditable && data?.x_studio_estado === 'borrador') {
           const newValue = event.target.value;
-          const columnId = cell.column.id;
-          // Clona el original y actualiza el valor de la celda editada
+
           const updatedRow = {
             ...row.original,
             [columnId]: columnId === 'cantidad' ? parseFloat(newValue) || 1 : newValue,
@@ -246,7 +248,7 @@ const EPPSolicitados = ({ }) => {
         <DialogTitle></DialogTitle>
         <DialogContent>
           <DialogContentText>
-            <TablaProductosDetalle></TablaProductosDetalle>
+            <TablaProductosDetalle close={handleClose}></TablaProductosDetalle>
           </DialogContentText>
         </DialogContent>
         <DialogActions>

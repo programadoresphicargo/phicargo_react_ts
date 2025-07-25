@@ -128,6 +128,7 @@ const TablaProductosDetalle = ({ close, tipo }) => {
           x_cantidad_devuelta: 0,
         };
         setLineasGlobales((prev) => [...prev, nueva]);
+        close();
       },
     }),
     muiTableBodyCellProps: ({ row }) => ({

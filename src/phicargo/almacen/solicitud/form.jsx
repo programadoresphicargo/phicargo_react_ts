@@ -372,8 +372,9 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                             </div>
                         </Stack>
 
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div className="md:col-span-2 grid grid-cols-1 gap-4">
+
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} md={9}>
 
                                 <Card>
                                     <CardHeader>
@@ -414,36 +415,37 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                                     </CardBody>
                                 </Card>
 
-                                <Card>
+                                <Card className="mt-4">
                                     <CardBody>
                                         <EPPSolicitados></EPPSolicitados>
                                     </CardBody>
                                 </Card>
-                            </div>
+                            </Grid>
 
-                            <Card>
-                                <CardHeader>Historial de cambios</CardHeader>
-                                <Divider></Divider>
+                            <Grid item xs={12} md={3}>
+                                <Card>
+                                    <CardHeader>Historial de cambios</CardHeader>
+                                    <Divider></Divider>
 
-                                {(data?.x_studio_estado == 'cancelada') && (
-                                    <Card className="m-3">
-                                        <CardHeader className="bg-danger text-white">
-                                            Cancelada
-                                        </CardHeader>
-                                        <Divider></Divider>
-                                        <CardContent>
-                                            <p>Motivo de cancelación: {data?.x_motivo_cancelacion}</p>
-                                            <p>Comentarios: {data?.x_comentarios_cancelacion}</p>
-                                        </CardContent>
-                                    </Card>
-                                )}
+                                    {(data?.x_studio_estado == 'cancelada') && (
+                                        <Card className="m-3">
+                                            <CardHeader className="bg-danger text-white">
+                                                Cancelada
+                                            </CardHeader>
+                                            <Divider></Divider>
+                                            <CardContent>
+                                                <p>Motivo de cancelación: {data?.x_motivo_cancelacion}</p>
+                                                <p>Comentarios: {data?.x_comentarios_cancelacion}</p>
+                                            </CardContent>
+                                        </Card>
+                                    )}
 
-                                <CardBody>
-                                    <HistorialCambios cambios={data?.mails || []} />
-                                </CardBody>
-                            </Card>
-
-                        </div>
+                                    <CardBody>
+                                        <HistorialCambios cambios={data?.mails || []} />
+                                    </CardBody>
+                                </Card>
+                            </Grid>
+                        </Grid>
 
                     </DialogContent>
 
