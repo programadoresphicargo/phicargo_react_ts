@@ -137,7 +137,7 @@ const Maniobras = ({ estado_maniobra }) => {
         Cell: ({ cell }) => {
           const value = cell.getValue();
 
-          let variant = 'default';
+          let variant = 'secondary';
           if (value === 'retiro') {
             variant = 'success';
           } else if (value === 'ingreso') {
