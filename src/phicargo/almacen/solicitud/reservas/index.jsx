@@ -5,7 +5,7 @@ import {
 } from 'material-react-table';
 import { Dialog, DialogContent, DialogTitle, Stack, TextField, Box, DialogActions } from '@mui/material';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import { Button, Select, SelectItem, Textarea, Checkbox } from '@heroui/react';
+import { Button, Select, SelectItem, Textarea, Checkbox, Chip } from '@heroui/react';
 import { useAlmacen } from '../../contexto/contexto';
 import SearchUnidad from './search_unidad';
 
@@ -39,6 +39,24 @@ const ReservasDetalle = ({ open, handleClose, dataLinea }) => {
             { accessorKey: 'id_solicitud_equipo_line', header: 'ID Linea' },
             { accessorKey: 'id_unidad', header: 'Unidad' },
             { accessorKey: 'x_name', header: 'Descripción' },
+            {
+                accessorKey: 'recibido_operador', header: 'Recibido operador', Cell: ({ row }) => {
+                    const valor = row.original.recibido_operador;
+                    var respuesta = '';
+                    if (valor == true) {
+                        respuesta = 'Sí';
+                    } else {
+                        respuesta = 'No';
+                    }
+                    return (
+                        <>
+                            <Chip color={respuesta == 'Sí' ? 'success' : 'danger'} className='text-white'>{respuesta}</Chip>
+                        </>
+                    );
+                },
+            },
+            { accessorKey: 'fecha_recibido_operador', header: 'Fecha recibido operador' },
+            { accessorKey: 'observaciones_operador', header: 'Observaciones operador' },
             {
                 accessorKey: 'devuelta',
                 header: '¿Devuelta?',
@@ -145,15 +163,20 @@ const ReservasDetalle = ({ open, handleClose, dataLinea }) => {
         );
     };
 
+    const mostrarColumnasRecepcion = ['entregado', 'recepcionado_operador', 'devuelto'].includes(data?.x_studio_estado);
+
     const table = useMaterialReactTable({
         columns,
         data: reservasLinea,
         localization: MRT_Localization_ES,
         initialState: {
             columnVisibility: {
-                devuelta: data?.x_studio_estado == 'entregado' ? true : false,
-                motivo_no_devuelta: data?.x_studio_estado == 'entregado' ? true : false,
-                comentarios_no_devuelta: data?.x_studio_estado == 'entregado' ? true : false,
+                devuelta: mostrarColumnasRecepcion,
+                motivo_no_devuelta: mostrarColumnasRecepcion,
+                comentarios_no_devuelta: mostrarColumnasRecepcion,
+                recibido_operador: mostrarColumnasRecepcion,
+                fecha_recibido_operador: mostrarColumnasRecepcion,
+                observaciones_operador: mostrarColumnasRecepcion,
             },
             density: 'compact',
             showColumnFilters: true,
@@ -201,7 +224,7 @@ const ReservasDetalle = ({ open, handleClose, dataLinea }) => {
                         onPress={() => deleteReserva(row.original.id_reserva)}
                         color="danger"
                         size="sm"
-                        isDisabled={['confirmado', 'entregado'].includes(data?.x_studio_estado)}
+                        isDisabled={['confirmado', 'entregado', 'recepcionado_operador'].includes(data?.x_studio_estado)}
                     >
                         Eliminar
                     </Button>
@@ -212,7 +235,11 @@ const ReservasDetalle = ({ open, handleClose, dataLinea }) => {
     });
 
     return (
-        <Dialog open={open} onClose={handleClose} fullWidth maxWidth="xl">
+        <Dialog open={open} onClose={handleClose} fullWidth maxWidth="xl" PaperProps={{
+            sx: {
+                borderRadius: '28px', // estilo M3
+            },
+        }}>
             <DialogTitle>Equipo asignado</DialogTitle>
             <DialogContent>
                 <MaterialReactTable table={table} />
