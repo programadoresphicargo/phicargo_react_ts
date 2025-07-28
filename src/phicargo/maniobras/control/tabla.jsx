@@ -31,7 +31,6 @@ import { exportToCSV } from '../../utils/export';
 import odooApi from '@/api/odoo-api';
 import { width } from '@mui/system';
 import { DateRangePicker } from 'rsuite';
-import 'rsuite/dist/rsuite.min.css';
 
 const getMonthStartAndEnd = () => {
   const now = new Date();
