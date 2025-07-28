@@ -42,6 +42,11 @@ const EstadoSolicitud = () => {
                         value: 'entregado',
                     },
                     {
+                        status: current === 'recepcionado_operador' ? 'process' : 'wait',
+                        title: 'Recepcionado por operador',
+                        value: 'recepcionado_operador',
+                    },
+                    {
                         status: current === 'devuelto' ? 'process' : 'wait',
                         title: 'Devuelto',
                         value: 'devuelto',

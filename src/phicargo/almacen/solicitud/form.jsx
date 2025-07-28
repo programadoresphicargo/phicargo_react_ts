@@ -367,7 +367,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                                 </Button>
                             )}
 
-                            <div style={{ marginLeft: 'auto', width: '600px' }}>
+                            <div style={{ marginLeft: 'auto', width: '1000px' }}>
                                 <EstadoSolicitud />
                             </div>
                         </Stack>
