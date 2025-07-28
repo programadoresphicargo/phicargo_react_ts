@@ -30,6 +30,15 @@ import dayjs from 'dayjs';
 import { exportToCSV } from '../../utils/export';
 import odooApi from '@/api/odoo-api';
 import { width } from '@mui/system';
+import { DateRangePicker } from 'rsuite';
+import 'rsuite/dist/rsuite.min.css';
+
+const getMonthStartAndEnd = () => {
+  const now = new Date();
+  const start = new Date(now.getFullYear(), now.getMonth(), 1); // 1er día
+  const end = new Date(now.getFullYear(), now.getMonth() + 1, 0); // Último día
+  return [start, end];
+};
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -43,6 +52,7 @@ const Maniobras = ({ estado_maniobra }) => {
   const [id_maniobra, setIdmaniobra] = useState('');
   const [id_cp, setIdcp] = useState('');
   const [idCliente, setClienteID] = useState('');
+  const [range, setRange] = useState(getMonthStartAndEnd());
 
   const handleShowModal = (id_maniobra, id_cp) => {
     setModalShow(true);
@@ -60,7 +70,7 @@ const Maniobras = ({ estado_maniobra }) => {
     try {
       setLoading(true);
       const response = await odooApi.get('/maniobras/estado/', {
-        params: { estado: estado_maniobra }
+        params: { estado: estado_maniobra, fecha_inicio: range[0].toISOString().split('T')[0], fecha_fin: range[1].toISOString().split('T')[0] }
       });
       setData(response.data);
       setLoading(false);
@@ -72,7 +82,7 @@ const Maniobras = ({ estado_maniobra }) => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [range]);
 
   const columns = useMemo(
     () => [
@@ -314,6 +324,12 @@ const Maniobras = ({ estado_maniobra }) => {
         }}
       >
         <h1 className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text">Control de maniobras</h1>
+        <DateRangePicker
+          value={range}
+          onChange={setRange}
+          format="yyyy-MM-dd"
+          placeholder="Selecciona un rango de fechas"
+        />
         <Button color="primary" isLoading={isLoading2} onPress={() => fetchData()} startContent={<i class="bi bi-arrow-clockwise"></i>} size="sm">Refrescar</Button>
         <Button color="success" onPress={() => handleClickOpen()} className='text-white' startContent={<i class="bi bi-send-plus"></i>} size="sm">Envio masivo</Button>
         <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, `maniobras ${estado_maniobra}.csv`)} size="sm">Exportar</Button>
