@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -19,14 +19,55 @@ import logo from '../../assets/img/phicargo-vertical.png';
 import AvatarProfile from '@/components/ui/AvatarProfile';
 
 const pages = [
-    { name: 'CONTENEDORES', path: '/cartas-porte' },
     { name: 'CONTROL DE MANIOBRAS', path: '/control_maniobras' },
-    { name: 'NOMINAS', path: '/nominas' },
-    { name: 'TERMINALES', path: '/terminales' },
-    { name: 'PRECIOS', path: '/precios' },
-    { name: 'CUMPLIMIENTO ESTATUS', path: '/cumplimiento_estatus_ejecutivos_maniobras' },
-    { name: 'CUMPLIMIENTO ESTATUS 2', path: '/cumplimiento_estatus_maniobras' },
+    { name: 'CONTENEDORES', path: '/cartas-porte' },
+    {
+        name: 'NOMINAS',
+        subpages: [
+            { name: 'Nominas', path: '/nominas' },
+            { name: 'Precios', path: '/precios' },
+        ],
+    },
+    { name: 'Terminales', path: '/terminales' },
+    {
+        name: 'Reportes',
+        subpages: [
+            { name: 'CUMPLIMIENTO ESTATUS POR HORA', path: '/cumplimiento_estatus_ejecutivos_maniobras' },
+            { name: 'CUMPLIMIENTO ESTATUS POR ESTATUS', path: '/cumplimiento_estatus_maniobras' }
+        ],
+    },
 ];
+
+function SubMenu({ title, items }) {
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
+
+    const handleOpen = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    return (
+        <>
+            <Button
+                sx={{ my: 2, color: 'white', display: 'block', fontFamily: 'inter' }}
+                onClick={handleOpen}
+            >
+                {title}
+            </Button>
+            <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+                {items.map(({ name, path }) => (
+                    <MenuItem key={name} onClick={handleClose} component={Link} to={path}>
+                        {name}
+                    </MenuItem>
+                ))}
+            </Menu>
+        </>
+    );
+}
 
 function ManiobrasNavBar() {
     const navigate = useNavigate();
@@ -47,15 +88,16 @@ function ManiobrasNavBar() {
 
     return (
         <>
-            <WebSocketWithToast></WebSocketWithToast>
-            <AppBar position="static" elevation={3}
+            <AppBar
+                elevation={3}
+                position="static"
                 sx={{
                     background: 'linear-gradient(90deg, #0b2149, #002887)',
-                    padding: '0 16px'
-                }}>
+                    padding: '0 16px',
+                }}
+            >
                 <Container maxWidth="xl">
                     <Toolbar disableGutters>
-
                         {/* Botón de retroceso */}
                         <IconButton
                             edge="start"
@@ -67,13 +109,14 @@ function ManiobrasNavBar() {
                             <AppsIcon></AppsIcon>
                         </IconButton>
 
-                        <img className='m-2'
+                        <img
+                            className="m-2"
                             src={logo}
                             alt="Descripción de la imagen"
                             style={{
                                 width: '175px',
                                 height: '60px',
-                                filter: 'brightness(0) invert(1)' // Esto hará que la imagen sea blanca
+                                filter: 'brightness(0) invert(1)',
                             }}
                         />
 
@@ -106,8 +149,13 @@ function ManiobrasNavBar() {
                             >
                                 {pages.map(({ name, path }) => (
                                     <MenuItem key={name} onClick={handleCloseNavMenu}>
-                                        <Link to={path} style={{ textDecoration: 'none', color: 'inherit' }}>
-                                            <Typography sx={{ textAlign: 'center' }}>{name}</Typography>
+                                        <Link
+                                            to={path}
+                                            style={{ textDecoration: 'none', color: 'inherit' }}
+                                        >
+                                            <Typography sx={{ textAlign: 'center', color: 'black' }}>
+                                                {name}
+                                            </Typography>
                                         </Link>
                                     </MenuItem>
                                 ))}
@@ -115,17 +163,31 @@ function ManiobrasNavBar() {
                         </Box>
 
                         <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                            {pages.map(({ name, path }) => (
-                                <Button
-                                    key={name}
-                                    onClick={handleCloseNavMenu}
-                                    sx={{ my: 2, color: 'white', display: 'block', fontFamily: 'Inter' }}
-                                    component={Link}
-                                    to={path}
-                                >
-                                    {name}
-                                </Button>
-                            ))}
+                            {pages.map((page) => {
+
+                                if (page.permiso && !session?.user.permissions.includes(page.permiso)) return null;
+
+                                if (page.subpages) {
+                                    return (
+                                        <SubMenu
+                                            key={page.name}
+                                            title={page.name}
+                                            items={page.subpages}
+                                        />
+                                    );
+                                }
+
+                                return (
+                                    <Button
+                                        key={page.name}
+                                        sx={{ my: 2, color: 'white', display: 'block', fontFamily: 'inter' }}
+                                        component={Link}
+                                        to={page.path}
+                                    >
+                                        {page.name}
+                                    </Button>
+                                );
+                            })}
                         </Box>
 
                         <Box sx={{ display: { xs: 'flex', md: 'flex' } }}>

@@ -47,7 +47,7 @@ const menuItems: MenuItemType[] = [
   {
     icon: maniobras_img,
     label: 'Maniobras',
-    link: '/cartas-porte',
+    link: '/control_maniobras',
     requiredPermissions: [38],
   },
   {
