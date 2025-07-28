@@ -45,8 +45,10 @@ const ReservasDetalle = ({ open, handleClose, dataLinea }) => {
                     var respuesta = '';
                     if (valor == true) {
                         respuesta = 'Sí';
-                    } else {
+                    } else if (valor == false) {
                         respuesta = 'No';
+                    } else {
+                        respuesta = 'Por confirmar';
                     }
                     return (
                         <>
