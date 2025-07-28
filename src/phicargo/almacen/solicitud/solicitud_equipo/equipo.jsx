@@ -100,7 +100,7 @@ const EPPSolicitados = ({ }) => {
               size="sm"
               color="primary"
               className="text-white"
-              isDisabled={data?.x_studio_estado == "entregado" || modoEdicion ? false : true}
+              isDisabled={data?.x_studio_estado == "entregado" || data?.x_studio_estado == "recepcionado_operador" || modoEdicion ? false : true}
               onPress={() => handleClickOpenReservas(row.original)} // puedes pasar datos de la fila si lo necesitas
             >
               {estado || 'Pendiente por asignar'}
