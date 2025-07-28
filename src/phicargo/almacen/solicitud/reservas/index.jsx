@@ -204,7 +204,9 @@ const ReservasDetalle = ({ open, handleClose, dataLinea }) => {
         }),
         renderTopToolbarCustomActions: () => (
             <>
-                <SearchUnidad data={dataLinea}></SearchUnidad>
+                {(data?.x_studio_estado === 'borrador') && (
+                    <SearchUnidad data={dataLinea}></SearchUnidad>
+                )}
                 {(data?.x_studio_estado === 'entregado' || data?.x_studio_estado === 'recepcionado_operador') && (
                     <>
                         <Button color="primary" onPress={() => marcarTodas(true)}>
