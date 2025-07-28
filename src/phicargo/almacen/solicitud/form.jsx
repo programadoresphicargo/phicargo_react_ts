@@ -358,7 +358,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                             {data?.x_studio_estado == "confirmado" && (
                                 <Button color='success' className='text-white' onPress={() => entregar()} isLoading={isLoading}>Entregar</Button>
                             )}
-                            {(data?.x_studio_estado == "entregado" && data?.es_asignacion) && (
+                            {((data?.x_studio_estado == "entregado" || data?.x_studio_estado == "recepcionado_operador") && data?.es_asignacion) && (
                                 <Button color='success' className='text-white' onPress={() => devolver()} isLoading={isLoading}>Devolver a stock</Button>
                             )}
                             {(!modoEdicion && data?.x_studio_estado == 'borrador') && (
