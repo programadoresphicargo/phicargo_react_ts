@@ -204,7 +204,7 @@ const ReservasDetalle = ({ open, handleClose, dataLinea }) => {
         }),
         renderTopToolbarCustomActions: () => (
             <>
-                {(data?.x_studio_estado === 'borrador') && (
+                {(data?.x_studio_estado === 'borrador' || data?.x_studio_estado === undefined) && (
                     <SearchUnidad data={dataLinea}></SearchUnidad>
                 )}
                 {(data?.x_studio_estado === 'entregado' || data?.x_studio_estado === 'recepcionado_operador') && (
@@ -216,7 +216,7 @@ const ReservasDetalle = ({ open, handleClose, dataLinea }) => {
                             Desmarcar todas
                         </Button>
                     </>
-                )},
+                )}
             </>
         ),
         renderRowActions: ({ row }) => (
