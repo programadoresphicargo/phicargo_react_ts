@@ -28,6 +28,10 @@ import ReservasDetalle from '../reservas';
 import TablaProductosDetalle from './tabla_productos';
 import toast from 'react-hot-toast';
 
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
 const EPPSolicitados = ({ }) => {
 
   const
@@ -174,7 +178,7 @@ const EPPSolicitados = ({ }) => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 210px)',
+        maxHeight: 'calc(100vh - 300px)',
       },
     },
     muiTableBodyCellProps: ({ row }) => ({
@@ -244,8 +248,17 @@ const EPPSolicitados = ({ }) => {
         table={table}
       />
 
-      <Dialog open={open} onClose={handleClose} maxWidth="lg" fullWidth>
-        <DialogTitle></DialogTitle>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        maxWidth="lg"
+        fullWidth
+        TransitionComponent={Transition}
+        sx={{
+          '& .MuiPaper-root': {
+            borderRadius: '28px',        // Opcional, para bordes redondeados
+          }
+        }}>
         <DialogContent>
           <DialogContentText>
             <TablaProductosDetalle close={handleClose}></TablaProductosDetalle>

@@ -301,11 +301,12 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                 transition: Transition,
             }}
                 keepMounted>
-                <AppBar elevation={0} sx={{
-                    background: 'linear-gradient(90deg, #0b2149, #002887)',
-                    padding: '0 16px',
-                    position: 'relative'
-                }}>
+                <AppBar elevation={0}
+                    sx={{
+                        background: 'linear-gradient(90deg, #0b2149, #002887)',
+                        padding: '0 16px',
+                        position: 'relative'
+                    }}>
                     <Toolbar>
                         <IconButton
                             edge="start"
