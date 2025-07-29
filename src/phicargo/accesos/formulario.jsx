@@ -650,7 +650,6 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                                             label="Áreas a visitar"
                                             placeholder="Seleccionar áreas permitidas a transitar"
                                             defaultItems={areas}
-                                            isDisabled={disabledFom}
                                             isReadOnly={disabledFom}
                                             onChange={handleSelectionChange}
                                             selectedKeys={
