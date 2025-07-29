@@ -651,6 +651,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                                             placeholder="Seleccionar áreas permitidas a transitar"
                                             defaultItems={areas}
                                             isReadOnly={disabledFom}
+                                            isDisabled={disabledFom}
                                             onChange={handleSelectionChange}
                                             selectedKeys={
                                                 formData.areas
