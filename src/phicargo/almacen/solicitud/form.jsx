@@ -351,7 +351,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                             )}
                             {data?.x_studio_estado === "borrador" && modoEdicion != true && (
                                 <Button color="success" className="text-white" onPress={() => confirmar()} isLoading={isLoading}>
-                                    Confirmar
+                                    Confirmar y reservar
                                 </Button>
                             )}
                             {data?.x_studio_estado == "confirmado" && (
