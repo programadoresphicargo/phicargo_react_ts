@@ -58,7 +58,7 @@ const SucursalActual = () => {
   const columns = [
     { accessorKey: 'vehiculo', header: 'Vehiculo', },
     {
-      accessorKey: 'sucursal_nombre', header: 'Sucursal', Cell: ({ cell }) => {
+      accessorKey: 'sucursal', header: 'Sucursal', Cell: ({ cell }) => {
         const valor = cell.getValue() || '';
         var clase;
 
@@ -93,7 +93,7 @@ const SucursalActual = () => {
     {
       accessorKey: 'dias_en_sucursal', header: 'Días en sucursal'
     },
-    { accessorKey: 'fecha_primer_viaje', header: 'Desde' },
+    { accessorKey: 'fecha_entrada_sucursal', header: 'Entrada a sucursal' },
     { accessorKey: 'primer_viaje', header: 'Primer viaje' },
     { accessorKey: 'ultimo_viaje', header: 'Último viaje' },
   ];
