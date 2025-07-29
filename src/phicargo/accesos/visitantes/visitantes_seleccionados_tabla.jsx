@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { Table, TableRow } from "@heroui/react";
-
 import { AccesoContext } from '../context';
 import { Button } from '@heroui/react';
 import { Grid } from '@mui/material';
@@ -41,7 +40,7 @@ const SelectedVisitantesTable = ({ }) => {
 
         <Grid item xs={12} sm={12} md={12}>
 
-            <div className="flex flex-wrap gap-4 items-center">
+            <div className="flex flex-wrap gap-4 items-center mb-4">
                 <Button onPress={abrirVisitantes} color={disabledFom ? "default" : "primary"} isDisabled={disabledFom || formData.id_empresa == '' ? true : false}>Añadir visitantes al acceso</Button>
             </div>
 
@@ -55,13 +54,13 @@ const SelectedVisitantesTable = ({ }) => {
                     {selectedVisitantes.map((visitor, index) => (
                         <TableRow key={index}>
                             <TableCell>{visitor.id_visitante}</TableCell>
-                            <TableCell>{visitor.nombre_visitante}</TableCell>
+                            <TableCell>{visitor.nombre_visitante.toUpperCase()}</TableCell>
                             <TableCell>
                                 <Button
                                     size='sm'
                                     color={disabledFom ? "default" : "primary"}
                                     isDisabled={disabledFom}
-                                    onClick={() => borrarVisitante(visitor.id_visitante)}
+                                    onPress={() => borrarVisitante(visitor.id_visitante)}
                                 >
                                     Borrar
                                 </Button>
