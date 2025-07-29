@@ -129,6 +129,10 @@ const Solicitudes = ({ x_tipo, vista }) => {
           );
         },
       },
+      {
+        accessorKey: 'descripcion',
+        header: 'Equipo asignado',
+      },
     ],
     [],
   );
