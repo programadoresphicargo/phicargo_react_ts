@@ -24,6 +24,7 @@ import { Grid } from '@mui/material';
 import SelectOperador from "@/phicargo/maniobras/maniobras/select_operador";
 import EstadoSolicitud from "./estado";
 import CancelarSolicitudDialog from "./cancelar";
+import { Select, SelectItem } from "@heroui/react";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -409,6 +410,19 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
 
                                             <Grid item xs={12} sm={6}>
                                                 <SelectOperador label={'Operador responsable'} name={'x_operador_id'} disabled={!modoEdicion} value={data?.x_operador_id} onChange={handleSelectChange} />
+                                            </Grid>
+
+                                            <Grid item xs={12} sm={6}>
+                                                <Select
+                                                    label="Tipo de solicitud"
+                                                    isDisabled={true}
+                                                    placeholder="Seleccionar tipo de solicitud"
+                                                    selectedKeys={[data?.x_tipo]}
+                                                    variant="bordered"
+                                                >
+                                                    <SelectItem key={'epp'}>Equipo de protección personal</SelectItem>
+                                                    <SelectItem key={'amarre'}>Equipo de amarre</SelectItem>
+                                                </Select>
                                             </Grid>
 
                                         </Grid>

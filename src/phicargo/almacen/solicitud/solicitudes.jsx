@@ -27,7 +27,7 @@ import EPP from '../inventario/tabla_productos';
 import SolicitudForm from './form';
 import { useAlmacen } from '../contexto/contexto';
 
-const Solicitudes = ({ x_tipo }) => {
+const Solicitudes = ({ x_tipo, vista }) => {
 
   const [id_solicitud, setIDSolicitud] = React.useState(null);
   const [open, setOpen] = React.useState(false);
@@ -49,7 +49,16 @@ const Solicitudes = ({ x_tipo }) => {
     try {
       setLoading(true);
       const response = await odooApi.get('/tms_travel/solicitudes_equipo/tipo/' + x_tipo);
-      setDataSolicitudes(response.data);
+
+      let solicitudes = response.data;
+
+      if (vista === 'solicitudes') {
+        solicitudes = solicitudes.filter((sol) => sol.x_waybill_id !== null);
+      } else if (vista === 'asignaciones') {
+        solicitudes = solicitudes.filter((sol) => sol.x_waybill_id == null);
+      }
+
+      setDataSolicitudes(solicitudes);
       setLoading(false);
     } catch (error) {
       console.error('Error al obtener los datos:', error);
@@ -144,7 +153,9 @@ const Solicitudes = ({ x_tipo }) => {
     initialState: {
       showGlobalFilter: true,
       columnVisibility: {
-        empresa: false,
+        carta_porte: vista == 'solicitudes' ? true : false,
+        referencia_viaje: vista == 'solicitudes' ? true : false,
+        inicio_programado: vista == 'solicitudes' ? true : false,
       },
       hiddenColumns: ["empresa"],
       density: 'compact',
@@ -167,7 +178,7 @@ const Solicitudes = ({ x_tipo }) => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 210px)',
+        maxHeight: 'calc(100vh - 260px)',
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
@@ -196,7 +207,7 @@ const Solicitudes = ({ x_tipo }) => {
         <h2
           className="tracking-tight font-semibold lg:text-2xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
         >
-          Solicitudes de equipo
+          {vista.toUpperCase()}
         </h2>
 
         <Button
