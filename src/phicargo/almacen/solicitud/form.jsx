@@ -30,7 +30,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo, setID }) => {
+const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo, setID, vista }) => {
     const [isLoading, setLoading] = useState(false);
     const [isSaving, setSaving] = useState(false);
     const [openCancelar, setOpenCancelar] = useState(false);
@@ -397,22 +397,32 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                                                 <Input value={data?.create_date || '---'} label="Fecha de solicitud:" isReadOnly></Input>
                                             </Grid>
 
-                                            <Grid item xs={12} sm={6}>
-                                                Operador asignado:
-                                                <Typography variant="body1">{data?.operador || '---'}</Typography>
-                                            </Grid>
+                                            {vista == 'solicitudes' && (<>
+                                                <Grid item xs={12} sm={6}>
+                                                    <ViajeEPP id_viaje={data?.x_waybill_id} />
+                                                </Grid>
 
-                                            <Grid item xs={12} sm={6}>
-                                                <Input value={data?.inicio_programado || '---'} label="Inicio programado de viaje:" isReadOnly></Input>
-                                            </Grid>
+                                                <Grid item xs={12} sm={6}>
+                                                    Operador asignado:
+                                                    <Typography variant="body1">{data?.operador || '---'}</Typography>
+                                                </Grid>
 
-                                            <Grid item xs={12} sm={6}>
-                                                <ViajeEPP id_viaje={data?.x_waybill_id} />
-                                            </Grid>
+                                                <Grid item xs={12} sm={6}>
+                                                    <Input
+                                                        value={data?.inicio_programado || '---'}
+                                                        label="Inicio programado de viaje:"
+                                                        isReadOnly
+                                                    />
+                                                </Grid>
+                                            </>
+                                            )}
 
-                                            <Grid item xs={12} sm={6}>
-                                                <SelectOperador label={'Operador responsable'} name={'x_operador_id'} disabled={!modoEdicion} value={data?.x_operador_id} onChange={handleSelectChange} />
-                                            </Grid>
+                                            {vista == 'asignaciones' && (<>
+                                                <Grid item xs={12} sm={6}>
+                                                    <SelectOperador label={'Operador responsable'} name={'x_operador_id'} disabled={!modoEdicion} value={data?.x_operador_id} onChange={handleSelectChange} />
+                                                </Grid>
+                                            </>
+                                            )}
 
                                             <Grid item xs={12} sm={6}>
                                                 <Select

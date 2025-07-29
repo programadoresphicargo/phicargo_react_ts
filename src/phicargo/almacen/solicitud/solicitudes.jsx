@@ -244,7 +244,7 @@ const Solicitudes = ({ x_tipo, vista }) => {
         table={table}
       />
 
-      <SolicitudForm id_solicitud={id_solicitud} open={open} handleClose={handleClose} x_tipo={x_tipo} setID={setIDSolicitud}></SolicitudForm>
+      <SolicitudForm id_solicitud={id_solicitud} open={open} handleClose={handleClose} x_tipo={x_tipo} setID={setIDSolicitud} vista={vista}></SolicitudForm>
     </>
   );
 };
