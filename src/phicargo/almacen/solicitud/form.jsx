@@ -379,20 +379,22 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                             <Grid item xs={12} md={9}>
 
                                 <Card>
-                                    <CardHeader>
+                                    <CardHeader style={{
+                                        background: 'linear-gradient(90deg, #0b2149, #002887)',
+                                        color: 'white',
+                                        fontWeight: 'bold'
+                                    }}>
                                         Datos de la solicitud
                                     </CardHeader>
                                     <Divider></Divider>
                                     <CardBody>
                                         <Grid container spacing={2}>
                                             <Grid item xs={12} sm={6}>
-                                                Creado por:
-                                                <Typography variant="body1">{data?.usuario || '---'}</Typography>
+                                                <Input value={data?.usuario || '---'} label="Creada por:" isReadOnly></Input>
                                             </Grid>
 
                                             <Grid item xs={12} sm={6}>
-                                                Fecha de solicitud:
-                                                <Typography variant="body1">{data?.create_date || '---'}</Typography>
+                                                <Input value={data?.create_date || '---'} label="Fecha de solicitud:" isReadOnly></Input>
                                             </Grid>
 
                                             <Grid item xs={12} sm={6}>
@@ -401,8 +403,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                                             </Grid>
 
                                             <Grid item xs={12} sm={6}>
-                                                Inicio programado de viaje:
-                                                <Typography variant="body1">{data?.inicio_programado || '---'}</Typography>
+                                                <Input value={data?.inicio_programado || '---'} label="Inicio programado de viaje:" isReadOnly></Input>
                                             </Grid>
 
                                             <Grid item xs={12} sm={6}>
@@ -416,10 +417,9 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                                             <Grid item xs={12} sm={6}>
                                                 <Select
                                                     label="Tipo de solicitud"
-                                                    isDisabled={true}
+                                                    isReadOnly
                                                     placeholder="Seleccionar tipo de solicitud"
                                                     selectedKeys={[data?.x_tipo]}
-                                                    variant="bordered"
                                                 >
                                                     <SelectItem key={'epp'}>Equipo de protección personal</SelectItem>
                                                     <SelectItem key={'amarre'}>Equipo de amarre</SelectItem>
@@ -439,7 +439,12 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
 
                             <Grid item xs={12} md={3}>
                                 <Card>
-                                    <CardHeader>Historial de cambios</CardHeader>
+                                    <CardHeader
+                                        style={{
+                                            background: 'linear-gradient(90deg, #0b2149, #002887)',
+                                            color: 'white',
+                                            fontWeight: 'bold'
+                                        }}>Historial de cambios</CardHeader>
                                     <Divider></Divider>
 
                                     {(data?.x_studio_estado == 'cancelada') && (
