@@ -153,7 +153,11 @@ const SucursalActual = () => {
         }}
       >
 
-        <h1>Ubicación de unidades</h1>
+        <h1
+          className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
+        >
+          Días en última sucursal por vehículo
+        </h1>
 
       </Box >
     ),

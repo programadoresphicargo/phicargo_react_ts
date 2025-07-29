@@ -22,7 +22,7 @@ const pages: MenuItemType[] = [
     requiredPermissions: [],
   },
   {
-    name: 'Sucursal actual',
+    name: 'Días en sucursal',
     path: '/disponibilidad/sucursal_actual',
     requiredPermissions: [],
   },
