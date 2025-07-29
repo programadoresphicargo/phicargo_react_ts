@@ -95,6 +95,7 @@ const SucursalActual = () => {
     },
     { accessorKey: 'fecha_entrada_sucursal', header: 'Entrada a sucursal' },
     { accessorKey: 'primer_viaje', header: 'Primer viaje' },
+    { accessorKey: 'fecha_ultimo_viaje', header: 'Fecha último viaje' },
     { accessorKey: 'ultimo_viaje', header: 'Último viaje' },
   ];
 
