@@ -524,11 +524,11 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                                 <Autocomplete
                                     id="tipo_movimiento"
                                     name="tipo_movimiento"
-                                    variant='bordered'
+                                    variant={disabledFom ? 'flat' : 'bordered'}
                                     label="Tipo de movimiento"
+                                    isReadOnly={disabledFom}
                                     selectedKey={formData.tipo_movimiento || null}
                                     onSelectionChange={(e) => handleChange('tipo_movimiento', e)}
-                                    isDisabled={disabledFom}
                                     defaultItems={options_tipo_movimiento}
                                     isInvalid={!!errors.tipo_movimiento}
                                     errorMessage={errors.tipo_movimiento}
@@ -542,11 +542,11 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                                     <Autocomplete
                                         id="id_tipo_salida"
                                         name="id_tipo_salida"
-                                        variant='bordered'
+                                        variant={disabledFom ? 'flat' : 'bordered'}
                                         label="Tipo de salida"
                                         selectedKey={String(formData.id_tipo_salida) || null}
                                         onSelectionChange={(e) => handleChange('id_tipo_salida', e)}
-                                        isDisabled={disabledFom}
+                                        isReadOnly={disabledFom}
                                         defaultItems={tiposSalida}
                                         isInvalid={!!errors.id_tipo_salida}
                                         errorMessage={errors.id_tipo_salida}
@@ -560,11 +560,11 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                                 <DatePicker
                                     firstDayOfWeek="mon"
                                     label="Fecha de entrada"
-                                    variant="bordered"
+                                    variant={disabledFom ? 'flat' : 'bordered'}
                                     showMonthAndYearPickers
                                     value={parseDateTime(formData.fecha_entrada)}
                                     onChange={(newValue) => update_fecha('fecha_entrada', newValue)}
-                                    isDisabled={disabledFom}
+                                    isReadOnly={disabledFom}
                                     errorMessage={errors.fecha_entrada}
                                 />
                             </Grid>
@@ -573,11 +573,11 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                                 <DatePicker
                                     firstDayOfWeek="mon"
                                     label="Fecha de salida"
-                                    variant="bordered"
+                                    variant={disabledFom ? 'flat' : 'bordered'}
                                     showMonthAndYearPickers
                                     value={parseDateTime(formData.fecha_salida)}
                                     onChange={(newValue) => update_fecha('fecha_salida', newValue)}
-                                    isDisabled={disabledFom}
+                                    isReadOnly={disabledFom}
                                     errorMessage={errors.fecha_salida}
                                 />
                             </Grid>
@@ -590,13 +590,13 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                                         id="id_empresa"
                                         name="id_empresa"
                                         label="Empresa"
-                                        variant="bordered"
-                                        isDisabled={disabledFom}
+                                        variant={disabledFom ? 'flat' : 'bordered'}
+                                        isReadOnly={disabledFom}
                                         defaultValue={(formData.empresa) || ' '}
                                         value={(formData.empresa) || ' '}
                                         isInvalid={!!errors.id_empresa}
                                         errorMessage={errors.id_empresa}
-                                        onClick={abrirEmpresas} />
+                                    />
                                 </Box>
                             </Grid>
 
@@ -609,10 +609,10 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                                             label="Documento con el que se identifica"
                                             id="tipo_identificacion"
                                             name="tipo_identificacion"
-                                            variant='bordered'
+                                            variant={disabledFom ? 'flat' : 'bordered'}
                                             selectedKey={formData.tipo_identificacion || null}
                                             onSelectionChange={(e) => handleChange('tipo_identificacion', e)}
-                                            isDisabled={disabledFom}
+                                            isReadOnly={disabledFom}
                                             defaultItems={identificationOptions}
                                             isInvalid={!!errors.tipo_identificacion}
                                             errorMessage={errors.tipo_identificacion}
@@ -627,11 +627,11 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                                             id="id_empresa_visitada"
                                             name="id_empresa_visitada"
                                             label="Empresa visitada"
-                                            variant='bordered'
+                                            variant={disabledFom ? 'flat' : 'bordered'}
                                             selectedKey={String(formData.id_empresa_visitada) || null}
                                             onSelectionChange={(e) => handleChange('id_empresa_visitada', e)}
                                             defaultItems={empresas_visitadas}
-                                            isDisabled={disabledFom}
+                                            isReadOnly={disabledFom}
                                             isInvalid={!!errors.id_empresa_visitada}
                                             errorMessage={errors.id_empresa_visitada}
                                         >
@@ -646,11 +646,12 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                                             isMultiline={true}
                                             id="areas"
                                             name="areas"
-                                            variant='bordered'
+                                            variant={disabledFom ? 'flat' : 'bordered'}
                                             label="Áreas a visitar"
                                             placeholder="Seleccionar áreas permitidas a transitar"
                                             defaultItems={areas}
                                             isDisabled={disabledFom}
+                                            isReadOnly={disabledFom}
                                             onChange={handleSelectionChange}
                                             selectedKeys={
                                                 formData.areas
@@ -674,8 +675,8 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                                     name="motivo"
                                     label={`Motivo de ${formData?.tipo_movimiento}`}
                                     placeholder="Ingresa una descripción"
-                                    variant='bordered'
-                                    isDisabled={disabledFom}
+                                    variant={disabledFom ? 'flat' : 'bordered'}
+                                    isReadOnly={disabledFom}
                                     value={formData.motivo}
                                     onChange={(event) => handleChange('motivo', event.target.value)}
                                     isInvalid={!!errors.motivo}
@@ -700,10 +701,10 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                                     <Textarea
                                         label="Descripción"
                                         placeholder="Ingresar descripción"
-                                        variant="bordered"
+                                        variant={disabledFom ? 'flat' : 'bordered'}
                                         value={formData?.mercancia_ingresada}
                                         onChange={(event) => handleChange('mercancia_ingresada', event.target.value)}
-                                        isDisabled={disabledFom}
+                                        isReadOnly={disabledFom}
                                         isInvalid={!!errors.mercancia_ingresada}
                                         errorMessage={errors.mercancia_ingresada}
                                     />
@@ -728,10 +729,10 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                                     <Textarea
                                         label="Descripción"
                                         placeholder="Ingresar descripción"
-                                        variant="bordered"
+                                        variant={disabledFom ? 'flat' : 'bordered'}
                                         value={formData?.mercancia_egresada}
                                         onChange={(event) => handleChange('mercancia_egresada', event.target.value)}
-                                        isDisabled={disabledFom}
+                                        isReadOnly={disabledFom}
                                         isInvalid={!!errors.mercancia_egresada}
                                         errorMessage={errors.mercancia_egresada}
                                     />
@@ -766,8 +767,8 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                         <Textarea
                             label="Notas para vigilancia"
                             value={formData.notas}
-                            variant='bordered'
-                            isDisabled={disabledFom}
+                            variant={disabledFom ? 'flat' : 'bordered'}
+                            isReadOnly={disabledFom}
                             onChange={(event) => handleChange('notas', event.target.value)}
                             placeholder="Ingresa tus notas para el personal de vigilancia" />
 
