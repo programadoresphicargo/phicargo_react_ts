@@ -203,7 +203,8 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                     cps_desligadas: [],
                     comentarios: data.comentarios || '',
                     usuario_cancelacion: data.usuario_cancelacion,
-                    fecha_cancelacion: data.fecha_cancelacion
+                    fecha_cancelacion: data.fecha_cancelacion,
+                    motivo_cancelacion: data.motivo_cancelacion
                 }));
 
                 toggleButtonsVisibility(data.estado_maniobra);
@@ -893,7 +894,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                                         {formData.estado_maniobra == 'cancelada' && (
                                                             <User
                                                                 name={"Cancelada por: " + formData.usuario_cancelacion}
-                                                                description={formData.fecha_cancelacion}
+                                                                description={formData.fecha_cancelacion + ' Motivo: ' + formData.motivo_cancelacion}
                                                                 avatarProps={{
                                                                     src: "",
                                                                     color: "danger"
