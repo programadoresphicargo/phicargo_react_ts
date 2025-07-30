@@ -704,7 +704,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                         </Stack>
                                     </Grid>
 
-                                    <Grid size={{ xs: 12, md: 6 }}>
+                                    <Grid size={{ xs: 12, md: 8 }}>
                                         <Card>
                                             <CardHeader>
                                                 Datos de la maniobra
@@ -712,7 +712,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                             <Divider></Divider>
                                             <CardBody>
                                                 <Grid container spacing={3}>
-                                                    <Grid size={{ xs: 12, md: 6 }}>
+                                                    <Grid size={{ xs: 12, md: 4 }}>
                                                         <SelectTerminal
                                                             label={'Terminal'}
                                                             id="id_terminal"
@@ -723,7 +723,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                                             error_terminal={errors['id_terminal']}
                                                         />
                                                     </Grid>
-                                                    <Grid size={{ xs: 12, md: 6 }}>
+                                                    <Grid size={{ xs: 12, md: 4 }}>
                                                         <Autocomplete
                                                             isRequired
                                                             label="Tipo de maniobra"
@@ -740,7 +740,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                                             {(item) => <AutocompleteItem key={item.key}>{item.label}</AutocompleteItem>}
                                                         </Autocomplete>
                                                     </Grid>
-                                                    <Grid size={{ xs: 12, md: 6 }}>
+                                                    <Grid size={{ xs: 12, md: 4 }}>
 
                                                         <DatePicker
                                                             firstDayOfWeek="mon"
@@ -774,7 +774,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                                             disabled={formDisabled}
                                                         />
                                                     </Grid>
-                                                    <Grid size={{ xs: 12, md: 6 }}>
+                                                    <Grid size={{ xs: 12, md: 4 }}>
                                                         <MyComponent
                                                             label={'Remolque 1'}
                                                             id={'trailer1_id'}
@@ -785,7 +785,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                                             disabled={formDisabled}
                                                         />
                                                     </Grid>
-                                                    <Grid size={{ xs: 12, md: 6 }}>
+                                                    <Grid size={{ xs: 12, md: 4 }}>
                                                         <MyComponent
                                                             label={'Remolque 2'}
                                                             id={'trailer2_id'}
@@ -796,7 +796,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                                             disabled={formDisabled}
                                                         />
                                                     </Grid>
-                                                    <Grid size={{ xs: 12, md: 6 }}>
+                                                    <Grid size={{ xs: 12, md: 4 }}>
                                                         <MyComponent
                                                             label={'Dolly'}
                                                             id={'dolly_id'}
@@ -853,7 +853,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                         ) : ''}
                                     </Grid>
 
-                                    <Grid size={{ xs: 12, md: 6 }}>
+                                    <Grid size={{ xs: 12, md: 4 }}>
                                         {formData.estado_maniobra != null ? (
                                             <Card elevation={0}>
                                                 <CardBody>
