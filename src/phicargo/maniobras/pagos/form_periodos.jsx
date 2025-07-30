@@ -83,14 +83,16 @@ const AbrirPeriodo = ({ fetchData, open, close }) => {
                             <strong>ID Maniobra:</strong> ${m.id_maniobra} |
                             <strong>Estado:</strong> ${m.estado_maniobra} |
                             <strong>Inicio programado:</strong> ${m.inicio_programado}
+                            <strong>Operador:</strong> ${m.operador}
+                            <strong>Registro:</strong> ${m.usuarioregistro}
                         </li>
                     `).join('');
 
                     Swal.fire({
                         title: "<strong>Maniobras pendientes de cierre, finalice estas maniobras para abrir periodos de nomina</strong>",
                         icon: "info",
-                        html: `<ul style="text-align:left">${htmlList}</ul>`,
-                        width: '800px',
+                        html: `<ul style="text-align:center">${htmlList}</ul>`,
+                        width: '1800px',
                         showCloseButton: true,
                         focusConfirm: false,
                         confirmButtonText: `
