@@ -78,31 +78,47 @@ const AbrirPeriodo = ({ fetchData, open, close }) => {
                 if (response.data.message == "pendiente cierre") {
                     const maniobras = response.data.maniobras;
 
-                    const htmlList = maniobras.map(m => `
-                        <li>
-                            <strong>ID Maniobra:</strong> ${m.id_maniobra} |
-                            <strong>Estado:</strong> ${m.estado_maniobra} |
-                            <strong>Inicio programado:</strong> ${m.inicio_programado}
-                            <strong>Operador:</strong> ${m.operador}
-                            <strong>Registro:</strong> ${m.usuarioregistro}
-                        </li>
-                    `).join('');
+                    const htmlTable = `
+                    <div style="overflow-x:auto;">
+                        <table style="width:100%; border-collapse: collapse; text-align: center;">
+                            <thead>
+                                <tr>
+                                    <th style="border: 1px solid #ddd; padding: 8px;">ID Maniobra</th>
+                                    <th style="border: 1px solid #ddd; padding: 8px;">Estado</th>
+                                    <th style="border: 1px solid #ddd; padding: 8px;">Inicio Programado</th>
+                                    <th style="border: 1px solid #ddd; padding: 8px;">Operador</th>
+                                    <th style="border: 1px solid #ddd; padding: 8px;">Usuario Registro</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${maniobras.map(m => `
+                                    <tr>
+                                        <td style="border: 1px solid #ddd; padding: 8px;">${m.id_maniobra}</td>
+                                        <td style="border: 1px solid #ddd; padding: 8px;">${m.estado_maniobra}</td>
+                                        <td style="border: 1px solid #ddd; padding: 8px;">${m.inicio_programado}</td>
+                                        <td style="border: 1px solid #ddd; padding: 8px;">${m.operador}</td>
+                                        <td style="border: 1px solid #ddd; padding: 8px;">${m.usuarioregistro}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
 
                     Swal.fire({
-                        title: "<strong>Maniobras pendientes de cierre, finalice estas maniobras para abrir periodos de nomina</strong>",
+                        title: "<strong>Maniobras pendientes de cierre</strong>",
                         icon: "info",
-                        html: `<ul style="text-align:center">${htmlList}</ul>`,
-                        width: '1800px',
+                        html: `
+                        <p style="text-align:center">Finalice o cancele estas maniobras para abrir el periodo de nómina.</p>
+                        ${htmlTable}
+                    `,
+                        width: '2000px',
                         showCloseButton: true,
                         focusConfirm: false,
                         confirmButtonText: `
-                          <i class="fa fa-thumbs-up"></i> OK
-                        `,
+                        <i class="fa fa-thumbs-up"></i> OK
+                    `,
                         confirmButtonAriaLabel: "Thumbs up, great!",
-                        cancelButtonText: `
-                          <i class="fa fa-thumbs-down"></i>
-                        `,
-                        cancelButtonAriaLabel: "Thumbs down"
                     });
                 }
             }
