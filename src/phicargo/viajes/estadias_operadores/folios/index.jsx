@@ -348,8 +348,9 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
                                         </TableCell>
                                         <TableCell>
                                             <Select
+                                                fullWidth
+                                                className="min-w-[200px]"
                                                 isDisabled={data?.estado == 'confirmado' ? true : false}
-                                                className="max-w-xs"
                                                 label="Motivo"
                                                 selectedKeys={[motivo]}
                                                 variant="flat"
