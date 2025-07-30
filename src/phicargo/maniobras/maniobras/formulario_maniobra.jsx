@@ -689,7 +689,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
 
                             <TabPanel value="1">
 
-                                <Grid container mb={2}>
+                                <Grid container mb={2} spacing={2}>
                                     <Grid size={12}>
                                         <Stack spacing={1} direction="row" className='mb-4'>
                                             {buttonsVisibility.registrar && <Button color="primary" onPress={validar_form} isLoading={Loading}>Registrar</Button>}
@@ -706,7 +706,12 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
 
                                     <Grid size={{ xs: 12, md: 8 }}>
                                         <Card>
-                                            <CardHeader>
+                                            <CardHeader
+                                                style={{
+                                                    background: 'linear-gradient(90deg, #0b2149, #002887)',
+                                                    color: 'white',
+                                                    fontWeight: 'bold'
+                                                }}>
                                                 Datos de la maniobra
                                             </CardHeader>
                                             <Divider></Divider>
@@ -856,6 +861,13 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                     <Grid size={{ xs: 12, md: 4 }}>
                                         {formData.estado_maniobra != null ? (
                                             <Card elevation={0}>
+                                                <CardHeader style={{
+                                                    background: 'linear-gradient(90deg, #0b2149, #002887)',
+                                                    color: 'white',
+                                                    fontWeight: 'bold'
+                                                }}>
+                                                    Movimientos
+                                                </CardHeader>
                                                 <CardBody>
                                                     <div className='mb-3'>
                                                         {formData.usuario_activo !== '' && (

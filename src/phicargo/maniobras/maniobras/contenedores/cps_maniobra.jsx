@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback, useContext } from 're
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 import AñadirContenedor from './modal_cps';
 import axios from 'axios';
-import { Button } from "@heroui/react";
+import { Button, CardHeader } from "@heroui/react";
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -157,6 +157,13 @@ const ManiobraContenedores = ({ id_maniobra }) => {
     return (
         <>
             <Card>
+                <CardHeader style={{
+                    background: 'linear-gradient(90deg, #0b2149, #002887)',
+                    color: 'white',
+                    fontWeight: 'bold'
+                }}>
+                    Contenedores
+                </CardHeader>
                 <CardBody>
                     <div>
                         <Button color='primary' onPress={handleShowModal} isDisabled={formDisabled}>
