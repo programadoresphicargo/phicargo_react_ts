@@ -14,6 +14,7 @@ import PeriodoPagoManiobras from './form_periodos';
 import { Popover, PopoverTrigger, PopoverContent, Button, Input, Select, SelectItem } from "@heroui/react";
 import { DateRangePicker } from 'rsuite';
 import PagosOperadores from './pagos_operadores';
+import AbrirPeriodo from './form_periodos';
 
 const Nominas = () => {
 
@@ -42,6 +43,8 @@ const Nominas = () => {
     setOpenPeriodo(false);
     await fetchData();
   };
+
+  const [openNewPeriod, setOpenNewPeriod] = useState(false);
 
   const [data, setData] = useState([]);
 
@@ -158,14 +161,7 @@ const Nominas = () => {
 
         <h1 className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text">Periodos de pago maniobras</h1>
         <Button color='primary' onPress={() => fetchData()}>Actualizar registros</Button>
-        <Popover showArrow offset={10} placement="bottom">
-          <PopoverTrigger>
-            <Button color="primary">Abrir nuevo periodo</Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-[280px]">
-            <PeriodoPagoManiobras fetchData={fetchData}></PeriodoPagoManiobras>
-          </PopoverContent>
-        </Popover>
+        <Button color="primary" onPress={() => setOpenNewPeriod(true)}>Abrir nuevo periodo</Button>
       </Box >
     ),
   });
@@ -177,6 +173,8 @@ const Nominas = () => {
         <ManiobrasNavBar />
         <MaterialReactTable table={table} />
       </ManiobraProvider>
+
+      <AbrirPeriodo open={openNewPeriod} close={setOpenNewPeriod}></AbrirPeriodo>
     </>
   );
 

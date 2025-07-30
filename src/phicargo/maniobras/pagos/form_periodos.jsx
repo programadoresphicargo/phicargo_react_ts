@@ -1,44 +1,46 @@
-
-import { Button, Card, CardBody, DatePicker } from '@heroui/react';
 import {
-    MaterialReactTable,
-    useMaterialReactTable,
-} from 'material-react-table';
-import React, { useEffect, useMemo, useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
+    Button,
+    Checkbox,
+    DateRangePicker
+} from '@heroui/react';
+import {
+    Dialog,
+    DialogContent,
+    AppBar,
+    Toolbar,
+    IconButton,
+    Typography,
+    Slide
+} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import Formulariomaniobra from '../maniobras/formulario_maniobra';
-import Grid from '@mui/material/Grid';
-import IconButton from '@mui/material/IconButton';
-import Swal from 'sweetalert2';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import { jsPDF } from 'jspdf';
+import React, { useEffect, useState } from 'react';
+import { parseDate } from "@internationalized/date";
 import odooApi from '@/api/odoo-api';
-import { Select, SelectItem } from "@heroui/react";
-import { DateRangePicker } from "@heroui/react";
-import { parseDate, getLocalTimeZone } from "@internationalized/date";
-import { useDateFormatter } from "@react-aria/i18n";
+import { toast } from 'react-toastify';
 
-const { VITE_PHIDES_API_URL } = import.meta.env;
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
 
-
-const PeriodoPagoManiobras = ({ fetchData }) => {
+const AbrirPeriodo = ({ fetchData, open, close }) => {
 
     const [isLoading, setLoading] = useState(false);
-    const [id_sucursal, setSucursal] = React.useState("");
-    const handleSelectionChange = (e) => {
-        setSucursal(e.target.value);
+    const [isLoadingMovedores, setLoadingMovedores] = useState(false);
+
+    const [movedores, setMovedores] = useState([]);
+    const [movedoresSeleccionados, setMovedoresSeleccionados] = useState([]);
+
+    const toggleSeleccion = (id) => {
+        setMovedoresSeleccionados((prev) =>
+            prev.includes(id)
+                ? prev.filter((item) => item !== id) // lo quita si ya estaba
+                : [...prev, id] // lo agrega si no estaba
+        );
     };
-    
+
     const start = new Date();
     const end = new Date();
-    end.setDate(start.getDate() + 7); // suma 7 días
+    end.setDate(start.getDate() + 7);
 
     const format = (date) => date.toISOString().split('T')[0];
 
@@ -48,62 +50,121 @@ const PeriodoPagoManiobras = ({ fetchData }) => {
     });
 
     const abrirPeriodo = async () => {
+
+        if (movedoresSeleccionados.length === 0) {
+            toast.warning('Selecciona al menos un movedor');
+            return;
+        }
+
         try {
-            const payload = {
-                id_sucursal: parseInt(id_sucursal), // si espera número
-                fecha_inicio: value.start?.toString(),
-                fecha_fin: value.end?.toString(),
-            };
+            const query = new URLSearchParams({
+                fecha_inicio: value.start.toString(),
+                fecha_fin: value.end.toString(),
+            });
+
+            const payload = movedoresSeleccionados.map((id) => ({ id }));
             setLoading(true);
-            const response = await odooApi.post('/maniobras/periodos_pagos_maniobras/', payload);
-            if (response.data.status == 'success') {
+            const response = await odooApi.post(
+                `/maniobras/periodos_pagos_maniobras/?${query.toString()}`,
+                payload
+            );
+            if (response.data.status === 'success') {
                 toast.success(response.data.message);
                 fetchData();
+                setOpen(false);
             } else {
                 toast.error(response.data.message);
             }
         } catch (error) {
-            console.error('Error al obtener los datos:', error);
+            console.error('Error al abrir periodo:', error);
         } finally {
             setLoading(false);
         }
     };
 
+    const getMovedores = async () => {
+        try {
+            setLoadingMovedores(true);
+            const response = await odooApi.get('/drivers/job_id/26');
+            setMovedores(response.data);
+        } catch (error) {
+            console.error('Error al obtener movedores:', error);
+        } finally {
+            setLoadingMovedores(false);
+        }
+    };
+
+    useEffect(() => {
+        getMovedores();
+    }, []);
+
     return (
         <>
-            <div className="px-1 py-2 w-full">
-                <p className="text-small font-bold text-foreground">
-                    Nuevo periodo
-                </p>
+            <Dialog
+                fullWidth
+                open={open}
+                onClose={() => close(false)}
+                TransitionComponent={Transition}
+                scroll="body"
+            >
+                <AppBar sx={{ position: 'relative' }} elevation={0}>
+                    <Toolbar>
+                        <IconButton
+                            edge="start"
+                            color="inherit"
+                            onClick={() => close(false)}
+                            aria-label="close"
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                        <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+                            Nuevo periodo de pago
+                        </Typography>
+                    </Toolbar>
+                </AppBar>
 
-                <div className="mt-2 flex flex-col gap-2 w-full">
-                    <Select
-                        label="Sucursal"
-                        placeholder="Seleccionar sucursal"
-                        variant="bordered"
-                        onChange={handleSelectionChange}
-                    >
-                        <SelectItem key={1}>Veracruz</SelectItem>
-                        <SelectItem key={9}>Manzanillo</SelectItem>
-                        <SelectItem key={2}>México</SelectItem>
-                    </Select>
+                <DialogContent>
+                    <div className="px-2 py-4 w-full">
+                        <h3 className="text-lg font-semibold mb-2">Lista de Movedores ACTIVOS</h3>
 
-                    <DateRangePicker label="Periodo" value={value} onChange={setValue} variant='bordered' />
+                        {isLoadingMovedores ? (
+                            <p>Cargando...</p>
+                        ) : (
+                            <ul className="mb-4">
+                                {movedores.map((movedor) => (
+                                    <li key={movedor.id}>
+                                        <Checkbox
+                                            isSelected={movedoresSeleccionados.includes(movedor.id)}
+                                            onChange={() => toggleSeleccion(movedor.id)}
+                                        >
+                                            {movedor.name ?? JSON.stringify(movedor)}
+                                        </Checkbox>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
 
-                    <Button
-                        fullWidth
-                        color="primary"
-                        isLoading={isLoading}
-                        onPress={() => {
-                            abrirPeriodo();
-                        }}
-                    >
-                        Abrir
-                    </Button>
-                </div>
-            </div>
+                        <DateRangePicker
+                            label="Periodo"
+                            value={value}
+                            onChange={setValue}
+                            variant='bordered'
+                            className="mb-4"
+                        />
+
+                        <Button
+                            fullWidth
+                            color="primary"
+                            isLoading={isLoading}
+                            onPress={() => abrirPeriodo()}
+                        >
+                            Confirmar apertura
+                        </Button>
+                    </div>
+                </DialogContent>
+            </Dialog>
         </>
     );
 };
 
-export default PeriodoPagoManiobras;
+export default AbrirPeriodo;
