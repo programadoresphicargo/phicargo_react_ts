@@ -17,6 +17,7 @@ import React, { useEffect, useState } from 'react';
 import { parseDate } from "@internationalized/date";
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
+import Swal from "sweetalert2";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -74,6 +75,34 @@ const AbrirPeriodo = ({ fetchData, open, close }) => {
                 setOpen(false);
             } else {
                 toast.error(response.data.message);
+                if (response.data.message == "pendiente cierre") {
+                    const maniobras = response.data.maniobras;
+
+                    const htmlList = maniobras.map(m => `
+                        <li>
+                            <strong>ID Maniobra:</strong> ${m.id_maniobra} |
+                            <strong>Estado:</strong> ${m.estado_maniobra} |
+                            <strong>Inicio programado:</strong> ${m.inicio_programado}
+                        </li>
+                    `).join('');
+
+                    Swal.fire({
+                        title: "<strong>Maniobras pendientes de cierre, finalice estas maniobras para abrir periodos de nomina</strong>",
+                        icon: "info",
+                        html: `<ul style="text-align:left">${htmlList}</ul>`,
+                        width: '800px',
+                        showCloseButton: true,
+                        focusConfirm: false,
+                        confirmButtonText: `
+                          <i class="fa fa-thumbs-up"></i> OK
+                        `,
+                        confirmButtonAriaLabel: "Thumbs up, great!",
+                        cancelButtonText: `
+                          <i class="fa fa-thumbs-down"></i>
+                        `,
+                        cancelButtonAriaLabel: "Thumbs down"
+                    });
+                }
             }
         } catch (error) {
             console.error('Error al abrir periodo:', error);
