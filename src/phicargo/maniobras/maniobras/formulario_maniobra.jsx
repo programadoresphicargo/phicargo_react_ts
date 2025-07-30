@@ -729,11 +729,11 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                                             label="Tipo de maniobra"
                                                             id="tipo_maniobra"
                                                             name="tipo_maniobra"
-                                                            variant='bordered'
+                                                            variant={formDisabled ? 'flat' : 'bordered'}
                                                             onSelectionChange={(e) => (handleSelectChange(e, 'tipo_maniobra'))}
                                                             defaultItems={options_tipo_maniobra}
                                                             selectedKey={String(formData.tipo_maniobra)}
-                                                            isDisabled={formDisabled}
+                                                            isReadOnly={formDisabled}
                                                             isInvalid={errors['tipo_maniobra'] ? true : false}
                                                             errorMessage={errors['tipo_maniobra']}
                                                         >
@@ -745,11 +745,11 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                                         <DatePicker
                                                             firstDayOfWeek="mon"
                                                             label="Inicio programado"
-                                                            variant="bordered"
+                                                            variant={formDisabled ? 'flat' : 'bordered'}
                                                             showMonthAndYearPickers
                                                             value={parseDateTime(formData.inicio_programado)}
                                                             onChange={update_inicio_programado}
-                                                            isDisabled={formDisabled}
+                                                            isReadOnly={formDisabled}
                                                         />
                                                     </Grid>
 
@@ -832,11 +832,11 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
 
                                                     <Grid size={{ xs: 12, md: 12 }}>
                                                         <Textarea
-                                                            isDisabled={formDisabled}
+                                                            isReadOnly={formDisabled}
                                                             label="Comentarios"
                                                             labelPlacement="outside"
                                                             placeholder="Ingresar un comentario (opcional)"
-                                                            variant="bordered"
+                                                            variant={formDisabled ? 'flat' : 'bordered'}
                                                             value={formData.comentarios}
                                                             onValueChange={handleChangeComentarios}
                                                         />

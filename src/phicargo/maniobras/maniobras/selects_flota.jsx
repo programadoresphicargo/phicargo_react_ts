@@ -34,9 +34,9 @@ const MyComponent = ({ label, id, name, onChange, value, tipo, disabled, error_f
             isLoading={isLoading}
             id={id}
             name={name}
-            isDisabled={disabled}
+            isReadOnly={disabled}
             defaultItems={options}
-            variant='bordered'
+            variant={disabled ? 'flat' : 'bordered'}
             selectedKey={String(value)}
             onSelectionChange={(e) => onChange(e, name)}
         >

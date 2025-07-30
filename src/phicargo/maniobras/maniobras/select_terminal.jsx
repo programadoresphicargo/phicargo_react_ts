@@ -34,12 +34,12 @@ const SelectTerminal = ({ label, id, name, onChange, value, disabled, error_term
         <div>
             <Autocomplete
                 isRequired
-                variant='bordered'
+                variant={disabled ? 'flat' : 'bordered'}
                 id={id}
                 label={label}
                 isLoading={isLoading}
                 name={name}
-                isDisabled={disabled}
+                isReadOnly={disabled}
                 defaultItems={options}
                 selectedKey={String(value)}
                 onSelectionChange={(e) => onChange(e, name)}

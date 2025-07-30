@@ -30,12 +30,12 @@ const SelectOperador = ({ label, id, name, onChange, value, disabled, error_oper
     return (
         <div>
             <Autocomplete
-                variant='bordered'
+                variant={disabled ? 'flat' : 'bordered'}
                 id={id}
                 label={label}
                 isLoading={isLoading}
                 name={name}
-                isDisabled={disabled}
+                isReadOnly={disabled}
                 defaultItems={options}
                 selectedKey={String(value)}
                 isInvalid={error_operador}
