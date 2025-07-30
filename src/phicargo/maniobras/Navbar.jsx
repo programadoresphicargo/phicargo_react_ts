@@ -24,7 +24,8 @@ const pages = [
     {
         name: 'NOMINAS',
         subpages: [
-            { name: 'Nominas', path: '/nominas' },
+            { name: 'Nominas', path: '/nominas_viejas' },
+            { name: 'Nominas Nueva (No entrar)', path: '/nominas' },
             { name: 'Precios', path: '/precios' },
         ],
     },

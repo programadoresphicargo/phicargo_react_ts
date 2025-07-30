@@ -27,6 +27,7 @@ const ControlManiobras = lazy(
   () => import('../phicargo/maniobras/control/control'),
 );
 const Nominas = lazy(() => import('../phicargo/maniobras/pagos/pagos'));
+const NominasViejas = lazy(() => import('../phicargo/maniobras/pagos/pagos_viejos'));
 const PreciosManiobras = lazy(
   () => import('../phicargo/maniobras/precios/precios'),
 );
@@ -167,6 +168,16 @@ export const PrivateRoutes = () => {
             </Suspense>
           }
         />
+
+        <Route
+          path="/nominas_viejas"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <NominasViejas></NominasViejas>
+            </Suspense>
+          }
+        />
+
         <Route
           path="/precios"
           element={

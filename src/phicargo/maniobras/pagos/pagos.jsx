@@ -1,42 +1,45 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import customFontTheme from '../../../theme';
-import Nomina_form from './form_pago';
+import Nomina_form from './pagos_operadores';
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
 import ManiobrasNavBar from '../Navbar';
 import { Box } from '@mui/system';
-import { Button } from '@heroui/react';
 import { ManiobraProvider } from '../context/viajeContext';
-const { VITE_PHIDES_API_URL } = import.meta.env;
+import odooApi from '@/api/odoo-api';
+import PeriodoPagoManiobras from './form_periodos';
+import { Popover, PopoverTrigger, PopoverContent, Button, Input, Select, SelectItem } from "@heroui/react";
+import { DateRangePicker } from 'rsuite';
+import PagosOperadores from './pagos_operadores';
 
 const Nominas = () => {
 
   const [isLoading2, setLoading] = useState();
-
-  const handleChange = (event) => {
-  };
+  const [periodo, setPeriodo] = useState('');
 
   const [modalShow, setModalShow] = useState(false);
-  const [id_pago, setIDPago] = useState('');
-  const [id_operador, setIDOperador] = useState('');
-  const [fecha_inicio, setFechainicio] = useState('');
-  const [fecha_fin, setFechafin] = useState('');
-  const [disabled, setDisabled] = useState(false);
 
   const handleShowModal = () => {
-    setDisabled(false);
     setModalShow(true);
-    setIDPago(null);
-    setIDOperador(null);
-    setFechainicio(null);
-    setFechafin(null);
+    setIDPeriodo(null);
   };
 
   const handleCloseModal = async () => {
     setModalShow(false);
+    await fetchData();
+  };
+
+  const [openPeriodo, setOpenPeriodo] = useState(false);
+
+  const handleShowPeriodo = () => {
+    setOpenPeriodo(true);
+  };
+
+  const handleClosePeriodo = async () => {
+    setOpenPeriodo(false);
     await fetchData();
   };
 
@@ -45,16 +48,8 @@ const Nominas = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const formData = new FormData();
-      formData.append('operador_id', '1070');
-
-      const response = await fetch(VITE_PHIDES_API_URL + '/modulo_maniobras/pagos/getPagos.php', {
-        method: 'POST',
-        body: formData,
-      });
-
-      const jsonData = await response.json();
-      setData(jsonData);
+      const response = await odooApi.get('/maniobras/periodos_pagos_maniobras/');
+      setData(response.data);
     } catch (error) {
       console.error('Error al obtener los datos:', error);
     } finally {
@@ -69,24 +64,28 @@ const Nominas = () => {
   const columns = useMemo(
     () => [
       {
-        accessorKey: 'id_pago',
-        header: 'ID Pago',
+        accessorKey: 'id_periodo',
+        header: 'ID Periodo',
       },
       {
-        accessorKey: 'name',
-        header: 'Conductor',
+        accessorKey: 'fecha_inicio',
+        header: 'Fecha inicio',
       },
       {
-        accessorKey: 'fecha_pago',
-        header: 'Fecha de pago',
+        accessorKey: 'fecha_fin',
+        header: 'Fecha fin',
       },
       {
-        accessorKey: 'periodo_inicio',
-        header: 'Periodo inicio',
+        accessorKey: 'estado',
+        header: 'Estado',
       },
       {
-        accessorKey: 'periodo_fin',
-        header: 'Periodo fin',
+        accessorKey: 'nombre',
+        header: 'Usuario creación',
+      },
+      {
+        accessorKey: 'fecha_creacion',
+        header: 'Fecha creación',
       },
     ],
     [],
@@ -99,7 +98,7 @@ const Nominas = () => {
     enableGlobalFilter: true,
     enableFilters: true,
     initialState: {
-      groupBy: ['store_id'],
+      showGlobalFilter: true,
       density: 'compact',
       pagination: { pageSize: 80 },
     },
@@ -107,20 +106,16 @@ const Nominas = () => {
     muiCircularProgressProps: {
       color: 'primary',
       thickness: 5,
-      size: 45,
+      size: 35,
     },
     muiSkeletonProps: {
       animation: 'pulse',
       height: 28,
     },
     muiTableBodyRowProps: ({ row }) => ({
-      onClick: ({ event }) => {
-        handleShowModal();
-        setIDPago(row.original.id_pago);
-        setIDOperador(row.original.id_operador);
-        setFechainicio(row.original.periodo_inicio);
-        setFechafin(row.original.periodo_fin);
-        setDisabled(true);
+      onClick: (event) => {
+        handleShowPeriodo();
+        setPeriodo(row.original);
       },
       style: {
         cursor: 'pointer',
@@ -142,7 +137,13 @@ const Nominas = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 200px)',
+        maxHeight: 'calc(100vh - 205px)',
+      },
+    },
+    muiTablePaperProps: {
+      elevation: 0,
+      sx: {
+        borderRadius: '0',
       },
     },
     renderTopToolbarCustomActions: ({ table }) => (
@@ -154,28 +155,29 @@ const Nominas = () => {
           alignItems: 'center',
         }}
       >
-        <Button color='primary' onPress={handleShowModal}>Nuevo registro de pago</Button>
+
+        <h1 className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text">Periodos de pago maniobras</h1>
+        <Button color='primary' onPress={() => fetchData()}>Actualizar registros</Button>
+        <Popover showArrow offset={10} placement="bottom">
+          <PopoverTrigger>
+            <Button color="primary">Abrir nuevo periodo</Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-[280px]">
+            <PeriodoPagoManiobras fetchData={fetchData}></PeriodoPagoManiobras>
+          </PopoverContent>
+        </Popover>
       </Box >
     ),
   });
 
   return (
-    <div>
+    <>
       <ManiobraProvider>
+        <PagosOperadores show={openPeriodo} handleClose={handleClosePeriodo} periodo={periodo}></PagosOperadores>
         <ManiobrasNavBar />
-        <Nomina_form
-          show={modalShow}
-          handleClose={handleCloseModal}
-          id_pago={id_pago}
-          id_operador={id_operador}
-          fecha_inicio={fecha_inicio}
-          fecha_fin={fecha_fin}
-          disabled={disabled} />
-        <ThemeProvider theme={customFontTheme}>
-          <MaterialReactTable table={table} />
-        </ThemeProvider>
+        <MaterialReactTable table={table} />
       </ManiobraProvider>
-    </div >
+    </>
   );
 
 };
