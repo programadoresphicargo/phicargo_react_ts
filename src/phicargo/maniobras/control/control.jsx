@@ -36,12 +36,14 @@ export default function control_maniobras() {
                                 <Tab label="PROGRAMADAS" value="2" sx={{ fontFamily: 'Inter' }} />
                                 <Tab label="FINALIZADAS" value="3" sx={{ fontFamily: 'Inter' }} />
                                 <Tab label="PENDIENTES POR ASIGNAR" value="4" sx={{ fontFamily: 'Inter' }} />
+                                <Tab label="CANCELADAS" value="5" sx={{ fontFamily: 'Inter' }} />
                             </TabList>
                         </Box>
                         <TabPanel value="1" sx={{ padding: 0, margin: 0 }}><Maniobras estado_maniobra={'activa'} /></TabPanel>
                         <TabPanel value="2" sx={{ padding: 0, margin: 0 }}><Maniobras estado_maniobra={'borrador'} /></TabPanel>
                         <TabPanel value="3" sx={{ padding: 0, margin: 0 }}> <Maniobras estado_maniobra={'finalizada'} /></TabPanel>
                         <TabPanel value="4" sx={{ padding: 0, margin: 0 }}><Maniobras estado_maniobra={''} /></TabPanel>
+                        <TabPanel value="5" sx={{ padding: 0, margin: 0 }}><Maniobras estado_maniobra={'cancelada'} /></TabPanel>
                     </TabContext>
                 </Box>
             </ManiobraProvider>

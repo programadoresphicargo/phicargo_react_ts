@@ -268,9 +268,6 @@ const Maniobras = ({ estado_maniobra }) => {
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
     initialState: {
-      columnVisibility: {
-        id_maniobra: false,
-      },
       density: 'compact',
       showColumnFilters: true,
       pagination: { pageSize: 80 },
