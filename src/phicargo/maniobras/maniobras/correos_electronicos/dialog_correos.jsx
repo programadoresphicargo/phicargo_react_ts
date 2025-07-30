@@ -21,6 +21,11 @@ import FormularioCorreo from './formulario';
 import { ManiobraContext } from '../../context/viajeContext';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
+import Slide from '@mui/material/Slide';
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const CorreosLigadosManiobra = ({ open, handleClose }) => {
     const { id_maniobra, id_cliente, formData, setFormData, formDisabled, setFormDisabled } = useContext(ManiobraContext);
@@ -98,6 +103,9 @@ const CorreosLigadosManiobra = ({ open, handleClose }) => {
                 onClose={handleClose}
                 maxWidth="md"
                 fullWidth
+                slots={{
+                    transition: Transition,
+                }}
                 sx={{
                     '& .MuiPaper-root': {
                         borderRadius: '25px',
