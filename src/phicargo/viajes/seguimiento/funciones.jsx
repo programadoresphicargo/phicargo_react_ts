@@ -186,7 +186,7 @@ export const useJourneyDialogs = () => {
                 getViaje(id_viaje);
 
             } else {
-                toast.error('Error: ' + response.data, { id: loadingToast });
+                toast.error('Error: ' + response.data.message, { id: loadingToast });
             }
         } catch (error) {
             toast.error('Error: ' + error, { id: loadingToast });
