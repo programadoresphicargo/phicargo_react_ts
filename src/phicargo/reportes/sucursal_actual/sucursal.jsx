@@ -129,7 +129,7 @@ const SucursalActual = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 167px)',
+        maxHeight: 'calc(100vh - 185px)',
       },
     },
     muiTableBodyCellProps: ({ row }) => ({
@@ -161,13 +161,13 @@ const SucursalActual = () => {
 
       </Box >
     ),
-  });
+  })
 
   return (
     <>
       <MaterialReactTable
         table={table}
-      />;
+      />
     </>
   );
 };
