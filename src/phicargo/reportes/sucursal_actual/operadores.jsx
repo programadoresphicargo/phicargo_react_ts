@@ -71,7 +71,7 @@ const SucursalActualOperador = () => {
         }
 
         return (
-          <Chip color={clase} className="text-white">
+          <Chip color={clase} size="sm" className="text-white">
             {valor}
           </Chip>
         );
@@ -124,7 +124,7 @@ const SucursalActualOperador = () => {
         backgroundColor: row.subRows?.length ? '#0456cf' : '#FFFFFF',
         fontFamily: 'Inter',
         fontWeight: 'normal',
-        fontSize: '14px',
+        fontSize: '12px',
         color: row.subRows?.length ? '#FFFFFF' : '#000000',
       },
     }),
