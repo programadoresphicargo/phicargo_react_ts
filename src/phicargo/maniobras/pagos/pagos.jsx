@@ -11,7 +11,7 @@ import { Box } from '@mui/system';
 import { ManiobraProvider } from '../context/viajeContext';
 import odooApi from '@/api/odoo-api';
 import PeriodoPagoManiobras from './form_periodos';
-import { Popover, PopoverTrigger, PopoverContent, Button, Input, Select, SelectItem } from "@heroui/react";
+import { Popover, PopoverTrigger, PopoverContent, Button, Input, Select, SelectItem, Chip } from "@heroui/react";
 import { DateRangePicker } from 'rsuite';
 import PagosOperadores from './pagos_operadores';
 import AbrirPeriodo from './form_periodos';
@@ -81,6 +81,22 @@ const Nominas = () => {
       {
         accessorKey: 'estado',
         header: 'Estado',
+        Cell: ({ cell }) => {
+          const value = cell.getValue();
+
+          let variant = 'default';
+          if (value === 'cerrado') {
+            variant = 'success';
+          } else if (value === 'pendiente') {
+            variant = 'warning';
+          }
+
+          return (
+            <Chip color={variant} className="text-white" size="sm">
+              {value}
+            </Chip>
+          );
+        },
       },
       {
         accessorKey: 'nombre',

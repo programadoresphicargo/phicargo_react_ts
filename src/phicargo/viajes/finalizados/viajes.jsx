@@ -110,6 +110,14 @@ const ViajesFinalizados = ({ }) => {
         header: 'Cartas porte',
       },
       {
+        accessorKey: 'cliente',
+        header: 'Cliente',
+      },
+      {
+        accessorKey: 'subcliente',
+        header: 'Subcliente',
+      },
+      {
         accessorKey: 'fecha_inicio',
         header: 'Fecha de inicio',
         Cell: ({ cell }) => formatFecha(cell.getValue()),
@@ -236,19 +244,19 @@ const ViajesFinalizados = ({ }) => {
       sx: {
         fontFamily: 'Inter',
         fontWeight: 'Bold',
-        fontSize: '14px',
+        fontSize: '12px',
       },
     },
     muiTableBodyCellProps: {
       sx: {
         fontFamily: 'Inter',
         fontWeight: 'normal',
-        fontSize: '14px',
+        fontSize: '12px',
       },
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 210px)',
+        maxHeight: 'calc(100vh - 220px)',
       },
     },
     renderTopToolbarCustomActions: ({ table }) => (

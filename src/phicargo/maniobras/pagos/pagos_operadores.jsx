@@ -194,7 +194,7 @@ const PagosOperadores = ({ show, handleClose, periodo }) => {
                     flexWrap: 'wrap',
                 }}
             >
-                <Button onPress={() => confirmarCerrado()} color='primary'>
+                <Button onPress={() => confirmarCerrado()} color='primary' isDisabled={periodo?.estado == 'cerrado' ? true : false}>
                     Cerrar periodo
                 </Button>
                 <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, `periodo_pago_maniobras_${id_periodo}.csv`)}>Exportar</Button>
