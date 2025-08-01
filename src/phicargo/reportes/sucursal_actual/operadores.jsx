@@ -79,9 +79,9 @@ const SucursalActualOperador = () => {
     },
     { accessorKey: 'dias_en_sucursal', header: 'Días en sucursal' },
     { accessorKey: 'fecha_primer_viaje', header: 'Entrada a sucursal' },
-    { accessorKey: 'primer_viaje', header: 'Primer viaje' },
+    { accessorKey: 'primer_viaje', header: 'Primer viaje en sucursal' },
     { accessorKey: 'fecha_ultimo_viaje', header: 'Fecha último viaje' },
-    { accessorKey: 'ultimo_viaje', header: 'Último viaje' },
+    { accessorKey: 'ultimo_viaje', header: 'Último viaje registrado' },
     { accessorKey: 'vehiculos_utilizados', header: 'Vehiculos utilizados' },
   ];
 
