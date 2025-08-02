@@ -23,6 +23,7 @@ import YearSelector from '@/año';
 import { exportToCSV } from '../../utils/export';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
+import { DateRangePicker } from 'rsuite';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -33,19 +34,11 @@ const ViajesFinalizados = ({ }) => {
   const [open, setOpen] = React.useState(false);
   const { id_viaje, viaje, getViaje, loading, error, ActualizarIDViaje } = useContext(ViajeContext);
 
-  const mesActual = String(new Date().getMonth() + 1).padStart(2, '0');
-  const [mes, setMes] = useState(mesActual);
+  const now = new Date();
+  const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+  const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
 
-  const añoActual = String(new Date().getFullYear());
-  const [año, setAño] = useState(añoActual);
-
-  const handleChangeAño = (e) => {
-    setAño(e.target.value);
-  };
-
-  const handleChange = (event) => {
-    setMes(event.target.value);
-  };
+  const [range, setRange] = useState([firstDay, lastDay]);
 
   useEffect(() => {
     getViaje(id_viaje);
@@ -63,10 +56,14 @@ const ViajesFinalizados = ({ }) => {
   const [isLoading, setLoading] = useState();
 
   const fetchData = async () => {
-
     try {
       setLoading(true);
-      const response = await odooApi.get('/tms_travel/completed_travels/' + mes + '/' + año);
+      const response = await odooApi.get('/tms_travel/completed_travels/', {
+        params: {
+          date_start: range[0].toISOString().slice(0, 10),
+          date_end: range[1].toISOString().slice(0, 10)
+        }
+      });
       setData(response.data);
       setLoading(false);
     } catch (error) {
@@ -89,7 +86,7 @@ const ViajesFinalizados = ({ }) => {
 
   useEffect(() => {
     fetchData();
-  }, [mes, año]);
+  }, [range]);
 
   const columns = useMemo(
     () => [
@@ -273,8 +270,14 @@ const ViajesFinalizados = ({ }) => {
         >
           Viajes finalizados
         </h1>
-        <MonthSelector selectedMonth={mes} handleChange={handleChange}></MonthSelector>
-        <YearSelector selectedYear={año} handleChange={handleChangeAño}></YearSelector>
+
+        <DateRangePicker
+          value={range}
+          onChange={(value) => setRange(value)}
+          placeholder="Selecciona un rango de fechas"
+          format="yyyy-MM-dd"
+        />
+
         <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "viajes_finalizados.csv")}>Exportar</Button>
       </Box>
     ),

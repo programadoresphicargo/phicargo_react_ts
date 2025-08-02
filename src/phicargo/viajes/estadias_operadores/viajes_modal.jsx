@@ -15,32 +15,36 @@ import {
 } from 'material-react-table';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { Box } from '@mui/material';
-import MonthSelector from "@/mes";
-import YearSelector from "@/año";
+import { DateRangePicker } from "@heroui/react";
+import { parseDate, getLocalTimeZone } from "@internationalized/date";
+import { useDateFormatter } from "@react-aria/i18n";
 
 function ListViajes({ open, handleClose, setDataTravel }) {
+    function formatDateToYYYYMMDD(date) {
+        return date.toISOString().slice(0, 10);
+    }
+
+    const now = new Date();
+    const first = formatDateToYYYYMMDD(new Date(now.getFullYear(), now.getMonth(), 1));
+    const last = formatDateToYYYYMMDD(new Date(now.getFullYear(), now.getMonth() + 1, 0));
+
+    const [value, setValue] = React.useState({
+        start: parseDate(first),
+        end: parseDate(last)
+    });
 
     const [data, setData] = useState([]);
     const [isLoading, setLoading] = useState(false);
 
-    const mesActual = String(new Date().getMonth() + 1).padStart(2, '0');
-    const [mes, setMes] = useState(mesActual);
-
-    const añoActual = String(new Date().getFullYear());
-    const [año, setAño] = useState(añoActual);
-
-    const handleChangeAño = (e) => {
-        setAño(e.target.value);
-    };
-
-    const handleChange = (event) => {
-        setMes(event.target.value);
-    };
-
     const fetchData = async () => {
         try {
             setLoading(true);
-            const response = await odooApi.get(`/tms_travel/completed_travels/${mes}/${año}`);
+            const response = await odooApi.get('/tms_travel/completed_travels/', {
+                params: {
+                    date_start: value.start,
+                    date_end: value.end
+                }
+            });
             setData(response.data);
         } catch (error) {
             console.error('Error al obtener los datos:', error);
@@ -52,7 +56,7 @@ function ListViajes({ open, handleClose, setDataTravel }) {
 
     useEffect(() => {
         fetchData();
-    }, [open, mes, año]);
+    }, [open, value]);
 
     const formatFecha = (fechaISO) => {
         if (!fechaISO) return "";
@@ -188,8 +192,12 @@ function ListViajes({ open, handleClose, setDataTravel }) {
                     Viajes finalizados
                 </h1>
 
-                <MonthSelector selectedMonth={mes} handleChange={handleChange}></MonthSelector>
-                <YearSelector selectedYear={año} handleChange={handleChangeAño}></YearSelector>
+                <DateRangePicker
+                    visibleMonths={2}
+                    value={value} onChange={setValue}
+                    className="max-w-xs"
+                    label="Viajes finalizadoss"
+                />
 
             </Box >
         ),
