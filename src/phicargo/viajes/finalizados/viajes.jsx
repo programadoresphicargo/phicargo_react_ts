@@ -19,7 +19,6 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Viaje from '../viaje';
 import { ViajeContext } from '../context/viajeContext';
-import YearSelector from '@/año';
 import { exportToCSV } from '../../utils/export';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';

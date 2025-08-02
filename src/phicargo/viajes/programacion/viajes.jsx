@@ -3,7 +3,6 @@ import {
   useMaterialReactTable,
 } from 'material-react-table';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-
 import AppBar from '@mui/material/AppBar';
 import { Box } from '@mui/material';
 import { Button } from '@heroui/react';
@@ -19,9 +18,9 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Viaje from '../viaje';
 import { ViajeContext } from '../context/viajeContext';
-import YearSelector from '@/año';
 import { exportToCSV } from '../../utils/export';
 import odooApi from '@/api/odoo-api';
+import { DateRangePicker } from 'rsuite';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -29,20 +28,14 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const ViajesProgramados = ({ }) => {
 
+  const now = new Date();
+  const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+  const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
+  const [range, setRange] = useState([firstDay, lastDay]);
+
   const [open, setOpen] = React.useState(false);
   const { id_viaje, viaje, getViaje, loading, error, ActualizarIDViaje } = useContext(ViajeContext);
-  const mesActual = String(new Date().getMonth() + 1).padStart(2, '0');
-  const [mes, setMes] = useState(mesActual);
-  const añoActual = String(new Date().getFullYear());
-  const [año, setAño] = useState(añoActual);
-
-  const handleChangeAño = (e) => {
-    setAño(e.target.value);
-  };
-
-  const handleChange = (event) => {
-    setMes(event.target.value);
-  };
 
   useEffect(() => {
     getViaje(id_viaje);
@@ -61,10 +54,14 @@ const ViajesProgramados = ({ }) => {
   const [isLoading, setLoading] = useState();
 
   const fetchData = async () => {
-
     try {
       setLoading(true);
-      const response = await odooApi.get('/tms_travel/scheduled_travels/' + mes + '/' + año);
+      const response = await odooApi.get('/tms_travel/scheduled_travels/', {
+        params: {
+          date_start: range[0].toISOString().slice(0, 10),
+          date_end: range[1].toISOString().slice(0, 10)
+        }
+      });
       setData(response.data);
       setLoading(false);
     } catch (error) {
@@ -74,7 +71,7 @@ const ViajesProgramados = ({ }) => {
 
   useEffect(() => {
     fetchData();
-  }, [mes, año]);
+  }, [range]);
 
   const { cantidadRojo, cantidadAmarillo } = useMemo(() => {
     let rojo = 0;
@@ -347,8 +344,12 @@ const ViajesProgramados = ({ }) => {
         >
           Programación de viajes
         </h1>
-        <MonthSelector selectedMonth={mes} handleChange={handleChange}></MonthSelector>
-        <YearSelector selectedYear={año} handleChange={handleChangeAño}></YearSelector>
+        <DateRangePicker
+          value={range}
+          onChange={(value) => setRange(value)}
+          placeholder="Selecciona un rango de fechas"
+          format="yyyy-MM-dd"
+        />
         <Chip color="danger" className="text-white" size='lg'>
           Retrasados: {cantidadRojo}
         </Chip>
