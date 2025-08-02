@@ -19,7 +19,6 @@ export const DatePicker = () => {
           <RefreshButton onRefresh={() => refetchFn()} />
         </div>
         <DateRangePicker
-          oneTap
           showOneCalendar
           placeholder={`Selecciona el rango de fechas`}
           size="sm"
