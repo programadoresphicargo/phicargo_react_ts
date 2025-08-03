@@ -74,17 +74,25 @@ const ViajesActivos = ({ }) => {
   const conexionSMTP = async () => {
     try {
       const response = await odooApi.get('/fastapi_mail/validar/');
-      if (response.data.status === 'success') {
+      if (response.data && response.data.status === 'success') {
         toast.success(response.data.message);
       } else {
-        toast.error(response.data); // Este else casi nunca se activa si el servidor lanza error con código HTTP
+        toast.error('Respuesta inesperada del servidor.');
+        console.warn('Respuesta:', response.data); // Log de respaldo para depurar
       }
     } catch (error) {
-      // Verifica si el error tiene respuesta y detalle
-      if (error.response && error.response.data && error.response.data.detail) {
+      // 1. Error devuelto por FastAPI con detail
+      if (error.response?.data?.detail) {
         toast.error('Error conexión SMTP: ' + error.response.data.detail);
-      } else {
+
+        // 2. Error con solo mensaje
+      } else if (error.message) {
         toast.error('Error conexión SMTP: ' + error.message);
+
+        // 3. Cualquier otro caso raro
+      } else {
+        toast.error('Error desconocido al validar conexión SMTP');
+        console.error('Error desconocido:', error);
       }
     }
   };
