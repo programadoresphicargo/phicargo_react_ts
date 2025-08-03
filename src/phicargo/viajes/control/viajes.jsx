@@ -26,6 +26,7 @@ import { ViajeContext } from '../context/viajeContext';
 import ViajesActivosMasivo from '../envio_masivo/viajes_activos';
 import { exportToCSV } from '../../utils/export';
 import odooApi from '@/api/odoo-api';
+import { toast } from 'react-toastify';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -70,8 +71,27 @@ const ViajesActivos = ({ }) => {
     }
   };
 
+  const conexionSMTP = async () => {
+    try {
+      const response = await odooApi.get('/fastapi_mail/validar/');
+      if (response.data.status === 'success') {
+        toast.success(response.data.message);
+      } else {
+        toast.error(response.data); // Este else casi nunca se activa si el servidor lanza error con código HTTP
+      }
+    } catch (error) {
+      // Verifica si el error tiene respuesta y detalle
+      if (error.response && error.response.data && error.response.data.detail) {
+        toast.error('Error conexión SMTP: ' + error.response.data.detail);
+      } else {
+        toast.error('Error conexión SMTP: ' + error.message);
+      }
+    }
+  };
+
   useEffect(() => {
     fetchData();
+    conexionSMTP();
   }, []);
 
   const columns = useMemo(
@@ -406,7 +426,10 @@ const ViajesActivos = ({ }) => {
           startContent={<i class="bi bi-arrow-clockwise"></i>}
           color='primary'
           isDisabled={false}
-          onPress={() => fetchData()}
+          onPress={() => {
+            fetchData();
+            conexionSMTP();
+          }}
           size='sm'
         >Actualizar tablero
         </Button>

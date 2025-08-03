@@ -11,6 +11,8 @@ import { Box, IconButton, Tooltip } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { VehicleInspectionHeader } from '../components/ui/VehicleInspectionHeader';
 import { LegalInspectionModal } from '@/modules/vehicles/components/vehicle-inspections/LegalInspectionModal';
+import { Button } from '@heroui/react';
+import { exportToCSV } from '../../../phicargo/utils/export';
 
 const now = new Date();
 
@@ -55,6 +57,7 @@ const VehicleLegalInspectionPage = () => {
       <div className="flex items-center gap-4">
         <MonthSelect onMonthChange={setMonth} />
         <YearSelect onYearChange={setYear} />
+        <Button color='success' className='text-white' onPress={() => exportToCSV(query.data || [], columns, "inspecciones.csv")}>Exportar</Button>
       </div>
     ),
   });
