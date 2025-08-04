@@ -7,13 +7,11 @@ import {
     useMaterialReactTable,
 } from 'material-react-table';
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
-
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import { Button } from "@heroui/react";
 import CostosExtrasContenedores from './añadir_contenedor/maniobra_contenedores';
 import { CostosExtrasContext } from '../context/context';
-import { DateRangePicker } from "@heroui/react";
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -23,7 +21,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Grid from '@mui/material/Grid';
 import LinearProgress from '@mui/material/LinearProgress';
 import ManiobraContenedores from './añadir_contenedor/maniobra_contenedores';
-import MonthSelector from '@/mes';
 import { NumberInput } from "@heroui/react";
 import ServiciosAplicadosCE from './costos_aplicados/costos_aplicados';
 import Slide from '@mui/material/Slide';
@@ -32,40 +29,46 @@ import Swal from 'sweetalert2';
 import TextField from '@mui/material/TextField';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import YearSelector from '@/año';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import { getEstadoChip } from '../utils';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import { useAuthContext } from "@/modules/auth/hooks";
+import { DateRangePicker } from "@heroui/react";
+import { parseDate, getLocalTimeZone } from "@internationalized/date";
+import { useDateFormatter } from "@react-aria/i18n";
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
 const FormCE = ({ }) => {
+
+    function formatDateToYYYYMMDD(date) {
+        return date.toISOString().slice(0, 10);
+    }
+
+    const now = new Date();
+    const first = formatDateToYYYYMMDD(new Date(now.getFullYear(), now.getMonth(), 1));
+    const last = formatDateToYYYYMMDD(new Date(now.getFullYear(), now.getMonth() + 1, 0));
+
+    const [value, setValue] = React.useState({
+        start: parseDate(first),
+        end: parseDate(last)
+    });
 
     const { id_folio, formData, setFormData, DisabledForm } = useContext(CostosExtrasContext);
     const [open, setOpen] = React.useState(false);
     const [isLoading, setLoading] = React.useState(false);
     const [referencias, setReferencias] = useState([]);
 
-    const currentMonth = String(new Date().getMonth() + 1).padStart(2, '0');
-    const [selectedMonth, setSelectedMonth] = useState(currentMonth);
-
-    const handleChange = (event) => {
-        setSelectedMonth(event.target.value);
-    };
-
-    const currentYear = new Date().getFullYear();
-    const [selectedYear, setSelectedYear] = useState(currentYear);
-
-    const handleChangeYear = (event) => {
-        setSelectedYear(event.target.value);
-    };
 
     useEffect(() => {
-        if (!selectedMonth || !selectedYear) return;
-
         setLoading(true);
-        odooApi.get("/folios_costos_extras/account_invoice/" + selectedMonth + '/' + selectedYear)
+        odooApi.get("/folios_costos_extras/account_invoice/", {
+            params: {
+                date_start: value.start,
+                date_end: value.end
+            }
+        })
             .then((response) => {
                 setReferencias(response.data);
                 setLoading(false);
@@ -74,7 +77,7 @@ const FormCE = ({ }) => {
                 console.error("Error al obtener las referencias:", error);
                 setLoading(false);
             });
-    }, [selectedMonth, selectedYear]);
+    }, [value]);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -120,6 +123,7 @@ const FormCE = ({ }) => {
         enableFilters: true,
         state: { isLoading: isLoading },
         enableColumnPinning: true,
+        localization: MRT_Localization_ES,
         enableStickyHeader: true,
         columnResizeMode: "onEnd",
         initialState: {
@@ -166,15 +170,12 @@ const FormCE = ({ }) => {
         }),
         renderTopToolbarCustomActions: ({ table }) => (
             <Box display="flex" alignItems="center" m={2}>
-                <Box sx={{ flexGrow: 1, mr: 2 }}>
-                    <MonthSelector
-                        selectedMonth={selectedMonth}
-                        handleChange={handleChange}
-                    />
-                </Box>
-                <Box sx={{ flexGrow: 1, mr: 2 }}>
-                    <YearSelector selectedYear={selectedYear} handleChange={handleChangeYear}></YearSelector>
-                </Box>
+                <DateRangePicker
+                    visibleMonths={2}
+                    value={value} onChange={setValue}
+                    className="max-w-xs"
+                    label="Cartas porte"
+                />
             </Box>
         ),
     });

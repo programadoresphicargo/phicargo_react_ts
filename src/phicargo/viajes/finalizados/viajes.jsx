@@ -12,7 +12,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import Dialog from '@mui/material/Dialog';
 import IconButton from '@mui/material/IconButton';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import MonthSelector from '@/mes';
 import NavbarViajes from '../navbar';
 import Slide from '@mui/material/Slide';
 import Toolbar from '@mui/material/Toolbar';

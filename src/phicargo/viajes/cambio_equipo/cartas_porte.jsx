@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import MonthSelector from '../../../mes';
 import { ThemeProvider } from '@mui/material/styles';
 import customFontTheme from '../../../theme';
 import Tabs from '@mui/material/Tabs';
@@ -164,10 +163,6 @@ const ContenedoresCambio = ({ setSelectedItems, onClose }) => {
     <div>
       <Box display="flex" alignItems="center" m={2}>
         <Box sx={{ flexGrow: 1, mr: 2 }}>
-          <MonthSelector
-            selectedMonth={selectedMonth}
-            handleChange={handleChange}
-          />
         </Box>
         <Box sx={{ flexGrow: 1, mr: 2 }}>
           <Tabs value={selectedTab} onChange={handleTabChange} aria-label="Tabs">

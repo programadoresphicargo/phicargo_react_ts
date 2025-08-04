@@ -11,7 +11,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import Dialog from '@mui/material/Dialog';
 import IconButton from '@mui/material/IconButton';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import MonthSelector from '@/mes';
 import NavbarViajes from '../navbar';
 import Slide from '@mui/material/Slide';
 import Toolbar from '@mui/material/Toolbar';
@@ -31,7 +30,6 @@ const ViajesProgramados = ({ }) => {
   const now = new Date();
   const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
   const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-
   const [range, setRange] = useState([firstDay, lastDay]);
 
   const [open, setOpen] = React.useState(false);

@@ -3,49 +3,48 @@ import {
     useMaterialReactTable,
 } from 'material-react-table';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { getLocalTimeZone, parseDate } from "@internationalized/date";
-
 import { Box } from '@mui/material';
 import { Button } from "@heroui/react";
 import { CostosExtrasContext } from '../../context/context';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import MonthSelector from '@/mes';
-import YearSelector from '@/año';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
+import { DateRangePicker } from "@heroui/react";
+import { parseDate, getLocalTimeZone } from "@internationalized/date";
+import { useDateFormatter } from "@react-aria/i18n";
 
 const AñadirContenedor = ({ show, handleClose }) => {
 
     const { id_folio, CartasPorte, setCPS } = useContext(CostosExtrasContext);
-
     const [data, setData] = useState([]);
     const [isLoading2, setILoading] = useState();
 
-    const currentMonth = String(new Date().getMonth() + 1).padStart(2, '0');
-    const [selectedMonth, setSelectedMonth] = useState(currentMonth);
+    function formatDateToYYYYMMDD(date) {
+        return date.toISOString().slice(0, 10);
+    }
 
-    const handleChange = (event) => {
-        setSelectedMonth(event.target.value);
-    };
+    const now = new Date();
+    const first = formatDateToYYYYMMDD(new Date(now.getFullYear(), now.getMonth(), 1));
+    const last = formatDateToYYYYMMDD(new Date(now.getFullYear(), now.getMonth() + 1, 0));
 
-    const currentYear = new Date().getFullYear();
-    const [selectedYear, setSelectedYear] = useState(currentYear);
-
-    const handleChangeYear = (event) => {
-        setSelectedYear(event.target.value);
-    };
-
+    const [value, setValue] = React.useState({
+        start: parseDate(first),
+        end: parseDate(last)
+    });
 
     useEffect(() => {
-        const fetchData = async (month, year,) => {
-            if (!selectedMonth || !selectedYear) return;
-
+        const fetchData = async () => {
             try {
                 setILoading(true);
-                const response = await odooApi.get('/tms_waybill/get_waybills/' + month + '/' + year);
+                const response = await odooApi.get('/tms_waybill/get_waybills/', {
+                    params: {
+                        date_start: value.start,
+                        date_end: value.end
+                    }
+                });
                 setData(response.data);
             } catch (error) {
                 console.error('Error al obtener los datos:', error);
@@ -54,8 +53,8 @@ const AñadirContenedor = ({ show, handleClose }) => {
             }
         };
 
-        fetchData(selectedMonth, selectedYear);
-    }, [selectedMonth, selectedYear]);
+        fetchData();
+    }, [value]);
 
     const añadir_contenedor = (data) => {
         setCPS(prevCartasPorte => [...prevCartasPorte, data]);
@@ -157,15 +156,12 @@ const AñadirContenedor = ({ show, handleClose }) => {
         }),
         renderTopToolbarCustomActions: ({ table }) => (
             <Box display="flex" alignItems="center" m={2}>
-                <Box sx={{ flexGrow: 1, mr: 2 }}>
-                    <MonthSelector
-                        selectedMonth={selectedMonth}
-                        handleChange={handleChange}
-                    />
-                </Box>
-                <Box sx={{ flexGrow: 1, mr: 2 }}>
-                    <YearSelector selectedYear={selectedYear} handleChange={handleChangeYear}></YearSelector>
-                </Box>
+                <DateRangePicker
+                    visibleMonths={2}
+                    value={value} onChange={setValue}
+                    className="max-w-xs"
+                    label="Cartas porte"
+                />
             </Box>
         ),
     });

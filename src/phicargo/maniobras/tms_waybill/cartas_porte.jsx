@@ -4,35 +4,33 @@ import {
   useMaterialReactTable,
 } from 'material-react-table';
 import React, { useEffect, useMemo, useState } from 'react';
-
 import Box from '@mui/material/Box';
 import Example2 from '../maniobras/modal';
 import { ManiobraProvider } from '../context/viajeContext';
 import ManiobrasNavBar from '../Navbar';
-import MonthSelector from '../../../mes';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import { ThemeProvider } from '@mui/material/styles';
-import YearSelector from '@/año';
 import customFontTheme from '../../../theme';
 import { exportToCSV } from '../../utils/export';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
+import { DateRangePicker } from 'rsuite';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
 const CartasPorte = () => {
+
+  const now = new Date();
+  const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+  const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+  const [range, setRange] = useState([firstDay, lastDay]);
+
   const [isLoading2, setLoading] = useState();
   const [selectedTab, setSelectedTab] = React.useState("carta");
 
   const handleTabChange = (e) => {
     setSelectedTab(e.target.value);
     fetchData(selectedMonth, selectedYear, e.target.value);
-  };
-
-  const currentMonth = String(new Date().getMonth() + 1).padStart(2, '0');
-  const [selectedMonth, setSelectedMonth] = useState(currentMonth);
-
-  const handleChange = (event) => {
-    setSelectedMonth(event.target.value);
   };
 
   const [modalShow, setModalShow] = useState(false);
@@ -51,18 +49,17 @@ const CartasPorte = () => {
 
   const [data, setData] = useState([]);
 
-  const currentYear = String(new Date().getFullYear());
-  const [selectedYear, setSelectedYear] = useState(currentYear);
-
-  const handleChangeYear = (event) => {
-    setSelectedYear(event.target.value);
-  };
-
-  const fetchData = async (month, year, selectedTab) => {
-    if (!month || selectedTab === undefined) return;
+  const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await odooApi.get(`/tms_waybill/get_contenedores/${month}/${year}/${selectedTab}`);
+      const response = await odooApi.get(`/tms_waybill/get_contenedores/`,
+        {
+          params: {
+            date_start: range[0].toISOString().slice(0, 10),
+            date_end: range[1].toISOString().slice(0, 10),
+            tab: selectedTab
+          }
+        });
       setData(response.data);
     } catch (error) {
       toast.error('Error al obtener los datos:' + error);
@@ -72,8 +69,8 @@ const CartasPorte = () => {
   };
 
   useEffect(() => {
-    fetchData(selectedMonth, selectedYear, selectedTab);
-  }, [selectedMonth, selectedYear, selectedTab]);
+    fetchData();
+  }, [range, selectedTab]);
 
   const columns = useMemo(
     () => [
@@ -162,6 +159,7 @@ const CartasPorte = () => {
     enableGlobalFilter: true,
     enableColumnPinning: true,
     enableStickyHeader: true,
+    localization: MRT_Localization_ES,
     positionToolbarAlertBanner: 'none',
     positionGlobalFilter: "right",
     muiSearchTextFieldProps: {
@@ -184,6 +182,12 @@ const CartasPorte = () => {
     muiSkeletonProps: {
       animation: 'pulse',
       height: 28,
+    },
+    muiTablePaperProps: {
+      elevation: 0,
+      sx: {
+        borderRadius: '0',
+      },
     },
     muiTableBodyRowProps: ({ row }) => ({
       onClick: () => {
@@ -218,7 +222,12 @@ const CartasPorte = () => {
       },
     }),
     renderTopToolbarCustomActions: ({ table }) => (
-      <Box display="flex" alignItems="center" m={2}>
+      <Box sx={{
+        display: 'flex',
+        gap: '16px',
+        padding: '8px',
+        alignItems: 'center',
+      }}>
         <Box sx={{ flexGrow: 1, mr: 2 }}>
           <h1
             className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
@@ -226,15 +235,12 @@ const CartasPorte = () => {
             Contenedores
           </h1>
         </Box>
-        <Box sx={{ flexGrow: 1, mr: 2 }}>
-          <MonthSelector
-            selectedMonth={selectedMonth}
-            handleChange={handleChange}
-          />
-        </Box>
-        <Box sx={{ flexGrow: 1, mr: 2 }}>
-          <YearSelector selectedYear={selectedYear} handleChange={handleChangeYear}></YearSelector>
-        </Box>
+        <DateRangePicker
+          value={range}
+          onChange={(value) => setRange(value)}
+          placeholder="Selecciona un rango de fechas"
+          format="yyyy-MM-dd"
+        />
         <Select
           onChange={handleTabChange}
           label="Seleccionar una opción"
@@ -245,14 +251,12 @@ const CartasPorte = () => {
           <SelectItem key={'carta'}>Cartas porte</SelectItem>
           <SelectItem key={'solicitud'}>Solicitudes de transporte</SelectItem>
         </Select>
-        <Box sx={{ flexGrow: 1, ml: 2 }}>
-          <Button color='success'
-            className='text-white'
-            startContent={<i class="bi bi-file-earmark-excel"></i>}
-            onPress={() => exportToCSV(data, columns, "contenedores.csv")}
-          >Exportar
-          </Button>
-        </Box>
+        <Button color='success'
+          className='text-white'
+          startContent={<i class="bi bi-file-earmark-excel"></i>}
+          onPress={() => exportToCSV(data, columns, "contenedores.csv")}
+        >Exportar
+        </Button>
       </Box>
     ),
   });
