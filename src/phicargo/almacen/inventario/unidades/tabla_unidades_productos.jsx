@@ -31,9 +31,11 @@ import { toast } from 'react-toastify';
 import Grid from '@mui/material/Grid';
 import HistorialStock from '../historial';
 import Unidad from './unidad_individual';
+import { useAuthContext } from '@/modules/auth/hooks';
 
 const UnidadesProductos = ({ data2, fetch }) => {
 
+  const { session } = useAuthContext();
   const [id_unidad, setUnidad] = useState(0);
 
   const [cantidad, setCantidad] = useState(1);
@@ -197,7 +199,11 @@ const UnidadesProductos = ({ data2, fetch }) => {
 
         <Popover showArrow offset={10} placement="bottom">
           <PopoverTrigger>
-            <Button color="primary" isLoading={isLoading}>Crear unidades</Button>
+            <>
+              {session?.user.permissions.includes(218) && (
+                <Button color="primary" isLoading={isLoading}>Crear unidades</Button>
+              )}
+            </>
           </PopoverTrigger>
           <PopoverContent className="w-[240px]">
             {(titleProps) => (

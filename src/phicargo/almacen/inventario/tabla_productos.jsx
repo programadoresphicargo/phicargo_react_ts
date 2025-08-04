@@ -28,9 +28,11 @@ import { useAlmacen } from '../contexto/contexto';
 import { exportToCSV } from '@/phicargo/utils/export';
 import IndexProducto from './form';
 import FormProducto from './form_producto';
+import { useAuthContext } from '@/modules/auth/hooks';
 
 const TablaProductos = ({ close, tipo }) => {
 
+  const { session } = useAuthContext();
   const { data, setData } = useAlmacen();
   const [dataForm, setDataForm] = useState([]);
   const [id_epp, setIDEpp] = React.useState({});
@@ -179,17 +181,19 @@ const TablaProductos = ({ close, tipo }) => {
           Productos
         </h1>
 
-        <Button
-          className='text-white'
-          startContent={<i class="bi bi-plus-lg"></i>}
-          color='primary'
-          isDisabled={false}
-          onPress={async () => {
-            setIDEpp(null);
-            handleClickOpenF();
-          }}
-        >Nuevo producto
-        </Button>
+        {session?.user.permissions.includes(218) && (
+          <Button
+            className='text-white'
+            startContent={<i class="bi bi-plus-lg"></i>}
+            color='primary'
+            isDisabled={false}
+            onPress={async () => {
+              setIDEpp(null);
+              handleClickOpenF();
+            }}
+          >Nuevo producto
+          </Button>
+        )}
 
         <Button
           className='text-white'
