@@ -30,7 +30,7 @@ const CartasPorte = () => {
 
   const handleTabChange = (e) => {
     setSelectedTab(e.target.value);
-    fetchData(selectedMonth, selectedYear, e.target.value);
+    fetchData();
   };
 
   const [modalShow, setModalShow] = useState(false);
