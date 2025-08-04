@@ -4,6 +4,7 @@ import { Modal } from '@/components';
 import { Posturas } from './Posturas';
 import type { Vehicle } from '../models';
 import VehicleForm from './VehicleForm';
+import AssignmentsDriver from './Assignments';
 
 interface Props {
   open: boolean;
@@ -36,6 +37,9 @@ export const VehicleInformationModal = ({ open, onClose, vehicle }: Props) => {
       >
         <Tab key="vehicle-form" title="Información">
           <VehicleForm vehicle={vehicle} />
+        </Tab>
+        <Tab key="assignments-form" title="Asignaciones">
+          <AssignmentsDriver vehicle={vehicle}></AssignmentsDriver>
         </Tab>
         <Tab key="posture-form" title="Posturas">
           <Posturas vehicle={vehicle} />
