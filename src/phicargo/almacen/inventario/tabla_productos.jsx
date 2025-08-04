@@ -148,7 +148,7 @@ const TablaProductos = ({ close, tipo }) => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 210px)',
+        maxHeight: 'calc(100vh - 260px)',
       },
     },
     muiTableBodyRowProps: ({ row }) => ({

@@ -182,7 +182,7 @@ const Solicitudes = ({ x_tipo, vista }) => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 260px)',
+        maxHeight: 'calc(100vh - 280px)',
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
