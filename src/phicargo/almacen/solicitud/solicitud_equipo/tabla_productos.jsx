@@ -123,7 +123,7 @@ const TablaProductosDetalle = ({ close, tipo }) => {
           x_solicitud_id: data.id,
           x_producto_id: row.original.id,
           x_name: row.original.x_name,
-          x_tipo_entrega: 'prestamo',
+          x_tipo_entrega: 'asignacion',
           x_cantidad_solicitada: 1,
           x_cantidad_devuelta: 0,
         };
