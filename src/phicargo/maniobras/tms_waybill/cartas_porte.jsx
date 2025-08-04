@@ -222,36 +222,39 @@ const CartasPorte = () => {
       },
     }),
     renderTopToolbarCustomActions: ({ table }) => (
-      <Box sx={{
-        display: 'flex',
-        gap: '16px',
-        padding: '8px',
-        alignItems: 'center',
-      }}>
-        <Box sx={{ flexGrow: 1, mr: 2 }}>
-          <h1
-            className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
-          >
-            Contenedores
-          </h1>
-        </Box>
+      <Box
+        sx={{
+          display: 'flex',
+          gap: '16px',
+          padding: '8px',
+          alignItems: 'center',
+        }}
+      >
+        <h1
+          className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
+        >
+          Contenedores
+        </h1>
         <DateRangePicker
+          style={{ minWidth: "250px" }}
           value={range}
           onChange={(value) => setRange(value)}
           placeholder="Selecciona un rango de fechas"
           format="yyyy-MM-dd"
         />
         <Select
+          style={{ minWidth: "300px" }}
           onChange={handleTabChange}
           label="Seleccionar una opción"
           size={'sm'} variant='bordered'
           selectedKeys={[selectedTab]}
-          fullWidth={true}
-          style={{ minWidth: "200px" }}>
+          fullWidth={true}>
           <SelectItem key={'carta'}>Cartas porte</SelectItem>
           <SelectItem key={'solicitud'}>Solicitudes de transporte</SelectItem>
         </Select>
-        <Button color='success'
+        <Button
+          color='success'
+          fullWidth
           className='text-white'
           startContent={<i class="bi bi-file-earmark-excel"></i>}
           onPress={() => exportToCSV(data, columns, "contenedores.csv")}
