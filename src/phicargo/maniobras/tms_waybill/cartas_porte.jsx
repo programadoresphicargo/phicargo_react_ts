@@ -25,12 +25,12 @@ const CartasPorte = () => {
   const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
   const [range, setRange] = useState([firstDay, lastDay]);
 
-  const [isLoading2, setLoading] = useState();
+  const [isLoading2, setLoading] = useState(false);
   const [selectedTab, setSelectedTab] = React.useState("carta");
 
   const handleTabChange = (e) => {
-    setSelectedTab(e.target.value);
-    fetchData();
+    const newTab = e.target.value;
+    setSelectedTab(newTab);
   };
 
   const [modalShow, setModalShow] = useState(false);
