@@ -52,11 +52,12 @@ const CartasPorte = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await odooApi.get("/tms_waybill/get_contenedores/",
+      const response = await odooApi.get('/tms_waybill/get_contenedores/',
         {
           params: {
             date_start: range[0].toISOString().slice(0, 10),
             date_end: range[1].toISOString().slice(0, 10),
+            tab: selectedTab
           }
         });
       setData(response.data);
