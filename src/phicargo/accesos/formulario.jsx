@@ -131,11 +131,10 @@ const AccesoForm = ({ id_acceso, onClose }) => {
         { value: 'patio_maniobras', label: 'Patio Maniobras' },
         { value: 'patio_contenedores', label: 'Patio de Contenedores' },
         { value: 'diesel_y_urea', label: 'Diesel y Urea' },
-        { value: 'rfe_comprobacion_revision', label: 'RFE (Comprobación y Revisión)' },
         { value: 'estacionamiento_externo', label: 'Estacionamiento Externo' },
         { value: 'perimetro_interior', label: 'Perímetro Interior' },
         { value: 'perimetro_exterior', label: 'Perímetro Exterior' },
-        { value: 'coppel', label: 'Coppel' },
+        { value: 'm&m_internacional', label: 'M&M internacional' },
         { value: 'fertilizantes_tepeyac', label: 'Fertilizantes Tepeyac' }
     ];
 
