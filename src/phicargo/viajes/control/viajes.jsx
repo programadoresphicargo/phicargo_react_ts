@@ -97,9 +97,25 @@ const ViajesActivos = ({ }) => {
     }
   };
 
+  const updateCP = async () => {
+    try {
+      const response = await odooApi.get('/tms_travel/codigos_postales/obtener_coordenadas/');
+      const { status, message, codigos_insertados, codigos_no_encontrados } = response.data;
+
+      toast.success(
+        `${message}
+  CP nuevos insertados: ${codigos_insertados.length > 0 ? codigos_insertados.join(', ') : 'Ninguno'}
+  CP no encontrados: ${codigos_no_encontrados.length > 0 ? codigos_no_encontrados.join(', ') : 'Ninguno'}`
+      );
+    } catch (error) {
+      toast.error('Error desconocido: ' + error);
+    }
+  };
+
   useEffect(() => {
     fetchData();
     conexionSMTP();
+    updateCP();
   }, []);
 
   const columns = useMemo(
@@ -438,6 +454,7 @@ const ViajesActivos = ({ }) => {
           onPress={() => {
             fetchData();
             conexionSMTP();
+            updateCP();
           }}
           size='sm'
         >Actualizar tablero
