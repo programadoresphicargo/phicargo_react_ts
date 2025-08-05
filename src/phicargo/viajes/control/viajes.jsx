@@ -240,10 +240,11 @@ const ViajesActivos = ({ }) => {
           const distancia = row.original.distancia_km;
           const tiempo_estimado_horas = row.original.tiempo_estimado_horas;
           const observacion_ubicacion = row.original.observacion_ubicacion;
+          const codigo_postal = row.original.codigo_postal;
 
           return (
             <Chip className="text-white" color="primary" size="sm">
-              {distancia !== null && distancia !== undefined ? `${distancia} km / ${tiempo_estimado_horas} hrs` : observacion_ubicacion}
+              {distancia !== null && distancia !== undefined ? `${distancia} km / ${tiempo_estimado_horas} hrs` : observacion_ubicacion + ' CP: ' + codigo_postal}
             </Chip>
           );
         }
