@@ -175,6 +175,12 @@ export default function BasicButtons2() {
                                             {viaje?.x_references || '—'}
                                         </Snippet>
                                     </div>
+                                    <div className="sm:col-span-2">
+                                        <span className="font-semibold text-gray-600 block mb-1">Referencia cliente:</span>
+                                        <Snippet color="success" variant="solid" size="sm" className="text-white">
+                                            {viaje?.client_order_ref || '—'}
+                                        </Snippet>
+                                    </div>
                                 </div>
                             </CardBody>
                         </Card>
