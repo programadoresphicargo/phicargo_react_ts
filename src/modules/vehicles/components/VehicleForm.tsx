@@ -8,6 +8,8 @@ import { useAuthContext } from '../../auth/hooks';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useVehicleQueries } from '../../vehicles/hooks/queries';
+import { useEffect, useState } from 'react';
+import { Controller } from 'react-hook-form';
 
 const EDIT_VEHICLE_TYPE_PERMISSION = 206;
 
@@ -19,6 +21,7 @@ const initialState: VehicleUpdate = {
   vehicleType: null,
   modality: null,
   typeLoad: null,
+  branchChangeDate: null,
 };
 
 interface Props {
@@ -57,6 +60,7 @@ const VehicleForm = (props: Props) => {
   const driverId = watch('driverId');
 
   const onSubmit: SubmitHandler<VehicleUpdate> = (data) => {
+    console.log(data);
     updateVehicle(
       {
         id: vehicle.id,
@@ -67,6 +71,15 @@ const VehicleForm = (props: Props) => {
       },
     );
   };
+
+  const originalBranchId = vehicle.branch?.id;
+  const watchedBranchId = watch('branchId');
+
+  const [showDatePicker, setShowDatePicker] = useState(false);
+
+  useEffect(() => {
+    setShowDatePicker(watchedBranchId !== originalBranchId);
+  }, [watchedBranchId, originalBranchId]);
 
   return (
     <Card
@@ -106,6 +119,29 @@ const VehicleForm = (props: Props) => {
               ]}
             />
           </div>
+
+          {showDatePicker && (
+            <div className="mb-3 col-span-2">
+              <Controller
+                name="branchChangeDate"
+                control={control}
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Fecha de cambio de sucursal *
+                    </label>
+                    <input
+                      type="datetime-local"
+                      {...field}
+                      value={field.value ?? ''} // ✅ aquí lo corriges
+                      className="w-full border border-gray-300 rounded px-2 py-1"
+                    />
+                  </div>
+                )}
+              />
+            </div>
+          )}
 
           <div className="mb-3">
             <SelectInput

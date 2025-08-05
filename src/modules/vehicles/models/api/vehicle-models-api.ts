@@ -62,6 +62,7 @@ export interface VehicleUpdateApi {
   x_tipo_vehiculo?: string | null;
   x_modalidad?: Modality | null;
   x_tipo_carga?: string | null;
+  x_fecha_cambio_sucursal?: string | null;
 }
 
 export interface VehicleStatusChangeEventApi {

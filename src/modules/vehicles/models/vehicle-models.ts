@@ -62,6 +62,7 @@ export interface VehicleUpdate {
   vehicleType?: string | null;
   modality?: Modality | null;
   typeLoad?: string | null;
+  branchChangeDate?: string | null;
 }
 
 export type VehicleRealStatus =

@@ -48,26 +48,26 @@ export class VehicleAdapter {
       ...VehicleAdapter.vehicleBaseToLocal(vehicle),
       travel: vehicle.tms_travel
         ? {
-            id: vehicle.tms_travel.id,
-            name: vehicle.tms_travel.name,
-            status: vehicle.tms_travel.x_status_viaje,
-          }
+          id: vehicle.tms_travel.id,
+          name: vehicle.tms_travel.name,
+          status: vehicle.tms_travel.x_status_viaje,
+        }
         : null,
       maneuver: vehicle.maniobra
         ? {
-            id: vehicle.maniobra.id_maniobra,
-            type: vehicle.maniobra.tipo_maniobra,
-            status: vehicle.maniobra.estado_maniobra,
-            finishedDate: vehicle.maniobra.fecha_finalizada
-              ? dayjs(vehicle.maniobra.fecha_finalizada)
-              : null,
-          }
+          id: vehicle.maniobra.id_maniobra,
+          type: vehicle.maniobra.tipo_maniobra,
+          status: vehicle.maniobra.estado_maniobra,
+          finishedDate: vehicle.maniobra.fecha_finalizada
+            ? dayjs(vehicle.maniobra.fecha_finalizada)
+            : null,
+        }
         : null,
       maintenanceRecord: vehicle.maintenance_records
         ? {
-            id: vehicle.maintenance_records.id,
-            orderService: vehicle.maintenance_records.order_service,
-          }
+          id: vehicle.maintenance_records.id,
+          orderService: vehicle.maintenance_records.order_service,
+        }
         : null,
       driver: vehicle.driver
         ? DriverAdapter.driverSimpleToLocal(vehicle.driver)
@@ -93,20 +93,20 @@ export class VehicleAdapter {
 
       travel: trailer.tms_travel
         ? {
-            id: trailer.tms_travel.id,
-            name: trailer.tms_travel.name,
-            status: trailer.tms_travel.x_status_viaje,
-          }
+          id: trailer.tms_travel.id,
+          name: trailer.tms_travel.name,
+          status: trailer.tms_travel.x_status_viaje,
+        }
         : null,
       maneuver: trailer.maniobra
         ? {
-            id: trailer.maniobra.id_maniobra,
-            type: trailer.maniobra.tipo_maniobra,
-            status: trailer.maniobra.estado_maniobra,
-            finishedDate: trailer.maniobra.fecha_finalizada
-              ? dayjs(trailer.maniobra.fecha_finalizada)
-              : null,
-          }
+          id: trailer.maniobra.id_maniobra,
+          type: trailer.maniobra.tipo_maniobra,
+          status: trailer.maniobra.estado_maniobra,
+          finishedDate: trailer.maniobra.fecha_finalizada
+            ? dayjs(trailer.maniobra.fecha_finalizada)
+            : null,
+        }
         : null,
       driver: trailer.driver
         ? DriverAdapter.driverSimpleToLocal(trailer.driver)
@@ -135,6 +135,10 @@ export class VehicleAdapter {
 
     if (vehicle.branchId) {
       vehicleApi.x_sucursal = vehicle.branchId;
+    }
+
+    if (vehicle.branchChangeDate !== undefined) {
+      vehicleApi.x_fecha_cambio_sucursal = vehicle.branchChangeDate;
     }
 
     if (vehicle.stateId) {
