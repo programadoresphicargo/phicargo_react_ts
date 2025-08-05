@@ -235,7 +235,7 @@ const ViajesActivos = ({ }) => {
       },
       {
         accessorKey: 'codigo_postal',
-        header: 'Distancia (50km/h)',
+        header: 'Distancia al punto de carga/descarga (50km/h)',
         Cell: ({ row }) => {
           const distancia = row.original.distancia_km;
           const tiempo_estimado_horas = row.original.tiempo_estimado_horas;
