@@ -92,19 +92,6 @@ const VehicleForm = (props: Props) => {
     );
   }, [watchedBranchId, watchedDriverId, originalBranchId, originalDriverId]);
 
-  const getCurrentDateTimeLocal = (): string => {
-    const now = new Date();
-    const pad = (n: number) => n.toString().padStart(2, '0');
-
-    const year = now.getFullYear();
-    const month = pad(now.getMonth() + 1); // Enero es 0
-    const day = pad(now.getDate());
-    const hours = pad(now.getHours());
-    const minutes = pad(now.getMinutes());
-
-    return `${year}-${month}-${day}T${hours}:${minutes}`;
-  };
-
   return (
     <Card
       classNames={{
@@ -158,7 +145,7 @@ const VehicleForm = (props: Props) => {
                     <input
                       type="datetime-local"
                       {...field}
-                      value={field.value ?? getCurrentDateTimeLocal()} // ✅ aquí lo corriges
+                      value={field.value ?? ''} // ✅ aquí lo corriges
                       className="w-full border border-gray-300 rounded px-2 py-1"
                     />
                   </div>
