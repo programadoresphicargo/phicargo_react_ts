@@ -51,11 +51,9 @@ const HistoryChanges = (props: Props) => {
             {data.map((item: any, index: number) => (
               <li key={index} className="border-b pb-3">
                 <p className="text-sm text-gray-800 font-semibold">Cambio de sucursal: {item.sucursal}</p>
-                {item.operador && (
-                  <p className="text-sm text-gray-800 font-semibold">
-                    Operador asignado: {item.operador}
-                  </p>
-                )}
+                <p className="text-sm text-gray-800 font-semibold">
+                  Operador asignado: {item.operador ?? 'NA'}
+                </p>
                 <p className="text-xs text-gray-500">
                   Por el usuario: {item.usuario_creacion}
                 </p>
