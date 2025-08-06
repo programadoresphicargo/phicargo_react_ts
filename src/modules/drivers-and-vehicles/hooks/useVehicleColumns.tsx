@@ -6,6 +6,7 @@ import { ModalityChip } from '../../drivers/components/ui/ModalityChip';
 import type { Vehicle } from '../../vehicles/models';
 import { VehicleTypeChip } from '../../vehicles/components/ui/VehicleTypeChip';
 import { useMemo } from 'react';
+import { Chip } from '@heroui/react';
 
 export const useVehicleColumns = () => {
   const columns = useMemo<MRT_ColumnDef<Vehicle>[]>(
@@ -72,7 +73,7 @@ export const useVehicleColumns = () => {
         accessorKey: 'name',
         header: 'Unidad',
         Cell: ({ cell }) => (
-          <span className="font-bold">{cell.getValue<string>()}</span>
+          <Chip color='primary' size='sm'>{cell.getValue<string>()}</Chip>
         ),
       },
       {
