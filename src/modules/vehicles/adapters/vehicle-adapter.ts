@@ -138,7 +138,7 @@ export class VehicleAdapter {
     }
 
     if (vehicle.branchChangeDate !== undefined) {
-      vehicleApi.x_fecha_cambio_sucursal = vehicle.branchChangeDate;
+      vehicleApi.x_fecha_cambio = vehicle.branchChangeDate;
     }
 
     if (vehicle.stateId) {

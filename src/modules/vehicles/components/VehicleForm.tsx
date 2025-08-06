@@ -26,6 +26,7 @@ const initialState: VehicleUpdate = {
 
 interface Props {
   vehicle: Vehicle;
+  onAfterSubmit?: () => void;
 }
 
 const VehicleForm = (props: Props) => {
@@ -52,7 +53,7 @@ const VehicleForm = (props: Props) => {
     return transformVehicleToForm(vehicle);
   }, [vehicle]);
 
-  const { control, handleSubmit, watch } = useForm<VehicleUpdate>({
+  const { control, handleSubmit, watch, resetField } = useForm<VehicleUpdate>({
     defaultValues: formData,
   });
 
@@ -67,19 +68,42 @@ const VehicleForm = (props: Props) => {
         updatedItem: data,
       },
       {
-        onSettled: () => navigate('/disponibilidad/unidades'),
+        onSuccess: () => {
+          setShowDatePicker(false);
+          resetField('branchChangeDate');
+          navigate('/disponibilidad/unidades');
+          props.onAfterSubmit?.();
+        },
       },
     );
   };
 
   const originalBranchId = vehicle.branch?.id;
+  const originalDriverId = vehicle.driver?.id;
+
   const watchedBranchId = watch('branchId');
+  const watchedDriverId = watch('driverId');
 
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   useEffect(() => {
-    setShowDatePicker(watchedBranchId !== originalBranchId);
-  }, [watchedBranchId, originalBranchId]);
+    setShowDatePicker(
+      watchedBranchId !== originalBranchId || watchedDriverId !== originalDriverId
+    );
+  }, [watchedBranchId, watchedDriverId, originalBranchId, originalDriverId]);
+
+  const getCurrentDateTimeLocal = (): string => {
+    const now = new Date();
+    const pad = (n: number) => n.toString().padStart(2, '0');
+
+    const year = now.getFullYear();
+    const month = pad(now.getMonth() + 1); // Enero es 0
+    const day = pad(now.getDate());
+    const hours = pad(now.getHours());
+    const minutes = pad(now.getMinutes());
+
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  };
 
   return (
     <Card
@@ -129,12 +153,12 @@ const VehicleForm = (props: Props) => {
                 render={({ field }) => (
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Fecha de cambio de sucursal *
+                      Fecha de cambio*
                     </label>
                     <input
                       type="datetime-local"
                       {...field}
-                      value={field.value ?? ''} // ✅ aquí lo corriges
+                      value={field.value ?? getCurrentDateTimeLocal()} // ✅ aquí lo corriges
                       className="w-full border border-gray-300 rounded px-2 py-1"
                     />
                   </div>

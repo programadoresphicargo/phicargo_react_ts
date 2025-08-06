@@ -113,7 +113,7 @@ export const useBaseTable = <T extends MRT_RowData & BaseRowData>(
     ),
     muiTableBodyRowProps: config.onDoubleClickFn
       ? ({ row }) => ({
-          onDoubleClick: () => config.onDoubleClickFn?.(row),
+          onClick: () => config.onDoubleClickFn?.(row),
           sx: { cursor: 'pointer' },
         })
       : undefined,

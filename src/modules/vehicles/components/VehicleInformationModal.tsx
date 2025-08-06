@@ -5,6 +5,7 @@ import { Posturas } from './Posturas';
 import type { Vehicle } from '../models';
 import VehicleForm from './VehicleForm';
 import AssignmentsDriver from './Assignments';
+import HistoryChanges from './HistoryChanges';
 
 interface Props {
   open: boolean;
@@ -36,7 +37,10 @@ export const VehicleInformationModal = ({ open, onClose, vehicle }: Props) => {
         }}
       >
         <Tab key="vehicle-form" title="Información">
-          <VehicleForm vehicle={vehicle} />
+          <VehicleForm onAfterSubmit={onClose} vehicle={vehicle} />
+        </Tab>
+        <Tab key="history-form" title="Actualizaciones">
+          <HistoryChanges vehicle={vehicle}></HistoryChanges>
         </Tab>
         <Tab key="assignments-form" title="Asignaciones">
           <AssignmentsDriver vehicle={vehicle}></AssignmentsDriver>
