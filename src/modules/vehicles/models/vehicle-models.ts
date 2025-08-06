@@ -12,8 +12,8 @@ import {
 
 import { Dayjs } from 'dayjs';
 import type { MaintenanceRecordSimple } from '../../maintenance/models';
-import { SimpleData } from '@/types';
 
+import { SimpleData } from '@/types';
 export type VehicleState = SimpleData;
 export type VehicleCategory = SimpleData;
 export type VehicleBrand = SimpleData;
