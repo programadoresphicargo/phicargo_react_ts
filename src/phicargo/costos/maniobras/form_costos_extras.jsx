@@ -361,7 +361,7 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
 
                                         {id_folio != null && (
                                             <Button color="danger" startContent={<i class="bi bi-filetype-pdf"></i>} showAnchorIcon href={`${apiUrl}/tms_travel/estadias/cortes/?id_folio=${id_folio}`} as={Link} isExternal={true}>
-                                                Cortes PDF
+                                                Cortes estadías PDF
                                             </Button>
                                         )}
 
