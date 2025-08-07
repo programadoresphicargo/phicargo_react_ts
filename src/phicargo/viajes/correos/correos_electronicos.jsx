@@ -51,8 +51,8 @@ const CorreosElectronicosViaje = ({ openCorreos }) => {
   const enlazarCorreo = async (id_correo) => {
     try {
       setLoading(true);
-      const response = await odooApi.get(`tms_travel/correos/enlazar/${id_viaje}/${id_correo}`);
-      if (response.data.success) {
+      const response = await odooApi.get(`/tms_travel/correos/enlazar/${id_viaje}/${id_correo}`);
+      if (response.data.status == "success") {
         toast.success(response.data.message);
         getCorreosLigados();
         comprobacion_correos();
