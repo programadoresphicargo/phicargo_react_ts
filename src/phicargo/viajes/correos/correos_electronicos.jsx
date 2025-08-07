@@ -19,7 +19,8 @@ const CorreosElectronicosViaje = ({ openCorreos }) => {
   const { id_viaje, viaje, comprobacion_correos } = useContext(ViajeContext);
   const [correosCliente, setCorreosCliente] = useState([]);
   const [correosLigados, setCorreosLigados] = useState([]);
-  const [isLoading2, setLoading] = useState();
+  const [isLoading2, setLoading] = useState(false);
+  const [isLoadingCM, setLoadingCM] = useState(false);
 
   const getCorreosCliente = async () => {
     try {
@@ -65,6 +66,19 @@ const CorreosElectronicosViaje = ({ openCorreos }) => {
     }
   };
 
+  const enlazarCorreoManiobras = async (id_correo) => {
+    try {
+      setLoadingCM(true);
+      const response = await odooApi.get(`/maniobras/correos/ligar_correos_maniobra/${id_viaje}`);
+      getCorreosLigados();
+      comprobacion_correos();
+    } catch (error) {
+      toast.error('Error al obtener los datos:' + error);
+    } finally {
+      setLoadingCM(false);
+    }
+  };
+
   const desvincularCorreo = async (id_correo) => {
     try {
       setLoading(true);
@@ -104,6 +118,7 @@ const CorreosElectronicosViaje = ({ openCorreos }) => {
 
   return (<>
     <div>
+      <Button color="success" className="text-white mb-3" onPress={() => enlazarCorreoManiobras()} isLoading={isLoadingCM}>Ligar correos maniobras</Button>
       <Autocomplete
         fullWidth="true"
         defaultItems={correosCliente}
@@ -139,7 +154,7 @@ const CorreosElectronicosViaje = ({ openCorreos }) => {
                 </div>
               </div>
               <Button
-                onClick={() => enlazarCorreo(correosCliente.id_correo)}
+                onPress={() => enlazarCorreo(correosCliente.id_correo)}
                 color='primary'
                 size="sm"
               >
@@ -234,7 +249,7 @@ const CorreosElectronicosViaje = ({ openCorreos }) => {
           handleClose={handleClose}
           idCliente={viaje?.partner?.id}>
         </FormularioCorreoGeneral>
-        
+
       </DialogContent>
     </Dialog>
   </>
