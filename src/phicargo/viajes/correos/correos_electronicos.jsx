@@ -118,7 +118,7 @@ const CorreosElectronicosViaje = ({ openCorreos }) => {
 
   return (<>
     <div>
-      <Button color="success" className="text-white mb-3" onPress={() => enlazarCorreoManiobras()} isLoading={isLoadingCM}>Ligar correos maniobras</Button>
+      <Button color="success" className="text-white mb-3" onPress={() => enlazarCorreoManiobras()} isLoading={isLoadingCM}>Ligar correos de maniobras</Button>
       <Autocomplete
         fullWidth="true"
         defaultItems={correosCliente}
