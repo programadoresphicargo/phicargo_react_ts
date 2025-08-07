@@ -219,6 +219,7 @@ const ViajesFinalizados = ({ }) => {
       density: 'compact',
       showColumnFilters: true,
       pagination: { pageSize: 80 },
+      columnVisibility: { 'empresa': false }
     },
     muiTablePaperProps: {
       elevation: 0,
