@@ -56,7 +56,7 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
             const info = response.data[0];
             setData(info);
             setHorasPagar(info.horas_planta - info.horas_estadias);
-            setTotal((info.horas_planta - info.horas_estadias) * 33.34);
+            setTotal((info.horas_planta - info.horas_estadias) * 62.50);
             setMotivo("");
         } catch (error) {
             console.error('Error al obtener los datos:', error);
@@ -342,7 +342,7 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
                                             <NumberInput
                                                 isDisabled={true}
                                                 className="max-w-xs"
-                                                defaultValue={horas_pagar * 33.34}
+                                                defaultValue={horas_pagar * 62.50}
                                                 value={total}
                                                 onValueChange={setTotal} />
                                         </TableCell>
