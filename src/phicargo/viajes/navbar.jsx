@@ -50,9 +50,9 @@ const pages = [
       { name: 'Reporte cumplimiento por horas', path: '/cumplimiento_estatus_ejecutivos' },
       { name: 'Reporte cumplimiento por porcentaje ', path: '/cumplimiento_estatus_viajes_general' },
       { name: 'Codigos postales', path: '/codigos_postales' },
+      { name: 'GEOCERCAS', path: '/geocercas', permiso: 500 },
     ],
   },
-  { name: 'GEOCERCAS', path: '/geocercas', permiso: 500 },
   { name: 'ENVIO MASIVO', path: '/envio_masivo_viajes', permiso: 500 },
 ];
 
