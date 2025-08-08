@@ -50,6 +50,7 @@ const CodigosPostales = ({ }) => {
         fetchData();
         setCodigoPostal('');
         setCoordenadas('');
+        onOpenChange();
       } else {
         toast.error(response.data.message);
       }
