@@ -52,6 +52,7 @@ const pages = [
       { name: 'Codigos postales', path: '/codigos_postales' },
     ],
   },
+  { name: 'GEOCERCAS', path: '/geocercas', permiso: 500 },
   { name: 'ENVIO MASIVO', path: '/envio_masivo_viajes', permiso: 500 },
 ];
 

@@ -73,6 +73,7 @@ const SolicitudesAmarre = lazy(() => import('../phicargo/almacen/solicitud/index
 const Inventario = lazy(() => import('../phicargo/almacen/inventario/index'));
 const EntregaMonitoreo = lazy(() => import('../phicargo/monitoreo/monitoreo'));
 const CodigosPostales = lazy(() => import('../phicargo/viajes/codigos_postales/index'));
+const Geocercas = lazy(() => import('../phicargo/viajes/geocercas/geocerca'));
 
 const DetencionesTable = lazy(
   () => import('../phicargo/reportes/llegadas_tarde/llegadas_tarde'),
@@ -243,6 +244,16 @@ export const PrivateRoutes = () => {
           element={
             <Suspense fallback={<LoadingPage />}>
               <EnvioMasivoViajes />
+            </Suspense>
+          }
+        />
+
+
+        <Route
+          path="/geocercas"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <Geocercas></Geocercas>
             </Suspense>
           }
         />
