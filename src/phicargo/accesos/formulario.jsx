@@ -389,10 +389,11 @@ const AccesoForm = ({ id_acceso, onClose }) => {
 
     const handleSelectionChange = (e) => {
         const val = e.target.value;
+        console.log(val);
 
         setFormData((prevData) => ({
             ...prevData,
-            areas: prevData ? `${prevData},${val}` : val,
+            areas: prevData.areas ? `${prevData.areas},${val}` : val,
         }));
     };
 
