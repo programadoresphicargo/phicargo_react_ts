@@ -135,7 +135,8 @@ const AccesoForm = ({ id_acceso, onClose }) => {
         { value: 'perimetro_interior', label: 'Perímetro Interior' },
         { value: 'perimetro_exterior', label: 'Perímetro Exterior' },
         { value: 'm&m_internacional', label: 'M&M internacional' },
-        { value: 'fertilizantes_tepeyac', label: 'Fertilizantes Tepeyac' }
+        { value: 'fertilizantes_tepeyac', label: 'Fertilizantes Tepeyac' },
+        { value: 'patio_resguardo_scania', label: 'Patio de resguardo scania' }
     ];
 
     const identificationOptions = [
