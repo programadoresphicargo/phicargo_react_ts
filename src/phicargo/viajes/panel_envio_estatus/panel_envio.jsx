@@ -58,6 +58,7 @@ function PanelEnvio({ open, cerrar, id_reporte }) {
       const response = await odooApi.get('/tms_travel/reportes_estatus_viajes/id_reporte/' + id_reporte);
       setEstatusSeleccionado(response.data.id_estatus);
       setEstatusSeleccionadoNombre(response.data.nombre_estatus);
+      setEstatusSeleccionadoImagen(response.data.imagen);
       setContenido(response.data.comentarios_estatus);
       setLoadingSE(false);
     } catch (error) {
@@ -77,6 +78,7 @@ function PanelEnvio({ open, cerrar, id_reporte }) {
   const { id_viaje, viaje } = useContext(ViajeContext);
   const [estatus_seleccionado, setEstatusSeleccionado] = useState('');
   const [estatus_seleccionado_nombre, setEstatusSeleccionadoNombre] = useState('');
+  const [estatus_seleccionado_imagen, setEstatusSeleccionadoImagen] = useState('');
   const [comentarios, setContenido] = useState('');
 
   function getLocalISOString() {
@@ -104,9 +106,10 @@ function PanelEnvio({ open, cerrar, id_reporte }) {
 
   const [fileList, setFileList] = useState([]);
 
-  const handleSelectCard = (id, nombre) => {
-    setEstatusSeleccionado(id);
-    setEstatusSeleccionadoNombre(nombre);
+  const handleSelectCard = (estatus) => {
+    setEstatusSeleccionado(estatus.id_estatus);
+    setEstatusSeleccionadoNombre(estatus.nombre_estatus);
+    setEstatusSeleccionadoImagen(estatus.imagen);
   };
 
   const handleNext = () => setActiveStep((prevStep) => prevStep + 1);
@@ -265,13 +268,17 @@ function PanelEnvio({ open, cerrar, id_reporte }) {
 
                 <div className="gap-4 grid grid-cols-2 sm:grid-cols-4">
                   {filteredData.map((item, index) => (
-                    <Card shadow="sm" key={index} isPressable
-                      onPress={() => handleSelectCard(item.id_estatus, item.nombre_estatus)}
+                    <Card
+                      shadow="sm"
+                      key={index}
+                      isPressable
+                      onPress={() => handleSelectCard(item)}
                       style={{
                         border: estatus_seleccionado === item.id_estatus ? '2px solid blue' : 'none',
                       }}>
                       <CardBody className="overflow-visible flex items-center justify-center">
                         <Image
+                          isBlurred
                           isZoomed
                           src={VITE_ODOO_API_URL + '/assets/trafico/estatus_operativos/' + item.imagen}
                           style={{ width: '80px' }}
@@ -297,16 +304,29 @@ function PanelEnvio({ open, cerrar, id_reporte }) {
                     Estatus seleccionado:
                   </h1>
 
-                  <h1 style={{
-                    fontSize: '32px',
-                    fontWeight: 'bold',
-                    color: '#27ae60',
-                    padding: '5px 10px',
-                    borderLeft: '5px solid #27ae60'
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '10px' // espacio entre texto e imagen
                   }}>
-                    {'(' + estatus_seleccionado + ')  ' + estatus_seleccionado_nombre}
-                  </h1>
+                    <Image
+                      isZoomed
+                      src={`${VITE_ODOO_API_URL}/assets/trafico/estatus_operativos/${estatus_seleccionado_imagen}`}
+                      style={{ width: '80px' }}
+                    />
+                    <h1 style={{
+                      fontSize: '32px',
+                      fontWeight: 'bold',
+                      color: '#066ee8',
+                      padding: '5px 10px',
+                      borderLeft: '5px solid #066ee8',
+                      margin: 0 // quitar margen para mejor alineación
+                    }}>
+                      {'(' + estatus_seleccionado + ')  ' + estatus_seleccionado_nombre}
+                    </h1>
+                  </div>
                 </div>
+
 
                 <Card className='mb-5'>
                   <CardHeader className="justify-between bg-danger">
