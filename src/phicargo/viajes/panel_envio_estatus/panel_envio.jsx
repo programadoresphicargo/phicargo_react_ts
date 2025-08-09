@@ -8,7 +8,7 @@ import {
   StepLabel,
   Stepper,
 } from '@mui/material';
-import { Button, Card, CardBody, CardFooter, CardHeader, Image, Switch, Textarea } from "@heroui/react";
+import { Button, Card, CardBody, CardFooter, CardHeader, Image, Input, Switch, Textarea } from "@heroui/react";
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { Upload, message } from 'antd';
 import { getLocalTimeZone, now, today } from "@internationalized/date";
@@ -36,7 +36,17 @@ const { Dragger } = Upload;
 const steps = ['Seleccion de estatus', 'Anexar comentarios o evidencias'];
 
 function PanelEnvio({ open, cerrar, id_reporte }) {
+
+  const [data, setData] = useState([]);
+
   const [isLoadingSendEstatus, setLoadingSE] = useState(false);
+
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const filteredData = data.filter(item =>
+    item.nombre_estatus.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
 
   const getEstatusReenvio = async () => {
     if (!id_reporte) {
@@ -103,7 +113,6 @@ function PanelEnvio({ open, cerrar, id_reporte }) {
   const handleBack = () => setActiveStep((prevStep) => prevStep - 1);
 
   const [isSelected, setIsSelected] = React.useState(false);
-  const [data, setData] = useState([]);
   const [isLoading, setLoading] = useState();
 
   useEffect(() => {
@@ -243,8 +252,19 @@ function PanelEnvio({ open, cerrar, id_reporte }) {
           <Box sx={{ mt: 3 }}>
             {activeStep === 0 && (
               <Box>
-                <div className="gap-4 grid grid-cols-2 sm:grid-cols-4 p-4">
-                  {data.map((item, index) => (
+
+                <Input
+                  value={searchTerm}
+                  color='primary'
+                  label='Buscar estatus'
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className='mb-4'
+                  isClearable
+                  onClear={() => setSearchTerm('')}>
+                </Input>
+
+                <div className="gap-4 grid grid-cols-2 sm:grid-cols-4">
+                  {filteredData.map((item, index) => (
                     <Card shadow="sm" key={index} isPressable
                       onPress={() => handleSelectCard(item.id_estatus, item.nombre_estatus)}
                       style={{
