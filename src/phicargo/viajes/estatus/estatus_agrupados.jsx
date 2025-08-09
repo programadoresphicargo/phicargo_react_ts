@@ -34,8 +34,7 @@ function EstatusHistorialAgrupado() {
     const [isLoading, setLoading] = React.useState(false);
 
     const [id_reporte, setIDReporte] = useState('');
-    const [comentarios, setComentarios] = useState('');
-    const [estatus_seleccionado, setEstatusSeleccionado] = useState(null);
+
     const [fileList, setFileList] = useState([]);
     const [enabledPickers, setEnabledPickers] = useState(Array(estatus.length).fill(false));
     const [pickerValues, setPickerValues] = useState([Array(estatus.length).fill(null)]);
@@ -43,7 +42,7 @@ function EstatusHistorialAgrupado() {
 
     const handleClickOpen = (id_reporte) => {
         setOpen(true);
-        getEstatusReenvio(id_reporte);
+        setIDReporte(id_reporte);
     };
 
     const handleClose = () => {
@@ -52,7 +51,6 @@ function EstatusHistorialAgrupado() {
 
     useEffect(() => {
         getEstatus();
-        console.log(id_reportes_agrupados);
     }, [id_reportes_agrupados]);
 
     const getEstatus = async () => {
@@ -83,19 +81,6 @@ function EstatusHistorialAgrupado() {
         } catch (error) {
             setLoading(false);
             toast.error('Error al obtener los datos:' + error);
-        }
-    };
-
-    const getEstatusReenvio = async (id_reporte) => {
-        toast.info('Obteniendo estatus...');
-        try {
-            const response = await odooApi.get('/tms_travel/reportes_estatus_viajes/id_reporte/' + id_reporte);
-            setIDReporte(response.data.id_reporte);
-            setEstatusSeleccionado(response.data.id_estatus);
-            setComentarios(response.data.comentarios_estatus);
-
-        } catch (error) {
-            toast.error('Error al obtener los datos:', error);
         }
     };
 
@@ -336,7 +321,7 @@ function EstatusHistorialAgrupado() {
             )
             }
 
-            <PanelEnvio open={open} cerrar={handleClose} id_reporte={id_reporte} estatusSeleccionado={estatus_seleccionado} comentariosEstatus={comentarios} archivos={fileList}></PanelEnvio>
+            <PanelEnvio open={open} cerrar={handleClose} id_reporte={id_reporte}></PanelEnvio>
 
         </>
     )

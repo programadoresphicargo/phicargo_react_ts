@@ -35,26 +35,39 @@ const { Dragger } = Upload;
 
 const steps = ['Seleccion de estatus', 'Anexar comentarios o evidencias'];
 
-function PanelEnvio({ open, cerrar, id_reporte, estatusSeleccionado, comentariosEstatus, archivos }) {
+function PanelEnvio({ open, cerrar, id_reporte }) {
+  const [isLoadingSendEstatus, setLoadingSE] = useState(false);
+
+  const getEstatusReenvio = async () => {
+    if (!id_reporte) {
+      return;
+    }
+    toast.info('Obteniendo estatus...');
+    try {
+      setLoadingSE(true);
+      const response = await odooApi.get('/tms_travel/reportes_estatus_viajes/id_reporte/' + id_reporte);
+      setEstatusSeleccionado(response.data.id_estatus);
+      setEstatusSeleccionadoNombre(response.data.nombre_estatus);
+      setContenido(response.data.comentarios_estatus);
+      setLoadingSE(false);
+    } catch (error) {
+      setLoadingSE(false);
+      toast.error('Error al obtener los datos:' + error);
+    }
+  };
+
+  const [activeStep, setActiveStep] = useState(0);
 
   useEffect(() => {
-    setEstatusSeleccionado(estatusSeleccionado || '');
-    setContenido(comentariosEstatus || '');
-    setActiveStep(0);
-  }, [estatusSeleccionado, comentariosEstatus]);
+    setActiveStep(id_reporte ? 1 : 0);
+    getEstatusReenvio();
+  }, [id_reporte, open]);
 
   const { enviar_estatus, reenviar_estatus } = useJourneyDialogs();
   const { id_viaje, viaje } = useContext(ViajeContext);
-
-  const [isLoadingSendEstatus, setLoadingSE] = useState(false);
-  const [activeStep, setActiveStep] = useState(0);
-
-  const [estatus_seleccionado, setEstatusSeleccionado] = useState(
-    estatusSeleccionado || ''
-  );
-  const [comentarios, setContenido] = useState(
-    comentariosEstatus || ''
-  );
+  const [estatus_seleccionado, setEstatusSeleccionado] = useState('');
+  const [estatus_seleccionado_nombre, setEstatusSeleccionadoNombre] = useState('');
+  const [comentarios, setContenido] = useState('');
 
   function getLocalISOString() {
     const now = new Date();
@@ -79,10 +92,11 @@ function PanelEnvio({ open, cerrar, id_reporte, estatusSeleccionado, comentarios
     }
   };
 
-  const [fileList, setFileList] = useState(archivos || []);
+  const [fileList, setFileList] = useState([]);
 
-  const handleSelectCard = (id) => {
+  const handleSelectCard = (id, nombre) => {
     setEstatusSeleccionado(id);
+    setEstatusSeleccionadoNombre(nombre);
   };
 
   const handleNext = () => setActiveStep((prevStep) => prevStep + 1);
@@ -232,7 +246,7 @@ function PanelEnvio({ open, cerrar, id_reporte, estatusSeleccionado, comentarios
                 <div className="gap-4 grid grid-cols-2 sm:grid-cols-4 p-4">
                   {data.map((item, index) => (
                     <Card shadow="sm" key={index} isPressable
-                      onPress={() => handleSelectCard(item.id_estatus)}
+                      onPress={() => handleSelectCard(item.id_estatus, item.nombre_estatus)}
                       style={{
                         border: estatus_seleccionado === item.id_estatus ? '2px solid blue' : 'none',
                       }}>
@@ -254,6 +268,25 @@ function PanelEnvio({ open, cerrar, id_reporte, estatusSeleccionado, comentarios
 
             {activeStep === 1 && (
               <Box>
+                <div className='mb-5'>
+                  <h1 style={{
+                    fontSize: '18px',
+                    fontWeight: 'bold',
+                    color: '#2c3e50',
+                  }}>
+                    Estatus seleccionado:
+                  </h1>
+
+                  <h1 style={{
+                    fontSize: '32px',
+                    fontWeight: 'bold',
+                    color: '#27ae60',
+                    padding: '5px 10px',
+                    borderLeft: '5px solid #27ae60'
+                  }}>
+                    {'(' + estatus_seleccionado + ')  ' + estatus_seleccionado_nombre}
+                  </h1>
+                </div>
 
                 <Card className='mb-5'>
                   <CardHeader className="justify-between bg-danger">
@@ -347,7 +380,7 @@ function PanelEnvio({ open, cerrar, id_reporte, estatusSeleccionado, comentarios
                   Enviar estatus
                 </Button>
               ) : (
-                <Button color="success" onPress={confirmar_reenvio} className='text-white'>
+                <Button color="success" onPress={() => confirmar_reenvio()} className='text-white' isDisabled={isLoadingSendEstatus}>
                   Reenviar estatus
                 </Button>
               )}
