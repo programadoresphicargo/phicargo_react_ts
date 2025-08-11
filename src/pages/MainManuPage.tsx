@@ -23,6 +23,7 @@ import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import fondo2 from '../assets/img/tract_scannia.jpg';
+import chatbot from '../assets/menu/chatbot.png';
 
 type MenuItemType = {
   icon: string;
@@ -129,10 +130,10 @@ const menuItems: MenuItemType[] = [
     requiredPermissions: [214, 215, 216, 217],
   },
   {
-    icon: incidentsImg,
-    label: 'Menu2',
-    link: '/menu2',
-    requiredPermissions: [],
+    icon: chatbot,
+    label: 'Chat',
+    link: '/chatbot',
+    requiredPermissions: [1],
   },
 ];
 
