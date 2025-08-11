@@ -141,9 +141,9 @@ function EstatusHistorialAgrupado() {
             )}
 
             {!isLoading && (
-                <Accordion variant="splitted">
+                <Accordion variant="splitted" defaultExpandedKeys={["0"]}>
                     {estatus.map((step, index) => (
-                        <AccordionItem key={step.id_reporte}
+                        <AccordionItem key={index}
                             aria-label={step.id_reporte}
                             title={
                                 <>
