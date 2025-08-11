@@ -13,9 +13,9 @@ import DriversWithRealStatus from '../utilities/get-drivers-real-status';
 const DriverAvailabilityPage = () => {
   const [driverInfo, setDriverInfo] = useState<Driver | null>(null);
 
-  const { 
+  const {
     driversQuery: { data: drivers, isFetching, isLoading, refetch, error },
-   } = useDriverQueries();
+  } = useDriverQueries();
 
   const { columns } = useDriversColumns();
 
@@ -72,10 +72,25 @@ const exportConf: ExportConfig<Driver> = {
     { accessorFn: (data) => data.licenseId, header: 'LICENCIA' },
     { accessorFn: (data) => data.licenseType, header: 'TIPO LICENCIA' },
     { accessorFn: (data) => data.modality, header: 'MODALIDAD' },
+    { accessorFn: (data) => data.licenseExpiration?.format('DD/MM/YYYY'), header: 'FECHA DE EXPIRACIÓN' },
     {
-      accessorFn: (data) => (data.isDangerous ? 'SI' : 'NO'),
-      header: 'PELIGROSO',
+      accessorFn: (data) => {
+        if (!data.licenseExpiration) return null; // Si es null, devolvemos null o un valor por defecto
+
+        const expirationDate = data.licenseExpiration.toDate(); // convertir Dayjs -> Date
+        const today = new Date();
+
+        expirationDate.setHours(0, 0, 0, 0);
+        today.setHours(0, 0, 0, 0);
+
+        const diffMs = expirationDate.getTime() - today.getTime();
+        const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
+
+        return diffDays;
+      },
+      header: 'DÍAS POR VENCER'
     },
+    { accessorFn: (data) => (data.isDangerous ? 'SI' : 'NO'), header: 'PELIGROSO', },
     { accessorFn: (data) => data.status, header: 'ESTADO' },
     { accessorFn: (data) => data.travel?.name, header: 'VIAJE' },
     { accessorFn: (data) => data.maneuver?.type, header: 'MANIOBRA' },
