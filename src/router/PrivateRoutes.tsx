@@ -98,6 +98,11 @@ const CumplimientoEjecutivosManiobras = lazy(() => import('../phicargo/reportes/
 const Redireccion = lazy(() => import('../router/TraficoRouter'));
 const RGV = lazy(() => import('../phicargo/reportes/cumplimiento_general/viajes/index_cumplimiento'));
 const CumplimientoManiobras = lazy(() => import('../phicargo/reportes/cumplimiento_general/maniobras/index_cumplimiento'));
+const Celulares = lazy(() => import('../phicargo/inventarioti/celulares/celulares/index'));
+const EmpleadosTI = lazy(() => import('../phicargo/inventarioti/celulares/empleados/index'));
+const EquipoComputoTI = lazy(() => import('../phicargo/inventarioti/celulares/equipo_computo/index'));
+const AsignacionActivos = lazy(() => import('../phicargo/inventarioti/celulares/asignacion/index'));
+
 
 
 export const PrivateRoutes = () => {
@@ -446,6 +451,43 @@ export const PrivateRoutes = () => {
           element={
             <Suspense fallback={<LoadingPage />}>
               <ChatBot></ChatBot>
+            </Suspense>
+          }
+        />
+
+
+        <Route
+          path="/celulares"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <Celulares></Celulares>
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/empleados_ti"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <EmpleadosTI></EmpleadosTI>
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/equipo_computo_ti"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <EquipoComputoTI></EquipoComputoTI>
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/asignacion_activos"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <AsignacionActivos></AsignacionActivos>
             </Suspense>
           }
         />

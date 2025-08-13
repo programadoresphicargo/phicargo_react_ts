@@ -105,14 +105,6 @@ const ViajesFinalizados = ({ }) => {
         header: 'Cartas porte',
       },
       {
-        accessorKey: 'cliente',
-        header: 'Cliente',
-      },
-      {
-        accessorKey: 'subcliente',
-        header: 'Subcliente',
-      },
-      {
         accessorKey: 'fecha_inicio',
         header: 'Fecha de inicio',
         Cell: ({ cell }) => formatFecha(cell.getValue()),
@@ -123,12 +115,42 @@ const ViajesFinalizados = ({ }) => {
         Cell: ({ cell }) => formatFecha(cell.getValue()),
       },
       {
+        accessorKey: 'duracion',
+        header: 'Duración',
+        AggregatedCell: ({ column, row }) => {
+          // Sumamos minutos de todas las subRows
+          const totalMinutos = row.subRows.reduce((sum, subRow) => {
+            let value = subRow.getValue(column.id) || '0:00';
+
+            const [h, m] = value.split(':').map(Number);
+            const minutos = (isNaN(h) ? 0 : h * 60) + (isNaN(m) ? 0 : m);
+
+            return sum + minutos;
+          }, 0);
+
+          if (totalMinutos === 0) return '';
+
+          const horas = Math.floor(totalMinutos / 60);
+          const minutos = totalMinutos % 60;
+
+          return `${horas}:${minutos.toString().padStart(2, '0')}`;
+        }
+      },
+      {
         accessorKey: 'vehiculo',
         header: 'Vehiculo',
       },
       {
         accessorKey: 'operador',
         header: 'Operador',
+      },
+      {
+        accessorKey: 'cliente',
+        header: 'Cliente',
+      },
+      {
+        accessorKey: 'subcliente',
+        header: 'Subcliente',
       },
       {
         accessorKey: 'pod_enviado',
@@ -243,12 +265,16 @@ const ViajesFinalizados = ({ }) => {
         fontSize: '12px',
       },
     },
-    muiTableBodyCellProps: {
-      sx: {
-        fontFamily: 'Inter',
-        fontWeight: 'normal',
-        fontSize: '12px',
-      },
+    muiTableBodyCellProps: ({ row }) => {
+      return {
+        sx: {
+          backgroundColor: row.subRows?.length ? '#0456cf' : '#FFFFFF',
+          color: row.subRows?.length ? '#FFFFFF' : '#000000',
+          fontFamily: 'Inter',
+          fontWeight: 'normal',
+          fontSize: '12px',
+        },
+      };
     },
     muiTableContainerProps: {
       sx: {

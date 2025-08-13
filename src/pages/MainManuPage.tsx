@@ -135,6 +135,12 @@ const menuItems: MenuItemType[] = [
     link: '/chatbot',
     requiredPermissions: [1],
   },
+  {
+    icon: chatbot,
+    label: 'Inventario TI',
+    link: '/celulares',
+    requiredPermissions: [1],
+  },
 ];
 
 const MainMenuPage = () => {
