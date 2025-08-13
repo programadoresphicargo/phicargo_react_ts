@@ -40,7 +40,13 @@ const pages = [
       { name: 'BAJAS', path: '/equipo_computo_t' },
     ],
   },
-  { name: 'ASIGNACIÓN DE ACTIVOS', path: '/asignacion_activos', permiso: 500 },
+  {
+    name: 'ASIGNACIÓN DE ACTIVOS', path: '/asignacion_activos', permiso: 500,
+    subpages: [
+      { name: 'ASIGNACIONES', path: '/asignaciones' },
+      { name: 'NUEVA ASIGNACIONES', path: '/asignaciones' },
+    ],
+  },
   { name: 'EMPLEADOS', path: '/empleados_ti', permiso: 500 },
 ];
 

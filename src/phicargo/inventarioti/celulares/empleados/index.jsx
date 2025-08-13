@@ -34,15 +34,14 @@ const EmpleadosInventarioTI = () => {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [isOpen]);
 
     const columns = useMemo(
         () => [
             { accessorKey: 'id_empleado', header: 'ID EMPLEADO' },
             { accessorKey: 'nombre_dep', header: 'DEPARTAMENTO' },
+            { accessorKey: 'puesto', header: 'PUESTO' },
             { accessorKey: 'nombre_empleado', header: 'NOMBRE' },
-            { accessorKey: 'apellido_paterno', header: 'APELLIDO PATERNO' },
-            { accessorKey: 'apellido_materno', header: 'APELLIDO MATERNO' },
         ],
         [],
     );
@@ -63,7 +62,7 @@ const EmpleadosInventarioTI = () => {
         },
         muiTableBodyRowProps: ({ row }) => ({
             onClick: ({ event }) => {
-                setCelular(row.original.id_celular);
+                setCelular(row.original.id_empleado);
                 onOpen();
             },
             style: {
