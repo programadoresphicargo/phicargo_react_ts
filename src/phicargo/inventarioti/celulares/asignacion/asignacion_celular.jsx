@@ -17,9 +17,10 @@ import {
 import { useInventarioTI } from '../../contexto/contexto';
 
 const AsignacionCelular = () => {
+
   const [isLoading, setLoading] = useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const { celulares_asignados, setCelularesAsignados } = useInventarioTI();
+  const { form_data, setFormData } = useInventarioTI();
 
   const columns = useMemo(
     () => [
@@ -39,12 +40,11 @@ const AsignacionCelular = () => {
 
   const eliminarCelular = (id) => {
     console.log(id);
-    setCelularesAsignados(celulares_asignados.filter(c => c.id_celular !== id));
   };
 
   const table = useMaterialReactTable({
     columns,
-    data: celulares_asignados,
+    data: form_data.celulares || [],
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,

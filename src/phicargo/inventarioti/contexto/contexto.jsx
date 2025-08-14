@@ -1,16 +1,13 @@
 import { createContext, useContext, useState } from 'react';
 
 // Valor inicial del contexto
-const InventarioTIContext = createContext({
-    celulares_asignados: [],
-    setCelularesAsignados: () => { }
-});
+const InventarioTIContext = createContext({});
 
 export const InventarioProvider = ({ children }) => {
-    const [celulares_asignados, setCelularesAsignados] = useState([]);
+    const [form_data, setFormData] = useState([]);
 
     return (
-        <InventarioTIContext.Provider value={{ celulares_asignados, setCelularesAsignados }}>
+        <InventarioTIContext.Provider value={{ form_data, setFormData }}>
             {children}
         </InventarioTIContext.Provider>
     );

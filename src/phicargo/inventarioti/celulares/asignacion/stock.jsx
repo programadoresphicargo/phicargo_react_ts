@@ -26,7 +26,7 @@ import Box from '@mui/material/Box';
 import { useInventarioTI } from "../../contexto/contexto";
 
 export default function StockCelulares({ isOpen, onOpen, onOpenChange, id_celular }) {
-    const { celulares_asignados, setCelularesAsignados } = useInventarioTI();
+    const { form_data, setFormData } = useInventarioTI();
     const [isLoading, setLoading] = useState(false);
 
     const [data, setData] = useState([]);
@@ -73,7 +73,10 @@ export default function StockCelulares({ isOpen, onOpen, onOpenChange, id_celula
         },
         muiTableBodyRowProps: ({ row }) => ({
             onClick: ({ event }) => {
-                setCelularesAsignados([...celulares_asignados, row.original]);
+                setFormData(prev => ({
+                    ...prev,
+                    celulares: [...(prev.celulares || []), row.original]
+                }));
             },
             style: {
                 cursor: 'pointer',

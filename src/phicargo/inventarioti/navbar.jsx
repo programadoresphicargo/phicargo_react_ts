@@ -36,7 +36,7 @@ const pages = [
     name: 'ASIGNACIÓN DE ACTIVOS', path: '/asignacion_activos',
     subpages: [
       { name: 'ASIGNACIONES', path: '/asignaciones' },
-      { name: 'NUEVA ASIGNACIONES', path: '/asignaciones' },
+      { name: 'NUEVA ASIGNACIONES', path: '/asignacion_activos' },
     ],
   },
   { name: 'EMPLEADOS', path: '/empleados_ti' },
