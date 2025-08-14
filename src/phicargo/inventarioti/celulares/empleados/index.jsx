@@ -13,143 +13,38 @@ import FormCelulares from './form';
 import {
     useDisclosure,
 } from "@heroui/react";
-import { Tabs, Tab, Card, CardBody } from "@heroui/react";
+import Tab from '@mui/material/Tab';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
+import EmpleadosTI from './tabla';
 
 const EmpleadosInventarioTI = () => {
-    const [isLoading, setLoading] = useState(false);
-    const [active, setActive] = useState("true");
-    const [id_celular, setCelular] = useState(0);
-    const { isOpen, onOpen, onOpenChange } = useDisclosure();
+    const [value, setValue] = React.useState('1');
 
-    const [data, setData] = useState([]);
-
-    const fetchData = async () => {
-        try {
-            setLoading(true);
-            const response = await odooApi.get('/inventarioti/empleados/');
-            setData(response.data);
-            setLoading(false);
-        } catch (error) {
-            console.error('Error al obtener los datos:', error);
-            setLoading(false);
-        }
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
     };
 
-    useEffect(() => {
-        fetchData();
-    }, [isOpen]);
-
-    const columns = useMemo(
-        () => [
-            { accessorKey: 'id_empleado', header: 'ID EMPLEADO' },
-            { accessorKey: 'nombre_dep', header: 'DEPARTAMENTO' },
-            { accessorKey: 'puesto', header: 'PUESTO' },
-            { accessorKey: 'nombre_empleado', header: 'NOMBRE' },
-        ],
-        [],
-    );
-
-    const table = useMaterialReactTable({
-        columns,
-        data,
-        enableGrouping: true,
-        enableGlobalFilter: true,
-        enableFilters: true,
-        localization: MRT_Localization_ES,
-        state: { showProgressBars: isLoading },
-        initialState: {
-            showGlobalFilter: true,
-            density: 'compact',
-            pagination: { pageSize: 80 },
-            showColumnFilters: true,
-        },
-        muiTableBodyRowProps: ({ row }) => ({
-            onClick: ({ event }) => {
-                setCelular(row.original.id_empleado);
-                onOpen();
-            },
-            style: {
-                cursor: 'pointer',
-            },
-        }),
-        muiTableHeadCellProps: {
-            sx: {
-                fontFamily: 'Inter',
-                fontWeight: 'Bold',
-                fontSize: '14px',
-            },
-        },
-        muiTablePaperProps: {
-            elevation: 0,
-            sx: {
-                borderRadius: '0',
-            },
-        },
-        muiTableBodyCellProps: {
-            sx: {
-                fontFamily: 'Inter',
-                fontWeight: 'normal',
-                fontSize: '14px',
-            },
-        },
-        muiTableContainerProps: {
-            sx: {
-                maxHeight: 'calc(100vh - 330px)',
-            },
-        },
-        renderTopToolbarCustomActions: ({ table }) => (
-            <Box
-                sx={{
-                    display: 'flex',
-                    gap: '16px',
-                    padding: '8px',
-                    flexWrap: 'wrap',
-                }}
-            >
-                <h1
-                    className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
-                >
-                    Empleados {active.toString()}
-                </h1>
-                <Button color="primary"
-                    onPress={() => {
-                        onOpen();
-                        setCelular(null);
-                    }}>Nuevo</Button>
-
-                <Button color="danger"
-                    onPress={() => {
-                        fetchData();
-                    }}>Refrescar
-                </Button>
-            </Box >
-        ),
-    });
-
     return (
-        <div>
+        <Box sx={{ width: '100%' }}>
             <NavbarInventarioTI></NavbarInventarioTI>
-            <div className="flex w-full flex-col p-3">
-                <Tabs aria-label="Options">
-                    <Tab key={"true"} title="Activos">
-                        <Card>
-                            <CardBody>
-                                <MaterialReactTable table={table} />
-                            </CardBody>
-                        </Card>
-                    </Tab>
-                    <Tab key={"false"} title="Inactivos">
-                        <Card>
-                            <CardBody>
-                                <h1>jfj</h1>
-                                <MaterialReactTable table={table} />
-                            </CardBody>
-                        </Card>
-                    </Tab>
-                </Tabs>
-            </div>
-            <FormCelulares isOpen={isOpen} onOpen={onOpen} onOpenChange={onOpenChange} id_celular={id_celular}></FormCelulares>
-        </div>
+            <TabContext value={value}>
+                <Box sx={{ borderColor: 'divider', background: 'linear-gradient(90deg, #a10003, #002887)', color: 'white' }}>
+                    <TabList onChange={handleChange} textColor="inherit" sx={{
+                        '& .MuiTabs-indicator': {
+                            backgroundColor: 'white',
+                            height: '3px',
+                        }
+                    }}>
+                        <Tab label="Activos" value="1" />
+                        <Tab label="Inactivos" value="2" />
+                    </TabList>
+                </Box>
+                <TabPanel value="1" sx={{ padding: 0, margin: 0 }}><EmpleadosTI></EmpleadosTI></TabPanel>
+                <TabPanel value="2" sx={{ padding: 0, margin: 0 }}></TabPanel>
+            </TabContext >
+        </Box >
     );
 };
 
