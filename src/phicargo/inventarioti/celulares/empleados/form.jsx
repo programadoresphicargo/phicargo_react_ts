@@ -17,6 +17,7 @@ import {
 import { Select, SelectItem } from "@heroui/react";
 import React, { useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
+import { Tabs, Tab, Card, CardBody } from "@heroui/react";
 
 export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular }) {
 

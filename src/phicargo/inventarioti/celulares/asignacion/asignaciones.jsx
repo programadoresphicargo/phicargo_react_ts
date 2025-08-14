@@ -41,6 +41,7 @@ const Asignaciones = () => {
       { accessorKey: 'marca', header: 'MARCA' },
       { accessorKey: 'modelo', header: 'MODELO' },
       { accessorKey: 'fecha_asignacion', header: 'FECHA ASIGNACIÓN' },
+      { accessorKey: 'acciones', header: 'ACCIONES' },
     ],
     [],
   );

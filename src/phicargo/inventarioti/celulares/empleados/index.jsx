@@ -13,8 +13,11 @@ import FormCelulares from './form';
 import {
     useDisclosure,
 } from "@heroui/react";
+import { Tabs, Tab, Card, CardBody } from "@heroui/react";
+
 const EmpleadosInventarioTI = () => {
     const [isLoading, setLoading] = useState(false);
+    const [active, setActive] = useState("true");
     const [id_celular, setCelular] = useState(0);
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
@@ -91,7 +94,7 @@ const EmpleadosInventarioTI = () => {
         },
         muiTableContainerProps: {
             sx: {
-                maxHeight: 'calc(100vh - 210px)',
+                maxHeight: 'calc(100vh - 330px)',
             },
         },
         renderTopToolbarCustomActions: ({ table }) => (
@@ -106,7 +109,7 @@ const EmpleadosInventarioTI = () => {
                 <h1
                     className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
                 >
-                    Empleados
+                    Empleados {active.toString()}
                 </h1>
                 <Button color="primary"
                     onPress={() => {
@@ -126,7 +129,25 @@ const EmpleadosInventarioTI = () => {
     return (
         <div>
             <NavbarInventarioTI></NavbarInventarioTI>
-            <MaterialReactTable table={table} />
+            <div className="flex w-full flex-col p-3">
+                <Tabs aria-label="Options">
+                    <Tab key={"true"} title="Activos">
+                        <Card>
+                            <CardBody>
+                                <MaterialReactTable table={table} />
+                            </CardBody>
+                        </Card>
+                    </Tab>
+                    <Tab key={"false"} title="Inactivos">
+                        <Card>
+                            <CardBody>
+                                <h1>jfj</h1>
+                                <MaterialReactTable table={table} />
+                            </CardBody>
+                        </Card>
+                    </Tab>
+                </Tabs>
+            </div>
             <FormCelulares isOpen={isOpen} onOpen={onOpen} onOpenChange={onOpenChange} id_celular={id_celular}></FormCelulares>
         </div>
     );

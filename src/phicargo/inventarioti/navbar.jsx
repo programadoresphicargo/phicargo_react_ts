@@ -108,7 +108,7 @@ function NavbarInventarioTI() {
   return (
     <>
       <AppBar
-        elevation={3}
+        elevation={2}
         position="static"
         sx={{
           background: 'linear-gradient(90deg, #a10003, #002887)',
