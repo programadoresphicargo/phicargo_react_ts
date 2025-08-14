@@ -13,9 +13,8 @@ import FormCelulares from './form';
 import {
     useDisclosure,
 } from "@heroui/react";
-import { Tabs, Tab, Card, CardBody } from "@heroui/react";
 
-const EmpleadosTI = ({ active }) => {
+const EquipoTI = ({ active }) => {
     const [isLoading, setLoading] = useState(false);
     const [id_celular, setCelular] = useState(0);
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -25,7 +24,7 @@ const EmpleadosTI = ({ active }) => {
     const fetchData = async () => {
         try {
             setLoading(true);
-            const response = await odooApi.get('/inventarioti/empleados/active/' + active);
+            const response = await odooApi.get('/inventarioti/equipo_computo/active/' + active);
             setData(response.data);
             setLoading(false);
         } catch (error) {
@@ -36,14 +35,22 @@ const EmpleadosTI = ({ active }) => {
 
     useEffect(() => {
         fetchData();
-    }, [isOpen]);
+    }, []);
 
     const columns = useMemo(
         () => [
-            { accessorKey: 'id_empleado', header: 'ID EMPLEADO' },
-            { accessorKey: 'nombre_dep', header: 'DEPARTAMENTO' },
-            { accessorKey: 'puesto', header: 'PUESTO' },
-            { accessorKey: 'nombre_empleado', header: 'NOMBRE EMPLEADO' },
+            { accessorKey: 'id_ec', header: 'ID' },
+            { accessorKey: 'sucursal', header: 'Sucursal' },
+            { accessorKey: 'nombre', header: 'Nombre del equipo' },
+            { accessorKey: 'marca', header: 'Marca' },
+            { accessorKey: 'modelo', header: 'Modelo' },
+            { accessorKey: 'tipo', header: 'Tipo' },
+            { accessorKey: 'sn', header: 'Número de serie' },
+            { accessorKey: 'procesador', header: 'Procesador' },
+            { accessorKey: 'so', header: 'Sistema Operativo' },
+            { accessorKey: 'tipodd', header: 'Tipo de disco' },
+            { accessorKey: 'ram', header: 'RAM' },
+            { accessorKey: 'fecha_compra', header: 'Fecha compra' },
         ],
         [],
     );
@@ -64,7 +71,7 @@ const EmpleadosTI = ({ active }) => {
         },
         muiTableBodyRowProps: ({ row }) => ({
             onClick: ({ event }) => {
-                setCelular(row.original.id_empleado);
+                setCelular(row.original.id_ec);
                 onOpen();
             },
             style: {
@@ -108,7 +115,7 @@ const EmpleadosTI = ({ active }) => {
                 <h1
                     className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
                 >
-                    Empleados
+                    Equipo de computo
                 </h1>
                 <Button color="primary"
                     onPress={() => {
@@ -133,5 +140,5 @@ const EmpleadosTI = ({ active }) => {
     );
 };
 
-export default EmpleadosTI;
+export default EquipoTI;
 

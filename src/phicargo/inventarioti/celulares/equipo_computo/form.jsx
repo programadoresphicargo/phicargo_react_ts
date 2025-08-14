@@ -47,8 +47,18 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
     };
 
     useEffect(() => {
+        if (!id_celular) {
+            setData([]);
+            return; // Evita que llame a fetchData si no hay id
+        }
         fetchData();
-    }, [isOpen, id_celular]);
+    }, [id_celular]);
+
+    useEffect(() => {
+        if (!isOpen) {
+            setData([]);
+        }
+    }, [isOpen]);
 
     const handleSave = async (onClose) => {
         try {
@@ -97,6 +107,8 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
                                 <div className="grid grid-cols-2 gap-4">
                                     <Select
                                         label="Empresa"
+                                        isInvalid={!data?.id_empresa}
+                                        errorMessage={!data?.id_empresa ? "La empresa es obligatoria" : ""}
                                         selectedKeys={data?.id_empresa ? [String(data.id_empresa)] : []}
                                         onSelectionChange={(keys) => handleChange("id_empresa", Number([...keys][0]))}
                                     >
@@ -106,6 +118,8 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
                                     </Select>
                                     <Select
                                         label="Tipo"
+                                        isInvalid={!data?.tipo}
+                                        errorMessage={!data?.tipo ? "Tipo es obligatorio" : ""}
                                         selectedKeys={data?.tipo ? [String(data.tipo)] : []}
                                         onSelectionChange={(keys) => handleChange("tipo", [...keys][0])}
                                     >
@@ -115,6 +129,8 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
                                     </Select>
                                     <Select
                                         label="Sucursal"
+                                        isInvalid={!data?.sucursal}
+                                        errorMessage={!data?.sucursal ? "Sucursal es obligatorio" : ""}
                                         selectedKeys={data?.sucursal ? [String(data.sucursal)] : []}
                                         onSelectionChange={(keys) => handleChange("sucursal", [...keys][0])}
                                     >
@@ -122,10 +138,26 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
                                         <SelectItem key={"Manzanillo"}>Manzanillo</SelectItem>
                                         <SelectItem key={"México"}>México</SelectItem>
                                     </Select>
-                                    <Input label="Nombre" value={data?.nombre} onChange={(e) => handleChange("nombre", e.target.value)}></Input>
-                                    <Input label="SN" value={data?.sn} onChange={(e) => handleChange("sn", e.target.value)}></Input>
+
+                                    <Input
+                                        label="Nombre"
+                                        value={data?.nombre}
+                                        onChange={(e) => handleChange("nombre", e.target.value)}
+                                        isInvalid={!data?.nombre}
+                                        errorMessage={!data?.nombre ? "Nombre es obligatorio" : ""}>
+                                    </Input>
+
+                                    <Input label="SN"
+                                        isInvalid={!data?.sn}
+                                        errorMessage={!data?.sn ? "SN es obligatorio" : ""}
+                                        value={data?.sn}
+                                        onChange={(e) => handleChange("sn", e.target.value)}>
+                                    </Input>
+
                                     <Select
                                         label="Marca"
+                                        isInvalid={!data?.marca}
+                                        errorMessage={!data?.marca ? "Marca es obligatorio" : ""}
                                         selectedKeys={data?.marca ? new Set([data.marca]) : new Set()}
                                         onSelectionChange={(keys) => handleChange("marca", [...keys][0])}
                                     >
@@ -138,28 +170,48 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
                                         label="Sistema Operativo"
                                         selectedKeys={data?.so ? new Set([data.so]) : new Set()}
                                         onSelectionChange={(keys) => handleChange("so", [...keys][0])}
+                                        isInvalid={!data?.so}
+                                        errorMessage={!data?.so ? "SO es obligatorio" : ""}
                                     >
                                         <SelectItem key="Windows 10 Home">Windows 10 Home</SelectItem>
                                         <SelectItem key="Windows 10 Pro">Windows 10 Pro</SelectItem>
                                         <SelectItem key="Windows 11 Home">Windows 11 Home</SelectItem>
                                         <SelectItem key="Windows 11 Pro">Windows 11 Pro</SelectItem>
                                     </Select>
-                                    <Input label="Modelo" value={data?.modelo} onChange={(e) => handleChange("modelo", e.target.value)}></Input>
+
+                                    <Input
+                                        label="Modelo"
+                                        isInvalid={!data?.modelo}
+                                        errorMessage={!data?.modelo ? "Modelo es obligatorio" : ""}
+                                        value={data?.modelo}
+                                        onChange={(e) => handleChange("modelo", e.target.value)}>
+                                    </Input>
+
                                     <Select
                                         label="Tipo disco duro"
                                         selectedKeys={data?.tipodd ? new Set([data.tipodd]) : new Set()}
                                         onSelectionChange={(keys) => handleChange("tipodd", [...keys][0])}
+                                        isInvalid={!data?.tipodd}
+                                        errorMessage={!data?.tipodd ? "Modelo es obligatorio" : ""}
                                     >
                                         <SelectItem key="HDD">HDD</SelectItem>
                                         <SelectItem key="SSD">SSD</SelectItem>
                                     </Select>
-                                    <Input label="RAM" value={data?.ram} onChange={(e) => handleChange("ram", e.target.value)}></Input>
+
+                                    <Input
+                                        label="RAM"
+                                        value={data?.ram}
+                                        isInvalid={!data?.ram}
+                                        errorMessage={!data?.ram ? "Ram es obligatorio" : ""}
+                                        onChange={(e) => handleChange("ram", e.target.value)}>
+                                    </Input>
+
                                     <DatePicker
                                         label="Fecha de compra"
                                         value={
                                             data?.fecha_compra
-                                                ? parseDate(data.fecha_compra) // solo si existe
-                                                : today(getLocalTimeZone())    // si no existe, fecha actual
+                                                ? parseDate(data.fecha_compra)
+                                                : undefined
                                         }
                                         onChange={(date) => {
                                             if (!date) {
@@ -171,7 +223,13 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
                                             handleChange("fecha_compra", formattedDate);
                                         }}
                                     />
-                                    <Textarea label="Comentarios" value={data?.comentarios} onChange={(e) => handleChange("comentarios", e.target.value)}></Textarea>
+
+                                    <Textarea
+                                        label="Comentarios"
+                                        value={data?.comentarios}
+                                        onChange={(e) => handleChange("comentarios", e.target.value)}>
+                                    </Textarea>
+
                                 </div>
                             </ModalBody>
                             <ModalFooter>
@@ -179,30 +237,28 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
                                     Cancelar
                                 </Button>
                                 {data?.active == true && (
-                                    <>
-                                        <Button
-                                            color={"danger"}
-                                            onPress={openBajaModal}
-                                            className="text-white"
-                                            isDisabled={isLoading}
-                                        >
-                                            Baja
-                                        </Button>
-                                        <Button
-                                            color={id_celular ? "success" : "primary"}
-                                            onPress={() => handleSave(onClose)}
-                                            className="text-white"
-                                            isDisabled={isLoading}
-                                        >
-                                            {id_celular ? "Actualizar" : "Registrar"}
-                                        </Button>
-                                    </>
+                                    <Button
+                                        color={"danger"}
+                                        onPress={openBajaModal}
+                                        className="text-white"
+                                        isDisabled={isLoading}
+                                    >
+                                        Baja
+                                    </Button>
                                 )}
+                                <Button
+                                    color={id_celular ? "success" : "primary"}
+                                    onPress={() => handleSave(onClose)}
+                                    className="text-white"
+                                    isDisabled={isLoading}
+                                >
+                                    {id_celular ? "Actualizar" : "Registrar"}
+                                </Button>
                             </ModalFooter>
                         </>
                     )}
                 </ModalContent>
-            </Modal>
+            </Modal >
         </>
     );
 }

@@ -27,27 +27,19 @@ import AvatarProfile from '@/components/ui/AvatarProfile';
 
 const pages = [
   {
-    name: 'CELULARES', permiso: 503,
-    subpages: [
-      { name: 'INVENTARIO', path: '/celulares' },
-      { name: 'BAJAS', path: '/celulares' },
-    ],
+    name: 'CELULARES', path: '/celulares',
   },
   {
-    name: 'PC / LAPTOS', permiso: 500,
-    subpages: [
-      { name: 'INVENTARIO', path: '/equipo_computo_ti' },
-      { name: 'BAJAS', path: '/equipo_computo_t' },
-    ],
+    name: 'EQUIPO COMPUTO', path: '/equipo_computo_ti',
   },
   {
-    name: 'ASIGNACIÓN DE ACTIVOS', path: '/asignacion_activos', permiso: 500,
+    name: 'ASIGNACIÓN DE ACTIVOS', path: '/asignacion_activos',
     subpages: [
       { name: 'ASIGNACIONES', path: '/asignaciones' },
       { name: 'NUEVA ASIGNACIONES', path: '/asignaciones' },
     ],
   },
-  { name: 'EMPLEADOS', path: '/empleados_ti', permiso: 500 },
+  { name: 'EMPLEADOS', path: '/empleados_ti' },
 ];
 
 function SubMenu({ title, items }) {

@@ -16,6 +16,8 @@ import {
 import { Select, SelectItem } from "@heroui/react";
 import React, { useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
+import { parseDate, parseDateTime, getLocalTimeZone } from "@internationalized/date";
+import { today } from "@internationalized/date";
 
 export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular }) {
 
@@ -40,8 +42,18 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
     };
 
     useEffect(() => {
+        if (!id_celular) {
+            setData([]);
+            return; // Evita que llame a fetchData si no hay id
+        }
         fetchData();
-    }, [isOpen, id_celular]);
+    }, [id_celular]);
+
+    useEffect(() => {
+        if (!isOpen) {
+            setData([]);
+        }
+    }, [isOpen]);
 
     const handleSave = async (onClose) => {
         try {
@@ -88,6 +100,8 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
                             <ModalBody>
                                 <Select
                                     label="Empresa"
+                                    isInvalid={!data?.id_empresa}
+                                    errorMessage={!data?.id_empresa ? "La empresa es obligatoria" : ""}
                                     selectedKeys={data?.id_empresa ? [String(data.id_empresa)] : []}
                                     onSelectionChange={(keys) => handleChange("id_empresa", Number([...keys][0]))}
                                 >
@@ -97,6 +111,8 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
                                 </Select>
                                 <Select
                                     label="Marca"
+                                    isInvalid={!data?.marca}
+                                    errorMessage={!data?.marca ? "La marca es obligatoria" : ""}
                                     selectedKeys={data?.marca ? new Set([data.marca]) : new Set()}
                                     onSelectionChange={(keys) => handleChange("marca", [...keys][0])}
                                 >
@@ -113,13 +129,53 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
                                     <SelectItem key="ZTE">ZTE</SelectItem>
                                     <SelectItem key="HONOR">HONOR</SelectItem>
                                 </Select>
-                                <Input label="Modelo" value={data?.modelo} onChange={(e) => handleChange("modelo", e.target.value)}></Input>
-                                <NumberInput label="IMEI" value={data?.imei} onValueChange={(e) => handleChange("imei", e)} step={1}></NumberInput>
-                                <NumberInput label="Número celular" value={data?.numero_celular} onValueChange={(e) => handleChange("numero_celular", e)}></NumberInput>
-                                <Input label="Correo electronico" value={data?.correo} onChange={(e) => handleChange("correo", e.target.value)}></Input>
-                                <Input label="Contraseña" value={data?.passwoord} onChange={(e) => handleChange("passwoord", e.target.value)}></Input>
+
+                                <Input
+                                    label="Modelo"
+                                    value={data?.modelo}
+                                    onChange={(e) => handleChange("modelo", e.target.value)}
+                                    isInvalid={!data?.modelo}
+                                    errorMessage={!data?.modelo ? "El modelo es obligatorio" : ""}>
+                                </Input>
+
+                                <NumberInput
+                                    label="IMEI"
+                                    value={data?.imei}
+                                    onValueChange={(e) => handleChange("imei", e)}
+                                    step={1}
+                                    isInvalid={!data?.imei}
+                                    errorMessage={!data?.imei ? "El IMEI es obligatorio" : ""}>
+                                </NumberInput>
+
+                                <NumberInput label="Número celular"
+                                    value={data?.numero_celular}
+                                    onValueChange={(e) => handleChange("numero_celular", e)}
+                                    isInvalid={!data?.numero_celular}
+                                    errorMessage={!data?.numero_celular ? "El Número celular es obligatorio" : ""}
+                                >
+                                </NumberInput>
+
+                                <Input label="Correo electronico"
+                                    value={data?.correo}
+                                    onChange={(e) => handleChange("correo", e.target.value)}
+                                    isInvalid={!data?.correo}
+                                    errorMessage={!data?.correo ? "El Número celular es obligatorio" : ""}>
+                                </Input>
+
+                                <Input label="Contraseña"
+                                    value={data?.passwoord}
+                                    onChange={(e) => handleChange("passwoord", e.target.value)}
+                                    isInvalid={!data?.passwoord}
+                                    errorMessage={!data?.passwoord ? "El Número celular es obligatorio" : ""}>
+                                </Input>
+
                                 <DatePicker
                                     label="Fecha de compra"
+                                    value={
+                                        data?.fecha_compra
+                                            ? parseDate(data.fecha_compra)
+                                            : undefined
+                                    }
                                     onChange={(date) => {
                                         if (!date) {
                                             handleChange("fecha_compra", null);
@@ -130,20 +186,24 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
                                         handleChange("fecha_compra", formattedDate);
                                     }}
                                 />
+
                                 <Textarea label="Comentarios" value={data?.comentarios} onChange={(e) => handleChange("comentarios", e.target.value)}></Textarea>
+
                             </ModalBody>
                             <ModalFooter>
                                 <Button color="danger" variant="light" onPress={onClose}>
                                     Cancelar
                                 </Button>
-                                <Button
-                                    color={"danger"}
-                                    onPress={() => handleSave(onClose)}
-                                    className="text-white"
-                                    isDisabled={isLoading}
-                                >
-                                    Baja
-                                </Button>
+                                {data?.active && (
+                                    <Button
+                                        color={"danger"}
+                                        onPress={() => handleSave(onClose)}
+                                        className="text-white"
+                                        isDisabled={isLoading}
+                                    >
+                                        Baja
+                                    </Button>
+                                )}
                                 <Button
                                     color={id_celular ? "success" : "primary"}
                                     onPress={() => handleSave(onClose)}

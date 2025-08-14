@@ -136,7 +136,9 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
                                 <Input label="Nombre del empleado" value={data?.nombre_empleado} onChange={(e) => handleChange("nombre_empleado", e.target.value)}></Input>
                                 <Input label="Puesto" value={data?.puesto} onChange={(e) => handleChange("puesto", e.target.value)}></Input>
                                 <Input label="Unidad" value={data?.eco} onChange={(e) => handleChange("eco", e.target.value)}></Input>
-                                <Checkbox isSelected={data?.active} onValueChange={(e) => handleChange("active", e)}>Activo</Checkbox>
+                                {id_celular && (
+                                    <Checkbox isSelected={data?.active} onValueChange={(e) => handleChange("active", e)}>Activo</Checkbox>
+                                )}
                             </ModalBody>
                             <ModalFooter>
                                 <Button color="danger" variant="light" onPress={onClose}>

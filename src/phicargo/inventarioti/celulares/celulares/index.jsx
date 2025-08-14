@@ -13,138 +13,39 @@ import FormCelulares from './form';
 import {
     useDisclosure,
 } from "@heroui/react";
+import Tab from '@mui/material/Tab';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
+import EmpleadosTI from './tabla';
+import CelularesTabla from './tabla';
+
 const Celulares = () => {
-    const [isLoading, setLoading] = useState(false);
-    const [id_celular, setCelular] = useState(0);
-    const { isOpen, onOpen, onOpenChange } = useDisclosure();
+    const [value, setValue] = React.useState('1');
 
-    const [data, setData] = useState([]);
-
-    const fetchData = async () => {
-        try {
-            setLoading(true);
-            const response = await odooApi.get('/inventarioti/celulares/');
-            setData(response.data);
-            setLoading(false);
-        } catch (error) {
-            console.error('Error al obtener los datos:', error);
-            setLoading(false);
-        }
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
     };
 
-    useEffect(() => {
-        fetchData();
-    }, []);
-
-    const columns = useMemo(
-        () => [
-            { accessorKey: 'id_celular', header: 'ID' },
-            { accessorKey: 'nombre', header: 'Empresa' },
-            { accessorKey: 'imei', header: 'IMEI' },
-            { accessorKey: 'marca', header: 'MARCA' },
-            { accessorKey: 'modelo', header: 'MODELO' },
-            { accessorKey: 'correo', header: 'CORREO' },
-            { accessorKey: 'passwoord', header: 'PASSWORD' },
-            {
-                accessorKey: 'numero_celular',
-                header: 'Número celular',
-                Cell: ({ cell }) => {
-                    const estatus_viaje = cell.getValue();
-
-                    return (
-                        <Chip color="primary" size="sm">
-                            {estatus_viaje}
-                        </Chip>
-                    );
-                },
-            },
-        ],
-        [],
-    );
-
-    const table = useMaterialReactTable({
-        columns,
-        data,
-        enableGrouping: true,
-        enableGlobalFilter: true,
-        enableFilters: true,
-        localization: MRT_Localization_ES,
-        state: { showProgressBars: isLoading },
-        initialState: {
-            showGlobalFilter: true,
-            density: 'compact',
-            pagination: { pageSize: 80 },
-            showColumnFilters: true,
-        },
-        muiTableBodyRowProps: ({ row }) => ({
-            onClick: ({ event }) => {
-                setCelular(row.original.id_celular);
-                onOpen();
-            },
-            style: {
-                cursor: 'pointer',
-            },
-        }),
-        muiTableHeadCellProps: {
-            sx: {
-                fontFamily: 'Inter',
-                fontWeight: 'Bold',
-                fontSize: '14px',
-            },
-        },
-        muiTablePaperProps: {
-            elevation: 0,
-            sx: {
-                borderRadius: '0',
-            },
-        },
-        muiTableBodyCellProps: {
-            sx: {
-                fontFamily: 'Inter',
-                fontWeight: 'normal',
-                fontSize: '14px',
-            },
-        },
-        muiTableContainerProps: {
-            sx: {
-                maxHeight: 'calc(100vh - 210px)',
-            },
-        },
-        renderTopToolbarCustomActions: ({ table }) => (
-            <Box
-                sx={{
-                    display: 'flex',
-                    gap: '16px',
-                    padding: '8px',
-                    flexWrap: 'wrap',
-                }}
-            >
-                <h1
-                    className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
-                >
-                    Celulares
-                </h1>
-                <Button color="primary"
-                    onPress={() => {
-                        onOpen();
-                        setCelular(null);
-                    }}>Nuevo</Button>
-
-                <Button color="danger"
-                    onPress={() => {
-                        fetchData();
-                    }}>Refrescar
-                </Button>
-            </Box >
-        ),
-    });
-
     return (
-        <div>
+        <Box sx={{ width: '100%' }}>
             <NavbarInventarioTI></NavbarInventarioTI>
-            <MaterialReactTable table={table} />
-            <FormCelulares isOpen={isOpen} onOpen={onOpen} onOpenChange={onOpenChange} id_celular={id_celular}></FormCelulares>
-        </div>
+            <TabContext value={value}>
+                <Box sx={{ borderColor: 'divider', background: 'linear-gradient(90deg, #a10003, #002887)', color: 'white' }}>
+                    <TabList onChange={handleChange} textColor="inherit" sx={{
+                        '& .MuiTabs-indicator': {
+                            backgroundColor: 'white',
+                            height: '3px',
+                        }
+                    }}>
+                        <Tab label="Activos" value="1" sx={{ fontFamily: 'Inter' }} />
+                        <Tab label="Inactivos" value="2" sx={{ fontFamily: 'Inter' }} />
+                    </TabList>
+                </Box>
+                <TabPanel value="1" sx={{ padding: 0, margin: 0 }}><CelularesTabla active={true}></CelularesTabla></TabPanel>
+                <TabPanel value="2" sx={{ padding: 0, margin: 0 }}><CelularesTabla active={false}></CelularesTabla></TabPanel>
+            </TabContext >
+        </Box >
     );
 };
 

@@ -13,9 +13,7 @@ import FormCelulares from './form';
 import {
     useDisclosure,
 } from "@heroui/react";
-import { Tabs, Tab, Card, CardBody } from "@heroui/react";
-
-const EmpleadosTI = ({ active }) => {
+const CelularesTabla = ({ active }) => {
     const [isLoading, setLoading] = useState(false);
     const [id_celular, setCelular] = useState(0);
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -25,7 +23,7 @@ const EmpleadosTI = ({ active }) => {
     const fetchData = async () => {
         try {
             setLoading(true);
-            const response = await odooApi.get('/inventarioti/empleados/active/' + active);
+            const response = await odooApi.get('/inventarioti/celulares/active/' + active);
             setData(response.data);
             setLoading(false);
         } catch (error) {
@@ -40,10 +38,26 @@ const EmpleadosTI = ({ active }) => {
 
     const columns = useMemo(
         () => [
-            { accessorKey: 'id_empleado', header: 'ID EMPLEADO' },
-            { accessorKey: 'nombre_dep', header: 'DEPARTAMENTO' },
-            { accessorKey: 'puesto', header: 'PUESTO' },
-            { accessorKey: 'nombre_empleado', header: 'NOMBRE EMPLEADO' },
+            { accessorKey: 'id_celular', header: 'ID' },
+            { accessorKey: 'nombre', header: 'Empresa' },
+            { accessorKey: 'imei', header: 'IMEI' },
+            { accessorKey: 'marca', header: 'MARCA' },
+            { accessorKey: 'modelo', header: 'MODELO' },
+            { accessorKey: 'correo', header: 'CORREO' },
+            { accessorKey: 'passwoord', header: 'PASSWORD' },
+            {
+                accessorKey: 'numero_celular',
+                header: 'Número celular',
+                Cell: ({ cell }) => {
+                    const estatus_viaje = cell.getValue();
+
+                    return (
+                        <Chip color="primary" size="sm">
+                            {estatus_viaje}
+                        </Chip>
+                    );
+                },
+            },
         ],
         [],
     );
@@ -64,7 +78,7 @@ const EmpleadosTI = ({ active }) => {
         },
         muiTableBodyRowProps: ({ row }) => ({
             onClick: ({ event }) => {
-                setCelular(row.original.id_empleado);
+                setCelular(row.original.id_celular);
                 onOpen();
             },
             style: {
@@ -108,7 +122,7 @@ const EmpleadosTI = ({ active }) => {
                 <h1
                     className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
                 >
-                    Empleados
+                    Celulares
                 </h1>
                 <Button color="primary"
                     onPress={() => {
@@ -133,5 +147,5 @@ const EmpleadosTI = ({ active }) => {
     );
 };
 
-export default EmpleadosTI;
+export default CelularesTabla;
 

@@ -37,12 +37,12 @@ const EmpleadosInventarioTI = () => {
                             height: '3px',
                         }
                     }}>
-                        <Tab label="Activos" value="1" />
-                        <Tab label="Inactivos" value="2" />
+                        <Tab label="Activos" value="1" sx={{ fontFamily: 'Inter' }} />
+                        <Tab label="Inactivos" value="2" sx={{ fontFamily: 'Inter' }} />
                     </TabList>
                 </Box>
-                <TabPanel value="1" sx={{ padding: 0, margin: 0 }}><EmpleadosTI></EmpleadosTI></TabPanel>
-                <TabPanel value="2" sx={{ padding: 0, margin: 0 }}></TabPanel>
+                <TabPanel value="1" sx={{ padding: 0, margin: 0 }}><EmpleadosTI active={true}></EmpleadosTI></TabPanel>
+                <TabPanel value="2" sx={{ padding: 0, margin: 0 }}><EmpleadosTI active={false}></EmpleadosTI></TabPanel>
             </TabContext >
         </Box >
     );
