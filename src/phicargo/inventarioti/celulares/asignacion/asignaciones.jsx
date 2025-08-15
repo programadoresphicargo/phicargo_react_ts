@@ -1,4 +1,4 @@
-import { Button, Chip } from '@heroui/react';
+import { Button, Chip, Link } from '@heroui/react';
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -13,6 +13,10 @@ import ModalAsignacion from './modal';
 import {
   useDisclosure,
 } from "@heroui/react";
+import Swal from 'sweetalert2';
+import { toast } from 'react-toastify';
+
+const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
 const Asignaciones = () => {
   const [isLoading, setLoading] = useState(false);
@@ -36,16 +40,84 @@ const Asignaciones = () => {
     fetchData();
   }, []);
 
+  const Desasignar = async (data) => {
+    console.log(data);
+    Swal.fire({
+      title: '¿Estás seguro?',
+      html: `
+        <p><strong>Nombre empleado:</strong> ${data.nombre_empleado || 'N/A'}</p>
+        <p><strong>Fecha asignación:</strong> ${data.fecha_asignacion}</p>
+      `,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, continuar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        odooApi.put('/inventarioti/asignaciones/desasignar_celulares/' + data.id_asignacion)
+          .then(response => {
+            if (response.data.status == 'success') {
+              toast.success(response.data);
+            }
+          })
+          .catch(error => {
+            toast.error('Ocurrió un error');
+          });
+      }
+    });
+  };
+
   const columns = useMemo(
     () => [
       { accessorKey: 'id_asignacion', header: 'ID ASIGNACION' },
-      { accessorKey: 'nombre_empleado', header: 'EMPLEADO' },
-      { accessorKey: 'puesto', header: 'PUESTO' },
+      {
+        accessorKey: 'nombre_empleado', header: 'Empleado',
+        Cell: ({ cell }) => {
+          const estatus_viaje = cell.getValue();
+
+          return (
+            <span className="font-bold uppercase">{estatus_viaje}</span>
+          );
+        },
+      },
+      { accessorKey: 'puesto', header: 'Puesto' },
       { accessorKey: 'imei', header: 'IMEI' },
-      { accessorKey: 'marca', header: 'MARCA' },
-      { accessorKey: 'modelo', header: 'MODELO' },
-      { accessorKey: 'fecha_asignacion', header: 'FECHA ASIGNACIÓN' },
-      { accessorKey: 'acciones', header: 'ACCIONES' },
+      { accessorKey: 'marca', header: 'Marca' },
+      { accessorKey: 'modelo', header: 'Modelo' },
+      { accessorKey: 'fecha_asignacion', header: 'Fecha asignación' },
+      {
+        accessorKey: 'responsiva',
+        header: 'Responsiva',
+        Cell: ({ row }) => (
+          <Button
+            showAnchorIcon
+            as={Link}
+            isExternal={true}
+            color="secondary"
+            href={`${apiUrl}/inventarioti/asignaciones/celulares/responsiva/${row.original.id_asignacion}`}
+            variant="solid"
+            size='sm'
+          >
+            Responsiva
+          </Button>
+        ),
+      },
+      {
+        accessorKey: 'desasignar',
+        header: 'Desasignar',
+        Cell: ({ row }) => (
+          <Button
+            color="danger"
+            onPress={() => Desasignar(row.original)}
+            variant="solid"
+            size='sm'
+          >
+            Desasignar
+          </Button>
+        ),
+      },
     ],
     [],
   );
@@ -92,7 +164,7 @@ const Asignaciones = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 200px)',
+        maxHeight: 'calc(100vh - 210px)',
       },
     },
     renderTopToolbarCustomActions: ({ table }) => (
@@ -109,7 +181,7 @@ const Asignaciones = () => {
         >
           Asignaciones
         </h1>
-        <Button color='primary' onPress={()=>onOpen()}>Nueva asignación</Button>
+        <Button color='primary' onPress={() => onOpen()}>Nueva asignación</Button>
       </Box>
     ),
   });

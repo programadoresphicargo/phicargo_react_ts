@@ -19,7 +19,7 @@ import toast from 'react-hot-toast';
 import { parseDate, parseDateTime, getLocalTimeZone } from "@internationalized/date";
 import { today } from "@internationalized/date";
 
-export default function BajaEquipoComputo({ isOpen, onOpen, onOpenChange, id_celular }) {
+export default function BajaCelular({ isOpen, onOpen, onOpenChange, id_celular }) {
 
     const [isLoading, setLoading] = useState(false);
 
@@ -30,7 +30,7 @@ export default function BajaEquipoComputo({ isOpen, onOpen, onOpenChange, id_cel
             setLoading(true);
 
             if (id_celular) {
-                const response = await odooApi.put(`/inventarioti/equipo_computo/baja/${id_celular}`,
+                const response = await odooApi.put(`/inventarioti/celulares/baja/${id_celular}`,
                     {},
                     {
                         params: {

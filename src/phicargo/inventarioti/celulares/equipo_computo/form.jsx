@@ -60,6 +60,12 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
         }
     }, [isOpen]);
 
+    useEffect(() => {
+        if (isBajaModalOpen == false && id_celular) {
+            fetchData();
+        }
+    }, [isBajaModalOpen]);
+
     const handleSave = async (onClose) => {
         try {
             setLoading(true);
@@ -94,7 +100,12 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
 
     return (
         <>
-            <BajaEquipoComputo isOpen={isBajaModalOpen} onOpenChange={setBajaModalOpen} id_celular={id_celular}></BajaEquipoComputo>
+            <BajaEquipoComputo
+                isOpen={isBajaModalOpen}
+                onOpenChange={setBajaModalOpen}
+                id_celular={id_celular}>
+            </BajaEquipoComputo>
+
             <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="3xl">
                 <ModalContent>
                     {(onClose) => (
@@ -236,9 +247,10 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
                                 <Button color="danger" variant="light" onPress={onClose}>
                                     Cancelar
                                 </Button>
-                                {data?.active == true && (
+
+                                {data?.active == true && id_celular && (
                                     <Button
-                                        color={"danger"}
+                                        color="danger"
                                         onPress={openBajaModal}
                                         className="text-white"
                                         isDisabled={isLoading}
@@ -246,15 +258,24 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
                                         Baja
                                     </Button>
                                 )}
-                                <Button
-                                    color={id_celular ? "success" : "primary"}
-                                    onPress={() => handleSave(onClose)}
-                                    className="text-white"
-                                    isDisabled={isLoading}
-                                >
-                                    {id_celular ? "Actualizar" : "Registrar"}
-                                </Button>
+
+                                {(
+                                    // Mostrar si es nuevo registro
+                                    !id_celular ||
+                                    // O si es edición y está activo
+                                    (id_celular && data?.active == true)
+                                ) && (
+                                        <Button
+                                            color={id_celular ? "success" : "primary"}
+                                            onPress={() => handleSave(onClose)}
+                                            className="text-white"
+                                            isDisabled={isLoading}
+                                        >
+                                            {id_celular ? "Actualizar" : "Registrar"}
+                                        </Button>
+                                    )}
                             </ModalFooter>
+
                         </>
                     )}
                 </ModalContent>

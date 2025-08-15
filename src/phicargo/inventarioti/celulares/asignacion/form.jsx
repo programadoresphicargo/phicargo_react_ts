@@ -16,6 +16,7 @@ import { now, getLocalTimeZone, today } from "@internationalized/date";
 import { parseDate, parseDateTime } from "@internationalized/date";
 import toast from 'react-hot-toast';
 import { Autocomplete, AutocompleteItem } from "@heroui/react";
+import AsignacionComputo from './asignacion_computo';
 
 const AsignacionActivosForm = () => {
 
@@ -115,6 +116,7 @@ const AsignacionActivosForm = () => {
             </CardBody>
           </Card>
           <AsignacionCelular></AsignacionCelular>
+          <AsignacionComputo></AsignacionComputo>
         </CardBody>
       </Card>
     </div >

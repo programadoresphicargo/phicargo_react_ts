@@ -18,8 +18,14 @@ import React, { useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { parseDate, parseDateTime, getLocalTimeZone } from "@internationalized/date";
 import { today } from "@internationalized/date";
+import BajaCelular from "./baja_form";
 
 export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular }) {
+
+    const [isBajaModalOpen, setBajaModalOpen] = useState(false);
+
+    const openBajaModal = () => setBajaModalOpen(true);
+    const closeBajaModal = () => setBajaModalOpen(false);
 
     const [isLoading, setLoading] = useState(false);
 
@@ -55,6 +61,12 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
         }
     }, [isOpen]);
 
+    useEffect(() => {
+        if (isBajaModalOpen == false && id_celular) {
+            fetchData();
+        }
+    }, [isBajaModalOpen]);
+
     const handleSave = async (onClose) => {
         try {
             setLoading(true);
@@ -89,6 +101,12 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
 
     return (
         <>
+            <BajaCelular
+                isOpen={isBajaModalOpen}
+                onOpenChange={setBajaModalOpen}
+                id_celular={id_celular}>
+            </BajaCelular>
+
             <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
                 <ModalContent>
                     {(onClose) => (
@@ -194,24 +212,33 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
                                 <Button color="danger" variant="light" onPress={onClose}>
                                     Cancelar
                                 </Button>
-                                {data?.active && (
+
+                                {data?.active == true && id_celular && (
                                     <Button
-                                        color={"danger"}
-                                        onPress={() => handleSave(onClose)}
+                                        color="danger"
+                                        onPress={openBajaModal}
                                         className="text-white"
                                         isDisabled={isLoading}
                                     >
                                         Baja
                                     </Button>
                                 )}
-                                <Button
-                                    color={id_celular ? "success" : "primary"}
-                                    onPress={() => handleSave(onClose)}
-                                    className="text-white"
-                                    isDisabled={isLoading}
-                                >
-                                    {id_celular ? "Actualizar" : "Registrar"}
-                                </Button>
+
+                                {(
+                                    // Mostrar si es nuevo registro
+                                    !id_celular ||
+                                    // O si es edición y está activo
+                                    (id_celular && data?.active == true)
+                                ) && (
+                                        <Button
+                                            color={id_celular ? "success" : "primary"}
+                                            onPress={() => handleSave(onClose)}
+                                            className="text-white"
+                                            isDisabled={isLoading}
+                                        >
+                                            {id_celular ? "Actualizar" : "Registrar"}
+                                        </Button>
+                                    )}
                             </ModalFooter>
                         </>
                     )}

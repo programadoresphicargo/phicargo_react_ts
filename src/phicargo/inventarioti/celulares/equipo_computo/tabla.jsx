@@ -35,7 +35,7 @@ const EquipoTI = ({ active }) => {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [isOpen]);
 
     const columns = useMemo(
         () => [
@@ -51,6 +51,7 @@ const EquipoTI = ({ active }) => {
             { accessorKey: 'tipodd', header: 'Tipo de disco' },
             { accessorKey: 'ram', header: 'RAM' },
             { accessorKey: 'fecha_compra', header: 'Fecha compra' },
+            { accessorKey: 'estado', header: 'Estado' },
         ],
         [],
     );
