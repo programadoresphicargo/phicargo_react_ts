@@ -75,12 +75,21 @@ export default function BajaEquipoComputo({ isOpen, onOpen, onOpenChange, id_cel
                                         label="Motivo de baja"
                                         selectedKeys={data?.motivo_baja ? [String(data.motivo_baja)] : []}
                                         onSelectionChange={(keys) => handleChange("motivo_baja", [...keys][0])}
+                                        isInvalid={!data?.motivo_baja}
+                                        errorMessage={!data?.motivo_baja ? "Motivo de baja obligatorio" : ""}
                                     >
                                         <SelectItem key={"Perdida"}>Perdida</SelectItem>
                                         <SelectItem key={"Robo"}>Robo</SelectItem>
                                         <SelectItem key={"Otro"}>Otro</SelectItem>
                                     </Select>
-                                    <Textarea label="Comentarios de baja" value={data?.comentarios_baja} onChange={(e) => handleChange("comentarios_baja", e.target.value)}></Textarea>
+
+                                    <Textarea
+                                        label="Comentarios de baja"
+                                        value={data?.comentarios_baja}
+                                        isInvalid={!data?.comentarios_baja}
+                                        errorMessage={!data?.comentarios_baja ? "Los comentarios son obligatorios" : ""}
+                                        onChange={(e) => handleChange("comentarios_baja", e.target.value)}>
+                                    </Textarea>
                                 </div>
                             </ModalBody>
                             <ModalFooter>
