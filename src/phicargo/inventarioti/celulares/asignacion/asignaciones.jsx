@@ -4,17 +4,21 @@ import {
   useMaterialReactTable,
 } from 'material-react-table';
 import React, { useEffect, useMemo, useState } from 'react';
-
 import Box from '@mui/material/Box';
 import { DatePicker } from 'antd';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import odooApi from '@/api/odoo-api';
 import NavbarInventarioTI from '../../navbar';
+import ModalAsignacion from './modal';
+import {
+  useDisclosure,
+} from "@heroui/react";
 
 const Asignaciones = () => {
   const [isLoading, setLoading] = useState(false);
 
   const [data, setData] = useState([]);
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const fetchData = async () => {
     try {
@@ -105,6 +109,7 @@ const Asignaciones = () => {
         >
           Asignaciones
         </h1>
+        <Button color='primary' onPress={()=>onOpen()}>Nueva asignación</Button>
       </Box>
     ),
   });
@@ -113,6 +118,7 @@ const Asignaciones = () => {
     <div>
       <NavbarInventarioTI></NavbarInventarioTI>
       <MaterialReactTable table={table} />
+      <ModalAsignacion isOpen={isOpen} onOpenChange={onOpenChange}></ModalAsignacion>
     </div>
   );
 };

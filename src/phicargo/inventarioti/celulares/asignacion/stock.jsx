@@ -49,6 +49,7 @@ export default function StockCelulares({ isOpen, onOpen, onOpenChange, id_celula
 
     const columns = useMemo(
         () => [
+            { accessorKey: 'id_celular', header: 'ID' },
             { accessorKey: 'nombre', header: 'Empresa' },
             { accessorKey: 'imei', header: 'IMEI' },
             { accessorKey: 'marca', header: 'Marca' },
@@ -73,10 +74,21 @@ export default function StockCelulares({ isOpen, onOpen, onOpenChange, id_celula
         },
         muiTableBodyRowProps: ({ row }) => ({
             onClick: ({ event }) => {
+                const existe = (form_data.celulares || []).some(
+                    cel => cel.id_celular === row.original.id_celular
+                );
+
+                if (existe) {
+                    toast.error("El celular ya está dentro");
+                    return; // salir sin agregarlo
+                }
+
                 setFormData(prev => ({
                     ...prev,
                     celulares: [...(prev.celulares || []), row.original]
                 }));
+
+                onOpenChange();
             },
             style: {
                 cursor: 'pointer',

@@ -22,7 +22,6 @@ const AsignacionActivos = () => {
   return (
     <div>
       <InventarioProvider>
-        <NavbarInventarioTI></NavbarInventarioTI>
         <AsignacionActivosForm></AsignacionActivosForm>
       </InventarioProvider >
     </div >

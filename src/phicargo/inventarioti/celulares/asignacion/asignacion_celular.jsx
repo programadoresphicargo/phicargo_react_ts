@@ -24,22 +24,27 @@ const AsignacionCelular = () => {
 
   const columns = useMemo(
     () => [
+      { accessorKey: 'id_celular', header: 'ID Celular' },
       { accessorKey: 'imei', header: 'IMEI' },
       { accessorKey: 'marca', header: 'Marca' },
       { accessorKey: 'modelo', header: 'Modelo' },
+      { accessorKey: 'correo', header: 'Correo' },
       {
         accessorKey: 'delete',
         header: 'Borrar',
         Cell: ({ cell, row, table }) => {
-          return <Button onPress={() => eliminarCelular(row.original.id_celular)} color='danger' size='sm'> Eliminar {row.original.id_celular}</Button>
+          return <Button onPress={() => removeCelular(row.original.id_celular)} color='danger' size='sm'> Eliminar</Button>
         },
       }
     ],
     [],
   );
 
-  const eliminarCelular = (id) => {
-    console.log(id);
+  const removeCelular = (id) => {
+    setFormData(prev => ({
+      ...prev,
+      celulares: (prev.celulares || []).filter(cel => cel.id_celular !== id)
+    }));
   };
 
   const table = useMaterialReactTable({
@@ -110,10 +115,6 @@ const AsignacionCelular = () => {
     <div>
       <StockCelulares isOpen={isOpen} onOpenChange={onOpenChange}></StockCelulares>
       <Card className='mt-3'>
-        <CardHeader>
-          Asignación celular
-        </CardHeader>
-        <Divider></Divider>
         <CardBody>
           <MaterialReactTable table={table} />
         </CardBody>

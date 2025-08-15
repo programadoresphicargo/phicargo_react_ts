@@ -15,6 +15,7 @@ import { InventarioProvider, useInventarioTI } from '../../contexto/contexto';
 import { now, getLocalTimeZone, today } from "@internationalized/date";
 import { parseDate, parseDateTime } from "@internationalized/date";
 import toast from 'react-hot-toast';
+import { Autocomplete, AutocompleteItem } from "@heroui/react";
 
 const AsignacionActivosForm = () => {
 
@@ -67,13 +68,13 @@ const AsignacionActivosForm = () => {
   return (
     <div>
       <Card>
-        <CardHeader>
+        <CardHeader className="flex items-center justify-between gap-4">
           <h1
             className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
           >
             Asignación de activos
           </h1>
-          <Button color='primary' onPress={() => Create()}>Guardar asignación</Button>
+          <Button color='success' onPress={() => Create()} className='text-white' isLoading={isLoading}>Guardar asignación</Button>
         </CardHeader>
         <Divider></Divider>
         <CardBody>
@@ -84,18 +85,20 @@ const AsignacionActivosForm = () => {
             <Divider></Divider>
             <CardBody>
               <div className="w-full flex flex-col gap-4">
-                <Select
+                <Autocomplete
                   label="Empleado"
-                  onSelectionChange={(keys) => handleChange("id_empleado", Number([...keys][0]))}>
+                  onSelectionChange={(keys) => handleChange("id_empleado", Number([...keys][0]))}
+                  isInvalid={!form_data?.data?.id_empleado}
+                  errorMessage={!form_data?.data?.id_empleado ? "El empleado es obligatorio" : ""}>
                   {empleados.map((animal) => (
-                    <SelectItem key={animal.id_empleado}>{animal.nombre_empleado}</SelectItem>
+                    <AutocompleteItem key={animal.id_empleado}>{animal.nombre_empleado}</AutocompleteItem>
                   ))}
-                </Select>
+                </Autocomplete>
                 <DatePicker
                   label="Fecha de asignación"
                   value={
-                    form_data?.fecha_asignacion
-                      ? parseDate(form_data.fecha_asignacion)
+                    form_data?.data?.fecha_asignacion
+                      ? parseDate(form_data?.data?.fecha_asignacion)
                       : today(getLocalTimeZone())
                   }
                   onChange={(date) => {
