@@ -44,7 +44,7 @@ const FormularioCorreoGeneral = ({ handleClose, idCliente, data }) => {
       let response;
 
       if (!data) {
-        response = await odooApi.post('/correos/crear_correo/', {
+        response = await odooApi.post('/correos/', {
           id_cliente: idCliente ?? data?.id_cliente,
           nombre_completo: nombreContacto,
           correo: correoElectronico,

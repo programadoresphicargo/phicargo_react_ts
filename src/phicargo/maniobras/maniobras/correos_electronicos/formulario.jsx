@@ -22,7 +22,7 @@ const FormularioCorreo = ({ open, handleClose }) => {
 
     const handleSubmit = async () => {
         try {
-            const response = await odooApi.post("/correos/crear_correo/", {
+            const response = await odooApi.post("/correos/", {
                 id_cliente: id_cliente,
                 nombre_completo: nombreCompleto,
                 correo: correo,
