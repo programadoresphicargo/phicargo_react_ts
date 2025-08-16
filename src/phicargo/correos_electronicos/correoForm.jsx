@@ -1,15 +1,16 @@
-import { Button, Input, Select, SelectItem } from "@heroui/react";
+import { Button, Checkbox, Input, Select, SelectItem } from "@heroui/react";
 import React, { useContext, useState } from 'react';
 
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 
-const FormularioCorreoGeneral = ({ handleClose, idCliente }) => {
+const FormularioCorreoGeneral = ({ handleClose, idCliente, data }) => {
   const [isLoading, setLoading] = useState(false);
 
-  const [nombreContacto, setNombreContacto] = useState('');
-  const [correoElectronico, setCorreoElectronico] = useState('');
-  const [tipoCorreo, setTipoCorreo] = useState('');
+  const [nombreContacto, setNombreContacto] = useState(data?.nombre_completo ?? '');
+  const [correoElectronico, setCorreoElectronico] = useState(data?.correo ?? '');
+  const [tipoCorreo, setTipoCorreo] = useState(data?.tipo ?? '');
+  const [isSelected, setIsSelected] = React.useState(data?.activo ? true : false);
   const [errors, setErrors] = useState({});
 
   const validateForm = () => {
@@ -32,38 +33,51 @@ const FormularioCorreoGeneral = ({ handleClose, idCliente }) => {
   };
 
   const crear_correo = async () => {
-    if (validateForm()) {
-      try {
-        setLoading(true);
-        const response = await odooApi.post('/correos/crear_correo/', {
-          id_cliente: idCliente,
+    if (!validateForm()) {
+      toast.error("Hay errores en el formulario. Por favor, corrígelos antes de enviar.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      let response;
+
+      if (!data) {
+        response = await odooApi.post('/correos/crear_correo/', {
+          id_cliente: idCliente ?? data?.id_cliente,
           nombre_completo: nombreContacto,
           correo: correoElectronico,
           tipo: tipoCorreo,
         });
-
-        if (response.status === 200 || response.status === 201) {
-          if (response.data.status === "success") {
-            toast.success(response.data.message);
-            handleClose();
-          } else {
-            toast.error('Error: ' + response.data.message);
-          }
-        } else {
-          toast.error("Error inesperado del servidor. Por favor, intente nuevamente.");
-        }
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-        if (error.response && error.response.data) {
-          toast.error(error.response.data.message);
-        } else {
-          toast.error("Error al conectar con el servidor: " + error.message);
-        }
+      } else {
+        response = await odooApi.patch(`/correos/${data.id_correo}`, {
+          id_cliente: idCliente ?? data?.id_cliente,
+          nombre_completo: nombreContacto,
+          correo: correoElectronico,
+          tipo: tipoCorreo,
+          activo: isSelected,
+        });
       }
-    } else {
+
+      if (response.status === 200 || response.status === 201) {
+        if (response.data.status?.toLowerCase() === "success") {
+          toast.success(response.data.message);
+          handleClose();
+        } else {
+          toast.error('Error: ' + response.data.message);
+        }
+      } else {
+        toast.error("Error inesperado del servidor. Por favor, intente nuevamente.");
+      }
+    } catch (error) {
+      if (error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("Error al conectar con el servidor: " + error.message);
+      }
+    } finally {
       setLoading(false);
-      toast.error("Hay errores en el formulario. Por favor, corrígelos antes de enviar.");
     }
   };
 
@@ -113,7 +127,17 @@ const FormularioCorreoGeneral = ({ handleClose, idCliente }) => {
             <SelectItem key="CC">CC</SelectItem>
           </Select>
 
-          <Button color='primary' onPress={() => crear_correo()} isLoading={isLoading}>Registrar</Button>
+          {data && (
+            <Checkbox isSelected={isSelected} onValueChange={setIsSelected}>Activo</Checkbox>
+          )}
+
+          <Button
+            className="text-white"
+            color={data ? 'success' : 'primary'}
+            onPress={() => crear_correo()}
+            isLoading={isLoading}>
+            {data ? 'Actualizar' : 'Registrar'}
+          </Button>
         </div>
       </form>
     </>

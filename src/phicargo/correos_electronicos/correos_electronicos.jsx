@@ -18,7 +18,16 @@ import odooApi from '@/api/odoo-api';
 const CorreosElectronicos = ({ estado }) => {
 
   const [open, setOpen] = React.useState(false);
-  const [id_acceso, setIDAcceso] = useState(0);
+  const [correo, setCorreo] = useState({});
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    fetchData();
+  };
 
   const [data, setData] = useState([]);
   const [isLoading2, setLoading] = useState();
@@ -102,7 +111,7 @@ const CorreosElectronicos = ({ estado }) => {
         if (row.subRows?.length) {
         } else {
           handleClickOpen();
-          setIDAcceso(row.original.id_acceso);
+          setCorreo(row.original);
         }
       },
       style: {
@@ -138,7 +147,10 @@ const CorreosElectronicos = ({ estado }) => {
         }}
       >
         Correos electronicos
-        <Button color='primary' onPress={() => fetchData()} size='sm'>Recargar</Button>
+        <Button
+          color='primary'
+          onPress={() => fetchData()}
+        >Recargar</Button>
       </Box>
     ),
   });
@@ -146,6 +158,20 @@ const CorreosElectronicos = ({ estado }) => {
   return (<>
     <MonitoreoNavbar />
     <MaterialReactTable table={table} />
+
+    <Dialog
+      fullWidth={true}
+      maxWidth={"sm"}
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogContent>
+        <FormularioCorreoGeneral idCliente={null} handleClose={handleClose} data={correo}>
+        </FormularioCorreoGeneral>
+      </DialogContent>
+    </Dialog>
   </>
   );
 
