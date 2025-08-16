@@ -18,7 +18,7 @@ const FormularioCorreo = ({ open, handleClose }) => {
     const { id_maniobra, id_cliente, formData, setFormData, formDisabled, setFormDisabled } = useContext(ManiobraContext);
     const [nombreCompleto, setNombreCompleto] = React.useState('');
     const [correo, setCorreo] = React.useState('');
-    const [tipoCorreo, setTipoCorreo] = React.useState('destinatario');
+    const [tipoCorreo, setTipoCorreo] = React.useState('Destinatario');
 
     const handleSubmit = async () => {
         try {
@@ -80,8 +80,8 @@ const FormularioCorreo = ({ open, handleClose }) => {
                         variant="bordered"
                         onChange={(e) => setTipoCorreo(e.target.value)}
                     >
-                        <SelectItem key={"destinatario"}>Destinatario</SelectItem>
-                        <SelectItem key={"cc"}>CC</SelectItem>
+                        <SelectItem key={"Destinatario"}>Destinatario</SelectItem>
+                        <SelectItem key={"CC"}>CC</SelectItem>
                     </Select>
 
                 </DialogContent>
