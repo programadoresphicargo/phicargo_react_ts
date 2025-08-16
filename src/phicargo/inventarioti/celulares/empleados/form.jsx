@@ -128,14 +128,33 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
                                     label="Departamento"
                                     selectedKeys={data?.id_departamento ? [String(data.id_departamento)] : []}
                                     onSelectionChange={(keys) => handleChange("id_departamento", Number([...keys][0]))}
+                                    isInvalid={!data?.id_departamento}
+                                    errorMessage={!data?.id_departamento ? "Departamento es obligatorio" : ""}
                                 >
                                     {departamentos.map((departamento) => (
                                         <SelectItem key={departamento.id_departamento}>{departamento.nombre_dep}</SelectItem>
                                     ))}
                                 </Select>
-                                <Input label="Nombre del empleado" value={data?.nombre_empleado} onChange={(e) => handleChange("nombre_empleado", e.target.value)}></Input>
-                                <Input label="Puesto" value={data?.puesto} onChange={(e) => handleChange("puesto", e.target.value)}></Input>
+
+                                <Input label="Nombre del empleado"
+                                    value={data?.nombre_empleado}
+                                    onChange={(e) => handleChange("nombre_empleado", e.target.value)}
+                                    isInvalid={!data?.nombre_empleado}
+                                    errorMessage={!data?.nombre_empleado ? "Nombre del empleado es obligatorio" : ""}
+                                >
+                                </Input>
+
+                                <Input
+                                    label="Puesto"
+                                    value={data?.puesto}
+                                    onChange={(e) => handleChange("puesto", e.target.value)}
+                                    isInvalid={!data?.puesto}
+                                    errorMessage={!data?.puesto ? "Puesto es obligatorio" : ""}
+                                >
+                                </Input>
+
                                 <Input label="Unidad" value={data?.eco} onChange={(e) => handleChange("eco", e.target.value)}></Input>
+
                                 {id_celular && (
                                     <Checkbox isSelected={data?.active} onValueChange={(e) => handleChange("active", e)}>Activo</Checkbox>
                                 )}

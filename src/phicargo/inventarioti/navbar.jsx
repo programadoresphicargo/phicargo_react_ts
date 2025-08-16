@@ -35,8 +35,8 @@ const pages = [
   {
     name: 'ASIGNACIÓN DE ACTIVOS', path: '/asignacion_activos',
     subpages: [
-      { name: 'ASIGNACIONES', path: '/asignaciones' },
-      { name: 'NUEVA ASIGNACIONES', path: '/asignacion_activos' },
+      { name: 'ASIGNACIONES CELULARES', path: '/asignaciones' },
+      { name: 'ASIGNACIONES COMPUTO', path: '/asignaciones_computo' },
     ],
   },
   { name: 'EMPLEADOS', path: '/empleados_ti' },

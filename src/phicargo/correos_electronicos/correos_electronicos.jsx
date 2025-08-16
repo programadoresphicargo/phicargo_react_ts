@@ -5,7 +5,7 @@ import {
 import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box } from '@mui/material';
-import { Button } from "@heroui/react";
+import { Button, Checkbox, Chip } from "@heroui/react";
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -18,22 +18,7 @@ import odooApi from '@/api/odoo-api';
 const CorreosElectronicos = ({ estado }) => {
 
   const [open, setOpen] = React.useState(false);
-
   const [id_acceso, setIDAcceso] = useState(0);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-    fetchData();
-  };
-
-  const NuevoAcceso = () => {
-    setOpen(true);
-    setIDAcceso(null);
-  };
 
   const [data, setData] = useState([]);
   const [isLoading2, setLoading] = useState();
@@ -72,6 +57,21 @@ const CorreosElectronicos = ({ estado }) => {
         accessorKey: 'tipo',
         header: 'Tipo',
       },
+      {
+        accessorKey: 'activo',
+        header: 'Activo',
+        Cell: ({ row }) => (
+          <Checkbox isSelected={row.original.activo ? true : false}></Checkbox>
+        ),
+      },
+      {
+        accessorKey: 'nombre',
+        header: 'Usuario creación',
+      },
+      {
+        accessorKey: 'fecha_creacion',
+        header: 'Fecha creación',
+      },
     ],
     [],
   );
@@ -82,7 +82,7 @@ const CorreosElectronicos = ({ estado }) => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
-    state: { isLoading: isLoading2 },
+    state: { showProgressBars: isLoading2 },
     enableColumnPinning: true,
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
@@ -120,12 +120,12 @@ const CorreosElectronicos = ({ estado }) => {
       sx: {
         fontFamily: 'Inter',
         fontWeight: 'normal',
-        fontSize: '14px',
+        fontSize: '12px',
       },
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 195px)',
+        maxHeight: 'calc(100vh - 210px)',
       },
     },
     renderTopToolbarCustomActions: ({ table }) => (
@@ -137,14 +137,8 @@ const CorreosElectronicos = ({ estado }) => {
           flexWrap: 'wrap',
         }}
       >
-        <Button
-          color='primary'
-          onPress={() =>
-            NuevoAcceso()
-          }
-        >
-          NUEVO CORREO ELECTRONICO
-        </Button>
+        Correos electronicos
+        <Button color='primary' onPress={() => fetchData()} size='sm'>Recargar</Button>
       </Box>
     ),
   });
@@ -152,20 +146,6 @@ const CorreosElectronicos = ({ estado }) => {
   return (<>
     <MonitoreoNavbar />
     <MaterialReactTable table={table} />
-
-    <Dialog
-      fullWidth={true}
-      maxWidth={"sm"}
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
-    >
-      <DialogContent>
-        <FormularioCorreoGeneral idCliente={null} handleClose={handleClose}>
-        </FormularioCorreoGeneral>
-      </DialogContent>
-    </Dialog>
   </>
   );
 

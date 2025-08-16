@@ -41,31 +41,33 @@ const Asignaciones = () => {
   }, []);
 
   const Desasignar = async (data) => {
-    console.log(data);
     Swal.fire({
       title: '¿Estás seguro?',
       html: `
         <p><strong>Nombre empleado:</strong> ${data.nombre_empleado || 'N/A'}</p>
-        <p><strong>Fecha asignación:</strong> ${data.fecha_asignacion}</p>
+        <p><strong>Fecha asignación:</strong> ${new Date(data.fecha_asignacion).toLocaleDateString()}</p>
       `,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Sí, continuar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        odooApi.put('/inventarioti/asignaciones/desasignar_celulares/' + data.id_asignacion)
-          .then(response => {
-            if (response.data.status == 'success') {
-              toast.success(response.data);
-            }
-          })
-          .catch(error => {
-            toast.error('Ocurrió un error');
-          });
-      }
+      cancelButtonText: 'Cancelar',
+      showLoaderOnConfirm: true,
+      preConfirm: async () => {
+        try {
+          const response = await odooApi.put(`/inventarioti/asignaciones/desasignar_celulares/${data.id_asignacion}`);
+          if (response.data.status === 'success') {
+            toast.success(response.data.message);
+            fetchData();
+          } else {
+            toast.error(response.data.message);
+          }
+        } catch (error) {
+          toast.error('Ocurrió un error en la desasignación');
+        }
+      },
+      allowOutsideClick: () => !Swal.isLoading()
     });
   };
 
@@ -179,7 +181,7 @@ const Asignaciones = () => {
         <h1
           className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
         >
-          Asignaciones
+          Asignaciones celulares
         </h1>
         <Button color='primary' onPress={() => onOpen()}>Nueva asignación</Button>
       </Box>

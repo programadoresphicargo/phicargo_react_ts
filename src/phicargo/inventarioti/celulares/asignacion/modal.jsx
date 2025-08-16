@@ -30,7 +30,7 @@ export default function ModalAsignacion({ isOpen, onOpen, onOpenChange, id_celul
 
     return (
         <>
-            <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="6xl">
+            <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="full">
                 <ModalContent>
                     {(onClose) => (
                         <>
