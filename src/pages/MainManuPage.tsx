@@ -24,6 +24,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import fondo2 from '../assets/img/tract_scannia.jpg';
 import chatbot from '../assets/menu/chatbot.png';
+import ti from '../assets/menu/laptop.png';
 
 type MenuItemType = {
   icon: string;
@@ -136,8 +137,8 @@ const menuItems: MenuItemType[] = [
     requiredPermissions: [1],
   },
   {
-    icon: chatbot,
-    label: 'Inventario TI',
+    icon: ti,
+    label: 'Sistemas',
     link: '/celulares',
     requiredPermissions: [1],
   },
