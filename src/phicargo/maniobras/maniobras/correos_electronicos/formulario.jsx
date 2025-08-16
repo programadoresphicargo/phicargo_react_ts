@@ -19,8 +19,34 @@ const FormularioCorreo = ({ open, handleClose }) => {
     const [nombreCompleto, setNombreCompleto] = React.useState('');
     const [correo, setCorreo] = React.useState('');
     const [tipoCorreo, setTipoCorreo] = React.useState('Destinatario');
+    const [errors, setErrors] = useState({});
+
+    const validateForm = () => {
+        let formErrors = {};
+
+        if (!/^[A-Za-z\s]+$/.test(nombreCompleto)) {
+            formErrors.nombreCompleto = "El nombre solo debe contener letras y espacios.";
+        }
+
+        if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(correo)) {
+            formErrors.correo = "El correo electrónico no tiene un formato válido.";
+        }
+
+        if (!tipoCorreo) {
+            formErrors.tipoCorreo = "Debe seleccionar un tipo de correo.";
+        }
+
+        setErrors(formErrors);
+        return Object.keys(formErrors).length === 0;
+    };
 
     const handleSubmit = async () => {
+
+        if (!validateForm()) {
+            toast.error("Hay errores en el formulario. Por favor, corrígelos antes de enviar.");
+            return;
+        }
+
         try {
             const response = await odooApi.post("/correos/", {
                 id_cliente: id_cliente,
@@ -61,6 +87,8 @@ const FormularioCorreo = ({ open, handleClose }) => {
                         variant="bordered"
                         value={nombreCompleto}
                         onChange={(e) => setNombreCompleto(e.target.value)}
+                        isInvalid={errors.nombreCompleto ? true : false}
+                        errorMessage={errors.nombreCompleto}
                     />
                     <Spacer y={1} />
                     <Input
@@ -71,14 +99,18 @@ const FormularioCorreo = ({ open, handleClose }) => {
                         variant="bordered"
                         value={correo}
                         onChange={(e) => setCorreo(e.target.value)}
+                        isInvalid={errors.correo ? true : false}
+                        errorMessage={errors.correo}
                     />
                     <Spacer y={1} />
                     <Select
                         label="Tipo de correo"
-                        placeholder="Select an animal"
+                        placeholder="Seleccionar tipo de correo"
                         selectedKeys={[tipoCorreo]}
                         variant="bordered"
                         onChange={(e) => setTipoCorreo(e.target.value)}
+                        isInvalid={errors.tipoCorreo ? true : false}
+                        errorMessage={errors.tipoCorreo}
                     >
                         <SelectItem key={"Destinatario"}>Destinatario</SelectItem>
                         <SelectItem key={"CC"}>CC</SelectItem>
