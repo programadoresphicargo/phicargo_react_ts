@@ -134,13 +134,13 @@ const menuItems: MenuItemType[] = [
     icon: chatbot,
     label: 'Chat',
     link: '/chatbot',
-    requiredPermissions: [1],
+    requiredPermissions: [700],
   },
   {
     icon: ti,
     label: 'Sistemas',
     link: '/celulares',
-    requiredPermissions: [1],
+    requiredPermissions: [701],
   },
 ];
 
