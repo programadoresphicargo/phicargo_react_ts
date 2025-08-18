@@ -30,11 +30,11 @@ export default function ModalAsignacion({ isOpen, onOpen, onOpenChange, id_celul
 
     return (
         <>
-            <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="full">
+            <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="full" scrollBehavior="inside">
                 <ModalContent>
                     {(onClose) => (
                         <>
-                            <ModalHeader className="flex flex-col gap-1">Celulares disponibles</ModalHeader>
+                            <ModalHeader className="flex flex-col gap-1" >Asignación de activos</ModalHeader>
                             <ModalBody>
                                 <AsignacionActivos></AsignacionActivos>
                             </ModalBody>

@@ -25,7 +25,7 @@ import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import Box from '@mui/material/Box';
 import { useInventarioTI } from "../../contexto/contexto";
 
-export default function StockCelulares({ isOpen, onOpen, onOpenChange, id_celular }) {
+export default function StockComputo({ isOpen, onOpen, onOpenChange }) {
     const { form_data, setFormData } = useInventarioTI();
     const [isLoading, setLoading] = useState(false);
 
@@ -34,7 +34,7 @@ export default function StockCelulares({ isOpen, onOpen, onOpenChange, id_celula
     const fetchData = async () => {
         try {
             setLoading(true);
-            const response = await odooApi.get('/inventarioti/celulares/active/true');
+            const response = await odooApi.get('/inventarioti/equipo_computo/active/true');
             const filtrados = response.data.filter(item => item.estado === 'disponible');
             setData(filtrados);
             setLoading(false);
@@ -46,15 +46,16 @@ export default function StockCelulares({ isOpen, onOpen, onOpenChange, id_celula
 
     useEffect(() => {
         fetchData();
-    }, [isOpen, id_celular]);
+    }, [isOpen]);
 
     const columns = useMemo(
         () => [
-            { accessorKey: 'id_celular', header: 'ID' },
+            { accessorKey: 'id_ec', header: 'ID Equipo' },
             { accessorKey: 'nombre', header: 'Empresa' },
-            { accessorKey: 'imei', header: 'IMEI' },
+            { accessorKey: 'sn', header: 'SN' },
             { accessorKey: 'marca', header: 'Marca' },
             { accessorKey: 'modelo', header: 'Modelo' },
+            { accessorKey: 'so', header: 'so' },
             { accessorKey: 'estado', header: 'Estado' },
         ],
         [],
@@ -76,18 +77,18 @@ export default function StockCelulares({ isOpen, onOpen, onOpenChange, id_celula
         },
         muiTableBodyRowProps: ({ row }) => ({
             onClick: ({ event }) => {
-                const existe = (form_data.celulares || []).some(
-                    cel => cel.id_celular === row.original.id_celular
+                const existe = (form_data.equipo_computo || []).some(
+                    cel => cel.id_ec === row.original.id_ec
                 );
 
                 if (existe) {
-                    toast.error("El celular ya está dentro");
+                    toast.error("El equipo ya está dentro");
                     return; // salir sin agregarlo
                 }
 
                 setFormData(prev => ({
                     ...prev,
-                    celulares: [...(prev.celulares || []), row.original]
+                    equipo_computo: [...(prev.equipo_computo || []), row.original]
                 }));
 
                 onOpenChange();
@@ -133,7 +134,7 @@ export default function StockCelulares({ isOpen, onOpen, onOpenChange, id_celula
                 <h1
                     className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
                 >
-                    Celulares disponibles
+                    Equipos disponibles
                 </h1>
             </Box>
         ),
@@ -153,7 +154,8 @@ export default function StockCelulares({ isOpen, onOpen, onOpenChange, id_celula
                                     background: 'linear-gradient(90deg, #a10003, #002887)',
                                     color: 'white',
                                     fontWeight: 'bold'
-                                }}>Celulares disponibles</ModalHeader>
+                                }}>Equipo de computo disponible
+                            </ModalHeader>
                             {isLoading && (
                                 <Progress color="primary" isIndeterminate size="sm" />
                             )}

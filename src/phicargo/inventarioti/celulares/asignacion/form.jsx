@@ -41,7 +41,12 @@ const AsignacionActivosForm = () => {
   }, []);
 
   const Create = async () => {
-    console.log(form_data);
+    if (!form_data?.data?.id_empleado) {
+      console.log(form_data);
+      toast.error('Ingresa el nombre del empleado');
+      return;
+    }
+
     try {
       setLoading(true);
       const response = await odooApi.post("/inventarioti/asignaciones/", form_data);
@@ -69,9 +74,14 @@ const AsignacionActivosForm = () => {
   return (
     <div>
       <Card>
-        <CardHeader className="flex items-center justify-between gap-4">
+        <CardHeader className="flex items-center justify-between gap-4"
+          style={{
+            background: 'linear-gradient(90deg, #0b2149, #002887)',
+            color: 'white',
+            fontWeight: 'bold'
+          }}>
           <h1
-            className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
+            className="tracking-tight font-semibold lg:text-2xl"
           >
             Asignación de activos
           </h1>
@@ -80,22 +90,28 @@ const AsignacionActivosForm = () => {
         <Divider></Divider>
         <CardBody>
           <Card>
-            <CardHeader>
+            <CardHeader style={{
+              background: 'linear-gradient(90deg, #a10003, #002887)',
+              color: 'white',
+              fontWeight: 'bold'
+            }}>
               Información del empleado
             </CardHeader>
             <Divider></Divider>
             <CardBody>
-              <div className="w-full flex flex-col gap-4">
+              <div className="w-full grid grid-cols-2 gap-4">
                 <Autocomplete
                   label="Empleado"
+                  variant='bordered'
                   onSelectionChange={(keys) => handleChange("id_empleado", Number([...keys][0]))}
                   isInvalid={!form_data?.data?.id_empleado}
                   errorMessage={!form_data?.data?.id_empleado ? "El empleado es obligatorio" : ""}>
                   {empleados.map((animal) => (
-                    <AutocompleteItem key={animal.id_empleado}>{animal.nombre_empleado}</AutocompleteItem>
+                    <AutocompleteItem key={animal.id_empleado}>{animal.id_empleado + ' - ' + animal.nombre_empleado}</AutocompleteItem>
                   ))}
                 </Autocomplete>
                 <DatePicker
+                  variant='bordered'
                   label="Fecha de asignación"
                   value={
                     form_data?.data?.fecha_asignacion

@@ -15,6 +15,7 @@ import {
   useDisclosure,
 } from "@heroui/react";
 import { useInventarioTI } from '../../contexto/contexto';
+import StockComputo from './stock_computo';
 
 const AsignacionComputo = () => {
 
@@ -24,16 +25,15 @@ const AsignacionComputo = () => {
 
   const columns = useMemo(
     () => [
-      { accessorKey: 'id_celular', header: 'ID Celular' },
-      { accessorKey: 'imei', header: 'IMEI' },
+      { accessorKey: 'id_ec', header: 'ID Equipo' },
+      { accessorKey: 'so', header: 'SO' },
       { accessorKey: 'marca', header: 'Marca' },
       { accessorKey: 'modelo', header: 'Modelo' },
-      { accessorKey: 'correo', header: 'Correo' },
       {
         accessorKey: 'delete',
         header: 'Borrar',
         Cell: ({ cell, row, table }) => {
-          return <Button onPress={() => removeCelular(row.original.id_celular)} color='danger' size='sm'> Eliminar</Button>
+          return <Button onPress={() => removeCelular(row.original.id_ec)} color='danger' size='sm'> Eliminar</Button>
         },
       }
     ],
@@ -43,13 +43,13 @@ const AsignacionComputo = () => {
   const removeCelular = (id) => {
     setFormData(prev => ({
       ...prev,
-      celulares: (prev.celulares || []).filter(cel => cel.id_celular !== id)
+      equipo_computo: (prev.equipo_computo || []).filter(cel => cel.id_ec !== id)
     }));
   };
 
   const table = useMaterialReactTable({
     columns,
-    data: form_data.celulares || [],
+    data: form_data.equipo_computo || [],
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
@@ -113,7 +113,7 @@ const AsignacionComputo = () => {
 
   return (
     <div>
-      <StockCelulares isOpen={isOpen} onOpenChange={onOpenChange}></StockCelulares>
+      <StockComputo isOpen={isOpen} onOpenChange={onOpenChange}></StockComputo>
       <Card className='mt-3'>
         <CardBody>
           <MaterialReactTable table={table} />
