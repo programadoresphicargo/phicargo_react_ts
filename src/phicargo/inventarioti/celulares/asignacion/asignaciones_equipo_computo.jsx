@@ -9,7 +9,7 @@ import { DatePicker } from 'antd';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import odooApi from '@/api/odoo-api';
 import NavbarInventarioTI from '../../navbar';
-import ModalAsignacion from './modal';
+import ModalAsignacion from './form';
 import {
   useDisclosure,
 } from "@heroui/react";
@@ -38,7 +38,7 @@ const AsignacionesEquipoComputo = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [isOpen]);
 
   const Desasignar = async (data) => {
     Swal.fire({
@@ -56,7 +56,7 @@ const AsignacionesEquipoComputo = () => {
       showLoaderOnConfirm: true,
       preConfirm: async () => {
         try {
-          const response = await odooApi.put(`/inventarioti/asignaciones/desasignar_computo/${data.id_asignacion}`);
+          const response = await odooApi.put(`/inventarioti/asignaciones/devolver/${data.id_asignacion}/computo`);
           if (response.data.status === 'success') {
             toast.success(response.data.message);
             fetchData();

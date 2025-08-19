@@ -17,13 +17,14 @@ import { parseDate, parseDateTime } from "@internationalized/date";
 import toast from 'react-hot-toast';
 import AsignacionActivosForm from './form';
 import Asignaciones from './asignaciones_celular';
+import AsignacionesEquipoComputo from './asignaciones_equipo_computo';
 
 const AsignacionActivos = () => {
 
   return (
     <div>
       <InventarioProvider>
-        <Asignaciones></Asignaciones>
+        <AsignacionesEquipoComputo></AsignacionesEquipoComputo>
       </InventarioProvider >
     </div >
   );

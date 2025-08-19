@@ -17,8 +17,20 @@ import { parseDate, parseDateTime } from "@internationalized/date";
 import toast from 'react-hot-toast';
 import { Autocomplete, AutocompleteItem } from "@heroui/react";
 import AsignacionComputo from './asignacion_computo';
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
+  NumberInput,
+  Input,
+  Textarea,
+  Progress,
+} from "@heroui/react";
 
-const AsignacionActivosForm = () => {
+export default function ModalAsignacion({ isOpen, onOpen, onOpenChange, id_celular }) {
 
   const { form_data, setFormData } = useInventarioTI();
   const [isLoading, setLoading] = useState(false);
@@ -71,6 +83,7 @@ const AsignacionActivosForm = () => {
       if (response.data.status == 'success') {
         toast.success(response.data.message);
         setFormData({ data: [], celulares: [], equipo_computo: [] });
+        onOpenChange();
       }
       setLoading(false);
     } catch (error) {
@@ -90,73 +103,91 @@ const AsignacionActivosForm = () => {
   };
 
   return (
-    <div>
-      <Card>
-        <CardHeader className="flex items-center justify-between gap-4"
-          style={{
-            background: 'linear-gradient(90deg, #0b2149, #002887)',
-            color: 'white',
-            fontWeight: 'bold'
-          }}>
-          <h1
-            className="tracking-tight font-semibold lg:text-2xl"
-          >
-            Asignación de activos
-          </h1>
-          <Button color='success' onPress={() => Create()} className='text-white' isLoading={isLoading}>Guardar asignación</Button>
-        </CardHeader>
-        <Divider></Divider>
-        <CardBody>
-          <Card>
-            <CardHeader style={{
-              background: 'linear-gradient(90deg, #a10003, #002887)',
-              color: 'white',
-              fontWeight: 'bold'
-            }}>
-              Información del empleado
-            </CardHeader>
-            <Divider></Divider>
-            <CardBody>
-              <div className="w-full grid grid-cols-2 gap-4">
-                <Autocomplete
-                  isLoading={isLoadingEmpleados}
-                  label="Empleado"
-                  variant='bordered'
-                  onSelectionChange={(keys) => handleChange("id_empleado", Number([...keys][0]))}
-                  isInvalid={!form_data?.data?.id_empleado}
-                  errorMessage={!form_data?.data?.id_empleado ? "El empleado es obligatorio" : ""}>
-                  {empleados.map((animal) => (
-                    <AutocompleteItem key={animal.id_empleado}>{animal.id_empleado + ' - ' + animal.nombre_empleado}</AutocompleteItem>
-                  ))}
-                </Autocomplete>
-                <DatePicker
-                  variant='bordered'
-                  label="Fecha de asignación"
-                  value={
-                    form_data?.data?.fecha_asignacion
-                      ? parseDate(form_data?.data?.fecha_asignacion)
-                      : today(getLocalTimeZone())
-                  }
-                  onChange={(date) => {
-                    if (!date) {
-                      handleChange("fecha_asignacion", null);
-                      return;
-                    }
-                    const d = new Date(date);
-                    const formattedDate = d.toISOString().slice(0, 10);
-                    handleChange("fecha_asignacion", formattedDate);
-                  }}
-                />
-              </div>
-            </CardBody>
-          </Card>
-          <AsignacionCelular></AsignacionCelular>
-          <AsignacionComputo></AsignacionComputo>
-        </CardBody>
-      </Card>
-    </div >
+    <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="full" scrollBehavior="inside">
+      <ModalContent>
+        {(onClose) => (
+          <>
+            <ModalHeader className="flex flex-col gap-1" >Asignación de activos</ModalHeader>
+            <ModalBody>
+
+              <div>
+                <Card>
+                  <CardHeader className="flex items-center justify-between gap-4"
+                    style={{
+                      background: 'linear-gradient(90deg, #0b2149, #002887)',
+                      color: 'white',
+                      fontWeight: 'bold'
+                    }}>
+                    <h1
+                      className="tracking-tight font-semibold lg:text-2xl"
+                    >
+                      Asignación de activos
+                    </h1>
+                    <Button color='success' onPress={() => Create()} className='text-white' isLoading={isLoading}>Guardar asignación</Button>
+                  </CardHeader>
+                  <Divider></Divider>
+                  <CardBody>
+                    <Card>
+                      <CardHeader style={{
+                        background: 'linear-gradient(90deg, #a10003, #002887)',
+                        color: 'white',
+                        fontWeight: 'bold'
+                      }}>
+                        Información del empleado
+                      </CardHeader>
+                      <Divider></Divider>
+                      <CardBody>
+                        <div className="w-full grid grid-cols-2 gap-4">
+                          <Autocomplete
+                            isLoading={isLoadingEmpleados}
+                            label="Empleado"
+                            variant='bordered'
+                            onSelectionChange={(keys) => handleChange("id_empleado", Number([...keys][0]))}
+                            isInvalid={!form_data?.data?.id_empleado}
+                            errorMessage={!form_data?.data?.id_empleado ? "El empleado es obligatorio" : ""}>
+                            {empleados.map((animal) => (
+                              <AutocompleteItem key={animal.id_empleado}>{animal.id_empleado + ' - ' + animal.nombre_empleado}</AutocompleteItem>
+                            ))}
+                          </Autocomplete>
+                          <DatePicker
+                            variant='bordered'
+                            label="Fecha de asignación"
+                            isInvalid={!form_data?.data?.fecha_asignacion}
+                            errorMessage={!form_data?.data?.fecha_asignacion ? "Fecha de asignación es obligatorio" : ""}
+                            value={
+                              form_data?.data?.fecha_asignacion
+                                ? parseDate(form_data?.data?.fecha_asignacion)
+                                : undefined
+                            }
+                            onChange={(date) => {
+                              if (!date) {
+                                handleChange("fecha_asignacion", null);
+                                return;
+                              }
+                              const d = new Date(date);
+                              const formattedDate = d.toISOString().slice(0, 10);
+                              handleChange("fecha_asignacion", formattedDate);
+                            }}
+                          />
+                        </div>
+                      </CardBody>
+                    </Card>
+                    <AsignacionCelular></AsignacionCelular>
+                    <AsignacionComputo></AsignacionComputo>
+                  </CardBody>
+                </Card>
+              </div >
+
+            </ModalBody>
+            <ModalFooter>
+              <Button color="danger" variant="light" onPress={onClose}>
+                Cancelar
+              </Button>
+            </ModalFooter>
+          </>
+        )}
+      </ModalContent>
+    </Modal>
   );
 };
-
-export default AsignacionActivosForm;
 

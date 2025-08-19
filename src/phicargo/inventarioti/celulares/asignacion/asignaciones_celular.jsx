@@ -9,12 +9,12 @@ import { DatePicker } from 'antd';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import odooApi from '@/api/odoo-api';
 import NavbarInventarioTI from '../../navbar';
-import ModalAsignacion from './modal';
 import {
   useDisclosure,
 } from "@heroui/react";
 import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
+import ModalAsignacion from './form';
 
 const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
@@ -38,7 +38,7 @@ const Asignaciones = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [isOpen]);
 
   const Devolver = async (data) => {
     Swal.fire({
@@ -56,7 +56,7 @@ const Asignaciones = () => {
       showLoaderOnConfirm: true,
       preConfirm: async () => {
         try {
-          const response = await odooApi.put(`/inventarioti/asignaciones/devolver/${data.id_asignacion}`);
+          const response = await odooApi.put(`/inventarioti/asignaciones/devolver/${data.id_asignacion}/celular`);
           if (response.data.status === 'success') {
             toast.success(response.data.message);
             fetchData();

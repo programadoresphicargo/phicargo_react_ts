@@ -25,7 +25,7 @@ const EmpleadosTI = ({ active }) => {
     const fetchData = async () => {
         try {
             setLoading(true);
-            const response = await odooApi.get('/inventarioti/empleados/active/' + active);
+            const response = await odooApi.get('/inventarioti/empleados/activo/' + active);
             setData(response.data);
             setLoading(false);
         } catch (error) {

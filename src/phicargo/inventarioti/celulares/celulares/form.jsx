@@ -107,7 +107,7 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
                 id_celular={id_celular}>
             </BajaCelular>
 
-            <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+            <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="3xl">
                 <ModalContent>
                     {(onClose) => (
                         <>
@@ -116,97 +116,98 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
                                 <Progress color="primary" isIndeterminate size="sm" />
                             )}
                             <ModalBody>
-                                <Select
-                                    label="Empresa"
-                                    isInvalid={!data?.id_empresa}
-                                    errorMessage={!data?.id_empresa ? "La empresa es obligatoria" : ""}
-                                    selectedKeys={data?.id_empresa ? [String(data.id_empresa)] : []}
-                                    onSelectionChange={(keys) => handleChange("id_empresa", Number([...keys][0]))}
-                                >
-                                    <SelectItem key={"1"}>Phi-cargo</SelectItem>
-                                    <SelectItem key={"2"}>Servicontainer</SelectItem>
-                                    <SelectItem key={"3"}>Tankcontainer</SelectItem>
-                                </Select>
-                                <Select
-                                    label="Marca"
-                                    isInvalid={!data?.marca}
-                                    errorMessage={!data?.marca ? "La marca es obligatoria" : ""}
-                                    selectedKeys={data?.marca ? new Set([data.marca]) : new Set()}
-                                    onSelectionChange={(keys) => handleChange("marca", [...keys][0])}
-                                >
-                                    <SelectItem key="Samsung">Samsung</SelectItem>
-                                    <SelectItem key="Xiaomi">Xiaomi</SelectItem>
-                                    <SelectItem key="Redmi">Redmi</SelectItem>
-                                    <SelectItem key="Apple">Apple</SelectItem>
-                                    <SelectItem key="Huawei">Huawei</SelectItem>
-                                    <SelectItem key="Motorola">Motorola</SelectItem>
-                                    <SelectItem key="Alcatel">Alcatel</SelectItem>
-                                    <SelectItem key="Nokia">Nokia</SelectItem>
-                                    <SelectItem key="Sony">Sony</SelectItem>
-                                    <SelectItem key="Oppo">Oppo</SelectItem>
-                                    <SelectItem key="ZTE">ZTE</SelectItem>
-                                    <SelectItem key="HONOR">HONOR</SelectItem>
-                                </Select>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <Select
+                                        label="Empresa"
+                                        isInvalid={!data?.id_empresa}
+                                        errorMessage={!data?.id_empresa ? "La empresa es obligatoria" : ""}
+                                        selectedKeys={data?.id_empresa ? [String(data.id_empresa)] : []}
+                                        onSelectionChange={(keys) => handleChange("id_empresa", Number([...keys][0]))}
+                                    >
+                                        <SelectItem key={"1"}>Phi-cargo</SelectItem>
+                                        <SelectItem key={"2"}>Servicontainer</SelectItem>
+                                        <SelectItem key={"3"}>Tankcontainer</SelectItem>
+                                    </Select>
+                                    <Select
+                                        label="Marca"
+                                        isInvalid={!data?.marca}
+                                        errorMessage={!data?.marca ? "La marca es obligatoria" : ""}
+                                        selectedKeys={data?.marca ? new Set([data.marca]) : new Set()}
+                                        onSelectionChange={(keys) => handleChange("marca", [...keys][0])}
+                                    >
+                                        <SelectItem key="Samsung">Samsung</SelectItem>
+                                        <SelectItem key="Xiaomi">Xiaomi</SelectItem>
+                                        <SelectItem key="Redmi">Redmi</SelectItem>
+                                        <SelectItem key="Apple">Apple</SelectItem>
+                                        <SelectItem key="Huawei">Huawei</SelectItem>
+                                        <SelectItem key="Motorola">Motorola</SelectItem>
+                                        <SelectItem key="Alcatel">Alcatel</SelectItem>
+                                        <SelectItem key="Nokia">Nokia</SelectItem>
+                                        <SelectItem key="Sony">Sony</SelectItem>
+                                        <SelectItem key="Oppo">Oppo</SelectItem>
+                                        <SelectItem key="ZTE">ZTE</SelectItem>
+                                        <SelectItem key="HONOR">HONOR</SelectItem>
+                                    </Select>
 
-                                <Input
-                                    label="Modelo"
-                                    value={data?.modelo}
-                                    onChange={(e) => handleChange("modelo", e.target.value)}
-                                    isInvalid={!data?.modelo}
-                                    errorMessage={!data?.modelo ? "El modelo es obligatorio" : ""}>
-                                </Input>
+                                    <Input
+                                        label="Modelo"
+                                        value={data?.modelo}
+                                        onChange={(e) => handleChange("modelo", e.target.value)}
+                                        isInvalid={!data?.modelo}
+                                        errorMessage={!data?.modelo ? "El modelo es obligatorio" : ""}>
+                                    </Input>
 
-                                <NumberInput
-                                    label="IMEI"
-                                    value={data?.imei}
-                                    onValueChange={(e) => handleChange("imei", e)}
-                                    step={1}
-                                    isInvalid={!data?.imei}
-                                    errorMessage={!data?.imei ? "El IMEI es obligatorio" : ""}>
-                                </NumberInput>
+                                    <NumberInput
+                                        label="IMEI"
+                                        value={data?.imei}
+                                        onValueChange={(e) => handleChange("imei", e)}
+                                        step={1}
+                                        isInvalid={!data?.imei}
+                                        errorMessage={!data?.imei ? "El IMEI es obligatorio" : ""}>
+                                    </NumberInput>
 
-                                <NumberInput label="Número celular"
-                                    value={data?.numero_celular}
-                                    onValueChange={(e) => handleChange("numero_celular", e)}
-                                    isInvalid={!data?.numero_celular}
-                                    errorMessage={!data?.numero_celular ? "El Número celular es obligatorio" : ""}
-                                >
-                                </NumberInput>
+                                    <NumberInput label="Número celular"
+                                        value={data?.numero_celular}
+                                        onValueChange={(e) => handleChange("numero_celular", e)}
+                                        isInvalid={!data?.numero_celular}
+                                        errorMessage={!data?.numero_celular ? "El Número celular es obligatorio" : ""}
+                                    >
+                                    </NumberInput>
 
-                                <Input label="Correo electronico"
-                                    value={data?.correo}
-                                    onChange={(e) => handleChange("correo", e.target.value)}
-                                    isInvalid={!data?.correo}
-                                    errorMessage={!data?.correo ? "El Número celular es obligatorio" : ""}>
-                                </Input>
+                                    <Input label="Correo electronico"
+                                        value={data?.correo}
+                                        onChange={(e) => handleChange("correo", e.target.value)}
+                                        isInvalid={!data?.correo}
+                                        errorMessage={!data?.correo ? "El Número celular es obligatorio" : ""}>
+                                    </Input>
 
-                                <Input label="Contraseña"
-                                    value={data?.passwoord}
-                                    onChange={(e) => handleChange("passwoord", e.target.value)}
-                                    isInvalid={!data?.passwoord}
-                                    errorMessage={!data?.passwoord ? "El Número celular es obligatorio" : ""}>
-                                </Input>
+                                    <Input label="Contraseña"
+                                        value={data?.passwoord}
+                                        onChange={(e) => handleChange("passwoord", e.target.value)}
+                                        isInvalid={!data?.passwoord}
+                                        errorMessage={!data?.passwoord ? "El Número celular es obligatorio" : ""}>
+                                    </Input>
 
-                                <DatePicker
-                                    label="Fecha de compra"
-                                    value={
-                                        data?.fecha_compra
-                                            ? parseDate(data.fecha_compra)
-                                            : undefined
-                                    }
-                                    onChange={(date) => {
-                                        if (!date) {
-                                            handleChange("fecha_compra", null);
-                                            return;
+                                    <DatePicker
+                                        label="Fecha de compra"
+                                        value={
+                                            data?.fecha_compra
+                                                ? parseDate(data.fecha_compra)
+                                                : undefined
                                         }
-                                        const d = new Date(date);
-                                        const formattedDate = d.toISOString().slice(0, 10);
-                                        handleChange("fecha_compra", formattedDate);
-                                    }}
-                                />
+                                        onChange={(date) => {
+                                            if (!date) {
+                                                handleChange("fecha_compra", null);
+                                                return;
+                                            }
+                                            const d = new Date(date);
+                                            const formattedDate = d.toISOString().slice(0, 10);
+                                            handleChange("fecha_compra", formattedDate);
+                                        }}
+                                    />
 
-                                <Textarea label="Comentarios" value={data?.comentarios} onChange={(e) => handleChange("comentarios", e.target.value)}></Textarea>
-
+                                    <Textarea label="Comentarios" value={data?.comentarios} onChange={(e) => handleChange("comentarios", e.target.value)}></Textarea>
+                                </div>
                             </ModalBody>
                             <ModalFooter>
                                 <Button color="danger" variant="light" onPress={onClose}>
