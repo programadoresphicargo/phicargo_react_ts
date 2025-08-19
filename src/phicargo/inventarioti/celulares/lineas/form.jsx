@@ -80,7 +80,7 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
                 console.log("Celular actualizado");
             } else {
                 // Crear
-                const response = await odooApi.post(`/inventarioti/lineas`, data);
+                const response = await odooApi.post(`/inventarioti/lineas/`, data);
                 console.log("Celular registrado");
             }
 
