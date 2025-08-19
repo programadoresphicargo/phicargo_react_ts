@@ -34,7 +34,7 @@ export default function StockCelulares({ isOpen, onOpen, onOpenChange, id_celula
     const fetchData = async () => {
         try {
             setLoading(true);
-            const response = await odooApi.get('/inventarioti/celulares/active/true');
+            const response = await odooApi.get('/inventarioti/dispositivos/celular/true');
             const filtrados = response.data.filter(item => item.estado === 'disponible');
             setData(filtrados);
             setLoading(false);

@@ -30,10 +30,11 @@ export default function BajaCelular({ isOpen, onOpen, onOpenChange, id_celular }
             setLoading(true);
 
             if (id_celular) {
-                const response = await odooApi.put(`/inventarioti/celulares/baja/${id_celular}`,
+                const response = await odooApi.put(`/inventarioti/dispositivos/baja/${id_celular}`,
                     {},
                     {
                         params: {
+                            tipo: 'celular',
                             motivo_baja: data?.motivo_baja,
                             comentarios_baja: data?.comentarios_baja
                         }

@@ -27,7 +27,7 @@ const AsignacionActivosForm = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await odooApi.get("/inventarioti/empleados/active/true");
+      const response = await odooApi.get("/inventarioti/empleados/activo/true");
       setEmpleados(response.data);
       setLoading(false);
     } catch (error) {
@@ -41,6 +41,15 @@ const AsignacionActivosForm = () => {
   }, []);
 
   const Create = async () => {
+
+    const sinLinea = (form_data.celulares || []).some(cel => !cel.id_linea);
+
+    if (sinLinea) {
+      toast.error("Todos los celulares deben tener asignada una línea.");
+      return; // detener el envío
+    }
+
+
     if (!form_data?.data?.id_empleado) {
       console.log(form_data);
       toast.error('Ingresa el nombre del empleado');

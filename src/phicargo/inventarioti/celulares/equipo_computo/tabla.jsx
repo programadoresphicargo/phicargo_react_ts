@@ -24,7 +24,7 @@ const EquipoTI = ({ active }) => {
     const fetchData = async () => {
         try {
             setLoading(true);
-            const response = await odooApi.get('/inventarioti/equipo_computo/active/' + active);
+            const response = await odooApi.get('/inventarioti/dispositivos/computo/' + active);
             setData(response.data);
             setLoading(false);
         } catch (error) {

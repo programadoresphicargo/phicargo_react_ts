@@ -27,7 +27,7 @@ const AsignacionesEquipoComputo = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await odooApi.get('/inventarioti/asignaciones/computo/');
+      const response = await odooApi.get('/inventarioti/asignaciones/tipo/computo');
       setData(response.data);
       setLoading(false);
     } catch (error) {

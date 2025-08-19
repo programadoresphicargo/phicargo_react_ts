@@ -1,4 +1,4 @@
-import { Button, Card, CardBody, CardHeader, Chip, Divider, Select, SelectItem } from '@heroui/react';
+import { Autocomplete, Button, Card, CardBody, CardHeader, Chip, Divider, Select, SelectItem, AutocompleteItem } from '@heroui/react';
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -21,6 +21,20 @@ const AsignacionCelular = () => {
   const [isLoading, setLoading] = useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { form_data, setFormData } = useInventarioTI();
+  const [opciones, setOpciones] = useState([]);
+
+  // Traer opciones desde la API
+  useEffect(() => {
+    const fetchOpciones = async () => {
+      try {
+        const response = await odooApi.get('/inventarioti/lineas/'); // cambia tu endpoint
+        setOpciones(response.data); // suponiendo que response.data es un array de objetos {id, nombre}
+      } catch (error) {
+        console.error('Error al obtener opciones:', error);
+      }
+    };
+    fetchOpciones();
+  }, [isOpen]);
 
   const columns = useMemo(
     () => [
@@ -29,6 +43,39 @@ const AsignacionCelular = () => {
       { accessorKey: 'marca', header: 'Marca' },
       { accessorKey: 'modelo', header: 'Modelo' },
       { accessorKey: 'correo', header: 'Correo' },
+      { accessorKey: 'id_linea', header: 'ID Linea' },
+      {
+        accessorKey: 'asignacion', // clave ficticia para la columna
+        header: 'Linea',
+        Cell: ({ row }) => {
+          return (
+            <>
+              <Autocomplete
+                selectedKey={row.original.id_linea}
+                label="Linea"
+                valu
+                onSelectionChange={(e) => {
+                  const nuevoId = e;
+                  row.original.id_linea = nuevoId;
+                  setFormData(prev => ({
+                    ...prev,
+                    celulares: prev.celulares.map(r =>
+                      r.id_celular === row.original.id_celular
+                        ? { ...r, id_linea: nuevoId }
+                        : r
+                    ),
+                  }));
+                  console.log(form_data.celulares);
+                }}
+              >
+                {opciones.map((animal) => (
+                  <AutocompleteItem key={animal.id_linea}>{animal.id_linea + '-' + animal.numero}</AutocompleteItem>
+                ))}
+              </Autocomplete>
+            </>
+          );
+        },
+      },
       {
         accessorKey: 'delete',
         header: 'Borrar',
@@ -37,7 +84,7 @@ const AsignacionCelular = () => {
         },
       }
     ],
-    [],
+    [opciones],
   );
 
   const removeCelular = (id) => {

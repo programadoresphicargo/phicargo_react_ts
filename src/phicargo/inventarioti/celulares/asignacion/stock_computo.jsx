@@ -34,7 +34,7 @@ export default function StockComputo({ isOpen, onOpen, onOpenChange }) {
     const fetchData = async () => {
         try {
             setLoading(true);
-            const response = await odooApi.get('/inventarioti/equipo_computo/active/true');
+            const response = await odooApi.get('/inventarioti/dispositivos/computo/true');
             const filtrados = response.data.filter(item => item.estado === 'disponible');
             setData(filtrados);
             setLoading(false);

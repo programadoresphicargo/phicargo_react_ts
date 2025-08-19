@@ -34,7 +34,7 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
         if (id_celular) {
             try {
                 setLoading(true);
-                const response = await odooApi.get('/inventarioti/equipo_computo/id_ec/' + id_celular);
+                const response = await odooApi.get('/inventarioti/dispositivos/id_dispositivo/computo/' + id_celular);
                 setData(response.data);
                 setLoading(false);
             } catch (error) {
@@ -72,14 +72,14 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
 
             if (id_celular) {
                 // Actualizar
-                const response = await odooApi.put(`/inventarioti/equipo_computo/${id_celular}`, data);
+                const response = await odooApi.put(`/inventarioti/dispositivos/${id_celular}`, data);
                 if (response.data.status == "success") {
                     toast.success(response.data.message);
                 }
                 console.log("Celular actualizado");
             } else {
                 // Crear
-                const response = await odooApi.post(`/inventarioti/equipo_computo/`, data);
+                const response = await odooApi.post(`/inventarioti/dispositivos/computo`, data);
                 console.log("Celular registrado");
             }
 
@@ -248,7 +248,7 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
                                     Cancelar
                                 </Button>
 
-                                {data?.active == true && id_celular && (
+                                {data?.activo == true && id_celular && (
                                     <Button
                                         color="danger"
                                         onPress={openBajaModal}
@@ -263,7 +263,7 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
                                     // Mostrar si es nuevo registro
                                     !id_celular ||
                                     // O si es edición y está activo
-                                    (id_celular && data?.active == true)
+                                    (id_celular && data?.activo == true)
                                 ) && (
                                         <Button
                                             color={id_celular ? "success" : "primary"}

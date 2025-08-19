@@ -23,7 +23,7 @@ const CelularesTabla = ({ active }) => {
     const fetchData = async () => {
         try {
             setLoading(true);
-            const response = await odooApi.get('/inventarioti/celulares/active/' + active);
+            const response = await odooApi.get('/inventarioti/dispositivos/celular/' + active);
             setData(response.data);
             setLoading(false);
         } catch (error) {
@@ -38,7 +38,7 @@ const CelularesTabla = ({ active }) => {
 
     const columns = useMemo(
         () => [
-            { accessorKey: 'id_celular', header: 'ID' },
+            { accessorKey: 'id_celular', header: 'ID Celular' },
             { accessorKey: 'nombre', header: 'Empresa' },
             { accessorKey: 'imei', header: 'IMEI' },
             { accessorKey: 'marca', header: 'MARCA' },

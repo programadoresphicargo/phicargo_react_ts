@@ -27,7 +27,7 @@ const Asignaciones = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await odooApi.get('/inventarioti/asignaciones/celulares/');
+      const response = await odooApi.get('/inventarioti/asignaciones/tipo/celular');
       setData(response.data);
       setLoading(false);
     } catch (error) {
@@ -40,7 +40,7 @@ const Asignaciones = () => {
     fetchData();
   }, []);
 
-  const Desasignar = async (data) => {
+  const Devolver = async (data) => {
     Swal.fire({
       title: '¿Estás seguro?',
       html: `
@@ -56,7 +56,7 @@ const Asignaciones = () => {
       showLoaderOnConfirm: true,
       preConfirm: async () => {
         try {
-          const response = await odooApi.put(`/inventarioti/asignaciones/desasignar_celulares/${data.id_asignacion}`);
+          const response = await odooApi.put(`/inventarioti/asignaciones/devolver/${data.id_asignacion}`);
           if (response.data.status === 'success') {
             toast.success(response.data.message);
             fetchData();
@@ -112,7 +112,7 @@ const Asignaciones = () => {
         Cell: ({ row }) => (
           <Button
             color="danger"
-            onPress={() => Desasignar(row.original)}
+            onPress={() => Devolver(row.original)}
             variant="solid"
             size='sm'
           >

@@ -132,7 +132,7 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
                                     errorMessage={!data?.id_departamento ? "Departamento es obligatorio" : ""}
                                 >
                                     {departamentos.map((departamento) => (
-                                        <SelectItem key={departamento.id_departamento}>{departamento.nombre_dep}</SelectItem>
+                                        <SelectItem key={departamento.id_departamento}>{departamento.departamento}</SelectItem>
                                     ))}
                                 </Select>
 
