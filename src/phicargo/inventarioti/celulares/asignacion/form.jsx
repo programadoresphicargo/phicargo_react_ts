@@ -23,13 +23,14 @@ const AsignacionActivosForm = () => {
   const { form_data, setFormData } = useInventarioTI();
   const [isLoading, setLoading] = useState(false);
   const [empleados, setEmpleados] = useState([]);
+  const [isLoadingEmpleados, setLoadingEmpleados] = useState([]);
 
   const fetchData = async () => {
     try {
-      setLoading(true);
+      setLoadingEmpleados(true);
       const response = await odooApi.get("/inventarioti/empleados/activo/true");
       setEmpleados(response.data);
-      setLoading(false);
+      setLoadingEmpleados(false);
     } catch (error) {
       console.error('Error al obtener los datos:', error);
       setLoading(false);
@@ -41,7 +42,7 @@ const AsignacionActivosForm = () => {
   }, []);
 
   const Create = async () => {
-
+    console.log(form_data.celulares.length);
     const sinLinea = (form_data.celulares || []).some(cel => !cel.id_linea);
 
     if (sinLinea) {
@@ -56,12 +57,20 @@ const AsignacionActivosForm = () => {
       return;
     }
 
+    if (
+      (!form_data.celulares || form_data.celulares.length === 0) &&
+      (!form_data.equipo_computo || form_data.equipo_computo.length === 0)
+    ) {
+      toast.error("Debes registrar al menos un celular o un equipo de computo");
+      return;
+    }
+
     try {
       setLoading(true);
       const response = await odooApi.post("/inventarioti/asignaciones/", form_data);
       if (response.data.status == 'success') {
         toast.success(response.data.message);
-        setFormData([]);
+        setFormData({ data: [], celulares: [], equipo_computo: [] });
       }
       setLoading(false);
     } catch (error) {
@@ -110,6 +119,7 @@ const AsignacionActivosForm = () => {
             <CardBody>
               <div className="w-full grid grid-cols-2 gap-4">
                 <Autocomplete
+                  isLoading={isLoadingEmpleados}
                   label="Empleado"
                   variant='bordered'
                   onSelectionChange={(keys) => handleChange("id_empleado", Number([...keys][0]))}

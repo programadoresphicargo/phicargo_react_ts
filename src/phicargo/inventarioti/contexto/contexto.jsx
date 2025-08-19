@@ -4,7 +4,7 @@ import { createContext, useContext, useState } from 'react';
 const InventarioTIContext = createContext({});
 
 export const InventarioProvider = ({ children }) => {
-    const [form_data, setFormData] = useState([]);
+    const [form_data, setFormData] = useState({ data: [], celulares: [], equipo_computo: [] });
 
     return (
         <InventarioTIContext.Provider value={{ form_data, setFormData }}>

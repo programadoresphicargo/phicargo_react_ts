@@ -28,6 +28,10 @@ import AvatarProfile from '@/components/ui/AvatarProfile';
 const pages = [
   {
     name: 'CELULARES', path: '/celulares',
+    subpages: [
+      { name: 'CELULARES', path: '/celulares' },
+      { name: 'LINEAS', path: '/lineas' },
+    ],
   },
   {
     name: 'EQUIPO COMPUTO', path: '/equipo_computo_ti',
