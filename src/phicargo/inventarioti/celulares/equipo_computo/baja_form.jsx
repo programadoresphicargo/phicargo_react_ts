@@ -42,6 +42,8 @@ export default function BajaEquipoComputo({ isOpen, onOpen, onOpenChange, id_cel
                 if (response.data.status == "success") {
                     toast.success(response.data.message);
                     setData([]);
+                } else {
+                    toast.error(response.data.message);
                 }
             }
 

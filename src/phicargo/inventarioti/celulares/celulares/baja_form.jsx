@@ -42,6 +42,8 @@ export default function BajaCelular({ isOpen, onOpen, onOpenChange, id_celular }
                 if (response.data.status == "success") {
                     toast.success(response.data.message);
                     setData([]);
+                } else {
+                    toast.error(response.data.message);
                 }
             }
 
