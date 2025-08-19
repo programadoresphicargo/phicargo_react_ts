@@ -41,23 +41,11 @@ const CelularesTabla = ({ active }) => {
             { accessorKey: 'id_celular', header: 'ID Celular' },
             { accessorKey: 'nombre', header: 'Empresa' },
             { accessorKey: 'imei', header: 'IMEI' },
-            { accessorKey: 'marca', header: 'MARCA' },
-            { accessorKey: 'modelo', header: 'MODELO' },
-            { accessorKey: 'correo', header: 'CORREO' },
-            { accessorKey: 'passwoord', header: 'PASSWORD' },
-            {
-                accessorKey: 'numero_celular',
-                header: 'Número celular',
-                Cell: ({ cell }) => {
-                    const estatus_viaje = cell.getValue();
-
-                    return (
-                        <Chip color="primary" size="sm">
-                            {estatus_viaje}
-                        </Chip>
-                    );
-                },
-            },
+            { accessorKey: 'marca', header: 'Marca' },
+            { accessorKey: 'modelo', header: 'Modelo' },
+            { accessorKey: 'correo', header: 'Correo' },
+            { accessorKey: 'passwoord', header: 'Contraseña' },
+            { accessorKey: 'estado', header: 'estado' },
         ],
         [],
     );

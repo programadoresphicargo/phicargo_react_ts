@@ -74,7 +74,7 @@ const AsignacionActivosForm = () => {
       }
       setLoading(false);
     } catch (error) {
-      console.error('Error al obtener los datos:', error);
+      toast.error('Error al obtener los datos:' + error.detail);
       setLoading(false);
     }
   };

@@ -27,7 +27,7 @@ const AsignacionCelular = () => {
   useEffect(() => {
     const fetchOpciones = async () => {
       try {
-        const response = await odooApi.get('/inventarioti/lineas/'); // cambia tu endpoint
+        const response = await odooApi.get('/inventarioti/lineas/estado/disponible'); // cambia tu endpoint
         setOpciones(response.data); // suponiendo que response.data es un array de objetos {id, nombre}
       } catch (error) {
         console.error('Error al obtener opciones:', error);
@@ -69,7 +69,7 @@ const AsignacionCelular = () => {
                 }}
               >
                 {opciones.map((animal) => (
-                  <AutocompleteItem key={animal.id_linea}>{animal.id_linea + '-' + animal.numero}</AutocompleteItem>
+                  <AutocompleteItem key={animal.id_linea}>{animal.compañia + '-' + animal.numero}</AutocompleteItem>
                 ))}
               </Autocomplete>
             </>

@@ -19,7 +19,7 @@ const ContactosCelulares = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await odooApi.get('/inventarioti/celulares/lineas');
+      const response = await odooApi.get('/inventarioti/lineas/all');
       setData(response.data);
       setLoading(false);
     } catch (error) {

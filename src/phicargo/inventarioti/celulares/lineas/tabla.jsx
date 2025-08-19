@@ -62,7 +62,7 @@ const CelularesTabla = ({ active }) => {
                     const estado = cell.getValue();
 
                     return (
-                        <Chip color="primary" size="sm">
+                        <Chip color="primary" size="sm" color={estado == 'asignada' ? 'success' : 'primary'} className='text-white'>
                             {estado}
                         </Chip>
                     );
