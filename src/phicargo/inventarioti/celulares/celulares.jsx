@@ -20,7 +20,8 @@ const ContactosCelulares = () => {
     try {
       setLoading(true);
       const response = await odooApi.get('/inventarioti/asignaciones/tipo/celular');
-      setData(response.data);
+      const filteredData = response.data.filter(item => ![1, 12, 13].includes(item.id_departamento));
+      setData(filteredData);
       setLoading(false);
     } catch (error) {
       console.error('Error al obtener los datos:', error);
