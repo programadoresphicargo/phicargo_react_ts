@@ -218,7 +218,7 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
                                         onSelectionChange={(keys) => handleChange("dd", [...keys][0])}
                                     >
                                         <SelectItem key={"500 GB"}>500 GB</SelectItem>
-                                        <SelectItem key={"250 GB"}>250 GB</SelectItem>
+                                        <SelectItem key={"256 GB"}>256 GB</SelectItem>
                                         <SelectItem key={"1 TB"}>1 TB</SelectItem>
                                     </Select>
 
