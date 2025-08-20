@@ -118,7 +118,7 @@ const CelularesTabla = ({ active }) => {
         },
         muiTableContainerProps: {
             sx: {
-                maxHeight: 'calc(100vh - 260px)',
+                maxHeight: 'calc(100vh - 270px)',
             },
         },
         renderTopToolbarCustomActions: ({ table }) => (
