@@ -111,9 +111,19 @@ const ShiftsPage = () => {
       },
     },
     defaultColumn: {
+      muiTableHeadCellProps: {
+        sx: {
+          fontFamily: 'Inter',
+          fontWeight: 'Bold',
+          fontSize: '14px',
+        },
+      },
       muiTableBodyCellProps: {
         sx: {
-          padding: '2px',
+          fontFamily: 'Inter',
+          fontWeight: 'normal',
+          fontSize: '12px',
+          padding: '2px'
         },
       },
     },

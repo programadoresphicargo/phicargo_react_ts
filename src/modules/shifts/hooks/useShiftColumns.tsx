@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { type MRT_ColumnDef } from 'material-react-table';
 import { Shift } from '../models';
 import { Chip } from "@heroui/react";
+import LastTravels from './last_travels';
 
 export const useShiftColumns = () => {
   const columns = useMemo<MRT_ColumnDef<Shift>[]>(
@@ -74,9 +75,9 @@ export const useShiftColumns = () => {
         Cell: ({ cell }) => {
           const value = cell.getValue<string | null>();
           return (
-            <span 
+            <span
               className={
-                value 
+                value
                   ? "text-blue-700 text-sm font-semibold"
                   : "text-gray-400 text-sm"
               }
@@ -90,6 +91,11 @@ export const useShiftColumns = () => {
         accessorFn: (row) => row.travel?.routeName || 'SIN ASIGNAR',
         header: 'Ruta',
         id: 'route',
+        Cell: ({ row }) => {
+          return (
+            <LastTravels data={row.original}></LastTravels>
+          )
+        }
       },
       {
         accessorFn: (row) => row.travel?.duration || 'SIN ASIGNAR',
