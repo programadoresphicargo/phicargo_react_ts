@@ -19,7 +19,7 @@ const ContactosCelulares = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await odooApi.get('/inventarioti/lineas/all');
+      const response = await odooApi.get('/inventarioti/asignaciones/tipo/celular');
       setData(response.data);
       setLoading(false);
     } catch (error) {
@@ -35,12 +35,10 @@ const ContactosCelulares = () => {
   const columns = useMemo(
     () => [
       { accessorKey: 'nombre_empleado', header: 'Nombre del empleado' },
-      { accessorKey: 'apellido_materno', header: 'Apellido materno' },
-      { accessorKey: 'apellido_paterno', header: 'Apellido paterno' },
-      { accessorKey: 'nombre_dep', header: 'Departamento' },
+      { accessorKey: 'departamento', header: 'Departamento' },
       { accessorKey: 'puesto', header: 'Puesto' },
       {
-        accessorKey: 'NUMERO_CELULAR',
+        accessorKey: 'numero',
         header: 'Número celular',
         Cell: ({ cell }) => {
           const estatus_viaje = cell.getValue();
