@@ -46,10 +46,19 @@ const LastTravels = ({ data }) => {
             ) : (
                 <DropdownMenu aria-label="Dynamic Actions" items={items} className="max-h-[400px] overflow-auto">
                     {(item) => (
-                        <DropdownItem
-                            key={item.id_viaje}
-                            description={item.primera_fecha_envio}>
-                            {item.referencia} - {item.ruta} - Duración {item.diferencia_horas_minutos}
+                        <DropdownItem key={item.id_viaje}>
+                            <div className="flex flex-col gap-1">
+                                <span className="font-semibold text-primary">{item.referencia}</span>
+                                <span className="text-sm text-gray-600 flex items-center gap-1">
+                                    🛣️            {item.ruta}
+                                </span>
+                                <span className="text-sm text-gray-600 flex items-center gap-1">
+                                    📅     Inicio: {item.fecha_inicio}
+                                </span>
+                                <span className="text-sm text-gray-600 flex items-center gap-1">
+                                    ⏰ Duración: {item.diferencia_dias > 0 ? item.diferencia_dias + ' días ' : ''}{item.diferencia_horas_minutos}
+                                </span>
+                            </div>
                         </DropdownItem>
                     )}
                 </DropdownMenu>

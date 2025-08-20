@@ -89,7 +89,7 @@ export const useShiftColumns = () => {
       },
       {
         accessorFn: (row) => row.travel?.routeName || 'SIN ASIGNAR',
-        header: 'Ruta',
+        header: 'Último viaje',
         id: 'route',
         Cell: ({ row }) => {
           return (
