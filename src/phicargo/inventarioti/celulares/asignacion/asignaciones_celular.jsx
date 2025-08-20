@@ -186,6 +186,7 @@ const Asignaciones = () => {
           Asignaciones celulares
         </h1>
         <Button color='primary' onPress={() => onOpen()}>Nueva asignación</Button>
+        <Button color='danger' onPress={() => fetchData()}>Refrescar</Button>
       </Box>
     ),
   });

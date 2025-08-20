@@ -184,6 +184,7 @@ const AsignacionesEquipoComputo = () => {
           Asignaciones computo
         </h1>
         <Button color='primary' onPress={() => onOpen()}>Nueva asignación</Button>
+        <Button color='danger' onPress={() => fetchData()}>Refrescar</Button>
       </Box>
     ),
   });
