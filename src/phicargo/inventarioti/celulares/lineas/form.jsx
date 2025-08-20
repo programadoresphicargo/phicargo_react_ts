@@ -35,7 +35,7 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
         if (id_celular) {
             try {
                 setLoading(true);
-                const response = await odooApi.get('/inventarioti/lineas/' + id_celular);
+                const response = await odooApi.get('/inventarioti/lineas/id_linea/' + id_celular);
                 setData(response.data);
                 setLoading(false);
             } catch (error) {
