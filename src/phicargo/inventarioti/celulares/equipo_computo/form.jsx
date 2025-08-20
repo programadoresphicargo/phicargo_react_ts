@@ -131,7 +131,7 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
                                     <TabContext value={valueTab}>
                                         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                                             <TabList onChange={handleChangeTab} aria-label="lab API tabs example">
-                                                <Tab label="Datos" value="1" sx={{ fontFamily: 'Inter' }} />
+                                                <Tab label="Información" value="1" sx={{ fontFamily: 'Inter' }} />
                                                 <Tab label="Historial" value="2" sx={{ fontFamily: 'Inter' }} />
                                             </TabList>
                                         </Box>
