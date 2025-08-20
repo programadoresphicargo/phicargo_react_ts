@@ -72,7 +72,7 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
 
             if (id_celular) {
                 // Actualizar
-                const response = await odooApi.put(`/inventarioti/dispositivos/${id_celular}`, data);
+                const response = await odooApi.put(`/inventarioti/dispositivos/computo/${id_celular}`, data);
                 if (response.data.status == "success") {
                     toast.success(response.data.message);
                 }
@@ -138,6 +138,7 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
                                         <SelectItem key={"Laptop"}>Laptop</SelectItem>
                                         <SelectItem key={"PC"}>PC</SelectItem>
                                     </Select>
+
                                     <Select
                                         label="Sucursal"
                                         isInvalid={!data?.sucursal}
@@ -209,12 +210,32 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
                                         <SelectItem key="SSD">SSD</SelectItem>
                                     </Select>
 
+                                    <Select
+                                        label="Disco duro"
+                                        isInvalid={!data?.dd}
+                                        errorMessage={!data?.dd ? "Disco duro es obligatorio" : ""}
+                                        selectedKeys={data?.dd ? [String(data.dd)] : []}
+                                        onSelectionChange={(keys) => handleChange("dd", [...keys][0])}
+                                    >
+                                        <SelectItem key={"500 GB"}>500 GB</SelectItem>
+                                        <SelectItem key={"250 GB"}>250 GB</SelectItem>
+                                        <SelectItem key={"1 TB"}>1 TB</SelectItem>
+                                    </Select>
+
                                     <Input
                                         label="RAM"
                                         value={data?.ram}
                                         isInvalid={!data?.ram}
                                         errorMessage={!data?.ram ? "Ram es obligatorio" : ""}
                                         onChange={(e) => handleChange("ram", e.target.value)}>
+                                    </Input>
+
+                                    <Input
+                                        label="Procesador"
+                                        value={data?.procesador}
+                                        isInvalid={!data?.procesador}
+                                        errorMessage={!data?.procesador ? "Procesador es obligatorio" : ""}
+                                        onChange={(e) => handleChange("procesador", e.target.value)}>
                                     </Input>
 
                                     <DatePicker
@@ -232,6 +253,24 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
                                             const d = new Date(date);
                                             const formattedDate = d.toISOString().slice(0, 10);
                                             handleChange("fecha_compra", formattedDate);
+                                        }}
+                                    />
+
+                                    <DatePicker
+                                        label="Expiración garantía"
+                                        value={
+                                            data?.expiracion_garantia
+                                                ? parseDate(data.expiracion_garantia)
+                                                : undefined
+                                        }
+                                        onChange={(date) => {
+                                            if (!date) {
+                                                handleChange("expiracion_garantia", null);
+                                                return;
+                                            }
+                                            const d = new Date(date);
+                                            const formattedDate = d.toISOString().slice(0, 10);
+                                            handleChange("expiracion_garantia", formattedDate);
                                         }}
                                     />
 
