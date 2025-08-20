@@ -19,6 +19,11 @@ import toast from 'react-hot-toast';
 import { parseDate, parseDateTime, getLocalTimeZone } from "@internationalized/date";
 import { today } from "@internationalized/date";
 import BajaEquipoComputo from "./baja_form";
+import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
 
 export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular }) {
     const [isBajaModalOpen, setBajaModalOpen] = useState(false);
@@ -98,6 +103,12 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
         }));
     };
 
+    const [valueTab, setValueTab] = React.useState('1');
+
+    const handleChangeTab = (event, newValue) => {
+        setValueTab(newValue);
+    };
+
     return (
         <>
             <BajaEquipoComputo
@@ -110,177 +121,191 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
                 <ModalContent>
                     {(onClose) => (
                         <>
-                            <ModalHeader className="flex flex-col gap-1">Celular: {id_celular}</ModalHeader>
+                            <ModalHeader className="flex flex-col gap-1">Equipo computo: {id_celular}</ModalHeader>
                             {isLoading && (
                                 <Progress color="primary" isIndeterminate size="sm" />
                             )}
                             <ModalBody>
-                                <div className="grid grid-cols-3 gap-4">
-                                    <Select
-                                        label="Empresa"
-                                        isInvalid={!data?.id_empresa}
-                                        errorMessage={!data?.id_empresa ? "La empresa es obligatoria" : ""}
-                                        selectedKeys={data?.id_empresa ? [String(data.id_empresa)] : []}
-                                        onSelectionChange={(keys) => handleChange("id_empresa", Number([...keys][0]))}
-                                    >
-                                        <SelectItem key={"1"}>Phi-cargo</SelectItem>
-                                        <SelectItem key={"2"}>Servicontainer</SelectItem>
-                                        <SelectItem key={"3"}>Tankcontainer</SelectItem>
-                                    </Select>
-                                    <Select
-                                        label="Tipo"
-                                        isInvalid={!data?.tipo_equipo}
-                                        errorMessage={!data?.tipo_equipo ? "Tipo es obligatorio" : ""}
-                                        selectedKeys={data?.tipo_equipo ? [String(data.tipo_equipo)] : []}
-                                        onSelectionChange={(keys) => handleChange("tipo_equipo", [...keys][0])}
-                                    >
-                                        <SelectItem key={"All in One"}>All in One</SelectItem>
-                                        <SelectItem key={"Laptop"}>Laptop</SelectItem>
-                                        <SelectItem key={"PC"}>PC</SelectItem>
-                                    </Select>
 
-                                    <Select
-                                        label="Sucursal"
-                                        isInvalid={!data?.sucursal}
-                                        errorMessage={!data?.sucursal ? "Sucursal es obligatorio" : ""}
-                                        selectedKeys={data?.sucursal ? [String(data.sucursal)] : []}
-                                        onSelectionChange={(keys) => handleChange("sucursal", [...keys][0])}
-                                    >
-                                        <SelectItem key={"Veracruz"}>Veracruz</SelectItem>
-                                        <SelectItem key={"Manzanillo"}>Manzanillo</SelectItem>
-                                        <SelectItem key={"México"}>México</SelectItem>
-                                    </Select>
+                                <Box sx={{ width: '100%' }}>
+                                    <TabContext value={valueTab}>
+                                        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                                            <TabList onChange={handleChangeTab} aria-label="lab API tabs example">
+                                                <Tab label="Datos" value="1" sx={{ fontFamily: 'Inter' }} />
+                                                <Tab label="Historial" value="2" sx={{ fontFamily: 'Inter' }} />
+                                            </TabList>
+                                        </Box>
+                                        <TabPanel value="1">
+                                            <div className="grid grid-cols-3 gap-4">
+                                                <Select
+                                                    label="Empresa"
+                                                    isInvalid={!data?.id_empresa}
+                                                    errorMessage={!data?.id_empresa ? "La empresa es obligatoria" : ""}
+                                                    selectedKeys={data?.id_empresa ? [String(data.id_empresa)] : []}
+                                                    onSelectionChange={(keys) => handleChange("id_empresa", Number([...keys][0]))}
+                                                >
+                                                    <SelectItem key={"1"}>Phi-cargo</SelectItem>
+                                                    <SelectItem key={"2"}>Servicontainer</SelectItem>
+                                                    <SelectItem key={"3"}>Tankcontainer</SelectItem>
+                                                </Select>
+                                                <Select
+                                                    label="Tipo"
+                                                    isInvalid={!data?.tipo_equipo}
+                                                    errorMessage={!data?.tipo_equipo ? "Tipo es obligatorio" : ""}
+                                                    selectedKeys={data?.tipo_equipo ? [String(data.tipo_equipo)] : []}
+                                                    onSelectionChange={(keys) => handleChange("tipo_equipo", [...keys][0])}
+                                                >
+                                                    <SelectItem key={"All in One"}>All in One</SelectItem>
+                                                    <SelectItem key={"Laptop"}>Laptop</SelectItem>
+                                                    <SelectItem key={"PC"}>PC</SelectItem>
+                                                </Select>
 
-                                    <Input
-                                        label="Nombre"
-                                        value={data?.nombre}
-                                        onChange={(e) => handleChange("nombre", e.target.value)}
-                                        isInvalid={!data?.nombre}
-                                        errorMessage={!data?.nombre ? "Nombre es obligatorio" : ""}>
-                                    </Input>
+                                                <Select
+                                                    label="Sucursal"
+                                                    isInvalid={!data?.sucursal}
+                                                    errorMessage={!data?.sucursal ? "Sucursal es obligatorio" : ""}
+                                                    selectedKeys={data?.sucursal ? [String(data.sucursal)] : []}
+                                                    onSelectionChange={(keys) => handleChange("sucursal", [...keys][0])}
+                                                >
+                                                    <SelectItem key={"Veracruz"}>Veracruz</SelectItem>
+                                                    <SelectItem key={"Manzanillo"}>Manzanillo</SelectItem>
+                                                    <SelectItem key={"México"}>México</SelectItem>
+                                                </Select>
 
-                                    <Input label="SN"
-                                        isInvalid={!data?.sn}
-                                        errorMessage={!data?.sn ? "SN es obligatorio" : ""}
-                                        value={data?.sn}
-                                        onChange={(e) => handleChange("sn", e.target.value)}>
-                                    </Input>
+                                                <Input
+                                                    label="Nombre"
+                                                    value={data?.nombre}
+                                                    onChange={(e) => handleChange("nombre", e.target.value)}
+                                                    isInvalid={!data?.nombre}
+                                                    errorMessage={!data?.nombre ? "Nombre es obligatorio" : ""}>
+                                                </Input>
 
-                                    <Select
-                                        label="Marca"
-                                        isInvalid={!data?.marca}
-                                        errorMessage={!data?.marca ? "Marca es obligatorio" : ""}
-                                        selectedKeys={data?.marca ? new Set([data.marca]) : new Set()}
-                                        onSelectionChange={(keys) => handleChange("marca", [...keys][0])}
-                                    >
-                                        <SelectItem key="Acer">Acer</SelectItem>
-                                        <SelectItem key="Apple">Apple</SelectItem>
-                                        <SelectItem key="DELL">DELL</SelectItem>
-                                        <SelectItem key="HP">HP</SelectItem>
-                                    </Select>
-                                    <Select
-                                        label="Sistema Operativo"
-                                        selectedKeys={data?.so ? new Set([data.so]) : new Set()}
-                                        onSelectionChange={(keys) => handleChange("so", [...keys][0])}
-                                        isInvalid={!data?.so}
-                                        errorMessage={!data?.so ? "SO es obligatorio" : ""}
-                                    >
-                                        <SelectItem key="Windows 10 Home">Windows 10 Home</SelectItem>
-                                        <SelectItem key="Windows 10 Pro">Windows 10 Pro</SelectItem>
-                                        <SelectItem key="Windows 11 Home">Windows 11 Home</SelectItem>
-                                        <SelectItem key="Windows 11 Pro">Windows 11 Pro</SelectItem>
-                                    </Select>
+                                                <Input label="SN"
+                                                    isInvalid={!data?.sn}
+                                                    errorMessage={!data?.sn ? "SN es obligatorio" : ""}
+                                                    value={data?.sn}
+                                                    onChange={(e) => handleChange("sn", e.target.value)}>
+                                                </Input>
 
-                                    <Input
-                                        label="Modelo"
-                                        isInvalid={!data?.modelo}
-                                        errorMessage={!data?.modelo ? "Modelo es obligatorio" : ""}
-                                        value={data?.modelo}
-                                        onChange={(e) => handleChange("modelo", e.target.value)}>
-                                    </Input>
+                                                <Select
+                                                    label="Marca"
+                                                    isInvalid={!data?.marca}
+                                                    errorMessage={!data?.marca ? "Marca es obligatorio" : ""}
+                                                    selectedKeys={data?.marca ? new Set([data.marca]) : new Set()}
+                                                    onSelectionChange={(keys) => handleChange("marca", [...keys][0])}
+                                                >
+                                                    <SelectItem key="Acer">Acer</SelectItem>
+                                                    <SelectItem key="Apple">Apple</SelectItem>
+                                                    <SelectItem key="DELL">DELL</SelectItem>
+                                                    <SelectItem key="HP">HP</SelectItem>
+                                                </Select>
+                                                <Select
+                                                    label="Sistema Operativo"
+                                                    selectedKeys={data?.so ? new Set([data.so]) : new Set()}
+                                                    onSelectionChange={(keys) => handleChange("so", [...keys][0])}
+                                                    isInvalid={!data?.so}
+                                                    errorMessage={!data?.so ? "SO es obligatorio" : ""}
+                                                >
+                                                    <SelectItem key="Windows 10 Home">Windows 10 Home</SelectItem>
+                                                    <SelectItem key="Windows 10 Pro">Windows 10 Pro</SelectItem>
+                                                    <SelectItem key="Windows 11 Home">Windows 11 Home</SelectItem>
+                                                    <SelectItem key="Windows 11 Pro">Windows 11 Pro</SelectItem>
+                                                </Select>
 
-                                    <Select
-                                        label="Tipo disco duro"
-                                        selectedKeys={data?.tipodd ? new Set([data.tipodd]) : new Set()}
-                                        onSelectionChange={(keys) => handleChange("tipodd", [...keys][0])}
-                                        isInvalid={!data?.tipodd}
-                                        errorMessage={!data?.tipodd ? "Modelo es obligatorio" : ""}
-                                    >
-                                        <SelectItem key="HDD">HDD</SelectItem>
-                                        <SelectItem key="SSD">SSD</SelectItem>
-                                    </Select>
+                                                <Input
+                                                    label="Modelo"
+                                                    isInvalid={!data?.modelo}
+                                                    errorMessage={!data?.modelo ? "Modelo es obligatorio" : ""}
+                                                    value={data?.modelo}
+                                                    onChange={(e) => handleChange("modelo", e.target.value)}>
+                                                </Input>
 
-                                    <Select
-                                        label="Disco duro"
-                                        isInvalid={!data?.dd}
-                                        errorMessage={!data?.dd ? "Disco duro es obligatorio" : ""}
-                                        selectedKeys={data?.dd ? [String(data.dd)] : []}
-                                        onSelectionChange={(keys) => handleChange("dd", [...keys][0])}
-                                    >
-                                        <SelectItem key={"500 GB"}>500 GB</SelectItem>
-                                        <SelectItem key={"256 GB"}>256 GB</SelectItem>
-                                        <SelectItem key={"1 TB"}>1 TB</SelectItem>
-                                    </Select>
+                                                <Select
+                                                    label="Tipo disco duro"
+                                                    selectedKeys={data?.tipodd ? new Set([data.tipodd]) : new Set()}
+                                                    onSelectionChange={(keys) => handleChange("tipodd", [...keys][0])}
+                                                    isInvalid={!data?.tipodd}
+                                                    errorMessage={!data?.tipodd ? "Modelo es obligatorio" : ""}
+                                                >
+                                                    <SelectItem key="HDD">HDD</SelectItem>
+                                                    <SelectItem key="SSD">SSD</SelectItem>
+                                                </Select>
 
-                                    <Input
-                                        label="RAM"
-                                        value={data?.ram}
-                                        isInvalid={!data?.ram}
-                                        errorMessage={!data?.ram ? "Ram es obligatorio" : ""}
-                                        onChange={(e) => handleChange("ram", e.target.value)}>
-                                    </Input>
+                                                <Select
+                                                    label="Disco duro"
+                                                    isInvalid={!data?.dd}
+                                                    errorMessage={!data?.dd ? "Disco duro es obligatorio" : ""}
+                                                    selectedKeys={data?.dd ? [String(data.dd)] : []}
+                                                    onSelectionChange={(keys) => handleChange("dd", [...keys][0])}
+                                                >
+                                                    <SelectItem key={"500 GB"}>500 GB</SelectItem>
+                                                    <SelectItem key={"256 GB"}>256 GB</SelectItem>
+                                                    <SelectItem key={"1 TB"}>1 TB</SelectItem>
+                                                </Select>
 
-                                    <Input
-                                        label="Procesador"
-                                        value={data?.procesador}
-                                        isInvalid={!data?.procesador}
-                                        errorMessage={!data?.procesador ? "Procesador es obligatorio" : ""}
-                                        onChange={(e) => handleChange("procesador", e.target.value)}>
-                                    </Input>
+                                                <Input
+                                                    label="RAM"
+                                                    value={data?.ram}
+                                                    isInvalid={!data?.ram}
+                                                    errorMessage={!data?.ram ? "Ram es obligatorio" : ""}
+                                                    onChange={(e) => handleChange("ram", e.target.value)}>
+                                                </Input>
 
-                                    <DatePicker
-                                        label="Fecha de compra"
-                                        value={
-                                            data?.fecha_compra
-                                                ? parseDate(data.fecha_compra)
-                                                : undefined
-                                        }
-                                        onChange={(date) => {
-                                            if (!date) {
-                                                handleChange("fecha_compra", null);
-                                                return;
-                                            }
-                                            const d = new Date(date);
-                                            const formattedDate = d.toISOString().slice(0, 10);
-                                            handleChange("fecha_compra", formattedDate);
-                                        }}
-                                    />
+                                                <Input
+                                                    label="Procesador"
+                                                    value={data?.procesador}
+                                                    isInvalid={!data?.procesador}
+                                                    errorMessage={!data?.procesador ? "Procesador es obligatorio" : ""}
+                                                    onChange={(e) => handleChange("procesador", e.target.value)}>
+                                                </Input>
 
-                                    <DatePicker
-                                        label="Expiración garantía"
-                                        value={
-                                            data?.expiracion_garantia
-                                                ? parseDate(data.expiracion_garantia)
-                                                : undefined
-                                        }
-                                        onChange={(date) => {
-                                            if (!date) {
-                                                handleChange("expiracion_garantia", null);
-                                                return;
-                                            }
-                                            const d = new Date(date);
-                                            const formattedDate = d.toISOString().slice(0, 10);
-                                            handleChange("expiracion_garantia", formattedDate);
-                                        }}
-                                    />
+                                                <DatePicker
+                                                    label="Fecha de compra"
+                                                    value={
+                                                        data?.fecha_compra
+                                                            ? parseDate(data.fecha_compra)
+                                                            : undefined
+                                                    }
+                                                    onChange={(date) => {
+                                                        if (!date) {
+                                                            handleChange("fecha_compra", null);
+                                                            return;
+                                                        }
+                                                        const d = new Date(date);
+                                                        const formattedDate = d.toISOString().slice(0, 10);
+                                                        handleChange("fecha_compra", formattedDate);
+                                                    }}
+                                                />
 
-                                    <Textarea
-                                        label="Comentarios"
-                                        value={data?.comentarios}
-                                        onChange={(e) => handleChange("comentarios", e.target.value)}>
-                                    </Textarea>
+                                                <DatePicker
+                                                    label="Expiración garantía"
+                                                    value={
+                                                        data?.expiracion_garantia
+                                                            ? parseDate(data.expiracion_garantia)
+                                                            : undefined
+                                                    }
+                                                    onChange={(date) => {
+                                                        if (!date) {
+                                                            handleChange("expiracion_garantia", null);
+                                                            return;
+                                                        }
+                                                        const d = new Date(date);
+                                                        const formattedDate = d.toISOString().slice(0, 10);
+                                                        handleChange("expiracion_garantia", formattedDate);
+                                                    }}
+                                                />
 
-                                </div>
+                                                <Textarea
+                                                    label="Comentarios"
+                                                    value={data?.comentarios}
+                                                    onChange={(e) => handleChange("comentarios", e.target.value)}>
+                                                </Textarea>
+
+                                            </div>
+                                        </TabPanel>
+                                        <TabPanel value="2">Item Two</TabPanel>
+                                    </TabContext>
+                                </Box>
                             </ModalBody>
                             <ModalFooter>
                                 <Button color="danger" variant="light" onPress={onClose}>
