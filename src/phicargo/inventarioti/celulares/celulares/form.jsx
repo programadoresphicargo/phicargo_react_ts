@@ -166,14 +166,6 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
                                         errorMessage={!data?.imei ? "El IMEI es obligatorio" : ""}>
                                     </NumberInput>
 
-                                    <NumberInput label="Número celular"
-                                        value={data?.numero_celular}
-                                        onValueChange={(e) => handleChange("numero_celular", e)}
-                                        isInvalid={!data?.numero_celular}
-                                        errorMessage={!data?.numero_celular ? "El Número celular es obligatorio" : ""}
-                                    >
-                                    </NumberInput>
-
                                     <Input label="Correo electronico"
                                         value={data?.correo}
                                         onChange={(e) => handleChange("correo", e.target.value)}
