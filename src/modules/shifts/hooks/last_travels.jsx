@@ -11,7 +11,7 @@ const LastTravels = ({ data }) => {
 
     const fetchItems = () => {
         setIsLoading(true);
-        odooApi.get(`/tms_travel/last_travels/${data.driver.id}/350`)
+        odooApi.get(`/tms_travel/last_travels/${data.driver.id}/15`)
             .then((response) => {
                 setItems(response.data);
             })
