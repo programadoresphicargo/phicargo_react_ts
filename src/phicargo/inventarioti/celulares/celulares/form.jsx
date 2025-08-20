@@ -73,7 +73,7 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
 
             if (id_celular) {
                 // Actualizar
-                const response = await odooApi.put(`/inventarioti/dispositivos/${id_celular}`, data);
+                const response = await odooApi.put(`/inventarioti/dispositivos/celular/${id_celular}`, data);
                 if (response.data.status == "success") {
                     toast.success(response.data.message);
                 }
