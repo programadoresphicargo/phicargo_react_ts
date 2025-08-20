@@ -106,7 +106,7 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
                 id_celular={id_celular}>
             </BajaEquipoComputo>
 
-            <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="3xl">
+            <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="5xl">
                 <ModalContent>
                     {(onClose) => (
                         <>
@@ -115,7 +115,7 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
                                 <Progress color="primary" isIndeterminate size="sm" />
                             )}
                             <ModalBody>
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-3 gap-4">
                                     <Select
                                         label="Empresa"
                                         isInvalid={!data?.id_empresa}
