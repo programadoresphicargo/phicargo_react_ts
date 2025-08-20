@@ -129,10 +129,10 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
                                     </Select>
                                     <Select
                                         label="Tipo"
-                                        isInvalid={!data?.tipo}
-                                        errorMessage={!data?.tipo ? "Tipo es obligatorio" : ""}
-                                        selectedKeys={data?.tipo ? [String(data.tipo)] : []}
-                                        onSelectionChange={(keys) => handleChange("tipo", [...keys][0])}
+                                        isInvalid={!data?.tipo_equipo}
+                                        errorMessage={!data?.tipo_equipo ? "Tipo es obligatorio" : ""}
+                                        selectedKeys={data?.tipo_equipo ? [String(data.tipo_equipo)] : []}
+                                        onSelectionChange={(keys) => handleChange("tipo_equipo", [...keys][0])}
                                     >
                                         <SelectItem key={"All in One"}>All in One</SelectItem>
                                         <SelectItem key={"Laptop"}>Laptop</SelectItem>
