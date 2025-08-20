@@ -45,7 +45,19 @@ const CelularesTabla = ({ active }) => {
             { accessorKey: 'modelo', header: 'Modelo' },
             { accessorKey: 'correo', header: 'Correo' },
             { accessorKey: 'passwoord', header: 'Contraseña' },
-            { accessorKey: 'estado', header: 'estado' },
+            {
+                accessorKey: 'estado', header: 'Estado',
+                Cell: ({ row }) => (
+                    <Chip
+                        className='text-white'
+                        color={row.original.estado == 'disponible' ? 'success' : 'primary'}
+                        variant="solid"
+                        size='sm'
+                    >
+                        {row.original.estado}
+                    </Chip >
+                ),
+            },
         ],
         [],
     );

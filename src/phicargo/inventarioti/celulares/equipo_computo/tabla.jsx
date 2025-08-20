@@ -51,7 +51,19 @@ const EquipoTI = ({ active }) => {
             { accessorKey: 'tipodd', header: 'Tipo de disco' },
             { accessorKey: 'ram', header: 'RAM' },
             { accessorKey: 'fecha_compra', header: 'Fecha compra' },
-            { accessorKey: 'estado', header: 'Estado' },
+            {
+                accessorKey: 'estado', header: 'Estado',
+                Cell: ({ row }) => (
+                    <Chip
+                        className='text-white'
+                        color={row.original.estado == 'disponible' ? 'success' : 'primary'}
+                        variant="solid"
+                        size='sm'
+                    >
+                        {row.original.estado}
+                    </Chip >
+                ),
+            },
         ],
         [],
     );
