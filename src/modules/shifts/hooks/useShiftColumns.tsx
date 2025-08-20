@@ -33,7 +33,7 @@ export const useShiftColumns = () => {
         Cell: ({ cell }) => {
           const value = cell.getValue<string>();
           return (
-            <Chip color={value === 'full' ? 'primary' : 'warning'} size="sm">
+            <Chip color={value === 'full' ? 'primary' : 'warning'} size="sm" className='text-white'>
               {cell.getValue<string>()}
             </Chip>
           );
