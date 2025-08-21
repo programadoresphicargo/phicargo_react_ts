@@ -54,7 +54,7 @@ export default function ModalAsignacion({ isOpen, onOpen, onOpenChange, id_celul
   }, []);
 
   const Create = async () => {
-    console.log(form_data.celulares.length);
+    console.log(form_data);
     const sinLinea = (form_data.celulares || []).some(cel => !cel.id_linea);
 
     if (sinLinea) {
@@ -76,6 +76,8 @@ export default function ModalAsignacion({ isOpen, onOpen, onOpenChange, id_celul
       toast.error("Debes registrar al menos un celular o un equipo de computo");
       return;
     }
+
+    return;
 
     try {
       setLoading(true);
@@ -142,11 +144,11 @@ export default function ModalAsignacion({ isOpen, onOpen, onOpenChange, id_celul
                             isLoading={isLoadingEmpleados}
                             label="Empleado"
                             variant='bordered'
-                            onSelectionChange={(keys) => handleChange("id_empleado", Number([...keys][0]))}
+                            onSelectionChange={(key) => handleChange("id_empleado", Number(key))}
                             isInvalid={!form_data?.data?.id_empleado}
                             errorMessage={!form_data?.data?.id_empleado ? "El empleado es obligatorio" : ""}>
-                            {empleados.map((animal) => (
-                              <AutocompleteItem key={animal.id_empleado}>{animal.id_empleado + ' - ' + animal.nombre_empleado}</AutocompleteItem>
+                            {empleados.map((empleado) => (
+                              <AutocompleteItem key={empleado.id_empleado}>{empleado.id_empleado + ' - ' + empleado.nombre_empleado + ' - ' + empleado.puesto}</AutocompleteItem>
                             ))}
                           </Autocomplete>
                           <DatePicker

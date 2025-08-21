@@ -143,7 +143,7 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
                                                     isInvalid={!data?.id_empresa}
                                                     errorMessage={!data?.id_empresa ? "La empresa es obligatoria" : ""}
                                                     selectedKeys={data?.id_empresa ? [String(data.id_empresa)] : []}
-                                                    onSelectionChange={(keys) => handleChange("id_empresa", Number([...keys][0]))}
+                                                    onSelectionChange={(keys) => handleChange("id_empresa", Number(keys))}
                                                 >
                                                     <SelectItem key={"1"}>Phi-cargo</SelectItem>
                                                     <SelectItem key={"2"}>Servicontainer</SelectItem>
