@@ -124,7 +124,7 @@ const HistorialAsignaciones = ({ id_dispositivo }) => {
         <h1
           className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
         >
-          Historial
+          Historial de asignaciones
         </h1>
         <Button color='danger' onPress={() => fetchData()}>Refrescar</Button>
       </Box>
