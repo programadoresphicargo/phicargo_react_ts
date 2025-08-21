@@ -40,10 +40,12 @@ const EmpleadosTI = ({ active }) => {
 
     const columns = useMemo(
         () => [
-            { accessorKey: 'id_empleado', header: 'ID EMPLEADO' },
-            { accessorKey: 'departamento', header: 'DEPARTAMENTO' },
-            { accessorKey: 'puesto', header: 'PUESTO' },
-            { accessorKey: 'nombre_empleado', header: 'NOMBRE EMPLEADO' },
+            { accessorKey: 'id_empleado', header: 'ID Empleado' },
+            { accessorKey: 'departamento', header: 'Departamento' },
+            { accessorKey: 'puesto', header: 'Puesto' },
+            { accessorKey: 'nombre_empleado', header: 'Nombre empleado' },
+            { accessorKey: 'tiene_celular', header: 'Celular asignado' },
+            { accessorKey: 'tiene_computo', header: 'Computo asignado' },
         ],
         [],
     );
