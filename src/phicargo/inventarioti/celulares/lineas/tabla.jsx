@@ -73,6 +73,11 @@ const CelularesTabla = ({ active }) => {
                 accessorKey: 'nombre_empleado',
                 header: 'Asignado',
                 Cell: ({ row }) => {
+                    const nombre = row.original.nombre_empleado;
+
+                    // Si es nulo o vacío, no renderiza nada
+                    if (!nombre) return null;
+
                     return (
                         <User
                             avatarProps={{
@@ -80,9 +85,9 @@ const CelularesTabla = ({ active }) => {
                                 size: 'sm',
                                 color: 'primary'
                             }}
-                            name={row.original.nombre_empleado}
-                            description={row.original.puesto}>
-                        </User>
+                            name={nombre}
+                            description={row.original.puesto}
+                        />
                     );
                 },
             }
