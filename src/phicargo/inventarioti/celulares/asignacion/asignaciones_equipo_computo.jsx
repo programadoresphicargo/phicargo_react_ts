@@ -1,4 +1,4 @@
-import { Button, Chip, Link } from '@heroui/react';
+import { Button, Chip, Link, User } from '@heroui/react';
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -76,11 +76,22 @@ const AsignacionesEquipoComputo = () => {
       { accessorKey: 'id_asignacion', header: 'ID Asignación' },
       {
         accessorKey: 'nombre_empleado', header: 'Empleado',
-        Cell: ({ cell }) => {
-          const estatus_viaje = cell.getValue();
+        Cell: ({ row }) => {
+          const nombre = row.original.nombre_empleado;
+
+          // Si es nulo o vacío, no renderiza nada
+          if (!nombre) return null;
 
           return (
-            <span className="font-bold uppercase">{estatus_viaje}</span>
+            <User
+              avatarProps={{
+                isBordered: true,
+                size: 'sm',
+                color: 'secondary'
+              }}
+              name={nombre}
+              description={row.original.puesto}
+            />
           );
         },
       },
@@ -97,7 +108,7 @@ const AsignacionesEquipoComputo = () => {
             showAnchorIcon
             as={Link}
             isExternal={true}
-            color="primary"
+            color="secondary"
             href={`${apiUrl}/inventarioti/asignaciones/equipo_computo/responsiva/${row.original.id_asignacion}`}
             variant="solid"
             size='sm'

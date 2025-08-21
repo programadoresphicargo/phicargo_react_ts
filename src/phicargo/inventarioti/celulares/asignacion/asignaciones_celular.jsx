@@ -1,4 +1,4 @@
-import { Button, Chip, Link } from '@heroui/react';
+import { Button, Chip, Link, User } from '@heroui/react';
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -75,22 +75,34 @@ const Asignaciones = () => {
     () => [
       { accessorKey: 'id_asignacion', header: 'ID Asignación' },
       {
-        accessorKey: 'nombre_empleado', header: 'Empleado',
-        Cell: ({ cell }) => {
-          const estatus_viaje = cell.getValue();
+        accessorKey: 'nombre_empleado',
+        header: 'Empleado',
+        Cell: ({ row }) => {
+          const nombre = row.original.nombre_empleado;
+
+          // Si es nulo o vacío, no renderiza nada
+          if (!nombre) return null;
 
           return (
-            <span className="font-bold uppercase">{estatus_viaje}</span>
+            <User
+              avatarProps={{
+                isBordered: true,
+                size: 'sm',
+                color: 'primary'
+              }}
+              name={nombre}
+              description={row.original.puesto}
+            />
           );
         },
       },
-      { accessorKey: 'puesto', header: 'Puesto' },
-      { accessorKey: 'imei', header: 'IMEI' },
       { accessorKey: 'marca', header: 'Marca' },
       { accessorKey: 'modelo', header: 'Modelo' },
-      { accessorKey: 'numero', header: 'Número' },
+      { accessorKey: 'imei', header: 'IMEI' },
+      { accessorKey: 'numero', header: 'Número asignado' },
       { accessorKey: 'compañia', header: 'Compañía' },
       { accessorKey: 'fecha_asignacion', header: 'Fecha asignación' },
+      { accessorKey: 'dias_asignado', header: 'Días asignado' },
       {
         accessorKey: 'responsiva',
         header: 'Responsiva',
@@ -99,7 +111,7 @@ const Asignaciones = () => {
             showAnchorIcon
             as={Link}
             isExternal={true}
-            color="secondary"
+            color="primary"
             href={`${apiUrl}/inventarioti/asignaciones/celulares/responsiva/${row.original.id_asignacion}`}
             variant="solid"
             size='sm'
