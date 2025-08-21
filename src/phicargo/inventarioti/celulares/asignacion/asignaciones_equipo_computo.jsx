@@ -100,6 +100,7 @@ const AsignacionesEquipoComputo = () => {
       { accessorKey: 'modelo', header: 'Modelo' },
       { accessorKey: 'sn', header: 'SN' },
       { accessorKey: 'fecha_asignacion', header: 'Fecha asignación' },
+      { accessorKey: 'dias_asignado', header: 'Días asignado' },
       {
         accessorKey: 'responsiva',
         header: 'Responsiva',
