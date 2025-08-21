@@ -1,4 +1,4 @@
-import { Button, Checkbox, Chip } from '@heroui/react';
+import { Button, Checkbox, Chip, User } from '@heroui/react';
 import {
     MaterialReactTable,
     useMaterialReactTable,
@@ -69,6 +69,23 @@ const CelularesTabla = ({ active }) => {
                     );
                 },
             },
+            {
+                accessorKey: 'nombre_empleado',
+                header: 'Asignado',
+                Cell: ({ row }) => {
+                    return (
+                        <User
+                            avatarProps={{
+                                isBordered: true,
+                                size: 'sm',
+                                color: 'primary'
+                            }}
+                            name={row.original.nombre_empleado}
+                            description={row.original.puesto}>
+                        </User>
+                    );
+                },
+            }
         ],
         [],
     );
