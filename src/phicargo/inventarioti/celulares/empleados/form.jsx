@@ -127,7 +127,7 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
                                 <Select
                                     label="Departamento"
                                     selectedKeys={data?.id_departamento ? [String(data.id_departamento)] : []}
-                                    onSelectionChange={(keys) => handleChange("id_departamento", Number(keys))}
+                                    onSelectionChange={(keys) => handleChange("id_departamento", Number([...keys][0]))}
                                     isInvalid={!data?.id_departamento}
                                     errorMessage={!data?.id_departamento ? "Departamento es obligatorio" : ""}
                                 >

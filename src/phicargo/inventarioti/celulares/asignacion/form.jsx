@@ -77,8 +77,6 @@ export default function ModalAsignacion({ isOpen, onOpen, onOpenChange, id_celul
       return;
     }
 
-    return;
-
     try {
       setLoading(true);
       const response = await odooApi.post("/inventarioti/asignaciones/", form_data);
@@ -148,7 +146,7 @@ export default function ModalAsignacion({ isOpen, onOpen, onOpenChange, id_celul
                             isInvalid={!form_data?.data?.id_empleado}
                             errorMessage={!form_data?.data?.id_empleado ? "El empleado es obligatorio" : ""}>
                             {empleados.map((empleado) => (
-                              <AutocompleteItem key={empleado.id_empleado}>{empleado.id_empleado + ' - ' + empleado.nombre_empleado + ' - ' + empleado.puesto}</AutocompleteItem>
+                              <AutocompleteItem key={empleado.id_empleado}>{empleado.nombre_empleado + ' - ' + empleado.puesto}</AutocompleteItem>
                             ))}
                           </Autocomplete>
                           <DatePicker
