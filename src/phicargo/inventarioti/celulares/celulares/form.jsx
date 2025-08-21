@@ -182,7 +182,7 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
                                                     label="IMEI"
                                                     value={data?.imei}
                                                     onValueChange={(e) => handleChange("imei", e)}
-                                                    step={1}
+                                                    formatOptions={{ useGrouping: false }}
                                                     isInvalid={!data?.imei}
                                                     errorMessage={!data?.imei ? "El IMEI es obligatorio" : ""}>
                                                 </NumberInput>
