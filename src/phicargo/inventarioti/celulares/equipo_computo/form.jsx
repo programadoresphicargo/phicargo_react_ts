@@ -24,6 +24,7 @@ import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
+import HistorialAsignaciones from "../asignacion/historial";
 
 export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular }) {
     const [isBajaModalOpen, setBajaModalOpen] = useState(false);
@@ -117,7 +118,7 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
                 id_celular={id_celular}>
             </BajaEquipoComputo>
 
-            <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="5xl">
+            <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="5xl" scrollBehavior="outside">
                 <ModalContent>
                     {(onClose) => (
                         <>
@@ -303,7 +304,9 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
 
                                             </div>
                                         </TabPanel>
-                                        <TabPanel value="2">Item Two</TabPanel>
+                                        <TabPanel value="2">
+                                            <HistorialAsignaciones id_dispositivo={id_celular}></HistorialAsignaciones>
+                                        </TabPanel>
                                     </TabContext>
                                 </Box>
                             </ModalBody>
