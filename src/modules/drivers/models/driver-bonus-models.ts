@@ -4,6 +4,9 @@ export interface DriverBonusMonth {
   id: number;
   month: number;
   year: number;
+  estado: string;
+  fecha_creacion: string;
+  fecha_cierre: string;
 }
 
 interface DriverBonusBase {
