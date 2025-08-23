@@ -210,7 +210,7 @@ export const PeriodBonusView = ({ open, onClose, periodo }: Props) => {
       >
         <Toolbar>
           <Typography sx={{ fontSize: '20px', textTransform: 'uppercase', flex: 1 }} variant='h3'>
-            Periodo: {periodo.id}
+                  Registro de bonos {getMonthName(periodo.month)} {periodo.year}
           </Typography>
           <Button autoFocus color="inherit" onClick={onClose}>
             Cerrar
