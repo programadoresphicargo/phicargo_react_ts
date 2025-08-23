@@ -3,7 +3,7 @@ import { DriverBonusLayout } from '../layouts/DriverBonusLayout';
 import { useMemo, useState } from 'react';
 import type { DriverBonusMonth } from '../models';
 import { useGetDriverBonusMonthsQuery } from '../hooks/queries';
-import { Button } from '@heroui/react';
+import { Button, Chip } from '@heroui/react';
 import { useBaseTable } from '@/hooks';
 import { NewPeriodModal } from '../components/bonus/NewPeriodModal';
 import { PeriodBonusView } from '../components/bonus/PeriodBonusView';
@@ -12,18 +12,32 @@ import { getMonthName } from '@/utilities';
 
 const DriverBonusPage = () => {
   const [newPeriodModalOpen, setNewPeriodModalOpen] = useState(false);
-  const [month, setMonth] = useState<number | null>(null);
-  const [year, setYear] = useState<number | null>(null);
+  const [selectedPeriodo, setSelectedPeriodo] = useState<DriverBonusMonth | null>(null);
 
   const { driverBonusMonthsQuery } = useGetDriverBonusMonthsQuery();
   const columns = useMemo<MRT_ColumnDef<DriverBonusMonth>[]>(
     () => [
+      { accessorKey: 'id', header: 'Periodo' },
       {
         accessorKey: 'month',
         header: 'Mes',
         Cell: ({ cell }) => getMonthName(cell.getValue<number>()),
       },
       { accessorKey: 'year', header: 'Año' },
+      { accessorKey: 'fecha_creacion', header: 'Fecha creación' },
+      {
+        accessorKey: 'estado', header: 'Estado',
+        Cell: ({ cell }) => {
+          const estado = cell.getValue<string>();
+
+          return (
+            <Chip color={estado == "borrador" ? "primary" : "danger"} size='sm' className='text-white'>
+              {estado}
+            </Chip>
+          );
+        },
+      },
+      { accessorKey: 'fecha_cierre', header: 'Cierre' },
     ],
     [],
   );
@@ -39,16 +53,13 @@ const DriverBonusPage = () => {
     tableId: 'driver-bonus-months',
     containerHeight: 'calc(100vh - 180px)',
     onDoubleClickFn: (row) => {
-      setMonth(row.original.month);
-      setYear(row.original.year);
+      setSelectedPeriodo(row.original);
     },
     toolbarActions: (
       <>
         <Button
-          radius="full"
           onPress={() => setNewPeriodModalOpen(true)}
           color="primary"
-          size="sm"
         >
           Nuevo periodo
         </Button>
@@ -62,17 +73,19 @@ const DriverBonusPage = () => {
       <MaterialReactTable table={table} />
       <NewPeriodModal
         open={newPeriodModalOpen}
-        onClose={() => setNewPeriodModalOpen(false)}
+        onClose={() => {
+          setNewPeriodModalOpen(false);
+          driverBonusMonthsQuery.refetch();
+        }}
       />
-      {month && year && (
+      {selectedPeriodo && (
         <PeriodBonusView
-          open={!!month && !!year}
+          open={!!selectedPeriodo}
           onClose={() => {
-            setMonth(null);
-            setYear(null);
+            setSelectedPeriodo(null);
+            driverBonusMonthsQuery.refetch();
           }}
-          month={month}
-          year={year}
+          periodo={selectedPeriodo} // 👈 le pasas todo el objeto
         />
       )}
     </DriverBonusLayout>
