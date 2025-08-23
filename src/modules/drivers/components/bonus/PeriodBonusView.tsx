@@ -16,8 +16,10 @@ import { useDriverBonusColumns } from '../../hooks/useDriverBonusColumns';
 import { useGetDriverBonusQuery } from '../../hooks/queries';
 import { useUpdateDriverBonusMutation } from '../../hooks/mutations';
 import DoorBackIcon from '@mui/icons-material/DoorBack';
+import PaidIcon from '@mui/icons-material/Paid';
 import { useCerrarPeriodoMutation } from '../../hooks/mutations/useCerrarPeriodoMutation';
 import Swal from 'sweetalert2';
+import { usePagarPeriodoMutation } from '../../hooks/mutations/usePagarPeriodoMutation';
 
 interface Props {
   open: boolean;
@@ -33,6 +35,7 @@ export const PeriodBonusView = ({ open, onClose, periodo }: Props) => {
 
   const { updateDriverBonusMutation } = useUpdateDriverBonusMutation(periodo.id);
   const { CerrarPeriodoMutation } = useCerrarPeriodoMutation(periodo.id)
+  const { PagarPeriodoMutation } = usePagarPeriodoMutation(periodo.id)
 
   const { driverBonusQuery } = useGetDriverBonusQuery(periodo.id);
   const columns = useDriverBonusColumns(
@@ -96,6 +99,44 @@ export const PeriodBonusView = ({ open, onClose, periodo }: Props) => {
               Swal.fire({
                 title: 'Error',
                 text: 'No se pudo cerrar el periodo. Intenta nuevamente.',
+                icon: 'error',
+                confirmButtonText: 'OK',
+              });
+            },
+          }
+        );
+      }
+    });
+  };
+
+  const pagar_periodo = async () => {
+    Swal.fire({
+      title: '¿Pagar periodo?',
+      text: 'Una vez pagado no podrás volver a editarlo.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, pagar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        PagarPeriodoMutation.mutate(
+          { id_periodo: periodo.id },
+          {
+            onSuccess: () => {
+              Swal.fire({
+                title: 'Pagado',
+                text: 'El periodo ha sido pagado con éxito.',
+                icon: 'success',
+                confirmButtonText: 'OK',
+              });
+              onClose();
+            },
+            onError: () => {
+              Swal.fire({
+                title: 'Error',
+                text: 'No se pudo pagar el periodo. Intenta nuevamente.',
                 icon: 'error',
                 confirmButtonText: 'OK',
               });
@@ -184,6 +225,16 @@ export const PeriodBonusView = ({ open, onClose, periodo }: Props) => {
             {'Cerrar periodo'}
           </Button>
         )}
+        {(periodo.estado == 'cerrado') && (
+          <Button
+            onClick={() => pagar_periodo()}
+            color="warning"
+            variant="outlined"
+            startIcon={<PaidIcon />}
+          >
+            {'Pagar periodo'}
+          </Button>
+        )}
         <ExportExcelButton
           onClick={() => toExcel.exportData(records)}
         />
@@ -210,7 +261,7 @@ export const PeriodBonusView = ({ open, onClose, periodo }: Props) => {
       >
         <Toolbar>
           <Typography sx={{ fontSize: '20px', textTransform: 'uppercase', flex: 1 }} variant='h3'>
-                  Registro de bonos {getMonthName(periodo.month)} {periodo.year}
+            Registro de bonos {getMonthName(periodo.month)} {periodo.year}
           </Typography>
           <Button autoFocus color="inherit" onClick={onClose}>
             Cerrar

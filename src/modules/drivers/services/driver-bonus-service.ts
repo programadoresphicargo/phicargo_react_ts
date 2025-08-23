@@ -100,5 +100,23 @@ export class DriverBonusService {
       throw new Error('Error al crear los bonos por periodo');
     }
   }
+
+  public static async pagarPeriodo({
+    id_periodo
+  }: {
+    id_periodo: number;
+  }) {
+    try {
+      const response = await odooApi.patch(`/bonos_operadores/pagar/${id_periodo}`);
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        // Aquí error.response.data contiene el JSON de tu backend
+        toast.error(error.response?.data.message);
+        throw new Error(error.response?.data.message || 'Error al crear los bonos por periodo');
+      }
+      throw new Error('Error al crear los bonos por periodo');
+    }
+  }
 }
 

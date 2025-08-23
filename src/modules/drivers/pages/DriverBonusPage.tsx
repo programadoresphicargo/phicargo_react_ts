@@ -26,12 +26,18 @@ const DriverBonusPage = () => {
       { accessorKey: 'year', header: 'Año' },
       { accessorKey: 'fecha_creacion', header: 'Fecha creación' },
       {
-        accessorKey: 'estado', header: 'Estado',
+        accessorKey: 'estado',
+        header: 'Estado',
         Cell: ({ cell }) => {
           const estado = cell.getValue<string>();
 
+          const color =
+            estado === 'borrador' ? 'primary' :
+              estado === 'cerrado' ? 'warning' :
+                'success'; // valor por defecto si es "pagado" u otro
+
           return (
-            <Chip color={estado == "borrador" ? "primary" : "danger"} size='sm' className='text-white'>
+            <Chip color={color} size='sm' className='text-white'>
               {estado}
             </Chip>
           );
