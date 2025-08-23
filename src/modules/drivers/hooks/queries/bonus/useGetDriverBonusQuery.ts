@@ -5,15 +5,14 @@ import { useQuery } from '@tanstack/react-query';
 export const DRIVER_BONUS_KEY = 'driverBonus';
 
 export const useGetDriverBonusQuery = (
-  month: number | null,
-  year: number | null,
+  id_periodo: number | null,
 ) => {
   const driverBonusQuery = useQuery<DriverBonus[]>({
-    queryKey: [DRIVER_BONUS_KEY, 'period', month, year],
-    queryFn: () => DriverBonusService.getDriversBonus(month!, year!),
+    queryKey: [DRIVER_BONUS_KEY, 'period', id_periodo],
+    queryFn: () => DriverBonusService.getDriversBonus(id_periodo!),
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 10,
-    enabled: !!month && !!year,
+    enabled: !!id_periodo,
   });
 
   return {
