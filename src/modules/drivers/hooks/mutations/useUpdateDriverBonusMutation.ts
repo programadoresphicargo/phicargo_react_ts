@@ -5,8 +5,7 @@ import { DriverBonusService } from '../../services';
 import toast from 'react-hot-toast';
 
 export const useUpdateDriverBonusMutation = (
-  month: number | null,
-  year: number | null,
+  id_periodo: number | null,
 ) => {
   const queryClient = useQueryClient();
 
@@ -14,7 +13,7 @@ export const useUpdateDriverBonusMutation = (
     mutationFn: DriverBonusService.updateDriverBonus,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [DRIVER_BONUS_KEY, month, year],
+        queryKey: [DRIVER_BONUS_KEY, id_periodo],
       });
       toast.success('Bonos actualizados correctamente');
     },
