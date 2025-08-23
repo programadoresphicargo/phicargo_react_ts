@@ -7,7 +7,7 @@ import {
 } from 'material-react-table';
 import { useEffect, useState } from 'react';
 
-import type { DriverBonus } from '../../models';
+import type { DriverBonus, DriverBonusMonth } from '../../models';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import ExportExcelButton from '@/components/ui/buttons/ExportExcelButton';
 import { MuiTransition } from '@/components';
@@ -15,25 +15,26 @@ import { useAuthContext } from '@/modules/auth/hooks';
 import { useDriverBonusColumns } from '../../hooks/useDriverBonusColumns';
 import { useGetDriverBonusQuery } from '../../hooks/queries';
 import { useUpdateDriverBonusMutation } from '../../hooks/mutations';
+import DoorBackIcon from '@mui/icons-material/DoorBack';
+import { useCerrarPeriodoMutation } from '../../hooks/mutations/useCerrarPeriodoMutation';
+import Swal from 'sweetalert2';
 
 interface Props {
   open: boolean;
   onClose: () => void;
-  month: number;
-  year: number;
+  periodo: DriverBonusMonth;
 }
 
-export const PeriodBonusView = ({ open, onClose, month, year }: Props) => {
+export const PeriodBonusView = ({ open, onClose, periodo }: Props) => {
   const [isEditing, setIsEditing] = useState(false);
   const [records, setRecords] = useState<DriverBonus[]>([]);
 
   const { session } = useAuthContext();
 
-  const { updateDriverBonusMutation } = useUpdateDriverBonusMutation(
-    month,
-    year,
-  );
-  const { driverBonusQuery } = useGetDriverBonusQuery(month, year);
+  const { updateDriverBonusMutation } = useUpdateDriverBonusMutation(periodo.id);
+  const { CerrarPeriodoMutation } = useCerrarPeriodoMutation(periodo.id)
+
+  const { driverBonusQuery } = useGetDriverBonusQuery(periodo.id);
   const columns = useDriverBonusColumns(
     session?.user.permissions || [],
     isEditing,
@@ -64,6 +65,44 @@ export const PeriodBonusView = ({ open, onClose, month, year }: Props) => {
       onSuccess: () => {
         setIsEditing(false);
       },
+    });
+  };
+
+  const cerrar_periodo = async () => {
+    Swal.fire({
+      title: '¿Cerrar periodo?',
+      text: 'Una vez cerrado no podrás volver a editarlo.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, cerrar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        CerrarPeriodoMutation.mutate(
+          { id_periodo: periodo.id },
+          {
+            onSuccess: () => {
+              Swal.fire({
+                title: 'Cerrado',
+                text: 'El periodo ha sido cerrado con éxito.',
+                icon: 'success',
+                confirmButtonText: 'OK',
+              });
+              onClose();
+            },
+            onError: () => {
+              Swal.fire({
+                title: 'Error',
+                text: 'No se pudo cerrar el periodo. Intenta nuevamente.',
+                icon: 'error',
+                confirmButtonText: 'OK',
+              });
+            },
+          }
+        );
+      }
     });
   };
 
@@ -116,14 +155,16 @@ export const PeriodBonusView = ({ open, onClose, month, year }: Props) => {
         }}
       >
         <RefreshButton onRefresh={driverBonusQuery.refetch} />
-        <Button
-          onClick={() => setIsEditing(!isEditing)}
-          color={isEditing ? 'error' : 'primary'}
-          variant="outlined"
-          startIcon={<EditNoteIcon />}
-        >
-          {isEditing ? 'Cancelar Edición' : 'Editar'}
-        </Button>
+        {periodo.estado !== 'cerrado' && (
+          <Button
+            onClick={() => setIsEditing(!isEditing)}
+            color={isEditing ? 'error' : 'primary'}
+            variant="outlined"
+            startIcon={<EditNoteIcon />}
+          >
+            {isEditing ? 'Cancelar Edición' : 'Editar'}
+          </Button>
+        )}
         {isEditing && (
           <MuiSaveButton
             variant="contained"
@@ -133,7 +174,17 @@ export const PeriodBonusView = ({ open, onClose, month, year }: Props) => {
             loading={updateDriverBonusMutation.isPending}
           />
         )}
-        <ExportExcelButton 
+        {(!isEditing && periodo.estado !== 'cerrado') && (
+          <Button
+            onClick={() => cerrar_periodo()}
+            color="success"
+            variant="outlined"
+            startIcon={<DoorBackIcon />}
+          >
+            {'Cerrar periodo'}
+          </Button>
+        )}
+        <ExportExcelButton
           onClick={() => toExcel.exportData(records)}
         />
       </Box>
@@ -159,7 +210,7 @@ export const PeriodBonusView = ({ open, onClose, month, year }: Props) => {
       >
         <Toolbar>
           <Typography sx={{ fontSize: '20px', textTransform: 'uppercase', flex: 1 }} variant='h3'>
-            Registro de bonos {getMonthName(month)} {year}
+            Periodo: {periodo.id}
           </Typography>
           <Button autoFocus color="inherit" onClick={onClose}>
             Cerrar
