@@ -5,8 +5,12 @@ import { useMutation } from '@tanstack/react-query';
 export const useCreateDriverBonusMutation = () => {
   const createDriverBonusMutation = useMutation({
     mutationFn: DriverBonusService.createDriverBonus,
-    onSuccess: () => {
-      toast.success('Bonos creados correctamente');
+    onSuccess: (data) => {
+      if (data.status == 'success') {
+        toast.success(data.message);
+      } else {
+        toast.error(data.message);
+      }
     },
     onError: (error: Error) => {
       toast.error(error.message);
