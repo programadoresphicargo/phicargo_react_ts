@@ -1,6 +1,12 @@
 export interface DriverBonusMonthApi {
+  id_periodo: number;
   month: number;
   year: number;
+  fecha_creacion: string;
+  estado: string;
+  fecha_cierre: string;
+  nombre_usuario_creacion: string,
+  nombre_usuario_cierre: string
 }
 
 interface DriverBonusBaseApi {
