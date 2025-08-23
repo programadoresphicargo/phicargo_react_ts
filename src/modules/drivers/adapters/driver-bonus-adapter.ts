@@ -9,12 +9,14 @@ import dayjs from 'dayjs';
 
 export class DriverBonusAdapter {
   static toDriverBonusMonth(data: DriverBonusMonthApi): DriverBonusMonth {
-    const id = String(data.month) + String(data.year);
 
     return {
-      id: Number(id),
+      id: data.id_periodo,
       month: data.month,
       year: data.year,
+      fecha_creacion: data.fecha_creacion,
+      estado: data.estado,
+      fecha_cierre: data.fecha_cierre
     };
   }
 
