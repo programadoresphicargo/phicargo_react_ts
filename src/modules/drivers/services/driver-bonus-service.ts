@@ -4,12 +4,13 @@ import type { DriverBonusApi, DriverBonusMonthApi } from '../models/api';
 import { AxiosError } from 'axios';
 import { DriverBonusAdapter } from '../adapters';
 import odooApi from '@/api/odoo-api';
+import { toast } from 'react-toastify';
 
 export class DriverBonusService {
   public static async getDriverBonusMonths(): Promise<DriverBonusMonth[]> {
     try {
       const response = await odooApi.get<DriverBonusMonthApi[]>(
-        '/bonos_operadores/months',
+        '/bonos_operadores/periodos',
       );
       return response.data.map(DriverBonusAdapter.toDriverBonusMonth);
     } catch (error) {
@@ -17,7 +18,7 @@ export class DriverBonusService {
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data.detail ||
-            'Error al obtener los meses de bonos operadores',
+          'Error al obtener los meses de bonos operadores',
         );
       }
       throw new Error('Error al obtener los meses de bonos operadores');
@@ -25,12 +26,11 @@ export class DriverBonusService {
   }
 
   public static async getDriversBonus(
-    month: number,
-    year: number,
+    id_periodo: number,
   ): Promise<DriverBonus[]> {
     try {
       const response = await odooApi.get<DriverBonusApi[]>(
-        `/bonos_operadores/${month}/${year}`,
+        `/bonos_operadores/${id_periodo}`,
       );
       return response.data.map(DriverBonusAdapter.toDriverBonus);
     } catch (error) {
@@ -38,7 +38,7 @@ export class DriverBonusService {
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data.detail ||
-            'Error al obtener los bonos por periodo',
+          'Error al obtener los bonos por periodo',
         );
       }
       throw new Error('Error al obtener los bonos por periodo');
@@ -56,7 +56,7 @@ export class DriverBonusService {
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data.detail ||
-            'Error al actualizar los bonos por periodo',
+          'Error al actualizar los bonos por periodo',
         );
       }
       throw new Error('Error al actualizar los bonos por periodo');
@@ -74,11 +74,28 @@ export class DriverBonusService {
       const response = await odooApi.post(`/bonos_operadores/${month}/${year}`);
       return response.data;
     } catch (error) {
-      console.error(error);
       if (error instanceof AxiosError) {
-        throw new Error(
-          error.response?.data.detail || 'Error al crear los bonos por periodo',
-        );
+        // Aquí error.response.data contiene el JSON de tu backend
+        toast.error(error.response?.data.message);
+        throw new Error(error.response?.data.message || 'Error al crear los bonos por periodo');
+      }
+      throw new Error('Error al crear los bonos por periodo');
+    }
+  }
+
+  public static async cerrarPeriodo({
+    id_periodo
+  }: {
+    id_periodo: number;
+  }) {
+    try {
+      const response = await odooApi.patch(`/bonos_operadores/cerrar/${id_periodo}`);
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        // Aquí error.response.data contiene el JSON de tu backend
+        toast.error(error.response?.data.message);
+        throw new Error(error.response?.data.message || 'Error al crear los bonos por periodo');
       }
       throw new Error('Error al crear los bonos por periodo');
     }
