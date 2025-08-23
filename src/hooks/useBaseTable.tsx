@@ -135,8 +135,8 @@ export const useBaseTable = <T extends MRT_RowData & BaseRowData>(
       sx: {
         fontFamily: 'Inter',
         fontWeight: 'normal',
-        fontSize: '0.75rem',
-        padding: '3px 5px',
+        fontSize: '12px',
+        padding: '10px 20px',
       },
     },
     muiTablePaperProps: {
