@@ -215,7 +215,7 @@ export const PeriodBonusView = ({ open, onClose, periodo }: Props) => {
             loading={updateDriverBonusMutation.isPending}
           />
         )}
-        {(!isEditing && periodo.estado !== 'cerrado') && (
+        {(!isEditing && periodo.estado !== 'cerrado' && periodo.estado !== 'pagado') && (
           <Button
             onClick={() => cerrar_periodo()}
             color="success"
