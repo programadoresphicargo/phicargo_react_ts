@@ -88,6 +88,18 @@ export const useVehicleInspectionColumns = () => {
           );
         },
       },
+      {
+        accessorFn: (row) => row.inspection?.inspectionState,
+        header: 'Estado',
+        Cell: ({ cell }) => {
+          const value = cell.getValue<string | null>();
+          return value ? (
+            <span className="font-bold">{value}</span>
+          ) : (
+            <span className="text-gray-400">NA</span>
+          );
+        },
+      },
 
       // {
       //   accessorFn: (row) => (row.branch ? row.branch.name : 'N/A'),

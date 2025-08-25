@@ -73,10 +73,29 @@ export class VehicleInspectionService {
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data?.detail ||
-            'Error al obtener la lista de verificación',
+          'Error al obtener la lista de verificación',
         );
       }
       throw new Error('Error al obtener la lista de verificación');
+    }
+  }
+
+  public static async confirmInspection(
+    inspectioId: number,
+  ) {
+    const url = `/vehicles/inspections/confirm/${inspectioId}`;
+    try {
+      const response = await odooApi.post(url);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      if (error instanceof AxiosError) {
+        throw new Error(
+          error.response?.data?.detail ||
+          'Error al confirmar',
+        );
+      }
+      throw new Error('Error al confirmar');
     }
   }
 }

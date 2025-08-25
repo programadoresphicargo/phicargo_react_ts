@@ -27,6 +27,8 @@ export class VehicleInspectionAdapter {
       inspector: userBasicToLocal(inspectionApi.inspector),
       incidentId: inspectionApi.incident_id,
       inspectionType: inspectionApi.inspection_type,
+      inspectionState: inspectionApi.inspection_state,
+      confirmedDate: inspectionApi.confirmed_date,
     };
   }
 
@@ -51,7 +53,7 @@ export class VehicleInspectionAdapter {
     const { question_type, answer } = vehicleInspection;
 
     if (
-      question_type === 'file' && 
+      question_type === 'file' &&
       Array.isArray(answer) &&
       answer.length > 0 &&
       typeof answer[0] === 'object' &&
@@ -97,7 +99,7 @@ export class VehicleInspectionAdapter {
       formData.append('driver_id', String(vehicleInspection.driverId));
     }
 
-    if(vehicleInspection.userPin) {
+    if (vehicleInspection.userPin) {
       formData.append('user_pin', vehicleInspection.userPin);
     }
 

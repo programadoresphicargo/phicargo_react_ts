@@ -14,6 +14,8 @@ import { FilesList } from '@/components/utils/FilesList';
 import { Button } from '@heroui/react';
 import { EditIncidentModal } from '@/modules/incidents/components/EditIncidentModal';
 import { useState } from "react";
+import Swal from 'sweetalert2';
+import { useConfirmInspectionMutation } from '../../hooks/queries/inspections/useConfirmInspection';
 
 interface Props {
   open: boolean;
@@ -34,9 +36,43 @@ export const VehicleInspectionDetailModal = ({
     query: { data: checklist, isLoading: loadingChecklist },
   } = useGetInspectionChecklistQuery(vehicleInspection.inspection?.id);
 
+  const { ConfirmInspectionMutacion } = useConfirmInspectionMutation(vehicleInspection.inspection?.id)
+
   const [openEditIncident, setOpenEditIncident] = useState(false);
   const handleOpen = () => setOpenEditIncident(true);
   const handleClose = () => setOpenEditIncident(false);
+
+  const confirmar_inspeccion = async () => {
+    Swal.fire({
+      title: '¿Confirmar inspección?',
+      text: 'Una vez confirmado no podrás editarlo.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, confirmar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        ConfirmInspectionMutacion.mutate(
+          undefined,
+          {
+            onSuccess: () => {
+              onClose();
+            },
+            onError: () => {
+              Swal.fire({
+                title: 'Error',
+                text: 'No se pudo confirmar. Intenta nuevamente.',
+                icon: 'error',
+                confirmButtonText: 'OK',
+              });
+            },
+          }
+        );
+      }
+    });
+  };
 
   return (
     <MuiModal
@@ -53,8 +89,33 @@ export const VehicleInspectionDetailModal = ({
       }
     >
 
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-3 p-5">
-        <Button color="success" className='text-white' radius='full'>Confirmar revisión</Button>
+      <div className="flex flex-col gap-4 p-4 w-full">
+        <DetailCard title="Revisión">
+          {vehicleInspection.inspection?.inspectionState !== 'confirmed' ? (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
+                <Button
+                  color="success"
+                  className="text-white"
+                  radius="full"
+                  onPress={confirmar_inspeccion}
+                >
+                  Confirmar revisión
+                </Button>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <p className="text-sm text-gray-500">Estado</p>
+                <p>{vehicleInspection.inspection?.inspectionState}</p>
+
+                <p className="text-sm text-gray-500">Fecha confirmación</p>
+                <p>{vehicleInspection.inspection?.confirmedDate}</p>
+              </div>
+            </>
+          )}
+        </DetailCard>
       </div>
 
       <div className="flex flex-col gap-4 p-4 w-full">
@@ -128,7 +189,7 @@ export const VehicleInspectionDetailModal = ({
             )}
             {incident && (
               <>
-                <Button color="primary" onPress={handleOpen} radius='full' size='sm'>Editar incidencia</Button>
+                <Button color="primary" onPress={handleOpen} radius='full' size='sm' isDisabled={vehicleInspection.inspection?.inspectionState == 'confirmed' ? true : false}>Editar incidencia</Button>
                 <Dialog open={openEditIncident} onClose={handleClose} maxWidth="lg">
                   <EditIncidentModal onClose={handleClose} incident={incident} />
                 </Dialog>
@@ -179,7 +240,7 @@ export const VehicleInspectionDetailModal = ({
           </div>
         </DetailCard>
       </div>
-    </MuiModal>
+    </MuiModal >
   );
 };
 

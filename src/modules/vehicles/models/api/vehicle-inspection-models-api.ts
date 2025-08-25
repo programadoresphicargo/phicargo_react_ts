@@ -8,6 +8,8 @@ export interface VehicleInspectionBaseApi {
   result: InspectionResult;
   comments: string | null;
   inspection_type: InspectionType;
+  inspection_state: string | null;
+  confirmed_date: string | null;
 }
 
 export interface InspectionApi extends VehicleInspectionBaseApi {

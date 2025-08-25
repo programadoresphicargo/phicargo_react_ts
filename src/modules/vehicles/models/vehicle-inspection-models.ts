@@ -12,6 +12,8 @@ export interface VehicleInspectionBase {
   result: InspectionResult;
   comments: string | null;
   inspectionType: InspectionType;
+  inspectionState: string | null;
+  confirmedDate: string | null;
 }
 
 export interface Inspection extends VehicleInspectionBase {
