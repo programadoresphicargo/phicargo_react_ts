@@ -1,4 +1,4 @@
-import { Chip, Divider } from '@mui/material';
+import { Chip, Dialog, Divider } from '@mui/material';
 import { ReactNode } from 'react';
 import { MuiModal } from '@/components';
 import type {
@@ -11,6 +11,9 @@ import { CheckCircleOutline, ErrorOutline } from '@mui/icons-material';
 import { Alert, LoadingSpinner } from '@/components/ui';
 import { useGetInspectionChecklistQuery } from '../../hooks/queries';
 import { FilesList } from '@/components/utils/FilesList';
+import { Button } from '@heroui/react';
+import { EditIncidentModal } from '@/modules/incidents/components/EditIncidentModal';
+import { useState } from "react";
 
 interface Props {
   open: boolean;
@@ -31,6 +34,10 @@ export const VehicleInspectionDetailModal = ({
     query: { data: checklist, isLoading: loadingChecklist },
   } = useGetInspectionChecklistQuery(vehicleInspection.inspection?.id);
 
+  const [openEditIncident, setOpenEditIncident] = useState(false);
+  const handleOpen = () => setOpenEditIncident(true);
+  const handleClose = () => setOpenEditIncident(false);
+
   return (
     <MuiModal
       open={open}
@@ -45,7 +52,13 @@ export const VehicleInspectionDetailModal = ({
         </div>
       }
     >
+
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-3 p-5">
+        <Button color="success" className='text-white' radius='full'>Confirmar revisión</Button>
+      </div>
+
       <div className="flex flex-col gap-4 p-4 w-full">
+
         {/* Sección de información básica */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <DetailCard title="Información de Revisión">
@@ -115,6 +128,11 @@ export const VehicleInspectionDetailModal = ({
             )}
             {incident && (
               <>
+                <Button color="primary" onPress={handleOpen} radius='full' size='sm'>Editar incidencia</Button>
+                <Dialog open={openEditIncident} onClose={handleClose} maxWidth="lg">
+                  <EditIncidentModal onClose={handleClose} incident={incident} />
+                </Dialog>
+
                 <div>
                   <p className="text-sm text-gray-500">Operador</p>
                   <p>
