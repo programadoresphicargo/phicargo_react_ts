@@ -25,6 +25,8 @@ const initialValues: VehicleInspectionCreate = {
   inspectionType: 'cleaning',
   checklist: [],
   userPin: '',
+  inspectionState: 'draft',
+  confirmedDate: dayjs(),
 };
 
 interface Props {

@@ -112,7 +112,7 @@ export const VehicleInspectionDetailModal = ({
                 <p>{vehicleInspection.inspection?.inspectionState}</p>
 
                 <p className="text-sm text-gray-500">Fecha confirmación</p>
-                <p>{vehicleInspection.inspection?.confirmedDate}</p>
+                <p>{vehicleInspection.inspection?.confirmedDate.toString()}</p>
               </div>
             </>
           )}

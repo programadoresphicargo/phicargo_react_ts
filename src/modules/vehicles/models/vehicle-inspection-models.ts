@@ -13,7 +13,7 @@ export interface VehicleInspectionBase {
   comments: string | null;
   inspectionType: InspectionType;
   inspectionState: string | null;
-  confirmedDate: string | null;
+  confirmedDate: Dayjs;
 }
 
 export interface Inspection extends VehicleInspectionBase {
