@@ -58,8 +58,11 @@ const CelularesTabla = ({ active }) => {
                     </Chip >
                 ),
             },
+            { accessorKey: 'fecha_baja', header: 'Fecha baja' },
+            { accessorKey: 'motivo_baja', header: 'Motivo baja' },
+            { accessorKey: 'comentarios_baja', header: 'Comentarios baja' },
         ],
-        [],
+        [active],
     );
 
     const table = useMaterialReactTable({
@@ -69,7 +72,14 @@ const CelularesTabla = ({ active }) => {
         enableGlobalFilter: true,
         enableFilters: true,
         localization: MRT_Localization_ES,
-        state: { showProgressBars: isLoading },
+        state: {
+            showProgressBars: isLoading,
+            columnVisibility: {
+                motivo_baja: active ? false : true,
+                comentarios_baja: active ? false : true,
+                fecha_baja: active ? false : true,
+            },
+        },
         initialState: {
             showGlobalFilter: true,
             density: 'compact',
