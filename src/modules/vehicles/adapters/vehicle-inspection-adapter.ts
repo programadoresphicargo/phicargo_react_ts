@@ -28,7 +28,7 @@ export class VehicleInspectionAdapter {
       incidentId: inspectionApi.incident_id,
       inspectionType: inspectionApi.inspection_type,
       inspectionState: inspectionApi.inspection_state,
-      confirmedDate: inspectionApi.confirmed_date,
+      confirmedDate: dayjs(inspectionApi.confirmed_date),
     };
   }
 
