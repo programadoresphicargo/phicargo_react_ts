@@ -153,9 +153,16 @@ export default function FormCelulares({ isOpen, onOpenChange, id_celular }) {
                                                     >
                                                         <SelectItem key="Samsung">Samsung</SelectItem>
                                                         <SelectItem key="Xiaomi">Xiaomi</SelectItem>
+                                                        <SelectItem key="Redmi">Redmi</SelectItem>
                                                         <SelectItem key="Apple">Apple</SelectItem>
                                                         <SelectItem key="Huawei">Huawei</SelectItem>
-                                                        {/* ... */}
+                                                        <SelectItem key="Motorola">Motorola</SelectItem>
+                                                        <SelectItem key="Alcatel">Alcatel</SelectItem>
+                                                        <SelectItem key="Nokia">Nokia</SelectItem>
+                                                        <SelectItem key="Sony">Sony</SelectItem>
+                                                        <SelectItem key="Oppo">Oppo</SelectItem>
+                                                        <SelectItem key="ZTE">ZTE</SelectItem>
+                                                        <SelectItem key="HONOR">HONOR</SelectItem>
                                                     </Select>
 
                                                     <Input
@@ -262,7 +269,7 @@ export default function FormCelulares({ isOpen, onOpenChange, id_celular }) {
                         </>
                     )}
                 </ModalContent>
-            </Modal>
+            </Modal >
         </>
     );
 }
