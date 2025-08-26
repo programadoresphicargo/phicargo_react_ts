@@ -96,10 +96,21 @@ export default function FormCelulares({ isOpen, onOpenChange, id_celular }) {
     };
 
     const handleChange = (field, value) => {
-        setFormData(prev => ({
-            ...prev,
-            [field]: value
-        }));
+        setFormData(prev => {
+            let newData = { ...prev, [field]: value };
+
+            // si el campo es "activo" y lo activas en true → estado disponible
+            if (field === "activo" && value === true) {
+                newData.estado = "disponible";
+            }
+
+            // si el campo es "activo" y lo pones en false → podrías limpiar estado o dejarlo
+            if (field === "activo" && value === false) {
+                newData.estado = "baja"; // o "", depende de tu lógica
+            }
+
+            return newData;
+        });
     };
 
     const [valueTab, setValueTab] = useState('1');
