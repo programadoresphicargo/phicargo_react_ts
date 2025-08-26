@@ -169,6 +169,7 @@ export default function FormCelulares({ isOpen, onOpenChange, id_celular }) {
                                                         label="IMEI"
                                                         value={formData.imei || ""}
                                                         isDisabled={!formData.activo}
+                                                        formatOptions={{ useGrouping: false }}
                                                         onValueChange={(e) => handleChange("imei", e)}
                                                     />
 
