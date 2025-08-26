@@ -51,7 +51,7 @@ export default function StockCelulares({ isOpen, onOpen, onOpenChange, id_celula
     const columns = useMemo(
         () => [
             { accessorKey: 'id_celular', header: 'ID' },
-            { accessorKey: 'nombre', header: 'Empresa' },
+            { accessorKey: 'empresa', header: 'Empresa' },
             { accessorKey: 'imei', header: 'IMEI' },
             { accessorKey: 'marca', header: 'Marca' },
             { accessorKey: 'modelo', header: 'Modelo' },

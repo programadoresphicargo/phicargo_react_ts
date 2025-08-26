@@ -39,7 +39,7 @@ const CelularesTabla = ({ active }) => {
     const columns = useMemo(
         () => [
             { accessorKey: 'id_celular', header: 'ID Celular' },
-            { accessorKey: 'nombre', header: 'Empresa' },
+            { accessorKey: 'empresa', header: 'Empresa' },
             { accessorKey: 'imei', header: 'IMEI' },
             { accessorKey: 'marca', header: 'Marca' },
             { accessorKey: 'modelo', header: 'Modelo' },
