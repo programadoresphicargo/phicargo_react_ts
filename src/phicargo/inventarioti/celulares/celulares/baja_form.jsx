@@ -25,8 +25,17 @@ import SelectEmpleadosTI from "../empleados/select_empleados";
 export default function BajaCelular({ isOpen, onOpen, onOpenChange, dataCel }) {
 
     const [isLoading, setLoading] = useState(false);
-
     const [data, setData] = useState([]);
+
+    useEffect(() => {
+        if (dataCel) {
+            setData({
+                empleado_baja: dataCel.id_empleado_baja,
+                motivo_baja: dataCel.motivo_baja || "",
+                comentarios_baja: dataCel.comentarios_baja || ""
+            });
+        }
+    }, [dataCel]);
 
     const handleSave = async (onClose) => {
         try {
@@ -72,7 +81,7 @@ export default function BajaCelular({ isOpen, onOpen, onOpenChange, dataCel }) {
                 <ModalContent>
                     {(onClose) => (
                         <>
-                            <ModalHeader className="flex flex-col gap-1">Registro de baja {dataCel.id_celular}</ModalHeader>
+                            <ModalHeader className="flex flex-col gap-1">Registro de baja Celular: {dataCel.id_celular}</ModalHeader>
                             {isLoading && (
                                 <Progress color="primary" isIndeterminate size="sm" />
                             )}
