@@ -81,7 +81,7 @@ export default function BajaCelular({ isOpen, onOpen, onOpenChange, dataCel }) {
 
                                     <SelectEmpleadosTI
                                         handleChange={handleChange}
-                                        value={data?.empleado_baja}
+                                        value={dataCel?.id_empleado_baja}
                                     />
 
                                     <Select
