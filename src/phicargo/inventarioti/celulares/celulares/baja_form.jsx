@@ -12,14 +12,17 @@ import {
     DatePicker,
     Textarea,
     Progress,
+    Autocomplete,
+    AutocompleteItem,
 } from "@heroui/react";
 import { Select, SelectItem } from "@heroui/react";
 import React, { useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { parseDate, parseDateTime, getLocalTimeZone } from "@internationalized/date";
 import { today } from "@internationalized/date";
+import SelectEmpleadosTI from "../empleados/select_empleados";
 
-export default function BajaCelular({ isOpen, onOpen, onOpenChange, id_celular }) {
+export default function BajaCelular({ isOpen, onOpen, onOpenChange, dataCel }) {
 
     const [isLoading, setLoading] = useState(false);
 
@@ -27,27 +30,28 @@ export default function BajaCelular({ isOpen, onOpen, onOpenChange, id_celular }
 
     const handleSave = async (onClose) => {
         try {
+
             setLoading(true);
 
-            if (id_celular) {
-                const response = await odooApi.put(`/inventarioti/dispositivos/baja/${id_celular}`,
+            if (dataCel.id_celular) {
+                const response = await odooApi.put(`/inventarioti/dispositivos/baja/${dataCel.id_celular}`,
                     {},
                     {
                         params: {
                             tipo: 'celular',
                             motivo_baja: data?.motivo_baja,
-                            comentarios_baja: data?.comentarios_baja
+                            comentarios_baja: data?.comentarios_baja,
+                            empleado_baja: data?.empleado_baja
                         }
                     });
                 if (response.data.status == "success") {
                     toast.success(response.data.message);
                     setData([]);
+                    onClose();
                 } else {
                     toast.error(response.data.message);
                 }
             }
-
-            onClose();
         } catch (error) {
             console.error("Error al guardar:", error);
         } finally {
@@ -68,12 +72,18 @@ export default function BajaCelular({ isOpen, onOpen, onOpenChange, id_celular }
                 <ModalContent>
                     {(onClose) => (
                         <>
-                            <ModalHeader className="flex flex-col gap-1">Registro de baja {id_celular}</ModalHeader>
+                            <ModalHeader className="flex flex-col gap-1">Registro de baja {dataCel.id_celular}</ModalHeader>
                             {isLoading && (
                                 <Progress color="primary" isIndeterminate size="sm" />
                             )}
                             <ModalBody>
                                 <div className="grid grid-cols-1 gap-4">
+
+                                    <SelectEmpleadosTI
+                                        handleChange={handleChange}
+                                        value={data?.empleado_baja}
+                                    />
+
                                     <Select
                                         label="Motivo de baja"
                                         selectedKeys={data?.motivo_baja ? [String(data.motivo_baja)] : []}
@@ -100,7 +110,7 @@ export default function BajaCelular({ isOpen, onOpen, onOpenChange, id_celular }
                                     Cancelar
                                 </Button>
                                 <Button
-                                    color={id_celular ? "success" : "primary"}
+                                    color={dataCel.id_celular ? "success" : "primary"}
                                     onPress={() => handleSave(onClose)}
                                     className="text-white"
                                     isDisabled={isLoading}
