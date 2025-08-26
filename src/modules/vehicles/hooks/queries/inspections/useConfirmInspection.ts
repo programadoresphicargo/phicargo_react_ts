@@ -1,6 +1,7 @@
 import { VehicleInspectionService } from "@/modules/vehicles/services";
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from "react-toastify";
+import { VEHICLE_INSPECTION_QUERY_KEY } from "..";
 
 export const useConfirmInspectionMutation = (inspectionId?: number) => {
   const queryClient = useQueryClient();
@@ -13,7 +14,7 @@ export const useConfirmInspectionMutation = (inspectionId?: number) => {
       } else {
         toast.error(data.message);
       }
-      queryClient.invalidateQueries({ queryKey: ["vehicle-inspections"] });
+      queryClient.invalidateQueries({ queryKey: [VEHICLE_INSPECTION_QUERY_KEY] });
     },
     onError: (error: Error) => {
       toast.error(error.message);
@@ -22,5 +23,6 @@ export const useConfirmInspectionMutation = (inspectionId?: number) => {
 
   return {
     ConfirmInspectionMutacion,
+    isLoadingConfirm: ConfirmInspectionMutacion.isPending,
   };
 }

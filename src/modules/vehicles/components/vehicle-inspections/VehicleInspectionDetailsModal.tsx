@@ -36,7 +36,7 @@ export const VehicleInspectionDetailModal = ({
     query: { data: checklist, isLoading: loadingChecklist },
   } = useGetInspectionChecklistQuery(vehicleInspection.inspection?.id);
 
-  const { ConfirmInspectionMutacion } = useConfirmInspectionMutation(vehicleInspection.inspection?.id)
+  const { ConfirmInspectionMutacion, isLoadingConfirm } = useConfirmInspectionMutation(vehicleInspection.inspection?.id)
 
   const [openEditIncident, setOpenEditIncident] = useState(false);
   const handleOpen = () => setOpenEditIncident(true);
@@ -99,6 +99,7 @@ export const VehicleInspectionDetailModal = ({
                   className="text-white"
                   radius="full"
                   onPress={confirmar_inspeccion}
+                  isLoading={isLoadingConfirm}
                 >
                   Confirmar revisión
                 </Button>
