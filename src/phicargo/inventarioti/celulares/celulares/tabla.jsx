@@ -61,6 +61,7 @@ const CelularesTabla = ({ active }) => {
             { accessorKey: 'fecha_baja', header: 'Fecha baja' },
             { accessorKey: 'motivo_baja', header: 'Motivo baja' },
             { accessorKey: 'comentarios_baja', header: 'Comentarios baja' },
+            { accessorKey: 'nombre_empleado_baja', header: 'Empleado baja' },
         ],
         [active],
     );
@@ -78,6 +79,7 @@ const CelularesTabla = ({ active }) => {
                 motivo_baja: active ? false : true,
                 comentarios_baja: active ? false : true,
                 fecha_baja: active ? false : true,
+                nombre_empleado_baja: active ? false : true,
             },
         },
         initialState: {

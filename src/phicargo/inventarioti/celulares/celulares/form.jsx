@@ -110,7 +110,7 @@ export default function FormCelulares({ isOpen, onOpenChange, id_celular }) {
             <BajaCelular
                 isOpen={isBajaModalOpen}
                 onOpenChange={setBajaModalOpen}
-                id_celular={id_celular}
+                dataCel={data}
             />
 
             <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="4xl" scrollBehavior="outside">
