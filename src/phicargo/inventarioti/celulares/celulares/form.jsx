@@ -127,8 +127,8 @@ export default function FormCelulares({ isOpen, onOpenChange, id_celular }) {
                                         <TabContext value={valueTab}>
                                             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                                                 <TabList onChange={handleChangeTab}>
-                                                    <Tab label="Información" value="1" />
-                                                    <Tab label="Historial" value="2" />
+                                                    <Tab label="Información" value="1" sx={{ fontFamily: 'Inter' }} />
+                                                    <Tab label="Historial" value="2" sx={{ fontFamily: 'Inter' }} />
                                                 </TabList>
                                             </Box>
                                             <TabPanel value="1">
