@@ -105,7 +105,7 @@ const AsignacionComputo = () => {
         >
           Asignación Computo
         </h1>
-        <Button color='primary' onPress={onOpen}>Añadir equipo de computo</Button>
+        <Button color='success' className='text-white' onPress={onOpen}>Añadir equipo de computo</Button>
       </Box>
     ),
   });

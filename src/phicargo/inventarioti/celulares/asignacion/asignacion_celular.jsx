@@ -151,7 +151,7 @@ const AsignacionCelular = () => {
         >
           Asignación celular
         </h1>
-        <Button color='primary' onPress={onOpen}>Añadir celular</Button>
+        <Button color='success' className='text-white' onPress={onOpen}>Añadir celular</Button>
       </Box>
     ),
   });

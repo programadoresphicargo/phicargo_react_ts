@@ -50,7 +50,6 @@ export default function StockComputo({ isOpen, onOpen, onOpenChange }) {
 
     const columns = useMemo(
         () => [
-            { accessorKey: 'id_ec', header: 'ID Equipo' },
             { accessorKey: 'nombre', header: 'Empresa' },
             { accessorKey: 'sn', header: 'SN' },
             { accessorKey: 'marca', header: 'Marca' },
