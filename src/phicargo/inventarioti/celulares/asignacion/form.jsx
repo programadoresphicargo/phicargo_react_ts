@@ -108,84 +108,76 @@ export default function ModalAsignacion({ isOpen, onOpen, onOpenChange, id_celul
       <ModalContent>
         {(onClose) => (
           <>
-            <ModalHeader className="flex flex-col gap-1" >Asignación de activos</ModalHeader>
+            <ModalHeader
+              className="flex items-center justify-between gap-4"
+              style={{
+                background: 'linear-gradient(90deg, #0b2149, #002887)',
+                color: 'white',
+                fontWeight: 'bold'
+              }}>
+              <h1
+                className="tracking-tight font-semibold lg:text-2xl"
+              >
+                Asignación de activos
+              </h1>
+              <Button color='success' onPress={() => Create()} className='text-white' isLoading={isLoading}>Guardar asignación</Button>
+            </ModalHeader>
             <ModalBody>
 
-              <div>
-                <Card>
-                  <CardHeader className="flex items-center justify-between gap-4"
-                    style={{
-                      background: 'linear-gradient(90deg, #0b2149, #002887)',
+              <Grid container spacing={2} className='pt-5'>
+                <Grid item xs={12} md={3}>
+                  <Card>
+                    <CardHeader style={{
+                      background: 'linear-gradient(90deg, #a10003, #002887)',
                       color: 'white',
                       fontWeight: 'bold'
                     }}>
-                    <h1
-                      className="tracking-tight font-semibold lg:text-2xl"
-                    >
-                      Asignación de activos
-                    </h1>
-                    <Button color='success' onPress={() => Create()} className='text-white' isLoading={isLoading}>Guardar asignación</Button>
-                  </CardHeader>
-                  <Divider></Divider>
-                  <CardBody>
+                      Información del empleado
+                    </CardHeader>
+                    <Divider></Divider>
+                    <CardBody>
+                      <div className="w-full grid grid-cols-1 gap-4">
+                        <Autocomplete
+                          isLoading={isLoadingEmpleados}
+                          label="Empleado"
+                          variant='bordered'
+                          onSelectionChange={(key) => handleChange("id_empleado", Number(key))}
+                          isInvalid={!form_data?.data?.id_empleado}
+                          errorMessage={!form_data?.data?.id_empleado ? "El empleado es obligatorio" : ""}>
+                          {empleados.map((empleado) => (
+                            <AutocompleteItem key={empleado.id_empleado}>{empleado.nombre_empleado + ' - ' + empleado.puesto}</AutocompleteItem>
+                          ))}
+                        </Autocomplete>
+                        <DatePicker
+                          variant='bordered'
+                          label="Fecha de asignación"
+                          isInvalid={!form_data?.data?.fecha_asignacion}
+                          errorMessage={!form_data?.data?.fecha_asignacion ? "Fecha de asignación es obligatorio" : ""}
+                          value={
+                            form_data?.data?.fecha_asignacion
+                              ? parseDate(form_data?.data?.fecha_asignacion)
+                              : undefined
+                          }
+                          onChange={(date) => {
+                            if (!date) {
+                              handleChange("fecha_asignacion", null);
+                              return;
+                            }
+                            const d = new Date(date);
+                            const formattedDate = d.toISOString().slice(0, 10);
+                            handleChange("fecha_asignacion", formattedDate);
+                          }}
+                        />
+                      </div>
+                    </CardBody>
+                  </Card>
+                </Grid>
 
-                    <Grid container spacing={2}>
-                      <Grid item xs={12} md={3}>
-                        <Card>
-                          <CardHeader style={{
-                            background: 'linear-gradient(90deg, #a10003, #002887)',
-                            color: 'white',
-                            fontWeight: 'bold'
-                          }}>
-                            Información del empleado
-                          </CardHeader>
-                          <Divider></Divider>
-                          <CardBody>
-                            <div className="w-full grid grid-cols-1 gap-4">
-                              <Autocomplete
-                                isLoading={isLoadingEmpleados}
-                                label="Empleado"
-                                variant='bordered'
-                                onSelectionChange={(key) => handleChange("id_empleado", Number(key))}
-                                isInvalid={!form_data?.data?.id_empleado}
-                                errorMessage={!form_data?.data?.id_empleado ? "El empleado es obligatorio" : ""}>
-                                {empleados.map((empleado) => (
-                                  <AutocompleteItem key={empleado.id_empleado}>{empleado.nombre_empleado + ' - ' + empleado.puesto}</AutocompleteItem>
-                                ))}
-                              </Autocomplete>
-                              <DatePicker
-                                variant='bordered'
-                                label="Fecha de asignación"
-                                isInvalid={!form_data?.data?.fecha_asignacion}
-                                errorMessage={!form_data?.data?.fecha_asignacion ? "Fecha de asignación es obligatorio" : ""}
-                                value={
-                                  form_data?.data?.fecha_asignacion
-                                    ? parseDate(form_data?.data?.fecha_asignacion)
-                                    : undefined
-                                }
-                                onChange={(date) => {
-                                  if (!date) {
-                                    handleChange("fecha_asignacion", null);
-                                    return;
-                                  }
-                                  const d = new Date(date);
-                                  const formattedDate = d.toISOString().slice(0, 10);
-                                  handleChange("fecha_asignacion", formattedDate);
-                                }}
-                              />
-                            </div>
-                          </CardBody>
-                        </Card>
-                      </Grid>
-
-                      <Grid item xs={12} md={9}>
-                        <AsignacionCelular></AsignacionCelular>
-                        <AsignacionComputo></AsignacionComputo>
-                      </Grid>
-                    </Grid>
-                  </CardBody>
-                </Card>
-              </div >
+                <Grid item xs={12} md={9}>
+                  <AsignacionCelular></AsignacionCelular>
+                  <AsignacionComputo></AsignacionComputo>
+                </Grid>
+              </Grid>
 
             </ModalBody>
             <ModalFooter>
