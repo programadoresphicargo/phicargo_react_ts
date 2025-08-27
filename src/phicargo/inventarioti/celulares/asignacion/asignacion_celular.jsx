@@ -159,7 +159,7 @@ const AsignacionCelular = () => {
   return (
     <div>
       <StockCelulares isOpen={isOpen} onOpenChange={onOpenChange}></StockCelulares>
-      <Card className='mt-3'>
+      <Card>
         <CardBody>
           <MaterialReactTable table={table} />
         </CardBody>
