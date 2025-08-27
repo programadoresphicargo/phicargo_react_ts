@@ -24,11 +24,17 @@ import {
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import Box from '@mui/material/Box';
 import { useInventarioTI } from "../../contexto/contexto";
+import FormCelulares from "../celulares/form";
 
-export default function StockCelulares({ isOpen, onOpen, onOpenChange, id_celular }) {
+export default function StockCelulares({ isOpen, onOpen, onOpenChange }) {
     const { form_data, setFormData } = useInventarioTI();
+    const [id_celular, setCelular] = useState(0);
     const [isLoading, setLoading] = useState(false);
-
+    const {
+        isOpen: isOpen1,
+        onOpen: onOpen1,
+        onOpenChange: onOpenChange1,
+    } = useDisclosure();
     const [data, setData] = useState([]);
 
     const fetchData = async () => {
@@ -46,7 +52,7 @@ export default function StockCelulares({ isOpen, onOpen, onOpenChange, id_celula
 
     useEffect(() => {
         fetchData();
-    }, [isOpen, id_celular]);
+    }, [isOpen, isOpen1]);
 
     const columns = useMemo(
         () => [
@@ -54,7 +60,27 @@ export default function StockCelulares({ isOpen, onOpen, onOpenChange, id_celula
             { accessorKey: 'imei', header: 'IMEI' },
             { accessorKey: 'marca', header: 'Marca' },
             { accessorKey: 'modelo', header: 'Modelo' },
+            { accessorKey: 'correo', header: 'Correo' },
+            { accessorKey: 'passwoord', header: 'Contraseña' },
             { accessorKey: 'estado', header: 'Estado' },
+            {
+                accessorKey: 'editar', header: 'Editar',
+                Cell: ({ row }) => (
+                    <Button
+                        className='text-white'
+                        color={'primary'}
+                        variant="solid"
+                        size='sm'
+                        onPress={() => {
+                            onOpen1();
+                            setCelular(row.original.id_celular);
+                        }}
+                    >
+                        <i class="bi bi-pen"></i>
+                        Editar
+                    </Button >
+                ),
+            },
         ],
         [],
     );
@@ -81,7 +107,7 @@ export default function StockCelulares({ isOpen, onOpen, onOpenChange, id_celula
 
                 if (existe) {
                     toast.error("El celular ya está dentro");
-                    return; // salir sin agregarlo
+                    return;
                 }
 
                 setFormData(prev => ({
@@ -140,9 +166,17 @@ export default function StockCelulares({ isOpen, onOpen, onOpenChange, id_celula
 
     return (
         <>
+            <FormCelulares
+                isOpen={isOpen1}
+                onOpenChange={onOpenChange1}
+                id_celular={id_celular}>
+            </FormCelulares>
+
             <Modal
                 isOpen={isOpen}
                 onOpenChange={onOpenChange}
+                isDismissable={false}
+                isKeyboardDismissDisabled={true}
                 size="6xl">
                 <ModalContent>
                     {(onClose) => (

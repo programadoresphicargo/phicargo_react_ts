@@ -124,7 +124,14 @@ export default function FormCelulares({ isOpen, onOpenChange, id_celular }) {
                 dataCel={data}
             />
 
-            <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="4xl" scrollBehavior="outside">
+            <Modal
+                isOpen={isOpen}
+                onOpenChange={onOpenChange}
+                size="4xl"
+                scrollBehavior="outside"
+                isDismissable={false}
+                isKeyboardDismissDisabled={true}
+            >
                 <ModalContent>
                     {(onClose) => (
                         <>
