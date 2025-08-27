@@ -62,7 +62,6 @@ export default function StockCelulares({ isOpen, onOpen, onOpenChange }) {
             { accessorKey: 'modelo', header: 'Modelo' },
             { accessorKey: 'correo', header: 'Correo' },
             { accessorKey: 'passwoord', header: 'Contraseña' },
-            { accessorKey: 'estado', header: 'Estado' },
             {
                 accessorKey: 'editar', header: 'Editar',
                 Cell: ({ row }) => (
