@@ -38,7 +38,6 @@ const CelularesTabla = ({ active }) => {
 
     const columns = useMemo(
         () => [
-            { accessorKey: 'id_celular', header: 'ID Celular' },
             { accessorKey: 'empresa', header: 'Empresa' },
             { accessorKey: 'imei', header: 'IMEI' },
             { accessorKey: 'marca', header: 'Marca' },
@@ -140,12 +139,12 @@ const CelularesTabla = ({ active }) => {
                     onPress={() => {
                         onOpen();
                         setCelular(null);
-                    }}>Nuevo</Button>
+                    }}><i class="bi bi-plus-circle"></i>Nuevo</Button>
 
                 <Button color="danger"
                     onPress={() => {
                         fetchData();
-                    }}>Refrescar
+                    }}><i class="bi bi-arrow-clockwise"></i>Refrescar
                 </Button>
             </Box >
         ),

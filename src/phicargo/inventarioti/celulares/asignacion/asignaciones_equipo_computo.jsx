@@ -73,7 +73,6 @@ const AsignacionesEquipoComputo = () => {
 
   const columns = useMemo(
     () => [
-      { accessorKey: 'id_asignacion', header: 'ID Asignación' },
       {
         accessorKey: 'nombre_empleado', header: 'Empleado',
         Cell: ({ row }) => {
