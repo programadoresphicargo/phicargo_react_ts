@@ -38,12 +38,11 @@ const AsignacionCelular = () => {
 
   const columns = useMemo(
     () => [
-      { accessorKey: 'id_celular', header: 'ID Celular' },
       { accessorKey: 'imei', header: 'IMEI' },
       { accessorKey: 'marca', header: 'Marca' },
       { accessorKey: 'modelo', header: 'Modelo' },
       { accessorKey: 'correo', header: 'Correo' },
-      { accessorKey: 'id_linea', header: 'ID Linea' },
+      { accessorKey: 'passwoord', header: 'Contraseña' },
       {
         accessorKey: 'asignacion', // clave ficticia para la columna
         header: 'Linea',
@@ -106,7 +105,6 @@ const AsignacionCelular = () => {
       showGlobalFilter: true,
       density: 'compact',
       pagination: { pageSize: 80 },
-      showColumnFilters: true,
     },
     muiTableBodyRowProps: ({ row }) => ({
       onClick: ({ event }) => { },
@@ -153,7 +151,7 @@ const AsignacionCelular = () => {
         >
           Asignación celular
         </h1>
-        <Button color='primary' onPress={onOpen}>Añadir</Button>
+        <Button color='primary' onPress={onOpen}>Añadir celular</Button>
       </Box>
     ),
   });

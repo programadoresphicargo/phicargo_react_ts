@@ -1,60 +1,50 @@
 import odooApi from "@/api/odoo-api";
 import {
-    Modal,
-    ModalContent,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
-    Button,
-    useDisclosure,
-    NumberInput,
-    Input,
-    DatePicker,
-    Textarea,
-    Progress,
-    Chip
+    Modal, ModalContent, ModalHeader, ModalBody, ModalFooter,
+    Button, NumberInput, Input, DatePicker, Textarea, Progress, Checkbox
 } from "@heroui/react";
 import { Select, SelectItem } from "@heroui/react";
-import React, { useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
+import { parseDate } from "@internationalized/date";
+import BajaCelular from "./baja_form";
+import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
+import HistorialAsignaciones from "../asignacion/historial";
 import {
     MaterialReactTable,
     useMaterialReactTable,
 } from 'material-react-table';
+import React, { useEffect, useMemo, useState } from 'react';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import Box from '@mui/material/Box';
-import { useInventarioTI } from "../../contexto/contexto";
 
-export default function StockCelulares({ isOpen, onOpen, onOpenChange, id_celular }) {
-    const { form_data, setFormData } = useInventarioTI();
+export default function EmpleadosSinAsignarCelular({ isOpen, onOpenChange, id_celular }) {
+
     const [isLoading, setLoading] = useState(false);
-
     const [data, setData] = useState([]);
 
     const fetchData = async () => {
         try {
             setLoading(true);
-            const response = await odooApi.get('/inventarioti/dispositivos/celular/true');
-            const filtrados = response.data.filter(item => item.estado === 'disponible');
-            setData(filtrados);
-            setLoading(false);
+            const response = await odooApi.get('/inventarioti/empleados/activo/true');
+            setData(response.data);
         } catch (error) {
             console.error('Error al obtener los datos:', error);
+        } finally {
             setLoading(false);
         }
-    };
+    }
 
     useEffect(() => {
         fetchData();
-    }, [isOpen, id_celular]);
+    }, [id_celular, isOpen]);
 
     const columns = useMemo(
         () => [
-            { accessorKey: 'empresa', header: 'Empresa' },
-            { accessorKey: 'imei', header: 'IMEI' },
-            { accessorKey: 'marca', header: 'Marca' },
-            { accessorKey: 'modelo', header: 'Modelo' },
-            { accessorKey: 'estado', header: 'Estado' },
+            { accessorKey: 'nombre_empleado', header: 'Nombre empleado' },
+            { accessorKey: 'celular_asignado', header: 'Correo' },
         ],
         [],
     );
@@ -66,7 +56,9 @@ export default function StockCelulares({ isOpen, onOpen, onOpenChange, id_celula
         enableGlobalFilter: true,
         enableFilters: true,
         localization: MRT_Localization_ES,
-        state: { showProgressBars: isLoading },
+        state: {
+            showProgressBars: isLoading,
+        },
         initialState: {
             showGlobalFilter: true,
             density: 'compact',
@@ -75,21 +67,6 @@ export default function StockCelulares({ isOpen, onOpen, onOpenChange, id_celula
         },
         muiTableBodyRowProps: ({ row }) => ({
             onClick: ({ event }) => {
-                const existe = (form_data.celulares || []).some(
-                    cel => cel.id_celular === row.original.id_celular
-                );
-
-                if (existe) {
-                    toast.error("El celular ya está dentro");
-                    return; // salir sin agregarlo
-                }
-
-                setFormData(prev => ({
-                    ...prev,
-                    celulares: [...(prev.celulares || []), row.original]
-                }));
-
-                onOpenChange();
             },
             style: {
                 cursor: 'pointer',
@@ -112,12 +89,12 @@ export default function StockCelulares({ isOpen, onOpen, onOpenChange, id_celula
             sx: {
                 fontFamily: 'Inter',
                 fontWeight: 'normal',
-                fontSize: '12px',
+                fontSize: '14px',
             },
         },
         muiTableContainerProps: {
             sx: {
-                maxHeight: 'calc(100vh - 300px)',
+                maxHeight: 'calc(100vh - 260px)',
             },
         },
         renderTopToolbarCustomActions: ({ table }) => (
@@ -132,27 +109,24 @@ export default function StockCelulares({ isOpen, onOpen, onOpenChange, id_celula
                 <h1
                     className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
                 >
-                    Celulares disponibles
+                    Empleados sin asignaciòn
                 </h1>
-            </Box>
+                <Button color="danger"
+                    onPress={() => {
+                        fetchData();
+                    }}>Refrescar
+                </Button>
+            </Box >
         ),
     });
 
     return (
         <>
-            <Modal
-                isOpen={isOpen}
-                onOpenChange={onOpenChange}
-                size="6xl">
+            <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="5xl" scrollBehavior="outside">
                 <ModalContent>
                     {(onClose) => (
                         <>
-                            <ModalHeader className="flex flex-col gap-1"
-                                style={{
-                                    background: 'linear-gradient(90deg, #a10003, #002887)',
-                                    color: 'white',
-                                    fontWeight: 'bold'
-                                }}>Celulares disponibles</ModalHeader>
+                            <ModalHeader className="flex flex-col gap-1"></ModalHeader>
                             {isLoading && (
                                 <Progress color="primary" isIndeterminate size="sm" />
                             )}
@@ -167,7 +141,7 @@ export default function StockCelulares({ isOpen, onOpen, onOpenChange, id_celula
                         </>
                     )}
                 </ModalContent>
-            </Modal>
+            </Modal >
         </>
     );
 }

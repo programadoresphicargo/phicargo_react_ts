@@ -25,7 +25,7 @@ const AsignacionComputo = () => {
 
   const columns = useMemo(
     () => [
-      { accessorKey: 'id_ec', header: 'ID Equipo' },
+      { accessorKey: 'sn', header: 'SN' },
       { accessorKey: 'so', header: 'SO' },
       { accessorKey: 'marca', header: 'Marca' },
       { accessorKey: 'modelo', header: 'Modelo' },
@@ -59,7 +59,6 @@ const AsignacionComputo = () => {
       showGlobalFilter: true,
       density: 'compact',
       pagination: { pageSize: 80 },
-      showColumnFilters: true,
     },
     muiTableBodyRowProps: ({ row }) => ({
       onClick: ({ event }) => { },
@@ -106,7 +105,7 @@ const AsignacionComputo = () => {
         >
           Asignación Computo
         </h1>
-        <Button color='primary' onPress={onOpen}>Añadir</Button>
+        <Button color='primary' onPress={onOpen}>Añadir equipo de computo</Button>
       </Box>
     ),
   });

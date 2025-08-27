@@ -15,6 +15,7 @@ import {
 import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
 import ModalAsignacion from './form';
+import EmpleadosSinAsignarCelular from '../celulares/empleados_no_celulares';
 
 const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
@@ -22,7 +23,19 @@ const Asignaciones = () => {
   const [isLoading, setLoading] = useState(false);
 
   const [data, setData] = useState([]);
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  const {
+    isOpen: isOpen1,
+    onOpen: onOpen1,
+    onOpenChange: onOpenChange1,
+  } = useDisclosure();
+
+  const {
+    isOpen: isOpen2,
+    onOpen: onOpen2,
+    onOpenChange: onOpenChange2,
+  } = useDisclosure();
+
 
   const fetchData = async () => {
     try {
@@ -38,7 +51,7 @@ const Asignaciones = () => {
 
   useEffect(() => {
     fetchData();
-  }, [isOpen]);
+  }, [isOpen1]);
 
   const Devolver = async (data) => {
     Swal.fire({
@@ -197,8 +210,9 @@ const Asignaciones = () => {
         >
           Asignaciones celulares
         </h1>
-        <Button color='primary' onPress={() => onOpen()}>Nueva asignación</Button>
+        <Button color='primary' onPress={() => onOpen1()}>Nueva asignación</Button>
         <Button color='danger' onPress={() => fetchData()}>Refrescar</Button>
+        <Button color='success' onPress={() => onOpenChange2()} className='text-white'>Empleados no asignados</Button>
       </Box>
     ),
   });
@@ -207,7 +221,8 @@ const Asignaciones = () => {
     <div>
       <NavbarInventarioTI></NavbarInventarioTI>
       <MaterialReactTable table={table} />
-      <ModalAsignacion isOpen={isOpen} onOpenChange={onOpenChange}></ModalAsignacion>
+      <ModalAsignacion isOpen={isOpen1} onOpenChange={onOpenChange1}></ModalAsignacion>
+      <EmpleadosSinAsignarCelular isOpen={isOpen2} onOpenChange={onOpenChange2}></EmpleadosSinAsignarCelular>
     </div>
   );
 };
