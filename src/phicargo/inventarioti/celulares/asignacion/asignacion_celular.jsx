@@ -10,7 +10,7 @@ import { DatePicker } from 'antd';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import odooApi from '@/api/odoo-api';
 import NavbarInventarioTI from '../../navbar';
-import StockCelulares from './stock';
+import StockCelulares from './stock_celular';
 import {
   useDisclosure,
 } from "@heroui/react";
@@ -151,7 +151,7 @@ const AsignacionCelular = () => {
         >
           Asignación celular
         </h1>
-        <Button color='success' className='text-white' onPress={onOpen}>Añadir celular</Button>
+        <Button color='success' className='text-white' onPress={onOpen}><i class="bi bi-plus-circle"></i> Añadir celular</Button>
       </Box>
     ),
   });

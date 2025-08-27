@@ -138,6 +138,7 @@ export default function ModalAsignacion({ isOpen, onOpen, onOpenChange, id_celul
                     <CardBody>
                       <div className="w-full grid grid-cols-1 gap-4">
                         <Autocomplete
+                          startContent={<i class="bi bi-person-fill"></i>}
                           isLoading={isLoadingEmpleados}
                           label="Empleado"
                           variant='bordered'
@@ -149,6 +150,7 @@ export default function ModalAsignacion({ isOpen, onOpen, onOpenChange, id_celul
                           ))}
                         </Autocomplete>
                         <DatePicker
+                          startContent={<i class="bi bi-calendar-event"></i>}
                           variant='bordered'
                           label="Fecha de asignación"
                           isInvalid={!form_data?.data?.fecha_asignacion}
