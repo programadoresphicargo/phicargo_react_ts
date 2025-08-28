@@ -67,6 +67,7 @@ const exportConf: ExportConfig<Vehicle> = {
     { accessorFn: (data) => data.loadType, header: 'TIPO CARGA' },
     { accessorFn: (data) => data.modality, header: 'MODALIDAD' },
     { accessorFn: (data) => data.state?.name, header: 'ESTADO' },
+    { accessorFn: (data) => data.driverPostura?.name, header: 'POSTURA ACTIVA' },
   ],
 };
 
