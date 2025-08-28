@@ -23,10 +23,9 @@ import { TiemposViajeProvider } from './detenciones/TiemposViajeContext';
 import { ViajeContext } from './context/viajeContext';
 import { fontFamily } from '@mui/system';
 import { useJourneyDialogs } from './seguimiento/funciones';
-
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+import WhatsAppContatcsTravel from "../inventarioti/whatsapp/table";
+import { useDisclosure } from "@heroui/react";
+import DialogActions from '@mui/material/DialogActions';
 
 const Viaje = ({ }) => {
 
@@ -57,6 +56,12 @@ const Viaje = ({ }) => {
     setOpenCorreos(false);
   };
 
+  const {
+    isOpen: isOpen1,
+    onOpen: onOpen1,
+    onOpenChange: onOpenChange1,
+  } = useDisclosure();
+
   return (
     <>
       {isLoading && (
@@ -77,8 +82,18 @@ const Viaje = ({ }) => {
             <span>Cliente: {viaje?.partner?.name}</span>
           </div>
         </div>
-        <div className="mt-5 flex lg:ml-4 lg:mt-0">
-          <Button color='primary' onPress={handleClickOpenCorreos}>
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <Button
+            color='success'
+            onPress={() => onOpen1()}
+            className="text-white"
+            isDisabled>
+            <i class="bi bi-whatsapp"></i>
+            WhatsApp
+          </Button>
+          <Button
+            color='primary'
+            onPress={handleClickOpenCorreos}>
             <i class="bi bi-envelope-at"></i>
             Correos electronicos
           </Button>
@@ -129,29 +144,25 @@ const Viaje = ({ }) => {
       </Box>
 
       <Dialog
-        fullWidth="md"
-        maxWidth="md"
         open={openCorreos}
         onClose={handleCloseCorreos}
-        TransitionComponent={Transition}
-        keepMounted
-        sx={{
-          '& .MuiPaper-root': {
-            borderRadius: '18px',
-            boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.0)',
-          },
-        }}
-        BackdropProps={{
-          sx: {
-            backgroundColor: 'rgba(0, 0, 0, 0.3)',
-          },
-        }}
+        maxWidth="md" // similar a size="5xl"
+        fullWidth
       >
-        <DialogTitle>Correos electronicos ligados a viaje</DialogTitle>
-        <DialogContent className='p-3'>
-          <CorreosElectronicosViaje openCorreos={openCorreos}></CorreosElectronicosViaje>
+        <DialogTitle>Destinatarios</DialogTitle>
+
+        <DialogContent dividers>
+          <CorreosElectronicosViaje openCorreos={openCorreos} />
         </DialogContent>
+
+        <DialogActions>
+          <Button onClick={handleCloseCorreos} color="primary" variant="contained">
+            Cerrar
+          </Button>
+        </DialogActions>
       </Dialog>
+
+      <WhatsAppContatcsTravel isOpen={isOpen1} onOpenChange={onOpenChange1}></WhatsAppContatcsTravel>
     </>
   );
 };

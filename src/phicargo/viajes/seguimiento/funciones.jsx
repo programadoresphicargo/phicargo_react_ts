@@ -45,6 +45,7 @@ export const useJourneyDialogs = () => {
             cancelButtonColor: '#d33',
             confirmButtonText: 'Sí, finalizar viaje',
             cancelButtonText: 'Cancelar',
+            target: document.getElementById('mi-div'), // 👈
         });
 
         if (result.isConfirmed) {
