@@ -242,14 +242,6 @@ const ViajesActivos = ({ }) => {
         header: 'Ruta',
       },
       {
-        accessorKey: 'inicio_programado',
-        header: 'Inicio programado',
-      },
-      {
-        accessorKey: 'llegada_planta_programada',
-        header: 'Llegada planta programada',
-      },
-      {
         accessorKey: 'codigo_postal',
         header: 'Distancia al punto de carga/descarga (50km/h)',
         Cell: ({ row }) => {
@@ -264,6 +256,26 @@ const ViajesActivos = ({ }) => {
             </Chip>
           );
         }
+      },
+      {
+        accessorKey: 'inicio_programado',
+        header: 'Inicio programado',
+      },
+      {
+        accessorKey: 'fecha_inicio',
+        header: 'Fecha inicio',
+      },
+      {
+        accessorKey: 'mensaje_inicio_programado',
+        header: 'Resultado',
+      },
+      {
+        accessorKey: 'llegada_planta_programada',
+        header: 'Llegada planta programada',
+      },
+      {
+        accessorKey: 'fecha_llegada_planta',
+        header: 'Llegada a planta',
       },
       {
         accessorKey: 'nombre_cliente',
@@ -298,10 +310,6 @@ const ViajesActivos = ({ }) => {
             </Chip>
           );
         },
-      },
-      {
-        accessorKey: 'fecha_llegada_planta',
-        header: 'Llegada a planta',
       },
       {
         accessorKey: 'fecha_salida_planta',

@@ -46,6 +46,7 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
         size: 4,
         Cell: ({ row }) => {
           if (row.original.status === 'pending') {
+            console.log(row.original.checkIn);
             return daysUtilNow(row.original.checkIn);
           } else if (row.original.checkOut) {
             return daysUtil(row.original.checkIn, row.original.checkOut);
