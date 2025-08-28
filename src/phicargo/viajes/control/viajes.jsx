@@ -28,6 +28,7 @@ import { exportToCSV } from '../../utils/export';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import EstatusChipInicioViaje from '../componentes/status_chip_inicio';
+import EstatusChipLlegadaPlanta from '../componentes/status_chip_planta';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -278,6 +279,11 @@ const ViajesActivos = ({ }) => {
       {
         accessorKey: 'fecha_llegada_planta',
         header: 'Llegada a planta',
+      },
+      {
+        accessorKey: 'mensaje_llegada_planta',
+        header: 'Resultado',
+        Cell: ({ cell }) => <EstatusChipLlegadaPlanta valor={cell.getValue()}></EstatusChipLlegadaPlanta>
       },
       {
         accessorKey: 'nombre_cliente',
