@@ -6,13 +6,13 @@ import {
 import { Select, SelectItem } from "@heroui/react";
 import toast from 'react-hot-toast';
 import { parseDate } from "@internationalized/date";
-import BajaCelular from "./baja_form";
+import BajaCelular from "../../celulares/baja_form";
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import HistorialAsignaciones from "../asignacion/historial";
+import HistorialAsignaciones from "../../asignacion/historial";
 import {
     MaterialReactTable,
     useMaterialReactTable,
@@ -20,7 +20,7 @@ import {
 import React, { useEffect, useMemo, useState } from 'react';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
-export default function EmpleadosSinAsignarCelular({ isOpen, onOpenChange, id_celular }) {
+export default function DispositivosSinAsignar({ tipo }) {
 
     const [isLoading, setLoading] = useState(false);
     const [data, setData] = useState([]);
@@ -29,7 +29,13 @@ export default function EmpleadosSinAsignarCelular({ isOpen, onOpenChange, id_ce
         try {
             setLoading(true);
             const response = await odooApi.get('/inventarioti/empleados/activo/true');
-            setData(response.data);
+            if (tipo == 'celular') {
+                const filtrados = response.data.filter(item => item.tiene_celular === 'No');
+                setData(filtrados);
+            } else {
+                const filtrados = response.data.filter(item => item.tiene_computo === 'No');
+                setData(filtrados);
+            }
         } catch (error) {
             console.error('Error al obtener los datos:', error);
         } finally {
@@ -39,12 +45,14 @@ export default function EmpleadosSinAsignarCelular({ isOpen, onOpenChange, id_ce
 
     useEffect(() => {
         fetchData();
-    }, [id_celular, isOpen]);
+    }, []);
 
     const columns = useMemo(
         () => [
             { accessorKey: 'nombre_empleado', header: 'Nombre empleado' },
-            { accessorKey: 'celular_asignado', header: 'Correo' },
+            { accessorKey: 'puesto', header: 'Puesto' },
+            { accessorKey: 'tiene_celular', header: 'Tiene celular' },
+            { accessorKey: 'tiene_computo', header: 'Tiene computo' },
         ],
         [],
     );
@@ -64,6 +72,11 @@ export default function EmpleadosSinAsignarCelular({ isOpen, onOpenChange, id_ce
             density: 'compact',
             pagination: { pageSize: 80 },
             showColumnFilters: true,
+            columnVisibility:
+            {
+                tiene_celular: tipo == 'celular' ? true : false,
+                tiene_computo: tipo == 'computo' ? true : false,
+            }
         },
         muiTableBodyRowProps: ({ row }) => ({
             onClick: ({ event }) => {
@@ -106,11 +119,6 @@ export default function EmpleadosSinAsignarCelular({ isOpen, onOpenChange, id_ce
                     flexWrap: 'wrap',
                 }}
             >
-                <h1
-                    className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
-                >
-                    Empleados sin asignaciòn
-                </h1>
                 <Button color="danger"
                     onPress={() => {
                         fetchData();
@@ -122,26 +130,7 @@ export default function EmpleadosSinAsignarCelular({ isOpen, onOpenChange, id_ce
 
     return (
         <>
-            <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="5xl" scrollBehavior="outside">
-                <ModalContent>
-                    {(onClose) => (
-                        <>
-                            <ModalHeader className="flex flex-col gap-1"></ModalHeader>
-                            {isLoading && (
-                                <Progress color="primary" isIndeterminate size="sm" />
-                            )}
-                            <ModalBody>
-                                <MaterialReactTable table={table} />
-                            </ModalBody>
-                            <ModalFooter>
-                                <Button color="danger" variant="light" onPress={onClose}>
-                                    Cancelar
-                                </Button>
-                            </ModalFooter>
-                        </>
-                    )}
-                </ModalContent>
-            </Modal >
+            <MaterialReactTable table={table} />
         </>
     );
 }

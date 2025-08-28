@@ -15,7 +15,7 @@ import {
 import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
 import ModalAsignacion from './form';
-import EmpleadosSinAsignarCelular from '../celulares/empleados_no_celulares';
+import EmpleadosSinAsignarCelular from '../empleados/no_asignados/empleados_no_celulares';
 
 const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
