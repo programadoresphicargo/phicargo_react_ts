@@ -27,6 +27,7 @@ import ViajesActivosMasivo from '../envio_masivo/viajes_activos';
 import { exportToCSV } from '../../utils/export';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
+import EstatusChipInicioViaje from '../componentes/status_chip_inicio';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -268,6 +269,7 @@ const ViajesActivos = ({ }) => {
       {
         accessorKey: 'mensaje_inicio_programado',
         header: 'Resultado',
+        Cell: ({ cell }) => <EstatusChipInicioViaje valor={cell.getValue()}></EstatusChipInicioViaje>
       },
       {
         accessorKey: 'llegada_planta_programada',
