@@ -1,5 +1,5 @@
 import { Box, Grid, Typography } from '@mui/material';
-import { Button, Textarea, user } from '@heroui/react';
+import { Button, CardHeader, Divider, Textarea, user } from '@heroui/react';
 import { Card, CardBody, CardFooter } from "@heroui/react";
 import React, { useCallback, useEffect, useState } from 'react';
 
@@ -30,10 +30,6 @@ export default function PanelEstatus({ id_maniobra, open, handleClose }) {
 
     const handleSelectCard = (id) => {
         setEstatusSeleccionado(id);
-    };
-
-    const handleComentariosChange = (event) => {
-        setComentarios(event.target.value);
     };
 
     useEffect(() => {
@@ -112,6 +108,24 @@ export default function PanelEstatus({ id_maniobra, open, handleClose }) {
         }
     };
 
+    const sugerencias = [
+        "Unidad liberada",
+        "Unidad ya con papeles para la salida",
+        "Operador reporta trafico",
+        "Operador en toma de alimentos",
+        "Operador reporta llegada a planta",
+        "Operador reporta accidente",
+        "Motivo de detención:"
+    ];
+
+    const handleComentariosChange = (event) => {
+        setComentarios(event.target.value);
+    };
+
+    const seleccionarOpcion = (opcion) => {
+        setComentarios((contenidoAnterior) => `${contenidoAnterior} ${opcion}`);
+    };
+
     return (
         <React.Fragment>
             <Dialog
@@ -125,49 +139,100 @@ export default function PanelEstatus({ id_maniobra, open, handleClose }) {
                     {"Envio estatus"}
                 </DialogTitle>
                 <DialogContent>
+                    <div className="flex flex-col gap-6">
 
-                    <Typography variant="h5" gutterBottom>
-                        Seleccionar estatus
-                    </Typography>
+                        <Card>
+                            <CardHeader className='bg-warning'>
+                                <div className="flex flex-col">
+                                    <p className="text-md font-bold text-white">Seleccionar estatus</p>
+                                </div>
+                            </CardHeader>
+                            <CardBody>
+                                <Box>
+                                    <div className="gap-4 grid grid-cols-2 sm:grid-cols-4">
+                                        {data.map((item, index) => (
+                                            <Card shadow="sm" key={index} isPressable
+                                                onPress={() => handleSelectCard(item.id_estatus)}
+                                                style={{
+                                                    border: estatus_seleccionado === item.id_estatus ? '2px solid blue' : 'none',
+                                                }}>
+                                                <CardBody className="overflow-visible flex items-center justify-center">
+                                                </CardBody>
+                                                <CardFooter className="text-small justify-center">
+                                                    <b>{item.nombre_estatus}</b>
+                                                </CardFooter>
+                                            </Card>
+                                        ))}
+                                    </div>
+                                </Box>
+                            </CardBody>
+                        </Card>
 
-                    <Box>
-                        <div className="gap-4 grid grid-cols-2 sm:grid-cols-4 p-4">
-                            {data.map((item, index) => (
-                                <Card shadow="sm" key={index} isPressable
-                                    onPress={() => handleSelectCard(item.id_estatus)}
+                        <Card>
+                            <CardHeader className='bg-primary'>
+                                <div className="flex flex-col">
+                                    <p className="text-md font-bold text-white">Evidencias</p>
+                                </div>
+                            </CardHeader>
+                            <Divider></Divider>
+                            <CardBody>
+                                <Dragger {...props} style={{ fontFamily: 'Inter' }}>
+                                    <p className="ant-upload-drag-icon"></p>
+                                    <p className="ant-upload-text">Haz clic o arrastra el archivo aquí para subirlo</p>
+                                    <p className="ant-upload-hint">Soporta múltiples archivos</p>
+                                </Dragger>
+
+                            </CardBody>
+                        </Card>
+
+                        <Card>
+                            <CardHeader className='bg-success'>
+                                <div className="flex flex-col">
+                                    <p className="text-md font-bold text-white">Añadir comentarios</p>
+                                </div>
+                            </CardHeader>
+                            <Divider></Divider>
+                            <CardBody>
+
+                                <h1
                                     style={{
-                                        border: estatus_seleccionado === item.id_estatus ? '2px solid blue' : 'none',
+                                        fontSize: '25px',
+                                        fontWeight: 'bold',
                                     }}>
-                                    <CardBody className="overflow-visible flex items-center justify-center">
-                                    </CardBody>
-                                    <CardFooter className="text-small justify-center">
-                                        <b>{item.nombre_estatus}</b>
-                                    </CardFooter>
-                                </Card>
-                            ))}
-                        </div>
-                    </Box>
+                                    Opciones predefinidas a comentar
+                                </h1>
 
-                    <Typography variant="h5" gutterBottom className='mt-5'>
-                        Evidencias
-                    </Typography>
+                                <div className="gap-2 grid grid-cols-2 sm:grid-cols-4 mt-3 mb-3">
+                                    {sugerencias.map((opcion, index) => (
+                                        <>
+                                            <Card
+                                                isBlurred
+                                                isPressable
+                                                onPress={() => seleccionarOpcion(opcion)}
+                                                style={{ backgroundColor: '#25D366' }} // Aquí defines el color
+                                            >
+                                                <CardBody>
+                                                    <span style={{ color: 'white' }}>{opcion}</span>
+                                                </CardBody>
+                                            </Card>
+                                        </>
+                                    ))}
+                                </div>
 
-                    <Dragger {...props} style={{ fontFamily: 'Inter' }}>
-                        <p className="ant-upload-drag-icon"></p>
-                        <p className="ant-upload-text">Haz clic o arrastra el archivo aquí para subirlo</p>
-                        <p className="ant-upload-hint">Soporta múltiples archivos</p>
-                    </Dragger>
+                                <Textarea
+                                    fullWidth
+                                    label="Comentarios"
+                                    id="comentarios_estatus"
+                                    variant='bordered'
+                                    value={comentarios}
+                                    onChange={handleComentariosChange}
+                                    className='mt-5'
+                                    onClear={() => setComentarios("")}
+                                />
 
-                    <Textarea
-                        fullWidth
-                        label="Comentarios"
-                        id="comentarios_estatus"
-                        variant='bordered'
-                        value={comentarios}
-                        onChange={handleComentariosChange}
-                        className='mt-5'
-                    />
-
+                            </CardBody>
+                        </Card>
+                    </div>
                 </DialogContent>
                 <DialogActions>
                     <Button onPress={handleClose} color='danger'>Cancelar</Button>
