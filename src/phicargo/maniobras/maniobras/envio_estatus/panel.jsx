@@ -109,13 +109,9 @@ export default function PanelEstatus({ id_maniobra, open, handleClose }) {
     };
 
     const sugerencias = [
-        "Unidad liberada",
-        "Unidad ya con papeles para la salida",
-        "Operador reporta trafico",
-        "Operador en toma de alimentos",
-        "Operador reporta llegada a planta",
-        "Operador reporta accidente",
-        "Motivo de detención:"
+        "Unidad en terminal esperando turno",
+        "Unidad ingresando a terminal",
+        "Unidad en terminal esperando turno",
     ];
 
     const handleComentariosChange = (event) => {
