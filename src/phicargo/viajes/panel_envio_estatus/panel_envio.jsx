@@ -229,25 +229,8 @@ function PanelEnvio({ open, cerrar, id_reporte }) {
     "Motivo de detención:"
   ];
 
-  const [resultados, setResultados] = useState([]);
-
-  const handleChange = (e) => {
-    const valor = e;
-    setContenido(valor);
-
-    if (valor.length > 0) {
-      const filtrados = sugerencias.filter((msg) =>
-        msg.toLowerCase().includes(valor.toLowerCase())
-      );
-      setResultados(filtrados);
-    } else {
-      setResultados([]);
-    }
-  };
-
   const seleccionarOpcion = (opcion) => {
     setContenido((contenidoAnterior) => `${contenidoAnterior} ${opcion}`);
-    setResultados([]);
   };
 
   return (
@@ -423,7 +406,7 @@ function PanelEnvio({ open, cerrar, id_reporte }) {
                       label="Comentarios"
                       variant='bordered'
                       value={comentarios}
-                      onValueChange={handleChange}
+                      onValueChange={setContenido}
                       onClear={() => setContenido("")}>
                     </Textarea>
 
