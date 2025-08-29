@@ -298,7 +298,7 @@ const ManiobrasActivasMasivos = ({ }) => {
         }}
       >
         <Button onPress={handleExportData} color="primary" isLoading={isLoading}>
-          Enviar estatus
+          <i class="bi bi-send"></i> Enviar estatus
         </Button>
 
         <Button onPress={() => fetchData()} color="primary" isLoading={isLoading}>

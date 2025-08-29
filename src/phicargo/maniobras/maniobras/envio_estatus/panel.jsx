@@ -233,7 +233,7 @@ export default function PanelEstatus({ id_maniobra, open, handleClose }) {
                 <DialogActions>
                     <Button onPress={handleClose} color='danger'>Cancelar</Button>
                     <Button onPress={enviar_estatus} color='primary' isLoading={isLoadingEnvio}>
-                        Enviar estatus
+                        <i class="bi bi-send"></i> Enviar estatus
                     </Button>
                 </DialogActions>
             </Dialog>

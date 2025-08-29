@@ -459,11 +459,11 @@ function PanelEnvio({ open, cerrar, id_reporte }) {
                   onPress={confirmar_envio}
                   isLoading={isLoadingSendEstatus}
                 >
-                  Enviar estatus
+                  <i class="bi bi-send"></i> Enviar estatus
                 </Button>
               ) : (
                 <Button color="success" onPress={() => confirmar_reenvio()} className='text-white' isDisabled={isLoadingSendEstatus}>
-                  Reenviar estatus
+                  <i class="bi bi-send"></i> Reenviar estatus
                 </Button>
               )}
             </>
