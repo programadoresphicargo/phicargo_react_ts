@@ -219,6 +219,37 @@ function PanelEnvio({ open, cerrar, id_reporte }) {
     });
   };
 
+  const sugerencias = [
+    "Unidad liberada",
+    "Unidad ya con papeles para la salida",
+    "Operador reporta trafico",
+    "Operador en toma de alimentos",
+    "Operador reporta llegada a planta",
+    "Operador reporta accidente",
+    "Motivo de detención:"
+  ];
+
+  const [resultados, setResultados] = useState([]);
+
+  const handleChange = (e) => {
+    const valor = e;
+    setContenido(valor);
+
+    if (valor.length > 0) {
+      const filtrados = sugerencias.filter((msg) =>
+        msg.toLowerCase().includes(valor.toLowerCase())
+      );
+      setResultados(filtrados);
+    } else {
+      setResultados([]);
+    }
+  };
+
+  const seleccionarOpcion = (opcion) => {
+    setContenido((contenidoAnterior) => `${contenidoAnterior} ${opcion}`);
+    setResultados([]);
+  };
+
   return (
     <Dialog
       fullWidth="lg"
@@ -362,12 +393,40 @@ function PanelEnvio({ open, cerrar, id_reporte }) {
                     </div>
                   </CardHeader>
                   <CardBody>
+
+                    <h1
+                      style={{
+                        fontSize: '25px',
+                        fontWeight: 'bold',
+                      }}>
+                      Opciones predefinidas a comentar
+                    </h1>
+
+                    <div className="gap-2 grid grid-cols-2 sm:grid-cols-4 mt-3 mb-3">
+                      {sugerencias.map((opcion, index) => (
+                        <>
+                          <Card
+                            isBlurred
+                            isPressable
+                            onPress={() => seleccionarOpcion(opcion)}
+                            style={{ backgroundColor: '#25D366' }} // Aquí defines el color
+                          >
+                            <CardBody>
+                              <span style={{ color: 'white' }}>{opcion}</span>
+                            </CardBody>
+                          </Card>
+                        </>
+                      ))}
+                    </div>
+
                     <Textarea
                       label="Comentarios"
                       variant='bordered'
                       value={comentarios}
-                      onValueChange={setContenido}>
+                      onValueChange={handleChange}
+                      onClear={() => setContenido("")}>
                     </Textarea>
+
                   </CardBody>
                 </Card>
 
