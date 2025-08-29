@@ -343,7 +343,7 @@ function PanelEnvio({ open, cerrar, id_reporte }) {
 
 
                 <Card className='mb-5'>
-                  <CardHeader className="justify-between bg-danger">
+                  <CardHeader className="justify-between bg-warning">
                     <Switch isSelected={isSelected} onValueChange={handleSwitchChange}>
                       Habilitar cambio de hora
                     </Switch>
