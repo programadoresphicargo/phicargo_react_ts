@@ -40,6 +40,18 @@ export const useShiftColumns = () => {
         },
       },
       {
+        accessorFn: (row) => row.driver.licenseType || 'SIN ASIGNAR',
+        header: 'Tipo Licencia',
+        maxSize: 50,
+        Cell: ({ cell }) => {
+          return (
+            <Chip color={"default"} size="sm">
+              {cell.getValue<string>()}
+            </Chip>
+          );
+        },
+      },
+      {
         accessorFn: (row) => row.driver.isDangerous,
         header: 'Peligroso',
         maxSize: 50,

@@ -7,6 +7,7 @@ export interface DriverInfo {
   id: number;
   name: string;
   license: string | null;
+  licenseType: string | null;
   modality: string | null;
   isDangerous: boolean;
 }

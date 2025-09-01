@@ -6,6 +6,7 @@ export interface DriverInfoApi {
   id: number;
   name: string;
   tms_driver_license_id: string | null;
+  tms_driver_license_type: string | null;
   x_modalidad: string | null;
   x_peligroso_lic: string | null;
 }
