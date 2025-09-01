@@ -11,7 +11,7 @@ const IncidentsShift = ({ data }) => {
 
     const fetchItems = () => {
         setIsLoading(true);
-        odooApi.get(`/tms_travel/last_travels/${data.driver.id}/15`)
+        odooApi.get(`/drivers/${data.driver.id}/incidents?recent_only=true`)
             .then((response) => {
                 setItems(response.data);
             })
@@ -60,15 +60,15 @@ const IncidentsShift = ({ data }) => {
                     {(item) => (
                         <DropdownItem key={item.id_viaje}>
                             <div className="flex flex-col gap-1">
-                                <span className="font-semibold text-primary">{item.referencia}</span>
+                                <span className="font-semibold text-danger">{item.incidence}</span>
                                 <span className="text-sm text-gray-600 flex items-center gap-1">
-                                    🛣️            {item.ruta}
+                                    💬{item.comments}
                                 </span>
                                 <span className="text-sm text-gray-600 flex items-center gap-1">
-                                    📅     Inicio: {item.fecha_inicio}
+                                    ⏰ Fecha: {item.incident_date}
                                 </span>
                                 <span className="text-sm text-gray-600 flex items-center gap-1">
-                                    ⏰ Duración: {item.diferencia_dias > 0 ? item.diferencia_dias + ' días ' : ''}{item.diferencia_horas_minutos}
+                                    👤{item.user.usuario}
                                 </span>
                             </div>
                         </DropdownItem>
