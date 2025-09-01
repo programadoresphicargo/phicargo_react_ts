@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { type MRT_ColumnDef } from 'material-react-table';
 import { Shift } from '../models';
-import { Chip, Button } from "@heroui/react";
+import { Chip } from "@heroui/react";
 import LastTravels from './last_travels';
 import IncidentsShift from './IncidentsShift';
 
