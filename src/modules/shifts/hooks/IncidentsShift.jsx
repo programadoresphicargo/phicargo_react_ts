@@ -61,14 +61,14 @@ const IncidentsShift = ({ data }) => {
                         <DropdownItem key={item.id_viaje}>
                             <div className="flex flex-col gap-1">
                                 <span className="font-semibold text-danger">{item.incidence}</span>
-                                <span className="text-sm text-gray-600 flex items-center gap-1">
-                                    💬{item.comments}
+                                <span className="text-sm text-gray-600 flex items-start gap-1 whitespace-pre-wrap break-words max-w-xs">
+                                    💬Comentarios: {item.comments}
                                 </span>
                                 <span className="text-sm text-gray-600 flex items-center gap-1">
-                                    ⏰ Fecha: {item.incident_date}
+                                    ⏰ Fecha de incidencia: {item.incident_date}
                                 </span>
                                 <span className="text-sm text-gray-600 flex items-center gap-1">
-                                    👤{item.user.usuario}
+                                    👤Registrado por: {item.user.usuario}
                                 </span>
                             </div>
                         </DropdownItem>
