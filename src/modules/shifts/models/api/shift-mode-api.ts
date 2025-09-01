@@ -33,6 +33,7 @@ export interface ShiftBaseApi {
   comments: string | null;
   register_date: string;
   queue: boolean;
+  has_recent_incident: boolean;
 }
 
 export interface ShiftApi extends ShiftBaseApi {

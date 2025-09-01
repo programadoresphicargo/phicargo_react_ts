@@ -34,6 +34,7 @@ export interface ShiftBase {
   comments: string | null;
   registerDate: Dayjs;
   queue: boolean;
+  has_recent_incident: boolean;
 }
 
 export interface Shift extends ShiftBase {

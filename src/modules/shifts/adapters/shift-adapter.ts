@@ -95,6 +95,7 @@ export const shiftToLocal = (shift: ShiftApi): Shift => ({
   branch: shift.res_store,
   registerUser: userBasicToLocal(shift.register_user),
   travel: shift.travel ? travelInfoToLocal(shift.travel) : null,
+  has_recent_incident: shift.has_recent_incident
 });
 
 /**

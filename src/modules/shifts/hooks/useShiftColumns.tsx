@@ -1,8 +1,9 @@
 import { useMemo } from 'react';
 import { type MRT_ColumnDef } from 'material-react-table';
 import { Shift } from '../models';
-import { Chip } from "@heroui/react";
+import { Chip, Button } from "@heroui/react";
 import LastTravels from './last_travels';
+import IncidentsShift from './IncidentsShift';
 
 export const useShiftColumns = () => {
   const columns = useMemo<MRT_ColumnDef<Shift>[]>(
@@ -97,6 +98,14 @@ export const useShiftColumns = () => {
               {value || 'SIN NÚMERO'}
             </span>
           )
+        }
+      },
+      {
+        accessorFn: (row) => row.has_recent_incident,
+        header: 'Incidencias recientes (últimos 15 días)',
+        Cell: ({ row }) => {
+          return (<IncidentsShift data={row.original}></IncidentsShift>
+          );
         }
       },
       {
