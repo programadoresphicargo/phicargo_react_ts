@@ -2,8 +2,6 @@ import { ExportConfig, ExportToExcel } from '@/utilities';
 import { IconButton, Tooltip } from '@mui/material';
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 import { Outlet, useNavigate } from 'react-router-dom';
-
-import { AddButton } from '@/components/ui';
 import { Button } from '@heroui/react';
 import ExportExcelButton from '@/components/ui/buttons/ExportExcelButton';
 import { HiQueueList } from 'react-icons/hi2';
@@ -74,29 +72,35 @@ const ShiftsPage = () => {
     }),
     renderTopToolbarCustomActions: () => (
       <div className="flex items-center gap-4">
-        <Tooltip arrow title="Refrescar">
-          <IconButton onClick={() => refetch()}>
-            <RefreshIcon />
-          </IconButton>
-        </Tooltip>
-        <AddButton
-          label="Ingresar turno"
-          onClick={() => navigate('/turnos/crear')}
-        />
+        <h1 className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text">
+          Control de turnos
+        </h1>
         <Button
-          size="sm"
-          variant="flat"
+          color='primary'
+          onPress={() => navigate('/turnos/crear')}
+          radius='full'
+          size='sm'
+          startContent={<i className="bi bi-plus-circle"></i>}>
+          Ingresar turno
+        </Button>
+        <Button
+          radius="full"
+          size='sm'
           color="secondary"
-          className="font-bold"
           startContent={<HiQueueList />}
           onPress={() => navigate('/turnos/cola')}
         >
-          Operadores En Cola
+          Operadores en cola
         </Button>
         <ExportExcelButton
           size="small"
           onClick={() => exportTo.exportData(data)}
         />
+        <Tooltip arrow title="Refrescar">
+          <IconButton onClick={() => refetch()}>
+            <RefreshIcon />
+          </IconButton>
+        </Tooltip>
       </div>
     ),
     muiTableContainerProps: {
