@@ -8,6 +8,7 @@ import { useBaseTable } from '@/hooks';
 import { useState } from 'react';
 import { useUsersColums } from '../hooks/useUsersColumns';
 import { useUsersQueries } from '../hooks/useUsersQueries';
+import { Button } from '@heroui/react';
 
 const UsersManagementPage = () => {
   const { columns } = useUsersColums();
@@ -29,7 +30,7 @@ const UsersManagementPage = () => {
     showGlobalFilter: true,
     showColumnFilters: true,
     toolbarActions: (
-      <AddButton label="Crear Usuario" onClick={() => setCreateModal(true)} />
+      <Button onPress={() => setCreateModal(true)} size='sm' color='primary' radius='full'>Crear Usuario</Button>
     ),
     onDoubleClickFn: (row) => {
       setInformationModal(row.original);
