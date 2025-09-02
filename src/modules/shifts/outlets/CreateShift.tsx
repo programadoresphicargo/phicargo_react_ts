@@ -62,10 +62,13 @@ const CreateShift = () => {
       <ModalContent>
         {() => (
           <>
-            <ModalHeader className="flex items-center justify-center bg-[#dadfeb] pb-2">
-              <h3 className="font-bold text-xl text-center text-gray-800 uppercase">
-                Crear Turno
-              </h3>
+            <ModalHeader
+              style={{
+                background: 'linear-gradient(70deg, #004494, #002887)',
+                color: 'white',
+                fontWeight: 'bold'
+              }}>
+              Nuevo turno
             </ModalHeader>
             <ModalBody className="p-2">
               <div className="flex flex-col gap-4 border-2 rounded-lg p-3">
