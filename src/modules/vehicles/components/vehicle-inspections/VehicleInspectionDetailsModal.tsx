@@ -14,7 +14,6 @@ import { EditIncidentModal } from '@/modules/incidents/components/EditIncidentMo
 import Swal from 'sweetalert2';
 import { useConfirmInspectionMutation } from '../../hooks/queries/inspections/useConfirmInspection';
 import { useState, useEffect } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
 import { useUpdateVehicleInspectionMutation } from '../../hooks/queries/inspections/useUpdateVehicleInspectionMutation';
 import { useGetInspectionChecklistQuery } from '../../hooks/queries';
 
