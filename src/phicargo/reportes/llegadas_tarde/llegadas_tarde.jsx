@@ -3,7 +3,6 @@ import { MaterialReactTable, useMaterialReactTable } from 'material-react-table'
 import React, { useEffect, useState } from 'react';
 import { download, generateCsv, mkConfig } from 'export-to-csv';
 import { getLocalTimeZone, parseDate } from "@internationalized/date";
-
 import Badge from 'react-bootstrap/Badge';
 import { Box } from '@mui/material';
 import { Component } from "react";
@@ -13,39 +12,37 @@ import axios from 'axios';
 import odooApi from '@/api/odoo-api';
 import { toast } from "react-toastify";
 import { useDateFormatter } from "@react-aria/i18n";
+import { DateRangePicker } from 'rsuite';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
 const DetencionesTable = () => {
+  function formatDateToYYYYMMDD(date) {
+    return date.toISOString().slice(0, 10);
+  }
+
+  const now = new Date();
+  const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+  const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
+  const [range, setRange] = useState([firstDay, lastDay]);
 
   const [isLoading, setisLoading] = useState('');
-  const [fechaInicio, setFechaInicio] = React.useState(parseDate(new Date().toISOString().split('T')[0]));
-  const [fechaFin, setFechaFin] = React.useState(parseDate(new Date().toISOString().split('T')[0]));
-
-  const handleFechaInicioChange = (event) => {
-    setFechaInicio(event.target.value);
-  };
-
-  const handleFechaFinChange = (event) => {
-    setFechaFin(event.target.value);
-  };
-
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchData();
-  }, [fechaInicio, fechaFin]);
+  }, [range]);
 
   const fetchData = async () => {
     try {
-      // Validar fechas
-      if (!fechaInicio || !fechaFin) {
+      if (!range) {
         throw new Error('Las fechas de inicio y fin son obligatorias.');
       }
 
       setisLoading(true);
-      const response = await odooApi.get(`/tms_travel/salidas_llegadas/${fechaInicio}/${fechaFin}`);
+      const response = await odooApi.get(`/tms_travel/salidas_llegadas/${range[0].toISOString().slice(0, 10)}/${range[1].toISOString().slice(0, 10)}`);
       setData(response.data);
-      console.log(response.data);
     } catch (error) {
       const errorMessage = error.response
         ? `Error: ${error.response.status} - ${error.response.data.message}`
@@ -60,6 +57,7 @@ const DetencionesTable = () => {
 
   const columns = [
     { accessorKey: 'travel_name', header: 'Referencia' },
+    { accessorKey: 'sucursal', header: 'Sucursal' },
     { accessorKey: 'x_status_viaje', header: 'Estado del viaje' },
     { accessorKey: 'route_name', header: 'Ruta' },
     { accessorKey: 'employee_name', header: 'Operador' },
@@ -144,11 +142,18 @@ const DetencionesTable = () => {
     paginationDisplayMode: 'pages',
     positionToolbarAlertBanner: 'bottom',
     enableGrouping: true,
+    localization: MRT_Localization_ES,
     initialState: {
       density: 'compact',
       expanded: false,
       pagination: { pageIndex: 0, pageSize: 100 },
       showColumnFilters: true,
+    },
+    muiTablePaperProps: {
+      elevation: 0,
+      sx: {
+        borderRadius: '0',
+      },
     },
     muiTableHeadCellProps: {
       sx: {
@@ -159,7 +164,7 @@ const DetencionesTable = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 220px)',
+        maxHeight: 'calc(100vh - 230px)',
       },
     },
     muiTableBodyCellProps: ({ row }) => ({
@@ -177,46 +182,40 @@ const DetencionesTable = () => {
           display: 'flex',
           gap: '16px',
           padding: '8px',
-          flexWrap: 'nowrap',
-          flexDirection: 'row',
-          alignItems: 'center',
+          flexWrap: 'wrap',
         }}
       >
-        <DatePicker
-          firstDayOfWeek="mon"
-          variant='bordered'
-          label="Fecha inicio"
-          value={fechaInicio}
-          onChange={setFechaInicio}>
-        </DatePicker>
-
-        <DatePicker
-          firstDayOfWeek="mon"
-          variant='bordered'
-          label="Fecha fin"
-          value={fechaFin}
-          onChange={setFechaFin}>
-        </DatePicker>
+        <DateRangePicker
+          value={range}
+          onChange={(value) => setRange(value)}
+          placeholder="Selecciona un rango de fechas"
+          format="yyyy-MM-dd"
+        />
 
         <Button
-          fullWidth={true}
           color='primary'
-          onClick={handleExportData}
+          onPress={handleExportData}
           startContent={<FileDownloadIcon />}
         >
           Exportar todo
         </Button>
 
         <Button
-          fullWidth={true}
           color='primary'
           isDisabled={
             !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
           }
-          onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
+          onPress={() => handleExportRows(table.getSelectedRowModel().rows)}
           startContent={<FileDownloadIcon />}
         >
           Exportar seleccionado
+        </Button>
+
+        <Button
+          color='danger'
+          onPress={() => fetchData()}
+        >
+          Refrescar
         </Button>
       </Box >
     ),
