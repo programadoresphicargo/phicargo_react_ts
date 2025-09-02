@@ -64,16 +64,18 @@ const ShiftDetail = () => {
         <ModalContent>
           {() => (
             <>
-              <ModalHeader className="flex items-center justify-center bg-[#dadfeb] pb-2">
-                <h3 className="font-bold text-xl text-center text-gray-800 uppercase">
-                  Detalles de Turno
-                </h3>
+              <ModalHeader
+                style={{
+                  background: 'linear-gradient(70deg, #004494, #002887)',
+                  color: 'white',
+                  fontWeight: 'bold'
+                }}>
+                Detalles de turno
               </ModalHeader>
               <ModalBody className="p-2 ">
                 <div className="flex flex-row gap-4 p-2 border-2 rounded-lg">
                   <Button
                     size="sm"
-                    variant="flat"
                     color={formEnabled ? 'danger' : 'primary'}
                     startContent={<FaEdit />}
                     onPress={() => setFormEnabled(!formEnabled)}
@@ -82,7 +84,6 @@ const ShiftDetail = () => {
                   </Button>
                   <Button
                     size="sm"
-                    variant="flat"
                     color="default"
                     startContent={
                       shift?.locked ? <MdOutlineLock /> : <MdOutlineLockOpen />
@@ -94,7 +95,6 @@ const ShiftDetail = () => {
                   </Button>
                   <Button
                     size="sm"
-                    variant="flat"
                     color="secondary"
                     startContent={<MdOutlineArchive />}
                     onPress={onArchive}
@@ -113,8 +113,8 @@ const ShiftDetail = () => {
                   <Button
                     size="sm"
                     variant="solid"
-                    color="warning"
-                    className="font-bold text-gray-900"
+                    color="primary"
+                    className="text-white"
                     startContent={
                       <HiQueueList style={{ transform: 'rotate(180deg)' }} />
                     }
