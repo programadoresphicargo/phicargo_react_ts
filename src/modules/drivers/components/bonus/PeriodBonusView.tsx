@@ -196,7 +196,7 @@ export const PeriodBonusView = ({ open, onClose, periodo }: Props) => {
         }}
       >
         <RefreshButton onRefresh={driverBonusQuery.refetch} />
-        {periodo.estado !== 'cerrado' && (
+        {(periodo.estado !== 'cerrado' && periodo.estado !== 'pagado') && (
           <Button
             onClick={() => setIsEditing(!isEditing)}
             color={isEditing ? 'error' : 'primary'}
