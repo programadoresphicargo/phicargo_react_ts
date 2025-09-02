@@ -13,6 +13,8 @@ import FormCelulares from './form';
 import {
     useDisclosure,
 } from "@heroui/react";
+import { exportToCSV } from '../../../utils/export';
+
 const CelularesTabla = ({ active }) => {
     const [isLoading, setLoading] = useState(false);
     const [id_celular, setCelular] = useState(0);
@@ -157,16 +159,30 @@ const CelularesTabla = ({ active }) => {
                 >
                     Lineas celulares
                 </h1>
-                <Button color="primary"
+                <Button
+                    radius='full'
+                    color="primary"
                     onPress={() => {
                         onOpen();
                         setCelular(null);
-                    }}>Nuevo</Button>
+                    }}>
+                    Nueva
+                </Button>
 
-                <Button color="danger"
+                <Button
+                    radius='full'
+                    color="danger"
                     onPress={() => {
                         fetchData();
                     }}>Refrescar
+                </Button>
+                <Button
+                    radius='full'
+                    color='success'
+                    className='text-white'
+                    startContent={<i class="bi bi-file-earmark-excel"></i>}
+                    onPress={() => exportToCSV(data, columns, "lineas.csv")}>
+                    Exportar
                 </Button>
             </Box >
         ),

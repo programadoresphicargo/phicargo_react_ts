@@ -15,6 +15,7 @@ import {
 } from "@heroui/react";
 import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
+import { exportToCSV } from '@/phicargo/utils/export';
 
 const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
@@ -194,8 +195,16 @@ const AsignacionesEquipoComputo = () => {
         >
           Asignaciones computo
         </h1>
-        <Button color='primary' onPress={() => onOpen()}>Nueva asignación</Button>
-        <Button color='danger' onPress={() => fetchData()}>Refrescar</Button>
+        <Button radius='full' color='primary' onPress={() => onOpen()}>Nueva asignación</Button>
+        <Button radius='full' color='danger' onPress={() => fetchData()}>Refrescar</Button>
+        <Button
+          radius='full'
+          color='success'
+          className='text-white'
+          startContent={<i class="bi bi-file-earmark-excel"></i>}
+          onPress={() => exportToCSV(data, columns, "asignaciones_computo.csv")}>
+          Exportar
+        </Button>
       </Box>
     ),
   });

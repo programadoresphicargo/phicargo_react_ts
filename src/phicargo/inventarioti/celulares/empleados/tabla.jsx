@@ -14,6 +14,7 @@ import {
     useDisclosure,
 } from "@heroui/react";
 import { Tabs, Tab, Card, CardBody } from "@heroui/react";
+import { exportToCSV } from '@/phicargo/utils/export';
 
 const EmpleadosTI = ({ active }) => {
     const [isLoading, setLoading] = useState(false);
@@ -112,17 +113,31 @@ const EmpleadosTI = ({ active }) => {
                 >
                     Empleados
                 </h1>
-                <Button color="primary"
+                <Button
+                    radius='full'
+                    color="primary"
                     onPress={() => {
                         onOpen();
                         setCelular(null);
                     }}>Nuevo</Button>
 
-                <Button color="danger"
+                <Button
+                    radius='full'
+                    color="danger"
                     onPress={() => {
                         fetchData();
                     }}>Refrescar
                 </Button>
+
+                <Button
+                    radius='full'
+                    color='success'
+                    className='text-white'
+                    startContent={<i class="bi bi-file-earmark-excel"></i>}
+                    onPress={() => exportToCSV(data, columns, "empleados.csv")}>
+                    Exportar
+                </Button>
+
             </Box >
         ),
     });

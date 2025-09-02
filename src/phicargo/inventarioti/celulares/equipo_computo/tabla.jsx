@@ -13,6 +13,7 @@ import FormCelulares from './form';
 import {
     useDisclosure,
 } from "@heroui/react";
+import { exportToCSV } from '@/phicargo/utils/export';
 
 const EquipoTI = ({ active }) => {
     const [isLoading, setLoading] = useState(false);
@@ -130,17 +131,31 @@ const EquipoTI = ({ active }) => {
                 >
                     Equipo de computo
                 </h1>
-                <Button color="primary"
+                <Button
+                    radius='full'
+                    color="primary"
                     onPress={() => {
                         onOpen();
                         setCelular(null);
                     }}>Nuevo</Button>
 
-                <Button color="danger"
+                <Button
+                    radius='full'
+                    color="danger"
                     onPress={() => {
                         fetchData();
                     }}>Refrescar
                 </Button>
+
+                <Button
+                    radius='full'
+                    color='success'
+                    className='text-white'
+                    startContent={<i class="bi bi-file-earmark-excel"></i>}
+                    onPress={() => exportToCSV(data, columns, "computo.csv")}>
+                    Exportar
+                </Button>
+
             </Box >
         ),
     });

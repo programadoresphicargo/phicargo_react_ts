@@ -16,6 +16,7 @@ import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
 import ModalAsignacion from './form';
 import EmpleadosSinAsignarCelular from '../empleados/no_asignados/empleados_no_celulares';
+import { exportToCSV } from '@/phicargo/utils/export';
 
 const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
@@ -209,9 +210,17 @@ const Asignaciones = () => {
         >
           Asignaciones celulares
         </h1>
-        <Button color='primary' onPress={() => onOpen1()}>Nueva asignación</Button>
-        <Button color='danger' onPress={() => fetchData()}>Refrescar</Button>
-        <Button color='success' onPress={() => onOpenChange2()} className='text-white'>Empleados no asignados</Button>
+        <Button radius='full' color='primary' onPress={() => onOpen1()}>Nueva asignación</Button>
+        <Button radius='full' color='danger' onPress={() => fetchData()}>Refrescar</Button>
+        <Button radius='full' color='success' onPress={() => onOpenChange2()} className='text-white'>Empleados no asignados</Button>
+        <Button
+          radius='full'
+          color='success'
+          className='text-white'
+          startContent={<i class="bi bi-file-earmark-excel"></i>}
+          onPress={() => exportToCSV(data, columns, "asignaciones_celulares.csv")}>
+          Exportar
+        </Button>
       </Box>
     ),
   });
