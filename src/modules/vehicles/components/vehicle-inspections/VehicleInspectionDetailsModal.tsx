@@ -5,17 +5,18 @@ import type {
   VehicleInspection,
   VehicleInspectionQuestion,
 } from '../../models';
-import { inspectionResult } from '../../utilities';
 import { useGetDriverIncidentQuery } from '@/modules/incidents/hooks/quries';
 import { CheckCircleOutline, ErrorOutline } from '@mui/icons-material';
 import { Alert, LoadingSpinner } from '@/components/ui';
-import { useGetInspectionChecklistQuery } from '../../hooks/queries';
 import { FilesList } from '@/components/utils/FilesList';
-import { Button } from '@heroui/react';
+import { Button, Select, SelectItem, Textarea } from '@heroui/react';
 import { EditIncidentModal } from '@/modules/incidents/components/EditIncidentModal';
-import { useState } from "react";
 import Swal from 'sweetalert2';
 import { useConfirmInspectionMutation } from '../../hooks/queries/inspections/useConfirmInspection';
+import { useState, useEffect } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import { useUpdateVehicleInspectionMutation } from '../../hooks/queries/inspections/useUpdateVehicleInspectionMutation';
+import { useGetInspectionChecklistQuery } from '../../hooks/queries';
 
 interface Props {
   open: boolean;
@@ -37,10 +38,29 @@ export const VehicleInspectionDetailModal = ({
   } = useGetInspectionChecklistQuery(vehicleInspection.inspection?.id);
 
   const { ConfirmInspectionMutacion, isLoadingConfirm } = useConfirmInspectionMutation(vehicleInspection.inspection?.id)
+  const { mutate: updateInspection, isPending: updarting } = useUpdateVehicleInspectionMutation();
 
   const [openEditIncident, setOpenEditIncident] = useState(false);
   const handleOpen = () => setOpenEditIncident(true);
   const handleClose = () => setOpenEditIncident(false);
+
+  const [formData, setFormData] = useState({
+    result: null as string | null,
+    comments: "",
+  });
+
+  useEffect(() => {
+    if (vehicleInspection.inspection) {
+      setFormData({
+        result: vehicleInspection.inspection.result || null,
+        comments: vehicleInspection.inspection.comments || "",
+      });
+    }
+  }, [vehicleInspection.inspection]);
+
+  const handleChange = (field: string, value: any) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
 
   const confirmar_inspeccion = async () => {
     Swal.fire({
@@ -74,6 +94,20 @@ export const VehicleInspectionDetailModal = ({
     });
   };
 
+  // Guardar cambios
+  const handleSave = () => {
+    if (!incident || !vehicleInspection.inspection) return;
+
+    updateInspection({
+      id: vehicleInspection.inspection.id,
+      data: formData,
+    }, {
+      onSuccess: () => {
+        onClose();
+      },
+    });
+  };
+
   return (
     <MuiModal
       open={open}
@@ -98,10 +132,19 @@ export const VehicleInspectionDetailModal = ({
                   color="success"
                   className="text-white"
                   radius="full"
-                  onPress={confirmar_inspeccion}
+                  onPress={() => confirmar_inspeccion()}
                   isLoading={isLoadingConfirm}
                 >
                   Confirmar revisión
+                </Button>
+                <Button
+                  color="primary"
+                  className="text-white"
+                  radius="full"
+                  onPress={() => handleSave()}
+                  isLoading={updarting}
+                >
+                  {updarting ? "Guardando..." : "Guardar cambios"}
                 </Button>
               </div>
             </>
@@ -124,22 +167,7 @@ export const VehicleInspectionDetailModal = ({
         {/* Sección de información básica */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <DetailCard title="Información de Revisión">
-            <div>
-              <p className="text-sm text-gray-500 uppercase">Resultado</p>
-              {vehicleInspection.inspection?.result ? (
-                <Chip
-                  label={inspectionResult.getLabel(
-                    vehicleInspection.inspection?.result,
-                  )}
-                  color={inspectionResult.getColor(
-                    vehicleInspection.inspection?.result,
-                  )}
-                  size="small"
-                />
-              ) : (
-                <Chip label="No Revisada" color="default" size="small" />
-              )}
-            </div>
+
             <div>
               <p className="text-sm text-gray-500 uppercase">
                 Fecha de Revisión
@@ -150,6 +178,40 @@ export const VehicleInspectionDetailModal = ({
                 ) || 'No especificada'}
               </p>
             </div>
+
+            <div>
+              {vehicleInspection.inspection?.result ? (
+                <>
+                  <Select
+                    label="Resultado"
+                    isDisabled={vehicleInspection.inspection?.inspectionState == 'confirmed' ? true : false}
+                    selectedKeys={[formData.result || '']}
+                    onSelectionChange={(keys) =>
+                      handleChange("result", Array.from(keys)[0] as string)
+                    }
+                    variant="bordered"
+                  >
+                    <SelectItem key="approved">Aprobado</SelectItem>
+                    <SelectItem key="rejected">Rechazado</SelectItem>
+                  </Select>
+                </>
+              ) : (
+                <Chip label="No Revisada" color="default" size="small" />
+              )}
+            </div>
+
+            <div>
+              <p className="text-sm text-gray-500">Comentarios</p>
+              <div className="flex items-center gap-1">
+                <Textarea
+                  isDisabled={vehicleInspection.inspection?.inspectionState == 'confirmed' ? true : false}
+                  value={formData.comments}
+                  onChange={(e) => handleChange("comments", e.target.value)}
+                  variant="bordered"
+                />
+              </div>
+            </div>
+
             <div>
               <p className="text-sm text-gray-500">Responsabilidad</p>
               <div className="flex items-center gap-1">
@@ -169,12 +231,6 @@ export const VehicleInspectionDetailModal = ({
                     </span>
                   </>
                 )}
-              </div>
-            </div>
-            <div>
-              <p className="text-sm text-gray-500">Comentarios</p>
-              <div className="flex items-center gap-1">
-                {vehicleInspection.inspection?.comments}
               </div>
             </div>
           </DetailCard>
