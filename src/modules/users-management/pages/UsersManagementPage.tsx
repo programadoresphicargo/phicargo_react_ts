@@ -1,4 +1,3 @@
-import { AddButton } from '@/components/ui';
 import { MaterialReactTable } from 'material-react-table';
 import { Outlet } from 'react-router-dom';
 import type { User } from '../../auth/models';
