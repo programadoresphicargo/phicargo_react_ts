@@ -265,6 +265,24 @@ const ViajesFinalizados = ({ }) => {
         fontSize: '12px',
       },
     },
+    muiTopToolbarProps: {
+      sx: {
+        background: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
+        color: 'white',
+        '& .MuiSvgIcon-root': {
+          color: 'white',   // 🎨 iconos en blanco
+        },
+        '& .MuiButton-root': {
+          color: 'white',   // texto de botones en blanco
+        },
+        '& .MuiInputBase-root': {
+          color: 'white',   // texto del buscador
+        },
+        '& .MuiInputBase-root .MuiSvgIcon-root': {
+          color: 'white',   // icono de lupa en blanco
+        },
+      },
+    },
     muiTableBodyCellProps: ({ row }) => {
       return {
         sx: {
@@ -278,7 +296,7 @@ const ViajesFinalizados = ({ }) => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 220px)',
+        maxHeight: 'calc(100vh - 210px)',
       },
     },
     renderTopToolbarCustomActions: ({ table }) => (
@@ -291,7 +309,7 @@ const ViajesFinalizados = ({ }) => {
         }}
       >
         <h1
-          className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
+          className="font-semibold lg:text-2xl"
         >
           Viajes finalizados
         </h1>

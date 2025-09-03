@@ -467,7 +467,7 @@ const ViajesActivos = ({ }) => {
         }}
       >
         <h1
-          className="tracking-tight font-semibold lg:text-2xl text-white"
+          className="font-semibold lg:text-2xl"
         >
           Viajes activos
         </h1>
