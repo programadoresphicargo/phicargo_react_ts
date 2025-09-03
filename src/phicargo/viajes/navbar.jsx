@@ -29,6 +29,8 @@ import { useJourneyDialogs } from './seguimiento/funciones';
 import logo from '../../assets/img/phicargo-vertical.png';
 import { useAuthContext } from '@/modules/auth/hooks';
 import AvatarProfile from '@/components/ui/AvatarProfile';
+import Slide from "@mui/material/Slide";
+import { ViajeContext } from './context/viajeContext';
 
 const pages = [
   { name: 'ACTIVOS', path: '/viajes', permiso: 500 },
@@ -88,6 +90,35 @@ function SubMenu({ title, items }) {
 }
 
 function NavbarViajes() {
+
+  const { visible, setVisible } = useContext(ViajeContext);
+  let hideTimer;
+
+  useEffect(() => {
+    // Ocultar después de 3 segundos
+    hideTimer = setTimeout(() => {
+      setVisible(false);
+    }, 3000);
+
+    // Detectar movimiento del mouse cerca del top
+    const handleMouseMove = (e) => {
+      if (e.clientY < 50) {
+        setVisible(true);
+        clearTimeout(hideTimer);
+        hideTimer = setTimeout(() => {
+          setVisible(false);
+        }, 2000);
+      }
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+
+    return () => {
+      clearTimeout(hideTimer);
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, []);
+
   const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const { session } = useAuthContext();
@@ -134,132 +165,135 @@ function NavbarViajes() {
           radius="none"
         />
       )}
-      <AppBar
-        elevation={3}
-        position="static"
-        sx={{
-          background: 'linear-gradient(90deg, #0b2149, #002887)',
-          padding: '0 16px',
-        }}
-      >
-        <Container maxWidth="xl">
-          <Toolbar disableGutters>
-            {/* Botón de retroceso */}
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="back"
-              onClick={handleBackClick}
-              sx={{ mr: 2 }}
-            >
-              <AppsIcon></AppsIcon>
-            </IconButton>
+      <Box sx={{ flexGrow: 1 }}>
+        <Slide appear={false} direction="down" in={visible}>
+          <AppBar
+            elevation={0}
+            sx={{
+              background: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
+              padding: '0 16px',
+            }}
+          >
+            <Container maxWidth="xl">
+              <Toolbar disableGutters>
+                {/* Botón de retroceso */}
+                <IconButton
+                  edge="start"
+                  color="inherit"
+                  aria-label="back"
+                  onClick={handleBackClick}
+                  sx={{ mr: 2 }}
+                >
+                  <AppsIcon></AppsIcon>
+                </IconButton>
 
-            <img
-              className="m-2"
-              src={logo}
-              alt="Descripción de la imagen"
-              style={{
-                width: '175px',
-                height: '60px',
-                filter: 'brightness(0) invert(1)',
-              }}
-            />
+                <img
+                  className="m-2"
+                  src={logo}
+                  alt="Descripción de la imagen"
+                  style={{
+                    width: '175px',
+                    height: '60px',
+                    filter: 'brightness(0) invert(1)',
+                  }}
+                />
 
-            <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleOpenNavMenu}
-                color="inherit"
-              >
-                <MenuIcon />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorElNav}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'left',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'left',
-                }}
-                open={Boolean(anchorElNav)}
-                onClose={handleCloseNavMenu}
-                sx={{ display: { xs: 'block', md: 'none' } }}
-              >
-                {pages.map(({ name, path }) => (
-                  <MenuItem key={name} onClick={handleCloseNavMenu}>
-                    <Link
-                      to={path}
-                      style={{ textDecoration: 'none', color: 'inherit' }}
-                    >
-                      <Typography sx={{ textAlign: 'center', color: 'black' }}>
-                        {name}
-                      </Typography>
-                    </Link>
-                  </MenuItem>
-                ))}
-              </Menu>
-            </Box>
-
-            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-              {pages.map((page) => {
-
-                if (page.permiso && !session?.user.permissions.includes(page.permiso)) return null;
-
-                if (page.subpages) {
-                  return (
-                    <SubMenu
-                      key={page.name}
-                      title={page.name}
-                      items={page.subpages}
-                    />
-                  );
-                }
-
-                return (
-                  <Button
-                    key={page.name}
-                    sx={{ my: 2, color: 'white', display: 'block', fontFamily: 'inter' }}
-                    component={Link}
-                    to={page.path}
+                <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+                  <IconButton
+                    size="large"
+                    aria-label="account of current user"
+                    aria-controls="menu-appbar"
+                    aria-haspopup="true"
+                    onClick={handleOpenNavMenu}
+                    color="inherit"
                   >
-                    {page.name}
-                  </Button>
-                );
-              })}
-            </Box>
+                    <MenuIcon />
+                  </IconButton>
+                  <Menu
+                    id="menu-appbar"
+                    anchorEl={anchorElNav}
+                    anchorOrigin={{
+                      vertical: 'bottom',
+                      horizontal: 'left',
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'left',
+                    }}
+                    open={Boolean(anchorElNav)}
+                    onClose={handleCloseNavMenu}
+                    sx={{ display: { xs: 'block', md: 'none' } }}
+                  >
+                    {pages.map(({ name, path }) => (
+                      <MenuItem key={name} onClick={handleCloseNavMenu}>
+                        <Link
+                          to={path}
+                          style={{ textDecoration: 'none', color: 'inherit' }}
+                        >
+                          <Typography sx={{ textAlign: 'center', color: 'black' }}>
+                            {name}
+                          </Typography>
+                        </Link>
+                      </MenuItem>
+                    ))}
+                  </Menu>
+                </Box>
 
-            <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-              <IconButton size="large" color="inherit" onClick={onOpenPO}>
-                <Badge badgeContent={numProblemasOperador} color="error">
-                  <ReportIcon />
-                </Badge>
-              </IconButton>
+                <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                  {pages.map((page) => {
 
-              <IconButton size="large" color="inherit" onClick={onOpen}>
-                <Badge badgeContent={1} color="error">
-                  <NotificationsIcon />
-                </Badge>
-              </IconButton>
+                    if (page.permiso && !session?.user.permissions.includes(page.permiso)) return null;
 
-              <MotumAlertsPanel />
+                    if (page.subpages) {
+                      return (
+                        <SubMenu
+                          key={page.name}
+                          title={page.name}
+                          items={page.subpages}
+                        />
+                      );
+                    }
 
-            </Box>
+                    return (
+                      <Button
+                        key={page.name}
+                        sx={{ my: 2, color: 'white', display: 'block', fontFamily: 'inter' }}
+                        component={Link}
+                        to={page.path}
+                      >
+                        {page.name}
+                      </Button>
+                    );
+                  })}
+                </Box>
 
-            <Box sx={{ display: { xs: 'flex', md: 'flex' } }}>
-              <AvatarProfile></AvatarProfile>
-            </Box>
+                <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                  <IconButton size="large" color="inherit" onClick={onOpenPO}>
+                    <Badge badgeContent={numProblemasOperador} color="error">
+                      <ReportIcon />
+                    </Badge>
+                  </IconButton>
 
-          </Toolbar>
-        </Container>
-      </AppBar>
+                  <IconButton size="large" color="inherit" onClick={onOpen}>
+                    <Badge badgeContent={1} color="error">
+                      <NotificationsIcon />
+                    </Badge>
+                  </IconButton>
+
+                  <MotumAlertsPanel />
+
+                </Box>
+
+                <Box sx={{ display: { xs: 'flex', md: 'flex' } }}>
+                  <AvatarProfile></AvatarProfile>
+                </Box>
+
+              </Toolbar>
+            </Container>
+          </AppBar>
+        </Slide>
+      </Box>
 
       <Notificaciones
         isOpen={isOpen}

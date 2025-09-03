@@ -38,7 +38,7 @@ const ViajesActivos = ({ }) => {
 
   const [open, setOpen] = React.useState(false);
   const [openMasivo, setMasivoOpen] = React.useState(false);
-  const { id_viaje, viaje, getViaje, loading, error, ActualizarIDViaje, setDrawerOpen } = useContext(ViajeContext);
+  const { id_viaje, viaje, getViaje, loading, error, ActualizarIDViaje, setDrawerOpen, visible, setVisible } = useContext(ViajeContext);
   const [blinkRows, setBlinkRows] = useState({});
 
   useEffect(() => {
@@ -387,6 +387,24 @@ const ViajesActivos = ({ }) => {
         borderRadius: '0',
       },
     },
+    muiTopToolbarProps: {
+      sx: {
+        background: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
+        color: 'white',
+        '& .MuiSvgIcon-root': {
+          color: 'white',   // 🎨 iconos en blanco
+        },
+        '& .MuiButton-root': {
+          color: 'white',   // texto de botones en blanco
+        },
+        '& .MuiInputBase-root': {
+          color: 'white',   // texto del buscador
+        },
+        '& .MuiInputBase-root .MuiSvgIcon-root': {
+          color: 'white',   // icono de lupa en blanco
+        },
+      },
+    },
     muiTableHeadCellProps: {
       sx: {
         fontFamily: 'Inter',
@@ -396,7 +414,7 @@ const ViajesActivos = ({ }) => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 210px)',
+        maxHeight: visible ? 'calc(100vh - 200px)' : 'calc(100vh - 120px)',
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
@@ -449,11 +467,12 @@ const ViajesActivos = ({ }) => {
         }}
       >
         <h1
-          className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
+          className="tracking-tight font-semibold lg:text-2xl text-white"
         >
           Viajes activos
         </h1>
         <Button
+          radius='full'
           className='text-white'
           startContent={<i class="bi bi-send-plus-fill"></i>}
           color='success'
@@ -462,7 +481,9 @@ const ViajesActivos = ({ }) => {
           size='sm'
         >Envio masivo
         </Button>
+
         <Button
+          radius='full'
           className='text-white'
           startContent={<i class="bi bi-arrow-clockwise"></i>}
           color='primary'
@@ -473,11 +494,28 @@ const ViajesActivos = ({ }) => {
             updateCP();
           }}
           size='sm'
-        >Actualizar tablero
+        >Refrescar
         </Button>
 
-        <Button color='danger' className='text-white' startContent={<i class="bi bi-sign-stop"></i>} onPress={() => handleOpen()} size='sm'>Unidades detenidas</Button>
-        <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "viajes_activos.csv")} size='sm'>Exportar</Button>
+        <Button
+          radius='full'
+          color='danger'
+          className='text-white'
+          startContent={<i class="bi bi-sign-stop"></i>}
+          onPress={() => handleOpen()} size='sm'>
+          Unidades detenidas
+        </Button>
+
+        <Button
+          radius='full'
+          color='success'
+          className='text-white'
+          startContent={<i class="bi bi-file-earmark-excel"></i>}
+          onPress={() => exportToCSV(data, columns, "viajes_activos.csv")}
+          size='sm'>
+          Exportar
+        </Button>
+
         <Chip
           size="sm"
           style={{
@@ -499,9 +537,12 @@ const ViajesActivos = ({ }) => {
     <>
       <DetencionesViajesActivos isOpen={isOpen} close={onClose}></DetencionesViajesActivos>
       <NavbarViajes></NavbarViajes>
-      <MaterialReactTable
-        table={table}
-      />
+
+      <Box sx={{ mt: visible ? "76px" : "0px", transition: "margin-top 0.3s" }}>
+        <MaterialReactTable
+          table={table}
+        />
+      </Box>
 
       <Travel open={open} handleClose={handleClose}></Travel>
 

@@ -7,6 +7,8 @@ import odooApi from '@/api/odoo-api';
 const ViajeContext = React.createContext();
 
 const ViajeProvider = ({ children }) => {
+
+    const [visible, setVisible] = useState(true);
     const [id_viaje, setIDViaje] = useState(0);
 
     const ActualizarIDViaje = (id_viaje) => {
@@ -83,7 +85,8 @@ const ViajeProvider = ({ children }) => {
             correosLigados,
             isLoading,
             drawerOpen, setDrawerOpen,
-            id_reportes_agrupados, setEstatusAgrupados
+            id_reportes_agrupados, setEstatusAgrupados,
+            visible, setVisible
         }}>
             {children}
         </ViajeContext.Provider>
