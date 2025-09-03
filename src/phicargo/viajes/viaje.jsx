@@ -87,6 +87,7 @@ const Viaje = ({ }) => {
         </div>
         <div style={{ display: 'flex', gap: '10px' }}>
           <Button
+            isDisabled
             color='success'
             onPress={() => onOpen1()}
             className="text-white">
