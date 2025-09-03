@@ -1,3 +1,4 @@
+import { Dayjs } from 'dayjs';
 import type { BranchSimple } from '../../../core/models';
 import type { ShiftTravelInfoApi } from './travel-models-models-api';
 import type { UserBasicApi } from '@/modules/auth/models';
@@ -7,8 +8,10 @@ export interface DriverInfoApi {
   name: string;
   tms_driver_license_id: string | null;
   tms_driver_license_type: string | null;
+  tms_driver_license_expiration: Dayjs | null;
   x_modalidad: string | null;
   x_peligroso_lic: string | null;
+  dias_restantes: number | null;
 }
 
 export interface VehicleInfoApi {

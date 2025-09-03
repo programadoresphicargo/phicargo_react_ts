@@ -31,7 +31,9 @@ const driverInfoToLocal = (driver: DriverInfoApi): DriverInfo => ({
   license: driver.tms_driver_license_id,
   modality: driver.x_modalidad,
   isDangerous: driver.x_peligroso_lic === 'SI',
-  licenseType: driver.tms_driver_license_type
+  licenseType: driver.tms_driver_license_type,
+  licenseExpiration: driver.tms_driver_license_expiration,
+  daysLeft: driver.dias_restantes,
 });
 
 /**

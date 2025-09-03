@@ -8,6 +8,8 @@ export interface DriverInfo {
   name: string;
   license: string | null;
   licenseType: string | null;
+  licenseExpiration: Dayjs | null;
+  daysLeft: number | null;
   modality: string | null;
   isDangerous: boolean;
 }

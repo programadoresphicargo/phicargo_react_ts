@@ -4,6 +4,9 @@ import { Shift } from '../models';
 import { Chip } from "@heroui/react";
 import LastTravels from './last_travels';
 import IncidentsShift from './IncidentsShift';
+import { Popover, PopoverTrigger, PopoverContent } from "@heroui/react";
+import dayjs from 'dayjs';
+
 
 export const useShiftColumns = () => {
   const columns = useMemo<MRT_ColumnDef<Shift>[]>(
@@ -41,14 +44,40 @@ export const useShiftColumns = () => {
         },
       },
       {
-        accessorFn: (row) => row.driver.licenseType || 'SIN ASIGNAR',
-        header: 'Tipo Licencia',
-        maxSize: 50,
-        Cell: ({ cell }) => {
+        header: 'Estado de la licencia',
+        size: 200,
+        Cell: ({ row }) => {
+          const driver = row.original.driver;
+          const daysLeft: number | null = driver?.daysLeft ?? null;
+
+          let color: "default" | "success" | "warning" | "danger" = "default";
+          let label = "SIN ASIGNAR";
+
+          if (daysLeft !== null) {
+            if (daysLeft < 0) {
+              color = "danger";
+              label = `Licencia vencida (${driver.licenseType})`;
+            } else if (daysLeft < 60) {
+              color = "warning";
+              label = `Próxima a expirar en ${daysLeft} días (${driver.licenseType})`;
+            } else {
+              color = "success";
+              label = `Vigente (${driver.licenseType})`;
+            }
+          }
+
           return (
-            <Chip color={"default"} size="sm">
-              {cell.getValue<string>()}
-            </Chip>
+            <Popover placement="right" color={color}>
+              <PopoverTrigger>
+                <Chip color={color} size="sm" className='text-white'>{label}</Chip>
+              </PopoverTrigger>
+              <PopoverContent>
+                <div className="px-1 py-2">
+                  <div className="text-small font-bold text-white">Expira:</div>
+                  <div className="text-tiny text-white"> {driver?.licenseExpiration ? dayjs(driver.licenseExpiration).format("DD/MM/YYYY") : "SIN ASIGNAR"}</div>
+                </div>
+              </PopoverContent>
+            </Popover>
           );
         },
       },
@@ -63,7 +92,7 @@ export const useShiftColumns = () => {
               NO
             </span>
           ) : (
-            <Chip color="primary" size="sm">
+            <Chip color="danger" size="sm">
               SI
             </Chip>
           );
