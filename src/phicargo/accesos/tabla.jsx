@@ -234,7 +234,25 @@ const TablaAccesos = ({ title, tipo }) => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 260px)',
+        maxHeight: 'calc(100vh - 220px)',
+      },
+    },
+    muiTopToolbarProps: {
+      sx: {
+        background: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
+        color: 'white',
+        '& .MuiSvgIcon-root': {
+          color: 'white',   // 🎨 iconos en blanco
+        },
+        '& .MuiButton-root': {
+          color: 'white',   // texto de botones en blanco
+        },
+        '& .MuiInputBase-root': {
+          color: 'white',   // texto del buscador
+        },
+        '& .MuiInputBase-root .MuiSvgIcon-root': {
+          color: 'white',   // icono de lupa en blanco
+        },
       },
     },
     renderTopToolbarCustomActions: ({ table }) => (
@@ -247,11 +265,12 @@ const TablaAccesos = ({ title, tipo }) => {
         }}
       >
         <h2
-          className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
+          className="font-semibold lg:text-2xl"
         >
           {title}
         </h2>
         <Button
+          radius="full"
           color='primary'
           onPress={() =>
             NuevoAcceso()
@@ -260,6 +279,7 @@ const TablaAccesos = ({ title, tipo }) => {
           <i class="bi bi-plus-lg"></i> Nuevo registro
         </Button>
         <Button
+          radius="full"
           color='success'
           className="text-white"
           onPress={() =>
