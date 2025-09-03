@@ -445,16 +445,17 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                 </Typography>
             )}
             {!id_acceso && (
-                <Button onPress={registrar_acceso} style={{ marginTop: '20px' }} color='primary' isLoading={isLoading}><i class="bi bi-floppy"></i> Registrar</Button>
+                <Button radius="full" onPress={registrar_acceso} style={{ marginTop: '20px' }} color='primary' isLoading={isLoading}><i class="bi bi-floppy"></i> Registrar</Button>
             )}
             {formData.estado_acceso !== 'archivado' && disabledFom && id_acceso && (
-                <Button onPress={EditarForm} style={{ marginTop: '20px' }} color='primary' isDisabled={isLoading}><i class="bi bi-pen"></i> Editar</Button>
+                <Button radius="full" onPress={EditarForm} style={{ marginTop: '20px' }} color='primary' isDisabled={isLoading}><i class="bi bi-pen"></i> Editar</Button>
             )}
             {id_acceso && !disabledFom && (
-                <Button onPress={actualizar_acceso} style={{ marginTop: '20px' }} isLoading={isLoading} color="success" className="text-white"><i class="bi bi-floppy2-fill"></i> Guardar Cambios</Button>
+                <Button radius="full" onPress={actualizar_acceso} style={{ marginTop: '20px' }} isLoading={isLoading} color="success" className="text-white"><i class="bi bi-floppy2-fill"></i> Guardar Cambios</Button>
             )}
             {(formData.estado_acceso === 'espera' || formData.estado_acceso === 'autorizado') && (
                 <Button
+                    radius="full"
                     onPress={handleClickOpenValidador}
                     style={{ marginTop: '20px' }}
                     color="primary"
@@ -463,10 +464,10 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                 </Button>
             )}
             {session?.user?.permissions?.includes(510) && id_acceso && formData.estado_acceso === 'espera' && (
-                <Button onPress={autorizar_acceso} style={{ marginTop: '20px' }} color='danger' isDisabled={formData.autorizado_por_id ? true : false}>Autorizar {formData.tipo_movimiento}</Button>
+                <Button radius="full" onPress={autorizar_acceso} style={{ marginTop: '20px' }} color='danger' isDisabled={formData.autorizado_por_id ? true : false}>Autorizar {formData.tipo_movimiento}</Button>
             )}
             {(formData.estado_acceso == 'validado' || formData.estado_acceso == 'rechazado') && (
-                < Button onPress={handleClickOpenValidador} style={{ marginTop: '20px' }} color='primary'><i class="bi bi-folder-plus"></i> Archivar / Finalizar acceso</Button>
+                < Button radius="full" onPress={handleClickOpenValidador} style={{ marginTop: '20px' }} color='primary'><i class="bi bi-folder-plus"></i> Archivar / Finalizar acceso</Button>
             )}
         </Stack >
         <Grid container spacing={2} style={{ padding: '20px' }}>
