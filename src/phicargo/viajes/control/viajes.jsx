@@ -38,7 +38,7 @@ const ViajesActivos = ({ }) => {
 
   const [open, setOpen] = React.useState(false);
   const [openMasivo, setMasivoOpen] = React.useState(false);
-  const { id_viaje, viaje, getViaje, loading, error, ActualizarIDViaje, setDrawerOpen, visible, setVisible } = useContext(ViajeContext);
+  const { id_viaje, viaje, getViaje, loading, error, ActualizarIDViaje, setDrawerOpen } = useContext(ViajeContext);
   const [blinkRows, setBlinkRows] = useState({});
 
   useEffect(() => {
@@ -414,7 +414,7 @@ const ViajesActivos = ({ }) => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: visible ? 'calc(100vh - 200px)' : 'calc(100vh - 120px)',
+        maxHeight: 'calc(100vh - 120px)',
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
@@ -537,13 +537,7 @@ const ViajesActivos = ({ }) => {
     <>
       <DetencionesViajesActivos isOpen={isOpen} close={onClose}></DetencionesViajesActivos>
       <NavbarViajes></NavbarViajes>
-
-      <Box sx={{ mt: visible ? "76px" : "0px", transition: "margin-top 0.3s" }}>
-        <MaterialReactTable
-          table={table}
-        />
-      </Box>
-
+      <MaterialReactTable table={table} />
       <Travel open={open} handleClose={handleClose}></Travel>
 
       <Dialog
