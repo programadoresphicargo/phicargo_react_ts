@@ -29,7 +29,7 @@ const LastTravels = ({ data }) => {
     };
 
     return (
-        <Dropdown isOpen={isOpen} onOpenChange={handleOpen}>
+        <Dropdown isOpen={isOpen} onOpenChange={handleOpen} backdrop="opaque">
             <DropdownTrigger>
                 {isLoading ? (
                     <Spinner size="sm" />

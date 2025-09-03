@@ -67,7 +67,7 @@ export const useShiftColumns = () => {
           }
 
           return (
-            <Popover placement="right" color={color}>
+            <Popover placement="right" color={color} backdrop="opaque">
               <PopoverTrigger>
                 <Chip color={color} size="sm" className='text-white'>{label}</Chip>
               </PopoverTrigger>
