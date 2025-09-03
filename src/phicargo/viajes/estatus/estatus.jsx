@@ -72,38 +72,40 @@ function EstatusHistorial() {
 
     return (
         <>
-            <Stack className="mb-2">
+            <Stack spacing={2} direction="row">
                 <Button
+                    radius="full"
                     color="primary"
-                    size="sm"
                     onPress={() => getHistorialEstatus()}
+                    className="w-fit self-end mb-3"
                     startContent={<i class="bi bi-arrow-clockwise"></i>}>
                     Refrescar historial
                 </Button>
+
+                <Input
+                    radius="full"
+                    className="w-96 mb-2"
+                    isClearable
+                    label="Buscador"
+                    color="primary"
+                    fullWidth
+                    size="sm" // puedes cambiarlo por "md" o "sm" si quieres más compacto
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onClear={() => setSearchTerm('')}
+                    startContent={<i className="bi bi-search"></i>}
+                    sx={{ flexGrow: 1 }}
+                />
+
+                <Button
+                    radius="full"
+                    onPress={toggleSortOrder}
+                    color="primary"
+                    className="w-fit self-end mb-3" // ancho mínimo y alineado a la derecha
+                >
+                    Ordenar: {sortOrder === 'asc' ? 'Ascendente' : 'Descendente'}
+                </Button>
             </Stack>
-
-            <Input
-                radius="full"
-                className="w-full mb-2"
-                isClearable
-                label="Buscador"
-                color="primary"
-                fullWidth
-                size="lg" // puedes cambiarlo por "md" o "sm" si quieres más compacto
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                onClear={() => setSearchTerm('')}
-                startContent={<i className="bi bi-search"></i>}
-            />
-
-            <Button
-                onPress={toggleSortOrder}
-                color="primary"
-                size="sm" // tamaño reducido
-                className="w-fit self-end mb-3" // ancho mínimo y alineado a la derecha
-            >
-                Ordenar: {sortOrder === 'asc' ? 'Ascendente' : 'Descendente'}
-            </Button>
 
             {isLoading ? (
                 <Progress size="sm" isIndeterminate color="primary" />
