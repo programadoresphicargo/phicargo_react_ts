@@ -51,22 +51,22 @@ export default function BasicButtons2() {
                                 <div>
                                     <Stack spacing={1} direction="row">
                                         {viaje?.x_status_viaje == null && (
-                                            <Button color="primary" onPress={comprobar_disponibilidad} isDisabled={correosLigados || isLoading}><i class="bi bi-play-fill"></i> Iniciar viaje</Button>
+                                            <Button color="primary" onPress={comprobar_disponibilidad} isDisabled={correosLigados || isLoading} radius="full"><i class="bi bi-play-fill"></i> Iniciar viaje</Button>
                                         )}
                                         {['ruta', 'planta', 'retorno'].includes(viaje?.x_status_viaje) && (
-                                            <Button color="danger" onPress={finalizar_viaje} isDisabled={correosLigados || isLoading}><i class="bi bi-stop-fill"></i> Finalizar viaje</Button>
+                                            <Button color="danger" onPress={finalizar_viaje} isDisabled={correosLigados || isLoading} radius="full"><i class="bi bi-stop-fill"></i> Finalizar viaje</Button>
                                         )}
-                                        <Button color="success" onPress={handleClickOpen} className="text-white" isDisabled={correosLigados || isLoading}>
+                                        <Button color="success" onPress={handleClickOpen} className="text-white" isDisabled={correosLigados || isLoading} radius="full">
                                             <i className="bi bi-send-plus-fill"></i> Nuevo estatus
                                         </Button>
                                         {viaje?.x_status_viaje == 'resguardo' && (
-                                            <Button color="primary" onPress={liberar_resguardo} isDisabled={correosLigados || isLoading}>Liberar resguardo</Button>
+                                            <Button color="primary" onPress={liberar_resguardo} isDisabled={correosLigados || isLoading} radius="full">Liberar resguardo</Button>
                                         )}
                                         {viaje?.x_status_viaje == 'finalizado' && (
-                                            <Button color="success" onPress={reactivar_viaje} className="text-white" isDisabled={correosLigados || isLoading}>Reactivar viaje</Button>
+                                            <Button color="success" onPress={reactivar_viaje} className="text-white" isDisabled={correosLigados || isLoading} radius="full">Reactivar viaje</Button>
                                         )}
 
-                                        <Button color="danger" onPress={() => calcular_estadia(id_viaje)} className="text-white">Generar estadías</Button>
+                                        <Button color="danger" onPress={() => calcular_estadia(id_viaje)} className="text-white" radius="full">Generar estadías</Button>
                                     </Stack>
                                 </div>
 

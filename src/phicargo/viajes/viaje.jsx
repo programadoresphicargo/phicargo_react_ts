@@ -23,9 +23,9 @@ import { TiemposViajeProvider } from './detenciones/TiemposViajeContext';
 import { ViajeContext } from './context/viajeContext';
 import { fontFamily } from '@mui/system';
 import { useJourneyDialogs } from './seguimiento/funciones';
-import WhatsAppContatcsTravel from "../inventarioti/whatsapp/table";
 import { useDisclosure } from "@heroui/react";
 import DialogActions from '@mui/material/DialogActions';
+import WhatsAppContatcsTravel from "./canales/tabla";
 
 const Viaje = ({ }) => {
 
@@ -70,12 +70,15 @@ const Viaje = ({ }) => {
         </Box>
       )}
 
-      <div className="flex items-center justify-between p-3">
+      <div className="flex items-center justify-between p-3"
+        style={{
+          background: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)'
+        }}>
         <div className="min-w-0 flex-1">
           <h1 className="h1">
             <Chip color='primary' size='lg' radius='md'>{viaje?.name}</Chip>
           </h1>
-          <div className="sm:space-x-3 mt-3 flex flex-wrap gap-2">
+          <div className="sm:space-x-3 mt-3 flex flex-wrap gap-2 text-white">
             <span>ID: {id_viaje}</span>
             <span>Vehículo: {viaje?.vehicle?.name}</span>
             <span>Operador: {viaje?.employee?.name}</span>
@@ -86,10 +89,9 @@ const Viaje = ({ }) => {
           <Button
             color='success'
             onPress={() => onOpen1()}
-            className="text-white"
-            isDisabled>
+            className="text-white">
             <i class="bi bi-whatsapp"></i>
-            WhatsApp
+            Destinatarios
           </Button>
           <Button
             color='primary'
@@ -101,13 +103,24 @@ const Viaje = ({ }) => {
       </div>
 
       <Box sx={{ width: '100%' }}>
-        <TabContext value={value}>
-          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <TabContext
+          value={value}>
+          <Box sx={{
+            background: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
+            color: 'white',
+          }}>
             <TabList
               onChange={handleChange}
               variant="scrollable"
               scrollButtons="auto"
-              allowScrollButtonsMobile>
+              allowScrollButtonsMobile
+              textColor="inherit"
+              sx={{
+                '& .MuiTabs-indicator': {
+                  backgroundColor: 'white',
+                  height: '3px',
+                }
+              }}>
               <Tab sx={{ fontFamily: 'Inter' }} label="Seguimiento" value="1" />
               <Tab sx={{ fontFamily: 'Inter' }} label="Mapa" value="2" />
               <Tab sx={{ fontFamily: 'Inter' }} label="Documentos" value="3" />

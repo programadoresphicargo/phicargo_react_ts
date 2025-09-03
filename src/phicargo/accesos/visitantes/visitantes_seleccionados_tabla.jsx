@@ -46,7 +46,13 @@ const SelectedVisitantesTable = ({ }) => {
         <Grid item xs={12} sm={12} md={12}>
 
             <div className="flex flex-wrap gap-4 items-center mb-4">
-                <Button onPress={abrirVisitantes} color={disabledFom ? "default" : "primary"} isDisabled={disabledFom || formData.id_empresa == '' ? true : false}>Añadir visitantes al acceso</Button>
+                <Button
+                    radius='full'
+                    onPress={abrirVisitantes}
+                    color={disabledFom ? "default" : "primary"}
+                    isDisabled={disabledFom || formData.id_empresa == '' ? true : false}>
+                    Añadir visitantes al acceso
+                </Button>
 
                 <Input
                     startContent={<i class="bi bi-search"></i>}
