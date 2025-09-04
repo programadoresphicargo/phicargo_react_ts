@@ -13,12 +13,39 @@ import revenueIcon from '../assets/menu/revenue.png';
 import { useAuthContext } from '@/modules/auth/hooks';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import fondo2 from '../assets/img/tract_scannia.jpg';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import { Grid } from '@mui/system';
+import logo from '../assets/img/phicargo_logo_white.png';
+import { motion } from 'framer-motion';
 
 type MenuItemType = {
   icon: string;
   label: string;
   path: string;
   requiredPermissions: number[];
+};
+
+const containerVariants = {
+  animate: {
+    transition: {
+      staggerChildren: 0.05, // tiempo entre cada item (en segundos)
+    },
+  },
+};
+
+const itemVariants = {
+  initial: { opacity: 0, y: 20 },
+  animate: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: "spring",
+      stiffness: 100,
+      damping: 10,
+    },
+  },
 };
 
 const reports: MenuItemType[] = [
@@ -88,17 +115,28 @@ const ReportsMenuPage = () => {
   );
 
   return (
-    <div
-      className="min-h-screen bg-gray-100 p-2 flex flex-col justify-between relative"
+    <main
       style={{
-        backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 400"><rect width="1920" height="400" fill="%23D9DEEA" /><mask id="mask0" mask-type="alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="1920" height="400"><rect width="1920" height="400" fill="%23D9DEEA" /></mask><g mask="url(%23mask0)"><path d="M1059.48 308.024C1152.75 57.0319 927.003 -103.239 802.47 -152.001L1805.22 -495.637L2095.53 351.501L1321.23 616.846C1195.12 618.485 966.213 559.015 1059.48 308.024Z" fill="%23C0CBDD" /><path d="M1333.22 220.032C1468.66 -144.445 1140.84 -377.182 960 -447.991L2416.14 -947L2837.71 283.168L1713.32 668.487C1530.19 670.868 1197.78 584.509 1333.22 220.032Z" fill="%238192B0" /></g></svg>')`,
+        backgroundImage: `
+        linear-gradient(90deg, rgba(11, 33, 73, 0.95), rgba(0, 40, 135, 0.95)),
+        url(${fondo2})`,
         backgroundSize: 'cover',
+        backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
-        backgroundPosition: 'top',
+        minHeight: '100vh',
       }}
     >
-      <div className="flex mt-10 items-center mb-8 sm:mb-12 px-4 relative z-10">
-        <div className="mr-auto">
+
+      <AppBar
+        position="static"
+        style={{
+          backgroundColor: 'transparent',
+          padding: '0',
+          boxShadow: 'none',
+        }}
+        elevation={0}
+      >
+        <Toolbar>
           <Button
             isIconOnly
             aria-label="back"
@@ -108,32 +146,53 @@ const ReportsMenuPage = () => {
           >
             <ArrowBackIcon />
           </Button>
-        </div>
-        <div className="flex-grow flex justify-center items-center">
-          <h1 className="mx-auto text-2xl sm:text-4xl font-bold text-gray-800">
-            Reportes
-          </h1>
-        </div>
-        <div className="ml-auto">
+          <Grid sx={{ flexGrow: 1 }}></Grid>
           <AvatarProfile />
+        </Toolbar>
+      </AppBar>
+
+      <div
+        className="flex items-center justify-center"
+        style={{ minHeight: '25vh' }}
+      >
+        <div className="flex justify-center items-center">
+          <img
+            src={logo}
+            alt="Logo Phi Cargo"
+            className="w-72 sm:w-60 md:w-80 lg:w-[350px] h-auto object-contain"
+          />
         </div>
       </div>
 
-      <div className="flex-grow flex items-center relative lg:mx-12 z-10 -mt-10 sm:-mt-14 md:-mt-20">
-        <div className="w-full flex justify-center">
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-2">
-            {filteredMenuItems.map((item, index) => (
-              <ReportMenuItem
-                key={index}
-                icon={item.icon}
-                label={item.label}
-                path={item.path}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
+
+      <motion.div
+        className="grid-container"
+        variants={containerVariants}
+        initial="initial"
+        animate="animate"
+      >
+        {filteredMenuItems.map((item, index) => (
+          <motion.div
+            key={index}
+            variants={itemVariants}
+            style={{
+              padding: "10px",
+              borderRadius: "20px",
+              display: "flex",             // ✅ Activa flex
+              justifyContent: "center",    // ✅ Centra horizontalmente
+              alignItems: "center",        // ✅ Centra verticalmente
+            }}
+          >
+            <ReportMenuItem
+              key={index}
+              icon={item.icon}
+              label={item.label}
+              path={item.path}
+            />
+          </motion.div>
+        ))}
+      </motion.div>
+    </main>
   );
 };
 

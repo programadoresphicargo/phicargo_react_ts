@@ -23,7 +23,6 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
         Cell: ({ cell }) => {
           return (
             <Chip
-              size="sm"
               color="primary"
             >
               {cell.getValue<string>()}
@@ -40,6 +39,7 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
           cell.getValue<Dayjs>()?.format('DD/MM/YYYY hh:mm A') || 'Sin Fecha',
       },
       {
+        id: 'daysInWorkshop',
         header: 'Días en Taller',
         enableEditing: false,
         Cell: ({ row }) => row.original.daysInWorkshop
@@ -64,10 +64,12 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
           cell.getValue<string>()?.toUpperCase() || 'Sin Asignar',
       },
       {
-        accessorFn: (originalRow) => originalRow.checkIn,
-        id: 'checkIn',
-        header: 'Entrada',
-        Cell: ({ row }) => row.original.checkIn.format('DD/MM/YYYY'),
+        id: 'checkOut',
+        accessorFn: (originalRow) => originalRow.checkOut,
+        header: 'Salida',
+        enableEditing: false,
+        Cell: ({ cell }) =>
+          cell.getValue<Dayjs>()?.format('DD/MM/YYYY') || 'N/A',
       },
       {
         accessorFn: (originalRow) => originalRow.status,
@@ -136,15 +138,6 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
         enableEditing: false,
         enableClickToCopy: true,
       },
-      {
-        accessorFn: (originalRow) => originalRow.checkOut,
-        id: 'checkOut',
-        header: 'Salida',
-        enableEditing: false,
-        Cell: ({ cell }) =>
-          cell.getValue<Dayjs>()?.format('DD/MM/YYYY') || 'N/A',
-      },
-
       {
         accessorFn: (originalRow) => originalRow.supervisor,
         id: 'supervisor',
