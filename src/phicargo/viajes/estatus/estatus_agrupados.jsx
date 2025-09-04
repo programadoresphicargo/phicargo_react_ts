@@ -188,6 +188,7 @@ function EstatusHistorialAgrupado() {
 
                                         {session?.user?.permissions?.includes(150) && (
                                             <Button
+                                                radius="full"
                                                 color={enabledPickers[index] ? "primary" : "success"}
                                                 size="sm"
                                                 className="text-white"
@@ -247,7 +248,12 @@ function EstatusHistorialAgrupado() {
 
                                 </CardBody>
                                 <CardFooter className="gap-3">
-                                    <Button color="success" className='text-white me-2' variant="solid" onPress={() => handleClickOpen(step.id_reporte)}>
+                                    <Button
+                                        radius="full"
+                                        color="success"
+                                        className='text-white me-2'
+                                        variant="solid"
+                                        onPress={() => handleClickOpen(step.id_reporte)}>
                                         <i class="bi bi-reply"></i>
                                         Reenviar
                                     </Button>

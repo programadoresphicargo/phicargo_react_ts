@@ -6,6 +6,7 @@ function BotonMapa({ latitud, longitud }) {
 
     return (
         <Button
+            radius="full"
             color='primary'
             className='text-white me-2'
             onClick={() => window.open(enlace, '_blank')}

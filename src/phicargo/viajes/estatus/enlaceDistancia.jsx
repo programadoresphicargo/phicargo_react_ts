@@ -21,6 +21,7 @@ function BotonDistanciaMapa({ latitud, longitud, tipo }) {
 
     return (
         <Button
+            radius="full"
             onPress={() => window.open(enlace, '_blank')}
             className='text-white'
             color="secondary"
