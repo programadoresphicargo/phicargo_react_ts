@@ -24,6 +24,7 @@ const initialFormState: IncidentCreate = {
   vehicleId: null,
   newVehicleStateId: null,
   driverId: null,
+  state: 'pending_validation'
 };
 
 export function useCreateIncidentForm({
