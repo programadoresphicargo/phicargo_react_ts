@@ -27,6 +27,7 @@ interface IncidentBase {
   incidentDate: Dayjs | null;
   damageCost: number | null;
   isDriverResponsible: boolean;
+  state: string | null;
 }
 
 export interface Incident extends IncidentBase {

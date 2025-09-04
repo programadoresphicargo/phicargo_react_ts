@@ -25,6 +25,7 @@ interface IncidentBaseApi {
   incident_date: string | null;
   damage_cost: number | null;
   is_driver_responsible: boolean;
+  state: string | null;
 }
 
 export interface IncidentApi extends IncidentBaseApi {

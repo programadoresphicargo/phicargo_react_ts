@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import type { Incident } from '../../models';
 import { IncidentsService } from '../../services';
+import odooApi from '@/api/odoo-api';
 
 export const DRIVER_INCIDENTS_KEY = 'driver-incidents';
 
@@ -61,10 +62,25 @@ export const useIncidentsQueries = ({ driverId, startDate, endDate }: Config) =>
     },
   });
 
+  const confirmIncidentMutation = useMutation({
+    mutationFn: async (id: number) => {
+      const response = await odooApi.put(`/drivers/incidents/confirm/${id}`);
+      return response.data;
+    },
+    onSuccess: (data) => {
+      toast.success(data.message || "Incidencia confirmada");
+    },
+    onError: (err) => {
+      console.error(err);
+      toast.error("Error al confirmar incidencia");
+    },
+  });
+
   return {
     incidentsQuery,
     createIncident,
     updateIncident,
+    confirmIncidentMutation
   };
 };
 

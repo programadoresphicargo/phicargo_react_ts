@@ -30,7 +30,9 @@ interface Props {
 }
 
 export const EditIncidentModal = ({ onClose, incident }: Props) => {
-  const { updateIncident } = useIncidentsQueries({});
+
+  console.log(incident);
+  const { updateIncident, confirmIncidentMutation } = useIncidentsQueries({});
 
   const { handleSubmit, control, watch, setValue } = useForm<IncidentUpdate>({
     defaultValues: transformIncidentToIncidentUpdate(incident),
@@ -64,6 +66,15 @@ export const EditIncidentModal = ({ onClose, incident }: Props) => {
         },
       },
     );
+  };
+
+  const confirmIncident = () => {
+    if (!incident) return;
+    confirmIncidentMutation.mutate(incident.id, {
+      onSuccess: () => {
+        onClose();
+      },
+    },);
   };
 
   return (
@@ -110,6 +121,7 @@ export const EditIncidentModal = ({ onClose, incident }: Props) => {
         >
           <div className="flex flex-col gap-4">
             <RadioButtonGroup
+              disabled={incident.state == 'confirmed' ? true : false}
               control={control}
               label="Tipo de Incidencia"
               name="type"
@@ -124,6 +136,7 @@ export const EditIncidentModal = ({ onClose, incident }: Props) => {
               row
             />
             <SelectElement
+              disabled={incident.state == 'confirmed' ? true : false}
               control={control}
               name="incident"
               label="Incidencia"
@@ -153,9 +166,11 @@ export const EditIncidentModal = ({ onClose, incident }: Props) => {
                   setValue('driverId', (value?.id as number) || 0);
                 },
                 size: 'small',
+                disabled: incident.state == 'confirmed' ? true : false
               }}
             />
             <DatePickerElement
+              disabled={incident.state == 'confirmed' ? true : false}
               control={control}
               name="incidentDate"
               label="Fecha de Incidencia"
@@ -164,6 +179,7 @@ export const EditIncidentModal = ({ onClose, incident }: Props) => {
               inputProps={{ size: 'small' }}
             />
             <TextareaAutosizeElement
+              disabled={incident.state == 'confirmed' ? true : false}
               control={control}
               name="comments"
               label="Comentarios"
@@ -176,7 +192,7 @@ export const EditIncidentModal = ({ onClose, incident }: Props) => {
                 control={control}
                 name="isDriverResponsible"
                 label="¿El operador es responsable?"
-                disabled={isDirectionReport}
+                disabled={isDirectionReport || incident.state == 'confirmed' ? true : false}
               />
             </div>
           </div>
@@ -252,7 +268,15 @@ export const EditIncidentModal = ({ onClose, incident }: Props) => {
         <Button variant="outlined" color="error" size="small" onClick={onClose}>
           Cancelar
         </Button>
+        <Button
+          disabled={incident.state == 'confirmed' ? true : false}
+          variant="contained"
+          onClick={confirmIncident}
+          loading={confirmIncidentMutation.isPending}>
+          Confirmar
+        </Button>
         <MuiSaveButton
+          disabled={confirmIncidentMutation.isPending ? true : false || incident.state == 'confirmed' ? true : false}
           variant="contained"
           loading={updateIncident.isPending}
           loadingPosition="end"
