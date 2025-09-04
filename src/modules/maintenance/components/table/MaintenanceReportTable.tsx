@@ -1,5 +1,5 @@
 import { Box, DialogProps, IconButton, Tooltip } from '@mui/material';
-import type { MaintenanceRecord, MaintenanceRecordBase, MaintenanceRecordStatus } from '../../models';
+import type { MaintenanceRecord, MaintenanceRecordStatus } from '../../models';
 import { useEffect, useState } from 'react';
 import { useMaintenanceRecord, useMaintenanceReportColumns } from '../../hooks';
 import { CreateRecordForm } from '../CreateRecordForm';
