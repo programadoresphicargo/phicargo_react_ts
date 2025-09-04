@@ -197,36 +197,32 @@ const UnidadesProductos = ({ data2, fetch }) => {
           Unidades
         </h1>
 
-        <Popover showArrow offset={10} placement="bottom">
+        <Popover placement="right">
           <PopoverTrigger>
-            <>
-              {session?.user.permissions.includes(218) && (
-                <Button color="primary" isLoading={isLoading}>Crear unidades</Button>
-              )}
-            </>
-          </PopoverTrigger>
-          <PopoverContent className="w-[240px]">
-            {(titleProps) => (
-              <div className="px-1 py-2 w-full">
-                <p className="text-small font-bold text-foreground" {...titleProps}>
-                  Registro de unidades
-                </p>
-                <div className="mt-2 flex flex-col gap-2 w-full">
-                  <NumberInput
-                    className="max-w-xs"
-                    placeholder="Ingresar número de unidades nuevas"
-                    variant="bordered"
-                    label="Número de unidades"
-                    value={cantidad}
-                    onValueChange={setCantidad}
-                    minValue={1}
-                  />
-                  <Button color="primary" onPress={registrarUnidades} isLoading={isLoading}>
-                    Registrar
-                  </Button>
-                </div>
-              </div>
+            {session?.user.permissions.includes(218) && (
+              <Button color="primary" isLoading={isLoading}>Crear unidades</Button>
             )}
+          </PopoverTrigger>
+          <PopoverContent>
+            <div className="px-1 py-2 w-full">
+              <p className="text-small font-bold text-foreground">
+                Registro de unidades
+              </p>
+              <div className="mt-2 flex flex-col gap-2 w-full">
+                <NumberInput
+                  className="max-w-xs"
+                  placeholder="Ingresar número de unidades nuevas"
+                  variant="bordered"
+                  label="Número de unidades"
+                  value={cantidad}
+                  onValueChange={setCantidad}
+                  minValue={1}
+                />
+                <Button color="primary" onPress={registrarUnidades} isLoading={isLoading}>
+                  Registrar
+                </Button>
+              </div>
+            </div>
           </PopoverContent>
         </Popover>
       </Box >
