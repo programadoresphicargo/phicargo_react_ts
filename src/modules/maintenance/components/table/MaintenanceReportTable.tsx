@@ -53,9 +53,11 @@ const MaintenanceReportTable = (props: MaintenanceReportTableProps) => {
     tableId: 'maintenance-report-table',
     containerHeight: 'calc(100vh - 220px)',
     enableRowActions: true,
-    columnFilterDisplayMode: 'popover',
+    showGlobalFilter: true,
+    positionGlobalFilter: "right",
     positionActionsColumn: 'first',
     initialState: {
+      showColumnFilters: true,
       columnOrder: columns.map((col) => col.id as string),
     },
     renderRowActions: ({ row, table }) => (
