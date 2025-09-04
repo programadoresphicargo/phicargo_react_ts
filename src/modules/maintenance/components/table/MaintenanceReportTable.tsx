@@ -2,8 +2,6 @@ import { Box, DialogProps, IconButton, Tooltip } from '@mui/material';
 import type { MaintenanceRecord, MaintenanceRecordStatus } from '../../models';
 import { useEffect, useState } from 'react';
 import { useMaintenanceRecord, useMaintenanceReportColumns } from '../../hooks';
-
-import { AddButton } from '@/components/ui';
 import { CreateRecordForm } from '../CreateRecordForm';
 import EditIcon from '@mui/icons-material/Edit';
 import { EditRecordForm } from '../EditRecordForm';
@@ -12,6 +10,7 @@ import { MaterialReactTable } from 'material-react-table';
 import { MuiTransition } from '@/components';
 import { RecordDetailsModal } from '../RecordDetailsModal';
 import { useBaseTable } from '@/hooks';
+import { Button } from '@heroui/react';
 
 const dialogProps: DialogProps = {
   slots: {
@@ -73,11 +72,12 @@ const MaintenanceReportTable = (props: MaintenanceReportTableProps) => {
       </Box>
     ),
     toolbarActions: (
-      <AddButton
-        label="Añadir Servicio"
-        size="small"
-        onClick={() => table.setCreatingRow(true)}
-      />
+      <Button
+        radius='full'
+        color='primary'
+        onPress={() => table.setCreatingRow(true)}
+      >Añadir Servicio
+      </Button>
     ),
     muiEditRowDialogProps: dialogProps,
     muiCreateRowModalProps: dialogProps,

@@ -11,14 +11,3 @@ export const formatDate = (date: Dayjs) => {
   return capitalizedDate(formattedDate);
 }
 
-export const daysUtilNow = (date: Dayjs) => {
-  const now = dayjs();
-  const diff =  Math.abs(now.diff(date, 'day'));
-  return diff;
-}
-
-export const daysUtil = (date: Dayjs, date2: Dayjs) => {
-  const diff = Math.abs(date.diff(date2, 'day'));
-  return diff;
-}
-

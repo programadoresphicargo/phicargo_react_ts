@@ -24,6 +24,7 @@ export interface MaintenanceRecordBase {
   supervisor: string;
   comments: string | null;
   order: string;
+  daysInWorkshop: number | null;
 }
 
 export interface MaintenanceRecord extends MaintenanceRecordBase {

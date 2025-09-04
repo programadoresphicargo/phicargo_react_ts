@@ -34,9 +34,9 @@ export class MaintenaceRecordAdapter {
       vehicleType: vehicle.x_tipo_vehiculo,
       branch: vehicle.res_store
         ? {
-            id: vehicle.res_store.id,
-            name: vehicle.res_store.name,
-          }
+          id: vehicle.res_store.id,
+          name: vehicle.res_store.name,
+        }
         : null,
     };
   }
@@ -57,6 +57,7 @@ export class MaintenaceRecordAdapter {
       supervisor: record.supervisor,
       comments: record.comments,
       order: record.order_service,
+      daysInWorkshop: record.days_in_workshop
     };
   }
 
@@ -102,6 +103,7 @@ export class MaintenaceRecordAdapter {
       order_service: record.order,
       workshop_id: record.workshopId,
       tract_id: record.vehicleId,
+      days_in_workshop: record.daysInWorkshop
     };
   }
 

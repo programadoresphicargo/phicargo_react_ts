@@ -59,6 +59,7 @@ export class IncidentAdapter {
         ? dayjs(incident.attended_at)
         : null,
       evidences: incident.evidences?.map(FilesAdapter.toOneDriveFile) ?? [],
+      state: incident.state
     };
   }
 
@@ -78,6 +79,7 @@ export class IncidentAdapter {
         : null,
       damage_cost: incident.damageCost ?? null,
       is_driver_responsible: incident.isDriverResponsible,
+      state: incident.state
     };
   }
 
@@ -95,7 +97,7 @@ export class IncidentAdapter {
     if (incident.type) {
       data.type = incident.type;
     }
-    if (incident.incidentDate) {  
+    if (incident.incidentDate) {
       data.incident_date = incident.incidentDate.format('YYYY-MM-DD');
     }
     if (incident.damageCost !== undefined) {

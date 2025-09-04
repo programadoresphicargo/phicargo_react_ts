@@ -3,8 +3,7 @@ import { type MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
 import { useWorkshop } from './useWorkshop';
 import type { MaintenanceRecord } from '../models';
-import { daysUtil, daysUtilNow } from '../utilities/datetime';
-import { Chip } from '@mui/material';
+import { Chip } from '@heroui/react';
 import { maintenanceStatus } from '../utilities';
 
 export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
@@ -24,10 +23,11 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
         Cell: ({ cell }) => {
           return (
             <Chip
-              label={cell.getValue<string>()}
-              size="small"
+              size="sm"
               color="primary"
-            />
+            >
+              {cell.getValue<string>()}
+            </Chip>
           );
         },
       },
@@ -41,19 +41,8 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
       },
       {
         header: 'Días en Taller',
-        filterVariant: 'range-slider',
         enableEditing: false,
-        size: 4,
-        Cell: ({ row }) => {
-          if (row.original.status === 'pending') {
-            console.log(row.original.checkIn);
-            return daysUtilNow(row.original.checkIn);
-          } else if (row.original.checkOut) {
-            return daysUtil(row.original.checkIn, row.original.checkOut);
-          } else {
-            return 'N/A';
-          }
-        },
+        Cell: ({ row }) => row.original.daysInWorkshop
       },
       {
         accessorFn: (originalRow) =>
@@ -96,10 +85,16 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
           const status = cell.getValue<MaintenanceRecord['status']>();
           return (
             <Chip
-              label={maintenanceStatus.getLabel(status)}
-              color={maintenanceStatus.getColor(status)}
-              size="small"
-            />
+              className="text-white"
+              color={
+                status === 'pending' ? 'warning' :
+                  status === 'completed' ? 'success' :
+                    status === 'cancelled' ? 'danger' :
+                      status === 'programmed' ? 'primary' :
+                        'default'
+              }
+            >{maintenanceStatus.getLabel(status)}
+            </Chip>
           );
         },
       },

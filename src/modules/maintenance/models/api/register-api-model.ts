@@ -18,6 +18,7 @@ export interface MaintenanceRecordBaseApi {
   supervisor: string;
   comments: string | null;
   order_service: string;
+  days_in_workshop: number | null;
 }
 
 export interface MaintenanceRecordApi extends MaintenanceRecordBaseApi {
