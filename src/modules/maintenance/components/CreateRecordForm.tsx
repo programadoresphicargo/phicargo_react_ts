@@ -47,6 +47,7 @@ const initialFormState: MaintenanceRecordCreate = {
   comments: '',
   order: '',
   vehicleId: '' as unknown as number,
+  daysInWorkshop: 0
 };
 
 interface Props {
