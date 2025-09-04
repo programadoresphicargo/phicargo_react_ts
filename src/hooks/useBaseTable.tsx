@@ -76,6 +76,7 @@ export const useBaseTable = <T extends MRT_RowData & BaseRowData>(
       columnPinning: {
         right: config.stickyRightActions ? ['mrt-row-actions'] : [],
       },
+      columnOrder: config.columns.map((col) => col.id as string),
     },
     state: {
       isLoading: config.isLoading,
@@ -101,8 +102,8 @@ export const useBaseTable = <T extends MRT_RowData & BaseRowData>(
               onClick={() =>
                 config.exportFn
                   ? config.exportFn(
-                      table.getRowModel().rows.map((row) => row.original),
-                    )
+                    table.getRowModel().rows.map((row) => row.original),
+                  )
                   : undefined
               }
             />
@@ -113,16 +114,16 @@ export const useBaseTable = <T extends MRT_RowData & BaseRowData>(
     ),
     muiTableBodyRowProps: config.onDoubleClickFn
       ? ({ row }) => ({
-          onClick: () => config.onDoubleClickFn?.(row),
-          sx: { cursor: 'pointer' },
-        })
+        onClick: () => config.onDoubleClickFn?.(row),
+        sx: { cursor: 'pointer' },
+      })
       : undefined,
     // CUSTOMIZATION
     muiToolbarAlertBannerProps: config.error
       ? {
-          color: 'error',
-          children: config.error,
-        }
+        color: 'error',
+        children: config.error,
+      }
       : undefined,
     muiTableHeadCellProps: {
       sx: {

@@ -23,6 +23,7 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
         Cell: ({ cell }) => {
           return (
             <Chip
+              size="sm"
               color="primary"
             >
               {cell.getValue<string>()}
@@ -32,17 +33,17 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
       },
       {
         accessorFn: (row) => row.lastCommentDate,
-        header: 'Última Actualización',
         id: 'lastCommentDate',
+        header: 'Última Actualización',
         enableEditing: false,
         Cell: ({ cell }) =>
           cell.getValue<Dayjs>()?.format('DD/MM/YYYY hh:mm A') || 'Sin Fecha',
       },
       {
+        accessorFn: (row) => row.daysInWorkshop,
         id: 'daysInWorkshop',
         header: 'Días en Taller',
         enableEditing: false,
-        Cell: ({ row }) => row.original.daysInWorkshop
       },
       {
         accessorFn: (originalRow) =>
@@ -64,10 +65,15 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
           cell.getValue<string>()?.toUpperCase() || 'Sin Asignar',
       },
       {
-        id: 'checkOut',
+        accessorFn: (originalRow) => originalRow.checkIn,
+        id: 'checkIn',
+        header: 'Entrada',
+        Cell: ({ row }) => row.original.checkIn.format('DD/MM/YYYY'),
+      },
+      {
         accessorFn: (originalRow) => originalRow.checkOut,
+        id: 'checkOut',
         header: 'Salida',
-        enableEditing: false,
         Cell: ({ cell }) =>
           cell.getValue<Dayjs>()?.format('DD/MM/YYYY') || 'N/A',
       },
@@ -79,7 +85,7 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
         filterSelectOptions: [
           { label: 'Pendiente', value: 'pending' },
           { label: 'Completado', value: 'completed' },
-          { label: 'Cancelado', value: 'caceled' },
+          { label: 'Cancelado', value: 'canceled' },
           { label: 'Programado', value: 'programmed' },
         ],
         header: 'Estatus',

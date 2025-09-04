@@ -1,5 +1,5 @@
 import { Box, DialogProps, IconButton, Tooltip } from '@mui/material';
-import type { MaintenanceRecord, MaintenanceRecordStatus } from '../../models';
+import type { MaintenanceRecord, MaintenanceRecordBase, MaintenanceRecordStatus } from '../../models';
 import { useEffect, useState } from 'react';
 import { useMaintenanceRecord, useMaintenanceReportColumns } from '../../hooks';
 import { CreateRecordForm } from '../CreateRecordForm';
@@ -11,6 +11,7 @@ import { MuiTransition } from '@/components';
 import { RecordDetailsModal } from '../RecordDetailsModal';
 import { useBaseTable } from '@/hooks';
 import { Button } from '@heroui/react';
+import { ExportConfig, ExportToExcel } from '@/utilities';
 
 const dialogProps: DialogProps = {
   slots: {
@@ -41,6 +42,7 @@ const MaintenanceReportTable = (props: MaintenanceReportTableProps) => {
   } = useMaintenanceRecord(status);
 
   const columns = useMaintenanceReportColumns(records || []);
+  console.log(columns);
 
   const table = useBaseTable<MaintenanceRecord>({
     columns,
@@ -53,6 +55,9 @@ const MaintenanceReportTable = (props: MaintenanceReportTableProps) => {
     enableRowActions: true,
     columnFilterDisplayMode: 'popover',
     positionActionsColumn: 'first',
+    initialState: {
+      columnOrder: columns.map((col) => col.id as string),
+    },
     renderRowActions: ({ row, table }) => (
       <Box sx={{ display: 'flex' }}>
         <Tooltip title="Editar">
@@ -72,12 +77,21 @@ const MaintenanceReportTable = (props: MaintenanceReportTableProps) => {
       </Box>
     ),
     toolbarActions: (
-      <Button
-        radius='full'
-        color='primary'
-        onPress={() => table.setCreatingRow(true)}
-      >Añadir Servicio
-      </Button>
+      <>
+        <Button
+          radius='full'
+          color='primary'
+          onPress={() => table.setCreatingRow(true)}
+        >Añadir Servicio
+        </Button>
+        <Button
+          radius='full'
+          className='text-white'
+          color='success'
+          onPress={() => exportTo.exportData(records || [])}>
+          Exportar
+        </Button>
+      </>
     ),
     muiEditRowDialogProps: dialogProps,
     muiCreateRowModalProps: dialogProps,
@@ -120,3 +134,24 @@ const MaintenanceReportTable = (props: MaintenanceReportTableProps) => {
 };
 
 export default MaintenanceReportTable;
+
+const exportConf: ExportConfig<MaintenanceRecord> = {
+  fileName: 'Turnos',
+  withDate: true,
+  columns: [
+    { accessorFn: (data) => data.vehicle.branch?.name, header: 'Sucursal', columnWidth: 50 },
+    { accessorFn: (data) => data.vehicle.name, header: 'Unidad', columnWidth: 50 },
+    { accessorFn: (data) => data.lastCommentDate?.format('DD/MM/YYYY') || 'N/A', header: 'Ultima actualizacion', columnWidth: 50 },
+    { accessorFn: (data) => data.deliveryDate?.format('DD/MM/YYYY') || 'N/A', header: 'Entrega tentativa', columnWidth: 50 },
+    { accessorFn: (data) => data.vehicle.vehicleType, header: 'Tipo', columnWidth: 50 },
+    { accessorFn: (data) => data.status, header: 'Estatus', columnWidth: 50 },
+    { accessorFn: (data) => data.workshop.name, header: 'Taller', columnWidth: 50 },
+    { accessorFn: (data) => data.checkIn?.format('DD/MM/YYYY') || 'N/A', header: 'Entrada', columnWidth: 50 },
+    { accessorFn: (data) => data.checkOut?.format('DD/MM/YYYY') || 'N/A', header: 'Salida', columnWidth: 50 },
+    { accessorFn: (data) => data.daysInWorkshop, header: 'Dias en sucursal', columnWidth: 50 },
+    { accessorFn: (data) => data.order, header: 'OM', columnWidth: 50 },
+    { accessorFn: (data) => data.supervisor, header: 'Supervisor', columnWidth: 50 },
+  ],
+};
+
+const exportTo = new ExportToExcel(exportConf);
