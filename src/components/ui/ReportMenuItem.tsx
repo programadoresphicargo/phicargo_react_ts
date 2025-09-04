@@ -6,35 +6,40 @@ interface MenuItemProps {
   path: string;
 }
 
-const ReportMenuItem = ({ icon, label, path}: MenuItemProps) => {
+const ReportMenuItem = ({ icon, label, path }: MenuItemProps) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-      navigate(path);
+    navigate(path);
   };
 
   return (
     <div
       onClick={handleClick}
       className="
-        flex 
-        flex-col 
-        items-center 
-        justify-center 
-        w-32 
-        h-32 
-        m-2 
-        rounded-2xl 
-        bg-white 
-        shadow-md 
-        cursor-pointer 
-        transition-colors
-        duration-200
-        hover:bg-gray-100
+      flex
+      flex-col
+      items-center
+      justify-center
+      w-32
+      h-32
+      rounded-2xl
+      bg-white/10
+      shadow-xl
+      backdrop-blur-lg
+      border
+      border-white/30
+      cursor-pointer
+      transition
+      duration-300
+      hover:bg-white/20
+      hover:shadow-2xl
       "
     >
-      <img src={icon} alt={label} className="w-16 h-16 mb-2" />
-      <div className="text-xs font-bold text-center">{label}</div>
+      <div className="mb-2.5">
+        <img src={icon} alt={label} className="w-20 h-20 mb-1.5" />
+      </div>
+      <div className="text-xs font-bold text-white text-center">{label}</div>
     </div>
   );
 };
