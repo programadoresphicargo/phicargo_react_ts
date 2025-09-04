@@ -166,11 +166,15 @@ const Documentacion = ({ }) => {
         }}
       >
 
-        <Button color='primary' onPress={handleClickOpen}>
+        <Button
+          color='primary'
+          radius="full"
+          onPress={handleClickOpen}>
           Nuevo documento
         </Button>
 
         <Button
+          radius="full"
           showAnchorIcon
           as={Link}
           isExternal={true}
@@ -182,6 +186,7 @@ const Documentacion = ({ }) => {
         </Button>
 
         <Button
+          radius="full"
           showAnchorIcon
           as={Link}
           isExternal={true}
@@ -194,6 +199,7 @@ const Documentacion = ({ }) => {
         </Button>
 
         <Button
+          radius="full"
           showAnchorIcon
           as={Link}
           isExternal={true}
@@ -205,6 +211,7 @@ const Documentacion = ({ }) => {
         </Button>
 
         <Button
+          radius="full"
           showAnchorIcon
           as={Link}
           isExternal={true}
@@ -217,6 +224,7 @@ const Documentacion = ({ }) => {
         </Button>
 
         <Button
+          radius="full"
           showAnchorIcon
           color="danger"
           className='text-white'

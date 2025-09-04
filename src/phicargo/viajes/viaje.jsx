@@ -87,6 +87,7 @@ const Viaje = ({ }) => {
         </div>
         <div style={{ display: 'flex', gap: '10px' }}>
           <Button
+            radius="full"
             isDisabled
             color='success'
             onPress={() => onOpen1()}
@@ -95,6 +96,7 @@ const Viaje = ({ }) => {
             Destinatarios
           </Button>
           <Button
+            radius="full"
             color='primary'
             onPress={handleClickOpenCorreos}>
             <i class="bi bi-envelope-at"></i>
