@@ -24,7 +24,8 @@ import { Grid } from '@mui/material';
 import SelectOperador from "@/phicargo/maniobras/maniobras/select_operador";
 import EstadoSolicitud from "./estado";
 import CancelarSolicitudDialog from "./cancelar";
-import { Select, SelectItem } from "@heroui/react";
+import { Select, SelectItem, Link } from "@heroui/react";
+const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -361,8 +362,22 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                                 <Button color='success' className='text-white' onPress={() => entregar()} isLoading={isLoading}>Entregar</Button>
                             )}
                             {((data?.x_studio_estado == "entregado" || data?.x_studio_estado == "recepcionado_operador") && data?.es_asignacion) && (
-                                <Button color='success' className='text-white' onPress={() => devolver()} isLoading={isLoading}>Devolver a stock</Button>
+                                <Button
+                                    color='success'
+                                    className='text-white'
+                                    onPress={() => devolver()}
+                                    isLoading={isLoading}>
+                                    Devolver a stock
+                                </Button>
                             )}
+                            <Button
+                                color='success'
+                                as={Link}
+                                isExternal={true}
+                                color="primary"
+                                href={`${apiUrl}/tms_travel/solicitudes_equipo/pdf/${id_solicitud}`}>
+                                Formato de entrega
+                            </Button>
                             {(!modoEdicion && data?.x_studio_estado == 'borrador') && (
                                 <Button color="danger" className="text-white" onPress={() => setOpenCancelar(true)} isLoading={isLoading}>
                                     Cancelar
