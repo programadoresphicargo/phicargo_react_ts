@@ -70,11 +70,26 @@ export const EditIncidentModal = ({ onClose, incident }: Props) => {
 
   const confirmIncident = () => {
     if (!incident) return;
-    confirmIncidentMutation.mutate(incident.id, {
-      onSuccess: () => {
-        onClose();
-      },
-    },);
+    confirmIncidentMutation.mutate(
+      { id: incident.id, state: "confirmed" },
+      {
+        onSuccess: () => {
+          onClose();
+        },
+      }
+    );
+  };
+
+  const canceledIncident = () => {
+    if (!incident) return;
+    confirmIncidentMutation.mutate(
+      { id: incident.id, state: "canceled" },
+      {
+        onSuccess: () => {
+          onClose();
+        },
+      }
+    );
   };
 
   return (
@@ -273,7 +288,14 @@ export const EditIncidentModal = ({ onClose, incident }: Props) => {
           variant="contained"
           onClick={confirmIncident}
           loading={confirmIncidentMutation.isPending}>
-          Confirmar
+          Confirmar incidencia
+        </Button>
+        <Button
+          disabled={incident.state == 'confirmed' ? true : false}
+          variant="contained"
+          onClick={canceledIncident}
+          loading={confirmIncidentMutation.isPending}>
+          Cancelar incidencia
         </Button>
         <MuiSaveButton
           disabled={confirmIncidentMutation.isPending ? true : false || incident.state == 'confirmed' ? true : false}

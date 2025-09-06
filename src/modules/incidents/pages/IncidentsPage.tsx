@@ -7,13 +7,13 @@ import { CreateIncidentModal } from '../components/CreateIncidentModal';
 import { Box, DialogProps, IconButton, Tooltip } from '@mui/material';
 import { MuiTransition } from '@/components';
 import InfoIcon from '@mui/icons-material/Info';
-import { AddButton } from '@/components/ui';
 import { IncidentDetailsModal } from '../components/IncidentDetailsModal';
 import { useState } from 'react';
 import { DateRangePicker } from '@/components/inputs';
 import { useIncidentsContext } from '../hooks/useIncidentsContext';
 import EditIcon from '@mui/icons-material/Edit';
 import { EditIncidentModal } from '../components/EditIncidentModal';
+import { Button } from '@heroui/react';
 
 const dialogProps: DialogProps = {
   slots: {
@@ -77,11 +77,13 @@ const IncidentsPage = () => {
     ),
     toolbarActions: (
       <div className="flex items-center gap-4">
-        <AddButton
-          label="Crear Incidencia"
-          size="small"
-          onClick={() => table.setCreatingRow(true)}
-        />
+        <Button
+          color='primary'
+          radius='full'
+          onPress={() => table.setCreatingRow(true)}
+        >
+          Crear incidencia
+        </Button>
         <DateRangePicker
           showOneCalendar
           placeholder="Rango"

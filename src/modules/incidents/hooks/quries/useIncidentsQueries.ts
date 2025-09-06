@@ -63,8 +63,10 @@ export const useIncidentsQueries = ({ driverId, startDate, endDate }: Config) =>
   });
 
   const confirmIncidentMutation = useMutation({
-    mutationFn: async (id: number) => {
-      const response = await odooApi.put(`/drivers/incidents/confirm/${id}`);
+    mutationFn: async ({ id, state }: { id: number; state: "confirmed" | "canceled" }) => {
+      const response = await odooApi.put(
+        `/drivers/incidents/state/${id}?state=${state}` // 👈 pasamos el estado en query
+      );
       return response.data;
     },
     onSuccess: (data) => {

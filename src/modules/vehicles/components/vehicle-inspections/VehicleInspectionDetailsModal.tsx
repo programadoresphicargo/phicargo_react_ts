@@ -16,6 +16,7 @@ import { useConfirmInspectionMutation } from '../../hooks/queries/inspections/us
 import { useState, useEffect } from 'react';
 import { useUpdateVehicleInspectionMutation } from '../../hooks/queries/inspections/useUpdateVehicleInspectionMutation';
 import { useGetInspectionChecklistQuery } from '../../hooks/queries';
+import { CreateIncidentModal } from '@/modules/incidents/components/CreateIncidentModal';
 
 interface Props {
   open: boolean;
@@ -245,9 +246,13 @@ export const VehicleInspectionDetailModal = ({
             )}
             {incident && (
               <>
+                <Button color="primary" onPress={handleOpen} radius='full' size='sm'>Crear incidencia</Button>
                 <Button color="primary" onPress={handleOpen} radius='full' size='sm' isDisabled={vehicleInspection.inspection?.inspectionState == 'confirmed' ? true : false}>Editar incidencia</Button>
                 <Dialog open={openEditIncident} onClose={handleClose} maxWidth="lg">
                   <EditIncidentModal onClose={handleClose} incident={incident} />
+                </Dialog>
+                <Dialog open={openEditIncident} onClose={handleClose} maxWidth="lg">
+                  <CreateIncidentModal onClose={handleClose}></CreateIncidentModal>
                 </Dialog>
 
                 <div>
