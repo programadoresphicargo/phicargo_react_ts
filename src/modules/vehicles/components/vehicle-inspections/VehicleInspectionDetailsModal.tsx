@@ -31,6 +31,9 @@ export const VehicleInspectionDetailModal = ({
   vehicleInspection,
   refresh,
 }: Props) => {
+
+  const [isEditing, setIsEditing] = useState(false);
+
   const {
     query: { data: incident, isLoading: loadingIncident },
   } = useGetDriverIncidentQuery(vehicleInspection.inspection?.incidentId);
@@ -105,10 +108,10 @@ export const VehicleInspectionDetailModal = ({
 
   // Guardar cambios
   const handleSave = () => {
-    if (!incident || !vehicleInspection.inspection) return;
+    if (!vehicleInspection.inspection?.id) return;
 
     updateInspection({
-      id: vehicleInspection.inspection.id,
+      id: vehicleInspection.inspection?.id,
       data: formData,
     }, {
       onSuccess: () => {
@@ -137,23 +140,35 @@ export const VehicleInspectionDetailModal = ({
           {vehicleInspection.inspection?.inspectionState !== 'confirmed' ? (
             <>
               <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
+                {!isEditing && (
+                  <Button
+                    color="success"
+                    className="text-white"
+                    radius="full"
+                    onPress={() => confirmar_inspeccion()}
+                    isLoading={isLoadingConfirm}
+                  >
+                    Confirmar revisión
+                  </Button>
+                )}
+                {isEditing && (
+                  <Button
+                    color="primary"
+                    className="text-white"
+                    radius="full"
+                    onPress={() => handleSave()}
+                    isLoading={updarting}
+                  >
+                    {updarting ? "Guardando..." : "Guardar cambios"}
+                  </Button>
+                )}
                 <Button
-                  color="success"
+                  color={isEditing ? "secondary" : "danger"}
                   className="text-white"
                   radius="full"
-                  onPress={() => confirmar_inspeccion()}
-                  isLoading={isLoadingConfirm}
+                  onPress={() => setIsEditing(!isEditing)}
                 >
-                  Confirmar revisión
-                </Button>
-                <Button
-                  color="primary"
-                  className="text-white"
-                  radius="full"
-                  onPress={() => handleSave()}
-                  isLoading={updarting}
-                >
-                  {updarting ? "Guardando..." : "Guardar cambios"}
+                  {isEditing ? "Cancelar edición" : "Editar"}
                 </Button>
               </div>
             </>
@@ -193,7 +208,7 @@ export const VehicleInspectionDetailModal = ({
                 <>
                   <Select
                     label="Resultado"
-                    isDisabled={vehicleInspection.inspection?.inspectionState == 'confirmed' ? true : false}
+                    isDisabled={vehicleInspection.inspection?.inspectionState == 'confirmed' ? true : false || !isEditing}
                     selectedKeys={[formData.result || '']}
                     onSelectionChange={(keys) =>
                       handleChange("result", Array.from(keys)[0] as string)
@@ -213,7 +228,7 @@ export const VehicleInspectionDetailModal = ({
               <p className="text-sm text-gray-500">Comentarios</p>
               <div className="flex items-center gap-1">
                 <Textarea
-                  isDisabled={vehicleInspection.inspection?.inspectionState == 'confirmed' ? true : false}
+                  isDisabled={vehicleInspection.inspection?.inspectionState == 'confirmed' ? true : false || !isEditing}
                   value={formData.comments}
                   onChange={(e) => handleChange("comments", e.target.value)}
                   variant="bordered"
