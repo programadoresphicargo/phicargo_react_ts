@@ -40,6 +40,10 @@ export const VehicleInspectionDetailModal = ({
   const { ConfirmInspectionMutacion, isLoadingConfirm } = useConfirmInspectionMutation(vehicleInspection.inspection?.id)
   const { mutate: updateInspection, isPending: updarting } = useUpdateVehicleInspectionMutation();
 
+  const [openCreateIncident, setOpenCreateIncident] = useState(false);
+  const handleCreateOpen = () => setOpenCreateIncident(true);
+  const handleCreateClose = () => setOpenCreateIncident(false);
+
   const [openEditIncident, setOpenEditIncident] = useState(false);
   const handleOpen = () => setOpenEditIncident(true);
   const handleClose = () => setOpenEditIncident(false);
@@ -124,7 +128,7 @@ export const VehicleInspectionDetailModal = ({
     >
 
       <div className="flex flex-col gap-4 p-4 w-full">
-        <DetailCard title="Revisión">
+        <DetailCard title={`Revisión: ${vehicleInspection.inspection?.id}`}>
           {vehicleInspection.inspection?.inspectionState !== 'confirmed' ? (
             <>
               <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
@@ -238,21 +242,38 @@ export const VehicleInspectionDetailModal = ({
           <DetailCard title="Incidencia Asociada">
             {loadingIncident && <LoadingSpinner />}
             {!incident && !loadingIncident && (
-              <Alert
-                title="No hay incidencia asociada"
-                description="Esta revisión no está vinculada a ninguna incidencia."
-                color="primary"
-              />
+              <>
+                <Alert
+                  title="No hay incidencia asociada"
+                  description="Esta revisión no está vinculada a ninguna incidencia."
+                  color="primary"
+                />
+                <Button
+                  color="primary"
+                  onPress={handleCreateOpen}
+                  radius="full"
+                  size="sm"
+                >
+                  Crear incidencia
+                </Button>
+                <Dialog open={openCreateIncident} onClose={handleCreateClose} maxWidth="lg">
+                  <CreateIncidentModal onClose={handleCreateClose} inspection_id={vehicleInspection.inspection?.id}></CreateIncidentModal>
+                </Dialog>
+              </>
             )}
             {incident && (
               <>
-                <Button color="primary" onPress={handleOpen} radius='full' size='sm'>Crear incidencia</Button>
-                <Button color="primary" onPress={handleOpen} radius='full' size='sm' isDisabled={vehicleInspection.inspection?.inspectionState == 'confirmed' ? true : false}>Editar incidencia</Button>
+                <Button
+                  color="primary"
+                  onPress={handleOpen}
+                  radius="full"
+                  size="sm"
+                  isDisabled={vehicleInspection.inspection?.inspectionState === 'confirmed'}
+                >
+                  Editar incidencia
+                </Button>
                 <Dialog open={openEditIncident} onClose={handleClose} maxWidth="lg">
                   <EditIncidentModal onClose={handleClose} incident={incident} />
-                </Dialog>
-                <Dialog open={openEditIncident} onClose={handleClose} maxWidth="lg">
-                  <CreateIncidentModal onClose={handleClose}></CreateIncidentModal>
                 </Dialog>
 
                 <div>

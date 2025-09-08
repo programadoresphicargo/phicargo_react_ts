@@ -22,12 +22,14 @@ interface Props {
   onSuccess?: () => void;
   onError?: (error: Error) => void;
   driverId?: number;
+  inspection_id2?: number;
 }
 
 export const CreateIncidentForm = ({
   onCancel,
   onSuccess,
   driverId,
+  inspection_id2,
 }: Props) => {
   const {
     form: { control, handleSubmit, setValue },
@@ -45,7 +47,7 @@ export const CreateIncidentForm = ({
     handleSubmit: onFormSubmit,
     isPending,
     isDirectionReport,
-  } = useCreateIncidentForm({ driverId, onSuccess });
+  } = useCreateIncidentForm({ driverId, inspection_id2, onSuccess });
 
   return (
     <form className="mt-6 transition-all duration-300 ease-in-out">
@@ -187,7 +189,7 @@ export const CreateIncidentForm = ({
               disabled={isDirectionReport}
             />
 
-            <VehicleAutocompleteInput 
+            <VehicleAutocompleteInput
               control={control}
               name="vehicleId"
               label="Unidad Afectada"

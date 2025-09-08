@@ -29,9 +29,11 @@ const initialFormState: IncidentCreate = {
 
 export function useCreateIncidentForm({
   driverId,
+  inspection_id2,
   onSuccess,
 }: {
   driverId?: number;
+  inspection_id2?: number,
   onSuccess?: () => void;
 }) {
   const [files, setFiles] = useState<File[]>([]);
@@ -74,6 +76,7 @@ export function useCreateIncidentForm({
         driverId: driverIdToUse,
         incident: { ...data },
         files,
+        inspectionid: inspection_id2
       },
       {
         onSuccess: () => {

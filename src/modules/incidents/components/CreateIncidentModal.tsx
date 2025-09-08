@@ -10,9 +10,10 @@ import { CreateIncidentForm } from './CreateIncidentForm';
 
 interface Props {
   onClose: () => void;
+  inspection_id?: number;
 }
 
-export const CreateIncidentModal = ({ onClose }: Props) => {
+export const CreateIncidentModal = ({ onClose, inspection_id }: Props) => {
   return (
     <>
       <DialogTitle
@@ -39,7 +40,7 @@ export const CreateIncidentModal = ({ onClose }: Props) => {
         </Box>
       </DialogTitle>
       <DialogContent>
-        <CreateIncidentForm onCancel={onClose} onSuccess={onClose} />
+        <CreateIncidentForm onCancel={onClose} onSuccess={onClose} inspection_id2={inspection_id} />
       </DialogContent>
     </>
   );

@@ -67,7 +67,7 @@ export class IncidentsService {
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data?.detail ||
-            'Error al obtener las incidencias del operador',
+          'Error al obtener las incidencias del operador',
         );
       }
       throw new Error('Error al obtener las incidencias del operador');
@@ -77,14 +77,21 @@ export class IncidentsService {
   public static async createIncident({
     driverId,
     incident,
+    inspectionid,
     files = [],
   }: {
     driverId: number;
     incident: IncidentCreate;
+    inspectionid?: number;
     files?: File[];
   }): Promise<Incident> {
-    const url = `/drivers/${driverId}/incidents`;
-    const data = IncidentAdapter.driverIncidentToApi(incident);
+    const url = inspectionid
+      ? `/drivers/${driverId}/incidents?inspection_id=${inspectionid}`
+      : `/drivers/${driverId}/incidents`;
+    const data = {
+      ...IncidentAdapter.driverIncidentToApi(incident),
+      inspection_id: inspectionid, // 👈 lo agregas aquí
+    };
     try {
       const response = await odooApi.post<IncidentApi>(url, data);
 
