@@ -74,6 +74,7 @@ const VehicleLegalInspectionPage = () => {
           open={!!detail}
           onClose={() => setDetail(null)}
           vehicleInspection={detail}
+          refresh={query.refetch}
         />
       )}
       {toInspect && (
