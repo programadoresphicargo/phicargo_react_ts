@@ -70,6 +70,10 @@ export const useIncidentsQueries = ({ driverId, startDate, endDate }: Config) =>
       return response.data;
     },
     onSuccess: (data) => {
+      queryClient.invalidateQueries<Incident[]>({
+        queryKey: [DRIVER_INCIDENTS_KEY],
+        exact: false,
+      });
       toast.success(data.message || "Incidencia confirmada");
     },
     onError: (err) => {
