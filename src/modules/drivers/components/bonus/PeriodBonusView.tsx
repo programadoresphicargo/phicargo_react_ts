@@ -86,14 +86,10 @@ export const PeriodBonusView = ({ open, onClose, periodo }: Props) => {
         CerrarPeriodoMutation.mutate(
           { id_periodo: periodo.id },
           {
-            onSuccess: () => {
-              Swal.fire({
-                title: 'Cerrado',
-                text: 'El periodo ha sido cerrado con éxito.',
-                icon: 'success',
-                confirmButtonText: 'OK',
-              });
-              onClose();
+            onSuccess: (data) => {
+              if (data.status == "success") {
+                onClose();
+              }
             },
             onError: () => {
               Swal.fire({
