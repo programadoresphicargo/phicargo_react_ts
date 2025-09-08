@@ -22,12 +22,14 @@ interface Props {
   open: boolean;
   onClose: () => void;
   vehicleInspection: VehicleInspection;
+  refresh: () => void;
 }
 
 export const VehicleInspectionDetailModal = ({
   open,
   onClose,
   vehicleInspection,
+  refresh,
 }: Props) => {
   const {
     query: { data: incident, isLoading: loadingIncident },
@@ -42,8 +44,11 @@ export const VehicleInspectionDetailModal = ({
 
   const [openCreateIncident, setOpenCreateIncident] = useState(false);
   const handleCreateOpen = () => setOpenCreateIncident(true);
-  const handleCreateClose = () => setOpenCreateIncident(false);
-
+  const handleCreateClose = () => {
+    setOpenCreateIncident(false);
+    refresh?.();
+    onClose();
+  };
   const [openEditIncident, setOpenEditIncident] = useState(false);
   const handleOpen = () => setOpenEditIncident(true);
   const handleClose = () => setOpenEditIncident(false);
