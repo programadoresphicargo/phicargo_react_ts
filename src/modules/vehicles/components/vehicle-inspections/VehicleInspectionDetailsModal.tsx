@@ -153,25 +153,6 @@ export const VehicleInspectionDetailModal = ({
                     Confirmar revisión
                   </Button>
                 )}
-                {isEditing && (
-                  <Button
-                    color="primary"
-                    className="text-white"
-                    radius="full"
-                    onPress={() => handleSave()}
-                    isLoading={updarting}
-                  >
-                    {updarting ? "Guardando..." : "Guardar cambios"}
-                  </Button>
-                )}
-                <Button
-                  color={isEditing ? "secondary" : "danger"}
-                  className="text-white"
-                  radius="full"
-                  onPress={() => setIsEditing(!isEditing)}
-                >
-                  {isEditing ? "Cancelar edición" : "Editar"}
-                </Button>
               </div>
             </>
           ) : (
@@ -193,6 +174,27 @@ export const VehicleInspectionDetailModal = ({
         {/* Sección de información básica */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <DetailCard title="Información de Revisión">
+
+            {isEditing && (
+              <Button
+                color="primary"
+                className="text-white"
+                radius="full"
+                onPress={() => handleSave()}
+                isLoading={updarting}
+              >
+                {updarting ? "Guardando..." : "Guardar cambios"}
+              </Button>
+            )}
+            <Button
+              color={isEditing ? "secondary" : "danger"}
+              className="text-white"
+              isDisabled={vehicleInspection.inspection?.inspectionState == 'confirmed' ? true : false || !isEditing}
+              radius="full"
+              onPress={() => setIsEditing(!isEditing)}
+            >
+              {isEditing ? "Cancelar edición" : "Editar"}
+            </Button>
 
             <div>
               <p className="text-sm text-gray-500 uppercase">
@@ -267,7 +269,6 @@ export const VehicleInspectionDetailModal = ({
                   color="primary"
                   onPress={handleOpen}
                   radius="full"
-                  size="sm"
                   isDisabled={vehicleInspection.inspection?.inspectionState === 'confirmed'}
                 >
                   Editar incidencia
