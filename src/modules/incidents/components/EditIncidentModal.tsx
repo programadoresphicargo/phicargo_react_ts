@@ -6,7 +6,7 @@ import {
   InputAdornment,
   Typography,
 } from '@mui/material';
-import { Button, MuiCloseButton, MuiSaveButton } from '@/components/ui';
+import { Button, MuiCloseButton } from '@/components/ui';
 import type { Incident, IncidentUpdate } from '../models';
 import {
   AutocompleteElement,
@@ -23,6 +23,7 @@ import { getIncidentOptions, incidentType } from '../utilities';
 import { useDriverQueries } from '@/modules/drivers/hooks/queries';
 import { useVehicleQueries } from '@/modules/vehicles/hooks/queries';
 import { useIncidentsQueries } from '../hooks/quries';
+import Swal from 'sweetalert2';
 
 interface Props {
   onClose: () => void;
@@ -70,26 +71,68 @@ export const EditIncidentModal = ({ onClose, incident }: Props) => {
 
   const confirmIncident = () => {
     if (!incident) return;
-    confirmIncidentMutation.mutate(
-      { id: incident.id, state: "confirmed" },
-      {
-        onSuccess: () => {
-          onClose();
-        },
+
+    Swal.fire({
+      title: "¿Confirmar incidencia?",
+      text: "Una vez confirmada no podrás deshacer esta acción.",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#28a745",
+      cancelButtonColor: "#6c757d",
+      confirmButtonText: "Sí, confirmar",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        confirmIncidentMutation.mutate(
+          { id: incident.id, state: "confirmed" },
+          {
+            onSuccess: () => {
+              onClose();
+            },
+            onError: () => {
+              Swal.fire(
+                "Error",
+                "No se pudo confirmar la incidencia. Inténtalo de nuevo.",
+                "error"
+              );
+            },
+          }
+        );
       }
-    );
+    });
   };
 
   const canceledIncident = () => {
     if (!incident) return;
-    confirmIncidentMutation.mutate(
-      { id: incident.id, state: "canceled" },
-      {
-        onSuccess: () => {
-          onClose();
-        },
+
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "Esta acción cancelará la incidencia.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sí, cancelar",
+      cancelButtonText: "No, regresar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        confirmIncidentMutation.mutate(
+          { id: incident.id, state: "canceled" },
+          {
+            onSuccess: () => {
+              onClose();
+            },
+            onError: () => {
+              Swal.fire(
+                "Error",
+                "No se pudo cancelar la incidencia. Inténtalo de nuevo.",
+                "error"
+              );
+            },
+          }
+        );
       }
-    );
+    });
   };
 
   return (
@@ -284,6 +327,7 @@ export const EditIncidentModal = ({ onClose, incident }: Props) => {
           Cancelar
         </Button>
         <Button
+          color='success'
           disabled={incident.state == 'confirmed' ? true : false}
           variant="contained"
           onClick={confirmIncident}
@@ -291,19 +335,21 @@ export const EditIncidentModal = ({ onClose, incident }: Props) => {
           Confirmar incidencia
         </Button>
         <Button
+          color='error'
           disabled={incident.state == 'confirmed' ? true : false}
           variant="contained"
           onClick={canceledIncident}
           loading={confirmIncidentMutation.isPending}>
           Cancelar incidencia
         </Button>
-        <MuiSaveButton
+        <Button
           disabled={confirmIncidentMutation.isPending ? true : false || incident.state == 'confirmed' ? true : false}
           variant="contained"
           loading={updateIncident.isPending}
           loadingPosition="end"
-          onClick={handleSubmit(onSubmit)}
-        />
+          onClick={handleSubmit(onSubmit)}>
+          Guadar cambios
+        </Button>
       </DialogActions>
     </>
   );

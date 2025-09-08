@@ -89,8 +89,10 @@ export const VehicleInspectionDetailModal = ({
         ConfirmInspectionMutacion.mutate(
           undefined,
           {
-            onSuccess: () => {
-              onClose();
+            onSuccess: (data) => {
+              if (data.status === 'success') {
+                onClose();
+              }
             },
             onError: () => {
               Swal.fire({
@@ -115,7 +117,7 @@ export const VehicleInspectionDetailModal = ({
       data: formData,
     }, {
       onSuccess: () => {
-        onClose();
+        setIsEditing(false);
       },
     });
   };
@@ -235,28 +237,6 @@ export const VehicleInspectionDetailModal = ({
                 />
               </div>
             </div>
-
-            <div>
-              <p className="text-sm text-gray-500">Responsabilidad</p>
-              <div className="flex items-center gap-1">
-                {incident?.isDriverResponsible ? (
-                  <>
-                    <ErrorOutline color="error" sx={{ fontSize: '1.2rem' }} />
-                    <span className="text-red-600">Conductor responsable</span>
-                  </>
-                ) : (
-                  <>
-                    <CheckCircleOutline
-                      color="success"
-                      sx={{ fontSize: '1.2rem' }}
-                    />
-                    <span className="text-green-600">
-                      Conductor no responsable
-                    </span>
-                  </>
-                )}
-              </div>
-            </div>
           </DetailCard>
 
           <DetailCard title="Incidencia Asociada">
@@ -297,6 +277,12 @@ export const VehicleInspectionDetailModal = ({
                 </Dialog>
 
                 <div>
+                  <p className="text-sm text-gray-500">Estado</p>
+                  <p>
+                    {incident.state}
+                  </p>
+                </div>
+                <div>
                   <p className="text-sm text-gray-500">Operador</p>
                   <p>
                     {incident.driver.name} ({incident.driver.license})
@@ -317,6 +303,25 @@ export const VehicleInspectionDetailModal = ({
                 <div>
                   <p className="text-sm text-gray-500">Fecha de registro</p>
                   <p>{incident?.createdAt.format('DD/MM/YYYY hh:mm A')}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Responsabilidad</p>
+                  {incident?.isDriverResponsible ? (
+                    <>
+                      <ErrorOutline color="error" sx={{ fontSize: '1.2rem' }} />
+                      <span className="text-red-600">Conductor responsable</span>
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircleOutline
+                        color="success"
+                        sx={{ fontSize: '1.2rem' }}
+                      />
+                      <span className="text-green-600">
+                        Conductor no responsable
+                      </span>
+                    </>
+                  )}
                 </div>
               </>
             )}
