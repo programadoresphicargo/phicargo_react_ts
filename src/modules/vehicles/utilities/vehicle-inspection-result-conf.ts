@@ -3,7 +3,7 @@ import { InspectionResult } from '../models';
 
 export const conf: KeyLabelConf<InspectionResult>[] = [
   { key: 'approved', label: 'Aprobado', color: 'success' },
-  { key: 'rejected', label: 'Rechazado', color: 'danger' },
+  { key: 'rejected', label: 'Rechazado', color: 'error' },
 ];
 
 export const inspectionResult = new KeyLabel(conf);
