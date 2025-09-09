@@ -87,11 +87,25 @@ export const useVehicleInspectionColumns = () => {
         header: 'Estado',
         Cell: ({ cell }) => {
           const value = cell.getValue<string | null>();
+          const translations: Record<string, string> = {
+            draft: 'Borrador',
+            confirmed: 'Confirmado',
+          };
+
           return value ? (
-            <span>{value}</span>
+            <Chip color={translations[value] == 'Borrador' ? 'warning' : 'success'} className='text-white'>{translations[value] || value}</Chip>
           ) : (
             <span className="text-gray-400"></span>
           );
+        },
+        filterFn: (row, columnId, filterValue) => {
+          const value = row.getValue(columnId) as string | null;
+          const translations: Record<string, string> = {
+            draft: 'Borrador',
+            confirmed: 'Confirmado',
+          };
+          const translated = value ? translations[value] || value : '';
+          return translated.toLowerCase().includes(filterValue.toLowerCase());
         },
       },
 
