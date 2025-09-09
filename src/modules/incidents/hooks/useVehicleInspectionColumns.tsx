@@ -1,7 +1,6 @@
 // import { ModalityChip } from '@/modules/drivers/components/ui/ModalityChip';
 // import type { Modality } from '@/modules/drivers/models';
 // import { VehicleTypeChip } from '@/modules/vehicles/components/ui/VehicleTypeChip';
-import { UserBasic } from '@/modules/auth/models';
 import type {
   InspectionResult,
   VehicleInspection,
