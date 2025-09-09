@@ -64,7 +64,7 @@ export const useIncidentsColumns = () => {
         maxSize: 50,
         Cell: ({ row }) => {
           const value = row.original.incidentDate?.format('DD/MM/YYYY hh:mm A');
-          return <BasicTextCell value={value} />;
+          return <p>{value}</p>;
         },
       },
       {
@@ -82,7 +82,15 @@ export const useIncidentsColumns = () => {
         maxSize: 50,
         Cell: ({ row }) => {
           const value = row.original.createdAt.format('DD/MM/YYYY hh:mm A');
-          return <BasicTextCell value={value} />;
+          return <p>{value}</p>;
+        },
+      },
+      {
+        accessorFn: (row) => row.state,
+        header: 'Estado',
+        id: 'state',
+        Cell: ({ row }) => {
+          return <IncidentChip incident={row.original}></IncidentChip>
         },
       },
       {
@@ -91,13 +99,6 @@ export const useIncidentsColumns = () => {
         Cell: ({ row }) => {
           const value = row.original.evidences.length;
           return <BasicTextCell value={value} fallback="Sin evidencias" />;
-        },
-      },
-      {
-        header: 'Evidencias',
-        id: 'state',
-        Cell: ({ row }) => {
-          return <IncidentChip incident={row.original}></IncidentChip>
         },
       },
     ],
