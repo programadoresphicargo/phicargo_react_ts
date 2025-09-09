@@ -7,7 +7,7 @@ import type {
   VehicleInspection,
 } from '@/modules/vehicles/models';
 import { inspectionResult } from '@/modules/vehicles/utilities';
-import { Chip } from '@mui/material';
+import { Chip } from '@heroui/react';
 import { Dayjs } from 'dayjs';
 import type { MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
@@ -19,7 +19,7 @@ export const useVehicleInspectionColumns = () => {
         accessorKey: 'name',
         header: 'Unidad',
         Cell: ({ cell }) => (
-          <span className="font-bold">{cell.getValue<string>()}</span>
+          <Chip color='primary'>{cell.getValue<string>()}</Chip>
         ),
       },
       {
@@ -53,12 +53,10 @@ export const useVehicleInspectionColumns = () => {
           const value = cell.getValue<InspectionResult | null>();
           return value ? (
             <Chip
-              label={inspectionResult.getLabel(value)}
-              color={inspectionResult.getColor(value)}
-              size="small"
-            />
+              color={value == 'approved' ? 'success' : 'danger'}
+            >{inspectionResult.getLabel(value)}</Chip>
           ) : (
-            <Chip label={'No Revisada'} color="default" size="small" />
+            <Chip color="default">{'No Revisada'}</Chip>
           );
         },
       },
@@ -69,7 +67,7 @@ export const useVehicleInspectionColumns = () => {
         Cell: ({ cell }) => {
           const value = cell.getValue<Dayjs | null>();
           return value ? (
-            <span className="font-bold">{value.format('DD/MM/YYYY')}</span>
+            <span>{value.format('DD/MM/YYYY')}</span>
           ) : (
             <span className="text-gray-400">SIN INSPECCIÓN</span>
           );
@@ -82,7 +80,7 @@ export const useVehicleInspectionColumns = () => {
         Cell: ({ cell }) => {
           const value = cell.getValue<UserBasic | null>();
           return value ? (
-            <span className="font-bold">{value.username}</span>
+            <span>{value.username}</span>
           ) : (
             <span className="text-gray-400">SIN INSPECCIÓN</span>
           );
@@ -94,9 +92,9 @@ export const useVehicleInspectionColumns = () => {
         Cell: ({ cell }) => {
           const value = cell.getValue<string | null>();
           return value ? (
-            <span className="font-bold">{value}</span>
+            <span>{value}</span>
           ) : (
-            <span className="text-gray-400">NA</span>
+            <span className="text-gray-400"></span>
           );
         },
       },
