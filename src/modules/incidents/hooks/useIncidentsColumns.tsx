@@ -4,6 +4,7 @@ import { Incident } from '../models';
 import { BasicTextCell } from '@/components/ui';
 import { Chip, Tooltip } from '@mui/material';
 import { incidentType } from '../utilities';
+import IncidentChip from '../components/IncidentChip';
 
 export const useIncidentsColumns = () => {
   const columns = useMemo<MRT_ColumnDef<Incident>[]>(
@@ -90,6 +91,13 @@ export const useIncidentsColumns = () => {
         Cell: ({ row }) => {
           const value = row.original.evidences.length;
           return <BasicTextCell value={value} fallback="Sin evidencias" />;
+        },
+      },
+      {
+        header: 'Evidencias',
+        id: 'state',
+        Cell: ({ row }) => {
+          return <IncidentChip incident={row.original}></IncidentChip>
         },
       },
     ],
