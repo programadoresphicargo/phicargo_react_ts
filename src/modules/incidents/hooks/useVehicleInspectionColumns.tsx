@@ -74,18 +74,14 @@ export const useVehicleInspectionColumns = () => {
           );
         },
       },
-
       {
-        accessorFn: (row) => row.inspection?.inspector,
+        accessorFn: (row) => row.inspection?.inspector?.username ?? 'SIN INSPECCIÓN',
         header: 'Inspector',
         Cell: ({ cell }) => {
-          const value = cell.getValue<UserBasic | null>();
-          return value ? (
-            <span>{value.username}</span>
-          ) : (
-            <span className="text-gray-400">SIN INSPECCIÓN</span>
-          );
+          const value = cell.getValue<string>();
+          return <span className={value === 'SIN INSPECCIÓN' ? "text-gray-400" : ""}>{value}</span>;
         },
+        enableGrouping: true, // opcional si quieres forzar que sea agrupable
       },
       {
         accessorFn: (row) => row.inspection?.inspectionState,
