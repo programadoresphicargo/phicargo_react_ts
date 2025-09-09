@@ -16,6 +16,7 @@ export interface InspectionApi extends VehicleInspectionBaseApi {
   id: number;
   inspector: UserBasicApi;
   incident_id: number | null;
+  confirmed_by_user: string | null;
 }
 
 export interface VehicleInspectionApi extends VehicleBaseApi {

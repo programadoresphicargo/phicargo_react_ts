@@ -29,6 +29,8 @@ export class VehicleInspectionAdapter {
       inspectionType: inspectionApi.inspection_type,
       inspectionState: inspectionApi.inspection_state,
       confirmedDate: dayjs(inspectionApi.confirmed_date),
+      userConfirmed: inspectionApi.confirmed_by_user
+
     };
   }
 

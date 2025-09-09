@@ -161,6 +161,9 @@ export const VehicleInspectionDetailModal = ({
                 <p className="text-sm text-gray-500">Estado</p>
                 <p>{vehicleInspection.inspection?.inspectionState}</p>
 
+                <p className="text-sm text-gray-500">Usuario confirmo</p>
+                <p>{vehicleInspection.inspection?.userConfirmed}</p>
+
                 <p className="text-sm text-gray-500">Fecha confirmación</p>
                 <p>{vehicleInspection.inspection?.confirmedDate.toString()}</p>
               </div>
@@ -189,7 +192,7 @@ export const VehicleInspectionDetailModal = ({
             <Button
               color={isEditing ? "secondary" : "danger"}
               className="text-white"
-              isDisabled={vehicleInspection.inspection?.inspectionState == 'confirmed' ? true : false || !isEditing}
+              isDisabled={vehicleInspection.inspection?.inspectionState == 'confirmed' ? true : false}
               radius="full"
               onPress={() => setIsEditing(!isEditing)}
             >

@@ -20,6 +20,7 @@ export interface Inspection extends VehicleInspectionBase {
   id: number;
   inspector: UserBasic;
   incidentId: number | null;
+  userConfirmed: string | null;
 }
 
 export interface VehicleInspection extends VehicleBase {
