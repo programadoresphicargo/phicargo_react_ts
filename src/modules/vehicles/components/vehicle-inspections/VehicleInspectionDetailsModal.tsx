@@ -272,7 +272,9 @@ export const VehicleInspectionDetailModal = ({
                   color="primary"
                   onPress={handleOpen}
                   radius="full"
-                  isDisabled={vehicleInspection.inspection?.inspectionState === 'confirmed'}
+                  isDisabled={
+                    vehicleInspection.inspection?.inspectionState === 'confirmed' || isEditing
+                  }
                 >
                   Editar incidencia
                 </Button>
