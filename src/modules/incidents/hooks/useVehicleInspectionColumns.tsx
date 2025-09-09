@@ -53,6 +53,7 @@ export const useVehicleInspectionColumns = () => {
           const value = cell.getValue<InspectionResult | null>();
           return value ? (
             <Chip
+              className='text-white'
               color={value == 'approved' ? 'success' : 'danger'}
             >{inspectionResult.getLabel(value)}</Chip>
           ) : (
