@@ -24,6 +24,7 @@ import { useDriverQueries } from '@/modules/drivers/hooks/queries';
 import { useVehicleQueries } from '@/modules/vehicles/hooks/queries';
 import { useIncidentsQueries } from '../hooks/quries';
 import Swal from 'sweetalert2';
+import IncidentChip from './IncidentChip';
 
 interface Props {
   onClose: () => void;
@@ -178,6 +179,11 @@ export const EditIncidentModal = ({ onClose, incident }: Props) => {
           onSubmit={handleSubmit(onSubmit)}
         >
           <div className="flex flex-col gap-4">
+            <div>
+              <h2>Incidencia: {incident.id}</h2>
+              <IncidentChip incident={incident} />
+            </div>
+
             <RadioButtonGroup
               disabled={incident.state == 'confirmed' ? true : false}
               control={control}
@@ -328,7 +334,7 @@ export const EditIncidentModal = ({ onClose, incident }: Props) => {
         </Button>
         <Button
           color='success'
-          disabled={incident.state == 'confirmed' ? true : false}
+          disabled={incident.state === 'confirmed' || incident.state === 'canceled'}
           variant="contained"
           onClick={confirmIncident}
           loading={confirmIncidentMutation.isPending}>
@@ -336,7 +342,7 @@ export const EditIncidentModal = ({ onClose, incident }: Props) => {
         </Button>
         <Button
           color='error'
-          disabled={incident.state == 'confirmed' ? true : false}
+          disabled={incident.state === 'confirmed' || incident.state === 'canceled'}
           variant="contained"
           onClick={canceledIncident}
           loading={confirmIncidentMutation.isPending}>
