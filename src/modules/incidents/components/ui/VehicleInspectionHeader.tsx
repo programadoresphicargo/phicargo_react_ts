@@ -14,12 +14,12 @@ export const VehicleInspectionHeader = ({ vehicleInspections, inspectionType }: 
   const pendingUnits = vehicleInspections.filter((v) => !v.inspection).length;
 
   return (
-    <div className="bg-gray-200 px-3 py-1 shadow-sm w-full flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+    <div className="bg-gradient-to-r from-[#002887] to-[#0059b3] px-3 py-1 shadow-sm w-full flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
       <div>
-        <h1 className="tracking-tight font-semibold lg:text-2xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text">
+        <h1 className="tracking-tight font-semibold lg:text-2xl text-white">
           Revisiones de Unidades {inspectionType && `(${inspectionType})`}
         </h1>
-        <p className="text-gray-600">
+        <p className="text-white">
           Aquí puedes ver y gestionar las revisiones de las unidades.
         </p>
       </div>
