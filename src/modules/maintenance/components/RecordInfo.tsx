@@ -25,7 +25,7 @@ export const RecordInfo = ({ record }: Props) => {
       </div>
       <div className="flex items-center text-medium">
         <MdOutlineSmsFailed className="text-yellow-400 mr-2" />
-        <span className="text-gray-800">Tipo de Falla:</span>
+        <span className="text-gray-800">Tipo de reporte:</span>
         <span className="ml-1 text-gray-700">
           {record?.failType || 'Sin estado'}
         </span>

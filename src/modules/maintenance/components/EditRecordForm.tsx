@@ -26,6 +26,10 @@ const SUPERVISORS = [
     label: 'ORTIZ DIAZ CARLOS EDUARDO',
     id: 'ORTIZ DIAZ CARLOS EDUARDO',
   },
+  {
+    label: 'BENITEZ CESAR FERNANDO',
+    id: 'BENITEZ CESAR FERNANDO',
+  },
 ];
 
 interface Props {
@@ -123,10 +127,12 @@ export const EditRecordForm = ({ onClose, record }: Props) => {
           <SelectElement
             control={control}
             name="failType"
-            label="Tipo de falla"
+            label="Tipo de reporte"
             size="small"
             required
             options={[
+              { label: 'Siniestro de la unidad', id: 'SINIESTRO' },
+              { label: 'Robo de la unidad', id: 'ROBO' },
               { label: 'MC', id: 'MC' },
               { label: 'EL', id: 'EL' },
               { label: 'PV', id: 'PV' },

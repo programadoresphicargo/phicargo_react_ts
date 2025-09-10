@@ -160,7 +160,7 @@ const VehicleForm = (props: Props) => {
               name="stateId"
               label="Estado"
               isDisabled={stateId === 5}
-              disabledKeys={['5']}
+              disabledKeys={['4', '5', '9']}
               items={[
                 { key: 1, value: 'EN USO' },
                 { key: 2, value: 'BAJA POR VENTA' },
@@ -170,6 +170,7 @@ const VehicleForm = (props: Props) => {
                 { key: 6, value: 'ESTATUS PGJ' },
                 { key: 7, value: 'ESTATUS OCRA' },
                 { key: 8, value: 'TERMINACION DE ARRENDAMIENTO' },
+                { key: 9, value: 'UNIDAD ROBADA' },
               ]}
             />
           </div>

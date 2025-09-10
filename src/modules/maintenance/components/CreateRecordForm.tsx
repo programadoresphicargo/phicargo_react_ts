@@ -11,10 +11,11 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import { Button, MuiCloseButton, MuiSaveButton } from '@/components/ui';
+import { MuiCloseButton, MuiSaveButton } from '@/components/ui';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import dayjs, { Dayjs } from 'dayjs';
 import { useMaintenanceRecord, useVehicles, useWorkshop } from '../hooks';
+import { Button } from '@heroui/react';
 
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import AddWorkshop from './AddWorkshop';
@@ -34,6 +35,10 @@ const SUPERVISORS = [
   {
     label: 'ORTIZ DIAZ CARLOS EDUARDO',
     id: 'ORTIZ DIAZ CARLOS EDUARDO',
+  },
+  {
+    label: 'BENITEZ CESAR FERNANDO',
+    id: 'BENITEZ CESAR FERNANDO',
   },
 ];
 
@@ -132,11 +137,13 @@ export const CreateRecordForm = ({ onClose }: Props) => {
           <SelectElement
             control={control}
             name="failType"
-            label="Tipo de falla"
+            label="Tipo de reporte"
             size="small"
             required
-            rules={{ required: 'Tipo de falla requerido' }}
+            rules={{ required: 'Tipo de reporte requerido' }}
             options={[
+              { label: 'Siniestro de la unidad', id: 'SINIESTRO' },
+              { label: 'Robo de la unidad', id: 'ROBO' },
               { label: 'MC', id: 'MC' },
               { label: 'EL', id: 'EL' },
               { label: 'PV', id: 'PV' },
@@ -234,7 +241,11 @@ export const CreateRecordForm = ({ onClose }: Props) => {
           pt: '0',
         }}
       >
-        <Button variant="outlined" color="error" size="small" onClick={onClose}>
+        <Button
+          radius='full'
+          color="danger"
+          size="sm"
+          onPress={onClose}>
           Cancelar
         </Button>
         <MuiSaveButton

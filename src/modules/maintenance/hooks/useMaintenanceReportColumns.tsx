@@ -42,7 +42,7 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
       {
         accessorFn: (row) => row.daysInWorkshop,
         id: 'daysInWorkshop',
-        header: 'Días en Taller',
+        header: 'Días transcurridos',
         enableEditing: false,
       },
       {
@@ -128,7 +128,7 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
           { label: 'EL', value: 'EL' },
           { label: 'PV', value: 'PV' },
         ],
-        header: 'Tipo de falla',
+        header: 'Tipo de reporte',
       },
       {
         accessorFn: (originalRow) =>
