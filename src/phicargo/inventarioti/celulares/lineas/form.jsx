@@ -116,6 +116,19 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
                                 <Progress color="primary" isIndeterminate size="sm" />
                             )}
                             <ModalBody>
+
+                                <Select
+                                    label="Empresa"
+                                    isInvalid={!data.activo}
+                                    errorMessage={!data?.compañia ? "La compañia es obligatoria" : ""}
+                                    selectedKeys={data.id_empresa ? [String(data.id_empresa)] : []}
+                                    onSelectionChange={(keys) => handleChange("id_empresa", Number([...keys][0]))}
+                                >
+                                    <SelectItem key={"1"}>Transportes Belchez</SelectItem>
+                                    <SelectItem key={"2"}>Servicontainer</SelectItem>
+                                    <SelectItem key={"3"}>Tankcontainer</SelectItem>
+                                </Select>
+
                                 <Select
                                     label="Compañia"
                                     isInvalid={!data?.compañia}
@@ -124,7 +137,7 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
                                     onSelectionChange={(keys) => handleChange("compañia", [...keys][0])}
                                 >
                                     <SelectItem key="telcel">Telcel</SelectItem>
-                                    <SelectItem key="at&t">AT&T</SelectItem>
+                                    <SelectItem key="AT&T">AT&T</SelectItem>
                                 </Select>
 
                                 <Input
