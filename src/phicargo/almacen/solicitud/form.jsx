@@ -342,6 +342,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
 
                             {modoEdicion && (
                                 <Button
+                                    radius="full"
                                     onPress={handleSave}
                                     color={id_solicitud ? 'success' : 'primary'}
                                     isDisabled={isSaving}
@@ -356,13 +357,14 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                                 </Button>
                             )}
                             {data?.x_studio_estado == "confirmado" && (
-                                <Button color='warning' className='text-white' onPress={() => cambiar_borrador()} isLoading={isLoading}>Regresar a borrador</Button>
+                                <Button color='warning' className='text-white' onPress={() => cambiar_borrador()} isLoading={isLoading} radius="full">Regresar a borrador</Button>
                             )}
                             {data?.x_studio_estado == "confirmado" && (
-                                <Button color='success' className='text-white' onPress={() => entregar()} isLoading={isLoading}>Entregar</Button>
+                                <Button color='success' className='text-white' onPress={() => entregar()} isLoading={isLoading} radius="full">Entregar</Button>
                             )}
                             {((data?.x_studio_estado == "entregado" || data?.x_studio_estado == "recepcionado_operador") && data?.es_asignacion) && (
                                 <Button
+                                    radius="full"
                                     color='success'
                                     className='text-white'
                                     onPress={() => devolver()}
@@ -371,7 +373,8 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                                 </Button>
                             )}
                             <Button
-                                color='success'
+                                radius="full"
+                                color="success"
                                 as={Link}
                                 isExternal={true}
                                 color="primary"

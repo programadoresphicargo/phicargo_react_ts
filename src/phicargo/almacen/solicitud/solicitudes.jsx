@@ -215,6 +215,7 @@ const Solicitudes = ({ x_tipo, vista }) => {
         </h2>
 
         <Button
+          radius="full"
           className='text-white'
           startContent={<i class="bi bi-plus-lg"></i>}
           color='primary'
@@ -230,10 +231,10 @@ const Solicitudes = ({ x_tipo, vista }) => {
         </Button>
 
         <Button
+          radius="full"
           className='text-white'
           startContent={<i class="bi bi-arrow-clockwise"></i>}
           color='primary'
-          isDisabled={false}
           onPress={() => fetchData()}
         >Actualizar tablero
         </Button>
