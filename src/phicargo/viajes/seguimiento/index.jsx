@@ -162,6 +162,14 @@ export default function BasicButtons2() {
                                         <div>{viaje?.origen || '—'}</div>
                                     </div>
                                     <div>
+                                        <span className="font-semibold text-gray-600">Dirección origen:</span>
+                                        <div>{viaje?.direccion_origen?.name || '—'}</div>
+                                    </div>
+                                    <div>
+                                        <span className="font-semibold text-gray-600">Dirección destino:</span>
+                                        <div>{viaje?.direccion_destino?.name || '—'}</div>
+                                    </div>
+                                    <div>
                                         <span className="font-semibold text-gray-600">Ruta:</span>
                                         <div>{viaje?.route?.name || '—'}</div>
                                     </div>
