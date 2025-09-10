@@ -247,6 +247,7 @@ const FoliosCostosExtras = () => {
         </h1>
         <Box sx={{ width: '160px' }}>
           <Button
+            radius="full"
             startContent={<i class="bi bi-plus-lg"></i>}
             color="primary"
             fullWidth
@@ -261,6 +262,7 @@ const FoliosCostosExtras = () => {
 
         <Box sx={{ width: '160px' }}>
           <Button
+            radius="full"
             startContent={<i class="bi bi-arrow-clockwise"></i>}
             color="success"
             className='text-white'
@@ -274,7 +276,9 @@ const FoliosCostosExtras = () => {
         </Box>
 
         <Box sx={{ width: '160px' }}>
-          <Button color='success'
+          <Button
+            radius="full"
+            color='success'
             fullWidth
             className='text-white'
             startContent={<i class="bi bi-file-earmark-excel"></i>}
