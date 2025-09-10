@@ -96,18 +96,17 @@ export const CreateRecordForm = ({ onClose }: Props) => {
           alignItems: 'center',
           padding: '10px 15px',
           color: 'white',
-          background: 'linear-gradient(90deg, #0b2149, #002887)',
+          background: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
         }}
       >
         <Typography
-          variant="h2"
           sx={{
             color: 'white',
             fontSize: '1.25rem',
-            textTransform: 'uppercase',
+            fontFamily: 'Inter'
           }}
         >
-          Crear Nuevo Registro
+          Nuevo Registro
         </Typography>
         <Box sx={{ display: 'flex', gap: '1rem' }}>
           <MuiCloseButton onClick={onClose} />
