@@ -84,7 +84,7 @@ const TablaProductosDetalle = ({ close, tipo }) => {
       sx: { fontFamily: 'Inter', fontWeight: 'Bold', fontSize: '14px' },
     },
     muiTableContainerProps: {
-      sx: { maxHeight: 'calc(100vh - 210px)' },
+      sx: { maxHeight: 'calc(100vh - 300px)' },
     },
     muiTableBodyCellProps: ({ row }) => ({
       sx: { fontFamily: 'Inter', fontWeight: 'normal', fontSize: '12px' },

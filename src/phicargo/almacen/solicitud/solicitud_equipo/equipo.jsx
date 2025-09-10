@@ -254,15 +254,14 @@ const EPPSolicitados = ({ }) => {
         maxWidth="lg"
         fullWidth
         TransitionComponent={Transition}
+        scroll="body"
         sx={{
           '& .MuiPaper-root': {
             borderRadius: '28px',        // Opcional, para bordes redondeados
           }
         }}>
         <DialogContent>
-          <DialogContentText>
-            <TablaProductosDetalle close={handleClose}></TablaProductosDetalle>
-          </DialogContentText>
+          <TablaProductosDetalle close={handleClose}></TablaProductosDetalle>
         </DialogContent>
         <DialogActions>
           <Button onPress={handleClose}>Cancelar</Button>
