@@ -127,6 +127,8 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
           { label: 'MC', value: 'MC' },
           { label: 'EL', value: 'EL' },
           { label: 'PV', value: 'PV' },
+          { label: 'Siniestro de la unidad', value: 'SINIESTRO' },
+          { label: 'Robo de la unidad', value: 'ROBO' },
         ],
         header: 'Tipo de reporte',
       },
