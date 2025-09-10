@@ -127,6 +127,7 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
                                     <SelectItem key={"1"}>Transportes Belchez</SelectItem>
                                     <SelectItem key={"2"}>Servicontainer</SelectItem>
                                     <SelectItem key={"3"}>Tankcontainer</SelectItem>
+                                    <SelectItem key={"5"}>Phi-Cargo</SelectItem>
                                 </Select>
 
                                 <Select
