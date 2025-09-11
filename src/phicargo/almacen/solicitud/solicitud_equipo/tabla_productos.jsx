@@ -100,15 +100,17 @@ const TablaProductosDetalle = ({ close, tipo }) => {
         </h1>
 
         <Button
+          radius='full'
           className="text-white"
           startContent={<i className="bi bi-arrow-clockwise"></i>}
           color="primary"
           onPress={() => fetchData()}
         >
-          Actualizar tablero
+          Actualizar
         </Button>
 
         <Button
+          radius='full'
           className="text-white"
           color="success"
           isDisabled={Object.keys(rowSelection).length === 0} // deshabilitado si no hay selección
