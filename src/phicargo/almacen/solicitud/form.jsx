@@ -335,7 +335,10 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                         <Stack spacing={1} direction="row" className="mb-5">
 
                             {(!modoEdicion && data?.x_studio_estado == 'borrador') && (
-                                <Button color="primary" onPress={handleEdit}>
+                                <Button
+                                    radius="full"
+                                    color="primary"
+                                    onPress={handleEdit}>
                                     Editar
                                 </Button>
                             )}
@@ -352,7 +355,12 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                                 </Button>
                             )}
                             {data?.x_studio_estado === "borrador" && modoEdicion != true && (
-                                <Button color="success" className="text-white" onPress={() => confirmar()} isLoading={isLoading}>
+                                <Button
+                                    radius="full"
+                                    color="success"
+                                    className="text-white"
+                                    onPress={() => confirmar()}
+                                    isLoading={isLoading}>
                                     Confirmar y reservar
                                 </Button>
                             )}
