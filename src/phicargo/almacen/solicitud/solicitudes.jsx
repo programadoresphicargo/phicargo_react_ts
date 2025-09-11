@@ -252,6 +252,15 @@ const Solicitudes = ({ x_tipo, vista }) => {
         >Actualizar tablero
         </Button>
 
+        <Button
+          radius="full"
+          color='success'
+          className='text-white'
+          startContent={<i class="bi bi-file-earmark-excel"></i>}
+          onPress={() => exportToCSV(dataSolicitudes, columns, "solicitudes.csv")}>
+          Exportar
+        </Button>
+
       </Box >
     ),
   });
