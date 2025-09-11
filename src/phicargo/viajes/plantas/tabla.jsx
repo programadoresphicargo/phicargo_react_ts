@@ -65,6 +65,7 @@ export default function PlantaViaje({ isOpen, onOpenChange }) {
             if (response.data.status == "success") {
                 toast.success(response.data.message);
                 getViaje(viaje?.id);
+                onOpenChange();
             } else {
                 toast.error(response.data.message);
             }
