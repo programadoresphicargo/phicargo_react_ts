@@ -26,6 +26,7 @@ import { useJourneyDialogs } from './seguimiento/funciones';
 import { useDisclosure } from "@heroui/react";
 import DialogActions from '@mui/material/DialogActions';
 import WhatsAppContatcsTravel from "./canales/tabla";
+import PlantaViaje from "./plantas/tabla";
 
 const Viaje = ({ }) => {
 
@@ -62,6 +63,12 @@ const Viaje = ({ }) => {
     onOpenChange: onOpenChange1,
   } = useDisclosure();
 
+  const {
+    isOpen: isOpenPlanta,
+    onOpen: onOpenPlanta,
+    onOpenChange: onOpenChangePlanta,
+  } = useDisclosure();
+
   return (
     <>
       {isLoading && (
@@ -86,6 +93,14 @@ const Viaje = ({ }) => {
           </div>
         </div>
         <div style={{ display: 'flex', gap: '10px' }}>
+          <Button
+            radius="full"
+            color='danger'
+            onPress={() => onOpenPlanta()}
+            className="text-white">
+            <i class="bi bi-pin-map"></i>
+            Ubicación  de planta
+          </Button>
           <Button
             radius="full"
             isDisabled
@@ -179,6 +194,7 @@ const Viaje = ({ }) => {
       </Dialog>
 
       <WhatsAppContatcsTravel isOpen={isOpen1} onOpenChange={onOpenChange1}></WhatsAppContatcsTravel>
+      <PlantaViaje isOpen={isOpenPlanta} onOpenChange={onOpenChangePlanta}></PlantaViaje>
     </>
   );
 };
