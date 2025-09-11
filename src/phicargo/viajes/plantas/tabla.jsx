@@ -35,24 +35,36 @@ import { ViajeContext } from "../context/viajeContext";
 import { toast } from "react-toastify";
 
 export default function PlantaViaje({ isOpen, onOpenChange }) {
-    const { id_viaje, viaje } = useContext(ViajeContext);
+    const { id_viaje, viaje, getViaje } = useContext(ViajeContext);
     const [isLoading, setLoading] = useState(false);
-    const [isLoading2, setLoading2] = useState(false);
     const [data, setData] = useState([]);
 
-    const [cliente, setCliente] = useState({
-        id: viaje?.partner?.id,
-        x_url_google_maps: viaje?.direccion_destino?.x_url_google_maps
-    });
+    const [cliente, setCliente] = useState({});
 
-    const LigarGeocerca = async () => {
+    useEffect(() => {
+        if (viaje?.x_modo_bel === 'exp') {
+            setCliente({
+                id: viaje?.direccion_origen?.id,
+                x_url_google_maps: viaje?.direccion_origen?.x_url_google_maps
+            });
+        } else {
+            setCliente({
+                id: viaje?.direccion_destino?.id,
+                x_url_google_maps: viaje?.direccion_destino?.x_url_google_maps
+            });
+        }
+    }, [viaje, isOpen]);
+
+
+    const UpdateContact = async () => {
         if (!validarFormulario()) return;
 
         try {
             setLoading(true);
-            const response = await odooApi.post('/geocercas_viajes/', cliente);
+            const response = await odooApi.patch('/contacts/', cliente);
             if (response.data.status == "success") {
                 toast.success(response.data.message);
+                getViaje(viaje?.id);
             } else {
                 toast.error(response.data.message);
             }
@@ -133,17 +145,27 @@ export default function PlantaViaje({ isOpen, onOpenChange }) {
                         {viaje?.x_modo_bel === 'exp' ? (
                             <div>
                                 <span className="font-semibold text-gray-600">Dirección origen:</span>
-                                <div>{viaje?.direccion_origen?.id || '—'}</div>
                                 <div>{viaje?.direccion_origen?.name || '—'}</div>
                                 <div>{viaje?.direccion_origen?.street || '—'}</div>
                             </div>
                         ) : (
                             <div>
                                 <span className="font-semibold text-gray-600">Dirección destino:</span>
-                                <div>{viaje?.direccion_destino?.id || '—'}</div>
                                 <div>{viaje?.direccion_destino?.name || '—'}</div>
                                 <div>{viaje?.direccion_destino?.street || '—'}</div>
                             </div>
+                        )}
+
+                        {cliente.x_url_google_maps && (
+                            <Button
+                                isExternal={true}
+                                color="success"
+                                className="text-white"
+                                as={Link}
+                                href={cliente.x_url_google_maps}
+                                showAnchorIcon
+                            >Ver en Google Maps
+                            </Button>
                         )}
                     </Box>
 
@@ -162,7 +184,7 @@ export default function PlantaViaje({ isOpen, onOpenChange }) {
                     <Button
                         isLoading={isLoading}
                         color="primary"
-                        onPress={() => LigarGeocerca()}
+                        onPress={() => UpdateContact()}
                         className="text-white">
                         Guardar
                     </Button>
