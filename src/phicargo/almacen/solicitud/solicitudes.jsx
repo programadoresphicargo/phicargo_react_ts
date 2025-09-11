@@ -247,9 +247,9 @@ const Solicitudes = ({ x_tipo, vista }) => {
           radius="full"
           className='text-white'
           startContent={<i class="bi bi-arrow-clockwise"></i>}
-          color='primary'
+          color='secondary'
           onPress={() => fetchData()}
-        >Actualizar tablero
+        >Actualizar
         </Button>
 
         <Button
