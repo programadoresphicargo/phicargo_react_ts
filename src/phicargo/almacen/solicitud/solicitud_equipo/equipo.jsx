@@ -181,13 +181,6 @@ const EPPSolicitados = ({ }) => {
         maxHeight: 'calc(100vh - 300px)',
       },
     },
-    muiTableBodyCellProps: ({ row }) => ({
-      sx: {
-        fontFamily: 'Inter',
-        fontWeight: 'normal',
-        fontSize: '12px',
-      },
-    }),
     renderTopToolbarCustomActions: ({ table }) => (
       <Box
         sx={{
@@ -239,7 +232,12 @@ const EPPSolicitados = ({ }) => {
 
           toast.success(`Campo "${columnId}" actualizado`);
         }
-      }
+      },
+      sx: {
+        fontFamily: 'Inter',
+        fontWeight: 'normal',
+        fontSize: '14px',
+      },
     }),
   });
 

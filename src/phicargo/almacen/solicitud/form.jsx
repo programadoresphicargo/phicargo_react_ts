@@ -382,7 +382,12 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                                 Formato de entrega
                             </Button>
                             {(!modoEdicion && data?.x_studio_estado == 'borrador') && (
-                                <Button color="danger" className="text-white" onPress={() => setOpenCancelar(true)} isLoading={isLoading}>
+                                <Button
+                                    radius="full"
+                                    color="danger"
+                                    className="text-white"
+                                    onPress={() => setOpenCancelar(true)}
+                                    isLoading={isLoading}>
                                     Cancelar
                                 </Button>
                             )}
