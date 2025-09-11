@@ -101,6 +101,7 @@ const EPPSolicitados = ({ }) => {
 
           return (
             <Button
+              radius='full'
               size="sm"
               color="primary"
               className="text-white"
@@ -117,16 +118,9 @@ const EPPSolicitados = ({ }) => {
         header: 'Borrar',
         enableEditing: false,
         Cell: ({ cell, row, table }) => {
-          return data?.x_studio_estado === 'borrador' ? (
-            <Button
-              onPress={() => deleteReserva(row.original.id)}
-              color='danger'
-              size='sm'
-              isDisabled={!modoEdicion}
-            >
-              Eliminar
-            </Button>
-          ) : null; // no muestra nada si no está en borrador
+          return <Button radius='full' color='danger' size='sm' onPress={() => deleteReserva(row.original.id)} isDisabled={!modoEdicion}>
+            Eliminar
+          </Button>
         },
       }
     ],

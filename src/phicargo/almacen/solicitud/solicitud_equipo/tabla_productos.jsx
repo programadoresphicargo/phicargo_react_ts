@@ -117,7 +117,7 @@ const TablaProductosDetalle = ({ close, tipo }) => {
           onPress={() => {
             const selectedRows = table.getSelectedRowModel().rows;
             const nuevas = selectedRows.map((row) => ({
-              id: -Date.now() + Math.random(), // ID temporal único
+              id: -(Date.now() + Math.floor(Math.random() * 1000)),
               x_solicitud_id: data.id,
               x_producto_id: row.original.id,
               x_name: row.original.x_name,
