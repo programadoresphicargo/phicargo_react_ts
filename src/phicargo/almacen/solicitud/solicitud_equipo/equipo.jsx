@@ -204,6 +204,7 @@ const EPPSolicitados = ({ }) => {
         </h2>
 
         <Button
+          radius='full'
           className='text-white'
           startContent={<i class="bi bi-plus-lg"></i>}
           color='primary'

@@ -90,6 +90,19 @@ const Solicitudes = ({ x_tipo, vista }) => {
       {
         accessorKey: 'operador',
         header: 'Operador',
+        Cell: ({ cell }) => {
+          const estatus_viaje = cell.getValue();
+
+          return (
+            <Chip
+              size="sm"
+              color="primary"
+              className="text-white"
+            >
+              {estatus_viaje}
+            </Chip>
+          );
+        },
       },
       {
         accessorKey: 'usuario',
@@ -115,7 +128,7 @@ const Solicitudes = ({ x_tipo, vista }) => {
           } else if (estatus_viaje === 'devuelto') {
             badgeClass = 'success';
           } else {
-            badgeClass = 'default';
+            badgeClass = 'secondary';
           }
 
           return (
