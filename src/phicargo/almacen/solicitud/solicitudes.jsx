@@ -73,7 +73,7 @@ const Solicitudes = ({ x_tipo, vista }) => {
     () => [
       {
         accessorKey: 'id',
-        header: 'ID',
+        header: 'Solicitud',
       },
       {
         accessorKey: 'carta_porte',
