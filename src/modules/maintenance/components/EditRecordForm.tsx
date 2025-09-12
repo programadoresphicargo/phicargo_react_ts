@@ -7,11 +7,15 @@ import {
 } from '@mui/material';
 import { Button, MuiCloseButton, MuiSaveButton } from '@/components/ui';
 import type { MaintenanceRecord, MaintenanceRecordUpdate } from '../models';
-import { SelectElement, TextFieldElement } from 'react-hook-form-mui';
+import { TextFieldElement } from 'react-hook-form-mui';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useMaintenanceRecord, useWorkshop } from '../hooks';
-
+import { Controller } from "react-hook-form";
+import { Select, SelectItem, Textarea } from "@heroui/react";
 import { DatePickerElement } from 'react-hook-form-mui/date-pickers';
+import { DatePicker } from "@heroui/react";
+import { parseDate, } from "@internationalized/date";
+import dayjs from "dayjs";
 
 const SUPERVISORS = [
   {
@@ -108,35 +112,72 @@ export const EditRecordForm = ({ onClose, record }: Props) => {
           className="flex flex-col gap-4 mt-6"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <SelectElement
-            control={control}
+          {/* Taller */}
+          <Controller
             name="workshopId"
-            label="Taller"
-            size="small"
-            required
-            options={workshops?.map((w) => ({ label: w.name, id: w.id })) || []}
-          />
-          <SelectElement
             control={control}
+            rules={{ required: "Taller requerido" }}
+            render={({ field, fieldState }) => (
+              <Select
+                label="Taller"
+                isRequired
+                isInvalid={!!fieldState.error}
+                errorMessage={fieldState.error?.message}
+                selectedKeys={field.value ? [String(field.value)] : []} // 🔑 HeroUI usa selectedKeys
+                onChange={(e) => field.onChange(e.target.value)} // actualiza react-hook-forms
+              >
+                {workshops?.map((w) => (
+                  <SelectItem key={w.id}>
+                    {w.name}
+                  </SelectItem>
+                )) || []}
+              </Select>
+            )}
+          />
+          {/* Supervisor */}
+          <Controller
             name="supervisor"
-            label="Supervisor"
-            size="small"
-            required
-            options={SUPERVISORS}
-          />
-          <SelectElement
             control={control}
+            rules={{ required: "Supervisor requerido" }}
+            render={({ field, fieldState }) => (
+              <Select
+                label="Supervisor"
+                isRequired
+                isInvalid={!!fieldState.error}
+                errorMessage={fieldState.error?.message}
+                selectedKeys={field.value ? [field.value] : []} // 🔑 HeroUI usa selectedKeys
+                onChange={(e) => field.onChange(e.target.value)} // actualiza react-hook-form
+                className="w-full"
+              >
+                {SUPERVISORS?.map((s) => (
+                  <SelectItem key={s.id}>
+                    {s.label}
+                  </SelectItem>
+                )) || []}
+              </Select>
+            )}
+          />
+
+          <Controller
             name="failType"
-            label="Tipo de reporte"
-            size="small"
-            required
-            options={[
-              { label: 'Siniestro de la unidad', id: 'SINIESTRO' },
-              { label: 'Robo de la unidad', id: 'ROBO' },
-              { label: 'MC', id: 'MC' },
-              { label: 'EL', id: 'EL' },
-              { label: 'PV', id: 'PV' },
-            ]}
+            control={control}
+            rules={{ required: "Tipo de reporte requerido" }}
+            render={({ field, fieldState }) => (
+              <Select
+                label="Tipo de reporte"
+                isRequired
+                isInvalid={!!fieldState.error}
+                errorMessage={fieldState.error?.message}
+                selectedKeys={field.value ? [field.value] : []}  // 🔑 HeroUI maneja selectedKeys
+                onChange={(e) => field.onChange(e.target.value)} // actualiza react-hook-form
+              >
+                <SelectItem key={"SINIESTRO"}>Siniestro de la unidad</SelectItem>
+                <SelectItem key={"ROBO"}>Robo de la unidad</SelectItem>
+                <SelectItem key={"MC"}>MC</SelectItem>
+                <SelectItem key={"EL"}>EL</SelectItem>
+                <SelectItem key={"PV"}>PV</SelectItem>
+              </Select>
+            )}
           />
 
           {status && status === 'programmed' && (
@@ -150,25 +191,43 @@ export const EditRecordForm = ({ onClose, record }: Props) => {
             />
           )}
 
-          <DatePickerElement
-            control={control}
+          <Controller
             name="deliveryDate"
-            label="Fecha de entrega"
-            inputProps={{
-              size: 'small',
+            control={control}
+            render={({ field, fieldState }) => {
+              // Convertimos Dayjs (si ya usas Dayjs en el formulario) a CalendarDate
+              const calendarValue = field.value ? parseDate(field.value.format("YYYY-MM-DD")) : null;
+
+              return (
+                <DatePicker
+                  label="Fecha de entrega"
+                  value={calendarValue} // CalendarDate compatible con HeroUI
+                  onChange={(val) => {
+                    // Convertimos CalendarDate de vuelta a Dayjs
+                    field.onChange(val ? dayjs(val.toString()) : null);
+                  }}
+                  isInvalid={!!fieldState.error}
+                  errorMessage={fieldState.error?.message}
+                />
+              );
             }}
           />
 
           {!deliveryDate?.isSame(record.deliveryDate, 'day') && (
-            <TextFieldElement
-              control={control}
+            <Controller
               name="updateComments"
-              label="Comentarios"
-              multiline
-              rows={4}
-              size="small"
-              required
-              rules={{ required: 'Requerido si cambias la fecha de entrega' }}
+              control={control}
+              rules={{ required: "Requerido si cambias la fecha de entrega" }}
+              render={({ field, fieldState }) => (
+                <Textarea
+                  {...field}
+                  label="Comentarios"
+                  minRows={4}            // equivalente a rows={4}
+                  isRequired
+                  isInvalid={!!fieldState.error}
+                  errorMessage={fieldState.error?.message}
+                />
+              )}
             />
           )}
 
