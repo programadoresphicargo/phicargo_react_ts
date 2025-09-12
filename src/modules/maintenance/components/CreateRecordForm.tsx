@@ -300,7 +300,6 @@ export const CreateRecordForm = ({ onClose }: Props) => {
                 variant="flat"
                 label="Motivo de Ingreso"
                 minRows={4}
-                size="sm"
                 isRequired
                 isInvalid={!!fieldState.error}
                 errorMessage={fieldState.error?.message}
