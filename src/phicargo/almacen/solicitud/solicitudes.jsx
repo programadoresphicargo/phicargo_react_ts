@@ -111,6 +111,24 @@ const Solicitudes = ({ x_tipo, vista }) => {
       {
         accessorKey: 'create_date',
         header: 'Fecha de solicitud',
+        Cell: ({ cell }) => {
+          const rawValue = cell.getValue();
+          const date = new Date(rawValue);
+
+          if (!rawValue || isNaN(date.getTime())) {
+            return "Fecha inválida";
+          }
+
+          return new Intl.DateTimeFormat('es-MX', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: true,
+          }).format(date).replace(',', '');
+          // Ejemplo: 11/09/2025 5:56 p. m.
+        },
       },
       {
         accessorKey: 'x_studio_estado',
