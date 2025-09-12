@@ -1,9 +1,4 @@
 import {
-  AutocompleteElement,
-  SelectElement,
-  TextFieldElement,
-} from 'react-hook-form-mui';
-import {
   Box,
   DialogActions,
   DialogContent,
@@ -16,12 +11,13 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import dayjs, { Dayjs } from 'dayjs';
 import { useMaintenanceRecord, useVehicles, useWorkshop } from '../hooks';
 import { Button } from '@heroui/react';
-
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import AddWorkshop from './AddWorkshop';
-import { DatePickerElement } from 'react-hook-form-mui/date-pickers';
 import type { MaintenanceRecordCreate } from '../models';
 import { useState } from 'react';
+import { Controller } from "react-hook-form";
+import { Textarea, Select, SelectItem, Autocomplete, AutocompleteItem, Input, DatePicker } from "@heroui/react";
+import { parseDate } from "@internationalized/date";
 
 const SUPERVISORS = [
   {
@@ -60,6 +56,7 @@ interface Props {
 }
 
 export const CreateRecordForm = ({ onClose }: Props) => {
+
   const { vehicleQuery } = useVehicles();
 
   const [addWorkshop, setAddWorkshop] = useState(false);
@@ -114,85 +111,154 @@ export const CreateRecordForm = ({ onClose }: Props) => {
       </DialogTitle>
       <DialogContent>
         <form className="flex flex-col gap-4 mt-6">
-          <AutocompleteElement
-            control={control}
+          <Controller
             name="vehicleId"
-            label="Unidad"
-            required
-            rules={{ required: 'Unidad Requerida' }}
-            options={
-              vehicleQuery.data?.map((v) => ({ label: v.name, id: v.id })) || []
-            }
-            loading={vehicleQuery.isLoading}
-            autocompleteProps={{
-              getOptionKey: (option) => option.id,
-              onChange: (_, value) => {
-                setValue('vehicleId', value?.id || 0);
-              },
-              size: 'small',
-            }}
+            control={control}
+            rules={{ required: "Unidad Requerida" }}
+            render={({ field, fieldState }) => (
+              <Autocomplete
+                isClearable={false}
+                label="Unidad"
+                isRequired
+                isInvalid={!!fieldState.error}
+                errorMessage={fieldState.error?.message}
+                isLoading={vehicleQuery.isLoading}
+                selectedKey={field.value ? String(field.value) : null} // 🔑 convertir number -> string
+                onSelectionChange={(key) => {
+                  const value = key ? Number(key) : 0; // 🔑 convertir string/null -> number
+                  field.onChange(value);
+                  setValue("vehicleId", value);
+                }}
+              >
+                {vehicleQuery.data?.map((v) => (
+                  <AutocompleteItem key={v.id}>
+                    {v.name}
+                  </AutocompleteItem>
+                )) || []}
+              </Autocomplete>
+            )}
           />
 
-          <SelectElement
-            control={control}
+          <Controller
             name="failType"
-            label="Tipo de reporte"
-            size="small"
-            required
-            rules={{ required: 'Tipo de reporte requerido' }}
-            options={[
-              { label: 'Siniestro de la unidad', id: 'SINIESTRO' },
-              { label: 'Robo de la unidad', id: 'ROBO' },
-              { label: 'MC', id: 'MC' },
-              { label: 'EL', id: 'EL' },
-              { label: 'PV', id: 'PV' },
-            ]}
+            control={control}
+            rules={{ required: "Tipo de reporte requerido" }}
+            render={({ field, fieldState }) => (
+              <Select
+                label="Tipo de reporte"
+                isRequired
+                isInvalid={!!fieldState.error}
+                errorMessage={fieldState.error?.message}
+                selectedKeys={field.value ? [field.value] : []}  // 🔑 HeroUI maneja selectedKeys
+                onChange={(e) => field.onChange(e.target.value)} // actualiza react-hook-form
+              >
+                {[
+                  { label: "Siniestro de la unidad", id: "SINIESTRO" },
+                  { label: "Robo de la unidad", id: "ROBO" },
+                  { label: "MC", id: "MC" },
+                  { label: "EL", id: "EL" },
+                  { label: "PV", id: "PV" },
+                ].map((option) => (
+                  <SelectItem key={option.id}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </Select>
+            )}
           />
 
-          <SelectElement
-            control={control}
+          <Controller
             name="supervisor"
-            label="Supervisor"
-            size="small"
-            required
-            rules={{ required: 'Supervisor requerido' }}
-            options={SUPERVISORS}
+            control={control}
+            rules={{ required: "Supervisor requerido" }}
+            render={({ field, fieldState }) => (
+              <Select
+                label="Supervisor"
+                isRequired
+                isInvalid={!!fieldState.error}
+                errorMessage={fieldState.error?.message}
+                selectedKeys={field.value ? [field.value] : []} // 🔑 HeroUI usa selectedKeys
+                onChange={(e) => field.onChange(e.target.value)} // actualiza react-hook-form
+              >
+                {SUPERVISORS.map((sup) => (
+                  <SelectItem key={sup.id}>
+                    {sup.label}
+                  </SelectItem>
+                ))}
+              </Select>
+            )}
           />
 
-          <DatePickerElement
-            control={control}
+          <Controller
             name="checkIn"
-            label="Fecha de Ingreso"
-            required
-            rules={{ required: 'Fecha de Ingreso Requerida' }}
-            inputProps={{
-              size: 'small',
+            control={control}
+            rules={{ required: "Fecha de Ingreso Requerida" }}
+            render={({ field, fieldState }) => {
+              // Convertir Dayjs a CalendarDate
+              const calendarValue = field.value ? parseDate(field.value.format("YYYY-MM-DD")) : null;
+
+              return (
+                <DatePicker
+                  label="Fecha de Ingreso"
+                  isRequired
+                  isInvalid={!!fieldState.error}
+                  errorMessage={fieldState.error?.message}
+                  value={calendarValue} // ✅ ahora es CalendarDate
+                  onChange={(val) => {
+                    // val es CalendarDate -> convertir a Dayjs para tu formulario
+                    field.onChange(val ? dayjs(val.toString()) : null);
+                  }}
+                />
+              );
             }}
           />
-          <DatePickerElement
-            control={control}
+
+          <Controller
             name="deliveryDate"
-            label="Fecha de Entrega Estimada"
-            required
-            rules={{ required: 'Fecha de entraga requerida' }}
-            inputProps={{
-              size: 'small',
+            control={control}
+            rules={{ required: "Fecha de entrega requerida" }}
+            render={({ field, fieldState }) => {
+              // Convertimos Dayjs (si ya usas Dayjs en el formulario) a CalendarDate
+              const calendarValue = field.value ? parseDate(field.value.format("YYYY-MM-DD")) : null;
+
+              return (
+                <DatePicker
+                  label="Fecha de Entrega Estimada"
+                  isRequired
+                  isInvalid={!!fieldState.error}
+                  errorMessage={fieldState.error?.message}
+                  value={calendarValue} // ✅ CalendarDate compatible con HeroUI
+                  onChange={(val) => {
+                    // Convertimos CalendarDate de vuelta a Dayjs
+                    field.onChange(val ? dayjs(val.toString()) : null);
+                  }}
+                />
+              );
             }}
           />
 
           <div className="flex flex-row">
-            <SelectElement
-              control={control}
+            <Controller
               name="workshopId"
-              label="Taller"
-              size="small"
-              fullWidth
-              required
-              rules={{ required: 'Taller requerido' }}
-              disabled={loadingWorkshops}
-              options={
-                workshops?.map((w) => ({ label: w.name, id: w.id })) || []
-              }
+              control={control}
+              rules={{ required: "Taller requerido" }}
+              render={({ field, fieldState }) => (
+                <Select
+                  label="Taller"
+                  isRequired
+                  isInvalid={!!fieldState.error}
+                  errorMessage={fieldState.error?.message}
+                  selectedKeys={field.value ? [field.value] : []} // 🔑 HeroUI usa selectedKeys
+                  onChange={(e) => field.onChange(e.target.value)} // actualiza react-hook-forms
+                  disabled={loadingWorkshops}
+                >
+                  {workshops?.map((w) => (
+                    <SelectItem key={w.id}>
+                      {w.name}
+                    </SelectItem>
+                  )) || []}
+                </Select>
+              )}
             />
             <Tooltip title="Agregar Taller" placement="top-start">
               <button
@@ -205,30 +271,44 @@ export const CreateRecordForm = ({ onClose }: Props) => {
             </Tooltip>
           </div>
 
-          <TextFieldElement
-            control={control}
+          <Controller
             name="order"
-            label="Order de Servicio"
-            size="small"
-            required={!checkIn.isAfter(dayjs())}
+            control={control}
             rules={{
-              required: {
-                value: !checkIn.isAfter(dayjs()),
-                message: 'Orden de Servicio requerida',
-              },
+              required: !checkIn.isAfter(dayjs())
+                ? "Orden de Servicio requerida"
+                : false, // no required si checkIn es futura
             }}
+            render={({ field, fieldState }) => (
+              <Input
+                {...field}
+                label="Orden de Servicio"
+                isRequired={!checkIn.isAfter(dayjs())}
+                isInvalid={!!fieldState.error}
+                errorMessage={fieldState.error?.message}
+              />
+            )}
           />
 
-          <TextFieldElement
-            control={control}
+          <Controller
             name="comments"
-            label="Motivo de Ingreso"
-            multiline
-            rows={4}
-            size="small"
-            required
-            rules={{ required: 'Motivo de Ingreso requerido' }}
+            control={control}
+            rules={{ required: "Motivo de Ingreso requerido" }}
+            render={({ field, fieldState }) => (
+              <Textarea
+                {...field}
+                variant="flat"
+                label="Motivo de Ingreso"
+                minRows={4}
+                size="sm"
+                isRequired
+                isInvalid={!!fieldState.error}
+                errorMessage={fieldState.error?.message}
+                value={field.value ?? ""}
+              />
+            )}
           />
+
         </form>
         <AddWorkshop open={addWorkshop} onClose={() => setAddWorkshop(false)} />
       </DialogContent>
