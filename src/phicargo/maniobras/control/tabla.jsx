@@ -326,9 +326,9 @@ const Maniobras = ({ estado_maniobra }) => {
           format="yyyy-MM-dd"
           placeholder="Selecciona un rango de fechas"
         />
-        <Button color="primary" isLoading={isLoading2} onPress={() => fetchData()} startContent={<i class="bi bi-arrow-clockwise"></i>} size="sm">Refrescar</Button>
-        <Button color="success" onPress={() => handleClickOpen()} className='text-white' startContent={<i class="bi bi-send-plus"></i>} size="sm">Envio masivo</Button>
-        <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, `maniobras ${estado_maniobra}.csv`)} size="sm">Exportar</Button>
+        <Button color="primary" isLoading={isLoading2} onPress={() => fetchData()} startContent={<i class="bi bi-arrow-clockwise"></i>} size="sm" radius="full">Refrescar</Button>
+        <Button color="secondary" onPress={() => handleClickOpen()} className='text-white' startContent={<i class="bi bi-send-plus"></i>} size="sm" radius="full">Envio masivo</Button>
+        <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, `maniobras ${estado_maniobra}.csv`)} size="sm" radius="full">Exportar</Button>
       </Box >
     ),
   });
