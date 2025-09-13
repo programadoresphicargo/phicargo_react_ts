@@ -57,6 +57,24 @@ const DriversAccountsPage = () => {
         driver={row.original}
       />
     ),
+    muiTopToolbarProps: {
+      sx: {
+        background: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
+        color: 'white',
+        '& .MuiSvgIcon-root': {
+          color: 'white',   // 🎨 iconos en blanco
+        },
+        '& .MuiButton-root': {
+          color: 'white',   // texto de botones en blanco
+        },
+        '& .MuiInputBase-root': {
+          color: 'white',   // texto del buscador
+        },
+        '& .MuiInputBase-root .MuiSvgIcon-root': {
+          color: 'white',   // icono de lupa en blanco
+        },
+      },
+    },
     muiTablePaperProps: {
       elevation: 0,
       sx: {
