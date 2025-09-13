@@ -10,28 +10,28 @@ export const useUsersColums = () => {
       {
         accessorKey: 'username',
         header: 'Usuario',
-        Cell: ({ cell }) => 
-          <span className='font-bold bg-sky-800 text-white px-2 p-1 rounded-xl'>{cell.getValue<string>()}</span>
+        Cell: ({ cell }) =>
+          <Chip color="primary">{cell.getValue<string>()}</Chip>
       },
       {
         accessorKey: 'name',
         header: 'Nombre del usuario',
-        Cell: ({ cell }) => <span className='font-bold uppercase'>{cell.getValue<string>()}</span>
+        Cell: ({ cell }) => <span className='uppercase'>{cell.getValue<string>()}</span>
       },
       {
         accessorKey: 'email',
         header: 'Correo',
         Cell: ({ cell }) => {
           const value = cell.getValue<string>();
-          return !value 
+          return !value
             ? <span className='text-gray-400 text-sm'>{'SIN ASIGNAR'}</span>
             : <span className='font-bold'>{cell.getValue<string>()}</span>
-        } 
+        }
       },
       {
         accessorKey: 'role',
         header: 'Rol',
-        Cell: ({ cell }) => <Chip size="sm" color='primary'>{cell.getValue<string>()}</Chip>
+        Cell: ({ cell }) => <Chip color='primary'>{cell.getValue<string>()}</Chip>
       },
     ],
     [],

@@ -28,8 +28,29 @@ const UsersManagementPage = () => {
     containerHeight: 'calc(100vh - 173px)',
     showGlobalFilter: true,
     showColumnFilters: true,
+    muiTopToolbarProps: {
+      sx: {
+        background: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
+        color: 'white',
+        '& .MuiSvgIcon-root': {
+          color: 'white',   // 🎨 iconos en blanco
+        },
+        '& .MuiButton-root': {
+          color: 'white',   // texto de botones en blanco
+        },
+        '& .MuiInputBase-root': {
+          color: 'white',   // texto del buscador
+        },
+        '& .MuiInputBase-root .MuiSvgIcon-root': {
+          color: 'white',   // icono de lupa en blanco
+        },
+      },
+    },
     toolbarActions: (
-      <Button onPress={() => setCreateModal(true)} size='sm' color='primary' radius='full'>Crear Usuario</Button>
+      <Button
+        onPress={() => setCreateModal(true)}
+        color='primary'
+        radius='full'>Crear Usuario</Button>
     ),
     onDoubleClickFn: (row) => {
       setInformationModal(row.original);
