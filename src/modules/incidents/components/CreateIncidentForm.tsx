@@ -1,12 +1,4 @@
-import {
-  RadioButtonGroup,
-  SelectElement,
-  TextareaAutosizeElement,
-  CheckboxElement,
-} from 'react-hook-form-mui';
-import { DatePickerElement } from 'react-hook-form-mui/date-pickers';
-import { Checkbox, Divider, FormControlLabel, FormGroup } from '@mui/material';
-
+import { Divider } from '@mui/material';
 import { FileUploadInput } from '@/components/inputs';
 import { Button, MuiSaveButton } from '@/components/ui';
 import {
@@ -16,6 +8,18 @@ import {
 import { LegalDetailsSection } from './LegalDetailsSection';
 import { DriverAutocompleteInput } from '@/modules/drivers/components/DriverAutocompleteInput';
 import { VehicleAutocompleteInput } from '@/modules/vehicles/components/VehicleAutocompleteInput';
+import {
+  Radio,
+  RadioGroup,
+  Select,
+  SelectItem,
+  Textarea,
+  Checkbox,
+  DatePicker
+} from "@heroui/react";
+import { Controller } from "react-hook-form";
+import dayjs from 'dayjs';
+import { parseDate } from "@internationalized/date";
 
 interface Props {
   onCancel?: () => void;
@@ -55,79 +59,125 @@ export const CreateIncidentForm = ({
         className={`grid gap-6 transition-all duration-300 ease-in-out grid-cols-[1fr_auto_1fr]`}
       >
         <div className="flex flex-col gap-4 max-w-sm">
-          <RadioButtonGroup
+          <Controller
             control={control}
-            label="Tipo de Incidencia"
             name="type"
-            required
-            rules={{ required: 'Tipo de incidencia requerido' }}
-            options={[
-              { id: INCIDENT_TYPES.OPERATIVE, label: 'Operativa' },
-              { id: INCIDENT_TYPES.LEGAL, label: 'Legal' },
-              { id: INCIDENT_TYPES.CLEANING, label: 'Limpieza' },
-              { id: INCIDENT_TYPES.MAINTENANCE, label: 'Mantenimiento' },
-            ]}
-            row
+            rules={{ required: "Tipo de incidencia requerido" }}
+            render={({ field, fieldState }) => (
+              <RadioGroup
+                label="Tipo de Incidencia"
+                orientation="horizontal"
+                value={field.value}
+                onValueChange={field.onChange}
+                isInvalid={!!fieldState.error}
+                errorMessage={fieldState.error?.message}
+              >
+                <Radio value={INCIDENT_TYPES.OPERATIVE}>Operativa</Radio>
+                <Radio value={INCIDENT_TYPES.LEGAL}>Legal</Radio>
+                <Radio value={INCIDENT_TYPES.CLEANING}>Limpieza</Radio>
+                <Radio value={INCIDENT_TYPES.MAINTENANCE}>Mantenimiento</Radio>
+              </RadioGroup>
+            )}
           />
 
-          <SelectElement
+          <Controller
             control={control}
             name="incident"
-            label="Incidencia"
-            size="small"
-            required
-            rules={{ required: 'Tipo de incidencia requerida' }}
-            options={incidenceOptions}
+            rules={{ required: "Tipo de incidencia requerida" }}
+            render={({ field, fieldState }) => (
+              <Select
+                label="Incidencia"
+                selectedKeys={field.value ? [field.value] : []}
+                onSelectionChange={(keys) => {
+                  const value = Array.from(keys)[0];
+                  field.onChange(value);
+                }}
+                isInvalid={!!fieldState.error}
+                errorMessage={fieldState.error?.message}
+              >
+                {incidenceOptions.map((option) => (
+                  <SelectItem key={option.id}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </Select>
+            )}
           />
 
-          {!driverId && (
-            <DriverAutocompleteInput
-              control={control}
-              name="driverId"
-              label="Operador"
-              required
-              rules={{ required: 'Operador requerido' }}
-              setValue={setValue}
-            />
-          )}
+          <Controller
+            control={control}
+            name="driverId"
+            rules={{ required: "Operador requerido" }}
+            render={({ field }) => (
+              <DriverAutocompleteInput
+                control={control}   // sigue siendo necesario
+                name={field.name}
+                label="Operador"
+                setValue={setValue}
+              />
+            )}
+          />
 
-          <DatePickerElement
+          <Controller
             control={control}
             name="incidentDate"
-            label="Fecha de Incidencia"
-            required
-            rules={{ required: 'Fecha de incidencia requerida' }}
-            inputProps={{ size: 'small' }}
+            rules={{ required: "Fecha de incidencia requerida" }}
+            render={({ field, fieldState }) => {
+              const calendarValue = field.value ? parseDate(field.value.format("YYYY-MM-DD")) : null;
+
+              return (
+                <DatePicker
+                  label="Fecha de Incidencia"
+                  value={calendarValue} // ✅ CalendarDate compatible con HeroUI
+                  onChange={(val) => {
+                    // Convertimos CalendarDate de vuelta a Dayjs
+                    field.onChange(val ? dayjs(val.toString()) : null);
+                  }}
+                  isInvalid={!!fieldState.error}
+                  errorMessage={fieldState.error?.message}
+                />
+              );
+            }}
           />
 
-          <TextareaAutosizeElement
+          <Controller
             control={control}
             name="comments"
-            label="Comentarios"
-            minRows={6}
-            required
-            rules={{ required: 'Comentario requerido' }}
+            rules={{ required: "Comentario requerido" }}
+            render={({ field, fieldState }) => (
+              <Textarea
+                label="Comentarios"
+                placeholder="Escribe tus comentarios..."
+                minRows={6}
+                value={field.value || ""}
+                onChange={field.onChange}
+                isInvalid={!!fieldState.error}
+                errorMessage={fieldState.error?.message}
+              />
+            )}
           />
 
           <div className="flex flex-row items-center justify-between">
-            <CheckboxElement
+            <Controller
               control={control}
               name="isDriverResponsible"
-              label="¿El operador es responsable?"
-              disabled={isDirectionReport}
+              render={({ field }) => (
+                <Checkbox
+                  isSelected={field.value || false}
+                  onValueChange={field.onChange}
+                  isDisabled={isDirectionReport}
+                >
+                  ¿El operador es responsable?
+                </Checkbox>
+              )}
             />
-            <FormGroup>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={createUnavailability}
-                    onChange={(e) => setCreateUnavailability(e.target.checked)}
-                  />
-                }
-                disabled={isDirectionReport}
-                label="Crear Indisponibilidad"
-              />
-            </FormGroup>
+            <Checkbox
+              checked={createUnavailability}
+              onValueChange={setCreateUnavailability}
+              isDisabled={isDirectionReport}
+            >
+              Crear Indisponibilidad
+            </Checkbox>
           </div>
         </div>
 
@@ -153,23 +203,66 @@ export const CreateIncidentForm = ({
               </p>
             </div>
 
-            <DatePickerElement
+            <Controller
               control={control}
               name="startDate"
-              label="Fecha Inicio"
-              disabled={!createUnavailability}
-              required
-              rules={{ required: 'Fecha de inicio requerida' }}
-              inputProps={{ size: 'small' }}
+              rules={{
+                validate: (value) => {
+                  if (createUnavailability && !value) {
+                    return "Fecha de fin requerida";
+                  }
+                  return true; // pasa la validación si !createUnavailability o hay valor
+                },
+              }}
+              render={({ field, fieldState }) => {
+                const calendarValue = field.value ? parseDate(field.value.format("YYYY-MM-DD")) : null;
+
+                return (
+                  <DatePicker
+                    label="Fecha Inicio"
+                    isDisabled={!createUnavailability}
+                    value={calendarValue} // ✅ CalendarDate compatible con HeroUI
+                    onChange={(val) => {
+                      // Convertimos CalendarDate de vuelta a Dayjs
+                      field.onChange(val ? dayjs(val.toString()) : null);
+                    }}
+                    isInvalid={!!fieldState.error}
+                    errorMessage={fieldState.error?.message}
+                  />
+                )
+              }
+              }
             />
-            <DatePickerElement
+
+            <Controller
               control={control}
               name="endDate"
-              label="Fecha Fin"
-              disabled={!createUnavailability}
-              required
-              rules={{ required: 'Fecha de fin requerida' }}
-              inputProps={{ size: 'small' }}
+              rules={{
+                validate: (value) => {
+                  if (createUnavailability && !value) {
+                    return "Fecha de fin requerida";
+                  }
+                  return true; // pasa la validación si !createUnavailability o hay valor
+                },
+              }}
+              render={({ field, fieldState }) => {
+                const calendarValue = field.value ? parseDate(field.value.format("YYYY-MM-DD")) : null;
+
+                return (
+                  <DatePicker
+                    label="Fecha Fin"
+                    isDisabled={!createUnavailability}
+                    value={calendarValue} // ✅ CalendarDate compatible con HeroUI
+                    onChange={(val) => {
+                      // Convertimos CalendarDate de vuelta a Dayjs
+                      field.onChange(val ? dayjs(val.toString()) : null);
+                    }}
+                    isInvalid={!!fieldState.error}
+                    errorMessage={fieldState.error?.message}
+                  />
+                )
+              }
+              }
             />
           </div>
 
@@ -198,21 +291,36 @@ export const CreateIncidentForm = ({
               helperText="Seleccionar unidad afectada, si aplica"
             />
 
-            <SelectElement
+            <Controller
               control={control}
               name="newVehicleStateId"
-              label="Nuevo Estado de la Unidad"
-              size="small"
-              helperText="Seleccionar el nuevo estado de la unidad, si aplica"
-              disabled={isDirectionReport}
-              options={[
-                { id: null, label: '' },
-                { id: 8, label: 'TERMINNACIÓN DE ARRENDAMIENTO' },
-                { id: 7, label: 'ESTATUS OCRA' },
-                { id: 5, label: 'EN REPARACIÓN POR FALLAS MECÁNICAS' },
-                { id: 4, label: 'EN REPARACION POR SINIESTRO' },
-                { id: 3, label: 'BAJA POR PERDIDA TOTAL' },
-              ]}
+              render={({ field, fieldState }) => (
+                <Select
+                  label="Nuevo Estado de la Unidad"
+                  placeholder="Seleccionar el nuevo estado de la unidad, si aplica"
+                  selectedKeys={field.value ? [String(field.value)] : []}
+                  onSelectionChange={(keys) => {
+                    const value = Array.from(keys)[0];
+                    field.onChange(value ? Number(value) : null);
+                  }}
+                  isDisabled={isDirectionReport}
+                  isInvalid={!!fieldState.error}
+                  errorMessage={fieldState.error?.message}
+                >
+                  {[
+                    { id: null, label: "" },
+                    { id: 8, label: "TERMINACIÓN DE ARRENDAMIENTO" },
+                    { id: 7, label: "ESTATUS OCRA" },
+                    { id: 5, label: "EN REPARACIÓN POR FALLAS MECÁNICAS" },
+                    { id: 4, label: "EN REPARACION POR SINIESTRO" },
+                    { id: 3, label: "BAJA POR PERDIDA TOTAL" },
+                  ].map((option) => (
+                    <SelectItem key={String(option.id)}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </Select>
+              )}
             />
           </div>
 

@@ -14,6 +14,7 @@ import { DatePickerElement } from 'react-hook-form-mui/date-pickers';
 import { Button, MuiSaveButton } from '@/components/ui';
 import { DriverAutocompleteInput } from '@/modules/drivers/components/DriverAutocompleteInput';
 import { useCreateVehicleInspectionMutation } from '../../hooks/mutations';
+import { Controller } from "react-hook-form";
 
 const initialValues: VehicleInspectionCreate = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -133,13 +134,18 @@ export const InspectionForm = ({
 
       {result === 'rejected' && (
         <>
-          <DriverAutocompleteInput
+          <Controller
             control={control}
             name="driverId"
-            label="Operador"
-            required
-            rules={{ required: 'Operador requerido' }}
-            setValue={setValue}
+            rules={{ required: "Operador requerido" }}
+            render={({ field }) => (
+              <DriverAutocompleteInput
+                control={control}   // sigue siendo necesario
+                name={field.name}
+                label="Operador"
+                setValue={setValue}
+              />
+            )}
           />
         </>
       )}

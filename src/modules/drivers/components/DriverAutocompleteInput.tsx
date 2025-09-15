@@ -1,50 +1,51 @@
 import {
-  AutocompleteElement,
-  FieldValues,
-  AutocompleteElementProps,
-  UseFormSetValue,
-} from 'react-hook-form-mui';
-import { useDriverQueries } from '../hooks/queries';
-import PersonIcon from '@mui/icons-material/Person';
+  Autocomplete,
+  AutocompleteItem,
+} from "@heroui/react";
+import { Controller, FieldValues, UseFormSetValue } from "react-hook-form";
+import { useDriverQueries } from "../hooks/queries";
+import { Path, PathValue } from "react-hook-form";
 
-interface Props<T extends FieldValues>
-  extends Omit<AutocompleteElementProps<T>, 'options'> {
+interface Props<T extends FieldValues> {
+  control: any;
+  name: string;
+  label: string;
   setValue: UseFormSetValue<T>;
 }
 
-export const DriverAutocompleteInput = <T extends FieldValues>(
-  props: Props<T>,
-) => {
+export const DriverAutocompleteInput = <T extends FieldValues>({
+  control,
+  name,
+  label,
+  setValue,
+}: Props<T>) => {
   const { AvailableDrivers, isLoading } = useDriverQueries();
-  const { control, name, label, setValue } = props;
+
   return (
-    <AutocompleteElement
+    <Controller
       control={control}
-      label={label}
-      loading={isLoading}
-      options={
-        AvailableDrivers.map((v) => ({
-          label: v.value,
-          id: v.key,
-        })) || []
-      }
-      autocompleteProps={{
-        getOptionKey: (option) => option.id,
-        onChange: (_, value) => {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          setValue(name, (value?.id as any) || null);
-        },
-        size: 'small',
-      }}
-      textFieldProps={{
-        InputProps: {
-          endAdornment: null,
-          startAdornment: <PersonIcon />,
-        },
-        placeholder: 'Saleccione un operador',
-      }}
-      {...props}
+      name={name}
+      render={({ field, fieldState }) => (
+        <Autocomplete
+          label={label}
+          placeholder="Seleccione un operador"
+          isLoading={isLoading}
+          selectedKey={field.value || null}
+          onSelectionChange={(key) => {
+            const value = key ? String(key) : null;
+            field.onChange(value);
+            setValue(name as Path<T>, value as PathValue<T, Path<T>>);
+          }}
+          isInvalid={!!fieldState.error}
+          errorMessage={fieldState.error?.message}
+        >
+          {AvailableDrivers?.map((driver) => (
+            <AutocompleteItem key={driver.key}>
+              {driver.value}
+            </AutocompleteItem>
+          ))}
+        </Autocomplete>
+      )}
     />
   );
 };
-
