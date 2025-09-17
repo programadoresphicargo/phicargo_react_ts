@@ -3,6 +3,7 @@ import { CategoryScale } from 'chart.js';
 import Chart from 'chart.js/auto';
 import { DistanceAndRevenueByVehicleChart } from '../components/vehicles/DistanceAndRevenueByVehicleChart';
 import { useVehiclesStatsQueries } from '../hooks/useVehiclesStatsQueries';
+import FleetUsageChart from '../components/vehicles/UnidadesMenosUsadas';
 
 Chart.register(CategoryScale);
 
@@ -21,6 +22,9 @@ const VehiclesDashboard = () => {
             isLoading={vehiclesStatsQuery.isFetching}
             data={vehiclesStatsQuery.data}
           />
+        </div>
+        <div className="col-span-2">
+          <FleetUsageChart></FleetUsageChart>
         </div>
       </div>
     </div>
