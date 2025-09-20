@@ -5,13 +5,19 @@ import {
 } from 'material-react-table';
 import { Dialog, DialogContent, DialogTitle, Stack, TextField, Box, DialogActions } from '@mui/material';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import { Button, Select, SelectItem, Textarea, Checkbox, Chip } from '@heroui/react';
+import { Button, Select, SelectItem, Textarea, Checkbox, Chip, RadioGroup, Radio } from '@heroui/react';
 import { useAlmacen } from '../../contexto/contexto';
 import SearchUnidad from './search_unidad';
+import toast from 'react-hot-toast';
+import Swal from 'sweetalert2';
+import odooApi from '@/api/odoo-api';
+import { User } from "@heroui/user";
 
 const ReservasDetalle = ({ open, handleClose, dataLinea }) => {
-    const { reservasGlobales, setReservasGlobales, modoEdicion, setModoEdicion, data } = useAlmacen();
+    const { reservasGlobales, setReservasGlobales, modoEdicion, setModoEdicion, data, fetchData } = useAlmacen();
+    const mostrarColumnasRecepcion = ['entregado', 'recepcionado_operador', 'devuelto'].includes(data?.x_studio_estado);
     const [reservasLinea, setReservasLinea] = useState([]);
+    const [isLoading, setLoading] = useState(false);
 
     useEffect(() => {
         const filtradas = reservasGlobales.filter(r => r.id_solicitud_equipo_line === dataLinea.id);
@@ -36,7 +42,6 @@ const ReservasDetalle = ({ open, handleClose, dataLinea }) => {
 
     const columns = useMemo(
         () => [
-            { accessorKey: 'id_solicitud_equipo_line', header: 'ID Linea' },
             { accessorKey: 'id_unidad', header: 'Unidad' },
             { accessorKey: 'x_name', header: 'Descripción' },
             {
@@ -64,12 +69,28 @@ const ReservasDetalle = ({ open, handleClose, dataLinea }) => {
                 header: '¿Devuelta?',
                 Cell: ({ row }) => {
                     const reserva = row.original;
+                    console.log(reserva.devuelta);
                     return (
                         <>
-                            <Checkbox
-                                isSelected={reserva.devuelta || false}
-                                onChange={(e) => {
-                                    const checked = e.target.checked; // ✅ Así se obtiene el valor real del checkbox
+                            <RadioGroup
+                                label="¿Producto devuelto?"
+                                orientation="horizontal"
+                                value={
+                                    reserva.devuelta === null
+                                        ? null // 👈 no selecciona nada
+                                        : reserva.devuelta
+                                            ? "si"
+                                            : "no"
+                                }
+                                isDisabled={row.original.fecha_devuelto != null}
+                                onValueChange={(value) => {
+                                    let checked = null;
+
+                                    if (value === "si") {
+                                        checked = true;
+                                    } else if (value === "no") {
+                                        checked = false;
+                                    }
 
                                     setReservasGlobales((prev) =>
                                         prev.map((r) =>
@@ -85,8 +106,9 @@ const ReservasDetalle = ({ open, handleClose, dataLinea }) => {
                                     );
                                 }}
                             >
-                                ¿Producto devuelto?
-                            </Checkbox>
+                                <Radio value="si">Sí</Radio>
+                                <Radio value="no">No</Radio>
+                            </RadioGroup>
                         </>
                     );
                 },
@@ -100,6 +122,7 @@ const ReservasDetalle = ({ open, handleClose, dataLinea }) => {
                     return (
                         <>
                             <Select
+                                isDisabled={row.original.fecha_devuelto != null ? true : false}
                                 className="max-w-xs"
                                 selectedKeys={[reserva.motivo_no_devuelta || '']}
                                 variant="bordered"
@@ -131,10 +154,10 @@ const ReservasDetalle = ({ open, handleClose, dataLinea }) => {
                         <>
                             <Textarea
                                 className="max-w-xs"
-                                labelPlacement="inside"
                                 variant='bordered'
                                 placeholder="Ingresa un comentario"
                                 value={reserva.comentarios_no_devuelta || ''}
+                                isDisabled={row.original.fecha_devuelto != null ? true : false}
                                 onChange={(e) => {
                                     const value = e.target.value;
                                     setReservasGlobales((prev) =>
@@ -150,8 +173,25 @@ const ReservasDetalle = ({ open, handleClose, dataLinea }) => {
                     );
                 },
             },
+            {
+                accessorKey: 'fecha_devuelto',
+                header: 'Fecha devuelto',
+                Cell: ({ row }) => {
+                    return (
+                        <>
+                            <User
+                                avatarProps={{
+                                    size: "sm"
+                                }}
+                                description={row.original.fecha_devuelto}
+                                name={row.original.nombre_usuario_devolvio}
+                            />
+                        </>
+                    );
+                },
+            },
         ],
-        [setReservasGlobales]
+        [setReservasGlobales, reservasGlobales, reservasLinea, mostrarColumnasRecepcion]
     );
 
     const marcarTodas = (valor) => {
@@ -165,13 +205,49 @@ const ReservasDetalle = ({ open, handleClose, dataLinea }) => {
         );
     };
 
-    const mostrarColumnasRecepcion = ['entregado', 'recepcionado_operador', 'devuelto'].includes(data?.x_studio_estado);
+    const devolver = async (row) => {
+
+        if (!row.devuelta && (!row.motivo_no_devuelta || !row.comentarios_no_devuelta)) {
+            toast.error('Por favor completa motivo y comentario en reservas no devueltas.');
+            return false;
+        }
+
+        const result = await Swal.fire({
+            title: '¿Estás seguro?',
+            text: 'Retornar stock',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, confirmar',
+        });
+
+        if (result.isConfirmed) {
+            try {
+                setLoading(true);
+                const response = await odooApi.patch('/tms_travel/solicitudes_equipo/devolver/reserva/' + data?.id, row);
+                if (response.data.status === 'success') {
+                    toast.success(response.data.message);
+                    fetchData(data?.id);
+                } else {
+                    toast.error(response.data.message);
+                }
+            } catch (error) {
+                if (error.response) {
+                    toast.error("Error del servidor:" + error.response.data);
+                } else {
+                    console.error("Error de red:", error.message);
+                }
+            } finally {
+                setLoading(false);
+            }
+        }
+    };
 
     const table = useMaterialReactTable({
         columns,
         data: reservasLinea,
         localization: MRT_Localization_ES,
-        initialState: {
+        positionActionsColumn: "last",
+        state: {
             columnVisibility: {
                 devuelta: mostrarColumnasRecepcion,
                 motivo_no_devuelta: mostrarColumnasRecepcion,
@@ -179,7 +255,10 @@ const ReservasDetalle = ({ open, handleClose, dataLinea }) => {
                 recibido_operador: mostrarColumnasRecepcion,
                 fecha_recibido_operador: mostrarColumnasRecepcion,
                 observaciones_operador: mostrarColumnasRecepcion,
+                fecha_devuelto: mostrarColumnasRecepcion,
             },
+        },
+        initialState: {
             density: 'compact',
             showColumnFilters: true,
             pagination: { pageSize: 80 },
@@ -211,10 +290,10 @@ const ReservasDetalle = ({ open, handleClose, dataLinea }) => {
                 )}
                 {(data?.x_studio_estado === 'entregado' || data?.x_studio_estado === 'recepcionado_operador') && (
                     <>
-                        <Button color="primary" onPress={() => marcarTodas(true)}>
+                        <Button color="primary" onPress={() => marcarTodas(true)} radius='full' isDisabled>
                             Marcar todas
                         </Button>
-                        <Button color="danger" onPress={() => marcarTodas(false)}>
+                        <Button color="danger" onPress={() => marcarTodas(false)} radius='full' isDisabled>
                             Desmarcar todas
                         </Button>
                     </>
@@ -223,27 +302,44 @@ const ReservasDetalle = ({ open, handleClose, dataLinea }) => {
         ),
         renderRowActions: ({ row }) => (
             <Box sx={{ display: 'flex', gap: 1 }}>
-                {!modoEdicion && (
-                    <Button
-                        onPress={() => deleteReserva(row.original.id_reserva)}
-                        color="danger"
-                        size="sm"
-                        isDisabled={['confirmado', 'entregado', 'recepcionado_operador'].includes(data?.x_studio_estado)}
-                    >
-                        Eliminar
-                    </Button>
-                )}
-            </Box>
+                <>
+                    {row.original.fecha_devuelto == null && (
+                        <Button
+                            isLoading={isLoading}
+                            onPress={() => devolver(row.original)}
+                            color="success"
+                            size="sm"
+                            className='text-white'
+                            radius='full'
+                            isDisabled={['borrador', 'confirmado'].includes(data?.x_studio_estado)}
+                        >
+                            Devolver
+                        </Button>
+                    )}
+                </>
+                <Button
+                    onPress={() => deleteReserva(row.original.id_reserva)}
+                    color="danger"
+                    size="sm"
+                    radius='full'
+                    isDisabled={['confirmado', 'entregado', 'recepcionado_operador'].includes(data?.x_studio_estado)}
+                >
+                    Eliminar
+                </Button>
+            </Box >
         ),
         enableRowActions: true,
     });
 
     return (
-        <Dialog open={open} onClose={handleClose} fullWidth maxWidth="xl" PaperProps={{
-            sx: {
-                borderRadius: '28px', // estilo M3
-            },
-        }}>
+        <Dialog open={open}
+            onClose={handleClose}
+            fullScreen
+            PaperProps={{
+                sx: {
+                    borderRadius: '12px',
+                },
+            }}>
             <DialogTitle>Equipo asignado</DialogTitle>
             <DialogContent>
                 <MaterialReactTable table={table} />

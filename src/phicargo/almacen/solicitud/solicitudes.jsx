@@ -134,17 +134,19 @@ const Solicitudes = ({ x_tipo, vista }) => {
         accessorKey: 'x_studio_estado',
         header: 'Estado',
         Cell: ({ cell }) => {
-          const estatus_viaje = cell.getValue();
+          const estatus = cell.getValue();
           let badgeClass = '';
 
-          if (estatus_viaje === 'entregado') {
+          if (estatus === 'entregado') {
             badgeClass = 'primary';
-          } else if (estatus_viaje === 'confirmado') {
+          } else if (estatus === 'confirmado') {
             badgeClass = 'success';
-          } else if (estatus_viaje === 'borrador') {
+          } else if (estatus === 'borrador') {
             badgeClass = 'warning';
-          } else if (estatus_viaje === 'devuelto') {
+          } else if (estatus === 'devuelto') {
             badgeClass = 'success';
+          } else if (estatus === 'cancelada') {
+            badgeClass = 'danger';
           } else {
             badgeClass = 'secondary';
           }
@@ -155,7 +157,7 @@ const Solicitudes = ({ x_tipo, vista }) => {
               color={badgeClass}
               className="text-white"
             >
-              {estatus_viaje}
+              {estatus}
             </Chip>
           );
         },

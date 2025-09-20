@@ -34,12 +34,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const EPPSolicitados = ({ }) => {
 
-  const
-    { modoEdicion, setModoEdicion,
-      lineasGlobales, setLineasGlobales,
-      data, setData,
-    } = useAlmacen();
-
+  const { modoEdicion, setModoEdicion, lineasGlobales, setLineasGlobales, data, setData } = useAlmacen();
   const [id_solicitud, setIDSolicitud] = React.useState(null);
   const [open, setOpen] = React.useState(false);
   const [linea, setLinea] = React.useState([]);
@@ -57,7 +52,6 @@ const EPPSolicitados = ({ }) => {
   const handleClickOpenReservas = (data) => {
     setOpenReservas(true);
     setLinea(data);
-    console.log(data);
   };
 
   const handleCloseReservas = () => {
@@ -105,7 +99,7 @@ const EPPSolicitados = ({ }) => {
               size="sm"
               color="primary"
               className="text-white"
-              isDisabled={data?.x_studio_estado == "entregado" || data?.x_studio_estado == "recepcionado_operador" || modoEdicion ? false : true}
+              isDisabled={!(modoEdicion && ![ "recepcionado_operador"].includes(data?.x_studio_estado))}
               onPress={() => handleClickOpenReservas(row.original)} // puedes pasar datos de la fila si lo necesitas
             >
               {estado || 'Pendiente por asignar'}

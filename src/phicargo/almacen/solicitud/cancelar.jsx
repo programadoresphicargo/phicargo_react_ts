@@ -4,24 +4,20 @@ import {
     DialogTitle,
     DialogContent,
     DialogActions,
-    TextField,
-    MenuItem,
-    Select,
-    InputLabel,
-    FormControl,
     FormHelperText,
-    CircularProgress,
 } from '@mui/material';
 import { toast } from 'react-toastify';
-import axios from 'axios'; // o usa tu `odooApi`
-import { Button } from '@heroui/react';
 import odooApi from '@/api/odoo-api';
+import { Button, Select, SelectItem, Textarea } from '@heroui/react';
+import { useAlmacen } from '../contexto/contexto';
 
-const CancelarSolicitudDialog = ({ open, onClose, id_solicitud, fetchData }) => {
+const CancelarSolicitudDialog = ({ open, onClose, id_solicitud }) => {
     const [motivo_cancelacion, setMotivo] = useState(null);
     const [comentarios_cancelacion, setComentario] = useState('');
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
+
+    const { fetchData } = useAlmacen();
 
     const handleCancel = async () => {
         const newErrors = {};
@@ -34,14 +30,14 @@ const CancelarSolicitudDialog = ({ open, onClose, id_solicitud, fetchData }) => 
         setLoading(true);
         try {
             const response = await odooApi.patch(`/tms_travel/solicitudes_equipo/cancelar/`, {
-                "id_solicitud": id_solicitud,
-                "motivo_cancelacion": motivo_cancelacion,
-                "comentarios_cancelacion": comentarios_cancelacion,
+                id_solicitud,
+                motivo_cancelacion,
+                comentarios_cancelacion,
             });
 
             if (response.data.status === 'success') {
                 toast.success(response.data.message);
-                fetchData?.();
+                fetchData?.(id_solicitud);
                 onClose();
             } else {
                 toast.error(response.data.message);
@@ -57,36 +53,44 @@ const CancelarSolicitudDialog = ({ open, onClose, id_solicitud, fetchData }) => 
         <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
             <DialogTitle>Cancelar solicitud</DialogTitle>
             <DialogContent dividers>
-                <FormControl fullWidth margin="normal" error={!!errors.motivo_cancelacion}>
-                    <InputLabel>Motivo de cancelación</InputLabel>
+                {/* Select con HeroUI */}
+                <div className="my-3">
                     <Select
-                        value={motivo_cancelacion}
                         label="Motivo de cancelación"
-                        onChange={(e) => setMotivo(e.target.value)}
+                        placeholder="Selecciona un motivo"
+                        selectedKeys={motivo_cancelacion ? [motivo_cancelacion] : []}
+                        onSelectionChange={(keys) => setMotivo(Array.from(keys)[0])}
+                        isInvalid={!!errors.motivo_cancelacion}
+                        errorMessage={errors.motivo_cancelacion}
                     >
-                        <MenuItem value="error de captura">Error de captura</MenuItem>
-                        <MenuItem value="solicitud duplicada">Solicitud duplicada</MenuItem>
-                        <MenuItem value="operador no se presento">Operador no se presento</MenuItem>
-                        <MenuItem value="otro">Otro</MenuItem>
+                        <SelectItem key="error de captura">Error de captura</SelectItem>
+                        <SelectItem key="solicitud duplicada">Solicitud duplicada</SelectItem>
+                        <SelectItem key="operador no se presento">Operador no se presentó</SelectItem>
+                        <SelectItem key="otro">Otro</SelectItem>
                     </Select>
-                    {errors.motivo_cancelacion && <FormHelperText>{errors.motivo_cancelacion}</FormHelperText>}
-                </FormControl>
+                </div>
 
-                <TextField
-                    label="Comentarios"
-                    fullWidth
-                    multiline
-                    minRows={3}
-                    value={comentarios_cancelacion}
-                    onChange={(e) => setComentario(e.target.value)}
-                    error={!!errors.comentarios_cancelacion}
-                    helperText={errors.comentarios_cancelacion}
-                    margin="normal"
-                />
+                {/* Textarea con HeroUI */}
+                <div className="my-3">
+                    <Textarea
+                        label="Comentarios"
+                        placeholder="Escribe un comentario"
+                        minRows={3}
+                        value={comentarios_cancelacion}
+                        onChange={(e) => setComentario(e.target.value)}
+                        isInvalid={!!errors.comentarios_cancelacion}
+                        errorMessage={errors.comentarios_cancelacion}
+                    />
+                </div>
             </DialogContent>
             <DialogActions>
                 <Button onPress={onClose} disabled={loading}>Cancelar</Button>
-                <Button onPress={handleCancel} color="danger" isDisabled={loading} isLoading={loading}>
+                <Button
+                    onPress={handleCancel}
+                    color="danger"
+                    isDisabled={loading}
+                    isLoading={loading}
+                >
                     Confirmar cancelación
                 </Button>
             </DialogActions>

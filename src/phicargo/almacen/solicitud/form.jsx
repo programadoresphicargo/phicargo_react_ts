@@ -42,23 +42,8 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
             isDisabled, setDisabled,
             reservasGlobales, setReservasGlobales,
             lineasGlobales, setLineasGlobales,
+            loading, fetchData
         } = useAlmacen();
-
-    const fetchData = async () => {
-        if (!id_solicitud) return;
-        try {
-            setLoading(true);
-            const response = await odooApi.get(`/tms_travel/solicitudes_equipo/id_solicitud/${id_solicitud}`);
-            setData(response.data);
-            setLineasGlobales(response.data.lineas);
-            setReservasGlobales(response.data.reservas)
-            console.log(response.data.reservas);
-        } catch (error) {
-            console.error('Error al obtener los datos:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const handleChange = (e) => {
         setData((prev) => ({
@@ -93,7 +78,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                 const response = await odooApi.patch(`/tms_travel/solicitudes_equipo/${id_solicitud}`, payload);
                 if (response.data.status == 'success') {
                     toast.success(response.data.message);
-                    fetchData();
+                    fetchData(id_solicitud);
                 } else {
                     toast.error(response.data.message);
                 }
@@ -122,7 +107,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                 const response = await odooApi.patch('/tms_travel/solicitudes_equipo/confirmar/' + id_solicitud);
                 if (response.data.status == 'success') {
                     toast.success(response.data.message);
-                    fetchData();
+                    fetchData(id_solicitud);
                     handleClose();
                 } else {
                     toast.error(response.data.message);
@@ -152,7 +137,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                 const response = await odooApi.patch('/tms_travel/solicitudes_equipo/reservar/' + id_solicitud);
                 if (response.data.status == 'success') {
                     toast.success(response.data.message);
-                    fetchData();
+                    fetchData(id_solicitud);
                     handleClose();
                 } else {
                     toast.error(response.data.message);
@@ -182,7 +167,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                 const response = await odooApi.get('/tms_travel/solicitudes_equipo/entregar/' + id_solicitud);
                 if (response.data.status == 'success') {
                     toast.success(response.data.message);
-                    fetchData();
+                    fetchData(id_solicitud);
                     handleClose();
                 } else {
                     toast.error(response.data.message);
@@ -212,7 +197,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                 const response = await odooApi.patch('/tms_travel/solicitudes_equipo/borrador/' + id_solicitud);
                 if (response.data.status == 'success') {
                     toast.success(response.data.message);
-                    fetchData();
+                    fetchData(id_solicitud);
                     handleClose();
                 } else {
                     toast.error(response.data.message);
@@ -226,25 +211,12 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
         }
     };
 
-    const htmlContent = reservasGlobales.map(r =>
-        `<div>Unidad: ${r.id_unidad} | Línea: ${r.id_solicitud_equipo_line} | Devuelta: ${r.devuelta ? '✅' : '❌'}</div>`
-    ).join("");
-
     const devolver = async () => {
-
-        const errores = reservasGlobales.filter(
-            (r) => !r.devuelta && (!r.motivo_no_devuelta || !r.comentarios_no_devuelta)
-        );
-        if (errores.length > 0) {
-            toast.error('Por favor completa motivo y comentario en reservas no devueltas.');
-            return false;
-        }
 
         const result = await Swal.fire({
             title: '¿Estás seguro?',
-            text: 'Retornar stock',
+            text: 'Cerrar solicitud',
             icon: 'warning',
-            html: htmlContent,
             showCancelButton: true,
             confirmButtonText: 'Sí, confirmar',
         });
@@ -253,10 +225,10 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
             setSaving(true);
             try {
                 setLoading(true);
-                const response = await odooApi.patch('/tms_travel/solicitudes_equipo/devolver/' + id_solicitud, reservasGlobales);
+                const response = await odooApi.patch('/tms_travel/solicitudes_equipo/devolver/' + id_solicitud);
                 if (response.data.status === 'success') {
                     toast.success(response.data.message);
-                    fetchData();
+                    fetchData(id_solicitud);
                     handleClose();
                 } else {
                     toast.error(response.data.message);
@@ -276,7 +248,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
 
     useEffect(() => {
         if (open && id_solicitud !== null) {
-            fetchData();
+            fetchData(id_solicitud);
         } else if (open && id_solicitud === null) {
             setData({ x_tipo: x_tipo });
             setLineasGlobales([]);
@@ -334,7 +306,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
 
                         <Stack spacing={1} direction="row" className="mb-5">
 
-                            {(!modoEdicion && data?.x_studio_estado == 'borrador') && (
+                            {(!modoEdicion && (data?.x_studio_estado === 'borrador' || data?.x_studio_estado === 'entregado')) && (
                                 <Button
                                     radius="full"
                                     color="primary"
@@ -373,22 +345,24 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                             {((data?.x_studio_estado == "entregado" || data?.x_studio_estado == "recepcionado_operador") && data?.es_asignacion) && (
                                 <Button
                                     radius="full"
-                                    color='success'
+                                    color='secondary'
                                     className='text-white'
                                     onPress={() => devolver()}
                                     isLoading={isLoading}>
-                                    Devolver a stock
+                                    Cerrar solicitud
                                 </Button>
                             )}
-                            <Button
-                                radius="full"
-                                color="success"
-                                as={Link}
-                                isExternal={true}
-                                color="primary"
-                                href={`${apiUrl}/tms_travel/solicitudes_equipo/pdf/${id_solicitud}`}>
-                                Formato de entrega
-                            </Button>
+                            {data?.x_studio_estado == "confirmado" && (
+                                <Button
+                                    radius="full"
+                                    color="success"
+                                    as={Link}
+                                    isExternal={true}
+                                    color="primary"
+                                    href={`${apiUrl}/tms_travel/solicitudes_equipo/pdf/${id_solicitud}`}>
+                                    Formato de entrega
+                                </Button>
+                            )}
                             {(!modoEdicion && data?.x_studio_estado == 'borrador') && (
                                 <Button
                                     radius="full"
@@ -518,7 +492,6 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                 open={openCancelar}
                 onClose={() => setOpenCancelar(false)}
                 id_solicitud={id_solicitud}
-                fetchData={fetchData}
             />
         </>
     );
