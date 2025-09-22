@@ -57,13 +57,7 @@ const EstatusOperativos = ({ estado }) => {
   const cambiarPermiso = async (id_estatus, columna, estado) => {
     try {
       setLoading(true);
-      const response = await odooApi.post('/estatus_operativos/cambiar_permisos/', {
-        params: {
-          id_estatus: id_estatus,
-          columna: columna,
-          estado: estado
-        }
-      });
+      const response = await odooApi.post(`/estatus_operativos/cambiar_permisos/?id_estatus=${id_estatus}&columna=${columna}&estado=${estado}`);
       setLoading(false);
       if (response.data.success === true) {
         fetchData();
@@ -149,7 +143,7 @@ const EstatusOperativos = ({ estado }) => {
       },
       {
         accessorKey: 'es_justificante',
-        header: 'Es justificable',
+        header: 'Es justificable en salidas/llegadas tarde',
         Cell: ({ row }) => {
           const id_estatus = row.original.id_estatus;
           const isChecked = row.original.es_justificante;
