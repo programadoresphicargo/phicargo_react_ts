@@ -149,29 +149,35 @@ const ReservasDetalle = ({ open, handleClose, dataLinea }) => {
                 header: 'Comentarios (si no devuelto)',
                 Cell: ({ row }) => {
                     const reserva = row.original;
+                    const [localValue, setLocalValue] = React.useState(reserva.comentarios_no_devuelta || "");
+
+                    React.useEffect(() => {
+                        setLocalValue(reserva.comentarios_no_devuelta || "");
+                    }, [reserva.comentarios_no_devuelta]);
+
                     if (reserva.devuelta) return null;
+
                     return (
-                        <>
-                            <Textarea
-                                className="max-w-xs"
-                                variant='bordered'
-                                placeholder="Ingresa un comentario"
-                                value={reserva.comentarios_no_devuelta || ''}
-                                isDisabled={row.original.fecha_devuelto != null ? true : false}
-                                onChange={(e) => {
-                                    const value = e.target.value;
-                                    setReservasGlobales((prev) =>
-                                        prev.map((r) =>
-                                            r.id_reserva === reserva.id_reserva
-                                                ? { ...r, comentarios_no_devuelta: value }
-                                                : r
-                                        )
-                                    );
-                                }}
-                            />
-                        </>
+                        <Textarea
+                            className="max-w-xs"
+                            variant="bordered"
+                            placeholder="Ingresa un comentario"
+                            value={localValue}
+                            isDisabled={row.original.fecha_devuelto != null}
+                            onChange={(e) => {
+                                const value = e.target.value;
+                                setLocalValue(value);
+                                setReservasGlobales((prev) =>
+                                    prev.map((r) =>
+                                        r.id_reserva === reserva.id_reserva
+                                            ? { ...r, comentarios_no_devuelta: value }
+                                            : r
+                                    )
+                                );
+                            }}
+                        />
                     );
-                },
+                }
             },
             {
                 accessorKey: 'fecha_devuelto',
