@@ -1,5 +1,6 @@
 import { Card, CardBody, CardFooter, CardHeader } from '@heroui/react';
 import {
+  AutocompleteInput,
   CheckboxInput,
   EmailInput,
   PasswordInput2,
@@ -47,12 +48,29 @@ const UserForm = (props: Props) => {
       updatedItem: data,
     });
   };
-  
+
   useEffect(() => {
     if (user) {
       reset((user as unknown as UserUpdate));
     }
   }, [user, reset]);
+
+  const roles = [
+    { key: 'Sistema', value: 'Sistema' },
+    { key: 'Desarrollador', value: 'Desarrollador' },
+    { key: 'Vigilancia', value: 'Vigilancia' },
+    { key: 'Administrador', value: 'Administrador' },
+    { key: 'Invitado', value: 'Invitado' },
+    { key: 'Supervisor', value: 'Supervisor' },
+    { key: 'ejecutivo', value: 'ejecutivo' },
+    { key: 'Contabilidad', value: 'Contabilidad' },
+    { key: 'Dirección', value: 'Dirección' },
+    { key: 'Monitorista', value: 'Monitorista' },
+    { key: 'invitado', value: 'invitado' },
+    { key: 'Ejecutivo', value: 'Ejecutivo' },
+    { key: 'Almacenista', value: 'Almacenista' },
+    { key: 'RH', value: 'RH' },
+  ];
 
   return (
     <Card
@@ -108,8 +126,13 @@ const UserForm = (props: Props) => {
               rules={!user ? { required: 'Este campo es requerido' } : {}}
               className="w-1/3"
             />
+            <AutocompleteInput control={control} name='role' items={roles} label="Especificar el tipo de usuario"></AutocompleteInput>
+          </div>
+
+          <div className="flex items-center space-x-2">
             <CheckboxInput control={control} name="isActive" label="Activo" />
           </div>
+
         </form>
       </CardBody>
       <CardFooter className="pt-0">
