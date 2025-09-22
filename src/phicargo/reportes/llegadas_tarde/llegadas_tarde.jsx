@@ -87,6 +87,7 @@ const DetencionesTable = () => {
         );
       },
     },
+    { accessorKey: 'id_estatus_salida_justificante', header: 'Estatus justificante' },
     { accessorKey: 'llegada_planta_programada', header: 'Llegada a planta programada' },
     { accessorKey: 'llegada_planta', header: 'Llegada a planta reportada' },
     { accessorKey: 'diferencia_llegada_planta', header: 'Diferencia tiempo planta' },
@@ -112,6 +113,7 @@ const DetencionesTable = () => {
         );
       },
     },
+    { accessorKey: 'id_estatus_llegada_justificante', header: 'Estatus justificante' },
     { accessorKey: 'fecha_finalizado', header: 'Fecha finalizado' },
   ];
 
