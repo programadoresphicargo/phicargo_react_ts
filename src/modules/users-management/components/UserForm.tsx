@@ -70,6 +70,8 @@ const UserForm = (props: Props) => {
     { key: 'Ejecutivo', value: 'Ejecutivo' },
     { key: 'Almacenista', value: 'Almacenista' },
     { key: 'RH', value: 'RH' },
+    { key: 'Comercial', value: 'Comercial' },
+    { key: 'Legal', value: 'Legal' },
   ];
 
   return (
