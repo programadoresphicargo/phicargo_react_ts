@@ -70,18 +70,20 @@ const DetencionesTable = () => {
         const valor = cell.getValue() || '';
         var clase;
 
-        if (valor === 'Salio tarde') {
+        if (valor === 'Salió tarde PERO tiene justificación') {
+          clase = 'success';
+        } else if (valor === 'Salió tarde SIN justificación') {
           clase = 'danger';
         } else if (valor === 'Va tarde') {
           clase = 'warning';
         } else if (valor === 'Llegó temprano') {
-          clase = 'primary';
+          clase = 'success';
         } else {
           clase = 'primary';
         }
 
         return (
-          <Chip color={clase} size='sm'>
+          <Chip className="text-white" color={clase} size='sm'>
             {valor}
           </Chip>
         );
@@ -96,18 +98,20 @@ const DetencionesTable = () => {
         const valor = cell.getValue() || '';
         var clase;
 
-        if (valor === 'Llegó tarde') {
+        if (valor === 'Llegó tarde SIN justificación') {
           clase = 'danger';
+        } else if (valor === 'Llegó tarde PERO tiene justificación') {
+          clase = 'success';
         } else if (valor === 'Va tarde') {
           clase = 'warning';
         } else if (valor === 'Llegó temprano') {
-          clase = 'primary';
+          clase = 'success';
         } else {
           clase = 'primary';
         }
 
         return (
-          <Chip color={clase} size='sm'>
+          <Chip color={clase} size='sm' className="text-white">
             {valor}
           </Chip>
         );
