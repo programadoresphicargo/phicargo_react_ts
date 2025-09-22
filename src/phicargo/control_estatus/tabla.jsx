@@ -70,7 +70,8 @@ const EstatusOperativos = ({ estado }) => {
       } else {
       }
     } catch (error) {
-      console.error('Error al obtener los datos:', error);
+      setLoading(false);
+      toast.error('Error al obtener los datos:', error);
     }
   };
 
@@ -146,6 +147,26 @@ const EstatusOperativos = ({ estado }) => {
           );
         },
       },
+      {
+        accessorKey: 'es_justificante',
+        header: 'Es justificable',
+        Cell: ({ row }) => {
+          const id_estatus = row.original.id_estatus;
+          const isChecked = row.original.es_justificante;
+
+          const handleCheckboxClick = (event) => {
+            const isCheckedNow = event.target.checked;
+            cambiarPermiso(id_estatus, 'es_justificante', isCheckedNow);
+          };
+
+          return (
+            <Checkbox
+              checked={isChecked}
+              onChange={handleCheckboxClick}
+            />
+          );
+        },
+      },
     ],
     []
   );
@@ -156,7 +177,7 @@ const EstatusOperativos = ({ estado }) => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
-    state: { isLoading: isLoading2 },
+    state: { showProgressBars: isLoading2 },
     enableColumnPinning: true,
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
@@ -186,7 +207,7 @@ const EstatusOperativos = ({ estado }) => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 200px)',
+        maxHeight: 'calc(100vh - 210px)',
       },
     },
     renderTopToolbarCustomActions: ({ table }) => (
@@ -205,7 +226,7 @@ const EstatusOperativos = ({ estado }) => {
             NuevoAcceso()
           }
         >
-          NUEVO ESTATUS
+          Nuesto estatus
         </Button>
       </Box>
     ),
