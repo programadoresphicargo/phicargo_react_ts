@@ -3,7 +3,6 @@ import { CategoryScale } from 'chart.js';
 import Chart from 'chart.js/auto';
 import { DistanceAndRevenueByVehicleChart } from '../components/vehicles/DistanceAndRevenueByVehicleChart';
 import { useVehiclesStatsQueries } from '../hooks/useVehiclesStatsQueries';
-import FleetUsageChart from '../components/vehicles/UnidadesMenosUsadas';
 import { VehicleMaintenance } from '../components/vehicles/VehiclesMaintenance';
 
 Chart.register(CategoryScale);
