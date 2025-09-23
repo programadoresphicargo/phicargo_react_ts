@@ -43,7 +43,8 @@ export class VehicleStatsAdapter {
       dias_indisponibles: data.dias_indisponibles,
       reportes_ids: data.reportes_ids,
       orders_service: data.orders_service,
-      periodos_con_orden: data.periodos_con_orden
+      periodos_con_orden: data.periodos_con_orden,
+      fail_type: data.fail_type
     };
   }
 

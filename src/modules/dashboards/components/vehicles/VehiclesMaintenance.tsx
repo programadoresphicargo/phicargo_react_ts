@@ -95,7 +95,7 @@ export const VehicleMaintenance = (props: Props) => {
 
   return (
     <ChartCard
-      title={`Unidades indispuestas ${monthYearName}`}
+      title={`Unidades no operativas ${monthYearName}`}
       isLoading={isLoading && !chartData}
       customHeight="150rem"
       downloadFn={() =>
@@ -108,7 +108,7 @@ export const VehicleMaintenance = (props: Props) => {
 };
 
 const exportConf: ExportConfig<VehicleMaintenances> = {
-  fileName: `Unidades indispuestas`,
+  fileName: `Unidades no operativas`,
   withDate: true,
   sheetName: 'Unidades',
   columns: [
@@ -117,6 +117,7 @@ const exportConf: ExportConfig<VehicleMaintenances> = {
     { accessorFn: (data) => data.orders_service, header: 'Ordenes de mantenimiento' },
     { accessorFn: (data) => data.reportes_ids, header: 'IDs Reportes' },
     { accessorFn: (data) => data.periodos_con_orden, header: 'Periodos' },
+    { accessorFn: (data) => data.fail_type, header: 'Tipo' },
   ],
 };
 

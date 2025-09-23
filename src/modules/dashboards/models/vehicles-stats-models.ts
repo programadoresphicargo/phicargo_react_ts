@@ -22,6 +22,7 @@ export interface VehicleMaintenances {
   orders_service: string;
   reportes_ids: string;
   periodos_con_orden: string;
+  fail_type: string;
 }
 
 export interface VehicleStats {
