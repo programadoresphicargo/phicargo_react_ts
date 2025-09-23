@@ -141,6 +141,28 @@ const Maniobras = ({ estado_maniobra }) => {
         size: 150,
       },
       {
+        accessorKey: 'tipo_empleado',
+        header: 'Tipo',
+        Cell: ({ cell }) => {
+          const value = cell.getValue();
+
+          let color = 'success'; // valor por defecto
+          if (value === 'MOVEDOR') {
+            color = 'success';
+          } else if (value === 'OPERADOR') {
+            color = 'primary';
+          } else if (value === 'OPERADOR POSTURERO') {
+            color = 'danger';
+          }
+
+          return (
+            <Chip color={color} size="sm" className="text-white capitalize">
+              {value}
+            </Chip>
+          );
+        },
+      },
+      {
         accessorKey: 'tipo_maniobra',
         header: 'Tipo de maniobra',
         Cell: ({ cell }) => {
