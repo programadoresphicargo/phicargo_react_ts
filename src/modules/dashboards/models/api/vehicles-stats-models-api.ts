@@ -16,8 +16,17 @@ export interface AvailableSummaryApi {
   maintenance_driver: number;
 }
 
+export interface VehiclesMaintenanceApi {
+  name: string;
+  dias_indisponibles: number;
+  orders_service: string;
+  reportes_ids: string;
+  periodos_con_orden: string;
+}
+
 export interface VehicleStatsApi {
   distance_and_revenue_by_vehicle: DistanceAndRevenueByVehicleApi[];
   available_summary: AvailableSummaryApi[];
+  vehicles_maintenance: VehiclesMaintenanceApi[];
 }
 

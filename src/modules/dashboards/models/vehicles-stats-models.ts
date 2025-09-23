@@ -16,8 +16,17 @@ export interface DistanceAndRevenueByVehicle {
   amount: number;
 }
 
+export interface VehicleMaintenances {
+  name: string;
+  dias_indisponibles: number;
+  orders_service: string;
+  reportes_ids: string;
+  periodos_con_orden: string;
+}
+
 export interface VehicleStats {
   distanceAndRevenueByVehicle: DistanceAndRevenueByVehicle[];
   availableSummary: AvailableSummary[];
+  vehicleMaintenence: VehicleMaintenances[];
 }
 

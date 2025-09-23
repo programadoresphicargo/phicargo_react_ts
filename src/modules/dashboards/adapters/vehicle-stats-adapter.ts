@@ -7,6 +7,7 @@ import type {
   AvailableSummaryApi,
   DistanceAndRevenueByVehicleApi,
   VehicleStatsApi,
+  VehiclesMaintenanceApi,
 } from '../models/api/vehicles-stats-models-api';
 
 export class VehicleStatsAdapter {
@@ -34,6 +35,18 @@ export class VehicleStatsAdapter {
     };
   }
 
+  static vehiclesMaintenance(
+    data: VehiclesMaintenanceApi,
+  ): VehiclesMaintenanceApi {
+    return {
+      name: data.name,
+      dias_indisponibles: data.dias_indisponibles,
+      reportes_ids: data.reportes_ids,
+      orders_service: data.orders_service,
+      periodos_con_orden: data.periodos_con_orden
+    };
+  }
+
   static vehicleStatsToLocal(stats: VehicleStatsApi): VehicleStats {
     return {
       distanceAndRevenueByVehicle: stats.distance_and_revenue_by_vehicle.map(
@@ -42,6 +55,7 @@ export class VehicleStatsAdapter {
       availableSummary: stats.available_summary.map(
         VehicleStatsAdapter.availableSummary,
       ),
+      vehicleMaintenence: stats.vehicles_maintenance.map(VehicleStatsAdapter.vehiclesMaintenance)
     };
   }
 }
