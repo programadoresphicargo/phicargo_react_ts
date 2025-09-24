@@ -46,7 +46,7 @@ jobs:
           port: 22
           host: ${{ secrets.VPS_HOST }}
           origin: "./phicargo-react-image.tar"
-          destination: "~/workspace/phicargo-react/phicargo-react-image.tar"
+          destination: "/home/${{ secrets.VPS_USERNAME }}/workspace/phicargo-react/phicargo-react-image.tar"
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_PRIVATE_KEY }}
 
@@ -57,7 +57,7 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USERNAME }}
           origin: "./docker-compose.prod.yml"
-          destination: "~/workspace/phicargo-react/docker-compose.prod.yml"
+          destination: "/home/${{ secrets.VPS_USERNAME }}/workspace/phicargo-react/docker-compose.prod.yml"
           key: ${{ secrets.VPS_PRIVATE_KEY }}
 
       - name: SSH to VPS and deploy
@@ -69,7 +69,7 @@ jobs:
           port: 22
           script: |
             set -e
-            WORKDIR=~/workspace/phicargo-react
+            WORKDIR=/home/${{ secrets.VPS_USERNAME }}/workspace/phicargo-react
 
             echo "1️⃣ Comprobando permisos en $WORKDIR..."
             mkdir -p $WORKDIR || { echo "❌ No se puede crear el directorio"; exit 1; }
@@ -77,7 +77,14 @@ jobs:
             rm $WORKDIR/test_perm
             echo "✅ Permisos OK"
 
-            echo "2️⃣ Deteniendo contenedores existentes..."
+            echo "2️⃣ Verificando que la imagen Docker llegó..."
+            if [ ! -f $WORKDIR/phicargo-react-image.tar ]; then
+              echo "❌ No se encontró el archivo phicargo-react-image.tar en $WORKDIR"
+              exit 1
+            fi
+            echo "✅ Imagen encontrada"
+
+            echo "3️⃣ Deteniendo contenedores existentes..."
             docker compose -f $WORKDIR/docker-compose.prod.yml down || echo "No había contenedores activos."
 
             EXISTING_CONTAINER=$(docker ps -aq -f name=phicargo-react)
@@ -90,11 +97,11 @@ jobs:
               docker rmi -f $EXISTING_IMAGE || echo "No se pudo eliminar la imagen antigua"
             fi
 
-            echo "3️⃣ Cargando nueva imagen Docker..."
+            echo "4️⃣ Cargando nueva imagen Docker..."
             docker load -i $WORKDIR/phicargo-react-image.tar || { echo "Fallo al cargar la imagen"; exit 1; }
             rm $WORKDIR/phicargo-react-image.tar
 
-            echo "4️⃣ Levantando contenedores..."
+            echo "5️⃣ Levantando contenedores..."
             docker compose -f $WORKDIR/docker-compose.prod.yml up -d || { 
               echo "Fallo al levantar contenedores"; 
               docker compose -f $WORKDIR/docker-compose.prod.yml logs --no-color;
@@ -109,3 +116,4 @@ jobs:
             else
               echo "✅ Contenedor desplegado correctamente"
             fi
+
