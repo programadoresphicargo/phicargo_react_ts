@@ -60,7 +60,7 @@ jobs:
           destination: "~/workspace/phicargo-react/docker-compose.prod.yml"
           key: ${{ secrets.VPS_PRIVATE_KEY }}
 
-      - name: SSH to VPS and load Docker Image
+      - name: SSH to VPS and deploy
         uses: appleboy/ssh-action@v1.0.2
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -68,17 +68,44 @@ jobs:
           key: ${{ secrets.VPS_PRIVATE_KEY }}
           port: 22
           script: |
-            cd ~/workspace/phicargo-react 
-            docker compose -f docker-compose.prod.yml down || exit 1
+            set -e
+            WORKDIR=~/workspace/phicargo-react
 
-            CURRENT_IMAGE=$(docker images -q phicargo-react:latest)
-            if [ -n "$CURRENT_IMAGE" ]; then
-              echo "Eliminando imagen actual: $CURRENT_IMAGE"
-              docker rmi -f $CURRENT_IMAGE
-            else
-              echo "No se encontró una imagen actual para phicargo-react:latest."
+            echo "1️⃣ Comprobando permisos en $WORKDIR..."
+            mkdir -p $WORKDIR || { echo "❌ No se puede crear el directorio"; exit 1; }
+            touch $WORKDIR/test_perm || { echo "❌ No se pueden crear archivos"; exit 1; }
+            rm $WORKDIR/test_perm
+            echo "✅ Permisos OK"
+
+            echo "2️⃣ Deteniendo contenedores existentes..."
+            docker compose -f $WORKDIR/docker-compose.prod.yml down || echo "No había contenedores activos."
+
+            EXISTING_CONTAINER=$(docker ps -aq -f name=phicargo-react)
+            if [ -n "$EXISTING_CONTAINER" ]; then
+              docker rm -f $EXISTING_CONTAINER
             fi
 
-            docker load -i ~/workspace/phicargo-react/phicargo-react-image.tar
-            rm ~/workspace/phicargo-react/phicargo-react-image.tar
-            docker compose -f docker-compose.prod.yml up -d || docker compose -f docker-compose.prod.yml down
+            EXISTING_IMAGE=$(docker images -q phicargo-react:latest)
+            if [ -n "$EXISTING_IMAGE" ]; then
+              docker rmi -f $EXISTING_IMAGE || echo "No se pudo eliminar la imagen antigua"
+            fi
+
+            echo "3️⃣ Cargando nueva imagen Docker..."
+            docker load -i $WORKDIR/phicargo-react-image.tar || { echo "Fallo al cargar la imagen"; exit 1; }
+            rm $WORKDIR/phicargo-react-image.tar
+
+            echo "4️⃣ Levantando contenedores..."
+            docker compose -f $WORKDIR/docker-compose.prod.yml up -d || { 
+              echo "Fallo al levantar contenedores"; 
+              docker compose -f $WORKDIR/docker-compose.prod.yml logs --no-color;
+              exit 1; 
+            }
+
+            RUNNING=$(docker ps -q -f name=phicargo-react)
+            if [ -z "$RUNNING" ]; then
+              echo "❌ El contenedor no está corriendo. Revisar logs."
+              docker compose -f $WORKDIR/docker-compose.prod.yml logs --no-color
+              exit 1
+            else
+              echo "✅ Contenedor desplegado correctamente"
+            fi
