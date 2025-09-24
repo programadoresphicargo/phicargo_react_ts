@@ -40,13 +40,23 @@ jobs:
       - name: Save Docker Image as tar file
         run: docker save phicargo-react:latest -o phicargo-react-image.tar
 
+      - name: Crear carpeta en VPS
+        uses: appleboy/ssh-action@v1.0.2
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_PRIVATE_KEY }}
+          port: 22
+          script: |
+            mkdir -p /root/workspace/phicargo-react
+
       - name: Copy Docker image to VPS
         uses: srueda99/scp-action@v12
         with:
           port: 22
           host: ${{ secrets.VPS_HOST }}
           origin: "./phicargo-react-image.tar"
-          destination: "/home/${{ secrets.VPS_USERNAME }}/workspace/phicargo-react/phicargo-react-image.tar"
+          destination: "/root/workspace/phicargo-react/phicargo-react-image.tar"
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_PRIVATE_KEY }}
 
@@ -57,8 +67,17 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USERNAME }}
           origin: "./docker-compose.prod.yml"
-          destination: "/home/${{ secrets.VPS_USERNAME }}/workspace/phicargo-react/docker-compose.prod.yml"
+          destination: "/root/workspace/phicargo-react/docker-compose.prod.yml"
           key: ${{ secrets.VPS_PRIVATE_KEY }}
+
+      - name: Verificar que la imagen llegó
+        uses: appleboy/ssh-action@v1.0.2
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_PRIVATE_KEY }}
+          port: 22
+          script: ls -l /root/workspace/phicargo-react
 
       - name: SSH to VPS and deploy
         uses: appleboy/ssh-action@v1.0.2
@@ -69,7 +88,7 @@ jobs:
           port: 22
           script: |
             set -e
-            WORKDIR=/home/${{ secrets.VPS_USERNAME }}/workspace/phicargo-react
+            WORKDIR=/root/workspace/phicargo-react
 
             echo "1️⃣ Comprobando permisos en $WORKDIR..."
             mkdir -p $WORKDIR || { echo "❌ No se puede crear el directorio"; exit 1; }
