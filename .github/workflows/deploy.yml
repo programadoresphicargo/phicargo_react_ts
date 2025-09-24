@@ -60,7 +60,7 @@ jobs:
           destination: "~/workspace/phicargo-react/docker-compose.prod.yml"
           key: ${{ secrets.VPS_PRIVATE_KEY }}
 
-      - name: SSH to VPS and load Docker Image
+      - name: SSH to VPS and deploy container
         uses: appleboy/ssh-action@v1.0.2
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -68,17 +68,33 @@ jobs:
           key: ${{ secrets.VPS_PRIVATE_KEY }}
           port: 22
           script: |
-            cd ~/workspace/phicargo-react 
-            docker compose -f docker-compose.prod.yml down || exit 1
+            cd ~/workspace/phicargo-react
 
+            # Detener contenedor anterior si existe
+            if docker ps -a --format '{{.Names}}' | grep -q '^phicargo-react$'; then
+              echo "Deteniendo contenedor existente..."
+              docker compose -f docker-compose.prod.yml down
+            fi
+
+            # Eliminar imagen anterior
             CURRENT_IMAGE=$(docker images -q phicargo-react:latest)
             if [ -n "$CURRENT_IMAGE" ]; then
               echo "Eliminando imagen actual: $CURRENT_IMAGE"
               docker rmi -f $CURRENT_IMAGE
-            else
-              echo "No se encontró una imagen actual para phicargo-react:latest."
             fi
 
+            # Cargar nueva imagen
             docker load -i ~/workspace/phicargo-react/phicargo-react-image.tar
             rm ~/workspace/phicargo-react/phicargo-react-image.tar
-            docker compose -f docker-compose.prod.yml up -d || docker compose -f docker-compose.prod.yml down
+
+            # Levantar contenedor
+            if ! docker compose -f docker-compose.prod.yml up -d; then
+              echo "❌ Error al levantar el contenedor, mostrando logs:"
+              docker compose -f docker-compose.prod.yml logs --tail=50
+              exit 1
+            fi
+
+            echo "✅ Contenedor levantado correctamente"
+
+            # Opcional: limpiar imágenes dangling
+            docker image prune -f
