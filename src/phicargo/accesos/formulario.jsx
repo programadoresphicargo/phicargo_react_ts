@@ -463,9 +463,19 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                     Validar {formData.tipo_movimiento}
                 </Button>
             )}
-            {session?.user?.permissions?.includes(510) && id_acceso && formData.estado_acceso === 'espera' && (
-                <Button radius="full" onPress={autorizar_acceso} style={{ marginTop: '20px' }} color='danger' isDisabled={formData.autorizado_por_id ? true : false}>Autorizar {formData.tipo_movimiento}</Button>
-            )}
+            {(session?.user?.permissions?.includes(510) || session?.user?.permissions?.includes(511))
+                && id_acceso
+                && formData.estado_acceso === 'espera' && (
+                    <Button
+                        radius="full"
+                        onPress={autorizar_acceso}
+                        style={{ marginTop: '20px' }}
+                        color="danger"
+                        isDisabled={!!formData.autorizado_por_id}
+                    >
+                        Autorizar {formData.tipo_movimiento}
+                    </Button>
+                )}
             {(formData.estado_acceso == 'validado' || formData.estado_acceso == 'rechazado') && (
                 < Button radius="full" onPress={handleClickOpenValidador} style={{ marginTop: '20px' }} color='primary'><i class="bi bi-folder-plus"></i> Archivar / Finalizar acceso</Button>
             )}
