@@ -28,6 +28,8 @@ export class DriverStatsAdapter {
       distance: data.distance,
       amount: data.amount,
       travels: data.travels,
+      travel_names: data.travel_names,
+      waybill_names: data.waybill_names
     };
   }
 
