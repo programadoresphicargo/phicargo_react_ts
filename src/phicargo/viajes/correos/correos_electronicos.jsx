@@ -196,7 +196,7 @@ const CorreosElectronicosViaje = ({ openCorreos }) => {
             <TableRow key={index}>
               <TableCell>
                 <User
-                  avatarProps={{ radius: "full", size: "sm", src: "https://icon-library.com/images/email-app-icon/email-app-icon-15.jpg" }}
+                  avatarProps={{ radius: "full", size: "sm", src: "https://cdn-icons-png.flaticon.com/512/5611/5611946.png" }}
                   classNames={{
                     description: "text-default-500",
                   }}

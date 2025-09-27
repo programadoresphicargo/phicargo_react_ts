@@ -227,6 +227,7 @@ export const useJourneyDialogs = () => {
                     let errores = [];
 
                     viajes.forEach((viaje) => {
+
                         if (!viaje.date_start || !viaje.x_date_arrival_shed) {
                             errores.push(`Faltan datos en la carta porte ${viaje.name}: las fechas son inválidas o están vacías. Completa la información.`);
                             return;
@@ -239,6 +240,24 @@ export const useJourneyDialogs = () => {
                             errores.push(`Carta porte ${viaje.name} tiene fechas con formato inválido.`);
                             return;
                         }
+
+                        const ahora = new Date();
+                        let inicio = new Date(viaje.date_start);
+
+                        // Restar 6 horas en milisegundos
+                        inicio = new Date(inicio.getTime() - 6 * 60 * 60 * 1000);
+
+                        // Diferencia en milisegundos
+                        const diffMs = ahora - inicio;
+
+                        // Validación
+                        if (diffMs > 24 * 60 * 60 * 1000) {
+                            errores.push(`⚠️ La fecha de inicio ya no es válida, por favor actualízala: ${viaje.name}`);
+                            return;
+                        } else {
+                            console.log("✅ date_start es válido");
+                        }
+
                     });
 
                     if (errores.length > 0) {
