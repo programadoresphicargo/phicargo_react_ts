@@ -32,6 +32,8 @@ export class VehicleStatsAdapter {
       services: data.services,
       distance: data.distance,
       amount: data.amount,
+      travel_names: data.travel_names,
+      waybill_names: data.waybill_names
     };
   }
 

@@ -4,6 +4,8 @@ export interface DistanceAndRevenueByDriver {
   services: number;
   distance: number;
   amount: number;
+  travel_names: string;
+  waybill_names: string;
 }
 
 export interface ModalitySummary {

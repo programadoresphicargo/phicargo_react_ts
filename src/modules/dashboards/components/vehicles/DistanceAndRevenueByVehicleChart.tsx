@@ -143,6 +143,8 @@ const exportConf: ExportConfig<DistanceAndRevenueByVehicle> = {
     },
     { accessorFn: (data) => data.travels, header: 'Viajes' },
     { accessorFn: (data) => data.services, header: 'Servicios' },
+    { accessorFn: (data) => data.travel_names, header: 'Viajes relacionados' },
+    { accessorFn: (data) => data.waybill_names, header: 'Cartas porte relacionadas' },
   ],
 };
 
