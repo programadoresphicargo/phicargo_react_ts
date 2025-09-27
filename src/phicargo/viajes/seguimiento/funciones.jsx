@@ -252,7 +252,7 @@ export const useJourneyDialogs = () => {
 
                         // Validación
                         if (diffMs > 24 * 60 * 60 * 1000) {
-                            errores.push(`⚠️ La fecha de inicio ya no es válida, por favor actualízala: ${viaje.name}`);
+                            errores.push(`⚠️ La fecha de inicio programado ya no es válida, por favor actualízala: ${viaje.name}`);
                             return;
                         } else {
                             console.log("✅ date_start es válido");
