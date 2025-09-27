@@ -13,8 +13,20 @@ const HeaderCards = () => {
     paymentsQuery: { data: payments, isFetching: loadingPayments },
   } = usePayments();
 
+  const totalCobrado = (registers || []).reduce(
+    (acc, curr) => acc + curr.totalConfirmed,
+    0,
+  );
+
+  const proyeccionCobro = (registers || []).reduce(
+    (acc, curr) => acc + getProjection(curr),
+    0,
+  );
+
+  const pendienteCobro = proyeccionCobro - totalCobrado;
+
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
+    <div className="grid grid-cols-2 md:grid-cols-5 gap-4 w-full">
       <IndicatorCard
         title="Total Cobrado"
         classNames={{
@@ -23,14 +35,7 @@ const HeaderCards = () => {
             'text-emerald-400 text-center font-bold text-medium m-0 transition-colors duration-300',
         }}
         content={
-          loadingCollect
-            ? 'Cargando...'
-            : formatCurrency(
-                (registers || []).reduce(
-                  (acc, curr) => acc + curr.totalConfirmed,
-                  0,
-                ),
-              )
+          loadingCollect ? 'Cargando...' : formatCurrency(totalCobrado)
         }
       />
       <IndicatorCard
@@ -41,14 +46,18 @@ const HeaderCards = () => {
             'text-emerald-400 text-center font-bold text-medium m-0 transition-colors duration-300',
         }}
         content={
-          loadingCollect
-            ? 'Cargando...'
-            : formatCurrency(
-                (registers || []).reduce(
-                  (acc, curr) => acc + getProjection(curr),
-                  0,
-                ),
-              )
+          loadingCollect ? 'Cargando...' : formatCurrency(proyeccionCobro)
+        }
+      />
+      <IndicatorCard
+        title="Pendiente de Cobro"
+        classNames={{
+          title: 'text-gray-300 text-center font-bold text-sm m-0',
+          content:
+            'text-emerald-400 text-center font-bold text-medium m-0 transition-colors duration-300',
+        }}
+  content={
+          loadingCollect ? 'Cargando...' : formatCurrency(pendienteCobro)
         }
       />
       <IndicatorCard
@@ -62,11 +71,11 @@ const HeaderCards = () => {
           loadingPayments
             ? 'Cargando...'
             : formatCurrency(
-                (payments || []).reduce(
-                  (acc, curr) => acc + curr.totalConfirmed,
-                  0,
-                ),
-              )
+              (payments || []).reduce(
+                (acc, curr) => acc + curr.totalConfirmed,
+                0,
+              ),
+            )
         }
       />
       <IndicatorCard
@@ -80,11 +89,11 @@ const HeaderCards = () => {
           loadingCollect
             ? 'Cargando...'
             : formatCurrency(
-                (payments || []).reduce(
-                  (acc, curr) => acc + getProjection(curr),
-                  0,
-                ),
-              )
+              (payments || []).reduce(
+                (acc, curr) => acc + getProjection(curr),
+                0,
+              ),
+            )
         }
       />
     </div>
