@@ -29,7 +29,6 @@ function EstatusHistorial() {
     const [isLoading, setLoading] = useState([]);
 
     const handleClickOpen = (id_registros) => {
-        console.log(id_registros);
         setEstatusAgrupados(id_registros);
         setDrawerOpen(true);
     };
@@ -72,6 +71,17 @@ function EstatusHistorial() {
 
     return (
         <>
+            <Dialog
+                open={drawerOpen}
+                onClose={() => setDrawerOpen(false)}
+                fullWidth
+                maxWidth="md" // puedes usar 'sm', 'md', 'lg', 'xl'
+            >
+                <DialogContent>
+                    <EstatusHistorialAgrupado />
+                </DialogContent>
+            </Dialog>
+
             <Stack spacing={2} direction="row">
                 <Button
                     radius="full"

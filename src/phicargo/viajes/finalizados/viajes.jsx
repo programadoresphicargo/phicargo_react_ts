@@ -22,6 +22,8 @@ import { exportToCSV } from '../../utils/export';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import { DateRangePicker } from 'rsuite';
+import EstatusHistorialAgrupado from '../estatus/estatus_agrupados';
+import { Drawer } from '@mui/material';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -30,7 +32,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const ViajesFinalizados = ({ }) => {
 
   const [open, setOpen] = React.useState(false);
-  const { id_viaje, viaje, getViaje, loading, error, ActualizarIDViaje } = useContext(ViajeContext);
+  const { id_viaje, viaje, getViaje, loading, error, ActualizarIDViaje, drawerOpen } = useContext(ViajeContext);
 
   const now = new Date();
   const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -340,7 +342,12 @@ const ViajesFinalizados = ({ }) => {
         onClose={handleClose}
         TransitionComponent={Transition}
       >
-        <AppBar sx={{ position: 'relative', backgroundColor: 'white' }} elevation={0}>
+        <AppBar
+          sx={{
+            background: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
+          }}
+          elevation={0}
+          position="static">
           <Toolbar>
             <IconButton
               edge="start"
@@ -352,8 +359,8 @@ const ViajesFinalizados = ({ }) => {
             </IconButton>
             <Typography sx={{ ml: 2, flex: 1, color: 'black' }} variant="h6" component="div">
             </Typography>
-            <Button autoFocus color="primary" onClick={handleClose}>
-              SALIR
+            <Button autoFocus color="primary" onClick={handleClose} radius='full'>
+              Salir
             </Button>
           </Toolbar>
         </AppBar>

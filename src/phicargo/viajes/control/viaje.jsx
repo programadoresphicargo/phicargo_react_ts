@@ -11,22 +11,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const drawerWidth = 650;
-
-const Main = styled('main', {
-    shouldForwardProp: (prop) => prop !== 'open',
-})(({ theme, open }) => ({
-    flexGrow: 1,
-    marginRight: open ? `${drawerWidth}px` : 0,
-    transition: theme.transitions.create('margin', {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-    }),
-}));
-
 const Travel = ({ open, handleClose }) => {
-
-    const { drawerOpen, setDrawerOpen } = useContext(ViajeContext);
 
     return (
         <Dialog
@@ -56,26 +41,7 @@ const Travel = ({ open, handleClose }) => {
                     </Button>
                 </Toolbar>
             </AppBar>
-
-            <Drawer
-                variant="persistent"
-                anchor="right"
-                open={drawerOpen}
-                sx={{
-                    width: drawerWidth,
-                    flexShrink: 0,
-                    '& .MuiDrawer-paper': {
-                        width: drawerWidth,
-                        boxSizing: 'border-box',
-                    },
-                }}
-            >
-                <EstatusHistorialAgrupado></EstatusHistorialAgrupado>
-            </Drawer>
-
-            <Main open={drawerOpen}>
-                <Viaje />
-            </Main>
+            <Viaje />
         </Dialog>
     );
 };
