@@ -391,7 +391,12 @@ const ViajesProgramados = ({ }) => {
         onClose={handleClose}
         TransitionComponent={Transition}
       >
-        <AppBar sx={{ position: 'relative', backgroundColor: 'white' }} elevation={0}>
+        <AppBar
+          elevation={0}
+          position="static"
+          sx={{
+            background: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
+          }}>
           <Toolbar>
             <IconButton
               edge="start"
