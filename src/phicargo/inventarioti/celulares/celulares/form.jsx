@@ -45,7 +45,7 @@ export default function FormCelulares({ isOpen, onOpenChange, id_celular }) {
             setData(null);
             setFormData({
                 activo: true,
-                estado: "",
+                estado: "disponible",
                 id_empresa: "",
                 marca: "",
                 modelo: "",
@@ -157,6 +157,8 @@ export default function FormCelulares({ isOpen, onOpenChange, id_celular }) {
                                                         isDisabled={!formData.activo}
                                                         selectedKeys={formData.id_empresa ? [String(formData.id_empresa)] : []}
                                                         onSelectionChange={(keys) => handleChange("id_empresa", Number([...keys][0]))}
+                                                        isInvalid={!formData?.id_empresa}
+                                                        errorMessage={!data?.id_empresa ? "Empresa obligatorio" : ""}
                                                     >
                                                         <SelectItem key={"1"}>Transportes Belchez</SelectItem>
                                                         <SelectItem key={"2"}>Servicontainer</SelectItem>
@@ -168,6 +170,8 @@ export default function FormCelulares({ isOpen, onOpenChange, id_celular }) {
                                                         isDisabled={!formData.activo}
                                                         selectedKeys={formData.marca ? new Set([formData.marca]) : new Set()}
                                                         onSelectionChange={(keys) => handleChange("marca", [...keys][0])}
+                                                        isInvalid={!formData?.marca}
+                                                        errorMessage={!data?.marca ? "Marca obligatorio" : ""}
                                                     >
                                                         <SelectItem key="Samsung">Samsung</SelectItem>
                                                         <SelectItem key="Xiaomi">Xiaomi</SelectItem>
@@ -188,6 +192,8 @@ export default function FormCelulares({ isOpen, onOpenChange, id_celular }) {
                                                         value={formData.modelo || ""}
                                                         isDisabled={!formData.activo}
                                                         onChange={(e) => handleChange("modelo", e.target.value)}
+                                                        isInvalid={!formData?.modelo}
+                                                        errorMessage={!data?.modelo ? "Modelo obligatorio" : ""}
                                                     />
 
                                                     <NumberInput
@@ -196,6 +202,8 @@ export default function FormCelulares({ isOpen, onOpenChange, id_celular }) {
                                                         isDisabled={!formData.activo}
                                                         formatOptions={{ useGrouping: false }}
                                                         onValueChange={(e) => handleChange("imei", e)}
+                                                        isInvalid={!formData?.imei}
+                                                        errorMessage={!data?.imei ? "IMEI obligatorio" : ""}
                                                     />
 
                                                     <Input
@@ -216,6 +224,8 @@ export default function FormCelulares({ isOpen, onOpenChange, id_celular }) {
                                                         label="Fecha de compra"
                                                         isDisabled={!formData.activo}
                                                         value={formData.fecha_compra ? parseDate(formData.fecha_compra) : undefined}
+                                                        isInvalid={!formData?.fecha_compra}
+                                                        errorMessage={!data?.fecha_compra ? "Fecha de compra obligatorio" : ""}
                                                         onChange={(date) => {
                                                             handleChange("fecha_compra", date ? new Date(date).toISOString().slice(0, 10) : null);
                                                         }}
@@ -228,26 +238,24 @@ export default function FormCelulares({ isOpen, onOpenChange, id_celular }) {
                                                         onChange={(e) => handleChange("comentarios", e.target.value)}
                                                     />
 
-                                                    {data && !data.activo && id_celular && (
-                                                        <>
-                                                            <Checkbox
-                                                                isSelected={formData.activo}
-                                                                onValueChange={(e) => handleChange("activo", e)}
-                                                            >
-                                                                Activo
-                                                            </Checkbox>
+                                                    <Checkbox
+                                                        isSelected={formData.activo}
+                                                        onValueChange={(e) => handleChange("activo", e)}
+                                                        isDisabled={!(data && !data.activo && id_celular)} // deshabilitado si no cumple la condición
+                                                    >
+                                                        Activo
+                                                    </Checkbox>
 
-                                                            <Select
-                                                                label="Estado"
-                                                                selectedKeys={formData.estado ? [String(formData.estado)] : []}
-                                                                onSelectionChange={(keys) => handleChange("estado", [...keys][0])}
-                                                            >
-                                                                <SelectItem key={"disponible"}>Disponible</SelectItem>
-                                                                <SelectItem key={"baja"}>Baja</SelectItem>
-                                                                <SelectItem key={"asignado"}>Asignado</SelectItem>
-                                                            </Select>
-                                                        </>
-                                                    )}
+                                                    <Select
+                                                        label="Estado"
+                                                        selectedKeys={[String(formData.estado && formData.estado.trim() !== "" ? formData.estado : "disponible")]}
+                                                        onSelectionChange={(keys) => handleChange("estado", [...keys][0])}
+                                                        isDisabled={!(data && !data.activo && id_celular)} // deshabilitado si no cumple la condición
+                                                    >
+                                                        <SelectItem key={"disponible"}>Disponible</SelectItem>
+                                                        <SelectItem key={"baja"}>Baja</SelectItem>
+                                                        <SelectItem key={"asignado"}>Asignado</SelectItem>
+                                                    </Select>
 
                                                 </div>
                                             </TabPanel>
@@ -270,6 +278,7 @@ export default function FormCelulares({ isOpen, onOpenChange, id_celular }) {
                                         onPress={openBajaModal}
                                         className="text-white"
                                         isDisabled={isLoading}
+                                        radius="full"
                                     >
                                         Baja
                                     </Button>
@@ -280,6 +289,7 @@ export default function FormCelulares({ isOpen, onOpenChange, id_celular }) {
                                     onPress={() => handleSave(onClose)}
                                     className="text-white"
                                     isDisabled={isLoading}
+                                    radius="full"
                                 >
                                     {id_celular ? "Actualizar" : "Registrar"}
                                 </Button>
