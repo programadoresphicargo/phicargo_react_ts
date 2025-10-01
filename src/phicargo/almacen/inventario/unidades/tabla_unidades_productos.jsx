@@ -200,7 +200,7 @@ const UnidadesProductos = ({ data2, fetch }) => {
         <Popover placement="right">
           <PopoverTrigger>
             {session?.user.permissions.includes(218) && (
-              <Button color="primary" isLoading={isLoading}>Crear unidades</Button>
+              <Button color="primary" isLoading={isLoading} radius='full'>Crear unidades</Button>
             )}
           </PopoverTrigger>
           <PopoverContent>

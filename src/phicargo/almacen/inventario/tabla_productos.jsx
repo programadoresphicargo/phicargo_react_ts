@@ -186,6 +186,7 @@ const TablaProductos = ({ close, tipo }) => {
             className='text-white'
             startContent={<i class="bi bi-plus-lg"></i>}
             color='primary'
+            radius='full'
             isDisabled={false}
             onPress={async () => {
               setIDEpp(null);
@@ -198,10 +199,11 @@ const TablaProductos = ({ close, tipo }) => {
         <Button
           className='text-white'
           startContent={<i class="bi bi-arrow-clockwise"></i>}
-          color='primary'
+          color='success'
+          radius='full'
           isDisabled={false}
           onPress={() => fetchData()}
-        >Actualizar tablero
+        >Actualizar
         </Button>
 
       </Box >
