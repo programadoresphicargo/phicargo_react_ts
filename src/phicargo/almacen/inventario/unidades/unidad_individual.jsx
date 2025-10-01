@@ -19,6 +19,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import odooApi from '@/api/odoo-api';
+import toast from 'react-hot-toast';
 
 const Unidad = ({ id_unidad, open, handleClose }) => {
   const [data, setData] = useState({});
@@ -65,6 +66,24 @@ const Unidad = ({ id_unidad, open, handleClose }) => {
     if (!data?.historial) return [];
     return Array.isArray(data.historial) ? data.historial : [data.historial];
   }, [data]);
+
+  const [isLoadingBaja, setLoadingBaja] = useState(false);
+
+  const BajaUnidad = async () => {
+    try {
+      setLoadingBaja(true);
+      let response = await odooApi.patch('/tms_travel/unidades_equipo/baja/' + id_unidad);
+      if (response.data.status == 'success') {
+        toast.success(response.data.message);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error('Error al guardar: ' + (error?.message || JSON.stringify(error)));
+    } finally {
+      setLoadingBaja(false);
+    }
+  };
 
   const table = useMaterialReactTable({
     columns,
@@ -125,6 +144,7 @@ const Unidad = ({ id_unidad, open, handleClose }) => {
           className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
         >
           {data?.id_unidad ? `Unidad #${data.id_unidad}` : ''}
+          <Button color='danger' onPress={() => BajaUnidad()} radius='full' isLoading={isLoadingBaja}>Baja</Button>
         </h1>
       </Box>
     ),
