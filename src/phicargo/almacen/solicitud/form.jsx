@@ -352,7 +352,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                                     Cerrar solicitud
                                 </Button>
                             )}
-                            {data?.x_studio_estado == "confirmado" && (
+                            {data?.x_studio_estado !== "borrador" && data?.x_studio_estado !== "cancelada" && (
                                 <Button
                                     radius="full"
                                     color="success"
