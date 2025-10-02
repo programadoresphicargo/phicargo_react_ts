@@ -135,6 +135,21 @@ export default function PlantaViaje() {
                                 <span className="font-semibold text-gray-600">Dirección:</span>
                                 <div>{direccion.name || "—"}</div>
                                 <div>{direccion.street || "—"}</div>
+
+                                {viaje?.x_modo_bel === "exp" ? (
+                                    <>
+                                        <div>Código postal: {direccion?.codigo_postal_origen || "—"}</div>
+                                        <div>Estado: {direccion?.estado_origen || "—"}</div>
+                                        <div>Municipio: {direccion?.municipio_origen || "—"}</div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <div>Código postal: {direccion?.codigo_postal_destino || "—"}</div>
+                                        <div>Estado: {direccion?.estado_destino || "—"}</div>
+                                        <div>Municipio: {direccion?.municipio_destino || "—"}</div>
+                                    </>
+                                )}
+
                             </div>
                         ) : (
                             <div>No hay dirección asociada.</div>
