@@ -54,7 +54,7 @@ const VehicleInspectionPage = () => {
     },
     toolbarActions: (
       <div className="flex items-center gap-4">
-        <MonthSelect onMonthChange={setMonth} />
+        <MonthSelect onMonthChange={setMonth} inspectionType='cleaning' />
         <YearSelect onYearChange={setYear} />
       </div>
     ),

@@ -2,19 +2,50 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface Props {
   defaultMonth?: string | number;
+  inspectionType?: string;
   onMonthChange?: (month: string | number) => void;
 }
 
-export const MonthSelect = ({ defaultMonth, onMonthChange }: Props) => {
+export const MonthSelect = ({ defaultMonth, inspectionType, onMonthChange }: Props) => {
   const [month, setMonth] = useState<string | number>(
     defaultMonth || new Date().getMonth() + 1,
   );
 
-  const handleChange = (event: SelectChangeEvent<typeof month>) => {
+  const [options, setOptions] = useState<{ value: number; label: string }[]>([]);
+
+  useEffect(() => {
+    if (inspectionType === 'legal') {
+      // Trimestres
+      setOptions([
+        { value: 1, label: 'Enero, Febrero, Marzo' },
+        { value: 2, label: 'Abril, Mayo, Junio' },
+        { value: 3, label: 'Julio, Agosto, Septiembre' },
+        { value: 4, label: 'Octubre, Noviembre, Diciembre' },
+      ]);
+    } else {
+      // Meses normales
+      setOptions([
+        { value: 1, label: 'Enero' },
+        { value: 2, label: 'Febrero' },
+        { value: 3, label: 'Marzo' },
+        { value: 4, label: 'Abril' },
+        { value: 5, label: 'Mayo' },
+        { value: 6, label: 'Junio' },
+        { value: 7, label: 'Julio' },
+        { value: 8, label: 'Agosto' },
+        { value: 9, label: 'Septiembre' },
+        { value: 10, label: 'Octubre' },
+        { value: 11, label: 'Noviembre' },
+        { value: 12, label: 'Diciembre' },
+      ]);
+    }
+  }, [inspectionType]);
+
+  const handleChange = (event: SelectChangeEvent<number | string>) => {
     setMonth(event.target.value);
     onMonthChange?.(event.target.value);
   };
@@ -30,18 +61,11 @@ export const MonthSelect = ({ defaultMonth, onMonthChange }: Props) => {
         onChange={handleChange}
         size='small'
       >
-        <MenuItem value={1}>Enero</MenuItem>
-        <MenuItem value={2}>Febrero</MenuItem>
-        <MenuItem value={3}>Marzo</MenuItem>
-        <MenuItem value={4}>Abril</MenuItem>
-        <MenuItem value={5}>Mayo</MenuItem>
-        <MenuItem value={6}>Junio</MenuItem>
-        <MenuItem value={7}>Julio</MenuItem>
-        <MenuItem value={8}>Agosto</MenuItem>
-        <MenuItem value={9}>Septiembre</MenuItem>
-        <MenuItem value={10}>Octubre</MenuItem>
-        <MenuItem value={11}>Noviembre</MenuItem>
-        <MenuItem value={12}>Diciembre</MenuItem>
+        {options.map((opt) => (
+          <MenuItem key={opt.value} value={opt.value}>
+            {opt.label}
+          </MenuItem>
+        ))}
       </Select>
     </FormControl>
   );

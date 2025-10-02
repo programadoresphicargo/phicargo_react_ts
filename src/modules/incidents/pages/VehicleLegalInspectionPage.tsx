@@ -55,9 +55,9 @@ const VehicleLegalInspectionPage = () => {
     },
     toolbarActions: (
       <div className="flex items-center gap-4">
-        <MonthSelect onMonthChange={setMonth} />
+        <MonthSelect onMonthChange={setMonth} inspectionType='legal' />
         <YearSelect onYearChange={setYear} />
-        <Button color='success' className='text-white' onPress={() => exportToCSV(query.data || [], columns, "inspecciones.csv")}>Exportar</Button>
+        <Button color='success' className='text-white' onPress={() => exportToCSV(query.data || [], columns, "inspecciones.csv")} isDisabled>Exportar</Button>
       </div>
     ),
   });
