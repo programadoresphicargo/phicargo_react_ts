@@ -117,7 +117,7 @@ export default function PlantaViaje() {
                             </div>
                         )}
                         {cliente.x_url_google_maps && (
-                            <Button as={Link} href={cliente.x_url_google_maps} target="_blank" color="success" className="text-white">
+                            <Button as={Link} href={cliente.x_url_google_maps} target="_blank" color="success" className="text-white" radius="full">
                                 Ver en Google Maps
                             </Button>
                         )}
@@ -134,10 +134,10 @@ export default function PlantaViaje() {
                 </DialogContent>
 
                 <DialogActions>
-                    <Button isLoading={isLoading} color="primary" onPress={handleSubmit} className="text-white">
+                    <Button isLoading={isLoading} color="primary" onPress={handleSubmit} className="text-white" radius="full">
                         Guardar
                     </Button>
-                    <Button color="default" onPress={onOpenChange} className="text-white">
+                    <Button color="default" onPress={onOpenChange} className="text-white" radius="full">
                         Cerrar
                     </Button>
                 </DialogActions>
