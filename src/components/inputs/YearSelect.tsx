@@ -18,7 +18,7 @@ export const YearSelect = ({ defaultYear, onYearChange }: Props) => {
 
   return (
     <Select
-      className="w-[300px]"
+      className="w-[250px]"
       variant="bordered"
       label="Año"
       selectedKeys={[String(year)]}

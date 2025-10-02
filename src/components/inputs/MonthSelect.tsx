@@ -52,7 +52,7 @@ export const MonthSelect = ({ defaultMonth, inspectionType, onMonthChange }: Pro
       variant="bordered"
       label="Mes"
       selectedKeys={[String(month)]}
-      className="w-[300px]"
+      className="w-[250px]"
       onSelectionChange={(keys) => {
         const selected = Array.from(keys)[0];
         handleChange(selected as string | number);
