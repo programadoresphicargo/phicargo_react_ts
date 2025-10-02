@@ -15,9 +15,6 @@ export default function PlantaViaje() {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const { viaje, getViaje } = useContext(ViajeContext);
 
-    // --------------------------------------------------
-    // Mantengo la variable `direccion` como pediste
-    // --------------------------------------------------
     const direccion = useMemo(() => {
         if (!viaje) return null;
         return viaje?.x_modo_bel === "exp" ? viaje?.direccion_origen : viaje?.direccion_destino;
