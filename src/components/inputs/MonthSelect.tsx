@@ -14,9 +14,21 @@ export const MonthSelect = ({ defaultMonth, inspectionType, onMonthChange }: Pro
 
   const [options, setOptions] = useState<{ value: number; label: string }[]>([]);
 
+  const getTrimester = (m: number) => {
+    if ([1, 2, 3].includes(m)) return 1;
+    if ([4, 5, 6].includes(m)) return 2;
+    if ([7, 8, 9].includes(m)) return 3;
+    if ([10, 11, 12].includes(m)) return 4;
+    return m; // fallback
+  };
+
   useEffect(() => {
     if (inspectionType === "legal") {
-      // Trimestres
+      // Si es tipo legal, forzamos el valor a trimestre
+      const trimesterValue = getTrimester(Number(month));
+      setMonth(trimesterValue);
+      onMonthChange?.(trimesterValue);
+
       setOptions([
         { value: 1, label: "Enero, Febrero, Marzo" },
         { value: 2, label: "Abril, Mayo, Junio" },
