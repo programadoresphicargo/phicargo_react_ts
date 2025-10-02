@@ -1,8 +1,5 @@
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { useState } from 'react';
+import { Select, SelectItem } from "@heroui/react";
+import { useState } from "react";
 
 interface Props {
   defaultYear?: string | number;
@@ -11,32 +8,30 @@ interface Props {
 
 export const YearSelect = ({ defaultYear, onYearChange }: Props) => {
   const [year, setYear] = useState<string | number>(
-    defaultYear || new Date().getFullYear(),
+    defaultYear || new Date().getFullYear()
   );
 
-  const handleChange = (event: SelectChangeEvent<typeof year>) => {
-    setYear(event.target.value);
-    onYearChange?.(event.target.value);
+  const handleChange = (value: string | number) => {
+    setYear(value);
+    onYearChange?.(value);
   };
 
   return (
-    <FormControl sx={{ m: 1, minWidth: 120 }}>
-      <InputLabel id="year-select-label">Año</InputLabel>
-      <Select
-        labelId="year-select-label"
-        id="year-select"
-        value={year}
-        label="Año"
-        onChange={handleChange}
-        size='small'
-      >
-        <MenuItem value={2025}>2025</MenuItem>
-        <MenuItem value={2026}>2026</MenuItem>
-        <MenuItem value={2027}>2027</MenuItem>
-        <MenuItem value={2028}>2028</MenuItem>
-        <MenuItem value={2029}>2029</MenuItem>
-      </Select>
-    </FormControl>
+    <Select
+      className="w-[300px]"
+      variant="bordered"
+      label="Año"
+      selectedKeys={[String(year)]}
+      onSelectionChange={(keys) => {
+        const selected = Array.from(keys)[0]; // obtiene el valor elegido
+        handleChange(selected);
+      }}
+    >
+      {["2025", "2026", "2027", "2028", "2029"].map((y) => (
+        <SelectItem key={String(y)}>
+          {y}
+        </SelectItem>
+      ))}
+    </Select>
   );
 };
-
