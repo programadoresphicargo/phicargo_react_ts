@@ -75,6 +75,7 @@ const EntregaMonitoreo = lazy(() => import('../phicargo/monitoreo/monitoreo'));
 const CodigosPostales = lazy(() => import('../phicargo/viajes/codigos_postales/index'));
 const Geocercas = lazy(() => import('../phicargo/viajes/geocercas/geocerca'));
 const ChatBot = lazy(() => import('../phicargo/chat/chat'))
+const Minutas = lazy(() => import('../phicargo/minutas/control_minutas'))
 
 const DetencionesTable = lazy(
   () => import('../phicargo/reportes/llegadas_tarde/llegadas_tarde'),
@@ -517,6 +518,15 @@ export const PrivateRoutes = () => {
           element={
             <Suspense fallback={<LoadingPage />}>
               <Lineas></Lineas>
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/minutas"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <Minutas></Minutas>
             </Suspense>
           }
         />

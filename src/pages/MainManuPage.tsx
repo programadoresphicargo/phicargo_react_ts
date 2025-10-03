@@ -6,6 +6,7 @@ import dashboardIcon from '../assets/menu/dashboardIcon.png';
 import maniobras_img from '../assets/menu/maniobras.png';
 import monitoreo_img from '../assets/menu/monitoreo.png';
 import complaints from '../assets/menu/complaints.png';
+import minutas from '../assets/menu/minutas.png';
 import incidentsImg from '../assets/menu/incidents.png';
 import reportesImg from '../assets/menu/reportes.png';
 import shipingcontainer from '../assets/menu/shiping-container.png';
@@ -122,6 +123,12 @@ const menuItems: MenuItemType[] = [
     icon: complaints,
     label: 'Quejas',
     link: '/quejas',
+    requiredPermissions: [213],
+  },
+  {
+    icon: minutas,
+    label: 'Minutas',
+    link: '/minutas',
     requiredPermissions: [213],
   },
   {

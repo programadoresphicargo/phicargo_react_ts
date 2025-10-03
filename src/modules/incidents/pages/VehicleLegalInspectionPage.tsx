@@ -120,7 +120,7 @@ const RowActions = ({
           </span>
         </Tooltip>
       )}
-      {!hasInspection && canInspect && (
+      {!hasInspection && (
         <Tooltip title={'Registrar revisión'}>
           <span>
             <IconButton
