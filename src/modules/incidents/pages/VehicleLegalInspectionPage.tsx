@@ -103,7 +103,7 @@ const RowActions = ({
 }) => {
   const hasInspection = !!inspection.inspection;
 
-  const canInspect = year === now.getFullYear() && month === now.getMonth() + 1;
+  //const canInspect = year === now.getFullYear() && month === now.getMonth() + 1;
 
   return (
     <Box sx={{ display: 'flex' }}>
