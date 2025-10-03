@@ -103,7 +103,8 @@ const RowActions = ({
 }) => {
   const hasInspection = !!inspection.inspection;
 
-  //const canInspect = year === now.getFullYear() && month === now.getMonth() + 1;
+  const canInspect = year === now.getFullYear() && month === now.getMonth() + 1;
+  canInspect = true;
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -120,7 +121,7 @@ const RowActions = ({
           </span>
         </Tooltip>
       )}
-      {!hasInspection && (
+      {!hasInspection && canInspect && (
         <Tooltip title={'Registrar revisión'}>
           <span>
             <IconButton
