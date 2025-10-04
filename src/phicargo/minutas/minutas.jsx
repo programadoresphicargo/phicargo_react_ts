@@ -19,6 +19,7 @@ const { VITE_ODOO_API_URL } = import.meta.env;
 const Minutas = ({ }) => {
 
   const [open, setOpen] = React.useState(false);
+  const [id_minuta, setMinuta] = React.useState(0);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -26,7 +27,7 @@ const Minutas = ({ }) => {
 
   const handleClose = () => {
     setOpen(false);
-    fetchData();
+    setMinuta(null);
   };
 
   const [data, setData] = useState([]);
@@ -55,7 +56,11 @@ const Minutas = ({ }) => {
         header: 'ID Minuta',
       },
       {
-        accessorKey: 'usuario_registro',
+        accessorKey: 'participantes',
+        header: 'Participantes',
+      },
+      {
+        accessorKey: 'usuario_registro_nombre',
         header: 'Usuario registro',
       },
       {
@@ -80,6 +85,15 @@ const Minutas = ({ }) => {
       density: 'compact',
       pagination: { pageSize: 80 },
     },
+    muiTableBodyRowProps: ({ row }) => ({
+      onClick: ({ event }) => {
+        handleClickOpen();
+        setMinuta(row.original.id_minuta);
+      },
+      style: {
+        cursor: 'pointer',
+      },
+    }),
     muiTablePaperProps: {
       elevation: 0,
       sx: {
@@ -114,7 +128,9 @@ const Minutas = ({ }) => {
           flexWrap: 'wrap',
         }}
       >
-        <MinutaForm></MinutaForm>
+        <MinutaForm open={open} handleClose={handleClose} id_minuta={id_minuta}></MinutaForm>
+        <Button color='primary' className='text-white' onPress={() => handleClickOpen()} radius='full'>Nuevo</Button>
+        <Button color='success' className='text-white' onPress={() => fetchData()} radius='full'>Refrescar</Button>
       </Box>
     ),
   });

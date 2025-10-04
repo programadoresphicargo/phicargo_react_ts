@@ -6,9 +6,10 @@ const MinutasContext = createContext();
 // Provider para envolver la app
 export const MinutasProvider = ({ children }) => {
  const [selectedRows, setSelectedRows] = useState([]);
+ const [isEditing, setIsEditing] = useState(false);
 
  return (
-  <MinutasContext.Provider value={{ selectedRows, setSelectedRows }}>
+  <MinutasContext.Provider value={{ selectedRows, setSelectedRows, isEditing, setIsEditing }}>
    {children}
   </MinutasContext.Provider>
  );

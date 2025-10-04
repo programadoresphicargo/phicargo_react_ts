@@ -21,7 +21,7 @@ const { VITE_ODOO_API_URL } = import.meta.env;
 const ParticipantesMinutas = ({ estado }) => {
 
   const [open, setOpen] = React.useState(false);
-  const { selectedRows, setSelectedRows } = useMinutas();
+  const { selectedRows, setSelectedRows, isEditing, setIsEditing } = useMinutas();
   const [id_acceso, setIDAcceso] = useState(0);
   const handleClickOpen = () => {
     setOpen(true);
@@ -70,16 +70,19 @@ const ParticipantesMinutas = ({ estado }) => {
         id: 'acciones',
         header: 'Acciones',
         Cell: ({ row }) => (
-          <button
-            style={{ color: "red", cursor: "pointer" }}
-            onClick={() => handleEliminar(row.original)}
+          <Button
+            size='sm'
+            isDisabled={!isEditing}
+            color='danger'
+            onPress={() => handleEliminar(row.original)}
+            radius='full'
           >
             ❌ Eliminar
-          </button>
+          </Button>
         ),
       },
     ],
-    []
+    [isEditing]
   );
 
   const handleEliminar = (rowToDelete) => {

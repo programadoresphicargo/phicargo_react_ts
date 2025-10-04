@@ -23,7 +23,7 @@ export default function AñadirParticipantes() {
  const [open, setOpen] = React.useState(false);
  const [data, setData] = useState([]);
  const [isLoading2, setLoading] = useState(false);
- const { selectedRows, setSelectedRows } = useMinutas();
+ const { selectedRows, setSelectedRows, isEditing, setIsEditing } = useMinutas();
 
  const handleClickOpen = () => {
   setOpen(true);
@@ -105,14 +105,13 @@ export default function AñadirParticipantes() {
  const handleAñadir = () => {
   const seleccionados = table.getSelectedRowModel().rows.map((row) => row.original);
   console.log("Participantes seleccionados:", seleccionados);
-  setSelectedRows(seleccionados); // ✅ guardamos en el contexto
+  setSelectedRows(seleccionados);
   handleClose();
-  // aquí puedes guardarlos en un estado o enviarlos a otro componente
  };
 
  return (
   <React.Fragment>
-   <Button color="primary" onPress={handleClickOpen} radius="full">
+   <Button color="primary" onPress={handleClickOpen} radius="full" isDisabled={!isEditing}>
     Añadir participante
    </Button>
    <Dialog

@@ -10,55 +10,90 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
-import { Button, Card, CardBody, Textarea } from '@heroui/react';
+import { Button, Card, CardBody, Progress, Textarea } from '@heroui/react';
 import ParticipantesMinutas from './participantes';
 import { Grid } from "@mui/material";
 import Stack from '@mui/material/Stack';
 import odooApi from '@/api/odoo-api';
 import toast from 'react-hot-toast';
+import { useMinutas } from './context';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
  return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function MinutaForm() {
- const [open, setOpen] = React.useState(false);
+export default function MinutaForm({ open, handleClose, id_minuta }) {
 
  const [puntos, setPuntos] = useState("");
  const [desarrollo, setDesarrollo] = useState("");
+ const [isLoading, setLoading] = useState();
+ const { selectedRows, setSelectedRows, isEditing, setIsEditing } = useMinutas();
 
- const handleClickOpen = () => {
-  setOpen(true);
+ const fetchData = async () => {
+
+  if (!id_minuta) {
+   setPuntos("");
+   setDesarrollo("");
+   setSelectedRows([]);
+  }
+
+  try {
+   setLoading(true);
+   const response = await odooApi.get('/minutas/' + id_minuta);
+   setPuntos(response.data.puntos_discusion);
+   setDesarrollo(response.data.desarrollo_reunion);
+   setSelectedRows(response.data.participantes);
+   setLoading(false);
+  } catch (error) {
+   setLoading(false);
+   console.error('Error al obtener los datos:', error);
+  }
  };
 
- const handleClose = () => {
-  setOpen(false);
- };
+ useEffect(() => {
+  fetchData();
+  setIsEditing(false);
+ }, [open]);
 
  const handleSubmit = async () => {
+
+  if (selectedRows.length <= 0) {
+   toast.error('Deben existir participantes a esta minuta.')
+   return;
+  }
+
   try {
    const payload = {
-    puntos_discusion: puntos,
-    desarrollo_reunion: desarrollo,
+    data: {
+     puntos_discusion: puntos,
+     desarrollo_reunion: desarrollo
+    },
+    participantes: selectedRows
    };
 
-   const response = await odooApi.post('/minutas/', payload);
-   if (response.data.state == "success") {
+   let response;
+
+   if (id_minuta) {
+    response = await odooApi.patch(`/minutas/${id_minuta}/`, payload);
+   } else {
+    response = await odooApi.post('/minutas/', payload);
+   }
+
+   if (response.data.state === "success") {
     toast.success(response.data.message);
     handleClose();
+    setIsEditing(false);
    } else {
     toast.error(response.data.message);
    }
+
   } catch (error) {
-   toast.error("Error al enviar datos:" + error);
+   toast.error("Error al enviar datos: " + error);
   }
  };
 
  return (
   <React.Fragment>
-   <Button color='primary' onPress={handleClickOpen} radius='full'>
-    Nuevo
-   </Button>
    <Dialog
     fullScreen
     open={open}
@@ -67,7 +102,13 @@ export default function MinutaForm() {
      transition: Transition,
     }}
    >
-    <AppBar sx={{ position: 'relative' }} elevation={0}>
+    <AppBar
+     elevation={0}
+     position="static"
+     sx={{
+      background: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
+      padding: '0 16px',
+     }}>
      <Toolbar>
       <IconButton
        edge="start"
@@ -81,16 +122,63 @@ export default function MinutaForm() {
        Minuta
       </Typography>
       <Button autoFocus color="inherit" onClick={handleClose}>
-       save
+       Cerrar
       </Button>
      </Toolbar>
     </AppBar>
 
-    <Stack spacing={2} direction="row">
-     <Button color='success' onPress={() => handleSubmit()} className='text-white'>Registrar</Button>
-    </Stack>
+    {isLoading && (
+     <Progress isIndeterminate size='sm'></Progress>
+    )}
 
-    <Grid container spacing={2}>
+    <Grid container spacing={2} sx={{ p: 2 }}>
+
+     <Grid item xs={12}>
+      <Stack spacing={2} direction="row">
+
+       {id_minuta && (
+        <h1>Minuta No.{id_minuta}</h1>
+       )}
+
+       {!id_minuta && (
+        <Button color="success" onPress={handleSubmit} className="text-white" radius='full'>
+         Registrar
+        </Button>
+       )}
+
+       {!isEditing && (
+        <Button
+         color="primary"
+         onPress={() => setIsEditing(true)}
+         className="text-white"
+         radius='full'
+        >
+         Editar
+        </Button>
+       )}
+
+       {isEditing && (
+        <Button
+         color="success"
+         onPress={handleSubmit}
+         className="text-white"
+         radius='full'
+        >
+         Actualizar
+        </Button>
+       )}
+
+       <Button
+        color="success"
+        onPress={handleSubmit}
+        className="text-white"
+        radius='full'
+       >
+        Imprimir formato
+       </Button>
+
+      </Stack>
+     </Grid>
      {/* Primer componente (4 columnas) */}
      <Grid item xs={5}>
       <ParticipantesMinutas />
@@ -104,6 +192,7 @@ export default function MinutaForm() {
          variant="bordered"
          label="PUNTOS DE DISCUSIÓN / TEMAS A TRATAR"
          value={puntos}            // ✅ valor controlado
+         isDisabled={!isEditing}
          onChange={(e) => setPuntos(e.target.value)}  // ✅ actualizar estado
         />
 
@@ -111,6 +200,7 @@ export default function MinutaForm() {
          variant="bordered"
          label="DESARROLLO DE LA REUNIÓN"
          value={desarrollo}        // ✅ valor controlado
+         isDisabled={!isEditing}
          onChange={(e) => setDesarrollo(e.target.value)} // ✅ actualizar estado
         />
        </CardBody>
