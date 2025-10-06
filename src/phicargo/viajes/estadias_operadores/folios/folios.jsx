@@ -93,7 +93,7 @@ const PagosEstadiasOperadores = ({ }) => {
                 header: 'Horas en planta',
             },
             {
-                accessorKey: 'horas_estadias',
+                accessorKey: 'x_horas_estadias',
                 header: 'Horas libres',
             },
             {

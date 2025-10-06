@@ -103,7 +103,7 @@ const PagosPeriodo = ({ open, handleClose, id_usuario, startDate, endDate }) => 
                 header: 'Horas en planta',
             },
             {
-                accessorKey: 'horas_estadias',
+                accessorKey: 'x_horas_estadias',
                 header: 'Horas libres',
             },
             {

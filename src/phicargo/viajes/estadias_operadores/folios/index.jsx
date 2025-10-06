@@ -55,8 +55,8 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
             });
             const info = response.data[0];
             setData(info);
-            setHorasPagar(info.horas_planta - info.horas_estadias);
-            setTotal((info.horas_planta - info.horas_estadias) * 62.50);
+            setHorasPagar(info.horas_planta - info.x_horas_estadias);
+            setTotal((info.horas_planta - info.x_horas_estadias) * 62.50);
             setMotivo("");
         } catch (error) {
             console.error('Error al obtener los datos:', error);
@@ -328,7 +328,7 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
                                         <TableCell>{data?.llegada_planta}</TableCell>
                                         <TableCell>{data?.salida_planta}</TableCell>
                                         <TableCell>{data?.horas_planta}</TableCell>
-                                        <TableCell>{data?.horas_estadias}</TableCell>
+                                        <TableCell>{data?.x_horas_estadias}</TableCell>
                                         <TableCell>
                                             <NumberInput
                                                 isDisabled={true}
