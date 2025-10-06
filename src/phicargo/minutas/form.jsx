@@ -35,6 +35,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
    setPuntos("");
    setDesarrollo("");
    setSelectedRows([]);
+   setIsEditing(false);
   }
 
   try {
@@ -59,6 +60,16 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
 
   if (selectedRows.length <= 0) {
    toast.error('Deben existir participantes a esta minuta.')
+   return;
+  }
+
+  if (puntos == "") {
+   toast.error('Puntos de discución es obligatorio.')
+   return;
+  }
+
+  if (desarrollo == "") {
+   toast.error('Desarrollo de reunión es obligatorio.')
    return;
   }
 
@@ -89,6 +100,20 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
 
   } catch (error) {
    toast.error("Error al enviar datos: " + error);
+  }
+ };
+
+ const ImprimirFormato = async () => {
+  try {
+   // Obtenemos la URL completa que Odoo usaría
+   const url = `/minutas/formato/${id_minuta}`;
+
+   // Si solo necesitas abrirla, sin descargar ni procesar:
+   const fullUrl = odooApi.defaults.baseURL + url; // 👈 combina el baseURL del axios
+   window.open(fullUrl, "_blank"); // abre en nueva pestaña sin cerrar la actual
+
+  } catch (error) {
+   toast.error("Error al abrir formato: " + error);
   }
  };
 
@@ -170,7 +195,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
 
        <Button
         color="success"
-        onPress={handleSubmit}
+        onPress={ImprimirFormato}
         className="text-white"
         radius='full'
        >
@@ -194,6 +219,8 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
          value={puntos}            // ✅ valor controlado
          isDisabled={!isEditing}
          onChange={(e) => setPuntos(e.target.value)}  // ✅ actualizar estado
+         isInvalid={puntos == "" ? true : false}
+         errorMessage="Campo obligatorio"
         />
 
         <Textarea
@@ -202,6 +229,8 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
          value={desarrollo}        // ✅ valor controlado
          isDisabled={!isEditing}
          onChange={(e) => setDesarrollo(e.target.value)} // ✅ actualizar estado
+         isInvalid={desarrollo == "" ? true : false}
+         errorMessage="Campo obligatorio"
         />
        </CardBody>
       </Card>

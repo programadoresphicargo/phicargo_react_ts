@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import { ViajeContext } from '../context/viajeContext';
 import axios from "axios";
@@ -324,13 +324,24 @@ export const useJourneyDialogs = () => {
             });
             const data = response.data;
 
+            // Si hay folios creados
             if (Array.isArray(data.folios_creados) && data.folios_creados.length > 0) {
-                const folio = data.folios_creados[0];
-                toast.success(`Viaje genera estadías,  ${folio.mensaje} (ID: ${folio.id_folio})`, { duration: 10000, });
+                data.folios_creados.forEach(folio => {
+                    toast.success(
+                        `Viaje genera estadías, ${folio.mensaje} (ID: ${folio.id_folio})`,
+                        { duration: 10000 }
+                    );
+                });
             }
 
+            // Si hay viajes que no generaron estadía
             if (Array.isArray(data.viajes_sin_estadia) && data.viajes_sin_estadia.length > 0) {
-                toast.success("Viaje no genera estadías", { duration: 10000, });
+                data.viajes_sin_estadia.forEach(viaje => {
+                    toast.success(
+                        `Viaje ID ${viaje.id_viaje}: ${viaje.mensaje}`,
+                        { duration: 10000 }
+                    );
+                });
             }
 
         } catch (error) {

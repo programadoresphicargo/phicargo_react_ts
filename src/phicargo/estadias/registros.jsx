@@ -83,7 +83,8 @@ const RegistrosEstadias = () => {
     () => [
       { accessorKey: 'travel_name', header: 'Referencia' },
       { accessorKey: 'cliente', header: 'Cliente', size: 10 },
-      { accessorKey: 'horas_estadias', header: 'Horas estadias' },
+      { accessorKey: 'x_horas_gracia', header: 'Horas iniciales gratis' },
+      { accessorKey: 'x_horas_estadias', header: 'Horas estadias' },
       { accessorKey: 'llegada_planta_programada', header: 'Llegada planta programada', size: 150 },
       { accessorKey: 'llegada_planta', header: 'Llegada planta', size: 150 },
       { accessorKey: 'diferencia_llegada_planta', header: 'Diferencia', size: 150 },
