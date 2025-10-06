@@ -57,7 +57,8 @@ const EstadiasForm = () => {
                             <Chip color="primary" size="lg">{data[0]?.travel_name}</Chip>
                             <div className="mt-3">
                                 <p>Cliente: {data[0]?.cliente}</p>
-                                <p>Horas estadias permitidas: {data[0]?.horas_estadias}</p>
+                                <p>Primeras horas gratuitas: {data[0]?.x_horas_gracia}</p>
+                                <p>Horas estadias permitidas: {data[0]?.x_horas_estadias}</p>
                                 <p>Operador: {data[0]?.employee_name}</p>
                             </div>
                         </Grid>
