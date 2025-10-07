@@ -10,13 +10,15 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
-import { Button, Card, CardBody, Progress, Textarea } from '@heroui/react';
+import { Button, Card, CardBody, CardHeader, Progress, Textarea } from '@heroui/react';
 import ParticipantesMinutas from './participantes';
 import { Grid } from "@mui/material";
 import Stack from '@mui/material/Stack';
 import odooApi from '@/api/odoo-api';
 import toast from 'react-hot-toast';
 import { useMinutas } from './context';
+import TareasMinutas from './tareas';
+import ExampleWithProviders from './tareas';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
  return <Slide direction="up" ref={ref} {...props} />;
@@ -27,7 +29,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
  const [puntos, setPuntos] = useState("");
  const [desarrollo, setDesarrollo] = useState("");
  const [isLoading, setLoading] = useState();
- const { selectedRows, setSelectedRows, isEditing, setIsEditing } = useMinutas();
+ const { selectedRows, setSelectedRows, isEditing, setIsEditing, tareas, setRecords } = useMinutas();
 
  const fetchData = async () => {
 
@@ -35,6 +37,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
    setPuntos("");
    setDesarrollo("");
    setSelectedRows([]);
+   setRecords([]);
    setIsEditing(false);
   }
 
@@ -44,6 +47,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
    setPuntos(response.data.puntos_discusion);
    setDesarrollo(response.data.desarrollo_reunion);
    setSelectedRows(response.data.participantes);
+   setRecords(response.data.tareas);
    setLoading(false);
   } catch (error) {
    setLoading(false);
@@ -79,7 +83,8 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
      puntos_discusion: puntos,
      desarrollo_reunion: desarrollo
     },
-    participantes: selectedRows
+    participantes: selectedRows,
+    tareas: tareas
    };
 
    let response;
@@ -211,29 +216,70 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
 
      {/* Segundo componente (8 columnas) */}
      <Grid item xs={7}>
-      <Card>
-       <CardBody>
-        <Textarea
-         variant="bordered"
-         label="PUNTOS DE DISCUSIÓN / TEMAS A TRATAR"
-         value={puntos}            // ✅ valor controlado
-         isDisabled={!isEditing}
-         onChange={(e) => setPuntos(e.target.value)}  // ✅ actualizar estado
-         isInvalid={puntos == "" ? true : false}
-         errorMessage="Campo obligatorio"
-        />
+      <div className="w-full flex flex-col gap-4">
 
-        <Textarea
-         variant="bordered"
-         label="DESARROLLO DE LA REUNIÓN"
-         value={desarrollo}        // ✅ valor controlado
-         isDisabled={!isEditing}
-         onChange={(e) => setDesarrollo(e.target.value)} // ✅ actualizar estado
-         isInvalid={desarrollo == "" ? true : false}
-         errorMessage="Campo obligatorio"
-        />
-       </CardBody>
-      </Card>
+       <Card>
+        <CardHeader
+         style={{
+          background: 'linear-gradient(90deg, #0b2149, #002887)',
+          color: 'white',
+          fontWeight: 'bold'
+         }}>
+         Puntos de discusión / Temas a tratar
+        </CardHeader>
+        <Divider></Divider>
+        <CardBody>
+         <Textarea
+          variant="bordered"
+          label="PUNTOS DE DISCUSIÓN / TEMAS A TRATAR"
+          value={puntos}            // ✅ valor controlado
+          isDisabled={!isEditing}
+          onChange={(e) => setPuntos(e.target.value)}  // ✅ actualizar estado
+          isInvalid={puntos == "" ? true : false}
+          errorMessage="Campo obligatorio"
+         />
+        </CardBody>
+       </Card>
+
+       <Card>
+        <CardHeader
+         style={{
+          background: 'linear-gradient(90deg, #0b2149, #002887)',
+          color: 'white',
+          fontWeight: 'bold'
+         }}>
+         Desarrollo de la reunión
+        </CardHeader>
+        <Divider></Divider>
+        <CardBody>
+         <Textarea
+          variant="bordered"
+          label="DESARROLLO DE LA REUNIÓN"
+          value={desarrollo}        // ✅ valor controlado
+          isDisabled={!isEditing}
+          onChange={(e) => setDesarrollo(e.target.value)} // ✅ actualizar estado
+          isInvalid={desarrollo == "" ? true : false}
+          errorMessage="Campo obligatorio"
+         />
+        </CardBody>
+       </Card>
+
+       <Card>
+        <CardHeader
+         style={{
+          background: 'linear-gradient(90deg, #0b2149, #002887)',
+          color: 'white',
+          fontWeight: 'bold'
+         }}>
+         Tareas
+        </CardHeader>
+        <Divider></Divider>
+        <CardBody>
+         <ExampleWithProviders></ExampleWithProviders>
+        </CardBody>
+       </Card>
+
+      </div>
      </Grid>
     </Grid>
 

@@ -7,9 +7,10 @@ const MinutasContext = createContext();
 export const MinutasProvider = ({ children }) => {
  const [selectedRows, setSelectedRows] = useState([]);
  const [isEditing, setIsEditing] = useState(false);
+ const [tareas, setRecords] = useState([]);
 
  return (
-  <MinutasContext.Provider value={{ selectedRows, setSelectedRows, isEditing, setIsEditing }}>
+  <MinutasContext.Provider value={{ selectedRows, setSelectedRows, isEditing, setIsEditing, tareas, setRecords }}>
    {children}
   </MinutasContext.Provider>
  );

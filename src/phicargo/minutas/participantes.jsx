@@ -5,7 +5,7 @@ import {
 import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box } from '@mui/material';
-import { Button, Card, CardBody } from "@heroui/react";
+import { Button, Card, CardBody, CardHeader } from "@heroui/react";
 import { Checkbox } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -139,7 +139,6 @@ const ParticipantesMinutas = ({ estado }) => {
           flexWrap: 'wrap',
         }}
       >
-        Participantes
         <AñadirParticipantes></AñadirParticipantes>
       </Box>
     ),
@@ -148,6 +147,14 @@ const ParticipantesMinutas = ({ estado }) => {
   return (<>
     <div>
       <Card>
+        <CardHeader
+          style={{
+            background: 'linear-gradient(90deg, #0b2149, #002887)',
+            color: 'white',
+            fontWeight: 'bold'
+          }}>
+          Participantes
+        </CardHeader>
         <CardBody>
           <MaterialReactTable table={table} />
         </CardBody>
