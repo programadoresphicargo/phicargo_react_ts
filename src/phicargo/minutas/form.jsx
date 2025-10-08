@@ -181,7 +181,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
         </Button>
        )}
 
-       {!isEditing && (
+       {!isEditing && id_minuta && (
         <Button
          color="primary"
          onPress={() => setIsEditing(true)}
@@ -203,7 +203,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
         </Button>
        )}
 
-       {!isEditing && (
+       {!isEditing && id_minuta && (
         <Button
          color="success"
          onPress={ImprimirFormato}
