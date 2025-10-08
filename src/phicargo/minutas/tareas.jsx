@@ -229,7 +229,12 @@ const TareasMinutas = ({ estado }) => {
       </Box>
 
       {/* Modal agregar/editar */}
-      <Dialog open={openDialog} maxWidth="lg" onClose={() => setOpenDialog(false)}>
+      <Dialog
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
+        fullWidth        // ✅ agrega esto
+        maxWidth="md"    // ✅ ahora sí se aplica
+      >
         <DialogTitle>{editingRecord ? "Editar Registro" : "Agregar Nuevo Registro"}</DialogTitle>
         <DialogContent>
           <div className="w-full flex flex-col gap-4">
@@ -267,8 +272,6 @@ const TareasMinutas = ({ estado }) => {
                 />
               )}
             />
-
-            <h1>{editingRecord?.fecha_compromiso}</h1>
 
             <DatePicker
               hideTimeZone
