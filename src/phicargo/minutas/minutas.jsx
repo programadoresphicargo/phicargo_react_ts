@@ -58,15 +58,37 @@ const Minutas = ({ }) => {
         header: 'ID Minuta',
       },
       {
+        accessorKey: 'puntos_discusion',
+        header: 'Puntos a discusión',
+        Cell: ({ row }) => {
+          const texto = row.original.puntos_discusion || '';
+          const palabras = texto.split(' ');
+
+          // Tomamos solo las primeras 50 palabras
+          const textoRecortado =
+            palabras.length > 30
+              ? palabras.slice(0, 30).join(' ') + '...'
+              : texto;
+
+          return <div style={{ whiteSpace: 'pre-line' }}>{textoRecortado}</div>;
+        },
+      },
+      {
         accessorKey: 'participantes',
         header: 'Participantes',
         Cell: ({ row }) => {
-          const responsables = row.original.participantes;
+          const participantes = row.original.participantes;
           return (
             <div style={{ whiteSpace: 'pre-line' }}>
-              {responsables && responsables.length > 0
-                ? responsables.map(p => p.empleado).join(",\n")
-                : "Sin responsables"}
+              {participantes && participantes.length > 0 ? (
+                participantes.map((p, index) => (
+                  <div key={index} style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <i className="bi bi-person-fill"></i> {p.empleado}
+                  </div>
+                ))
+              ) : (
+                "Sin responsables"
+              )}
             </div>
           );
         },
