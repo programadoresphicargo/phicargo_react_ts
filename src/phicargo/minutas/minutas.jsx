@@ -64,7 +64,6 @@ const Minutas = ({ }) => {
           const texto = row.original.puntos_discusion || '';
           const palabras = texto.split(' ');
 
-          // Tomamos solo las primeras 50 palabras
           const textoRecortado =
             palabras.length > 30
               ? palabras.slice(0, 30).join(' ') + '...'
