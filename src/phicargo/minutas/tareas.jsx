@@ -255,7 +255,7 @@ const TareasMinutas = ({ estado }) => {
               <CloseIcon />
             </IconButton>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              {editingRecord ? "Editar tarea2" : "Agregar Nueva tarea2"}
+              {editingRecord ? "Editar tarea" : "Agregar nueva tarea"}
             </Typography>
             <Button autoFocus color="inherit" onPress={() => setOpenDialog(false)}>
               Cerrar
