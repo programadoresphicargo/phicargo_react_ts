@@ -8,6 +8,7 @@ import { useMinutas } from './context';
 import dayjs from "dayjs";
 import { parseDate } from "@internationalized/date";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
+import { now, getLocalTimeZone } from "@internationalized/date";
 
 const TareasMinutas = ({ estado }) => {
   const [data, setData] = useState([]);
@@ -121,9 +122,15 @@ const TareasMinutas = ({ estado }) => {
         const responsables = row.original.responsables;
         return (
           <div style={{ whiteSpace: 'pre-line' }}>
-            {responsables && responsables.length > 0
-              ? responsables.map(p => p.empleado).join(",\n")
-              : "Sin responsables"}
+            {responsables && responsables.length > 0 ? (
+              responsables.map((p, index) => (
+                <div key={index} style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <i className="bi bi-person-fill"></i> {p.empleado}
+                </div>
+              ))
+            ) : (
+              "Sin responsables"
+            )}
           </div>
         );
       },
@@ -133,13 +140,7 @@ const TareasMinutas = ({ estado }) => {
       header: 'Fecha Compromiso',
       Cell: ({ row }) => {
         const fecha = row.original.fecha_compromiso;
-        if (!fecha) return "Sin fecha";
-        const fechaObj = new Date(fecha);
-        return fechaObj.toLocaleDateString("es-MX", {
-          year: "numeric",
-          month: "2-digit",
-          day: "2-digit",
-        });
+        return fecha;
       },
     },
     {
@@ -267,17 +268,21 @@ const TareasMinutas = ({ estado }) => {
               )}
             />
 
+            <h1>{editingRecord?.fecha_compromiso}</h1>
+
             <DatePicker
               hideTimeZone
               showMonthAndYearPickers
               label="Fecha Compromiso"
               fullWidth
-              defaultValue={editingRecord
-                ? parseDate("2024-01-01")
-                : parseDate("2024-01-01")}
+              value={
+                editingRecord?.fecha_compromiso
+                  ? parseDate(editingRecord.fecha_compromiso.split('T')[0]) // evita el problema del formato
+                  : null
+              }
               onChange={(date) => {
                 if (!date) return;
-                const formattedDate = dayjs(date).format("YYYY-MM-DD");
+                const formattedDate = date.toString(); // genera YYYY-MM-DD
                 if (editingRecord) {
                   setEditingRecord((prev) => ({ ...prev, fecha_compromiso: formattedDate }));
                 } else {
@@ -288,6 +293,7 @@ const TareasMinutas = ({ estado }) => {
               isInvalid={errors.fecha_compromiso}
               errorMessage={errors.fecha_compromiso && "La fecha es obligatoria"}
             />
+
           </div>
         </DialogContent>
         <DialogActions>
