@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
-import { Box, TextField, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import { Box, TextField, Dialog, DialogActions, DialogContent, DialogTitle, AppBar, Toolbar } from '@mui/material';
 import odooApi from '@/api/odoo-api';
 import { DatePicker, Textarea, Button } from '@heroui/react';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -9,6 +9,9 @@ import dayjs from "dayjs";
 import { parseDate } from "@internationalized/date";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { now, getLocalTimeZone } from "@internationalized/date";
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import Typography from '@mui/material/Typography';
 
 const TareasMinutas = ({ estado }) => {
   const [data, setData] = useState([]);
@@ -235,7 +238,30 @@ const TareasMinutas = ({ estado }) => {
         fullWidth        // ✅ agrega esto
         maxWidth="md"    // ✅ ahora sí se aplica
       >
-        <DialogTitle>{editingRecord ? "Editar tarea" : "Agregar Nueva tarea"}</DialogTitle>
+        <AppBar
+          elevation={0}
+          position="static"
+          sx={{
+            background: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
+            padding: '0 16px',
+          }}>
+          <Toolbar>
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="close"
+              onClick={() => setOpenDialog(false)}
+            >
+              <CloseIcon />
+            </IconButton>
+            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+              {editingRecord ? "Editar tarea2" : "Agregar Nueva tarea2"}
+            </Typography>
+            <Button autoFocus color="inherit" onPress={() => setOpenDialog(false)}>
+              Cerrar
+            </Button>
+          </Toolbar>
+        </AppBar>
         <DialogContent>
           <div className="w-full flex flex-col gap-4">
             <Textarea

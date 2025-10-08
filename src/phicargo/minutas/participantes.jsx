@@ -131,7 +131,7 @@ const ParticipantesMinutas = ({ estado }) => {
       <Card>
         <CardHeader
           style={{
-            background: 'linear-gradient(90deg, #0b2149, #002887)',
+            background: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
             color: 'white',
             fontWeight: 'bold'
           }}>
