@@ -14,6 +14,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import odooApi from '@/api/odoo-api';
 import MinutaForm from './form';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
+
 const { VITE_ODOO_API_URL } = import.meta.env;
 
 const Minutas = ({ }) => {
@@ -58,6 +60,16 @@ const Minutas = ({ }) => {
       {
         accessorKey: 'participantes',
         header: 'Participantes',
+        Cell: ({ row }) => {
+          const responsables = row.original.participantes;
+          return (
+            <div style={{ whiteSpace: 'pre-line' }}>
+              {responsables && responsables.length > 0
+                ? responsables.map(p => p.empleado).join(",\n")
+                : "Sin responsables"}
+            </div>
+          );
+        },
       },
       {
         accessorKey: 'usuario_registro_nombre',
@@ -76,6 +88,7 @@ const Minutas = ({ }) => {
     data,
     enableGrouping: true,
     enableGlobalFilter: true,
+    localization: MRT_Localization_ES,
     enableFilters: true,
     state: { showProgressBars: isLoading2 },
     enableColumnPinning: true,

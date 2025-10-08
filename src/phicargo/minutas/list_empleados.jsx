@@ -14,6 +14,7 @@ import {
 import odooApi from '@/api/odoo-api';
 import { Box } from '@mui/material';
 import { useMinutas } from './context';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
  return <Slide direction="up" ref={ref} {...props} />;
@@ -88,6 +89,7 @@ export default function AñadirParticipantes() {
   enableRowSelection: true,
   enableMultiRowSelection: true,
   onRowSelectionChange: setRowSelection, // controlamos selección manualmente
+  localization: MRT_Localization_ES,
   state: {
    rowSelection, // ✅ muestra los seleccionados previos
    showProgressBars: isLoading2,

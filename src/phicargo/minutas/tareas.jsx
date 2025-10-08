@@ -7,6 +7,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { useMinutas } from './context';
 import dayjs from "dayjs";
 import { parseDate } from "@internationalized/date";
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
 const TareasMinutas = ({ estado }) => {
   const [data, setData] = useState([]);
@@ -176,6 +177,7 @@ const TareasMinutas = ({ estado }) => {
     columns,
     data: tareas,
     getRowId: (row) => row.id_tarea,
+    localization: MRT_Localization_ES,
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,

@@ -16,6 +16,7 @@ import odooApi from '@/api/odoo-api';
 import MinutaForm from './form';
 import AñadirParticipantes from './list_empleados';
 import { useMinutas } from './context';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 const { VITE_ODOO_API_URL } = import.meta.env;
 
 const ParticipantesMinutas = ({ estado }) => {
@@ -74,6 +75,7 @@ const ParticipantesMinutas = ({ estado }) => {
     columns,
     data: selectedRows,
     getRowId: (row) => row.id_empleado,
+    localization: MRT_Localization_ES,
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
