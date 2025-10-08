@@ -21,7 +21,7 @@ const { VITE_ODOO_API_URL } = import.meta.env;
 const Minutas = ({ }) => {
 
   const [open, setOpen] = React.useState(false);
-  const [id_minuta, setMinuta] = React.useState(0);
+  const [id_minuta, setMinuta] = React.useState(null);
 
   const handleClickOpen = () => {
     setOpen(true);

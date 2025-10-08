@@ -33,7 +33,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
 
  const fetchData = async () => {
 
-  if (!id_minuta) {
+  if (id_minuta == null) {
    setPuntos("");
    setDesarrollo("");
    setSelectedRows([]);
@@ -47,6 +47,8 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
    setParticipantesNuevos([]);
    setEliminadosParticipantes([]);
    return;
+  } else {
+   setIsEditing(false);
   }
 
   try {
