@@ -39,6 +39,13 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
    setSelectedRows([]);
    setRecords([]);
    setIsEditing(true);
+
+   setNuevasTareas([]);
+   setActualizadasTareas([]);
+   setEliminadasTareas([]);
+
+   setParticipantesNuevos([]);
+   setEliminadosParticipantes([]);
    return;
   }
 
