@@ -29,7 +29,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
  const [puntos, setPuntos] = useState("");
  const [desarrollo, setDesarrollo] = useState("");
  const [isLoading, setLoading] = useState();
- const { selectedRows, setSelectedRows, isEditing, setIsEditing, tareas, setRecords } = useMinutas();
+ const { selectedRows, setSelectedRows, isEditing, setIsEditing, tareas, setRecords, nuevas_tareas, setNuevasTareas, actualizadas_tareas, setActualizadasTareas, eliminadas_tareas, setEliminadasTareas } = useMinutas();
 
  const fetchData = async () => {
 
@@ -84,7 +84,9 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
      desarrollo_reunion: desarrollo
     },
     participantes: selectedRows,
-    tareas: tareas
+    nuevas_tareas: nuevas_tareas,
+    actualizadas_tareas: actualizadas_tareas,
+    eliminadas_tareas: eliminadas_tareas
    };
 
    let response;
@@ -167,7 +169,9 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
       <Stack spacing={2} direction="row">
 
        {id_minuta && (
-        <h1>Minuta No.{id_minuta}</h1>
+        <h1 className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text">
+         M-{id_minuta}
+        </h1>
        )}
 
        {!id_minuta && (
@@ -198,14 +202,16 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
         </Button>
        )}
 
-       <Button
-        color="success"
-        onPress={ImprimirFormato}
-        className="text-white"
-        radius='full'
-       >
-        Imprimir formato
-       </Button>
+       {!isEditing && (
+        <Button
+         color="success"
+         onPress={ImprimirFormato}
+         className="text-white"
+         radius='full'
+        >
+         Imprimir formato
+        </Button>
+       )}
 
       </Stack>
      </Grid>
@@ -263,26 +269,25 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
          />
         </CardBody>
        </Card>
-
-       <Card>
-        <CardHeader
-         style={{
-          background: 'linear-gradient(90deg, #0b2149, #002887)',
-          color: 'white',
-          fontWeight: 'bold'
-         }}>
-         Tareas
-        </CardHeader>
-        <Divider></Divider>
-        <CardBody>
-         <ExampleWithProviders></ExampleWithProviders>
-        </CardBody>
-       </Card>
-
       </div>
      </Grid>
+     <Grid item xs={12}>
+      <Card>
+       <CardHeader
+        style={{
+         background: 'linear-gradient(90deg, #0b2149, #002887)',
+         color: 'white',
+         fontWeight: 'bold'
+        }}>
+        Tareas
+       </CardHeader>
+       <Divider></Divider>
+       <CardBody>
+        <ExampleWithProviders></ExampleWithProviders>
+       </CardBody>
+      </Card>
+     </Grid>
     </Grid>
-
    </Dialog>
   </React.Fragment>
  );

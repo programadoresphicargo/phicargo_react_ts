@@ -9,8 +9,17 @@ export const MinutasProvider = ({ children }) => {
  const [isEditing, setIsEditing] = useState(false);
  const [tareas, setRecords] = useState([]);
 
+ const [nuevas_tareas, setNuevasTareas] = useState([]);
+ const [actualizadas_tareas, setActualizadasTareas] = useState([]);
+ const [eliminadas_tareas, setEliminadasTareas] = useState([]);
+
  return (
-  <MinutasContext.Provider value={{ selectedRows, setSelectedRows, isEditing, setIsEditing, tareas, setRecords }}>
+  <MinutasContext.Provider value={{
+   selectedRows, setSelectedRows, isEditing, setIsEditing, tareas, setRecords,
+   nuevas_tareas, setNuevasTareas,
+   actualizadas_tareas, setActualizadasTareas,
+   eliminadas_tareas, setEliminadasTareas
+  }}>
    {children}
   </MinutasContext.Provider>
  );

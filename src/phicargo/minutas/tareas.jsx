@@ -2,17 +2,18 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 import { Box, TextField, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import odooApi from '@/api/odoo-api';
-import { DatePicker, Textarea } from '@heroui/react';
-import { Button } from '@heroui/react';
+import { DatePicker, Textarea, Button } from '@heroui/react';
 import Autocomplete from '@mui/material/Autocomplete';
 import { useMinutas } from './context';
+import dayjs from "dayjs";
+import { parseDate } from "@internationalized/date";
 
 const TareasMinutas = ({ estado }) => {
   const [data, setData] = useState([]);
   const [isLoading2, setLoading] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
 
-  const { tareas, setRecords, isEditing, setIsEditing } = useMinutas();
+  const { tareas, setRecords, isEditing, setIsEditing, nuevas_tareas, setNuevasTareas, actualizadas_tareas, setActualizadasTareas, eliminadas_tareas, setEliminadasTareas } = useMinutas();
 
   const [newRecord, setNewRecord] = useState({
     descripcion: "",
@@ -20,7 +21,7 @@ const TareasMinutas = ({ estado }) => {
     fecha_compromiso: null,
   });
 
-  const [editingRecord, setEditingRecord] = useState(null); // null = crear, objeto = editar
+  const [editingRecord, setEditingRecord] = useState(null);
 
   const [errors, setErrors] = useState({
     descripcion: false,
@@ -51,7 +52,6 @@ const TareasMinutas = ({ estado }) => {
     } else {
       setNewRecord((prev) => ({ ...prev, [name]: value }));
     }
-
     setErrors((prev) => ({ ...prev, [name]: false }));
   };
 
@@ -72,32 +72,59 @@ const TareasMinutas = ({ estado }) => {
         ...newRecord,
         id_tarea: Date.now(), // id temporal
       };
+
       setRecords((prev) => [...prev, newRecordWithId]);
+      setNuevasTareas((prev) => [...prev, newRecordWithId]); // 🔹 Registrar nueva tarea
     } else {
       setRecords((prev) =>
         prev.map((r) => (r.id_tarea === editingRecord.id_tarea ? editingRecord : r))
       );
+
+      // 🔹 Evita duplicados en actualizadas_tareas
+      setActualizadasTareas((prev) => {
+        const yaExiste = prev.some((t) => t.id_tarea === editingRecord.id_tarea);
+        if (yaExiste) {
+          return prev.map((t) => (t.id_tarea === editingRecord.id_tarea ? editingRecord : t));
+        } else {
+          return [...prev, editingRecord];
+        }
+      });
     }
 
-    // limpiar campos y cerrar modal
+    // limpiar y cerrar modal
     setNewRecord({ descripcion: "", responsables: [], fecha_compromiso: null });
     setEditingRecord(null);
     setOpenDialog(false);
   };
 
+  // 🔹 Eliminar registro
+  const handleDelete = (row) => {
+    setRecords((prev) => prev.filter((r) => r.id_tarea !== row.id_tarea));
+
+    // Si es una tarea recién creada (no en BD), la quitamos de nuevas_tareas
+    setNuevasTareas((prev) => prev.filter((t) => t.id_tarea !== row.id_tarea));
+
+    // Si ya existía (tiene id de BD), la agregamos a eliminadas_tareas
+    if (String(row.id_tarea).length < 13) {
+      // asumiendo que los id_tarea de BD son más cortos que los Date.now()
+      setEliminadasTareas((prev) => [...prev, row]);
+    }
+  };
+
   const columns = useMemo(() => [
-    {
-      accessorKey: 'descripcion',
-      header: 'Descripción',
-    },
+    { accessorKey: 'descripcion', header: 'Descripción' },
     {
       accessorKey: 'responsables',
       header: 'Responsables',
       Cell: ({ row }) => {
         const responsables = row.original.responsables;
-        return responsables && responsables.length > 0
-          ? responsables.map(p => p.empleado).join(", ")
-          : "Sin responsables";
+        return (
+          <div style={{ whiteSpace: 'pre-line' }}>
+            {responsables && responsables.length > 0
+              ? responsables.map(p => p.empleado).join(",\n")
+              : "Sin responsables"}
+          </div>
+        );
       },
     },
     {
@@ -118,21 +145,32 @@ const TareasMinutas = ({ estado }) => {
       id: 'actions',
       header: 'Acciones',
       Cell: ({ row }) => (
-        <Button
-          onPress={() => {
-            setEditingRecord(row.original); // cargar datos en modal
-            setOpenDialog(true);
-          }}
-          color="primary"
-          radius="full"
-          size='sm'
-          isDisabled={!isEditing}
-        >
-          Editar
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            onPress={() => {
+              setEditingRecord(row.original);
+              setOpenDialog(true);
+            }}
+            color="primary"
+            radius="full"
+            size="sm"
+            isDisabled={!isEditing}
+          >
+            Editar
+          </Button>
+          <Button
+            onPress={() => handleDelete(row.original)}
+            color="danger"
+            radius="full"
+            size="sm"
+            isDisabled={!isEditing}
+          >
+            Eliminar
+          </Button>
+        </div>
       ),
     },
-  ], []);
+  ], [isEditing]);
 
   const table = useMaterialReactTable({
     columns,
@@ -166,31 +204,28 @@ const TareasMinutas = ({ estado }) => {
         fontSize: '14px',
       },
     },
-    renderTopToolbarCustomActions: ({ table }) => (
-      <Box
-        sx={{
-          display: 'flex',
-          gap: '16px',
-          padding: '8px',
-          flexWrap: 'wrap',
-        }}
-      >
-        <Button
-          onPress={() => { setEditingRecord(null); setOpenDialog(true); }}
-          color="secondary"
-          radius="full"
-          isDisabled={!isEditing}
-        >
-          Agregar tarea
-        </Button>
-      </Box>
-    ),
+    muiTableContainerProps: {
+      sx: {
+        maxHeight: 'calc(100vh - 210px)',
+      },
+    },
   });
 
   return (
     <div>
+      {/* Botón para sincronizar con backend */}
+      <Box sx={{ p: 2 }}>
+        <Button
+          onPress={() => setOpenDialog(true)}
+          color="primary"
+          radius="full"
+          isDisabled={!isEditing}
+        >
+          Nuevo
+        </Button>
+      </Box>
 
-      {/* Modal para agregar/editar */}
+      {/* Modal agregar/editar */}
       <Dialog open={openDialog} maxWidth="lg" onClose={() => setOpenDialog(false)}>
         <DialogTitle>{editingRecord ? "Editar Registro" : "Agregar Nuevo Registro"}</DialogTitle>
         <DialogContent>
@@ -231,14 +266,20 @@ const TareasMinutas = ({ estado }) => {
             />
 
             <DatePicker
+              hideTimeZone
+              showMonthAndYearPickers
               label="Fecha Compromiso"
               fullWidth
-              value={editingRecord ? editingRecord.fecha_compromiso : newRecord.fecha_compromiso}
+              defaultValue={editingRecord
+                ? parseDate("2024-01-01")
+                : parseDate("2024-01-01")}
               onChange={(date) => {
+                if (!date) return;
+                const formattedDate = dayjs(date).format("YYYY-MM-DD");
                 if (editingRecord) {
-                  setEditingRecord((prev) => ({ ...prev, fecha_compromiso: date }));
+                  setEditingRecord((prev) => ({ ...prev, fecha_compromiso: formattedDate }));
                 } else {
-                  setNewRecord((prev) => ({ ...prev, fecha_compromiso: date }));
+                  setNewRecord((prev) => ({ ...prev, fecha_compromiso: formattedDate }));
                 }
                 setErrors((prev) => ({ ...prev, fecha_compromiso: false }));
               }}
