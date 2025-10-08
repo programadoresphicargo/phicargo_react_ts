@@ -38,7 +38,8 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
    setDesarrollo("");
    setSelectedRows([]);
    setRecords([]);
-   setIsEditing(false);
+   setIsEditing(true);
+   return;
   }
 
   try {
@@ -57,7 +58,6 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
 
  useEffect(() => {
   fetchData();
-  setIsEditing(false);
  }, [open]);
 
  const handleSubmit = async () => {
@@ -192,7 +192,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
         </Button>
        )}
 
-       {isEditing && (
+       {isEditing && id_minuta && (
         <Button
          color="success"
          onPress={handleSubmit}
