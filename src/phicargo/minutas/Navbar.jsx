@@ -15,10 +15,7 @@ import { Typography } from '@mui/material';
 import { Button } from '@mui/material';
 import logo from '../../assets/img/phicargo-vertical.png';
 
-const pages = [
-    { name: 'EVENTOS PENDIENTES', path: '/EventosPendientes' },
-    { name: 'ENTREGAS', path: '/monitoreo' },
-];
+const pages = [];
 
 function MinutasNavbar() {
 
