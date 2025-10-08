@@ -66,34 +66,14 @@ const ParticipantesMinutas = ({ estado }) => {
         accessorKey: 'puesto',
         header: 'Puesto',
       },
-      {
-        id: 'acciones',
-        header: 'Acciones',
-        Cell: ({ row }) => (
-          <Button
-            size='sm'
-            isDisabled={!isEditing}
-            color='danger'
-            onPress={() => handleEliminar(row.original)}
-            radius='full'
-          >
-            ❌ Eliminar
-          </Button>
-        ),
-      },
     ],
     [isEditing]
   );
 
-  const handleEliminar = (rowToDelete) => {
-    const nuevos = selectedRows.filter((r) => r.empleado !== rowToDelete.empleado);
-    setSelectedRows(nuevos);
-  };
-
   const table = useMaterialReactTable({
     columns,
     data: selectedRows,
-    getRowId: (row) => row.id,
+    getRowId: (row) => row.id_empleado,
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,

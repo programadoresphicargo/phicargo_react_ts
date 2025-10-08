@@ -29,7 +29,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
  const [puntos, setPuntos] = useState("");
  const [desarrollo, setDesarrollo] = useState("");
  const [isLoading, setLoading] = useState();
- const { selectedRows, setSelectedRows, isEditing, setIsEditing, tareas, setRecords, nuevas_tareas, setNuevasTareas, actualizadas_tareas, setActualizadasTareas, eliminadas_tareas, setEliminadasTareas } = useMinutas();
+ const { selectedRows, setSelectedRows, isEditing, setIsEditing, tareas, setRecords, nuevas_tareas, setNuevasTareas, actualizadas_tareas, setActualizadasTareas, eliminadas_tareas, setEliminadasTareas, eliminados_participantes, setEliminadosParticipantes, participantes_nuevos, setParticipantesNuevos, } = useMinutas();
 
  const fetchData = async () => {
 
@@ -83,10 +83,11 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
      puntos_discusion: puntos,
      desarrollo_reunion: desarrollo
     },
-    participantes: selectedRows,
-    nuevas_tareas: nuevas_tareas,
-    actualizadas_tareas: actualizadas_tareas,
-    eliminadas_tareas: eliminadas_tareas
+    participantes_nuevos: participantes_nuevos,
+    participantes_eliminados: eliminados_participantes,
+    tareas_nuevas: nuevas_tareas,
+    tareas_actualizadas: actualizadas_tareas,
+    tareas_eliminadas: eliminadas_tareas
    };
 
    let response;

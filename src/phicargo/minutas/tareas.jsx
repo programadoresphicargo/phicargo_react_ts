@@ -217,11 +217,11 @@ const TareasMinutas = ({ estado }) => {
       <Box sx={{ p: 2 }}>
         <Button
           onPress={() => setOpenDialog(true)}
-          color="primary"
+          color="secondary"
           radius="full"
           isDisabled={!isEditing}
         >
-          Nuevo
+          Nueva tarea
         </Button>
       </Box>
 

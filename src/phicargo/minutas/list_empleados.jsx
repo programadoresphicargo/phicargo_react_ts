@@ -20,12 +20,31 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function AñadirParticipantes() {
- const [open, setOpen] = React.useState(false);
+ const [open, setOpen] = useState(false);
  const [data, setData] = useState([]);
  const [isLoading2, setLoading] = useState(false);
- const { selectedRows, setSelectedRows, isEditing, setIsEditing } = useMinutas();
+ const [rowSelection, setRowSelection] = useState({}); // ✅ para controlar la selección visible
+
+ const {
+  selectedRows,
+  setSelectedRows,
+  isEditing,
+  participantes_nuevos, setParticipantesNuevos,
+  eliminados_participantes, setEliminadosParticipantes
+ } = useMinutas();
 
  const handleClickOpen = () => {
+  // ✅ Cuando se abre el modal, sincronizamos los seleccionados previos
+  const selectedIds = selectedRows.map((p) => p.id_empleado);
+  const newSelection = {};
+
+  data.forEach((row, index) => {
+   if (selectedIds.includes(row.id_empleado)) {
+    newSelection[index] = true; // Marca como seleccionado
+   }
+  });
+
+  setRowSelection(newSelection);
   setOpen(true);
  };
 
@@ -66,11 +85,11 @@ export default function AñadirParticipantes() {
  const table = useMaterialReactTable({
   columns,
   data,
-  enableRowSelection: true, // ✅ activa selección por checkbox
-  enableMultiRowSelection: true, // ✅ permite seleccionar varios
-  onRowSelectionChange: setSelectedRows, // ✅ guarda los seleccionados
+  enableRowSelection: true,
+  enableMultiRowSelection: true,
+  onRowSelectionChange: setRowSelection, // controlamos selección manualmente
   state: {
-   rowSelection: selectedRows,
+   rowSelection, // ✅ muestra los seleccionados previos
    showProgressBars: isLoading2,
   },
   enableGrouping: true,
@@ -85,14 +104,10 @@ export default function AñadirParticipantes() {
   },
   muiTablePaperProps: {
    elevation: 0,
-   sx: {
-    borderRadius: '0',
-   },
+   sx: { borderRadius: '0' },
   },
   muiTableContainerProps: {
-   sx: {
-    maxHeight: 'calc(100vh - 210px)',
-   },
+   sx: { maxHeight: 'calc(100vh - 210px)' },
   },
   renderTopToolbarCustomActions: () => (
    <Box sx={{ display: 'flex', gap: '16px', padding: '8px' }}>
@@ -104,43 +119,57 @@ export default function AñadirParticipantes() {
  // 👉 función que toma los seleccionados
  const handleAñadir = () => {
   const seleccionados = table.getSelectedRowModel().rows.map((row) => row.original);
-  console.log("Participantes seleccionados:", seleccionados);
+
+  // --- 🧠 Lógica para detectar nuevos registros ---
+  const idsActuales = selectedRows.map((p) => p.id_empleado);
+  const idsNuevos = seleccionados.map((p) => p.id_empleado);
+
+  const nuevos = seleccionados.filter((p) => !idsActuales.includes(p.id_empleado));
+  const eliminados = selectedRows.filter((p) => !idsNuevos.includes(p.id_empleado));
+
+  console.log("✅ Participantes seleccionados:", seleccionados);
+  console.log("🆕 Nuevos participantes:", nuevos);
+  console.log("❌ Participantes eliminados:", eliminados);
+
+  setParticipantesNuevos(nuevos);
+  setEliminadosParticipantes(eliminados);
   setSelectedRows(seleccionados);
+
   handleClose();
  };
 
  return (
   <React.Fragment>
-   <Button color="primary" onPress={handleClickOpen} radius="full" isDisabled={!isEditing}>
-    Añadir participante
+   <Button
+    color="primary"
+    onPress={handleClickOpen}
+    radius="full"
+    isDisabled={!isEditing}
+   >
+    Editar participantes
    </Button>
+
    <Dialog
     open={open}
     onClose={handleClose}
-    slots={{
-     transition: Transition,
-    }}
+    slots={{ transition: Transition }}
     fullWidth
     maxWidth="md"
    >
     <AppBar sx={{ position: 'relative' }} elevation={0}>
      <Toolbar>
-      <IconButton
-       edge="start"
-       color="inherit"
-       onClick={handleClose}
-       aria-label="close"
-      >
+      <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
        <CloseIcon />
       </IconButton>
       <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
        Minuta
       </Typography>
-      <Button autoFocus color="success" onClick={handleAñadir} className='text-white'>
-       Añadir
+      <Button autoFocus color="success" onPress={handleAñadir} className="text-white" radius="full">
+       Guardar cambios
       </Button>
      </Toolbar>
     </AppBar>
+
     <MaterialReactTable table={table} />
    </Dialog>
   </React.Fragment>
