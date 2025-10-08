@@ -235,7 +235,7 @@ const TareasMinutas = ({ estado }) => {
         fullWidth        // ✅ agrega esto
         maxWidth="md"    // ✅ ahora sí se aplica
       >
-        <DialogTitle>{editingRecord ? "Editar Registro" : "Agregar Nuevo Registro"}</DialogTitle>
+        <DialogTitle>{editingRecord ? "Editar tarea" : "Agregar Nueva tarea"}</DialogTitle>
         <DialogContent>
           <div className="w-full flex flex-col gap-4">
             <Textarea
