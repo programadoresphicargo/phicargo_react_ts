@@ -129,7 +129,7 @@ const menuItems: MenuItemType[] = [
     icon: minutas,
     label: 'Minutas',
     link: '/minutas',
-    requiredPermissions: [213],
+    requiredPermissions: [782],
   },
   {
     icon: incidentsImg,
