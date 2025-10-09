@@ -117,6 +117,9 @@ const AccesoForm = ({ id_acceso, onClose }) => {
         if (selectedME == 'si' && (formData?.mercancia_egresada == "" || formData?.mercancia_egresada == undefined)) {
             newErrors.mercancia_egresada = 'Ingresar una descripción de la mercancía egresada.';
         }
+        if (!formData.personal_visita) {
+            newErrors.personal_visita = 'Personal a visitar es campo obligatorio.';
+        }
         return newErrors;
     };
 
@@ -641,6 +644,19 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                                         </Autocomplete>
                                     </Grid>
 
+                                    <Grid item xs={12} sm={6} md={4}>
+                                        <Textarea
+                                            id="personal_visita"
+                                            name="personal_visita"
+                                            label="Nombre(s) del personal a visitar"
+                                            variant={disabledFom ? 'flat' : 'bordered'}
+                                            isReadOnly={disabledFom}
+                                            value={formData.personal_visita}
+                                            onChange={(event) => handleChange('personal_visita', event.target.value)}
+                                            isInvalid={!!errors.personal_visita}
+                                            errorMessage={errors.personal_visita}
+                                        />
+                                    </Grid>
 
                                     <Grid item xs={12} sm={6} md={4}>
                                         <Select

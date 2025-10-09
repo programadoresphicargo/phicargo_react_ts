@@ -47,7 +47,8 @@ const AccesoCompo = ({ children }) => {
         usuario_archivo: '',
         fecha_creacion: '',
         fecha_validacion: '',
-        fecha_archivado: ''
+        fecha_archivado: '',
+        personal_visita: <session className="user name"></session>
     });
 
     const [visitantes, setVisitantes] = useState([]);
