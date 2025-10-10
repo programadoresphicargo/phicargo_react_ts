@@ -224,14 +224,17 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
        )}
 
        {!isEditing && id_minuta && (
-        <Button
-         color="success"
-         onPress={ImprimirFormato}
-         className="text-white"
-         radius='full'
-        >
-         <i class="bi bi-printer"></i> Imprimir formato
-        </Button>
+        <>
+         <Button
+          color="success"
+          onPress={ImprimirFormato}
+          className="text-white"
+          radius='full'
+         >
+          <i class="bi bi-printer"></i> Imprimir formato
+         </Button>
+         <Button color='success' className='text-white' radius='full'>Confirmar</Button>
+        </>
        )}
 
       </Stack>

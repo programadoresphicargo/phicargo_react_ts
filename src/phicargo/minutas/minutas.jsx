@@ -62,6 +62,14 @@ const Minutas = ({ }) => {
         header: 'Solicitante',
       },
       {
+        accessorKey: 'departamento',
+        header: 'Departamento',
+      },
+      {
+        accessorKey: 'puesto',
+        header: 'Puesto',
+      },
+      {
         accessorKey: 'puntos_discusion',
         header: 'Puntos a discusión',
         Cell: ({ row }) => {
