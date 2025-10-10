@@ -20,6 +20,7 @@ import { useMinutas } from './context';
 import TareasMinutas from './tareas';
 import ExampleWithProviders from './tareas';
 import SolicitanteMinuta from './solicitante';
+import VoiceTextarea from './VoiceTextarea';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
  return <Slide direction="up" ref={ref} {...props} />;
@@ -258,14 +259,14 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
         </CardHeader>
         <Divider></Divider>
         <CardBody>
-         <Textarea
-          variant="bordered"
+         <VoiceTextarea
           label="PUNTOS DE DISCUSIÓN / TEMAS A TRATAR"
-          value={puntos}            // ✅ valor controlado
+          value={puntos}
+          onChange={setPuntos}
           isDisabled={!isEditing}
-          onChange={(e) => setPuntos(e.target.value)}  // ✅ actualizar estado
-          isInvalid={puntos == "" ? true : false}
+          isInvalid={puntos === ""}
           errorMessage="Campo obligatorio"
+          lang="es-MX"
          />
         </CardBody>
        </Card>
@@ -281,14 +282,14 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
         </CardHeader>
         <Divider></Divider>
         <CardBody>
-         <Textarea
-          variant="bordered"
+         <VoiceTextarea
           label="DESARROLLO DE LA REUNIÓN"
-          value={desarrollo}        // ✅ valor controlado
+          value={desarrollo}
+          onChange={setDesarrollo}
           isDisabled={!isEditing}
-          onChange={(e) => setDesarrollo(e.target.value)} // ✅ actualizar estado
-          isInvalid={desarrollo == "" ? true : false}
+          isInvalid={desarrollo === ""}
           errorMessage="Campo obligatorio"
+          lang="es-MX"
          />
         </CardBody>
        </Card>
