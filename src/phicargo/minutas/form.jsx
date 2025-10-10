@@ -230,7 +230,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
          className="text-white"
          radius='full'
         >
-         Imprimir formato
+         <i class="bi bi-printer"></i> Imprimir formato
         </Button>
        )}
 
