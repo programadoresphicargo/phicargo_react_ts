@@ -208,7 +208,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
          className="text-white"
          radius='full'
         >
-         Editar
+         <i class="bi bi-pencil-square"></i> Editar
         </Button>
        )}
 
@@ -219,7 +219,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
          className="text-white"
          radius='full'
         >
-         Actualizar
+         <i class="bi bi-floppy-fill"></i> Actualizar
         </Button>
        )}
 

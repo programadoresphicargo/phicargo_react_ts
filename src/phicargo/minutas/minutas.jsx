@@ -166,9 +166,12 @@ const Minutas = ({ }) => {
           flexWrap: 'wrap',
         }}
       >
+        <h1 className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text">
+          Minutas
+        </h1>
         <MinutaForm open={open} handleClose={handleClose} id_minuta={id_minuta}></MinutaForm>
-        <Button color='primary' className='text-white' onPress={() => handleClickOpen()} radius='full'>Nuevo</Button>
-        <Button color='success' className='text-white' onPress={() => fetchData()} radius='full'>Refrescar</Button>
+        <Button color='primary' className='text-white' onPress={() => handleClickOpen()} radius='full'><i class="bi bi-plus-circle"></i> Nueva</Button>
+        <Button color='success' className='text-white' onPress={() => fetchData()} radius='full'><i class="bi bi-arrow-clockwise"></i> Refrescar</Button>
       </Box>
     ),
   });

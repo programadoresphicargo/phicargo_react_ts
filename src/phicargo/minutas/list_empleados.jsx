@@ -148,7 +148,7 @@ export default function AñadirParticipantes() {
     radius="full"
     isDisabled={!isEditing}
    >
-    Editar participantes
+    <i class="bi bi-pencil-square"></i> Editar participantes
    </Button>
 
    <Dialog

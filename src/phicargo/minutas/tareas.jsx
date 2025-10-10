@@ -158,19 +158,17 @@ const TareasMinutas = ({ estado }) => {
             }}
             color="primary"
             radius="full"
-            size="sm"
             isDisabled={!isEditing}
           >
-            Editar
+            <i class="bi bi-pencil-square"></i>  Editar
           </Button>
           <Button
             onPress={() => handleDelete(row.original)}
             color="danger"
             radius="full"
-            size="sm"
             isDisabled={!isEditing}
           >
-            Eliminar
+            <i class="bi bi-x-circle"></i> Eliminar
           </Button>
         </div>
       ),
@@ -227,7 +225,7 @@ const TareasMinutas = ({ estado }) => {
           radius="full"
           isDisabled={!isEditing}
         >
-          Nueva tarea
+          <i class="bi bi-plus-circle"></i> Nueva tarea
         </Button>
       </Box>
 
