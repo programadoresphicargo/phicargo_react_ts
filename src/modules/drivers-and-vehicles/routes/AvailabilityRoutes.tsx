@@ -36,6 +36,9 @@ const Contactos = lazy(
 const SucursalActual = lazy(
   () => import('@/phicargo/reportes/sucursal_actual/sucursal'),
 );
+const UltimoUsoVehiculos = lazy(
+  () => import('@/phicargo/reportes/ultimos_usos/equipos'),
+);
 const permission = 200;
 const EDITION_PERMISSION = 208;
 const RESUMENES_PERMISSION = 220;
@@ -141,7 +144,16 @@ const AvailabilityRoutes = () => {
           </Suspense>
         }
       />
+      <Route
+        path="ultimos_usos"
+        element={
+          <Suspense fallback={<LoadingPage />}>
+            <UltimoUsoVehiculos></UltimoUsoVehiculos>
+          </Suspense>
+        }
+      />
     </Route>
+
   );
 };
 

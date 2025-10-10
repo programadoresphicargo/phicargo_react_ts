@@ -27,6 +27,11 @@ const pages: MenuItemType[] = [
     requiredPermissions: [],
   },
   {
+    name: 'Últimos usos',
+    path: '/disponibilidad/ultimos_usos',
+    requiredPermissions: [],
+  },
+  {
     name: 'Resumen Unidades',
     path: '/disponibilidad/resumen-unidades',
     requiredPermissions: [RESUMENES_PERMISSION],
