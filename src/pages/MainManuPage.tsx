@@ -281,12 +281,12 @@ const MenuItem = ({ icon, label, link, }: MenuItemProps) => {
       justify-center
       w-32
       h-32
-      rounded-2xl
+      rounded-3xl
       bg-white/10
       shadow-xl
       backdrop-blur-lg
       border
-      border-white/30
+      border-white/10
       cursor-pointer
       transition
       duration-300
