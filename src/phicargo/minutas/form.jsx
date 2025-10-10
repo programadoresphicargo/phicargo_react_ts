@@ -10,7 +10,7 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
-import { Button, Card, CardBody, CardHeader, Progress, Textarea } from '@heroui/react';
+import { Autocomplete, Button, Card, CardBody, CardHeader, Progress, Textarea } from '@heroui/react';
 import ParticipantesMinutas from './participantes';
 import { Grid } from "@mui/material";
 import Stack from '@mui/material/Stack';
@@ -19,6 +19,7 @@ import toast from 'react-hot-toast';
 import { useMinutas } from './context';
 import TareasMinutas from './tareas';
 import ExampleWithProviders from './tareas';
+import SolicitanteMinuta from './solicitante';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
  return <Slide direction="up" ref={ref} {...props} />;
@@ -26,6 +27,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export default function MinutaForm({ open, handleClose, id_minuta }) {
 
+ const [id_solicitante, setSolicitante] = useState(null);
  const [puntos, setPuntos] = useState("");
  const [desarrollo, setDesarrollo] = useState("");
  const [isLoading, setLoading] = useState();
@@ -34,6 +36,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
  const fetchData = async () => {
 
   if (id_minuta == null) {
+   setSolicitante(null);
    setPuntos("");
    setDesarrollo("");
    setSelectedRows([]);
@@ -54,6 +57,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
   try {
    setLoading(true);
    const response = await odooApi.get('/minutas/' + id_minuta);
+   setSolicitante(response.data.id_solicitante);
    setPuntos(response.data.puntos_discusion);
    setDesarrollo(response.data.desarrollo_reunion);
    setSelectedRows(response.data.participantes);
@@ -70,6 +74,11 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
  }, [open]);
 
  const handleSubmit = async () => {
+
+  if (id_solicitante == null) {
+   toast.error('El solicitante es obligatorio.')
+   return;
+  }
 
   if (selectedRows.length <= 0) {
    toast.error('Deben existir participantes a esta minuta.')
@@ -89,6 +98,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
   try {
    const payload = {
     data: {
+     id_solicitante: id_solicitante,
      puntos_discusion: puntos,
      desarrollo_reunion: desarrollo
     },
@@ -227,7 +237,10 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
      </Grid>
      {/* Primer componente (4 columnas) */}
      <Grid item xs={5}>
-      <ParticipantesMinutas />
+      <div className="w-full flex flex-col gap-4">
+       <SolicitanteMinuta id_solicitante={id_solicitante} setSolicitante={setSolicitante}></SolicitanteMinuta>
+       <ParticipantesMinutas />
+      </div>
      </Grid>
 
      {/* Segundo componente (8 columnas) */}

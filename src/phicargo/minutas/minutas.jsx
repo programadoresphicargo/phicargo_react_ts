@@ -58,6 +58,10 @@ const Minutas = ({ }) => {
         header: 'ID Minuta',
       },
       {
+        accessorKey: 'solicitante',
+        header: 'Solicitante',
+      },
+      {
         accessorKey: 'puntos_discusion',
         header: 'Puntos a discusión',
         Cell: ({ row }) => {
