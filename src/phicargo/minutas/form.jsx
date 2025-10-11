@@ -44,7 +44,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
  const fetchData = async () => {
 
   if (id_minuta == null) {
-   setSolicitante(null);
+   setData({});
 
    setSelectedRows([]);
    setRecords([]);
@@ -67,6 +67,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
    setSelectedRows(response.data.participantes);
    setRecords(response.data.tareas);
    setData(response.data);
+   console.log(response.data);
    setLoading(false);
   } catch (error) {
    setLoading(false);
