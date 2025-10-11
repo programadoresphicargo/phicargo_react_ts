@@ -229,14 +229,14 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
         </Button>
        )}
 
-       {!isEditing && id_minuta && (
+       {!isEditing && id_minuta && data?.estado !== 'confirmado' && (
         <Button
          color="primary"
          onPress={() => setIsEditing(true)}
          className="text-white"
-         radius='full'
+         radius="full"
         >
-         <i class="bi bi-pencil-square"></i> Editar
+         <i className="bi bi-pencil-square"></i> Editar
         </Button>
        )}
 
