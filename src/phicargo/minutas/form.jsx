@@ -234,6 +234,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
          color="primary"
          onPress={() => setIsEditing(true)}
          className="text-white"
+         isLoading={isLoading}
          radius="full"
         >
          <i className="bi bi-pencil-square"></i> Editar
@@ -246,6 +247,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
          onPress={handleSubmit}
          className="text-white"
          radius='full'
+         isLoading={isLoading}
         >
          <i class="bi bi-floppy-fill"></i> Actualizar
         </Button>
@@ -258,11 +260,13 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
           onPress={ImprimirFormato}
           className="text-white"
           radius='full'
+          isLoading={isLoading}
          >
           <i class="bi bi-printer"></i> Imprimir formato
          </Button>
          {data?.estado != 'confirmado' && (
-          <Button color='success' className='text-white' radius='full' onPress={() => Confirmar()}>Confirmar</Button>
+          <Button color='success' className='text-white' radius='full' onPress={() => Confirmar()} isLoading={isLoading}
+          >Confirmar</Button>
          )}
         </>
        )}
