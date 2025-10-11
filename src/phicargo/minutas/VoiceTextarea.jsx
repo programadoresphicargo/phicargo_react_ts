@@ -2,93 +2,102 @@ import { Button, Textarea } from "@heroui/react";
 import React, { useState, useEffect, useRef } from "react";
 
 const VoiceTextarea = ({
-  value,
-  onChange,
-  label = "Texto",
-  isDisabled = false,
-  isInvalid = false,
-  errorMessage = "",
-  lang = "es-MX",
+ value = "",
+ name,
+ onChange,
+ label = "Texto",
+ isDisabled = false,
+ isInvalid = false,
+ errorMessage = "",
+ lang = "es-MX",
 }) => {
-  const recognitionRef = useRef(null);
-  const [listening, setListening] = useState(false);
-  const [interimText, setInterimText] = useState("");
+ const recognitionRef = useRef(null);
+ const [listening, setListening] = useState(false);
+ const [interimText, setInterimText] = useState("");
+ const [finalText, setFinalText] = useState(value); // Guarda todo lo reconocido
 
-  useEffect(() => {
-    const SpeechRecognition =
-      window.SpeechRecognition || window.webkitSpeechRecognition;
+ useEffect(() => {
+  const SpeechRecognition =
+   window.SpeechRecognition || window.webkitSpeechRecognition;
 
-    if (!SpeechRecognition) {
-      console.warn("Tu navegador no soporta SpeechRecognition");
-      return;
-    }
+  if (!SpeechRecognition) {
+   console.warn("Tu navegador no soporta SpeechRecognition");
+   return;
+  }
 
-    const recognition = new SpeechRecognition();
-    recognition.continuous = true; // escucha sin parar
-    recognition.interimResults = true; // muestra resultados parciales
-    recognition.lang = lang;
+  const recognition = new SpeechRecognition();
+  recognition.continuous = true;
+  recognition.interimResults = true;
+  recognition.lang = lang;
 
-    recognition.onresult = (event) => {
-      let finalTranscript = "";
-      let interimTranscript = "";
+  recognition.onresult = (event) => {
+   let newFinalTranscript = "";
+   let newInterimTranscript = "";
 
-      for (let i = event.resultIndex; i < event.results.length; i++) {
-        const transcript = event.results[i][0].transcript;
-        if (event.results[i].isFinal) finalTranscript += transcript + " ";
-        else interimTranscript += transcript;
-      }
+   for (let i = event.resultIndex; i < event.results.length; i++) {
+    const transcript = event.results[i][0].transcript;
+    if (event.results[i].isFinal) newFinalTranscript += transcript + " ";
+    else newInterimTranscript += transcript;
+   }
 
-      // Acumula texto final
-      if (finalTranscript) {
-        onChange((prev) => prev + finalTranscript);
-      }
+   // Acumula todo el texto final
+   if (newFinalTranscript) {
+    setFinalText((prev) => {
+     const updated = prev + newFinalTranscript;
+     onChange(name, updated); // actualiza el valor externo
+     return updated;
+    });
+   }
 
-      setInterimText(interimTranscript);
-    };
-
-    // Si se detiene por error o pausa, reiniciar automáticamente si estaba escuchando
-    recognition.onend = () => {
-      if (listening) recognition.start();
-    };
-
-    recognitionRef.current = recognition;
-  }, [lang, listening, onChange]);
-
-  const toggleListening = () => {
-    if (!recognitionRef.current) return;
-
-    if (listening) {
-      recognitionRef.current.stop();
-      setListening(false);
-      setInterimText("");
-    } else {
-      recognitionRef.current.start();
-      setListening(true);
-    }
+   setInterimText(newInterimTranscript);
   };
 
-  return (
-    <div style={{ position: "relative", width: "100%" }}>
-      <Button
-        onPress={toggleListening}
-        color={listening ? "danger" : "primary"}
-        isDisabled={isDisabled}
-        radius="full"
-        className="mb-2"
-      >
-        {listening ? "⏹ Detener" : "🎤 Hablar"}
-      </Button>
-      <Textarea
-        variant="bordered"
-        label={label}
-        value={value + interimText}
-        isDisabled={isDisabled}
-        onChange={(e) => onChange(e.target.value)}
-        isInvalid={isInvalid}
-        errorMessage={errorMessage}
-      />
-    </div>
-  );
+  recognition.onend = () => {
+   if (listening) recognition.start(); // reinicia si estaba escuchando
+  };
+
+  recognitionRef.current = recognition;
+ }, [lang, listening, name, onChange]);
+
+ const toggleListening = () => {
+  if (!recognitionRef.current) return;
+
+  if (listening) {
+   recognitionRef.current.stop();
+   setListening(false);
+   setInterimText(""); // limpia solo el texto parcial
+  } else {
+   recognitionRef.current.start();
+   setListening(true);
+  }
+ };
+
+ return (
+  <div style={{ position: "relative", width: "100%" }}>
+   <Button
+    onPress={toggleListening}
+    color={listening ? "danger" : "primary"}
+    isDisabled={isDisabled}
+    radius="full"
+    className="mb-2"
+   >
+    {listening ? "⏹ Detener" : "🎤 Hablar"}
+   </Button>
+
+   <Textarea
+    variant="bordered"
+    label={label}
+    value={finalText + interimText} // siempre muestra todo
+    isDisabled={isDisabled}
+    onChange={(e) => {
+     setFinalText(e.target.value);
+     onChange(name, e.target.value);
+    }}
+    isInvalid={isInvalid}
+    errorMessage={errorMessage}
+   />
+  </div>
+ );
 };
 
 export default VoiceTextarea;

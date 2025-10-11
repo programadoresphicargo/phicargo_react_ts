@@ -10,7 +10,7 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
-import { Autocomplete, Button, Card, CardBody, CardHeader, Progress, Textarea } from '@heroui/react';
+import { Autocomplete, Button, Card, CardBody, CardHeader, Chip, Progress, Textarea } from '@heroui/react';
 import ParticipantesMinutas from './participantes';
 import { Grid } from "@mui/material";
 import Stack from '@mui/material/Stack';
@@ -21,6 +21,7 @@ import TareasMinutas from './tareas';
 import ExampleWithProviders from './tareas';
 import SolicitanteMinuta from './solicitante';
 import VoiceTextarea from './VoiceTextarea';
+import Swal from "sweetalert2";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
  return <Slide direction="up" ref={ref} {...props} />;
@@ -28,18 +29,23 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export default function MinutaForm({ open, handleClose, id_minuta }) {
 
- const [id_solicitante, setSolicitante] = useState(null);
- const [puntos, setPuntos] = useState("");
- const [desarrollo, setDesarrollo] = useState("");
+ const [data, setData] = useState({});
+
  const [isLoading, setLoading] = useState();
  const { selectedRows, setSelectedRows, isEditing, setIsEditing, tareas, setRecords, nuevas_tareas, setNuevasTareas, actualizadas_tareas, setActualizadasTareas, eliminadas_tareas, setEliminadasTareas, eliminados_participantes, setEliminadosParticipantes, participantes_nuevos, setParticipantesNuevos, } = useMinutas();
+
+ const handleChange = (key, value) => {
+  setData((prev) => ({
+   ...prev,
+   [key]: value,
+  }));
+ };
 
  const fetchData = async () => {
 
   if (id_minuta == null) {
    setSolicitante(null);
-   setPuntos("");
-   setDesarrollo("");
+
    setSelectedRows([]);
    setRecords([]);
    setIsEditing(true);
@@ -58,11 +64,9 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
   try {
    setLoading(true);
    const response = await odooApi.get('/minutas/' + id_minuta);
-   setSolicitante(response.data.id_solicitante);
-   setPuntos(response.data.puntos_discusion);
-   setDesarrollo(response.data.desarrollo_reunion);
    setSelectedRows(response.data.participantes);
    setRecords(response.data.tareas);
+   setData(response.data);
    setLoading(false);
   } catch (error) {
    setLoading(false);
@@ -76,7 +80,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
 
  const handleSubmit = async () => {
 
-  if (id_solicitante == null) {
+  if (data?.id_solicitante == null) {
    toast.error('El solicitante es obligatorio.')
    return;
   }
@@ -86,23 +90,19 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
    return;
   }
 
-  if (puntos == "") {
+  if (data?.puntos_discusion == "") {
    toast.error('Puntos de discución es obligatorio.')
    return;
   }
 
-  if (desarrollo == "") {
+  if (data?.desarrollo_reunion == "") {
    toast.error('Desarrollo de reunión es obligatorio.')
    return;
   }
 
   try {
    const payload = {
-    data: {
-     id_solicitante: id_solicitante,
-     puntos_discusion: puntos,
-     desarrollo_reunion: desarrollo
-    },
+    data: data,
     participantes_nuevos: participantes_nuevos,
     participantes_eliminados: eliminados_participantes,
     tareas_nuevas: nuevas_tareas,
@@ -133,15 +133,39 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
 
  const ImprimirFormato = async () => {
   try {
-   // Obtenemos la URL completa que Odoo usaría
    const url = `/minutas/formato/${id_minuta}`;
-
-   // Si solo necesitas abrirla, sin descargar ni procesar:
-   const fullUrl = odooApi.defaults.baseURL + url; // 👈 combina el baseURL del axios
-   window.open(fullUrl, "_blank"); // abre en nueva pestaña sin cerrar la actual
-
+   const fullUrl = odooApi.defaults.baseURL + url;
+   window.open(fullUrl, "_blank");
   } catch (error) {
    toast.error("Error al abrir formato: " + error);
+  }
+ };
+
+ const ejecutarAccion = async () => {
+  let response = await odooApi.patch(`/minutas/estado/${id_minuta}/confirmado`);
+  if (response.data.state === "success") {
+   toast.success(response.data.message);
+   handleClose();
+   setIsEditing(false);
+  } else {
+   toast.error(response.data.message);
+  }
+ };
+
+ const Confirmar = async () => {
+  const result = await Swal.fire({
+   title: "¿Estás seguro?",
+   text: "Esta acción no se puede deshacer.",
+   icon: "warning",
+   showCancelButton: true,
+   confirmButtonText: "Sí, continuar",
+   cancelButtonText: "Cancelar",
+   confirmButtonColor: "#3085d6",
+   cancelButtonColor: "#d33",
+  });
+
+  if (result.isConfirmed) {
+   ejecutarAccion();
   }
  };
 
@@ -190,9 +214,12 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
       <Stack spacing={2} direction="row">
 
        {id_minuta && (
-        <h1 className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text">
-         M-{id_minuta}
-        </h1>
+        <>
+         <h1 className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text">
+          M-{id_minuta}
+         </h1>
+         <Chip color='warning' className='text-white'>{data?.estado}</Chip>
+        </>
        )}
 
        {!id_minuta && (
@@ -233,7 +260,9 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
          >
           <i class="bi bi-printer"></i> Imprimir formato
          </Button>
-         <Button color='success' className='text-white' radius='full'>Confirmar</Button>
+         {data?.estado != 'confirmado' && (
+          <Button color='success' className='text-white' radius='full' onPress={() => Confirmar()}>Confirmar</Button>
+         )}
         </>
        )}
 
@@ -242,7 +271,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
      {/* Primer componente (4 columnas) */}
      <Grid item xs={5}>
       <div className="w-full flex flex-col gap-4">
-       <SolicitanteMinuta id_solicitante={id_solicitante} setSolicitante={setSolicitante}></SolicitanteMinuta>
+       <SolicitanteMinuta id_solicitante={data?.id_solicitante} setSolicitante={handleChange}></SolicitanteMinuta>
        <ParticipantesMinutas />
       </div>
      </Grid>
@@ -264,10 +293,11 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
         <CardBody>
          <VoiceTextarea
           label="PUNTOS DE DISCUSIÓN / TEMAS A TRATAR"
-          value={puntos}
-          onChange={setPuntos}
+          name={"puntos_discusion"}
+          value={data?.puntos_discusion}
+          onChange={handleChange}
           isDisabled={!isEditing}
-          isInvalid={puntos === ""}
+          isInvalid={data?.puntos_discusion === ""}
           errorMessage="Campo obligatorio"
           lang="es-MX"
          />
@@ -287,10 +317,11 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
         <CardBody>
          <VoiceTextarea
           label="DESARROLLO DE LA REUNIÓN"
-          value={desarrollo}
-          onChange={setDesarrollo}
+          name={"desarrollo_reunion"}
+          value={data?.desarrollo_reunion}
+          onChange={handleChange}
           isDisabled={!isEditing}
-          isInvalid={desarrollo === ""}
+          isInvalid={data?.desarrollo_reunion === ""}
           errorMessage="Campo obligatorio"
           lang="es-MX"
          />

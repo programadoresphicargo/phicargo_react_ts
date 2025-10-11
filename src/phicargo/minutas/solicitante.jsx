@@ -60,7 +60,7 @@ export default function SolicitanteMinuta({ id_solicitante, setSolicitante }) {
       defaultItems={data}
       label="Empleado solicitante"
       selectedKey={String(id_solicitante) || null}
-      onSelectionChange={(key) => setSolicitante(key)}
+      onSelectionChange={(key) => setSolicitante('id_solicitante', key)}
       isDisabled={!isEditing}
       isInvalid={!id_solicitante}
       errorMessage="Campo obligatorio"

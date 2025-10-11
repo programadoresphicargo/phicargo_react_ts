@@ -112,6 +112,10 @@ const Minutas = ({ }) => {
         accessorKey: 'fecha_registro',
         header: 'Fecha registro',
       },
+      {
+        accessorKey: 'estado',
+        header: 'Estado',
+      },
     ],
     []
   );
