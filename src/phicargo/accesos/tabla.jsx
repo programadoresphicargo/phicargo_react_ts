@@ -303,8 +303,9 @@ const TablaAccesos = ({ title, tipo }) => {
       <AppBar elevation={0}
         position="static"
         sx={{
-          background: 'linear-gradient(90deg, #0b2149, #002887)',
-          padding: '0 16px',
+          background: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
+          color: 'white',
+          fontWeight: 'bold'
         }}>
         <Toolbar>
           <IconButton

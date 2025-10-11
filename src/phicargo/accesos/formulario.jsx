@@ -512,11 +512,12 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                 )}
 
                 <Card className='mb-3'>
-                    <CardHeader style={{
-                        background: 'linear-gradient(90deg, #0b2149, #002887)',
-                        color: 'white',
-                        fontWeight: 'bold'
-                    }}>
+                    <CardHeader
+                        style={{
+                            background: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
+                            color: 'white',
+                            fontWeight: 'bold'
+                        }}>
                         <div className="flex flex-col">
                             <p className="text-md">Datos del acceso</p>
                         </div>
@@ -770,11 +771,12 @@ const AccesoForm = ({ id_acceso, onClose }) => {
 
             <Grid item xs={12} sm={6} md={4}>
                 <Card>
-                    <CardHeader style={{
-                        background: 'linear-gradient(90deg, #0b2149, #002887)',
-                        color: 'white',
-                        fontWeight: 'bold'
-                    }}>
+                    <CardHeader
+                        style={{
+                            background: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
+                            color: 'white',
+                            fontWeight: 'bold'
+                        }}>
                         <div className="flex flex-col">
                             <p className="text-md">Historial de cambios</p>
                         </div>
@@ -933,7 +935,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                 {id_acceso && (
                     <Card className="mt-2">
                         <CardHeader style={{
-                            background: 'linear-gradient(90deg, #0b2149, #002887)',
+                            background: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
                             color: 'white',
                             fontWeight: 'bold'
                         }}>
