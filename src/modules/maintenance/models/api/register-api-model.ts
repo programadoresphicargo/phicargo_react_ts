@@ -7,6 +7,7 @@ export interface VehicleInfoApi {
   id: number;
   name2: string;
   x_tipo_vehiculo: 'carretera' | 'local' | null;
+  vehicle_type_id: number | null;
   res_store: BranchSimple | null;
 }
 
