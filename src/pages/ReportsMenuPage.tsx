@@ -56,8 +56,14 @@ const reports: MenuItemType[] = [
     requiredPermissions: [190],
   },
   {
-    label: 'Mantenimiento',
+    label: 'Mantenimiento Tractos',
     path: '/reportes/mantenimiento',
+    icon: maintenanceIcon,
+    requiredPermissions: [198],
+  },
+  {
+    label: 'Mantenimiento Remolques',
+    path: '/reportes/remolques',
     icon: maintenanceIcon,
     requiredPermissions: [198],
   },
