@@ -6,7 +6,7 @@ import type { MaintenanceRecord } from '../models';
 import { Chip } from '@heroui/react';
 import { maintenanceStatus } from '../utilities';
 
-export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
+export const useMaintenanceReportColumns = (type: 'tractocamion' | 'remolques', data: MaintenanceRecord[]) => {
   const {
     workshopQuery: { data: workshops },
   } = useWorkshop();
@@ -23,8 +23,7 @@ export const useMaintenanceReportColumns = (data: MaintenanceRecord[]) => {
         Cell: ({ cell }) => {
           return (
             <Chip
-              size="sm"
-              color="primary"
+              color={type == "tractocamion" ? "primary" : "secondary"}
             >
               {cell.getValue<string>()}
             </Chip>

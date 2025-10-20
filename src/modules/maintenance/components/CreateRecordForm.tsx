@@ -52,12 +52,13 @@ const initialFormState: MaintenanceRecordCreate = {
 };
 
 interface Props {
+  type: "tractocamion" | "remolques";
   onClose: () => void;
 }
 
-export const CreateRecordForm = ({ onClose }: Props) => {
+export const CreateRecordForm = ({ type, onClose }: Props) => {
 
-  const { vehicleQuery } = useVehicles();
+  const { vehicleQuery, VehicleSelectOptions } = useVehicles(type);
 
   const [addWorkshop, setAddWorkshop] = useState(false);
 
@@ -130,9 +131,9 @@ export const CreateRecordForm = ({ onClose }: Props) => {
                   setValue("vehicleId", value);
                 }}
               >
-                {vehicleQuery.data?.map((v) => (
-                  <AutocompleteItem key={v.id}>
-                    {v.name}
+                {VehicleSelectOptions.map((v) => (
+                  <AutocompleteItem key={v.key}>
+                    {v.value}
                   </AutocompleteItem>
                 )) || []}
               </Autocomplete>
