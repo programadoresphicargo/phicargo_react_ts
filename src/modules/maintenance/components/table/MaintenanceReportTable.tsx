@@ -1,17 +1,16 @@
-import { Box, DialogProps, IconButton, Tooltip } from '@mui/material';
+import { Box, DialogProps } from '@mui/material';
 import type { MaintenanceRecord, MaintenanceRecordStatus } from '../../models';
 import { useEffect, useState } from 'react';
 import { useMaintenanceRecord, useMaintenanceReportColumns } from '../../hooks';
 import { CreateRecordForm } from '../CreateRecordForm';
-import EditIcon from '@mui/icons-material/Edit';
 import { EditRecordForm } from '../EditRecordForm';
-import InfoIcon from '@mui/icons-material/Info';
 import { MaterialReactTable } from 'material-react-table';
 import { MuiTransition } from '@/components';
 import { RecordDetailsModal } from '../RecordDetailsModal';
 import { useBaseTable } from '@/hooks';
 import { Button } from '@heroui/react';
 import { ExportConfig, ExportToExcel } from '@/utilities';
+import { Tooltip } from "@heroui/tooltip";
 
 const dialogProps: DialogProps = {
   slots: {
@@ -28,21 +27,25 @@ const dialogProps: DialogProps = {
 };
 
 interface MaintenanceReportTableProps {
+  type: 'tractocamion' | 'remolques';
   status: MaintenanceRecordStatus;
   setStatus: (status: MaintenanceRecordStatus) => void;
 }
 
 const MaintenanceReportTable = (props: MaintenanceReportTableProps) => {
-  const { status, setStatus } = props;
+  const { type, status, setStatus } = props;
 
   const [detail, setDetail] = useState<MaintenanceRecord | null>(null);
 
   const {
     recordsQuery: { data: records, isFetching, refetch, isLoading },
-  } = useMaintenanceRecord(status);
+  } = useMaintenanceRecord(type, status);
 
-  const columns = useMaintenanceReportColumns(records || []);
-  console.log(columns);
+  useEffect(() => {
+    refetch();
+  }, [type]);
+
+  const columns = useMaintenanceReportColumns(type, records || []);
 
   const table = useBaseTable<MaintenanceRecord>({
     columns,
@@ -62,27 +65,34 @@ const MaintenanceReportTable = (props: MaintenanceReportTableProps) => {
     },
     renderRowActions: ({ row, table }) => (
       <Box sx={{ display: 'flex' }}>
-        <Tooltip title="Editar">
-          <IconButton size="small" onClick={() => table.setEditingRow(row)}>
-            <EditIcon />
-          </IconButton>
+        <Tooltip content="Editar">
+          <Button size="sm"
+            onPress={() => table.setEditingRow(row)}
+            color={type == "tractocamion" ? "primary" : "secondary"}
+            radius='full'>
+            <i className="bi bi-pen"></i>
+          </Button>
         </Tooltip>
-        <Tooltip title="Detalles">
-          <IconButton
-            size="small"
-            color="primary"
-            onClick={() => setDetail(row.original)}
+        <Tooltip content="Detalles">
+          <Button
+            size="sm"
+            radius='full'
+            color="default"
+            onPress={() => setDetail(row.original)}
           >
-            <InfoIcon />
-          </IconButton>
+            <i className="bi bi-info-circle"></i>
+          </Button>
         </Tooltip>
       </Box>
     ),
     toolbarActions: (
       <>
+        <h1 className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text">
+          {type}
+        </h1>
         <Button
           radius='full'
-          color='primary'
+          color={type == 'tractocamion' ? 'primary' : 'secondary'}
           onPress={() => table.setCreatingRow(true)}
         >Añadir Servicio
         </Button>
@@ -106,7 +116,7 @@ const MaintenanceReportTable = (props: MaintenanceReportTableProps) => {
     renderCreateRowDialogContent: ({ table }) => (
       <CreateRecordForm
         onClose={() => table.setCreatingRow(null)}
-      />
+        type={type} />
     ),
   });
 

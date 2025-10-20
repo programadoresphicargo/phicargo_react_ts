@@ -7,13 +7,14 @@ import toast from 'react-hot-toast';
 const mainKey = 'maintenance-records';
 
 export const useMaintenanceRecord = (
+  type: "tractocamion" | "remolques",
   status: MaintenanceRecordStatus = 'pending',
 ) => {
   const queryClient = useQueryClient();
 
   const recordsQuery = useQuery<MaintenanceRecord[]>({
     queryKey: [mainKey, status],
-    queryFn: () => MaintenanceRecordServiceApi.getAllRecords(status),
+    queryFn: () => MaintenanceRecordServiceApi.getAllRecords(type, status),
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 10,
   });

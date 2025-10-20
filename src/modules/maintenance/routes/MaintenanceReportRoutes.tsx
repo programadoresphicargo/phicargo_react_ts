@@ -15,7 +15,7 @@ const MaintenanceReportRoutes = () => (
       <ProtectedRoute
         element={
           <Suspense fallback={<LoadingPage />}>
-            <MaintenanceReportPage />
+            <MaintenanceReportPage title={'tractocamion'} />
           </Suspense>
         }
         requiredPermissionId={198}

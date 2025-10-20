@@ -68,7 +68,7 @@ export const CreateRecordForm = ({ type, onClose }: Props) => {
 
   const {
     addRecordMutation: { mutate: addRegister, isPending },
-  } = useMaintenanceRecord();
+  } = useMaintenanceRecord(type);
 
   const { control, handleSubmit, setValue, watch } =
     useForm<MaintenanceRecordCreate>({
