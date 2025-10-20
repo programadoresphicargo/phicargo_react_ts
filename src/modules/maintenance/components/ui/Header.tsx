@@ -36,7 +36,7 @@ const Header = (props: Props) => {
   const {
     recordsCountQuery: { data: count, isFetching },
     recordsQuery: { data: registers, isFetching: isFetchingRegisters },
-  } = useMaintenanceRecord(status);
+  } = useMaintenanceRecord("tractocamion", status);
 
   useEffect(() => {
     if (!isFetchingRegisters && registers) {
