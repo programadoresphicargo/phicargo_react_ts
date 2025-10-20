@@ -22,9 +22,10 @@ import odooApi from '@/api/odoo-api';
  */
 class MaintenanceRecordServiceApi {
   public static async getAllRecords(
+    type: "tractocamion" | "remolques",
     status: MaintenanceRecordStatus,
   ): Promise<MaintenanceRecord[]> {
-    const url = `/maintenance-record/?status=${status}`;
+    const url = `/maintenance-record/?status=${status}&type=${type}`;
 
     try {
       const response = await odooApi.get<MaintenanceRecordApi[]>(url);
@@ -122,7 +123,7 @@ class MaintenanceRecordServiceApi {
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data.detail ||
-            'Error al obtener comentarios de actualización',
+          'Error al obtener comentarios de actualización',
         );
       }
       throw new Error('Error inesperado con el servidor de actualización');
@@ -164,7 +165,7 @@ class MaintenanceRecordServiceApi {
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data.detail ||
-            'Error al obtener el conteo de registros',
+          'Error al obtener el conteo de registros',
         );
       }
       throw new Error('Error inesperado con el servidor');
