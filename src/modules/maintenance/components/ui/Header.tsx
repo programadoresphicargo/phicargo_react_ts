@@ -6,6 +6,7 @@ import { MaintenanceRecordStatus } from '../../models';
 import { useMaintenanceRecord } from '../../hooks';
 
 interface Props {
+  type: "tractocamion" | "remolques",
   status: MaintenanceRecordStatus;
 }
 
@@ -28,7 +29,7 @@ const BRANCH_IDS = {
 };
 
 const Header = (props: Props) => {
-  const { status } = props;
+  const { type, status } = props;
 
   const [branchCount, setBranchCount] =
     useState<BranchCount>(defaultBranchCount);
@@ -36,7 +37,7 @@ const Header = (props: Props) => {
   const {
     recordsCountQuery: { data: count, isFetching },
     recordsQuery: { data: registers, isFetching: isFetchingRegisters },
-  } = useMaintenanceRecord("tractocamion", status);
+  } = useMaintenanceRecord(type, status);
 
   useEffect(() => {
     if (!isFetchingRegisters && registers) {
