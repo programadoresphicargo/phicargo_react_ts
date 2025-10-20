@@ -6,6 +6,7 @@ import MaintenanceReportRoutes from '@/modules/maintenance/routes/MaintenanceRep
 import ProtectedRoute from './ProtectedRoute';
 import ReportsMenuPage from '@/pages/ReportsMenuPage';
 import { Route } from 'react-router-dom';
+import MaintenanceReportRoutesRemolques from '@/modules/maintenance/routes/MaintenanceReportRoutes copy';
 
 const Saldos = lazy(
   () => import('@/phicargo/saldos_contabilidad/ControlUsuarios'),
@@ -34,6 +35,8 @@ export const ReportsRoutes = () => (
 
     {/* Reporte de Mantenimiento */}
     {MaintenanceReportRoutes()}
+
+    {MaintenanceReportRoutesRemolques()}
 
     {/* Reporte de Cobranza */}
     {CashflowReportRoutes()}
