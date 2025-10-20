@@ -15,7 +15,7 @@ class VehicleServiceApi {
   public static async getVehicles(): Promise<VehicleInfo[]> {
     try {
       const response = await odooApi.get<VehicleInfoApi[]>(
-        '/maintenance-record/vehicles/all',
+        '/vehicles/activos/',
       );
       return response.data.map(MaintenaceRecordAdapter.vehicleInfoToLocal);
     } catch (error) {
