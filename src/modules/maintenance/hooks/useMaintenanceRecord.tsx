@@ -7,7 +7,7 @@ import toast from 'react-hot-toast';
 const mainKey = 'maintenance-records';
 
 export const useMaintenanceRecord = (
-  type: "tractocamion" | "remolques",
+  type: "tractocamion" | "remolques" = "tractocamion",
   status: MaintenanceRecordStatus = 'pending',
 ) => {
   const queryClient = useQueryClient();
