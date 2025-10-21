@@ -65,7 +65,7 @@ const Header = (props: Props) => {
           Reporte de Mantenimiento
         </h1>
         <p className="my-1 text-sm text-gray-300">
-          Información sobre el estado de los tractos en mantenimiento.
+          Información sobre el estado de los {type} en mantenimiento.
         </p>
       </div>
 
