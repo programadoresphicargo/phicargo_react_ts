@@ -20,13 +20,13 @@ const checklistItems: ChecklistItem[] = [
     label:
       'Foto exteriores (Frente, Lateral derecho, Lateral izquierdo, Atrás)',
     name: 'fotos_exteriores',
-    photoCount: 4,
+    photoCount: 1,
   },
   {
     type: 'file',
     label: 'Fotos interiores (Cabina, Piloto y Copiloto)',
     name: 'fotos_interiores',
-    photoCount: 3,
+    photoCount: 5,
   },
 ];
 
