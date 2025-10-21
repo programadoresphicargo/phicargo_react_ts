@@ -1,4 +1,4 @@
-import { AddButton, Button } from '@/components/ui';
+import { AddButton } from '@/components/ui';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Tab, Tabs } from '@heroui/react';
 
@@ -11,6 +11,7 @@ import { RecordInfo } from './RecordInfo';
 import { TextareaInput } from '@/components/inputs';
 import { useMaintenanceRecord } from '../hooks';
 import { useState } from 'react';
+import { Button } from '@heroui/react';
 
 interface RegisterDetailForm {
   comment: string;
@@ -55,7 +56,7 @@ export const RecordDetailsModal = ({ open, onClose, record }: Props) => {
         maxWidth="md"
         header={
           <h2 className="uppercase font-thin">
-            Detalles: <span className="font-bold">{record.vehicle.name}</span>
+            <span className="font-bold">{record.vehicle.name}</span>
           </h2>
         }
       >
@@ -78,11 +79,12 @@ export const RecordDetailsModal = ({ open, onClose, record }: Props) => {
                 onClick={handleSubmit(onSubmit)}
               />
               <Button
+                className='text-white'
                 color="success"
-                variant="contained"
-                size="small"
-                startIcon={<CheckIcon width={'1.5em'} height={'1.5em'} />}
-                onClick={() => setCompleteModal(true)}
+                size="sm"
+                radius='full'
+                startContent={<CheckIcon width={'1.5em'} height={'1.5em'} />}
+                onPress={() => setCompleteModal(true)}
               >
                 Finalizar
               </Button>
