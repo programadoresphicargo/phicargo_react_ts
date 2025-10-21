@@ -54,7 +54,7 @@ const MaintenanceReportTable = (props: MaintenanceReportTableProps) => {
     isLoading,
     refetchFn: refetch,
     tableId: 'maintenance-report-table',
-    containerHeight: 'calc(100vh - 220px)',
+    containerHeight: 'calc(100vh - 270px)',
     enableRowActions: true,
     showGlobalFilter: true,
     positionGlobalFilter: "right",
