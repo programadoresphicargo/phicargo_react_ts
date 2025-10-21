@@ -11,10 +11,12 @@ import {
   TextFieldElement,
 } from 'react-hook-form-mui';
 import { DatePickerElement } from 'react-hook-form-mui/date-pickers';
-import { Button, MuiSaveButton } from '@/components/ui';
+import { MuiSaveButton } from '@/components/ui';
 import { DriverAutocompleteInput } from '@/modules/drivers/components/DriverAutocompleteInput';
 import { useCreateVehicleInspectionMutation } from '../../hooks/mutations';
 import { Controller } from "react-hook-form";
+import { Button } from '@heroui/react';
+import { useEffect } from 'react';
 
 const initialValues: VehicleInspectionCreate = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -54,11 +56,28 @@ export const InspectionForm = ({
 
   const result = watch('result');
 
+  useEffect(() => {
+    if (!checklist) return;
+
+    const answer0 = checklist[0]?.answer;
+    const answer1 = checklist[1]?.answer;
+
+    if (answer0 === 'si' || answer1 === 'no') {
+      setValue('result', 'rejected');
+    } else if (answer0 === 'no' || answer1 === 'si') {
+      setValue('result', 'approved');
+    }
+  }, [checklist, setValue]);
+
   const onSubmit: SubmitHandler<VehicleInspectionCreate> = (data) => {
     if (!vehicleId) return;
     if (inspectionType) {
       data.inspectionType = inspectionType;
     }
+
+    console.log('Checklist recibido:', checklist);
+    console.log('Datos del formulario:', data);
+
     mutation.mutate(
       {
         ...data,
@@ -83,6 +102,7 @@ export const InspectionForm = ({
         label="Resultado de la Revisión"
         size="small"
         required
+        disabled
         rules={{ required: 'Resultado de la revisión requerido' }}
         options={[
           { label: 'Aprobado', id: 'approved' },
@@ -153,10 +173,10 @@ export const InspectionForm = ({
       <div className="flex justify-between items-center">
         {onCancel && (
           <Button
-            variant="outlined"
-            color="error"
-            size="small"
-            onClick={onCancel}
+            radius='full'
+            color="danger"
+            size="sm"
+            onPress={onCancel}
           >
             Cancelar
           </Button>
