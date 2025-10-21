@@ -23,8 +23,7 @@ export const HeaderBase = ({ children, backRoute, fixed }: Props) => {
       }}
     >
       <div className="flex justify-between items-center flex-wrap">
-        <BackButton route={backRoute} />
-
+        {backRoute?.trim() && <BackButton route={backRoute} />}
         {children}
       </div>
     </div>
