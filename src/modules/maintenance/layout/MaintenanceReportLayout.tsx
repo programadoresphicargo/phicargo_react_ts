@@ -7,14 +7,15 @@ import { Toaster } from 'react-hot-toast';
 
 interface Props {
   children: ReactNode;
+  type: "tractocamion" | "remolques",
   status: MaintenanceRecordStatus;
 }
 
-const MaintenanceReportLayout = ({ children, status }: Props) => {
+const MaintenanceReportLayout = ({ children, type, status }: Props) => {
   return (
     <>
       <Toaster position="top-center" reverseOrder={false} />
-      <Header status={status} />
+      <Header status={status} type={type} />
       <main className="flex-grow w-full p-2">
         <ErrorBoundary>
           {children}
