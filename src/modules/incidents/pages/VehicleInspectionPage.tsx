@@ -7,7 +7,7 @@ import { MonthSelect, YearSelect } from '@/components/inputs';
 import { useState } from 'react';
 import { VehicleInspectionDetailModal } from '@/modules/vehicles/components/vehicle-inspections/VehicleInspectionDetailsModal';
 import InfoIcon from '@mui/icons-material/Info';
-import { Box, IconButton, Tooltip } from '@mui/material';
+import { Box, Tooltip } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { InspectionModal } from '@/modules/vehicles/components/vehicle-inspections/InspectionModal';
 import { VehicleInspectionHeader } from '../components/ui/VehicleInspectionHeader';
