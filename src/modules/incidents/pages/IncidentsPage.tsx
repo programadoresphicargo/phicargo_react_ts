@@ -4,7 +4,7 @@ import { useIncidentsColumns } from '../hooks/useIncidentsColumns';
 import { useBaseTable } from '@/hooks';
 import type { Incident } from '../models';
 import { CreateIncidentModal } from '../components/CreateIncidentModal';
-import { Box, DialogProps, IconButton, Tooltip } from '@mui/material';
+import { Box, DialogProps } from '@mui/material';
 import { MuiTransition } from '@/components';
 import InfoIcon from '@mui/icons-material/Info';
 import { IncidentDetailsModal } from '../components/IncidentDetailsModal';
@@ -13,7 +13,7 @@ import { DateRangePicker } from '@/components/inputs';
 import { useIncidentsContext } from '../hooks/useIncidentsContext';
 import EditIcon from '@mui/icons-material/Edit';
 import { EditIncidentModal } from '../components/EditIncidentModal';
-import { Button } from '@heroui/react';
+import { Button, Tooltip } from '@heroui/react';
 
 const dialogProps: DialogProps = {
   slots: {
@@ -59,19 +59,20 @@ const IncidentsPage = () => {
     positionActionsColumn: 'first',
     renderRowActions: ({ row }) => (
       <Box sx={{ display: 'flex' }}>
-        <Tooltip title="Detalles">
-          <IconButton
-            size="small"
+        <Tooltip content="Detalles">
+          <Button
+            size="sm"
+            radius='full'
             color="primary"
-            onClick={() => setDetail(row.original)}
+            onPress={() => setDetail(row.original)}
           >
             <InfoIcon />
-          </IconButton>
+          </Button>
         </Tooltip>
-        <Tooltip title="Editar">
-          <IconButton size="small" onClick={() => table.setEditingRow(row)}>
+        <Tooltip content="Editar">
+          <Button size="sm" onPress={() => table.setEditingRow(row)} radius='full'>
             <EditIcon />
-          </IconButton>
+          </Button>
         </Tooltip>
       </Box>
     ),
