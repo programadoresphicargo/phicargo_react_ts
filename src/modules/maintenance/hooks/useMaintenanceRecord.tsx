@@ -66,8 +66,8 @@ export const useMaintenanceRecord = (
   });
 
   const recordsCountQuery = useQuery({
-    queryKey: [mainKey, 'count'],
-    queryFn: () => MaintenanceRecordServiceApi.getRecordsCount(),
+    queryKey: [mainKey, type, 'count'],
+    queryFn: () => MaintenanceRecordServiceApi.getRecordsCount(type),
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 5,
   });

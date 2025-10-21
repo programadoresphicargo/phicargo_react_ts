@@ -156,8 +156,8 @@ class MaintenanceRecordServiceApi {
     }
   }
 
-  public static async getRecordsCount(): Promise<RecordStats> {
-    const url = '/maintenance-record/count/all';
+  public static async getRecordsCount(type: "tractocamion" | "remolques"): Promise<RecordStats> {
+    const url = `/maintenance-record/count/all?type=${type}`;
     try {
       const response = await odooApi.get<RecordStats>(url);
       return response.data;
