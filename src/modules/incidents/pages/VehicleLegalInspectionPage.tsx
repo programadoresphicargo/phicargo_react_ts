@@ -111,26 +111,29 @@ const RowActions = ({
       {hasInspection && (
         <Tooltip title={'Ver revisión'}>
           <span>
-            <IconButton
-              size="small"
+            <Button
+              size="sm"
               color={'primary'}
-              onClick={() => openDetail(inspection)}
+              onPress={() => openDetail(inspection)}
+              radius='full'
             >
               <InfoIcon />
-            </IconButton>
+            </Button>
           </span>
         </Tooltip>
       )}
       {!hasInspection && canInspect && (
         <Tooltip title={'Registrar revisión'}>
           <span>
-            <IconButton
-              size="small"
+            <Button
+              size="sm"
+              className='text-white'
+              radius='full'
               color={'warning'}
-              onClick={() => openInspect(inspection)}
+              onPress={() => openInspect(inspection)}
             >
               <VisibilityIcon />
-            </IconButton>
+            </Button>
           </span>
         </Tooltip>
       )}

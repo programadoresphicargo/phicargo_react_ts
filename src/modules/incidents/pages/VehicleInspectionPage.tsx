@@ -11,6 +11,7 @@ import { Box, IconButton, Tooltip } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { InspectionModal } from '@/modules/vehicles/components/vehicle-inspections/InspectionModal';
 import { VehicleInspectionHeader } from '../components/ui/VehicleInspectionHeader';
+import { Button } from '@heroui/react';
 
 
 const now = new Date();
@@ -105,26 +106,30 @@ const RowActions = ({
       {hasInspection && (
         <Tooltip title={'Ver revisión'}>
           <span>
-            <IconButton
-              size="small"
+            <Button
+              size="sm"
               color={'primary'}
-              onClick={() => openDetail(inspection)}
+              className='text-white'
+              radius='full'
+              onPress={() => openDetail(inspection)}
             >
               <InfoIcon />
-            </IconButton>
+            </Button>
           </span>
         </Tooltip>
       )}
       {!hasInspection && canInspect && (
         <Tooltip title={'Registrar revisión'}>
           <span>
-            <IconButton
-              size="small"
+            <Button
+              size="sm"
               color={'warning'}
-              onClick={() => openInspect(inspection)}
+              className='text-white'
+              onPress={() => openInspect(inspection)}
+              radius='full'
             >
               <VisibilityIcon />
-            </IconButton>
+            </Button>
           </span>
         </Tooltip>
       )}
