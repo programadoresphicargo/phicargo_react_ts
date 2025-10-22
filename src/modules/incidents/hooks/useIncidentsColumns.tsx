@@ -28,6 +28,18 @@ export const useIncidentsColumns = () => {
         },
       },
       {
+        accessorFn: (row) => row.isDriverResponsible,
+        header: 'Es Responsable',
+        Cell: ({ cell }) => {
+          const value = cell.getValue<boolean>();
+          return value === true ? (
+            <Chip label="Sí" color="error" />
+          ) : (
+            <Chip label="No" color="success" />
+          );
+        },
+      },
+      {
         accessorFn: (row) => row.type,
         header: 'Tipo',
         maxSize: 50,
@@ -38,7 +50,7 @@ export const useIncidentsColumns = () => {
               label={incidentType.getLabel(value)}
               color={incidentType.getColor(value)}
               size="small"
-              variant="outlined"
+              variant="filled"
             />
           );
         },
