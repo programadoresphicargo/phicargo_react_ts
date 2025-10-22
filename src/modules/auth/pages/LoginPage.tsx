@@ -4,8 +4,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { useAuthContext, useLoginMutation } from '../hooks';
 import { Toaster } from 'react-hot-toast';
 import { UserLogin } from '../models';
-import logo from '@/assets/img/phicargo_logo_white.png';
-import logo2 from '@/assets/papel.png'
+import logo from '@/assets/papel.png'
 import { useNavigate } from 'react-router-dom';
 import './styles.css';
 
@@ -48,7 +47,7 @@ const LoginPage = () => {
               <div className="flex flex-col gap-1">
 
                 <div className="flex justify-center mb-5">
-                  <Image width={400} alt="phicargo logo" src={logo2} />
+                  <Image width={400} alt="phicargo logo" src={logo} />
                 </div>
 
                 <h1 className="text-large font-medium text-white">Bienvenido 👋</h1>
