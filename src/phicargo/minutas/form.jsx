@@ -22,6 +22,8 @@ import ExampleWithProviders from './tareas';
 import SolicitanteMinuta from './solicitante';
 import VoiceTextarea from './VoiceTextarea';
 import Swal from "sweetalert2";
+import { DatePicker } from '@heroui/react';
+import { parseDate } from "@internationalized/date";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
  return <Slide direction="up" ref={ref} {...props} />;
@@ -98,6 +100,11 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
 
   if (data?.desarrollo_reunion == "") {
    toast.error('Desarrollo de reunión es obligatorio.')
+   return;
+  }
+
+  if (data?.fecha == null) {
+   toast.error('Fecha es obligatorio.')
    return;
   }
 
@@ -276,6 +283,26 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
      {/* Primer componente (4 columnas) */}
      <Grid item xs={5}>
       <div className="w-full flex flex-col gap-4">
+       <DatePicker
+        variant={isEditing ? "bordered" : "bordered"}
+        hideTimeZone
+        showMonthAndYearPickers
+        label="Fecha de minuta"
+        fullWidth
+        value={
+         data?.fecha
+          ? parseDate(data.fecha.split('T')[0])
+          : null
+        }
+        isDisabled={!isEditing}
+        onChange={(date) => {
+         if (!date) return;
+         const formattedDate = date.toString();
+         setData((prev) => ({ ...prev, fecha: formattedDate }));
+        }}
+        isInvalid={!data?.fecha}
+        errorMessage={!data.fecha && "La fecha es obligatoria"}
+       />
        <SolicitanteMinuta id_solicitante={data?.id_solicitante} setSolicitante={handleChange}></SolicitanteMinuta>
        <ParticipantesMinutas />
       </div>
