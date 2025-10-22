@@ -58,6 +58,10 @@ const Minutas = ({ }) => {
         header: 'ID Minuta',
       },
       {
+        accessorKey: 'fecha',
+        header: 'Fecha',
+      },
+      {
         accessorKey: 'solicitante',
         header: 'Solicitante',
       },
