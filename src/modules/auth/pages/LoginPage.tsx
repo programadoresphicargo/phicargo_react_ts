@@ -5,6 +5,7 @@ import { useAuthContext, useLoginMutation } from '../hooks';
 import { Toaster } from 'react-hot-toast';
 import { UserLogin } from '../models';
 import logo from '@/assets/img/phicargo_logo_white.png';
+import logo2 from '@/assets/papel.png'
 import { useNavigate } from 'react-router-dom';
 import './styles.css';
 
@@ -37,9 +38,9 @@ const LoginPage = () => {
     <>
       <Toaster position="top-center" reverseOrder={false} />
       <div className="bg_fondo">
-        <div className="bg_login"></div>
-        <div className="bg_login bg2_login"></div>
-        <div className="bg_login bg3_login"></div>
+        <div className="bg_login_muertos"></div>
+        <div className="bg_login_muertos bg2_login"></div>
+        <div className="bg_login_muertos bg3_login"></div>
 
         <div className="content_login">
           <div className="flex h-full w-full items-center justify-center">
@@ -47,7 +48,7 @@ const LoginPage = () => {
               <div className="flex flex-col gap-1">
 
                 <div className="flex justify-center mb-5">
-                  <Image width={400} alt="phicargo logo" src={logo} />
+                  <Image width={400} alt="phicargo logo" src={logo2} />
                 </div>
 
                 <h1 className="text-large font-medium text-white">Bienvenido 👋</h1>
@@ -85,8 +86,8 @@ const LoginPage = () => {
                   />
                 </div>
                 <Button
-                  className="w-full"
-                  color="primary"
+                  className="w-full text-white"
+                  color="warning"
                   type="submit"
                   size="sm"
                   isLoading={isPending}
