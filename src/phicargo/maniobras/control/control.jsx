@@ -22,7 +22,13 @@ export default function control_maniobras() {
                 <ManiobrasNavBar />
                 <Box sx={{ width: '100%' }}>
                     <TabContext value={value}>
-                        <Box sx={{ borderColor: 'divider', backgroundColor: '#002887', color: 'white' }}>
+                        <Box
+                            sx={{
+                                borderColor: 'divider',
+                                background: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
+                                color: 'white',
+                            }}
+                        >
                             <TabList onChange={handleChange}
                                 textColor="inherit"
                                 sx={{

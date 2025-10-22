@@ -93,7 +93,7 @@ function ManiobrasNavBar() {
                 elevation={3}
                 position="static"
                 sx={{
-                    background: 'linear-gradient(90deg, #0b2149, #002887)',
+                    background: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
                     padding: '0 16px',
                 }}
             >
