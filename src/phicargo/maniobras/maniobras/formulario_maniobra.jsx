@@ -697,10 +697,10 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                             {buttonsVisibility.guardar_maniobra && <Button color="success" onPress={validar_form_actualizar} isLoading={Loading} className='text-white' startContent={<i class="bi bi-floppy"></i>}>Guardar cambios</Button>}
                                             {buttonsVisibility.editar_maniobra && <Button color="primary" onPress={toggleForm} startContent={<i class="bi bi-pen"></i>}>Editar</Button>}
                                             {buttonsVisibility.iniciar && <Button color="success" onPress={comprobar_equipo} className='text-white' startContent={<i class="bi bi-play-fill"></i>}>Iniciar</Button>}
-                                            {buttonsVisibility.finalizar && <Button onPress={finalizar_maniobra} color="danger" startContent={<i class="bi bi-stop-fill"></i>}>Finalizar</Button>}
-                                            {buttonsVisibility.enviar_estatus && <Button onPress={handleClickOpenPE} color="success" className='text-white' startContent={<i class="bi bi-send-fill"></i>}>Enviar nuevo estatus</Button>}
-                                            {buttonsVisibility.reactivar && <Button color="primary" onPress={reactivar_maniobra}>Reactivar maniobra</Button>}
-                                            <Button color="primary" onPress={handleClickOpenCL} startContent={<i class="bi bi-envelope-at-fill"></i>}>Correos electronicos</Button>
+                                            {buttonsVisibility.finalizar && <Button onPress={finalizar_maniobra} color="danger" startContent={<i class="bi bi-stop-fill"></i>} radius="full">Finalizar</Button>}
+                                            {buttonsVisibility.enviar_estatus && <Button onPress={handleClickOpenPE} color="success" className='text-white' startContent={<i class="bi bi-send-fill"></i>} radius="full">Enviar nuevo estatus</Button>}
+                                            {buttonsVisibility.reactivar && <Button color="primary" onPress={reactivar_maniobra} radius='full'>Reactivar maniobra</Button>}
+                                            <Button color="primary" onPress={handleClickOpenCL} startContent={<i class="bi bi-envelope-at-fill"></i>} radius='full'>Correos electronicos</Button>
                                         </Stack>
                                     </Grid>
 
