@@ -93,13 +93,18 @@ const Minutas = ({ }) => {
         accessorKey: 'participantes',
         header: 'Participantes',
         Cell: ({ row }) => {
+          const colors = ["default", "primary", "secondary", "success", "warning", "danger", "foreground"];
           const participantes = row.original.participantes;
           return (
             <AvatarGroup isBordered>
               {participantes && participantes.length > 0 ? (
                 participantes.map((p, index) => (
-                  <Tooltip content={p.empleado} color='primary'>
-                    <Avatar isBordered color='primary' />
+                  <Tooltip key={index} content={p.empleado} color="primary">
+                    <Avatar
+                      isBordered
+                      color={colors[index % colors.length]} // 🔹 Asigna colores de forma cíclica
+                      size="sm"
+                    />
                   </Tooltip>
                 ))
               ) : (
