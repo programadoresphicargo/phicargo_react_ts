@@ -40,6 +40,9 @@ import { useAuthContext } from "@/modules/auth/hooks";
 import dayjs from 'dayjs';
 import { DatePicker } from "@heroui/react";
 import { parseDate, parseDateTime, getLocalTimeZone } from "@internationalized/date";
+import { Link } from "@heroui/link";
+
+const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
 const fieldValidations = {
     id_terminal: { required: true, message: 'El campo Terminal es requerido' },
@@ -659,7 +662,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                             <Typography sx={{ fontFamily: 'Inter' }}>
                                 Maniobra M-{id_maniobra} / {id_cp}
                             </Typography>
-                            <Button autoFocus color="inherit" onPress={handleClose}>
+                            <Button autoFocus color="primary" onPress={handleClose}>
                                 Cerrar
                             </Button>
                         </Toolbar>
@@ -695,7 +698,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                 <Grid container mb={2} spacing={2}>
                                     <Grid size={12}>
                                         <Stack spacing={1} direction="row" className='mb-4'>
-                                            {buttonsVisibility.registrar && <Button color="primary" onPress={validar_form} isLoading={Loading}>Registrar</Button>}
+                                            {buttonsVisibility.registrar && <Button color="primary" onPress={validar_form} isLoading={Loading} radius='full'>Registrar</Button>}
                                             {buttonsVisibility.cancelar && <Button onPress={handleOpenDialog} color="danger" startContent={<i class="bi bi-x-circle"></i>}>Cancelar</Button>}
                                             {buttonsVisibility.guardar_maniobra && <Button color="success" onPress={validar_form_actualizar} isLoading={Loading} className='text-white' startContent={<i class="bi bi-floppy"></i>}>Guardar cambios</Button>}
                                             {buttonsVisibility.editar_maniobra && <Button color="primary" onPress={toggleForm} startContent={<i class="bi bi-pen"></i>}>Editar</Button>}
@@ -704,6 +707,20 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                             {buttonsVisibility.enviar_estatus && <Button onPress={handleClickOpenPE} color="success" className='text-white' startContent={<i class="bi bi-send-fill"></i>} radius="full">Enviar nuevo estatus</Button>}
                                             {buttonsVisibility.reactivar && <Button color="primary" onPress={reactivar_maniobra} radius='full'>Reactivar maniobra</Button>}
                                             <Button color="primary" onPress={handleClickOpenCL} startContent={<i class="bi bi-envelope-at-fill"></i>} radius='full'>Correos electronicos</Button>
+
+                                            <Button
+                                                radius="full"
+                                                showAnchorIcon
+                                                as={Link}
+                                                isExternal={true}
+                                                color="success"
+                                                href={`${apiUrl}/maniobras/formato_entrega/` + id_maniobra}
+                                                variant="solid"
+                                                className='text-white'
+                                            >
+                                                Formato de entrega
+                                            </Button>
+
                                         </Stack>
                                     </Grid>
 
