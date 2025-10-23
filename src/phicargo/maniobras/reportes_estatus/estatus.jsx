@@ -56,7 +56,7 @@ function EstatusHistorialManiobras({ id_maniobra }) {
     return (
         <>
             <Stack className='mb-3'>
-                <Button color='primary' onPress={getHistorialEstatus} isLoading={isLoading}>Actualizar historial</Button>
+                <Button color='primary' onPress={getHistorialEstatus} isLoading={isLoading} radius="full">Actualizar historial</Button>
             </Stack>
             <Dialog
                 open={open}
