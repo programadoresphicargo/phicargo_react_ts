@@ -3,7 +3,7 @@ import {
   useMaterialReactTable,
 } from 'material-react-table';
 import React, { useEffect, useMemo, useState } from 'react';
-
+import { Avatar, AvatarGroup } from "@heroui/react";
 import { Box } from '@mui/material';
 import { Button } from "@heroui/react";
 import { Checkbox } from '@mui/material';
@@ -15,6 +15,7 @@ import Slide from '@mui/material/Slide';
 import odooApi from '@/api/odoo-api';
 import MinutaForm from './form';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
+import { Tooltip } from "@heroui/react";
 
 const { VITE_ODOO_API_URL } = import.meta.env;
 
@@ -94,17 +95,17 @@ const Minutas = ({ }) => {
         Cell: ({ row }) => {
           const participantes = row.original.participantes;
           return (
-            <div style={{ whiteSpace: 'pre-line' }}>
+            <AvatarGroup isBordered>
               {participantes && participantes.length > 0 ? (
                 participantes.map((p, index) => (
-                  <div key={index} style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                    <i className="bi bi-person-fill"></i> {p.empleado}
-                  </div>
+                  <Tooltip content={p.empleado} color='primary'>
+                    <Avatar isBordered color='primary' />
+                  </Tooltip>
                 ))
               ) : (
                 "Sin responsables"
               )}
-            </div>
+            </AvatarGroup>
           );
         },
       },
