@@ -18,7 +18,7 @@ const checklistItems: ChecklistItem[] = [
   {
     type: 'file',
     label:
-      "Foto exterior (frente del camión, donde se note el número de vehículo)",
+      'Foto exterior (frente del camión, donde se note el número de vehículo)',
     name: 'fotos_exteriores',
     photoCount: 1,
   },
