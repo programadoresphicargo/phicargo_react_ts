@@ -12,11 +12,11 @@ import { FilesList } from '@/components/utils/FilesList';
 import { Button, Select, SelectItem, Textarea } from '@heroui/react';
 import { EditIncidentModal } from '@/modules/incidents/components/EditIncidentModal';
 import Swal from 'sweetalert2';
-import { useConfirmInspectionMutation } from '../../hooks/queries/inspections/useConfirmInspection';
 import { useState, useEffect } from 'react';
 import { useUpdateVehicleInspectionMutation } from '../../hooks/queries/inspections/useUpdateVehicleInspectionMutation';
 import { useGetInspectionChecklistQuery } from '../../hooks/queries';
 import { CreateIncidentModal } from '@/modules/incidents/components/CreateIncidentModal';
+import { useChangeStateInspectionMutation } from '../../hooks/queries/inspections/useConfirmInspection';
 
 interface Props {
   open: boolean;
@@ -42,7 +42,7 @@ export const VehicleInspectionDetailModal = ({
     query: { data: checklist, isLoading: loadingChecklist },
   } = useGetInspectionChecklistQuery(vehicleInspection.inspection?.id);
 
-  const { ConfirmInspectionMutacion, isLoadingConfirm } = useConfirmInspectionMutation(vehicleInspection.inspection?.id)
+  const { ChangeStateInspectionMutacion, isLoadingConfirm } = useChangeStateInspectionMutation();
   const { mutate: updateInspection, isPending: updarting } = useUpdateVehicleInspectionMutation();
 
   const [openCreateIncident, setOpenCreateIncident] = useState(false);
@@ -74,9 +74,9 @@ export const VehicleInspectionDetailModal = ({
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const confirmar_inspeccion = async () => {
+  const cambiar_estado_inspeccion = async (nuevoEstado: string) => {
     Swal.fire({
-      title: '¿Confirmar inspección?',
+      title: '¿Confirmar cambio de estado a esta inspección?',
       text: 'Una vez confirmado no podrás editarlo.',
       icon: 'warning',
       showCancelButton: true,
@@ -86,8 +86,11 @@ export const VehicleInspectionDetailModal = ({
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        ConfirmInspectionMutacion.mutate(
-          undefined,
+        ChangeStateInspectionMutacion.mutate(
+          {
+            inspectionId: vehicleInspection.inspection?.id!,
+            state: nuevoEstado,
+          },
           {
             onSuccess: (data) => {
               if (data.status === 'success') {
@@ -147,7 +150,7 @@ export const VehicleInspectionDetailModal = ({
                     color="success"
                     className="text-white"
                     radius="full"
-                    onPress={() => confirmar_inspeccion()}
+                    onPress={() => cambiar_estado_inspeccion("confirmed")}
                     isLoading={isLoadingConfirm}
                   >
                     Confirmar revisión
@@ -157,6 +160,8 @@ export const VehicleInspectionDetailModal = ({
             </>
           ) : (
             <>
+
+              <Button color='warning' onPress={() => cambiar_estado_inspeccion("draft")} radius='full' className='text-white'>Regresar a Borrador</Button>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <p className="text-sm text-gray-500">Estado</p>
                 <p>{vehicleInspection.inspection?.inspectionState}</p>

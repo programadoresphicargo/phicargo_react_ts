@@ -80,10 +80,11 @@ export class VehicleInspectionService {
     }
   }
 
-  public static async confirmInspection(
+  public static async ChangeStateInspection(
     inspectioId: number,
+    state: string,
   ) {
-    const url = `/vehicles/inspections/confirm/${inspectioId}`;
+    const url = `/vehicles/inspections/state/${inspectioId}/${state}`;
     try {
       const response = await odooApi.post(url);
       return response.data;

@@ -3,26 +3,35 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from "react-toastify";
 import { VEHICLE_INSPECTION_QUERY_KEY } from "..";
 
-export const useConfirmInspectionMutation = (inspectionId?: number) => {
+interface ChangeStateParams {
+  inspectionId: number;
+  state: string;
+}
+
+export const useChangeStateInspectionMutation = () => {
   const queryClient = useQueryClient();
 
-  const ConfirmInspectionMutacion = useMutation({
-    mutationFn: () => VehicleInspectionService.confirmInspection(inspectionId!),
+  // 2️⃣ Tipamos useMutation para aceptar ChangeStateParams
+  const ChangeStateInspectionMutacion = useMutation({
+    mutationFn: ({ inspectionId, state }: ChangeStateParams) =>
+      VehicleInspectionService.ChangeStateInspection(inspectionId, state),
+
     onSuccess: (data) => {
-      if (data.status == 'success') {
+      if (data.status === "success") {
         toast.success(data.message);
       } else {
         toast.error(data.message);
       }
       queryClient.invalidateQueries({ queryKey: [VEHICLE_INSPECTION_QUERY_KEY] });
     },
+
     onError: (error: Error) => {
       toast.error(error.message);
     },
   });
 
   return {
-    ConfirmInspectionMutacion,
-    isLoadingConfirm: ConfirmInspectionMutacion.isPending,
+    ChangeStateInspectionMutacion,
+    isLoadingConfirm: ChangeStateInspectionMutacion.isPending,
   };
-}
+};
