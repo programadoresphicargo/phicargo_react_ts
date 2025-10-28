@@ -63,11 +63,18 @@ export const InspectionForm = ({
     const answer1 = checklist[1]?.answer;
 
     if (answer0 === 'si' || answer1 === 'no') {
-      setValue('result', 'rejected');
+      setValue('result', 'rejected', { shouldValidate: true });
     } else if (answer0 === 'no' || answer1 === 'si') {
-      setValue('result', 'approved');
+      setValue('result', 'approved', { shouldValidate: true });
+    } else {
+      // Si no hay respuestas válidas, asegura mantener el valor actual o default
+      const currentResult = watch('result');
+      if (!currentResult) {
+        setValue('result', 'approved', { shouldValidate: true });
+      }
     }
-  }, [checklist, setValue]);
+    // ⚠️ Quitamos `result` de dependencias para evitar loops
+  }, [checklist, setValue, watch]);
 
   const onSubmit: SubmitHandler<VehicleInspectionCreate> = (data) => {
     if (!vehicleId) return;
@@ -102,7 +109,6 @@ export const InspectionForm = ({
         label="Resultado de la Revisión"
         size="small"
         required
-        disabled
         rules={{ required: 'Resultado de la revisión requerido' }}
         options={[
           { label: 'Aprobado', id: 'approved' },
