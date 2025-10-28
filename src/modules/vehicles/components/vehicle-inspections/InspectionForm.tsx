@@ -6,7 +6,6 @@ import {
 } from '../../models';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import {
-  SelectElement,
   TextareaAutosizeElement,
   TextFieldElement,
 } from 'react-hook-form-mui';
@@ -14,9 +13,10 @@ import { DatePickerElement } from 'react-hook-form-mui/date-pickers';
 import { MuiSaveButton } from '@/components/ui';
 import { DriverAutocompleteInput } from '@/modules/drivers/components/DriverAutocompleteInput';
 import { useCreateVehicleInspectionMutation } from '../../hooks/mutations';
-import { Controller } from "react-hook-form";
 import { Button } from '@heroui/react';
 import { useEffect } from 'react';
+import { Select, SelectItem } from "@heroui/react";
+import { Controller } from "react-hook-form";
 
 const initialValues: VehicleInspectionCreate = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -103,17 +103,31 @@ export const InspectionForm = ({
 
   return (
     <form className="flex flex-col gap-4" noValidate>
-      <SelectElement
+      <Controller
         control={control}
         name="result"
-        label="Resultado de la Revisión"
-        size="small"
-        required
         rules={{ required: 'Resultado de la revisión requerido' }}
-        options={[
-          { label: 'Aprobado', id: 'approved' },
-          { label: 'Rechazado', id: 'rejected' },
-        ]}
+        render={({ field, fieldState }) => (
+          <Select
+            {...field}
+            label="Resultado de la Revisión"
+            variant="bordered"
+            placeholder="Selecciona un resultado"
+            isRequired
+            selectedKeys={[field.value]} // HeroUI usa selectedKeys en lugar de value
+            onSelectionChange={(keys) => {
+              const value = Array.from(keys)[0] as string;
+              field.onChange(value);
+            }}
+            color={fieldState.invalid ? "danger" : "default"}
+            errorMessage={fieldState.error?.message}
+            // si quieres hacerlo solo lectura:
+            isDisabled
+          >
+            <SelectItem key="approved">Aprobado</SelectItem>
+            <SelectItem key="rejected">Rechazado</SelectItem>
+          </Select>
+        )}
       />
 
       <TextareaAutosizeElement
