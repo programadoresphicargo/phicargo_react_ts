@@ -699,10 +699,10 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                     <Grid size={12}>
                                         <Stack spacing={1} direction="row" className='mb-4'>
                                             {buttonsVisibility.registrar && <Button color="primary" onPress={validar_form} isLoading={Loading} radius='full'>Registrar</Button>}
-                                            {buttonsVisibility.cancelar && <Button onPress={handleOpenDialog} color="danger" startContent={<i class="bi bi-x-circle"></i>}>Cancelar</Button>}
+                                            {buttonsVisibility.cancelar && <Button onPress={handleOpenDialog} color="danger" startContent={<i class="bi bi-x-circle"></i>} radius='full'>Cancelar</Button>}
                                             {buttonsVisibility.guardar_maniobra && <Button color="success" onPress={validar_form_actualizar} isLoading={Loading} className='text-white' startContent={<i class="bi bi-floppy"></i>}>Guardar cambios</Button>}
-                                            {buttonsVisibility.editar_maniobra && <Button color="primary" onPress={toggleForm} startContent={<i class="bi bi-pen"></i>}>Editar</Button>}
-                                            {buttonsVisibility.iniciar && <Button color="success" onPress={comprobar_equipo} className='text-white' startContent={<i class="bi bi-play-fill"></i>}>Iniciar</Button>}
+                                            {buttonsVisibility.editar_maniobra && <Button color="primary" onPress={toggleForm} startContent={<i class="bi bi-pen"></i>} radius='full'>Editar</Button>}
+                                            {buttonsVisibility.iniciar && <Button color="success" onPress={comprobar_equipo} className='text-white' startContent={<i class="bi bi-play-fill"></i>} radius='full'>Iniciar</Button>}
                                             {buttonsVisibility.finalizar && <Button onPress={finalizar_maniobra} color="danger" startContent={<i class="bi bi-stop-fill"></i>} radius="full">Finalizar</Button>}
                                             {buttonsVisibility.enviar_estatus && <Button onPress={handleClickOpenPE} color="success" className='text-white' startContent={<i class="bi bi-send-fill"></i>} radius="full">Enviar nuevo estatus</Button>}
                                             {buttonsVisibility.reactivar && <Button color="primary" onPress={reactivar_maniobra} radius='full'>Reactivar maniobra</Button>}

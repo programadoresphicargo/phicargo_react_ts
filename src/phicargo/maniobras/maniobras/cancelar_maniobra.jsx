@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 import { Button } from "@heroui/react"
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -72,10 +71,11 @@ const CancelarManiobraDialog = ({ open, handleClose, id_maniobra }) => {
 
             </DialogContent>
             <DialogActions>
-                <Button onPress={handleClose} color="primary">
+                <Button onPress={handleClose} color="primary" radius='full'>
                     Volver
                 </Button>
                 <Button
+                    radius='full'
                     onPress={cancelarManiobra}
                     color="danger"
                     autoFocus
