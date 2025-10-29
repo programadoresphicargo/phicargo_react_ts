@@ -106,6 +106,7 @@ const AsignacionActivos = lazy(() => import('../phicargo/inventarioti/celulares/
 const Asignaciones = lazy(() => import('../phicargo/inventarioti/celulares/asignacion/index'));
 const AsignacionesComputo = lazy(() => import('../phicargo/inventarioti/celulares/asignacion/index_computo'));
 const Lineas = lazy(() => import('../phicargo/inventarioti/celulares/lineas/index'))
+const Descuentos = lazy(() => import('../phicargo/descuentos/control_descuentos'))
 
 export const PrivateRoutes = () => {
   return (
@@ -527,6 +528,15 @@ export const PrivateRoutes = () => {
           element={
             <Suspense fallback={<LoadingPage />}>
               <Minutas></Minutas>
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/descuentos"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <Descuentos></Descuentos>
             </Suspense>
           }
         />

@@ -12,6 +12,7 @@ import reportesImg from '../assets/menu/reportes.png';
 import shipingcontainer from '../assets/menu/shiping-container.png';
 import turnos_img from '../assets/menu/turnos.png';
 import usuarios_img from '../assets/menu/usuarios.png';
+import descuento from '../assets/menu/descuento.png';
 import viajes_img from '../assets/menu/viajes.png';
 import logo from '../assets/img/phicargo_logo_white.png';
 import almacen from '../assets/menu/almacen.png';
@@ -147,6 +148,12 @@ const menuItems: MenuItemType[] = [
     icon: ti,
     label: 'Sistemas',
     link: '/celulares',
+    requiredPermissions: [701],
+  },
+  {
+    icon: descuento,
+    label: 'Descuentos',
+    link: '/descuentos',
     requiredPermissions: [701],
   },
 ];
