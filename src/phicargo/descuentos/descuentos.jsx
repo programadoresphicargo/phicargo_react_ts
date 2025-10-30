@@ -80,11 +80,11 @@ const Descuentos = ({ }) => {
       },
       {
         accessorKey: 'nombre',
-        header: 'Usuario registro',
+        header: 'Usuario creación',
       },
       {
-        accessorKey: 'fecha_registro',
-        header: 'Fecha de registro',
+        accessorKey: 'fecha_creacion',
+        header: 'Fecha creación',
       },
       {
         accessorKey: 'estado',
