@@ -111,7 +111,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
   return (
     <Dialog
       fullWidth
-      maxWidth="md"
+      maxWidth="lg"
       open={open}
       onClose={handleClose}
       TransitionComponent={Transition}
@@ -130,7 +130,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
           <Typography variant="h6" sx={{ flex: 1, fontWeight: 500 }}>
             {id_minuta ? `Descuento D-${id_minuta}` : "Nuevo descuento"}
           </Typography>
-          <Button autoFocus color="primary" onPress={handleClose} variant="flat" className="text-white">
+          <Button autoFocus color="danger" onPress={handleClose} className="text-white" radius="full">
             Cerrar
           </Button>
         </Toolbar>
@@ -171,7 +171,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
                 Imprimir formato
               </Button>
               {data?.estado !== "confirmado" && (
-                <Button color="success" onPress={Confirmar} radius="full" className="text-white">
+                <Button color="success" onPress={Confirmar} radius="full" className="text-white" isDisabled>
                   Confirmar
                 </Button>
               )}
@@ -181,46 +181,47 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
 
         {/* Form Sections */}
         <Grid container spacing={3}>
-          {/* Solicitante */}
+          {/* Columna izquierda */}
           <Grid item xs={12} md={6}>
-            <Card shadow="sm" className="border border-gray-200 rounded-2xl">
-              <CardHeader className="bg-gradient-to-r from-[#0b2149] to-[#0059b3] text-white font-semibold text-center rounded-t-2xl">
-                QUIÉN REALIZA SOLICITUD
-              </CardHeader>
-              <Divider />
-              <CardBody>
-                <SelectEmpleado
-                  setSolicitante={handleChange}
-                  key_name={"id_solicitante"}
-                  label={"Solicitante"}
-                  value={data?.id_solicitante}
-                />
-              </CardBody>
-            </Card>
+            <Stack spacing={3}>
+              {/* Card: QUIÉN REALIZA SOLICITUD */}
+              <Card shadow="sm" className="border border-gray-200 rounded-2xl h-full">
+                <CardHeader className="bg-gradient-to-r from-[#002887] to-[#0059b3] text-white font-semibold text-center rounded-t-2xl">
+                  QUIÉN REALIZA SOLICITUD
+                </CardHeader>
+                <Divider />
+                <CardBody>
+                  <SelectEmpleado
+                    setSolicitante={handleChange}
+                    key_name={"id_solicitante"}
+                    label={"Solicitante"}
+                    value={data?.id_solicitante}
+                  />
+                </CardBody>
+              </Card>
+
+              {/* Card: PERSONAL A DESCONTAR */}
+              <Card shadow="sm" className="border border-gray-200 rounded-2xl h-full">
+                <CardHeader className="bg-gradient-to-r from-[#002887] to-[#0059b3] text-white font-semibold text-center rounded-t-2xl">
+                  PERSONAL A DESCONTAR
+                </CardHeader>
+                <Divider />
+                <CardBody>
+                  <SelectEmpleado
+                    setSolicitante={handleChange}
+                    key_name={"id_empleado"}
+                    label={"Empleado"}
+                    value={data?.id_empleado}
+                  />
+                </CardBody>
+              </Card>
+            </Stack>
           </Grid>
 
-          {/* Empleado */}
+          {/* Columna derecha */}
           <Grid item xs={12} md={6}>
-            <Card shadow="sm" className="border border-gray-200 rounded-2xl">
-              <CardHeader className="bg-gradient-to-r from-[#0b2149] to-[#0059b3] text-white font-semibold text-center rounded-t-2xl">
-                PERSONAL A DESCONTAR
-              </CardHeader>
-              <Divider />
-              <CardBody>
-                <SelectEmpleado
-                  setSolicitante={handleChange}
-                  key_name={"id_empleado"}
-                  label={"Empleado"}
-                  value={data?.id_empleado}
-                />
-              </CardBody>
-            </Card>
-          </Grid>
-
-          {/* Datos del descuento */}
-          <Grid item xs={12}>
-            <Card shadow="sm" className="border border-gray-200 rounded-2xl">
-              <CardHeader className="bg-gradient-to-r from-[#0b2149] to-[#0059b3] text-white font-semibold text-center rounded-t-2xl">
+            <Card shadow="sm" className="border border-gray-200 rounded-2xl h-full">
+              <CardHeader className="bg-gradient-to-r from-[#002887] to-[#0059b3] text-white font-semibold text-center rounded-t-2xl">
                 DATOS DEL DESCUENTO
               </CardHeader>
               <Divider />
@@ -282,6 +283,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
             </Card>
           </Grid>
         </Grid>
+
       </div>
     </Dialog>
   );
