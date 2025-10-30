@@ -163,7 +163,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
             </Button>
           )}
 
-          {isEditing && (
+          {isEditing && id_minuta && (
             <Button color="success" onPress={handleSubmit} radius="full" className="text-white">
               Guardar cambios
             </Button>
