@@ -17,7 +17,7 @@ import odooApi from '@/api/odoo-api';
 import toast from 'react-hot-toast';
 import { useDescuentos } from './context';
 
-export default function SolicitanteMinuta({ id_solicitante, setSolicitante }) {
+export default function SelectEmpleado({ key_name, label, setSolicitante, value }) {
 
  const { selectedRows, setSelectedRows, isEditing, setIsEditing, tareas, setRecords, nuevas_tareas, setNuevasTareas, actualizadas_tareas, setActualizadasTareas, eliminadas_tareas, setEliminadasTareas, eliminados_participantes, setEliminadosParticipantes, participantes_nuevos, setParticipantesNuevos, } = useDescuentos();
  const [data, setData] = useState([]);
@@ -44,11 +44,11 @@ export default function SolicitanteMinuta({ id_solicitante, setSolicitante }) {
    <Autocomplete
     variant="bordered"
     defaultItems={data}
-    label="Empleado solicitante"
-    selectedKey={String(id_solicitante) || null}
-    onSelectionChange={(key) => setSolicitante('id_empleado', key)}
+    label={label}
+    selectedKey={String(value) || null}
+    onSelectionChange={(key) => setSolicitante(key_name, key)}
     isDisabled={!isEditing}
-    isInvalid={!id_solicitante}
+    isInvalid={!value}
     errorMessage="Campo obligatorio"
    >
     {(user) => (

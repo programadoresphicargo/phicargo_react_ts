@@ -20,6 +20,8 @@ import SolicitanteMinuta from './solicitante';
 import Swal from "sweetalert2";
 import { DatePicker } from '@heroui/react';
 import { parseDate } from "@internationalized/date";
+import SelectEmpleado from './solicitante';
+import { Select, SelectItem } from "@heroui/react";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -253,7 +255,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
                 variant={isEditing ? "bordered" : "bordered"}
                 hideTimeZone
                 showMonthAndYearPickers
-                label="Fecha de minuta"
+                label="Fecha"
                 fullWidth
                 value={
                   data?.fecha
@@ -269,22 +271,61 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
                 isInvalid={!data?.fecha}
                 errorMessage={!data.fecha && "La fecha es obligatoria"}
               />
-              <SolicitanteMinuta id_solicitante={data?.id_empleado} setSolicitante={handleChange}></SolicitanteMinuta>
+              <SelectEmpleado setSolicitante={handleChange} key_name={'id_solicitante'} label={'Solicitante'} value={data?.id_solicitante}></SelectEmpleado>
+
+              <SelectEmpleado setSolicitante={handleChange} key_name={'id_empleado'} label={'Empleado'} value={data?.id_empleado}></SelectEmpleado>
 
               <NumberInput
+                label="Monto"
                 value={data?.monto}
                 variant='bordered' isDisabled={!isEditing}
                 onValueChange={(e) => handleChange('monto', e)}
                 isInvalid={!data?.monto}
-                errorMessage={!data.fecha && "Monto es obligatorio"}>
+                errorMessage={!data.fecha && "Campo obligatorio"}>
               </NumberInput>
 
-              <Textarea value={data?.descripcion}
+              <Textarea
+                label="Motivo"
+                value={data?.motivo}
                 variant='bordered'
-                isDisabled={!isEditing} onValueChange={(e) => handleChange('descripcion', e)}
-                isInvalid={!data?.fecha}
-                errorMessage={!data.fecha && "Descripción obligatoria"}>
+                isDisabled={!isEditing} onValueChange={(e) => handleChange('motivo', e)}
+                isInvalid={!data?.motivo}
+                errorMessage={!data.motivo && "Campo obligatorio"}>
               </Textarea>
+
+              <Textarea
+                label="Comentarios"
+                value={data?.comentarios}
+                variant='bordered'
+                isDisabled={!isEditing}
+                onValueChange={(e) => handleChange('comentarios', e)}
+                isInvalid={!data?.comentarios}
+                errorMessage={!data.comentarios && "Campo obligatorio"}>
+              </Textarea>
+
+              <Select
+                label="Periodicidad"
+                placeholder="Seleccionar una opción"
+                variant="bordered"
+                isDisabled={!isEditing}
+                onSelectionChange={(keys) => handleChange('periodicidad', Array.from(keys)[0])}
+                selectedKeys={data.periodicidad ? [data.periodicidad] : []}
+                isInvalid={!data?.periodicidad}
+                errorMessage={!data.periodicidad && "Campo obligatorio"}
+              >
+                <SelectItem key="viaje">Por viaje</SelectItem>
+                <SelectItem key="maniobra">Maniobra</SelectItem>
+              </Select>
+
+              <NumberInput
+                label="Importe"
+                value={data?.importe}
+                isDisabled={!isEditing}
+                variant='bordered' isDisabled={!isEditing}
+                onValueChange={(e) => handleChange('importe', e)}
+                isInvalid={!data?.importe}
+                errorMessage={!data.fecha && "Campo obligatorio"}>
+              </NumberInput>
 
             </div>
           </Grid>

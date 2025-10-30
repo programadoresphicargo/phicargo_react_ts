@@ -67,8 +67,12 @@ const Descuentos = ({ }) => {
         header: 'Fecha',
       },
       {
-        accessorKey: 'descripcion',
-        header: 'Descripción',
+        accessorKey: 'motivo',
+        header: 'Motivo',
+      },
+      {
+        accessorKey: 'comentarios',
+        header: 'Comentarios',
       },
       {
         accessorKey: 'monto',
