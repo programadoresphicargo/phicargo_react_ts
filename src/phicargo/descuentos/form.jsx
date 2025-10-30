@@ -60,7 +60,11 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
   const handleSubmit = async () => {
     if (!data?.id_empleado) return toast.error("El empleado es obligatorio.");
     if (!data?.monto) return toast.error("El monto es obligatorio.");
+    if (!data?.importe) return toast.error("Importe es obligatorio.");
     if (!data?.fecha) return toast.error("La fecha es obligatoria.");
+    if (!data?.motivo) return toast.error("Motivo es obligatorio.");
+    if (!data?.comentarios) return toast.error("Comentarios es obligatorio.");
+    if (!data?.periodicidad) return toast.error("Periodicidad es obligatorio.");
 
     try {
       setIsEditing(true);
@@ -234,6 +238,8 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
                   value={data?.fecha ? parseDate(data.fecha.split("T")[0]) : null}
                   onChange={(date) => handleChange("fecha", date.toString())}
                   isDisabled={!isEditing}
+                  isInvalid={!data?.fecha}
+                  errorMessage="Campo obligatorio"
                 />
 
                 <NumberInput
@@ -242,6 +248,8 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
                   value={data?.monto || ""}
                   onValueChange={(v) => handleChange("monto", v)}
                   isDisabled={!isEditing}
+                  isInvalid={!data?.monto}
+                  errorMessage="Campo obligatorio"
                 />
 
                 <Select
@@ -251,6 +259,8 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
                   onSelectionChange={(keys) => handleChange("periodicidad", Array.from(keys)[0])}
                   selectedKeys={data.periodicidad ? [data.periodicidad] : []}
                   isDisabled={!isEditing}
+                  isInvalid={!data?.periodicidad}
+                  errorMessage="Campo obligatorio"
                 >
                   <SelectItem key="viaje">Por viaje</SelectItem>
                   <SelectItem key="maniobra">Por maniobra</SelectItem>
@@ -262,6 +272,8 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
                   value={data?.importe || ""}
                   onValueChange={(v) => handleChange("importe", v)}
                   isDisabled={!isEditing}
+                  isInvalid={!data?.importe}
+                  errorMessage="Campo obligatorio"
                 />
 
                 <Textarea
@@ -270,6 +282,8 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
                   value={data?.motivo || ""}
                   onValueChange={(v) => handleChange("motivo", v)}
                   isDisabled={!isEditing}
+                  isInvalid={!data?.motivo}
+                  errorMessage="Campo obligatorio"
                 />
 
                 <Textarea
@@ -278,6 +292,8 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
                   value={data?.comentarios || ""}
                   onValueChange={(v) => handleChange("comentarios", v)}
                   isDisabled={!isEditing}
+                  isInvalid={!data?.comentarios}
+                  errorMessage="Campo obligatorio"
                 />
               </CardBody>
             </Card>
