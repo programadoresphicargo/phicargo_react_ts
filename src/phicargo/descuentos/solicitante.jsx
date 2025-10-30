@@ -42,6 +42,7 @@ export default function SelectEmpleado({ key_name, label, setSolicitante, value 
  return (
   <React.Fragment>
    <Autocomplete
+    fullWidth
     variant="bordered"
     defaultItems={data}
     label={label}

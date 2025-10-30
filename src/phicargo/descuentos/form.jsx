@@ -1,65 +1,55 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import Dialog from '@mui/material/Dialog';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemButton from '@mui/material/ListItemButton';
-import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import CloseIcon from '@mui/icons-material/Close';
-import Slide from '@mui/material/Slide';
-import { Autocomplete, Button, Card, CardBody, CardHeader, Chip, NumberInput, Progress, Textarea } from '@heroui/react';
-import { Grid } from "@mui/material";
-import Stack from '@mui/material/Stack';
-import odooApi from '@/api/odoo-api';
-import toast from 'react-hot-toast';
-import { useDescuentos } from './context';
-import SolicitanteMinuta from './solicitante';
-import Swal from "sweetalert2";
-import { DatePicker } from '@heroui/react';
+import React, { useEffect, useState } from "react";
+import {
+  Dialog,
+  AppBar,
+  Toolbar,
+  IconButton,
+  Typography,
+  Slide,
+  Grid,
+  Divider,
+  Stack,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import { Button, Card, CardBody, CardHeader, Chip, Progress, Textarea, NumberInput, DatePicker, Select, SelectItem } from "@heroui/react";
 import { parseDate } from "@internationalized/date";
-import SelectEmpleado from './solicitante';
-import { Select, SelectItem } from "@heroui/react";
+import toast from "react-hot-toast";
+import Swal from "sweetalert2";
+import odooApi from "@/api/odoo-api";
+import { useDescuentos } from "./context";
+import SelectEmpleado from "./solicitante";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 export default function MinutaForm({ open, handleClose, id_minuta }) {
-
   const [data, setData] = useState({});
-
-  const [isLoading, setLoading] = useState();
-  const { isEditing, setIsEditing, tareas, setRecords, setNuevasTareas, setActualizadasTareas, setEliminadasTareas, setEliminadosParticipantes, setParticipantesNuevos, } = useDescuentos();
+  const [isLoading, setLoading] = useState(false);
+  const {
+    isEditing,
+    setIsEditing,
+  } = useDescuentos();
 
   const handleChange = (key, value) => {
-    setData((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
+    setData((prev) => ({ ...prev, [key]: value }));
   };
 
   const fetchData = async () => {
-
-    if (id_minuta == null) {
+    if (!id_minuta) {
       setData({});
       setIsEditing(true);
       return;
-    } else {
-      setIsEditing(false);
     }
-
+    setIsEditing(false);
     try {
       setLoading(true);
-      const response = await odooApi.get('/descuentos/' + id_minuta);
+      const response = await odooApi.get("/descuentos/" + id_minuta);
       setData(response.data);
-      console.log(response.data);
-      setLoading(false);
     } catch (error) {
+      toast.error("Error al obtener los datos.");
+    } finally {
       setLoading(false);
-      console.error('Error al obtener los datos:', error);
     }
   };
 
@@ -68,269 +58,231 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
   }, [open]);
 
   const handleSubmit = async () => {
-
-    if (data?.id_empleado == null) {
-      toast.error('El empleado es obligatorio.')
-      return;
-    }
-
-    if (data?.monto == "") {
-      toast.error('Monto es obligatorio.')
-      return;
-    }
-
-    if (data?.fecha == null) {
-      toast.error('Fecha es obligatorio.')
-      return;
-    }
+    if (!data?.id_empleado) return toast.error("El empleado es obligatorio.");
+    if (!data?.monto) return toast.error("El monto es obligatorio.");
+    if (!data?.fecha) return toast.error("La fecha es obligatoria.");
 
     try {
+      setIsEditing(true);
       let response;
-
-      if (id_minuta) {
-        response = await odooApi.patch(`/descuentos/${id_minuta}/`, data);
-      } else {
-        response = await odooApi.post('/descuentos/', data);
-      }
+      if (id_minuta) response = await odooApi.patch(`/descuentos/${id_minuta}/`, data);
+      else response = await odooApi.post("/descuentos/", data);
 
       if (response.data.status === "success") {
         toast.success(response.data.message);
         handleClose();
-        setIsEditing(false);
-      } else {
-        toast.error(response.data.message);
-      }
-
+      } else toast.error(response.data.message);
     } catch (error) {
-      toast.error("Error al enviar datos: " + error);
-    }
-  };
-
-  const ImprimirFormato = async () => {
-    try {
-      const url = `/descuentos/formato/${id_minuta}`;
-      const fullUrl = odooApi.defaults.baseURL + url;
-      window.open(fullUrl, "_blank");
-    } catch (error) {
-      toast.error("Error al abrir formato: " + error);
-    }
-  };
-
-  const ejecutarAccion = async () => {
-    let response = await odooApi.patch(`/minutas/estado/${id_minuta}/confirmado`);
-    if (response.data.state === "success") {
-      toast.success(response.data.message);
-      handleClose();
+      toast.error("Error al enviar datos.");
+    } finally {
       setIsEditing(false);
-    } else {
-      toast.error(response.data.message);
     }
   };
 
   const Confirmar = async () => {
     const result = await Swal.fire({
-      title: "¿Estás seguro?",
+      title: "¿Confirmar descuento?",
       text: "Esta acción no se puede deshacer.",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "Sí, continuar",
+      confirmButtonText: "Sí, confirmar",
       cancelButtonText: "Cancelar",
-      confirmButtonColor: "#3085d6",
+      confirmButtonColor: "#2563eb",
       cancelButtonColor: "#d33",
     });
-
     if (result.isConfirmed) {
-      ejecutarAccion();
+      try {
+        const response = await odooApi.patch(`/minutas/estado/${id_minuta}/confirmado`);
+        if (response.data.state === "success") {
+          toast.success(response.data.message);
+          handleClose();
+        } else toast.error(response.data.message);
+      } catch {
+        toast.error("Error al confirmar.");
+      }
     }
   };
 
+  const ImprimirFormato = () => {
+    const url = odooApi.defaults.baseURL + `/descuentos/formato/${id_minuta}`;
+    window.open(url, "_blank");
+  };
+
   return (
-    <React.Fragment>
-      <Dialog
-        fullWidth
-        maxWidth="sm"
-        open={open}
-        onClose={handleClose}
-        slots={{
-          transition: Transition,
+    <Dialog
+      fullWidth
+      maxWidth="md"
+      open={open}
+      onClose={handleClose}
+      TransitionComponent={Transition}
+    >
+      <AppBar
+        elevation={0}
+        position="static"
+        sx={{
+          background: "linear-gradient(90deg, #002887 0%, #0059b3 100%)",
         }}
       >
-        <AppBar
-          elevation={0}
-          position="static"
-          sx={{
-            background: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
-            padding: '0 16px',
-          }}>
-          <Toolbar>
-            <IconButton
-              edge="start"
-              color="inherit"
-              onClick={handleClose}
-              aria-label="close"
-            >
-              <CloseIcon />
-            </IconButton>
-            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              Descuentos
-            </Typography>
-            <Button autoFocus color="inherit" onClick={handleClose}>
-              Cerrar
+        <Toolbar>
+          <IconButton edge="start" color="inherit" onClick={handleClose}>
+            <CloseIcon />
+          </IconButton>
+          <Typography variant="h6" sx={{ flex: 1, fontWeight: 500 }}>
+            {id_minuta ? `Descuento D-${id_minuta}` : "Nuevo descuento"}
+          </Typography>
+          <Button autoFocus color="primary" onPress={handleClose} variant="flat" className="text-white">
+            Cerrar
+          </Button>
+        </Toolbar>
+      </AppBar>
+
+      {isLoading && <Progress isIndeterminate size="sm" />}
+
+      <div className="p-6 space-y-6 bg-gray-50">
+        {/* Header Actions */}
+        <Stack direction="row" spacing={2} alignItems="center">
+          {id_minuta && (
+            <Chip color="warning" className="uppercase text-sm font-semibold text-white">
+              {data?.estado || "pendiente"}
+            </Chip>
+          )}
+
+          {!id_minuta && (
+            <Button color="success" onPress={handleSubmit} radius="full" className="text-white">
+              Registrar
             </Button>
-          </Toolbar>
-        </AppBar>
+          )}
 
-        {isLoading && (
-          <Progress isIndeterminate size='sm'></Progress>
-        )}
+          {id_minuta && !isEditing && data?.estado !== "confirmado" && (
+            <Button color="primary" onPress={() => setIsEditing(true)} radius="full" className="text-white">
+              Editar
+            </Button>
+          )}
 
-        <Grid container spacing={2} sx={{ p: 2 }}>
+          {isEditing && (
+            <Button color="success" onPress={handleSubmit} radius="full" className="text-white">
+              Guardar cambios
+            </Button>
+          )}
 
-          <Grid item xs={12} md={12}>
-            <Stack spacing={2} direction="row">
-
-              {id_minuta && (
-                <>
-                  <h1 className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text">
-                    D-{id_minuta}
-                  </h1>
-                  <Chip color='warning' className='text-white'>{data?.estado}</Chip>
-                </>
-              )}
-
-              {!id_minuta && (
-                <Button color="success" onPress={handleSubmit} className="text-white" radius='full'>
-                  Registrar
+          {!isEditing && id_minuta && (
+            <>
+              <Button color="secondary" onPress={ImprimirFormato} radius="full" className="text-white">
+                Imprimir formato
+              </Button>
+              {data?.estado !== "confirmado" && (
+                <Button color="success" onPress={Confirmar} radius="full" className="text-white">
+                  Confirmar
                 </Button>
               )}
+            </>
+          )}
+        </Stack>
 
-              {!isEditing && id_minuta && data?.estado !== 'confirmado' && (
-                <Button
-                  color="primary"
-                  onPress={() => setIsEditing(true)}
-                  className="text-white"
-                  isLoading={isLoading}
-                  radius="full"
-                >
-                  <i className="bi bi-pencil-square"></i> Editar
-                </Button>
-              )}
-
-              {isEditing && id_minuta && (
-                <Button
-                  color="success"
-                  onPress={handleSubmit}
-                  className="text-white"
-                  radius='full'
-                  isLoading={isLoading}
-                >
-                  <i class="bi bi-floppy-fill"></i> Actualizar
-                </Button>
-              )}
-
-              {!isEditing && id_minuta && (
-                <>
-                  <Button
-                    color="success"
-                    onPress={ImprimirFormato}
-                    className="text-white"
-                    radius='full'
-                    isLoading={isLoading}
-                  >
-                    <i class="bi bi-printer"></i> Imprimir formato
-                  </Button>
-                  {data?.estado != 'confirmado' && (
-                    <Button color='success' className='text-white' radius='full' onPress={() => Confirmar()} isLoading={isLoading}
-                    >Confirmar</Button>
-                  )}
-                </>
-              )}
-
-            </Stack>
+        {/* Form Sections */}
+        <Grid container spacing={3}>
+          {/* Solicitante */}
+          <Grid item xs={12} md={6}>
+            <Card shadow="sm" className="border border-gray-200 rounded-2xl">
+              <CardHeader className="bg-gradient-to-r from-[#0b2149] to-[#0059b3] text-white font-semibold text-center rounded-t-2xl">
+                QUIÉN REALIZA SOLICITUD
+              </CardHeader>
+              <Divider />
+              <CardBody>
+                <SelectEmpleado
+                  setSolicitante={handleChange}
+                  key_name={"id_solicitante"}
+                  label={"Solicitante"}
+                  value={data?.id_solicitante}
+                />
+              </CardBody>
+            </Card>
           </Grid>
-          {/* Primer componente (4 columnas) */}
+
+          {/* Empleado */}
+          <Grid item xs={12} md={6}>
+            <Card shadow="sm" className="border border-gray-200 rounded-2xl">
+              <CardHeader className="bg-gradient-to-r from-[#0b2149] to-[#0059b3] text-white font-semibold text-center rounded-t-2xl">
+                PERSONAL A DESCONTAR
+              </CardHeader>
+              <Divider />
+              <CardBody>
+                <SelectEmpleado
+                  setSolicitante={handleChange}
+                  key_name={"id_empleado"}
+                  label={"Empleado"}
+                  value={data?.id_empleado}
+                />
+              </CardBody>
+            </Card>
+          </Grid>
+
+          {/* Datos del descuento */}
           <Grid item xs={12}>
-            <div className="w-full flex flex-col gap-4">
-              <DatePicker
-                variant={isEditing ? "bordered" : "bordered"}
-                hideTimeZone
-                showMonthAndYearPickers
-                label="Fecha"
-                fullWidth
-                value={
-                  data?.fecha
-                    ? parseDate(data.fecha.split('T')[0])
-                    : null
-                }
-                isDisabled={!isEditing}
-                onChange={(date) => {
-                  if (!date) return;
-                  const formattedDate = date.toString();
-                  setData((prev) => ({ ...prev, fecha: formattedDate }));
-                }}
-                isInvalid={!data?.fecha}
-                errorMessage={!data.fecha && "La fecha es obligatoria"}
-              />
-              <SelectEmpleado setSolicitante={handleChange} key_name={'id_solicitante'} label={'Solicitante'} value={data?.id_solicitante}></SelectEmpleado>
+            <Card shadow="sm" className="border border-gray-200 rounded-2xl">
+              <CardHeader className="bg-gradient-to-r from-[#0b2149] to-[#0059b3] text-white font-semibold text-center rounded-t-2xl">
+                DATOS DEL DESCUENTO
+              </CardHeader>
+              <Divider />
+              <CardBody className="flex flex-wrap gap-4">
+                <DatePicker
+                  label="Fecha"
+                  variant="bordered"
+                  hideTimeZone
+                  showMonthAndYearPickers
+                  value={data?.fecha ? parseDate(data.fecha.split("T")[0]) : null}
+                  onChange={(date) => handleChange("fecha", date.toString())}
+                  isDisabled={!isEditing}
+                />
 
-              <SelectEmpleado setSolicitante={handleChange} key_name={'id_empleado'} label={'Empleado'} value={data?.id_empleado}></SelectEmpleado>
+                <NumberInput
+                  label="Monto"
+                  variant="bordered"
+                  value={data?.monto || ""}
+                  onValueChange={(v) => handleChange("monto", v)}
+                  isDisabled={!isEditing}
+                />
 
-              <NumberInput
-                label="Monto"
-                value={data?.monto}
-                variant='bordered' isDisabled={!isEditing}
-                onValueChange={(e) => handleChange('monto', e)}
-                isInvalid={!data?.monto}
-                errorMessage={!data.fecha && "Campo obligatorio"}>
-              </NumberInput>
+                <Select
+                  label="Periodicidad"
+                  variant="bordered"
+                  placeholder="Seleccionar..."
+                  onSelectionChange={(keys) => handleChange("periodicidad", Array.from(keys)[0])}
+                  selectedKeys={data.periodicidad ? [data.periodicidad] : []}
+                  isDisabled={!isEditing}
+                >
+                  <SelectItem key="viaje">Por viaje</SelectItem>
+                  <SelectItem key="maniobra">Por maniobra</SelectItem>
+                </Select>
 
-              <Textarea
-                label="Motivo"
-                value={data?.motivo}
-                variant='bordered'
-                isDisabled={!isEditing} onValueChange={(e) => handleChange('motivo', e)}
-                isInvalid={!data?.motivo}
-                errorMessage={!data.motivo && "Campo obligatorio"}>
-              </Textarea>
+                <NumberInput
+                  label="Importe"
+                  variant="bordered"
+                  value={data?.importe || ""}
+                  onValueChange={(v) => handleChange("importe", v)}
+                  isDisabled={!isEditing}
+                />
 
-              <Textarea
-                label="Comentarios"
-                value={data?.comentarios}
-                variant='bordered'
-                isDisabled={!isEditing}
-                onValueChange={(e) => handleChange('comentarios', e)}
-                isInvalid={!data?.comentarios}
-                errorMessage={!data.comentarios && "Campo obligatorio"}>
-              </Textarea>
+                <Textarea
+                  label="Motivo"
+                  variant="bordered"
+                  value={data?.motivo || ""}
+                  onValueChange={(v) => handleChange("motivo", v)}
+                  isDisabled={!isEditing}
+                />
 
-              <Select
-                label="Periodicidad"
-                placeholder="Seleccionar una opción"
-                variant="bordered"
-                isDisabled={!isEditing}
-                onSelectionChange={(keys) => handleChange('periodicidad', Array.from(keys)[0])}
-                selectedKeys={data.periodicidad ? [data.periodicidad] : []}
-                isInvalid={!data?.periodicidad}
-                errorMessage={!data.periodicidad && "Campo obligatorio"}
-              >
-                <SelectItem key="viaje">Por viaje</SelectItem>
-                <SelectItem key="maniobra">Maniobra</SelectItem>
-              </Select>
-
-              <NumberInput
-                label="Importe"
-                value={data?.importe}
-                isDisabled={!isEditing}
-                variant='bordered' isDisabled={!isEditing}
-                onValueChange={(e) => handleChange('importe', e)}
-                isInvalid={!data?.importe}
-                errorMessage={!data.fecha && "Campo obligatorio"}>
-              </NumberInput>
-
-            </div>
+                <Textarea
+                  label="Comentarios"
+                  variant="bordered"
+                  value={data?.comentarios || ""}
+                  onValueChange={(v) => handleChange("comentarios", v)}
+                  isDisabled={!isEditing}
+                />
+              </CardBody>
+            </Card>
           </Grid>
         </Grid>
-      </Dialog>
-    </React.Fragment>
+      </div>
+    </Dialog>
   );
 }
