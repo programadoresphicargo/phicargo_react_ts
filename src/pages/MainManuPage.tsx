@@ -154,7 +154,7 @@ const menuItems: MenuItemType[] = [
     icon: descuento,
     label: 'Descuentos',
     link: '/descuentos',
-    requiredPermissions: [701],
+    requiredPermissions: [444],
   },
 ];
 
