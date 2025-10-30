@@ -15,6 +15,8 @@ export interface VehicleInfo {
   vehicleType: 'carretera' | 'local' | null;
   branch: BranchSimple | null;
   vehicle_type_id: number | null;
+  model_year: string | null;
+  brand: string | null;
 }
 
 export interface MaintenanceRecordBase {

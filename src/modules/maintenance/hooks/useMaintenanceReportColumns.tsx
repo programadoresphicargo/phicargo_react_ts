@@ -31,6 +31,18 @@ export const useMaintenanceReportColumns = (type: 'tractocamion' | 'remolques', 
         },
       },
       {
+        accessorFn: (originalRow) =>
+          originalRow?.vehicle?.brand || 'Sin Asignar',
+        header: 'Marca',
+        id: 'marca',
+      },
+      {
+        accessorFn: (originalRow) =>
+          originalRow?.vehicle?.model_year || 'Sin Asignar',
+        header: 'Año',
+        id: 'año',
+      },
+      {
         accessorFn: (row) => row.lastCommentDate,
         id: 'lastCommentDate',
         header: 'Última Actualización',

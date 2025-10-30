@@ -33,6 +33,8 @@ export class MaintenaceRecordAdapter {
       name: vehicle.name2,
       vehicleType: vehicle.x_tipo_vehiculo,
       vehicle_type_id: vehicle.vehicle_type_id,
+      model_year: vehicle.model_year,
+      brand: vehicle.brand,
       branch: vehicle.res_store
         ? {
           id: vehicle.res_store.id,

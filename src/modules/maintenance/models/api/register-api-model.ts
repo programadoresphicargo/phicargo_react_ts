@@ -9,6 +9,8 @@ export interface VehicleInfoApi {
   x_tipo_vehiculo: 'carretera' | 'local' | null;
   vehicle_type_id: number | null;
   res_store: BranchSimple | null;
+  model_year: string | null;
+  brand: string | null;
 }
 
 export interface MaintenanceRecordBaseApi {
