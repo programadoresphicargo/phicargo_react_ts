@@ -147,29 +147,39 @@ const TablaAccesos = ({ title, tipo }) => {
         header: 'Estado del acceso',
         Cell: ({ cell }) => {
           const tipoMovimiento = cell.getValue();
-          let badgeClass = '';
 
-          if (tipoMovimiento === 'espera') {
-            badgeClass = 'warning';
-          } else if (tipoMovimiento === 'validado') {
-            badgeClass = 'success';
-          } else if (tipoMovimiento === 'autorizado') {
-            badgeClass = 'primary';
-          } else if (tipoMovimiento === 'rechazado') {
-            badgeClass = 'danger';
-          } else {
-            badgeClass = 'secondary';
-          }
+          // Colores según el estado
+          const colorMap = {
+            espera: 'warning',
+            validado: 'success',
+            autorizado: 'primary',
+            rechazado: 'danger',
+          };
 
-          const displayText = tipoMovimiento === 'espera' ? 'En espera de validación' : tipoMovimiento;
+          // Íconos según el estado (Bootstrap Icons)
+          const iconMap = {
+            espera: 'bi-clock',
+            validado: 'bi-check-circle',
+            autorizado: 'bi-shield-check',
+            rechazado: 'bi-x-circle',
+            default: 'bi-info-circle',
+          };
+
+          const badgeClass = colorMap[tipoMovimiento] || 'secondary';
+          const iconClass = iconMap[tipoMovimiento] || iconMap['default'];
+
+          const displayText =
+            tipoMovimiento === 'espera'
+              ? 'En espera de validación'
+              : tipoMovimiento.charAt(0).toUpperCase() + tipoMovimiento.slice(1);
 
           return (
-            <Chip color={badgeClass} size='sm' className={"text-white"}>
-              {displayText}
+            <Chip color={badgeClass} size='sm' className="text-white flex items-center gap-1">
+              <i className={`bi ${iconClass}`}></i> {displayText}
             </Chip>
           );
         },
-      },
+      }
     ],
     [],
   );
