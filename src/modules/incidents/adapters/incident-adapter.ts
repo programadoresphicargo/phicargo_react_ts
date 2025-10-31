@@ -79,7 +79,11 @@ export class IncidentAdapter {
         : null,
       damage_cost: incident.damageCost ?? null,
       is_driver_responsible: incident.isDriverResponsible,
-      state: incident.state
+      state: incident.state,
+      discountAmount: incident.discountAmount,
+      discountTotal: incident.discountTotal,
+      discountReason: incident.discountReason,
+      discountComments: incident.discountComments
     };
   }
 

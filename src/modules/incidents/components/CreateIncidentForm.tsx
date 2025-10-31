@@ -20,6 +20,7 @@ import {
 import { Controller } from "react-hook-form";
 import dayjs from 'dayjs';
 import { parseDate } from "@internationalized/date";
+import { NumberInput } from "@heroui/react";
 
 interface Props {
   onCancel?: () => void;
@@ -44,6 +45,9 @@ export const CreateIncidentForm = ({
     createUnavailability,
     setCreateUnavailability,
 
+    createDiscount,
+    setCreateDiscount,
+
     incidenceOptions,
 
     damageCostDisabled,
@@ -56,9 +60,9 @@ export const CreateIncidentForm = ({
   return (
     <form className="mt-6 transition-all duration-300 ease-in-out">
       <div
-        className={`grid gap-6 transition-all duration-300 ease-in-out grid-cols-[1fr_auto_1fr]`}
+        className={`grid gap-6 transition-all duration-300 ease-in-out grid-cols-[1fr_auto_1fr_auto_1fr]`}
       >
-        <div className="flex flex-col gap-4 max-w-sm">
+        <div className="flex flex-col gap-4">
           <Controller
             control={control}
             name="type"
@@ -341,7 +345,126 @@ export const CreateIncidentForm = ({
             />
           </div>
         </div>
+
+        <Divider
+          orientation="vertical"
+          flexItem
+          sx={{
+            mx: 2,
+            transition: 'opacity 0.3s',
+          }}
+        />
+
+        <div className="flex flex-col gap-4">
+          <div>
+            <h3 className="text-medium font-bold text-muted-foreground">
+              Descuento al Operador
+            </h3>
+            <p className="text-xs text-muted-foreground">
+              Rellene estos campos para registrar un descuento. Opcional.
+            </p>
+          </div>
+
+          <Checkbox
+            checked={createDiscount}
+            onValueChange={setCreateDiscount}
+          >
+            Registrar Descuento
+          </Checkbox>
+
+          {createDiscount && (
+            <>
+              {/* Monto */}
+              <Controller
+                control={control}
+                name="discountAmount"
+                rules={{
+                  validate: (v) => {
+                    if (createDiscount && !v) return "Monto requerido";
+                    return true;
+                  }
+                }}
+                render={({ field, fieldState }) => (
+                  <NumberInput
+                    label="Monto"
+                    value={field.value || 0}
+                    onChange={field.onChange}
+                    isInvalid={!!fieldState.error}
+                    errorMessage={fieldState.error?.message}
+                  />
+                )}
+              />
+
+              {/* Importe */}
+              <Controller
+                control={control}
+                name="discountTotal"
+                rules={{
+                  validate: (v) => {
+                    if (createDiscount && !v) return "Importe requerido";
+                    return true;
+                  }
+                }}
+                render={({ field, fieldState }) => (
+                  <NumberInput
+                    label="Importe"
+                    value={field.value || 0}
+                    onChange={field.onChange}
+                    isInvalid={!!fieldState.error}
+                    errorMessage={fieldState.error?.message}
+                  />
+                )}
+              />
+
+              {/* Motivo */}
+              <Controller
+                control={control}
+                name="discountReason"
+                rules={{
+                  validate: (v) => {
+                    if (createDiscount && !v) return "Motivo requerido";
+                    return true;
+                  }
+                }}
+                render={({ field, fieldState }) => (
+                  <Textarea
+                    label="Motivo"
+                    minRows={4}
+                    value={field.value || ""}
+                    onChange={field.onChange}
+                    isInvalid={!!fieldState.error}
+                    errorMessage={fieldState.error?.message}
+                  />
+                )}
+              />
+
+              {/* Comentarios */}
+              <Controller
+                control={control}
+                name="discountComments"
+                rules={{
+                  validate: (v) => {
+                    if (createDiscount && !v) return "Comentario requerido";
+                    return true;
+                  }
+                }}
+                render={({ field, fieldState }) => (
+                  <Textarea
+                    label="Comentarios del Descuento"
+                    minRows={4}
+                    value={field.value || ""}
+                    onChange={field.onChange}
+                    isInvalid={!!fieldState.error}
+                    errorMessage={fieldState.error?.message}
+                  />
+                )}
+              />
+            </>
+          )}
+        </div>
+
       </div>
+
       <div className="flex justify-between items-center mt-6">
         {onCancel && (
           <Button
