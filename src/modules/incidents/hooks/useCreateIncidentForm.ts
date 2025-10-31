@@ -24,7 +24,11 @@ const initialFormState: IncidentCreate = {
   vehicleId: null,
   newVehicleStateId: null,
   driverId: null,
-  state: 'pending_validation'
+  state: 'pending_validation',
+  discountAmount: null,
+  discountTotal: null,
+  discountReason: null,
+  discountComments: null
 };
 
 export function useCreateIncidentForm({
@@ -38,6 +42,7 @@ export function useCreateIncidentForm({
 }) {
   const [files, setFiles] = useState<File[]>([]);
   const [createUnavailability, setCreateUnavailability] = useState(false);
+  const [createDiscount, setCreateDiscount] = useState(false);
 
   const [isDirectionReport, setIsDirectionReport] = useState(false);
 
@@ -103,6 +108,13 @@ export function useCreateIncidentForm({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [incidentSelected]);
 
+  useEffect(() => {
+    form.setValue('discountAmount', null);
+    form.setValue('discountTotal', null);
+    form.setValue('discountReason', null);
+    form.setValue('discountComments', null);
+  }, [createDiscount]);
+
   return {
     form,
     files,
@@ -114,6 +126,8 @@ export function useCreateIncidentForm({
     handleSubmit,
     isPending,
     isDirectionReport,
+    createDiscount,
+    setCreateDiscount
   };
 }
 

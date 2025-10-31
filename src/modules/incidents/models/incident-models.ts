@@ -46,6 +46,10 @@ export interface IncidentCreate extends IncidentBase {
   newVehicleStateId?: number | null;
   vehicleId?: number | null;
   driverId?: number | null;
+  discountAmount?: number | null;
+  discountTotal?: number | null;
+  discountReason?: string | null;
+  discountComments?: string | null;
 }
 
 export type IncidentUpdate = Partial<IncidentBase> & {

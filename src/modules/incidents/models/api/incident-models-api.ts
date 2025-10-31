@@ -43,6 +43,10 @@ export interface IncidentCreateApi extends IncidentBaseApi {
   end_date: string | null;
   vehicle_id?: number | null;
   new_vehicle_state_id?: number | null;
+  discountAmount?: number | null;
+  discountTotal?: number | null;
+  discountReason?: string | null;
+  discountComments?: string | null;
 }
 
 export type IncidentUpdateApi = Partial<IncidentBaseApi> & {
