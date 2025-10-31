@@ -22,7 +22,7 @@ const dialogProps: DialogProps = {
   disableEnforceFocus: true,
   disableScrollLock: true,
   open: true,
-  maxWidth: 'md',
+  maxWidth: "xl",
   sx: {
     '& .MuiPaper-root': {
       borderRadius: 4,
