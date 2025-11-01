@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useState } from "react";
 import logo from '../assets/img/phicargo-vertical.png';
 import AppBar from "@mui/material/AppBar";
@@ -10,7 +10,6 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
-import AppsIcon from "@mui/icons-material/Apps";
 import AvatarProfile from "@/components/ui/AvatarProfile";
 import { useAuthContext } from "@/modules/auth/hooks";
 import GoogleAppsMenu from "./menu";
@@ -49,10 +48,8 @@ const CustomNavbar = ({
   extraButtons,
   rightComponents,
   showBackButton = true,
-  backTo = "/menu",
 }: any) => {
   const { session } = useAuthContext();
-  const navigate = useNavigate();
 
   const [anchorElNav, setAnchorElNav] = useState(null);
 
@@ -71,16 +68,9 @@ const CustomNavbar = ({
 
             {/* Botón de regreso */}
             {showBackButton && (
-              <IconButton
-                color="inherit"
-                onClick={() => navigate(backTo)}
-                sx={{ mr: 2 }}
-              >
-                <AppsIcon />
-              </IconButton>
+              <GoogleAppsMenu></GoogleAppsMenu>
             )}
 
-            <GoogleAppsMenu></GoogleAppsMenu>
             <img
               src={logo}
               alt="Logo"

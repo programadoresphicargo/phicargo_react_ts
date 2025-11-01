@@ -64,6 +64,7 @@ export default function GoogleAppsMenu() {
     z-[9999]
   "
      >
+
       {menuItems.map((app) => (
        <div key={app.name}>
         <div
@@ -77,6 +78,13 @@ export default function GoogleAppsMenu() {
         </div>
        </div>
       ))}
+
+      <div className="col-span-3 mb-2 flex justify-center">
+       <Button color="primary" onPress={() => handleClick('/menu')} radius="full">
+        Menu principal
+       </Button>
+      </div>
+      
      </motion.div>
     )}
    </AnimatePresence>
