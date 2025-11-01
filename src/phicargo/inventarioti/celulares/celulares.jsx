@@ -8,7 +8,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 import Box from '@mui/material/Box';
 import { DatePicker } from 'antd';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import MonitoreoNavbar from '../../monitoreo/Navbar';
 import odooApi from '@/api/odoo-api';
 
 const ContactosCelulares = () => {

@@ -20,7 +20,6 @@ import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import MonitoreoNavbar from './Navbar';
 import PersistentDrawerRight from './Eventos';
 import Slide from '@mui/material/Slide';
 import Toolbar from '@mui/material/Toolbar';
@@ -30,6 +29,8 @@ import dayjs from 'dayjs';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import { useAuthContext } from "../../modules/auth/hooks/useAuthContext";
+import CustomNavbar from "@/pages/CustomNavbar";
+import { pages } from '../monitoreo/pages';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -222,7 +223,7 @@ const EventosPendientes = () => {
 
     </Dialog>
 
-    <MonitoreoNavbar></MonitoreoNavbar>
+    <CustomNavbar pages={pages}></CustomNavbar>
     <Card className='m-5'>
       <CardBody>
         <MaterialReactTable table={table} />

@@ -11,9 +11,9 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import FormularioCorreoGeneral from './correoForm';
-import MonitoreoNavbar from '../monitoreo/Navbar';
 import Slide from '@mui/material/Slide';
 import odooApi from '@/api/odoo-api';
+import CustomNavbar from '@/pages/CustomNavbar';
 
 const CorreosElectronicos = ({ estado }) => {
 
@@ -156,7 +156,7 @@ const CorreosElectronicos = ({ estado }) => {
   });
 
   return (<>
-    <MonitoreoNavbar />
+    <CustomNavbar></CustomNavbar>
     <MaterialReactTable table={table} />
 
     <Dialog

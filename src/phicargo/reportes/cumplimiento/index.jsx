@@ -7,8 +7,8 @@ import React, { useEffect, useMemo, useState } from 'react';
 import Box from '@mui/material/Box';
 import { Button } from "@heroui/react"
 import { DatePicker } from 'antd';
-import MonitoreoNavbar from '../../monitoreo/Navbar';
 import odooApi from '@/api/odoo-api';
+import CustomNavbar from '@/pages/CustomNavbar';
 const { RangePicker } = DatePicker;
 
 const ReporteCumplimiento = () => {
@@ -139,7 +139,7 @@ const ReporteCumplimiento = () => {
 
     return (
         <div>
-            <MonitoreoNavbar />
+            <CustomNavbar></CustomNavbar>
             <MaterialReactTable table={table} />
         </div>
     );
