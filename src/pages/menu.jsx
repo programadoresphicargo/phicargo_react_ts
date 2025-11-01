@@ -1,10 +1,11 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { menuItems } from '../pages/MenuItems';
 import { useNavigate } from "react-router-dom";
 import IconButton from '@mui/material/IconButton';
 import AppsIcon from "@mui/icons-material/Apps";
 import { Button } from "@heroui/react";
+import { useAuthContext } from "@/modules/auth/hooks";
 
 export default function GoogleAppsMenu() {
  const [open, setOpen] = useState(false);
@@ -36,6 +37,18 @@ export default function GoogleAppsMenu() {
   navigate(link);
  };
 
+ const { session } = useAuthContext();
+
+ const filteredMenuItems = useMemo(
+  () =>
+   menuItems.filter((item) =>
+    item.requiredPermissions.some((permission) =>
+     session?.user?.permissions?.includes(permission),
+    ),
+   ),
+  [session],
+ );
+
  return (
   <div className="relative" ref={menuRef}>
    {/* Botón */}
@@ -65,7 +78,7 @@ export default function GoogleAppsMenu() {
   "
      >
 
-      {menuItems.map((app) => (
+      {filteredMenuItems.map((app) => (
        <div key={app.name}>
         <div
          className="flex flex-col items-center p-3 rounded-xl cursor-pointer hover:bg-gray-100 transition"
@@ -84,7 +97,7 @@ export default function GoogleAppsMenu() {
         Menu principal
        </Button>
       </div>
-      
+
      </motion.div>
     )}
    </AnimatePresence>
