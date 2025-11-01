@@ -7,13 +7,13 @@ import Badge from 'react-bootstrap/Badge';
 import { Box } from '@mui/material';
 import { Component } from "react";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import ResponsiveAppBar from '@/phicargo/saldos_contabilidad/Navbar';
 import axios from 'axios';
 import odooApi from '@/api/odoo-api';
 import { toast } from "react-toastify";
 import { useDateFormatter } from "@react-aria/i18n";
 import { DateRangePicker } from 'rsuite';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
+import CustomNavbar from "@/pages/CustomNavbar";
 
 const DetencionesTable = () => {
   function formatDateToYYYYMMDD(date) {
@@ -230,7 +230,7 @@ const DetencionesTable = () => {
 
   return (
     <>
-      <ResponsiveAppBar></ResponsiveAppBar>
+      <CustomNavbar></CustomNavbar>
       <MaterialReactTable
         table={table}
       />;

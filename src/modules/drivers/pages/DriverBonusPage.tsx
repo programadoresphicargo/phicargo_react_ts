@@ -66,6 +66,7 @@ const DriverBonusPage = () => {
         <Button
           onPress={() => setNewPeriodModalOpen(true)}
           color="primary"
+          radius='full'
         >
           Nuevo periodo
         </Button>

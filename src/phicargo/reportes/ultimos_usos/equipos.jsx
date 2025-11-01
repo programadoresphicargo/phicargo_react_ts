@@ -8,7 +8,6 @@ import Badge from 'react-bootstrap/Badge';
 import { Box } from '@mui/material';
 import { Component } from "react";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import ResponsiveAppBar from '@/phicargo/saldos_contabilidad/Navbar';
 import axios from 'axios';
 import odooApi from '@/api/odoo-api';
 import { toast } from "react-toastify";
