@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import React, { useState } from "react";
+import { useState } from "react";
 import logo from '../assets/img/phicargo-vertical.png';
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
