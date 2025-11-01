@@ -129,6 +129,7 @@ const FormularioNewCE = ({ onClose, id_tipo_costo }) => {
           isLoading={Loading}
           color="primary"
           onPress={registrar}
+          radius="full"
         >
           Registrar
         </Button>

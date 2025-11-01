@@ -3,10 +3,8 @@ import {
   useMaterialReactTable,
 } from 'material-react-table';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-
 import { Box } from '@mui/material';
 import { Button } from '@heroui/react';
-import CENavBar from '../Navbar';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -16,6 +14,8 @@ import FormularioNewCE from './formulario';
 import Slide from '@mui/material/Slide';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
+import CustomNavbar from '@/pages/CustomNavbar';
+import { pages } from '../folios/pages';
 
 const TiposCostosExtras = ({ }) => {
 
@@ -134,7 +134,7 @@ const TiposCostosExtras = ({ }) => {
           flexWrap: 'wrap',
         }}
       >
-        <Button color='primary' onPress={handleClickOpen}>
+        <Button color='primary' onPress={handleClickOpen} radius='full'>
           Nuevo
         </Button>
       </Box>
@@ -155,7 +155,7 @@ const TiposCostosExtras = ({ }) => {
 
   return (
     <>
-      <CENavBar></CENavBar>
+      <CustomNavbar pages={pages}></CustomNavbar>
       <MaterialReactTable table={table} />
 
       <Dialog
