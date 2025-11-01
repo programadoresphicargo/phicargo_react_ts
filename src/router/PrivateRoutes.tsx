@@ -83,9 +83,6 @@ const DetencionesTable = lazy(
 const ReporteDetencionesViajes = lazy(
   () => import('../phicargo/viajes/detenciones/reporte_detenciones_viajes'),
 );
-const AsignacionUnidades = lazy(
-  () => import('../phicargo/reportes/asignacion_unidades'),
-);
 // const BonosOperadores = lazy(() => import('../phicargo/bonos/BonosIndex'));
 const DriverBonusPage = lazy(
   () => import('@/modules/drivers/pages/DriverBonusPage'),
@@ -436,15 +433,6 @@ export const PrivateRoutes = () => {
           element={
             <Suspense fallback={<LoadingPage />}>
               <ReporteDetencionesViajes />
-            </Suspense>
-          }
-        />
-
-        <Route
-          path="/asignacion"
-          element={
-            <Suspense fallback={<LoadingPage />}>
-              <AsignacionUnidades />
             </Suspense>
           }
         />
