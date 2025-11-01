@@ -3,12 +3,12 @@ import { Tabs, Tab, Card, CardBody } from "@heroui/react";
 import Typography from '@mui/material/Typography';
 import Minutas from "./minutas";
 import { MinutasProvider } from "./context";
-import MinutasNavbar from "./Navbar";
+import CustomNavbar from "@/pages/CustomNavbar";
 
 export default function ControlMinutas() {
     return (
         <MinutasProvider>
-            <MinutasNavbar></MinutasNavbar>
+            <CustomNavbar></CustomNavbar>
             <Minutas />
         </MinutasProvider>
     );
