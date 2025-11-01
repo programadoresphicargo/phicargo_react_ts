@@ -154,9 +154,12 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
     useEffect(() => {
         const fetchManiobraData = async (id) => {
             try {
+                setLoading(true);
                 const response = await odooApi.get(`/maniobras/by_id/${id}`);
+                setLoading(false);
                 return response.data || {};
             } catch (error) {
+                setLoading(false);
                 console.error('Error al obtener maniobra:', error);
                 toast.error('Error al obtener maniobra.');
                 return {};
@@ -662,7 +665,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                             <Typography sx={{ fontFamily: 'Inter' }}>
                                 Maniobra M-{id_maniobra} / {id_cp}
                             </Typography>
-                            <Button autoFocus color="primary" onPress={handleClose}>
+                            <Button autoFocus color="primary" onPress={handleClose} radius='full'>
                                 Cerrar
                             </Button>
                         </Toolbar>
@@ -699,14 +702,14 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                     <Grid size={12}>
                                         <Stack spacing={1} direction="row" className='mb-4'>
                                             {buttonsVisibility.registrar && <Button color="primary" onPress={validar_form} isLoading={Loading} radius='full'>Registrar</Button>}
-                                            {buttonsVisibility.cancelar && <Button onPress={handleOpenDialog} color="danger" startContent={<i class="bi bi-x-circle"></i>} radius='full'>Cancelar</Button>}
+                                            {buttonsVisibility.cancelar && <Button onPress={handleOpenDialog} color="danger" startContent={<i class="bi bi-x-circle"></i>} radius='full' isLoading={Loading}>Cancelar</Button>}
                                             {buttonsVisibility.guardar_maniobra && <Button color="success" onPress={validar_form_actualizar} isLoading={Loading} className='text-white' startContent={<i class="bi bi-floppy"></i>}>Guardar cambios</Button>}
-                                            {buttonsVisibility.editar_maniobra && <Button color="primary" onPress={toggleForm} startContent={<i class="bi bi-pen"></i>} radius='full'>Editar</Button>}
-                                            {buttonsVisibility.iniciar && <Button color="success" onPress={comprobar_equipo} className='text-white' startContent={<i class="bi bi-play-fill"></i>} radius='full'>Iniciar</Button>}
-                                            {buttonsVisibility.finalizar && <Button onPress={finalizar_maniobra} color="danger" startContent={<i class="bi bi-stop-fill"></i>} radius="full">Finalizar</Button>}
-                                            {buttonsVisibility.enviar_estatus && <Button onPress={handleClickOpenPE} color="success" className='text-white' startContent={<i class="bi bi-send-fill"></i>} radius="full">Enviar nuevo estatus</Button>}
-                                            {buttonsVisibility.reactivar && <Button color="primary" onPress={reactivar_maniobra} radius='full'>Reactivar maniobra</Button>}
-                                            <Button color="primary" onPress={handleClickOpenCL} startContent={<i class="bi bi-envelope-at-fill"></i>} radius='full'>Correos electronicos</Button>
+                                            {buttonsVisibility.editar_maniobra && <Button color="primary" onPress={toggleForm} startContent={<i class="bi bi-pen"></i>} radius='full' isLoading={Loading}>Editar</Button>}
+                                            {buttonsVisibility.iniciar && <Button color="success" onPress={comprobar_equipo} className='text-white' startContent={<i class="bi bi-play-fill"></i>} radius='full' isLoading={Loading}>Iniciar</Button>}
+                                            {buttonsVisibility.finalizar && <Button onPress={finalizar_maniobra} color="danger" startContent={<i class="bi bi-stop-fill"></i>} radius="full" isLoading={Loading}>Finalizar</Button>}
+                                            {buttonsVisibility.enviar_estatus && <Button onPress={handleClickOpenPE} color="success" className='text-white' startContent={<i class="bi bi-send-fill"></i>} radius="full" isLoading={Loading}>Enviar nuevo estatus</Button>}
+                                            {buttonsVisibility.reactivar && <Button color="primary" onPress={reactivar_maniobra} radius='full' isLoading={Loading}>Reactivar maniobra</Button>}
+                                            <Button color="primary" onPress={handleClickOpenCL} startContent={<i class="bi bi-envelope-at-fill"></i>} radius='full' isLoading={Loading}>Correos electronicos</Button>
 
                                             <Button
                                                 radius="full"
@@ -717,6 +720,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                                 href={`${apiUrl}/maniobras/formato_entrega/` + id_maniobra}
                                                 variant="solid"
                                                 className='text-white'
+                                                isLoading={Loading}
                                             >
                                                 Formato de entrega
                                             </Button>
