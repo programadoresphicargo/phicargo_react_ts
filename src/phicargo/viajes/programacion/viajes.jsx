@@ -11,7 +11,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import Dialog from '@mui/material/Dialog';
 import IconButton from '@mui/material/IconButton';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import NavbarViajes from '../navbar';
 import Slide from '@mui/material/Slide';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -20,6 +19,7 @@ import { ViajeContext } from '../context/viajeContext';
 import { exportToCSV } from '../../utils/export';
 import odooApi from '@/api/odoo-api';
 import { DateRangePicker } from 'rsuite';
+import NavbarTravel from '../navbar_viajes';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -380,7 +380,7 @@ const ViajesProgramados = ({ }) => {
 
   return (
     <>
-      <NavbarViajes></NavbarViajes>
+      <NavbarTravel></NavbarTravel>
       <MaterialReactTable
         table={table}
       />

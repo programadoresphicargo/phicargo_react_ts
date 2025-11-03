@@ -7,7 +7,6 @@ import Box from '@mui/material/Box';
 import { Button, Chip } from "@heroui/react"
 import { DatePicker } from 'antd';
 import odooApi from '@/api/odoo-api';
-import NavbarViajes from '@/phicargo/viajes/navbar';
 import { Slider } from "@heroui/react";
 import { DateRangePicker } from "@heroui/react";
 import { parseDate } from "@internationalized/date";
@@ -16,6 +15,7 @@ import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { User } from "@heroui/react";
 import Travel from '@/phicargo/viajes/control/viaje';
 import { ViajeContext } from '@/phicargo/viajes/context/viajeContext';
+import NavbarTravel from '@/phicargo/viajes/navbar_viajes';
 const { VITE_ODOO_API_URL } = import.meta.env;
 
 const ReporteCumplimientoEjecutivo = () => {
@@ -242,7 +242,7 @@ const ReporteCumplimientoEjecutivo = () => {
 
     return (
         <>
-            <NavbarViajes></NavbarViajes>
+            <NavbarTravel></NavbarTravel>
             <MaterialReactTable table={table} />
             <Travel open={open} handleClose={handleClose}></Travel>
         </>
