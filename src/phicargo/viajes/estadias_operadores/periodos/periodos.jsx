@@ -16,7 +16,6 @@ import EstatusDropdown from '../../estatus/resumen_estatus';
 import IconButton from '@mui/material/IconButton';
 import { Image } from 'antd';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import NavbarViajes from '../../navbar';
 import Slide from '@mui/material/Slide';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -27,6 +26,7 @@ import EstadiasOperadores from '../folios';
 import AbrirPeriodo from './modal_periodo';
 import PagosPeriodo from './folios_pago';
 import { Link } from '@heroui/react';
+import NavbarTravel from '../../navbar_viajes';
 const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
 const PagosEstadiasOperadores = ({ }) => {
@@ -227,7 +227,7 @@ const PagosEstadiasOperadores = ({ }) => {
     return (
         <>
             <ViajeProvider>
-                <NavbarViajes></NavbarViajes>
+                <NavbarTravel></NavbarTravel>
                 <MaterialReactTable
                     table={table}
                 />

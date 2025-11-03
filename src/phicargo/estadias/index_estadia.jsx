@@ -4,13 +4,14 @@ import { ViajeProvider } from "../viajes/context/viajeContext";
 import RegistrosEstadias from "./registros";
 import { CostosExtrasProvider } from "../costos/context/context";
 import EstadiasForm from "./estadia_form";
-import NavbarViajes from "../viajes/navbar";
+import NavbarTravel from "../viajes/navbar_viajes";
 
 export default function EstadiaViajeIndex() {
     return (
         <ViajeProvider>
+            <h1>americn</h1>
             <CostosExtrasProvider>
-                <NavbarViajes></NavbarViajes>
+                <NavbarTravel></NavbarTravel>
                 <EstadiasForm></EstadiasForm>
             </CostosExtrasProvider>
         </ViajeProvider>
