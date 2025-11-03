@@ -15,8 +15,10 @@ import { exportToCSV } from '../../utils/export';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { User } from "@heroui/react";
 import Travel from '@/phicargo/viajes/control/viaje';
-import ManiobrasNavBar from '@/phicargo/maniobras/Navbar';
 import Formulariomaniobra from '@/phicargo/maniobras/maniobras/formulario_maniobra';
+import CustomNavbar from '@/pages/CustomNavbar';
+import { pages } from '../../maniobras/pages';
+
 const { VITE_ODOO_API_URL } = import.meta.env;
 
 const ReporteCumplimientoEjecutivoManiobra = () => {
@@ -245,7 +247,7 @@ const ReporteCumplimientoEjecutivoManiobra = () => {
 
     return (
         <>
-            <ManiobrasNavBar></ManiobrasNavBar>
+            <CustomNavbar pages={pages}></CustomNavbar>
             <MaterialReactTable table={table} />
             <Formulariomaniobra
                 show={modalShow}

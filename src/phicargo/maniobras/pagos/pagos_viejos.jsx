@@ -6,10 +6,10 @@ import {
     MaterialReactTable,
     useMaterialReactTable,
 } from 'material-react-table';
-import ManiobrasNavBar from '../Navbar';
 import { Box } from '@mui/system';
 import { Button } from '@heroui/react';
 import { ManiobraProvider } from '../context/viajeContext';
+import CustomNavbar from '@/pages/CustomNavbar';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 const NominasViejas = () => {
@@ -162,7 +162,7 @@ const NominasViejas = () => {
     return (
         <div>
             <ManiobraProvider>
-                <ManiobrasNavBar />
+                <CustomNavbar></CustomNavbar>
                 <Nomina_form
                     show={modalShow}
                     handleClose={handleCloseModal}
