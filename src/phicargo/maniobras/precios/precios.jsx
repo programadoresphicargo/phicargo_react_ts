@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import customFontTheme from '../../../theme';
+import { pages } from '../pages';
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import ManiobrasNavBar from '../Navbar';
+import CustomNavbar from '@/pages/CustomNavbar';
 
 const Precios_maniobras = () => {
 
@@ -110,7 +111,7 @@ const Precios_maniobras = () => {
 
   return (
     <div>
-      <ManiobrasNavBar />
+      <CustomNavbar pages={pages}></CustomNavbar>
       <ThemeProvider theme={customFontTheme}>
         <MaterialReactTable table={table} />
       </ThemeProvider>

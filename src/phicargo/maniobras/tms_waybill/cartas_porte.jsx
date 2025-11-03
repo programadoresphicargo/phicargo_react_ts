@@ -7,7 +7,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 import Box from '@mui/material/Box';
 import Example2 from '../maniobras/modal';
 import { ManiobraProvider } from '../context/viajeContext';
-import ManiobrasNavBar from '../Navbar';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import { ThemeProvider } from '@mui/material/styles';
@@ -17,6 +16,8 @@ import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import { DateRangePicker } from 'rsuite';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
+import CustomNavbar from "@/pages/CustomNavbar";
+import { pages } from '../pages';
 
 const CartasPorte = () => {
 
@@ -267,7 +268,7 @@ const CartasPorte = () => {
   return (
     <div>
       <ManiobraProvider>
-        <ManiobrasNavBar />
+        <CustomNavbar pages={pages}></CustomNavbar>
         <MaterialReactTable key={selectedTab} table={table} />
         <Example2
           show={modalShow}

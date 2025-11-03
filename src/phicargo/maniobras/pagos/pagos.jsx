@@ -6,7 +6,6 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import ManiobrasNavBar from '../Navbar';
 import { Box } from '@mui/system';
 import { ManiobraProvider } from '../context/viajeContext';
 import odooApi from '@/api/odoo-api';
@@ -15,6 +14,7 @@ import { Popover, PopoverTrigger, PopoverContent, Button, Input, Select, SelectI
 import { DateRangePicker } from 'rsuite';
 import PagosOperadores from './pagos_operadores';
 import AbrirPeriodo from './form_periodos';
+import CustomNavbar from '@/pages/CustomNavbar';
 
 const Nominas = () => {
 
@@ -186,7 +186,7 @@ const Nominas = () => {
     <>
       <ManiobraProvider>
         <PagosOperadores show={openPeriodo} handleClose={handleClosePeriodo} periodo={periodo}></PagosOperadores>
-        <ManiobrasNavBar />
+        <CustomNavbar></CustomNavbar>
         <MaterialReactTable table={table} />
       </ManiobraProvider>
 

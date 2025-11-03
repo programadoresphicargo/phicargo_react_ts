@@ -1,6 +1,5 @@
 import React from "react";
 import Maniobras from "./tabla";
-import ManiobrasNavBar from "../Navbar";
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
