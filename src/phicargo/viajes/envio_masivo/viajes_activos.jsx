@@ -304,11 +304,11 @@ const ViajesActivosMasivo = ({ }) => {
           flexWrap: 'wrap',
         }}
       >
-        <Button onPress={handleExportData} color="primary" isLoading={isLoading}>
+        <Button onPress={handleExportData} color="primary" isLoading={isLoading} radius="full">
           <i class="bi bi-send"></i> Enviar estatus
         </Button>
 
-        <Button onPress={() => fetchData()} color="primary" isLoading={isLoading}>
+        <Button onPress={() => fetchData()} color="primary" isLoading={isLoading} radius="full">
           Refrescar
         </Button>
 
