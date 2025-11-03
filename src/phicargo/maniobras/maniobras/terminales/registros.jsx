@@ -112,7 +112,7 @@ const Terminales = () => {
         <div>
             <CustomNavbar pages={pages}></CustomNavbar>
             <div className="flex flex-wrap gap-2 items-center p-2">
-                <Button color="primary" onPress={() => handleClickOpen(0)}>
+                <Button color="primary" onPress={() => handleClickOpen(0)} radius='full'>
                     Nueva
                 </Button>
             </div>
