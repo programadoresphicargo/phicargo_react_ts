@@ -16,7 +16,6 @@ import EstatusDropdown from '../estatus/resumen_estatus';
 import IconButton from '@mui/material/IconButton';
 import { Image } from 'antd';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import NavbarViajes from '../navbar';
 import Slide from '@mui/material/Slide';
 import Toolbar from '@mui/material/Toolbar';
 import Travel from './viaje';
@@ -29,6 +28,7 @@ import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import EstatusChipInicioViaje from '../componentes/status_chip_inicio';
 import EstatusChipLlegadaPlanta from '../componentes/status_chip_planta';
+import NavbarTravel from '../navbar_viajes';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -536,7 +536,7 @@ const ViajesActivos = ({ }) => {
   return (
     <>
       <DetencionesViajesActivos isOpen={isOpen} close={onClose}></DetencionesViajesActivos>
-      <NavbarViajes></NavbarViajes>
+      <NavbarTravel></NavbarTravel>
       <MaterialReactTable table={table} />
       <Travel open={open} handleClose={handleClose}></Travel>
 
