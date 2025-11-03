@@ -12,7 +12,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import Dialog from '@mui/material/Dialog';
 import IconButton from '@mui/material/IconButton';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import NavbarViajes from '../navbar';
 import Slide from '@mui/material/Slide';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -24,6 +23,7 @@ import { toast } from 'react-toastify';
 import { DateRangePicker } from 'rsuite';
 import EstatusHistorialAgrupado from '../estatus/estatus_agrupados';
 import { Drawer } from '@mui/material';
+import NavbarTravel from '../navbar_viajes';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -330,7 +330,7 @@ const ViajesFinalizados = ({ }) => {
 
   return (
     <>
-      <NavbarViajes />
+      <NavbarTravel></NavbarTravel>
       <MaterialReactTable
         table={table}
         enableStickyHeader={true} // Opcional: si deseas un encabezado fijo
