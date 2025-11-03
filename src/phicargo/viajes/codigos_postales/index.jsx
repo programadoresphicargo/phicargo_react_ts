@@ -13,16 +13,16 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
-import NavbarViajes from "../navbar";
 import { ViajeProvider } from "../context/viajeContext";
 import CodigosPostales from "./tabla";
+import NavbarTravel from "../navbar_viajes";
 
 const CodigosPostalesIndex = ({ }) => {
 
   return (
     <>
       <ViajeProvider>
-        <NavbarViajes></NavbarViajes>
+        <NavbarTravel></NavbarTravel>
         <CodigosPostales></CodigosPostales>
       </ViajeProvider>
     </>

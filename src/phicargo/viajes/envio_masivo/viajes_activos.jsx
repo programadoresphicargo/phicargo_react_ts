@@ -11,7 +11,6 @@ import { getLocalTimeZone, now } from "@internationalized/date";
 import { Box } from '@mui/material';
 import { DatePicker } from "@heroui/react";
 import EstatusDropdown from '../estatus/resumen_estatus';
-import NavbarViajes from '../navbar';
 import Swal from 'sweetalert2';
 import { format } from 'date-fns';
 import odooApi from '@/api/odoo-api';

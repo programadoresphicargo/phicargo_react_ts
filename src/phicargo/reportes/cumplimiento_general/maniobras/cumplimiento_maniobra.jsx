@@ -7,7 +7,6 @@ import Box from '@mui/material/Box';
 import { Button, Chip } from "@heroui/react"
 import { DatePicker } from 'antd';
 import odooApi from '@/api/odoo-api';
-import NavbarViajes from '@/phicargo/viajes/navbar';
 import { Slider } from "@heroui/react";
 import { DateRangePicker } from "@heroui/react";
 import { parseDate } from "@internationalized/date";

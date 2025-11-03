@@ -2,7 +2,6 @@ import React from 'react';
 import { ViajeProvider } from '../context/viajeContext'
 import WebSocketWithToast from '@/phicargo/websocket/websocket';
 import ViajesActivosMasivo from './viajes_activos';
-import NavbarViajes from '../navbar';
 import NavbarTravel from '../navbar_viajes';
 
 const EnviosMasivosViajes = () => {
