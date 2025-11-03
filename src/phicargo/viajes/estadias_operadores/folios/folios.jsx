@@ -15,7 +15,6 @@ import EstatusDropdown from '../../estatus/resumen_estatus';
 import IconButton from '@mui/material/IconButton';
 import { Image } from 'antd';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import NavbarViajes from '../../navbar';
 import Slide from '@mui/material/Slide';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -23,6 +22,7 @@ import { exportToCSV } from '../../../utils/export';
 import odooApi from '@/api/odoo-api';
 import { ViajeProvider } from '../../context/viajeContext';
 import EstadiasOperadores from '.';
+import NavbarTravel from '../../navbar_viajes';
 
 const PagosEstadiasOperadores = ({ }) => {
 
@@ -248,7 +248,7 @@ const PagosEstadiasOperadores = ({ }) => {
     return (
         <>
             <ViajeProvider>
-                <NavbarViajes></NavbarViajes>
+                <NavbarTravel></NavbarTravel>
                 <MaterialReactTable
                     table={table}
                 />

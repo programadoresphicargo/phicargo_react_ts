@@ -7,11 +7,11 @@ import React, { useEffect, useMemo, useState } from 'react';
 
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import NavbarViajes from '../navbar';
 import Slide from '@mui/material/Slide';
 import { Typography } from '@mui/material';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
+import NavbarTravel from "../navbar_viajes";
 
 const ReporteDetencionesViajes = () => {
   const [data, setData] = useState([]);
@@ -81,7 +81,7 @@ const ReporteDetencionesViajes = () => {
 
   return (
     <>
-      <NavbarViajes></NavbarViajes>
+      <NavbarTravel></NavbarTravel>
       <Box sx={{ flexGrow: 1 }} margin={2}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
