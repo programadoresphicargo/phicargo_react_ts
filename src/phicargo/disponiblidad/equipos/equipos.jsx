@@ -18,7 +18,6 @@ import Box from '@mui/material/Box';
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
 import IndexHistorial from '.';
-import ManiobrasNavBar from '../../maniobras/Navbar';
 import Slide from '@mui/material/Slide';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';

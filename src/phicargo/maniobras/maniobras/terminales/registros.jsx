@@ -1,10 +1,10 @@
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-
 import { Button } from "@heroui/react";
 import FormularioTerminales from './informacion';
-import ManiobrasNavBar from '../../Navbar';
 import odooApi from '@/api/odoo-api';
+import CustomNavbar from '@/pages/CustomNavbar';
+import { pages } from '../../../maniobras/pages';
 
 const Terminales = () => {
 
@@ -110,7 +110,7 @@ const Terminales = () => {
 
     return (
         <div>
-            <ManiobrasNavBar />
+            <CustomNavbar pages={pages}></CustomNavbar>
             <div className="flex flex-wrap gap-2 items-center p-2">
                 <Button color="primary" onPress={() => handleClickOpen(0)}>
                     Nueva

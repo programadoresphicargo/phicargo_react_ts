@@ -17,7 +17,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 
 import { Chip } from "@heroui/react";
 import Formulariomaniobra from '@/phicargo/maniobras/maniobras/formulario_maniobra';
-import ManiobrasNavBar from '../../maniobras/Navbar';
 import { ThemeProvider } from '@mui/material/styles';
 import customFontTheme from '../../../theme';
 import odooApi from '@/api/odoo-api';
