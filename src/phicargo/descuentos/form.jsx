@@ -263,7 +263,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
                   errorMessage="Campo obligatorio"
                 >
                   <SelectItem key="viaje">Por viaje</SelectItem>
-                  <SelectItem key="maniobra">Por maniobra</SelectItem>
+                  <SelectItem key="quincenal">Quincenal</SelectItem>
                 </Select>
 
                 <NumberInput
