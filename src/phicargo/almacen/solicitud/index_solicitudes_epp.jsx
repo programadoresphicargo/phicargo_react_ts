@@ -1,5 +1,4 @@
 import React from 'react';
-import NavbarAlmacen from '../Navbar';
 import { AlmacenProvider } from '../contexto/contexto';
 import Solicitudes from './solicitudes';
 import Box from '@mui/material/Box';
@@ -7,6 +6,8 @@ import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
+import CustomNavbar from '@/pages/CustomNavbar';
+import { pages } from '../pages';
 
 const Almacen = () => {
 
@@ -19,7 +20,7 @@ const Almacen = () => {
     return (
         <>
             <AlmacenProvider>
-                <NavbarAlmacen></NavbarAlmacen>
+                <CustomNavbar pages={pages}></CustomNavbar>
                 <Box sx={{ width: '100%' }}>
                     <TabContext value={value}>
                         <Box sx={{ borderColor: 'divider', backgroundColor: '#002887', color: 'white' }}>

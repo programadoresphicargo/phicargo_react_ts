@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import NavbarAlmacen from '../Navbar';
 import { AlmacenProvider } from '../contexto/contexto';
 import Inventario from './tabla_productos';
 import Tabs from '@mui/material/Tabs';
@@ -11,6 +10,8 @@ import TabList from '@mui/lab/TabList';
 import { useAuthContext } from '@/modules/auth/hooks';
 import TablaProductos from './tabla_productos';
 import TablaUnidades from './unidades/tabla_unidades';
+import CustomNavbar from '@/pages/CustomNavbar';
+import { pages } from '../pages';
 
 const Almacen = () => {
     const [value, setValue] = useState('0'); // `value` debe ser string
@@ -36,7 +37,7 @@ const Almacen = () => {
 
     return (
         <AlmacenProvider>
-            <NavbarAlmacen />
+            <CustomNavbar pages={pages}></CustomNavbar>
             <TabContext value={value}>
                 <Box sx={{ width: '100%' }}>
                     <Box sx={{ borderColor: 'divider', backgroundColor: '#002887', color: 'white' }}>
