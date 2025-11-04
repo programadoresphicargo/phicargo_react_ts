@@ -155,6 +155,13 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
 
                                 <Input label="Unidad" value={data?.eco} onChange={(e) => handleChange("eco", e.target.value)}></Input>
 
+                                <NumberInput
+                                    label="ID ODOO"
+                                    value={data?.id_odoo}
+                                    onValueChange={(e) => handleChange("id_odoo", e)}
+                                >
+                                </NumberInput>
+
                                 {id_celular && (
                                     <Checkbox isSelected={data?.activo} onValueChange={(e) => handleChange("activo", e)}>Activo</Checkbox>
                                 )}
