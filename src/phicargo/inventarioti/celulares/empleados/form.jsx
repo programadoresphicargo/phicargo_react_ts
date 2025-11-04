@@ -167,10 +167,11 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
                                 )}
                             </ModalBody>
                             <ModalFooter>
-                                <Button color="danger" variant="light" onPress={onClose}>
+                                <Button color="danger" variant="light" onPress={onClose} radius="full">
                                     Cancelar
                                 </Button>
                                 <Button
+                                    radius="full"
                                     color={id_celular ? "success" : "primary"}
                                     onPress={() => handleSave(onClose)}
                                     className="text-white"
