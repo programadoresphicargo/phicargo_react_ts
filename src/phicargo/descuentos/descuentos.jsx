@@ -16,6 +16,7 @@ import odooApi from '@/api/odoo-api';
 import MinutaForm from './form';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { Tooltip } from "@heroui/react";
+import { Chip } from '@heroui/react';
 
 const { VITE_ODOO_API_URL } = import.meta.env;
 
@@ -83,16 +84,32 @@ const Descuentos = ({ }) => {
         header: 'Comentarios',
       },
       {
+        accessorKey: 'estado',
+        header: 'Estado',
+        Cell: ({ cell }) => {
+          const status = cell.getValue() || '';
+          let badgeClass = 'default';
+
+          if (status === 'borrador') {
+            badgeClass = 'warning';
+          } else if (status === 'aplicado') {
+            badgeClass = 'success';
+          }
+
+          return (
+            <Chip color={badgeClass} size="sm" className="text-white">
+              {status}
+            </Chip>
+          );
+        },
+      },
+      {
         accessorKey: 'nombre',
         header: 'Usuario creación',
       },
       {
         accessorKey: 'fecha_creacion',
         header: 'Fecha creación',
-      },
-      {
-        accessorKey: 'estado',
-        header: 'Estado',
       },
     ],
     []
@@ -159,7 +176,7 @@ const Descuentos = ({ }) => {
         <h1 className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text">
           Descuentos
         </h1>
-        <MinutaForm open={open} handleClose={handleClose} id_minuta={id_minuta}></MinutaForm>
+        <MinutaForm open={open} handleClose={handleClose} id_descuento={id_minuta}></MinutaForm>
         <Button color='primary' className='text-white' onPress={() => handleClickOpen()} radius='full'><i class="bi bi-plus-circle"></i> Nuevo registro</Button>
         <Button color='success' className='text-white' onPress={() => fetchData()} radius='full'><i class="bi bi-arrow-clockwise"></i> Refrescar</Button>
       </Box>

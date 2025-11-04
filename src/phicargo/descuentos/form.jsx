@@ -23,7 +23,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function MinutaForm({ open, handleClose, id_minuta }) {
+export default function MinutaForm({ open, handleClose, id_descuento }) {
   const [data, setData] = useState({});
   const [isLoading, setLoading] = useState(false);
   const {
@@ -36,7 +36,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
   };
 
   const fetchData = async () => {
-    if (!id_minuta) {
+    if (!id_descuento) {
       setData({});
       setIsEditing(true);
       return;
@@ -44,7 +44,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
     setIsEditing(false);
     try {
       setLoading(true);
-      const response = await odooApi.get("/descuentos/" + id_minuta);
+      const response = await odooApi.get("/descuentos/" + id_descuento);
       setData(response.data);
     } catch (error) {
       toast.error("Error al obtener los datos.");
@@ -69,7 +69,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
     try {
       setIsEditing(true);
       let response;
-      if (id_minuta) response = await odooApi.patch(`/descuentos/${id_minuta}/`, data);
+      if (id_descuento) response = await odooApi.patch(`/descuentos/${id_descuento}/`, data);
       else response = await odooApi.post("/descuentos/", data);
 
       if (response.data.status === "success") {
@@ -85,7 +85,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
 
   const Confirmar = async () => {
     const result = await Swal.fire({
-      title: "¿Confirmar descuento?",
+      title: "¿Marcar como aplicado el descuento?",
       text: "Esta acción no se puede deshacer.",
       icon: "warning",
       showCancelButton: true,
@@ -96,8 +96,8 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
     });
     if (result.isConfirmed) {
       try {
-        const response = await odooApi.patch(`/minutas/estado/${id_minuta}/confirmado`);
-        if (response.data.state === "success") {
+        const response = await odooApi.patch(`/descuentos/estado/${id_descuento}/aplicado`);
+        if (response.data.status === "success") {
           toast.success(response.data.message);
           handleClose();
         } else toast.error(response.data.message);
@@ -108,7 +108,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
   };
 
   const ImprimirFormato = () => {
-    const url = odooApi.defaults.baseURL + `/descuentos/formato/${id_minuta}`;
+    const url = odooApi.defaults.baseURL + `/descuentos/formato/${id_descuento}`;
     window.open(url, "_blank");
   };
 
@@ -132,7 +132,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
             <CloseIcon />
           </IconButton>
           <Typography variant="h6" sx={{ flex: 1, fontWeight: 500 }}>
-            {id_minuta ? `Descuento D-${id_minuta}` : "Nuevo descuento"}
+            {id_descuento ? `Descuento D-${id_descuento}` : "Nuevo descuento"}
           </Typography>
           <Button autoFocus color="danger" onPress={handleClose} className="text-white" radius="full">
             Cerrar
@@ -145,38 +145,38 @@ export default function MinutaForm({ open, handleClose, id_minuta }) {
       <div className="p-6 space-y-6 bg-gray-50">
         {/* Header Actions */}
         <Stack direction="row" spacing={2} alignItems="center">
-          {id_minuta && (
+          {id_descuento && (
             <Chip color="warning" className="uppercase text-sm font-semibold text-white">
               {data?.estado || "pendiente"}
             </Chip>
           )}
 
-          {!id_minuta && (
+          {!id_descuento && (
             <Button color="success" onPress={handleSubmit} radius="full" className="text-white">
               Registrar
             </Button>
           )}
 
-          {id_minuta && !isEditing && data?.estado !== "confirmado" && (
+          {id_descuento && !isEditing && data?.estado !== "confirmado" && (
             <Button color="primary" onPress={() => setIsEditing(true)} radius="full" className="text-white">
               Editar
             </Button>
           )}
 
-          {isEditing && id_minuta && (
+          {isEditing && id_descuento && (
             <Button color="success" onPress={handleSubmit} radius="full" className="text-white">
               Guardar cambios
             </Button>
           )}
 
-          {!isEditing && id_minuta && (
+          {!isEditing && id_descuento && (
             <>
               <Button color="secondary" onPress={ImprimirFormato} radius="full" className="text-white">
                 Imprimir formato
               </Button>
-              {data?.estado !== "confirmado" && (
-                <Button color="success" onPress={Confirmar} radius="full" className="text-white" isDisabled>
-                  Confirmar
+              {data?.estado !== "aplicado" && (
+                <Button color="success" onPress={Confirmar} radius="full" className="text-white">
+                  Aplicar
                 </Button>
               )}
             </>
