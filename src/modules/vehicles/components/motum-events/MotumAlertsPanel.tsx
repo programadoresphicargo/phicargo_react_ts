@@ -60,6 +60,8 @@ export const MotumAlertsPanel = () => {
                   selectedKey={tab}
                   onSelectionChange={(value) => setTab(value as MotumEventStatus)}
                   aria-label="motum-alerts-tabs"
+                  color='primary'
+                  radius='full'
                 >
                   <Tab key="pending" title="Sin Atender" />
                   <Tab key="attended" title="Historial" />
