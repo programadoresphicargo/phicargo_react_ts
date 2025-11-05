@@ -50,6 +50,8 @@ export const MotumAlertsPanel = () => {
       <Drawer
         isOpen={open}
         onClose={toggleDrawer(false)}
+        isDismissable={false}
+        isKeyboardDismissDisabled={true}
       >
         <DrawerContent>
           {(onClose) => (

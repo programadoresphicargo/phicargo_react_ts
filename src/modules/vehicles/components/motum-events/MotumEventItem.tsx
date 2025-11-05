@@ -43,7 +43,7 @@ export const MotumEventItem = ({ event }: Props) => {
           <ReportGmailerrorredIcon color="error" />
           <Box sx={{ flexGrow: 1 }}>
             <Typography variant="subtitle1" fontWeight="bold">
-              {event.eventTypeName}
+              {event.id}     {event.eventTypeName}
             </Typography>
             {event.eventDescription && (
               <Typography variant="body2" color="text.secondary">
@@ -55,7 +55,7 @@ export const MotumEventItem = ({ event }: Props) => {
               color="primary"
               sx={{ fontStyle: 'italic' }}
             >
-              Estado: {event.status} | Unidad: {event.vehicleName}
+              Estado: {event.status} | Unidad: {event.vehicleName}  | Fecha : {event.createdAt.format('YYYY-MM-DD HH:mm')}
             </Typography>
           </Box>
           <IconButton
