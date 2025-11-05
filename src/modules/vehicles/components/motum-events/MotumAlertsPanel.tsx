@@ -52,16 +52,27 @@ export const MotumAlertsPanel = () => {
         onClose={toggleDrawer(false)}
         isDismissable={false}
         isKeyboardDismissDisabled={true}
+        size="lg"
       >
         <DrawerContent>
           {(onClose) => (
             <>
               <DrawerHeader className="flex flex-col gap-1">Alertas GPS</DrawerHeader>
+              <div className='pl-6'>
+                <Button
+                  color='success'
+                  className='text-white'
+                  onPress={() => getMotumEventsQuery.refetch()}
+                  isLoading={getMotumEventsQuery.isFetching}
+                  radius='full'
+                >
+                  Recargar eventos
+                </Button>
+              </div>
               <DrawerBody>
                 <Tabs
                   selectedKey={tab}
                   onSelectionChange={(value) => setTab(value as MotumEventStatus)}
-                  aria-label="motum-alerts-tabs"
                   color='primary'
                   radius='full'
                 >
@@ -71,13 +82,13 @@ export const MotumAlertsPanel = () => {
                 {tab === 'pending' && (
                   <MotumEventsList
                     toggleDrawer={toggleDrawer}
-                    isLoading={getMotumEventsQuery.isLoading}
+                    isLoading={getMotumEventsQuery.isFetching}
                     events={getMotumEventsQuery.data}
                   />
                 )}
                 {tab === 'attended' && (
                   <MotumEventsHistoryList
-                    isLoading={getMotumEventsQuery.isLoading}
+                    isLoading={getMotumEventsQuery.isFetching}
                     events={getMotumEventsQuery.data}
                     setDateRange={setDateRange}
                   />
