@@ -1,13 +1,20 @@
-import { Badge, IconButton, Tab, Tabs, Tooltip } from '@mui/material';
+import { Badge, IconButton, Tooltip } from '@mui/material';
 import { useMemo, useState } from 'react';
-
-import Drawer from '@mui/material/Drawer';
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerBody,
+  DrawerFooter,
+} from "@heroui/drawer";
+import { Button } from "@heroui/button";
 import type { MotumEventStatus } from '../../models';
 import { MotumEventsHistoryList } from './MotumEventsHistoryList';
 import { MotumEventsList } from './MotumEventsList';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import dayjs from 'dayjs';
 import { useMotumEventsQueries } from '../../hooks/queries';
+import { Tabs, Tab } from "@heroui/react";
 
 export const MotumAlertsPanel = () => {
   const [open, setOpen] = useState(false);
@@ -41,43 +48,45 @@ export const MotumAlertsPanel = () => {
         </Badge>
       </Tooltip>
       <Drawer
-        open={open}
+        isOpen={open}
         onClose={toggleDrawer(false)}
-        anchor="right"
-        slotProps={{
-          paper: {
-            sx: {
-              borderTopLeftRadius: 16,
-              borderBottomLeftRadius: 16,
-            },
-          },
-        }}
       >
-        <Tabs
-          value={tab}
-          onChange={(_, value) => setTab(value)}
-          textColor="primary"
-          variant="fullWidth"
-          indicatorColor="primary"
-          aria-label="motum-alerts-tabs"
-        >
-          <Tab value="pending" label="Sin Atender" />
-          <Tab value="attended" label="Historial" />
-        </Tabs>
-        {tab === 'pending' && (
-          <MotumEventsList
-            toggleDrawer={toggleDrawer}
-            isLoading={getMotumEventsQuery.isLoading}
-            events={getMotumEventsQuery.data}
-          />
-        )}
-        {tab === 'attended' && (
-          <MotumEventsHistoryList
-            isLoading={getMotumEventsQuery.isLoading}
-            events={getMotumEventsQuery.data}
-            setDateRange={setDateRange}
-          />
-        )}
+        <DrawerContent>
+          {(onClose) => (
+            <>
+              <DrawerHeader className="flex flex-col gap-1">Alertas GPS</DrawerHeader>
+              <DrawerBody>
+                <Tabs
+                  selectedKey={tab}
+                  onSelectionChange={(value) => setTab(value as MotumEventStatus)}
+                  aria-label="motum-alerts-tabs"
+                >
+                  <Tab key="pending" title="Sin Atender" />
+                  <Tab key="attended" title="Historial" />
+                </Tabs>
+                {tab === 'pending' && (
+                  <MotumEventsList
+                    toggleDrawer={toggleDrawer}
+                    isLoading={getMotumEventsQuery.isLoading}
+                    events={getMotumEventsQuery.data}
+                  />
+                )}
+                {tab === 'attended' && (
+                  <MotumEventsHistoryList
+                    isLoading={getMotumEventsQuery.isLoading}
+                    events={getMotumEventsQuery.data}
+                    setDateRange={setDateRange}
+                  />
+                )}
+              </DrawerBody>
+              <DrawerFooter>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  Cancelar
+                </Button>
+              </DrawerFooter>
+            </>
+          )}
+        </DrawerContent>
       </Drawer>
     </>
   );

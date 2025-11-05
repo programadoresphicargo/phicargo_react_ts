@@ -1,8 +1,8 @@
-import { Divider, IconButton, Paper, Stack, Typography } from '@mui/material';
-import { SubmitHandler, TextFieldElement, useForm } from 'react-hook-form-mui';
-
+import { Divider, IconButton, Stack, Typography } from '@mui/material';
+import { SubmitHandler, useForm } from 'react-hook-form-mui';
+import { Controller } from "react-hook-form";
+import { Textarea } from "@heroui/react"
 import Box from '@mui/material/Box';
-import { Button } from '@/components/ui';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CloseIcon from '@mui/icons-material/Close';
 import type { MotumEvent } from '../../models';
@@ -11,6 +11,7 @@ import RoomIcon from '@mui/icons-material/Room';
 import SaveIcon from '@mui/icons-material/Save';
 import { useMotumEventsQueries } from '../../hooks/queries';
 import { useState } from 'react';
+import { Button, Card, CardBody } from '@heroui/react';
 
 interface Props {
   event: MotumEvent;
@@ -36,129 +37,138 @@ export const MotumEventItem = ({ event }: Props) => {
   };
 
   return (
-    <Paper elevation={3} sx={{ p: 2, mb: 2, borderRadius: 2 }}>
-      <Stack direction="row" spacing={2} alignItems="center">
-        <ReportGmailerrorredIcon color="error" />
-        <Box sx={{ flexGrow: 1 }}>
-          <Typography variant="subtitle1" fontWeight="bold">
-            {event.eventTypeName}
-          </Typography>
-          {event.eventDescription && (
-            <Typography variant="body2" color="text.secondary">
-              {event.eventDescription}
+    <Card>
+      <CardBody>
+        <Stack direction="row" spacing={2} alignItems="center">
+          <ReportGmailerrorredIcon color="error" />
+          <Box sx={{ flexGrow: 1 }}>
+            <Typography variant="subtitle1" fontWeight="bold">
+              {event.eventTypeName}
             </Typography>
-          )}
-          <Typography
-            variant="caption"
-            color="primary"
-            sx={{ fontStyle: 'italic' }}
-          >
-            Estado: {event.status} | Unidad: {event.vehicleName}
-          </Typography>
-        </Box>
-        <IconButton
-          color="primary"
-          onClick={(e) => {
-            e.stopPropagation();
-            window.open(
-              `https://www.google.com/maps?q=${event.latitude},${event.longitude}`,
-              '_blank',
-            );
-          }}
-        >
-          <RoomIcon />
-        </IconButton>
-      </Stack>
-      <Divider sx={{ mt: 1, mb: 2 }} />
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexDirection: 'column',
-          gap: 1,
-          flexWrap: 'wrap',
-        }}
-      >
-        {commentInput && (
-          <>
-            <TextFieldElement
-              control={control}
-              name="comment"
-              id="comment-event-input"
-              label="Comentarios"
-              multiline
-              rows={4}
-              fullWidth
-              required
-              rules={{
-                required: 'Este campo es requerido',
-                minLength: {
-                  value: 5,
-                  message: 'El comentario debe tener al menos 5 caracteres',
-                },
-                maxLength: {
-                  value: 200,
-                  message: 'El comentario no puede tener más de 200 caracteres',
-                },
-              }}
-              onClick={(e) => e.stopPropagation()}
-            />
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                gap: 3,
-                width: '100%',
-              }}
+            {event.eventDescription && (
+              <Typography variant="body2" color="text.secondary">
+                {event.eventDescription}
+              </Typography>
+            )}
+            <Typography
+              variant="caption"
+              color="primary"
+              sx={{ fontStyle: 'italic' }}
             >
-              <Button
-                variant="text"
-                size="small"
-                startIcon={<CloseIcon />}
-                color={'warning'}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setCommentInput(false);
-                }}
-                disabled={attendMotumEventMutation.isPending}
-              >
-                {'Cancelar'}
-              </Button>
-              <Button
-                variant="contained"
-                size="small"
-                startIcon={<SaveIcon />}
-                color={'primary'}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleSubmit(onAttend)();
-                }}
-                disabled={attendMotumEventMutation.isPending}
-              >
-                {'Guardar'}
-              </Button>
-            </Box>
-          </>
-        )}
-        {!commentInput && (
-          <Button
-            variant="outlined"
-            size="small"
-            fullWidth
-            startIcon={<CheckCircleOutlineIcon />}
-            color={'primary'}
+              Estado: {event.status} | Unidad: {event.vehicleName}
+            </Typography>
+          </Box>
+          <IconButton
+            color="primary"
             onClick={(e) => {
               e.stopPropagation();
-              setCommentInput(!commentInput);
+              window.open(
+                `https://www.google.com/maps?q=${event.latitude},${event.longitude}`,
+                '_blank',
+              );
             }}
-            disabled={attendMotumEventMutation.isPending}
           >
-            {'Atender'}
-          </Button>
-        )}
-      </Box>
-    </Paper>
+            <RoomIcon />
+          </IconButton>
+        </Stack>
+        <Divider sx={{ mt: 1, mb: 2 }} />
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexDirection: 'column',
+            gap: 1,
+            flexWrap: 'wrap',
+          }}
+        >
+          {commentInput && (
+            <>
+              <Controller
+                name="comment"
+                control={control}
+                rules={{
+                  required: "Este campo es requerido",
+                  minLength: {
+                    value: 5,
+                    message: "El comentario debe tener al menos 5 caracteres",
+                  },
+                  maxLength: {
+                    value: 200,
+                    message: "El comentario no puede tener más de 200 caracteres",
+                  },
+                }}
+                render={({ field, fieldState }) => (
+                  <Textarea
+                    label="Comentarios"
+                    variant="bordered"
+                    minRows={4}
+                    value={field.value || ""}
+                    onChange={field.onChange}
+                    onBlur={field.onBlur}
+                    isInvalid={!!fieldState.error}
+                    errorMessage={fieldState.error?.message}
+                    onClick={(e) => e.stopPropagation()}
+                    fullWidth
+                  />
+                )}
+              />
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  gap: 3,
+                  width: '100%',
+                }}
+              >
+                <Button
+                  size="sm"
+                  radius='full'
+                  startContent={<CloseIcon />}
+                  color={'danger'}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setCommentInput(false);
+                  }}
+                  disabled={attendMotumEventMutation.isPending}
+                >
+                  {'Cancelar'}
+                </Button>
+                <Button
+                  size="sm"
+                  radius='full'
+                  startContent={<SaveIcon />}
+                  color={'primary'}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleSubmit(onAttend)();
+                  }}
+                  disabled={attendMotumEventMutation.isPending}
+                >
+                  {'Guardar'}
+                </Button>
+              </Box>
+            </>
+          )}
+          {!commentInput && (
+            <Button
+              size="sm"
+              radius='full'
+              fullWidth
+              startContent={<CheckCircleOutlineIcon />}
+              color={'primary'}
+              onClick={(e) => {
+                e.stopPropagation();
+                setCommentInput(!commentInput);
+              }}
+              disabled={attendMotumEventMutation.isPending}
+            >
+              {'Atender'}
+            </Button>
+          )}
+        </Box>
+      </CardBody>
+    </Card >
   );
 };
 
