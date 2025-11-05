@@ -230,6 +230,17 @@ export default function MinutaForm({ open, handleClose, id_descuento }) {
               </CardHeader>
               <Divider />
               <CardBody className="flex flex-wrap gap-4">
+
+                <NumberInput
+                  label="Folio"
+                  variant="bordered"
+                  value={data?.folio || ""}
+                  onValueChange={(v) => handleChange("folio", v)}
+                  isDisabled={!isEditing}
+                  isInvalid={!data?.folio}
+                  errorMessage="Campo obligatorio"
+                />
+
                 <DatePicker
                   label="Fecha"
                   variant="bordered"
