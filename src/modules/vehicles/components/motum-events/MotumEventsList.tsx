@@ -9,9 +9,10 @@ interface Props {
   toggleDrawer: (open: boolean) => () => void;
   isLoading: boolean;
   events: MotumEvent[] | undefined;
+  refresh: () => void;
 }
 
-export const MotumEventsList = ({ isLoading, events }: Props) => {
+export const MotumEventsList = ({ isLoading, events, refresh }: Props) => {
   return (
     <Box
       role="presentation"
@@ -25,7 +26,7 @@ export const MotumEventsList = ({ isLoading, events }: Props) => {
       <Stack spacing={2}>
         {events && !isLoading &&
           events.map((event) => (
-            <MotumEventItem key={event.id} event={event} />
+            <MotumEventItem key={event.id} event={event} refresh={refresh} />
           ))}
       </Stack>
     </Box>

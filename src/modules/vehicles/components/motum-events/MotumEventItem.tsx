@@ -15,9 +15,10 @@ import { Button, Card, CardBody } from '@heroui/react';
 
 interface Props {
   event: MotumEvent;
+  refresh: () => void;
 }
 
-export const MotumEventItem = ({ event }: Props) => {
+export const MotumEventItem = ({ event, refresh }: Props) => {
   const [commentInput, setCommentInput] = useState<boolean>(false);
 
   const { control, handleSubmit } = useForm({
@@ -34,6 +35,7 @@ export const MotumEventItem = ({ event }: Props) => {
       updatedItem: data,
     });
     setCommentInput(false);
+    refresh();
   };
 
   return (
@@ -43,7 +45,7 @@ export const MotumEventItem = ({ event }: Props) => {
           <ReportGmailerrorredIcon color="error" />
           <Box sx={{ flexGrow: 1 }}>
             <Typography variant="subtitle1" fontWeight="bold">
-              {event.id}     {event.eventTypeName}
+              {event.eventTypeName}
             </Typography>
             {event.eventDescription && (
               <Typography variant="body2" color="text.secondary">

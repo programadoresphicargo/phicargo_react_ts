@@ -84,6 +84,7 @@ export const MotumAlertsPanel = () => {
                     toggleDrawer={toggleDrawer}
                     isLoading={getMotumEventsQuery.isFetching}
                     events={getMotumEventsQuery.data}
+                    refresh={getMotumEventsQuery.refetch}
                   />
                 )}
                 {tab === 'attended' && (
