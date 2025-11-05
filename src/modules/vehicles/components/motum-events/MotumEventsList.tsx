@@ -1,5 +1,4 @@
-import { Alert, LoadingSpinner } from '@/components/ui';
-
+import { Alert } from '@/components/ui';
 import Box from '@mui/material/Box';
 import type { MotumEvent } from '../../models';
 import { MotumEventItem } from './MotumEventItem';
