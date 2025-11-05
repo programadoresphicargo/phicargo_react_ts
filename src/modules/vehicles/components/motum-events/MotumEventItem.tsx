@@ -108,7 +108,6 @@ export const MotumEventItem = ({ event }: Props) => {
                     onBlur={field.onBlur}
                     isInvalid={!!fieldState.error}
                     errorMessage={fieldState.error?.message}
-                    onClick={(e) => e.stopPropagation()}
                     fullWidth
                   />
                 )}
@@ -126,11 +125,10 @@ export const MotumEventItem = ({ event }: Props) => {
                   radius='full'
                   startContent={<CloseIcon />}
                   color={'danger'}
-                  onClick={(e) => {
-                    e.stopPropagation();
+                  onPress={() => {
                     setCommentInput(false);
                   }}
-                  disabled={attendMotumEventMutation.isPending}
+                  isDisabled={attendMotumEventMutation.isPending}
                 >
                   {'Cancelar'}
                 </Button>
@@ -139,11 +137,11 @@ export const MotumEventItem = ({ event }: Props) => {
                   radius='full'
                   startContent={<SaveIcon />}
                   color={'primary'}
-                  onClick={(e) => {
-                    e.stopPropagation();
+                  onPress={() => {
                     handleSubmit(onAttend)();
                   }}
-                  disabled={attendMotumEventMutation.isPending}
+                  isLoading={attendMotumEventMutation.isPending}
+                  isDisabled={attendMotumEventMutation.isPending}
                 >
                   {'Guardar'}
                 </Button>
@@ -157,11 +155,10 @@ export const MotumEventItem = ({ event }: Props) => {
               fullWidth
               startContent={<CheckCircleOutlineIcon />}
               color={'primary'}
-              onClick={(e) => {
-                e.stopPropagation();
+              onPress={() => {
                 setCommentInput(!commentInput);
               }}
-              disabled={attendMotumEventMutation.isPending}
+              isDisabled={attendMotumEventMutation.isPending}
             >
               {'Atender'}
             </Button>

@@ -11,12 +11,11 @@ interface Props {
   events: MotumEvent[] | undefined;
 }
 
-export const MotumEventsList = ({ toggleDrawer, isLoading, events }: Props) => {
+export const MotumEventsList = ({ isLoading, events }: Props) => {
   return (
     <Box
-      sx={{ width: 400, p: 2 }}
+      sx={{ width: 400 }}
       role="presentation"
-      onClick={toggleDrawer(false)}
     >
       {isLoading && <LoadingSpinner />}
 
