@@ -19,6 +19,7 @@ export const pages = [
    { name: 'Reporte cumplimiento por porcentaje ', path: '/cumplimiento_estatus_viajes_general' },
    { name: 'Codigos postales', path: '/codigos_postales' },
    { name: 'GEOCERCAS', path: '/geocercas', permiso: 500 },
+   { name: 'EVENTOS GPS', path: '/eventos_gps' },
   ],
  },
  { name: 'ENVIO MASIVO', path: '/envio_masivo_viajes', permiso: 500 },
