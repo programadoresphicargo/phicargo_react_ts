@@ -19,7 +19,6 @@ import { AxiosError } from 'axios';
 import type { UpdatableItem } from '@/types';
 import { VehicleAdapter } from '../adapters/vehicle-adapter';
 import odooApi from '@/api/odoo-api';
-import { Incident, IncidentCreate } from '@/modules/incidents/models';
 import { IncidentCreateApi } from '@/modules/incidents/models/api';
 
 export class VehicleServiceApi {
