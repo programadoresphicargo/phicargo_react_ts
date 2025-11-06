@@ -19,6 +19,8 @@ import { AxiosError } from 'axios';
 import type { UpdatableItem } from '@/types';
 import { VehicleAdapter } from '../adapters/vehicle-adapter';
 import odooApi from '@/api/odoo-api';
+import { Incident, IncidentCreate } from '@/modules/incidents/models';
+import { IncidentCreateApi } from '@/modules/incidents/models/api';
 
 export class VehicleServiceApi {
   static async getVehicles(): Promise<Vehicle[]> {
@@ -156,12 +158,24 @@ export class VehicleServiceApi {
   static async attendMotumEvent({
     id,
     updatedItem,
-  }: UpdatableItem<{ comment: string }>): Promise<MotumEvent> {
+    driver_id,
+  }: {
+    id: number;
+    updatedItem: {
+      comment_data: { comment: string };
+      incidence_data: IncidentCreateApi | null;
+    };
+    driver_id?: number; // ✅ opcional
+  }): Promise<MotumEvent> {
     try {
       const response = await odooApi.patch<MotumEventAPI>(
         `/vehicles/alerts-motum/${id}/attend`,
         updatedItem,
+        {
+          params: driver_id ? { driver_id } : {},  // ✅ se envía como query param
+        }
       );
+
       return VehicleAdapter.toMotumEvent(response.data);
     } catch (error) {
       console.error(error);
