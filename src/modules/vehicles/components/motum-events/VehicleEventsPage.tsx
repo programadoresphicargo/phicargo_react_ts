@@ -4,24 +4,32 @@ import type { MotumEvent, MotumEventStatus } from '@/modules/vehicles/models';
 import { MaterialReactTable } from 'material-react-table';
 import { useVehicleEventsColumns } from './useVehicleEventsColumns';
 import { useState, useMemo } from 'react';
-import dayjs from 'dayjs';
 import CustomNavbar from '@/pages/CustomNavbar';
 import { Select, SelectItem } from "@heroui/react";
+import { DateRangePicker } from 'rsuite';
 
 const VehicleEventsPage = () => {
   const [tab, setTab] = useState<MotumEventStatus>('pending');
-  const [dateRagen, setDateRange] = useState<[string, string] | null>(null);
+
+  const now = new Date();
+  const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+  const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+  const [range, setRange] = useState<[Date, Date] | null>([firstDay, lastDay]);
 
   const conf = useMemo(() => {
-    const startOfMonth = dayjs().startOf('month').format('YYYY-MM-DD');
-    const endOfMonth = dayjs().endOf('month').format('YYYY-MM-DD');
+    const format = (d: Date) => d.toISOString().slice(0, 10);
 
     return {
       status: tab,
-      startDate: tab === 'attended' ? dateRagen?.[0] : startOfMonth,
-      endDate: tab === 'attended' ? dateRagen?.[1] : endOfMonth,
+      startDate: tab === 'attended'
+        ? (range ? format(range[0]) : undefined)
+        : format(firstDay),
+
+      endDate: tab === 'attended'
+        ? (range ? format(range[1]) : undefined)
+        : format(lastDay),
     };
-  }, [tab, dateRagen]);
+  }, [tab, range]);
 
   const { getMotumEventsQuery } = useMotumEventsQueries(conf);
 
@@ -41,6 +49,12 @@ const VehicleEventsPage = () => {
     toolbarActions: (
       <div className="flex items-center gap-4">
         <h1>Eventos GPS</h1>
+        <DateRangePicker
+          value={range}
+          onChange={(value) => setRange(value)}
+          placeholder="Selecciona un rango de fechas"
+          format="yyyy-MM-dd"
+        />
         <Select
           label="Tipo"
           fullWidth
