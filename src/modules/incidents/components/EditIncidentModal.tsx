@@ -33,7 +33,6 @@ interface Props {
 
 export const EditIncidentModal = ({ onClose, incident }: Props) => {
 
-  console.log(incident);
   const { updateIncident, confirmIncidentMutation } = useIncidentsQueries({});
 
   const { handleSubmit, control, watch, setValue } = useForm<IncidentUpdate>({
