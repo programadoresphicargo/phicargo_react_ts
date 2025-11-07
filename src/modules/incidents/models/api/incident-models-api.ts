@@ -47,6 +47,7 @@ export interface IncidentCreateApi extends IncidentBaseApi {
   discountTotal?: number | null;
   discountReason?: string | null;
   discountComments?: string | null;
+  periodicidad?: string | null;
 }
 
 export type IncidentUpdateApi = Partial<IncidentBaseApi> & {

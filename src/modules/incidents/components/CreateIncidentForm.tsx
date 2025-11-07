@@ -428,6 +428,34 @@ export const CreateIncidentForm = ({
                 )}
               />
 
+              {/* Importe */}
+              <Controller
+                control={control}
+                name="periodicidad"
+                rules={{
+                  validate: (v) => {
+                    if (createDiscount && !v) return "Periodicidad requerido";
+                    return true;
+                  }
+                }}
+                render={({ field, fieldState }) => (
+                  <Select
+                    label="Periodicidad"
+                    variant="flat"
+                    placeholder="Seleccionar..."
+                    onSelectionChange={(keys) => {
+                      const value = Array.from(keys)[0];
+                      field.onChange(value);
+                    }}
+                    isInvalid={!!fieldState.error}
+                    errorMessage={fieldState.error?.message}
+                  >
+                    <SelectItem key="viaje">Por viaje</SelectItem>
+                    <SelectItem key="quincenal">Quincenal</SelectItem>
+                  </Select>
+                )}
+              />
+
               {/* Motivo */}
               <Controller
                 control={control}

@@ -50,6 +50,7 @@ export interface IncidentCreate extends IncidentBase {
   discountTotal?: number | null;
   discountReason?: string | null;
   discountComments?: string | null;
+  periodicidad?: string | null;
 }
 
 export type IncidentUpdate = Partial<IncidentBase> & {

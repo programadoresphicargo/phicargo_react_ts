@@ -28,7 +28,8 @@ const initialFormState: IncidentCreate = {
   discountAmount: null,
   discountTotal: null,
   discountReason: null,
-  discountComments: null
+  discountComments: null,
+  periodicidad: ''
 };
 
 export function useCreateIncidentForm({
