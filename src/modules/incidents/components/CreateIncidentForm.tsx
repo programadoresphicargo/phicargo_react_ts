@@ -387,10 +387,16 @@ export const CreateIncidentForm = ({
                 render={({ field, fieldState }) => (
                   <NumberInput
                     label="Monto"
+                    formatOptions={{ useGrouping: false }}
                     value={field.value || 0}
                     onChange={field.onChange}
                     isInvalid={!!fieldState.error}
                     errorMessage={fieldState.error?.message}
+                    startContent={
+                      <div className="pointer-events-none flex items-center">
+                        <span className="text-default-400 text-small">$</span>
+                      </div>
+                    }
                   />
                 )}
               />
@@ -407,11 +413,17 @@ export const CreateIncidentForm = ({
                 }}
                 render={({ field, fieldState }) => (
                   <NumberInput
+                    formatOptions={{ useGrouping: false }}
                     label="Importe"
                     value={field.value || 0}
                     onChange={field.onChange}
                     isInvalid={!!fieldState.error}
                     errorMessage={fieldState.error?.message}
+                    startContent={
+                      <div className="pointer-events-none flex items-center">
+                        <span className="text-default-400 text-small">$</span>
+                      </div>
+                    }
                   />
                 )}
               />
