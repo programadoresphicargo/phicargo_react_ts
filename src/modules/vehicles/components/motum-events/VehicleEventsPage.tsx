@@ -7,6 +7,7 @@ import { useState, useMemo } from 'react';
 import CustomNavbar from '@/pages/CustomNavbar';
 import { Select, SelectItem } from "@heroui/react";
 import { DateRangePicker } from 'rsuite';
+import { pages } from '../../../../phicargo/viajes/pages';
 
 const VehicleEventsPage = () => {
   const [tab, setTab] = useState<MotumEventStatus>('pending');
@@ -74,7 +75,7 @@ const VehicleEventsPage = () => {
 
   return (
     <>
-      <CustomNavbar></CustomNavbar>
+      <CustomNavbar pages={pages}></CustomNavbar>
       <MaterialReactTable table={table} />
     </>
   );

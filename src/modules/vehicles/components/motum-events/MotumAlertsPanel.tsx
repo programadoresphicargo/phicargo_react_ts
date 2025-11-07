@@ -94,6 +94,9 @@ export const MotumAlertsPanel = () => {
                 )}
               </DrawerBody>
               <DrawerFooter>
+                <Button color="success" className='text-white' onPress={() => window.open("/eventos_gps", "_blank")} fullWidth radius='full'>
+                  Ver todos los eventos
+                </Button>
                 <Button color="danger" variant="light" onPress={onClose}>
                   Cancelar
                 </Button>

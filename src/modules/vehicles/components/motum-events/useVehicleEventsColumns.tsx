@@ -63,14 +63,14 @@ export const useVehicleEventsColumns = () => {
         accessorKey: 'attendedBy',
         header: 'Atendida por',
         Cell: ({ cell }) => (
-          <span className="font-bold uppercase">{cell.getValue<string>()}</span>
+          <span>{cell.getValue<string>()}</span>
         ),
       },
       {
         accessorKey: 'comment',
         header: 'Comentarios',
         Cell: ({ cell }) => (
-          <span className="font-bold uppercase">{cell.getValue<string>()}</span>
+          <span>{cell.getValue<string>()}</span>
         ),
       },
     ],
