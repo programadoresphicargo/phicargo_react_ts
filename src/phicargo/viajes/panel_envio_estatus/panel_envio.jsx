@@ -438,7 +438,7 @@ function PanelEnvio({ open, cerrar, id_reporte }) {
       <DialogActions>
 
         <Box sx={{ display: 'flex', flexDirection: 'row', pt: 1, gap: 1 }}>
-          <Button disabled={activeStep === 0} onPress={handleBack} sx={{ ml: 3 }}>
+          <Button disabled={activeStep === 0} onPress={handleBack} sx={{ ml: 3 }} radius='full'>
             Atrás
           </Button>
 
@@ -447,6 +447,7 @@ function PanelEnvio({ open, cerrar, id_reporte }) {
               color="primary"
               onPress={handleNext}
               isDisabled={estatus_seleccionado == '' ? true : false}
+              radius='full'
             >
               Siguiente
             </Button>
@@ -458,6 +459,7 @@ function PanelEnvio({ open, cerrar, id_reporte }) {
                   className="text-white"
                   onPress={confirmar_envio}
                   isLoading={isLoadingSendEstatus}
+                  radius='full'
                 >
                   <i class="bi bi-send"></i> Enviar estatus
                 </Button>
@@ -467,7 +469,8 @@ function PanelEnvio({ open, cerrar, id_reporte }) {
                   color="success"
                   onPress={() => confirmar_reenvio()}
                   className='text-white'
-                  isDisabled={isLoadingSendEstatus}>
+                  isDisabled={isLoadingSendEstatus}
+                  radius='full'>
                   <i class="bi bi-send"></i> Reenviar estatus
                 </Button>
               )}
