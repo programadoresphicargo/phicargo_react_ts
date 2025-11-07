@@ -63,6 +63,10 @@ const ListadoVisitantes = ({ open, handleClose }) => {
         header: 'Nombre del visitante',
         Cell: ({ cell }) => cell.getValue()?.toUpperCase(),
       },
+      {
+        accessorKey: 'fecha_creacion',
+        header: 'Fecha creación',
+      },
     ],
     [],
   );
@@ -112,7 +116,7 @@ const ListadoVisitantes = ({ open, handleClose }) => {
           flexWrap: 'wrap',
         }}
       >
-        <Button color='primary' onClick={handleClickOpenForm}>Nuevo visitante</Button>
+        <Button color='primary' onClick={handleClickOpenForm} radius='full'>Nuevo visitante</Button>
       </Box >
     ),
     muiTableContainerProps: {

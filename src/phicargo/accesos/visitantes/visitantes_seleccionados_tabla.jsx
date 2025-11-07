@@ -81,6 +81,7 @@ const SelectedVisitantesTable = ({ }) => {
                                     color={disabledFom ? "default" : "primary"}
                                     isDisabled={disabledFom}
                                     onPress={() => borrarVisitante(visitor.id_visitante)}
+                                    radius='full'
                                 >
                                     Borrar
                                 </Button>

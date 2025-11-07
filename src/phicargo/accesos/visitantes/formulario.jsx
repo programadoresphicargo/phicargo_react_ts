@@ -1,7 +1,6 @@
 import React, { useContext, useState } from 'react';
 
 import { AccesoContext } from '../context';
-import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -11,6 +10,7 @@ import axios from 'axios';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import { useAuthContext } from "@/modules/auth/hooks";
+import { Button } from '@heroui/react';
 
 export default function FormVisitante({ open, handleClose }) {
 
@@ -84,8 +84,8 @@ export default function FormVisitante({ open, handleClose }) {
                 />
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose}>Cancelar</Button>
-                <Button onClick={registrarNuevoVisitante}>Registrar visitante</Button>
+                <Button onClick={handleClose} radius='full'>Cancelar</Button>
+                <Button onClick={registrarNuevoVisitante} radius='full' color='primary'>Registrar visitante</Button>
             </DialogActions>
         </Dialog>
     );

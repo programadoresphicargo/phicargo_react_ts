@@ -53,7 +53,7 @@ export default function FormEmpresa({ open, handleClose }) {
             open={open}
             onClose={handleClose}
             fullWidth
-            maxWidth="md"
+            maxWidth="sm"
         >
             <DialogTitle>Nueva empresa</DialogTitle>
             <DialogContent>
@@ -70,8 +70,8 @@ export default function FormEmpresa({ open, handleClose }) {
                 />
             </DialogContent>
             <DialogActions>
-                <Button onPress={handleClose}>Cancelar</Button>
-                <Button onPress={AñadirEmpresa} color='primary'>Registrar</Button>
+                <Button onPress={handleClose} radius='full'>Cancelar</Button>
+                <Button onPress={AñadirEmpresa} color='primary' radius='full'>Registrar</Button>
             </DialogActions>
         </Dialog>
     );

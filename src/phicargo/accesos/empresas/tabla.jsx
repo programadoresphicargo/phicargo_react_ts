@@ -139,7 +139,7 @@ const ListadoEmpresas = ({ open, handleClose }) => {
           flexWrap: 'wrap',
         }}
       >
-        <Button color='primary' onPress={handleClickOpenForm}>Nueva empresa</Button>
+        <Button color='primary' onPress={handleClickOpenForm} radius='full'>Nueva empresa</Button>
       </Box>
     ),
   });
