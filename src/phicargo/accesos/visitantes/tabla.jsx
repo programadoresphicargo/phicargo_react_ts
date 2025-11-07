@@ -121,7 +121,7 @@ const ListadoVisitantes = ({ open, handleClose }) => {
     ),
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 250px)',
+        maxHeight: 'calc(100vh - 300px)',
       },
     },
     muiTableHeadCellProps: {

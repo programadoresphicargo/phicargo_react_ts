@@ -67,6 +67,11 @@ const ListadoEmpresas = ({ open, handleClose }) => {
         header: 'Nombre de la empresa',
         Cell: ({ cell }) => cell.getValue()?.toUpperCase(),
       },
+      {
+        accessorKey: 'fecha_creacion',
+        header: 'Creación',
+        Cell: ({ cell }) => cell.getValue()?.toUpperCase(),
+      },
     ],
     [],
   );
@@ -127,7 +132,7 @@ const ListadoEmpresas = ({ open, handleClose }) => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 250px)',
+        maxHeight: 'calc(100vh - 300px)',
       },
     },
     renderTopToolbarCustomActions: ({ table }) => (
@@ -156,11 +161,13 @@ const ListadoEmpresas = ({ open, handleClose }) => {
       fullWidth
       maxWidth="md"
     >
-      <AppBar sx={{
-        background: 'linear-gradient(90deg, #0b2149, #002887)',
-        position: 'relative',
-        padding: '0 16px'
-      }}>
+      <AppBar
+        sx={{
+          background: 'linear-gradient(90deg, #0b2149, #002887)',
+          position: 'relative',
+          padding: '0 16px'
+        }}
+        elevation={0}>
         <Toolbar>
           <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
             Registro de empresas

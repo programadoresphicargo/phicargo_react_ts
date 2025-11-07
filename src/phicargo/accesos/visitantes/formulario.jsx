@@ -11,6 +11,7 @@ import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import { useAuthContext } from "@/modules/auth/hooks";
 import { Button } from '@heroui/react';
+import { Input } from '@heroui/react';
 
 export default function FormVisitante({ open, handleClose }) {
 
@@ -67,25 +68,25 @@ export default function FormVisitante({ open, handleClose }) {
             open={open}
             onClose={handleClose}
             fullWidth
-            maxWidth="md"
+            maxWidth="sm"
         >
             <DialogTitle>Nuevo visitante</DialogTitle>
             <DialogContent>
-                <TextField
+                <Input
                     autoFocus
                     required
                     id="nombre_visitante"
                     name="nombre_visitante"
                     label="Ingresa el nombre completo del visitante"
                     fullWidth
-                    variant="standard"
+                    variant="bordered"
                     value={nombreVisitante}
                     onChange={handleChange}
                 />
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose} radius='full'>Cancelar</Button>
-                <Button onClick={registrarNuevoVisitante} radius='full' color='primary'>Registrar visitante</Button>
+                <Button onPress={handleClose} radius='full'>Cancelar</Button>
+                <Button onPress={registrarNuevoVisitante} radius='full' color='primary'>Registrar visitante</Button>
             </DialogActions>
         </Dialog>
     );

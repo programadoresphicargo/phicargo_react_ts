@@ -9,6 +9,7 @@ import axios from 'axios';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import { Button } from '@heroui/react';
+import { Input } from '@heroui/react';
 
 export default function FormEmpresa({ open, handleClose }) {
     const [nombreEmpresa, setNombreEmpresa] = useState('');
@@ -57,14 +58,12 @@ export default function FormEmpresa({ open, handleClose }) {
         >
             <DialogTitle>Nueva empresa</DialogTitle>
             <DialogContent>
-                <TextField
-                    autoFocus
-                    required
+                <Input
                     id="nombre_empresa"
                     name="nombre_empresa"
                     label="Ingresa el nombre de la empresa"
                     fullWidth
-                    variant="standard"
+                    variant="bordered"
                     value={nombreEmpresa}
                     onChange={handleChange} // Validación en tiempo real
                 />
