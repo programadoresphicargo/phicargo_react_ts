@@ -15,11 +15,9 @@ import { Grid } from "@mui/material";
 import Stack from '@mui/material/Stack';
 import odooApi from '@/api/odoo-api';
 import toast from 'react-hot-toast';
-import { useDescuentos } from './context';
 
-export default function SelectEmpleado({ key_name, label, setSolicitante, value }) {
+export default function SelectEmpleado({ key_name, label, setSolicitante, value, isEditing = true, variant = "flat" }) {
 
- const { selectedRows, setSelectedRows, isEditing, setIsEditing, tareas, setRecords, nuevas_tareas, setNuevasTareas, actualizadas_tareas, setActualizadasTareas, eliminadas_tareas, setEliminadasTareas, eliminados_participantes, setEliminadosParticipantes, participantes_nuevos, setParticipantesNuevos, } = useDescuentos();
  const [data, setData] = useState([]);
  const [isLoading, setLoading] = useState(false);
 
@@ -43,7 +41,7 @@ export default function SelectEmpleado({ key_name, label, setSolicitante, value 
   <React.Fragment>
    <Autocomplete
     fullWidth
-    variant="bordered"
+    variant={variant}
     defaultItems={data}
     label={label}
     selectedKey={String(value) || null}
