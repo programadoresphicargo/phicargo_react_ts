@@ -173,7 +173,12 @@ export default function MinutaForm({ open, handleClose, id_descuento }) {
 
               <Card shadow="sm" className="border border-gray-200 rounded-2xl h-full">
                 <CardHeader className="bg-gradient-to-r from-[#002887] to-[#0059b3] text-white font-semibold text-center rounded-t-2xl">
-                  QUIÉN REALIZA SOLICITUD
+                  <div className="flex flex-col items-start">
+                    <h4 className="text-large">¿Quién solicita el descuento?</h4>
+                    <p className="text-small text-white-100">
+                      Selecciona al encargado del departamento que realiza la solicitud.
+                    </p>
+                  </div>
                 </CardHeader>
                 <Divider />
                 <CardBody>
@@ -192,7 +197,12 @@ export default function MinutaForm({ open, handleClose, id_descuento }) {
               {/* Card: PERSONAL A DESCONTAR */}
               <Card shadow="sm" className="border border-gray-200 rounded-2xl h-full">
                 <CardHeader className="bg-gradient-to-r from-[#002887] to-[#0059b3] text-white font-semibold text-center rounded-t-2xl">
-                  PERSONAL A DESCONTAR
+                  <div className="flex flex-col items-start">
+                    <h4 className="text-large">¿A quién se aplicará el descuento?</h4>
+                    <p className="text-small text-white-100">
+                      Selecciona al empleado correspondiente.
+                    </p>
+                  </div>
                 </CardHeader>
                 <Divider />
                 <CardBody>
@@ -209,11 +219,11 @@ export default function MinutaForm({ open, handleClose, id_descuento }) {
               </Card>
 
               <Card shadow="sm" className="border border-gray-200 rounded-2xl h-full">
-                <CardHeader>
+                <CardHeader className="bg-gradient-to-r from-[#002887] to-[#0059b3] text-white font-semibold text-center rounded-t-2xl">
                   <div className="flex flex-col items-start">
-                    <h4 className="text-large">Datos del descuento</h4>
-                    <p className="text-small text-default-500">
-                      Ingresar datos del descuento, todos los campos son obligatorios.
+                    <h4 className="text-large">Detalles del descuento</h4>
+                    <p className="text-small text-white-500">
+                      Ingresa la información requerida para procesar el descuento.
                     </p>
                   </div>
                 </CardHeader>
