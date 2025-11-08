@@ -70,7 +70,6 @@ export default function MinutaForm({ open, handleClose, id_descuento }) {
     if (!data?.periodicidad) return toast.error("Periodicidad es obligatorio.");
 
     try {
-      setIsEditing(true);
       setLoading(true);
       let response;
       if (id_descuento) response = await odooApi.patch(`/descuentos/${id_descuento}/`, data);
@@ -82,12 +81,9 @@ export default function MinutaForm({ open, handleClose, id_descuento }) {
       } else {
         toast.error(response.data.message);
       }
-      setIsEditing(false);
     } catch (error) {
-      setIsEditing(false);
       toast.error("Error al enviar datos.");
     } finally {
-      setIsEditing(false);
       setLoading(false);
     }
   };
