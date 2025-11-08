@@ -16,7 +16,7 @@ import Stack from '@mui/material/Stack';
 import odooApi from '@/api/odoo-api';
 import toast from 'react-hot-toast';
 
-export default function SelectEmpleado({ key_name, label, setSolicitante, value, isEditing = true, variant = "flat" }) {
+export default function SelectEmpleado({ key_name, label, setSolicitante, value, isEditing = true, variant = "flat", placeholder }) {
 
  const [data, setData] = useState([]);
  const [isLoading, setLoading] = useState(false);
@@ -42,6 +42,7 @@ export default function SelectEmpleado({ key_name, label, setSolicitante, value,
    <Autocomplete
     fullWidth
     variant={variant}
+    placeholder={placeholder}
     defaultItems={data}
     label={label}
     selectedKey={String(value) || null}

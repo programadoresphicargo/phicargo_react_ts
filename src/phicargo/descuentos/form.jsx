@@ -200,6 +200,7 @@ export default function MinutaForm({ open, handleClose, id_descuento }) {
                     key_name={"id_solicitante"}
                     label={"Solicitante"}
                     value={data?.id_solicitante}
+                    placeholder={"Encargado de departamento que hace la solicitud"}
                   />
                 </CardBody>
               </Card>
@@ -216,6 +217,7 @@ export default function MinutaForm({ open, handleClose, id_descuento }) {
                     key_name={"id_empleado"}
                     label={"Empleado"}
                     value={data?.id_empleado}
+                    placeholder={"Empleado responsable del descuento"}
                   />
                 </CardBody>
               </Card>

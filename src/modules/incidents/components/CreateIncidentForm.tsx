@@ -379,12 +379,19 @@ export const CreateIncidentForm = ({
               <Controller
                 control={control}
                 name="id_solicitante"
+                rules={{
+                  validate: (v) => {
+                    if (createDiscount && !v) return "Campo requerido";
+                    return true;
+                  }
+                }}
                 render={({ field }) => (
                   <SelectEmpleado
                     key_name="id_solicitante"
                     label="Solicitante"
                     value={field.value}
                     setSolicitante={setValue}
+                    placeholder={"Encargado de departamento que hace la solicitud"}
                   />
                 )}
               />

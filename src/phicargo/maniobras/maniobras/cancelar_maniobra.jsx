@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button } from "@heroui/react"
+import { Button, Textarea } from "@heroui/react"
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -51,8 +51,8 @@ const CancelarManiobraDialog = ({ open, handleClose, id_maniobra }) => {
             onClose={handleClose}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
-            maxWidth
-
+            fullWidth
+            maxWidth="md"
         >
             <DialogTitle id="alert-dialog-title">{"¿Estás seguro?"}</DialogTitle>
             <DialogContent>
@@ -60,14 +60,22 @@ const CancelarManiobraDialog = ({ open, handleClose, id_maniobra }) => {
                     ¿Deseas realmente cancelar este registro?
                 </DialogContentText>
 
-                <Select
-                    className="max-w-xs mt-3"
-                    label="Motivo de cancelacion"
-                    onChange={handleSelectionChange}
-                >
-                    <SelectItem key="perdida_operador">Pérdida del operador</SelectItem>
-                    <SelectItem key="error_datos">Error en los datos</SelectItem>
-                </Select>
+                <div className="w-full flex flex-row flex-wrap gap-4">
+                    <Select
+                        className="max-w-xs mt-3"
+                        label="Motivo de cancelacion"
+                        onChange={handleSelectionChange}
+                        variant='bordered'
+                    >
+                        <SelectItem key="perdida_operador">Pérdida del operador</SelectItem>
+                        <SelectItem key="error_datos">Error en los datos</SelectItem>
+                    </Select>
+
+                    <Textarea
+                        label="Comentarios"
+                        variant='bordered'>
+                    </Textarea>
+                </div>
 
             </DialogContent>
             <DialogActions>
