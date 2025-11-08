@@ -18,10 +18,13 @@ import Swal from "sweetalert2";
 import odooApi from "@/api/odoo-api";
 import { useDescuentos } from "./context";
 import SelectEmpleado from "./solicitante";
-
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter
+} from "@heroui/modal";
 
 export default function MinutaForm({ open, handleClose, id_descuento }) {
   const [data, setData] = useState({});
@@ -68,6 +71,7 @@ export default function MinutaForm({ open, handleClose, id_descuento }) {
 
     try {
       setIsEditing(true);
+      setLoading(true);
       let response;
       if (id_descuento) response = await odooApi.patch(`/descuentos/${id_descuento}/`, data);
       else response = await odooApi.post("/descuentos/", data);
@@ -75,11 +79,16 @@ export default function MinutaForm({ open, handleClose, id_descuento }) {
       if (response.data.status === "success") {
         toast.success(response.data.message);
         handleClose();
-      } else toast.error(response.data.message);
+      } else {
+        toast.error(response.data.message);
+      }
+      setIsEditing(false);
     } catch (error) {
+      setIsEditing(false);
       toast.error("Error al enviar datos.");
     } finally {
       setIsEditing(false);
+      setLoading(false);
     }
   };
 
@@ -113,82 +122,55 @@ export default function MinutaForm({ open, handleClose, id_descuento }) {
   };
 
   return (
-    <Dialog
-      fullWidth
-      maxWidth="lg"
-      open={open}
-      onClose={handleClose}
-      TransitionComponent={Transition}
-    >
-      <AppBar
-        elevation={0}
-        position="static"
-        sx={{
-          background: "linear-gradient(90deg, #002887 0%, #0059b3 100%)",
-        }}
-      >
-        <Toolbar>
-          <IconButton edge="start" color="inherit" onClick={handleClose}>
-            <CloseIcon />
-          </IconButton>
-          <Typography variant="h6" sx={{ flex: 1, fontWeight: 500 }}>
-            {id_descuento ? `Descuento D-${id_descuento}` : "Nuevo descuento"}
-          </Typography>
-          <Button autoFocus color="danger" onPress={handleClose} className="text-white" radius="full">
-            Cerrar
-          </Button>
-        </Toolbar>
-      </AppBar>
+    <Modal isOpen={open} scrollBehavior="outside" onOpenChange={handleClose} size="xl">
+      <ModalContent>
+        {(onClose) => (
+          <>
+            <ModalHeader className="flex flex-col gap-1">Descuento</ModalHeader>
+            <ModalBody>
 
-      {isLoading && <Progress isIndeterminate size="sm" />}
+              {isLoading && <Progress isIndeterminate size="sm" />}
 
-      <div className="p-6 space-y-6 bg-gray-50">
-        {/* Header Actions */}
-        <Stack direction="row" spacing={2} alignItems="center">
-          {id_descuento && (
-            <Chip color="warning" className="uppercase text-sm font-semibold text-white">
-              {data?.estado || "pendiente"}
-            </Chip>
-          )}
+              {/* Header Actions */}
+              <Stack direction="row" spacing={2} alignItems="center">
+                {id_descuento && (
+                  <Chip color="warning" className="uppercase text-sm font-semibold text-white">
+                    {data?.estado || "pendiente"}
+                  </Chip>
+                )}
 
-          {!id_descuento && (
-            <Button color="success" onPress={handleSubmit} radius="full" className="text-white">
-              Registrar
-            </Button>
-          )}
+                {!id_descuento && (
+                  <Button color="success" onPress={handleSubmit} radius="full" className="text-white" isLoading={isLoading}>
+                    Registrar
+                  </Button>
+                )}
 
-          {id_descuento && !isEditing && data?.estado !== "confirmado" && (
-            <Button color="primary" onPress={() => setIsEditing(true)} radius="full" className="text-white">
-              Editar
-            </Button>
-          )}
+                {id_descuento && !isEditing && data?.estado !== "confirmado" && (
+                  <Button color="primary" onPress={() => setIsEditing(true)} radius="full" className="text-white">
+                    Editar
+                  </Button>
+                )}
 
-          {isEditing && id_descuento && (
-            <Button color="success" onPress={handleSubmit} radius="full" className="text-white">
-              Guardar cambios
-            </Button>
-          )}
+                {isEditing && id_descuento && (
+                  <Button color="success" onPress={handleSubmit} radius="full" className="text-white" isLoading={isLoading}>
+                    Guardar cambios
+                  </Button>
+                )}
 
-          {!isEditing && id_descuento && (
-            <>
-              <Button color="success" onPress={ImprimirFormato} radius="full" className="text-white">
-                Imprimir formato
-              </Button>
-              {data?.estado !== "aplicado" && (
-                <Button color="success" onPress={Confirmar} radius="full" className="text-white">
-                  Aplicar
-                </Button>
-              )}
-            </>
-          )}
-        </Stack>
+                {!isEditing && id_descuento && (
+                  <>
+                    <Button color="success" onPress={ImprimirFormato} radius="full" className="text-white">
+                      Imprimir formato
+                    </Button>
+                    {data?.estado !== "aplicado" && (
+                      <Button color="success" onPress={Confirmar} radius="full" className="text-white" isLoading={isLoading}>
+                        Aplicar
+                      </Button>
+                    )}
+                  </>
+                )}
+              </Stack>
 
-        {/* Form Sections */}
-        <Grid container spacing={3}>
-          {/* Columna izquierda */}
-          <Grid item xs={12} md={6}>
-            <Stack spacing={3}>
-              {/* Card: QUIÉN REALIZA SOLICITUD */}
               <Card shadow="sm" className="border border-gray-200 rounded-2xl h-full">
                 <CardHeader className="bg-gradient-to-r from-[#002887] to-[#0059b3] text-white font-semibold text-center rounded-t-2xl">
                   QUIÉN REALIZA SOLICITUD
@@ -225,97 +207,103 @@ export default function MinutaForm({ open, handleClose, id_descuento }) {
                   />
                 </CardBody>
               </Card>
-            </Stack>
-          </Grid>
 
-          {/* Columna derecha */}
-          <Grid item xs={12} md={6}>
-            <Card shadow="sm" className="border border-gray-200 rounded-2xl h-full">
-              <CardHeader className="bg-gradient-to-r from-[#7f0000] to-[#ff4d4d] text-white font-semibold text-center rounded-t-2xl">
-                DATOS DEL DESCUENTO
-              </CardHeader>
-              <Divider />
-              <CardBody className="flex flex-wrap gap-4">
+              <Card shadow="sm" className="border border-gray-200 rounded-2xl h-full">
+                <CardHeader>
+                  <div className="flex flex-col items-start">
+                    <h4 className="text-large">Datos del descuento</h4>
+                    <p className="text-small text-default-500">
+                      Ingresar datos del descuento, todos los campos son obligatorios.
+                    </p>
+                  </div>
+                </CardHeader>
+                <Divider />
+                <CardBody className="flex flex-wrap gap-4">
 
-                <NumberInput
-                  label="Folio"
-                  variant="bordered"
-                  value={data?.folio || ""}
-                  onValueChange={(v) => handleChange("folio", v)}
-                  isDisabled={true}
-                />
+                  <NumberInput
+                    label="Folio"
+                    variant="bordered"
+                    value={data?.folio || ""}
+                    onValueChange={(v) => handleChange("folio", v)}
+                    isDisabled={true}
+                  />
 
-                <DatePicker
-                  label="Fecha"
-                  variant="bordered"
-                  hideTimeZone
-                  showMonthAndYearPickers
-                  value={data?.fecha ? parseDate(data.fecha.split("T")[0]) : null}
-                  onChange={(date) => handleChange("fecha", date.toString())}
-                  isDisabled={!isEditing}
-                  isInvalid={!data?.fecha}
-                  errorMessage="Campo obligatorio"
-                />
+                  <DatePicker
+                    label="Fecha"
+                    variant="bordered"
+                    hideTimeZone
+                    showMonthAndYearPickers
+                    value={data?.fecha ? parseDate(data.fecha.split("T")[0]) : null}
+                    onChange={(date) => handleChange("fecha", date.toString())}
+                    isDisabled={!isEditing}
+                    isInvalid={!data?.fecha}
+                    errorMessage="Campo obligatorio"
+                  />
 
-                <NumberInput
-                  label="Monto"
-                  variant="bordered"
-                  value={data?.monto || ""}
-                  onValueChange={(v) => handleChange("monto", v)}
-                  isDisabled={!isEditing}
-                  isInvalid={!data?.monto}
-                  errorMessage="Campo obligatorio"
-                />
+                  <NumberInput
+                    label="Monto"
+                    variant="bordered"
+                    value={data?.monto || ""}
+                    onValueChange={(v) => handleChange("monto", v)}
+                    isDisabled={!isEditing}
+                    isInvalid={!data?.monto}
+                    errorMessage="Campo obligatorio"
+                  />
 
-                <Select
-                  label="Periodicidad"
-                  variant="bordered"
-                  placeholder="Seleccionar..."
-                  onSelectionChange={(keys) => handleChange("periodicidad", Array.from(keys)[0])}
-                  selectedKeys={data?.periodicidad ? [data?.periodicidad] : []}
-                  isDisabled={!isEditing}
-                  isInvalid={!data?.periodicidad}
-                  errorMessage="Campo obligatorio"
-                >
-                  <SelectItem key="viaje">Por viaje</SelectItem>
-                  <SelectItem key="quincenal">Quincenal</SelectItem>
-                </Select>
+                  <Select
+                    label="Periodicidad"
+                    variant="bordered"
+                    placeholder="Seleccionar..."
+                    onSelectionChange={(keys) => handleChange("periodicidad", Array.from(keys)[0])}
+                    selectedKeys={data?.periodicidad ? [data?.periodicidad] : []}
+                    isDisabled={!isEditing}
+                    isInvalid={!data?.periodicidad}
+                    errorMessage="Campo obligatorio"
+                  >
+                    <SelectItem key="viaje">Por viaje</SelectItem>
+                    <SelectItem key="quincenal">Quincenal</SelectItem>
+                  </Select>
 
-                <NumberInput
-                  label="Importe"
-                  variant="bordered"
-                  value={data?.importe || ""}
-                  onValueChange={(v) => handleChange("importe", v)}
-                  isDisabled={!isEditing}
-                  isInvalid={!data?.importe}
-                  errorMessage="Campo obligatorio"
-                />
+                  <NumberInput
+                    label="Importe"
+                    variant="bordered"
+                    value={data?.importe || ""}
+                    onValueChange={(v) => handleChange("importe", v)}
+                    isDisabled={!isEditing}
+                    isInvalid={!data?.importe}
+                    errorMessage="Campo obligatorio"
+                  />
 
-                <Textarea
-                  label="Motivo"
-                  variant="bordered"
-                  value={data?.motivo || ""}
-                  onValueChange={(v) => handleChange("motivo", v)}
-                  isDisabled={!isEditing}
-                  isInvalid={!data?.motivo}
-                  errorMessage="Campo obligatorio"
-                />
+                  <Textarea
+                    label="Motivo"
+                    variant="bordered"
+                    value={data?.motivo || ""}
+                    onValueChange={(v) => handleChange("motivo", v)}
+                    isDisabled={!isEditing}
+                    isInvalid={!data?.motivo}
+                    errorMessage="Campo obligatorio"
+                  />
 
-                <Textarea
-                  label="Comentarios"
-                  variant="bordered"
-                  value={data?.comentarios || ""}
-                  onValueChange={(v) => handleChange("comentarios", v)}
-                  isDisabled={!isEditing}
-                  isInvalid={!data?.comentarios}
-                  errorMessage="Campo obligatorio"
-                />
-              </CardBody>
-            </Card>
-          </Grid>
-        </Grid>
-
-      </div>
-    </Dialog>
+                  <Textarea
+                    label="Comentarios"
+                    variant="bordered"
+                    value={data?.comentarios || ""}
+                    onValueChange={(v) => handleChange("comentarios", v)}
+                    isDisabled={!isEditing}
+                    isInvalid={!data?.comentarios}
+                    errorMessage="Campo obligatorio"
+                  />
+                </CardBody>
+              </Card>
+            </ModalBody>
+            <ModalFooter>
+              <Button color="danger" variant="light" onPress={onClose}>
+                Cancelar
+              </Button>
+            </ModalFooter>
+          </>
+        )}
+      </ModalContent>
+    </Modal>
   );
 }
