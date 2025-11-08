@@ -122,7 +122,7 @@ export default function MinutaForm({ open, handleClose, id_descuento }) {
   };
 
   return (
-    <Modal isOpen={open} scrollBehavior="outside" onOpenChange={handleClose} size="xl">
+    <Modal isOpen={open} scrollBehavior="outside" onOpenChange={handleClose} size="3xl">
       <ModalContent>
         {(onClose) => (
           <>
@@ -228,7 +228,7 @@ export default function MinutaForm({ open, handleClose, id_descuento }) {
                   </div>
                 </CardHeader>
                 <Divider />
-                <CardBody className="flex flex-wrap gap-4">
+                <CardBody className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                   <NumberInput
                     label="Folio"
@@ -303,6 +303,7 @@ export default function MinutaForm({ open, handleClose, id_descuento }) {
                     isInvalid={!data?.comentarios}
                     errorMessage="Campo obligatorio"
                   />
+
                 </CardBody>
               </Card>
             </ModalBody>
