@@ -201,6 +201,8 @@ export default function MinutaForm({ open, handleClose, id_descuento }) {
                     label={"Solicitante"}
                     value={data?.id_solicitante}
                     placeholder={"Encargado de departamento que hace la solicitud"}
+                    isEditing={isEditing}
+                    variant="bordered"
                   />
                 </CardBody>
               </Card>
@@ -218,6 +220,8 @@ export default function MinutaForm({ open, handleClose, id_descuento }) {
                     label={"Empleado"}
                     value={data?.id_empleado}
                     placeholder={"Empleado responsable del descuento"}
+                    isEditing={isEditing}
+                    variant="bordered"
                   />
                 </CardBody>
               </Card>
@@ -227,7 +231,7 @@ export default function MinutaForm({ open, handleClose, id_descuento }) {
           {/* Columna derecha */}
           <Grid item xs={12} md={6}>
             <Card shadow="sm" className="border border-gray-200 rounded-2xl h-full">
-              <CardHeader className="bg-gradient-to-r from-[#002887] to-[#0059b3] text-white font-semibold text-center rounded-t-2xl">
+              <CardHeader className="bg-gradient-to-r from-[#7f0000] to-[#ff4d4d] text-white font-semibold text-center rounded-t-2xl">
                 DATOS DEL DESCUENTO
               </CardHeader>
               <Divider />
@@ -239,8 +243,6 @@ export default function MinutaForm({ open, handleClose, id_descuento }) {
                   value={data?.folio || ""}
                   onValueChange={(v) => handleChange("folio", v)}
                   isDisabled={true}
-                  isInvalid={!data?.folio}
-                  errorMessage="Campo obligatorio"
                 />
 
                 <DatePicker
