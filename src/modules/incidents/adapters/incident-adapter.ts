@@ -84,7 +84,8 @@ export class IncidentAdapter {
       discountTotal: incident.discountTotal,
       discountReason: incident.discountReason,
       discountComments: incident.discountComments,
-      periodicidad: incident.periodicidad
+      periodicidad: incident.periodicidad,
+      id_solicitante: incident.id_solicitante
     };
   }
 

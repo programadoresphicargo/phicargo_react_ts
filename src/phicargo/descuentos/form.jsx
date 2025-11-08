@@ -171,7 +171,7 @@ export default function MinutaForm({ open, handleClose, id_descuento }) {
 
           {!isEditing && id_descuento && (
             <>
-              <Button color="secondary" onPress={ImprimirFormato} radius="full" className="text-white">
+              <Button color="success" onPress={ImprimirFormato} radius="full" className="text-white">
                 Imprimir formato
               </Button>
               {data?.estado !== "aplicado" && (
@@ -236,7 +236,7 @@ export default function MinutaForm({ open, handleClose, id_descuento }) {
                   variant="bordered"
                   value={data?.folio || ""}
                   onValueChange={(v) => handleChange("folio", v)}
-                  isDisabled={!isEditing}
+                  isDisabled={true}
                   isInvalid={!data?.folio}
                   errorMessage="Campo obligatorio"
                 />
@@ -268,7 +268,7 @@ export default function MinutaForm({ open, handleClose, id_descuento }) {
                   variant="bordered"
                   placeholder="Seleccionar..."
                   onSelectionChange={(keys) => handleChange("periodicidad", Array.from(keys)[0])}
-                  selectedKeys={data.periodicidad ? [data.periodicidad] : []}
+                  selectedKeys={data?.periodicidad ? [data?.periodicidad] : []}
                   isDisabled={!isEditing}
                   isInvalid={!data?.periodicidad}
                   errorMessage="Campo obligatorio"

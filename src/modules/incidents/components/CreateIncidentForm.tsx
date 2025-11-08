@@ -21,6 +21,7 @@ import { Controller } from "react-hook-form";
 import dayjs from 'dayjs';
 import { parseDate } from "@internationalized/date";
 import { NumberInput } from "@heroui/react";
+import SelectEmpleado from '@/phicargo/descuentos/solicitante';
 
 interface Props {
   onCancel?: () => void;
@@ -374,6 +375,20 @@ export const CreateIncidentForm = ({
 
           {createDiscount && (
             <>
+
+              <Controller
+                control={control}
+                name="id_solicitante"
+                render={({ field }) => (
+                  <SelectEmpleado
+                    key_name="id_solicitante"
+                    label="Solicitante"
+                    value={field.value}
+                    setSolicitante={setValue}
+                  />
+                )}
+              />
+
               {/* Monto */}
               <Controller
                 control={control}
