@@ -15,6 +15,7 @@ import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import dayjs from 'dayjs';
 import { useMotumEventsQueries } from '../../hooks/queries';
 import { Tabs, Tab } from "@heroui/react";
+import { FilterMotumEventsList } from './FilterMotumEventsList';
 
 export const MotumAlertsPanel = () => {
   const [open, setOpen] = useState(false);
@@ -37,6 +38,15 @@ export const MotumAlertsPanel = () => {
     setOpen(newOpen);
     setTab('pending');
   };
+
+  const [selectedEventType, setSelectedEventType] = useState<String | null>(null);
+
+  const filteredEvents = useMemo(() => {
+    if (!selectedEventType) return getMotumEventsQuery.data;
+    return getMotumEventsQuery.data?.filter(
+      (e) => String(e.eventType) === selectedEventType
+    );
+  }, [selectedEventType, getMotumEventsQuery.data]);
 
   return (
     <>
@@ -66,6 +76,10 @@ export const MotumAlertsPanel = () => {
                 >
                   Recargar eventos
                 </Button>
+                <FilterMotumEventsList
+                  events={getMotumEventsQuery.data}
+                  onSelectEventType={setSelectedEventType}>
+                </FilterMotumEventsList>
               </div>
               <DrawerBody>
                 <Tabs
@@ -81,7 +95,7 @@ export const MotumAlertsPanel = () => {
                   <MotumEventsList
                     toggleDrawer={toggleDrawer}
                     isLoading={getMotumEventsQuery.isFetching}
-                    events={getMotumEventsQuery.data}
+                    events={filteredEvents}
                     refresh={getMotumEventsQuery.refetch}
                   />
                 )}
