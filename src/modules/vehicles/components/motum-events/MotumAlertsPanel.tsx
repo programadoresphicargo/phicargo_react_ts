@@ -66,7 +66,7 @@ export const MotumAlertsPanel = () => {
           {(onClose) => (
             <>
               <DrawerHeader className="flex flex-col gap-1">Alertas GPS</DrawerHeader>
-              <div className='pl-6'>
+              <div className="pl-6 flex items-center gap-4">
                 <Button
                   color='success'
                   className='text-white'
@@ -74,7 +74,7 @@ export const MotumAlertsPanel = () => {
                   isLoading={getMotumEventsQuery.isFetching}
                   radius='full'
                 >
-                  Recargar eventos
+                  Recargar
                 </Button>
                 <FilterMotumEventsList
                   events={getMotumEventsQuery.data}

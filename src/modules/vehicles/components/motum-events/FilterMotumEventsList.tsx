@@ -22,22 +22,19 @@ export const FilterMotumEventsList = ({ events, onSelectEventType }: Props) => {
   const tiposUnicos = Array.from(tipoToName.keys());
 
   return (
-    <Box role="presentation">
-      <Stack spacing={3}>
-        <Select
-          key="primary"
-          label="Eventos"
-          placeholder="Selecciona uno..."
-          color="primary"
-          radius="full"
-          onChange={(e) => onSelectEventType?.(String(e.target.value))}>
-          {tiposUnicos.map((tipo) => (
-            <SelectItem key={tipo}>
-              {tipoToName.get(tipo)}
-            </SelectItem>
-          ))}
-        </Select>
-      </Stack>
-    </Box>
+    <Select
+      key="primary"
+      label="Eventos"
+      placeholder="Selecciona uno..."
+      color="primary"
+      size='sm'
+      radius="full"
+      onChange={(e) => onSelectEventType?.(String(e.target.value))}>
+      {tiposUnicos.map((tipo) => (
+        <SelectItem key={tipo}>
+          {tipoToName.get(tipo)}
+        </SelectItem>
+      ))}
+    </Select>
   );
 };
