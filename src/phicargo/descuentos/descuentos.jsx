@@ -56,8 +56,8 @@ const Descuentos = ({ }) => {
   const columns = useMemo(
     () => [
       {
-        accessorKey: 'folio',
-        header: 'Folio',
+        accessorKey: 'id_descuento',
+        header: 'ID',
       },
       {
         accessorKey: 'empleado',

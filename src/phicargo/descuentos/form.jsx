@@ -231,14 +231,6 @@ export default function MinutaForm({ open, handleClose, id_descuento }) {
                 <Divider />
                 <CardBody className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-                  <NumberInput
-                    label="Folio"
-                    variant="bordered"
-                    value={data?.folio || ""}
-                    onValueChange={(v) => handleChange("folio", v)}
-                    isDisabled={true}
-                  />
-
                   <DatePicker
                     label="Fecha"
                     variant="bordered"
