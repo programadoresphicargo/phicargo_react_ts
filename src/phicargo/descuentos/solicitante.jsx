@@ -16,16 +16,50 @@ import Stack from '@mui/material/Stack';
 import odooApi from '@/api/odoo-api';
 import toast from 'react-hot-toast';
 
-export default function SelectEmpleado({ key_name, label, setSolicitante, value, isEditing = true, variant = "flat", placeholder }) {
+export default function SelectEmpleado({ key_name, label, setSolicitante, value, isEditing = true, variant = "flat", placeholder, filters = [] }) {
 
  const [data, setData] = useState([]);
  const [isLoading, setLoading] = useState(false);
+
+ const applyFilters = (items, filters) => {
+  if (!filters.length) return items;
+
+  return items.filter((item) => {
+   return filters.every((f) => {
+    const fieldValue = item[f.field];
+
+    switch (f.operator) {
+     case "==":
+      return fieldValue === f.value;
+     case "!=":
+      return fieldValue !== f.value;
+     case ">":
+      return fieldValue > f.value;
+     case "<":
+      return fieldValue < f.value;
+     case ">=":
+      return fieldValue >= f.value;
+     case "<=":
+      return fieldValue <= f.value;
+     case "includes":
+      return Array.isArray(fieldValue) && fieldValue.includes(f.value);
+     case "contains":
+      return String(fieldValue)
+       .toLowerCase()
+       .includes(String(f.value).toLowerCase());
+     default:
+      return true;
+    }
+   });
+  });
+ };
 
  const fetchData = async () => {
   try {
    setLoading(true);
    const response = await odooApi.get('/drivers/employees/');
-   setData(response.data);
+   const filtered = applyFilters(response.data, filters);
+   setData(filtered);
    setLoading(false);
   } catch (error) {
    setLoading(false);
