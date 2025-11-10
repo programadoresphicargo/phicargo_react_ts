@@ -20,6 +20,13 @@ export const useVehicleEventsColumns = () => {
         ),
       },
       {
+        accessorKey: 'eventTypeName',
+        header: 'Tipo de evento',
+        Cell: ({ cell }) => (
+          <span className="font-bold uppercase">{cell.getValue<string>()}</span>
+        ),
+      },
+      {
         accessorKey: 'event',
         header: 'Evento',
         Cell: ({ cell }) => (
@@ -35,7 +42,7 @@ export const useVehicleEventsColumns = () => {
       },
       {
         accessorKey: 'createdAt',
-        header: 'Fecha de Inspección',
+        header: 'Fecha de creación',
         Cell: ({ cell }) => {
           const value = cell.getValue<Dayjs | null>();
           return value ? (
