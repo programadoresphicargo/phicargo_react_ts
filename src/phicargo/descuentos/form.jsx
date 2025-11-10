@@ -82,7 +82,12 @@ export default function MinutaForm({ open, handleClose, id_descuento }) {
         toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error("Error al enviar datos.");
+      const message =
+        error.response?.data?.detail ||
+        error.message ||
+        "Error al enviar datos.";
+
+      toast.error(message);
     } finally {
       setLoading(false);
     }
