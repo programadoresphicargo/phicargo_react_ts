@@ -454,8 +454,10 @@ export const CreateIncidentForm = ({
           </div>
 
           <Checkbox
+            isSelected={createDiscount}
             checked={createDiscount}
             onValueChange={setCreateDiscount}
+            isDisabled={isDirectionReport || criticalDisabled}
           >
             Registrar Descuento
           </Checkbox>
@@ -479,6 +481,7 @@ export const CreateIncidentForm = ({
                     value={field.value}
                     setSolicitante={setValue}
                     placeholder={"Encargado de departamento que hace la solicitud"}
+                    isDisabled={isDirectionReport || criticalDisabled}
                   />
                 )}
               />
@@ -501,6 +504,7 @@ export const CreateIncidentForm = ({
                     onChange={field.onChange}
                     isInvalid={!!fieldState.error}
                     errorMessage={fieldState.error?.message}
+                    isDisabled={isDirectionReport || criticalDisabled}
                     startContent={
                       <div className="pointer-events-none flex items-center">
                         <span className="text-default-400 text-small">$</span>
@@ -527,6 +531,7 @@ export const CreateIncidentForm = ({
                     value={field.value || 0}
                     onChange={field.onChange}
                     isInvalid={!!fieldState.error}
+                    isDisabled={isDirectionReport || criticalDisabled}
                     errorMessage={fieldState.error?.message}
                     startContent={
                       <div className="pointer-events-none flex items-center">
@@ -552,10 +557,12 @@ export const CreateIncidentForm = ({
                     label="Periodicidad"
                     variant="flat"
                     placeholder="Seleccionar..."
+                    selectedKeys={[String(field.value)]}
                     onSelectionChange={(keys) => {
                       const value = Array.from(keys)[0];
                       field.onChange(value);
                     }}
+                    isDisabled={isDirectionReport || criticalDisabled}
                     isInvalid={!!fieldState.error}
                     errorMessage={fieldState.error?.message}
                   >
@@ -582,6 +589,7 @@ export const CreateIncidentForm = ({
                     value={field.value || ""}
                     onChange={field.onChange}
                     isInvalid={!!fieldState.error}
+                    isDisabled={isDirectionReport || criticalDisabled}
                     errorMessage={fieldState.error?.message}
                   />
                 )}
@@ -603,6 +611,7 @@ export const CreateIncidentForm = ({
                     minRows={4}
                     value={field.value || ""}
                     onChange={field.onChange}
+                    isDisabled={isDirectionReport || criticalDisabled}
                     isInvalid={!!fieldState.error}
                     errorMessage={fieldState.error?.message}
                   />

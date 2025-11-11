@@ -1,4 +1,5 @@
 import type {
+  Descuento,
   DriverInfo,
   Incident,
   IncidentCreate,
@@ -6,6 +7,7 @@ import type {
   VehicleInfo,
 } from '../models';
 import type {
+  DescuentoApi,
   DriverInfoApi,
   IncidentApi,
   IncidentCreateApi,
@@ -25,6 +27,18 @@ export class IncidentAdapter {
       license: driver.tms_driver_license_id,
       modality: driver.x_modalidad,
       isDangerous: driver.x_peligroso_lic === 'SI',
+    };
+  }
+
+  static descuentoInfoToLocal(descuento: DescuentoApi): Descuento {
+    return {
+      monto: descuento.monto,
+      importe: descuento.importe,
+      periodicidad: descuento.periodicidad,
+      comentarios: descuento.comentarios,
+      motivo: descuento.motivo,
+      id_solicitante: descuento.id_solicitante,
+      id_empleado: descuento.id_empleado
     };
   }
 
@@ -59,7 +73,8 @@ export class IncidentAdapter {
         ? dayjs(incident.attended_at)
         : null,
       evidences: incident.evidences?.map(FilesAdapter.toOneDriveFile) ?? [],
-      state: incident.state
+      state: incident.state,
+      descuento: incident.descuento ? IncidentAdapter.descuentoInfoToLocal(incident.descuento) : null
     };
   }
 
