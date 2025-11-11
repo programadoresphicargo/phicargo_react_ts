@@ -25,7 +25,7 @@ export default function SelectEmpleado({ key_name, label, setSolicitante, value,
     try {
       setLoading(true);
       const response = await odooApi.get('/drivers/employees/');
-      setData(response);
+      setData(response.data);
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -43,7 +43,6 @@ export default function SelectEmpleado({ key_name, label, setSolicitante, value,
         fullWidth
         variant={variant}
         placeholder={placeholder}
-        defaultItems={data}
         label={label}
         selectedKey={String(value) || null}
         onSelectionChange={(key) => setSolicitante(key_name, key)}
@@ -51,11 +50,11 @@ export default function SelectEmpleado({ key_name, label, setSolicitante, value,
         isInvalid={!value}
         errorMessage="Campo obligatorio"
       >
-        {(user) => (
+        {data.map((user) => (
           <AutocompleteItem key={user.id_empleado}>
             {user.empleado}
           </AutocompleteItem>
-        )}
+        ))}
       </Autocomplete>
     </React.Fragment>
   );

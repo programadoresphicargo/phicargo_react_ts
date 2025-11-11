@@ -191,10 +191,6 @@ export default function MinutaForm({ open, handleClose, id_descuento }) {
                     placeholder={"Encargado de departamento que hace la solicitud"}
                     isEditing={isEditing}
                     variant="bordered"
-                    filters={[
-                      { field: "department_id", operator: "!=", value: 5 },
-                      { field: "department_id", operator: "!=", value: 6 },
-                    ]}
                   />
                 </CardBody>
               </Card>
