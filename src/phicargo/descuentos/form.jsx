@@ -191,6 +191,7 @@ export default function MinutaForm({ open, handleClose, id_descuento }) {
                     placeholder={"Encargado de departamento que hace la solicitud"}
                     isEditing={isEditing}
                     variant="bordered"
+                    isDisabled={!isEditing}
                   />
                 </CardBody>
               </Card>
@@ -215,6 +216,7 @@ export default function MinutaForm({ open, handleClose, id_descuento }) {
                     placeholder={"Empleado responsable del descuento"}
                     isEditing={isEditing}
                     variant="bordered"
+                    isDisabled={!isEditing}
                   />
                 </CardBody>
               </Card>

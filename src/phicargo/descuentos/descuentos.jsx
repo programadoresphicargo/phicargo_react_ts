@@ -111,6 +111,14 @@ const Descuentos = ({ }) => {
         accessorKey: 'fecha_creacion',
         header: 'Fecha creación',
       },
+      {
+        accessorKey: 'id_origen',
+        header: 'ID Origen',
+      },
+      {
+        accessorKey: 'tabla',
+        header: 'Tabla',
+      },
     ],
     []
   );
