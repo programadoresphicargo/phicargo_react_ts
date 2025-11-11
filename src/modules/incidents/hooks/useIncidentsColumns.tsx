@@ -16,7 +16,7 @@ export const useIncidentsColumns = () => {
         maxSize: 50,
         Cell: ({ cell }) => {
           const value = cell.getValue<string>();
-          return <BasicTextCell value={value} />;
+          return <p>{value}</p>;
         },
       },
       {

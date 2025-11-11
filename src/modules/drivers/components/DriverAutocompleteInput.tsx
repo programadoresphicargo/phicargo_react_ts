@@ -12,6 +12,7 @@ interface Props<T extends FieldValues> {
   label: string;
   variant?: "bordered" | "flat" | "faded" | "underlined";
   setValue: UseFormSetValue<T>;
+  isDisabled?: boolean;
 }
 
 export const DriverAutocompleteInput = <T extends FieldValues>({
@@ -20,6 +21,7 @@ export const DriverAutocompleteInput = <T extends FieldValues>({
   label,
   variant = "bordered",
   setValue,
+  isDisabled = false
 }: Props<T>) => {
   const { AvailableDrivers, isLoading } = useDriverQueries();
 
@@ -33,7 +35,8 @@ export const DriverAutocompleteInput = <T extends FieldValues>({
           variant={variant}
           placeholder="Seleccione un operador"
           isLoading={isLoading}
-          selectedKey={field.value || null}
+          isDisabled={isDisabled}
+          selectedKey={String(field.value) || null}
           onSelectionChange={(key) => {
             const value = key ? String(key) : null;
             field.onChange(value);

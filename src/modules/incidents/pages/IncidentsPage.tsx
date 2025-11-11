@@ -12,7 +12,6 @@ import { useState } from 'react';
 import { DateRangePicker } from '@/components/inputs';
 import { useIncidentsContext } from '../hooks/useIncidentsContext';
 import EditIcon from '@mui/icons-material/Edit';
-import { EditIncidentModal } from '../components/EditIncidentModal';
 import { Button, Tooltip } from '@heroui/react';
 
 const dialogProps: DialogProps = {
@@ -100,13 +99,10 @@ const IncidentsPage = () => {
     muiEditRowDialogProps: dialogProps,
     muiCreateRowModalProps: dialogProps,
     renderCreateRowDialogContent: ({ table }) => (
-      <CreateIncidentModal onClose={() => table.setCreatingRow(null)} />
+      <CreateIncidentModal label='Crear incidencia' mode="create" onClose={() => table.setCreatingRow(null)} />
     ),
     renderEditRowDialogContent: ({ table, row }) => (
-      <EditIncidentModal
-        onClose={() => table.setEditingRow(null)}
-        incident={row.original}
-      />
+      <CreateIncidentModal label='Editar incidencia' mode="edit" incident={row.original} onClose={() => table.setEditingRow(null)} />
     ),
   });
 
