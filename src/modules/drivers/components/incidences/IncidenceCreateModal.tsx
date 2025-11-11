@@ -15,7 +15,7 @@ export const IncidenceCreateModal = (props: Props) => {
     <MuiSimpleModal
       open={isOpen}
       onClose={onOpenChange}
-      maxWidth="md"
+      maxWidth="xl"
       header={
         <div className="flex items-center justify-between">
           <h2 className="w-full">Agregar Incidencia</h2>
@@ -32,7 +32,7 @@ export const IncidenceCreateModal = (props: Props) => {
         onSuccessfulSubmit={onOpenChange}
       /> */}
       <div className="px-8 pb-4">
-        <CreateIncidentForm onCancel={onOpenChange} onSuccess={onOpenChange} driverId={driverId} />
+        <CreateIncidentForm onCancel={onOpenChange} onSuccess={onOpenChange} driverId={driverId} mode="create" />
       </div>
     </MuiSimpleModal>
   );
