@@ -14,9 +14,15 @@ export const useIncidentsColumns = () => {
         header: 'Incidencia',
         id: 'incident',
         maxSize: 50,
-        Cell: ({ cell }) => {
-          const value = cell.getValue<string>();
-          return <p>{value}</p>;
+        Cell: ({ row }) => {
+          const { id, incident } = row.original;
+
+          return (
+            <p>
+              <span className="px-2 py-1 bg-gray-200 rounded-md text-xs mr-2">#{id}</span>
+              {incident}
+            </p>
+          );
         },
       },
       {

@@ -30,6 +30,16 @@ interface IncidentBase {
   state: string | null;
 }
 
+export interface Descuento {
+  id_solicitante: number | null;
+  id_empleado: number | null;
+  importe: number | null;
+  monto: number | null;
+  comentarios: string | null;
+  motivo: string | null;
+  periodicidad: string | null;
+}
+
 export interface Incident extends IncidentBase {
   id: number;
   createdAt: Dayjs;
@@ -38,6 +48,7 @@ export interface Incident extends IncidentBase {
   vehicle: VehicleInfo | null;
   attendedAt: Dayjs | null;
   evidences: OneDriveFile[];
+  descuento: Descuento | null;
 }
 
 export interface IncidentCreate extends IncidentBase {

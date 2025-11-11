@@ -28,6 +28,16 @@ interface IncidentBaseApi {
   state: string | null;
 }
 
+export interface DescuentoApi {
+  id_solicitante: number | null;
+  id_empleado: number | null;
+  importe: number;
+  monto: number;
+  comentarios: string | null;
+  motivo: string | null;
+  periodicidad: string | null;
+}
+
 export interface IncidentApi extends IncidentBaseApi {
   id: number;
   created_at: string;
@@ -36,6 +46,7 @@ export interface IncidentApi extends IncidentBaseApi {
   vehicle: VehicleInfoApi | null;
   attended_at: string | null;
   evidences: OneDriveFileApi[];
+  descuento: DescuentoApi | null;
 }
 
 export interface IncidentCreateApi extends IncidentBaseApi {

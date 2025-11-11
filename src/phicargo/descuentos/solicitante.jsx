@@ -16,7 +16,7 @@ import Stack from '@mui/material/Stack';
 import odooApi from '@/api/odoo-api';
 import toast from 'react-hot-toast';
 
-export default function SelectEmpleado({ key_name, label, setSolicitante, value, isEditing = true, variant = "flat", placeholder }) {
+export default function SelectEmpleado({ key_name, label, setSolicitante, value, isEditing = true, variant = "flat", placeholder, isDisabled = false }) {
 
   const [data, setData] = useState([]);
   const [isLoading, setLoading] = useState(false);
@@ -49,6 +49,7 @@ export default function SelectEmpleado({ key_name, label, setSolicitante, value,
         isDisabled={!isEditing}
         isInvalid={!value}
         errorMessage="Campo obligatorio"
+        isDisabled={isDisabled}
       >
         {data.map((user) => (
           <AutocompleteItem key={user.id_empleado}>

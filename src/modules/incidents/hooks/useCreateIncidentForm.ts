@@ -51,12 +51,6 @@ export function transformIncidentToCreate(incident: Incident): IncidentCreate {
     startDate: null,
     endDate: null,
     newVehicleStateId: null,
-    discountAmount: null,
-    discountTotal: null,
-    discountReason: null,
-    discountComments: null,
-    periodicidad: "",
-    id_solicitante: 0,
   };
 }
 
@@ -76,6 +70,23 @@ export function useCreateIncidentForm({
   const [files, setFiles] = useState<File[]>([]);
   const [createUnavailability, setCreateUnavailability] = useState(false);
   const [createDiscount, setCreateDiscount] = useState(false);
+
+  useEffect(() => {
+    if (mode === "edit" && incident) {
+      // si el incidente tiene descuento, activar createDiscount
+      if (incident.descuento?.importe != null) {
+        setCreateDiscount(true);
+
+        // setear los valores al formulario también:
+        form.setValue("discountTotal", incident.descuento.importe);
+        form.setValue("discountAmount", incident.descuento.monto ?? 0);
+        form.setValue("discountReason", incident.descuento.motivo ?? "");
+        form.setValue("discountComments", incident.descuento.comentarios ?? "");
+        form.setValue("periodicidad", incident.descuento.periodicidad ?? "");
+        form.setValue("id_solicitante", incident.descuento.id_solicitante ?? null);
+      }
+    }
+  }, [mode, incident]);
 
   const [isDirectionReport, setIsDirectionReport] = useState(false);
 
@@ -156,10 +167,12 @@ export function useCreateIncidentForm({
   }, [incidentSelected]);
 
   useEffect(() => {
-    form.setValue('discountAmount', null);
-    form.setValue('discountTotal', null);
-    form.setValue('discountReason', null);
-    form.setValue('discountComments', null);
+    if (createDiscount === null) {
+      form.setValue('discountAmount', null);
+      form.setValue('discountTotal', null);
+      form.setValue('discountReason', null);
+      form.setValue('discountComments', null);
+    }
   }, [createDiscount]);
 
   const confirmIncidentFn = (id?: number) => {
