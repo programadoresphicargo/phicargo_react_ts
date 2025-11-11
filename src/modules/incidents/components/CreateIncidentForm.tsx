@@ -1,6 +1,6 @@
 import { Divider } from '@mui/material';
 import { FileUploadInput } from '@/components/inputs';
-import { Button, MuiSaveButton } from '@/components/ui';
+import { Button } from '@heroui/react';
 import {
   useCreateIncidentForm,
   INCIDENT_TYPES,
@@ -22,8 +22,12 @@ import dayjs from 'dayjs';
 import { parseDate } from "@internationalized/date";
 import { NumberInput } from "@heroui/react";
 import SelectEmpleado from '@/phicargo/descuentos/solicitante';
+import IncidentChip from './IncidentChip';
+import Swal from 'sweetalert2';
 
 interface Props {
+  mode: "create" | "edit";
+  incident?: any;
   onCancel?: () => void;
   onSuccess?: () => void;
   onError?: (error: Error) => void;
@@ -32,6 +36,8 @@ interface Props {
 }
 
 export const CreateIncidentForm = ({
+  mode,
+  incident,
   onCancel,
   onSuccess,
   driverId,
@@ -53,16 +59,91 @@ export const CreateIncidentForm = ({
 
     damageCostDisabled,
 
-    handleSubmit: onFormSubmit,
+    submit,
     isPending,
     isDirectionReport,
-  } = useCreateIncidentForm({ driverId, inspection_id2, onSuccess });
+    confirmIncident,
+    cancelIncident,
+  } = useCreateIncidentForm({
+    mode,
+    incident,
+    driverId,
+    inspection_id2,
+    onSuccess
+  });
+
+  const isEditing = mode === "edit";
+  const isConfirmed = isEditing && incident?.state === "confirmed";
+  const criticalDisabled = isConfirmed;
+
+  const handleConfirm = () => {
+    Swal.fire({
+      title: "¿Confirmar incidencia?",
+      text: "Una vez confirmada no podrás deshacer esta acción.",
+      icon: "question",
+      showCancelButton: true,
+    }).then((r) => {
+      if (r.isConfirmed) confirmIncident();
+    });
+  };
+
+  const handleCancelIncident = () => {
+    Swal.fire({
+      title: "¿Cancelar incidencia?",
+      icon: "warning",
+      showCancelButton: true,
+    }).then((r) => {
+      if (r.isConfirmed) cancelIncident();
+    });
+  };
 
   return (
     <form className="mt-6 transition-all duration-300 ease-in-out">
+
+      <div className="flex items-center justify-between pb-5 gap-4">
+        {incident && (
+          <div className='pb-5'>
+            <h2>Incidencia: {incident.id}</h2>
+            <IncidentChip incident={incident} />
+          </div>
+        )}
+        {isEditing && (
+          <>
+            <Button
+              color="success"
+              isDisabled={incident?.state === "confirmed"}
+              onPress={() => handleConfirm()}
+              className='text-white'
+              radius='full'
+            >
+              Confirmar incidencia
+            </Button>
+
+            <Button
+              color="danger"
+              isDisabled={incident?.state === "confirmed"}
+              onPress={() => handleCancelIncident()}
+              radius='full'
+            >
+              Cancelar incidencia
+            </Button>
+          </>
+        )}
+
+        <Button
+          color='primary'
+          radius='full'
+          onPress={submit}
+          isLoading={isPending}
+          isDisabled={criticalDisabled}
+        >Guardar
+        </Button>
+
+      </div>
       <div
         className={`grid gap-6 transition-all duration-300 ease-in-out grid-cols-[1fr_auto_1fr_auto_1fr]`}
       >
+
         <div className="flex flex-col gap-4">
           <Controller
             control={control}
@@ -76,6 +157,7 @@ export const CreateIncidentForm = ({
                 onValueChange={field.onChange}
                 isInvalid={!!fieldState.error}
                 errorMessage={fieldState.error?.message}
+                isDisabled={criticalDisabled}
               >
                 <Radio value={INCIDENT_TYPES.OPERATIVE}>Operativa</Radio>
                 <Radio value={INCIDENT_TYPES.LEGAL}>Legal</Radio>
@@ -92,6 +174,7 @@ export const CreateIncidentForm = ({
             render={({ field, fieldState }) => (
               <Select
                 label="Incidencia"
+                isDisabled={criticalDisabled}
                 selectedKeys={field.value ? [field.value] : []}
                 onSelectionChange={(keys) => {
                   const value = Array.from(keys)[0];
@@ -115,10 +198,12 @@ export const CreateIncidentForm = ({
             rules={{ required: "Operador requerido" }}
             render={({ field }) => (
               <DriverAutocompleteInput
+                variant="flat"
                 control={control}   // sigue siendo necesario
                 name={field.name}
                 label="Operador"
                 setValue={setValue}
+                isDisabled={criticalDisabled}
               />
             )}
           />
@@ -133,6 +218,7 @@ export const CreateIncidentForm = ({
               return (
                 <DatePicker
                   label="Fecha de Incidencia"
+                  isDisabled={criticalDisabled}
                   value={calendarValue} // ✅ CalendarDate compatible con HeroUI
                   onChange={(val) => {
                     // Convertimos CalendarDate de vuelta a Dayjs
@@ -156,6 +242,7 @@ export const CreateIncidentForm = ({
                 minRows={6}
                 value={field.value || ""}
                 onChange={field.onChange}
+                isDisabled={criticalDisabled}
                 isInvalid={!!fieldState.error}
                 errorMessage={fieldState.error?.message}
               />
@@ -170,7 +257,7 @@ export const CreateIncidentForm = ({
                 <Checkbox
                   isSelected={field.value || false}
                   onValueChange={field.onChange}
-                  isDisabled={isDirectionReport}
+                  isDisabled={isDirectionReport || criticalDisabled}
                 >
                   ¿El operador es responsable?
                 </Checkbox>
@@ -179,7 +266,7 @@ export const CreateIncidentForm = ({
             <Checkbox
               checked={createUnavailability}
               onValueChange={setCreateUnavailability}
-              isDisabled={isDirectionReport}
+              isDisabled={isDirectionReport || criticalDisabled}
             >
               Crear Indisponibilidad
             </Checkbox>
@@ -284,7 +371,7 @@ export const CreateIncidentForm = ({
             <LegalDetailsSection
               control={control}
               damageCostDisabled={damageCostDisabled}
-              disabled={isDirectionReport}
+              disabled={isDirectionReport || criticalDisabled}
             />
 
             <VehicleAutocompleteInput
@@ -292,7 +379,7 @@ export const CreateIncidentForm = ({
               name="vehicleId"
               label="Unidad Afectada"
               setValue={setValue}
-              disabled={isDirectionReport}
+              disabled={isDirectionReport || criticalDisabled}
               helperText="Seleccionar unidad afectada, si aplica"
             />
 
@@ -308,7 +395,7 @@ export const CreateIncidentForm = ({
                     const value = Array.from(keys)[0];
                     field.onChange(value ? Number(value) : null);
                   }}
-                  isDisabled={isDirectionReport}
+                  isDisabled={isDirectionReport || criticalDisabled}
                   isInvalid={!!fieldState.error}
                   errorMessage={fieldState.error?.message}
                 >
@@ -534,20 +621,14 @@ export const CreateIncidentForm = ({
       <div className="flex justify-between items-center mt-6">
         {onCancel && (
           <Button
-            variant="outlined"
-            color="error"
-            size="small"
-            onClick={onCancel}
+            color="danger"
+            size="sm"
+            onPress={onCancel}
+            radius='full'
           >
             Cancelar
           </Button>
         )}
-        <MuiSaveButton
-          variant="contained"
-          loadingPosition="end"
-          onClick={handleSubmit(onFormSubmit)}
-          loading={isPending}
-        />
       </div>
     </form>
   );
