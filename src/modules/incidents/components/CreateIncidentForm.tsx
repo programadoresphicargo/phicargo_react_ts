@@ -479,10 +479,6 @@ export const CreateIncidentForm = ({
                     value={field.value}
                     setSolicitante={setValue}
                     placeholder={"Encargado de departamento que hace la solicitud"}
-                    filters={[
-                      { field: "department_id", operator: "!=", value: 5 },
-                      { field: "department_id", operator: "!=", value: 6 },
-                    ]}
                   />
                 )}
               />
