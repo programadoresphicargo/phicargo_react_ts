@@ -44,7 +44,7 @@ export const CreateIncidentForm = ({
   inspection_id2,
 }: Props) => {
   const {
-    form: { control, handleSubmit, setValue },
+    form: { control, setValue },
 
     files,
     setFiles,
