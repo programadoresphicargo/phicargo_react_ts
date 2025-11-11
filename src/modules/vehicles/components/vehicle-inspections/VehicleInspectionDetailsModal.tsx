@@ -267,7 +267,7 @@ export const VehicleInspectionDetailModal = ({
                   Crear incidencia
                 </Button>
                 <Dialog open={openCreateIncident} onClose={handleCreateClose} maxWidth="lg">
-                  <CreateIncidentModal onClose={handleCreateClose} inspection_id={vehicleInspection.inspection?.id}></CreateIncidentModal>
+                  <CreateIncidentModal label="Crear incidencia" mode="create" onClose={handleCreateClose} inspection_id={vehicleInspection.inspection?.id}></CreateIncidentModal>
                 </Dialog>
               </>
             )}
