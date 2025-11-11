@@ -7,13 +7,17 @@ import {
 import { MuiCloseButton } from '@/components/ui';
 
 import { CreateIncidentForm } from './CreateIncidentForm';
+import { Incident } from '../models';
 
 interface Props {
   onClose: () => void;
   inspection_id?: number;
+  label: string;
+  mode: "create" | "edit";
+  incident?: Incident;
 }
 
-export const CreateIncidentModal = ({ onClose, inspection_id }: Props) => {
+export const CreateIncidentModal = ({ onClose, inspection_id, label, incident, mode }: Props) => {
   return (
     <>
       <DialogTitle
@@ -33,14 +37,14 @@ export const CreateIncidentModal = ({ onClose, inspection_id }: Props) => {
             textTransform: 'uppercase',
           }}
         >
-          Crear Nueva Incidencia
+          {label}
         </Typography>
         <Box sx={{ display: 'flex', gap: '1rem' }}>
           <MuiCloseButton onClick={onClose} />
         </Box>
       </DialogTitle>
       <DialogContent>
-        <CreateIncidentForm onCancel={onClose} onSuccess={onClose} inspection_id2={inspection_id} />
+        <CreateIncidentForm onCancel={onClose} onSuccess={onClose} inspection_id2={inspection_id} mode={mode} incident={incident} />
       </DialogContent>
     </>
   );
