@@ -93,9 +93,9 @@ export default function MinutaForm({ open, handleClose, id_descuento }) {
     }
   };
 
-  const Confirmar = async () => {
+  const CambiarEstado = async (estado) => {
     const result = await Swal.fire({
-      title: "¿Marcar como aplicado el descuento?",
+      title: `¿Marcar como ${estado} el descuento?`,
       text: "Esta acción no se puede deshacer.",
       icon: "warning",
       showCancelButton: true,
@@ -106,7 +106,7 @@ export default function MinutaForm({ open, handleClose, id_descuento }) {
     });
     if (result.isConfirmed) {
       try {
-        const response = await odooApi.patch(`/descuentos/estado/${id_descuento}/aplicado`);
+        const response = await odooApi.patch(`/descuentos/estado/${id_descuento}/${estado}`);
         if (response.data.status === "success") {
           toast.success(response.data.message);
           handleClose();
@@ -163,9 +163,19 @@ export default function MinutaForm({ open, handleClose, id_descuento }) {
                     <Button color="success" onPress={ImprimirFormato} radius="full" className="text-white">
                       Imprimir formato
                     </Button>
-                    {data?.estado !== "aplicado" && (
-                      <Button color="success" onPress={Confirmar} radius="full" className="text-white" isLoading={isLoading}>
+                    {data?.estado == "borrador" && (
+                      <Button color="success" onPress={() => CambiarEstado('confirmado')} radius="full" className="text-white" isLoading={isLoading}>
+                        Confirmar
+                      </Button>
+                    )}
+                    {data?.estado == "confirmado" && (
+                      <Button color="warning" onPress={() => CambiarEstado('aplicado')} radius="full" className="text-white" isLoading={isLoading}>
                         Aplicar
+                      </Button>
+                    )}
+                    {data?.estado == "borrador" && (
+                      <Button color="danger" onPress={() => CambiarEstado('cancelado')} radius="full" className="text-white" isLoading={isLoading}>
+                        Cancelar
                       </Button>
                     )}
                   </>

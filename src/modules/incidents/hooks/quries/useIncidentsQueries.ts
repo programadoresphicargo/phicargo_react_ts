@@ -76,9 +76,10 @@ export const useIncidentsQueries = ({ driverId, startDate, endDate }: Config) =>
       });
       toast.success(data.message || "Incidencia confirmada");
     },
-    onError: (err) => {
-      console.error(err);
-      toast.error("Error al confirmar incidencia");
+    onError: (err: any) => {
+      console.error("Error completo:", err);
+      const detail = err.response?.data?.detail || "Error al confirmar incidencia";
+      toast.error(detail);
     },
   });
 

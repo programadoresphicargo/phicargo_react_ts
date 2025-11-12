@@ -94,6 +94,10 @@ const Descuentos = ({ }) => {
             badgeClass = 'warning';
           } else if (status === 'aplicado') {
             badgeClass = 'success';
+          } else if (status === 'cancelado') {
+            badgeClass = 'danger';
+          } else if (status === 'confirmado') {
+            badgeClass = 'primary';
           }
 
           return (
