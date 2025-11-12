@@ -32,13 +32,14 @@ export class IncidentAdapter {
 
   static descuentoInfoToLocal(descuento: DescuentoApi): Descuento {
     return {
+      id_descuento: descuento.id_descuento,
+      id_solicitante: descuento.id_solicitante,
+      id_empleado: descuento.id_empleado,
       monto: descuento.monto,
       importe: descuento.importe,
       periodicidad: descuento.periodicidad,
       comentarios: descuento.comentarios,
       motivo: descuento.motivo,
-      id_solicitante: descuento.id_solicitante,
-      id_empleado: descuento.id_empleado
     };
   }
 
@@ -95,6 +96,7 @@ export class IncidentAdapter {
       damage_cost: incident.damageCost ?? null,
       is_driver_responsible: incident.isDriverResponsible,
       state: incident.state,
+      id_descuento: incident.id_descuento,
       discountAmount: incident.discountAmount,
       discountTotal: incident.discountTotal,
       discountReason: incident.discountReason,
@@ -135,6 +137,27 @@ export class IncidentAdapter {
     }
     if (incident.attendedAt) {
       data.attended_at = incident.attendedAt.format('YYYY-MM-DD');
+    }
+    if (incident.id_descuento) {
+      data.id_descuento = incident.id_descuento
+    }
+    if (incident.discountTotal) {
+      data.discountTotal = incident.discountTotal
+    }
+    if (incident.discountAmount) {
+      data.discountAmount = incident.discountAmount
+    }
+    if (incident.discountComments) {
+      data.discountComments = incident.discountComments
+    }
+    if (incident.discountReason) {
+      data.discountReason = incident.discountReason
+    }
+    if (incident.id_solicitante) {
+      data.id_solicitante = incident.id_solicitante
+    }
+    if (incident.periodicidad) {
+      data.periodicidad = incident.periodicidad
     }
     return data;
   }

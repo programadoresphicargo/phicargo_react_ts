@@ -84,6 +84,7 @@ export function useCreateIncidentForm({
         form.setValue("discountComments", incident.descuento.comentarios ?? "");
         form.setValue("periodicidad", incident.descuento.periodicidad ?? "");
         form.setValue("id_solicitante", incident.descuento.id_solicitante ?? null);
+        form.setValue("id_descuento", incident.descuento.id_descuento ?? null);
       }
     }
   }, [mode, incident]);
@@ -172,6 +173,8 @@ export function useCreateIncidentForm({
       form.setValue('discountTotal', null);
       form.setValue('discountReason', null);
       form.setValue('discountComments', null);
+      form.setValue("periodicidad", "");
+      form.setValue("id_descuento", 0);
     }
   }, [createDiscount]);
 
@@ -187,7 +190,7 @@ export function useCreateIncidentForm({
     );
   };
 
-  const submitUpdate: SubmitHandler<IncidentCreate> = (data) => {
+  const submitUpdate: SubmitHandler<IncidentUpdate> = (data) => {
     if (!incident) return;
 
     const allowed: IncidentUpdate = {
@@ -200,7 +203,16 @@ export function useCreateIncidentForm({
       vehicleId: data.vehicleId,
       driverId: data.driverId,
       state: data.state,
+      discountTotal: data.discountTotal,
+      discountAmount: data.discountAmount,
+      discountReason: data.discountReason,
+      discountComments: data.discountComments,
+      periodicidad: data.periodicidad,
+      id_solicitante: data.id_solicitante,
+      id_descuento: data.id_descuento
     };
+
+    console.log(allowed);
 
     updateIncident.mutate(
       { id: incident.id, updatedItem: allowed },

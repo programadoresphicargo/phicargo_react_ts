@@ -29,6 +29,7 @@ interface IncidentBaseApi {
 }
 
 export interface DescuentoApi {
+  id_descuento: number | null;
   id_solicitante: number | null;
   id_empleado: number | null;
   importe: number;
@@ -54,16 +55,24 @@ export interface IncidentCreateApi extends IncidentBaseApi {
   end_date: string | null;
   vehicle_id?: number | null;
   new_vehicle_state_id?: number | null;
+  id_descuento?: number | null;
+  id_solicitante?: number | null;
+  periodicidad?: string | null;
   discountAmount?: number | null;
   discountTotal?: number | null;
   discountReason?: string | null;
   discountComments?: string | null;
-  periodicidad?: string | null;
-  id_solicitante?: number | null;
 }
 
 export type IncidentUpdateApi = Partial<IncidentBaseApi> & {
   vehicle_id?: number | null;
   driver_id?: number | null;
   attended_at?: string | null;
+  id_descuento?: number | null;
+  discountAmount?: number | null;
+  discountTotal?: number | null;
+  discountReason?: string | null;
+  discountComments?: string | null;
+  periodicidad?: string | null;
+  id_solicitante?: number | null;
 };

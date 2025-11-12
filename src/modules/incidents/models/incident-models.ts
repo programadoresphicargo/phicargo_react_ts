@@ -31,6 +31,7 @@ interface IncidentBase {
 }
 
 export interface Descuento {
+  id_descuento: number | null;
   id_solicitante: number | null;
   id_empleado: number | null;
   importe: number | null;
@@ -57,17 +58,25 @@ export interface IncidentCreate extends IncidentBase {
   newVehicleStateId?: number | null;
   vehicleId?: number | null;
   driverId?: number | null;
+  id_descuento?: number | null;
+  id_solicitante?: number | null;
+  periodicidad?: string | null;
   discountAmount?: number | null;
   discountTotal?: number | null;
   discountReason?: string | null;
   discountComments?: string | null;
-  periodicidad?: string | null;
-  id_solicitante?: number | null;
 }
 
 export type IncidentUpdate = Partial<IncidentBase> & {
   vehicleId?: number | null;
   driverId?: number | null;
   attendedAt?: Dayjs | null;
+  id_descuento?: number | null;
+  id_solicitante?: number | null;
+  periodicidad?: string | null;
+  discountAmount?: number | null;
+  discountTotal?: number | null;
+  discountReason?: string | null;
+  discountComments?: string | null;
 };
 

@@ -467,6 +467,14 @@ export const CreateIncidentForm = ({
 
               <Controller
                 control={control}
+                name="id_descuento"
+                render={({ field }) => (
+                  <h1>Descuento: {field.value}</h1>
+                )}
+              />
+
+              <Controller
+                control={control}
                 name="id_solicitante"
                 rules={{
                   validate: (v) => {
