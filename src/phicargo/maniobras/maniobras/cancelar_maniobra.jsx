@@ -13,7 +13,8 @@ import { Select, SelectItem } from "@heroui/react";
 
 const CancelarManiobraDialog = ({ open, handleClose, id_maniobra }) => {
     const [loading, setLoading] = useState(false);
-    const [motivo_cancelacion, setValue] = React.useState("");
+    const [motivo, setValue] = React.useState("");
+    const [comentarios, setComentarios] = React.useState("");
 
     const handleSelectionChange = (e) => {
         setValue(e.target.value);
@@ -21,14 +22,26 @@ const CancelarManiobraDialog = ({ open, handleClose, id_maniobra }) => {
 
     const cancelarManiobra = () => {
 
-        if (motivo_cancelacion == "") {
+        if (motivo == "") {
             toast.error('Añade un motivo de cancelación.');
+            return;
+        }
+
+        if (comentarios == "") {
+            toast.error('Añade un comentario de cancelación.');
             return;
         }
 
         setLoading(true);
 
-        odooApi.get(`/maniobras/cancelar/${id_maniobra}/${motivo_cancelacion}`)
+        const data = {
+            motivo,
+            comentarios,
+        };
+
+        console.log(data);
+
+        odooApi.patch(`/maniobras/cancelar/${id_maniobra}`, data)
             .then((response) => {
                 setLoading(false);
                 if (response.data.status === 'success') {
@@ -68,12 +81,15 @@ const CancelarManiobraDialog = ({ open, handleClose, id_maniobra }) => {
                         variant='bordered'
                     >
                         <SelectItem key="perdida_operador">Pérdida del operador</SelectItem>
-                        <SelectItem key="error_datos">Error en los datos</SelectItem>
+                        <SelectItem key="error_datos">Error en datos de captura</SelectItem>
+                        <SelectItem key="seguimiento_ejecutivo">Falta de seguimiento ejecutivo</SelectItem>
+                        <SelectItem key="falla_mecanica">Falla mecanica de equipos</SelectItem>
                     </Select>
 
                     <Textarea
                         label="Comentarios"
-                        variant='bordered'>
+                        variant='bordered'
+                        onValueChange={setComentarios}>
                     </Textarea>
                 </div>
 
