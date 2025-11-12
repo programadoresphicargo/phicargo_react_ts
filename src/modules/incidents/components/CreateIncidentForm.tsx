@@ -24,6 +24,7 @@ import { NumberInput } from "@heroui/react";
 import SelectEmpleado from '@/phicargo/descuentos/solicitante';
 import IncidentChip from './IncidentChip';
 import Swal from 'sweetalert2';
+import { useState } from 'react';
 
 interface Props {
   mode: "create" | "edit";
@@ -59,7 +60,9 @@ export const CreateIncidentForm = ({
 
     damageCostDisabled,
 
-    submit,
+    Create,
+    Update,
+
     isPending,
     isDirectionReport,
     confirmIncident,
@@ -72,6 +75,7 @@ export const CreateIncidentForm = ({
     onSuccess
   });
 
+  const [isEditingEnabled, setIsEditingEnabled] = useState(false);
   const isEditing = mode === "edit";
   const isConfirmedOrCanceled = isEditing && (incident?.state === "confirmed" || incident?.state === "canceled");
   const criticalDisabled = isConfirmedOrCanceled;
@@ -107,35 +111,67 @@ export const CreateIncidentForm = ({
             <IncidentChip incident={incident} />
           </div>
         )}
+
+        {!isEditing && (
+          <Button
+            color='success'
+            className='text-white'
+            radius='full'
+            onPress={Create}
+            isLoading={isPending}
+            isDisabled={criticalDisabled}
+          >Registrar
+          </Button>
+        )}
+
         {isEditing && (
           <>
-            <Button
-              color='primary'
-              radius='full'
-              onPress={submit}
-              isLoading={isPending}
-              isDisabled={criticalDisabled}
-            >Guardar
-            </Button>
-            
-            <Button
-              color="success"
-              isDisabled={incident?.state === "confirmed" || incident?.state === "canceled"}
-              onPress={() => handleConfirm()}
-              className='text-white'
-              radius='full'
-            >
-              Confirmar incidencia
-            </Button>
 
-            <Button
-              color="danger"
-              isDisabled={incident?.state === "confirmed" || incident?.state === "canceled"}
-              onPress={() => handleCancelIncident()}
-              radius='full'
-            >
-              Cancelar incidencia
-            </Button>
+            {!isEditingEnabled && (
+              <Button
+                color="warning"
+                className="text-white"
+                radius="full"
+                onPress={() => setIsEditingEnabled(true)}
+                isDisabled={criticalDisabled}
+              >
+                Editar
+              </Button>
+            )}
+
+            {isEditingEnabled && (
+              <Button
+                color='primary'
+                radius='full'
+                onPress={Update}
+                isLoading={isPending}
+                isDisabled={criticalDisabled}
+              >Guardar
+              </Button>
+            )}
+
+            {!isEditingEnabled && (
+              <>
+                <Button
+                  color="success"
+                  isDisabled={incident?.state === "confirmed" || incident?.state === "canceled"}
+                  onPress={() => handleConfirm()}
+                  className='text-white'
+                  radius='full'
+                >
+                  Confirmar incidencia
+                </Button>
+
+                <Button
+                  color="danger"
+                  isDisabled={incident?.state === "confirmed" || incident?.state === "canceled"}
+                  onPress={() => handleCancelIncident()}
+                  radius='full'
+                >
+                  Cancelar incidencia
+                </Button>
+              </>
+            )}
           </>
         )}
       </div>
@@ -156,7 +192,7 @@ export const CreateIncidentForm = ({
                 onValueChange={field.onChange}
                 isInvalid={!!fieldState.error}
                 errorMessage={fieldState.error?.message}
-                isDisabled={criticalDisabled}
+                isDisabled={criticalDisabled || !isEditingEnabled}
               >
                 <Radio value={INCIDENT_TYPES.OPERATIVE}>Operativa</Radio>
                 <Radio value={INCIDENT_TYPES.LEGAL}>Legal</Radio>
@@ -173,7 +209,7 @@ export const CreateIncidentForm = ({
             render={({ field, fieldState }) => (
               <Select
                 label="Incidencia"
-                isDisabled={criticalDisabled}
+                isDisabled={criticalDisabled || !isEditingEnabled}
                 selectedKeys={field.value ? [field.value] : []}
                 onSelectionChange={(keys) => {
                   const value = Array.from(keys)[0];
@@ -202,7 +238,7 @@ export const CreateIncidentForm = ({
                 name={field.name}
                 label="Operador"
                 setValue={setValue}
-                isDisabled={criticalDisabled}
+                isDisabled={criticalDisabled || !isEditingEnabled}
               />
             )}
           />
@@ -217,7 +253,7 @@ export const CreateIncidentForm = ({
               return (
                 <DatePicker
                   label="Fecha de Incidencia"
-                  isDisabled={criticalDisabled}
+                  isDisabled={criticalDisabled || !isEditingEnabled}
                   value={calendarValue} // ✅ CalendarDate compatible con HeroUI
                   onChange={(val) => {
                     // Convertimos CalendarDate de vuelta a Dayjs
@@ -241,7 +277,7 @@ export const CreateIncidentForm = ({
                 minRows={6}
                 value={field.value || ""}
                 onChange={field.onChange}
-                isDisabled={criticalDisabled}
+                isDisabled={criticalDisabled || !isEditingEnabled}
                 isInvalid={!!fieldState.error}
                 errorMessage={fieldState.error?.message}
               />
@@ -256,7 +292,7 @@ export const CreateIncidentForm = ({
                 <Checkbox
                   isSelected={field.value || false}
                   onValueChange={field.onChange}
-                  isDisabled={isDirectionReport || criticalDisabled}
+                  isDisabled={isDirectionReport || criticalDisabled || !isEditingEnabled}
                 >
                   ¿El operador es responsable?
                 </Checkbox>
@@ -265,7 +301,7 @@ export const CreateIncidentForm = ({
             <Checkbox
               checked={createUnavailability}
               onValueChange={setCreateUnavailability}
-              isDisabled={isDirectionReport || criticalDisabled || isEditing}
+              isDisabled={isDirectionReport || criticalDisabled || !isEditingEnabled}
             >
               Crear Indisponibilidad
             </Checkbox>
@@ -370,7 +406,7 @@ export const CreateIncidentForm = ({
             <LegalDetailsSection
               control={control}
               damageCostDisabled={damageCostDisabled}
-              disabled={isDirectionReport || criticalDisabled}
+              disabled={isDirectionReport || criticalDisabled || !isEditingEnabled}
             />
 
             <VehicleAutocompleteInput
@@ -378,7 +414,7 @@ export const CreateIncidentForm = ({
               name="vehicleId"
               label="Unidad Afectada"
               setValue={setValue}
-              disabled={isDirectionReport || criticalDisabled}
+              disabled={isDirectionReport || criticalDisabled || !isEditingEnabled}
               helperText="Seleccionar unidad afectada, si aplica"
             />
 
@@ -429,7 +465,7 @@ export const CreateIncidentForm = ({
               files={files}
               setFiles={setFiles}
               acceptedFileTypes="image/jpeg, image/png"
-              disabled={criticalDisabled}
+              disabled={criticalDisabled || !isEditingEnabled}
             />
           </div>
         </div>
@@ -457,7 +493,7 @@ export const CreateIncidentForm = ({
             isSelected={createDiscount}
             checked={createDiscount}
             onValueChange={setCreateDiscount}
-            isDisabled={isDirectionReport || criticalDisabled || (isEditing && createDiscount)}
+            isDisabled={isDirectionReport || criticalDisabled || (isEditing && createDiscount) || !isEditingEnabled}
           >
             Registrar Descuento
           </Checkbox>
@@ -489,7 +525,7 @@ export const CreateIncidentForm = ({
                     value={field.value}
                     setSolicitante={setValue}
                     placeholder={"Encargado de departamento que hace la solicitud"}
-                    isDisabled={isDirectionReport || criticalDisabled}
+                    isDisabled={isDirectionReport || criticalDisabled || !isEditingEnabled}
                   />
                 )}
               />
@@ -512,7 +548,7 @@ export const CreateIncidentForm = ({
                     onChange={field.onChange}
                     isInvalid={!!fieldState.error}
                     errorMessage={fieldState.error?.message}
-                    isDisabled={isDirectionReport || criticalDisabled}
+                    isDisabled={isDirectionReport || criticalDisabled || !isEditingEnabled}
                     startContent={
                       <div className="pointer-events-none flex items-center">
                         <span className="text-default-400 text-small">$</span>
@@ -539,7 +575,7 @@ export const CreateIncidentForm = ({
                     value={field.value || 0}
                     onChange={field.onChange}
                     isInvalid={!!fieldState.error}
-                    isDisabled={isDirectionReport || criticalDisabled}
+                    isDisabled={isDirectionReport || criticalDisabled || !isEditingEnabled}
                     errorMessage={fieldState.error?.message}
                     startContent={
                       <div className="pointer-events-none flex items-center">
@@ -570,7 +606,7 @@ export const CreateIncidentForm = ({
                       const value = Array.from(keys)[0];
                       field.onChange(value);
                     }}
-                    isDisabled={isDirectionReport || criticalDisabled}
+                    isDisabled={isDirectionReport || criticalDisabled || !isEditingEnabled}
                     isInvalid={!!fieldState.error}
                     errorMessage={fieldState.error?.message}
                   >
@@ -597,7 +633,7 @@ export const CreateIncidentForm = ({
                     value={field.value || ""}
                     onChange={field.onChange}
                     isInvalid={!!fieldState.error}
-                    isDisabled={isDirectionReport || criticalDisabled}
+                    isDisabled={isDirectionReport || criticalDisabled || !isEditingEnabled}
                     errorMessage={fieldState.error?.message}
                   />
                 )}
@@ -619,7 +655,7 @@ export const CreateIncidentForm = ({
                     minRows={4}
                     value={field.value || ""}
                     onChange={field.onChange}
-                    isDisabled={isDirectionReport || criticalDisabled}
+                    isDisabled={isDirectionReport || criticalDisabled || !isEditingEnabled}
                     isInvalid={!!fieldState.error}
                     errorMessage={fieldState.error?.message}
                   />

@@ -222,10 +222,8 @@ export function useCreateIncidentForm({
     );
   };
 
-  const submit = () =>
-    mode === "create"
-      ? form.handleSubmit(submitCreate)()
-      : form.handleSubmit(submitUpdate)();
+  const Create = () => form.handleSubmit(submitCreate)()
+  const Update = () => form.handleSubmit(submitUpdate)();
 
   const cancelIncidentFn = (id?: number) => {
     const toId = id ?? incident?.id;
@@ -253,7 +251,8 @@ export function useCreateIncidentForm({
     setCreateDiscount,
     confirmIncident: confirmIncidentFn,
     cancelIncident: cancelIncidentFn,
-    submit
+    Create,
+    Update
   };
 }
 
