@@ -215,7 +215,7 @@ export function useCreateIncidentForm({
     console.log(allowed);
 
     updateIncident.mutate(
-      { id: incident.id, updatedItem: allowed },
+      { id: incident.id, updatedItem: allowed, files: files },
       {
         onSuccess: () => onSuccess?.(),
       }

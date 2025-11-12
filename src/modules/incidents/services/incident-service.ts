@@ -114,11 +114,15 @@ export class IncidentsService {
   public static async updateIncident({
     id,
     updatedItem,
+    files,
   }: UpdatableItem<IncidentUpdate>) {
     const url = `/drivers/incidents/${id}`;
     const data = IncidentAdapter.driverIncidentUpdateToApi(updatedItem);
     try {
       const response = await odooApi.patch<IncidentApi>(url, data);
+      if (response.status === 200 && files && files.length > 0) {
+        await uploadFiles(files, 'incidents', 'x_driver_incidents', id);
+      }
       return IncidentAdapter.driverIncidentToLocal(response.data);
     } catch (error) {
       console.error(error);

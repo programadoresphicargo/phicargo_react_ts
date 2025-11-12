@@ -31,6 +31,7 @@ export type StatusColor<T extends string> = {
 export interface UpdatableItem<T> {
   id: number;
   updatedItem: T;
+  files?: File[];
 }
 
 export interface SimpleData {
