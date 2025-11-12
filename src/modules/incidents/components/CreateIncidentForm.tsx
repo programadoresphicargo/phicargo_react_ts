@@ -192,7 +192,7 @@ export const CreateIncidentForm = ({
                 onValueChange={field.onChange}
                 isInvalid={!!fieldState.error}
                 errorMessage={fieldState.error?.message}
-                isDisabled={criticalDisabled || !isEditingEnabled}
+                isDisabled={criticalDisabled || (isEditing && !isEditingEnabled)}
               >
                 <Radio value={INCIDENT_TYPES.OPERATIVE}>Operativa</Radio>
                 <Radio value={INCIDENT_TYPES.LEGAL}>Legal</Radio>
@@ -209,7 +209,7 @@ export const CreateIncidentForm = ({
             render={({ field, fieldState }) => (
               <Select
                 label="Incidencia"
-                isDisabled={criticalDisabled || !isEditingEnabled}
+                isDisabled={criticalDisabled || (isEditing && !isEditingEnabled)}
                 selectedKeys={field.value ? [field.value] : []}
                 onSelectionChange={(keys) => {
                   const value = Array.from(keys)[0];
@@ -238,7 +238,7 @@ export const CreateIncidentForm = ({
                 name={field.name}
                 label="Operador"
                 setValue={setValue}
-                isDisabled={criticalDisabled || !isEditingEnabled}
+                isDisabled={criticalDisabled || (isEditing && !isEditingEnabled)}
               />
             )}
           />
@@ -253,7 +253,7 @@ export const CreateIncidentForm = ({
               return (
                 <DatePicker
                   label="Fecha de Incidencia"
-                  isDisabled={criticalDisabled || !isEditingEnabled}
+                  isDisabled={criticalDisabled || (isEditing && !isEditingEnabled)}
                   value={calendarValue} // ✅ CalendarDate compatible con HeroUI
                   onChange={(val) => {
                     // Convertimos CalendarDate de vuelta a Dayjs
@@ -277,7 +277,7 @@ export const CreateIncidentForm = ({
                 minRows={6}
                 value={field.value || ""}
                 onChange={field.onChange}
-                isDisabled={criticalDisabled || !isEditingEnabled}
+                isDisabled={criticalDisabled || (isEditing && !isEditingEnabled)}
                 isInvalid={!!fieldState.error}
                 errorMessage={fieldState.error?.message}
               />
@@ -292,7 +292,7 @@ export const CreateIncidentForm = ({
                 <Checkbox
                   isSelected={field.value || false}
                   onValueChange={field.onChange}
-                  isDisabled={isDirectionReport || criticalDisabled || !isEditingEnabled}
+                  isDisabled={isDirectionReport || criticalDisabled || (isEditing && !isEditingEnabled)}
                 >
                   ¿El operador es responsable?
                 </Checkbox>
@@ -301,7 +301,7 @@ export const CreateIncidentForm = ({
             <Checkbox
               checked={createUnavailability}
               onValueChange={setCreateUnavailability}
-              isDisabled={isDirectionReport || criticalDisabled || !isEditingEnabled}
+              isDisabled={isDirectionReport || isEditing}
             >
               Crear Indisponibilidad
             </Checkbox>
@@ -406,7 +406,7 @@ export const CreateIncidentForm = ({
             <LegalDetailsSection
               control={control}
               damageCostDisabled={damageCostDisabled}
-              disabled={isDirectionReport || criticalDisabled || !isEditingEnabled}
+              disabled={isDirectionReport || criticalDisabled || (isEditing && !isEditingEnabled)}
             />
 
             <VehicleAutocompleteInput
@@ -414,7 +414,7 @@ export const CreateIncidentForm = ({
               name="vehicleId"
               label="Unidad Afectada"
               setValue={setValue}
-              disabled={isDirectionReport || criticalDisabled || !isEditingEnabled}
+              disabled={isDirectionReport || criticalDisabled || (isEditing && !isEditingEnabled)}
               helperText="Seleccionar unidad afectada, si aplica"
             />
 
@@ -465,7 +465,7 @@ export const CreateIncidentForm = ({
               files={files}
               setFiles={setFiles}
               acceptedFileTypes="image/jpeg, image/png"
-              disabled={criticalDisabled || !isEditingEnabled}
+              disabled={criticalDisabled || (isEditing && !isEditingEnabled)}
             />
           </div>
         </div>
@@ -493,7 +493,7 @@ export const CreateIncidentForm = ({
             isSelected={createDiscount}
             checked={createDiscount}
             onValueChange={setCreateDiscount}
-            isDisabled={isDirectionReport || criticalDisabled || (isEditing && createDiscount) || !isEditingEnabled}
+            isDisabled={isDirectionReport || criticalDisabled || (isEditing && createDiscount) || (isEditing && !isEditingEnabled)}
           >
             Registrar Descuento
           </Checkbox>
@@ -525,7 +525,7 @@ export const CreateIncidentForm = ({
                     value={field.value}
                     setSolicitante={setValue}
                     placeholder={"Encargado de departamento que hace la solicitud"}
-                    isDisabled={isDirectionReport || criticalDisabled || !isEditingEnabled}
+                    isDisabled={isDirectionReport || criticalDisabled || (isEditing && !isEditingEnabled)}
                   />
                 )}
               />
@@ -548,7 +548,7 @@ export const CreateIncidentForm = ({
                     onChange={field.onChange}
                     isInvalid={!!fieldState.error}
                     errorMessage={fieldState.error?.message}
-                    isDisabled={isDirectionReport || criticalDisabled || !isEditingEnabled}
+                    isDisabled={isDirectionReport || criticalDisabled || (isEditing && !isEditingEnabled)}
                     startContent={
                       <div className="pointer-events-none flex items-center">
                         <span className="text-default-400 text-small">$</span>
@@ -575,7 +575,7 @@ export const CreateIncidentForm = ({
                     value={field.value || 0}
                     onChange={field.onChange}
                     isInvalid={!!fieldState.error}
-                    isDisabled={isDirectionReport || criticalDisabled || !isEditingEnabled}
+                    isDisabled={isDirectionReport || criticalDisabled || (isEditing && !isEditingEnabled)}
                     errorMessage={fieldState.error?.message}
                     startContent={
                       <div className="pointer-events-none flex items-center">
@@ -606,7 +606,7 @@ export const CreateIncidentForm = ({
                       const value = Array.from(keys)[0];
                       field.onChange(value);
                     }}
-                    isDisabled={isDirectionReport || criticalDisabled || !isEditingEnabled}
+                    isDisabled={isDirectionReport || criticalDisabled || (isEditing && !isEditingEnabled)}
                     isInvalid={!!fieldState.error}
                     errorMessage={fieldState.error?.message}
                   >
@@ -633,7 +633,7 @@ export const CreateIncidentForm = ({
                     value={field.value || ""}
                     onChange={field.onChange}
                     isInvalid={!!fieldState.error}
-                    isDisabled={isDirectionReport || criticalDisabled || !isEditingEnabled}
+                    isDisabled={isDirectionReport || criticalDisabled || (isEditing && !isEditingEnabled)}
                     errorMessage={fieldState.error?.message}
                   />
                 )}
@@ -655,7 +655,7 @@ export const CreateIncidentForm = ({
                     minRows={4}
                     value={field.value || ""}
                     onChange={field.onChange}
-                    isDisabled={isDirectionReport || criticalDisabled || !isEditingEnabled}
+                    isDisabled={isDirectionReport || criticalDisabled || (isEditing && !isEditingEnabled)}
                     isInvalid={!!fieldState.error}
                     errorMessage={fieldState.error?.message}
                   />
