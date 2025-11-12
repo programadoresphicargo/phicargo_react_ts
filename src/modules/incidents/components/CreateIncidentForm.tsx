@@ -430,6 +430,7 @@ export const CreateIncidentForm = ({
               files={files}
               setFiles={setFiles}
               acceptedFileTypes="image/jpeg, image/png"
+              disabled={criticalDisabled}
             />
           </div>
         </div>

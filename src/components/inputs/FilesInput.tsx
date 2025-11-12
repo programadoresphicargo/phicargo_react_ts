@@ -6,6 +6,7 @@ interface Props {
   setFiles: React.Dispatch<React.SetStateAction<File[]>>;
   acceptedFileTypes?: string;
   label?: string;
+  disabled?: boolean;
 }
 
 export const FileUploadInput = ({
@@ -13,6 +14,7 @@ export const FileUploadInput = ({
   setFiles,
   acceptedFileTypes,
   label = 'Subir archivos',
+  disabled = false
 }: Props) => {
   const [previews, setPreviews] = useState<string[]>([]);
 
@@ -45,6 +47,7 @@ export const FileUploadInput = ({
           accept={acceptedFileTypes || 'image/*'}
           data-testid="file-input"
           onChange={handleFileChange}
+          disabled={disabled}
         />
       </label>
 
