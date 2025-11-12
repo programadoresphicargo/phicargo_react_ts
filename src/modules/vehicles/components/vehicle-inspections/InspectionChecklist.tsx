@@ -54,7 +54,7 @@ export const InspectionChecklist = ({ onSubmit }: Props) => {
       <ChecklistForm
         items={checklistItems}
         onSubmit={handleSubmit}
-        submitLabel={'Finalizar Revisión'}
+        submitLabel={'Siguiente'}
       />
     </div>
   );

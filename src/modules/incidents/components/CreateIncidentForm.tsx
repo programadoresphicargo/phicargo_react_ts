@@ -430,7 +430,7 @@ export const CreateIncidentForm = ({
                     const value = Array.from(keys)[0];
                     field.onChange(value ? Number(value) : null);
                   }}
-                  isDisabled={isDirectionReport || criticalDisabled}
+                  isDisabled={isDirectionReport || criticalDisabled || isEditing}
                   isInvalid={!!fieldState.error}
                   errorMessage={fieldState.error?.message}
                 >

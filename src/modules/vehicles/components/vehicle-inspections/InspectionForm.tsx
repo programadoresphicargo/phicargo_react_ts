@@ -62,17 +62,19 @@ export const InspectionForm = ({
     const answer0 = checklist[0]?.answer;
     const answer1 = checklist[1]?.answer;
 
-    if (answer0 === 'si' || answer1 === 'no') {
-      setValue('result', 'rejected', { shouldValidate: true });
-    } else if (answer0 === 'no' || answer1 === 'si') {
-      setValue('result', 'approved', { shouldValidate: true });
+    if (inspectionType != 'legal') {
+      if (answer0 === 'si' || answer1 === 'no') {
+        setValue('result', 'rejected', { shouldValidate: true });
+      } else if (answer0 === 'no' || answer1 === 'si') {
+        setValue('result', 'approved', { shouldValidate: true });
+      }
     } else {
-      // Si no hay respuestas válidas, asegura mantener el valor actual o default
       const currentResult = watch('result');
       if (!currentResult) {
         setValue('result', 'approved', { shouldValidate: true });
       }
     }
+
     // ⚠️ Quitamos `result` de dependencias para evitar loops
   }, [checklist, setValue, watch]);
 
