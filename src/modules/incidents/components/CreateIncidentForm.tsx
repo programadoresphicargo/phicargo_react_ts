@@ -73,8 +73,8 @@ export const CreateIncidentForm = ({
   });
 
   const isEditing = mode === "edit";
-  const isConfirmed = isEditing && incident?.state === "confirmed";
-  const criticalDisabled = isConfirmed;
+  const isConfirmedOrCanceled = isEditing && (incident?.state === "confirmed" || incident?.state === "canceled");
+  const criticalDisabled = isConfirmedOrCanceled;
 
   const handleConfirm = () => {
     Swal.fire({
@@ -111,7 +111,7 @@ export const CreateIncidentForm = ({
           <>
             <Button
               color="success"
-              isDisabled={incident?.state === "confirmed"}
+              isDisabled={incident?.state === "confirmed" || incident?.state === "canceled"}
               onPress={() => handleConfirm()}
               className='text-white'
               radius='full'
@@ -121,7 +121,7 @@ export const CreateIncidentForm = ({
 
             <Button
               color="danger"
-              isDisabled={incident?.state === "confirmed"}
+              isDisabled={incident?.state === "confirmed" || incident?.state === "canceled"}
               onPress={() => handleCancelIncident()}
               radius='full'
             >
@@ -458,7 +458,7 @@ export const CreateIncidentForm = ({
             isSelected={createDiscount}
             checked={createDiscount}
             onValueChange={setCreateDiscount}
-            isDisabled={isDirectionReport || criticalDisabled}
+            isDisabled={isDirectionReport || criticalDisabled || (isEditing && createDiscount)}
           >
             Registrar Descuento
           </Checkbox>
