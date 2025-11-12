@@ -26,7 +26,7 @@ import {
   ModalFooter
 } from "@heroui/modal";
 
-export default function MinutaForm({ open, handleClose, id_descuento }) {
+export default function DescuentoForm({ open, handleClose, id_descuento }) {
   const [data, setData] = useState({});
   const [isLoading, setLoading] = useState(false);
   const {

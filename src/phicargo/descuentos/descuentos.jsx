@@ -17,6 +17,7 @@ import MinutaForm from './form';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { Tooltip } from "@heroui/react";
 import { Chip } from '@heroui/react';
+import DescuentoForm from './form';
 
 const { VITE_ODOO_API_URL } = import.meta.env;
 
@@ -32,6 +33,7 @@ const Descuentos = ({ }) => {
   const handleClose = () => {
     setOpen(false);
     setMinuta(null);
+    fetchData();
   };
 
   const [data, setData] = useState([]);
@@ -188,7 +190,7 @@ const Descuentos = ({ }) => {
         <h1 className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text">
           Descuentos
         </h1>
-        <MinutaForm open={open} handleClose={handleClose} id_descuento={id_minuta}></MinutaForm>
+        <DescuentoForm open={open} handleClose={handleClose} id_descuento={id_minuta}></DescuentoForm>
         <Button color='primary' className='text-white' onPress={() => handleClickOpen()} radius='full'><i class="bi bi-plus-circle"></i> Nuevo registro</Button>
         <Button color='success' className='text-white' onPress={() => fetchData()} radius='full'><i class="bi bi-arrow-clockwise"></i> Refrescar</Button>
       </Box>
