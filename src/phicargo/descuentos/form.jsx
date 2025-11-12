@@ -146,7 +146,7 @@ export default function DescuentoForm({ open, handleClose, id_descuento }) {
                   </Button>
                 )}
 
-                {id_descuento && !isEditing && data?.estado !== "confirmado" && (
+                {id_descuento && !isEditing && data?.estado == "borrador" && (
                   <Button color="primary" onPress={() => setIsEditing(true)} radius="full" className="text-white">
                     Editar
                   </Button>
