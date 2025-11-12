@@ -171,7 +171,7 @@ const DetencionesTable = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 230px)',
+        maxHeight: 'calc(100vh - 200px)',
       },
     },
     muiTableBodyCellProps: ({ row }) => ({
@@ -192,6 +192,7 @@ const DetencionesTable = () => {
           flexWrap: 'wrap',
         }}
       >
+        Salidas y llegadas
         <DateRangePicker
           value={range}
           onChange={(value) => setRange(value)}
@@ -203,6 +204,7 @@ const DetencionesTable = () => {
           color='primary'
           onPress={handleExportData}
           startContent={<FileDownloadIcon />}
+          radius="full"
         >
           Exportar todo
         </Button>
@@ -214,6 +216,7 @@ const DetencionesTable = () => {
           }
           onPress={() => handleExportRows(table.getSelectedRowModel().rows)}
           startContent={<FileDownloadIcon />}
+          radius="full"
         >
           Exportar seleccionado
         </Button>
@@ -221,6 +224,7 @@ const DetencionesTable = () => {
         <Button
           color='danger'
           onPress={() => fetchData()}
+          radius="full"
         >
           Refrescar
         </Button>
@@ -233,7 +237,7 @@ const DetencionesTable = () => {
       <CustomNavbar></CustomNavbar>
       <MaterialReactTable
         table={table}
-      />;
+      />
     </>
   );
 };
