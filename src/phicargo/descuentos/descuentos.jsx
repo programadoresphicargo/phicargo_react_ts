@@ -82,10 +82,6 @@ const Descuentos = ({ }) => {
         header: 'Periodicidad',
       },
       {
-        accessorKey: 'comentarios',
-        header: 'Comentarios',
-      },
-      {
         accessorKey: 'estado',
         header: 'Estado',
         Cell: ({ cell }) => {
