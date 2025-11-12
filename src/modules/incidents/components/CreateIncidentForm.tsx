@@ -100,7 +100,7 @@ export const CreateIncidentForm = ({
   return (
     <form className="mt-6 transition-all duration-300 ease-in-out">
 
-      <div className="flex items-center justify-between pb-5 gap-4">
+      <div className="flex items-center justify-start pb-5 gap-4">
         {incident && (
           <div className='pb-5'>
             <h2>Incidencia: {incident.id}</h2>
@@ -109,6 +109,15 @@ export const CreateIncidentForm = ({
         )}
         {isEditing && (
           <>
+            <Button
+              color='primary'
+              radius='full'
+              onPress={submit}
+              isLoading={isPending}
+              isDisabled={criticalDisabled}
+            >Guardar
+            </Button>
+            
             <Button
               color="success"
               isDisabled={incident?.state === "confirmed" || incident?.state === "canceled"}
@@ -129,16 +138,6 @@ export const CreateIncidentForm = ({
             </Button>
           </>
         )}
-
-        <Button
-          color='primary'
-          radius='full'
-          onPress={submit}
-          isLoading={isPending}
-          isDisabled={criticalDisabled}
-        >Guardar
-        </Button>
-
       </div>
       <div
         className={`grid gap-6 transition-all duration-300 ease-in-out grid-cols-[1fr_auto_1fr_auto_1fr]`}
@@ -266,7 +265,7 @@ export const CreateIncidentForm = ({
             <Checkbox
               checked={createUnavailability}
               onValueChange={setCreateUnavailability}
-              isDisabled={isDirectionReport || criticalDisabled  || isEditing}
+              isDisabled={isDirectionReport || criticalDisabled || isEditing}
             >
               Crear Indisponibilidad
             </Checkbox>
