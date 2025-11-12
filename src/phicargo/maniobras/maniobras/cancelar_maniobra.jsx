@@ -48,6 +48,7 @@ const CancelarManiobraDialog = ({ open, handleClose, id_maniobra }) => {
                     handleClose();
                     toast.success(response.data.message);
                     setValue("");
+                    setComentarios("");
                 } else {
                     toast.error(response.data.message);
                 }
@@ -79,6 +80,7 @@ const CancelarManiobraDialog = ({ open, handleClose, id_maniobra }) => {
                         label="Motivo de cancelacion"
                         onChange={handleSelectionChange}
                         variant='bordered'
+                        selectedKeys={[String(motivo)]}
                     >
                         <SelectItem key="perdida_operador">Pérdida del operador</SelectItem>
                         <SelectItem key="error_datos">Error en datos de captura</SelectItem>
