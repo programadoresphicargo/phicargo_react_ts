@@ -266,7 +266,7 @@ export const CreateIncidentForm = ({
             <Checkbox
               checked={createUnavailability}
               onValueChange={setCreateUnavailability}
-              isDisabled={isDirectionReport || criticalDisabled}
+              isDisabled={isDirectionReport || criticalDisabled  || isEditing}
             >
               Crear Indisponibilidad
             </Checkbox>
