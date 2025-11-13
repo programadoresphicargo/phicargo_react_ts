@@ -39,7 +39,11 @@ export default function BajaLinea({ isOpen, onOpen, onOpenChange, id_linea }) {
 
             onClose();
         } catch (error) {
-            console.error("Error al guardar:", error);
+            toast.error("Error al guardar:" + error);
+
+            if (error.response && error.response.data) {
+                toast.error("Detalle:" + error.response.data.detail);
+            }
         } finally {
             setLoading(false);
         }
