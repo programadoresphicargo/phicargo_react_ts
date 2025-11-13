@@ -56,17 +56,16 @@ const DetencionesTable = () => {
 
 
   const columns = [
-    { accessorKey: 'travel_name', header: 'Referencia' },
+    { accessorKey: 'referencia', header: 'Referencia' },
     { accessorKey: 'sucursal', header: 'Sucursal' },
     { accessorKey: 'x_status_viaje', header: 'Estado del viaje' },
-    { accessorKey: 'route_name', header: 'Ruta' },
-    { accessorKey: 'employee_name', header: 'Operador' },
-    { accessorKey: 'x_ejecutivo_viaje_bel', header: 'Ejecutivo' },
+    { accessorKey: 'ruta', header: 'Ruta' },
+    { accessorKey: 'driver', header: 'Operador' },
     { accessorKey: 'inicio_programado', header: 'Inicio programado', },
     { accessorKey: 'fecha_inicio', header: 'Fecha inicio' },
     { accessorKey: 'diferencia_tiempo', header: 'Diferencia tiempo salida' },
     {
-      accessorKey: 'mensaje1', header: 'Mensaje', Cell: ({ cell }) => {
+      accessorKey: 'departure_status', header: 'SALIDA', Cell: ({ cell }) => {
         const valor = cell.getValue() || '';
         var clase;
 
@@ -89,12 +88,12 @@ const DetencionesTable = () => {
         );
       },
     },
-    { accessorKey: 'estatus_salida_justificante', header: 'Estatus justificante' },
+    { accessorKey: 'NOMBRE_JUSTIFICACION_LLEGADA', header: 'Estatus justificante' },
     { accessorKey: 'llegada_planta_programada', header: 'Llegada a planta programada' },
     { accessorKey: 'llegada_planta', header: 'Llegada a planta reportada' },
     { accessorKey: 'diferencia_llegada_planta', header: 'Diferencia tiempo planta' },
     {
-      accessorKey: 'mensaje2', header: 'Mensaje', Cell: ({ cell }) => {
+      accessorKey: 'arrival_status', header: 'LLEGADA', Cell: ({ cell }) => {
         const valor = cell.getValue() || '';
         var clase;
 
@@ -117,7 +116,7 @@ const DetencionesTable = () => {
         );
       },
     },
-    { accessorKey: 'estatus_llegada_justificante', header: 'Estatus justificante' },
+    { accessorKey: 'NOMBRE_JUSTIFICACION_LLEGADA', header: 'Estatus justificante' },
     { accessorKey: 'fecha_finalizado', header: 'Fecha finalizado' },
   ];
 
