@@ -65,25 +65,38 @@ const DetencionesTable = () => {
     { accessorKey: 'fecha_inicio', header: 'Fecha inicio' },
     { accessorKey: 'diferencia_tiempo_salida', header: 'Diferencia tiempo salida' },
     {
-      accessorKey: 'departure_status', header: 'SALIDA', Cell: ({ cell }) => {
-        const valor = cell.getValue() || '';
-        var clase;
+      accessorKey: 'departure_status',
+      header: 'SALIDA',
+      Cell: ({ cell }) => {
+        const raw = cell.getValue() || '';
 
-        if (valor === 'Salió tarde PERO tiene justificación') {
-          clase = 'success';
-        } else if (valor === 'Salió tarde SIN justificación') {
-          clase = 'danger';
-        } else if (valor === 'Va tarde') {
-          clase = 'warning';
-        } else if (valor === 'Llegó temprano') {
-          clase = 'success';
-        } else {
-          clase = 'primary';
-        }
+        // Traducciones de estados
+        const traducciones = {
+          no_info: 'Sin información',
+          start_early: 'Salió temprano',
+          start_late: 'Salió tarde SIN justificación',
+          start_late_justified: 'Salió tarde PERO tiene justificación',
+          in_time: 'A tiempo',
+          late: 'Va tarde',
+        };
+
+        // Colores del Chip según el estado traducido
+        const colores = {
+          'Salió tarde PERO tiene justificación': 'success',
+          'Salió tarde SIN justificación': 'danger',
+          'Va tarde': 'warning',
+          'Llegó temprano': 'success',
+          'Salió temprano': 'success',
+          'A tiempo': 'primary',
+          'Sin información': 'primary',
+        };
+
+        const valorTraducido = traducciones[raw] || raw;
+        const colorChip = colores[valorTraducido] || 'primary';
 
         return (
-          <Chip className="text-white" color={clase} size='sm'>
-            {valor}
+          <Chip className="text-white" color={colorChip} size="sm">
+            {valorTraducido}
           </Chip>
         );
       },
@@ -93,25 +106,33 @@ const DetencionesTable = () => {
     { accessorKey: 'llegada_planta', header: 'Llegada a planta reportada' },
     { accessorKey: 'diferencia_tiempo_llegada', header: 'Diferencia tiempo planta' },
     {
-      accessorKey: 'arrival_status', header: 'LLEGADA', Cell: ({ cell }) => {
-        const valor = cell.getValue() || '';
-        var clase;
+      accessorKey: 'arrival_status',
+      header: 'LLEGADA',
+      Cell: ({ cell }) => {
+        const raw = cell.getValue() || '';
 
-        if (valor === 'Llegó tarde SIN justificación') {
-          clase = 'danger';
-        } else if (valor === 'Llegó tarde PERO tiene justificación') {
-          clase = 'success';
-        } else if (valor === 'Va tarde') {
-          clase = 'warning';
-        } else if (valor === 'Llegó temprano') {
-          clase = 'success';
-        } else {
-          clase = 'primary';
-        }
+        const traducciones = {
+          arrived_late: 'Llegó tarde SIN justificación',
+          arrived_late_justified: 'Llegó tarde PERO tiene justificación',
+          arrived_early: 'Llegó temprano',
+          no_info: 'Sin información',
+          no_arrival_recorded: 'Sin registro de llegada'
+        };
+
+        const colores = {
+          'Llegó tarde SIN justificación': 'danger',
+          'Llegó tarde PERO tiene justificación': 'success',
+          'Llegó temprano': 'success',
+          'Sin información': 'primary',
+          'Sin registro de llegada': 'primary'
+        };
+
+        const label = traducciones[raw] || raw; // si llega otro valor, lo mostramos tal cual
+        const color = colores[label] || 'primary';
 
         return (
-          <Chip color={clase} size='sm' className="text-white">
-            {valor}
+          <Chip color={color} size="sm" className="text-white">
+            {label}
           </Chip>
         );
       },
