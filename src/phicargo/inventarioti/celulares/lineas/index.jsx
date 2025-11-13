@@ -19,6 +19,7 @@ import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import EmpleadosTI from './tabla';
 import CelularesTabla from './tabla';
+import LineasTabla from './tabla';
 
 const Celulares = () => {
     const [value, setValue] = React.useState('1');
@@ -42,8 +43,8 @@ const Celulares = () => {
                         <Tab label="Inactivas" value="2" sx={{ fontFamily: 'Inter' }} />
                     </TabList>
                 </Box>
-                <TabPanel value="1" sx={{ padding: 0, margin: 0 }}><CelularesTabla active={true}></CelularesTabla></TabPanel>
-                <TabPanel value="2" sx={{ padding: 0, margin: 0 }}><CelularesTabla active={false}></CelularesTabla></TabPanel>
+                <TabPanel value="1" sx={{ padding: 0, margin: 0 }}><LineasTabla active={true}></LineasTabla></TabPanel>
+                <TabPanel value="2" sx={{ padding: 0, margin: 0 }}><LineasTabla active={false}></LineasTabla></TabPanel>
             </TabContext >
         </Box >
     );

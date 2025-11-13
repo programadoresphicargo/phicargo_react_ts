@@ -9,15 +9,15 @@ import { DatePicker } from 'antd';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import odooApi from '@/api/odoo-api';
 import NavbarInventarioTI from '../../navbar';
-import FormCelulares from './form';
 import {
     useDisclosure,
 } from "@heroui/react";
 import { exportToCSV } from '../../../utils/export';
+import FormLineas from './form';
 
-const CelularesTabla = ({ active }) => {
+const LineasTabla = ({ active }) => {
     const [isLoading, setLoading] = useState(false);
-    const [id_celular, setCelular] = useState(0);
+    const [id_linea, setCelular] = useState(0);
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
     const [data, setData] = useState([]);
@@ -191,10 +191,10 @@ const CelularesTabla = ({ active }) => {
     return (
         <div>
             <MaterialReactTable table={table} />
-            <FormCelulares isOpen={isOpen} onOpen={onOpen} onOpenChange={onOpenChange} id_celular={id_celular}></FormCelulares>
+            <FormLineas isOpen={isOpen} onOpen={onOpen} onOpenChange={onOpenChange} id_linea={id_linea}></FormLineas>
         </div>
     );
 };
 
-export default CelularesTabla;
+export default LineasTabla;
 

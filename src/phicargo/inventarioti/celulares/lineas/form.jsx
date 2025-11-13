@@ -21,7 +21,7 @@ import { parseDate, parseDateTime, getLocalTimeZone } from "@internationalized/d
 import { today } from "@internationalized/date";
 import BajaLinea from "./baja_form";
 
-export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_linea }) {
+export default function FormLineas({ isOpen, onOpen, onOpenChange, id_linea }) {
 
     const [isBajaModalOpen, setBajaModalOpen] = useState(false);
 
