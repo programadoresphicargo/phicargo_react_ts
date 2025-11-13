@@ -63,7 +63,7 @@ const DetencionesTable = () => {
     { accessorKey: 'driver', header: 'Operador' },
     { accessorKey: 'inicio_programado', header: 'Inicio programado', },
     { accessorKey: 'fecha_inicio', header: 'Fecha inicio' },
-    { accessorKey: 'diferencia_tiempo', header: 'Diferencia tiempo salida' },
+    { accessorKey: 'diferencia_tiempo_salida', header: 'Diferencia tiempo salida' },
     {
       accessorKey: 'departure_status', header: 'SALIDA', Cell: ({ cell }) => {
         const valor = cell.getValue() || '';

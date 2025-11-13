@@ -19,7 +19,7 @@ import toast from 'react-hot-toast';
 import { parseDate, parseDateTime, getLocalTimeZone } from "@internationalized/date";
 import { today } from "@internationalized/date";
 
-export default function BajaCelular({ isOpen, onOpen, onOpenChange, id_celular }) {
+export default function BajaLinea({ isOpen, onOpen, onOpenChange, id_linea }) {
 
     const [isLoading, setLoading] = useState(false);
 
@@ -29,16 +29,8 @@ export default function BajaCelular({ isOpen, onOpen, onOpenChange, id_celular }
         try {
             setLoading(true);
 
-            if (id_celular) {
-                const response = await odooApi.put(`/inventarioti/dispositivos/baja/${id_celular}`,
-                    {},
-                    {
-                        params: {
-                            tipo: 'celular',
-                            motivo_baja: data?.motivo_baja,
-                            comentarios_baja: data?.comentarios_baja
-                        }
-                    });
+            if (id_linea) {
+                const response = await odooApi.put(`/inventarioti/lineas/baja/${id_linea}`, data);
                 if (response.data.status == "success") {
                     toast.success(response.data.message);
                     setData([]);
@@ -66,7 +58,7 @@ export default function BajaCelular({ isOpen, onOpen, onOpenChange, id_celular }
                 <ModalContent>
                     {(onClose) => (
                         <>
-                            <ModalHeader className="flex flex-col gap-1">Registro de baja {id_celular}</ModalHeader>
+                            <ModalHeader className="flex flex-col gap-1">Registro de baja de linea {id_linea}</ModalHeader>
                             {isLoading && (
                                 <Progress color="primary" isIndeterminate size="sm" />
                             )}
@@ -98,7 +90,8 @@ export default function BajaCelular({ isOpen, onOpen, onOpenChange, id_celular }
                                     Cancelar
                                 </Button>
                                 <Button
-                                    color={id_celular ? "success" : "primary"}
+                                    radius="full"
+                                    color={id_linea ? "success" : "primary"}
                                     onPress={() => handleSave(onClose)}
                                     className="text-white"
                                     isDisabled={isLoading}

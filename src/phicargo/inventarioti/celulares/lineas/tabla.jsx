@@ -25,7 +25,7 @@ const CelularesTabla = ({ active }) => {
     const fetchData = async () => {
         try {
             setLoading(true);
-            const response = await odooApi.get('/inventarioti/lineas/');
+            const response = await odooApi.get(`/inventarioti/lineas/${active}`);
             setData(response.data);
             setLoading(false);
         } catch (error) {

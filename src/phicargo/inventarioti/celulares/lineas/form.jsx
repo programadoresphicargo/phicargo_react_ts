@@ -12,15 +12,16 @@ import {
     DatePicker,
     Textarea,
     Progress,
+    Checkbox,
 } from "@heroui/react";
 import { Select, SelectItem } from "@heroui/react";
 import React, { useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { parseDate, parseDateTime, getLocalTimeZone } from "@internationalized/date";
 import { today } from "@internationalized/date";
-import BajaCelular from "./baja_form";
+import BajaLinea from "./baja_form";
 
-export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular }) {
+export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_linea }) {
 
     const [isBajaModalOpen, setBajaModalOpen] = useState(false);
 
@@ -32,10 +33,10 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
     const [data, setData] = useState([]);
 
     const fetchData = async () => {
-        if (id_celular) {
+        if (id_linea) {
             try {
                 setLoading(true);
-                const response = await odooApi.get('/inventarioti/lineas/id_linea/' + id_celular);
+                const response = await odooApi.get('/inventarioti/lineas/id_linea/' + id_linea);
                 setData(response.data);
                 setLoading(false);
             } catch (error) {
@@ -48,21 +49,21 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
     };
 
     useEffect(() => {
-        if (!id_celular) {
+        if (!id_linea) {
             setData([]);
             return; // Evita que llame a fetchData si no hay id
         }
         fetchData();
-    }, [id_celular]);
+    }, [id_linea]);
 
     useEffect(() => {
         if (!isOpen) {
             setData([]);
         }
-    }, [isOpen, id_celular]);
+    }, [isOpen, id_linea]);
 
     useEffect(() => {
-        if (isBajaModalOpen == false && id_celular) {
+        if (isBajaModalOpen == false && id_linea) {
             fetchData();
         }
     }, [isBajaModalOpen]);
@@ -71,9 +72,9 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
         try {
             setLoading(true);
 
-            if (id_celular) {
+            if (id_linea) {
                 // Actualizar
-                const response = await odooApi.put(`/inventarioti/lineas/${id_celular}`, data);
+                const response = await odooApi.put(`/inventarioti/lineas/${id_linea}`, data);
                 if (response.data.status == "success") {
                     toast.success(response.data.message);
                 }
@@ -101,17 +102,17 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
 
     return (
         <>
-            <BajaCelular
+            <BajaLinea
                 isOpen={isBajaModalOpen}
                 onOpenChange={setBajaModalOpen}
-                id_celular={id_celular}>
-            </BajaCelular>
+                id_linea={id_linea}>
+            </BajaLinea>
 
             <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
                 <ModalContent>
                     {(onClose) => (
                         <>
-                            <ModalHeader className="flex flex-col gap-1">Linea: {id_celular}</ModalHeader>
+                            <ModalHeader className="flex flex-col gap-1">Linea: {id_linea}</ModalHeader>
                             {isLoading && (
                                 <Progress color="primary" isIndeterminate size="sm" />
                             )}
@@ -156,19 +157,19 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
                                     errorMessage={!data?.plan ? "Plan es obligatorio" : ""}>
                                 </Input>
 
-
                             </ModalBody>
                             <ModalFooter>
                                 <Button color="danger" variant="light" onPress={onClose}>
                                     Cancelar
                                 </Button>
 
-                                {data?.activo == true && id_celular && (
+                                {data?.activo == true && id_linea && (
                                     <Button
                                         color="danger"
                                         onPress={openBajaModal}
                                         className="text-white"
                                         isDisabled={isLoading}
+                                        radius="full"
                                     >
                                         Baja
                                     </Button>
@@ -176,17 +177,18 @@ export default function FormCelulares({ isOpen, onOpen, onOpenChange, id_celular
 
                                 {(
                                     // Mostrar si es nuevo registro
-                                    !id_celular ||
+                                    !id_linea ||
                                     // O si es edición y está activo
-                                    (id_celular && data?.activo == true)
+                                    (id_linea && data?.activo == true)
                                 ) && (
                                         <Button
-                                            color={id_celular ? "success" : "primary"}
+                                            color={id_linea ? "success" : "primary"}
                                             onPress={() => handleSave(onClose)}
                                             className="text-white"
                                             isDisabled={isLoading}
+                                            radius="full"
                                         >
-                                            {id_celular ? "Actualizar" : "Registrar"}
+                                            {id_linea ? "Actualizar" : "Registrar"}
                                         </Button>
                                     )}
                             </ModalFooter>
