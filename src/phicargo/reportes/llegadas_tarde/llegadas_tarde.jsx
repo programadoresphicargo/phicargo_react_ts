@@ -88,10 +88,10 @@ const DetencionesTable = () => {
         );
       },
     },
-    { accessorKey: 'NOMBRE_JUSTIFICACION_LLEGADA', header: 'Estatus justificante' },
+    { accessorKey: 'nombre_justificacion_salida', header: 'Estatus justificante' },
     { accessorKey: 'llegada_planta_programada', header: 'Llegada a planta programada' },
     { accessorKey: 'llegada_planta', header: 'Llegada a planta reportada' },
-    { accessorKey: 'diferencia_llegada_planta', header: 'Diferencia tiempo planta' },
+    { accessorKey: 'diferencia_tiempo_llegada', header: 'Diferencia tiempo planta' },
     {
       accessorKey: 'arrival_status', header: 'LLEGADA', Cell: ({ cell }) => {
         const valor = cell.getValue() || '';
@@ -116,7 +116,7 @@ const DetencionesTable = () => {
         );
       },
     },
-    { accessorKey: 'NOMBRE_JUSTIFICACION_LLEGADA', header: 'Estatus justificante' },
+    { accessorKey: 'nombre_justificacion_llegada', header: 'Estatus justificante' },
     { accessorKey: 'fecha_finalizado', header: 'Fecha finalizado' },
   ];
 
