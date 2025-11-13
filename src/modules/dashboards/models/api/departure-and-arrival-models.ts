@@ -3,7 +3,7 @@ export type ArrivalStatus =
   | 'no_arrival_recorded'
   | 'arrived_early'
   | 'no_info';
-export type DepartureStatus = 'start_late' | 'late' | 'start_early' | 'no_info';
+export type DepartureStatus = 'start_late' | 'late' | 'start_early' | 'no_info' | 'start_late_justified';
 
 export interface ArrivalApi {
   arrival_status: ArrivalStatus;

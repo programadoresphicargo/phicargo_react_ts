@@ -23,6 +23,7 @@ const statusArrivalConf: {key: ArrivalStatus, label: string}[] = [
 const statusDepartureConf: {key: DepartureStatus, label: string}[] = [
   { key: 'start_early', label: 'Temprano' },
   { key: 'start_late', label: 'Tarde' },
+  { key: 'start_late_justified', label: 'Tarde justificado' },
   { key: 'late', label: 'Va tarde' },
   { key: 'no_info', label: 'Sin Información' },
 ];
