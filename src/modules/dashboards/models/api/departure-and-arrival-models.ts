@@ -1,5 +1,6 @@
 export type ArrivalStatus =
   | 'arrived_late'
+  | 'arrived_late_justified'
   | 'no_arrival_recorded'
   | 'arrived_early'
   | 'no_info';
@@ -19,6 +20,7 @@ export interface ArrivalStatusDriverApi {
   driver: string;
   arrived_early: number;
   arrived_late: number;
+  arrived_late_justified: number;
   no_arrival_recorded: number;
 }
 

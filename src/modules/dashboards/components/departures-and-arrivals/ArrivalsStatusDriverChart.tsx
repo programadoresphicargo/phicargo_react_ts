@@ -69,6 +69,14 @@ export const ArrivalsStatusDriverChart = (props: Props) => {
           backgroundColor: 'rgba(40, 159, 64, 0.6)',
           borderColor: ['rgba(40, 159, 64, 1)'],
         },
+        {
+          label: 'Tarde justificado',
+          data: data.arrivalStatusDrivers.map((item) => item.arrivalLateJustified),
+          borderWidth: 2,
+          borderRadius: 10,
+          backgroundColor: 'rgba(40, 109, 64, 0.6)',
+          borderColor: ['rgba(40, 129, 64, 1)'],
+        },
       ],
     };
 
@@ -97,6 +105,10 @@ const exportConf: ExportConfig<ArrivalStatusDriver> = {
     {
       accessorFn: (data) => data.arrivalLate,
       header: 'Tarde',
+    },
+    {
+      accessorFn: (data) => data.arrivalLateJustified,
+      header: 'Tarde justificado',
     },
     { accessorFn: (data) => data.noArrivalRecorded, header: 'Sin informacion' },
   ],

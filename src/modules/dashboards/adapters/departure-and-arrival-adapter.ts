@@ -13,14 +13,15 @@ import type {
   DepartureStatus,
 } from '../models/api/departure-and-arrival-models';
 
-const statusArrivalConf: {key: ArrivalStatus, label: string}[] = [
+const statusArrivalConf: { key: ArrivalStatus, label: string }[] = [
   { key: 'arrived_early', label: 'Temprano' },
   { key: 'arrived_late', label: 'Tarde' },
+  { key: 'arrived_late_justified', label: 'Tarde justificado' },
   { key: 'no_arrival_recorded', label: 'Sin Llegada Registrada' },
   { key: 'no_info', label: 'Sin Información' },
 ];
 
-const statusDepartureConf: {key: DepartureStatus, label: string}[] = [
+const statusDepartureConf: { key: DepartureStatus, label: string }[] = [
   { key: 'start_early', label: 'Temprano' },
   { key: 'start_late', label: 'Tarde' },
   { key: 'start_late_justified', label: 'Tarde justificado' },
@@ -44,6 +45,7 @@ const arrivalStatusDriverToLocal = (
   driver: data.driver,
   arrivalEarly: data.arrived_early,
   arrivalLate: data.arrived_late,
+  arrivalLateJustified: data.arrived_late_justified,
   noArrivalRecorded: data.no_arrival_recorded,
 });
 

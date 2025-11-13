@@ -12,6 +12,7 @@ export interface ArrivalStatusDriver {
   driver: string;
   arrivalEarly: number;
   arrivalLate: number;
+  arrivalLateJustified: number;
   noArrivalRecorded: number;
 }
 
