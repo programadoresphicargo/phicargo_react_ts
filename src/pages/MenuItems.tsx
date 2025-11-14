@@ -12,7 +12,6 @@ import reportesImg from '../assets/menu/reportes.png';
 import shipingcontainer from '../assets/menu/shiping-container.png';
 import turnos_img from '../assets/menu/turnos.png';
 import usuarios_img from '../assets/menu/usuarios.png';
-import descuento from '../assets/menu/descuento.png';
 import viajes_img from '../assets/menu/viajes.png';
 import almacen from '../assets/menu/almacen.png';
 import chatbot from '../assets/menu/chatbot.png';
