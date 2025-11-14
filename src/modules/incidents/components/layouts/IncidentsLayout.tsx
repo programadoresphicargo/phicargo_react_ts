@@ -5,14 +5,21 @@ import { IncidentsProvider } from '../../context/IncidentsContext';
 
 const INCIDENTS_PERMISSION = 214;
 const DIRECTION_INCIDENTS_PERMISSION = 215;
-const VEHICLE_INSPECTION_PERMISSION_SECURITY= 216;
+const VEHICLE_INSPECTION_PERMISSION_SECURITY = 216;
 const VEHICLE_INSPECTION_PERMISSION_LEGAL = 217;
+const DISCOUNTS = 444;
 
 const pages: MenuItemType[] = [
   {
     name: 'Incidencias',
     path: '/incidencias',
     requiredPermissions: [INCIDENTS_PERMISSION],
+    exact: true,
+  },
+  {
+    name: 'Descuentos',
+    path: '/descuentos',
+    requiredPermissions: [DISCOUNTS],
     exact: true,
   },
   {
