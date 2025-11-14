@@ -140,10 +140,4 @@ export const menuItems: MenuItemType[] = [
   link: '/celulares',
   requiredPermissions: [701],
  },
- {
-  icon: descuento,
-  label: 'Descuentos',
-  link: '/descuentos',
-  requiredPermissions: [444],
- },
 ];
