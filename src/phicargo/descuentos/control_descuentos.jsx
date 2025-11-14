@@ -8,13 +8,8 @@ import CustomNavbar from "@/pages/CustomNavbar";
 
 export default function ControlDescuentos() {
 
-    const pages = [
-        { name: 'DESCUENTOS', path: '/descuentos' },
-    ];
-
     return (
         <DescuentosProvider>
-            <CustomNavbar pages={pages}></CustomNavbar>
             <Descuentos></Descuentos>
         </DescuentosProvider>
     );

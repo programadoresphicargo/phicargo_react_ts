@@ -171,7 +171,7 @@ const Descuentos = ({ }) => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 200px)',
+        maxHeight: 'calc(100vh - 180px)',
       },
     },
     renderTopToolbarCustomActions: ({ table }) => (

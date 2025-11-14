@@ -10,11 +10,13 @@ const IncidentsPage = lazy(() => import('../pages/IncidentsPage'));
 const DirectionIncidentsPage = lazy(() => import('../pages/DirectionIncidentsPage'));
 const VehicleInspectionPage = lazy(() => import('../pages/VehicleInspectionPage'));
 const VehicleLegalInspectionPage = lazy(() => import('../pages/VehicleLegalInspectionPage'));
+const DescuentosPage = lazy(() => import('../../../phicargo/descuentos/control_descuentos'));
 
 const INCIDENTS_PERMISSION = 214;
 const DIRECTION_INCIDENTS_PERMISSION = 215;
 const VEHICLE_INSPECTION_PERMISSION_SECURITY = 216;
 const VEHICLE_INSPECTION_PERMISSION_LEGAL = 217;
+const DISCOUNT_PERMISSION = 214;
 
 const IncidentsRoutes = () => (
   <Route
@@ -39,6 +41,20 @@ const IncidentsRoutes = () => (
             </Suspense>
           }
           requiredPermissionId={INCIDENTS_PERMISSION}
+        />
+      }
+    />
+
+    <Route
+      path="descuentos"
+      element={
+        <ProtectedRoute
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <DescuentosPage></DescuentosPage>
+            </Suspense>
+          }
+          requiredPermissionId={DISCOUNT_PERMISSION}
         />
       }
     />

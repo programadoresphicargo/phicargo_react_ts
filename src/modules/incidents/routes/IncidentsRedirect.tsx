@@ -3,6 +3,7 @@ import { useAuthContext } from '@/modules/auth/hooks';
 
 const INCIDENTS_SUBROUTES = [
     { path: 'incidencias', permission: 214 },
+    { path: 'descuentos', permission: 444 },
     { path: 'direccion', permission: 215 },
     { path: 'inspeccion-unidades', permission: 216 },
     { path: 'inspeccion-unidades-legal', permission: 217 },

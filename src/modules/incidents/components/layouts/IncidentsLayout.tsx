@@ -7,7 +7,7 @@ const INCIDENTS_PERMISSION = 214;
 const DIRECTION_INCIDENTS_PERMISSION = 215;
 const VEHICLE_INSPECTION_PERMISSION_SECURITY = 216;
 const VEHICLE_INSPECTION_PERMISSION_LEGAL = 217;
-const DISCOUNTS = 444;
+const DISCOUNTS_PERSMISSION = 444;
 
 const pages: MenuItemType[] = [
   {
@@ -18,8 +18,8 @@ const pages: MenuItemType[] = [
   },
   {
     name: 'Descuentos',
-    path: '/descuentos',
-    requiredPermissions: [DISCOUNTS],
+    path: '/incidencias/descuentos',
+    requiredPermissions: [DISCOUNTS_PERSMISSION],
     exact: true,
   },
   {
