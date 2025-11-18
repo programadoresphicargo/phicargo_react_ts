@@ -93,6 +93,7 @@ const Documentacion = ({ }) => {
           <Button
             color='primary'
             onPress={() => obtenerUrlPublico(row.original.id_onedrive)}
+            radius="full"
           >
             Ver archivo
           </Button>
@@ -105,6 +106,7 @@ const Documentacion = ({ }) => {
           <Button
             color='danger'
             onPress={() => handleClickOpenV(row.original.id_onedrive)}
+            radius="full"
           >
             Visualizar
           </Button>
