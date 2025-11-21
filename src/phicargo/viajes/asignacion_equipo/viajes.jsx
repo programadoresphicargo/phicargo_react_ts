@@ -32,6 +32,7 @@ const ViajesProgramados = ({ }) => {
   const [date, setDate] = useState(new Date());
   const [value, setValue] = React.useState(new Set(["1"]));
   const [open, setOpen] = React.useState(false);
+  const [id_cp, setCP] = React.useState(null);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -181,6 +182,7 @@ const ViajesProgramados = ({ }) => {
     muiTableBodyRowProps: ({ row }) => {
       return {
         onClick: () => {
+          setCP(row.original.id);
           handleClickOpen();
         },
         style: {
@@ -304,7 +306,7 @@ const ViajesProgramados = ({ }) => {
           </Toolbar>
         </AppBar>
 
-        <FormularioAsignacionEquipo></FormularioAsignacionEquipo>
+        <FormularioAsignacionEquipo id_cp={id_cp}></FormularioAsignacionEquipo>
 
       </Dialog>
     </>
