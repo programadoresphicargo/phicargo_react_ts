@@ -29,7 +29,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const ViajesProgramados = ({ }) => {
-  const [date, setDate] = useState(null);
+  const [date, setDate] = useState(new Date());
   const [value, setValue] = React.useState(new Set(["1"]));
   const [open, setOpen] = React.useState(false);
 
