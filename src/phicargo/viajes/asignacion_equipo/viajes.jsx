@@ -131,6 +131,8 @@ const ViajesProgramados = () => {
       },
     },
 
+    muiTableBodyCellProps: ({ row }) => { return { sx: { fontFamily: 'Inter', fontWeight: 'normal', fontSize: '12px', }, } },
+
     renderTopToolbarCustomActions: () => (
       <Box
         sx={{
