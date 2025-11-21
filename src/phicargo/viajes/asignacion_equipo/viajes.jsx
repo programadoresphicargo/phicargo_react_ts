@@ -160,8 +160,9 @@ const ViajesProgramados = ({ }) => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
-    state: { showProgressBars: isLoading },
     enableColumnPinning: true,
+    layoutMode: 'grid-no-grow',
+    state: { showProgressBars: isLoading },
     enableStickyHeader: true,
     localization: MRT_Localization_ES,
     columnResizeMode: "onEnd",
@@ -169,6 +170,7 @@ const ViajesProgramados = ({ }) => {
       density: 'compact',
       showColumnFilters: true,
       pagination: { pageSize: 80 },
+      columnPinning: { right: ['trailer1', 'trailer2', 'dolly'] },
     },
     muiTablePaperProps: {
       elevation: 0,

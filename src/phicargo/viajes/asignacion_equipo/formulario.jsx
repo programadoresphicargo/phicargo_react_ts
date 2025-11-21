@@ -4,6 +4,7 @@ import ViajesActivos from './viajes';
 import ViajesProgramados from './viajes';
 import { Grid } from '@mui/system';
 import SelectFlota from '@/phicargo/maniobras/maniobras/selects_flota';
+import { Button } from '@heroui/react';
 
 const FormularioAsignacionEquipo = () => {
 
@@ -19,6 +20,9 @@ const FormularioAsignacionEquipo = () => {
 
     return (
         <Grid padding={2}>
+            <div className='mb-3'>
+                <Button color='success' className='text-white' radius='full'>Guardar asignación</Button>
+            </div>
             <div className="w-full flex flex-row flex-wrap gap-4">
                 <SelectFlota
                     label={'Remolque 1'}
