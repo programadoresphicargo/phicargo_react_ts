@@ -20,7 +20,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import ManiobraContenedores from './contenedores/cps_maniobra';
 import { ManiobraContext } from '../context/viajeContext';
-import MyComponent from './selects_flota';
+import SelectFlota from './selects_flota';
 import PanelEstatus from './envio_estatus/panel';
 import SelectOperador from './select_operador';
 import SelectTerminal from './select_terminal';
@@ -793,7 +793,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                                         />
                                                     </Grid>
                                                     <Grid size={{ xs: 12, md: 6 }}>
-                                                        <MyComponent
+                                                        <SelectFlota
                                                             label={'Vehiculo'}
                                                             id={'vehicle_id'}
                                                             name={'vehicle_id'}
@@ -804,7 +804,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                                         />
                                                     </Grid>
                                                     <Grid size={{ xs: 12, md: 4 }}>
-                                                        <MyComponent
+                                                        <SelectFlota
                                                             label={'Remolque 1'}
                                                             id={'trailer1_id'}
                                                             name={'trailer1_id'}
@@ -815,7 +815,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                                         />
                                                     </Grid>
                                                     <Grid size={{ xs: 12, md: 4 }}>
-                                                        <MyComponent
+                                                        <SelectFlota
                                                             label={'Remolque 2'}
                                                             id={'trailer2_id'}
                                                             name={'trailer2_id'}
@@ -826,7 +826,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                                         />
                                                     </Grid>
                                                     <Grid size={{ xs: 12, md: 4 }}>
-                                                        <MyComponent
+                                                        <SelectFlota
                                                             label={'Dolly'}
                                                             id={'dolly_id'}
                                                             name={'dolly_id'}
@@ -837,7 +837,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                                         />
                                                     </Grid>
                                                     <Grid size={{ xs: 12, md: 6 }}>
-                                                        <MyComponent
+                                                        <SelectFlota
                                                             label={'Motogenerador 1'}
                                                             id={'motogenerador_1'}
                                                             name={'motogenerador_1'}
@@ -848,7 +848,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                                         />
                                                     </Grid>
                                                     <Grid size={{ xs: 12, md: 6 }}>
-                                                        <MyComponent
+                                                        <SelectFlota
                                                             label={'Motogenerador 2'}
                                                             id={'motogenerador_2'}
                                                             name={'motogenerador_2'}

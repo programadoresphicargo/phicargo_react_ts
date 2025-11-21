@@ -5,7 +5,7 @@ import TextField from '@mui/material/TextField';
 import axios from 'axios';
 import odooApi from '@/api/odoo-api';
 
-const MyComponent = ({ label, id, name, onChange, value, tipo, disabled, error_flota }) => {
+const SelectFlota = ({ label, id, name, onChange, value, tipo, disabled = false, error_flota }) => {
     const [options, setOptions] = useState([]);
     const [isLoading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -45,4 +45,4 @@ const MyComponent = ({ label, id, name, onChange, value, tipo, disabled, error_f
     );
 };
 
-export default MyComponent;
+export default SelectFlota;
