@@ -23,6 +23,7 @@ import { DatePicker } from 'rsuite';
 import NavbarTravel from '../navbar_viajes';
 import { Select, SelectItem } from "@heroui/react";
 import FormularioAsignacionEquipo from './formulario';
+import CustomNavbar from '@/pages/CustomNavbar';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -33,6 +34,7 @@ const ViajesProgramados = ({ }) => {
   const [value, setValue] = React.useState(new Set(["1"]));
   const [open, setOpen] = React.useState(false);
   const [id_cp, setCP] = React.useState(null);
+  const [id_pre_asignacion, setPA] = React.useState(null);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -72,8 +74,12 @@ const ViajesProgramados = ({ }) => {
   const columns = useMemo(
     () => [
       {
+        accessorKey: 'id_cp',
+        header: 'CP',
+      },
+      {
         accessorKey: 'carta_porte',
-        header: 'Carta porte',
+        header: 'Carta porte2',
       },
       {
         accessorKey: 'vehiculo_programado',
@@ -182,7 +188,8 @@ const ViajesProgramados = ({ }) => {
     muiTableBodyRowProps: ({ row }) => {
       return {
         onClick: () => {
-          setCP(row.original.id);
+          setCP(row.original.id_cp);
+          setPA(row.original.id_pre_asignacion);
           handleClickOpen();
         },
         style: {
@@ -193,7 +200,7 @@ const ViajesProgramados = ({ }) => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 230px)',
+        maxHeight: 'calc(100vh - 210px)',
       },
     },
     muiTableHeadCellProps: {
@@ -263,14 +270,21 @@ const ViajesProgramados = ({ }) => {
           format="yyyy-MM-dd"
           placeholder="Selecciona una fecha"
         />
-        <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "plan_viaje.csv")} radius='full'>Exportar</Button>
+        <Button
+          color='success'
+          className='text-white'
+          startContent={<i class="bi bi-file-earmark-excel"></i>}
+          onPress={() => exportToCSV(data, columns, "plan_viaje.csv")}
+          radius='full'>
+          Exportar
+        </Button>
       </Box >
     ),
   });
 
   return (
     <>
-      <NavbarTravel></NavbarTravel>
+      <CustomNavbar></CustomNavbar>
       <MaterialReactTable
         table={table}
       />
@@ -306,7 +320,7 @@ const ViajesProgramados = ({ }) => {
           </Toolbar>
         </AppBar>
 
-        <FormularioAsignacionEquipo id_cp={id_cp}></FormularioAsignacionEquipo>
+        <FormularioAsignacionEquipo id_cp={id_cp} id_pre_asignacion={id_pre_asignacion}></FormularioAsignacionEquipo>
 
       </Dialog>
     </>

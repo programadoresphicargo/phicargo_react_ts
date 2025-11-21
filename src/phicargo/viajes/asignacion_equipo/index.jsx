@@ -5,9 +5,7 @@ import ViajesProgramados from './viajes';
 
 const AsignacionEquipo = () => {
     return (
-        <ViajeProvider>
-            <ViajesProgramados></ViajesProgramados>
-        </ViajeProvider>
+        <ViajesProgramados></ViajesProgramados>
     );
 };
 

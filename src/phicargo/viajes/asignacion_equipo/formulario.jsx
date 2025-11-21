@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ViajeProvider } from '../context/viajeContext'
 import ViajesActivos from './viajes';
 import ViajesProgramados from './viajes';
@@ -8,7 +8,7 @@ import { Button } from '@heroui/react';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 
-const FormularioAsignacionEquipo = ({ id_cp }) => {
+const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion }) => {
 
     const [formData, setFormData] = useState({
         id_cp: id_cp
@@ -41,6 +41,31 @@ const FormularioAsignacionEquipo = ({ id_cp }) => {
             toast.error('Error al obtener los datos:' + mensaje);
         }
     };
+
+    const getData = async () => {
+        if (id_pre_asignacion == null) {
+            return;
+        }
+
+        try {
+            setLoading(true);
+            const response = await odooApi.get('/preasignacion_equipo/' + id_pre_asignacion);
+            setFormData(response.data);
+            setLoading(false);
+        } catch (error) {
+            setLoading(false);
+            const mensaje =
+                error?.response?.data?.detail ||
+                error?.response?.data?.message ||
+                error?.message ||
+                'Error desconocido';
+            toast.error('Error al obtener los datos:' + mensaje);
+        }
+    };
+
+    useEffect(() => {
+        getData();
+    }, []);
 
     return (
         <Grid padding={2}>
