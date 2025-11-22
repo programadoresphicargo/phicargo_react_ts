@@ -10,15 +10,14 @@ import { useAuthContext } from '@/modules/auth/hooks';
 
 const AvatarProfile = () => {
   const { session, onLogout } = useAuthContext();
+  "https://cdn-icons-png.flaticon.com/512/3177/3177440.png"
 
   return (
     <Dropdown placement="bottom-end">
       <DropdownTrigger>
         <User
           avatarProps={{
-            isBordered: true,
-            src: "https://cdn-icons-png.flaticon.com/512/3177/3177440.png",
-            size: 'sm'
+            src: "https://png.pngtree.com/png-vector/20241118/ourmid/pngtree-santa-claus-profile-picture-vector-png-image_14487013.png",
           }}
           description={session?.user.role || ''}
           name={session?.user.name || ''}

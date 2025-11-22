@@ -86,9 +86,56 @@ const ViajesProgramados = () => {
 
     { accessorKey: 'x_ruta_bel', header: 'Ruta' },
     { accessorKey: 'x_clase_bel', header: 'Clase' },
-    { accessorKey: 'trailer1', header: 'Remolque 1' },
-    { accessorKey: 'trailer2', header: 'Remolque 2' },
-    { accessorKey: 'dolly', header: 'Dolly' },
+    {
+      accessorKey: 'trailer1',
+      header: 'Remolque 1',
+      Cell: ({ cell }) => {
+        const val = cell.getValue();
+
+        if (!val) {
+          return null; // No renderizar nada si está vacío o nulo
+        }
+
+        return (
+          <Chip color="primary" size="sm" className="text-white">
+            {val}
+          </Chip>
+        );
+      },
+    },
+    {
+      accessorKey: 'trailer2',
+      header: 'Remolque 2',
+      Cell: ({ cell }) => {
+        const val = cell.getValue();
+
+        if (!val) {
+          return null;
+        }
+
+        return (
+          <Chip color="success" size="sm" className="text-white">
+            {val}
+          </Chip>
+        );
+      },
+    },
+    {
+      accessorKey: 'dolly', header: 'Dolly',
+      Cell: ({ cell }) => {
+        const val = cell.getValue();
+
+        if (!val) {
+          return null;
+        }
+
+        return (
+          <Chip color="warning" size="sm" className="text-white">
+            {val}
+          </Chip>
+        );
+      },
+    },
   ], []);
 
   const table = useMaterialReactTable({

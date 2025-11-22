@@ -13,8 +13,16 @@ import SelectFlota from '@/phicargo/maniobras/maniobras/selects_flota';
 
 const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenChange }) => {
 
+    const [isEditMode, setEditMode] = useState(false);
     const [formData, setFormData] = useState({ id_cp });
+    const isDisabled = id_pre_asignacion ? !isEditMode : false;
     const [isLoading, setLoading] = useState(false);
+
+    useEffect(() => {
+        setFormData({ id_cp });
+        setEditMode(false);    // cuando cambia el registro, modo edición reset
+        getData();
+    }, [id_cp, id_pre_asignacion]);
 
     const handleSelectChange = (value, name) => {
         setFormData(prev => ({
@@ -47,6 +55,19 @@ const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenCh
 
             if (res.data.status === "success") toast.success(res.data.message);
 
+            setEditMode(false);
+        } catch (error) {
+            toast.error("Error: " + (error.response?.data?.message || error.message));
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const asignar_viaje = async () => {
+        try {
+            setLoading(true);
+            const res = await odooApi.post(`/preasignacion_equipo/asignar_viaje/${id_pre_asignacion}`);
+            if (res.data.status === "success") toast.success(res.data.message);
             onOpenChange(false);
         } catch (error) {
             toast.error("Error: " + (error.response?.data?.message || error.message));
@@ -83,27 +104,55 @@ const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenCh
 
                         <ModalBody>
 
-                            {!id_pre_asignacion ? (
-                                <Button
-                                    color="success"
-                                    className="text-white"
-                                    radius="full"
-                                    isLoading={isLoading}
-                                    onPress={guardar}
-                                >
-                                    Guardar asignación
-                                </Button>
-                            ) : (
-                                <Button
-                                    color="warning"
-                                    className="text-white"
-                                    radius="full"
-                                    isLoading={isLoading}
-                                    onPress={actualizar}
-                                >
-                                    Actualizar asignación
-                                </Button>
-                            )}
+                            <div className="flex flex-row gap-3">
+
+                                {id_pre_asignacion == null && (
+                                    <Button
+                                        color="success"
+                                        className="text-white"
+                                        radius="full"
+                                        isLoading={isLoading}
+                                        onPress={guardar}
+                                    >
+                                        Guardar asignación
+                                    </Button>
+                                )}
+
+                                {id_pre_asignacion != null && !isEditMode && (
+                                    <>
+                                        <Button
+                                            color="primary"
+                                            className="text-white"
+                                            radius="full"
+                                            onPress={() => setEditMode(true)}
+                                        >
+                                            Editar
+                                        </Button>
+
+                                        <Button
+                                            color="danger"
+                                            className="text-white"
+                                            radius="full"
+                                            isLoading={isLoading}
+                                            onPress={asignar_viaje}
+                                        >
+                                            Asignar a viaje
+                                        </Button>
+                                    </>
+                                )}
+
+                                {id_pre_asignacion != null && isEditMode && (
+                                    <Button
+                                        color="warning"
+                                        className="text-white"
+                                        radius="full"
+                                        isLoading={isLoading}
+                                        onPress={actualizar}
+                                    >
+                                        Actualizar asignación
+                                    </Button>
+                                )}
+                            </div>
 
                             <div className="w-full flex flex-row flex-wrap gap-4 mt-3">
 
@@ -113,6 +162,7 @@ const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenCh
                                     onChange={handleSelectChange}
                                     value={formData.trailer1_id}
                                     tipo="trailer"
+                                    disabled={isDisabled}
                                 />
 
                                 <SelectFlota
@@ -121,6 +171,7 @@ const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenCh
                                     onChange={handleSelectChange}
                                     value={formData.trailer2_id}
                                     tipo="trailer"
+                                    disabled={isDisabled}
                                 />
 
                                 <SelectFlota
@@ -129,6 +180,7 @@ const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenCh
                                     onChange={handleSelectChange}
                                     value={formData.dolly_id}
                                     tipo="dolly"
+                                    disabled={isDisabled}
                                 />
 
                                 <SelectFlota
@@ -137,6 +189,7 @@ const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenCh
                                     onChange={handleSelectChange}
                                     value={formData.motogenerador1_id}
                                     tipo="other"
+                                    disabled={isDisabled}
                                 />
 
                                 <SelectFlota
@@ -145,6 +198,7 @@ const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenCh
                                     onChange={handleSelectChange}
                                     value={formData.motogenerador2_id}
                                     tipo="other"
+                                    disabled={isDisabled}
                                 />
 
                             </div>

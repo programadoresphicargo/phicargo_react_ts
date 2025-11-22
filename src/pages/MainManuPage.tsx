@@ -50,7 +50,7 @@ const MainMenuPage = () => {
     <main
       style={{
         backgroundImage: `
-        linear-gradient(90deg, rgba(11, 33, 73, 0.95), rgba(0, 40, 135, 0.95)),
+        linear-gradient(90deg, rgba(100, 10, 10, 1), rgba(154, 44, 44, .90)),
         url(${fondo2})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
