@@ -10,6 +10,7 @@ import { motion } from 'framer-motion';
 import fondo2 from '../assets/img/tract_scannia.jpg';
 import { menuItems } from '../pages/MenuItems';
 import navidad from '@/assets/original/christmas-tree-2595897.png';
+import navidad1 from '@/assets/original/snowman-2595899.png';
 
 const MainMenuPage = () => {
   const { session } = useAuthContext();
@@ -121,6 +122,18 @@ const MainMenuPage = () => {
             position: "absolute",
             bottom: "20px",
             width: "200px",      // <-- aquí puedes agrandarla sin miedo
+            zIndex: 0,           // <-- detrás del contenido
+            opacity: 0.9         // opcional
+          }}
+        />
+
+        <img
+          src={navidad1}
+          style={{
+            position: "absolute",
+            bottom: "20px",
+            right: "130px",
+            width: "150px",      // <-- aquí puedes agrandarla sin miedo
             zIndex: 0,           // <-- detrás del contenido
             opacity: 0.9         // opcional
           }}
