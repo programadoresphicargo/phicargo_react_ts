@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import fondo2 from '../assets/img/tract_scannia.jpg';
 import { menuItems } from '../pages/MenuItems';
+import navidad from '@/assets/original/christmas-tree-2595897.png';
 
 const MainMenuPage = () => {
   const { session } = useAuthContext();
@@ -113,6 +114,18 @@ const MainMenuPage = () => {
         ))}
       </motion.div>
 
+      <div style={{ display: "flex", justifyContent: "flex-end" }}>
+        <img
+          src={navidad}
+          style={{
+            position: "absolute",
+            bottom: "20px",
+            width: "200px",      // <-- aquí puedes agrandarla sin miedo
+            zIndex: 0,           // <-- detrás del contenido
+            opacity: 0.9         // opcional
+          }}
+        />
+      </div>
     </main >
   );
 };
