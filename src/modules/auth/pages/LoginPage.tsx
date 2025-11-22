@@ -6,6 +6,7 @@ import { Toaster } from 'react-hot-toast';
 import { UserLogin } from '../models';
 import logo from '@/assets/img/phicargo_logo_white.png';
 import { useNavigate } from 'react-router-dom';
+import navidad from '@/assets/original/christmas-wreath-2595895.png';
 import './styles.css';
 
 const initialForm: UserLogin = {
@@ -45,6 +46,8 @@ const LoginPage = () => {
           <div className="flex h-full w-full items-center justify-center">
             <div className="glass flex w-full max-w-sm flex-col gap-10 px-8 pb-10 pt-6 shadow-small">
               <div className="flex flex-col gap-1">
+
+                <Image width={400} alt="phicargo logo" src={navidad} />
 
                 <div className="flex justify-center mb-5">
                   <Image width={400} alt="phicargo logo" src={logo} />
