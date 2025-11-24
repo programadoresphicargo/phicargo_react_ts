@@ -7,6 +7,7 @@ import { UserLogin } from '../models';
 import logo from '@/assets/img/phicargo_logo_white.png';
 import { useNavigate } from 'react-router-dom';
 import navidad from '@/assets/original/christmas-wreath-2595895.png';
+import Snowfall from 'react-snowfall'
 import './styles.css';
 
 const initialForm: UserLogin = {
@@ -41,6 +42,8 @@ const LoginPage = () => {
         <div className="bg_login_muertos"></div>
         <div className="bg_login_muertos bg2_login"></div>
         <div className="bg_login_muertos bg3_login"></div>
+
+        <Snowfall></Snowfall>
 
         <div className="content_login">
           <div className="flex h-full w-full items-center justify-center">

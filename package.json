@@ -67,6 +67,7 @@
       "react-quill": "^2.0.0",
       "react-router-dom": "^6.28.0",
       "react-select": "^5.8.3",
+      "react-snowfall": "^2.3.0",
       "react-sweetalert2": "^0.6.0",
       "react-toastify": "^10.0.6",
       "react-vertical-timeline-component": "^3.6.0",

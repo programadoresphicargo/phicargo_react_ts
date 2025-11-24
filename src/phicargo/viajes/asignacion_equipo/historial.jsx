@@ -1,17 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import {
- Modal,
- ModalContent,
- ModalHeader,
- ModalBody,
- ModalFooter,
- Button,
  Card,
  CardBody,
 } from "@heroui/react";
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
-import SelectFlota from '@/phicargo/maniobras/maniobras/selects_flota';
 
 const HistorialCambioEquipo = ({ id_pre_asignacion }) => {
 
@@ -25,10 +18,10 @@ const HistorialCambioEquipo = ({ id_pre_asignacion }) => {
    setLoading(true);
 
    const res = await odooApi.get(
-    `/mail_message/model_res/?model=preasignaciones.equipo&res_id=${id_pre_asignacion}`
+    `/mail_message/model_res_group/?model=preasignaciones.equipo&res_id=${id_pre_asignacion}`
    );
 
-   setFormData(res.data); // Debe ser un array
+   setFormData(res.data);
   } catch (error) {
    toast.error("Error: " + (error.response?.data?.message || error.message));
   } finally {
@@ -52,24 +45,39 @@ const HistorialCambioEquipo = ({ id_pre_asignacion }) => {
 
    {!isLoading && formData.length > 0 && (
     <div className="space-y-4">
-     {formData.map((item, index) => (
-      <Card>
+     {formData.map((item) => (
+      <Card key={item.message_id}>
        <CardBody>
+        {/* Mensaje principal */}
         <p className="font-semibold">{item.body}</p>
 
-        <p className="text-sm mt-2">
-         <strong>{item.field_desc}</strong>
-        </p>
+        {/* Lista de cambios */}
+        {item.cambios && item.cambios.length > 0 ? (
+         <div className="mt-3 space-y-2">
+          {item.cambios.map((chg, idx) => (
+           <div key={idx} className="border-l-4 border-blue-500 pl-3">
+            <p className="text-sm font-semibold">{chg.field_desc}</p>
 
-        <p className="text-sm">
-         Antes: <span className="text-red-600">{item.old_value_char}</span>
-        </p>
+            <p className="text-sm">
+             <strong>Antes:</strong>{" "}
+             <span className="text-red-600">{chg.old_value_char}</span>
+            </p>
 
-        <p className="text-sm">
-         Ahora: <span className="text-green-600">{item.new_value_char}</span>
-        </p>
+            <p className="text-sm">
+             <strong>Ahora:</strong>{" "}
+             <span className="text-green-600">{chg.new_value_char}</span>
+            </p>
+           </div>
+          ))}
+         </div>
+        ) : (
+         <p className="text-sm text-gray-500 mt-2">
+          No hubo cambios en campos específicos.
+         </p>
+        )}
 
-        <p className="text-xs text-gray-500 mt-2">
+        {/* Fecha */}
+        <p className="text-xs text-gray-500 mt-3">
          Fecha: {new Date(item.create_date).toLocaleString()}
         </p>
        </CardBody>

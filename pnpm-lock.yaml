@@ -176,6 +176,9 @@ importers:
       react-select:
         specifier: ^5.8.3
         version: 5.10.1(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-snowfall:
+        specifier: ^2.3.0
+        version: 2.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-sweetalert2:
         specifier: ^0.6.0
         version: 0.6.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -4086,6 +4089,9 @@ packages:
     peerDependencies:
       react: '>= 16.8 || 18.0.0'
 
+  react-fast-compare@3.2.2:
+    resolution: {integrity: sha512-nsO+KSNgo1SbJqJEYRE9ERzo7YtYbou/OqjSQKxV7jcKox7+usiUVZOAC+XnDOABXggQTno0Y1CpVnuWEc1boQ==}
+
   react-hook-form-mui@7.5.0:
     resolution: {integrity: sha512-skgTMuhjK6UKVUZvqMKwGS7EYqZwB0/oscmu8eYtabDk/9Oo9TDQo3/3VfCS5pxbCF9uJc/fqi6Bu2UVOQ1iQQ==}
     engines: {node: '>=14'}
@@ -4170,6 +4176,12 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+
+  react-snowfall@2.3.0:
+    resolution: {integrity: sha512-+ms0lEWz30GqfGdFGFIk5YNBya2lvFA9SWWJa6di0xVpgU7qnvLbMXrh0qzfge1xDxw+Gh0FZ1IVG3YEJ+vRNQ==}
+    peerDependencies:
+      react: "^16.8 ||\_17.x || 18.x || 19.x"
+      react-dom: ^16.8 || 17.x || 18.x || 19.x
 
   react-sweetalert2@0.6.0:
     resolution: {integrity: sha512-4MEWGAJamSfoj56m7MUs7IfBnev9wJYs0RayvoHvxshSQeH62iK0N/EkDiHr3VuZ3vTy34kOpzL1Yg3b3VYF8w==}
@@ -9684,6 +9696,8 @@ snapshots:
       prop-types: 15.8.1
       react: 18.3.1
 
+  react-fast-compare@3.2.2: {}
+
   react-hook-form-mui@7.5.0(7039dd23c94abfe5210d6d74ea755d90):
     dependencies:
       '@mui/material': 6.4.7(@emotion/react@11.14.0(@types/react@18.3.18)(react@18.3.1))(@emotion/styled@11.14.0(@emotion/react@11.14.0(@types/react@18.3.18)(react@18.3.1))(@types/react@18.3.18)(react@18.3.1))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -9765,6 +9779,12 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
       - supports-color
+
+  react-snowfall@2.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+    dependencies:
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+      react-fast-compare: 3.2.2
 
   react-sweetalert2@0.6.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
