@@ -52,7 +52,6 @@ const ViajesProgramados = () => {
   }, [date, storeValue]);
 
   const columns = useMemo(() => [
-    { accessorKey: 'id_cp', header: 'CP' },
     { accessorKey: 'carta_porte', header: 'Carta Porte' },
     { accessorKey: 'vehiculo_programado', header: 'Vehículo' },
     { accessorKey: 'operador_programado', header: 'Operador' },
