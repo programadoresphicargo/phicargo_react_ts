@@ -10,6 +10,7 @@ import {
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import SelectFlota from '@/phicargo/maniobras/maniobras/selects_flota';
+import HistorialCambioEquipo from './historial';
 
 const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenChange }) => {
 
@@ -96,7 +97,7 @@ const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenCh
     }, [id_cp, id_pre_asignacion]);
 
     return (
-        <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <Modal isOpen={isOpen} onOpenChange={onOpenChange} size='5xl'>
             <ModalContent>
                 {(onClose) => (
                     <>
@@ -104,104 +105,119 @@ const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenCh
 
                         <ModalBody>
 
-                            <div className="flex flex-row gap-3">
+                            <div style={{ display: "flex", gap: "20px" }}>
+                                <div style={{ flex: 2 }}>
+                                    <div className="flex flex-row gap-3">
 
-                                {id_pre_asignacion == null && (
-                                    <Button
-                                        color="success"
-                                        className="text-white"
-                                        radius="full"
-                                        isLoading={isLoading}
-                                        onPress={guardar}
-                                    >
-                                        Guardar asignación
-                                    </Button>
-                                )}
+                                        {id_pre_asignacion == null && (
+                                            <Button
+                                                color="success"
+                                                className="text-white"
+                                                radius="full"
+                                                isLoading={isLoading}
+                                                onPress={guardar}
+                                            >
+                                                Guardar asignación
+                                            </Button>
+                                        )}
 
-                                {id_pre_asignacion != null && !isEditMode && (
-                                    <>
-                                        <Button
-                                            color="primary"
-                                            className="text-white"
-                                            radius="full"
-                                            onPress={() => setEditMode(true)}
-                                        >
-                                            Editar
-                                        </Button>
+                                        {id_pre_asignacion != null && !isEditMode && (
+                                            <>
+                                                <Button
+                                                    color="primary"
+                                                    className="text-white"
+                                                    radius="full"
+                                                    onPress={() => setEditMode(true)}
+                                                >
+                                                    Editar
+                                                </Button>
 
-                                        <Button
-                                            color="danger"
-                                            className="text-white"
-                                            radius="full"
-                                            isLoading={isLoading}
-                                            onPress={asignar_viaje}
-                                        >
-                                            Asignar a viaje
-                                        </Button>
-                                    </>
-                                )}
+                                                <Button
+                                                    color="danger"
+                                                    className="text-white"
+                                                    radius="full"
+                                                    isDisabled
+                                                    isLoading={isLoading}
+                                                    onPress={asignar_viaje}
+                                                >
+                                                    Asignar a viaje
+                                                </Button>
+                                            </>
+                                        )}
 
-                                {id_pre_asignacion != null && isEditMode && (
-                                    <Button
-                                        color="warning"
-                                        className="text-white"
-                                        radius="full"
-                                        isLoading={isLoading}
-                                        onPress={actualizar}
-                                    >
-                                        Actualizar asignación
-                                    </Button>
-                                )}
+                                        {id_pre_asignacion != null && isEditMode && (
+                                            <Button
+                                                color="warning"
+                                                className="text-white"
+                                                radius="full"
+                                                isLoading={isLoading}
+                                                onPress={actualizar}
+                                            >
+                                                Actualizar asignación
+                                            </Button>
+                                        )}
+                                    </div>
+
+                                    <div className="w-full flex flex-row flex-wrap gap-4 mt-3">
+
+                                        <SelectFlota
+                                            label="Remolque 1"
+                                            name="trailer1_id"
+                                            onChange={handleSelectChange}
+                                            value={formData.trailer1_id}
+                                            tipo="trailer"
+                                            disabled={isDisabled}
+                                        />
+
+                                        <SelectFlota
+                                            label="Remolque 2"
+                                            name="trailer2_id"
+                                            onChange={handleSelectChange}
+                                            value={formData.trailer2_id}
+                                            tipo="trailer"
+                                            disabled={isDisabled}
+                                        />
+
+                                        <SelectFlota
+                                            label="Dolly"
+                                            name="dolly_id"
+                                            onChange={handleSelectChange}
+                                            value={formData.dolly_id}
+                                            tipo="dolly"
+                                            disabled={isDisabled}
+                                        />
+
+                                        <SelectFlota
+                                            label="Motogenerador 1"
+                                            name="motogenerador1_id"
+                                            onChange={handleSelectChange}
+                                            value={formData.motogenerador1_id}
+                                            tipo="other"
+                                            disabled={isDisabled}
+                                        />
+
+                                        <SelectFlota
+                                            label="Motogenerador 2"
+                                            name="motogenerador2_id"
+                                            onChange={handleSelectChange}
+                                            value={formData.motogenerador2_id}
+                                            tipo="other"
+                                            disabled={isDisabled}
+                                        />
+
+                                    </div>
+                                </div>
+
+                                <div style={{
+                                    flex: 2,
+                                    height: 400,
+                                    overflowY: "auto",
+                                    paddingRight: "5px"
+                                }}>
+                                    <HistorialCambioEquipo id_pre_asignacion={id_pre_asignacion}></HistorialCambioEquipo>
+                                </div>
                             </div>
 
-                            <div className="w-full flex flex-row flex-wrap gap-4 mt-3">
-
-                                <SelectFlota
-                                    label="Remolque 1"
-                                    name="trailer1_id"
-                                    onChange={handleSelectChange}
-                                    value={formData.trailer1_id}
-                                    tipo="trailer"
-                                    disabled={isDisabled}
-                                />
-
-                                <SelectFlota
-                                    label="Remolque 2"
-                                    name="trailer2_id"
-                                    onChange={handleSelectChange}
-                                    value={formData.trailer2_id}
-                                    tipo="trailer"
-                                    disabled={isDisabled}
-                                />
-
-                                <SelectFlota
-                                    label="Dolly"
-                                    name="dolly_id"
-                                    onChange={handleSelectChange}
-                                    value={formData.dolly_id}
-                                    tipo="dolly"
-                                    disabled={isDisabled}
-                                />
-
-                                <SelectFlota
-                                    label="Motogenerador 1"
-                                    name="motogenerador1_id"
-                                    onChange={handleSelectChange}
-                                    value={formData.motogenerador1_id}
-                                    tipo="other"
-                                    disabled={isDisabled}
-                                />
-
-                                <SelectFlota
-                                    label="Motogenerador 2"
-                                    name="motogenerador2_id"
-                                    onChange={handleSelectChange}
-                                    value={formData.motogenerador2_id}
-                                    tipo="other"
-                                    disabled={isDisabled}
-                                />
-
-                            </div>
                         </ModalBody>
 
                         <ModalFooter>
