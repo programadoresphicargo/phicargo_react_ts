@@ -47,7 +47,7 @@ const ViajeEPP = ({ id_viaje }) => {
     if (!id) return;
     try {
       const response = await odooApi.get(`/tms_waybill/get_by_id/${id}`);
-      const item = response.data?.[0];
+      const item = response.data;
       if (item) setDataViaje(item);
     } catch (error) {
       console.error('Error al obtener los datos:', error);
@@ -71,7 +71,7 @@ const ViajeEPP = ({ id_viaje }) => {
       if (!filterText && viajePorDefectoId && !items.some((item) => item.id === viajePorDefectoId)) {
         try {
           const defaultRes = await odooApi.get(`/tms_waybill/get_by_id/${viajePorDefectoId}`);
-          const defaultItem = defaultRes.data?.[0];
+          const defaultItem = defaultRes.data;
           if (defaultItem) {
             items.unshift(defaultItem);
           }
@@ -103,7 +103,7 @@ const ViajeEPP = ({ id_viaje }) => {
 
       try {
         const res = await odooApi.get(`/tms_waybill/get_by_id/${viajePorDefectoId}`);
-        const item = res.data?.[0];
+        const item = res.data;
         if (item) {
           setSelectedItem(item);
           list.setFilterText(item.name);
