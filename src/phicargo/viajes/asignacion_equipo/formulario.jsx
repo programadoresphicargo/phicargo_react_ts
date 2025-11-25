@@ -105,7 +105,7 @@ const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenCh
     }, [id_cp, id_pre_asignacion]);
 
     return (
-        <Modal isOpen={isOpen} onOpenChange={onOpenChange} size='5xl'>
+        <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="5xl">
             <ModalContent>
                 {(onClose) => (
                     <>
