@@ -44,7 +44,7 @@ const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenCh
                 historialRef.current?.reload();
             }
 
-            onOpenChange(false); // cerrar modal
+            onOpenChange(false);
         } catch (error) {
             toast.error("Error: " + (error.response?.data?.message || error.message));
         } finally {

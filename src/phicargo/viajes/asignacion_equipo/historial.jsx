@@ -76,7 +76,6 @@ const HistorialCambioEquipo = forwardRef(({ id_pre_asignacion }, ref) => {
          </div>
         ) : (
          <p className="text-sm text-gray-500 mt-2">
-          No hubo cambios en campos específicos.
          </p>
         )}
 

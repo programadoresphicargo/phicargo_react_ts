@@ -52,6 +52,7 @@ const ViajesProgramados = () => {
   }, [date, storeValue]);
 
   const columns = useMemo(() => [
+    { accessorKey: 'id_pre_asignacion', header: 'PA' },
     { accessorKey: 'carta_porte', header: 'Carta Porte' },
     { accessorKey: 'vehiculo_programado', header: 'Vehículo' },
     { accessorKey: 'operador_programado', header: 'Operador' },
