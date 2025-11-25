@@ -51,6 +51,7 @@ const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenCh
             if (res.data.status === "success") {
                 toast.success(res.data.message);
                 historialRef.current?.reload();
+                setComentarios("");
             }
 
             onOpenChange(false);
