@@ -6,6 +6,7 @@ import {
     ModalBody,
     ModalFooter,
     Button,
+    Textarea,
 } from "@heroui/react";
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
@@ -19,6 +20,7 @@ const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenCh
     const [formData, setFormData] = useState({ id_cp });
     const isDisabled = id_pre_asignacion ? !isEditMode : false;
     const [isLoading, setLoading] = useState(false);
+    const [comentarios, setComentarios] = useState("");
 
     useEffect(() => {
         setFormData({ id_cp });
@@ -53,14 +55,24 @@ const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenCh
     };
 
     const actualizar = async () => {
+
+        if (!comentarios.trim()) {
+            toast.error("El campo comentarios es obligatorio.");
+            return;
+        }
+
         try {
             setLoading(true);
 
-            const res = await odooApi.patch(`/preasignacion_equipo/${id_pre_asignacion}`, formData);
+            const res = await odooApi.patch(
+                `/preasignacion_equipo/${id_pre_asignacion}?comentarios=${encodeURIComponent(comentarios)}`,
+                formData
+            );
 
             if (res.data.status === "success") {
                 toast.success(res.data.message);
                 setEditMode(false);
+                setComentarios("");
                 historialRef.current?.reload();
             }
 
@@ -210,6 +222,14 @@ const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenCh
                                             onChange={handleSelectChange}
                                             value={formData.motogenerador2_id}
                                             tipo="other"
+                                            disabled={isDisabled}
+                                        />
+
+                                        <Textarea
+                                            variant={isDisabled ? "flat" : "bordered"}
+                                            label="Comentarios"
+                                            value={comentarios}
+                                            onChange={(e) => setComentarios(e.target.value)}
                                             disabled={isDisabled}
                                         />
 
