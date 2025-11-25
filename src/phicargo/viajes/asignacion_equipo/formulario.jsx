@@ -39,7 +39,14 @@ const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenCh
         try {
             setLoading(true);
 
-            const res = await odooApi.post('/preasignacion_equipo/', formData);
+            // Construir URL dinámicamente
+            let url = '/preasignacion_equipo/';
+
+            if (comentarios?.trim()) {
+                url += `?comentarios=${encodeURIComponent(comentarios.trim())}`;
+            }
+
+            const res = await odooApi.post(url, formData);
 
             if (res.data.status === "success") {
                 toast.success(res.data.message);
@@ -238,7 +245,7 @@ const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenCh
 
                                 <div style={{
                                     flex: 2,
-                                    height: 400,
+                                    height: 600,
                                     overflowY: "auto",
                                     paddingRight: "5px"
                                 }}>
