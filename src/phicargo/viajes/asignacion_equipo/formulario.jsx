@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
     Modal,
     ModalContent,
@@ -14,6 +14,7 @@ import HistorialCambioEquipo from './historial';
 
 const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenChange }) => {
 
+    const historialRef = useRef(null);
     const [isEditMode, setEditMode] = useState(false);
     const [formData, setFormData] = useState({ id_cp });
     const isDisabled = id_pre_asignacion ? !isEditMode : false;
@@ -38,7 +39,10 @@ const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenCh
 
             const res = await odooApi.post('/preasignacion_equipo/', formData);
 
-            if (res.data.status === "success") toast.success(res.data.message);
+            if (res.data.status === "success") {
+                toast.success(res.data.message);
+                historialRef.current?.reload();
+            }
 
             onOpenChange(false); // cerrar modal
         } catch (error) {
@@ -54,7 +58,11 @@ const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenCh
 
             const res = await odooApi.patch(`/preasignacion_equipo/${id_pre_asignacion}`, formData);
 
-            if (res.data.status === "success") toast.success(res.data.message);
+            if (res.data.status === "success") {
+                toast.success(res.data.message);
+                setEditMode(false);
+                historialRef.current?.reload();
+            }
 
             setEditMode(false);
         } catch (error) {
@@ -214,7 +222,7 @@ const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenCh
                                     overflowY: "auto",
                                     paddingRight: "5px"
                                 }}>
-                                    <HistorialCambioEquipo id_pre_asignacion={id_pre_asignacion}></HistorialCambioEquipo>
+                                    <HistorialCambioEquipo ref={historialRef} id_pre_asignacion={id_pre_asignacion}></HistorialCambioEquipo>
                                 </div>
                             </div>
 

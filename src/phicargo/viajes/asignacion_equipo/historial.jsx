@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
 import {
  Card,
  CardBody,
@@ -6,7 +6,7 @@ import {
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 
-const HistorialCambioEquipo = ({ id_pre_asignacion }) => {
+const HistorialCambioEquipo = forwardRef(({ id_pre_asignacion }, ref) => {
 
  const [formData, setFormData] = useState([]);
  const [isLoading, setLoading] = useState(false);
@@ -28,6 +28,10 @@ const HistorialCambioEquipo = ({ id_pre_asignacion }) => {
    setLoading(false);
   }
  };
+
+ useImperativeHandle(ref, () => ({
+  reload: () => getData()
+ }));
 
  useEffect(() => {
   getData();
@@ -87,6 +91,6 @@ const HistorialCambioEquipo = ({ id_pre_asignacion }) => {
    )}
   </div>
  );
-};
+});
 
 export default HistorialCambioEquipo;

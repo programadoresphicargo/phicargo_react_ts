@@ -7,7 +7,7 @@ import { UserLogin } from '../models';
 import logo from '@/assets/img/phicargo_logo_white.png';
 import { useNavigate } from 'react-router-dom';
 import navidad from '@/assets/original/christmas-wreath-2595895.png';
-import Snowfall from 'react-snowfall'
+import Snowfall from 'react-snowfall';
 import './styles.css';
 
 const initialForm: UserLogin = {
