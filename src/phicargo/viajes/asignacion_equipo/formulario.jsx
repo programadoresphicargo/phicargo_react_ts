@@ -1,17 +1,18 @@
 import React, { useEffect, useState, useRef } from 'react';
 import {
-    Modal,
-    ModalContent,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
-    Button,
-    Textarea,
-} from "@heroui/react";
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    Button as MUIButton,
+    TextField,
+} from "@mui/material";
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import SelectFlota from '@/phicargo/maniobras/maniobras/selects_flota';
 import HistorialCambioEquipo from './historial';
+import Swal from "sweetalert2";
+import { Button, Textarea } from '@heroui/react';
 
 const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenChange }) => {
 
@@ -24,7 +25,7 @@ const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenCh
 
     useEffect(() => {
         setFormData({ id_cp });
-        setEditMode(false);    // cuando cambia el registro, modo edición reset
+        setEditMode(false);
         getData();
     }, [id_cp, id_pre_asignacion]);
 
@@ -39,7 +40,6 @@ const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenCh
         try {
             setLoading(true);
 
-            // Construir URL dinámicamente
             let url = '/preasignacion_equipo/';
 
             if (comentarios?.trim()) {
@@ -63,7 +63,6 @@ const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenCh
     };
 
     const actualizar = async () => {
-
         if (!comentarios.trim()) {
             toast.error("El campo comentarios es obligatorio.");
             return;
@@ -97,7 +96,8 @@ const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenCh
             setLoading(true);
             const res = await odooApi.post(`/preasignacion_equipo/asignar_viaje/${id_pre_asignacion}`);
             if (res.data.status === "success") toast.success(res.data.message);
-            onOpenChange(false);
+            getData();
+
         } catch (error) {
             toast.error("Error: " + (error.response?.data?.message || error.message));
         } finally {
@@ -119,152 +119,153 @@ const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenCh
         }
     };
 
-    useEffect(() => {
-        setFormData({ id_cp }); // reset base
-        getData();
-    }, [id_cp, id_pre_asignacion]);
+    const confirmarEquipoViaje = async () => {
+        const result = await Swal.fire({
+            title: "¿Estás seguro?",
+            text: "Se enviará la información al viaje",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Sí, continuar",
+            cancelButtonText: "Cancelar",
+        });
+
+        if (result.isConfirmed) {
+            await asignar_viaje();
+        }
+    };
 
     return (
-        <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="5xl">
-            <ModalContent>
-                {(onClose) => (
-                    <>
-                        <ModalHeader>Asignación de equipo</ModalHeader>
+        <Dialog open={isOpen} onClose={() => onOpenChange(false)} maxWidth="xl" fullWidth>
+            <DialogTitle>Asignación de equipo</DialogTitle>
 
-                        <ModalBody>
+            <DialogContent dividers>
 
-                            <div style={{ display: "flex", gap: "20px" }}>
-                                <div style={{ flex: 2 }}>
-                                    <div className="flex flex-row gap-3">
+                <div style={{ display: "flex", gap: "20px" }}>
+                    <div style={{ flex: 2 }}>
 
-                                        {id_pre_asignacion == null && (
-                                            <Button
-                                                color="success"
-                                                className="text-white"
-                                                radius="full"
-                                                isLoading={isLoading}
-                                                onPress={guardar}
-                                            >
-                                                Guardar asignación
-                                            </Button>
-                                        )}
+                        <div style={{ display: "flex", gap: "10px", marginBottom: "15px" }}>
 
-                                        {id_pre_asignacion != null && !isEditMode && (
-                                            <>
-                                                <Button
-                                                    color="primary"
-                                                    className="text-white"
-                                                    radius="full"
-                                                    onPress={() => setEditMode(true)}
-                                                >
-                                                    Editar
-                                                </Button>
+                            {id_pre_asignacion == null && (
+                                <Button
+                                    color="success"
+                                    isDisabled={isLoading}
+                                    onPress={guardar}
+                                    className='text-white'
+                                    radius='full'
+                                >
+                                    Guardar asignación
+                                </Button>
+                            )}
 
-                                                <Button
-                                                    color="danger"
-                                                    className="text-white"
-                                                    radius="full"
-                                                    isDisabled
-                                                    isLoading={isLoading}
-                                                    onPress={asignar_viaje}
-                                                >
-                                                    Asignar a viaje
-                                                </Button>
-                                            </>
-                                        )}
+                            {id_pre_asignacion != null && !isEditMode && formData.estado !== 'asignado_viaje' && (
+                                <>
+                                    <Button
+                                        color="primary"
+                                        onPress={() => setEditMode(true)}
+                                        radius='full'
+                                    >
+                                        Editar
+                                    </Button>
 
-                                        {id_pre_asignacion != null && isEditMode && (
-                                            <Button
-                                                color="warning"
-                                                className="text-white"
-                                                radius="full"
-                                                isLoading={isLoading}
-                                                onPress={actualizar}
-                                            >
-                                                Actualizar asignación
-                                            </Button>
-                                        )}
-                                    </div>
+                                    <Button
+                                        radius='full'
+                                        color="danger"
+                                        isDisabled={isLoading}
+                                        onPress={confirmarEquipoViaje}
+                                    >
+                                        Asignar a viaje
+                                    </Button>
+                                </>
+                            )}
 
-                                    <div className="w-full flex flex-row flex-wrap gap-4 mt-3">
+                            {id_pre_asignacion != null && isEditMode && (
+                                <Button
+                                    color="warning"
+                                    isDisabled={isLoading}
+                                    onPress={actualizar}
+                                    radius='full'
+                                    className='text-white'
+                                >
+                                    Actualizar asignación
+                                </Button>
+                            )}
+                        </div>
 
-                                        <SelectFlota
-                                            label="Remolque 1"
-                                            name="trailer1_id"
-                                            onChange={handleSelectChange}
-                                            value={formData.trailer1_id}
-                                            tipo="trailer"
-                                            disabled={isDisabled}
-                                        />
+                        <div className="w-full flex flex-row flex-wrap gap-4 mt-3">
 
-                                        <SelectFlota
-                                            label="Remolque 2"
-                                            name="trailer2_id"
-                                            onChange={handleSelectChange}
-                                            value={formData.trailer2_id}
-                                            tipo="trailer"
-                                            disabled={isDisabled}
-                                        />
+                            <SelectFlota
+                                label="Remolque 1"
+                                name="trailer1_id"
+                                onChange={handleSelectChange}
+                                value={formData.trailer1_id}
+                                tipo="trailer"
+                                disabled={isDisabled}
+                            />
 
-                                        <SelectFlota
-                                            label="Dolly"
-                                            name="dolly_id"
-                                            onChange={handleSelectChange}
-                                            value={formData.dolly_id}
-                                            tipo="dolly"
-                                            disabled={isDisabled}
-                                        />
+                            <SelectFlota
+                                label="Remolque 2"
+                                name="trailer2_id"
+                                onChange={handleSelectChange}
+                                value={formData.trailer2_id}
+                                tipo="trailer"
+                                disabled={isDisabled}
+                            />
 
-                                        <SelectFlota
-                                            label="Motogenerador 1"
-                                            name="motogenerador1_id"
-                                            onChange={handleSelectChange}
-                                            value={formData.motogenerador1_id}
-                                            tipo="other"
-                                            disabled={isDisabled}
-                                        />
+                            <SelectFlota
+                                label="Dolly"
+                                name="dolly_id"
+                                onChange={handleSelectChange}
+                                value={formData.dolly_id}
+                                tipo="dolly"
+                                disabled={isDisabled}
+                            />
 
-                                        <SelectFlota
-                                            label="Motogenerador 2"
-                                            name="motogenerador2_id"
-                                            onChange={handleSelectChange}
-                                            value={formData.motogenerador2_id}
-                                            tipo="other"
-                                            disabled={isDisabled}
-                                        />
+                            <SelectFlota
+                                label="Motogenerador 1"
+                                name="motogenerador1_id"
+                                onChange={handleSelectChange}
+                                value={formData.motogenerador1_id}
+                                tipo="other"
+                                disabled={isDisabled}
+                            />
 
-                                        <Textarea
-                                            variant={isDisabled ? "flat" : "bordered"}
-                                            label="Comentarios"
-                                            value={comentarios}
-                                            onChange={(e) => setComentarios(e.target.value)}
-                                            disabled={isDisabled}
-                                        />
+                            <SelectFlota
+                                label="Motogenerador 2"
+                                name="motogenerador2_id"
+                                onChange={handleSelectChange}
+                                value={formData.motogenerador2_id}
+                                tipo="other"
+                                disabled={isDisabled}
+                            />
 
-                                    </div>
-                                </div>
+                            <Textarea
+                                label="Comentarios"
+                                value={comentarios}
+                                variant={isDisabled ? "flat" : "bordered"}
+                                isDisabled={isDisabled}
+                                onChange={(e) => setComentarios(e.target.value)}
+                            />
+                        </div>
+                    </div>
 
-                                <div style={{
-                                    flex: 2,
-                                    height: 600,
-                                    overflowY: "auto",
-                                    paddingRight: "5px"
-                                }}>
-                                    <HistorialCambioEquipo ref={historialRef} id_pre_asignacion={id_pre_asignacion}></HistorialCambioEquipo>
-                                </div>
-                            </div>
+                    <div style={{
+                        flex: 2,
+                        height: 600,
+                        overflowY: "auto",
+                        paddingRight: "5px"
+                    }}>
+                        <HistorialCambioEquipo ref={historialRef} id_pre_asignacion={id_pre_asignacion} />
+                    </div>
+                </div>
 
-                        </ModalBody>
+            </DialogContent>
 
-                        <ModalFooter>
-                            <Button color="danger" variant="light" onPress={onClose}>
-                                Cancelar
-                            </Button>
-                        </ModalFooter>
-                    </>
-                )}
-            </ModalContent>
-        </Modal>
+            <DialogActions>
+                <MUIButton color="error" onClick={() => onOpenChange(false)}>
+                    Cerrar
+                </MUIButton>
+            </DialogActions>
+        </Dialog>
     );
 };
 

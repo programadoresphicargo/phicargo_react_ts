@@ -57,7 +57,7 @@ const ViajesProgramados = () => {
     { accessorKey: 'vehiculo_programado', header: 'Vehículo' },
     { accessorKey: 'operador_programado', header: 'Operador' },
     { accessorKey: 'x_reference', header: 'Contenedor' },
-
+    { accessorKey: 'estado', header: 'Estado' },
     {
       accessorKey: 'x_tipo_bel',
       header: 'Tipo',
