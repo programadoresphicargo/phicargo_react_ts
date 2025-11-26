@@ -5,6 +5,7 @@ import {
 } from "@heroui/react";
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
+import { CircularProgress } from "@heroui/react";
 
 const HistorialCambioEquipo = forwardRef(({ id_pre_asignacion }, ref) => {
 
@@ -41,7 +42,7 @@ const HistorialCambioEquipo = forwardRef(({ id_pre_asignacion }, ref) => {
   <div className="p-4">
    <h2 className="text-xl font-bold mb-4">Historial de cambios de equipo</h2>
 
-   {isLoading && <p>Cargando historial...</p>}
+   {isLoading && <CircularProgress aria-label="Loading..." />}
 
    {!isLoading && formData.length === 0 && (
     <p>No hay historial registrado.</p>

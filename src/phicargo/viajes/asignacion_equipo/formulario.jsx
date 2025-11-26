@@ -150,6 +150,21 @@ const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenCh
         }
     };
 
+    const confirmarCambioEstadoPreasignacion = async (estado) => {
+        const result = await Swal.fire({
+            title: "¿Estás seguro?",
+            text: "Se reabrira esta preasignación de equipo",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Sí, continuar",
+            cancelButtonText: "Cancelar",
+        });
+
+        if (result.isConfirmed) {
+            await cambiar_estado(estado);
+        }
+    };
+
     return (
         <Dialog open={isOpen} onClose={() => onOpenChange(false)} maxWidth="xl" fullWidth>
             <DialogTitle>Asignación de equipo</DialogTitle>
@@ -214,7 +229,7 @@ const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenCh
                                 <Button
                                     color="primary"
                                     isDisabled={isLoading}
-                                    onPress={() => cambiar_estado("borrador")}
+                                    onPress={() => confirmarCambioEstadoPreasignacion("borrador")}
                                     radius='full'
                                     className='text-white'
                                 >
