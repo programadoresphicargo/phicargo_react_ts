@@ -115,11 +115,16 @@ const Validador = ({ id_acceso, estado_acceso, open, handleClose }) => {
             </DialogContent>
 
             <DialogActions sx={{ justifyContent: 'space-between', px: 3 }}>
-                <Button onClick={handleClose} color="secondary" variant="outlined">
+                <Button
+                    radius='full'
+                    onPress={handleClose}
+                    color="default"
+                    variant="faded">
                     Cancelar
                 </Button>
                 <Button
-                    onClick={validar_pin}
+                    radius='full'
+                    onPress={validar_pin}
                     color="primary"
                 >
                     Validar
