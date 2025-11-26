@@ -105,6 +105,20 @@ const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenCh
         }
     };
 
+    const cambiar_estado = async (estado) => {
+        try {
+            setLoading(true);
+            const res = await odooApi.patch(`/preasignacion_equipo/estado/${id_pre_asignacion}?estado=${estado}&comentario=${comentarios}`);
+            if (res.data.status === "success") toast.success(res.data.message);
+            getData();
+
+        } catch (error) {
+            toast.error("Error: " + (error.response?.data?.message || error.message));
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const getData = async () => {
         if (!id_pre_asignacion) return;
 
@@ -187,6 +201,18 @@ const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenCh
                                     className='text-white'
                                 >
                                     Actualizar asignación
+                                </Button>
+                            )}
+
+                            {formData.estado == 'asignado_viaje' && (
+                                <Button
+                                    color="primary"
+                                    isDisabled={isLoading}
+                                    onPress={() => cambiar_estado("borrador")}
+                                    radius='full'
+                                    className='text-white'
+                                >
+                                    Reabrir asignación
                                 </Button>
                             )}
                         </div>
