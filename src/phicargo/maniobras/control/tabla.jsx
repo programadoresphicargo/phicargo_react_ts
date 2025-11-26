@@ -347,6 +347,7 @@ const Maniobras = ({ estado_maniobra }) => {
           onChange={setRange}
           format="yyyy-MM-dd"
           placeholder="Selecciona un rango de fechas"
+          loading={isLoading2}
         />
         <Button color="primary" isLoading={isLoading2} onPress={() => fetchData()} startContent={<i class="bi bi-arrow-clockwise"></i>} size="sm" radius="full">Refrescar</Button>
         <Button color="secondary" onPress={() => handleClickOpen()} className='text-white' startContent={<i class="bi bi-send-plus"></i>} size="sm" radius="full">Envio masivo</Button>
