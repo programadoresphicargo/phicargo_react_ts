@@ -51,6 +51,88 @@ const ViajesProgramados = () => {
     fetchData();
   }, [date, storeValue]);
 
+  const handlePrint = () => {
+    const tableElement = document.querySelector('.MuiTable-root');
+
+    if (!tableElement) {
+      console.error("No se encontró la tabla para imprimir");
+      return;
+    }
+
+    const printWindow = window.open('', '', 'width=1200,height=900');
+
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>Imprimir tabla</title>
+          <style>
+            @page {
+              size: landscape;
+              margin: 10mm;
+            }
+  
+            body {
+              font-family: Arial, sans-serif;
+              padding: 10px;
+              zoom: 0.75; /* ESCALA */
+            }
+  
+            table {
+              border-collapse: collapse;
+              width: 100%;
+              font-size: 11px;
+            }
+  
+            th, td {
+              border: 1px solid black;
+              padding: 4px 6px;
+              text-align: left;
+            }
+  
+            thead {
+              background-color: #e5e5e5;
+              font-weight: bold;
+            }
+  
+            /* 🔥 OCULTAR FILTROS DE MATERIAL REACT TABLE */
+            .Mui-TableHeadCell-FilterContainer,
+            .MuiTableHeadCell-filterTextField,
+            .MuiInputBase-root,
+            .MuiFormControl-root,
+            input {
+              display: none !important;
+              visibility: hidden !important;
+            }
+  
+            /* 🔥 OCULTAR LOS ICONOS DE SORTING */
+            .MuiTableSortLabel-root,
+            .MuiTableSortLabel-icon,
+            .MuiTableSortLabel-iconDirectionAsc,
+            .MuiTableSortLabel-iconDirectionDesc,
+            th svg {
+              display: none !important;
+              visibility: hidden !important;
+            }
+  
+            /* Ocultar contenedor de flechitas */
+            .MuiTableSortLabel-root * {
+              display: none !important;
+              visibility: hidden !important;
+            }
+          </style>
+        </head>
+        <body>
+          ${tableElement.outerHTML}
+        </body>
+      </html>
+    `);
+
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+    printWindow.close();
+  };
+
   const columns = useMemo(() => [
     { accessorKey: 'carta_porte', header: 'Carta Porte' },
     { accessorKey: 'vehiculo_programado', header: 'Vehículo' },
@@ -225,6 +307,16 @@ const ViajesProgramados = () => {
           radius="full"
         >
           Exportar
+        </Button>
+
+        <Button
+          color="primary"
+          className="text-white"
+          startContent={<i className="bi bi-printer"></i>}
+          onPress={handlePrint}
+          radius="full"
+        >
+          Imprimir
         </Button>
       </Box>
     ),
