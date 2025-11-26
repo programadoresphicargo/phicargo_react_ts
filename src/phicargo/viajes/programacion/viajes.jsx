@@ -365,6 +365,7 @@ const ViajesProgramados = ({ }) => {
           onChange={(value) => setRange(value)}
           placeholder="Selecciona un rango de fechas"
           format="yyyy-MM-dd"
+          loading={isLoading}
         />
         <Chip color="danger" className="text-white" size='lg'>
           Retrasados: {cantidadRojo}
@@ -372,8 +373,8 @@ const ViajesProgramados = ({ }) => {
         <Chip color="warning" className="text-white" size='lg'>
           Proximos a salir: {cantidadAmarillo}
         </Chip>
-        <Button color='primary' startContent={<i class="bi bi-arrow-clockwise"></i>} onPress={() => fetchData()}>Actualizar</Button>
-        <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "programacion_viajes.csv")}>Exportar</Button>
+        <Button color='primary' startContent={<i class="bi bi-arrow-clockwise"></i>} onPress={() => fetchData()} radius='full'>Actualizar</Button>
+        <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "programacion_viajes.csv")} radius='full'>Exportar</Button>
       </Box >
     ),
   });

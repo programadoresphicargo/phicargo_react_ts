@@ -272,7 +272,7 @@ const ViajesProgramados = () => {
       <Box
         sx={{
           display: 'grid',
-          gridTemplateColumns: '1fr 1fr 1fr auto auto',
+          gridTemplateColumns: '1fr 1fr 1fr 1fr auto auto',
           gap: '16px',
           padding: '8px',
           alignItems: 'center',
@@ -285,6 +285,7 @@ const ViajesProgramados = () => {
           label="Sucursal"
           selectedKeys={storeValue}
           onSelectionChange={setStoreValue}
+          radius='full'
         >
           <SelectItem key="1">Veracruz</SelectItem>
           <SelectItem key="9">Manzanillo</SelectItem>
@@ -297,6 +298,7 @@ const ViajesProgramados = () => {
           format="yyyy-MM-dd"
           placeholder="Selecciona una fecha"
           size="lg"
+          loading={isLoading}
         />
 
         <Button
@@ -317,6 +319,16 @@ const ViajesProgramados = () => {
           radius="full"
         >
           Imprimir
+        </Button>
+
+        <Button
+          color="danger"
+          className="text-white"
+          startContent={<i className="bi bi-arrow-clockwise"></i>}
+          onPress={fetchData}
+          radius="full"
+        >
+          Recargar
         </Button>
       </Box>
     ),

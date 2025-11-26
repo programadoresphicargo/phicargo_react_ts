@@ -321,9 +321,17 @@ const ViajesFinalizados = ({ }) => {
           onChange={(value) => setRange(value)}
           placeholder="Selecciona un rango de fechas"
           format="yyyy-MM-dd"
+          loading={isLoading}
         />
 
-        <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "viajes_finalizados.csv")}>Exportar</Button>
+        <Button
+          color='success'
+          className='text-white'
+          startContent={<i class="bi bi-file-earmark-excel"></i>}
+          onPress={() => exportToCSV(data, columns, "viajes_finalizados.csv")}
+          radius='full'>
+          Exportar
+        </Button>
       </Box>
     ),
   });
