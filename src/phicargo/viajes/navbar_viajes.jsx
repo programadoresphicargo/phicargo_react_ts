@@ -52,7 +52,7 @@ function NavbarTravel() {
 
   useEffect(() => {
     fetchReportes();
-  });
+  }, []);
 
   return (
     <>

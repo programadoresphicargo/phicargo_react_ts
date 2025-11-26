@@ -36,7 +36,7 @@ const FormularioRemolques = ({ id_pre_asignacion, isOpen, onOpenChange }) => {
             setLoading(true);
 
             const res = await odooApi.patch(
-                `/vehicles/${id_pre_asignacion}`,
+                `/vehicles/remolque/${id_pre_asignacion}`,
                 formData
             );
 
@@ -100,7 +100,7 @@ const FormularioRemolques = ({ id_pre_asignacion, isOpen, onOpenChange }) => {
                                 onPress={actualizar}
                                 isLoading={isLoading}
                             >
-                                Guardar asignación
+                                Guardar
                             </Button>
                         </div>
 
@@ -109,16 +109,16 @@ const FormularioRemolques = ({ id_pre_asignacion, isOpen, onOpenChange }) => {
                             <Select
                                 label="Sucursal"
                                 placeholder="Selecciona una sucursal"
-                                selectedKeys={formData.x_sucursal ? new Set([formData.x_sucursal]) : new Set()}
+                                selectedKeys={formData.x_sucursal ? new Set([String(formData.x_sucursal)]) : new Set()}
                                 variant="bordered"
                                 onSelectionChange={(keys) => {
                                     const value = [...keys][0];
                                     handleSelectChange(value, "x_sucursal");
                                 }}
                             >
-                                <SelectItem key="1">Veracruz</SelectItem>
-                                <SelectItem key="9">Manzanillo</SelectItem>
-                                <SelectItem key="2">México</SelectItem>
+                                <SelectItem key={"1"}>Veracruz</SelectItem>
+                                <SelectItem key={"9"}>Manzanillo</SelectItem>
+                                <SelectItem key={"2"}>México</SelectItem>
                             </Select>
 
                             <Select
