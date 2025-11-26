@@ -49,6 +49,7 @@ const ListadoVisitantes = ({ open, handleClose }) => {
   };
 
   useEffect(() => {
+    if (!formData.id_empresa) return;
     fetchVisitantes();
   }, [formData.id_empresa]);
 

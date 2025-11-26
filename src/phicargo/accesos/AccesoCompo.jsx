@@ -130,6 +130,7 @@ const AccesoCompo = ({ children }) => {
     };
 
     useEffect(() => {
+        if (!id_acceso) return;
         getVehiculos(id_acceso);
     }, [id_acceso])
 
