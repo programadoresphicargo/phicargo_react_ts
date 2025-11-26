@@ -12,7 +12,7 @@ import { toast } from 'react-toastify';
 import SelectFlota from '@/phicargo/maniobras/maniobras/selects_flota';
 import HistorialCambioEquipo from './historial';
 import Swal from "sweetalert2";
-import { Button, Textarea } from '@heroui/react';
+import { Button, Progress, Textarea } from '@heroui/react';
 
 const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenChange }) => {
 
@@ -96,6 +96,7 @@ const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenCh
             setLoading(true);
             const res = await odooApi.post(`/preasignacion_equipo/asignar_viaje/${id_pre_asignacion}`);
             if (res.data.status === "success") toast.success(res.data.message);
+            historialRef.current?.reload();
             getData();
 
         } catch (error) {
@@ -108,9 +109,10 @@ const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenCh
     const cambiar_estado = async (estado) => {
         try {
             setLoading(true);
-            const res = await odooApi.patch(`/preasignacion_equipo/estado/${id_pre_asignacion}?estado=${estado}&comentario=${comentarios}`);
+            const res = await odooApi.patch(`/preasignacion_equipo/estado/${id_pre_asignacion}?estado=${estado}&comentario="Se reabrió esta asignación de equipo."`);
             if (res.data.status === "success") toast.success(res.data.message);
             getData();
+            historialRef.current?.reload();
 
         } catch (error) {
             toast.error("Error: " + (error.response?.data?.message || error.message));
@@ -151,6 +153,10 @@ const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenCh
     return (
         <Dialog open={isOpen} onClose={() => onOpenChange(false)} maxWidth="xl" fullWidth>
             <DialogTitle>Asignación de equipo</DialogTitle>
+
+            {isLoading && (
+                <Progress isIndeterminate size='sm'></Progress>
+            )}
 
             <DialogContent dividers>
 
