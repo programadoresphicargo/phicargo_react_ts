@@ -184,8 +184,6 @@ const TablaAccesos = ({ title, tipo }) => {
     [],
   );
 
-  const manualGrouping = ['nombre_operador'];
-
   const table = useMaterialReactTable({
     columns,
     data,
@@ -196,7 +194,6 @@ const TablaAccesos = ({ title, tipo }) => {
     enableColumnPinning: true,
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
-    grouping: manualGrouping,
     localization: MRT_Localization_ES,
     initialState: {
       showColumnFilters: true,
