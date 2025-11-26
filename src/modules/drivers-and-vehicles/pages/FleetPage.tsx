@@ -29,7 +29,7 @@ const FleetPage = () => {
     isLoading: getFleetQuery.isLoading,
     isFetching: getFleetQuery.isFetching,
     refetchFn: () => getFleetQuery.refetch(),
-    exportFn: (data) => exportToCSV(data || [], columns, 'unidades.csv'),
+    exportFn: (data) => exportToCSV(data || [], columns, 'unidades1.csv'),
     showColumnFilters: true,
     showGlobalFilter: true,
     containerHeight: 'calc(100vh - 165px)',

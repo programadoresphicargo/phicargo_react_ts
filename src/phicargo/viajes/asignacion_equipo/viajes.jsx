@@ -157,6 +157,13 @@ const ViajesProgramados = () => {
       pagination: { pageSize: 80 },
       columnPinning: { right: ['trailer1', 'trailer2', 'dolly'] },
     },
+    muiTableHeadCellProps: {
+      sx: {
+        fontFamily: 'Inter',
+        fontWeight: 'Bold',
+        fontSize: '12px',
+      },
+    },
     muiTablePaperProps: { elevation: 0, sx: { borderRadius: '0', }, },
     muiTableContainerProps: { sx: { maxHeight: 'calc(100vh - 200px)', }, },
     muiTableBodyRowProps: ({ row }) => ({
@@ -193,11 +200,10 @@ const ViajesProgramados = () => {
         <h1 className="font-semibold lg:text-2xl">Asignación de equipo</h1>
 
         <Select
-          className="max-w-xs"
+          size="sm"
           label="Sucursal"
           selectedKeys={storeValue}
           onSelectionChange={setStoreValue}
-          size="sm"
         >
           <SelectItem key="1">Veracruz</SelectItem>
           <SelectItem key="9">Manzanillo</SelectItem>
@@ -209,6 +215,7 @@ const ViajesProgramados = () => {
           onChange={setDate}
           format="yyyy-MM-dd"
           placeholder="Selecciona una fecha"
+          size="lg"
         />
 
         <Button

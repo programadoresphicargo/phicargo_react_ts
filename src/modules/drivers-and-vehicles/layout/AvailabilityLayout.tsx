@@ -12,6 +12,11 @@ const pages: MenuItemType[] = [
     requiredPermissions: [EDITION_PERMISSION],
   },
   {
+    name: 'Remolques',
+    path: '/disponibilidad/remolques',
+    requiredPermissions: [EDITION_PERMISSION],
+  },
+  {
     name: 'Operadores',
     path: '/disponibilidad/operadores',
     requiredPermissions: [EDITION_PERMISSION],
