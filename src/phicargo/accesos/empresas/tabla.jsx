@@ -18,6 +18,7 @@ import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
 import odooApi from '@/api/odoo-api';
 import { Box } from '@mui/material';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -41,7 +42,6 @@ const ListadoEmpresas = ({ open, handleClose }) => {
   };
 
   const fetchData = async () => {
-
     try {
       setLoading(true);
       const response = await odooApi.get('/empresas_visitantes/');
@@ -53,8 +53,10 @@ const ListadoEmpresas = ({ open, handleClose }) => {
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (open) {
+      fetchData();
+    }
+  }, [open]);
 
   const columns = useMemo(
     () => [
@@ -76,20 +78,19 @@ const ListadoEmpresas = ({ open, handleClose }) => {
     [],
   );
 
-  const manualGrouping = ['nombre_operador'];
-
   const table = useMaterialReactTable({
     columns,
     data,
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
-    state: { isLoading: isLoading },
+    localization: MRT_Localization_ES,
+    state: { showProgressBars: isLoading },
     enableColumnPinning: true,
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
-    grouping: manualGrouping,
     initialState: {
+      showColumnFilters: true,
       density: 'compact',
       pagination: { pageSize: 80 },
     },
