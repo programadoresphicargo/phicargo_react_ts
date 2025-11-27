@@ -121,6 +121,7 @@ const RegistroVehiculos = ({ onClose }) => {
         <Button
           color="primary"
           size='sm'
+          radius='full'
           onPress={() => {
             AñadirVehiculo(row.original.id_vehiculo);
             onClose();
@@ -130,6 +131,7 @@ const RegistroVehiculos = ({ onClose }) => {
         <Button
           color="secondary"
           size='sm'
+          radius='full'
           onPress={() => {
             NuevoVehiculo();
             setVehicleID(row.original.id_vehiculo);
@@ -181,7 +183,7 @@ const RegistroVehiculos = ({ onClose }) => {
         >
           Registro de vehículos
         </h2>
-        <Button color='primary' onPress={NuevoVehiculo}>Nuevo vehiculo</Button>
+        <Button color='primary' onPress={NuevoVehiculo} radius='full'>Nuevo vehiculo</Button>
       </Box>
     ),
   });

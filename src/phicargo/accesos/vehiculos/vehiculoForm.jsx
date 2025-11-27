@@ -77,7 +77,7 @@ const VehiculoForm = ({ open, onClose, id_vehiculo }) => {
             if (id_vehiculo) {
                 response = await odooApi.patch("/vehiculos_visitantes/", dataVehicle);
             } else {
-                response = await odooApi.post("/vehiculos_visitantes/crear_vehiculo_visitante/", dataVehicle);
+                response = await odooApi.post("/vehiculos_visitantes/", dataVehicle);
             }
 
             if (response.data.status === 'success') {
@@ -101,7 +101,7 @@ const VehiculoForm = ({ open, onClose, id_vehiculo }) => {
     return (<>
         <Grid container spacing={2} className="mb-5">
             <Grid item xs={12}>
-                <Button color="primary" onPress={registrar_vehiculo} isLoading={isLoading}>
+                <Button color="primary" onPress={registrar_vehiculo} isLoading={isLoading} radius="full">
                     {id_vehiculo ? "Actualizar" : "Registrar"}
                 </Button>
             </Grid>
