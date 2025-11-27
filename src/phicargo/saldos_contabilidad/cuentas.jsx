@@ -109,7 +109,7 @@ const Cuentas = ({ estado }) => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
-    state: { isLoading: isLoading2 },
+    state: { showProgressBars: isLoading2 },
     enableColumnPinning: true,
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
@@ -169,7 +169,7 @@ const Cuentas = ({ estado }) => {
           <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
 
             <h1 className='text-primary'>Cuentas registradas</h1>
-            <Button color='primary' onClick={handleClickOpen}>Nueva cuenta</Button>
+            <Button color='primary' onPress={handleClickOpen} radius="full">Nueva cuenta</Button>
           </div>
         </div>
 

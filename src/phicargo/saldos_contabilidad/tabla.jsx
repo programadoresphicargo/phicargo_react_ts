@@ -338,7 +338,7 @@ const Operadores = ({ estado }) => {
 
             <h1 className='text-primary'>Fecha saldo anterior: {fechaAnterior || 'N/A'}</h1>
 
-            <Button color='primary' onPress={handleClickOpen}>Cuentas</Button>
+            <Button color='primary' onPress={handleClickOpen} radius="full">Registros cuentas</Button>
           </div>
         </div>
 
