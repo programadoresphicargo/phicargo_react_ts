@@ -3,7 +3,7 @@ import {
   useMaterialReactTable,
 } from 'material-react-table';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { AccesoContext } from '../context';
 import AppBar from '@mui/material/AppBar';
 import { Button } from '@heroui/react';
@@ -49,9 +49,10 @@ const ListadoVisitantes = ({ open, handleClose }) => {
   };
 
   useEffect(() => {
-    if (!formData.id_empresa) return;
-    fetchVisitantes();
-  }, [formData.id_empresa]);
+    if (formData.id_empresa && open) {
+      fetchVisitantes();
+    }
+  }, [formData.id_empresa, open]);
 
   const columns = useMemo(
     () => [
@@ -80,7 +81,8 @@ const ListadoVisitantes = ({ open, handleClose }) => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
-    state: { isLoading: isLoading },
+    localization: MRT_Localization_ES,
+    state: { showProgressBars: isLoading },
     enableColumnPinning: true,
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
