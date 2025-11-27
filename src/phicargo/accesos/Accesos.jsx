@@ -14,6 +14,7 @@ import logo from '../../assets/img/phicargo-vertical.png';
 import { useNavigate } from "react-router-dom";
 import IconButton from '@mui/material/IconButton';
 import AppsIcon from '@mui/icons-material/Apps';
+import AvatarProfile from "@/components/ui/AvatarProfile";
 
 export default function Accesos() {
 
@@ -90,6 +91,9 @@ export default function Accesos() {
                             <Tab label="REGISTRO VEHICULOS" value="5" sx={{ fontFamily: 'Inter' }} />
                             <Tab label="ARCHIVADOS" value="6" sx={{ fontFamily: 'Inter' }} />
                         </TabList>
+                        <div className="mr-5">
+                            <AvatarProfile></AvatarProfile>
+                        </div>
                     </Box>
 
                     {/* TabPanels */}
