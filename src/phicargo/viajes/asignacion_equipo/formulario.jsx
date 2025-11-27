@@ -6,28 +6,33 @@ import {
     DialogActions,
     Button as MUIButton,
     TextField,
+    Typography,
+    Box,
 } from "@mui/material";
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import SelectFlota from '@/phicargo/maniobras/maniobras/selects_flota';
 import HistorialCambioEquipo from './historial';
 import Swal from "sweetalert2";
-import { Button, Progress, Textarea } from '@heroui/react';
+import { Button, Card, CardBody, CardHeader, Divider, Progress, Textarea } from '@heroui/react';
+import { Grid } from '@mui/system';
 
-const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenChange }) => {
+const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
 
     const historialRef = useRef(null);
     const [isEditMode, setEditMode] = useState(false);
-    const [formData, setFormData] = useState({ id_cp });
-    const isDisabled = id_pre_asignacion ? !isEditMode : false;
+    const [formData, setFormData] = useState({
+        id_cp: data?.id_cp || null,
+    });
+    const isDisabled = data?.id_pre_asignacion ? !isEditMode : false;
     const [isLoading, setLoading] = useState(false);
     const [comentarios, setComentarios] = useState("");
 
     useEffect(() => {
-        setFormData({ id_cp });
+        setFormData({ id_cp: data?.id_cp || null });
         setEditMode(false);
         getData();
-    }, [id_cp, id_pre_asignacion]);
+    }, [data]);
 
     const handleSelectChange = (value, name) => {
         setFormData(prev => ({
@@ -122,11 +127,11 @@ const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenCh
     };
 
     const getData = async () => {
-        if (!id_pre_asignacion) return;
+        if (!data?.id_pre_asignacion) return;
 
         try {
             setLoading(true);
-            const res = await odooApi.get(`/preasignacion_equipo/${id_pre_asignacion}`);
+            const res = await odooApi.get(`/preasignacion_equipo/${data?.id_pre_asignacion}`);
             setFormData(res.data);
         } catch (error) {
             toast.error("Error: " + (error.response?.data?.message || error.message));
@@ -180,7 +185,7 @@ const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenCh
 
                         <div style={{ display: "flex", gap: "10px", marginBottom: "15px" }}>
 
-                            {id_pre_asignacion == null && (
+                            {data?.id_pre_asignacion == null && (
                                 <Button
                                     color="success"
                                     isDisabled={isLoading}
@@ -192,7 +197,7 @@ const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenCh
                                 </Button>
                             )}
 
-                            {id_pre_asignacion != null && !isEditMode && formData.estado !== 'asignado_viaje' && (
+                            {data?.id_pre_asignacion != null && !isEditMode && formData.estado !== 'asignado_viaje' && (
                                 <>
                                     <Button
                                         color="primary"
@@ -213,7 +218,7 @@ const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenCh
                                 </>
                             )}
 
-                            {id_pre_asignacion != null && isEditMode && (
+                            {data?.id_pre_asignacion != null && isEditMode && (
                                 <Button
                                     color="warning"
                                     isDisabled={isLoading}
@@ -238,60 +243,138 @@ const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenCh
                             )}
                         </div>
 
-                        <div className="w-full flex flex-row flex-wrap gap-4 mt-3">
+                        <div className="w-full flex flex-row flex-wrap gap-4">
 
-                            <SelectFlota
-                                label="Remolque 1"
-                                name="trailer1_id"
-                                onChange={handleSelectChange}
-                                value={formData.trailer1_id}
-                                tipo="trailer"
-                                disabled={isDisabled}
-                            />
+                            {data && (
+                                <Card fullWidth>
+                                    <CardHeader
+                                        style={{
+                                            background: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
+                                            color: 'white',
+                                            fontWeight: 'bold'
+                                        }}>
+                                        Información del CP
+                                    </CardHeader>
+                                    <Divider></Divider>
+                                    <CardBody>
+                                        <div
+                                            style={{
+                                                display: "grid",
+                                                gridTemplateColumns: "1fr 1fr",
+                                                gap: "14px",
+                                                fontSize: "14px"
+                                            }}
+                                        >
+                                            <div>
+                                                <div style={{ color: "#6B7280", fontSize: "12px" }}>CP</div>
+                                                <div style={{ fontWeight: 600 }}>{data.name}</div>
+                                            </div>
 
-                            <SelectFlota
-                                label="Remolque 2"
-                                name="trailer2_id"
-                                onChange={handleSelectChange}
-                                value={formData.trailer2_id}
-                                tipo="trailer"
-                                disabled={isDisabled}
-                            />
+                                            <div>
+                                                <div style={{ color: "#6B7280", fontSize: "12px" }}>Modo</div>
+                                                <div style={{ fontWeight: 600 }}>{data.x_modo_bel}</div>
+                                            </div>
 
-                            <SelectFlota
-                                label="Dolly"
-                                name="dolly_id"
-                                onChange={handleSelectChange}
-                                value={formData.dolly_id}
-                                tipo="dolly"
-                                disabled={isDisabled}
-                            />
+                                            <div>
+                                                <div style={{ color: "#6B7280", fontSize: "12px" }}>Tipo</div>
+                                                <div style={{ fontWeight: 600 }}>{data.x_tipo_bel}</div>
+                                            </div>
 
-                            <SelectFlota
-                                label="Motogenerador 1"
-                                name="motogenerador1_id"
-                                onChange={handleSelectChange}
-                                value={formData.motogenerador1_id}
-                                tipo="other"
-                                disabled={isDisabled}
-                            />
+                                            <div>
+                                                <div style={{ color: "#6B7280", fontSize: "12px" }}>Contenedor</div>
+                                                <div style={{ fontWeight: 600 }}>{data.x_reference}</div>
+                                            </div>
 
-                            <SelectFlota
-                                label="Motogenerador 2"
-                                name="motogenerador2_id"
-                                onChange={handleSelectChange}
-                                value={formData.motogenerador2_id}
-                                tipo="other"
-                                disabled={isDisabled}
-                            />
+                                            <div>
+                                                <div style={{ color: "#6B7280", fontSize: "12px" }}>Ruta</div>
+                                                <div style={{ fontWeight: 600 }}>{data.x_ruta_bel}</div>
+                                            </div>
 
-                            <Textarea
-                                label="Comentarios"
-                                value={comentarios}
-                                variant={isDisabled ? "flat" : "bordered"}
-                                isDisabled={isDisabled}
-                                onChange={(e) => setComentarios(e.target.value)}
-                            />
+                                            <div>
+                                                <div style={{ color: "#6B7280", fontSize: "12px" }}>Clase</div>
+                                                <div style={{ fontWeight: 600 }}>{data.x_clase_bel}</div>
+                                            </div>
+                                        </div>
+                                    </CardBody>
+                                </Card>
+                            )}
+
+                            <div
+                                style={{
+                                    display: "grid",
+                                    gridTemplateColumns: "1fr 1fr",
+                                    gap: "16px",
+                                    marginTop: "16px"
+                                }}
+                            >
+                                <Card>
+                                    <CardHeader
+                                        style={{
+                                            background: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
+                                            color: 'white',
+                                            fontWeight: 'bold'
+                                        }}>
+                                        Equipo asignado
+                                    </CardHeader>
+                                    <Divider></Divider>
+                                    <CardBody>
+
+                                        <SelectFlota
+                                            label="Remolque 1"
+                                            name="trailer1_id"
+                                            onChange={handleSelectChange}
+                                            value={formData.trailer1_id}
+                                            tipo="trailer"
+                                            disabled={isDisabled}
+                                        />
+
+                                        <SelectFlota
+                                            label="Remolque 2"
+                                            name="trailer2_id"
+                                            onChange={handleSelectChange}
+                                            value={formData.trailer2_id}
+                                            tipo="trailer"
+                                            disabled={isDisabled}
+                                        />
+
+                                        <SelectFlota
+                                            label="Dolly"
+                                            name="dolly_id"
+                                            onChange={handleSelectChange}
+                                            value={formData.dolly_id}
+                                            tipo="dolly"
+                                            disabled={isDisabled}
+                                        />
+
+                                        <SelectFlota
+                                            label="Motogenerador 1"
+                                            name="motogenerador1_id"
+                                            onChange={handleSelectChange}
+                                            value={formData.motogenerador1_id}
+                                            tipo="other"
+                                            disabled={isDisabled}
+                                        />
+
+                                        <SelectFlota
+                                            label="Motogenerador 2"
+                                            name="motogenerador2_id"
+                                            onChange={handleSelectChange}
+                                            value={formData.motogenerador2_id}
+                                            tipo="other"
+                                            disabled={isDisabled}
+                                        />
+
+                                        <Textarea
+                                            label="Comentarios"
+                                            value={comentarios}
+                                            variant={isDisabled ? "flat" : "bordered"}
+                                            isDisabled={isDisabled}
+                                            onChange={(e) => setComentarios(e.target.value)}
+                                        />
+                                    </CardBody>
+                                </Card>
+
+                            </div>
                         </div>
                     </div>
 
@@ -301,7 +384,7 @@ const FormularioAsignacionEquipo = ({ id_cp, id_pre_asignacion, isOpen, onOpenCh
                         overflowY: "auto",
                         paddingRight: "5px"
                     }}>
-                        <HistorialCambioEquipo ref={historialRef} id_pre_asignacion={id_pre_asignacion} />
+                        <HistorialCambioEquipo ref={historialRef} id_pre_asignacion={data?.id_pre_asignacion} />
                     </div>
                 </div>
 

@@ -19,9 +19,7 @@ const ViajesProgramados = () => {
   const [storeValue, setStoreValue] = useState(new Set(["1"]));
   const [data, setData] = useState([]);
   const [isLoading, setLoading] = useState(false);
-
-  const [idCP, setIdCP] = useState(null);
-  const [idPreAsignacion, setIdPreAsignacion] = useState(null);
+  const [Preasignacion, setPreasignacion] = useState(null);
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
@@ -249,8 +247,7 @@ const ViajesProgramados = () => {
     muiTableContainerProps: { sx: { maxHeight: 'calc(100vh - 200px)', }, },
     muiTableBodyRowProps: ({ row }) => ({
       onClick: () => {
-        setIdCP(row.original.id_cp);
-        setIdPreAsignacion(row.original.id_pre_asignacion);
+        setPreasignacion(row.original);
         onOpen(); // abrir modal
       },
       style: { cursor: 'pointer' },
@@ -341,8 +338,7 @@ const ViajesProgramados = () => {
       <MaterialReactTable table={table} />
 
       <FormularioAsignacionEquipo
-        id_cp={idCP}
-        id_pre_asignacion={idPreAsignacion}
+        data={Preasignacion}
         isOpen={isOpen}
         onOpenChange={(open) => {
           onOpenChange(open);
