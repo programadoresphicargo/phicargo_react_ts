@@ -54,7 +54,6 @@ const AccesoForm = ({ id_acceso, onClose }) => {
 
     const [openEmpresas, setEmpresas] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [isLoadingVisitantes, setIsLoadingVisitantes] = useState(false);
     const [selectedMI, setSelectedMI] = React.useState(null);
     const [selectedME, setSelectedME] = React.useState(null);
     const { session } = useAuthContext();
@@ -67,7 +66,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
         setEmpresas(false);
     };
 
-    const { ActualizarIDAacceso, selectVehiculos, vehiculosAñadidos, vehiculosEliminados, empresas, formData, setFormData, addedVisitors, selectedVisitantes, setSelectedVisitantes, removedVisitors, disabledFom, setFormOptions, fileList, setFileList } = useContext(AccesoContext);
+    const { ActualizarIDAacceso, selectVehiculos, vehiculosAñadidos, vehiculosEliminados, empresas, formData, setFormData, addedVisitors, selectedVisitantes, setSelectedVisitantes, removedVisitors, disabledFom, setFormOptions, fileList, setFileList, setVehiculoSeleccionado } = useContext(AccesoContext);
 
     const EditarForm = () => {
         setFormOptions(false);
@@ -170,18 +169,18 @@ const AccesoForm = ({ id_acceso, onClose }) => {
             const response = await odooApi.get(baseUrl);
             const data = response.data;
             if (data) {
-                getVisitantesAccceso();
                 setFormData(data);
                 const tieneMercancia = data?.mercancia_ingresada?.trim();
                 setSelectedMI(tieneMercancia ? "si" : "no");
                 setSelectedME(data?.mercancia_egresada?.trim() ? "si" : "no");
+                setSelectedVisitantes(data?.visitantes);
+                setVehiculoSeleccionado(data?.vehiculos);
             } else {
                 toast.error("No se encontraron datos para el acceso.");
             }
             setIsLoading(false);
         } catch (error) {
             setIsLoading(false);
-            toast.error("Error obteniendo los datos:" + error);
             toast.error("Error al obtener datos del acceso.");
         }
     };
@@ -207,20 +206,6 @@ const AccesoForm = ({ id_acceso, onClose }) => {
             ActualizarIDAacceso(id_acceso);
         }
     }, [id_acceso]);
-
-    const getVisitantesAccceso = () => {
-        setIsLoadingVisitantes(true);
-        odooApi.get('/accesos/get_visitantes/' + id_acceso)
-            .then(response => {
-                const data = response.data;
-                setSelectedVisitantes(data);
-                setIsLoadingVisitantes(false);
-            })
-            .catch(err => {
-                console.error('Error al obtener la flota:', err);
-                setIsLoadingVisitantes(false);
-            });
-    };
 
     const fetchEmpresasVisitada = () => {
         odooApi.get('/empresas/get_empresas/')
