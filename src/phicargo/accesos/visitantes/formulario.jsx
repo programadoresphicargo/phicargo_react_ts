@@ -42,7 +42,7 @@ export default function FormVisitante({ open, handleClose }) {
         };
 
         try {
-            const response = await odooApi.post('/visitantes/crear_visitante/', dataToSend);
+            const response = await odooApi.post('/visitantes/', dataToSend);
 
             if (response.data.status == 'success') {
                 toast.success(response.data.message);

@@ -42,10 +42,15 @@ const ListadoVisitantes = ({ open, handleClose }) => {
   };
 
   const fetchVisitantes = async () => {
-    setLoading(true);
-    const response = await odooApi.get('/visitantes/by_id_empresa/' + formData.id_empresa);
-    setVisitantes(response.data);
-    setLoading(false);
+    try {
+      setLoading(true);
+      const response = await odooApi.get('/visitantes/empresas/' + formData.id_empresa);
+      setVisitantes(response.data);
+    } catch (error) {
+      toast.error("Error al obtener visitantes:" + error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
