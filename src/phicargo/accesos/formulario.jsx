@@ -166,9 +166,9 @@ const AccesoForm = ({ id_acceso, onClose }) => {
         try {
             setIsLoading(true);
             setFormOptions(true);
-            const baseUrl = `/accesos/get_by_id_acceso/${id_acceso}`;
+            const baseUrl = `/accesos/${id_acceso}`;
             const response = await odooApi.get(baseUrl);
-            const data = response.data[0];
+            const data = response.data;
             if (data) {
                 getVisitantesAccceso();
                 setFormData(data);
@@ -181,7 +181,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
             setIsLoading(false);
         } catch (error) {
             setIsLoading(false);
-            console.error("Error obteniendo los datos:", error);
+            toast.error("Error obteniendo los datos:" + error);
             toast.error("Error al obtener datos del acceso.");
         }
     };
