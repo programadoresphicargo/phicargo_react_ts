@@ -117,6 +117,14 @@ const Disponibilidad_unidades = () => {
                     );
                 },
             },
+            {
+                accessorKey: 'x_altura_compatible',
+                header: 'Altura',
+            },
+            {
+                accessorKey: 'x_longitud_compatible',
+                header: 'Longitud',
+            },
         ],
         [],
     );

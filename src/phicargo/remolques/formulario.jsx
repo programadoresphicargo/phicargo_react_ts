@@ -149,6 +149,36 @@ const FormularioRemolques = ({ id_pre_asignacion, isOpen, onOpenChange }) => {
                                 <SelectItem key="imo">IMO</SelectItem>
                             </Select>
 
+                            <Select
+                                label="Altura compatible"
+                                placeholder="Altura compatible"
+                                selectedKeys={formData.x_altura_compatible ? new Set([String(formData.x_altura_compatible)]) : new Set()}
+                                variant="bordered"
+                                onSelectionChange={(keys) => {
+                                    const value = [...keys][0];
+                                    handleSelectChange(value, "x_altura_compatible");
+                                }}
+                            >
+                                <SelectItem key={"HC"}>HC</SelectItem>
+                                <SelectItem key={"DC"}>DC</SelectItem>
+                                <SelectItem key={"DC_HC"}>DC HC</SelectItem>
+                            </Select>
+
+                            <Select
+                                label="Longitud compatible"
+                                placeholder="Longitud compatible"
+                                selectedKeys={formData.x_longitud_compatible ? new Set([String(formData.x_longitud_compatible)]) : new Set()}
+                                variant="bordered"
+                                onSelectionChange={(keys) => {
+                                    const value = [...keys][0];
+                                    handleSelectChange(value, "x_longitud_compatible");
+                                }}
+                            >
+                                <SelectItem key={"20"}>20</SelectItem>
+                                <SelectItem key={"40"}>40</SelectItem>
+                                <SelectItem key={"20_40"}>20 40</SelectItem>
+                            </Select>
+
                         </div>
                     </div>
                 </div>
