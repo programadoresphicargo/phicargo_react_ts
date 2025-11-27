@@ -14,7 +14,7 @@ import Swal from "sweetalert2";
 import { Button, Textarea } from '@heroui/react';
 import { Select, SelectItem } from '@heroui/react';
 
-const FormularioRemolques = ({ id_pre_asignacion, isOpen, onOpenChange }) => {
+const FormularioRemolques = ({ vehicle_data, isOpen, onOpenChange }) => {
 
     const [formData, setFormData] = useState({});
     const [isLoading, setLoading] = useState(false);
@@ -22,7 +22,7 @@ const FormularioRemolques = ({ id_pre_asignacion, isOpen, onOpenChange }) => {
     useEffect(() => {
         setFormData({});
         getData();
-    }, [id_pre_asignacion]);
+    }, [vehicle_data]);
 
     const handleSelectChange = (value, name) => {
         setFormData(prev => ({
@@ -36,7 +36,7 @@ const FormularioRemolques = ({ id_pre_asignacion, isOpen, onOpenChange }) => {
             setLoading(true);
 
             const res = await odooApi.patch(
-                `/vehicles/remolque/${id_pre_asignacion}`,
+                `/vehicles/remolque/${vehicle_data?.id}`,
                 formData
             );
 
@@ -54,7 +54,7 @@ const FormularioRemolques = ({ id_pre_asignacion, isOpen, onOpenChange }) => {
     const asignar_viaje = async () => {
         try {
             setLoading(true);
-            const res = await odooApi.post(`/preasignacion_equipo/asignar_viaje/${id_pre_asignacion}`);
+            const res = await odooApi.post(`/preasignacion_equipo/asignar_viaje/${vehicle_data?.id}`);
             if (res.data.status === "success") toast.success(res.data.message);
             getData();
 
@@ -66,11 +66,11 @@ const FormularioRemolques = ({ id_pre_asignacion, isOpen, onOpenChange }) => {
     };
 
     const getData = async () => {
-        if (!id_pre_asignacion) return;
+        if (!vehicle_data?.id) return;
 
         try {
             setLoading(true);
-            const res = await odooApi.get(`/vehicles/${id_pre_asignacion}`);
+            const res = await odooApi.get(`/vehicles/${vehicle_data?.id}`);
             setFormData(res.data);
         } catch (error) {
             toast.error("Error: " + (error.response?.data?.message || error.message));
@@ -85,7 +85,7 @@ const FormularioRemolques = ({ id_pre_asignacion, isOpen, onOpenChange }) => {
             onClose={() => onOpenChange(false)}
             maxWidth="sm"
             fullWidth>
-            <DialogTitle>Asignación de equipo</DialogTitle>
+            <DialogTitle>{vehicle_data?.name2}</DialogTitle>
 
             <DialogContent dividers>
 

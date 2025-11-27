@@ -30,7 +30,7 @@ const Disponibilidad_unidades = () => {
     const [isLoading2, setLoading] = useState();
     const [data, setData] = useState([]);
     const [openDialog, setOpenDialog] = useState(false);
-    const [vehicle_id, setVehicle] = useState(0);
+    const [vehicle_data, setVehicle] = useState(0);
 
     const fetchData = async () => {
         setLoading(true);
@@ -147,7 +147,7 @@ const Disponibilidad_unidades = () => {
         },
         state: { showProgressBars: isLoading2 },
         muiTableBodyRowProps: ({ row }) => ({
-            onClick: () => { handleRowClick(row); setVehicle(row.original.id) },
+            onClick: () => { handleRowClick(row); setVehicle(row.original) },
             style: {
                 cursor: 'pointer',
             },
@@ -202,7 +202,7 @@ const Disponibilidad_unidades = () => {
         <div>
             <MaterialReactTable table={table} />
 
-            <FormularioRemolques isOpen={openDialog} onOpenChange={setOpenDialog} id_pre_asignacion={vehicle_id}></FormularioRemolques>
+            <FormularioRemolques isOpen={openDialog} onOpenChange={setOpenDialog} vehicle_data={vehicle_data}></FormularioRemolques>
         </div>
     );
 };
