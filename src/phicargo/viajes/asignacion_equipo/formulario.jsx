@@ -77,7 +77,7 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
             setLoading(true);
 
             const res = await odooApi.patch(
-                `/preasignacion_equipo/${id_pre_asignacion}?comentarios=${encodeURIComponent(comentarios)}`,
+                `/preasignacion_equipo/${data?.id_pre_asignacion}?comentarios=${encodeURIComponent(comentarios)}`,
                 formData
             );
 
@@ -99,7 +99,7 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
     const asignar_viaje = async () => {
         try {
             setLoading(true);
-            const res = await odooApi.post(`/preasignacion_equipo/asignar_viaje/${id_pre_asignacion}`);
+            const res = await odooApi.post(`/preasignacion_equipo/asignar_viaje/${data?.id_pre_asignacion}`);
             if (res.data.status === "success") toast.success(res.data.message);
             historialRef.current?.reload();
             getData();
@@ -114,7 +114,7 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
     const cambiar_estado = async (estado) => {
         try {
             setLoading(true);
-            const res = await odooApi.patch(`/preasignacion_equipo/estado/${id_pre_asignacion}?estado=${estado}&comentario="Se reabrió esta asignación de equipo."`);
+            const res = await odooApi.patch(`/preasignacion_equipo/estado/${data?.id_pre_asignacion}?estado=${estado}&comentario="Se reabrió esta asignación de equipo."`);
             if (res.data.status === "success") toast.success(res.data.message);
             getData();
             historialRef.current?.reload();
@@ -243,7 +243,7 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
                             )}
                         </div>
 
-                        <div className="w-full flex flex-row flex-wrap gap-4">
+                        <div className="w-full flex flex-col gap-4">
 
                             {data && (
                                 <Card fullWidth>
@@ -299,26 +299,18 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
                                 </Card>
                             )}
 
-                            <div
-                                style={{
-                                    display: "grid",
-                                    gridTemplateColumns: "1fr 1fr",
-                                    gap: "16px",
-                                    marginTop: "16px"
-                                }}
-                            >
-                                <Card>
-                                    <CardHeader
-                                        style={{
-                                            background: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
-                                            color: 'white',
-                                            fontWeight: 'bold'
-                                        }}>
-                                        Equipo asignado
-                                    </CardHeader>
-                                    <Divider></Divider>
-                                    <CardBody>
-
+                            <Card fullWidth>
+                                <CardHeader
+                                    style={{
+                                        background: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
+                                        color: 'white',
+                                        fontWeight: 'bold'
+                                    }}>
+                                    Equipo asignado
+                                </CardHeader>
+                                <Divider></Divider>
+                                <CardBody>
+                                    <div className="w-full grid grid-cols-2 gap-4">
                                         <SelectFlota
                                             label="Remolque 1"
                                             name="trailer1_id"
@@ -371,10 +363,9 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
                                             isDisabled={isDisabled}
                                             onChange={(e) => setComentarios(e.target.value)}
                                         />
-                                    </CardBody>
-                                </Card>
-
-                            </div>
+                                    </div>
+                                </CardBody>
+                            </Card>
                         </div>
                     </div>
 
@@ -395,7 +386,7 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
                     Cerrar
                 </MUIButton>
             </DialogActions>
-        </Dialog>
+        </Dialog >
     );
 };
 
