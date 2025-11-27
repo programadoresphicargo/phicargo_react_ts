@@ -166,7 +166,7 @@ const Registromaniobras = ({ id_cp, id_cliente }) => {
                     flexWrap: 'wrap',
                 }}
             >
-                <Button onPress={abrir_nueva} color='primary'>
+                <Button onPress={abrir_nueva} color="primary" radius="full">
                     Ingresar nueva maniobra
                 </Button>
             </Box>)
