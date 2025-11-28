@@ -61,10 +61,6 @@ const ListadoEmpresas = ({ open, handleClose }) => {
   const columns = useMemo(
     () => [
       {
-        accessorKey: 'id_empresa',
-        header: 'ID Empresa',
-      },
-      {
         accessorKey: 'empresa',
         header: 'Nombre de la empresa',
         Cell: ({ cell }) => cell.getValue()?.toUpperCase(),
@@ -160,7 +156,7 @@ const ListadoEmpresas = ({ open, handleClose }) => {
       TransitionComponent={Transition}
       scroll={scroll}
       fullWidth
-      maxWidth="md"
+      maxWidth="lg"
     >
       <AppBar
         sx={{
