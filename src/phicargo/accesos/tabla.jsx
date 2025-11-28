@@ -51,10 +51,9 @@ const TablaAccesos = ({ title, tipo }) => {
   const [isLoading2, setLoading] = useState();
 
   const fetchData = async () => {
-
     try {
       setLoading(true);
-      const response = await odooApi.get('/accesos/tipo_acceso/' + tipo);
+      const response = await odooApi.get('/accesos/get_tipo_acceso/' + tipo);
       setData(response.data);
       setLoading(false);
     } catch (error) {
