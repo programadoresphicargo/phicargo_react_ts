@@ -62,10 +62,6 @@ const ListadoVisitantes = ({ open, handleClose }) => {
   const columns = useMemo(
     () => [
       {
-        accessorKey: 'id_visitante',
-        header: 'ID Visitante',
-      },
-      {
         accessorKey: 'nombre_visitante',
         header: 'Nombre del visitante',
         Cell: ({ cell }) => cell.getValue()?.toUpperCase(),
@@ -160,7 +156,11 @@ const ListadoVisitantes = ({ open, handleClose }) => {
       maxWidth="lg"
       fullWidth
     >
-      <AppBar sx={{ position: 'relative' }} elevation={0}>
+      <AppBar sx={{
+        background: 'linear-gradient(90deg, #0b2149, #002887)',
+        position: 'relative',
+        padding: '0 16px'
+      }} elevation={0}>
         <Toolbar>
           <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
             Registro de visitantes

@@ -10,6 +10,9 @@ import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import { Button } from '@heroui/react';
 import { Input } from '@heroui/react';
+import { AppBar } from '@mui/material';
+import { Toolbar } from '@mui/material';
+import Typography from '@mui/material/Typography';
 
 export default function FormEmpresa({ open, handleClose }) {
     const [nombreEmpresa, setNombreEmpresa] = useState('');
@@ -56,7 +59,19 @@ export default function FormEmpresa({ open, handleClose }) {
             fullWidth
             maxWidth="sm"
         >
-            <DialogTitle>Nueva empresa</DialogTitle>
+            <AppBar
+                sx={{
+                    background: 'linear-gradient(90deg, #0b2149, #002887)',
+                    position: 'relative',
+                    padding: '0 16px'
+                }}
+                elevation={0}>
+                <Toolbar>
+                    <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+                        Nueva empresa
+                    </Typography>
+                </Toolbar>
+            </AppBar>
             <DialogContent>
                 <Input
                     id="nombre_empresa"
