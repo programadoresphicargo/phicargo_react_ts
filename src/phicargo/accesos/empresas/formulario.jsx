@@ -33,7 +33,7 @@ export default function FormEmpresa({ open, handleClose }) {
         }
 
         try {
-            const response = await odooApi.post('/empresas_visitantes/crear_empresa_visitante/', {
+            const response = await odooApi.post('/empresas_visitantes/', {
                 empresa: nombreEmpresa.trim()
             });
 
