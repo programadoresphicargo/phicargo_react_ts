@@ -309,7 +309,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
 
             try {
                 setIsLoading(true);
-                const response = await odooApi.post(`/accesos/actualizar_acceso/${id_acceso}`, formDataToSend, {
+                const response = await odooApi.patch(`/accesos/${id_acceso}`, formDataToSend, {
                     headers: {
                         "Content-Type": "multipart/form-data",
                     },
