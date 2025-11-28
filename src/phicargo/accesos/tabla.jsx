@@ -57,7 +57,7 @@ const TablaAccesos = ({ title, tipo }) => {
       setData(response.data);
       setLoading(false);
     } catch (error) {
-      toast.error('Error al obtener los datos:' + error);
+      console.error('Error al obtener los datos:', error);
     }
   };
 
