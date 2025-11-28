@@ -1,4 +1,4 @@
-import { Autocomplete, AutocompleteItem, DatePicker, Select, SelectItem } from "@heroui/react";
+import { Autocomplete, AutocompleteItem, DatePicker, Progress, Select, SelectItem } from "@heroui/react";
 import { FormControl, Grid, Grid2, InputLabel, MenuItem, TextField } from "@mui/material";
 import React, { useEffect, useMemo, useState } from 'react';
 import { getLocalTimeZone, parseDate } from "@internationalized/date";
@@ -15,31 +15,21 @@ const CuentaForm = ({ id_cuenta, onClose }) => {
     const [value, setValue] = React.useState(parseDate(fechaActual));
     const [empresas, setEmpresas] = React.useState([]);
     const [bancos, setBancos] = React.useState([]);
+    const [isLoading, setLoading] = React.useState(false);
 
-    const getCuentaByID = async () => {
+    const getCuenta = async () => {
         try {
-            const response = await odooApi.get('/cuentas/get_cuenta_by_id/' + id_cuenta);
-            const data = response.data
-            setFormData((prevFormData) => ({
-                ...prevFormData,
-                id_empresa: data.id_empresa,
-                id_banco: data.id_banco,
-                referencia: data.referencia,
-                tipo: data.tipo,
-                moneda: data.moneda,
-            }));
+            setLoading(true);
+            const response = await odooApi.get('/cuentas/' + id_cuenta);
+            setFormData(response.data);
+            setLoading(false);
         } catch (error) {
+            setLoading(false);
             console.error('Error al obtener los datos:', error);
         }
     };
 
-    const [formData, setFormData] = useState({
-        id_empresa: '',
-        id_banco: '',
-        referencia: '',
-        tipo: '',
-        moneda: '',
-    });
+    const [formData, setFormData] = useState({});
 
     const validarFormulario = () => {
         const camposVacios = Object.entries(formData).filter(([key, value]) => !value);
@@ -52,25 +42,36 @@ const CuentaForm = ({ id_cuenta, onClose }) => {
     };
 
 
-    const registrarCuenta = async () => {
+    const registrar = async () => {
         if (!validarFormulario()) return;
         try {
-            console.log("Datos válidos:", formData);
-            try {
-                const response = await odooApi.post("/cuentas/crear_cuenta/", formData);
-                if (response.data.mensaje) {
-                    toast.success(response.data.mensaje);
-                    onClose();
-                } else {
-                    toast.error(response.data);
-                }
-            } catch (error) {
-                toast.error("Error de conexión: " + error.message);
-                console.error(error);
+            const response = await odooApi.post("/cuentas/", formData);
+            if (response.data.mensaje) {
+                toast.success(response.data.mensaje);
+                onClose();
+            } else {
+                toast.error(response.data);
             }
         } catch (error) {
-            console.error(error);
-            toast.error("Error al registrar la cuenta");
+            toast.error("Error de conexión: " + error.message);
+        }
+    };
+
+    const actualizar = async () => {
+        if (!validarFormulario()) return;
+        try {
+            setLoading(true);
+            const response = await odooApi.patch("/cuentas/" + id_cuenta, formData);
+            if (response.data.mensaje) {
+                toast.success(response.data.mensaje);
+                onClose();
+            } else {
+                toast.error(response.data);
+            }
+            setLoading(false);
+        } catch (error) {
+            setLoading(false);
+            toast.error("Error de conexión: " + error.message);
         }
     };
 
@@ -112,89 +113,91 @@ const CuentaForm = ({ id_cuenta, onClose }) => {
     useEffect(() => {
         getEmpresas();
         getBancos();
-        if (id_cuenta != 0) {
-            getCuentaByID();
+        if (id_cuenta) {
+            getCuenta();
         }
     }, []);
 
     return (
         <>
-            <Grid container spacing={2} className="mb-5">
+            {isLoading && (
+                <Progress isIndeterminate size="sm" className="mb-5"></Progress>
+            )}
 
-                <Grid item xs={12} md={12}>
-                    <Autocomplete
-                        variant="bordered"
-                        defaultItems={empresas}
-                        label="Selecciona una empresa"
-                        placeholder="Selecciona una empresa"
-                        selectedKey={String(formData.id_empresa || '')}
-                        onSelectionChange={(key) => handleChange('id_empresa', key)}
-                    >
-                        {(item) => <AutocompleteItem key={item.key}>{item.label}</AutocompleteItem>}
-                    </Autocomplete>
-                </Grid>
+            {id_cuenta && (<h1 className="mb-5">Cuenta No. {id_cuenta}</h1>)}
 
-                <Grid item xs={12} md={12}>
-                    <Autocomplete
-                        variant='bordered'
-                        defaultItems={bancos}
-                        label="Selecciona un banco"
-                        placeholder="Selecciona un banco"
-                        selectedKey={String(formData.id_banco || '')}
-                        onSelectionChange={(key) => handleChange('id_banco', key)}
-                    >
-                        {(item) => <AutocompleteItem key={item.key}>{item.label}</AutocompleteItem>}
-                    </Autocomplete>
-                </Grid>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
 
-                <Grid item xs={12} md={12}>
-                    <Select
-                        variant="bordered"
-                        label="Tipo de moneda"
-                        selectedKeys={[formData.moneda]}
-                        placeholder="Selecciona un tipo de moneda"
-                        onChange={(e) => handleChange('moneda', e.target.value)}
-                    >
-                        <SelectItem key="MXN">MXN</SelectItem>
-                        <SelectItem key="US">US</SelectItem>
-                    </Select>
-                </Grid>
-                <Grid item xs={12} md={12}>
-                    <Input
-                        label="Referencia de la cuenta"
-                        variant="bordered"
-                        type="text"
-                        value={formData.referencia}
-                        onChange={(e) => handleChange('referencia', e.target.value)}
-                    />
-                </Grid>
-                <Grid item xs={12} md={12}>
-                    <Select
-                        variant="bordered"
-                        label="Tipo de cuenta"
-                        placeholder="Selecciona un tipo de cuenta"
-                        selectedKeys={[formData.tipo]}
-                        onChange={(e) => handleChange('tipo', e.target.value)}
-                    >
-                        <SelectItem key="Cuenta bancaria">Cuenta bancaria</SelectItem>
-                        <SelectItem key="Credito revolvente">Credito revolvente</SelectItem>
-                        <SelectItem key="Inversiones">Inversiones</SelectItem>
-                        <SelectItem key="Tarjeta de credito">Tarjeta de credito</SelectItem>
-                        <SelectItem key="Factoraje">Factoraje</SelectItem>
-                        <SelectItem key="Cartera">Cartera</SelectItem>
-                    </Select>
-                </Grid>
-                <Grid item xs={12} md={12}>
-                    <Stack spacing={2} direction="row">
-                        <Button color="primary" onClick={registrarCuenta}>
+                <Stack direction="row">
+                    {!id_cuenta && (
+                        <Button color="primary" onPress={registrar} radius="full">
                             Registrar
                         </Button>
-                        <Button color="success" onClick={registrarCuenta} className='text-white'>
+                    )}
+                    {id_cuenta && (
+                        <Button color="success" onPress={actualizar} className='text-white' radius="full" isLoading={isLoading}>
                             Actualizar
                         </Button>
-                    </Stack>
-                </Grid>
-            </Grid>
+                    )}
+                </Stack>
+
+                <Autocomplete
+                    variant="bordered"
+                    defaultItems={empresas}
+                    label="Selecciona una empresa"
+                    placeholder="Selecciona una empresa"
+                    selectedKey={String(formData.id_empresa || '')}
+                    onSelectionChange={(key) => handleChange('id_empresa', key)}
+                >
+                    {(item) => <AutocompleteItem key={item.key}>{item.label}</AutocompleteItem>}
+                </Autocomplete>
+
+                <Autocomplete
+                    variant='bordered'
+                    defaultItems={bancos}
+                    label="Selecciona un banco"
+                    placeholder="Selecciona un banco"
+                    selectedKey={String(formData.id_banco || '')}
+                    onSelectionChange={(key) => handleChange('id_banco', key)}
+                >
+                    {(item) => <AutocompleteItem key={item.key}>{item.label}</AutocompleteItem>}
+                </Autocomplete>
+
+                <Select
+                    variant="bordered"
+                    label="Tipo de moneda"
+                    selectedKeys={[formData.moneda]}
+                    placeholder="Selecciona un tipo de moneda"
+                    onChange={(e) => handleChange('moneda', e.target.value)}
+                >
+                    <SelectItem key="MXN">MXN</SelectItem>
+                    <SelectItem key="US">US</SelectItem>
+                </Select>
+
+                <Input
+                    label="Referencia de la cuenta"
+                    variant="bordered"
+                    type="text"
+                    value={formData.referencia}
+                    onChange={(e) => handleChange('referencia', e.target.value)}
+                />
+
+                <Select
+                    variant="bordered"
+                    label="Tipo de cuenta"
+                    placeholder="Selecciona un tipo de cuenta"
+                    selectedKeys={[formData.tipo]}
+                    onChange={(e) => handleChange('tipo', e.target.value)}
+                >
+                    <SelectItem key="Cuenta bancaria">Cuenta bancaria</SelectItem>
+                    <SelectItem key="Credito revolvente">Credito revolvente</SelectItem>
+                    <SelectItem key="Inversiones">Inversiones</SelectItem>
+                    <SelectItem key="Tarjeta de credito">Tarjeta de credito</SelectItem>
+                    <SelectItem key="Factoraje">Factoraje</SelectItem>
+                    <SelectItem key="Cartera">Cartera</SelectItem>
+                </Select>
+
+            </div>
         </>
     );
 };

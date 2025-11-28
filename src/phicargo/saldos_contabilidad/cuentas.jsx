@@ -14,12 +14,20 @@ import {
 } from 'material-react-table';
 import React, { useEffect, useMemo, useState } from 'react';
 import { getLocalTimeZone, parseDate } from "@internationalized/date";
-
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
 import { Box } from '@mui/material';
 import CuentaForm from './cuentaForm';
 import OperadorForm from './saldoForm';
 import Slide from '@mui/material/Slide';
 import odooApi from '@/api/odoo-api';
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogActions
+} from "@mui/material";
 
 const Cuentas = ({ estado }) => {
 
@@ -27,10 +35,11 @@ const Cuentas = ({ estado }) => {
   const [value, setValue] = React.useState(parseDate(fechaActual));
 
   const [open, setOpen] = React.useState(false);
-  const [id_cuenta, setCuenta] = useState(0);
+  const [id_cuenta, setCuenta] = useState(null);
 
   const handleClickOpen = () => {
     setOpen(true);
+    setCuenta(null);
   };
 
   const handleClose = () => {
@@ -44,7 +53,7 @@ const Cuentas = ({ estado }) => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await odooApi.get('/cuentas/get_cuentas/');
+      const response = await odooApi.get('/cuentas/');
       setData(response.data);
       setLoading(false);
     } catch (error) {
@@ -179,23 +188,36 @@ const Cuentas = ({ estado }) => {
 
   return (<>
 
-    <Modal
-      isOpen={open}
-      onOpenChange={handleClose}
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      maxWidth="sm"
+      fullWidth
     >
-      <ModalContent>
-        <ModalHeader>
-          Nueva cuenta
-        </ModalHeader>
-        <ModalBody>
-          <CuentaForm id_cuenta={id_cuenta} onClose={handleClose}></CuentaForm>
-        </ModalBody>
-      </ModalContent>
-    </Modal>
+      <AppBar sx={{
+        background: 'linear-gradient(90deg, #0b2149, #002887)',
+        position: 'relative',
+        padding: '0 16px'
+      }} elevation={0}>
+        <Toolbar>
+          <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+            Cuenta
+          </Typography>
+          <Button autoFocus color="inherit" onClick={handleClose}>
+            Cerrar
+          </Button>
+        </Toolbar>
+      </AppBar>
+      <DialogContent dividers>
+        <CuentaForm id_cuenta={id_cuenta} onClose={handleClose}></CuentaForm>
+      </DialogContent>
 
-    <div>
-      <MaterialReactTable table={table} />
-    </div >
+      <DialogActions>
+        <Button onPress={handleClose}>Cerrar</Button>
+      </DialogActions>
+    </Dialog>
+
+    <MaterialReactTable table={table} />
   </>
   );
 

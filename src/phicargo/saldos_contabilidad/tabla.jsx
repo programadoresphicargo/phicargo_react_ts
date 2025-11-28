@@ -8,6 +8,12 @@ import {
   useDisclosure,
 } from "@heroui/react";
 import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogActions
+} from "@mui/material";
+import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
@@ -348,17 +354,21 @@ const Operadores = ({ estado }) => {
 
   return (<>
 
-    <Modal
-      size='5xl'
-      isOpen={open}
-      onOpenChange={handleClose}
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      maxWidth="xl"
+      fullWidth
     >
-      <ModalContent>
-        <ModalBody>
-          <Cuentas></Cuentas>
-        </ModalBody>
-      </ModalContent>
-    </Modal>
+
+      <DialogContent dividers>
+        <Cuentas />
+      </DialogContent>
+
+      <DialogActions>
+        <Button onPress={handleClose}>Cerrar</Button>
+      </DialogActions>
+    </Dialog>
 
     <Modal
       size='xl'
