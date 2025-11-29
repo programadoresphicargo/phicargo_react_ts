@@ -253,6 +253,7 @@ const Operadores = ({ estado }) => {
             size='sm'
             color='success'
             className='text-white'
+            radius="full"
             onPress={() => abrirForm(row.original.id_cuenta, row.original.referencia)}
           >
             <i class="bi bi-pen"></i>
