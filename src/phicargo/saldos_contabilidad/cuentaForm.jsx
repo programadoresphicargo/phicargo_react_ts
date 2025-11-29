@@ -93,7 +93,7 @@ const CuentaForm = ({ id_cuenta, onClose }) => {
 
     const getBancos = async () => {
         try {
-            const response = await odooApi.get("/bancos/get_bancos/");
+            const response = await odooApi.get("/bancos/");
             const data = response.data.map(item => ({
                 key: item.id_banco,
                 label: item.banco,
