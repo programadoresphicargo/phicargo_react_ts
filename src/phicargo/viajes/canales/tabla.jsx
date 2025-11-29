@@ -65,13 +65,16 @@ export default function WhatsAppContatcsTravel({ isOpen, onOpenChange }) {
     };
 
     const fetchCanalesLigados = async () => {
+        if (!id_viaje) return;
+
+        setLoading(true);
+
         try {
-            setLoading(true);
-            const response = await odooApi.get('/canales_viajes/id_viaje/' + id_viaje);
+            const response = await odooApi.get(`/canales_viajes/id_viaje/${id_viaje}`);
             setCanalesSeleccionados(response.data);
-            setLoading(false);
         } catch (error) {
             console.error('Error al obtener los datos:', error);
+        } finally {
             setLoading(false);
         }
     };
