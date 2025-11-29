@@ -28,6 +28,7 @@ import {
   DialogTitle,
   DialogActions
 } from "@mui/material";
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
 const Cuentas = ({ estado }) => {
 
@@ -71,6 +72,10 @@ const Cuentas = ({ estado }) => {
       {
         accessorKey: 'id_cuenta',
         header: 'Cuenta',
+      },
+      {
+        accessorKey: 'empresa',
+        header: 'Empresa',
       },
       {
         accessorKey: 'banco',
@@ -118,6 +123,7 @@ const Cuentas = ({ estado }) => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
+    localization: MRT_Localization_ES,
     state: { showProgressBars: isLoading2 },
     enableColumnPinning: true,
     enableStickyHeader: true,

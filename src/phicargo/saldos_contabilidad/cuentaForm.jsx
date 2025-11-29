@@ -2,7 +2,6 @@ import { Autocomplete, AutocompleteItem, DatePicker, Progress, Select, SelectIte
 import { FormControl, Grid, Grid2, InputLabel, MenuItem, TextField } from "@mui/material";
 import React, { useEffect, useMemo, useState } from 'react';
 import { getLocalTimeZone, parseDate } from "@internationalized/date";
-
 import { Button } from "@heroui/react";
 import { Input } from "@heroui/react";
 import Stack from '@mui/material/Stack';
@@ -45,14 +44,17 @@ const CuentaForm = ({ id_cuenta, onClose }) => {
     const registrar = async () => {
         if (!validarFormulario()) return;
         try {
+            setLoading(true);
             const response = await odooApi.post("/cuentas/", formData);
-            if (response.data.mensaje) {
-                toast.success(response.data.mensaje);
+            if (response.data.status == "success") {
+                toast.success(response.data.message);
                 onClose();
             } else {
                 toast.error(response.data);
             }
+            setLoading(false);
         } catch (error) {
+            setLoading(false);
             toast.error("Error de conexión: " + error.message);
         }
     };
@@ -62,8 +64,8 @@ const CuentaForm = ({ id_cuenta, onClose }) => {
         try {
             setLoading(true);
             const response = await odooApi.patch("/cuentas/" + id_cuenta, formData);
-            if (response.data.mensaje) {
-                toast.success(response.data.mensaje);
+            if (response.data.status == "success") {
+                toast.success(response.data.menssage);
                 onClose();
             } else {
                 toast.error(response.data);
@@ -130,7 +132,7 @@ const CuentaForm = ({ id_cuenta, onClose }) => {
 
                 <Stack direction="row">
                     {!id_cuenta && (
-                        <Button color="primary" onPress={registrar} radius="full">
+                        <Button color="primary" onPress={registrar} radius="full" isLoading={isLoading}>
                             Registrar
                         </Button>
                     )}
