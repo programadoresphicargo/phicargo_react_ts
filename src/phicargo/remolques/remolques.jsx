@@ -259,7 +259,7 @@ const Disponibilidad_unidades = () => {
                     size="sm"
                     color='danger'
                     className='text-white'
-                    startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => fetchData()}
+                    startContent={<i class="bi bi-arrow-clockwise"></i>} onPress={() => fetchData()}
                     radius="full">
                     Recargar
                 </Button>
