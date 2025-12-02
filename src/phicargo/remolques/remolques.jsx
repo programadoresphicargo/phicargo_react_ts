@@ -1,4 +1,4 @@
-import { Button, Chip } from "@heroui/react";
+import { Button, Chip, Tooltip } from "@heroui/react";
 import {
     CircularProgress,
     Dialog,
@@ -74,6 +74,47 @@ const Disponibilidad_unidades = () => {
             {
                 accessorKey: 'sucursal',
                 header: 'Sucursal',
+            },
+            {
+                accessorKey: 'x_status',
+                header: 'Estado',
+            },
+            {
+                accessorKey: 'viaje_name',
+                header: 'Viaje',
+                Cell: ({ cell, row }) => {
+                    const valor = cell.getValue(); // viaje_name
+                    const estado = row.original.viaje_estado; // aquí obtienes viaje_estado
+
+                    // No mostrar si viaje_name es nulo
+                    if (!valor) return null;
+
+                    return (
+                        <Tooltip content={`Estado: ${estado ?? 'N/A'}`}>
+                            <Button className="capitalize" color="primary" size="sm" radius="full">
+                                {valor}
+                            </Button>
+                        </Tooltip>
+                    );
+                },
+            },
+            {
+                accessorKey: 'x_maniobra',
+                header: 'Maniobra',
+                Cell: ({ cell, row }) => {
+                    const valor = cell.getValue();
+                    const estado = row.original.estado_maniobra;
+
+                    if (!valor) return null;
+
+                    return (
+                        <Tooltip content={`Estado: ${estado ?? 'N/A'}`}>
+                            <Button className="capitalize" color="secondary" size="sm" radius="full">
+                                {valor}
+                            </Button>
+                        </Tooltip>
+                    );
+                },
             },
             {
                 accessorKey: 'x_modalidad',
