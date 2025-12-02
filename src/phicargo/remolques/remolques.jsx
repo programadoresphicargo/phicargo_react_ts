@@ -255,6 +255,14 @@ const Disponibilidad_unidades = () => {
                     radius="full">
                     Exportar
                 </Button>
+                <Button
+                    size="sm"
+                    color='danger'
+                    className='text-white'
+                    startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => fetchData()}
+                    radius="full">
+                    Recargar
+                </Button>
             </Box>
         ),
     });
