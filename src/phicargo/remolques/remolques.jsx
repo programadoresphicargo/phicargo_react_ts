@@ -104,13 +104,33 @@ const Disponibilidad_unidades = () => {
                 Cell: ({ cell, row }) => {
                     const valor = cell.getValue();
                     const estado = row.original.estado_maniobra;
+                    const tipo = row.original.tipo_maniobra;
 
                     if (!valor) return null;
 
                     return (
                         <Tooltip content={`Estado: ${estado ?? 'N/A'}`}>
                             <Button className="capitalize" color="secondary" size="sm" radius="full">
-                                {valor}
+                                {valor} {tipo}
+                            </Button>
+                        </Tooltip>
+                    );
+                },
+            },
+            {
+                accessorKey: 'mantenimiento_id',
+                header: 'Mantenimiento',
+                Cell: ({ cell, row }) => {
+                    const valor = cell.getValue();
+                    const estado = row.original.mantenimiento_status;
+                    const tipo = row.original.tipo_maniobra;
+
+                    if (!valor) return null;
+
+                    return (
+                        <Tooltip content={`Estado: ${estado ?? 'N/A'}`}>
+                            <Button className="text-white" color="success" size="sm" radius="full">
+                                {valor} {tipo}
                             </Button>
                         </Tooltip>
                     );
