@@ -133,7 +133,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, dataCP }) => {
             setFormData(initialFormData);
             setCorreosLigados([]);
             setCorreosDesligados([]);
-            setCpsLigadas(data && Object.keys(data).length > 0 ? [dataCP] : []);
+            setCpsLigadas([dataCP]);
             setCpsDesligadas([]);
         };
 
