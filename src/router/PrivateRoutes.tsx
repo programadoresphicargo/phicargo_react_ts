@@ -18,6 +18,7 @@ import { ToastContainer } from 'react-toastify';
 import { Toaster } from 'react-hot-toast';
 import UsersManagementRoutes from '../modules/users-management/routes/UsersManagementRoutes';
 import IncidentsRoutes from '@/modules/incidents/routes/IncidentsRoutes';
+import { useCheckVersion } from '@/useCheckVersion';
 
 // Lazy load the components
 const CartasPorte = lazy(
@@ -107,8 +108,37 @@ const Lineas = lazy(() => import('../phicargo/inventarioti/celulares/lineas/inde
 const AsignacionEquipo = lazy(() => import('../phicargo/viajes/asignacion_equipo/index'))
 
 export const PrivateRoutes = () => {
+  const updateAvailable = useCheckVersion();
+
   return (
     <>
+      {updateAvailable && (
+        <div style={{
+          background: "#ffcc00",
+          padding: "10px",
+          textAlign: "center",
+          position: "fixed",
+          top: 0,
+          width: "100%",
+          zIndex: 9999,
+          fontWeight: "bold"
+        }}>
+          Nueva versión disponible.
+          <button
+            onClick={() => window.location.reload()}
+            style={{
+              marginLeft: "10px",
+              padding: "6px 12px",
+              backgroundColor: "#000",
+              color: "#fff",
+              border: "none",
+              cursor: "pointer"
+            }}
+          >
+            Recargar
+          </button>
+        </div>
+      )}
       <Toaster />
       <ToastContainer />
       <Routes>
