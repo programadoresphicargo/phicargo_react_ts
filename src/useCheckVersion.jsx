@@ -7,7 +7,7 @@ export const useCheckVersion = (interval = 60000) => {
  useEffect(() => {
   const check = async () => {
    try {
-    const res = await fetch("./public/version.json?t=" + Date.now());
+    const res = await fetch("/version.json?t=" + Date.now());
     const data = await res.json();
 
     if (data.version !== APP_VERSION) {
