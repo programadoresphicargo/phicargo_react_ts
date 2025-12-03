@@ -125,7 +125,7 @@ export const PrivateRoutes = () => {
         }}>
           Nueva versión disponible.
           <button
-            onClick={() => window.location.reload()}
+            onClick={() => window.location.href = window.location.pathname + "?v=" + Date.now()}
             style={{
               marginLeft: "10px",
               padding: "6px 12px",
