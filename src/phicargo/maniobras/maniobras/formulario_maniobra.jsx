@@ -262,7 +262,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, dataCP }) => {
                 cps_ligadas: cps_ligadas
             };
 
-            const response = await odooApi.post('/maniobras/', dataSend);
+            const response = await odooApi.post('/maniobras/create/', dataSend);
             const data = response.data;
 
             if (data.status === "success") {
