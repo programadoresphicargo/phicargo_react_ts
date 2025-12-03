@@ -10,6 +10,7 @@ const EstatusDropdownManiobra = ({ id_maniobra, ultimo_estatus, usuario_ultimo_e
     const [isLoading, setIsLoading] = useState(false);
 
     const fetchItems = () => {
+        if (!id_maniobra) return;
         setIsLoading(true);
         odooApi.get(`/maniobras/reportes_estatus_maniobras/id_maniobra/${id_maniobra}`)
             .then((response) => {

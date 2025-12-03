@@ -199,8 +199,7 @@ const Nomina_form = ({ show, handleClose, id_pago, id_operador, fecha_inicio, fe
 
     const [modalShow, setModalShow] = useState(false);
     const [idManiobra, setIdManiobra] = useState('');
-    const [idCP, setidCP] = useState('');
-    const [idCliente, setidCliente] = useState('');
+    const [dataCP, setDataCP] = useState({});
 
     const handleShowModal = () => {
         setModalShow(true);
@@ -257,8 +256,7 @@ const Nomina_form = ({ show, handleClose, id_pago, id_operador, fecha_inicio, fe
             onClick: ({ event }) => {
                 handleShowModal();
                 setIdManiobra(row.original.id_maniobra);
-                setidCP(row.original.id_cp);
-                setidCliente(row.original.partner_id);
+                setDataCP(row.original);
             },
             style: {
                 cursor: 'pointer',
@@ -285,9 +283,8 @@ const Nomina_form = ({ show, handleClose, id_pago, id_operador, fecha_inicio, fe
                 show={modalShow}
                 handleClose={handleCloseModal}
                 id_maniobra={idManiobra}
-                id_cp={idCP}
                 form_deshabilitado={true}
-                id_cliente={idCliente}
+                dataCP={dataCP}
             />
 
             <Dialog open={show} onClose={handleClose} fullScreen>

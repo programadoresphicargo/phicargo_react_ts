@@ -17,30 +17,11 @@ import odooApi from '@/api/odoo-api';
 import { ManiobraContext } from '../../context/viajeContext';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
-const ManiobraContenedores = ({ id_maniobra }) => {
+const ManiobraContenedores = ({ id_maniobra = null }) => {
     const [modalShow, setModalShow] = useState(false);
     const [openDialog, setOpenDialog] = useState(false);
-    const [isLoading, setLoading] = useState(false);
     const [selectedId, setSelectedId] = useState(null);
-    const { formData, setFormData, formDisabled } = useContext(ManiobraContext);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                setLoading(true);
-                const response = await odooApi.get('/maniobras/contenedores/' + id_maniobra);
-                setFormData(prevFormData => ({
-                    ...prevFormData,
-                    cps_ligadas: response.data || [],
-                }));
-                setLoading(false);
-            } catch (error) {
-                console.error('Error al obtener los datos:', error);
-            }
-        };
-
-        fetchData();
-    }, [id_maniobra]);
+    const { formDisabled, cps_ligadas, setCpsLigadas, cps_desligadas, setCpsDesligadas } = useContext(ManiobraContext);
 
     const handleShowModal = () => {
         setModalShow(true);
@@ -63,15 +44,19 @@ const ManiobraContenedores = ({ id_maniobra }) => {
     };
 
     const confirmarBorrado = () => {
-        const contenedor = formData.cps_ligadas.find(c => c.id === selectedId);
+        const contenedor = cps_ligadas.find(c => c.id === selectedId);
 
         if (contenedor) {
-            // Eliminar de cps_ligadas y añadir a cps_desligadas
-            setFormData(prev => ({
-                ...prev,
-                cps_ligadas: prev.cps_ligadas.filter(c => c.id !== selectedId),
-                cps_desligadas: [...(prev.cps_desligadas || []), contenedor],
-            }));
+            // 1. Quitar de cps_ligadas
+            setCpsLigadas(prev =>
+                prev.filter(c => c.id !== selectedId)
+            );
+
+            // 2. Agregar a cps_desligadas
+            setCpsDesligadas(prev => [
+                ...(prev || []),
+                contenedor
+            ]);
         }
 
         setOpenDialog(false);
@@ -107,12 +92,11 @@ const ManiobraContenedores = ({ id_maniobra }) => {
 
     const table = useMaterialReactTable({
         columns,
-        data: formData.cps_ligadas || [],
+        data: cps_ligadas,
         enableGrouping: true,
         enableGlobalFilter: true,
         enableFilters: true,
         localization: MRT_Localization_ES,
-        state: { showProgressBars: isLoading },
         initialState: {
             density: 'compact',
             pagination: { pageSize: 80 },
@@ -127,7 +111,7 @@ const ManiobraContenedores = ({ id_maniobra }) => {
         enableRowActions: true,
         renderRowActions: ({ row }) => (
             <Box>
-                <Button onPress={() => handleOpenDialog(row.original.id)} startContent={<DeleteIcon />} size='sm' color='primary' isDisabled={formDisabled}></Button>
+                <Button onPress={() => handleOpenDialog(row.original.id)} startContent={<DeleteIcon />} size='sm' color='primary' isDisabled={formDisabled} radius='full'></Button>
             </Box>
         ),
         muiTableBodyRowProps: ({ row }) => ({
@@ -166,7 +150,7 @@ const ManiobraContenedores = ({ id_maniobra }) => {
                 </CardHeader>
                 <CardBody>
                     <div>
-                        <Button color='primary' onPress={handleShowModal} isDisabled={formDisabled}>
+                        <Button color='primary' onPress={handleShowModal} isDisabled={formDisabled} radius='full'>
                             Añadir contenedor
                         </Button>
                         <AñadirContenedor
@@ -184,10 +168,10 @@ const ManiobraContenedores = ({ id_maniobra }) => {
                         >
                             <DialogTitle>¿Estás seguro?</DialogTitle>
                             <DialogActions>
-                                <Button onPress={handleCloseDialog} color="default" className="text-white">
+                                <Button onPress={handleCloseDialog} color="default" className="text-white" radius='full'>
                                     Cancelar
                                 </Button>
-                                <Button onPress={confirmarBorrado} color="primary">
+                                <Button onPress={confirmarBorrado} color="primary" radius='full'>
                                     Sí, borrar
                                 </Button>
                             </DialogActions>

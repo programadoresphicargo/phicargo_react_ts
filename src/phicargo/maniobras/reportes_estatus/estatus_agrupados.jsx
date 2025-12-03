@@ -37,6 +37,7 @@ function EstatusHistorialAgrupado({ id_reporte }) {
     }, [id_reporte]);
 
     const getEstatus = async () => {
+        if (!id_reporte) return;
 
         try {
             setLoading(true);

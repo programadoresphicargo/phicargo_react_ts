@@ -13,7 +13,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const Example2 = ({ show, handleClose, id_cp, x_reference, id_cliente }) => {
+const RegistroManiobrasCP = ({ show, handleClose, data }) => {
     return (
         <>
             <Dialog
@@ -22,14 +22,15 @@ const Example2 = ({ show, handleClose, id_cp, x_reference, id_cliente }) => {
                 fullScreen
                 TransitionComponent={Transition}
             >
-                <AppBar elevation={3} position="static"
+                <AppBar elevation={0}
+                    position="static"
                     sx={{
                         background: 'linear-gradient(90deg, #0b2149, #002887)',
                         padding: '0 16px'
                     }}>
                     <Toolbar>
                         <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-                            {x_reference}
+                            ID: {data?.id_cp} Contenedor: {data?.x_reference} Cliente: {data?.id_cliente}
                         </Typography>
                         <IconButton
                             edge="start"
@@ -44,8 +45,7 @@ const Example2 = ({ show, handleClose, id_cp, x_reference, id_cliente }) => {
 
                 <DialogContent>
                     <Registromaniobras
-                        id_cp={id_cp}
-                        id_cliente={id_cliente}
+                        dataCP={data}
                     />
                 </DialogContent>
             </Dialog>
@@ -53,4 +53,4 @@ const Example2 = ({ show, handleClose, id_cp, x_reference, id_cliente }) => {
     );
 }
 
-export default Example2;
+export default RegistroManiobrasCP;

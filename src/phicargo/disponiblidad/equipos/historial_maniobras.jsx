@@ -23,17 +23,16 @@ import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 
 const HistorialManiobrasVehiculo = ({ vehicle_id }) => {
-    const [isLoading2, setLoading] = useState();
+    const [isLoading, setLoading] = useState();
     const [data, setData] = useState([]);
     const [modalShow, setModalShow] = useState(false);
     const [id_maniobra, setIdmaniobra] = useState('');
-    const [id_cp, setIdcp] = useState('');
-    const [idCliente, setClienteID] = useState('');
+    const [dataCP, setDataCP] = useState({});
 
-    const handleShowModal = (id_maniobra, id_cp) => {
+    const handleShowModal = (id_maniobra, data) => {
         setModalShow(true);
         setIdmaniobra(id_maniobra);
-        setIdcp(id_cp);
+        setDataCP(data);
     };
 
     const handleCloseModal = () => {
@@ -184,7 +183,7 @@ const HistorialManiobrasVehiculo = ({ vehicle_id }) => {
             density: 'compact',
             pagination: { pageSize: 80 },
         },
-        state: { isLoading: isLoading2 },
+        state: { isLoading: isLoading },
         muiTableHeadCellProps: {
             sx: {
                 fontFamily: 'Inter',
@@ -214,8 +213,7 @@ const HistorialManiobrasVehiculo = ({ vehicle_id }) => {
             onClick: ({ event }) => {
                 if (row.subRows?.length) {
                 } else {
-                    handleShowModal(row.original.id_maniobra, row.original.id);
-                    setClienteID(row.original.id_cliente);
+                    handleShowModal(row.original.id_maniobra, row.original);
                 }
             },
             style: {
@@ -231,8 +229,7 @@ const HistorialManiobrasVehiculo = ({ vehicle_id }) => {
             show={modalShow}
             handleClose={handleCloseModal}
             id_maniobra={id_maniobra}
-            id_cp={id_cp}
-            id_cliente={idCliente}
+            data={dataCP}
             form_deshabilitado={true}
         />
     </>

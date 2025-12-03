@@ -24,15 +24,13 @@ const { VITE_ODOO_API_URL } = import.meta.env;
 const ReporteCumplimientoManiobra = () => {
 
     const [modalShow, setModalShow] = React.useState(false);
-
     const [id_maniobra, setIdmaniobra] = useState('');
-    const [id_cp, setIdcp] = useState('');
-    const [idCliente, setClienteID] = useState('');
+    const [dataCP, setDataCP] = useState({});
 
-    const handleShowModal = (id_maniobra, id_cp) => {
+    const handleShowModal = (id_maniobra, data) => {
         setModalShow(true);
         setIdmaniobra(id_maniobra);
-        setIdcp(id_cp);
+        setDataCP({ data });
     };
 
     const handleCloseModal = () => {
@@ -351,8 +349,7 @@ const ReporteCumplimientoManiobra = () => {
         },
         muiTableBodyRowProps: ({ row }) => ({
             onClick: ({ event }) => {
-                handleShowModal(row.original.id_maniobra, row.original.id);
-                setClienteID(row.original.id_cliente);
+                handleShowModal(row.original.id_maniobra, row.original);
             },
             style: {
                 cursor: 'pointer',
@@ -423,8 +420,7 @@ const ReporteCumplimientoManiobra = () => {
                 show={modalShow}
                 handleClose={handleCloseModal}
                 id_maniobra={id_maniobra}
-                id_cp={id_cp}
-                id_cliente={idCliente}
+                data={dataCP}
                 form_deshabilitado={true}
             />
         </>

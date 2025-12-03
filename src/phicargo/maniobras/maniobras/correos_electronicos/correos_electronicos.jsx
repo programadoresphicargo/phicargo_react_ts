@@ -10,7 +10,7 @@ import TextField from '@mui/material/TextField';
 import axios from 'axios';
 import odooApi from '@/api/odoo-api';
 
-const AutocompleteManager = ({ onValuesChange, id_maniobra, id_cliente, disabled }) => {
+const AutocompleteManager = ({ onValuesChange, id_cliente, disabled }) => {
     const [options, setOptions] = useState([]);
     const [addedValues, setAddedValues] = useState([]);
     const [initialValues, setInitialValues] = useState([]);
@@ -64,7 +64,7 @@ const AutocompleteManager = ({ onValuesChange, id_maniobra, id_cliente, disabled
         <Card>
             <CardBody>
                 <div className='mb-5'>
-                    <Button color='primary' onPress={handleClickOpen2}>Nuevo correo</Button>
+                    <Button color='primary' onPress={handleClickOpen2}>Nuevo correo: {id_cliente}</Button>
                 </div>
                 <FormularioCorreo open={open2} handleClose={handleClose2} id_cliente={id_cliente}></FormularioCorreo>
                 <Autocomplete

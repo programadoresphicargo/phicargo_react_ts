@@ -1,7 +1,7 @@
 import { Autocomplete, AutocompleteItem } from '@heroui/react';
 import { Card, CardBody } from "@heroui/react";
 import { CardHeader, Divider, User } from "@heroui/react";
-import { Container, filledInputClasses } from '@mui/material';
+import { Container } from '@mui/material';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Textarea } from "@heroui/react";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -48,99 +48,51 @@ const fieldValidations = {
     id_terminal: { required: true, message: 'El campo Terminal es requerido' },
     tipo_maniobra: { required: true, message: 'El campo Tipo de Maniobra es requerido' },
     inicio_programado: { required: true, message: 'El campo Inicio Programado es requerido' },
-    correos_ligados: { required: true, message: 'Los correos son requeridos' }
 };
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente }) => {
+const Formulariomaniobra = ({ show, handleClose, id_maniobra, dataCP }) => {
 
-    const { setIDManiobra, setIDCliente, addedValues, setAddedValues, removedValues, setRemovedValues, formData, setFormData, formDisabled, setFormDisabled } = useContext(ManiobraContext);
-
+    const {
+        formDisabled, setFormDisabled,
+        correos_ligados, setCorreosLigados,
+        correos_desligados, setCorreosDesligados,
+        cps_ligadas, setCpsLigadas,
+        cps_desligadas, setCpsDesligadas } = useContext(ManiobraContext);
     const { session } = useAuthContext();
     const [Loading, setLoading] = useState(false);
-    const controller = new AbortController();
     const [value, setValue] = React.useState('1');
-    setIDCliente(id_cliente);
+
+    function getLocalISOString() {
+        const now = new Date();
+        const offset = now.getTimezoneOffset();
+        const localDate = new Date(now.getTime() - offset * 60 * 1000);
+        return localDate.toISOString().slice(0, 19);
+    }
+
+    const initialFormData = {
+        id_terminal: null,
+        tipo_maniobra: null,
+        operador_id: null,
+        vehicle_id: null,
+        trailer1_id: null,
+        trailer2_id: null,
+        dolly_id: null,
+        inicio_programado: getLocalISOString(),
+        comentarios: ''
+    };
+
+    const [formData, setFormData] = useState(initialFormData);
 
     const handleChangeTab = (event, newValue) => {
         setValue(newValue);
     };
 
-    const [buttonsVisibility, setButtonsVisibility] = useState({
-        registrar: false,
-        cancelar: false,
-        editar_maniobra: false,
-        iniciar: false,
-        finalizar: false,
-        enviar_estatus: false,
-        reactivar: false
-    });
-
-    const toggleButtonsVisibility = (variable) => {
-        const newVisibility = {};
-
-        if (variable === 'borrador') {
-            newVisibility.registrar = false;
-            newVisibility.editar_maniobra = true;
-            newVisibility.cancelar = true;
-            newVisibility.iniciar = true;
-            newVisibility.finalizar = false;
-            newVisibility.correos = true;
-            newVisibility.enviar_estatus = false;
-        } else if (variable === 'cancelada') {
-            newVisibility.registrar = false;
-            newVisibility.cancelar = false;
-            newVisibility.iniciar = false;
-            newVisibility.finalizar = false;
-            newVisibility.correos = false;
-            newVisibility.enviar_estatus = false;
-        } else if (variable === 'registrar') {
-            newVisibility.registrar = true;
-            newVisibility.cancelar = false;
-            newVisibility.iniciar = false;
-            newVisibility.finalizar = false;
-            newVisibility.correos = false;
-            newVisibility.enviar_estatus = false;
-        } else if (variable === 'editar') {
-            newVisibility.registrar = false;
-            newVisibility.editar_maniobra = false;
-            newVisibility.guardar_maniobra = true;
-            newVisibility.cancelar = false;
-            newVisibility.iniciar = false;
-            newVisibility.finalizar = false;
-            newVisibility.correos = false;
-            newVisibility.enviar_estatus = false;
-        } else if (variable === 'finalizada') {
-            newVisibility.registrar = false;
-            newVisibility.editar_maniobra = false;
-            newVisibility.guardar_maniobra = false;
-            newVisibility.cancelar = false;
-            newVisibility.iniciar = false;
-            newVisibility.finalizar = false;
-            newVisibility.reactivar = true;
-            newVisibility.correos = false;
-            newVisibility.enviar_estatus = false;
-        } else if (variable === 'activa') {
-            newVisibility.registrar = false;
-            newVisibility.editar_maniobra = false;
-            newVisibility.guardar_maniobra = false;
-            newVisibility.cancelar = false;
-            newVisibility.iniciar = false;
-            newVisibility.finalizar = true;
-            newVisibility.reactivar = false;
-            newVisibility.correos = false;
-            newVisibility.enviar_estatus = true;
-        }
-
-        setButtonsVisibility(newVisibility);
-    };
-
     const toggleForm = () => {
         setFormDisabled(false);
-        toggleButtonsVisibility('editar');
     };
 
     const options_tipo_maniobra = [
@@ -152,99 +104,41 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
     ];
 
     useEffect(() => {
-        const fetchManiobraData = async (id) => {
-            try {
-                setLoading(true);
-                const response = await odooApi.get(`/maniobras/by_id/${id}`);
-                setLoading(false);
-                return response.data || {};
-            } catch (error) {
-                setLoading(false);
-                console.error('Error al obtener maniobra:', error);
-                toast.error('Error al obtener maniobra.');
-                return {};
-            }
-        };
+        const loadData = async () => {
 
-        const fetchCorreosLigados = async (id) => {
-            try {
-                const response = await odooApi.get(`/maniobras/correos/ligados/${id}`);
-                console.log(response.data);
-                return response.data || [];
-            } catch (error) {
-                console.error('Error al obtener correos:', error);
-                toast.error('Error al obtener correos.');
-                return [];
-            }
-        };
-
-        const cargarDatos = async () => {
+            // 👉 SI ES EDICIÓN
             if (id_maniobra) {
                 setFormDisabled(true);
-                setIDManiobra(id_maniobra);
+                setLoading(true);
 
-                const correos = await fetchCorreosLigados(id_maniobra);
-                const data = await fetchManiobraData(id_maniobra);
+                try {
+                    const response = await odooApi.get(`/maniobras/${id_maniobra}`);
+                    const maniobra = response.data;
+                    setFormData(maniobra);
+                    setCorreosLigados(maniobra.correos_ligados || []);
+                    setCpsLigadas(maniobra.contenedores_ligados || []);
+                    setCorreosDesligados([]);
+                    setCpsDesligadas([]);
+                } catch (error) {
+                    toast.error("Error al cargar datos" + error);
+                } finally {
+                    setLoading(false);
+                }
 
-                setFormData(prev => ({
-                    ...prev,
-                    id_maniobra: data.id_maniobra || '',
-                    id_usuario: session.user.id,
-                    id_terminal: data.id_terminal || '',
-                    tipo_maniobra: data.tipo_maniobra || '',
-                    operador_id: data.operador_id || null,
-                    vehicle_id: data.vehicle_id || null,
-                    trailer1_id: data.trailer1_id || null,
-                    trailer2_id: data.trailer2_id || null,
-                    dolly_id: data.dolly_id || null,
-                    motogenerador_1: data.motogenerador_1 || null,
-                    motogenerador_2: data.motogenerador_2 || null,
-                    inicio_programado: data.inicio_programado || '',
-                    usuario_registro: data.usuarioregistro || '',
-                    usuario_activo: data.usuarioactivacion || '',
-                    usuario_finalizo: data.usuariofinalizacion || '',
-                    estado_maniobra: data.estado_maniobra || '',
-                    correos_ligados: correos,
-                    correos_desligados: [],
-                    cps_desligadas: [],
-                    comentarios: data.comentarios || '',
-                    usuario_cancelacion: data.usuario_cancelacion,
-                    fecha_cancelacion: data.fecha_cancelacion,
-                    motivo_cancelacion: data.motivo_cancelacion
-                }));
-
-                toggleButtonsVisibility(data.estado_maniobra);
-            } else {
-                setIDManiobra(0);
-                setFormDisabled(false);
-
-                setFormData(prev => ({
-                    ...prev,
-                    id_usuario: session.user.id,
-                    id_terminal: '',
-                    id_cliente: '',
-                    tipo_maniobra: '',
-                    operador_id: null,
-                    vehicle_id: null,
-                    trailer1_id: null,
-                    trailer2_id: null,
-                    dolly_id: null,
-                    motogenerador_1: null,
-                    motogenerador_2: null,
-                    estado_maniobra: '',
-                    correos_ligados: [],
-                    correos_desligados: [],
-                    cps_ligadas: [{ "id": id_cp }],
-                    comentarios: ''
-                }));
-
-                toggleButtonsVisibility('registrar');
+                return;
             }
+
+            // 👉 SI ES NUEVO REGISTRO
+            setFormDisabled(false);
+            setFormData(initialFormData);
+            setCorreosLigados([]);
+            setCorreosDesligados([]);
+            setCpsLigadas(data && Object.keys(data).length > 0 ? [dataCP] : []);
+            setCpsDesligadas([]);
         };
 
-        cargarDatos();
+        loadData();
     }, [id_maniobra, show]);
-
 
     const [errors, setErrors] = useState({});
     const validateFields = () => {
@@ -270,7 +164,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
 
     // Función para validar los correos
     const comprobacion_correos = () => {
-        if (formData.correos_ligados.length === 0) {
+        if (correos_ligados.length === 0) {
             toast.error('Selecciona al menos un correo');
             return false;
         }
@@ -358,78 +252,69 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
         setDialogOpen(false);
     };
 
-    const registrar_maniobra = () => {
-
-        const dataSend = {
-            data: formData,
-            correos_ligados: formData.correos_ligados,
-            cps_ligadas: formData.cps_ligadas
-        }
-
+    const registrar_maniobra = async () => {
         setLoading(true);
-        odooApi.post('/maniobras/create/', dataSend)
-            .then((response) => {
-                const data = response.data;
-                setLoading(false);
-                if (data.status == "success") {
-                    toast.success('El registro ha sido exitoso.');
-                    handleClose();
-                } else if (data.status == "error") {
-                    toast.error('Error: ' + data.message);
-                } else if (data.error) {
-                    toast.error('Error: ' + data.error);
-                } else {
-                    toast.error('Respuesta inesperada.');
-                }
-            })
-            .catch((error) => {
-                console.error('Error en la solicitud:' + error);
-                setLoading(false);
-                if (error.response) {
-                    toast.error('Respuesta de error:' + error.response.data);
-                } else if (error.request) {
-                    toast.error('No se recibió respuesta del servidor:' + error.request);
-                } else {
-                    toast.error('Error al configurar la solicitud:' + error.message);
-                }
-            });
+
+        try {
+            const dataSend = {
+                data: formData,
+                correos_ligados: correos_ligados,
+                cps_ligadas: cps_ligadas
+            };
+
+            const response = await odooApi.post('/maniobras/', dataSend);
+            const data = response.data;
+
+            if (data.status === "success") {
+                toast.success(data.message);
+                handleClose();
+            } else if (data.status === "error") {
+                toast.error("Error: " + data.message);
+            } else if (data.error) {
+                toast.error("Error: " + data.error);
+            } else {
+                toast.error("Respuesta inesperada del servidor.");
+            }
+
+        } catch (error) {
+            console.error("Error en la solicitud:", error);
+
+            if (error.response) {
+                toast.error("Respuesta de error: " + JSON.stringify(error.response.data));
+            } else if (error.request) {
+                toast.error("No se recibió respuesta del servidor.");
+            } else {
+                toast.error("Error al configurar la solicitud: " + error.message);
+            }
+
+        } finally {
+            setLoading(false);
+        }
     };
 
     const actualizar_maniobra = async () => {
-        try {
+        setLoading(true);
 
+        try {
             const dataSend = {
                 data: formData,
-                correos_ligados: formData.correos_ligados,
-                correos_desligados: formData.correos_desligados,
-                cps_ligadas: formData.cps_ligadas,
-                cps_desligadas: formData.cps_desligadas
-            }
+                correos_ligados: correos_ligados,
+                correos_desligados: correos_desligados,
+                cps_ligadas: cps_ligadas,
+                cps_desligadas: cps_desligadas
+            };
 
-            setLoading(true);
-            const response = await odooApi.post(`/maniobras/update/${id_maniobra}`, dataSend);
-            setLoading(false);
+            const response = await odooApi.patch(`/maniobras/${id_maniobra}`, dataSend);
 
-            const data = response.data;
-            setLoading(false);
-            if (data.status == "success") {
-                toast.success('Datos actualizados correctamente.');
+            if (response.data.status === "success") {
+                toast.success(response.data.message);
                 handleClose();
                 setFormDisabled(true);
-                toggleButtonsVisibility('borrador');
-
-                setFormData(prevFormData => ({
-                    ...prevFormData,
-                    correos_ligados: [],
-                    correos_desligados: [],
-                }));
             } else {
-                toast.error(`Error en la actualización: Respuesta inesperada del servidor'}`);
+                toast.error("Error en la actualización: Respuesta inesperada del servidor");
             }
         } catch (error) {
-            setLoading(false);
             console.error('Error en la solicitud:', error);
-
             if (error.response) {
                 toast.error(`Error del servidor: ${error.response.data}`);
             } else if (error.request) {
@@ -437,6 +322,8 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
             } else {
                 toast.error(`Error en la solicitud: ${error.message}`);
             }
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -452,13 +339,11 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
             cancelButtonText: 'Cancelar',
         }).then((result) => {
             if (result.isConfirmed) {
-                console.log(formData.id_maniobra);
                 odooApi.get('/maniobras/reactivar/' + formData.id_maniobra)
                     .then((response) => {
                         if (response.data.status === 'success') {
                             toast.success(response.data.message);
                             handleClose();
-                            toggleButtonsVisibility('borrador');
                         } else {
                             toast.error('Respuesta inesperada del servidor: ' + response.data.message);
                         }
@@ -637,7 +522,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
             <PanelEstatus id_maniobra={id_maniobra} open={openPanelEstatus} handleClose={handleClosePE}>
             </PanelEstatus>
 
-            <CorreosLigadosManiobra open={openCL} handleClose={handleCloseCL}></CorreosLigadosManiobra>
+            <CorreosLigadosManiobra open={openCL} handleClose={handleCloseCL} id_cliente={dataCP?.id_cliente}></CorreosLigadosManiobra>
 
             <CancelarManiobraDialog
                 open={dialogOpen}
@@ -663,7 +548,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                         }}>
                         <Toolbar>
                             <Typography sx={{ fontFamily: 'Inter' }}>
-                                Maniobra M-{id_maniobra} / {id_cp}
+                                Maniobra M-{id_maniobra} / {dataCP?.id}
                             </Typography>
                             <Button autoFocus color="primary" onPress={handleClose} radius='full'>
                                 Cerrar
@@ -701,29 +586,45 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                 <Grid container mb={2} spacing={2}>
                                     <Grid size={12}>
                                         <Stack spacing={1} direction="row" className='mb-4'>
-                                            {buttonsVisibility.registrar && <Button color="primary" onPress={validar_form} isLoading={Loading} radius='full'>Registrar</Button>}
-                                            {buttonsVisibility.cancelar && <Button onPress={handleOpenDialog} color="danger" startContent={<i class="bi bi-x-circle"></i>} radius='full' isLoading={Loading}>Cancelar</Button>}
-                                            {buttonsVisibility.guardar_maniobra && <Button color="success" onPress={validar_form_actualizar} isLoading={Loading} className='text-white' startContent={<i class="bi bi-floppy"></i>} radius='full'>Guardar cambios</Button>}
-                                            {buttonsVisibility.editar_maniobra && <Button color="primary" onPress={toggleForm} startContent={<i class="bi bi-pen"></i>} radius='full' isLoading={Loading}>Editar</Button>}
-                                            {buttonsVisibility.iniciar && <Button color="success" onPress={comprobar_equipo} className='text-white' startContent={<i class="bi bi-play-fill"></i>} radius='full' isLoading={Loading}>Iniciar</Button>}
-                                            {buttonsVisibility.finalizar && <Button onPress={finalizar_maniobra} color="danger" startContent={<i class="bi bi-stop-fill"></i>} radius="full" isLoading={Loading}>Finalizar</Button>}
-                                            {buttonsVisibility.enviar_estatus && <Button onPress={handleClickOpenPE} color="success" className='text-white' startContent={<i class="bi bi-send-fill"></i>} radius="full" isLoading={Loading}>Enviar nuevo estatus</Button>}
-                                            {buttonsVisibility.reactivar && <Button color="primary" onPress={reactivar_maniobra} radius='full' isLoading={Loading}>Reactivar maniobra</Button>}
+                                            {!id_maniobra &&
+                                                <Button color="primary" onPress={validar_form} isLoading={Loading} radius='full'>Registrar</Button>
+                                            }
+                                            {formData.estado_maniobra == "borrador" && (
+                                                <Button onPress={handleOpenDialog} color="danger" startContent={<i class="bi bi-x-circle"></i>} radius='full' isLoading={Loading}>Cancelar</Button>
+                                            )}
+                                            {!formDisabled && id_maniobra && (
+                                                <Button color="success" onPress={validar_form_actualizar} isLoading={Loading} className='text-white' startContent={<i class="bi bi-floppy"></i>} radius='full'>Guardar cambios</Button>
+                                            )}
+                                            {formData.estado_maniobra == "borrador" && (
+                                                <Button color="primary" onPress={toggleForm} startContent={<i class="bi bi-pen"></i>} radius='full' isLoading={Loading}>Editar</Button>
+                                            )}
+                                            {formData.estado_maniobra == "borrador" && (
+                                                <Button color="success" onPress={comprobar_equipo} className='text-white' startContent={<i class="bi bi-play-fill"></i>} radius='full' isLoading={Loading}>Iniciar</Button>
+                                            )}
+                                            {formData.estado_maniobra == "activa" && (
+                                                <Button onPress={finalizar_maniobra} color="danger" startContent={<i class="bi bi-stop-fill"></i>} radius="full" isLoading={Loading}>Finalizar</Button>
+                                            )}
+                                            {formData.estado_maniobra == "activa" && (
+                                                <Button onPress={handleClickOpenPE} color="success" className='text-white' startContent={<i class="bi bi-send-fill"></i>} radius="full" isLoading={Loading}>Enviar nuevo estatus</Button>
+                                            )}
+                                            {formData.estado_maniobra == "finalizada" && (
+                                                <Button color="primary" onPress={reactivar_maniobra} radius='full' isLoading={Loading}>Reactivar maniobra</Button>
+                                            )}
                                             <Button color="primary" onPress={handleClickOpenCL} startContent={<i class="bi bi-envelope-at-fill"></i>} radius='full' isLoading={Loading}>Correos electronicos</Button>
-
-                                            <Button
-                                                radius="full"
-                                                showAnchorIcon
-                                                as={Link}
-                                                isExternal={true}
-                                                color="success"
-                                                href={`${apiUrl}/maniobras/formato_entrega/` + id_maniobra}
-                                                variant="solid"
-                                                className='text-white'
-                                                isLoading={Loading}
-                                            >
-                                                Formato de entrega
-                                            </Button>
+                                            {id_maniobra && (
+                                                <Button
+                                                    radius="full"
+                                                    showAnchorIcon
+                                                    as={Link}
+                                                    isExternal={true}
+                                                    color="success"
+                                                    href={`${apiUrl}/maniobras/formato_entrega/` + id_maniobra}
+                                                    variant="solid"
+                                                    className='text-white'
+                                                    isLoading={Loading}
+                                                >
+                                                    Formato de entrega
+                                                </Button>)}
 
                                         </Stack>
                                     </Grid>
@@ -874,7 +775,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                             </CardBody>
                                         </Card>
 
-                                        {id_maniobra != null ? (
+                                        {id_maniobra ? (
                                             <div className='mt-4'>
                                                 <ManiobraContenedores
                                                     id_maniobra={id_maniobra} />
@@ -907,7 +808,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                                     </div>
 
                                                     <div className="flex gap-4 items-center">
-                                                        {formData.usuario_activo !== '' && (
+                                                        {formData.usuario_activo && (
                                                             <User
                                                                 name="Iniciada por"
                                                                 isBordered color="primary"
@@ -917,7 +818,7 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, id_cp, id_cliente 
                                                                 }}
                                                             />
                                                         )}
-                                                        {formData.usuario_finalizo !== '' && (
+                                                        {formData.usuario_finalizo && (
                                                             <User
                                                                 name="Finalizada por"
                                                                 description={formData.usuario_finalizo}

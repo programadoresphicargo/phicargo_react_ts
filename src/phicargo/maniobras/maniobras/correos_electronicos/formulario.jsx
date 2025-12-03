@@ -13,9 +13,9 @@ import axios from 'axios';
 import odooApi from '@/api/odoo-api';
 import { toast } from "react-toastify";
 
-const FormularioCorreo = ({ open, handleClose }) => {
+const FormularioCorreo = ({ open, handleClose, id_cliente }) => {
 
-    const { id_maniobra, id_cliente, formData, setFormData, formDisabled, setFormDisabled } = useContext(ManiobraContext);
+    const { formDisabled, setFormDisabled } = useContext(ManiobraContext);
     const [nombreCompleto, setNombreCompleto] = React.useState('');
     const [correo, setCorreo] = React.useState('');
     const [tipoCorreo, setTipoCorreo] = React.useState('Destinatario');
@@ -76,7 +76,7 @@ const FormularioCorreo = ({ open, handleClose }) => {
                 fullWidth={true}
                 maxWidth='sm'
             >
-                <DialogTitle>Nuevo correo electrónico</DialogTitle>
+                <DialogTitle>Nuevo correo electrónico {id_cliente}</DialogTitle>
                 <DialogContent>
                     <Input
                         margin="dense"
@@ -118,8 +118,8 @@ const FormularioCorreo = ({ open, handleClose }) => {
 
                 </DialogContent>
                 <DialogActions>
-                    <Button onPress={handleClose} color='danger'>Cancelar</Button>
-                    <Button type="submit" color='primary' onPress={handleSubmit}>Registrar</Button>
+                    <Button onPress={handleClose} color='danger' radius='full'>Cancelar</Button>
+                    <Button type="submit" color='primary' onPress={handleSubmit} radius='full'>Registrar</Button>
                 </DialogActions>
             </Dialog>
         </React.Fragment>

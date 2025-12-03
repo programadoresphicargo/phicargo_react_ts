@@ -18,6 +18,7 @@ import { DateRangePicker } from 'rsuite';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import CustomNavbar from "@/pages/CustomNavbar";
 import { pages } from '../pages';
+import RegistroManiobrasCP from "../maniobras/modal";
 
 const CartasPorte = () => {
 
@@ -35,15 +36,11 @@ const CartasPorte = () => {
   };
 
   const [modalShow, setModalShow] = useState(false);
-  const [modalContent, setModalContent] = useState('');
-  const [x_reference, setXreferenceContent] = useState('');
-  const [partner_id, setPartenerid] = useState('');
+  const [dataCP, setDataCP] = useState({});
 
-  const handleShowModal = (id_cp, x_reference, partner_id) => {
-    setModalContent(id_cp);
-    setXreferenceContent(x_reference);
+  const handleShowModal = (data) => {
     setModalShow(true);
-    setPartenerid(partner_id);
+    setDataCP(data);
   };
 
   const handleCloseModal = () => setModalShow(false);
@@ -194,7 +191,7 @@ const CartasPorte = () => {
       onClick: () => {
         if (row.subRows?.length) {
         } else {
-          handleShowModal(row.original.id_cp, row.original.x_reference, row.original.id_cliente);
+          handleShowModal(row.original);
         }
       },
       style: {
@@ -247,8 +244,10 @@ const CartasPorte = () => {
           style={{ minWidth: "300px" }}
           onChange={handleTabChange}
           label="Seleccionar una opción"
-          size={'sm'} variant='bordered'
+          size={'sm'}
+          variant='bordered'
           selectedKeys={[selectedTab]}
+          radius="full"
           fullWidth={true}>
           <SelectItem key={'carta'}>Cartas porte</SelectItem>
           <SelectItem key={'solicitud'}>Solicitudes de transporte</SelectItem>
@@ -259,7 +258,17 @@ const CartasPorte = () => {
           className='text-white'
           startContent={<i class="bi bi-file-earmark-excel"></i>}
           onPress={() => exportToCSV(data, columns, "contenedores.csv")}
+          radius="full"
         >Exportar
+        </Button>
+        <Button
+          color='danger'
+          fullWidth
+          className='text-white'
+          startContent={<i class="bi bi-arrow-clockwise"></i>}
+          onPress={() => fetchData()}
+          radius="full"
+        >Recargar
         </Button>
       </Box>
     ),
@@ -270,12 +279,10 @@ const CartasPorte = () => {
       <ManiobraProvider>
         <CustomNavbar pages={pages}></CustomNavbar>
         <MaterialReactTable key={selectedTab} table={table} />
-        <Example2
+        <RegistroManiobrasCP
           show={modalShow}
           handleClose={handleCloseModal}
-          id_cp={modalContent}
-          x_reference={x_reference}
-          id_cliente={partner_id} />
+          data={dataCP} />
       </ManiobraProvider>
     </div >
   );

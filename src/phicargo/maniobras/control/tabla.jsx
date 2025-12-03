@@ -5,7 +5,6 @@ import {
   useMaterialReactTable,
 } from 'material-react-table';
 import React, { useEffect, useMemo, useState } from 'react';
-
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import AppBar from '@mui/material/AppBar';
 import { Box } from '@mui/material';
@@ -46,17 +45,16 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const Maniobras = ({ estado_maniobra }) => {
 
   const [data, setData] = useState([]);
-  const [isLoading2, setLoading] = useState();
+  const [isLoading, setLoading] = useState();
   const [modalShow, setModalShow] = useState(false);
-  const [id_maniobra, setIdmaniobra] = useState('');
-  const [id_cp, setIdcp] = useState('');
-  const [idCliente, setClienteID] = useState('');
+  const [id_maniobra, setIDManiobra] = useState(null);
+  const [dataCP, setDataCP] = useState({});
   const [range, setRange] = useState(getMonthStartAndEnd());
 
-  const handleShowModal = (id_maniobra, id_cp) => {
+  const handleShowModal = (id_maniobra, data) => {
     setModalShow(true);
-    setIdmaniobra(id_maniobra);
-    setIdcp(id_cp);
+    setIDManiobra(id_maniobra);
+    setDataCP(data);
   };
 
   const handleCloseModal = () => {
@@ -146,7 +144,7 @@ const Maniobras = ({ estado_maniobra }) => {
         Cell: ({ cell }) => {
           const value = cell.getValue();
 
-          let color = 'success'; // valor por defecto
+          let color = 'success';
           if (value === 'MOVEDOR') {
             color = 'success';
           } else if (value === 'OPERADOR') {
@@ -285,7 +283,7 @@ const Maniobras = ({ estado_maniobra }) => {
     enableGlobalFilter: true,
     enableFilters: true,
     localization: MRT_Localization_ES,
-    state: { showProgressBars: isLoading2 },
+    state: { showProgressBars: isLoading },
     enableColumnPinning: true,
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
@@ -309,8 +307,7 @@ const Maniobras = ({ estado_maniobra }) => {
       onClick: ({ event }) => {
         if (row.subRows?.length) {
         } else {
-          handleShowModal(row.original.id_maniobra, row.original.id);
-          setClienteID(row.original.id_cliente);
+          handleShowModal(row.original.id_maniobra, row.original);
         }
       },
       style: {
@@ -347,9 +344,9 @@ const Maniobras = ({ estado_maniobra }) => {
           onChange={setRange}
           format="yyyy-MM-dd"
           placeholder="Selecciona un rango de fechas"
-          loading={isLoading2}
+          loading={isLoading}
         />
-        <Button color="primary" isLoading={isLoading2} onPress={() => fetchData()} startContent={<i class="bi bi-arrow-clockwise"></i>} size="sm" radius="full">Refrescar</Button>
+        <Button color="primary" isLoading={isLoading} onPress={() => fetchData()} startContent={<i class="bi bi-arrow-clockwise"></i>} size="sm" radius="full">Refrescar</Button>
         <Button color="secondary" onPress={() => handleClickOpen()} className='text-white' startContent={<i class="bi bi-send-plus"></i>} size="sm" radius="full">Envio masivo</Button>
         <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, `maniobras ${estado_maniobra}.csv`)} size="sm" radius="full">Exportar</Button>
       </Box >
@@ -372,8 +369,7 @@ const Maniobras = ({ estado_maniobra }) => {
         show={modalShow}
         handleClose={handleCloseModal}
         id_maniobra={id_maniobra}
-        id_cp={id_cp}
-        id_cliente={idCliente}
+        dataCP={dataCP}
         form_deshabilitado={true}
       />
 
@@ -404,8 +400,8 @@ const Maniobras = ({ estado_maniobra }) => {
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
               Envio masivo de estatus
             </Typography>
-            <Button autoFocus color="inherit" onClick={handleClose}>
-              save
+            <Button autoFocus color="inherit" onPress={handleClose}>
+              Cerrar
             </Button>
           </Toolbar>
         </AppBar>

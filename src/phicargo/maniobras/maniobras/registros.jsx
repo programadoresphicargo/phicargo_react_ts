@@ -2,7 +2,6 @@ import { Button, Card, CardBody } from "@heroui/react";
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { format, isValid } from 'date-fns';
-
 import { Box } from '@mui/system';
 import { Chip } from "@heroui/react";
 import DocumentacionManiobra from '../documentacion/documentacion';
@@ -12,25 +11,25 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import odooApi from '@/api/odoo-api';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
-const Registromaniobras = ({ id_cp, id_cliente }) => {
-    const [isLoading2, setILoading] = useState();
-    const [idManiobra, setIdManiobra] = useState();
-    const [idCliente, setClienteID] = useState();
+const Registromaniobras = ({ dataCP }) => {
+    const [isLoading, setLoading] = useState();
+    const [id_maniobra, setIDManiobra] = useState(null);
     const [modalShow, setModalShow] = useState(false);
     const [data, setData] = useState([]);
 
     const fetchData = useCallback(async () => {
         try {
-            setILoading(true);
-            const response = await odooApi.get('/maniobras/by_id_cp/' + id_cp);
+            setLoading(true);
+            const response = await odooApi.get('/maniobras/by_id_cp/' + dataCP?.id_cp);
             setData(response.data);
-            setILoading(false);
+            setLoading(false);
         } catch (error) {
-            setILoading(false);
+            setLoading(false);
             console.error('Error al obtener los datos:', error);
         }
-    }, [id_cp]);
+    }, [dataCP?.id_cp]);
 
     useEffect(() => {
         fetchData();
@@ -41,13 +40,14 @@ const Registromaniobras = ({ id_cp, id_cliente }) => {
     };
 
     const abrir_nueva = () => {
-        setIdManiobra(null);
+        setIDManiobra(null);
         handleShowModal(null);
     };
 
     const handleCloseModal = () => {
         setModalShow(false);
         fetchData();
+        setIDManiobra(null);
     };
 
     const columns = useMemo(
@@ -113,7 +113,10 @@ const Registromaniobras = ({ id_cp, id_cliente }) => {
         columns,
         data,
         enableGrouping: true,
+        localization: MRT_Localization_ES,
         initialState: {
+            showGlobalFilter: true,
+            showColumnFilters: true,
             density: 'compact',
             pagination: { pageSize: 80 },
         },
@@ -123,7 +126,7 @@ const Registromaniobras = ({ id_cp, id_cliente }) => {
                 borderRadius: '0',
             },
         },
-        state: { showProgressBars: isLoading2 },
+        state: { showProgressBars: isLoading },
         muiCircularProgressProps: {
             color: 'primary',
             thickness: 5,
@@ -135,9 +138,8 @@ const Registromaniobras = ({ id_cp, id_cliente }) => {
         },
         muiTableBodyRowProps: ({ row }) => ({
             onClick: () => {
-                setIdManiobra(row.original.id_maniobra);
+                setIDManiobra(row.original.id_maniobra);
                 handleShowModal(row.original.id_maniobra);
-                setClienteID(id_cliente);
             },
             style: {
                 cursor: 'pointer',
@@ -166,8 +168,8 @@ const Registromaniobras = ({ id_cp, id_cliente }) => {
                     flexWrap: 'wrap',
                 }}
             >
-                <Button onPress={abrir_nueva} color="primary" radius="full">
-                    Ingresar nueva maniobra
+                <Button onPress={abrir_nueva} color="success" radius="full" className="text-white">
+                    Nueva maniobra
                 </Button>
             </Box>)
     });
@@ -177,13 +179,12 @@ const Registromaniobras = ({ id_cp, id_cliente }) => {
             <Formulariomaniobra
                 show={modalShow}
                 handleClose={handleCloseModal}
-                id_maniobra={idManiobra}
-                id_cp={id_cp}
+                id_maniobra={id_maniobra}
                 form_deshabilitado={true}
-                id_cliente={id_cliente}
+                dataCP={dataCP}
             />
 
-            <Box sx={{ width: '100%', typography: 'body1' }}>
+            <Box sx={{ width: '100%' }}>
                 <Card>
                     <CardBody>
                         <MaterialReactTable table={table} />

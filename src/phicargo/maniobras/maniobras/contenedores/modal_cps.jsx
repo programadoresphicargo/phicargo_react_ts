@@ -35,7 +35,7 @@ const AñadirContenedor = ({ show, handleClose, id_maniobra }) => {
 
     const [data, setData] = useState([]);
     const [isLoading2, setILoading] = useState();
-    const { formData, setFormData } = useContext(ManiobraContext);
+    const { cps_ligadas, setCpsLigadas, cps_desligadas, setCpsDesligadas } = useContext(ManiobraContext);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -60,18 +60,16 @@ const AñadirContenedor = ({ show, handleClose, id_maniobra }) => {
 
     const añadir_contenedor = (data) => {
         toast.success('Añadiendo contenedor');
-        setFormData(prev => {
-            const yaExiste = prev.cps_ligadas?.some(item => item.id === data.id);
-            if (yaExiste) {
-                toast.warn('Este contenedor ya ha sido añadido.');
-                return prev;
-            }
-            handleClose();
-            return {
-                ...prev,
-                cps_ligadas: [...(prev.cps_ligadas || []), data],
-            };
-        });
+
+        const yaExiste = cps_ligadas?.some(item => item.id === data.id);
+        if (yaExiste) {
+            toast.warn('Este contenedor ya ha sido añadido.');
+            return;
+        }
+
+        setCpsLigadas(prev => [...(prev || []), data]);
+
+        handleClose();
     };
 
     const columns = useMemo(
@@ -117,7 +115,6 @@ const AñadirContenedor = ({ show, handleClose, id_maniobra }) => {
         localization: MRT_Localization_ES,
         state: {
             showProgressBars: isLoading2,
-            isLoading: isLoading2,
             showColumnFilters: true
         },
         muiCircularProgressProps: {
@@ -162,7 +159,7 @@ const AñadirContenedor = ({ show, handleClose, id_maniobra }) => {
         },
         renderRowActions: ({ row }) => (
             <Box>
-                <Button color='primary' onPress={() => añadir_contenedor(row.original)} size='sm'>
+                <Button color='primary' onPress={() => añadir_contenedor(row.original)} size='sm' radius='full'>
                     Añadir
                 </Button>
             </Box>

@@ -38,6 +38,8 @@ function EstatusHistorialManiobras({ id_maniobra }) {
     };
 
     const getHistorialEstatus = async () => {
+        if (!id_maniobra) return;
+
         try {
             setLoading(true);
             const response = await odooApi.get('/maniobras/reportes_estatus_maniobras/id_maniobra/' + id_maniobra)

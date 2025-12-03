@@ -1,8 +1,6 @@
 import { Autocomplete, AutocompleteItem } from "@heroui/react";
 import {
     Button,
-    Select,
-    SelectItem,
     Spinner,
     Table,
     TableBody,
@@ -12,7 +10,6 @@ import {
     TableRow
 } from "@heroui/react";
 import React, { useContext, useEffect, useState } from 'react';
-
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -27,8 +24,16 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const CorreosLigadosManiobra = ({ open, handleClose }) => {
-    const { id_maniobra, id_cliente, formData, setFormData, formDisabled, setFormDisabled } = useContext(ManiobraContext);
+const CorreosLigadosManiobra = ({ open, handleClose, id_cliente }) => {
+    const {
+        id_maniobra,
+        formDisabled,
+        correos_ligados,
+        setCorreosLigados,
+        correos_desligados,
+        setCorreosDesligados
+    } = useContext(ManiobraContext);
+
     const [correosCliente, setCorreosCliente] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [openF, setOpenF] = useState(false);
@@ -36,12 +41,10 @@ const CorreosLigadosManiobra = ({ open, handleClose }) => {
     const cerrar = () => {
         setOpenF(false);
         fetchCorreos();
-    }
+    };
 
     useEffect(() => {
-        if (open) {
-            fetchCorreos();
-        }
+        if (open) fetchCorreos();
     }, [open]);
 
     const fetchCorreos = async () => {
@@ -65,47 +68,39 @@ const CorreosLigadosManiobra = ({ open, handleClose }) => {
             return;
         }
 
-        if (formData.correos_ligados.some(c => c.id_correo === correoIdNum)) {
+        if (correos_ligados.some(c => c.id_correo === correoIdNum)) {
             toast.warn(`⏳ Correo con ID ${correoIdNum} ya está en la lista.`);
             return;
         }
 
-        setFormData(prevFormData => ({
-            ...prevFormData,
-            correos_ligados: [...prevFormData.correos_ligados, correoSeleccionado],
-        }));
+        setCorreosLigados(prev => [...prev, correoSeleccionado]);
     };
 
     const handleRemove = (correoId) => {
         const correoIdNum = Number(correoId);
-        const correoEliminado = formData.correos_ligados.find(c => c.id_correo === correoIdNum);
+        const correoEliminado = correos_ligados.find(c => c.id_correo === correoIdNum);
 
         if (!correoEliminado) {
             toast.warn(`⚠️ Correo con ID ${correoIdNum} no encontrado.`);
             return;
         }
 
-        setFormData(prevFormData => ({
-            ...prevFormData,
-            correos_ligados: prevFormData.correos_ligados.filter(c => c.id_correo !== correoIdNum),
-            correos_desligados: [...prevFormData.correos_desligados, correoEliminado],
-        }));
+        setCorreosLigados(prev => prev.filter(c => c.id_correo !== correoIdNum));
+        setCorreosDesligados(prev => [...prev, correoEliminado]);
 
         toast.success(`❌ Eliminado correo con ID: ${correoIdNum}`);
     };
 
     return (
         <>
-            <FormularioCorreo open={openF} handleClose={cerrar} />
+            <FormularioCorreo open={openF} handleClose={cerrar} id_cliente={id_cliente} />
 
             <Dialog
                 open={open}
                 onClose={handleClose}
                 maxWidth="md"
                 fullWidth
-                slots={{
-                    transition: Transition,
-                }}
+                slots={{ transition: Transition }}
                 sx={{
                     '& .MuiPaper-root': {
                         borderRadius: '25px',
@@ -116,11 +111,15 @@ const CorreosLigadosManiobra = ({ open, handleClose }) => {
                     sx: {
                         backgroundColor: 'rgba(0, 0, 0, 0.3)',
                     },
-                }}>
+                }}
+            >
                 <DialogTitle>Correos Ligados a Maniobra M-{id_maniobra}</DialogTitle>
+
                 <DialogContent>
                     <div className='mb-3'>
-                        <Button color='primary' onPress={() => setOpenF(true)}>Nuevo correo</Button>
+                        <Button color='primary' onPress={() => setOpenF(true)} radius="full">
+                            Nuevo correo
+                        </Button>
                     </div>
 
                     <Autocomplete
@@ -130,6 +129,7 @@ const CorreosLigadosManiobra = ({ open, handleClose }) => {
                         variant="bordered"
                         isDisabled={formDisabled}
                         onSelectionChange={handleAdd}
+                        isLoading={isLoading}
                     >
                         {correosCliente.map((correo) => (
                             <AutocompleteItem key={correo.id_correo} value={correo.id_correo}>
@@ -139,7 +139,12 @@ const CorreosLigadosManiobra = ({ open, handleClose }) => {
                     </Autocomplete>
 
                     {isLoading ? (
-                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '300px' }}>
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            height: '300px'
+                        }}>
                             <Spinner label="Cargando correos..." />
                         </div>
                     ) : (
@@ -151,16 +156,23 @@ const CorreosLigadosManiobra = ({ open, handleClose }) => {
                                 <TableColumn>Tipo</TableColumn>
                                 <TableColumn>Acciones</TableColumn>
                             </TableHeader>
+
                             <TableBody>
-                                {formData.correos_ligados.length > 0 ? (
-                                    formData.correos_ligados.map((item) => (
+                                {correos_ligados.length > 0 ? (
+                                    correos_ligados.map((item) => (
                                         <TableRow key={item.id_correo}>
                                             <TableCell>{item.id_correo}</TableCell>
                                             <TableCell>{item.nombre_completo}</TableCell>
                                             <TableCell>{item.correo}</TableCell>
                                             <TableCell>{item.tipo}</TableCell>
                                             <TableCell>
-                                                <Button color="danger" onPress={() => handleRemove(item.id_correo)} size='sm' isDisabled={formDisabled}>
+                                                <Button
+                                                    color="danger"
+                                                    onPress={() => handleRemove(item.id_correo)}
+                                                    size='sm'
+                                                    isDisabled={formDisabled}
+                                                    radius="full"
+                                                >
                                                     Eliminar
                                                 </Button>
                                             </TableCell>
@@ -168,26 +180,22 @@ const CorreosLigadosManiobra = ({ open, handleClose }) => {
                                     ))
                                 ) : (
                                     <TableRow>
-                                        <TableCell>
-                                            No hay correos registrados.
-                                        </TableCell>
-                                        <TableCell>
-                                        </TableCell>
-                                        <TableCell>
-                                        </TableCell>
-                                        <TableCell>
-                                        </TableCell>
-                                        <TableCell>
-                                        </TableCell>
+                                        <TableCell>No hay correos registrados.</TableCell>
+                                        <TableCell />
+                                        <TableCell />
+                                        <TableCell />
+                                        <TableCell />
                                     </TableRow>
                                 )}
                             </TableBody>
                         </Table>
                     )}
-
                 </DialogContent>
+
                 <DialogActions>
-                    <Button onPress={handleClose} color="primary">Cerrar</Button>
+                    <Button onPress={handleClose} color="default" radius="full">
+                        Cerrar
+                    </Button>
                 </DialogActions>
             </Dialog>
         </>
