@@ -80,6 +80,56 @@ const Disponibilidad_unidades = () => {
                 header: 'Sucursal',
             },
             {
+                accessorKey: 'x_modalidad',
+                header: 'Modalidad',
+                Cell: ({ cell }) => {
+                    const modalidad = cell.getValue();
+
+                    // ❗ Si está vacío, null o undefined → no retorna nada
+                    if (!modalidad) return null;
+
+                    let color =
+                        modalidad === 'sencillo' ? 'warning' :
+                            modalidad === 'full' ? 'danger' :
+                                'default';
+
+                    return (
+                        <Chip color={color} size="sm" className="text-white">
+                            {modalidad}
+                        </Chip>
+                    );
+                },
+            },
+            {
+                accessorKey: 'x_tipo_carga',
+                header: 'Tipo de carga',
+                Cell: ({ cell }) => {
+                    const tipo_carga = cell.getValue();
+
+                    // ❗ Si está vacío, null o undefined → no retorna nada
+                    if (!tipo_carga) return null;
+
+                    let color =
+                        tipo_carga === 'general' ? 'success' :
+                            tipo_carga === 'imo' ? 'danger' :
+                                'default';
+
+                    return (
+                        <Chip color={color} size="sm" className="text-white">
+                            {tipo_carga}
+                        </Chip>
+                    );
+                },
+            },
+            {
+                accessorKey: 'x_altura_compatible',
+                header: 'Altura',
+            },
+            {
+                accessorKey: 'x_longitud_compatible',
+                header: 'Longitud',
+            },
+            {
                 accessorKey: 'x_status',
                 header: 'Estado',
             },
@@ -139,56 +189,6 @@ const Disponibilidad_unidades = () => {
                         </Tooltip>
                     );
                 },
-            },
-            {
-                accessorKey: 'x_modalidad',
-                header: 'Modalidad',
-                Cell: ({ cell }) => {
-                    const modalidad = cell.getValue();
-
-                    // ❗ Si está vacío, null o undefined → no retorna nada
-                    if (!modalidad) return null;
-
-                    let color =
-                        modalidad === 'sencillo' ? 'warning' :
-                            modalidad === 'full' ? 'danger' :
-                                'default';
-
-                    return (
-                        <Chip color={color} size="sm" className="text-white">
-                            {modalidad}
-                        </Chip>
-                    );
-                },
-            },
-            {
-                accessorKey: 'x_tipo_carga',
-                header: 'Tipo de carga',
-                Cell: ({ cell }) => {
-                    const tipo_carga = cell.getValue();
-
-                    // ❗ Si está vacío, null o undefined → no retorna nada
-                    if (!tipo_carga) return null;
-
-                    let color =
-                        tipo_carga === 'general' ? 'success' :
-                            tipo_carga === 'imo' ? 'danger' :
-                                'default';
-
-                    return (
-                        <Chip color={color} size="sm" className="text-white">
-                            {tipo_carga}
-                        </Chip>
-                    );
-                },
-            },
-            {
-                accessorKey: 'x_altura_compatible',
-                header: 'Altura',
-            },
-            {
-                accessorKey: 'x_longitud_compatible',
-                header: 'Longitud',
             },
         ],
         [],
