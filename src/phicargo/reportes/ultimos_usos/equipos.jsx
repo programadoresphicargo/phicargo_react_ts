@@ -51,6 +51,7 @@ const UltimosUsosUnidades = () => {
   const columns = [
     { accessorKey: 'vehiculo', header: 'Vehiculo', },
     { accessorKey: 'tipo_vehiculo', header: 'Tipo' },
+    { accessorKey: 'sucursal', header: 'Sucursal' },
     { accessorKey: 'tipo_uso', header: 'Último uso' },
     { accessorKey: 'ultima_fecha_uso', header: 'Última fecha' },
     { accessorKey: 'dias_sin_uso', header: 'Días sin usar' },
