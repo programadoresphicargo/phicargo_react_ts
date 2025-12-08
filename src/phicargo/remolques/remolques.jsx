@@ -72,6 +72,10 @@ const Disponibilidad_unidades = () => {
                 header: 'Tipo de vehiculo',
             },
             {
+                accessorKey: 'fleet_type',
+                header: 'Tipo',
+            },
+            {
                 accessorKey: 'sucursal',
                 header: 'Sucursal',
             },
