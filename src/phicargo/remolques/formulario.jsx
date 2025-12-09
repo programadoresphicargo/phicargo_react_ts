@@ -150,28 +150,28 @@ const FormularioRemolques = ({ vehicle_data, isOpen, onOpenChange }) => {
                             </Select>
 
                             <Select
-                                label="Altura compatible"
-                                placeholder="Altura compatible"
-                                selectedKeys={formData.x_altura_compatible ? new Set([String(formData.x_altura_compatible)]) : new Set()}
+                                label="DC compatible"
+                                placeholder="DC compatible"
+                                selectedKeys={formData.x_dc_compatible ? new Set([String(formData.x_dc_compatible)]) : new Set()}
                                 variant="bordered"
                                 onSelectionChange={(keys) => {
                                     const value = [...keys][0];
-                                    handleSelectChange(value, "x_altura_compatible");
+                                    handleSelectChange(value, "x_dc_compatible");
                                 }}
                             >
-                                <SelectItem key={"HC"}>HC</SelectItem>
-                                <SelectItem key={"DC"}>DC</SelectItem>
-                                <SelectItem key={"DC_HC"}>DC HC</SelectItem>
+                                <SelectItem key={"20"}>20</SelectItem>
+                                <SelectItem key={"40"}>40</SelectItem>
+                                <SelectItem key={"20_40"}>20_40</SelectItem>
                             </Select>
 
                             <Select
-                                label="Longitud compatible"
-                                placeholder="Longitud compatible"
-                                selectedKeys={formData.x_longitud_compatible ? new Set([String(formData.x_longitud_compatible)]) : new Set()}
+                                label="HC compatible"
+                                placeholder="HC compatible"
+                                selectedKeys={formData.x_hc_compatible ? new Set([String(formData.x_hc_compatible)]) : new Set()}
                                 variant="bordered"
                                 onSelectionChange={(keys) => {
                                     const value = [...keys][0];
-                                    handleSelectChange(value, "x_longitud_compatible");
+                                    handleSelectChange(value, "x_hc_compatible");
                                 }}
                             >
                                 <SelectItem key={"20"}>20</SelectItem>

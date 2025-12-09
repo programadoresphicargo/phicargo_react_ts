@@ -122,12 +122,12 @@ const Disponibilidad_unidades = () => {
                 },
             },
             {
-                accessorKey: 'x_altura_compatible',
-                header: 'Altura',
+                accessorKey: 'x_dc_compatible',
+                header: 'DC Compatible',
             },
             {
-                accessorKey: 'x_longitud_compatible',
-                header: 'Longitud',
+                accessorKey: 'x_hc_compatible',
+                header: 'HC Compatible',
             },
             {
                 accessorKey: 'x_status',
