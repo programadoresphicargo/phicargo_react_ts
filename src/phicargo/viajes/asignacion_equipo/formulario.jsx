@@ -172,7 +172,20 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
     };
 
     return (
-        <Dialog open={isOpen} onClose={() => onOpenChange(false)} maxWidth="xl" fullWidth>
+        <Dialog
+            open={isOpen}
+            onClose={() => onOpenChange(false)}
+            maxWidth="lg"
+            fullWidth
+            slotProps={{
+                paper: {
+                    elevation: 3,
+                    sx: {
+                        borderRadius: "24px",
+                        padding: "8px 0",
+                    }
+                }
+            }}>
             <DialogTitle>Asignación de equipo</DialogTitle>
 
             {isLoading && (
@@ -321,23 +334,27 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
                                             disabled={isDisabled}
                                         />
 
-                                        <SelectFlota
-                                            label="Remolque 2"
-                                            name="trailer2_id"
-                                            onChange={handleSelectChange}
-                                            value={formData.trailer2_id}
-                                            tipo="trailer"
-                                            disabled={isDisabled}
-                                        />
+                                        {data.x_tipo_bel == 'full' && (
+                                            <SelectFlota
+                                                label="Remolque 2"
+                                                name="trailer2_id"
+                                                onChange={handleSelectChange}
+                                                value={formData.trailer2_id}
+                                                tipo="trailer"
+                                                disabled={isDisabled}
+                                            />
+                                        )}
 
-                                        <SelectFlota
-                                            label="Dolly"
-                                            name="dolly_id"
-                                            onChange={handleSelectChange}
-                                            value={formData.dolly_id}
-                                            tipo="dolly"
-                                            disabled={isDisabled}
-                                        />
+                                        {data.x_tipo_bel == 'full' && (
+                                            <SelectFlota
+                                                label="Dolly"
+                                                name="dolly_id"
+                                                onChange={handleSelectChange}
+                                                value={formData.dolly_id}
+                                                tipo="dolly"
+                                                disabled={isDisabled}
+                                            />
+                                        )}
 
                                         <SelectFlota
                                             label="Motogenerador 1"
@@ -348,15 +365,17 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
                                             disabled={isDisabled}
                                         />
 
-                                        <SelectFlota
-                                            label="Motogenerador 2"
-                                            name="motogenerador2_id"
-                                            onChange={handleSelectChange}
-                                            value={formData.motogenerador2_id}
-                                            tipo="other"
-                                            disabled={isDisabled}
-                                        />
-
+                                        {data.x_tipo_bel == 'full' && (
+                                            <SelectFlota
+                                                label="Motogenerador 2"
+                                                name="motogenerador2_id"
+                                                onChange={handleSelectChange}
+                                                value={formData.motogenerador2_id}
+                                                tipo="other"
+                                                disabled={isDisabled}
+                                            />
+                                        )}
+                                        
                                         <Textarea
                                             label="Comentarios"
                                             value={comentarios}

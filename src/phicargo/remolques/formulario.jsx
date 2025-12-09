@@ -84,7 +84,16 @@ const FormularioRemolques = ({ vehicle_data, isOpen, onOpenChange }) => {
             open={isOpen}
             onClose={() => onOpenChange(false)}
             maxWidth="sm"
-            fullWidth>
+            fullWidth
+            slotProps={{
+                paper: {
+                    elevation: 3,
+                    sx: {
+                        borderRadius: "24px",
+                        padding: "8px 0",
+                    }
+                }
+            }}>
             <DialogTitle>{vehicle_data?.name2}</DialogTitle>
 
             <DialogContent dividers>
