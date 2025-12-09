@@ -334,7 +334,7 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
                                             disabled={isDisabled}
                                         />
 
-                                        {data.x_tipo_bel == 'full' && (
+                                        {data?.x_tipo_bel == 'full' && (
                                             <SelectFlota
                                                 label="Remolque 2"
                                                 name="trailer2_id"
@@ -345,7 +345,7 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
                                             />
                                         )}
 
-                                        {data.x_tipo_bel == 'full' && (
+                                        {data?.x_tipo_bel == 'full' && (
                                             <SelectFlota
                                                 label="Dolly"
                                                 name="dolly_id"
@@ -365,7 +365,7 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
                                             disabled={isDisabled}
                                         />
 
-                                        {data.x_tipo_bel == 'full' && (
+                                        {data?.x_tipo_bel == 'full' && (
                                             <SelectFlota
                                                 label="Motogenerador 2"
                                                 name="motogenerador2_id"
@@ -375,7 +375,7 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
                                                 disabled={isDisabled}
                                             />
                                         )}
-                                        
+
                                         <Textarea
                                             label="Comentarios"
                                             value={comentarios}
