@@ -1,6 +1,6 @@
 import odooApi from "@/api/odoo-api";
 import CustomNavbar from "@/pages/CustomNavbar";
-import { Button, Card, CardBody, CardHeader, Divider, Link } from "@heroui/react";
+import { Button, Card, CardBody, CardHeader, Divider, Link, Textarea } from "@heroui/react";
 import { useState, useEffect } from "react";
 
 const { VITE_ODOO_API_URL } = import.meta.env;
@@ -64,7 +64,7 @@ export default function OndriveConfiguracion() {
        showAnchorIcon
        as={Link}
        isExternal={true}
-       color="secondary"
+       color="primary"
        href={VITE_ODOO_API_URL + '/onedrive/auth/login-onedrive'}
       >
        Generar Token
@@ -79,6 +79,17 @@ export default function OndriveConfiguracion() {
         {exp?.diffHours}h {exp?.diffMinutes % 60}m {exp?.diffSeconds % 60}s
        </p>
       </div>
+      <Button
+       radius="full"
+       showAnchorIcon
+       as={Link}
+       isExternal={true}
+       color="secondary"
+       href={VITE_ODOO_API_URL + '/onedrive/refresh_token'}
+      >
+       Refrescar Token
+      </Button>
+      <Textarea value={data?.access_token}></Textarea>
      </CardBody>
     </Card>
    </div>
