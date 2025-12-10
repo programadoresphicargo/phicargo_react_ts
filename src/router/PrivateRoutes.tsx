@@ -106,6 +106,7 @@ const Asignaciones = lazy(() => import('../phicargo/inventarioti/celulares/asign
 const AsignacionesComputo = lazy(() => import('../phicargo/inventarioti/celulares/asignacion/index_computo'));
 const Lineas = lazy(() => import('../phicargo/inventarioti/celulares/lineas/index'))
 const AsignacionEquipo = lazy(() => import('../phicargo/viajes/asignacion_equipo/index'))
+const OnedriveAjustes = lazy(() => import('../phicargo/ajustes/onedrive'))
 
 export const PrivateRoutes = () => {
   const updateAvailable = useCheckVersion();
@@ -565,6 +566,15 @@ export const PrivateRoutes = () => {
           element={
             <Suspense fallback={<LoadingPage />}>
               <EventosGPS></EventosGPS>
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/onedrive_ajutes"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <OnedriveAjustes></OnedriveAjustes>
             </Suspense>
           }
         />

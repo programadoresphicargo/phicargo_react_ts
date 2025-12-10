@@ -16,6 +16,7 @@ import viajes_img from '../assets/menu/viajes.png';
 import almacen from '../assets/menu/almacen.png';
 import chatbot from '../assets/menu/chatbot.png';
 import ti from '../assets/menu/laptop.png';
+import ajustes from '../assets/menu/ajustes.png';
 
 export type MenuItemType = {
  icon: string;
@@ -137,6 +138,12 @@ export const menuItems: MenuItemType[] = [
   icon: ti,
   label: 'Sistemas',
   link: '/celulares',
+  requiredPermissions: [701],
+ },
+ {
+  icon: ajustes,
+  label: 'Ajustes',
+  link: '/onedrive_ajutes',
   requiredPermissions: [701],
  },
 ];
