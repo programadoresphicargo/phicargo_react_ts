@@ -121,6 +121,10 @@ const Descuentos = ({ }) => {
         accessorKey: 'tabla',
         header: 'Tabla',
       },
+      {
+        accessorKey: 'departamento',
+        header: 'Departamento',
+      },
     ],
     []
   );
@@ -137,6 +141,7 @@ const Descuentos = ({ }) => {
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
     initialState: {
+      grouping: ['departamento'],
       density: 'compact',
       pagination: { pageSize: 80 },
     },
