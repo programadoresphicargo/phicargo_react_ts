@@ -16,8 +16,8 @@ const SelectFlota = ({
     error_flota,
 
     filtroActivo = false,      // true = filtrar, false = mostrar todos
-    modalidad,           // "single" | "full"
-    tipoCarga            // "imo" | "general"
+    modalidad = null,           // "single" | "full"
+    tipoCarga = null        // "imo" | "general"
 }) => {
     const [options, setOptions] = useState([]);
     const [filteredOptions, setFilteredOptions] = useState([]);
@@ -46,6 +46,11 @@ const SelectFlota = ({
 
     useEffect(() => {
         if (!filtroActivo) {
+            setFilteredOptions(options);
+            return;
+        }
+
+        if (!modalidad || !tipoCarga) {
             setFilteredOptions(options);
             return;
         }
