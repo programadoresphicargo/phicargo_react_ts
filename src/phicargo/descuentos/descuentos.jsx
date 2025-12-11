@@ -160,17 +160,19 @@ const Descuentos = ({ }) => {
         borderRadius: '0',
       },
     },
+    muiTableBodyCellProps: ({ row }) => ({
+      sx: {
+        backgroundColor: row.subRows?.length ? '#0456cf' : '#FFFFFF',
+        fontFamily: 'Inter',
+        fontWeight: 'normal',
+        fontSize: '14px',
+        color: row.subRows?.length ? '#FFFFFF' : '#000000',
+      },
+    }),
     muiTableHeadCellProps: {
       sx: {
         fontFamily: 'Inter',
         fontWeight: 'Bold',
-        fontSize: '14px',
-      },
-    },
-    muiTableBodyCellProps: {
-      sx: {
-        fontFamily: 'Inter',
-        fontWeight: 'normal',
         fontSize: '14px',
       },
     },
