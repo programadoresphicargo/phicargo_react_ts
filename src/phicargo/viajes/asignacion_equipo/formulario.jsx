@@ -41,6 +41,7 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
         setFormData({ id_cp: data?.id_cp || null });
         setEditMode(false);
         getData();
+        setFiltroActivo(true);
     }, [data]);
 
     const handleSelectChange = (value, name) => {
@@ -265,7 +266,7 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
                                 </Button>
                             )}
 
-                            <Button onClick={() => setFiltroActivo(!filtroActivo)} color='primary' radius='full'>
+                            <Button onClick={() => setFiltroActivo(!filtroActivo)} color={filtroActivo ? 'danger' : 'primary'} radius='full'>
                                 {filtroActivo ? "Mostrar todos los equipos" : "Aplicar filtros del viaje"}
                             </Button>
                         </div>

@@ -3,7 +3,7 @@ export const pages = [
  { name: 'FINALIZADOS', path: '/viajesfinalizados', permiso: 501 },
  { name: 'PROGRAMACIÓN', path: '/viajesprogramados', permiso: 502 },
  { name: 'CORREOS', path: '/CorreosElectronicos', permiso: 103 },
- { name: 'ASIGNACION', path: '/asignacion_equipo', permiso: 103 },
+ { name: 'ASIGNACION', path: '/asignacion_equipo', permiso: 188 },
  {
   name: 'ESTADIAS', permiso: 503,
   subpages: [
