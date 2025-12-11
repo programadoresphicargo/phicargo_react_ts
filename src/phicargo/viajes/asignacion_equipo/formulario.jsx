@@ -27,6 +27,15 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
     const isDisabled = data?.id_pre_asignacion ? !isEditMode : false;
     const [isLoading, setLoading] = useState(false);
     const [comentarios, setComentarios] = useState("");
+    const [filtroActivo, setFiltroActivo] = useState(true);
+
+    const TipoCarga = (waybill_category) => {
+        if ([25, 28, 33, 39, 42, 47, 49, 52].includes(waybill_category)) {
+            return 'imo';
+        } else {
+            return 'general';
+        }
+    };
 
     useEffect(() => {
         setFormData({ id_cp: data?.id_cp || null });
@@ -255,6 +264,10 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
                                     Reabrir asignación
                                 </Button>
                             )}
+
+                            <Button onClick={() => setFiltroActivo(!filtroActivo)} color='primary' radius='full'>
+                                {filtroActivo ? "Mostrar todos los equipos" : "Aplicar filtros del viaje"}
+                            </Button>
                         </div>
 
                         <div className="w-full flex flex-col gap-4">
@@ -332,6 +345,9 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
                                             value={formData.trailer1_id}
                                             tipo="trailer"
                                             disabled={isDisabled}
+                                            filtroActivo={filtroActivo}
+                                            modalidad={data?.x_tipo_bel == 'single' ? 'sencillo' : 'full'}
+                                            tipoCarga={TipoCarga(data?.waybill_category)}
                                         />
 
                                         {data?.x_tipo_bel == 'full' && (
@@ -342,6 +358,9 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
                                                 value={formData.trailer2_id}
                                                 tipo="trailer"
                                                 disabled={isDisabled}
+                                                filtroActivo={filtroActivo}
+                                                modalidad={data?.x_tipo_bel == 'single' ? 'sencillo' : 'full'}
+                                                tipoCarga={TipoCarga(data?.waybill_category)}
                                             />
                                         )}
 

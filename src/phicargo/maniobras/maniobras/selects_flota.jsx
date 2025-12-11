@@ -5,8 +5,22 @@ import TextField from '@mui/material/TextField';
 import axios from 'axios';
 import odooApi from '@/api/odoo-api';
 
-const SelectFlota = ({ label, id, name, onChange, value, tipo, disabled = false, error_flota }) => {
+const SelectFlota = ({
+    label,
+    id,
+    name,
+    onChange,
+    value,
+    tipo,
+    disabled = false,
+    error_flota,
+
+    filtroActivo = false,      // true = filtrar, false = mostrar todos
+    modalidad,           // "single" | "full"
+    tipoCarga            // "imo" | "general"
+}) => {
     const [options, setOptions] = useState([]);
+    const [filteredOptions, setFilteredOptions] = useState([]);
     const [isLoading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -17,6 +31,8 @@ const SelectFlota = ({ label, id, name, onChange, value, tipo, disabled = false,
                 const data = response.data.map(item => ({
                     key: item.id,
                     label: item.name,
+                    x_tipo_carga: item.x_tipo_carga,
+                    x_modalidad: item.x_modalidad
                 }));
                 setOptions(data);
             })
@@ -28,6 +44,21 @@ const SelectFlota = ({ label, id, name, onChange, value, tipo, disabled = false,
             });
     }, [tipo]);
 
+    useEffect(() => {
+        if (!filtroActivo) {
+            setFilteredOptions(options);
+            return;
+        }
+
+        const filtrados = options.filter((item) => {
+            const tipoOk = item.x_tipo_carga === tipoCarga;
+            const modalidadOk = item.x_modalidad === modalidad;
+            return tipoOk && modalidadOk;
+        });
+
+        setFilteredOptions(filtrados);
+    }, [filtroActivo, options, modalidad, tipoCarga]);
+
     return (
         <Autocomplete
             label={label}
@@ -35,7 +66,7 @@ const SelectFlota = ({ label, id, name, onChange, value, tipo, disabled = false,
             id={id}
             name={name}
             isReadOnly={disabled}
-            defaultItems={options}
+            defaultItems={filteredOptions}
             variant={disabled ? 'flat' : 'bordered'}
             selectedKey={String(value)}
             onSelectionChange={(e) => onChange(e, name)}

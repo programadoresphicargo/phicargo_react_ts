@@ -215,6 +215,8 @@ const ViajesProgramados = () => {
         );
       },
     },
+    { accessorKey: 'waybill_category', header: 'Waybill category' },
+
   ], []);
 
   const table = useMaterialReactTable({
