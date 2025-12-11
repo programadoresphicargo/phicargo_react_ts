@@ -28,7 +28,7 @@ const DocumentacionManiobra = ({ id_maniobra }) => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await odooApi.get('/archivos/get_archivos/maniobras/' + id_maniobra);
+      const response = await odooApi.get('/archivos/maniobras/' + id_maniobra);
       setData(response.data);
       setLoading(false);
     } catch (error) {

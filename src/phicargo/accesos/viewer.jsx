@@ -14,7 +14,7 @@ const Viewer = ({ id }) => {
         const fetchAllBlobs = async () => {
             try {
                 setLoading(true);
-                const { data: archivos } = await odooApi.get(`/archivos/get_archivos/accesos/${id}`);
+                const { data: archivos } = await odooApi.get(`/archivos/accesos/${id}`);
                 const listaIds = archivos.map(item => item.id_onedrive).filter(Boolean);
 
                 const urls = await Promise.all(listaIds.map(async (id_onedrive) => {

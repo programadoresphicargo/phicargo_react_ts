@@ -23,7 +23,7 @@ const Archivos = ({ id }) => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await odooApi.get('/archivos/get_archivos/folios_costos_extras/' + id);
+      const response = await odooApi.get('/archivos/folios_costos_extras/' + id);
       setData(response.data);
       setLoading(false);
     } catch (error) {
