@@ -132,6 +132,25 @@ const Disponibilidad_unidades = () => {
             {
                 accessorKey: 'x_status',
                 header: 'Estado',
+                Cell: ({ cell }) => {
+                    const estado = cell.getValue();
+
+                    // ❗ Si está vacío, null o undefined → no retorna nada
+                    if (!estado) return null;
+
+                    let color =
+                        estado === 'disponible' ? 'success' :
+                            estado === 'viaje' ? 'primary' :
+                                estado === 'maniobra' ? 'secondary' :
+                                    estado === 'mantenimiento' ? 'warning' :
+                                        'default';
+
+                    return (
+                        <Chip color={color} size="sm" className="text-white">
+                            {estado}
+                        </Chip>
+                    );
+                },
             },
             {
                 accessorKey: 'viaje_name',
