@@ -148,6 +148,7 @@ const exportConf: ExportConfig<Shift> = {
   withDate: true,
   columns: [
     { accessorFn: (data) => data.shift, header: 'Turno', columnWidth: 50 },
+    { accessorFn: (data) => data.driver.name, header: 'Operador' },
     { accessorFn: (data) => data.driver.modality, header: 'Licencia' },
     {
       accessorFn: (data) => (data.driver.isDangerous ? 'SI' : 'NO'),
