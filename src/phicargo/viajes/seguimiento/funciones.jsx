@@ -216,8 +216,8 @@ export const useJourneyDialogs = () => {
 
     const comprobar_horarios = async () => {
         try {
-            const res = await odooApi.get('/tms_travel/get_by_id/' + id_viaje);
-            if (res.data[0].x_status_viaje == null || res.data[0].x_status_viaje == 'disponible') {
+            const res = await odooApi.get(`/tms_travel/${id_viaje}`);
+            if (res.data.x_status_viaje == null || res.data.x_status_viaje == 'disponible') {
 
                 const response = await odooApi.get('/tms_waybill/get_by_travel_id/' + id_viaje);
 

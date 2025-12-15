@@ -53,10 +53,8 @@ const ViajeProvider = ({ children }) => {
 
         try {
             setLoading(true);
-            const response = await odooApi.get('/tms_travel/get_by_id/' + id_viaje);
-            const data = response.data[0];
-            console.log(data);
-            setViaje(data);
+            const response = await odooApi.get(`/tms_travel/${id_viaje}`);
+            setViaje(response.data);
             comprobacion_correos();
             setLoading(false);
         } catch (error) {
