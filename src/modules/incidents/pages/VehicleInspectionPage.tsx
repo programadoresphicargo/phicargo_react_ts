@@ -12,6 +12,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { InspectionModal } from '@/modules/vehicles/components/vehicle-inspections/InspectionModal';
 import { VehicleInspectionHeader } from '../components/ui/VehicleInspectionHeader';
 import { Button } from '@heroui/react';
+import { ExportConfig, ExportToExcel } from '@/utilities';
 
 
 const now = new Date();
@@ -57,6 +58,7 @@ const VehicleInspectionPage = () => {
       <div className="flex items-center gap-4">
         <MonthSelect onMonthChange={setMonth} inspectionType='cleaning' />
         <YearSelect onYearChange={setYear} />
+        <Button color='success' className='text-white' onClick={() => exportTo.exportData(query.data ?? [])} radius='full'>Exportar</Button>
       </div>
     ),
   });
@@ -139,3 +141,18 @@ const RowActions = ({
 
 export default VehicleInspectionPage;
 
+const exportConf: ExportConfig<VehicleInspection> = {
+  fileName: 'Revisiones',
+  withDate: true,
+  columns: [
+    { accessorFn: (data) => data.name, header: 'Unidad', columnWidth: 50 },
+    { accessorFn: (data) => data.fleetType, header: 'Tipo', columnWidth: 50 },
+    { accessorFn: (data) => data.driver?.name, header: 'Operador asignado', columnWidth: 50 },
+    { accessorFn: (data) => data.inspection?.result, header: 'Resultado', columnWidth: 50 },
+    { accessorFn: (data) => data.inspection?.inspectionDate.format('DD/MM/YYYY hh:mm A'), header: 'Fecha de inspección', columnWidth: 50 },
+    { accessorFn: (data) => data.inspection?.inspector.username, header: 'Inspector', columnWidth: 50 },
+    { accessorFn: (data) => data.inspection?.inspectionState, header: 'Estado', columnWidth: 50 },
+  ],
+};
+
+const exportTo = new ExportToExcel(exportConf);
