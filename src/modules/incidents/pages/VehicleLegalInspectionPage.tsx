@@ -12,7 +12,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { VehicleInspectionHeader } from '../components/ui/VehicleInspectionHeader';
 import { LegalInspectionModal } from '@/modules/vehicles/components/vehicle-inspections/LegalInspectionModal';
 import { Button } from '@heroui/react';
-import { exportToCSV } from '../../../phicargo/utils/export';
+import { ExportConfig, ExportToExcel } from '@/utilities';
 
 const now = new Date();
 
@@ -57,7 +57,7 @@ const VehicleLegalInspectionPage = () => {
       <div className="flex items-center gap-4">
         <MonthSelect onMonthChange={setMonth} inspectionType='legal' />
         <YearSelect onYearChange={setYear} />
-        <Button color='success' className='text-white' onPress={() => exportToCSV(query.data || [], columns, "inspecciones.csv")} isDisabled>Exportar</Button>
+        <Button color='success' className='text-white' onClick={() => exportTo.exportData(query.data ?? [])} radius='full'>Exportar</Button>
       </div>
     ),
   });
@@ -142,4 +142,20 @@ const RowActions = ({
 };
 
 export default VehicleLegalInspectionPage;
+
+const exportConf: ExportConfig<VehicleInspection> = {
+  fileName: 'Revisiones',
+  withDate: true,
+  columns: [
+    { accessorFn: (data) => data.name, header: 'Unidad', columnWidth: 50 },
+    { accessorFn: (data) => data.fleetType, header: 'Tipo', columnWidth: 50 },
+    { accessorFn: (data) => data.driver?.name, header: 'Operador asignado', columnWidth: 50 },
+    { accessorFn: (data) => data.inspection?.result, header: 'Resultado', columnWidth: 50 },
+    { accessorFn: (data) => data.inspection?.inspectionDate, header: 'Fecha de inspección', columnWidth: 50 },
+    { accessorFn: (data) => data.inspection?.inspector.username, header: 'Inspector', columnWidth: 50 },
+    { accessorFn: (data) => data.inspection?.inspectionState, header: 'Estado', columnWidth: 50 },
+  ],
+};
+
+const exportTo = new ExportToExcel(exportConf);
 
