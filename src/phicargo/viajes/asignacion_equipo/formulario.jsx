@@ -27,7 +27,7 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
     const isDisabled = data?.id_pre_asignacion ? !isEditMode : false;
     const [isLoading, setLoading] = useState(false);
     const [comentarios, setComentarios] = useState("");
-    const [filtroActivo, setFiltroActivo] = useState(true);
+    const [filtroActivo, setFiltroActivo] = useState(false);
 
     const TipoCarga = (waybill_category) => {
         if ([25, 28, 33, 39, 42, 47, 49, 52].includes(waybill_category)) {
