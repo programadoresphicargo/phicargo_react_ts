@@ -151,7 +151,7 @@ const exportConf: ExportConfig<VehicleInspection> = {
     { accessorFn: (data) => data.fleetType, header: 'Tipo', columnWidth: 50 },
     { accessorFn: (data) => data.driver?.name, header: 'Operador asignado', columnWidth: 50 },
     { accessorFn: (data) => data.inspection?.result, header: 'Resultado', columnWidth: 50 },
-    { accessorFn: (data) => data.inspection?.inspectionDate, header: 'Fecha de inspección', columnWidth: 50 },
+    { accessorFn: (data) => data.inspection?.inspectionDate.format('DD/MM/YYYY hh:mm A'), header: 'Fecha de inspección', columnWidth: 50 },
     { accessorFn: (data) => data.inspection?.inspector.username, header: 'Inspector', columnWidth: 50 },
     { accessorFn: (data) => data.inspection?.inspectionState, header: 'Estado', columnWidth: 50 },
   ],
