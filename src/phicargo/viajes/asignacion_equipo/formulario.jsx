@@ -41,7 +41,7 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
         setFormData({ id_cp: data?.id_cp || null });
         setEditMode(false);
         getData();
-        setFiltroActivo(true);
+        setFiltroActivo(false);
     }, [data]);
 
     const handleSelectChange = (value, name) => {
