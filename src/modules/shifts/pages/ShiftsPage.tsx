@@ -11,21 +11,68 @@ import type { Shift } from '../models/shift-model';
 import { useReorderShifts } from '../hooks/useReorderShifts';
 import { useShiftColumns } from '../hooks/useShiftColumns';
 import { useShiftQueries } from '../hooks/useShiftQueries';
+import { useEffect, useState } from 'react';
+import odooApi from '@/api/odoo-api';
+import { DateRangePicker } from 'rsuite';
 
 const ShiftsPage = () => {
+  const now = new Date();
+  const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+  const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+  const [range, setRange] = useState<[Date, Date]>([firstDay, lastDay]);
+
+  type KmData = {
+    total_km: number | null;
+  };
+
+  const [kmByKey, setKmByKey] = useState<Record<string, KmData>>({});
+
   const navigate = useNavigate();
-  const { columns } = useShiftColumns();
+  const { columns } = useShiftColumns(kmByKey);
   const {
     shiftQuery: { data: shifts, isFetching, refetch },
   } = useShiftQueries();
 
+  const shiftsData = shifts ?? [];
   const { data, handleRowOrderChange, saveChanges } = useReorderShifts(
-    shifts || [],
+    shiftsData,
   );
 
   const onOpenDetails = (id: number) => {
     navigate(`/turnos/detalles/${id}`);
   };
+
+  useEffect(() => {
+    if (!data || data.length === 0) return;
+
+    const payload = data.map(s => ({
+      shift: s.shift,
+      driver_id: s.driver.id,
+    }));
+
+    console.log(range[0].toISOString().slice(0, 10));
+
+    const fetchKmBatch = async () => {
+      try {
+        const res = await odooApi.post(
+          '/shifts/km-batch',
+          payload, // 👈 el BODY ES SOLO la lista
+          {
+            params: {
+              date_start: range[0].toISOString().slice(0, 10),
+              date_end: range[1].toISOString().slice(0, 10),
+            },
+          }
+        );
+        const result = await res.data;
+        setKmByKey(result);
+      } catch (error) {
+        console.error('Error obteniendo km batch', error);
+      }
+    };
+
+    fetchKmBatch();
+  }, [data]);
 
   const table = useMaterialReactTable<Shift>({
     // DATA
@@ -101,6 +148,18 @@ const ShiftsPage = () => {
             <RefreshIcon />
           </IconButton>
         </Tooltip>
+
+        <DateRangePicker
+          value={range}
+          onChange={(value) => {
+            if (value && value.length === 2) {
+              setRange(value as [Date, Date]);
+              refetch();
+            }
+          }}
+          placeholder="Selecciona un rango de fechas"
+          format="yyyy-MM-dd"
+        />
       </div>
     ),
     muiTableContainerProps: {

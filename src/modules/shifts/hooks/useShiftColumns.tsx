@@ -7,8 +7,13 @@ import IncidentsShift from './IncidentsShift';
 import { Popover, PopoverTrigger, PopoverContent } from "@heroui/react";
 import dayjs from 'dayjs';
 
+type KmData = {
+  total_km: number | null;
+};
 
-export const useShiftColumns = () => {
+export const useShiftColumns = (
+  kmByKey: Record<string, KmData>
+) => {
   const columns = useMemo<MRT_ColumnDef<Shift>[]>(
     () => [
       {
@@ -130,6 +135,20 @@ export const useShiftColumns = () => {
         }
       },
       {
+        header: 'Kilómetros recorridos',
+        id: 'km',
+        Cell: ({ row }) => {
+          const kmData = kmByKey[row.original.shift];
+          const km = kmData?.total_km;
+
+          return (
+            <span className="text-sm font-semibold text-green-600">
+              {km != null ? `${km} km` : '—'}
+            </span>
+          );
+        },
+      },
+      {
         accessorFn: (row) => row.has_recent_incident,
         header: 'Incidencias recientes (últimos 30 días)',
         Cell: ({ row }) => {
@@ -156,7 +175,7 @@ export const useShiftColumns = () => {
         header: 'Comentarios',
       },
     ],
-    [],
+    [kmByKey],
   );
 
   return {
