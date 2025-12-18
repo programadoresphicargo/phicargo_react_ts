@@ -149,17 +149,23 @@ const ShiftsPage = () => {
           </IconButton>
         </Tooltip>
 
-        <DateRangePicker
-          value={range}
-          onChange={(value) => {
-            if (value && value.length === 2) {
-              setRange(value as [Date, Date]);
-              refetch();
-            }
-          }}
-          placeholder="Selecciona un rango de fechas"
-          format="yyyy-MM-dd"
-        />
+        <div style={{ display: 'flex', flexDirection: 'row', gap: 6, alignItems: 'center', }}>
+          <label style={{ fontWeight: 600 }}>
+            Rango km recorridos
+          </label>
+
+          <DateRangePicker
+            value={range}
+            onChange={(value) => {
+              if (value && value.length === 2) {
+                setRange(value as [Date, Date]);
+                refetch();
+              }
+            }}
+            placeholder="Selecciona un rango de fechas"
+            format="yyyy-MM-dd"
+          />
+        </div>
       </div>
     ),
     muiTableContainerProps: {
