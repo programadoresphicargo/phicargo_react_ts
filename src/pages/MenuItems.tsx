@@ -112,7 +112,7 @@ export const menuItems: MenuItemType[] = [
  },
  {
   icon: complaints,
-  label: 'Quejas',
+  label: 'No conformidades',
   link: '/quejas',
   requiredPermissions: [213],
  },
