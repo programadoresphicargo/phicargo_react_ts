@@ -10,7 +10,7 @@ import { motion } from 'framer-motion';
 import fondo2 from '../assets/img/tract_scannia.jpg';
 import { menuItems } from '../pages/MenuItems';
 import navidad from '@/assets/original/christmas-tree-2595897.png';
-import navidad1 from '@/assets/original/snowman-2595899.png';
+import navidad1 from '@/assets/original/magos.png';
 
 const MainMenuPage = () => {
   const { session } = useAuthContext();
@@ -52,7 +52,7 @@ const MainMenuPage = () => {
     <main
       style={{
         backgroundImage: `
-        linear-gradient(90deg, rgba(100, 10, 10, 1), rgba(154, 44, 44, .90)),
+        linear-gradient(90deg, rgba(95, 45, 131, 1), rgba(133, 87, 165, .9)),
         url(${fondo2})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
@@ -117,23 +117,12 @@ const MainMenuPage = () => {
 
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
         <img
-          src={navidad}
-          style={{
-            position: "absolute",
-            bottom: "20px",
-            width: "200px",      // <-- aquí puedes agrandarla sin miedo
-            zIndex: 0,           // <-- detrás del contenido
-            opacity: 0.9         // opcional
-          }}
-        />
-
-        <img
           src={navidad1}
           style={{
             position: "absolute",
             bottom: "20px",
-            right: "130px",
-            width: "150px",      // <-- aquí puedes agrandarla sin miedo
+            right: "10px",
+            width: "400px",      // <-- aquí puedes agrandarla sin miedo
             zIndex: 0,           // <-- detrás del contenido
             opacity: 0.9         // opcional
           }}
