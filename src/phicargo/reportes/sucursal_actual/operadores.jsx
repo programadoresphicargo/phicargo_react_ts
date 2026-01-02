@@ -1,51 +1,30 @@
-import { Button, Chip, DatePicker } from "@heroui/react";
+import { Button, Chip } from "@heroui/react";
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 import React, { useEffect, useState } from 'react';
-import { download, generateCsv, mkConfig } from 'export-to-csv';
-import { getLocalTimeZone, parseDate } from "@internationalized/date";
-
-import Badge from 'react-bootstrap/Badge';
 import { Box } from '@mui/material';
-import { Component } from "react";
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import axios from 'axios';
 import odooApi from '@/api/odoo-api';
 import { toast } from "react-toastify";
-import { useDateFormatter } from "@react-aria/i18n";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
+import OperadoresDialogPage from "./historial";
 
 const SucursalActualOperador = () => {
 
-  const [isLoading, setisLoading] = useState('');
-  const [fechaInicio, setFechaInicio] = React.useState(parseDate(new Date().toISOString().split('T')[0]));
-  const [fechaFin, setFechaFin] = React.useState(parseDate(new Date().toISOString().split('T')[0]));
-
-  const handleFechaInicioChange = (event) => {
-    setFechaInicio(event.target.value);
-  };
-
-  const handleFechaFinChange = (event) => {
-    setFechaFin(event.target.value);
-  };
-
+  const [open, setOpen] = useState(false);
+  const [historial, setHistorial] = useState([]);
+  const [isLoading, setisLoading] = useState(false);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchData();
-  }, [fechaInicio, fechaFin]);
+  }, []);
 
   const fetchData = async () => {
     try {
-      // Validar fechas
-      if (!fechaInicio || !fechaFin) {
-        throw new Error('Las fechas de inicio y fin son obligatorias.');
-      }
 
       setisLoading(true);
       const response = await odooApi.get(`/tms_travel/sucursal_actual_operadores/`);
       setData(response.data);
-      console.log(response.data);
     } catch (error) {
       toast.error('Error al enviar los datos: ' + error);
     } finally {
@@ -123,6 +102,15 @@ const SucursalActualOperador = () => {
         color: row.subRows?.length ? '#FFFFFF' : '#000000',
       },
     }),
+    muiTableBodyRowProps: ({ row }) => ({
+      onClick: () => {
+        setOpen(true);
+        setHistorial(row.original.historial);
+      },
+      style: {
+        cursor: 'pointer',
+      },
+    }),
     renderTopToolbarCustomActions: ({ table }) => (
       <Box
         sx={{
@@ -140,6 +128,7 @@ const SucursalActualOperador = () => {
         >
           Operadores
         </h1>
+        <Button color="success" onPress={() => fetchData()} className="text-white" radius="full">Recargar</Button>
 
       </Box >
     ),
@@ -150,6 +139,7 @@ const SucursalActualOperador = () => {
       <MaterialReactTable
         table={table}
       />
+      <OperadoresDialogPage open={open} setOpen={setOpen} data={historial}></OperadoresDialogPage>
     </>
   );
 };
