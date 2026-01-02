@@ -17,7 +17,7 @@ const AvatarProfile = () => {
       <DropdownTrigger>
         <User
           avatarProps={{
-            src: "https://png.pngtree.com/png-vector/20241118/ourmid/pngtree-santa-claus-profile-picture-vector-png-image_14487013.png",
+            src: "https://cdn-icons-png.flaticon.com/256/8033/8033010.png",
           }}
           description={session?.user.role || ''}
           name={session?.user.name || ''}
