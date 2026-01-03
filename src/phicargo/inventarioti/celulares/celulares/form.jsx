@@ -89,7 +89,8 @@ export default function FormCelulares({ isOpen, onOpenChange, id_celular }) {
             }
             onClose();
         } catch (error) {
-            console.error("Error al guardar:", error);
+            toast.error("Error al guardar:" + error);
+            toast.error("Error: " + error?.response?.data?.detail);
         } finally {
             setLoading(false);
         }
