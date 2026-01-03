@@ -22,7 +22,7 @@ export default function OperadoresDialogPage({ open, setOpen, data = [] }) {
       <IconButton
        edge="start"
        color="inherit"
-       onClick={setOpen}
+       onClick={() => setOpen(false)}
        aria-label="close"
       >
        <CloseIcon />
