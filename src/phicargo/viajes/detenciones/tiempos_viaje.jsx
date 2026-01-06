@@ -1,8 +1,6 @@
 import { Card, CardBody, CardHeader, Divider, Progress } from "@heroui/react";
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { TiemposViajeProvider, useTiemposViaje } from './TiemposViajeContext';
-
-import { ViajeContext } from '../context/viajeContext';
 import odooApi from '@/api/odoo-api';
 
 function TiemposViajes() {
