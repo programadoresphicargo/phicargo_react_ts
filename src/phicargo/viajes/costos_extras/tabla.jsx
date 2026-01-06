@@ -214,6 +214,7 @@ const FoliosCostosExtrasViaje = () => {
       >
         <Box sx={{ width: '200px' }}>
           <Button
+            radius="full"
             color="primary"
             fullWidth
             onPress={() => {
