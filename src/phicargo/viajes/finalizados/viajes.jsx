@@ -32,7 +32,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const ViajesFinalizados = ({ }) => {
 
   const [open, setOpen] = React.useState(false);
-  const { id_viaje, viaje, getViaje, loading, error, ActualizarIDViaje, drawerOpen } = useContext(ViajeContext);
+  const { id_viaje, viaje, getViaje, loading, error, ActualizarIDViaje } = useContext(ViajeContext);
 
   const now = new Date();
   const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
