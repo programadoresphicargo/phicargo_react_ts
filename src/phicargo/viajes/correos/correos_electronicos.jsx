@@ -118,7 +118,14 @@ const CorreosElectronicosViaje = ({ openCorreos }) => {
 
   return (<>
     <div>
-      <Button color="success" className="text-white mb-3" onPress={() => enlazarCorreoManiobras()} isLoading={isLoadingCM}>Ligar correos de maniobras</Button>
+      <Button
+        color="success"
+        className="text-white mb-3"
+        radius="full"
+        onPress={() => enlazarCorreoManiobras()}
+        isLoading={isLoadingCM}>
+        Ligar correos de maniobras
+      </Button>
       <Autocomplete
         fullWidth="true"
         defaultItems={correosCliente}
@@ -178,7 +185,7 @@ const CorreosElectronicosViaje = ({ openCorreos }) => {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <div className="flex gap-3">
-            <Button color="primary" onClick={handleClickOpen}>
+            <Button color="primary" onPress={() => handleClickOpen()} radius="full">
               Nuevo correo electrónico +
             </Button>
           </div>
@@ -215,7 +222,7 @@ const CorreosElectronicosViaje = ({ openCorreos }) => {
                 </Chip>
               </TableCell>
               <TableCell>
-                <Button color='danger' size='sm' onPress={() => desvincularCorreo(visitor.id)}>
+                <Button color='danger' size='sm' onPress={() => desvincularCorreo(visitor.id)} radius="full">
                   <i class="bi bi-x-circle"></i>
                 </Button>
               </TableCell>
