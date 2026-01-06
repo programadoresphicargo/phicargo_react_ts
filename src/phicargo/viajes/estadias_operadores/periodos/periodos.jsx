@@ -21,7 +21,6 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { exportToCSV } from '../../../utils/export';
 import odooApi from '@/api/odoo-api';
-import { ViajeProvider } from '../../context/viajeContext';
 import EstadiasOperadores from '../folios';
 import AbrirPeriodo from './modal_periodo';
 import PagosPeriodo from './folios_pago';
@@ -226,16 +225,13 @@ const PagosEstadiasOperadores = ({ }) => {
 
     return (
         <>
-            <ViajeProvider>
-                <NavbarTravel></NavbarTravel>
-                <MaterialReactTable
-                    table={table}
-                />
+            <NavbarTravel></NavbarTravel>
+            <MaterialReactTable
+                table={table}
+            />
 
-                <AbrirPeriodo open={openOP} handleClose={handleCloseEO} datapago={folio}></AbrirPeriodo>
-                <PagosPeriodo open={open} handleClose={handleClose} id_usuario={id_usuario} startDate={startDate} endDate={endDate}></PagosPeriodo>
-
-            </ViajeProvider>
+            <AbrirPeriodo open={openOP} handleClose={handleCloseEO} datapago={folio}></AbrirPeriodo>
+            <PagosPeriodo open={open} handleClose={handleClose} id_usuario={id_usuario} startDate={startDate} endDate={endDate}></PagosPeriodo>
         </>
     );
 };
