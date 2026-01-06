@@ -3,7 +3,6 @@ import {
   useMaterialReactTable,
 } from 'material-react-table';
 import React, { useEffect, useMemo, useState } from 'react';
-
 import { Box } from '@mui/material';
 import { Button } from "@heroui/react";
 import { Checkbox } from '@mui/material';
@@ -15,15 +14,11 @@ import Slide from '@mui/material/Slide';
 import odooApi from '@/api/odoo-api';
 const { VITE_ODOO_API_URL } = import.meta.env;
 
-
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
-
-const EstatusOperativos = ({ estado }) => {
+const EstatusOperativos = ({ }) => {
 
   const [open, setOpen] = React.useState(false);
   const [id_acceso, setIDAcceso] = useState(0);
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -201,7 +196,7 @@ const EstatusOperativos = ({ estado }) => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 210px)',
+        maxHeight: 'calc(100vh - 220px)',
       },
     },
     renderTopToolbarCustomActions: ({ table }) => (
@@ -215,8 +210,9 @@ const EstatusOperativos = ({ estado }) => {
       >
         <Button
           color='primary'
+          radius='full'
           disabled={table.getPrePaginationRowModel().rows.length === 0}
-          onClick={() =>
+          onPress={() =>
             NuevoAcceso()
           }
         >
@@ -226,12 +222,7 @@ const EstatusOperativos = ({ estado }) => {
     ),
   });
 
-  return (<>
-    <div>
-      <MaterialReactTable table={table} />
-    </div >
-  </>
-  );
+  return (<><MaterialReactTable table={table} /></>);
 
 };
 
