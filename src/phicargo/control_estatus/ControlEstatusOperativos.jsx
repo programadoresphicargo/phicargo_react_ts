@@ -7,9 +7,9 @@ import EstatusOperativos from "./tabla";
 
 export default function ControlEstatusOperativos() {
     return (
-        <div>
+        <>
             <NavbarTravel></NavbarTravel>
             <EstatusOperativos></EstatusOperativos>
-        </div>
+        </>
     );
 }
