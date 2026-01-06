@@ -11,7 +11,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Documentacion from './documentacion/documentacion';
 import FoliosCostosExtras from '../costos/folios/tabla';
 import FoliosCostosExtrasViaje from './costos_extras/tabla';
-import IndexCambioEquipo from './cambio_equipo/documentacion';
 import Map from './mapa/mapa';
 import Notificaciones from './panel_notificaciones/panel';
 import Slide from '@mui/material/Slide';
@@ -129,9 +128,8 @@ const Viaje = ({ }) => {
               <Tab sx={{ fontFamily: 'Inter' }} label="Seguimiento" value="1" />
               <Tab sx={{ fontFamily: 'Inter' }} label="Mapa" value="2" />
               <Tab sx={{ fontFamily: 'Inter' }} label="Documentos" value="3" />
-              <Tab sx={{ fontFamily: 'Inter' }} label="Cambio de equipo" value="4" />
-              <Tab sx={{ fontFamily: 'Inter' }} label="Detenciones" value="5" />
-              <Tab sx={{ fontFamily: 'Inter' }} label="Costos extras" value="6" />
+              <Tab sx={{ fontFamily: 'Inter' }} label="Detenciones" value="4" />
+              <Tab sx={{ fontFamily: 'Inter' }} label="Costos extras" value="5" />
             </TabList>
           </Box>
 
@@ -144,15 +142,12 @@ const Viaje = ({ }) => {
           <TabPanel value="3" sx={{ padding: 0 }}>
             <Documentacion />
           </TabPanel>
-          <TabPanel value="4" sx={{ padding: 2 }}>
-            <IndexCambioEquipo />
-          </TabPanel>
-          <TabPanel value="5" sx={{ padding: 0 }}>
+          <TabPanel value="4" sx={{ padding: 0 }}>
             <TiemposViajeProvider>
               <Detenciones />
             </TiemposViajeProvider>
           </TabPanel>
-          <TabPanel value="6" sx={{ padding: 0 }}>
+          <TabPanel value="5" sx={{ padding: 0 }}>
             <CostosExtrasProvider>
               <FoliosCostosExtrasViaje />
             </CostosExtrasProvider>
