@@ -1,7 +1,6 @@
 import { Avatar, Badge, Card, CardBody, CardHeader, Divider, Input } from "@heroui/react";
 import React, { useContext, useEffect, useState, useMemo } from 'react';
 import { Spinner } from "@heroui/react";
-import { ViajeContext } from '../../context/viajeContext';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import Dialog from '@mui/material/Dialog';
