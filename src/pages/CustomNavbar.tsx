@@ -21,7 +21,7 @@ function SubMenu({ title, items }: any) {
   return (
     <>
       <Button
-        sx={{ my: 2, color: "white", fontFamily: "inter" }}
+        sx={{ my: 2, color: "white", fontFamily: "inter", fontSize: "12px" }}
         onClick={(e: any) => setAnchorEl(e.currentTarget)}
       >
         {title}
@@ -123,7 +123,7 @@ const CustomNavbar = ({
                     key={p.name}
                     component={Link}
                     to={p.path || ""}
-                    sx={{ my: 2, color: "white", fontFamily: "inter", fontSize: "10px" }}
+                    sx={{ my: 2, color: "white", fontFamily: "inter", fontSize: "12px" }}
                   >
                     {p.name}
                   </Button>
