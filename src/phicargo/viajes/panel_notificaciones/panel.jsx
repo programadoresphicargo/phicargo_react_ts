@@ -29,6 +29,7 @@ export default function Notificaciones({ isOpen, onOpen, onOpenChange }) {
     const [idViaje, setIDViaje] = React.useState(false);
 
     const handleClickOpen = (id_viaje) => {
+        console.log(id_viaje);
         setIDViaje(id_viaje);
         setOpenTravel(true);
     };
@@ -55,7 +56,7 @@ export default function Notificaciones({ isOpen, onOpen, onOpenChange }) {
 
     return (
         <>
-            <Travel id_viaje={idViaje} open={openTravel} handleClose={handleClose}></Travel>
+            <Travel idViaje={idViaje} open={openTravel} handleClose={handleClose}></Travel>
             <Drawer
                 isOpen={isOpen}
                 size='lg'
