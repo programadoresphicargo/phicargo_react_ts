@@ -39,11 +39,9 @@ const LoginPage = () => {
     <>
       <Toaster position="top-center" reverseOrder={false} />
       <div className="bg_fondo">
-        <div className="bg_login_muertos"></div>
-        <div className="bg_login_muertos bg2_login"></div>
-        <div className="bg_login_muertos bg3_login"></div>
-
-        <Snowfall></Snowfall>
+        <div className="bg_login"></div>
+        <div className="bg_login bg2_login"></div>
+        <div className="bg_login bg3_login"></div>
 
         <div className="content_login">
           <div className="flex h-full w-full items-center justify-center">
@@ -88,11 +86,10 @@ const LoginPage = () => {
                     className='text-white'
                   />
                 </div>
-                <Image width={400} alt="phicargo logo" src={navidad} />
 
                 <Button
                   className="w-full text-white"
-                  color="secondary"
+                  color="primary"
                   type="submit"
                   size="sm"
                   isLoading={isPending}

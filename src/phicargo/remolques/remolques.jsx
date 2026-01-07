@@ -25,12 +25,19 @@ import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import FormularioRemolques from "./formulario";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
+import Travel from "../viajes/control/viaje";
+import { ViajeProvider } from "../viajes/context/viajeContext";
 
 const Disponibilidad_unidades = () => {
     const [isLoading2, setLoading] = useState();
     const [data, setData] = useState([]);
     const [openDialog, setOpenDialog] = useState(false);
     const [vehicle_data, setVehicle] = useState(0);
+    const [open, setOpen] = React.useState(false);
+
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     const fetchData = async () => {
         setLoading(true);
@@ -164,7 +171,7 @@ const Disponibilidad_unidades = () => {
 
                     return (
                         <Tooltip content={`Estado: ${estado ?? 'N/A'}`}>
-                            <Button className="capitalize" color="primary" size="sm" radius="full">
+                            <Button className="capitalize" color="primary" size="sm" radius="full" onPress={() => setOpen(true)}>
                                 {valor}
                             </Button>
                         </Tooltip>
@@ -230,12 +237,6 @@ const Disponibilidad_unidades = () => {
             pagination: { pageSize: 80 },
         },
         state: { showProgressBars: isLoading2 },
-        muiTableBodyRowProps: ({ row }) => ({
-            onClick: () => { handleRowClick(row); setVehicle(row.original) },
-            style: {
-                cursor: 'pointer',
-            },
-        }),
         muiTableHeadCellProps: {
             sx: {
                 fontFamily: 'Inter',
@@ -256,6 +257,22 @@ const Disponibilidad_unidades = () => {
             },
         },
         muiTablePaperProps: { elevation: 0, sx: { borderRadius: '0', }, },
+        enableRowActions: true,
+        renderRowActions: ({ row }) => [
+            <Button
+                key="edit"
+                color="success"
+                radius="full"
+                className="text-white"
+                size="sm"
+                onPress={() => {
+                    handleRowClick(row);
+                    setVehicle(row.original);
+                }}
+            >
+                Editar
+            </Button>
+        ],
         renderTopToolbarCustomActions: ({ table }) => (
             <Box
                 sx={{
@@ -295,6 +312,10 @@ const Disponibilidad_unidades = () => {
             <MaterialReactTable table={table} />
 
             <FormularioRemolques isOpen={openDialog} onOpenChange={setOpenDialog} vehicle_data={vehicle_data}></FormularioRemolques>
+
+            <ViajeProvider>
+                <Travel open={open} handleClose={handleClose}></Travel>
+            </ViajeProvider>
         </div>
     );
 };

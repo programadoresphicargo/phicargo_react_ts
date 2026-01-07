@@ -36,7 +36,7 @@ const Travel = ({ open, handleClose }) => {
                     </IconButton>
                     <Typography sx={{ ml: 2, flex: 1, color: 'black' }} variant="h6" component="div">
                     </Typography>
-                    <Button autoFocus color="primary" onClick={handleClose}>
+                    <Button autoFocus color="primary" onPress={handleClose} radius="full">
                         Salir
                     </Button>
                 </Toolbar>

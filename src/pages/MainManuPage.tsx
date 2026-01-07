@@ -51,7 +51,7 @@ const MainMenuPage = () => {
     <main
       style={{
         backgroundImage: `
-        linear-gradient(90deg, rgba(95, 45, 131, 1), rgba(133, 87, 165, .9)),
+        linear-gradient(90deg, rgba(11, 33, 73, 0.95), rgba(0, 40, 135, 0.95)),
         url(${fondo2})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
@@ -114,19 +114,21 @@ const MainMenuPage = () => {
         ))}
       </motion.div>
 
-      <div style={{ display: "flex", justifyContent: "flex-end" }}>
-        <img
-          src={navidad1}
-          style={{
-            position: "absolute",
-            bottom: "20px",
-            right: "10px",
-            width: "400px",      // <-- aquí puedes agrandarla sin miedo
-            zIndex: 0,           // <-- detrás del contenido
-            opacity: 0.9         // opcional
-          }}
-        />
-      </div>
+    {/*
+    <div style={{ display: "flex", justifyContent: "flex-end" }}>
+      <img
+        src={navidad1}
+        style={{
+          position: "absolute",
+          bottom: "20px",
+          right: "10px",
+          width: "400px",
+          zIndex: 0,
+          opacity: 0.9
+        }}
+      />
+    </div>
+    */}
     </main >
   );
 };
