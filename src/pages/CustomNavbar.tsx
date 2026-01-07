@@ -123,7 +123,7 @@ const CustomNavbar = ({
                     key={p.name}
                     component={Link}
                     to={p.path || ""}
-                    sx={{ my: 2, color: "white", fontFamily: "inter" }}
+                    sx={{ my: 2, color: "white", fontFamily: "inter", fontSize: "10px" }}
                   >
                     {p.name}
                   </Button>
