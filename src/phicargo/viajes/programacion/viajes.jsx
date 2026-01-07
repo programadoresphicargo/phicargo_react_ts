@@ -33,7 +33,7 @@ const ViajesProgramados = ({ }) => {
   const [range, setRange] = useState([firstDay, lastDay]);
 
   const [open, setOpen] = React.useState(false);
-  const { id_viaje, viaje, getViaje, loading, error, ActualizarIDViaje } = useContext(ViajeContext);
+  const { id_viaje, viaje, getViaje, ActualizarIDViaje } = useContext(ViajeContext);
 
   useEffect(() => {
     getViaje(id_viaje);

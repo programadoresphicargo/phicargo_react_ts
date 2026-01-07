@@ -12,7 +12,7 @@ import {
     MaterialReactTable,
     useMaterialReactTable,
 } from 'material-react-table';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useContext } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import CloseIcon from '@mui/icons-material/Close';
@@ -26,9 +26,15 @@ import { toast } from 'react-toastify';
 import FormularioRemolques from "./formulario";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import Travel from "../viajes/control/viaje";
-import { ViajeProvider } from "../viajes/context/viajeContext";
+import { ViajeContext, ViajeProvider } from "../viajes/context/viajeContext";
 
-const Disponibilidad_unidades = () => {
+const Remolques = () => {
+    const { id_viaje, viaje, getViaje, loading, error, ActualizarIDViaje, setDrawerOpen } = useContext(ViajeContext);
+
+    useEffect(() => {
+        getViaje(id_viaje);
+    }, [id_viaje]);
+
     const [isLoading2, setLoading] = useState();
     const [data, setData] = useState([]);
     const [openDialog, setOpenDialog] = useState(false);
@@ -164,6 +170,7 @@ const Disponibilidad_unidades = () => {
                 header: 'Viaje',
                 Cell: ({ cell, row }) => {
                     const valor = cell.getValue(); // viaje_name
+                    const id_viaje = row.original.viaje_id; // aquí obtienes viaje_estado
                     const estado = row.original.viaje_estado; // aquí obtienes viaje_estado
 
                     // No mostrar si viaje_name es nulo
@@ -171,7 +178,7 @@ const Disponibilidad_unidades = () => {
 
                     return (
                         <Tooltip content={`Estado: ${estado ?? 'N/A'}`}>
-                            <Button className="capitalize" color="primary" size="sm" radius="full" onPress={() => setOpen(true)}>
+                            <Button className="capitalize" color="primary" size="sm" radius="full" onPress={() => { setOpen(true); ActualizarIDViaje(id_viaje) }}>
                                 {valor}
                             </Button>
                         </Tooltip>
@@ -310,14 +317,10 @@ const Disponibilidad_unidades = () => {
     return (
         <div>
             <MaterialReactTable table={table} />
-
             <FormularioRemolques isOpen={openDialog} onOpenChange={setOpenDialog} vehicle_data={vehicle_data}></FormularioRemolques>
-
-            <ViajeProvider>
-                <Travel open={open} handleClose={handleClose}></Travel>
-            </ViajeProvider>
+            <Travel open={open} handleClose={handleClose}></Travel>
         </div>
     );
 };
 
-export default Disponibilidad_unidades;
+export default Remolques;
