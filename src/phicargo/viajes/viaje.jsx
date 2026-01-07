@@ -87,7 +87,7 @@ const Viaje = ({ idViaje }) => {
         }}>
         <div className="min-w-0 flex-1">
           <h1 className="h1">
-            <Chip color='primary' size='lg' radius='md'>{viaje?.name}</Chip>
+            <Chip color='primary' size='lg'>{viaje?.name}</Chip>
           </h1>
           <div className="sm:space-x-3 mt-3 flex flex-wrap gap-2 text-white">
             <span>ID: {id_viaje}</span>
