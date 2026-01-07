@@ -96,7 +96,7 @@ const PersistentDrawer = lazy(() => import('../phicargo/monitoreo/Eventos'));
 const CumplimientoEjecutivosViajes = lazy(() => import('../phicargo/reportes/cumplimiento/cumplimiento_ejecutivos_viajes'));
 const CumplimientoEjecutivosManiobras = lazy(() => import('../phicargo/reportes/cumplimiento/index_cumplimiento_ejecutivo_maniobra'));
 const Redireccion = lazy(() => import('../router/TraficoRouter'));
-const RGV = lazy(() => import('../phicargo/reportes/cumplimiento_general/viajes/index_cumplimiento'));
+const RGV = lazy(() => import('../phicargo/reportes/cumplimiento_general/viajes/cumplimiento'));
 const CumplimientoManiobras = lazy(() => import('../phicargo/reportes/cumplimiento_general/maniobras/index_cumplimiento'));
 const CelularesTI = lazy(() => import('../phicargo/inventarioti/celulares/celulares/index'));
 const EmpleadosTI = lazy(() => import('../phicargo/inventarioti/celulares/empleados/index'));

@@ -14,7 +14,6 @@ import { exportToCSV } from '../../../utils/export';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { User } from "@heroui/react";
 import Travel from '@/phicargo/viajes/control/viaje';
-import ReporteCumplimientoGeneralViajeIndex from './index_cumplimiento';
 import { Progress } from "@heroui/react";
 import NavbarTravel from '@/phicargo/viajes/navbar_viajes';
 
@@ -461,8 +460,8 @@ const ReporteCumplimientoV = () => {
                     variant='bordered'
                     onChange={setDates} />
 
-                <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "reporte_estatus.csv")} fullWidth>Exportar</Button>
-                <Button color='primary' className='text-white' startContent={<i class="bi bi-arrow-clockwise"></i>} onPress={() => fetchData()} fullWidth>Recargar</Button>
+                <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} radius='full' onPress={() => exportToCSV(data, columns, "reporte_estatus.csv")} fullWidth>Exportar</Button>
+                <Button color='primary' className='text-white' startContent={<i class="bi bi-arrow-clockwise"></i>} radius='full' onPress={() => fetchData()} fullWidth>Recargar</Button>
 
             </Box>
 
