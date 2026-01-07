@@ -129,7 +129,7 @@ const CostosExtrasContenedores = ({ }) => {
                 >
                     Cartas porte
                 </h1>
-                <Button color='primary' onPress={handleShowModal} isDisabled={DisabledForm} startContent={<i className="bi bi-plus-lg"></i>}>Añadir carta porte</Button>
+                <Button radius="full" color='primary' onPress={handleShowModal} isDisabled={DisabledForm} startContent={<i className="bi bi-plus-lg"></i>}>Añadir carta porte</Button>
             </Box>
         ),
     });

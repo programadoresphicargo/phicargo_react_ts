@@ -314,14 +314,14 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
                                     <Stack spacing={1} direction="row">
 
                                         {id_folio == null && (
-                                            <Button color="primary" onPress={registrar_folio} isLoading={Loading}>
+                                            <Button color="primary" onPress={registrar_folio} isLoading={Loading} radius="full">
                                                 Registrar
                                             </Button>
                                         )}
 
                                         {session?.user?.permissions?.includes(151) &&
                                             (formData.status === "borrador" || formData.status === "confirmado") && (
-                                                <Button color="danger" onPress={openCancelDialog} startContent={<i className="bi bi-x-circle"></i>}>
+                                                <Button color="danger" onPress={openCancelDialog} startContent={<i className="bi bi-x-circle"></i>} radius="full">
                                                     Cancelar
                                                 </Button>
                                             )
@@ -334,19 +334,20 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
                                         )}
 
                                         {formData.status === 'confirmado' && (
-                                            <Button color="success" onPress={facturar_folio} className='text-white'>
+                                            <Button color="success" onPress={facturar_folio} className='text-white' radius="full">
                                                 Facturar
                                             </Button>
                                         )}
 
                                         {(formData.status === "borrador" || formData.status === 'confirmado') && !isEditing && (
-                                            <Button color="primary" onPress={() => editar_registro()} startContent={<i class="bi bi-pen"></i>}>
+                                            <Button color="primary" onPress={() => editar_registro()} startContent={<i class="bi bi-pen"></i>} radius="full">
                                                 Editar
                                             </Button>
                                         )}
 
                                         {(formData.status === "borrador" || formData.status === 'confirmado') && isEditing && (
                                             <Button
+                                                radius="full"
                                                 color="success"
                                                 className='text-white'
                                                 startContent={<i class="bi bi-floppy"></i>}
@@ -360,13 +361,13 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
                                         )}
 
                                         {id_folio != null && (
-                                            <Button color="danger" startContent={<i class="bi bi-filetype-pdf"></i>} showAnchorIcon href={`${apiUrl}/tms_travel/estadias/cortes/?id_folio=${id_folio}`} as={Link} isExternal={true}>
+                                            <Button radius="full" color="danger" startContent={<i class="bi bi-filetype-pdf"></i>} showAnchorIcon href={`${apiUrl}/tms_travel/estadias/cortes/?id_folio=${id_folio}`} as={Link} isExternal={true}>
                                                 Cortes estadías PDF
                                             </Button>
                                         )}
 
                                         {id_folio != null && (
-                                            <Button color="success" startContent={<i class="bi bi-filetype-pdf"></i>} className="text-white" onPress={() => setOpen(true)}>
+                                            <Button radius="full" color="success" startContent={<i class="bi bi-filetype-pdf"></i>} className="text-white" onPress={() => setOpen(true)}>
                                                 Adjuntos
                                             </Button>
                                         )}

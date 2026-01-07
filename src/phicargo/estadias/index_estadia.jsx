@@ -9,7 +9,6 @@ import NavbarTravel from "../viajes/navbar_viajes";
 export default function EstadiaViajeIndex() {
     return (
         <ViajeProvider>
-            <h1>americn</h1>
             <CostosExtrasProvider>
                 <NavbarTravel></NavbarTravel>
                 <EstadiasForm></EstadiasForm>

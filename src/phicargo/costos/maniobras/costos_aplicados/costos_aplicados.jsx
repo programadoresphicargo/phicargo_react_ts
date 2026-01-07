@@ -305,7 +305,7 @@ const ServiciosAplicadosCE = ({ onClose }) => {
                 >
                     Costos extras
                 </h1>
-                <Button onPress={handleClickOpen} color="primary" size="md" isDisabled={DisabledForm} startContent={<i class="bi bi-plus-lg"></i>}>
+                <Button radius="full" onPress={handleClickOpen} color="primary" size="md" isDisabled={DisabledForm} startContent={<i class="bi bi-plus-lg"></i>}>
                     Añadir costo extra
                 </Button>
             </Box>
