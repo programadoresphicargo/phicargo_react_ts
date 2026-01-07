@@ -16,6 +16,7 @@ const AvatarProfile = () => {
       <DropdownTrigger>
         <User
           avatarProps={{
+            size: "sm",
             src: "https://cdn-icons-png.flaticon.com/512/3177/3177440.png",
           }}
           description={session?.user.role || ''}
