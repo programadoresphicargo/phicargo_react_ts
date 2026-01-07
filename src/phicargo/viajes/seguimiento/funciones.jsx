@@ -351,18 +351,6 @@ export const useJourneyDialogs = () => {
         }
     };
 
-    const getReportesNoAtendidos = async () => {
-        try {
-            const response = await odooApi.get('/problemas_operadores/no_atendidos/');
-            const numRegistros = response.data?.length ?? 0;
-            return numRegistros;
-
-        } catch (error) {
-            console.error('Error al obtener los datos:', error);
-            return 0;
-        }
-    };
-
     const comprobar_estatus_viajes = async (id_viaje, id_estatus) => {
         try {
             const response = await odooApi.get(`/tms_travel/reportes_estatus_viajes/buscar_estatus/${id_viaje}/${id_estatus}`);
@@ -390,7 +378,6 @@ export const useJourneyDialogs = () => {
         comprobar_operador,
         comprobar_disponibilidad,
         comprobar_horarios,
-        getReportesNoAtendidos,
         calcular_estadia
     };
 };

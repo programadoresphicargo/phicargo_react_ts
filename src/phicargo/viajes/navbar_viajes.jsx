@@ -42,16 +42,22 @@ function NavbarTravel() {
     onOpenChange: onOpenChangePO,
   } = useDisclosure();
 
-  const { getReportesNoAtendidos } = useJourneyDialogs();
   const [numProblemasOperador, setNumPO] = useState(0);
 
-  const fetchReportes = async () => {
-    const numReportes = await getReportesNoAtendidos();
-    setNumPO(numReportes);
+  const getReportesNoAtendidos = async () => {
+    try {
+      const response = await odooApi.get('/problemas_operadores/no_atendidos/');
+      const numRegistros = response.data?.length ?? 0;
+      setNumPO(numRegistros);
+
+    } catch (error) {
+      console.error('Error al obtener los datos:', error);
+      return 0;
+    }
   };
 
   useEffect(() => {
-    fetchReportes();
+    getReportesNoAtendidos();
   }, []);
 
   return (

@@ -1,4 +1,4 @@
-import { Autocomplete, AutocompleteItem, Avatar } from "@heroui/react";
+import { Autocomplete, AutocompleteItem, Avatar, Progress } from "@heroui/react";
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, getKeyValue } from "@heroui/react";
 
@@ -192,44 +192,46 @@ const CorreosElectronicosViaje = ({ openCorreos }) => {
         </div>
       </div>
 
-      <Table aria-label="Example static collection table" isStriped>
-        <TableHeader>
-          <TableColumn>Correo electronico</TableColumn>
-          <TableColumn>Tipo</TableColumn>
-          <TableColumn>Acciones</TableColumn>
-        </TableHeader>
-        <TableBody>
-          {filteredData.map((visitor, index) => (
-            <TableRow key={index}>
-              <TableCell>
-                <User
-                  avatarProps={{ radius: "full", size: "sm", src: "https://cdn-icons-png.flaticon.com/512/5611/5611946.png" }}
-                  classNames={{
-                    description: "text-default-500",
-                  }}
-                  description={visitor.nombre}
-                  name={visitor.correo}
-                >
-                  {visitor.tipo}
-                </User>
-              </TableCell>
-              <TableCell>
-                <Chip
-                  color={visitor.tipo === 'Destinatario' ? 'primary' : 'success'}
-                  variant="dot"
-                >
-                  {visitor.tipo}
-                </Chip>
-              </TableCell>
-              <TableCell>
-                <Button color='danger' size='sm' onPress={() => desvincularCorreo(visitor.id)} radius="full">
-                  <i class="bi bi-x-circle"></i>
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+      {isLoadingCM ? <Progress isIndeterminate></Progress> :
+        <Table aria-label="Example static collection table" isStriped>
+          <TableHeader>
+            <TableColumn>Correo electronico</TableColumn>
+            <TableColumn>Tipo</TableColumn>
+            <TableColumn>Borrar</TableColumn>
+          </TableHeader>
+          <TableBody>
+            {filteredData.map((visitor, index) => (
+              <TableRow key={index}>
+                <TableCell>
+                  <User
+                    avatarProps={{ radius: "full", size: "sm", src: "https://cdn-icons-png.flaticon.com/512/5611/5611946.png" }}
+                    classNames={{
+                      description: "text-default-500",
+                    }}
+                    description={visitor.nombre}
+                    name={visitor.correo}
+                  >
+                    {visitor.tipo}
+                  </User>
+                </TableCell>
+                <TableCell>
+                  <Chip
+                    color={visitor.tipo === 'Destinatario' ? 'primary' : 'success'}
+                    variant="dot"
+                  >
+                    {visitor.tipo}
+                  </Chip>
+                </TableCell>
+                <TableCell>
+                  <Button color='danger' size='sm' onPress={() => desvincularCorreo(visitor.id)} radius="full">
+                    <i class="bi bi-x-circle"></i>
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      }
     </div>
 
     <Dialog

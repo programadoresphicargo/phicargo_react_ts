@@ -22,7 +22,7 @@ import { fontFamily } from "@mui/system";
 import { useJourneyDialogs } from "./funciones";
 import Custodia from "../custodia/custodia";
 
-export default function BasicButtons2() {
+export default function Seguimiento() {
 
     const { iniciar_viaje, finalizar_viaje, liberar_resguardo, reactivar_viaje, comprobar_operador, comprobar_disponibilidad, calcular_estadia } = useJourneyDialogs();
     const { id_viaje, viaje, correosLigados, isLoading } = useContext(ViajeContext);

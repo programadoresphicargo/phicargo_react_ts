@@ -12,11 +12,9 @@ const IndexHistorial = ({ vehicle_id }) => {
         <Tab key="viajes" title="Viajes" disabled={true}>
           <Card>
             <CardBody>
-              <ViajeProvider>
-                <HistorialViajesVehiculo
-                  vehicle_id={vehicle_id}
-                ></HistorialViajesVehiculo>
-              </ViajeProvider>
+              <HistorialViajesVehiculo
+                vehicle_id={vehicle_id}
+              ></HistorialViajesVehiculo>
             </CardBody>
           </Card>
         </Tab>

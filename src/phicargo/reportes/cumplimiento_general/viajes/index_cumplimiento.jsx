@@ -12,9 +12,7 @@ import ReporteCumplimientoV from './cumplimiento';
 const ReporteCumplimientoGeneralViajeIndex = () => {
 
     return (
-        <ViajeProvider>
-            <ReporteCumplimientoV></ReporteCumplimientoV>
-        </ViajeProvider>
+        <ReporteCumplimientoV></ReporteCumplimientoV>
     );
 };
 

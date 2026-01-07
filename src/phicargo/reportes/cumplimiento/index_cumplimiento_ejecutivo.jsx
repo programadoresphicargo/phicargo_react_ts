@@ -11,9 +11,7 @@ import ReporteCumplimientoEjecutivo from './cumplimiento_ejecutivos_viajes';
 const ReporteCumplimientoEjecutivoIndex = () => {
 
     return (
-        <ViajeProvider>
-            <ReporteCumplimientoEjecutivo></ReporteCumplimientoEjecutivo>
-        </ViajeProvider>
+        <ReporteCumplimientoEjecutivo></ReporteCumplimientoEjecutivo>
     );
 };
 

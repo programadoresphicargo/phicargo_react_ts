@@ -35,12 +35,12 @@ const PreciosManiobras = lazy(
 const Terminales = lazy(
   () => import('../phicargo/maniobras/maniobras/terminales/registros'),
 );
-const ControlViajesActivos = lazy(() => import('../phicargo/viajes/control'));
+const ControlViajesActivos = lazy(() => import('../phicargo/viajes/viajes/activos'));
 const ControlViajesProgramados = lazy(
-  () => import('../phicargo/viajes/programacion'),
+  () => import('../phicargo/viajes/viajes/programados'),
 );
 const ControlViajesFinalizados = lazy(
-  () => import('../phicargo/viajes/finalizados'),
+  () => import('../phicargo/viajes/viajes/finalizados'),
 );
 const ControlEstatusOperativos = lazy(
   () => import('../phicargo/control_estatus/ControlEstatusOperativos'),

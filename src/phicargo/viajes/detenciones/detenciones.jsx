@@ -24,7 +24,7 @@ import { toast } from 'react-toastify';
 
 const Detenciones = ({ }) => {
 
-  const { id_viaje, viaje, getViaje, loading, error, setIDViaje, isLoading } = useContext(ViajeContext);
+  const { id_viaje, viaje, loading, error, setIDViaje, isLoading } = useContext(ViajeContext);
   const { data, setData } = useTiemposViaje();
   const [isLoading3, setLoading3] = React.useState(false);
 

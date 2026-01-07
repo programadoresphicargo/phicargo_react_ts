@@ -10,10 +10,6 @@ const ViajeProvider = ({ children }) => {
 
     const [id_viaje, setIDViaje] = useState(0);
 
-    const ActualizarIDViaje = (id_viaje) => {
-        setIDViaje(id_viaje);
-    }
-
     const [correosLigados, setCorreosLigados] = useState(false);
 
     const ActualizarCorreosLigados = (estado) => {
@@ -24,10 +20,10 @@ const ViajeProvider = ({ children }) => {
         odooApi.get('/tms_travel/correos/id_viaje/' + id_viaje)
             .then(response => {
                 if (response.data.length > 0) {
-                    toast.success('Correos ligados.');
+                    toast.success('Correos ligados.' + id_viaje);
                     ActualizarCorreosLigados(false);
                 } else {
-                    toast.error('No hay correos electronicos ligados.');
+                    toast.error('No hay correos electronicos ligados.' + id_viaje);
                     ActualizarCorreosLigados(true);
                 }
             })
@@ -77,7 +73,7 @@ const ViajeProvider = ({ children }) => {
             id_viaje,
             viaje,
             getViaje,
-            ActualizarIDViaje,
+            setIDViaje,
             comprobacion_correos,
             correosLigados,
             isLoading,

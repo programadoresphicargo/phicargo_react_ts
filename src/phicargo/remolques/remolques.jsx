@@ -26,20 +26,15 @@ import { toast } from 'react-toastify';
 import FormularioRemolques from "./formulario";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import Travel from "../viajes/control/viaje";
-import { ViajeContext, ViajeProvider } from "../viajes/context/viajeContext";
 
 const Remolques = () => {
-    const { id_viaje, viaje, getViaje, loading, error, ActualizarIDViaje, setDrawerOpen } = useContext(ViajeContext);
-
-    useEffect(() => {
-        getViaje(id_viaje);
-    }, [id_viaje]);
 
     const [isLoading2, setLoading] = useState();
     const [data, setData] = useState([]);
     const [openDialog, setOpenDialog] = useState(false);
     const [vehicle_data, setVehicle] = useState(0);
     const [open, setOpen] = React.useState(false);
+    const [idViaje, setIDViaje] = React.useState(false);
 
     const handleClose = () => {
         setOpen(false);
@@ -178,7 +173,7 @@ const Remolques = () => {
 
                     return (
                         <Tooltip content={`Estado: ${estado ?? 'N/A'}`}>
-                            <Button className="capitalize" color="primary" size="sm" radius="full" onPress={() => { setOpen(true); ActualizarIDViaje(id_viaje) }}>
+                            <Button className="capitalize" color="primary" size="sm" radius="full" onPress={() => { setOpen(true); setIDViaje(id_viaje) }}>
                                 {valor}
                             </Button>
                         </Tooltip>
@@ -318,7 +313,7 @@ const Remolques = () => {
         <div>
             <MaterialReactTable table={table} />
             <FormularioRemolques isOpen={openDialog} onOpenChange={setOpenDialog} vehicle_data={vehicle_data}></FormularioRemolques>
-            <Travel open={open} handleClose={handleClose}></Travel>
+            <Travel idViaje={idViaje} open={open} handleClose={handleClose}></Travel>
         </div>
     );
 };

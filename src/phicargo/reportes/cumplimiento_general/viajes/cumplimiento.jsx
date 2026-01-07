@@ -14,7 +14,6 @@ import { exportToCSV } from '../../../utils/export';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { User } from "@heroui/react";
 import Travel from '@/phicargo/viajes/control/viaje';
-import { ViajeContext } from '@/phicargo/viajes/context/viajeContext';
 import ReporteCumplimientoGeneralViajeIndex from './index_cumplimiento';
 import { Progress } from "@heroui/react";
 import NavbarTravel from '@/phicargo/viajes/navbar_viajes';
@@ -23,12 +22,8 @@ const { VITE_ODOO_API_URL } = import.meta.env;
 
 const ReporteCumplimientoV = () => {
 
-    const { id_viaje, viaje, getViaje, loading, error, ActualizarIDViaje } = useContext(ViajeContext);
     const [open, setOpen] = React.useState(false);
-
-    useEffect(() => {
-        getViaje(id_viaje);
-    }, [id_viaje]);
+    const [idViaje, setIDViaje] = React.useState(false);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -411,7 +406,7 @@ const ReporteCumplimientoV = () => {
         muiTableBodyRowProps: ({ row }) => ({
             onClick: ({ event }) => {
                 handleClickOpen();
-                ActualizarIDViaje(row.original.id_viaje);
+                setIDViaje(row.original.id_viaje);
             },
             style: {
                 cursor: 'pointer',
@@ -478,7 +473,7 @@ const ReporteCumplimientoV = () => {
         <>
             <NavbarTravel></NavbarTravel>
             <MaterialReactTable table={table} />
-            <Travel open={open} handleClose={handleClose}></Travel>
+            <Travel idViaje={idViaje} open={open} handleClose={handleClose}></Travel>
         </>
     );
 };

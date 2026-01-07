@@ -13,14 +13,13 @@ import { toast } from 'react-toastify';
 
 const HistorialViajesVehiculo = ({ vehicle_id }) => {
 
-    const { id_viaje, viaje, getViaje, loading, error, ActualizarIDViaje } = useContext(ViajeContext);
     const [isLoading, setLoading] = useState();
     const [data, setData] = useState([]);
     const [open, setModalShow] = useState(false);
+    const [idViaje, setIDViaje] = useState(false);
 
     const handleShowModal = (id_viaje) => {
-        ActualizarIDViaje(id_viaje);
-        getViaje(id_viaje);
+        setIDViaje(id_viaje);
         setModalShow(true);
     };
 
@@ -138,7 +137,7 @@ const HistorialViajesVehiculo = ({ vehicle_id }) => {
     return (
         <>
             <MaterialReactTable table={table} />
-            <Travel open={open} handleClose={handleCloseModal}></Travel>
+            <Travel idViaje={idViaje} open={open} handleClose={handleCloseModal}></Travel>
         </>
     );
 };

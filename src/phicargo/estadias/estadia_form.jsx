@@ -14,13 +14,13 @@ const EstadiasForm = () => {
     const navigate = useNavigate();
 
     const { id_folio, CostosExtras, setCostosExtras, setCostosExtrasEliminados, DisabledForm, setDisabledForm, agregarConcepto, setAC, horasEstadias, setHE } = useContext(CostosExtrasContext);
-    const { ActualizarIDViaje } = useContext(ViajeContext);
+    const { setIDViaje } = useContext(ViajeContext);
     const location = useLocation();
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState([]);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const id_viaje = location.state?.id_viaje;
-    ActualizarIDViaje(id_viaje);
+    setIDViaje(id_viaje);
 
     useEffect(() => {
         const getDatos = async () => {

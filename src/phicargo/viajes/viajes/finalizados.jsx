@@ -24,6 +24,7 @@ import { DateRangePicker } from 'rsuite';
 import EstatusHistorialAgrupado from '../estatus/estatus_agrupados';
 import { Drawer } from '@mui/material';
 import NavbarTravel from '../navbar_viajes';
+import Travel from '../control/viaje';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -32,17 +33,12 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const ViajesFinalizados = ({ }) => {
 
   const [open, setOpen] = React.useState(false);
-  const { id_viaje, viaje, getViaje, loading, error, ActualizarIDViaje } = useContext(ViajeContext);
+  const [idViaje, setIDViaje] = React.useState(null);
 
   const now = new Date();
   const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
   const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-
   const [range, setRange] = useState([firstDay, lastDay]);
-
-  useEffect(() => {
-    getViaje(id_viaje);
-  }, [id_viaje]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -254,7 +250,7 @@ const ViajesFinalizados = ({ }) => {
     muiTableBodyRowProps: ({ row }) => ({
       onClick: ({ event }) => {
         handleClickOpen();
-        ActualizarIDViaje(row.original.id_viaje);
+        setIDViaje(row.original.id_viaje);
       },
       style: {
         cursor: 'pointer',
@@ -341,39 +337,9 @@ const ViajesFinalizados = ({ }) => {
       <NavbarTravel></NavbarTravel>
       <MaterialReactTable
         table={table}
-        enableStickyHeader={true} // Opcional: si deseas un encabezado fijo
+        enableStickyHeader={true}
       />
-
-      <Dialog
-        fullScreen
-        open={open}
-        onClose={handleClose}
-        TransitionComponent={Transition}
-      >
-        <AppBar
-          sx={{
-            background: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
-          }}
-          elevation={0}
-          position="static">
-          <Toolbar>
-            <IconButton
-              edge="start"
-              color="black"
-              onClick={handleClose}
-              aria-label="close"
-            >
-              <CloseIcon />
-            </IconButton>
-            <Typography sx={{ ml: 2, flex: 1, color: 'black' }} variant="h6" component="div">
-            </Typography>
-            <Button autoFocus color="primary" onClick={handleClose} radius='full'>
-              Salir
-            </Button>
-          </Toolbar>
-        </AppBar>
-        <Viaje></Viaje>
-      </Dialog>
+      <Travel idViaje={idViaje} open={open} handleClose={handleClose}></Travel>
     </>
   );
 };

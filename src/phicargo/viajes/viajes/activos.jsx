@@ -18,7 +18,7 @@ import { Image } from 'antd';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import Slide from '@mui/material/Slide';
 import Toolbar from '@mui/material/Toolbar';
-import Travel from './viaje';
+import Travel from '../control/viaje';
 import Typography from '@mui/material/Typography';
 import Viaje from '../viaje';
 import { ViajeContext } from '../context/viajeContext';
@@ -29,6 +29,7 @@ import { toast } from 'react-toastify';
 import EstatusChipInicioViaje from '../componentes/status_chip_inicio';
 import EstatusChipLlegadaPlanta from '../componentes/status_chip_planta';
 import NavbarTravel from '../navbar_viajes';
+import WebSocketWithToast from '@/phicargo/websocket/websocket';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -38,12 +39,8 @@ const ViajesActivos = ({ }) => {
 
   const [open, setOpen] = React.useState(false);
   const [openMasivo, setMasivoOpen] = React.useState(false);
-  const { id_viaje, viaje, getViaje, loading, error, ActualizarIDViaje, setDrawerOpen } = useContext(ViajeContext);
+  const [idViaje, setIDViaje] = React.useState(null);
   const [blinkRows, setBlinkRows] = useState({});
-
-  useEffect(() => {
-    getViaje(id_viaje);
-  }, [id_viaje]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -420,7 +417,7 @@ const ViajesActivos = ({ }) => {
     muiTableBodyRowProps: ({ row }) => ({
       onClick: ({ event }) => {
         handleClickOpen();
-        ActualizarIDViaje(row.original.id_viaje);
+        setIDViaje(row.original.id_viaje);
         setDrawerOpen(false);
       },
     }),
@@ -535,10 +532,11 @@ const ViajesActivos = ({ }) => {
 
   return (
     <>
+      <WebSocketWithToast></WebSocketWithToast>
       <DetencionesViajesActivos isOpen={isOpen} close={onClose}></DetencionesViajesActivos>
       <NavbarTravel></NavbarTravel>
       <MaterialReactTable table={table} />
-      <Travel open={open} handleClose={handleClose}></Travel>
+      <Travel idViaje={idViaje} open={open} handleClose={handleClose}></Travel>
 
       <Dialog
         open={openMasivo}

@@ -18,7 +18,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Travel from '../control/viaje';
 import Typography from '@mui/material/Typography';
-import { ViajeContext } from '../context/viajeContext';
 import odooApi from '@/api/odoo-api';
 import { tiempoTranscurrido } from '../../funciones/tiempo';
 
@@ -27,10 +26,10 @@ export default function Notificaciones({ isOpen, onOpen, onOpenChange }) {
     const [estatus, setEstatus] = React.useState([]);
     const [isLoading, setLoading] = React.useState(false);
     const [openTravel, setOpenTravel] = React.useState(false);
-    const { ActualizarIDViaje } = useContext(ViajeContext);
+    const [idViaje, setIDViaje] = React.useState(false);
 
     const handleClickOpen = (id_viaje) => {
-        ActualizarIDViaje(id_viaje);
+        setIDViaje(id_viaje);
         setOpenTravel(true);
     };
 
@@ -56,7 +55,7 @@ export default function Notificaciones({ isOpen, onOpen, onOpenChange }) {
 
     return (
         <>
-            <Travel open={openTravel} handleClose={handleClose}></Travel>
+            <Travel id_viaje={idViaje} open={openTravel} handleClose={handleClose}></Travel>
             <Drawer
                 isOpen={isOpen}
                 size='lg'

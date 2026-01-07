@@ -20,12 +20,8 @@ const { VITE_ODOO_API_URL } = import.meta.env;
 
 const ReporteCumplimientoEjecutivo = () => {
 
-    const { id_viaje, viaje, getViaje, loading, error, ActualizarIDViaje } = useContext(ViajeContext);
     const [open, setOpen] = React.useState(false);
-
-    useEffect(() => {
-        getViaje(id_viaje);
-    }, [id_viaje]);
+    const [idViaje, setIDViaje] = React.useState(false);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -46,7 +42,6 @@ const ReporteCumplimientoEjecutivo = () => {
     const [columnOrder, setColumnOrder] = useState([]);
     const [isLoading, setLoading] = useState(false);
     const [value, setValue] = React.useState([0, 24]);
-
 
     const handleDateChange = (dates) => {
         setDates(dates);
@@ -166,7 +161,7 @@ const ReporteCumplimientoEjecutivo = () => {
         muiTableBodyRowProps: ({ row }) => ({
             onClick: ({ event }) => {
                 handleClickOpen();
-                ActualizarIDViaje(row.original.id_viaje);
+                setIDViaje(row.original.id_viaje);
             },
             style: {
                 cursor: 'pointer',
@@ -244,7 +239,7 @@ const ReporteCumplimientoEjecutivo = () => {
         <>
             <NavbarTravel></NavbarTravel>
             <MaterialReactTable table={table} />
-            <Travel open={open} handleClose={handleClose}></Travel>
+            <Travel idViaje={idViaje} open={open} handleClose={handleClose}></Travel>
         </>
     );
 };

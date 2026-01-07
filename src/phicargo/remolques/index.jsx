@@ -33,9 +33,7 @@ const RemolquesIndex = () => {
 
     return (
         <div>
-            <ViajeProvider>
-                <Remolques></Remolques>
-            </ViajeProvider>
+            <Remolques></Remolques>
         </div>
     );
 };

@@ -1,6 +1,5 @@
 import { Button, Chip, Progress, Spacer } from "@heroui/react";
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import BasicButtons2 from './seguimiento';
 import Box from '@mui/material/Box';
 import CorreosElectronicosViaje from './correos/correos_electronicos';
 import { CostosExtrasProvider } from '../costos/context/context';
@@ -26,11 +25,23 @@ import { useDisclosure } from "@heroui/react";
 import DialogActions from '@mui/material/DialogActions';
 import WhatsAppContatcsTravel from "./canales/tabla";
 import PlantaViaje from "./plantas/tabla";
+import Seguimiento from "./seguimiento";
 
-const Viaje = ({ }) => {
+const Viaje = ({ idViaje }) => {
+
+  const { id_viaje, viaje, getViaje, loading, error, setIDViaje, isLoading } = useContext(ViajeContext);
+
+  useEffect(() => {
+    setIDViaje(idViaje);
+  }, [idViaje]);
+
+  useEffect(() => {
+    if (id_viaje) {
+      getViaje(id_viaje);
+    }
+  }, [id_viaje]);
 
   const { comprobar_operador, comprobar_horarios } = useJourneyDialogs();
-  const { id_viaje, viaje, getViaje, loading, error, setIDViaje, isLoading } = useContext(ViajeContext);
 
   const [value, setValue] = React.useState('1');
 
@@ -134,7 +145,7 @@ const Viaje = ({ }) => {
           </Box>
 
           <TabPanel value="1" sx={{ backgroundColor: '#f8f9fa', padding: 2 }}>
-            <BasicButtons2 />
+            <Seguimiento></Seguimiento>
           </TabPanel>
           <TabPanel value="2" sx={{ padding: 0, margin: 0 }}>
             <Map />

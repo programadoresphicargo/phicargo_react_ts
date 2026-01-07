@@ -20,6 +20,7 @@ import { exportToCSV } from '../../utils/export';
 import odooApi from '@/api/odoo-api';
 import { DateRangePicker } from 'rsuite';
 import NavbarTravel from '../navbar_viajes';
+import Travel from '../control/viaje';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -33,11 +34,7 @@ const ViajesProgramados = ({ }) => {
   const [range, setRange] = useState([firstDay, lastDay]);
 
   const [open, setOpen] = React.useState(false);
-  const { id_viaje, viaje, getViaje, ActualizarIDViaje } = useContext(ViajeContext);
-
-  useEffect(() => {
-    getViaje(id_viaje);
-  }, [id_viaje]);
+  const [idViaje, setIDViaje] = React.useState(null);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -281,7 +278,7 @@ const ViajesProgramados = ({ }) => {
       return {
         onClick: () => {
           handleClickOpen();
-          ActualizarIDViaje(row.original.id_viaje);
+          setIDViaje(row.original.id_viaje);
         },
         style: {
           color: '#ffcccc',
@@ -382,40 +379,8 @@ const ViajesProgramados = ({ }) => {
   return (
     <>
       <NavbarTravel></NavbarTravel>
-      <MaterialReactTable
-        table={table}
-      />
-
-      <Dialog
-        fullScreen
-        open={open}
-        onClose={handleClose}
-        TransitionComponent={Transition}
-      >
-        <AppBar
-          elevation={0}
-          position="static"
-          sx={{
-            background: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
-          }}>
-          <Toolbar>
-            <IconButton
-              edge="start"
-              color="black"
-              onClick={handleClose}
-              aria-label="close"
-            >
-              <CloseIcon />
-            </IconButton>
-            <Typography sx={{ ml: 2, flex: 1, color: 'black' }} variant="h6" component="div">
-            </Typography>
-            <Button autoFocus color="primary" onClick={handleClose}>
-              SALIR
-            </Button>
-          </Toolbar>
-        </AppBar>
-        <Viaje></Viaje>
-      </Dialog>
+      <MaterialReactTable table={table} />
+      <Travel idViaje={idViaje} open={open} onClose={handleClose}></Travel>
     </>
   );
 };
