@@ -380,7 +380,7 @@ const ViajesProgramados = ({ }) => {
     <>
       <NavbarTravel></NavbarTravel>
       <MaterialReactTable table={table} />
-      <Travel idViaje={idViaje} open={open} onClose={handleClose}></Travel>
+      <Travel idViaje={idViaje} open={open} handleClose={handleClose}></Travel>
     </>
   );
 };
