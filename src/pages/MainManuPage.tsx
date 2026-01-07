@@ -9,7 +9,6 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import fondo2 from '../assets/img/tract_scannia.jpg';
 import { menuItems } from '../pages/MenuItems';
-import navidad1 from '@/assets/original/magos.png';
 
 const MainMenuPage = () => {
   const { session } = useAuthContext();
