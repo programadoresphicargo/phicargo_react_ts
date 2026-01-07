@@ -6,8 +6,6 @@ import { Toaster } from 'react-hot-toast';
 import { UserLogin } from '../models';
 import logo from '@/assets/img/phicargo_logo_white.png';
 import { useNavigate } from 'react-router-dom';
-import navidad from '@/assets/original/magos2.png';
-import Snowfall from 'react-snowfall';
 import './styles.css';
 
 const initialForm: UserLogin = {
