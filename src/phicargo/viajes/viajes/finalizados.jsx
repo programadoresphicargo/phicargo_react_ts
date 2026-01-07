@@ -294,7 +294,7 @@ const ViajesFinalizados = ({ }) => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 210px)',
+        maxHeight: 'calc(100vh - 200px)',
       },
     },
     renderTopToolbarCustomActions: ({ table }) => (
