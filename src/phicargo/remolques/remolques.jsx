@@ -26,6 +26,7 @@ import { toast } from 'react-toastify';
 import FormularioRemolques from "./formulario";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import Travel from "../viajes/control/viaje";
+import { RecordDetailsModal } from "@/modules/maintenance/components/RecordDetailsModal";
 
 const Remolques = () => {
 
@@ -35,9 +36,16 @@ const Remolques = () => {
     const [vehicle_data, setVehicle] = useState(0);
     const [open, setOpen] = React.useState(false);
     const [idViaje, setIDViaje] = React.useState(false);
+    const [reportDetail, setReportDetail] = React.useState(false);
 
     const handleClose = () => {
         setOpen(false);
+    };
+
+    const [openReport, setOpenReport] = React.useState(false);
+
+    const handleCloseReport = () => {
+        setOpenReport(false);
     };
 
     const fetchData = async () => {
@@ -205,19 +213,34 @@ const Remolques = () => {
                 Cell: ({ cell, row }) => {
                     const valor = cell.getValue();
                     const estado = row.original.mantenimiento_status;
-                    const tipo = row.original.tipo_maniobra;
 
                     if (!valor) return null;
 
+                    const handleOpen = async () => {
+                        try {
+                            const response = await odooApi.get('/maintenance-record/' + valor);
+                            setReportDetail(response.data);
+                            setOpenReport(true);
+                        } catch (error) {
+                            console.error(error);
+                        }
+                    };
+
                     return (
                         <Tooltip content={`Estado: ${estado ?? 'N/A'}`}>
-                            <Button className="text-white" color="success" size="sm" radius="full">
-                                {valor} {tipo}
+                            <Button
+                                className="text-white"
+                                color="success"
+                                size="sm"
+                                radius="full"
+                                onPress={handleOpen}
+                            >
+                                {valor}
                             </Button>
                         </Tooltip>
                     );
                 },
-            },
+            }
         ],
         [],
     );
@@ -314,6 +337,9 @@ const Remolques = () => {
             <MaterialReactTable table={table} />
             <FormularioRemolques isOpen={openDialog} onOpenChange={setOpenDialog} vehicle_data={vehicle_data}></FormularioRemolques>
             <Travel idViaje={idViaje} open={open} handleClose={handleClose}></Travel>
+            {reportDetail && (
+                <RecordDetailsModal open={openReport} onClose={handleCloseReport} record={reportDetail}></RecordDetailsModal>
+            )}
         </div>
     );
 };
