@@ -6,6 +6,7 @@ import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { ViajeContext } from '../context/viajeContext';
 import axios from 'axios';
 import odooApi from '@/api/odoo-api';
+import { Progress } from '@heroui/react';
 
 const customIcon = new L.Icon({
     iconUrl: 'https://static.vecteezy.com/system/resources/previews/017/178/337/original/location-map-marker-icon-symbol-on-transparent-background-free-png.png',
@@ -26,12 +27,24 @@ const Map = () => {
     const [estatusHistorial, setHistorial] = useState([]);
     const [estatus, setEstatus] = useState([]);
     const [locations, setLocations] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         if (!id_viaje) return;
+
+        setIsLoading(true);
+
         odooApi.get(`/tms_travel/reportes_estatus_viajes/id_viaje/${id_viaje}`)
-            .then(response => setEstatus(response.data))
-            .catch(error => console.error('Error al obtener datos:', error));
+            .then(response => {
+                setEstatus(response.data);
+            })
+            .catch(error => {
+                console.error('Error al obtener datos:', error);
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
+
     }, [id_viaje]);
 
     useEffect(() => {
@@ -46,7 +59,10 @@ const Map = () => {
         [locations]
     );
 
-    return (
+    return (<>
+        {isLoading && (
+            < Progress isIndeterminate size='sm'></Progress >
+        )}
         <MapContainer center={[21.9713317720013, -101.7129111380927]} zoom={5} style={{ height: '76vh', width: '100%' }}>
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
             {estatus?.map((registro, index) => (
@@ -61,6 +77,7 @@ const Map = () => {
                 </Marker>
             )}
         </MapContainer>
+    </>
     );
 };
 
