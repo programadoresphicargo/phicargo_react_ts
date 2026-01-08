@@ -92,6 +92,7 @@ const Documentacion = ({ }) => {
         Cell: ({ row }) => (
           <Button
             color='primary'
+            size="sm"
             onPress={() => obtenerUrlPublico(row.original.id_onedrive)}
             radius="full"
           >
@@ -104,6 +105,7 @@ const Documentacion = ({ }) => {
         header: 'Visualizar',
         Cell: ({ row }) => (
           <Button
+            size="sm"
             color='danger'
             onPress={() => handleClickOpenV(row.original.id_onedrive)}
             radius="full"
@@ -122,7 +124,7 @@ const Documentacion = ({ }) => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
-    state: { isLoading: isLoading2 },
+    state: { showProgressBars: isLoading2 },
     enableColumnPinning: true,
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
