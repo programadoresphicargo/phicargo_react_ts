@@ -179,9 +179,6 @@ const Remolques: React.FC = () => {
                 if (!maniobra) return null;
 
                 const handleOpen = async () => {
-                    console.log(maniobra);
-                    const response = await odooApi.get(`/maintenance-record/1`);
-                    //setReportDetail(response.data);
                     setManiobra(maniobra);
                     setOpenManiobra(true);
                 };
