@@ -40,7 +40,7 @@ const UltimoUsoVehiculos = lazy(
   () => import('@/phicargo/reportes/ultimos_usos/equipos'),
 );
 const Remolques = lazy(
-  () => import('@/phicargo/remolques/index'),
+  () => import('@/phicargo/remolques/remolques'),
 );
 
 const permission = 200;
