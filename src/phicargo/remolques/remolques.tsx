@@ -13,6 +13,8 @@ import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import Travel from "../viajes/control/viaje";
 import { RecordDetailsModal } from "@/modules/maintenance/components/RecordDetailsModal";
 import { MaintenanceRecord } from "@/modules/maintenance/models";
+import Formulariomaniobra from "../maniobras/maniobras/formulario_maniobra";
+import { ManiobraProvider } from "../maniobras/context/viajeContext";
 
 /* =========================
    TIPOS
@@ -52,9 +54,12 @@ const Remolques: React.FC = () => {
 
     const [openTravel, setOpenTravel] = useState(false);
     const [idViaje, setIDViaje] = useState<number | null>(null);
+    const [idManiobra, setManiobra] = useState<number | null>(null);
 
     const [openReport, setOpenReport] = useState(false);
     const [reportDetail, setReportDetail] = useState<MaintenanceRecord | null>(null);
+
+    const [openManiobra, setOpenManiobra] = useState(false);
 
     /* =========================
        HANDLERS
@@ -170,12 +175,20 @@ const Remolques: React.FC = () => {
             accessorKey: 'x_maniobra',
             header: 'Maniobra',
             Cell: ({ cell, row }) => {
-                const maniobra = cell.getValue<string | undefined>();
+                const maniobra = cell.getValue<number | undefined>();
                 if (!maniobra) return null;
+
+                const handleOpen = async () => {
+                    console.log(maniobra);
+                    const response = await odooApi.get(`/maintenance-record/1`);
+                    //setReportDetail(response.data);
+                    setManiobra(maniobra);
+                    setOpenManiobra(true);
+                };
 
                 return (
                     <Tooltip content={`Estado: ${row.original.estado_maniobra ?? 'N/A'}`}>
-                        <Button size="sm" radius="full" color="secondary">
+                        <Button size="sm" radius="full" color="secondary" onPress={() => handleOpen()}>
                             {maniobra} {row.original.tipo_maniobra}
                         </Button>
                     </Tooltip>
@@ -316,6 +329,17 @@ const Remolques: React.FC = () => {
                     onClose={() => setOpenReport(false)}
                     record={reportDetail}
                 />
+            )}
+
+            {idManiobra && (
+                <ManiobraProvider>
+                    <Formulariomaniobra
+                        show={openManiobra}
+                        handleClose={() => setOpenManiobra(false)}
+                        id_maniobra={idManiobra}
+                        dataCP={[]}
+                    />
+                </ManiobraProvider>
             )}
         </>
     );
