@@ -75,20 +75,26 @@ const InventarioContenedores = () => {
         header: 'Fecha',
       },
       {
-        accessorKey: 'x_reference',
-        header: 'Contenedor',
-      },
-      {
         accessorKey: 'x_modo_bel',
         header: 'Modo',
       },
       {
-        accessorKey: 'x_tipo2_bel',
-        header: 'Tipo',
+        accessorKey: 'x_reference',
+        header: 'Contenedor',
+        muiTableBodyCellProps: {
+          sx: {
+            maxWidth: '180px',
+            fontFamily: 'Inter',
+          },
+        },
       },
       {
         accessorKey: 'x_medida_bel',
         header: 'Medida',
+      },
+      {
+        accessorKey: 'x_tipo2_bel',
+        header: 'Tipo',
       },
       {
         accessorKey: 'x_status_bel',
