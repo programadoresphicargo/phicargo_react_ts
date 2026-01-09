@@ -91,6 +91,45 @@ const InventarioContenedores = () => {
         header: 'Medida',
       },
       {
+        accessorKey: 'x_status_bel',
+        header: 'Estatus',
+        size: 150,
+        Cell: ({ cell }) => {
+          const value = cell.getValue();
+
+          let variant = 'secondary';
+          let text = '';
+
+          const mappings = {
+            sm: { variant: 'secondary', text: 'SIN MANIOBRA' },
+            EI: { variant: 'warning', text: 'EN PROCESO DE INGRESO' },
+            pm: { variant: 'primary', text: 'PATIO MÉXICO' },
+            Ing: { variant: 'success', text: 'INGRESADO' },
+            'No Ing': { variant: 'danger', text: 'NO INGRESADO' },
+            ru: { variant: 'info', text: 'REUTILIZADO' },
+            can: { variant: 'error', text: 'CANCELADO' },
+            P: { variant: 'primary', text: 'EN PATIO' },
+            T: { variant: 'warning', text: 'EN TERRAPORTS' },
+            V: { variant: 'success', text: 'EN VIAJE' },
+          };
+
+          if (mappings[value]) {
+            variant = mappings[value].variant;
+            text = mappings[value].text;
+          } else {
+            variant = 'danger';
+            text = value || 'DESCONOCIDO';
+          }
+
+          return (
+            value !== null ? (
+              <Chip color={variant} size='sm' className="text-white">
+                {text}
+              </Chip>) : null
+          );
+        },
+      },
+      {
         accessorKey: 'dangerous_cargo',
         header: 'Peligroso',
         Cell: ({ cell }) => {
