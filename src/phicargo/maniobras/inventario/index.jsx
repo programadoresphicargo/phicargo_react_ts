@@ -91,6 +91,21 @@ const InventarioContenedores = () => {
         header: 'Medida',
       },
       {
+        accessorKey: 'dangerous_cargo',
+        header: 'Peligroso',
+        Cell: ({ cell }) => {
+          const value = cell.getValue();
+
+          if (value !== true) return null;
+
+          return (
+            <Chip size="sm" className="text-white" color="success">
+              <i class="bi bi-check-lg"></i>
+            </Chip>
+          );
+        },
+      },
+      {
         accessorKey: 'dias_patio',
         header: 'Días en patio',
       },
