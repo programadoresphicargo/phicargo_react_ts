@@ -23,18 +23,7 @@ import FormularioContenedor from "./contenedor";
 
 const InventarioContenedores = () => {
 
-  const now = new Date();
-  const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
-  const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-  const [range, setRange] = useState([firstDay, lastDay]);
-
-  const [isLoading2, setLoading] = useState(false);
-  const [selectedTab, setSelectedTab] = React.useState("carta");
-
-  const handleTabChange = (e) => {
-    const newTab = e.target.value;
-    setSelectedTab(newTab);
-  };
+  const [isLoading, setLoading] = useState(false);
 
   const [modalShow, setModalShow] = useState(false);
   const [dataCP, setDataCP] = useState({});
@@ -44,7 +33,11 @@ const InventarioContenedores = () => {
     setDataCP(data);
   };
 
-  const handleCloseModal = () => setModalShow(false);
+  const handleCloseModal = () => {
+    setModalShow(false);
+    fetchData();
+    setDataCP({});
+  }
 
   const [data, setData] = useState([]);
 
@@ -62,10 +55,14 @@ const InventarioContenedores = () => {
 
   useEffect(() => {
     fetchData();
-  }, [range, selectedTab]);
+  }, []);
 
   const columns = useMemo(
     () => [
+      {
+        accessorKey: 'id',
+        header: 'ID',
+      },
       {
         accessorKey: 'sucursal',
         header: 'Sucursal',
@@ -151,8 +148,28 @@ const InventarioContenedores = () => {
         },
       },
       {
+        accessorKey: 'fecha_llegada',
+        header: 'Fecha llegada',
+      },
+      {
         accessorKey: 'dias_patio',
         header: 'Días en patio',
+      },
+      {
+        accessorKey: 'sellos',
+        header: 'Sellos',
+      },
+      {
+        accessorKey: 'name_remolque',
+        header: 'Remolque',
+      },
+      {
+        accessorKey: 'name_dolly',
+        header: 'Dolly',
+      },
+      {
+        accessorKey: 'observaciones',
+        header: 'Observaciones',
       },
     ],
     [],
@@ -179,7 +196,7 @@ const InventarioContenedores = () => {
       pagination: { pageSize: 80 },
       showGlobalFilter: false,
     },
-    state: { showProgressBars: isLoading2 },
+    state: { showProgressBars: isLoading },
     muiCircularProgressProps: {
       color: 'primary',
       thickness: 5,
@@ -241,13 +258,6 @@ const InventarioContenedores = () => {
         >
           Inventario contenedores
         </h1>
-        <DateRangePicker
-          style={{ minWidth: "250px" }}
-          value={range}
-          onChange={(value) => setRange(value)}
-          placeholder="Selecciona un rango de fechas"
-          format="yyyy-MM-dd"
-        />
         <Button
           color='success'
           fullWidth
@@ -273,7 +283,7 @@ const InventarioContenedores = () => {
   return (
     <div>
       <CustomNavbar pages={pages}></CustomNavbar>
-      <MaterialReactTable key={selectedTab} table={table} />
+      <MaterialReactTable table={table} />
       <FormularioContenedor open={modalShow} handleClose={handleCloseModal} data={dataCP}></FormularioContenedor>
     </div >
   );
