@@ -92,7 +92,7 @@ const FormularioContenedor = ({ open, handleClose, data }) => {
       } else {
         // 💾 CREAR
         response = await odooApi.post(
-          '/tms_waybill/control_contenedores',
+          '/tms_waybill/control_contenedores/',
           formData
         );
       }
