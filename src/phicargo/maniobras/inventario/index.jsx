@@ -458,6 +458,7 @@ const InventarioContenedores = () => {
           size="sm"
           color="primary"
           radius="full"
+          isDisabled={editingRow && editingRow.id !== row.id}
           onPress={() => {
             if (editingRow && editingRow.id !== row.id) {
               toast.warning(
@@ -485,6 +486,14 @@ const InventarioContenedores = () => {
 
         table.setEditingRow(row);
         setEditingRow(row);
+      },
+      sx: {
+        backgroundColor: row.original.pending_sync
+          ? '#FFF7E6'   // amarillo suave
+          : 'inherit',
+        borderLeft: row.original.pending_sync
+          ? '4px solid #f59e0b'
+          : 'none',
       },
     }),
     renderTopToolbarCustomActions: ({ table }) => (
