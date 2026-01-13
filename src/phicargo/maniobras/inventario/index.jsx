@@ -112,7 +112,16 @@ const InventarioContenedores = () => {
       }));
 
       // guardar en IndexedDB
-      await inventarioDB.contenedores.bulkPut(rows);
+      for (const row of rows) {
+        const local = localMap.get(row.id);
+      
+        if (local?.pending_sync) {
+          // ⛔ NO sobrescribimos cambios locales
+          continue;
+        }
+      
+        await inventarioDB.contenedores.put(row);
+      }
 
       // siempre renderizar desde DB local
       const localData = await inventarioDB.contenedores.toArray();

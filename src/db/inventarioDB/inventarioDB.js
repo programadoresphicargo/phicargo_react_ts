@@ -3,10 +3,14 @@ import Dexie from 'dexie';
 
 export const inventarioDB = new Dexie('inventarioDB');
 
-inventarioDB.version(3).stores({
+inventarioDB.version(4).stores({
  contenedores: `
    id,
    id_checklist,
+   sellos,
+   remolque_id,
+   dolly_id,
+   observaciones,
    pending_sync,
    sync_action,
    updated_at
