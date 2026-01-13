@@ -30,7 +30,6 @@ const InventarioContenedores = () => {
   const [editingRow, setEditingRow] = useState(null);
   const [trailers, setTrailers] = useState([]);
   const [dollies, setDollies] = useState([]);
-  const [LoadingSincronizar, setLoadingSincronizar] = useState(false);
 
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
@@ -114,12 +113,12 @@ const InventarioContenedores = () => {
       // guardar en IndexedDB
       for (const row of rows) {
         const local = localMap.get(row.id);
-      
+
         if (local?.pending_sync) {
           // ⛔ NO sobrescribimos cambios locales
           continue;
         }
-      
+
         await inventarioDB.contenedores.put(row);
       }
 
@@ -150,48 +149,54 @@ const InventarioContenedores = () => {
   const syncOfflineData = async () => {
     if (!navigator.onLine) return;
 
-    const pendientes = await inventarioDB.contenedores
-      .filter(row =>
-        row.pending_sync === true &&
-        (row.sync_action === 'create' || row.sync_action === 'update')
-      )
-      .toArray();
+    setLoading(true); // 🔵 INICIA LOADING
 
-    for (const row of pendientes) {
-      try {
-        if (row.sync_action === 'create') {
-          const res = await odooApi.post(
-            '/tms_waybill/control_contenedores/',
-            row
-          );
+    try {
+      const pendientes = await inventarioDB.contenedores
+        .filter(row =>
+          row.pending_sync === true &&
+          (row.sync_action === 'create' || row.sync_action === 'update')
+        )
+        .toArray();
 
-          // Backend devuelve id_checklist
-          await inventarioDB.contenedores.update(row.id, {
-            id_checklist: res.data.id_checklist,
-            pending_sync: false,
-            sync_action: null,
-          });
+      for (const row of pendientes) {
+        try {
+          if (row.sync_action === 'create') {
+            const res = await odooApi.post(
+              '/tms_waybill/control_contenedores/',
+              row
+            );
+
+            await inventarioDB.contenedores.update(row.id, {
+              id_checklist: res.data.id_checklist,
+              pending_sync: false,
+              sync_action: null,
+            });
+          }
+
+          if (row.sync_action === 'update') {
+            await odooApi.patch(
+              `/tms_waybill/control_contenedores/${row.id_checklist}`,
+              row
+            );
+
+            await inventarioDB.contenedores.update(row.id, {
+              pending_sync: false,
+              sync_action: null,
+            });
+          }
+        } catch (e) {
+          console.error('Error sync:', row.id);
         }
-
-        if (row.sync_action === 'update') {
-          await odooApi.patch(
-            `/tms_waybill/control_contenedores/${row.id_checklist}`,
-            row
-          );
-
-          await inventarioDB.contenedores.update(row.id, {
-            pending_sync: false,
-            sync_action: null,
-          });
-        }
-      } catch (e) {
-        console.error('Error sync:', row.id);
       }
-    }
 
-    // refrescar UI
-    const localData = await inventarioDB.contenedores.toArray();
-    setData(localData);
+      // refrescar UI
+      const localData = await inventarioDB.contenedores.toArray();
+      setData(localData);
+
+    } finally {
+      setLoading(false); // 🔴 TERMINA LOADING (aunque falle algo)
+    }
   };
 
   const columns = useMemo(
@@ -369,7 +374,7 @@ const InventarioContenedores = () => {
       },
       {
         accessorKey: 'pending_sync',
-        header: 'Sync',
+        header: 'Sincronizado',
         enableEditing: false,
         Cell: ({ cell }) =>
           cell.getValue() ? (
@@ -554,6 +559,7 @@ const InventarioContenedores = () => {
         <Button
           color='success'
           fullWidth
+          isLoading={isLoading}
           className='text-white'
           startContent={<i class="bi bi-arrow-clockwise"></i>}
           onPress={() => syncOfflineData()}
