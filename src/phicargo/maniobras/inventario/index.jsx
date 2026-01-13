@@ -152,7 +152,7 @@ const InventarioContenedores = () => {
       try {
         if (row.sync_action === 'create') {
           const res = await odooApi.post(
-            '/tms_waybill/control_contenedores',
+            '/tms_waybill/control_contenedores/',
             row
           );
 
