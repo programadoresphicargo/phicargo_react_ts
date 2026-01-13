@@ -26,6 +26,7 @@ import { inventarioDB } from "@/db/inventarioDB/inventarioDB";
 
 const InventarioContenedores = () => {
 
+  const [editingRow, setEditingRow] = useState(null);
   const [trailers, setTrailers] = useState([]);
   const [dollies, setDollies] = useState([]);
   const [LoadingSincronizar, setLoadingSincronizar] = useState(false);
@@ -346,6 +347,7 @@ const InventarioContenedores = () => {
       {
         accessorKey: 'pending_sync',
         header: 'Sync',
+        enableEditing: false,
         Cell: ({ cell }) =>
           cell.getValue() ? (
             <Chip color="warning" size="sm" className="text-white">Pendiente</Chip>
@@ -365,6 +367,7 @@ const InventarioContenedores = () => {
     positionActionsColumn: "last",
     onEditingRowSave: async ({ values, table }) => {
       table.setEditingRow(null);
+      setEditingRow(null);
 
       const syncAction = values.id_checklist == null
         ? 'create'
@@ -390,6 +393,9 @@ const InventarioContenedores = () => {
           : 'Cambios guardados offline'
       );
     },
+    onEditingRowCancel: () => {
+      setEditingRow(null);
+    },
     enableGrouping: true,
     enableGlobalFilter: true,
     enableColumnPinning: true,
@@ -407,9 +413,9 @@ const InventarioContenedores = () => {
       density: 'compact',
       pagination: { pageSize: 80 },
       showGlobalFilter: false,
-      columnPinning: { left: ['x_reference'] }
+      columnPinning: { left: ['x_reference'] },
     },
-    state: { showProgressBars: isLoading },
+    state: { showProgressBars: isLoading, editingRow },
     muiCircularProgressProps: {
       color: 'primary',
       thickness: 5,
@@ -444,6 +450,41 @@ const InventarioContenedores = () => {
         fontWeight: 'normal',
         fontSize: '14px',
         color: row.subRows?.length ? '#FFFFFF' : '#000000',
+      },
+    }),
+    renderRowActions: ({ row, table }) => (
+      <Box sx={{ display: 'flex', gap: '8px' }}>
+        <Button
+          size="sm"
+          color="primary"
+          radius="full"
+          onPress={() => {
+            if (editingRow && editingRow.id !== row.id) {
+              toast.warning(
+                'Tienes cambios sin guardar. Guarda o cancela antes de editar otro registro.'
+              );
+              return;
+            }
+
+            table.setEditingRow(row);
+            setEditingRow(row);
+          }}
+        >
+          <i className="bi bi-pencil" />
+        </Button>
+      </Box>
+    ),
+    muiTableBodyRowProps: ({ row }) => ({
+      onDoubleClick: () => {
+        if (editingRow && editingRow.id !== row.id) {
+          toast.warning(
+            'Tienes cambios sin guardar. Guarda o cancela antes de editar otro registro.'
+          );
+          return;
+        }
+
+        table.setEditingRow(row);
+        setEditingRow(row);
       },
     }),
     renderTopToolbarCustomActions: ({ table }) => (
