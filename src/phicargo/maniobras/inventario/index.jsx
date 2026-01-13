@@ -26,6 +26,19 @@ import { inventarioDB } from "@/db/inventarioDB/inventarioDB";
 
 const InventarioContenedores = () => {
 
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      event.preventDefault();
+      event.returnValue = ''; // ← obligatorio para que aparezca el alert
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [editingRow, setEditingRow] = useState(null);
   const [trailers, setTrailers] = useState([]);
