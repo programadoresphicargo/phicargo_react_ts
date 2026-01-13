@@ -26,10 +26,24 @@ import { inventarioDB } from "@/db/inventarioDB/inventarioDB";
 
 const InventarioContenedores = () => {
 
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [editingRow, setEditingRow] = useState(null);
   const [trailers, setTrailers] = useState([]);
   const [dollies, setDollies] = useState([]);
   const [LoadingSincronizar, setLoadingSincronizar] = useState(false);
+
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
 
   useEffect(() => {
     const loadFleet = async () => {
@@ -537,6 +551,13 @@ const InventarioContenedores = () => {
           radius="full"
         >Sincronizar cambios
         </Button>
+        <Chip
+          size="sm"
+          color={isOnline ? "success" : "warning"}
+          className="text-white"
+        >
+          {isOnline ? "TRABAJANDO: ONLINE" : "TRABAJANDO: OFFLINE"}
+        </Chip>
       </Box>
     ),
   });
