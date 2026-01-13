@@ -20,8 +20,46 @@ import CustomNavbar from "@/pages/CustomNavbar";
 import { pages } from '../pages';
 import RegistroManiobrasCP from "../maniobras/modal";
 import FormularioContenedor from "./contenedor";
+import { Autocomplete } from "@mui/material";
+import { TextField } from "@mui/material";
+import { inventarioDB } from "@/db/inventarioDB/inventarioDB";
 
 const InventarioContenedores = () => {
+
+  const [trailers, setTrailers] = useState([]);
+  const [dollies, setDollies] = useState([]);
+  const [LoadingSincronizar, setLoadingSincronizar] = useState(false);
+
+  useEffect(() => {
+    const loadFleet = async () => {
+      try {
+        if (navigator.onLine) {
+          const [resTrailers, resDollies] = await Promise.all([
+            odooApi.get('/vehicles/fleet_type/trailer'),
+            odooApi.get('/vehicles/fleet_type/dolly'),
+          ]);
+
+          setTrailers(resTrailers.data);
+          setDollies(resDollies.data);
+
+          // Guardar en IndexedDB
+          await inventarioDB.trailers.bulkPut(resTrailers.data);
+          await inventarioDB.dollies.bulkPut(resDollies.data);
+        } else {
+          // Offline → leer de IndexedDB
+          const localTrailers = await inventarioDB.trailers.toArray();
+          const localDollies = await inventarioDB.dollies.toArray();
+
+          setTrailers(localTrailers);
+          setDollies(localDollies);
+        }
+      } catch (e) {
+        toast.error("Error al cargar flota");
+      }
+    };
+
+    loadFleet();
+  }, []);
 
   const [isLoading, setLoading] = useState(false);
 
@@ -45,39 +83,129 @@ const InventarioContenedores = () => {
     setLoading(true);
     try {
       const response = await odooApi.get('/tms_waybill/inventario_contenedores');
-      setData(response.data);
+
+      const localMap = new Map(
+        (await inventarioDB.contenedores.toArray())
+          .map(r => [r.id, r])
+      );
+
+      const rows = response.data.map(r => ({
+        ...r,
+        pending_sync: localMap.get(r.id)?.pending_sync ?? false,
+        sync_action: localMap.get(r.id)?.sync_action ?? null,
+        updated_at: new Date().toISOString(),
+      }));
+
+      // guardar en IndexedDB
+      await inventarioDB.contenedores.bulkPut(rows);
+
+      // siempre renderizar desde DB local
+      const localData = await inventarioDB.contenedores.toArray();
+      setData(localData);
+
     } catch (error) {
-      toast.error('Error al obtener los datos:' + error);
+      toast.error('Error al obtener los datos');
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchData();
+    const load = async () => {
+      if (navigator.onLine) {
+        await fetchData();
+      } else {
+        const localData = await inventarioDB.contenedores.toArray();
+        setData(localData);
+      }
+    };
+
+    load();
   }, []);
+
+  const syncOfflineData = async () => {
+    if (!navigator.onLine) return;
+
+    const pendientes = await inventarioDB.contenedores
+      .filter(row =>
+        row.pending_sync === true &&
+        (row.sync_action === 'create' || row.sync_action === 'update')
+      )
+      .toArray();
+
+    for (const row of pendientes) {
+      try {
+        if (row.sync_action === 'create') {
+          const res = await odooApi.post(
+            '/tms_waybill/control_contenedores',
+            row
+          );
+
+          // Backend devuelve id_checklist
+          await inventarioDB.contenedores.update(row.id, {
+            id_checklist: res.data.id_checklist,
+            pending_sync: false,
+            sync_action: null,
+          });
+        }
+
+        if (row.sync_action === 'update') {
+          await odooApi.patch(
+            `/tms_waybill/control_contenedores/${row.id_checklist}`,
+            row
+          );
+
+          await inventarioDB.contenedores.update(row.id, {
+            pending_sync: false,
+            sync_action: null,
+          });
+        }
+      } catch (e) {
+        console.error('Error sync:', row.id);
+      }
+    }
+
+    // refrescar UI
+    const localData = await inventarioDB.contenedores.toArray();
+    setData(localData);
+  };
 
   const columns = useMemo(
     () => [
       {
         accessorKey: 'id',
         header: 'ID',
+        enableEditing: false,
+      },
+      {
+        accessorKey: 'id_cp',
+        header: 'ID CP',
+        enableEditing: false,
+      },
+      {
+        accessorKey: 'id_checklist',
+        header: 'ID Checklist',
+        enableEditing: false,
       },
       {
         accessorKey: 'sucursal',
         header: 'Sucursal',
+        enableEditing: false,
       },
       {
         accessorKey: 'date_order',
         header: 'Fecha',
+        enableEditing: false,
       },
       {
         accessorKey: 'x_modo_bel',
         header: 'Modo',
+        enableEditing: false,
       },
       {
         accessorKey: 'x_reference',
         header: 'Contenedor',
+        enableEditing: false,
         muiTableBodyCellProps: {
           sx: {
             maxWidth: '180px',
@@ -88,14 +216,17 @@ const InventarioContenedores = () => {
       {
         accessorKey: 'x_medida_bel',
         header: 'Medida',
+        enableEditing: false,
       },
       {
         accessorKey: 'x_tipo2_bel',
         header: 'Tipo',
+        enableEditing: false,
       },
       {
         accessorKey: 'x_status_bel',
         header: 'Estatus',
+        enableEditing: false,
         size: 150,
         Cell: ({ cell }) => {
           const value = cell.getValue();
@@ -135,6 +266,7 @@ const InventarioContenedores = () => {
       {
         accessorKey: 'dangerous_cargo',
         header: 'Peligroso',
+        enableEditing: false,
         Cell: ({ cell }) => {
           const value = cell.getValue();
 
@@ -150,10 +282,12 @@ const InventarioContenedores = () => {
       {
         accessorKey: 'fecha_llegada',
         header: 'Fecha llegada',
+        enableEditing: false,
       },
       {
         accessorKey: 'dias_patio',
         header: 'Días en patio',
+        enableEditing: false,
       },
       {
         accessorKey: 'sellos',
@@ -162,22 +296,100 @@ const InventarioContenedores = () => {
       {
         accessorKey: 'name_remolque',
         header: 'Remolque',
+        muiEditTextFieldProps: {
+          select: true,
+          label: "Remolque",
+        },
+        Edit: ({ row, cell }) => (
+          <Autocomplete
+            options={trailers}
+            getOptionLabel={(opt) => opt.name}
+            value={
+              trailers.find(t => t.name === cell.getValue()) || null
+            }
+            onChange={(_, newValue) => {
+              row._valuesCache.name_remolque = newValue?.name || null;
+              row._valuesCache.remolque_id = newValue?.id || null;
+            }}
+            renderInput={(params) => (
+              <TextField {...params} label="Remolque" />
+            )}
+          />
+        ),
       },
       {
         accessorKey: 'name_dolly',
         header: 'Dolly',
+        enableEditing: true,
+
+        Edit: ({ row, cell }) => (
+          <Autocomplete
+            options={dollies}
+            getOptionLabel={(opt) => opt.name}
+            value={
+              dollies.find(d => d.name === cell.getValue()) || null
+            }
+            onChange={(_, newValue) => {
+              row._valuesCache.name_dolly = newValue?.name || null;
+              row._valuesCache.dolly_id = newValue?.id || null;
+            }}
+            renderInput={(params) => (
+              <TextField {...params} label="Dolly" />
+            )}
+          />
+        ),
       },
       {
         accessorKey: 'observaciones',
         header: 'Observaciones',
       },
+      {
+        accessorKey: 'pending_sync',
+        header: 'Sync',
+        Cell: ({ cell }) =>
+          cell.getValue() ? (
+            <Chip color="warning" size="sm" className="text-white">Pendiente</Chip>
+          ) : (
+            <Chip color="success" size="sm" className="text-white">OK</Chip>
+          ),
+      }
     ],
-    [],
+    [trailers, dollies],
   );
 
   const table = useMaterialReactTable({
     columns,
     data,
+    enableEditing: true,
+    editDisplayMode: "row",
+    positionActionsColumn: "last",
+    onEditingRowSave: async ({ values, table }) => {
+      table.setEditingRow(null);
+
+      const syncAction = values.id_checklist == null
+        ? 'create'
+        : 'update';
+
+      const rowToSave = {
+        ...values,
+        pending_sync: true,
+        sync_action: syncAction,
+        updated_at: new Date().toISOString(),
+      };
+
+      // Guardar en IndexedDB
+      await inventarioDB.contenedores.put(rowToSave);
+
+      // Actualizar UI desde DB local
+      const localData = await inventarioDB.contenedores.toArray();
+      setData(localData);
+
+      toast.info(
+        syncAction === 'create'
+          ? 'Registro guardado offline (nuevo)'
+          : 'Cambios guardados offline'
+      );
+    },
     enableGrouping: true,
     enableGlobalFilter: true,
     enableColumnPinning: true,
@@ -195,6 +407,7 @@ const InventarioContenedores = () => {
       density: 'compact',
       pagination: { pageSize: 80 },
       showGlobalFilter: false,
+      columnPinning: { left: ['x_reference'] }
     },
     state: { showProgressBars: isLoading },
     muiCircularProgressProps: {
@@ -212,17 +425,6 @@ const InventarioContenedores = () => {
         borderRadius: '0',
       },
     },
-    muiTableBodyRowProps: ({ row }) => ({
-      onClick: () => {
-        if (row.subRows?.length) {
-        } else {
-          handleShowModal(row.original);
-        }
-      },
-      style: {
-        cursor: 'pointer',
-      },
-    }),
     muiTableHeadCellProps: {
       sx: {
         fontFamily: 'Inter',
@@ -276,6 +478,15 @@ const InventarioContenedores = () => {
           radius="full"
         >Recargar
         </Button>
+        <Button
+          color='success'
+          fullWidth
+          className='text-white'
+          startContent={<i class="bi bi-arrow-clockwise"></i>}
+          onPress={() => syncOfflineData()}
+          radius="full"
+        >Sincronizar cambios
+        </Button>
       </Box>
     ),
   });
@@ -284,7 +495,6 @@ const InventarioContenedores = () => {
     <div>
       <CustomNavbar pages={pages}></CustomNavbar>
       <MaterialReactTable table={table} />
-      <FormularioContenedor open={modalShow} handleClose={handleCloseModal} data={dataCP}></FormularioContenedor>
     </div >
   );
 };
