@@ -342,44 +342,53 @@ const InventarioContenedores = () => {
           select: true,
           label: "Remolque",
         },
-        Edit: ({ row, cell }) => (
-          <Autocomplete
-            options={trailers}
-            getOptionLabel={(opt) => opt.name}
-            value={
-              trailers.find(t => t.name === cell.getValue()) || null
-            }
-            onChange={(_, newValue) => {
-              row._valuesCache.name_remolque = newValue?.name || null;
-              row._valuesCache.remolque_id = newValue?.id || null;
-            }}
-            renderInput={(params) => (
-              <TextField {...params} label="Remolque" />
-            )}
-          />
-        ),
+        Edit: ({ row, cell }) => {
+          const [value, setValue] = React.useState(
+            trailers.find(t => t.name === cell.getValue()) || null
+          );
+
+          return (
+            <Autocomplete
+              options={trailers}
+              getOptionLabel={(opt) => opt.name}
+              value={value}
+              onChange={(_, newValue) => {
+                setValue(newValue); // 👈 clave
+                row._valuesCache.name_remolque = newValue?.name || null;
+                row._valuesCache.remolque_id = newValue?.id || null;
+              }}
+              renderInput={(params) => (
+                <TextField {...params} label="Remolque" />
+              )}
+            />
+          );
+        }
       },
       {
         accessorKey: 'name_dolly',
         header: 'Dolly',
         enableEditing: true,
+        Edit: ({ row, cell }) => {
+          const [value, setValue] = React.useState(
+            dollies.find(d => d.name === cell.getValue()) || null
+          );
 
-        Edit: ({ row, cell }) => (
-          <Autocomplete
-            options={dollies}
-            getOptionLabel={(opt) => opt.name}
-            value={
-              dollies.find(d => d.name === cell.getValue()) || null
-            }
-            onChange={(_, newValue) => {
-              row._valuesCache.name_dolly = newValue?.name || null;
-              row._valuesCache.dolly_id = newValue?.id || null;
-            }}
-            renderInput={(params) => (
-              <TextField {...params} label="Dolly" />
-            )}
-          />
-        ),
+          return (
+            <Autocomplete
+              options={dollies}
+              getOptionLabel={(opt) => opt.name}
+              value={value}
+              onChange={(_, newValue) => {
+                setValue(newValue); // 👈 clave
+                row._valuesCache.name_dolly = newValue?.name || null;
+                row._valuesCache.dolly_id = newValue?.id || null;
+              }}
+              renderInput={(params) => (
+                <TextField {...params} label="Dolly" />
+              )}
+            />
+          );
+        }
       },
       {
         accessorKey: 'observaciones',
