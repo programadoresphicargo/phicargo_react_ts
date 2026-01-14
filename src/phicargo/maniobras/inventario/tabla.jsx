@@ -42,7 +42,7 @@ import { Button, Chip } from '@heroui/react';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import Box from '@mui/material/Box';
 
-export default function TablaContenedores({ data, setData, isLoading, inventarioDB, opcionesRemolques, opcionesDolly, sincronizar }) {
+export default function TablaContenedores({ data, setData, isLoading, inventarioDB, opcionesRemolques, opcionesDolly, sincronizar, isOnline }) {
   const {
     editingRow,
     draft,
@@ -356,6 +356,13 @@ export default function TablaContenedores({ data, setData, isLoading, inventario
           Inventario contenedores
         </h1>
         <Button onPress={() => sincronizar()} color='success' radius='full' className='text-white'>Sincronizar</Button>
+        <Chip
+          size="sm"
+          color={isOnline ? "success" : "warning"}
+          className="text-white"
+        >
+          {isOnline ? "TRABAJANDO: ONLINE" : "TRABAJANDO: OFFLINE"}
+        </Chip>
       </Box>
     ),
   });

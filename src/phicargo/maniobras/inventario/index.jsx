@@ -200,10 +200,6 @@ const InventarioContenedores = () => {
   const table = useMaterialReactTable({
     columns: [],
     data: [],
-
-    localization: MRT_Localization_ES,
-    positionToolbarAlertBanner: 'none',
-    positionGlobalFilter: "right",
     renderTopToolbarCustomActions: ({ table }) => (
       <Box
         sx={{
@@ -231,23 +227,6 @@ const InventarioContenedores = () => {
           radius="full"
         >Recargar
         </Button>
-        <Button
-          color='success'
-          fullWidth
-          isLoading={isLoading}
-          className='text-white'
-          startContent={<i class="bi bi-arrow-clockwise"></i>}
-          onPress={() => syncOfflineData()}
-          radius="full"
-        >Sincronizar cambios
-        </Button>
-        <Chip
-          size="sm"
-          color={isOnline ? "success" : "warning"}
-          className="text-white"
-        >
-          {isOnline ? "TRABAJANDO: ONLINE" : "TRABAJANDO: OFFLINE"}
-        </Chip>
       </Box>
     ),
   });
@@ -255,7 +234,7 @@ const InventarioContenedores = () => {
   return (
     <div>
       <CustomNavbar pages={pages}></CustomNavbar>
-      <TablaContenedores data={data} setData={setData} isLoading={isLoading} inventarioDB={inventarioDB} opcionesRemolques={trailers} opcionesDolly={dollies} sincronizar={syncOfflineData}></TablaContenedores>
+      <TablaContenedores data={data} setData={setData} isLoading={isLoading} inventarioDB={inventarioDB} opcionesRemolques={trailers} opcionesDolly={dollies} sincronizar={syncOfflineData} isOnline={isOnline}></TablaContenedores>
     </div >
   );
 };
