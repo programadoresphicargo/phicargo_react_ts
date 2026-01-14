@@ -41,6 +41,7 @@ import TextField from '@mui/material/TextField';
 import { Button, Chip } from '@heroui/react';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import Box from '@mui/material/Box';
+import { exportDB } from 'dexie-export-import';
 
 export default function TablaContenedores({ data, setData, isLoading, inventarioDB, opcionesRemolques, opcionesDolly, sincronizar, isOnline }) {
   const {
@@ -50,6 +51,26 @@ export default function TablaContenedores({ data, setData, isLoading, inventario
     updateDraft,
     stopEditing,
   } = useRowDraft();
+
+  async function exportInventarioDB() {
+    const blob = await exportDB(inventarioDB, {
+      prettyJson: true,
+    });
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `inventarioDB_${new Date().toISOString()}.json`;
+    a.click();
+
+    URL.revokeObjectURL(url);
+  }
+
+  async function importInventarioDB(file) {
+    await importDB(file, {
+      overwriteValues: true,
+    });
+  }
 
   const table = useMaterialReactTable({
     data,
@@ -356,6 +377,8 @@ export default function TablaContenedores({ data, setData, isLoading, inventario
           Inventario contenedores
         </h1>
         <Button onPress={() => sincronizar()} color='success' radius='full' className='text-white'>Sincronizar</Button>
+        <Button onPress={() => exportInventarioDB()} radius='full' color='success' className='text-white'>Exportar DB</Button>
+        <Button onPress={() => importInventarioDB()} radius='full' color='warning' className='text-white'>Importar DB</Button>
         <Chip
           size="sm"
           color={isOnline ? "success" : "warning"}

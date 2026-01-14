@@ -107,6 +107,9 @@ importers:
       dexie:
         specifier: ^4.2.1
         version: 4.2.1
+      dexie-export-import:
+        specifier: ^4.1.4
+        version: 4.1.4(dexie@4.2.1)
       export-to-csv:
         specifier: ^1.4.0
         version: 1.4.0
@@ -2938,6 +2941,11 @@ packages:
   dequal@2.0.3:
     resolution: {integrity: sha512-0je+qPKHEMohvfRTCEo3CrPG6cAzAYgmzKyxRiYSSDkS6eGJdyVJm7WaYA5ECaAD9wLB2T4EEeymA5aFVcYXCA==}
     engines: {node: '>=6'}
+
+  dexie-export-import@4.1.4:
+    resolution: {integrity: sha512-3bw171qUuOTWSYLXI7C/0M6p1X65Rho3tu1IvD9By8jn0+3t3dLSkDlZ1BC6MbABl3kRlhtGigzC+SF+qcS5Og==}
+    peerDependencies:
+      dexie: ^2.0.4 || ^3.0.0 || ^4.0.1
 
   dexie@4.2.1:
     resolution: {integrity: sha512-Ckej0NS6jxQ4Po3OrSQBFddayRhTCic2DoCAG5zacOfOVB9P2Q5Xc5uL/nVa7ZVs+HdMnvUPzLFCB/JwpB6Csg==}
@@ -8440,6 +8448,10 @@ snapshots:
   delayed-stream@1.0.0: {}
 
   dequal@2.0.3: {}
+
+  dexie-export-import@4.1.4(dexie@4.2.1):
+    dependencies:
+      dexie: 4.2.1
 
   dexie@4.2.1: {}
 
