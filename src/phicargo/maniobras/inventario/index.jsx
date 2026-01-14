@@ -23,6 +23,7 @@ import FormularioContenedor from "./contenedor";
 import { Autocomplete } from "@mui/material";
 import { TextField } from "@mui/material";
 import { inventarioDB } from "@/db/inventarioDB/inventarioDB";
+import TablaContenedores from "./tabla";
 
 const InventarioContenedores = () => {
 
@@ -40,7 +41,6 @@ const InventarioContenedores = () => {
   }, []);
 
   const [isOnline, setIsOnline] = useState(navigator.onLine);
-  const [editingRow, setEditingRow] = useState(null);
   const [trailers, setTrailers] = useState([]);
   const [dollies, setDollies] = useState([]);
 
@@ -89,21 +89,6 @@ const InventarioContenedores = () => {
   }, []);
 
   const [isLoading, setLoading] = useState(false);
-
-  const [modalShow, setModalShow] = useState(false);
-  const [dataCP, setDataCP] = useState({});
-
-  const handleShowModal = (data) => {
-    setModalShow(true);
-    setDataCP(data);
-  };
-
-  const handleCloseModal = () => {
-    setModalShow(false);
-    fetchData();
-    setDataCP({});
-  }
-
   const [data, setData] = useState([]);
 
   const fetchData = async () => {
@@ -212,342 +197,13 @@ const InventarioContenedores = () => {
     }
   };
 
-  const columns = useMemo(
-    () => [
-      {
-        accessorKey: 'id',
-        header: 'ID',
-        enableEditing: false,
-      },
-      {
-        accessorKey: 'id_cp',
-        header: 'ID CP',
-        enableEditing: false,
-      },
-      {
-        accessorKey: 'id_checklist',
-        header: 'ID Checklist',
-        enableEditing: false,
-      },
-      {
-        accessorKey: 'sucursal',
-        header: 'Sucursal',
-        enableEditing: false,
-      },
-      {
-        accessorKey: 'date_order',
-        header: 'Fecha',
-        enableEditing: false,
-      },
-      {
-        accessorKey: 'x_modo_bel',
-        header: 'Modo',
-        enableEditing: false,
-      },
-      {
-        accessorKey: 'x_reference',
-        header: 'Contenedor',
-        enableEditing: false,
-        muiTableBodyCellProps: {
-          sx: {
-            maxWidth: '180px',
-            fontFamily: 'Inter',
-          },
-        },
-      },
-      {
-        accessorKey: 'x_medida_bel',
-        header: 'Medida',
-        enableEditing: false,
-      },
-      {
-        accessorKey: 'x_tipo2_bel',
-        header: 'Tipo',
-        enableEditing: false,
-      },
-      {
-        accessorKey: 'x_status_bel',
-        header: 'Estatus',
-        enableEditing: false,
-        size: 150,
-        Cell: ({ cell }) => {
-          const value = cell.getValue();
-
-          let variant = 'secondary';
-          let text = '';
-
-          const mappings = {
-            sm: { variant: 'secondary', text: 'SIN MANIOBRA' },
-            EI: { variant: 'warning', text: 'EN PROCESO DE INGRESO' },
-            pm: { variant: 'primary', text: 'PATIO MÉXICO' },
-            Ing: { variant: 'success', text: 'INGRESADO' },
-            'No Ing': { variant: 'danger', text: 'NO INGRESADO' },
-            ru: { variant: 'info', text: 'REUTILIZADO' },
-            can: { variant: 'error', text: 'CANCELADO' },
-            P: { variant: 'primary', text: 'EN PATIO' },
-            T: { variant: 'warning', text: 'EN TERRAPORTS' },
-            V: { variant: 'success', text: 'EN VIAJE' },
-          };
-
-          if (mappings[value]) {
-            variant = mappings[value].variant;
-            text = mappings[value].text;
-          } else {
-            variant = 'danger';
-            text = value || 'DESCONOCIDO';
-          }
-
-          return (
-            value !== null ? (
-              <Chip color={variant} size='sm' className="text-white">
-                {text}
-              </Chip>) : null
-          );
-        },
-      },
-      {
-        accessorKey: 'dangerous_cargo',
-        header: 'Peligroso',
-        enableEditing: false,
-        Cell: ({ cell }) => {
-          const value = cell.getValue();
-
-          if (value !== true) return null;
-
-          return (
-            <Chip size="sm" className="text-white" color="success">
-              <i class="bi bi-check-lg"></i>
-            </Chip>
-          );
-        },
-      },
-      {
-        accessorKey: 'fecha_llegada',
-        header: 'Fecha llegada',
-        enableEditing: false,
-      },
-      {
-        accessorKey: 'dias_patio',
-        header: 'Días en patio',
-        enableEditing: false,
-      },
-      {
-        accessorKey: 'sellos',
-        header: 'Sellos',
-      },
-      {
-        accessorKey: 'name_remolque',
-        header: 'Remolque',
-        muiEditTextFieldProps: {
-          select: true,
-          label: "Remolque",
-        },
-        Edit: ({ row, cell }) => {
-          const [value, setValue] = React.useState(
-            trailers.find(t => t.name2 === cell.getValue()) || null
-          );
-
-          return (
-            <Autocomplete
-              size="small"
-              options={trailers}
-              getOptionLabel={(opt) => opt.name2}
-              value={value}
-              onChange={(_, newValue) => {
-                setValue(newValue); // 👈 clave
-                row._valuesCache.name_remolque = newValue?.name2 || null;
-                row._valuesCache.remolque_id = newValue?.id || null;
-              }}
-              renderInput={(params) => (
-                <TextField {...params} label="Remolque" />
-              )}
-            />
-          );
-        }
-      },
-      {
-        accessorKey: 'name_dolly',
-        header: 'Dolly',
-        enableEditing: true,
-        Edit: ({ row, cell }) => {
-          const [value, setValue] = React.useState(
-            dollies.find(d => d.name2 === cell.getValue()) || null
-          );
-
-          return (
-            <Autocomplete
-              size="small"
-              options={dollies}
-              getOptionLabel={(opt) => opt.name2}
-              value={value}
-              onChange={(_, newValue) => {
-                setValue(newValue); // 👈 clave
-                row._valuesCache.name_dolly = newValue?.name2 || null;
-                row._valuesCache.dolly_id = newValue?.id || null;
-              }}
-              renderInput={(params) => (
-                <TextField {...params} label="Dolly" />
-              )}
-            />
-          );
-        }
-      },
-      {
-        accessorKey: 'observaciones',
-        header: 'Observaciones',
-      },
-      {
-        accessorKey: 'pending_sync',
-        header: 'Sincronizado',
-        enableEditing: false,
-        Cell: ({ cell }) =>
-          cell.getValue() ? (
-            <Chip color="warning" size="sm" className="text-white">Pendiente</Chip>
-          ) : (
-            <Chip color="success" size="sm" className="text-white">OK</Chip>
-          ),
-      }
-    ],
-    [trailers, dollies],
-  );
-
   const table = useMaterialReactTable({
-    columns,
-    data,
-    enableEditing: true,
-    editDisplayMode: "row",
-    positionActionsColumn: "last",
-    onEditingRowSave: async ({ values, table }) => {
-      table.setEditingRow(null);
-      setEditingRow(null);
+    columns: [],
+    data: [],
 
-      const syncAction = values.id_checklist == null
-        ? 'create'
-        : 'update';
-
-      const rowToSave = {
-        ...values,
-        pending_sync: true,
-        sync_action: syncAction,
-        updated_at: new Date().toISOString(),
-      };
-
-      // Guardar en IndexedDB
-      await inventarioDB.contenedores.put(rowToSave);
-
-      // Actualizar UI desde DB local
-      const localData = await inventarioDB.contenedores.toArray();
-      setData(localData);
-
-      toast.info(
-        syncAction === 'create'
-          ? 'Registro guardado offline (nuevo)'
-          : 'Cambios guardados offline'
-      );
-    },
-    onEditingRowCancel: () => {
-      setEditingRow(null);
-    },
-    enableGrouping: true,
-    enableGlobalFilter: true,
-    enableColumnPinning: true,
-    enableStickyHeader: true,
     localization: MRT_Localization_ES,
     positionToolbarAlertBanner: 'none',
     positionGlobalFilter: "right",
-    muiSearchTextFieldProps: {
-      placeholder: `Buscador global`,
-      sx: { minWidth: '300px' },
-      variant: 'outlined',
-    },
-    initialState: {
-      showColumnFilters: true,
-      density: 'compact',
-      pagination: { pageSize: 80 },
-      showGlobalFilter: false,
-      columnPinning: { left: ['x_reference'] },
-    },
-    state: { showProgressBars: isLoading, editingRow },
-    muiCircularProgressProps: {
-      color: 'primary',
-      thickness: 5,
-      size: 45,
-    },
-    muiSkeletonProps: {
-      animation: 'pulse',
-      height: 28,
-    },
-    muiTablePaperProps: {
-      elevation: 0,
-      sx: {
-        borderRadius: '0',
-      },
-    },
-    muiTableHeadCellProps: {
-      sx: {
-        fontFamily: 'Inter',
-        fontWeight: 'Bold',
-        fontSize: '14px',
-      },
-    },
-    muiTableContainerProps: {
-      sx: {
-        maxHeight: 'calc(100vh - 230px)',
-      },
-    },
-    muiTableBodyCellProps: ({ row }) => ({
-      sx: {
-        backgroundColor: row.subRows?.length ? '#1184e8' : '#FFFFFF',
-        fontFamily: 'Inter',
-        fontWeight: 'normal',
-        fontSize: '14px',
-        color: row.subRows?.length ? '#FFFFFF' : '#000000',
-      },
-    }),
-    renderRowActions: ({ row, table }) => (
-      <Box sx={{ display: 'flex', gap: '8px' }}>
-        <Button
-          size="sm"
-          color="primary"
-          radius="full"
-          isDisabled={editingRow && editingRow.id !== row.id}
-          onPress={() => {
-            if (editingRow && editingRow.id !== row.id) {
-              toast.warning(
-                'Tienes cambios sin guardar. Guarda o cancela antes de editar otro registro.'
-              );
-              return;
-            }
-
-            table.setEditingRow(row);
-            setEditingRow(row);
-          }}
-        >
-          <i className="bi bi-pencil" />
-        </Button>
-      </Box>
-    ),
-    muiTableBodyRowProps: ({ row }) => ({
-      onDoubleClick: () => {
-        if (editingRow && editingRow.id !== row.id) {
-          toast.warning(
-            'Tienes cambios sin guardar. Guarda o cancela antes de editar otro registro.'
-          );
-          return;
-        }
-
-        table.setEditingRow(row);
-        setEditingRow(row);
-      },
-      sx: {
-        backgroundColor: row.original.pending_sync
-          ? '#FFF7E6'   // amarillo suave
-          : 'inherit',
-        borderLeft: row.original.pending_sync
-          ? '4px solid #f59e0b'
-          : 'none',
-      },
-    }),
     renderTopToolbarCustomActions: ({ table }) => (
       <Box
         sx={{
@@ -557,11 +213,6 @@ const InventarioContenedores = () => {
           alignItems: 'center',
         }}
       >
-        <h1
-          className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
-        >
-          Inventario contenedores
-        </h1>
         <Button
           color='success'
           fullWidth
@@ -604,7 +255,7 @@ const InventarioContenedores = () => {
   return (
     <div>
       <CustomNavbar pages={pages}></CustomNavbar>
-      <MaterialReactTable table={table} />
+      <TablaContenedores data={data} setData={setData} isLoading={isLoading} inventarioDB={inventarioDB} opcionesRemolques={trailers} opcionesDolly={dollies} sincronizar={syncOfflineData}></TablaContenedores>
     </div >
   );
 };
