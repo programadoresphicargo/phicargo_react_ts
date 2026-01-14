@@ -578,7 +578,6 @@ const InventarioContenedores = () => {
           startContent={<i class="bi bi-arrow-clockwise"></i>}
           onPress={() => fetchData()}
           radius="full"
-          isDisabled={editingRow}
         >Recargar
         </Button>
         <Button
@@ -589,7 +588,6 @@ const InventarioContenedores = () => {
           startContent={<i class="bi bi-arrow-clockwise"></i>}
           onPress={() => syncOfflineData()}
           radius="full"
-          isDisabled={editingRow}
         >Sincronizar cambios
         </Button>
         <Chip
