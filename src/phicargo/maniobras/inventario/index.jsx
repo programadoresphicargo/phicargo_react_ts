@@ -344,17 +344,18 @@ const InventarioContenedores = () => {
         },
         Edit: ({ row, cell }) => {
           const [value, setValue] = React.useState(
-            trailers.find(t => t.name === cell.getValue()) || null
+            trailers.find(t => t.name2 === cell.getValue()) || null
           );
 
           return (
             <Autocomplete
+              size="small"
               options={trailers}
-              getOptionLabel={(opt) => opt.name}
+              getOptionLabel={(opt) => opt.name2}
               value={value}
               onChange={(_, newValue) => {
                 setValue(newValue); // 👈 clave
-                row._valuesCache.name_remolque = newValue?.name || null;
+                row._valuesCache.name_remolque = newValue?.name2 || null;
                 row._valuesCache.remolque_id = newValue?.id || null;
               }}
               renderInput={(params) => (
@@ -370,17 +371,18 @@ const InventarioContenedores = () => {
         enableEditing: true,
         Edit: ({ row, cell }) => {
           const [value, setValue] = React.useState(
-            dollies.find(d => d.name === cell.getValue()) || null
+            dollies.find(d => d.name2 === cell.getValue()) || null
           );
 
           return (
             <Autocomplete
+              size="small"
               options={dollies}
-              getOptionLabel={(opt) => opt.name}
+              getOptionLabel={(opt) => opt.name2}
               value={value}
               onChange={(_, newValue) => {
                 setValue(newValue); // 👈 clave
-                row._valuesCache.name_dolly = newValue?.name || null;
+                row._valuesCache.name_dolly = newValue?.name2 || null;
                 row._valuesCache.dolly_id = newValue?.id || null;
               }}
               renderInput={(params) => (
