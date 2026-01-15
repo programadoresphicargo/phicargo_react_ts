@@ -19,7 +19,6 @@ import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import CustomNavbar from "@/pages/CustomNavbar";
 import { pages } from '../pages';
 import RegistroManiobrasCP from "../maniobras/modal";
-import FormularioContenedor from "./contenedor";
 import { Autocomplete } from "@mui/material";
 import { TextField } from "@mui/material";
 import { inventarioDB } from "@/db/inventarioDB/inventarioDB";
