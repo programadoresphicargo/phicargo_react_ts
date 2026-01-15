@@ -38,7 +38,7 @@ export function useRowDraft() {
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import { Button, Chip } from '@heroui/react';
+import { Button, Chip, CircularProgress } from '@heroui/react';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import Box from '@mui/material/Box';
 import { exportDB } from 'dexie-export-import';
@@ -291,6 +291,30 @@ export default function TablaContenedores({ data, setData, isLoading, inventario
                 updateDraft({ observaciones: localValue });
               }}
             />
+          );
+        },
+      },
+      {
+        accessorKey: 'pending_sync',
+        header: 'Enviado',
+        enableEditing: false,
+        Cell: ({ cell }) => {
+          const value = cell.getValue();
+
+          return (
+            <>
+              {isLoading && value ? (
+                <CircularProgress size="sm" />
+              ) : (
+                <Chip
+                  size="sm"
+                  className="text-white"
+                  color={value ? "warning" : "success"}
+                >
+                  {value ? 'Pendiente' : 'Enviado'}
+                </Chip>
+              )}
+            </>
           );
         },
       },
