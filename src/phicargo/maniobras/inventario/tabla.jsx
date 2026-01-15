@@ -333,6 +333,7 @@ export default function TablaContenedores({ data, setData, isLoading, inventario
         pending_sync: true,
         sync_action: syncAction,
         updated_at: new Date().toISOString(),
+        version: draft.version || 1,
       };
 
       await inventarioDB.contenedores.put(rowToSave);
