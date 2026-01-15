@@ -103,21 +103,6 @@ export default function TablaContenedores({ data, setData, isLoading, inventario
 
     columns: [
       {
-        accessorKey: 'id',
-        header: 'ID',
-        enableEditing: false,
-      },
-      {
-        accessorKey: 'id_cp',
-        header: 'ID CP',
-        enableEditing: false,
-      },
-      {
-        accessorKey: 'id_checklist',
-        header: 'ID Checklist',
-        enableEditing: false,
-      },
-      {
         accessorKey: 'sucursal',
         header: 'Sucursal',
         enableEditing: false,
