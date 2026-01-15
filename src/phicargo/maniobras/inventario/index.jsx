@@ -144,9 +144,12 @@ const InventarioContenedores = () => {
   }, []);
 
   const syncOfflineData = async () => {
-    if (!navigator.onLine) return;
+    if (!navigator.onLine) {
+      toast.warning('No tienes conexión a internet');
+      return;
+    }
 
-    setLoading(true); // 🔵 INICIA LOADING
+    setLoading(true);
 
     try {
       const pendientes = await inventarioDB.contenedores
@@ -164,26 +167,34 @@ const InventarioContenedores = () => {
               row
             );
 
-            await inventarioDB.contenedores.update(row.id, {
-              id_checklist: res.data.id_checklist,
-              pending_sync: false,
-              sync_action: null,
-            });
+            if (res.data?.status === 'success') {
+              await inventarioDB.contenedores.update(row.id, {
+                id_checklist: res.data.id_checklist,
+                pending_sync: false,
+                sync_action: null,
+              });
+            } else {
+              console.warn('Backend rechazó create:', res.data);
+            }
           }
 
           if (row.sync_action === 'update') {
-            await odooApi.patch(
+            const res = await odooApi.patch(
               `/tms_waybill/control_contenedores/${row.id_checklist}`,
               row
             );
 
-            await inventarioDB.contenedores.update(row.id, {
-              pending_sync: false,
-              sync_action: null,
-            });
+            if (res.data?.status === 'success') {
+              await inventarioDB.contenedores.update(row.id, {
+                pending_sync: false,
+                sync_action: null,
+              });
+            } else {
+              console.warn('Backend rechazó update:', res.data);
+            }
           }
         } catch (e) {
-          console.error('Error sync:', row.id);
+          console.error('Error HTTP sync:', row.id, e);
         }
       }
 
@@ -192,7 +203,7 @@ const InventarioContenedores = () => {
       setData(localData);
 
     } finally {
-      setLoading(false); // 🔴 TERMINA LOADING (aunque falle algo)
+      setLoading(false);
     }
   };
 
