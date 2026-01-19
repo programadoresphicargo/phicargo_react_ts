@@ -34,7 +34,7 @@ const LastTravels = ({ data }) => {
                 {isLoading ? (
                     <Spinner size="sm" />
                 ) : (
-                    <Button color="primary" size="sm">
+                    <Button color="primary" size="sm" radius="full">
                         {data.travel?.routeName}
                     </Button>
                 )}

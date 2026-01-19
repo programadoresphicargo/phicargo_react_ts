@@ -34,7 +34,7 @@ const IncidentsShift = ({ data }) => {
                 {isLoading ? (
                     <Spinner size="sm" />
                 ) : data?.has_recent_incident ? (
-                    <Button color="danger" size="sm">
+                    <Button color="danger" size="sm" radius="full">
                         ⚠️ Con incidencias
                     </Button>
                 ) : (
