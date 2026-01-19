@@ -117,7 +117,7 @@ const ShiftsPage = () => {
     // renderRowActionMenuItems: ({ row }) =>
     //   getRowActionMenuItems(row.original),
     muiTableBodyRowProps: ({ row }) => ({
-      onClick: () => onOpenDetails(row.original.id),
+      onDoubleClick: () => onOpenDetails(row.original.id),
       sx: { cursor: 'pointer' },
     }),
     muiRowDragHandleProps: ({ table, row }) => ({
