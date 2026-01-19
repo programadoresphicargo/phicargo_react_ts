@@ -31,61 +31,6 @@ export const useShiftColumnsArchived = () => {
         },
       },
       {
-        header: 'Estado de la licencia',
-        size: 200,
-        Cell: ({ row }) => {
-          const driver = row.original.driver;
-          const daysLeft: number | null = driver?.daysLeft ?? null;
-
-          let color: "default" | "success" | "warning" | "danger" = "default";
-          let label = "SIN ASIGNAR";
-
-          if (daysLeft !== null) {
-            if (daysLeft < 0) {
-              color = "danger";
-              label = `Licencia vencida (${driver.licenseType})`;
-            } else if (daysLeft < 60) {
-              color = "warning";
-              label = `Próxima a expirar en ${daysLeft} días (${driver.licenseType})`;
-            } else {
-              color = "success";
-              label = `Vigente (${driver.licenseType})`;
-            }
-          }
-
-          return (
-            <Popover placement="right" color={color} backdrop="opaque">
-              <PopoverTrigger>
-                <Chip color={color} size="sm" className='text-white'>{label}</Chip>
-              </PopoverTrigger>
-              <PopoverContent>
-                <div className="px-1 py-2">
-                  <div className="text-small font-bold text-white">Expira:</div>
-                  <div className="text-tiny text-white"> {driver?.licenseExpiration ? dayjs(driver.licenseExpiration).format("DD/MM/YYYY") : "SIN ASIGNAR"}</div>
-                </div>
-              </PopoverContent>
-            </Popover>
-          );
-        },
-      },
-      {
-        accessorFn: (row) => row.driver.isDangerous,
-        header: 'Peligroso',
-        maxSize: 50,
-        Cell: ({ row }) => {
-          const value = row.original.driver.isDangerous;
-          return !value ? (
-            <span className="text-gray-400 text-sm">
-              NO
-            </span>
-          ) : (
-            <Chip color="danger" size="sm">
-              SI
-            </Chip>
-          );
-        },
-      },
-      {
         accessorFn: (row) => row.vehicle.name,
         header: 'Unidad',
         Cell: ({ cell }) => (
@@ -97,24 +42,6 @@ export const useShiftColumnsArchived = () => {
       {
         accessorFn: (row) => row.arrivalAt.format('DD/MM/YYYY hh:mm A'),
         header: 'Llegada',
-      },
-      {
-        accessorFn: (row) => row.phoneNumber,
-        header: 'Teléfono',
-        Cell: ({ cell }) => {
-          const value = cell.getValue<string | null>();
-          return (
-            <span
-              className={
-                value
-                  ? "text-blue-700 text-sm font-semibold"
-                  : "text-gray-400 text-sm"
-              }
-            >
-              {value || 'SIN NÚMERO'}
-            </span>
-          )
-        }
       },
       {
         accessorFn: (row) => row.comments,
