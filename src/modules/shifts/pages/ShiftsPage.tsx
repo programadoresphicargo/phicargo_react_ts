@@ -39,14 +39,15 @@ const ShiftsPage = () => {
   );
 
   const location = useLocation();
+  const isCrearOpen = location.pathname.startsWith('/turnos/crear');
   const isDetailsOpen = location.pathname.startsWith('/turnos/detalles');
   const isHistoryOpen = location.pathname.startsWith('/turnos/historial-asignado');
 
   useEffect(() => {
-    if (!isDetailsOpen || !isHistoryOpen) {
+    if (!isDetailsOpen || !isHistoryOpen || !isCrearOpen) {
       refetch();
     }
-  }, [isDetailsOpen, isHistoryOpen]);
+  }, [isDetailsOpen, isHistoryOpen, isCrearOpen]);
 
 
   const onOpenDetails = (id: number) => {
