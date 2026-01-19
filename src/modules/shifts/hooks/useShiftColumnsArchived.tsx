@@ -2,8 +2,6 @@ import { useMemo } from 'react';
 import { type MRT_ColumnDef } from 'material-react-table';
 import { Shift } from '../models';
 import { Chip } from "@heroui/react";
-import { Popover, PopoverTrigger, PopoverContent } from "@heroui/react";
-import dayjs from 'dayjs';
 
 export const useShiftColumnsArchived = () => {
   const columns = useMemo<MRT_ColumnDef<Shift>[]>(
