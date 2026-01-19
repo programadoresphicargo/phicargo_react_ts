@@ -16,19 +16,30 @@ import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import CustomNavbar from "@/pages/CustomNavbar";
 
 const DetencionesTable = () => {
-  function formatDateToYYYYMMDD(date) {
-    return date.toISOString().slice(0, 10);
-  }
+
+  const departureTranslations = {
+    no_info: 'Sin información',
+    start_early: 'Salió temprano',
+    start_late: 'Salió tarde SIN justificación',
+    start_late_justified: 'Salió tarde PERO tiene justificación',
+    in_time: 'A tiempo',
+    late: 'Va tarde',
+  };
+
+  const arrivalTranslations = {
+    arrived_late: 'Llegó tarde SIN justificación',
+    arrived_late_justified: 'Llegó tarde PERO tiene justificación',
+    arrived_early: 'Llegó temprano',
+    no_info: 'Sin información',
+    no_arrival_recorded: 'Sin registro de llegada',
+  };
 
   const now = new Date();
   const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
   const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-
   const [range, setRange] = useState([firstDay, lastDay]);
-
-  const [isLoading, setisLoading] = useState('');
+  const [isLoading, setLoading] = useState(false);
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -40,7 +51,7 @@ const DetencionesTable = () => {
         throw new Error('Las fechas de inicio y fin son obligatorias.');
       }
 
-      setisLoading(true);
+      setLoading(true);
       const response = await odooApi.get(`/tms_travel/salidas_llegadas/${range[0].toISOString().slice(0, 10)}/${range[1].toISOString().slice(0, 10)}`);
       setData(response.data);
     } catch (error) {
@@ -50,7 +61,7 @@ const DetencionesTable = () => {
 
       toast.error('Error al enviar los datos: ' + errorMessage);
     } finally {
-      setisLoading(false);
+      setLoading(false);
     }
   };
 
@@ -70,16 +81,6 @@ const DetencionesTable = () => {
       Cell: ({ cell }) => {
         const raw = cell.getValue() || '';
 
-        // Traducciones de estados
-        const traducciones = {
-          no_info: 'Sin información',
-          start_early: 'Salió temprano',
-          start_late: 'Salió tarde SIN justificación',
-          start_late_justified: 'Salió tarde PERO tiene justificación',
-          in_time: 'A tiempo',
-          late: 'Va tarde',
-        };
-
         // Colores del Chip según el estado traducido
         const colores = {
           'Salió tarde PERO tiene justificación': 'success',
@@ -91,7 +92,7 @@ const DetencionesTable = () => {
           'Sin información': 'primary',
         };
 
-        const valorTraducido = traducciones[raw] || raw;
+        const valorTraducido = departureTranslations[raw] || raw;
         const colorChip = colores[valorTraducido] || 'primary';
 
         return (
@@ -111,14 +112,6 @@ const DetencionesTable = () => {
       Cell: ({ cell }) => {
         const raw = cell.getValue() || '';
 
-        const traducciones = {
-          arrived_late: 'Llegó tarde SIN justificación',
-          arrived_late_justified: 'Llegó tarde PERO tiene justificación',
-          arrived_early: 'Llegó temprano',
-          no_info: 'Sin información',
-          no_arrival_recorded: 'Sin registro de llegada'
-        };
-
         const colores = {
           'Llegó tarde SIN justificación': 'danger',
           'Llegó tarde PERO tiene justificación': 'success',
@@ -127,7 +120,7 @@ const DetencionesTable = () => {
           'Sin registro de llegada': 'primary'
         };
 
-        const label = traducciones[raw] || raw; // si llega otro valor, lo mostramos tal cual
+        const label = arrivalTranslations[raw] || raw; // si llega otro valor, lo mostramos tal cual
         const color = colores[label] || 'primary';
 
         return (
@@ -147,17 +140,18 @@ const DetencionesTable = () => {
     useKeysAsHeaders: true,
   });
 
-  const handleExportRows = (rows) => {
-    const rowData = rows.map((row) => row.original);
-    const csv = generateCsv(csvConfig)(rowData);
-    download(csvConfig)(csv);
-  };
-
   const handleExportData = () => {
-    const csv = generateCsv(csvConfig)(data);
+    const formattedData = data.map((row) => ({
+      ...row,
+      departure_status:
+        departureTranslations[row.departure_status] || row.departure_status,
+      arrival_status:
+        arrivalTranslations[row.arrival_status] || row.arrival_status,
+    }));
+
+    const csv = generateCsv(csvConfig)(formattedData);
     download(csvConfig)(csv);
   };
-
 
   const table = useMaterialReactTable({
     columns,
@@ -166,7 +160,6 @@ const DetencionesTable = () => {
     enableGlobalFilter: true,
     enableFilters: true,
     state: { showProgressBars: isLoading },
-    enableRowSelection: true,
     positionToolbarAlertBanner: 'bottom',
     localization: MRT_Localization_ES,
     initialState: {
@@ -212,7 +205,11 @@ const DetencionesTable = () => {
           flexWrap: 'wrap',
         }}
       >
-        Salidas y llegadas
+        <h1
+          className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
+        >
+          Salidas y llegadas tarde
+        </h1>
         <DateRangePicker
           value={range}
           onChange={(value) => setRange(value)}
@@ -221,24 +218,13 @@ const DetencionesTable = () => {
         />
 
         <Button
-          color='primary'
+          color='success'
+          className="text-white"
           onPress={handleExportData}
           startContent={<FileDownloadIcon />}
           radius="full"
         >
-          Exportar todo
-        </Button>
-
-        <Button
-          color='primary'
-          isDisabled={
-            !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
-          }
-          onPress={() => handleExportRows(table.getSelectedRowModel().rows)}
-          startContent={<FileDownloadIcon />}
-          radius="full"
-        >
-          Exportar seleccionado
+          Exportar
         </Button>
 
         <Button
