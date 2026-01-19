@@ -2,30 +2,12 @@ import { useMemo } from 'react';
 import { type MRT_ColumnDef } from 'material-react-table';
 import { Shift } from '../models';
 import { Chip } from "@heroui/react";
-import LastTravels from './last_travels';
-import IncidentsShift from './IncidentsShift';
 import { Popover, PopoverTrigger, PopoverContent } from "@heroui/react";
 import dayjs from 'dayjs';
 
-type KmData = {
-  total_km: number | null;
-};
-
-export const useShiftColumns = (
-  kmByKey: Record<string, KmData>
-) => {
+export const useShiftColumnsArchived = () => {
   const columns = useMemo<MRT_ColumnDef<Shift>[]>(
     () => [
-      {
-        accessorFn: (row) => row.shift,
-        header: 'Turno',
-        maxSize: 50,
-        Cell: ({ cell }) => (
-          <span className="bg-blue-300 text-blue-900 font-semibold rounded-full w-8 h-8 m-0 flex items-center justify-center">
-            {`#${cell.getValue<string>()}`}
-          </span>
-        ),
-      },
       {
         accessorFn: (row) => row.driver.name,
         header: 'Operador',
@@ -135,42 +117,6 @@ export const useShiftColumns = (
         }
       },
       {
-        header: 'Kilómetros recorridos',
-        id: 'km',
-        Cell: ({ row }) => {
-          const kmData = kmByKey[row.original.shift];
-          const km = kmData?.total_km;
-
-          return (
-            <span className="text-sm font-semibold text-green-600">
-              {km != null ? `${km} km` : '—'}
-            </span>
-          );
-        },
-      },
-      {
-        accessorFn: (row) => row.has_recent_incident,
-        header: 'Incidencias recientes (últimos 30 días)',
-        Cell: ({ row }) => {
-          return (<IncidentsShift data={row.original}></IncidentsShift>
-          );
-        }
-      },
-      {
-        accessorFn: (row) => row.travel?.routeName || 'SIN ASIGNAR',
-        header: 'Viajes (últimos 15 días)',
-        id: 'route',
-        Cell: ({ row }) => {
-          return (
-            <LastTravels data={row.original}></LastTravels>
-          )
-        }
-      },
-      {
-        accessorFn: (row) => row.travel?.duration || 'SIN ASIGNAR',
-        header: 'Duración',
-      },
-      {
         accessorFn: (row) => row.comments,
         header: 'Comentarios',
       },
@@ -178,8 +124,16 @@ export const useShiftColumns = (
         accessorFn: (row) => row.cp_assigned,
         header: 'Viaje programado',
       },
+      {
+        accessorFn: (row) => row.archivedReason,
+        header: 'Motivo',
+      },
+      {
+        accessorFn: (row) => row.archivedDate?.format('DD/MM/YYYY hh:mm A'),
+        header: 'Archivado',
+      },
     ],
-    [kmByKey],
+    [],
   );
 
   return {

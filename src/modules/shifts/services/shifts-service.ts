@@ -52,6 +52,22 @@ class ShiftServiceApi {
     }
   }
 
+  public static async getShiftsAssigned(branchId: number = 1, archived_date?: string | null): Promise<Shift[]> {
+    const url = `/shifts/archived?branch_id=${branchId}&archived_date=${archived_date}`;
+
+    try {
+      const response = await odooApi.get<ShiftApi[]>(url);
+      return response.data.map(shiftToLocal);
+    } catch (error) {
+      console.error(error);
+      if (error instanceof AxiosError) {
+        throw new Error(
+          error.response?.data?.detail || 'Error al obtener los turnos',
+        );
+      }
+      throw new Error('Error al obtener los turnos');
+    }
+  }
   /**
    * Method to edit a shift
    * @param param0 Object with the data to create a new shift
@@ -103,6 +119,27 @@ class ShiftServiceApi {
     }
   }
 
+
+  public static async unarchiveShift({
+    id,
+    updatedItem,
+  }: UpdatableItem<ShiftArchive>): Promise<Shift[]> {
+    const url = `/shifts/${id}/unarchive`;
+    const data = updatedItem;
+
+    try {
+      const response = await odooApi.put<ShiftApi[]>(url, data);
+      return response.data.map(shiftToLocal);
+    } catch (error) {
+      console.error(error);
+      if (error instanceof AxiosError) {
+        throw new Error(
+          error.response?.data?.detail || 'Error al archivar el turno',
+        );
+      }
+      throw new Error('Error al archivar el turno');
+    }
+  }
   /**
    * Method to reorder the shifts
    * @param shifts List of shifts to reorder

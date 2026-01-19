@@ -21,8 +21,8 @@ const initialState: ShiftArchive = {
   reason: '',
 };
 
-export const ArchiveDialog = ({ isOpen, onClose, shiftId }: Props) => {
-  const { archiveShift } = useShiftQueries();
+export const UnarchiveDialog = ({ isOpen, onClose, shiftId }: Props) => {
+  const { unarchiveShift } = useShiftQueries();
 
   const { control, handleSubmit } = useForm({
     defaultValues: initialState,
@@ -32,7 +32,7 @@ export const ArchiveDialog = ({ isOpen, onClose, shiftId }: Props) => {
     if (!shiftId) {
       return;
     }
-    archiveShift.mutate(
+    unarchiveShift.mutate(
       {
         id: shiftId,
         updatedItem: data,
@@ -65,7 +65,7 @@ export const ArchiveDialog = ({ isOpen, onClose, shiftId }: Props) => {
             <CloseIcon />
           </IconButton>
           <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-            Archivar turno
+            Desarchivar turno {shiftId}
           </Typography>
           <Button autoFocus onPress={onClose} color="primary" radius="full">
             Cancelar
@@ -79,19 +79,11 @@ export const ArchiveDialog = ({ isOpen, onClose, shiftId }: Props) => {
           <div>
             <SelectInput
               control={control}
-              label="Razón"
+              label="Razón de desarchivo"
               name="reason"
               items={[
-                { key: 'VIAJE ASIGNADO', value: 'VIAJE ASIGNADO' },
-                { key: 'TURNO REPETIDO', value: 'TURNO REPETIDO' },
-                {
-                  key: 'ARCHIVADO SIN ASIGNAR',
-                  value: 'ARCHIVADO SIN ASIGNAR',
-                },
-                {
-                  key: 'OPERADOR DE ENGANCHE',
-                  value: 'OPERADOR DE ENGANCHE',
-                },
+                { key: 'CAMBIO DE OPERADOR', value: 'CAMBIO DE OPERADOR' },
+                { key: 'ERROR DE ASIGNACION', value: 'ERROR DE ASIGNACION' },
               ]}
               rules={{ required: 'Este campo es requerido' }}
             />
@@ -101,9 +93,9 @@ export const ArchiveDialog = ({ isOpen, onClose, shiftId }: Props) => {
             color="primary"
             onPress={() => handleSubmit(onSubmit)()}
             startContent={<MdOutlineArchive />}
-            isLoading={archiveShift.isPending}
+            isLoading={unarchiveShift.isPending}
           >
-            Archivar
+            Desarchivar
           </Button>
 
         </>

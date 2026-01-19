@@ -37,6 +37,7 @@ export interface ShiftBaseApi {
   register_date: string;
   queue: boolean;
   has_recent_incident: boolean;
+  cp_assigned: number | null;
 }
 
 export interface ShiftApi extends ShiftBaseApi {

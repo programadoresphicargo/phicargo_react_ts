@@ -1,7 +1,7 @@
 import { ExportConfig, ExportToExcel } from '@/utilities';
 import { IconButton, Tooltip } from '@mui/material';
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@heroui/react';
 import ExportExcelButton from '@/components/ui/buttons/ExportExcelButton';
 import { HiQueueList } from 'react-icons/hi2';
@@ -37,6 +37,17 @@ const ShiftsPage = () => {
   const { data, handleRowOrderChange, saveChanges } = useReorderShifts(
     shiftsData,
   );
+
+  const location = useLocation();
+  const isDetailsOpen = location.pathname.startsWith('/turnos/detalles');
+  const isHistoryOpen = location.pathname.startsWith('/turnos/historial-asignado');
+
+  useEffect(() => {
+    if (!isDetailsOpen || !isHistoryOpen) {
+      refetch();
+    }
+  }, [isDetailsOpen, isHistoryOpen]);
+
 
   const onOpenDetails = (id: number) => {
     navigate(`/turnos/detalles/${id}`);
@@ -100,13 +111,13 @@ const ShiftsPage = () => {
       },
     },
     state: {
-      isLoading: isFetching,
+      showProgressBars: isFetching,
     },
     // CUSTOMIZATIONS
     // renderRowActionMenuItems: ({ row }) =>
     //   getRowActionMenuItems(row.original),
     muiTableBodyRowProps: ({ row }) => ({
-      onDoubleClick: () => onOpenDetails(row.original.id),
+      onClick: () => onOpenDetails(row.original.id),
       sx: { cursor: 'pointer' },
     }),
     muiRowDragHandleProps: ({ table, row }) => ({
@@ -138,6 +149,16 @@ const ShiftsPage = () => {
           onPress={() => navigate('/turnos/cola')}
         >
           Operadores en cola
+        </Button>
+        <Button
+          radius="full"
+          size='sm'
+          color="success"
+          className='text-white'
+          startContent={<HiQueueList />}
+          onPress={() => navigate('/turnos/historial-asignado')}
+        >
+          Historial
         </Button>
         <ExportExcelButton
           size="small"

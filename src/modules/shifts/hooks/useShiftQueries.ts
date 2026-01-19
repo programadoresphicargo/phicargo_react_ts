@@ -7,14 +7,24 @@ import { useShiftsContext } from './useShiftsContext';
 
 export const shiftKey = 'shifts';
 
-export const useShiftQueries = () => {
+export const useShiftQueries = (archivedDate?: string | null) => {
+
   const queryClient = useQueryClient();
   const { branchId } = useShiftsContext();
 
   const shiftQuery = useQuery<Shift[]>({
-    queryKey: [shiftKey, branchId],
+    queryKey: [shiftKey, 'all', branchId],
     queryFn: () => ShiftServiceApi.getShifts(branchId),
     refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 10,
+    enabled: !!branchId,
+  });
+
+  const shiftAssignedQuery = useQuery<Shift[]>({
+    queryKey: [shiftKey, 'assigned', branchId, archivedDate],
+    queryFn: () => ShiftServiceApi.getShiftsAssigned(branchId, archivedDate),
+    refetchOnWindowFocus: false,
+    refetchOnMount: 'always',
     staleTime: 1000 * 60 * 10,
     enabled: !!branchId,
   });
@@ -56,12 +66,26 @@ export const useShiftQueries = () => {
     },
   });
 
+  const unarchiveShift = useMutation({
+    mutationFn: ShiftServiceApi.unarchiveShift,
+    onSuccess: (newShifts) => {
+      queryClient.setQueryData([shiftKey, branchId], () => newShifts || []);
+      toast.success('Registro desarchivado');
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
   return {
     shifts: shiftQuery.data || [],
+    shiftsAssigned: shiftAssignedQuery.data || [],
     shiftQuery,
+    shiftAssignedQuery,
     createShift,
     editShift,
     archiveShift,
+    unarchiveShift
   };
 };
 
