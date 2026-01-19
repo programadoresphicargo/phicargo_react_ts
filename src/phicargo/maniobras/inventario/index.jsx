@@ -189,8 +189,10 @@ const InventarioContenedores = () => {
                 pending_sync: false,
                 sync_action: null,
               });
+            } else if (res.data?.status === 'conflict') {
+              toast.error('Alguien ya edito');
             } else {
-              console.warn('Backend rechazó update:', res.data);
+              toast.error('Backend rechazó update:', res.data);
             }
           }
         } catch (e) {
