@@ -97,7 +97,7 @@ const ArchivedsShift = () => {
     ),
     muiTableContainerProps: {
       sx: {
-        height: 'calc(100vh - 230px)',
+        height: 'calc(100vh - 330px)',
       },
     },
     muiTablePaperProps: {
@@ -145,7 +145,7 @@ const ArchivedsShift = () => {
               <CloseIcon />
             </IconButton>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              Detalles del turno
+              Historial asignado
             </Typography>
             <Button autoFocus onPress={onClose} color="primary" radius="full">
               Cancelar
