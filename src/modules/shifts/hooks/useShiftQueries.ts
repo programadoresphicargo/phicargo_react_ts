@@ -26,7 +26,7 @@ export const useShiftQueries = (archivedDate?: string | null) => {
     refetchOnWindowFocus: false,
     refetchOnMount: 'always',
     staleTime: 1000 * 60 * 10,
-    enabled: !!branchId,
+    enabled: !!branchId && !!archivedDate,
   });
 
   const createShift = useMutation({
