@@ -14,7 +14,7 @@ const Header = () => {
   );
 
   const closedComplaints = useMemo(
-    () => data?.filter((complaint) => complaint.status === 'closed').length || 0,
+    () => data?.filter((complaint) => complaint.status === 'resolved').length || 0,
     [data],
   );
 
