@@ -240,7 +240,7 @@ const TablaAccesos = ({ title, tipo, background }) => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 220px)',
+        maxHeight: 'calc(100vh - 200px)',
       },
     },
     muiTopToolbarProps: {
