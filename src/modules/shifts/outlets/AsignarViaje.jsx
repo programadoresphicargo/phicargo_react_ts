@@ -203,12 +203,28 @@ export default function ResponsiveDialog({ open, setOpen, shift }) {
     },
    },
    {
-    accessorKey: 'travel_id',
+    accessorKey: 'referencia_viaje',
     header: 'Viaje',
    },
    {
-    accessorKey: 'x_operador_bel_id',
-    header: 'Operador',
+    accessorKey: 'vehiculo_programado',
+    header: 'Vehiculo programado',
+    Cell: ({ cell }) => {
+     const value = cell.getValue();
+     if (!value) return;
+
+     return (
+      <Chip color='primary' size='sm' className='text-white'>{value}</Chip>
+     );
+    },
+   },
+   {
+    accessorKey: 'inicio_programado',
+    header: 'Inicio programado',
+   },
+   {
+    accessorKey: 'llegada_planta_programada',
+    header: 'Llegada a planta prog',
    },
   ],
   [],
