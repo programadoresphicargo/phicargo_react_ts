@@ -7,7 +7,7 @@ interface Customer {
   name: string;
 }
 
-export type ComplaintStatus = 'open' | 'closed' | 'in_process';
+export type ComplaintStatus = 'open' | 'closed' | 'in_process' | 'resolved';
 export type ComplaintPriority = 'low' | 'medium' | 'high';
 
 export interface ComplaintBase {
