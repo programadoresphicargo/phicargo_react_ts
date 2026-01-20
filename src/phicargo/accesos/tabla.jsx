@@ -29,7 +29,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const TablaAccesos = ({ title, tipo }) => {
+const TablaAccesos = ({ title, tipo, background }) => {
 
   const [open, setOpen] = React.useState(false);
   const [id_acceso, setIDAcceso] = useState(0);
@@ -245,7 +245,7 @@ const TablaAccesos = ({ title, tipo }) => {
     },
     muiTopToolbarProps: {
       sx: {
-        background: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
+        background: background,
         color: 'white',
         '& .MuiSvgIcon-root': {
           color: 'white',   // 🎨 iconos en blanco
