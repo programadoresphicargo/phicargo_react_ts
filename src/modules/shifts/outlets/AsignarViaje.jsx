@@ -42,8 +42,11 @@ export default function ResponsiveDialog({ open, setOpen, shift }) {
  const navigate = useNavigate();
  const theme = useTheme();
  const fullScreen = useMediaQuery(theme.breakpoints.down("lg"));
- const [data, setData] = useState([]);
  const [isLoading, setLoading] = useState(false);
+
+ const [data, setData] = useState([]);
+ const [rawData, setRawData] = useState([]);
+ const [useFilters, setUseFilters] = useState(true);
 
  function formatDateToYYYYMMDD(date) {
   return date.toISOString().slice(0, 10);
@@ -54,21 +57,43 @@ export default function ResponsiveDialog({ open, setOpen, shift }) {
  const [value, setValue] = React.useState(parseDate(first));
 
  const fetchData = async () => {
-
   try {
    setLoading(true);
+
    const response = await odooApi.get('/tms_waybill/plan_viaje_asignacion', {
     params: {
      date_order: value,
-     operador_asignado: false
+     operador_asignado: false,
     },
    });
-   setData(response.data);
+
+   setRawData(response.data); // ← sin filtrar
    setLoading(false);
   } catch (error) {
    console.error('Error al obtener los datos:', error);
+   setLoading(false);
   }
  };
+
+ const filteredData = useMemo(() => {
+  if (!useFilters) return rawData;
+
+  return rawData.filter(item => {
+   // --- FILTRO POR MODALIDAD ---
+   if (shift?.driver?.modality === 'single') {
+    if (item.x_tipo_bel !== 'single') return false;
+   }
+   // si es 'full' → no se filtra nada
+
+   // --- FILTRO POR PELIGROSO ---
+   if (shift?.driver?.isDangerous === false) {
+    if (item.dangerous_cargo === true) return false;
+   }
+   // si es 'SI' → no se filtra nada
+
+   return true; // pasa todos los filtros
+  });
+ }, [rawData, useFilters, shift]);
 
  useEffect(() => {
   fetchData();
@@ -232,11 +257,12 @@ export default function ResponsiveDialog({ open, setOpen, shift }) {
 
  const table = useMaterialReactTable({
   columns,
-  data,
+  data: filteredData,
   localization: MRT_Localization_ES,
   enableGrouping: true,
   enableGlobalFilter: true,
   enableFilters: true,
+  enableRowPinning: true,
   state: { showProgressBars: isLoading },
   enableColumnPinning: true,
   enableStickyHeader: true,
@@ -274,17 +300,23 @@ export default function ResponsiveDialog({ open, setOpen, shift }) {
     maxHeight: 'calc(100vh - 350px)',
    },
   },
-  muiTableBodyRowProps: ({ row }) => ({
-   onClick: ({ }) => {
+  enableRowActions: true,
+  positionActionsColumn: "last",
+  renderRowActions: ({ row }) => (
+   <Button color="primary" className="text-white" radius="full" size='sm' onPress={() => {
     asignar_viaje(row.original.id);
-   },
-  }),
+   }}>
+    Seleccionar
+   </Button>
+  ),
   renderTopToolbarCustomActions: ({ table }) => (
    <Box
     sx={{
-     display: 'flex',
-     alignItems: 'center',
+     display: 'grid',
+     gridTemplateColumns: 'minmax(360px, 1fr) auto auto auto',
      gap: 2,
+     alignItems: 'center',
+     width: '100%',
     }}
    >
     <Card>
@@ -316,7 +348,7 @@ export default function ResponsiveDialog({ open, setOpen, shift }) {
 
        <span className="text-gray-500">Peligroso</span>
        <span className="font-medium text-gray-900">
-        {shift?.driver.dangerous ? 'Sí' : 'No'}
+        {shift?.driver.isDangerous.toString()}
        </span>
 
        <span className="text-gray-500">Vencimiento</span>
@@ -342,6 +374,13 @@ export default function ResponsiveDialog({ open, setOpen, shift }) {
      isLoading={isLoading}
     />
     <Button onPress={() => fetchData()} color='success' className='text-white' radius='full'>Recargar</Button>
+    <Button
+     radius='full'
+     color='primary'
+     onPress={() => setUseFilters(prev => !prev)}
+    >
+     {useFilters ? 'Desactivar filtros' : 'Activar filtros'}
+    </Button>
 
    </Box>
   )
