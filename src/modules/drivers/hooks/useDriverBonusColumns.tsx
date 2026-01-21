@@ -31,6 +31,7 @@ export const useDriverBonusColumns = (
         accessorKey: 'distance',
         header: 'Km recorridos',
       },
+      /*
       {
         accessorKey: 'excellence',
         header: 'Excelencia',
@@ -47,25 +48,28 @@ export const useDriverBonusColumns = (
             formatCurrency(cell.getValue<number>())
           ),
       },
+      */
       {
         accessorKey: 'productivity',
         header: 'Productividad',
         Cell: ({ row, cell }) =>
           isEditing && userPermissions.includes(12) ? (
-            <TextField
-              variant="standard"
-              value={editedRecords[row.index].productivity}
-              onChange={(e) => handleEditChange(e, row.index, 'productivity')}
-              size="small"
-              type="number"
-            />
+            <>
+              <TextField
+                variant="standard"
+                value={editedRecords[row.index].productivity}
+                onChange={(e) => handleEditChange(e, row.index, 'productivity')}
+                size="small"
+                type="number"
+              />
+            </>
           ) : (
             formatCurrency(cell.getValue<number>())
           ),
       },
       {
         accessorKey: 'operation',
-        header: 'Operacion',
+        header: 'Operaciones',
         Cell: ({ row, cell }) =>
           isEditing && userPermissions.includes(12) ? (
             <TextField
@@ -79,6 +83,7 @@ export const useDriverBonusColumns = (
             formatCurrency(cell.getValue<number>())
           ),
       },
+      /*
       {
         accessorKey: 'roadSafety',
         header: 'Seguridad vial',
@@ -95,6 +100,7 @@ export const useDriverBonusColumns = (
             formatCurrency(cell.getValue<number>())
           ),
       },
+      */
       {
         accessorKey: 'vehicleCare',
         header: 'Cuidado unidad',
@@ -113,7 +119,7 @@ export const useDriverBonusColumns = (
       },
       {
         accessorKey: 'performance',
-        header: 'Rendimiento',
+        header: 'Rendimiento (Diesel)',
         Cell: ({ row, cell }) =>
           isEditing && userPermissions.includes(10) ? (
             <TextField
