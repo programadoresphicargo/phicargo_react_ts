@@ -262,7 +262,6 @@ export default function ResponsiveDialog({ open, setOpen, shift }) {
   enableGrouping: true,
   enableGlobalFilter: true,
   enableFilters: true,
-  enableRowPinning: true,
   state: { showProgressBars: isLoading },
   enableColumnPinning: true,
   enableStickyHeader: true,
