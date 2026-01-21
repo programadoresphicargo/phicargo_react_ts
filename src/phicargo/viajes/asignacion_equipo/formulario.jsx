@@ -116,7 +116,7 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
             getData();
 
         } catch (error) {
-            toast.error("Error: " + (error.response?.data?.message || error.message));
+            toast.error("Error: " + (error.response?.data?.detail || error.message));
         } finally {
             setLoading(false);
         }
