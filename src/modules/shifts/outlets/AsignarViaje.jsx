@@ -32,6 +32,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from 'react-router-dom';
 import { DatePicker } from '@heroui/react';
 import { parseDate, getLocalTimeZone } from "@internationalized/date";
+import AsignacionViaje from './confirmar_cambios';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
  return <Slide direction="up" ref={ref} {...props} />;
@@ -44,9 +45,14 @@ export default function ResponsiveDialog({ open, setOpen, shift }) {
  const fullScreen = useMediaQuery(theme.breakpoints.down("lg"));
  const [isLoading, setLoading] = useState(false);
 
+ const [cp, setCP] = useState({});
  const [data, setData] = useState([]);
  const [rawData, setRawData] = useState([]);
  const [useFilters, setUseFilters] = useState(true);
+
+ const [open2, setOpen2] = useState(false);
+ const handleOpen2 = () => setOpen2(true);
+ const handleClose2 = () => setOpen2(false);
 
  function formatDateToYYYYMMDD(date) {
   return date.toISOString().slice(0, 10);
@@ -303,7 +309,8 @@ export default function ResponsiveDialog({ open, setOpen, shift }) {
   positionActionsColumn: "last",
   renderRowActions: ({ row }) => (
    <Button color="primary" className="text-white" radius="full" size='sm' onPress={() => {
-    asignar_viaje(row.original.id);
+    setCP(row.original);
+    handleOpen2();
    }}>
     Seleccionar
    </Button>
@@ -386,6 +393,7 @@ export default function ResponsiveDialog({ open, setOpen, shift }) {
  });
 
  return (<>
+  <AsignacionViaje open={open2} onClose={handleClose2} cp={cp} shift={shift}></AsignacionViaje>
   <Dialog
    open={open}
    onClose={(event, reason) => {
