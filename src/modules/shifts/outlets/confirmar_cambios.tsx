@@ -55,8 +55,14 @@ const AsignacionViaje: React.FC<Props> = ({ open, onClose, cp, shift }) => {
     });
   }, [cp, open, reset]);
 
+  React.useEffect(() => {
+    if (asignarViajeMutation.isSuccess) {
+      //onClose();
+    }
+  }, [asignarViajeMutation.isSuccess, onClose]);
+
   const onSubmit = (data: FormValues) => {
-    if (!cp?.id) return;
+    if (!cp?.id || !shift?.id) return;
 
     asignarViajeMutation.mutate({
       shiftId: shift.id,
@@ -74,8 +80,13 @@ const AsignacionViaje: React.FC<Props> = ({ open, onClose, cp, shift }) => {
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="lg">
       <DialogTitle>Asignación de viaje</DialogTitle>
 
-      <DialogContent>
+      <DialogContent dividers>
         {/* INFO */}
+
+        <h2 className="text-sm font-semibold text-gray-700 mb-2">
+          Información del viaje
+        </h2>
+
         <div className="grid grid-cols-4 gap-x-6 gap-y-2 text-sm mb-4">
 
           <span className="text-gray-500">Turno</span>
@@ -102,7 +113,7 @@ const AsignacionViaje: React.FC<Props> = ({ open, onClose, cp, shift }) => {
 
         {/* FECHAS */}
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-sm mb-6">
             <Controller
               name="date_start"
               control={control}
@@ -111,6 +122,9 @@ const AsignacionViaje: React.FC<Props> = ({ open, onClose, cp, shift }) => {
                   label="Inicio programado"
                   value={field.value}
                   onChange={field.onChange}
+                  slotProps={{
+                    textField: { fullWidth: true },
+                  }}
                 />
               )}
             />
@@ -123,6 +137,9 @@ const AsignacionViaje: React.FC<Props> = ({ open, onClose, cp, shift }) => {
                   label="Llegada a planta programada"
                   value={field.value}
                   onChange={field.onChange}
+                  slotProps={{
+                    textField: { fullWidth: true },
+                  }}
                 />
               )}
             />

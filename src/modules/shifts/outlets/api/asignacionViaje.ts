@@ -3,7 +3,7 @@ import odooApi from "@/api/odoo-api";
 
 interface ApiSuccessResponse {
  status: string;
- menssage: string;
+ message: string;
 }
 
 export interface AsignacionViajePayload {

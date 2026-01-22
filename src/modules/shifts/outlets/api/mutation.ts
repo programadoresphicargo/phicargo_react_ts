@@ -18,7 +18,7 @@ export const useAsignarViaje = () => {
   mutationFn: ({ shiftId, payload }: AsignarViajeVars) =>
    postAsignacionViaje(shiftId, payload),
   onSuccess: (data) => {
-   toast.success(data.menssage);
+   toast.success(data.message);
   },
   onError: (error: AxiosError<ApiError>) => {
    toast.error("Error completo:" + error);
