@@ -9,11 +9,6 @@ interface AsignarViajeVars {
  payload: AsignacionViajePayload;
 }
 
-interface ApiSuccessResponse {
- status: string;
- menssage: string;
-}
-
 interface ApiError {
  detail: string;
 }
