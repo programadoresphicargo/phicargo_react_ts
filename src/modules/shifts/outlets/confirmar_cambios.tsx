@@ -60,7 +60,7 @@ const AsignacionViaje: React.FC<Props> = ({ open, onClose, cp, shift }) => {
         ? dayjs.utc(cp.x_date_arrival_shed).tz("America/Mexico_City")
         : null,
 
-      x_eco_bel_id: null,
+      x_eco_bel_id: cp?.x_eco_bel_id ?? shift?.vehicle?.id ?? null,
     });
   }, [cp, open, reset]);
 
@@ -83,7 +83,7 @@ const AsignacionViaje: React.FC<Props> = ({ open, onClose, cp, shift }) => {
         x_date_arrival_shed: data.x_date_arrival_shed
           ? data.x_date_arrival_shed.utc().format()
           : null,
-        x_eco_bel_id: data.x_eco_bel_id,
+        x_eco_bel_id: data.x_eco_bel_id ? data.x_eco_bel_id : null,
       },
     }, {
       onSuccess: () => {
@@ -104,9 +104,6 @@ const AsignacionViaje: React.FC<Props> = ({ open, onClose, cp, shift }) => {
         </h2>
 
         <div className="grid grid-cols-4 gap-x-6 gap-y-2 text-sm mb-4">
-
-          <span className="font-medium">{cp?.date_start}</span>
-          <span className="font-medium">{cp?.x_date_arrival_shed}</span>
 
           <span className="text-gray-500">Turno</span>
           <span className="font-medium">{shift?.id}</span>
