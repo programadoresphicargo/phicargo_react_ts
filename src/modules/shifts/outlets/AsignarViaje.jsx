@@ -52,7 +52,7 @@ export default function ResponsiveDialog({ open, setOpen, shift }) {
 
  const [open2, setOpen2] = useState(false);
  const handleOpen2 = () => setOpen2(true);
- const handleClose2 = () => setOpen2(false);
+ const handleClose2 = () => { setOpen2(false); fetchData(); };
 
  function formatDateToYYYYMMDD(date) {
   return date.toISOString().slice(0, 10);

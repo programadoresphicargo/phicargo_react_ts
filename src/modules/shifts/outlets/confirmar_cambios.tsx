@@ -85,6 +85,10 @@ const AsignacionViaje: React.FC<Props> = ({ open, onClose, cp, shift }) => {
           : null,
         x_eco_bel_id: data.x_eco_bel_id,
       },
+    }, {
+      onSuccess: () => {
+        onClose(); // 👈 AQUÍ se cierra el diálogo
+      },
     });
   };
 
