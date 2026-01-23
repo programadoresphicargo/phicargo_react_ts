@@ -125,90 +125,102 @@ const AsignacionViaje: React.FC<Props> = ({ open, onClose, cp, shift }) => {
       <DialogContent dividers>
         {/* INFO */}
 
-        <h2 className="text-sm font-semibold text-gray-700 mb-2">
-          Información del viaje
-        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
-        <div className="grid grid-cols-4 gap-x-6 gap-y-2 text-sm mb-4">
+          {/* ⬅️ IZQUIERDA: INFO DEL VIAJE */}
+          <div>
 
-          <span className="text-gray-500">Turno</span>
-          <span className="font-medium">{shift?.id}</span>
+            <h2 className="text-sm font-semibold text-gray-700 mb-2">
+              Información del viaje
+            </h2>
 
-          <span className="text-gray-500">ID</span>
-          <span className="font-medium">{cp?.id}</span>
+            <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-sm mb-4">
 
-          <span className="text-gray-500">Carta porte</span>
-          <span className="font-medium">{cp?.name}</span>
+              <span className="text-gray-500">Turno</span>
+              <span className="font-medium">{shift?.id}</span>
 
-          <span className="text-gray-500">Cliente</span>
-          <span className="font-medium">{cp?.cliente}</span>
+              <span className="text-gray-500">ID</span>
+              <span className="font-medium">{cp?.id}</span>
 
-          <span className="text-gray-500">Modo</span>
-          <span className="font-medium">{cp?.x_modo_bel}</span>
+              <span className="text-gray-500">Carta porte</span>
+              <span className="font-medium">{cp?.name}</span>
 
-          <span className="text-gray-500">Tipo</span>
-          <span className="font-medium">{cp?.x_tipo_bel}</span>
+              <span className="text-gray-500">Cliente</span>
+              <span className="font-medium">{cp?.cliente}</span>
 
-          <span className="text-gray-500">Ruta</span>
-          <span className="font-medium">{cp?.x_ruta_bel}</span>
+              <span className="text-gray-500">Modo</span>
+              <span className="font-medium">{cp?.x_modo_bel}</span>
 
-          <span className="text-gray-500">Custodia</span>
-          <span className="font-medium">{cp?.x_custodia_bel}</span>
-        </div>
+              <span className="text-gray-500">Tipo</span>
+              <span className="font-medium">{cp?.x_tipo_bel}</span>
 
-        {/* FECHAS */}
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-sm mb-6">
-            <Controller
-              name="date_start"
-              control={control}
-              rules={{ required: "El inicio programado es obligatorio" }}
-              render={({ field }) => (
-                <DateTimePicker
-                  label="Inicio programado"
-                  value={field.value}
-                  onChange={field.onChange}
-                  slotProps={{
-                    textField: {
-                      fullWidth: true,
-                      size: 'small',
-                      error: !!errors.date_start,
-                      helperText: errors.date_start?.message,
-                    },
-                  }}
-                />
-              )}
-            />
+              <span className="text-gray-500">Ruta</span>
+              <span className="font-medium">{cp?.x_ruta_bel}</span>
 
-            <Controller
-              name="x_date_arrival_shed"
-              control={control}
-              rules={{ required: "Llegada a planta programada es obligatoria" }}
-              render={({ field }) => (
-                <DateTimePicker
-                  label="Llegada a planta programada"
-                  value={field.value}
-                  onChange={field.onChange}
-                  slotProps={{
-                    textField: {
-                      fullWidth: true,
-                      size: 'small',
-                      error: !!errors.x_date_arrival_shed,
-                      helperText: errors.x_date_arrival_shed?.message,
-                    },
-                  }}
-                />
-              )}
-            />
-            <VehicleAutocompleteInput
-              control={control}
-              name="x_eco_bel_id"
-              label="ECO Programado"
-              setValue={setValue}
-              helperText="El ECO es obligatorio"
-              rules={{ required: "El ECO es obligatorio" }} />
+              <span className="text-gray-500">Custodia</span>
+              <span className="font-medium">{cp?.x_custodia_bel}</span>
+            </div>
+
           </div>
-        </LocalizationProvider>
+
+          {/* ➡️ DERECHA: FORMULARIO */}
+          <div>
+            {/* FECHAS */}
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <div className="flex flex-col gap-4 text-sm mb-6">
+                <Controller
+                  name="date_start"
+                  control={control}
+                  rules={{ required: "El inicio programado es obligatorio" }}
+                  render={({ field }) => (
+                    <DateTimePicker
+                      label="Inicio programado"
+                      value={field.value}
+                      onChange={field.onChange}
+                      slotProps={{
+                        textField: {
+                          fullWidth: true,
+                          size: 'small',
+                          error: !!errors.date_start,
+                          helperText: errors.date_start?.message,
+                        },
+                      }}
+                    />
+                  )}
+                />
+
+                <Controller
+                  name="x_date_arrival_shed"
+                  control={control}
+                  rules={{ required: "Llegada a planta programada es obligatoria" }}
+                  render={({ field }) => (
+                    <DateTimePicker
+                      label="Llegada a planta programada"
+                      value={field.value}
+                      onChange={field.onChange}
+                      slotProps={{
+                        textField: {
+                          fullWidth: true,
+                          size: 'small',
+                          error: !!errors.x_date_arrival_shed,
+                          helperText: errors.x_date_arrival_shed?.message,
+                        },
+                      }}
+                    />
+                  )}
+                />
+                <VehicleAutocompleteInput
+                  control={control}
+                  name="x_eco_bel_id"
+                  label="ECO Programado"
+                  setValue={setValue}
+                  helperText="El ECO es obligatorio"
+                  rules={{ required: "El ECO es obligatorio" }} />
+              </div>
+            </LocalizationProvider>
+          </div>
+
+        </div>
       </DialogContent>
 
       <DialogActions>
