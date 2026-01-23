@@ -26,6 +26,7 @@ export const VehicleAutocompleteInput = <T extends FieldValues>(
       control={control}
       name={name}
       label={label}
+      rules={props.rules}
       loading={vehicleQuery.isLoading}
       options={
         vehicleQuery.data?.map((v) => ({

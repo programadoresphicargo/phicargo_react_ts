@@ -174,6 +174,7 @@ const AsignacionViaje: React.FC<Props> = ({ open, onClose, cp, shift }) => {
               name="x_eco_bel_id"
               label="ECO Programado"
               setValue={setValue}
+              helperText="El ECO es obligatorio"
               rules={{ required: "El ECO es obligatorio" }} />
           </div>
         </LocalizationProvider>
