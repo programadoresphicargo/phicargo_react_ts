@@ -18,6 +18,11 @@ import { CartaPorte } from "./types.ts";
 import { VehicleAutocompleteInput } from "@/modules/vehicles/components/VehicleAutocompleteInput.tsx";
 import { useAsignarViaje } from "./api/mutation.ts";
 import { Shift } from "../models/shift-model.ts";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 interface Props {
   open: boolean;
@@ -47,10 +52,14 @@ const AsignacionViaje: React.FC<Props> = ({ open, onClose, cp, shift }) => {
   // 🔄 Sincronizar datos cuando cambia cp
   React.useEffect(() => {
     reset({
-      date_start: cp?.date_start ? dayjs(cp.date_start) : null,
-      x_date_arrival_shed: cp?.x_date_arrival_shed
-        ? dayjs(cp.x_date_arrival_shed)
+      date_start: cp?.date_start
+        ? dayjs.utc(cp.date_start).tz("America/Mexico_City")
         : null,
+
+      x_date_arrival_shed: cp?.x_date_arrival_shed
+        ? dayjs.utc(cp.x_date_arrival_shed).tz("America/Mexico_City")
+        : null,
+
       x_eco_bel_id: null,
     });
   }, [cp, open, reset]);
@@ -67,10 +76,13 @@ const AsignacionViaje: React.FC<Props> = ({ open, onClose, cp, shift }) => {
     asignarViajeMutation.mutate({
       shiftId: shift.id,
       payload: {
-        id_cp: cp?.id,
-        date_start: data.date_start?.format("YYYY-MM-DDTHH:mm") ?? null,
-        x_date_arrival_shed:
-          data.x_date_arrival_shed?.format("YYYY-MM-DDTHH:mm") ?? null,
+        id_cp: cp.id,
+        date_start: data.date_start
+          ? data.date_start.utc().format()
+          : null,
+        x_date_arrival_shed: data.x_date_arrival_shed
+          ? data.x_date_arrival_shed.utc().format()
+          : null,
         x_eco_bel_id: data.x_eco_bel_id,
       },
     });
@@ -88,6 +100,9 @@ const AsignacionViaje: React.FC<Props> = ({ open, onClose, cp, shift }) => {
         </h2>
 
         <div className="grid grid-cols-4 gap-x-6 gap-y-2 text-sm mb-4">
+
+          <span className="font-medium">{cp?.date_start}</span>
+          <span className="font-medium">{cp?.x_date_arrival_shed}</span>
 
           <span className="text-gray-500">Turno</span>
           <span className="font-medium">{shift?.id}</span>
