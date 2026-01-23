@@ -24,6 +24,7 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
+import { useNavigate } from "react-router-dom";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -43,6 +44,7 @@ interface FormValues {
 
 const AsignacionViaje: React.FC<Props> = ({ open, onClose, cp, shift }) => {
 
+  const navigate = useNavigate();
   const asignarViajeMutation = useAsignarViaje();
 
   const { control, reset, handleSubmit, setValue, formState: { errors }, } = useForm<FormValues>({
@@ -91,7 +93,7 @@ const AsignacionViaje: React.FC<Props> = ({ open, onClose, cp, shift }) => {
       },
     }, {
       onSuccess: () => {
-        onClose(); // 👈 AQUÍ se cierra el diálogo
+        navigate('/turnos');
       },
     });
   };
@@ -165,6 +167,10 @@ const AsignacionViaje: React.FC<Props> = ({ open, onClose, cp, shift }) => {
 
           {/* ➡️ DERECHA: FORMULARIO */}
           <div>
+
+            <h2 className="text-sm font-semibold text-gray-700 mb-5">
+              Programación
+            </h2>
             {/* FECHAS */}
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <div className="flex flex-col gap-4 text-sm mb-6">
