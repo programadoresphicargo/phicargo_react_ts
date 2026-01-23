@@ -20,6 +20,11 @@ import { useAsignarViaje } from "./api/mutation.ts";
 import { Shift } from "../models/shift-model.ts";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import CloseIcon from '@mui/icons-material/Close';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -94,7 +99,29 @@ const AsignacionViaje: React.FC<Props> = ({ open, onClose, cp, shift }) => {
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="lg">
-      <DialogTitle>Asignación de viaje</DialogTitle>
+
+      <AppBar sx={{
+        position: 'relative',
+        background: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
+        color: 'white',
+      }} elevation={0}>
+        <Toolbar>
+          <IconButton
+            edge="start"
+            color="inherit"
+            onClick={() => onClose()}
+            aria-label="close"
+          >
+            <CloseIcon />
+          </IconButton>
+          <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+            Asignación de viaje
+          </Typography>
+          <Button autoFocus color="inherit" onClick={() => onClose()}>
+            Cancelar
+          </Button>
+        </Toolbar>
+      </AppBar>
 
       <DialogContent dividers>
         {/* INFO */}
@@ -125,6 +152,9 @@ const AsignacionViaje: React.FC<Props> = ({ open, onClose, cp, shift }) => {
 
           <span className="text-gray-500">Ruta</span>
           <span className="font-medium">{cp?.x_ruta_bel}</span>
+
+          <span className="text-gray-500">Custodia</span>
+          <span className="font-medium">{cp?.x_custodia_bel}</span>
         </div>
 
         {/* FECHAS */}
@@ -142,6 +172,7 @@ const AsignacionViaje: React.FC<Props> = ({ open, onClose, cp, shift }) => {
                   slotProps={{
                     textField: {
                       fullWidth: true,
+                      size: 'small',
                       error: !!errors.date_start,
                       helperText: errors.date_start?.message,
                     },
@@ -162,6 +193,7 @@ const AsignacionViaje: React.FC<Props> = ({ open, onClose, cp, shift }) => {
                   slotProps={{
                     textField: {
                       fullWidth: true,
+                      size: 'small',
                       error: !!errors.x_date_arrival_shed,
                       helperText: errors.x_date_arrival_shed?.message,
                     },

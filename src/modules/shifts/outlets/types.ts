@@ -10,4 +10,5 @@ export interface CartaPorte {
  x_eco_bel_id?: number;
  cliente?: string;
  x_ruta_bel?: string;
+ x_custodia_bel?: string;
 }
