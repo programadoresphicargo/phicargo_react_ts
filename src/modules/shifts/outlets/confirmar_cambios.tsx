@@ -41,7 +41,7 @@ const AsignacionViaje: React.FC<Props> = ({ open, onClose, cp, shift }) => {
 
   const asignarViajeMutation = useAsignarViaje();
 
-  const { control, reset, handleSubmit, setValue } = useForm<FormValues>({
+  const { control, reset, handleSubmit, setValue, formState: { errors }, } = useForm<FormValues>({
     defaultValues: {
       date_start: null,
       x_date_arrival_shed: null,
@@ -132,13 +132,18 @@ const AsignacionViaje: React.FC<Props> = ({ open, onClose, cp, shift }) => {
             <Controller
               name="date_start"
               control={control}
+              rules={{ required: "El inicio programado es obligatorio" }}
               render={({ field }) => (
                 <DateTimePicker
                   label="Inicio programado"
                   value={field.value}
                   onChange={field.onChange}
                   slotProps={{
-                    textField: { fullWidth: true },
+                    textField: {
+                      fullWidth: true,
+                      error: !!errors.date_start,
+                      helperText: errors.date_start?.message,
+                    },
                   }}
                 />
               )}
@@ -147,13 +152,18 @@ const AsignacionViaje: React.FC<Props> = ({ open, onClose, cp, shift }) => {
             <Controller
               name="x_date_arrival_shed"
               control={control}
+              rules={{ required: "Llegada a planta programada es obligatoria" }}
               render={({ field }) => (
                 <DateTimePicker
                   label="Llegada a planta programada"
                   value={field.value}
                   onChange={field.onChange}
                   slotProps={{
-                    textField: { fullWidth: true },
+                    textField: {
+                      fullWidth: true,
+                      error: !!errors.x_date_arrival_shed,
+                      helperText: errors.x_date_arrival_shed?.message,
+                    },
                   }}
                 />
               )}
@@ -162,7 +172,8 @@ const AsignacionViaje: React.FC<Props> = ({ open, onClose, cp, shift }) => {
               control={control}
               name="x_eco_bel_id"
               label="ECO Programado"
-              setValue={setValue} />
+              setValue={setValue}
+              rules={{ required: "El ECO es obligatorio" }} />
           </div>
         </LocalizationProvider>
       </DialogContent>
