@@ -9,6 +9,8 @@ import dayjs from 'dayjs';
 
 type KmData = {
   total_km: number | null;
+  travels_full: number | null;
+  travels_single: number | null;
 };
 
 export const useShiftColumns = (
@@ -138,12 +140,40 @@ export const useShiftColumns = (
         header: 'Kilómetros recorridos',
         id: 'km',
         Cell: ({ row }) => {
-          const kmData = kmByKey[row.original.shift];
-          const km = kmData?.total_km;
+          const travelData = kmByKey[row.original.shift];
+          const km = travelData?.total_km;
 
           return (
             <span className="text-sm font-semibold text-green-600">
               {km != null ? `${km} km` : '—'}
+            </span>
+          );
+        },
+      },
+      {
+        header: 'Viajes full',
+        id: 'travels_full',
+        Cell: ({ row }) => {
+          const travelData = kmByKey[row.original.shift];
+          const travels = travelData?.travels_full;
+
+          return (
+            <span>
+              {travels != null ? `${travels}` : '—'}
+            </span>
+          );
+        },
+      },
+      {
+        header: 'Viajes sencillos',
+        id: 'travels_single',
+        Cell: ({ row }) => {
+          const travelsData = kmByKey[row.original.shift];
+          const travels = travelsData?.travels_single;
+
+          return (
+            <span>
+              {travels != null ? `${travels}` : '—'}
             </span>
           );
         },

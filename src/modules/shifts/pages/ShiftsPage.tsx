@@ -23,6 +23,8 @@ const ShiftsPage = () => {
 
   type KmData = {
     total_km: number | null;
+    travels_full: number | null;
+    travels_single: number | null;
   };
 
   const [kmByKey, setKmByKey] = useState<Record<string, KmData>>({});
