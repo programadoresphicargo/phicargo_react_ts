@@ -151,6 +151,11 @@ const CartasPorte = () => {
         header: 'Estado CP',
         size: 150,
       },
+      {
+        accessorKey: 'x_modo_bel',
+        header: 'Modo',
+        size: 150,
+      },
     ],
     [],
   );
