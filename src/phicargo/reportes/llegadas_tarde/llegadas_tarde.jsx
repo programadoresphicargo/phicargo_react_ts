@@ -105,6 +105,8 @@ const DetencionesTable = () => {
     { accessorKey: 'nombre_justificacion_salida', header: 'Estatus justificante' },
     { accessorKey: 'llegada_planta_programada', header: 'Llegada a planta programada' },
     { accessorKey: 'llegada_planta', header: 'Llegada a planta reportada' },
+    { accessorKey: 'id_usuario', header: 'Usuario' },
+    { accessorKey: 'tipo_registrante', header: 'Tipo registrante' },
     { accessorKey: 'diferencia_tiempo_llegada', header: 'Diferencia tiempo planta' },
     {
       accessorKey: 'arrival_status',

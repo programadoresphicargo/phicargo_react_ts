@@ -84,6 +84,8 @@ export const UnarchiveDialog = ({ isOpen, onClose, shiftId }: Props) => {
               items={[
                 { key: 'CAMBIO DE OPERADOR', value: 'CAMBIO DE OPERADOR' },
                 { key: 'ERROR DE ASIGNACION', value: 'ERROR DE ASIGNACION' },
+                { key: 'VIAJE BOTADO', value: 'VIAJE BOTADO' },
+                { key: 'NO SALIO EL VIAJE', value: 'NO SALIO EL VIAJE' },
               ]}
               rules={{ required: 'Este campo es requerido' }}
             />
