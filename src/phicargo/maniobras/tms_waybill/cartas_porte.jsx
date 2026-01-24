@@ -146,6 +146,11 @@ const CartasPorte = () => {
         header: 'Ejecutivo',
         size: 150,
       },
+      {
+        accessorKey: 'state',
+        header: 'Estado CP',
+        size: 150,
+      },
     ],
     [],
   );
