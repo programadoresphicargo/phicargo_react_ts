@@ -1,4 +1,4 @@
-import { Button, Chip, DatePicker } from "@heroui/react";
+import { Button, Chip, DatePicker, Link } from "@heroui/react";
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 import React, { useEffect, useState } from 'react';
 import { download, generateCsv, mkConfig } from 'export-to-csv';
@@ -14,6 +14,7 @@ import { useDateFormatter } from "@react-aria/i18n";
 import { DateRangePicker } from 'rsuite';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import CustomNavbar from "@/pages/CustomNavbar";
+const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
 const DetencionesTable = () => {
 
@@ -235,6 +236,18 @@ const DetencionesTable = () => {
           radius="full"
         >
           Refrescar
+        </Button>
+
+        <Button
+          radius="full"
+          showAnchorIcon
+          as={Link}
+          isExternal={true}
+          color="danger"
+          href={`${apiUrl}/tms_travel/reporte_llegadas_tarde/?fecha_inicio=${range[0].toISOString().slice(0, 10)}&fecha_fin=${range[1].toISOString().slice(0, 10)}`}
+          variant="solid"
+        >
+          Reporte descuentos
         </Button>
       </Box >
     ),
