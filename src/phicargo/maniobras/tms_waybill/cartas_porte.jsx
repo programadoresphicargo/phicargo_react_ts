@@ -73,10 +73,6 @@ const CartasPorte = () => {
   const columns = useMemo(
     () => [
       {
-        accessorKey: 'empresa',
-        header: 'Empresa',
-      },
-      {
         accessorKey: 'sucursal',
         header: 'Sucursal',
       },
