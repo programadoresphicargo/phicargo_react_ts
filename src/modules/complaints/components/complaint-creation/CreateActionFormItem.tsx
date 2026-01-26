@@ -1,4 +1,4 @@
-import { Control, Path, TextFieldElement } from 'react-hook-form-mui';
+import { Control, Path, SelectElement, TextFieldElement } from 'react-hook-form-mui';
 
 import { Button } from '@/components/ui';
 import { ComplaintActionCreate } from '../../models';
@@ -22,6 +22,19 @@ export const CreateActionFormItem = <T extends ComplaintActionCreateForm>({
 }: Props<T>) => {
   return (
     <div className="flex flex-col gap-4 border p-4 rounded-md">
+
+      <SelectElement
+        control={control}
+        name={`actions.${index}.type` as Path<T>}
+        label="Tipo"
+        size="small"
+        required
+        options={[
+          { id: 'plan de accion', label: 'Plan de acción' },
+          { id: 'accion inmediata', label: 'Acción inmediata' },
+        ]}
+      />
+
       <TextFieldElement
         control={control}
         name={`actions.${index}.actionPlan` as Path<T>} // Aserción de tipo

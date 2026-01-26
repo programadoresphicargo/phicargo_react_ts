@@ -48,6 +48,7 @@ export const CreateActionsForm = <T extends ComplaintActionCreateForm>({
             actionPlan: '',
             responsible: '',
             commitmentDate: dayjs(),
+            type: '',
           })
         }
         variant="outlined"

@@ -6,6 +6,7 @@ export interface ComplaintActionBaseApi {
   action_plan: string;
   responsible: string;
   commitment_date: string;
+  type: string;
 }
 
 export interface ComplaintActionApi extends ComplaintActionBaseApi {

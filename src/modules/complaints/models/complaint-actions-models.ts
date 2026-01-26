@@ -12,6 +12,7 @@ export interface ComplaintActionBase {
   actionPlan: string;
   responsible: string;
   commitmentDate: Dayjs;
+  type: string;
 }
 
 export interface ComplaintAction extends ComplaintActionBase {

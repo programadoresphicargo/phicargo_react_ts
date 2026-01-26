@@ -20,6 +20,7 @@ export class ComplaintActionsAdapter {
       actionPlan: data.action_plan,
       responsible: data.responsible,
       status: data.status,
+      type: data.type,
       commitmentDate: dayjs(data.commitment_date),
       createdAt: dayjs(data.created_at),
       createdBy: UserAdapter.userReadToLocal(data.created_by),
@@ -34,6 +35,7 @@ export class ComplaintActionsAdapter {
       action_plan: data.actionPlan,
       responsible: data.responsible,
       commitment_date: data.commitmentDate.format('YYYY-MM-DD'),
+      type: data.type
     };
   }
 

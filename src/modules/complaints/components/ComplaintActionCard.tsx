@@ -33,6 +33,9 @@ export const ComplaintActionCard = ({ action }: Props) => {
             {action.actionPlan}
           </p>
 
+          <span className="text-sm text-gray-500">
+            Tipo: {action.type}
+          </span>
           {/* Información de creación */}
           <div className="text-xs text-gray-400">
             Creado por{' '}
