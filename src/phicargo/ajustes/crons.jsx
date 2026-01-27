@@ -3,6 +3,7 @@ import axios from "axios";
 import odooApi from "../../api/odoo-api";
 import CustomNavbar from "@/pages/CustomNavbar";
 import { pages } from "./pages";
+import { Button } from "@heroui/react";
 
 export default function CronManager() {
  const [hora, setHora] = useState("");
@@ -67,7 +68,7 @@ export default function CronManager() {
      <input type="number" placeholder="Minuto (0-59)" value={minuto} onChange={e => setMinuto(e.target.value)} required />
      <input type="text" placeholder="Días semana (mon,fri)" value={diaSemana} onChange={e => setDiaSemana(e.target.value)} required />
      <input type="text" placeholder="URL" value={url} onChange={e => setUrl(e.target.value)} required />
-     <button type="submit">Guardar Job</button>
+     <Button type="submit" color="primary" radius="full">Guardar Job</Button>
     </form>
 
     <h2 style={{ marginTop: "30px" }}>Jobs Activos</h2>
@@ -75,7 +76,7 @@ export default function CronManager() {
      {jobs.map((job) => (
       <li key={job.id}>
        {job.id} → Próxima ejecución: {job.next_run}{" "}
-       <button onClick={() => handleDelete(job.id)}>Eliminar</button>
+       <Button onClick={() => handleDelete(job.id)} color="success" className="text-white" size="sm" radius="full">Eliminar</Button>
       </li>
      ))}
     </ul>
