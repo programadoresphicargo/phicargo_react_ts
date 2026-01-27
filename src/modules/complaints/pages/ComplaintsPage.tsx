@@ -23,7 +23,7 @@ const dialogProps: DialogProps = {
   slots: {
     transition: MuiTransition,
   },
-  maxWidth: 'md',
+  maxWidth: 'xl',
   disableEnforceFocus: true,
   disableScrollLock: true,
   open: true,
