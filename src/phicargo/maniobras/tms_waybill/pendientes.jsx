@@ -207,6 +207,7 @@ const ContenedoresPendientes = () => {
           gap: '16px',
           padding: '8px',
           alignItems: 'center',
+          width: '100%',
         }}
       >
         <h1
@@ -216,7 +217,6 @@ const ContenedoresPendientes = () => {
         </h1>
         <Button
           color='success'
-          fullWidth
           className='text-white'
           startContent={<i class="bi bi-file-earmark-excel"></i>}
           onPress={() => exportToCSV(data, columns, "contenedores.csv")}
@@ -225,7 +225,6 @@ const ContenedoresPendientes = () => {
         </Button>
         <Button
           color='danger'
-          fullWidth
           className='text-white'
           startContent={<i class="bi bi-arrow-clockwise"></i>}
           onPress={() => fetchData()}
