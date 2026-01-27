@@ -231,7 +231,7 @@ const DetencionesTable = () => {
         </Button>
 
         <Button
-          color='danger'
+          color='secondary'
           onPress={() => fetchData()}
           radius="full"
         >
