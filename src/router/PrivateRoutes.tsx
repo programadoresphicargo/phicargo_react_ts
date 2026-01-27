@@ -24,6 +24,9 @@ import { useCheckVersion } from '@/useCheckVersion';
 const CartasPorte = lazy(
   () => import('../phicargo/maniobras/tms_waybill/cartas_porte'),
 );
+const ContenedoresPendientes = lazy(
+  () => import('../phicargo/maniobras/tms_waybill/pendientes'),
+);
 const ControlManiobras = lazy(
   () => import('../phicargo/maniobras/control/control'),
 );
@@ -598,6 +601,15 @@ export const PrivateRoutes = () => {
           element={
             <Suspense fallback={<LoadingPage />}>
               <CronManager></CronManager>
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/contenedores_pendientes"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <ContenedoresPendientes></ContenedoresPendientes>
             </Suspense>
           }
         />

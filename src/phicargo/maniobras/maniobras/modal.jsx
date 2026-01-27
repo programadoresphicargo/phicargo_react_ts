@@ -19,7 +19,8 @@ const RegistroManiobrasCP = ({ show, handleClose, data }) => {
             <Dialog
                 open={show}
                 onClose={handleClose}
-                fullScreen
+                fullWidth
+                maxWidth="xl"
                 TransitionComponent={Transition}
             >
                 <AppBar elevation={0}
