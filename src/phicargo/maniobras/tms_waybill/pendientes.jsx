@@ -66,6 +66,10 @@ const ContenedoresPendientes = () => {
         header: 'Carta porte',
       },
       {
+        accessorKey: 'categoria',
+        header: 'Categoria',
+      },
+      {
         accessorKey: 'cliente',
         header: 'Cliente',
       },
