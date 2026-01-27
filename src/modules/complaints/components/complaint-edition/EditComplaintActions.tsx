@@ -62,9 +62,24 @@ export const EditComplaintActions = ({ complaint }: Props) => {
           color="secondary"
         />
       )}
-      {actions?.map((action) => (
-        <ComplaintActionCard key={action.id} action={action} />
-      ))}
+
+      <section className="px-2 space-y-3">
+        <h2 className='text-lg font-semibold text-gray-700 flex items-center gap-2'>Plan de Acción</h2>
+        {actions
+          ?.filter(action => action.type === 'plan de accion')
+          .map(action => (
+            <ComplaintActionCard key={action.id} action={action} />
+          ))}
+      </section>
+
+      <section className="px-2 space-y-3">
+        <h2 className='text-lg font-semibold text-gray-700 flex items-center gap-2'>Acción Inmediata</h2>
+        {actions
+          ?.filter(action => action.type === 'accion inmediata')
+          .map(action => (
+            <ComplaintActionCard key={action.id} action={action} />
+          ))}
+      </section>
 
       <CreateActionsForm
         fields={fields}
