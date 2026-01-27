@@ -5,96 +5,80 @@ import CustomNavbar from "@/pages/CustomNavbar";
 import { pages } from "./pages";
 
 export default function CronManager() {
+ const [hora, setHora] = useState("");
+ const [minuto, setMinuto] = useState("");
+ const [diaSemana, setDiaSemana] = useState("");
+ const [jobId, setJobId] = useState("");
+ const [url, setUrl] = useState("");
  const [jobs, setJobs] = useState([]);
- const [form, setForm] = useState({
-  minuto: "0",
-  hora: "10",
-  dia_mes: "*",
-  mes: "*",
-  dia_semana: "1,4",
-  command: "",
-  comentario: ""
- });
 
- const api = "/cron_manager/";
-
- // ---------------- Listar cron jobs ----------------
- const fetchJobs = async () => {
-  const res = await odooApi.get(api);
-  setJobs(res.data);
- };
+ const API_URL = "/cron_manager";
 
  useEffect(() => {
   fetchJobs();
  }, []);
 
- // ---------------- Crear o Modificar ----------------
- const handleSubmit = async (e) => {
-  e.preventDefault();
+ const fetchJobs = async () => {
   try {
-   const existing = jobs.find(j => j.comentario === form.comentario);
-   if (existing) {
-    await odooApi.put(`${api}/${form.comentario}`, form);
-    alert("Cron modificado");
-   } else {
-    await odooApi.post(api, form);
-    alert("Cron creado");
-   }
-   fetchJobs();
+   const res = await odooApi.get(`${API_URL}/cron`);
+   setJobs(res.data);
   } catch (err) {
-   alert(err.response?.data?.detail || err.message);
+   console.error(err);
   }
  };
 
- // ---------------- Eliminar ----------------
- const handleDelete = async (comentario) => {
-  if (!window.confirm("¿Eliminar este cron?")) return;
-  await odooApi.delete(`${api}/${comentario}`);
-  fetchJobs();
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+   const payload = {
+    hora: parseInt(hora),
+    minuto: parseInt(minuto),
+    dia_semana: diaSemana,
+    job_id: jobId,
+    url: url
+   };
+   await odooApi.post(`${API_URL}/cron`, payload);
+   alert("Job creado/actualizado");
+   fetchJobs();
+  } catch (err) {
+   console.error(err);
+   alert("Error creando job");
+  }
+ };
+
+ const handleDelete = async (id) => {
+  try {
+   await odooApi.delete(`${API_URL}/cron/${id}`);
+   fetchJobs();
+  } catch (err) {
+   console.error(err);
+   alert("Error eliminando job");
+  }
  };
 
  return (
   <>
    <CustomNavbar pages={pages}></CustomNavbar>
    <div style={{ padding: "20px" }}>
-    <h2>Cron Jobs Manager</h2>
-
-    {/* Formulario */}
-    <form onSubmit={handleSubmit} style={{ marginBottom: "20px" }}>
-     <input placeholder="Comentario" value={form.comentario} onChange={e => setForm({ ...form, comentario: e.target.value })} required />
-     <input placeholder="Minuto" value={form.minuto} onChange={e => setForm({ ...form, minuto: e.target.value })} />
-     <input placeholder="Hora" value={form.hora} onChange={e => setForm({ ...form, hora: e.target.value })} />
-     <input placeholder="Día mes" value={form.dia_mes} onChange={e => setForm({ ...form, dia_mes: e.target.value })} />
-     <input placeholder="Mes" value={form.mes} onChange={e => setForm({ ...form, mes: e.target.value })} />
-     <input placeholder="Día semana" value={form.dia_semana} onChange={e => setForm({ ...form, dia_semana: e.target.value })} />
-     <input placeholder="Comando" value={form.command} onChange={e => setForm({ ...form, command: e.target.value })} required />
-     <button type="submit">Guardar</button>
+    <h2>Crear / Actualizar Cron Job</h2>
+    <form onSubmit={handleSubmit}>
+     <input type="text" placeholder="Job ID" value={jobId} onChange={e => setJobId(e.target.value)} required />
+     <input type="number" placeholder="Hora (0-23)" value={hora} onChange={e => setHora(e.target.value)} required />
+     <input type="number" placeholder="Minuto (0-59)" value={minuto} onChange={e => setMinuto(e.target.value)} required />
+     <input type="text" placeholder="Días semana (mon,fri)" value={diaSemana} onChange={e => setDiaSemana(e.target.value)} required />
+     <input type="text" placeholder="URL" value={url} onChange={e => setUrl(e.target.value)} required />
+     <button type="submit">Guardar Job</button>
     </form>
 
-    {/* Lista de cron jobs */}
-    <table border="1" cellPadding="5">
-     <thead>
-      <tr>
-       <th>Comentario</th>
-       <th>Horario</th>
-       <th>Comando</th>
-       <th>Acciones</th>
-      </tr>
-     </thead>
-     <tbody>
-      {jobs.map(j => (
-       <tr key={j.comentario}>
-        <td>{j.comentario}</td>
-        <td>{`${j.minuto} ${j.hora} ${j.dia_mes} ${j.mes} ${j.dia_semana}`}</td>
-        <td>{j.command}</td>
-        <td>
-         <button onClick={() => setForm(j)}>Editar</button>
-         <button onClick={() => handleDelete(j.comentario)}>Eliminar</button>
-        </td>
-       </tr>
-      ))}
-     </tbody>
-    </table>
+    <h2 style={{ marginTop: "30px" }}>Jobs Activos</h2>
+    <ul>
+     {jobs.map((job) => (
+      <li key={job.id}>
+       {job.id} → Próxima ejecución: {job.next_run}{" "}
+       <button onClick={() => handleDelete(job.id)}>Eliminar</button>
+      </li>
+     ))}
+    </ul>
    </div>
   </>
  );
