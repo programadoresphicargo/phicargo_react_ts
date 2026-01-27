@@ -2,6 +2,7 @@ import odooApi from "@/api/odoo-api";
 import CustomNavbar from "@/pages/CustomNavbar";
 import { Button, Card, CardBody, CardHeader, Divider, Link, Textarea } from "@heroui/react";
 import { useState, useEffect } from "react";
+import { pages } from './pages';
 
 const { VITE_ODOO_API_URL } = import.meta.env;
 
@@ -51,7 +52,7 @@ export default function OndriveConfiguracion() {
 
  return (
   <>
-   <CustomNavbar></CustomNavbar>
+   <CustomNavbar pages={pages}></CustomNavbar>
    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
     <Card>
      <CardHeader>
