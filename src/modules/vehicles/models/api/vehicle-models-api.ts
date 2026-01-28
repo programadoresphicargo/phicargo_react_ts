@@ -18,6 +18,13 @@ import type {
 import type { MaintenanceRecordSimpleApi } from '../../../maintenance/models';
 import type { Modality } from '@/modules/drivers/models';
 
+export interface LocationApi {
+  latitude: number | null;
+  longitude: number | null;
+  recorded_at: string | null;
+  reference: string | null;
+}
+
 export interface VehicleBaseApi {
   id: number;
   name2: string;
@@ -42,6 +49,7 @@ export interface VehicleApi extends VehicleBaseApi {
   maintenance_records: MaintenanceRecordSimpleApi | null;
   driver: DriverSimpleApi | null;
   driver_postura: DriverPosturaSimpleApi | null;
+  location: LocationApi | null;
 }
 
 export interface VehicleSimpleApi {

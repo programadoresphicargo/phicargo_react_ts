@@ -18,6 +18,13 @@ export type VehicleState = SimpleData;
 export type VehicleCategory = SimpleData;
 export type VehicleBrand = SimpleData;
 
+export interface Location {
+  latitude: number | null;
+  longitude: number | null;
+  recorded_at: string | null;
+  reference: string | null;
+}
+
 export interface VehicleBase {
   readonly id: number;
   readonly name: string;
@@ -42,6 +49,7 @@ export interface Vehicle extends VehicleBase {
   maintenanceRecord: MaintenanceRecordSimple | null;
   driver: DriverSimple | null;
   driverPostura: DriverPosturaSimple | null;
+  location: Location | null;
 }
 
 export interface VehicleSimple {

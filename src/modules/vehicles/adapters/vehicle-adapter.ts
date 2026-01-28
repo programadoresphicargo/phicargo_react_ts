@@ -75,6 +75,12 @@ export class VehicleAdapter {
       driverPostura: vehicle.driver_postura
         ? DriverAdapter.toDriverPosturaSimple(vehicle.driver_postura)
         : null,
+      location: vehicle.location ? {
+        latitude: vehicle.location?.latitude,
+        longitude: vehicle.location?.longitude,
+        reference: vehicle.location?.reference,
+        recorded_at: vehicle.location?.recorded_at
+      } : null
     };
   }
 

@@ -3,10 +3,11 @@ import type { DriverPosturaSimple, Modality } from '@/modules/drivers/models';
 import { DriverPosturaCell } from '@/modules/vehicles/components/ui/DriverPosturaCell';
 import type { MRT_ColumnDef } from 'material-react-table';
 import { ModalityChip } from '../../drivers/components/ui/ModalityChip';
-import type { Vehicle } from '../../vehicles/models';
+import type { Location, Vehicle } from '../../vehicles/models';
 import { VehicleTypeChip } from '../../vehicles/components/ui/VehicleTypeChip';
 import { useMemo } from 'react';
 import { Chip } from '@heroui/react';
+import { Link, Button } from "@heroui/react";
 
 export const useVehicleColumns = () => {
   const columns = useMemo<MRT_ColumnDef<Vehicle>[]>(
@@ -184,6 +185,29 @@ export const useVehicleColumns = () => {
       {
         accessorFn: (row) => (row.state ? row.state.name : 'N/A'),
         header: 'Estado',
+      },
+      {
+        accessorFn: (row) => (row.location),
+        header: 'Ubicación',
+        Cell: ({ cell }) => {
+          const value = cell.getValue<Location | null>();
+          return !value ? (
+            <span className="text-gray-400 text-sm">
+              NA
+            </span>
+          ) : (
+            <Button
+              isExternal={true}
+              showAnchorIcon
+              size='sm'
+              radius='full'
+              color='primary'
+              as={Link}
+              href={`https://www.google.com/maps?q=${value?.latitude},${value?.longitude}`}>
+              {value?.latitude}, {value?.longitude}
+            </Button>
+          );
+        },
       },
     ],
     [],
