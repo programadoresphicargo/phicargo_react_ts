@@ -15,6 +15,7 @@ const TravelsNearToBranch = lazy(
 const TravelsUnloading = lazy(() => import('../outlets/TravelsUnloading'));
 const TravelsInPlant = lazy(() => import('../outlets/TravelsInPlant'));
 const HistorialAsignado = lazy(() => import('../outlets/HistorialAsignado'));
+const Actividad = lazy(() => import('../outlets/Operadores'));
 
 const permission = 202;
 
@@ -92,8 +93,16 @@ const ShiftsRoutes = () => (
           </Suspense>
         }
       />
+      <Route
+        path="actividad"
+        element={
+          <Suspense fallback={<LoadingPage />}>
+            <Actividad></Actividad>
+          </Suspense>
+        }
+      />
     </Route>
-  </Route>
+  </Route >
 );
 
 export default ShiftsRoutes;

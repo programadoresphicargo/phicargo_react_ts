@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import type { Shift } from '../models';
+import type { Actividad, Shift } from '../models';
 import ShiftServiceApi from '../services/shifts-service';
 import toast from 'react-hot-toast';
 import { useShiftsContext } from './useShiftsContext';
@@ -77,6 +77,14 @@ export const useShiftQueries = (archivedDate?: string | null) => {
     },
   });
 
+  const actividadQuery = useQuery<Actividad[]>({
+    queryKey: [shiftKey, 'actividad', branchId],
+    queryFn: () => ShiftServiceApi.getActividad(),
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 10,
+    enabled: !!branchId,
+  });
+
   return {
     shifts: shiftQuery.data || [],
     shiftsAssigned: shiftAssignedQuery.data || [],
@@ -85,7 +93,9 @@ export const useShiftQueries = (archivedDate?: string | null) => {
     createShift,
     editShift,
     archiveShift,
-    unarchiveShift
+    unarchiveShift,
+    actividad: actividadQuery.data || [],
+    actividadQuery
   };
 };
 

@@ -1,4 +1,6 @@
 import type {
+  Actividad,
+  ActividadApi,
   DriverInfo,
   DriverInfoApi,
   Shift,
@@ -181,3 +183,10 @@ export const shiftReorderToApi = (shift: ShiftReorder): ShiftReorderApi => ({
   shift: shift.shift,
 });
 
+export const actividadToLocal = (item: ActividadApi): Actividad => ({
+  operador: item.operador,
+  dias_transcurridos: item.dias_transcurridos,
+  vehiculo: item.vehiculo,
+  ruta: item.ruta,
+  fecha_finalizado: item.fecha_finalizado
+});

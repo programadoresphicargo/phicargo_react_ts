@@ -81,3 +81,11 @@ export interface ShiftReorder {
   shiftId: number;
   shift: number;
 }
+
+export interface Actividad {
+  operador: string;
+  vehiculo: string;
+  ruta: string;
+  dias_transcurridos: number;
+  fecha_finalizado: string;
+}

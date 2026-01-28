@@ -1,5 +1,7 @@
 import { Maneuver, ManeuverApi } from '../../core/models';
 import type {
+  Actividad,
+  ActividadApi,
   Queue,
   QueueCreate,
   Shift,
@@ -10,6 +12,7 @@ import type {
   ShiftReorder,
 } from '../models';
 import {
+  actividadToLocal,
   shiftCreateToApi,
   shiftEditToApi,
   shiftReorderToApi,
@@ -276,6 +279,23 @@ class ShiftServiceApi {
         );
       }
       throw new Error('Error al obtener los maniobras');
+    }
+  }
+
+  public static async getActividad(): Promise<Actividad[]> {
+    const url = `/tms_travel/ultima_actividad/`;
+
+    try {
+      const response = await odooApi.get<ActividadApi[]>(url);
+      return response.data.map(actividadToLocal);
+    } catch (error) {
+      console.error(error);
+      if (error instanceof AxiosError) {
+        throw new Error(
+          error.response?.data?.detail || 'Error al obtener los turnos',
+        );
+      }
+      throw new Error('Error al obtener los turnos');
     }
   }
 }

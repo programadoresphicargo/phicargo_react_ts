@@ -44,12 +44,13 @@ const ShiftsPage = () => {
   const isCrearOpen = location.pathname.startsWith('/turnos/crear');
   const isDetailsOpen = location.pathname.startsWith('/turnos/detalles');
   const isHistoryOpen = location.pathname.startsWith('/turnos/historial-asignado');
+  const isActividadOpen = location.pathname.startsWith('/turnos/actividad');
 
   useEffect(() => {
-    if (!isDetailsOpen || !isHistoryOpen || !isCrearOpen) {
+    if (!isDetailsOpen || !isHistoryOpen || !isCrearOpen || !isActividadOpen) {
       refetch();
     }
-  }, [isDetailsOpen, isHistoryOpen, isCrearOpen]);
+  }, [isDetailsOpen, isHistoryOpen, isCrearOpen, isActividadOpen]);
 
 
   const onOpenDetails = (id: number) => {
@@ -162,6 +163,16 @@ const ShiftsPage = () => {
           onPress={() => navigate('/turnos/historial-asignado')}
         >
           Historial
+        </Button>
+        <Button
+          radius="full"
+          size='sm'
+          color="danger"
+          className='text-white'
+          startContent={<HiQueueList />}
+          onPress={() => navigate('/turnos/actividad')}
+        >
+          Actividad
         </Button>
         <ExportExcelButton
           size="small"

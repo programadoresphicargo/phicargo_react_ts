@@ -78,3 +78,12 @@ export interface ShiftReorderApi {
   shift_id: number;
   shift: number;
 }
+
+
+export interface ActividadApi {
+  operador: string;
+  vehiculo: string;
+  ruta: string;
+  dias_transcurridos: number;
+  fecha_finalizado: string;
+}
