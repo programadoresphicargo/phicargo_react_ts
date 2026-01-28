@@ -45,10 +45,6 @@ const UltimoViajeOperadores = () => {
       columnPinning: { right: ['mrt-row-actions'] },
     },
     state: { isLoading: isFetching },
-    muiTableBodyRowProps: ({ row }) => ({
-      onClick: () => { },
-      sx: { cursor: 'pointer' },
-    }),
     renderTopToolbarCustomActions: () => (
       <div className="flex items-center gap-4">
         <h1 className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text">
