@@ -33,10 +33,15 @@ const ContenedorEdit = ({ open, onClose, data }) => {
  const Save = async () => {
   setLoading(true);
   try {
-   await odooApi.put(
+   const response = await odooApi.put(
     `/tms_waybill/${data.id}`,
     { x_status_bel: selectedKey }
    );
+   if (response.data.status == "success") {
+    toast.success(response.data.message);
+   } else {
+    toast.error(response.data);
+   }
    onClose();
   } catch (error) {
    toast.error("Error al guardar el estatus");
