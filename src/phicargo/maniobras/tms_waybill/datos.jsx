@@ -3,11 +3,10 @@ import {
  DialogTitle,
  DialogContent,
  DialogActions,
- Typography
 } from "@mui/material";
 import { Button } from "@heroui/react";
 import { Autocomplete, AutocompleteItem } from "@heroui/react";
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import odooApi from "@/api/odoo-api";
 
@@ -17,19 +16,30 @@ export const status = [
  { label: "PATIO MÉXICO", key: "pm" },
  { label: "REUTILIZADO", key: "ru" },
  { label: "EN TERRAPORTS", key: "T" },
+ { label: "EN VIAJE", key: "V" },
+ { label: "EN PATIO", key: "P" },
 ];
 
 const ContenedorEdit = ({ open, onClose, data }) => {
-
+ const [selectedKey, setSelectedKey] = useState("");
  const [isLoading, setLoading] = useState(false);
+
+ useEffect(() => {
+  if (data?.x_status_bel) {
+   setSelectedKey(String(data.x_status_bel));
+  }
+ }, [data]);
 
  const Save = async () => {
   setLoading(true);
   try {
-   const response = await odooApi.put(`/tms_waybill/${data.id}`, { "x_status_bel": "sm" });
+   await odooApi.put(
+    `/tms_waybill/${data.id}`,
+    { x_status_bel: selectedKey }
+   );
    onClose();
   } catch (error) {
-   toast.error('Error al obtener los datos:' + error);
+   toast.error("Error al guardar el estatus");
   } finally {
    setLoading(false);
   }
@@ -41,14 +51,19 @@ const ContenedorEdit = ({ open, onClose, data }) => {
 
    <DialogContent>
     <Autocomplete
-     defaultSelectedKey={String(data?.x_status_bel)}
-     selectedKey={String(data?.x_status_bel)}
+     defaultSelectedKey={String(selectedKey)}
+     selectedKey={String(selectedKey)}
      className="max-w-xs"
      defaultItems={status}
      label="Estatus"
-     placeholder="Estatus"
+     placeholder="Selecciona estatus"
+     onSelectionChange={setSelectedKey}
     >
-     {(item) => <AutocompleteItem key={item.key}>{item.label}</AutocompleteItem>}
+     {(item) => (
+      <AutocompleteItem key={item.key}>
+       {item.label}
+      </AutocompleteItem>
+     )}
     </Autocomplete>
    </DialogContent>
 
@@ -57,7 +72,12 @@ const ContenedorEdit = ({ open, onClose, data }) => {
      Cancelar
     </Button>
 
-    <Button onPress={() => Save()} color="primary" radius="full">
+    <Button
+     onPress={Save}
+     color="primary"
+     radius="full"
+     isLoading={isLoading}
+    >
      Aceptar
     </Button>
    </DialogActions>
