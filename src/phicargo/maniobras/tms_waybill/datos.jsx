@@ -58,6 +58,7 @@ const ContenedorEdit = ({ open, onClose, data }) => {
      label="Estatus"
      placeholder="Selecciona estatus"
      onSelectionChange={setSelectedKey}
+     disabledKeys={["P", "V"]}
     >
      {(item) => (
       <AutocompleteItem key={item.key}>
