@@ -1,58 +1,44 @@
-import { Button, Chip, Select, SelectItem } from "@heroui/react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
-} from 'material-react-table';
-import React, { useEffect, useMemo, useState } from 'react';
-import Box from '@mui/material/Box';
-import Example2 from '../maniobras/modal';
-import { ManiobraProvider } from '../context/viajeContext';
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
-import { ThemeProvider } from '@mui/material/styles';
-import customFontTheme from '../../../theme';
-import { exportToCSV } from '../../utils/export';
-import odooApi from '@/api/odoo-api';
-import { toast } from 'react-toastify';
-import { DateRangePicker } from 'rsuite';
-import { MRT_Localization_ES } from 'material-react-table/locales/es';
+} from "material-react-table";
+import { Button, Chip } from "@heroui/react";
+import Box from "@mui/material/Box";
+import { MRT_Localization_ES } from "material-react-table/locales/es";
+import { toast } from "react-toastify";
+
+import odooApi from "@/api/odoo-api";
 import CustomNavbar from "@/pages/CustomNavbar";
-import { pages } from '../pages';
-import RegistroManiobrasCP from "../maniobras/modal";
+import { pages } from "../pages";
+import { ManiobraProvider } from "../context/viajeContext";
 import ContenedorEdit from "./datos";
 import CountContenedor from "./count_contenedor";
+import { exportToCSV } from "../../utils/export";
 
 const ContenedoresPendientes = () => {
 
-  const [open, setOpen] = useState(false);
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-    fetchData();
-  };
-
+  /* =======================
+     ESTADOS
+  ======================= */
+  const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [selectedBranches, setSelectedBranches] = useState([]);
   const [isLoading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
   const [dataCP, setDataCP] = useState({});
 
-  const handleShowModal = (data) => {
-    handleOpen();
-    setDataCP(data);
-  };
-
-  const [data, setData] = useState([]);
-
+  /* =======================
+     FETCH
+  ======================= */
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await odooApi.get('/tms_waybill/pendientes_ing/');
+      const response = await odooApi.get("/tms_waybill/pendientes_ing/");
       setData(response.data);
     } catch (error) {
-      toast.error('Error al obtener los datos:' + error);
-      setData();
+      toast.error("Error al obtener los datos");
+      setData([]);
     } finally {
       setLoading(false);
     }
@@ -62,112 +48,67 @@ const ContenedoresPendientes = () => {
     fetchData();
   }, []);
 
-  const columns = useMemo(
-    () => [
-      {
-        accessorKey: 'sucursal',
-        header: 'Sucursal',
-      },
-      {
-        accessorKey: 'date_order',
-        header: 'Fecha',
-      },
-      {
-        accessorKey: 'carta_porte',
-        header: 'Carta porte',
-      },
-      {
-        accessorKey: 'categoria',
-        header: 'Categoria',
-      },
-      {
-        accessorKey: 'cliente',
-        header: 'Cliente',
-      },
-      {
-        accessorKey: 'x_reference',
-        header: 'Contenedor',
-        size: 150,
-      },
-      {
-        accessorKey: 'x_status_bel',
-        header: 'Estatus',
-        size: 150,
-        Cell: ({ cell }) => {
-          const value = cell.getValue();
+  /* =======================
+     FILTRO POR SUCURSAL
+  ======================= */
+  useEffect(() => {
+    if (selectedBranches.length === 0) {
+      setFilteredData(data);
+    } else {
+      setFilteredData(
+        data.filter(item =>
+          selectedBranches.includes(item.store_id)
+        )
+      );
+    }
+  }, [data, selectedBranches]);
 
-          let variant = 'secondary';
-          let text = '';
+  /* =======================
+     COLUMNAS
+  ======================= */
+  const columns = useMemo(() => [
+    { accessorKey: "sucursal", header: "Sucursal" },
+    { accessorKey: "date_order", header: "Fecha" },
+    { accessorKey: "carta_porte", header: "Carta porte" },
+    { accessorKey: "categoria", header: "Categoria" },
+    { accessorKey: "cliente", header: "Cliente" },
+    { accessorKey: "x_reference", header: "Contenedor" },
+    {
+      accessorKey: "x_status_bel",
+      header: "Estatus",
+      Cell: ({ cell }) => {
+        const value = cell.getValue();
+        const map = {
+          sm: { color: "secondary", text: "SIN MANIOBRA" },
+          pm: { color: "primary", text: "PATIO MÉXICO" },
+          P: { color: "primary", text: "EN PATIO" },
+          V: { color: "success", text: "EN VIAJE" },
+        };
 
-          const mappings = {
-            sm: { variant: 'secondary', text: 'SIN MANIOBRA' },
-            EI: { variant: 'warning', text: 'EN PROCESO DE INGRESO' },
-            pm: { variant: 'primary', text: 'PATIO MÉXICO' },
-            Ing: { variant: 'success', text: 'INGRESADO' },
-            'No Ing': { variant: 'danger', text: 'NO INGRESADO' },
-            ru: { variant: 'info', text: 'REUTILIZADO' },
-            can: { variant: 'error', text: 'CANCELADO' },
-            P: { variant: 'primary', text: 'EN PATIO' },
-            T: { variant: 'warning', text: 'EN TERRAPORTS' },
-            V: { variant: 'success', text: 'EN VIAJE' },
-          };
+        const cfg = map[value] || { color: "danger", text: value || "N/A" };
 
-          if (mappings[value]) {
-            variant = mappings[value].variant;
-            text = mappings[value].text;
-          } else {
-            variant = 'danger';
-            text = value || 'DESCONOCIDO';
-          }
-
-          return (
-            value !== null ? (
-              <Chip color={variant} size='sm' className="text-white">
-                {text}
-              </Chip>) : null
-          );
-        },
+        return (
+          <Chip color={cfg.color} size="sm" className="text-white">
+            {cfg.text}
+          </Chip>
+        );
       },
-      {
-        accessorKey: 'state',
-        header: 'Estado CP',
-        size: 150,
-      },
-      {
-        accessorKey: 'x_modo_bel',
-        header: 'Modo',
-        size: 150,
-      },
-    ],
-    [],
-  );
+    },
+  ], []);
 
+  /* =======================
+     TABLA
+  ======================= */
   const table = useMaterialReactTable({
     columns,
-    data,
+    data: filteredData,
+    localization: MRT_Localization_ES,
     enableGrouping: true,
     enableGlobalFilter: true,
-    enableColumnPinning: true,
-    enableStickyHeader: true,
-    localization: MRT_Localization_ES,
-    positionToolbarAlertBanner: 'none',
-    positionGlobalFilter: "right",
-    muiSearchTextFieldProps: {
-      placeholder: `Buscador global`,
-      sx: { minWidth: '300px' },
-      variant: 'outlined',
-    },
-    initialState: {
-      showColumnFilters: true,
-      density: 'compact',
-      pagination: { pageSize: 80 },
-      showGlobalFilter: false,
-    },
     state: { showProgressBars: isLoading },
-    muiCircularProgressProps: {
-      color: 'primary',
-      thickness: 5,
-      size: 45,
+    initialState: {
+      pagination: { pageSize: 80 },
+      density: "compact",
     },
     muiSkeletonProps: {
       animation: 'pulse',
@@ -181,14 +122,10 @@ const ContenedoresPendientes = () => {
     },
     muiTableBodyRowProps: ({ row }) => ({
       onClick: () => {
-        if (row.subRows?.length) {
-        } else {
-          handleOpen(row.original);
-        }
+        setDataCP(row.original);
+        setOpen(true);
       },
-      style: {
-        cursor: 'pointer',
-      },
+      sx: { cursor: "pointer" },
     }),
     muiTableHeadCellProps: {
       sx: {
@@ -199,20 +136,9 @@ const ContenedoresPendientes = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 290px)',
+        maxHeight: 'calc(100vh - 280px)',
       },
     },
-    muiTableBodyRowProps: ({ row }) => ({
-      onClick: () => {
-        if (row.subRows?.length) {
-        } else {
-          handleShowModal(row.original);
-        }
-      },
-      style: {
-        cursor: 'pointer',
-      },
-    }),
     muiTableBodyCellProps: ({ row }) => ({
       sx: {
         backgroundColor: row.subRows?.length ? '#1184e8' : '#FFFFFF',
@@ -222,45 +148,41 @@ const ContenedoresPendientes = () => {
         color: row.subRows?.length ? '#FFFFFF' : '#000000',
       },
     }),
-    renderTopToolbarCustomActions: ({ table }) => (
-      <Box
-        sx={{
-          display: 'flex',
-          gap: '16px',
-          padding: '8px',
-          alignItems: 'center',
-          width: '100%',
-        }}
-      >
+    renderTopToolbarCustomActions: () => (
+      <Box sx={{ display: "flex", gap: 2 }}>
         <Button
-          color='success'
-          className='text-white'
-          startContent={<i class="bi bi-file-earmark-excel"></i>}
-          onPress={() => exportToCSV(data, columns, "contenedores.csv")}
+          color="success"
+          className="text-white"
           radius="full"
-        >Exportar
+          onPress={() => exportToCSV(filteredData, columns, "contenedores.csv")}
+        >
+          Exportar
         </Button>
-        <Button
-          color='danger'
-          className='text-white'
-          startContent={<i class="bi bi-arrow-clockwise"></i>}
-          onPress={() => fetchData()}
-          radius="full"
-        >Recargar
+        <Button color="danger" onPress={fetchData} className="text-white" radius="full">
+          Recargar
         </Button>
       </Box>
     ),
   });
 
   return (
-    <div>
-      <ManiobraProvider>
-        <CustomNavbar pages={pages}></CustomNavbar>
-        <CountContenedor data={data}></CountContenedor>
-        <MaterialReactTable table={table} />
-        <ContenedorEdit open={open} onClose={handleClose} data={dataCP}></ContenedorEdit>
-      </ManiobraProvider>
-    </div >
+    <ManiobraProvider>
+      <CustomNavbar pages={pages} />
+
+      <CountContenedor
+        filteredData={filteredData}
+        selectedBranches={selectedBranches}
+        setSelectedBranches={setSelectedBranches}
+      />
+
+      <MaterialReactTable table={table} />
+
+      <ContenedorEdit
+        open={open}
+        onClose={() => setOpen(false)}
+        data={dataCP}
+      />
+    </ManiobraProvider>
   );
 };
 
