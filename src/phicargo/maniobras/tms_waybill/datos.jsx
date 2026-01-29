@@ -17,8 +17,6 @@ export const status = [
  { label: "PATIO MÉXICO", key: "pm" },
  { label: "REUTILIZADO", key: "ru" },
  { label: "EN TERRAPORTS", key: "T" },
- { label: "EN PATIO", key: "P" },
- { label: "EN VIAJE", key: "V" },
 ];
 
 const ContenedorEdit = ({ open, onClose, data }) => {
@@ -39,7 +37,7 @@ const ContenedorEdit = ({ open, onClose, data }) => {
 
  return (
   <Dialog open={open} onClose={onClose}>
-   <DialogTitle>{data?.x_reference}</DialogTitle>
+   <DialogTitle>Contenedor: {data?.x_reference}</DialogTitle>
 
    <DialogContent>
     <Autocomplete
