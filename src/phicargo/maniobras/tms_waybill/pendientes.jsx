@@ -179,7 +179,10 @@ const ContenedoresPendientes = () => {
 
       <ContenedorEdit
         open={open}
-        onClose={() => setOpen(false)}
+        onClose={() => {
+          setOpen(false);
+          fetchData();
+        }}
         data={dataCP}
       />
     </ManiobraProvider>
