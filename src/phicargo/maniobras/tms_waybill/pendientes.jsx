@@ -19,19 +19,29 @@ import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import CustomNavbar from "@/pages/CustomNavbar";
 import { pages } from '../pages';
 import RegistroManiobrasCP from "../maniobras/modal";
+import ContenedorEdit from "./datos";
+import CountContenedor from "./count_contenedor";
 
 const ContenedoresPendientes = () => {
 
-  const [isLoading2, setLoading] = useState(false);
-  const [modalShow, setModalShow] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    fetchData();
+  };
+
+  const [isLoading, setLoading] = useState(false);
   const [dataCP, setDataCP] = useState({});
 
   const handleShowModal = (data) => {
-    setModalShow(true);
+    handleOpen();
     setDataCP(data);
   };
-
-  const handleCloseModal = () => setModalShow(false);
 
   const [data, setData] = useState([]);
 
@@ -42,6 +52,7 @@ const ContenedoresPendientes = () => {
       setData(response.data);
     } catch (error) {
       toast.error('Error al obtener los datos:' + error);
+      setData();
     } finally {
       setLoading(false);
     }
@@ -152,7 +163,7 @@ const ContenedoresPendientes = () => {
       pagination: { pageSize: 80 },
       showGlobalFilter: false,
     },
-    state: { showProgressBars: isLoading2 },
+    state: { showProgressBars: isLoading },
     muiCircularProgressProps: {
       color: 'primary',
       thickness: 5,
@@ -172,7 +183,7 @@ const ContenedoresPendientes = () => {
       onClick: () => {
         if (row.subRows?.length) {
         } else {
-          handleShowModal(row.original);
+          handleOpen(row.original);
         }
       },
       style: {
@@ -188,9 +199,20 @@ const ContenedoresPendientes = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 200px)',
+        maxHeight: 'calc(100vh - 290px)',
       },
     },
+    muiTableBodyRowProps: ({ row }) => ({
+      onClick: () => {
+        if (row.subRows?.length) {
+        } else {
+          handleShowModal(row.original);
+        }
+      },
+      style: {
+        cursor: 'pointer',
+      },
+    }),
     muiTableBodyCellProps: ({ row }) => ({
       sx: {
         backgroundColor: row.subRows?.length ? '#1184e8' : '#FFFFFF',
@@ -210,11 +232,6 @@ const ContenedoresPendientes = () => {
           width: '100%',
         }}
       >
-        <h1
-          className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
-        >
-          Pendientes de ingreso
-        </h1>
         <Button
           color='success'
           className='text-white'
@@ -239,11 +256,9 @@ const ContenedoresPendientes = () => {
     <div>
       <ManiobraProvider>
         <CustomNavbar pages={pages}></CustomNavbar>
+        <CountContenedor data={data}></CountContenedor>
         <MaterialReactTable table={table} />
-        <RegistroManiobrasCP
-          show={modalShow}
-          handleClose={handleCloseModal}
-          data={dataCP} />
+        <ContenedorEdit open={open} onClose={handleClose} data={dataCP}></ContenedorEdit>
       </ManiobraProvider>
     </div >
   );
