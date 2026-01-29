@@ -109,6 +109,8 @@ const ContenedoresPendientes = () => {
     initialState: {
       pagination: { pageSize: 80 },
       density: "compact",
+      showColumnFilters: true,
+      showGlobalFilter:true,
     },
     muiSkeletonProps: {
       animation: 'pulse',
