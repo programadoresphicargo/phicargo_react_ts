@@ -15,6 +15,7 @@ import { ManiobraProvider } from "../context/viajeContext";
 import ContenedorEdit from "./datos";
 import CountContenedor from "./count_contenedor";
 import { exportToCSV } from "../../utils/export";
+import Travel from "@/phicargo/viajes/control/viaje";
 
 const ContenedoresPendientes = () => {
 
@@ -27,6 +28,16 @@ const ContenedoresPendientes = () => {
   const [isLoading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [dataCP, setDataCP] = useState({});
+  const [openViaje, setOpenViaje] = useState(false);
+  const [idViaje, setIDViaje] = React.useState(null);
+
+  const handleClickOpen = () => {
+    setOpenViaje(true);
+  };
+
+  const handleClose = () => {
+    setOpenViaje(false);
+  };
 
   /* =======================
      FETCH
@@ -105,12 +116,30 @@ const ContenedoresPendientes = () => {
     localization: MRT_Localization_ES,
     enableGrouping: true,
     enableGlobalFilter: true,
+    enableRowActions: true,
+    positionActionsColumn: "last",
+    renderRowActions: ({ row }) => (
+      <Box sx={{ display: 'flex', gap: '1rem' }}>
+        <Button
+          size="sm"
+          color="success"
+          className="text-white"
+          radius="full"
+          onClick={(event) => {
+            event.stopPropagation();
+            setDataCP(row.original);
+            setOpen(true);
+          }}>
+          Editar
+        </Button>
+      </Box >
+    ),
     state: { showProgressBars: isLoading },
     initialState: {
       pagination: { pageSize: 80 },
       density: "compact",
       showColumnFilters: true,
-      showGlobalFilter:true,
+      showGlobalFilter: true,
     },
     muiSkeletonProps: {
       animation: 'pulse',
@@ -124,8 +153,8 @@ const ContenedoresPendientes = () => {
     },
     muiTableBodyRowProps: ({ row }) => ({
       onClick: () => {
-        setDataCP(row.original);
-        setOpen(true);
+        handleClickOpen();
+        setIDViaje(row.original.travel_id)
       },
       sx: { cursor: "pointer" },
     }),
@@ -187,6 +216,8 @@ const ContenedoresPendientes = () => {
         }}
         data={dataCP}
       />
+
+      <Travel idViaje={idViaje} open={openViaje} handleClose={handleClose}></Travel>
     </ManiobraProvider>
   );
 };
