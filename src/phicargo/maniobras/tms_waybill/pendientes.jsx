@@ -31,7 +31,9 @@ const ContenedoresPendientes = () => {
   const [openViaje, setOpenViaje] = useState(false);
   const [idViaje, setIDViaje] = React.useState(null);
 
-  const handleClickOpen = () => {
+  const handleClickOpen = (id) => {
+    console.log(id);
+    setIDViaje(id);
     setOpenViaje(true);
   };
 
@@ -87,7 +89,8 @@ const ContenedoresPendientes = () => {
     {
       accessorKey: "x_status_bel",
       header: "Estatus",
-      Cell: ({ cell }) => {
+      Cell: ({ row, cell }) => {
+        console.log(row.original);
         const value = cell.getValue();
         const map = {
           sm: { color: "secondary", text: "SIN MANIOBRA" },
@@ -99,9 +102,9 @@ const ContenedoresPendientes = () => {
         const cfg = map[value] || { color: "danger", text: value || "N/A" };
 
         return (
-          <Chip color={cfg.color} size="sm" className="text-white">
+          <Button color={cfg.color} size="sm" className="text-white" onPress={() => handleClickOpen(row.original.travel_id)} radius="full">
             {cfg.text}
-          </Chip>
+          </Button>
         );
       },
     },
@@ -153,8 +156,7 @@ const ContenedoresPendientes = () => {
     },
     muiTableBodyRowProps: ({ row }) => ({
       onClick: () => {
-        handleClickOpen();
-        setIDViaje(row.original.travel_id)
+
       },
       sx: { cursor: "pointer" },
     }),
