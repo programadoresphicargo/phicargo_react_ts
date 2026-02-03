@@ -4,7 +4,7 @@ import {
   type MRT_ColumnDef,
   useMaterialReactTable,
 } from 'material-react-table';
-import { Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/react";
+import { Chip, Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/react";
 
 import RefreshIcon from '@mui/icons-material/Refresh';
 import type { Travel } from '../models/travels-models';
@@ -26,9 +26,9 @@ const columns: MRT_ColumnDef<Travel>[] = [
     header: 'Unidad',
     id: 'vehicle',
     Cell: ({ cell }) => (
-      <span className="bg-blue-500 p-2 rounded-lg text-white">
+      <Chip color='success' className='text-white'>
         {cell.getValue<string>()}
-      </span>
+      </Chip>
     ),
   },
   {
@@ -133,6 +133,22 @@ export const TravelsModal = (props: Props) => {
     state: {
       isLoading: props.isLoading,
     },
+    muiTableHeadCellProps: {
+      sx: {
+        fontFamily: 'Inter',
+        fontWeight: 'Bold',
+        fontSize: '14px',
+      },
+    },
+    muiTableBodyCellProps: ({ row }) => ({
+      sx: {
+        backgroundColor: row.subRows?.length ? '#1184e8' : '#FFFFFF',
+        fontFamily: 'Inter',
+        fontWeight: 'normal',
+        fontSize: '14px',
+        color: row.subRows?.length ? '#FFFFFF' : '#000000',
+      },
+    }),
     // CUSTOMIZATIONS
     renderTopToolbarCustomActions: () => (
       <div className="flex items-center gap-4">
