@@ -108,6 +108,8 @@ const ContenedoresPendientes = () => {
         );
       },
     },
+    { accessorKey: "x_fecha_llegada_patio", header: "Llegada a patio" },
+    { accessorKey: "dias_en_patio", header: "Días en patio" },
   ], []);
 
   /* =======================

@@ -20,10 +20,10 @@ const ViajeProvider = ({ children }) => {
         odooApi.get('/tms_travel/correos/id_viaje/' + id_viaje)
             .then(response => {
                 if (response.data.length > 0) {
-                    toast.success('Correos ligados.' + id_viaje);
+                    toast.success('Correos ligados.');
                     ActualizarCorreosLigados(false);
                 } else {
-                    toast.error('No hay correos electronicos ligados.' + id_viaje);
+                    toast.error('No hay correos electronicos ligados.');
                     ActualizarCorreosLigados(true);
                 }
             })
