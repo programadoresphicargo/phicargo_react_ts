@@ -81,6 +81,9 @@ export default function Seguimiento() {
                 </Grid>
 
                 <Grid item size={4}>
+
+                    <LlegadaTarde></LlegadaTarde>
+
                     <Grid item size={12}>
 
                         <Card>
@@ -88,8 +91,6 @@ export default function Seguimiento() {
                                 <Chip color='primary' size='lg' radius='md'>Información del viaje</Chip>
                             </CardHeader>
                             <CardBody className="bg-white rounded-xl shadow p-4">
-
-                                <LlegadaTarde></LlegadaTarde>
 
                                 <div className="grid sm:grid-cols-2 gap-y-2 gap-x-4 text-gray-800 text-sm">
                                     {/* Sección: Equipo de viaje */}
