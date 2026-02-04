@@ -61,14 +61,14 @@ function LlegadaTarde() {
 
                     return (
                         <Alert
-                            className="text-white mb-3"
+                            className="text-white mb-5"
                             radius="lg"
                             color={status.color}
                             title={status.label}
                             variant="solid"
                             description={
                                 <>
-                                    <div>📅 <strong>Viaje:</strong> {data?.referencia}</div>
+                                    <div>🚚 <strong>Viaje:</strong> {data?.referencia}</div>
                                     <div>📅 <strong>Llegada programada:</strong> {data?.llegada_planta_programada}</div>
                                     <div>🚚 <strong>Llegada real:</strong> {data?.llegada_planta}</div>
                                     <div>⏱ <strong>Diferencia:</strong> {data?.diferencia_tiempo_llegada}</div>
