@@ -21,6 +21,7 @@ import axios from "axios";
 import { fontFamily } from "@mui/system";
 import { useJourneyDialogs } from "./funciones";
 import Custodia from "../custodia/custodia";
+import LlegadaTarde from "../llegada_tarde";
 
 export default function Seguimiento() {
 
@@ -42,6 +43,7 @@ export default function Seguimiento() {
             <Grid container spacing={2}>
 
                 <Custodia></Custodia>
+                <LlegadaTarde></LlegadaTarde>
 
                 <Grid item size={12}>
                     <Card>
