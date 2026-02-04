@@ -61,7 +61,8 @@ function LlegadaTarde() {
 
                     return (
                         <Alert
-                            className="text-white"
+                            className="text-white mb-3"
+                            radius="lg"
                             color={status.color}
                             title={status.label}
                             variant="solid"
