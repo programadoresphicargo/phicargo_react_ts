@@ -53,7 +53,12 @@ const DetencionesTable = () => {
       }
 
       setLoading(true);
-      const response = await odooApi.get(`/tms_travel/salidas_llegadas/${range[0].toISOString().slice(0, 10)}/${range[1].toISOString().slice(0, 10)}`);
+      const response = await odooApi.get('/tms_travel/departures-arrivals/', {
+        params: {
+          fecha_inicio: range[0].toISOString().slice(0, 10),
+          fecha_fin: range[1].toISOString().slice(0, 10),
+        },
+      });
       setData(response.data);
     } catch (error) {
       const errorMessage = error.response
