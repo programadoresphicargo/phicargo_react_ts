@@ -79,7 +79,7 @@ export const useShiftQueries = (archivedDate?: string | null) => {
 
   const actividadQuery = useQuery<Actividad[]>({
     queryKey: [shiftKey, 'actividad', branchId],
-    queryFn: () => ShiftServiceApi.getActividad(),
+    queryFn: () => ShiftServiceApi.getActividad(branchId),
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 10,
     enabled: !!branchId,

@@ -44,7 +44,7 @@ const UltimoViajeOperadores = () => {
       pagination: { pageSize: 100, pageIndex: 0 },
       columnPinning: { right: ['mrt-row-actions'] },
     },
-    state: { isLoading: isFetching },
+    state: { showProgressBars: isFetching },
     renderTopToolbarCustomActions: () => (
       <div className="flex items-center gap-4">
         <h1 className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text">

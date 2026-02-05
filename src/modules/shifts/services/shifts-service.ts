@@ -282,8 +282,8 @@ class ShiftServiceApi {
     }
   }
 
-  public static async getActividad(): Promise<Actividad[]> {
-    const url = `/tms_travel/ultima_actividad/`;
+  public static async getActividad(branchId: number = 1): Promise<Actividad[]> {
+    const url = `/tms_travel/ultima_actividad/${branchId}`;
 
     try {
       const response = await odooApi.get<ActividadApi[]>(url);
