@@ -27,6 +27,7 @@ import dayjs from 'dayjs';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import { useAuthContext } from "@/modules/auth/hooks";
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -144,6 +145,7 @@ const Entregas = ({ fecha }) => {
     enableGlobalFilter: true,
     enableFilters: true,
     state: { isLoading: isLoading2 },
+    localization: MRT_Localization_ES,
     enableColumnPinning: true,
     enableStickyHeader: true,
     columnResizeMode: "onEnd",

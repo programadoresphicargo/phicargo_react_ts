@@ -43,6 +43,8 @@ import axios from 'axios';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import { width } from '@mui/system';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
+
 const drawerWidth = 650;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
@@ -214,6 +216,7 @@ export default function PersistentDrawerRight({ id_entrega, onClose }) {
         enableGlobalFilter: true,
         enableFilters: true,
         state: { isLoading: isLoading },
+        localization: MRT_Localization_ES,
         enableColumnPinning: true,
         enableStickyHeader: true,
         columnResizeMode: "onEnd",

@@ -4,7 +4,7 @@ import {
   useMaterialReactTable,
 } from 'material-react-table';
 import React, { useEffect, useMemo, useState } from 'react';
-
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import AppBar from '@mui/material/AppBar';
 import { Box } from '@mui/material';
 import { Button } from "@heroui/react";
@@ -130,6 +130,7 @@ const EventosPendientes = () => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
+    localization: MRT_Localization_ES,
     state: { isLoading: isLoading2 },
     enableColumnPinning: true,
     enableStickyHeader: true,
