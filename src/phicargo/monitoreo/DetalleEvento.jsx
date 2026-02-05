@@ -87,7 +87,7 @@ const DetalleForm = ({ id_evento, onClose }) => {
             comentario: comentario,
         };
 
-        odooApi.post('/comentarios/crear_comentario/', data)
+        odooApi.post('/comentarios_eventos/', data)
             .then((response) => {
                 toast.success(response.data.mensaje);
                 setComentario('');
@@ -167,7 +167,7 @@ const DetalleForm = ({ id_evento, onClose }) => {
     };
 
     const obtenerComentarios = () => {
-        const baseUrl = '/comentarios/comentarios_by_evento_id/' + id_evento;
+        const baseUrl = '/comentarios_eventos/evento_id/' + id_evento;
 
         odooApi.get(baseUrl)
             .then(response => {
@@ -344,7 +344,7 @@ const DetalleForm = ({ id_evento, onClose }) => {
                             </Grid>
 
                             <Grid item>
-                                <Button color="primary" onPress={GuardarComentario} radius="full">Guardar comentario</Button>
+                                <Button color="primary" onPress={GuardarComentario} radius="full">Guardar</Button>
                             </Grid>
                         </Grid>
                     </CardContent>
