@@ -193,7 +193,7 @@ const Entregas = ({ fecha }) => {
           flexWrap: 'wrap',
         }}
       >
-        <Button color='primary' onClick={ComprobarEntrega}>Nueva entrega</Button>
+        <Button color='primary' onPress={ComprobarEntrega} radius="full">Nueva entrega</Button>
       </Box>
     ),
   });
@@ -207,7 +207,7 @@ const Entregas = ({ fecha }) => {
       TransitionComponent={Transition}
     >
       <AppBar
-        elevation={3}
+        elevation={0}
         position="static"
         sx={{
           background: 'linear-gradient(90deg, #0b2149, #002887)',

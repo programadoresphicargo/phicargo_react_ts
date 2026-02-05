@@ -93,7 +93,7 @@ const EntregaForm2 = ({ id_entrega, onClose }) => {
         <>
             <Grid container spacing={2}>
                 <Stack spacing={2} direction="row" style={{ padding: '20px' }}>
-                    <Button onClick={registrar_evento} style={{ marginTop: '20px' }} color='primary'>Guardar evento</Button>
+                    <Button onPress={registrar_evento} style={{ marginTop: '20px' }} color='primary' radius="full">Guardar evento</Button>
                 </Stack>
 
                 <Grid item xs={12} sm={12} md={12}>

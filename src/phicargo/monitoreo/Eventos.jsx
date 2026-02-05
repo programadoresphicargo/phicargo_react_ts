@@ -294,15 +294,15 @@ export default function PersistentDrawerRight({ id_entrega, onClose }) {
 
     return (<>
         <Box sx={{ display: 'flex' }}>
-            <CssBaseline />
+
             <Main open={open}>
                 <Stack spacing={2} direction="row">
                     {dataEntrega.length > 0 && dataEntrega[0].estado !== 'cerrado' && (
-                        <Button onClick={handleClickOpen2} color='primary'>Nuevo evento</Button>
+                        <Button onClick={handleClickOpen2} color='primary' radius="full">Nuevo evento</Button>
                     )}
 
                     {dataEntrega.length > 0 && dataEntrega[0].estado !== 'cerrado' && (
-                        <Button onClick={cerrar_entrega} color='danger'>Cerrar entrega</Button>
+                        <Button onClick={cerrar_entrega} color='danger' radius="full">Cerrar entrega</Button>
                     )}
 
                 </Stack>

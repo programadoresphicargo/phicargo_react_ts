@@ -194,8 +194,8 @@ const DetalleForm = ({ id_evento, onClose }) => {
 
                     <CardHeader className="flex gap-3">
                         <h1>Evento E-{id_evento}</h1>
-                        <Button color="primary" onClick={actualizarEvento} isDisabled={formData.usuario_creacion == session.user.id ? false : true}>Actualizar</Button>
-                        <Button color="success" className="text-white" onClick={atenderEvento} isDisabled={formData.estado == 'atendido' ? true : false}>{formData.estado == 'atendido' ? 'atendido' : 'atender'}</Button>
+                        <Button color="primary" onPress={actualizarEvento} isDisabled={formData.usuario_creacion == session.user.id ? false : true} radius="full">Actualizar</Button>
+                        <Button color="success" className="text-white" onPress={atenderEvento} isDisabled={formData.estado == 'atendido' ? true : false} radius="full">{formData.estado == 'atendido' ? 'Atendido' : 'Atender'}</Button>
                     </CardHeader>
                     <Divider />
 
@@ -344,7 +344,7 @@ const DetalleForm = ({ id_evento, onClose }) => {
                             </Grid>
 
                             <Grid item>
-                                <Button color="primary" onClick={GuardarComentario}>Guardar comentario</Button>
+                                <Button color="primary" onPress={GuardarComentario} radius="full">Guardar comentario</Button>
                             </Grid>
                         </Grid>
                     </CardContent>
