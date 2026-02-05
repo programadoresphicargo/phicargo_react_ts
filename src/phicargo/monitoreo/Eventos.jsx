@@ -215,7 +215,7 @@ export default function PersistentDrawerRight({ id_entrega, onClose }) {
         enableGrouping: true,
         enableGlobalFilter: true,
         enableFilters: true,
-        state: { isLoading: isLoading },
+        state: { showProgressBars: isLoading },
         localization: MRT_Localization_ES,
         enableColumnPinning: true,
         enableStickyHeader: true,

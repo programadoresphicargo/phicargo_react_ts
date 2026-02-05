@@ -48,7 +48,7 @@ const Entregas = ({ fecha }) => {
   };
 
   const [data, setData] = useState([]);
-  const [isLoading2, setLoading] = useState();
+  const [isLoading, setLoading] = useState();
 
   const fetchData = async () => {
 
@@ -144,7 +144,7 @@ const Entregas = ({ fecha }) => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
-    state: { isLoading: isLoading2 },
+    state: { showProgressBars: isLoading },
     localization: MRT_Localization_ES,
     enableColumnPinning: true,
     enableStickyHeader: true,
