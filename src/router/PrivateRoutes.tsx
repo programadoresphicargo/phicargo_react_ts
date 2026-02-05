@@ -113,7 +113,6 @@ const AsignacionesComputo = lazy(() => import('../phicargo/inventarioti/celulare
 const Lineas = lazy(() => import('../phicargo/inventarioti/celulares/lineas/index'))
 const AsignacionEquipo = lazy(() => import('../phicargo/viajes/asignacion_equipo/index'))
 const OnedriveAjustes = lazy(() => import('../phicargo/ajustes/onedrive'))
-const CronManager = lazy(() => import('../phicargo/ajustes/crons'))
 
 export const PrivateRoutes = () => {
   const updateAvailable = useCheckVersion();
@@ -596,14 +595,6 @@ export const PrivateRoutes = () => {
           }
         />
 
-        <Route
-          path="/cron_manager"
-          element={
-            <Suspense fallback={<LoadingPage />}>
-              <CronManager></CronManager>
-            </Suspense>
-          }
-        />
 
         <Route
           path="/contenedores_pendientes"
