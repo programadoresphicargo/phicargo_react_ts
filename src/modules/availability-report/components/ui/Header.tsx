@@ -1,12 +1,12 @@
 import 'rsuite/dist/rsuite-no-reset.min.css';
 
 import { BackButton } from '@/components/ui';
-import { Checkbox } from '@heroui/react';
+import { Button, Checkbox } from '@heroui/react';
 import { IndicatorCard } from '@/components/utils/IndicatorCard';
 import dayjs from 'dayjs';
 import { useGlobalContext } from '../../hook/useGlobalContext';
 import { useMemo } from 'react';
-import { useRecordsQuery } from '../../hook/useRecordsQuery';
+import { useRecordsQuery, useSendReportEmail } from '../../hook/useRecordsQuery';
 import DateRangePicker from 'rsuite/esm/DateRangePicker/DateRangePicker';
 
 const { after } = DateRangePicker;
@@ -17,6 +17,12 @@ const Header = () => {
   const {
     recordsQuery: { data: records, isFetching },
   } = useRecordsQuery(month, branchId);
+
+  const { sendReportEmail, isPending } = useSendReportEmail();
+
+  const handleSendEmail = () => {
+    sendReportEmail({ month, branchId });
+  };
 
   const dayRecord = useMemo(() => {
     if (!records) return;
@@ -105,6 +111,10 @@ const Header = () => {
               dayjs().endOf('month').add(1, 'month').toDate(),
             )}
           />
+        </div>
+
+        <div>
+          <Button color='success' size='sm' className='text-white' radius='full' onPress={handleSendEmail} isDisabled={isPending}>Enviar por correo</Button>
         </div>
       </div>
     </div>

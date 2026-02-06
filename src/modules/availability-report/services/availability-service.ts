@@ -37,6 +37,29 @@ export class AvailabilityService {
     }
   }
 
+  public static async sendReportEmail(
+    monthRange: DateRange,
+    branchId: number,
+  ): Promise<Record[]> {
+    const startDate = dayjs(monthRange[0]).format('YYYY-MM-DD');
+    const endDate = dayjs(monthRange[1]).format('YYYY-MM-DD');
+
+    const url = `/daily_operations_report/report-email/?start_date=${startDate}&end_date=${endDate}&branch_id=${branchId}`;
+
+    try {
+      const response = await odooApi.get<RecordApi[]>(url);
+      return response.data.map(AvailibilityAdapter.recordToLocal);
+    } catch (error) {
+      console.error(error);
+      if (error instanceof AxiosError) {
+        throw new Error(
+          error.response?.data?.detail || 'Error al obtener los registros',
+        );
+      }
+      throw new Error('Error al obtener los registros');
+    }
+  }
+
   public static async editRecord({
     id,
     updatedItem,

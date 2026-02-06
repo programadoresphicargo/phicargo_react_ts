@@ -1,6 +1,6 @@
 import { AvailabilityService } from '../services';
 import type { Record } from '../models';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import type { DateRange } from 'rsuite/esm/DateRangePicker/types';
 
 const mainKey = 'records';
@@ -20,3 +20,15 @@ export const useRecordsQuery = (month: DateRange, branchId: number) => {
   };
 };
 
+export const useSendReportEmail = () => {
+  const mutation = useMutation({
+    mutationFn: ({ month, branchId }: { month: DateRange; branchId: number }) =>
+      AvailabilityService.sendReportEmail(month, branchId),
+  });
+
+  return {
+    sendReportEmail: mutation.mutate,
+    sendReportEmailAsync: mutation.mutateAsync,
+    ...mutation,
+  };
+};
