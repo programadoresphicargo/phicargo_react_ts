@@ -2,6 +2,7 @@ import { AvailabilityService } from '../services';
 import type { Record } from '../models';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import type { DateRange } from 'rsuite/esm/DateRangePicker/types';
+import toast from 'react-hot-toast';
 
 const mainKey = 'records';
 
@@ -24,6 +25,12 @@ export const useSendReportEmail = () => {
   const mutation = useMutation({
     mutationFn: ({ month, branchId }: { month: DateRange; branchId: number }) =>
       AvailabilityService.sendReportEmail(month, branchId),
+    onSuccess: (data) => {
+      toast.success(data.message);
+    },
+    onError: (error: Error) => {
+      toast.error(error.message);
+    },
   });
 
   return {

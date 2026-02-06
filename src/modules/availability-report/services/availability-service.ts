@@ -13,6 +13,11 @@ import dayjs from 'dayjs';
 import odooApi from '@/api/odoo-api';
 import type { DateRange } from 'rsuite/esm/DateRangePicker/types';
 
+export interface SendEmailResponse {
+  status: 'success' | 'error';
+  message: string;
+}
+
 export class AvailabilityService {
   public static async getRecords(
     monthRange: DateRange,
@@ -40,23 +45,23 @@ export class AvailabilityService {
   public static async sendReportEmail(
     monthRange: DateRange,
     branchId: number,
-  ): Promise<Record[]> {
+  ): Promise<SendEmailResponse> {
     const startDate = dayjs(monthRange[0]).format('YYYY-MM-DD');
     const endDate = dayjs(monthRange[1]).format('YYYY-MM-DD');
 
     const url = `/daily_operations_report/report-email/?start_date=${startDate}&end_date=${endDate}&branch_id=${branchId}`;
 
     try {
-      const response = await odooApi.get<RecordApi[]>(url);
-      return response.data.map(AvailibilityAdapter.recordToLocal);
+      const response = await odooApi.get<SendEmailResponse>(url);
+      return response.data;
     } catch (error) {
       console.error(error);
       if (error instanceof AxiosError) {
         throw new Error(
-          error.response?.data?.detail || 'Error al obtener los registros',
+          error.response?.data?.detail || 'Error al enviar el correo',
         );
       }
-      throw new Error('Error al obtener los registros');
+      throw new Error('Error al enviar el correo');
     }
   }
 
