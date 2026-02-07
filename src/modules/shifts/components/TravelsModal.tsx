@@ -237,7 +237,3 @@ export const TravelsModal = (props: Props) => {
   );
 };
 
-function handleSubmit(onSubmit: SubmitHandler<ShiftCreate>) {
-  throw new Error('Function not implemented.');
-}
-
