@@ -11,8 +11,6 @@ import type { Travel } from '../models/travels-models';
 import { FaSearchLocation } from 'react-icons/fa';
 import { GiPathDistance } from 'react-icons/gi';
 import { TbTruckReturn } from 'react-icons/tb';
-import { ShiftCreate } from '../models';
-import { SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useShiftsContext } from '../hooks/useShiftsContext';
 import { useShiftQueries } from '../hooks/useShiftQueries';
