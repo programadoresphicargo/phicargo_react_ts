@@ -46,11 +46,15 @@ const ShiftsPage = () => {
   const isHistoryOpen = location.pathname.startsWith('/turnos/historial-asignado');
   const isActividadOpen = location.pathname.startsWith('/turnos/actividad');
 
+  const Descargnado = location.pathname.startsWith('/turnos/unidades-descargando');
+  const Bajando = location.pathname.startsWith('/turnos/unidades-bajando');
+  const Planta = location.pathname.startsWith('/turnos/unidades-planta');
+
   useEffect(() => {
-    if (!isDetailsOpen || !isHistoryOpen || !isCrearOpen || !isActividadOpen) {
+    if (!isDetailsOpen || !isHistoryOpen || !isCrearOpen || !isActividadOpen || !Descargnado || !Bajando || !Planta) {
       refetch();
     }
-  }, [isDetailsOpen, isHistoryOpen, isCrearOpen, isActividadOpen]);
+  }, [isDetailsOpen, isHistoryOpen, isCrearOpen, isActividadOpen, Descargnado, Bajando, Planta]);
 
 
   const onOpenDetails = (id: number) => {

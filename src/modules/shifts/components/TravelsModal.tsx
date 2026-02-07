@@ -4,13 +4,19 @@ import {
   type MRT_ColumnDef,
   useMaterialReactTable,
 } from 'material-react-table';
-import { Chip, Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/react";
+import { Button, Chip, Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/react";
 
 import RefreshIcon from '@mui/icons-material/Refresh';
 import type { Travel } from '../models/travels-models';
 import { FaSearchLocation } from 'react-icons/fa';
 import { GiPathDistance } from 'react-icons/gi';
 import { TbTruckReturn } from 'react-icons/tb';
+import { ShiftCreate } from '../models';
+import { SubmitHandler } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { useShiftsContext } from '../hooks/useShiftsContext';
+import { useShiftQueries } from '../hooks/useShiftQueries';
+import dayjs from 'dayjs';
 
 const columns: MRT_ColumnDef<Travel>[] = [
   {
@@ -111,6 +117,11 @@ interface Props {
 }
 
 export const TravelsModal = (props: Props) => {
+
+  const navigate = useNavigate();
+  const { branchId } = useShiftsContext();
+  const { createShift } = useShiftQueries();
+
   const table = useMaterialReactTable<Travel>({
     // DATA
     columns,
@@ -123,6 +134,32 @@ export const TravelsModal = (props: Props) => {
     enableDensityToggle: false,
     enableFullScreenToggle: false,
     columnFilterDisplayMode: 'subheader',
+    enableRowActions: true,
+    renderRowActions: (({ row }) => (
+      <Button
+        color="primary"
+        radius="full"
+        size="sm"
+        onPress={() => {
+          createShift.mutate(
+            {
+              branchId: branchId,
+              vehicleId: row.original.vehicle_id,
+              driverId: row.original.driver_id,
+              arrivalAt: dayjs(),
+              comments: '',
+              maneuver1: null,
+              maneuver2: null,
+            },
+            {
+              onSuccess: () => navigate('/turnos'),
+            },
+          );
+        }}
+      >
+        Ingresar a turnos
+      </Button>
+    )),
     getRowId: (row) => String(row.id),
     // STATE
     initialState: {
@@ -199,4 +236,8 @@ export const TravelsModal = (props: Props) => {
     </Modal>
   );
 };
+
+function handleSubmit(onSubmit: SubmitHandler<ShiftCreate>) {
+  throw new Error('Function not implemented.');
+}
 

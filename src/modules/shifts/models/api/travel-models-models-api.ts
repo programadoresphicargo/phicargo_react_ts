@@ -13,7 +13,9 @@ export interface TravelApi {
   x_status_viaje: string;
   operative_status: string | null;
   branch: string;
+  driver_id: number;
   driver: string;
+  vehicle_id: number;
   vehicle: string;
   latitude: number | null;
   longitude: number | null;

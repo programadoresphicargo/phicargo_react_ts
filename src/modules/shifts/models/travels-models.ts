@@ -15,8 +15,10 @@ export interface Travel {
   status: string;
   operativeStatus: string | null;
   branch: string;
+  driver_id: number,
   driver: string;
   vehicle: string;
+  vehicle_id: number,
   latitude: number | null;
   longitude: number | null;
   recordedAt: Dayjs | null;
