@@ -11,8 +11,14 @@ import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import { Button } from "@heroui/react";
 import { useActividadColumns } from '../hooks/useActividadColumns';
+import { useShiftsContext } from '../hooks/useShiftsContext';
+import dayjs from 'dayjs';
 
 const UltimoViajeOperadores = () => {
+
+  const { branchId } = useShiftsContext();
+  const { createShift } = useShiftQueries();
+
   const navigate = useNavigate();
 
   const onClose = () => {
@@ -32,7 +38,6 @@ const UltimoViajeOperadores = () => {
     localization: MRT_Localization_ES,
     enableStickyHeader: true,
     autoResetPageIndex: false,
-    enableRowActions: false,
     enableSorting: false,
     enableGrouping: true,
     enableDensityToggle: false,
@@ -45,6 +50,32 @@ const UltimoViajeOperadores = () => {
       columnPinning: { right: ['mrt-row-actions'] },
     },
     state: { showProgressBars: isFetching },
+    enableRowActions: true,
+    renderRowActions: (({ row }) => (
+      <Button
+        color="primary"
+        radius="full"
+        size="sm"
+        onPress={() => {
+          createShift.mutate(
+            {
+              branchId: branchId,
+              vehicleId: row.original.vehicle_id,
+              driverId: row.original.driver_id,
+              arrivalAt: dayjs(),
+              comments: '',
+              maneuver1: null,
+              maneuver2: null,
+            },
+            {
+              onSuccess: () => navigate('/turnos'),
+            },
+          );
+        }}
+      >
+        Ingresar a turnos
+      </Button>
+    )),
     renderTopToolbarCustomActions: () => (
       <div className="flex items-center gap-4">
         <h1 className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text">

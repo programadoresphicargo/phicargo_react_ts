@@ -6,11 +6,11 @@ export const useActividadColumns = () => {
   const columns = useMemo<MRT_ColumnDef<Actividad>[]>(
     () => [
       {
-        accessorFn: (row) => row.operador,
+        accessorFn: (row) => row.driver,
         header: 'Operador',
       },
       {
-        accessorFn: (row) => row.vehiculo,
+        accessorFn: (row) => row.vehicle,
         header: 'Vehículo',
       },
       {

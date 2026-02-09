@@ -184,9 +184,11 @@ export const shiftReorderToApi = (shift: ShiftReorder): ShiftReorderApi => ({
 });
 
 export const actividadToLocal = (item: ActividadApi): Actividad => ({
-  operador: item.operador,
+  driver_id: item.driver_id,
+  driver: item.driver,
   dias_transcurridos: item.dias_transcurridos,
-  vehiculo: item.vehiculo,
+  vehicle_id: item.vehicle_id,
+  vehicle: item.vehicle,
   ruta: item.ruta,
   fecha_finalizado: item.fecha_finalizado
 });
