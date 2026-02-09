@@ -33,6 +33,7 @@ import { useNavigate } from 'react-router-dom';
 import { DatePicker } from '@heroui/react';
 import { parseDate, getLocalTimeZone } from "@internationalized/date";
 import AsignacionViaje from './confirmar_cambios';
+import { useShiftsContext } from '../hooks/useShiftsContext';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
  return <Slide direction="up" ref={ref} {...props} />;
@@ -41,6 +42,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function ResponsiveDialog({ open, setOpen, shift }) {
 
  const navigate = useNavigate();
+ const { branchId } = useShiftsContext();
+
  const theme = useTheme();
  const fullScreen = useMediaQuery(theme.breakpoints.down("lg"));
  const [isLoading, setLoading] = useState(false);
@@ -70,6 +73,7 @@ export default function ResponsiveDialog({ open, setOpen, shift }) {
     params: {
      date_order: value,
      operador_asignado: false,
+     store_id: branchId,
     },
    });
 
