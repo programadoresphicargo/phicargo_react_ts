@@ -40,6 +40,12 @@ const Maniobras = ({ estado_maniobra }) => {
     { tipo: 'ingreso', label: "Ingreso" },
   ];
 
+  const ESTADOS_CON_FECHA = [
+    'borrador',
+    'finalizada',
+    'cancelada',
+  ];
+
   const [filteredData, setFilteredData] = useState([]);
   const [selectedManiobras, setSelectedManiobras] = useState([]);
   const [data, setData] = useState([]);
@@ -64,10 +70,20 @@ const Maniobras = ({ estado_maniobra }) => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await odooApi.get('/maniobras/estado/', {
-        params: { estado: estado_maniobra, fecha_inicio: range[0].toISOString().split('T')[0], fecha_fin: range[1].toISOString().split('T')[0] }
-      });
+
+      const params = {
+        estado: estado_maniobra, // 👈 SIEMPRE
+      };
+
+      // 👇 solo agregar fechas si el estado las necesita
+      if (ESTADOS_CON_FECHA.includes(estado_maniobra)) {
+        params.fecha_inicio = range[0].toISOString().split('T')[0];
+        params.fecha_fin = range[1].toISOString().split('T')[0];
+      }
+
+      const response = await odooApi.get('/maniobras/estado/', { params });
       setData(response.data);
+
       setLoading(false);
     } catch (error) {
       console.error('Error al obtener los datos:', error);
@@ -348,13 +364,15 @@ const Maniobras = ({ estado_maniobra }) => {
         }}
       >
         <h1 className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text">Control de maniobras</h1>
-        <DateRangePicker
-          value={range}
-          onChange={setRange}
-          format="yyyy-MM-dd"
-          placeholder="Selecciona un rango de fechas"
-          loading={isLoading}
-        />
+        {ESTADOS_CON_FECHA.includes(estado_maniobra) && (
+          <DateRangePicker
+            value={range}
+            onChange={setRange}
+            format="yyyy-MM-dd"
+            placeholder="Selecciona un rango de fechas"
+            loading={isLoading}
+          />
+        )}
         <ul>
           {tipo_maniobra.map(branch => (
             <li key={branch.tipo}>
