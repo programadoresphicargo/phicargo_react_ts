@@ -406,8 +406,8 @@ export default function TablaContenedores({ data, setData, isLoading, inventario
         >
           Inventario contenedores
         </h1>
-        <Button onPress={() => sincronizar()} color='success' radius='full' className='text-white'>Sincronizar</Button>
-        <Button onPress={() => exportInventarioDB()} radius='full' color='success' className='text-white'>Exportar DB</Button>
+        <Button onPress={() => sincronizar()} color='success' radius='full' className='text-white' isDisabled={editingRow !== null}>Sincronizar</Button>
+        <Button onPress={() => exportInventarioDB()} radius='full' color='warning' className='text-white'>Exportar DB</Button>
         <Chip
           size="sm"
           color={isOnline ? "success" : "warning"}
