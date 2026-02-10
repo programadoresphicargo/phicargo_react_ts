@@ -3,7 +3,7 @@ import Dexie from 'dexie';
 
 export const inventarioDB = new Dexie('inventarioDB');
 
-inventarioDB.version(6).stores({
+inventarioDB.version(7).stores({
   contenedores: `
     id,
     id_checklist,
@@ -14,7 +14,9 @@ inventarioDB.version(6).stores({
     pending_sync,
     sync_action,
     updated_at,
-    version
+    version,
+    conflict,
+    conflict_at
   `,
   trailers: 'id, name',
   dollies: 'id, name',
@@ -23,8 +25,11 @@ inventarioDB.version(6).stores({
     if (row.pending_sync === undefined) row.pending_sync = false;
     if (row.sync_action === undefined) row.sync_action = null;
     if (!row.updated_at) row.updated_at = new Date().toISOString();
-    if (row.version === undefined) row.version = 1; // 🔹 NUEVO
+    if (row.version === undefined) row.version = 1;
+
+    // 🔥 NUEVOS DEFAULTS
+    if (row.conflict === undefined) row.conflict = false;
+    if (row.conflict_at === undefined) row.conflict_at = null;
+    if (row.server_snapshot === undefined) row.server_snapshot = null;
   });
 });
-
-

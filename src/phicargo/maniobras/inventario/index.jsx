@@ -197,6 +197,12 @@ const InventarioContenedores = () => {
               });
             } else if (res.data?.status === 'conflict') {
               toast.error('Alguien ya edito');
+              await inventarioDB.contenedores.update(row.id, {
+                conflict: true,
+                server_snapshot: res.data.server_data,
+                pending_sync: false,
+                sync_action: null,
+              });
             } else {
               toast.error('Backend rechazó update:', res.data);
             }

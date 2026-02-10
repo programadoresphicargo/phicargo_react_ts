@@ -42,6 +42,8 @@ import { Button, Chip, CircularProgress } from '@heroui/react';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import Box from '@mui/material/Box';
 import { exportDB } from 'dexie-export-import';
+import ConflictResolverModal from './ConflictResolverModal';
+import odooApi from '@/api/odoo-api';
 
 export default function TablaContenedores({ data, setData, isLoading, inventarioDB, opcionesRemolques, opcionesDolly, sincronizar, isOnline }) {
   const {
@@ -51,6 +53,9 @@ export default function TablaContenedores({ data, setData, isLoading, inventario
     updateDraft,
     stopEditing,
   } = useRowDraft();
+
+  const [conflictRow, setConflictRow] = React.useState(null);
+  const [showConflictModal, setShowConflictModal] = React.useState(false);
 
   async function exportInventarioDB() {
     const blob = await exportDB(inventarioDB, {
@@ -64,6 +69,43 @@ export default function TablaContenedores({ data, setData, isLoading, inventario
     a.click();
 
     URL.revokeObjectURL(url);
+  }
+
+  async function discardLocalChanges(row) {
+    await inventarioDB.contenedores.put({
+      ...row.server_snapshot,
+      id: row.id,
+      conflict: false,
+      conflict_at: null,
+      server_snapshot: null,
+      pending_sync: false,
+      sync_action: null,
+    });
+
+    setData(await inventarioDB.contenedores.toArray());
+    setShowConflictModal(false);
+  }
+
+  async function overwriteServer(row) {
+    await odooApi.patch(
+      `/tms_waybill/control_contenedores/${row.id_checklist}?force=true`,
+      {
+        ...row,
+        version: row.server_snapshot.version,
+      }
+    );
+
+    await inventarioDB.contenedores.update(row.id, {
+      conflict: false,
+      conflict_at: null,
+      server_snapshot: null,
+      pending_sync: false,
+      sync_action: null,
+      version: row.server_snapshot.version + 1,
+    });
+
+    setData(await inventarioDB.contenedores.toArray());
+    setShowConflictModal(false);
   }
 
   async function importInventarioDB(file) {
@@ -338,11 +380,49 @@ export default function TablaContenedores({ data, setData, isLoading, inventario
         header: 'sync_action',
         enableEditing: false,
       },
+      {
+        accessorKey: 'conflict',
+        header: 'Conflicto',
+        enableEditing: false,
+        Cell: ({ cell }) =>
+          cell.getValue() ? (
+            <Chip color="danger" size="sm" className="text-white">
+              Conflicto
+            </Chip>
+          ) : null,
+      }
     ],
 
-    renderRowActions: ({ row }) => (
-      <Button onPress={() => startEditing(row, table)} size='sm' color='success' className='text-white' radius='full'>Editar</Button>
-    ),
+    renderRowActions: ({ row }) => {
+      if (row.original.conflict) {
+        return (
+          <Button
+            size="sm"
+            color="danger"
+            className="text-white"
+            radius="full"
+            onPress={() => {
+              setConflictRow(row.original);
+              setShowConflictModal(true);
+            }}
+          >
+            Resolver
+          </Button>
+        );
+      }
+
+      return (
+        <Button
+          size="sm"
+          color="success"
+          className="text-white"
+          radius="full"
+          onPress={() => startEditing(row, table)}
+        >
+          Editar
+        </Button>
+      );
+    },
 
     onEditingRowSave: async () => {
       if (!draft) return;
@@ -419,5 +499,15 @@ export default function TablaContenedores({ data, setData, isLoading, inventario
     ),
   });
 
-  return <MaterialReactTable table={table} />;
+  return <>
+    <MaterialReactTable table={table} />
+    <ConflictResolverModal
+      open={showConflictModal}
+      onClose={() => setShowConflictModal(false)}
+      localData={conflictRow}
+      serverData={conflictRow?.server_snapshot}
+      onDiscard={() => discardLocalChanges(conflictRow)}
+      onOverwrite={() => overwriteServer(conflictRow)}>
+    </ConflictResolverModal>
+  </>
 }
