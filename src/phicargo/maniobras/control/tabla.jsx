@@ -1,34 +1,24 @@
 import { Button, Chip } from "@heroui/react";
-import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
 import React, { useEffect, useMemo, useState } from 'react';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import AppBar from '@mui/material/AppBar';
 import { Box } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import Dialog from '@mui/material/Dialog';
-import Divider from '@mui/material/Divider';
 import EnviosMasivosManiobras from '../envio_masivo';
 import EstatusDropdownManiobra from '../reportes_estatus/resumen_estatus';
 import Formulariomaniobra from '../maniobras/formulario_maniobra';
 import IconButton from '@mui/material/IconButton';
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import { LocalizationProvider } from '@mui/x-date-pickers';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import Slide from '@mui/material/Slide';
-import { TextField } from '@mui/material';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { User } from "@heroui/react";
-import dayjs from 'dayjs';
 import { exportToCSV } from '../../utils/export';
 import odooApi from '@/api/odoo-api';
-import { width } from '@mui/system';
 import { DateRangePicker } from 'rsuite';
 import { Checkbox } from "@heroui/react";
 
@@ -53,7 +43,7 @@ const Maniobras = ({ estado_maniobra }) => {
   const [filteredData, setFilteredData] = useState([]);
   const [selectedManiobras, setSelectedManiobras] = useState([]);
   const [data, setData] = useState([]);
-  const [isLoading, setLoading] = useState();
+  const [isLoading, setLoading] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [id_maniobra, setIDManiobra] = useState(null);
   const [dataCP, setDataCP] = useState({});
@@ -87,7 +77,7 @@ const Maniobras = ({ estado_maniobra }) => {
 
   useEffect(() => {
     fetchData();
-  }, [range]);
+  }, [range, estado_maniobra]);
 
   useEffect(() => {
     if (selectedManiobras.length === 0) {
@@ -207,7 +197,7 @@ const Maniobras = ({ estado_maniobra }) => {
         accessorKey: 'modo',
         header: 'Modo',
         Cell: ({ cell }) => {
-          const tipoMovimiento = cell.getValue() || '';
+          const tipoMovimiento = String(cell.getValue() || '');
           let badgeClass = 'default';
 
           if (tipoMovimiento === 'imp') {
@@ -324,9 +314,8 @@ const Maniobras = ({ estado_maniobra }) => {
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
-      onClick: ({ event }) => {
-        if (row.subRows?.length) {
-        } else {
+      onClick: (event) => {
+        if (!row.subRows?.length) {
           handleShowModal(row.original.id_maniobra, row.original);
         }
       },
@@ -386,7 +375,7 @@ const Maniobras = ({ estado_maniobra }) => {
         </ul>
         <Button color="primary" isLoading={isLoading} onPress={() => fetchData()} startContent={<i class="bi bi-arrow-clockwise"></i>} size="sm" radius="full">Refrescar</Button>
         <Button color="secondary" isLoading={isLoading} onPress={() => handleClickOpen()} className='text-white' startContent={<i class="bi bi-send-plus"></i>} size="sm" radius="full">Envio masivo</Button>
-        <Button color='success' isLoading={isLoading} className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, `maniobras ${estado_maniobra}.csv`)} size="sm" radius="full">Exportar</Button>
+        <Button color='success' isLoading={isLoading} className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(filteredData, columns, `maniobras ${estado_maniobra}.csv`)} size="sm" radius="full">Exportar</Button>
       </Box >
     ),
   });
