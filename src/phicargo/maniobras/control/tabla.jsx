@@ -66,7 +66,6 @@ const Maniobras = ({ estado_maniobra }) => {
     fetchData();
   };
 
-
   const fetchData = async () => {
     try {
       setLoading(true);
