@@ -243,7 +243,7 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
                     <Stack spacing={1} direction="row">
 
                         {(datapago == "" || datapago == null) && (
-                            <Button color="primary" onPress={registrar_pago_estadia} isLoading={isLoadingRegistro}>
+                            <Button color="primary" onPress={registrar_pago_estadia} isLoading={isLoadingRegistro} radius="full">
                                 Registrar pago
                             </Button>
                         )}
@@ -254,25 +254,26 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
                                 onPress={actualizar_pago}
                                 isLoading={isLoadingRegistro}
                                 className="text-white"
+                                radius="full"
                             >
                                 Actualizar
                             </Button>
                         )}
 
                         {data.estado == 'borrador' && (
-                            <Button color="danger" onPress={cancelar_pago} isLoading={isLoadingRegistro}>
+                            <Button color="danger" onPress={cancelar_pago} isLoading={isLoadingRegistro} radius="full">
                                 Cancelar pago
                             </Button>
                         )}
 
                         {data.estado == 'borrador' && (
-                            <Button color="warning" onPress={confirmar_pago} isLoading={isLoadingRegistro} className="text-white">
+                            <Button color="warning" onPress={confirmar_pago} isLoading={isLoadingRegistro} className="text-white" radius="full">
                                 Confirmar pago
                             </Button>
                         )}
 
                         {data.estado == 'confirmado' && (
-                            <Button color="success" onPress={pagar_folio} isLoading={isLoadingRegistro} className="text-white">
+                            <Button color="success" onPress={pagar_folio} isLoading={isLoadingRegistro} className="text-white" radius="full">
                                 Pagar
                             </Button>
                         )}
@@ -286,7 +287,7 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
                                 >
                                     Viaje
                                 </h1>
-                                <Button onPress={handleClickOpenEO} color="primary" size="sm" fullWidth>Ingresar viaje</Button>
+                                <Button onPress={handleClickOpenEO} color="primary" size="sm" fullWidth radius="full">Ingresar viaje</Button>
                             </Stack>
                         </CardHeader>
                         <Divider></Divider>

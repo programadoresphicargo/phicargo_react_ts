@@ -216,6 +216,7 @@ const PagosEstadiasOperadores = ({ }) => {
                 </h1>
                 <Button
                     className='text-white'
+                    radius="full"
                     startContent={<i class="bi bi-plus-lg"></i>}
                     color='success'
                     isDisabled={false}
@@ -226,6 +227,7 @@ const PagosEstadiasOperadores = ({ }) => {
                 >Nuevo registro
                 </Button>
                 <Button
+                    radius="full"
                     className='text-white'
                     startContent={<i class="bi bi-arrow-clockwise"></i>}
                     color='primary'
@@ -234,7 +236,9 @@ const PagosEstadiasOperadores = ({ }) => {
                     size='sm'
                 >Actualizar tablero
                 </Button>
-                <Button color='success'
+                <Button
+                    color='success'
+                    radius="full"
                     className='text-white'
                     startContent={<i class="bi bi-file-earmark-excel"></i>}
                     onPress={() => exportToCSV(data, columns, "viajes_activos.csv")}

@@ -103,6 +103,11 @@ export default function TablaContenedores({ data, setData, isLoading, inventario
 
     columns: [
       {
+        accessorKey: 'id_checklist',
+        header: 'ID Checklist',
+        enableEditing: false,
+      },
+      {
         accessorKey: 'sucursal',
         header: 'Sucursal',
         enableEditing: false,
@@ -317,6 +322,10 @@ export default function TablaContenedores({ data, setData, isLoading, inventario
             </>
           );
         },
+      },
+      {
+        accessorKey: 'sync_action',
+        header: 'sync_action',
       },
     ],
 

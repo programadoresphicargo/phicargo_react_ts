@@ -169,7 +169,11 @@ const InventarioContenedores = () => {
 
             if (res.data?.status === 'success') {
               await inventarioDB.contenedores.update(row.id, {
-                id_checklist: res.data.id_checklist,
+                id_checklist: res.data.server_data.id_checklist,
+                version: res.data.server_data.version,
+                updated_at: res.data.server_data.updated_at,
+                updated_by: res.data.server_data.updated_by,
+                fecha_registro: res.data.server_data.fecha_registro,
                 pending_sync: false,
                 sync_action: null,
               });
@@ -186,6 +190,7 @@ const InventarioContenedores = () => {
 
             if (res.data?.status === 'success') {
               await inventarioDB.contenedores.update(row.id, {
+                version: res.data.server_data.version,
                 pending_sync: false,
                 sync_action: null,
               });
