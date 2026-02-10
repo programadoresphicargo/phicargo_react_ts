@@ -3,7 +3,7 @@ import Dexie from 'dexie';
 
 export const inventarioDB = new Dexie('inventarioDB');
 
-inventarioDB.version(5).stores({
+inventarioDB.version(6).stores({
   contenedores: `
     id,
     id_checklist,

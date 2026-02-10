@@ -30,6 +30,7 @@ import { exportToCSV } from '../../utils/export';
 import odooApi from '@/api/odoo-api';
 import { width } from '@mui/system';
 import { DateRangePicker } from 'rsuite';
+import { Checkbox } from "@heroui/react";
 
 const getMonthStartAndEnd = () => {
   const now = new Date();
@@ -44,6 +45,13 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const Maniobras = ({ estado_maniobra }) => {
 
+  const tipo_maniobra = [
+    { tipo: 'retiro', label: "Retiro" },
+    { tipo: 'ingreso', label: "Ingreso" },
+  ];
+
+  const [filteredData, setFilteredData] = useState([]);
+  const [selectedManiobras, setSelectedManiobras] = useState([]);
   const [data, setData] = useState([]);
   const [isLoading, setLoading] = useState();
   const [modalShow, setModalShow] = useState(false);
@@ -80,6 +88,18 @@ const Maniobras = ({ estado_maniobra }) => {
   useEffect(() => {
     fetchData();
   }, [range]);
+
+  useEffect(() => {
+    if (selectedManiobras.length === 0) {
+      setFilteredData(data);
+    } else {
+      setFilteredData(
+        data.filter(item =>
+          selectedManiobras.includes(item.tipo_maniobra)
+        )
+      );
+    }
+  }, [data, selectedManiobras]);
 
   const columns = useMemo(
     () => [
@@ -278,7 +298,7 @@ const Maniobras = ({ estado_maniobra }) => {
 
   const table = useMaterialReactTable({
     columns,
-    data,
+    data: filteredData || [],
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
@@ -346,6 +366,24 @@ const Maniobras = ({ estado_maniobra }) => {
           placeholder="Selecciona un rango de fechas"
           loading={isLoading}
         />
+        <ul className="space-y-1">
+          {tipo_maniobra.map(branch => (
+            <li key={branch.tipo}>
+              <Checkbox
+                isSelected={selectedManiobras.includes(branch.tipo)}
+                onValueChange={(checked) => {
+                  setSelectedManiobras(prev =>
+                    checked
+                      ? [...prev, branch.tipo]
+                      : prev.filter(id => id !== branch.tipo)
+                  );
+                }}
+              >
+                <span>{branch.label}</span>
+              </Checkbox>
+            </li>
+          ))}
+        </ul>
         <Button color="primary" isLoading={isLoading} onPress={() => fetchData()} startContent={<i class="bi bi-arrow-clockwise"></i>} size="sm" radius="full">Refrescar</Button>
         <Button color="secondary" onPress={() => handleClickOpen()} className='text-white' startContent={<i class="bi bi-send-plus"></i>} size="sm" radius="full">Envio masivo</Button>
         <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, `maniobras ${estado_maniobra}.csv`)} size="sm" radius="full">Exportar</Button>
