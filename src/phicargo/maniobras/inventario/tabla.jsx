@@ -324,8 +324,19 @@ export default function TablaContenedores({ data, setData, isLoading, inventario
         },
       },
       {
+        accessorKey: 'version',
+        header: 'version',
+        enableEditing: false,
+      },
+      {
+        accessorKey: 'updated_at',
+        header: 'updated_at',
+        enableEditing: false,
+      },
+      {
         accessorKey: 'sync_action',
         header: 'sync_action',
+        enableEditing: false,
       },
     ],
 

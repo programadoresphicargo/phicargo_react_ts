@@ -189,6 +189,7 @@ const InventarioContenedores = () => {
             );
 
             if (res.data?.status === 'success') {
+              console.log(res.data.server_data);
               await inventarioDB.contenedores.update(row.id, {
                 version: res.data.server_data.version,
                 pending_sync: false,
