@@ -114,6 +114,23 @@ export default function TablaContenedores({ data, setData, isLoading, inventario
     });
   }
 
+  async function resetInventarioDB() {
+    const confirmacion = confirm(
+      '⚠️ Esto borrará TODA la base de datos local.\n\n¿Deseas continuar?'
+    );
+
+    if (!confirmacion) return;
+
+    try {
+      await inventarioDB.delete();
+      await inventarioDB.open();
+      location.reload();
+    } catch (e) {
+      alert('Error al borrar la base de datos');
+      console.error(e);
+    }
+  }
+
   const table = useMaterialReactTable({
     data,
     editDisplayMode: 'row',
@@ -488,6 +505,7 @@ export default function TablaContenedores({ data, setData, isLoading, inventario
         </h1>
         <Button onPress={() => sincronizar()} color='success' radius='full' className='text-white' isDisabled={editingRow !== null}>Sincronizar</Button>
         <Button onPress={() => exportInventarioDB()} radius='full' color='warning' className='text-white'>Exportar DB</Button>
+        <Button onPress={() => resetInventarioDB()} radius='full' color='danger' className='text-white'>Resetear</Button>
         <Chip
           size="sm"
           color={isOnline ? "success" : "warning"}
