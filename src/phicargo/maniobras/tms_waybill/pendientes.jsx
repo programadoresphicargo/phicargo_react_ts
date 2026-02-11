@@ -86,6 +86,10 @@ const ContenedoresPendientes = () => {
     { accessorKey: "categoria", header: "Categoria" },
     { accessorKey: "cliente", header: "Cliente" },
     { accessorKey: "x_reference", header: "Contenedor" },
+    { accessorKey: 'fecha_inicio', header: 'Inicio de viaje' },
+    { accessorKey: 'dias_viaje', header: 'Días en viaje' },
+    { accessorKey: "x_fecha_llegada_patio", header: "Llegada a patio" },
+    { accessorKey: "dias_en_patio", header: "Días en patio" },
     {
       accessorKey: "x_status_bel",
       header: "Estatus",
@@ -108,8 +112,6 @@ const ContenedoresPendientes = () => {
         );
       },
     },
-    { accessorKey: "x_fecha_llegada_patio", header: "Llegada a patio" },
-    { accessorKey: "dias_en_patio", header: "Días en patio" },
   ], []);
 
   /* =======================
