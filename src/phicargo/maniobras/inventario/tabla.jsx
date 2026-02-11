@@ -388,16 +388,6 @@ export default function TablaContenedores({ data, setData, isLoading, inventario
         enableEditing: false,
       },
       {
-        accessorKey: 'updated_at',
-        header: 'updated_at',
-        enableEditing: false,
-      },
-      {
-        accessorKey: 'sync_action',
-        header: 'sync_action',
-        enableEditing: false,
-      },
-      {
         accessorKey: 'conflict',
         header: 'Conflicto',
         enableEditing: false,
