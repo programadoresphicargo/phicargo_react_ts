@@ -445,7 +445,11 @@ export default function TablaContenedores({ data, setData, isLoading, inventario
 
       await inventarioDB.contenedores.put(rowToSave);
       const localData = await inventarioDB.contenedores.toArray();
-      setData(localData);
+      setData(prev =>
+        prev.map(row =>
+          row.id === rowToSave.id ? rowToSave : row
+        )
+      );
 
       stopEditing(table);
     },
