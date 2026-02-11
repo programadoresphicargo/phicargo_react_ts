@@ -55,6 +55,7 @@ const UltimosUsosUnidades = () => {
     { accessorKey: 'tipo_uso', header: 'Último uso' },
     { accessorKey: 'ultima_fecha_uso', header: 'Última fecha' },
     { accessorKey: 'dias_sin_uso', header: 'Días sin usar' },
+    { accessorKey: 'origen_id', header: 'Origen' },
   ];
 
   const table = useMaterialReactTable({
@@ -135,6 +136,14 @@ const UltimosUsosUnidades = () => {
           radius="full"
           fullWidth>
           Exportar
+        </Button>
+        <Button
+          onPress={() => fetchData()}
+          color="danger"
+          className="text-white"
+          radius="full"
+          fullWidth>
+          Recargar
         </Button>
       </Box >
     ),
