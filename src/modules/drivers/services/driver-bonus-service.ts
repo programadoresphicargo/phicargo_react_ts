@@ -5,6 +5,7 @@ import { AxiosError } from 'axios';
 import { DriverBonusAdapter } from '../adapters';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
 
 export class DriverBonusService {
   public static async getDriverBonusMonths(): Promise<DriverBonusMonth[]> {
@@ -75,10 +76,34 @@ export class DriverBonusService {
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
-        // Aquí error.response.data contiene el JSON de tu backend
-        toast.error(error.response?.data.message);
-        throw new Error(error.response?.data.message || 'Error al crear los bonos por periodo');
+        const rawMessage =
+          error.response?.data?.detail ||
+          'Error al crear los bonos por periodo';
+
+        // Separar incidencias por coma
+        const formattedList = rawMessage
+        .split('\n')
+        .filter((line: string) => line.trim() !== '')
+        .map((item: string) => `<li>${item}</li>`)
+        .join('');
+
+        await Swal.fire({
+          icon: 'error',
+          title: 'No se puede abrir el periodo',
+          html: `
+            <div style="text-align:left; max-height:300px; overflow-y:auto;">
+              <ul style="padding-left:20px;">
+                ${formattedList}
+              </ul>
+            </div>
+          `,
+          confirmButtonText: 'Entendido',
+          width: 700,
+        });
+
+        throw new Error(rawMessage);
       }
+
       throw new Error('Error al crear los bonos por periodo');
     }
   }
@@ -95,9 +120,9 @@ export class DriverBonusService {
       if (error instanceof AxiosError) {
         // Aquí error.response.data contiene el JSON de tu backend
         toast.error(error.response?.data.message);
-        throw new Error(error.response?.data.message || 'Error al crear los bonos por periodo');
+        throw new Error(error.response?.data.message || 'Error al cerrar el periodo');
       }
-      throw new Error('Error al crear los bonos por periodo');
+      throw new Error('Error al cerrar el periodo');
     }
   }
 
@@ -113,9 +138,9 @@ export class DriverBonusService {
       if (error instanceof AxiosError) {
         // Aquí error.response.data contiene el JSON de tu backend
         toast.error(error.response?.data.message);
-        throw new Error(error.response?.data.message || 'Error al crear los bonos por periodo');
+        throw new Error(error.response?.data.message || 'Error al pagar el periodo');
       }
-      throw new Error('Error al crear los bonos por periodo');
+      throw new Error('Error al pagar el periodo');
     }
   }
 }
