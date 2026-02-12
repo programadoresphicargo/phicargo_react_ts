@@ -185,7 +185,7 @@ const ContenedoresPendientes = () => {
       let backgroundColor = '';
       let ColorText = '';
 
-      if (inicioProgramado > 4) {
+      if (inicioProgramado >= 4) {
         backgroundColor = '#f5a200';
         ColorText = '#FFFFFF';
       }
