@@ -114,6 +114,7 @@ const ContenedoresPendientes = () => {
         );
       },
     },
+    { accessorKey: "total_dias", header: "Total dias" },
   ], []);
 
   /* =======================
