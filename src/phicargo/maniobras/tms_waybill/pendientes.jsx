@@ -179,7 +179,28 @@ const ContenedoresPendientes = () => {
         maxHeight: 'calc(100vh - 280px)',
       },
     },
-    muiTableBodyCellProps: ({ row }) => ({
+    muiTableBodyCellProps: ({ row }) => {
+      const inicioProgramado = row.original.total_dias;
+
+      let backgroundColor = '';
+      let ColorText = '';
+
+      if (inicioProgramado > 4) {
+        backgroundColor = '#f5a200';
+        ColorText = '#FFFFFF';
+      }
+
+      return {
+        sx: {
+          backgroundColor: row.subRows?.length ? '#1184e8' : backgroundColor,
+          color: ColorText,
+          fontFamily: 'Inter',
+          fontWeight: 'normal',
+          fontSize: '12px',
+        },
+      }
+    },
+    muiTableBodyCellProps2: ({ row }) => ({
       sx: {
         backgroundColor: row.subRows?.length ? '#1184e8' : '#FFFFFF',
         fontFamily: 'Inter',
