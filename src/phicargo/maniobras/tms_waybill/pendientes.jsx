@@ -86,6 +86,7 @@ const ContenedoresPendientes = () => {
     { accessorKey: "categoria", header: "Categoria" },
     { accessorKey: "cliente", header: "Cliente" },
     { accessorKey: "x_reference", header: "Contenedor" },
+    { accessorKey: 'flr_formateada', header: 'Llegada de puerto a patio' },
     { accessorKey: 'fecha_inicio_formateada', header: 'Inicio de viaje' },
     { accessorKey: 'dias_viaje', header: 'Días en viaje' },
     { accessorKey: "flp_formateada", header: "Llegada a patio" },
