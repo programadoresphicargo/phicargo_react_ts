@@ -84,8 +84,9 @@ const CancelarSolicitudDialog = ({ open, onClose, id_solicitud }) => {
                 </div>
             </DialogContent>
             <DialogActions>
-                <Button onPress={onClose} disabled={loading}>Cancelar</Button>
+                <Button onPress={onClose} disabled={loading} radius='full'>Cancelar</Button>
                 <Button
+                    radius='full'
                     onPress={handleCancel}
                     color="danger"
                     isDisabled={loading}
