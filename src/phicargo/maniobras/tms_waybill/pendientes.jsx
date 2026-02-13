@@ -3,7 +3,7 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from "material-react-table";
-import { Button, Chip } from "@heroui/react";
+import { Button, Chip, Link } from "@heroui/react";
 import Box from "@mui/material/Box";
 import { MRT_Localization_ES } from "material-react-table/locales/es";
 import { toast } from "react-toastify";
@@ -16,6 +16,8 @@ import ContenedorEdit from "./datos";
 import CountContenedor from "./count_contenedor";
 import { exportToCSV } from "../../utils/export";
 import Travel from "@/phicargo/viajes/control/viaje";
+
+const { VITE_ODOO_API_URL } = import.meta.env;
 
 const ContenedoresPendientes = () => {
 
@@ -176,7 +178,7 @@ const ContenedoresPendientes = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 280px)',
+        maxHeight: 'calc(100vh - 210px)',
       },
     },
     muiTableBodyCellProps: ({ row }) => {
@@ -212,6 +214,16 @@ const ContenedoresPendientes = () => {
     renderTopToolbarCustomActions: () => (
       <Box sx={{ display: "flex", gap: 2 }}>
         <Button
+          radius="full"
+          showAnchorIcon
+          as={Link}
+          isExternal={true}
+          color="primary"
+          href={VITE_ODOO_API_URL + '/maniobras/reporte_email/'}
+        >
+          Enviar por correo
+        </Button>
+        <Button
           color="success"
           className="text-white"
           radius="full"
@@ -228,7 +240,6 @@ const ContenedoresPendientes = () => {
 
   return (
     <ManiobraProvider>
-      <CustomNavbar pages={pages} />
 
       <CountContenedor
         filteredData={filteredData}

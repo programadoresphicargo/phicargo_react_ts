@@ -15,6 +15,7 @@ const DepartureAndArrivalDashboardPage = lazy(
 );
 const ManeuversDashboardPage = lazy(() => import('../pages/ManeuversDashboardPage'));
 const FinanceDashbordPage = lazy(() => import('../pages/FinanceDashbordPage'));
+const ReportesCorreos = lazy(() => import('../layouts/ReportesCorreos'));
 
 const permission = 203;
 
@@ -74,6 +75,15 @@ const DashboardsRoutes = () => (
       element={
         <Suspense fallback={<LoadingPage />}>
           <ManeuversDashboardPage />
+        </Suspense>
+      }
+    />
+
+    <Route
+      path="reportes_correos"
+      element={
+        <Suspense fallback={<LoadingPage />}>
+          <ReportesCorreos></ReportesCorreos>
         </Suspense>
       }
     />
