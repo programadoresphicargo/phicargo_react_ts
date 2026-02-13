@@ -25,6 +25,7 @@ import SelectOperador from "@/phicargo/maniobras/maniobras/select_operador";
 import EstadoSolicitud from "./estado";
 import CancelarSolicitudDialog from "./cancelar";
 import { Select, SelectItem, Link } from "@heroui/react";
+import SelectEmpleado from "@/phicargo/descuentos/solicitante";
 const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -260,12 +261,8 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
         setModoEdicion(true);
     };
 
-    const handleSelectChange = (selectedOption, name) => {
-        setData((prevData) => ({
-            ...prevData,
-            [name]: selectedOption ? selectedOption : null,
-        }));
-        console.log('Datos del formulario actualizados:', data);
+    const handleSelectChange = (key, value) => {
+        setData((prev) => ({ ...prev, [key]: value }));
     };
 
     return (
@@ -424,7 +421,13 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
 
                                             {vista == 'asignaciones' && (<>
                                                 <Grid item xs={12} sm={6}>
-                                                    <SelectOperador label={'Operador responsable'} name={'x_operador_id'} disabled={!modoEdicion} value={data?.x_operador_id} onChange={handleSelectChange} />
+                                                    <SelectEmpleado
+                                                        key_name={"x_operador_id"}
+                                                        label={"Empleado"}
+                                                        isDisabled={!modoEdicion}
+                                                        value={data?.x_operador_id}
+                                                        setSolicitante={handleSelectChange}>
+                                                    </SelectEmpleado>
                                                 </Grid>
                                             </>
                                             )}
