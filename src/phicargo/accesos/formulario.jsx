@@ -49,6 +49,7 @@ import { Alert } from "@heroui/react";
 import { RadioGroup, Radio } from "@heroui/react";
 import Swal from 'sweetalert2';
 import AppCamara from "./archivos";
+import SelectedEmpleadosTable from "./empleados/empleados_seleccionados_tabla";
 
 const AccesoForm = ({ id_acceso, onClose }) => {
 
@@ -66,7 +67,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
         setEmpresas(false);
     };
 
-    const { ActualizarIDAacceso, selectVehiculos, vehiculosAñadidos, vehiculosEliminados, empresas, formData, setFormData, addedVisitors, selectedVisitantes, setSelectedVisitantes, removedVisitors, disabledFom, setFormOptions, fileList, setFileList, setVehiculoSeleccionado } = useContext(AccesoContext);
+    const { ActualizarIDAacceso, selectVehiculos, vehiculosAñadidos, vehiculosEliminados, empresas, formData, setFormData, addedVisitors, selectedVisitantes, setSelectedVisitantes, removedVisitors, disabledFom, setFormOptions, fileList, setFileList, setVehiculoSeleccionado, selectedEmpleados, setSelectedEmpleados, addedEmpleados, removedEmpleados } = useContext(AccesoContext);
 
     const EditarForm = () => {
         setFormOptions(false);
@@ -174,6 +175,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                 setSelectedMI(tieneMercancia ? "si" : "no");
                 setSelectedME(data?.mercancia_egresada?.trim() ? "si" : "no");
                 setSelectedVisitantes(data?.visitantes);
+                setSelectedEmpleados(data?.empleados);
                 setVehiculoSeleccionado(data?.vehiculos);
             } else {
                 toast.error("No se encontraron datos para el acceso.");
@@ -234,6 +236,15 @@ const AccesoForm = ({ id_acceso, onClose }) => {
         }
     }, [formData.tipo_movimiento]);
 
+    useEffect(() => {
+        if (!formData.id_empresa) return;
+
+        setFormData((prev) => ({
+            ...prev,
+            tipo_persona: formData.id_empresa === 1 ? "empleado" : "visitante"
+        }));
+    }, [formData.id_empresa]);
+
     const handleChange = (name, value) => {
         setFormData((prevData) => ({
             ...prevData,
@@ -246,9 +257,13 @@ const AccesoForm = ({ id_acceso, onClose }) => {
 
         if (Object.keys(validationErrors).length === 0) {
 
-            if (selectedVisitantes.length > 0) {
-            } else {
-                toast.error("Debes añadir al menos un visitante al acceso.");
+            const esEmpresa = formData.id_empresa === 1;
+            const lista = esEmpresa ? selectedEmpleados : selectedVisitantes;
+
+            if (lista.length === 0) {
+                toast.error(
+                    `Debes añadir al menos un ${esEmpresa ? "empleado" : "visitante"} al acceso.`
+                );
                 return;
             }
 
@@ -256,6 +271,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                 data: formData,
                 visitantes: selectedVisitantes,
                 vehiculos: selectVehiculos,
+                empleados: selectedEmpleados,
             };
 
             try {
@@ -279,13 +295,18 @@ const AccesoForm = ({ id_acceso, onClose }) => {
     };
 
     const actualizar_acceso = async (e) => {
+
         const validationErrors = validateForm();
 
         if (Object.keys(validationErrors).length === 0) {
 
-            if (selectedVisitantes.length > 0) {
-            } else {
-                toast.error("Debes añadir al menos un visitante al acceso.");
+            const esEmpresa = formData.id_empresa === 1;
+            const lista = esEmpresa ? selectedEmpleados : selectedVisitantes;
+
+            if (lista.length === 0) {
+                toast.error(
+                    `Debes añadir al menos un ${esEmpresa ? "empleado" : "visitante"} al acceso.`
+                );
                 return;
             }
 
@@ -297,6 +318,8 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                 visitantes_removidos: removedVisitors,
                 vehiculos_agregados: vehiculosAñadidos,
                 vehiculos_removidos: vehiculosEliminados,
+                empleados_agregados: addedEmpleados,
+                empleados_removidos: removedEmpleados,
             };
 
             formDataToSend.append("payload", JSON.stringify(payload));
@@ -591,8 +614,11 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                                 </Box>
                             </Grid>
 
-                            <SelectedVisitantesTable></SelectedVisitantesTable>
-
+                            {formData.id_empresa != 1 ? (
+                                <SelectedVisitantesTable></SelectedVisitantesTable>
+                            ) : (
+                                <SelectedEmpleadosTable></SelectedEmpleadosTable>
+                            )}
                             {formData.tipo_movimiento == 'entrada' && (
                                 <>
                                     <Grid item xs={12} sm={6} md={4}>

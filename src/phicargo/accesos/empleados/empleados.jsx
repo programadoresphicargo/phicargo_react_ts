@@ -9,7 +9,7 @@ import AppBar from '@mui/material/AppBar';
 import { Button } from '@heroui/react';
 import CloseIcon from '@mui/icons-material/Close';
 import Dialog from '@mui/material/Dialog';
-import FormEmpresa from './formulario';
+import FormEmpresa from '../visitantes/formulario';
 import IconButton from '@mui/material/IconButton';
 import Slide from '@mui/material/Slide';
 import Stack from '@mui/material/Stack';
@@ -25,29 +25,18 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const ListadoVisitantes = ({ open, handleClose }) => {
+const ListadoEmpleados = ({ open, handleClose }) => {
 
   const [isLoading, setLoading] = useState();
-  const { formData, setVisitantes, visitantes, setAddedVisitors, AñadirVisitanteAcceso } = useContext(AccesoContext);
+  const { formData, setEmpleados, empleados, setAddedEmpleados, AñadirEmpleadoAcceso } = useContext(AccesoContext);
 
-  const [openFormulario, setOpenForm] = useState(false);
-
-  const handleClickOpenForm = () => {
-    setOpenForm(true);
-  };
-
-  const handleCloseForm = () => {
-    fetchVisitantes();
-    setOpenForm(false);
-  };
-
-  const fetchVisitantes = async () => {
+  const fetchEmpleados = async () => {
     try {
       setLoading(true);
 
-      let response = await odooApi.get('/visitantes/empresas/' + formData.id_empresa);
+      let response = await odooApi.get('/drivers/employees/');
 
-      setVisitantes(response.data);
+      setEmpleados(response.data);
 
     } catch (error) {
       toast.error("Error al obtener visitantes: " + error.message);
@@ -58,30 +47,28 @@ const ListadoVisitantes = ({ open, handleClose }) => {
 
   useEffect(() => {
     if (formData.id_empresa && open) {
-      fetchVisitantes();
+      fetchEmpleados();
     }
   }, [formData.id_empresa, open]);
 
   const columns = useMemo(
     () => [
       {
-        accessorKey: 'nombre_visitante',
-        header: 'Nombre del visitante',
+        accessorKey: 'empleado',
+        header: 'Empleado',
         Cell: ({ cell }) => cell.getValue()?.toUpperCase(),
       },
       {
-        accessorKey: 'fecha_creacion',
-        header: 'Fecha creación',
+        accessorKey: 'puesto',
+        header: 'Puesto',
       },
     ],
     [],
   );
 
-  const manualGrouping = ['nombre_operador'];
-
   const table = useMaterialReactTable({
     columns,
-    data: visitantes,
+    data: empleados,
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
@@ -90,7 +77,6 @@ const ListadoVisitantes = ({ open, handleClose }) => {
     enableColumnPinning: true,
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
-    grouping: manualGrouping,
     initialState: {
       density: 'compact',
       pagination: { pageSize: 80 },
@@ -106,7 +92,7 @@ const ListadoVisitantes = ({ open, handleClose }) => {
 
         if (row.subRows?.length) {
         } else {
-          AñadirVisitanteAcceso(row.original.id_visitante);
+          AñadirEmpleadoAcceso(row.original.id_empleado);
           handleClose();
         }
       },
@@ -123,7 +109,6 @@ const ListadoVisitantes = ({ open, handleClose }) => {
           flexWrap: 'wrap',
         }}
       >
-        <Button color='primary' onPress={handleClickOpenForm} radius='full'>Nuevo visitante</Button>
       </Box >
     ),
     muiTableContainerProps: {
@@ -166,21 +151,18 @@ const ListadoVisitantes = ({ open, handleClose }) => {
       }} elevation={0}>
         <Toolbar>
           <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-            Registro de visitantes
+            Empleados Transportes Belchez (Nuevos empleados se registran desde Odoo)
           </Typography>
-          <Button autoFocus color="inherit" onClick={handleClose}>
+          <Button autoFocus color="inherit" onPress={handleClose}>
             Cerrar
           </Button>
         </Toolbar>
       </AppBar>
       <MaterialReactTable table={table} />
     </Dialog>
-
-    <FormEmpresa open={openFormulario} handleClose={handleCloseForm}></FormEmpresa>
-
   </>
   );
 
 };
 
-export default ListadoVisitantes;
+export default ListadoEmpleados;

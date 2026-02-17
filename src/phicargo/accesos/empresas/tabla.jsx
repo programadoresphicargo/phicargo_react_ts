@@ -104,7 +104,7 @@ const ListadoEmpresas = ({ open, handleClose }) => {
           setFormData((prevData) => ({
             ...prevData,
             ['id_empresa']: row.original.id_empresa,
-            ['empresa']: row.original.empresa
+            ['empresa']: row.original.empresa,
           }));
           handleClose();
         }

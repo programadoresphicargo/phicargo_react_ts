@@ -48,7 +48,8 @@ const AccesoCompo = ({ children }) => {
         fecha_creacion: '',
         fecha_validacion: '',
         fecha_archivado: '',
-        personal_visita: session.user.name
+        personal_visita: session.user.name,
+        tipo_persona: '',
     });
 
     const [visitantes, setVisitantes] = useState([]);
@@ -59,6 +60,11 @@ const AccesoCompo = ({ children }) => {
     const [selectVehiculos, setVehiculoSeleccionado] = useState([]);
     const [vehiculosAñadidos, setVehiculosAñadidos] = useState([]);
     const [vehiculosEliminados, setVehiculosEliminados] = useState([]);
+
+    const [empleados, setEmpleados] = useState([]);
+    const [selectedEmpleados, setSelectedEmpleados] = useState([]);
+    const [addedEmpleados, setAddedEmpleados] = useState([]);
+    const [removedEmpleados, setRemovedEmpleados] = useState([]);
 
     const ActualizarIDAacceso = (id_acceso) => {
         setAcceso(id_acceso);
@@ -141,16 +147,66 @@ const AccesoCompo = ({ children }) => {
         });
     };
 
+    const AñadirEmpleadoAcceso = (value) => {
+        if (!value) {
+            toast.error("No se seleccionó ningún empleado.");
+            return;
+        }
+
+        const selectedVisitor = empleados.find(option => option.id_empleado === value);
+
+        if (selectedVisitor) {
+            setSelectedEmpleados((prevVisitantes) => {
+                const isSelected = prevVisitantes.some(v => v.id_empleado === selectedVisitor.id_empleado);
+
+                if (!isSelected) {
+                    setAddedEmpleados((prevAdded) => {
+                        if (!prevAdded.some(v => v.id_empleado === selectedVisitor.id_empleado)) {
+                            toast.success(`Empleado añadido a la lista.`);
+                            return [...prevAdded, selectedVisitor];
+                        }
+                        toast.info(`El empleado "${selectedVisitor.id_empleado}" ya estaba en la lista de añadidos.`);
+                        return prevAdded;
+                    });
+
+                    return [...prevVisitantes, selectedVisitor];
+                }
+
+                toast.warning(`El empleado "${selectedVisitor.id_empleado}" ya estaba seleccionado.`);
+                return prevVisitantes;
+            });
+        } else {
+            toast.error("No se encontró el empleado seleccionado.");
+        }
+    };
+
     return (
         <AccesoContext.Provider value={{
             id_acceso, formData,
             disabledFom, setFormOptions,
+
             visitantes, setVisitantes,
+            empleados, setEmpleados,
+
             AñadirVisitanteAcceso,
+            AñadirEmpleadoAcceso,
+
             selectedVisitantes, setSelectedVisitantes,
             addedVisitors, setAddedVisitors,
             removedVisitors, setRemovedVisitors,
-            setFormData, empresas, setEmpresas, ActualizarIDAacceso, selectVehiculos, AñadirVehiculo, EliminarVehiculo, vehiculosAñadidos, vehiculosEliminados,
+
+            selectedEmpleados, setSelectedEmpleados,
+            addedEmpleados, setAddedEmpleados,
+            removedEmpleados, setRemovedEmpleados,
+
+            setFormData, empresas, setEmpresas, ActualizarIDAacceso,
+
+            selectVehiculos,
+            AñadirVehiculo,
+            EliminarVehiculo,
+            vehiculosAñadidos,
+            vehiculosEliminados,
+
             fileList, setFileList, setVehiculoSeleccionado
         }}>
             {children}
