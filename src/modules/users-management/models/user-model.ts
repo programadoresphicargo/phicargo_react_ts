@@ -8,6 +8,7 @@ export interface UserUpdate {
   isActive: boolean;
   password: string;
   pin: string;
+  id_odoo: number | null
 }
 
 export interface UserCreate {

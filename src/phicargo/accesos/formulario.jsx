@@ -379,9 +379,12 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                     toast.error("Error al actualizar los datos.");
                 }
             } catch (error) {
-                console.error('Error en la petición', error);
-                toast.error('Error en la conexión o al procesar los datos. ' + error);
-            } finally {
+                const mensaje =
+                    error.response?.data?.detail || error.message || "Error desconocido";
+
+                toast.error("Error al procesar los datos. " + mensaje);
+            }
+            finally {
                 setIsLoading(false);
             }
         });

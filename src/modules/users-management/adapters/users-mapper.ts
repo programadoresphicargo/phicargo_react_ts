@@ -44,6 +44,10 @@ export class UserAdapter {
       userApi.pin = user.pin;
     }
 
+    if (user.id_odoo) {
+      userApi.id_odoo = user.id_odoo;
+    }
+
     return userApi;
   }
 

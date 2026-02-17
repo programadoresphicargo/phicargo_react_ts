@@ -33,6 +33,21 @@ export const useUsersColums = () => {
         header: 'Rol',
         Cell: ({ cell }) => <Chip color='primary'>{cell.getValue<string>()}</Chip>
       },
+      {
+        accessorKey: 'id_odoo',
+        header: 'ID Odoo',
+        Cell: ({ cell }) => {
+          const value = cell.getValue<string | null>();
+
+          if (!value) return null;
+
+          return (
+            <Chip color='success' className="text-white">
+              {value}
+            </Chip>
+          );
+        }
+      }
     ],
     [],
   );

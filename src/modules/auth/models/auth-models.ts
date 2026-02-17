@@ -27,6 +27,7 @@ interface UserBase {
   email: string | null;
   role: Role | null;
   isActive: boolean;
+  id_odoo: number | null;
 }
 
 export interface User extends UserBase {

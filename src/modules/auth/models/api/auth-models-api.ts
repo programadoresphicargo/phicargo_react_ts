@@ -11,6 +11,7 @@ interface UserBaseApi {
   correo: string | null;
   tipo: Role | null;
   estado: string | null;
+  id_odoo: number | null;
 }
 
 export interface UserApi extends UserBaseApi {

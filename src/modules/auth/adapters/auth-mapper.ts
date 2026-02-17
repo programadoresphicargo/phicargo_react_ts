@@ -24,6 +24,7 @@ export const userToLocal = (user: UserApi): User => ({
   role: user.tipo,
   isActive: user.estado === 'Activo',
   permissions: user.permissions_user_ids,
+  id_odoo: user.id_odoo
 });
 
 /**

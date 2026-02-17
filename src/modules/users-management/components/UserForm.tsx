@@ -11,8 +11,11 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import type { FullUser } from '../../auth/models';
 import { SaveButton } from '@/components/ui';
 import type { UserUpdate } from '../models';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useUsersQueries } from '../hooks/useUsersQueries';
+import odooApi from '@/api/odoo-api';
+import toast from 'react-hot-toast';
+import { SelectItem } from '@/types/gloabal-types';
 
 const initialState: UserUpdate = {
   username: '',
@@ -22,14 +25,21 @@ const initialState: UserUpdate = {
   isActive: true,
   password: '',
   pin: '',
+  id_odoo: null,
 };
 
 interface Props {
   user?: FullUser;
 }
 
+interface Employee {
+  id_empleado: number;
+  empleado: string;
+}
+
 const UserForm = (props: Props) => {
   const { user } = props;
+  const [searchTerm, setSearchTerm] = useState('');
 
   const { control, handleSubmit, reset } = useForm<UserUpdate>({
     defaultValues: user ? (user as unknown as UserUpdate) : initialState,
@@ -73,6 +83,26 @@ const UserForm = (props: Props) => {
     { key: 'Comercial', value: 'Comercial' },
     { key: 'Legal', value: 'Legal' },
   ];
+
+  const [empleados, setEmpleados] = useState<SelectItem[]>([]);
+  const [isLoading, setLoading] = useState(false);
+
+  useEffect(() => {
+    odooApi.get<Employee[]>('/drivers/employees/')
+      .then(response => {
+        const data: SelectItem[] = response.data.map((item) => ({
+          key: Number(item.id_empleado),
+          value: item.empleado,
+        }));
+        setEmpleados(data);
+      })
+      .catch(() => {
+        toast.error("Error al obtener empleados.");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
 
   return (
     <Card
@@ -128,7 +158,19 @@ const UserForm = (props: Props) => {
               rules={!user ? { required: 'Este campo es requerido' } : {}}
               className="w-1/3"
             />
-            <AutocompleteInput control={control} name='role' items={roles} label="Especificar el tipo de usuario"></AutocompleteInput>
+            <AutocompleteInput control={control} name='role' items={roles} label="Especificar el tipo de usuario" variant="faded"></AutocompleteInput>
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <AutocompleteInput
+              control={control}
+              name='id_odoo'
+              items={empleados}
+              label="Usuario Odoo"
+              variant="faded"
+              isLoading={isLoading}
+              searchInput={searchTerm}
+              setSearchInput={setSearchTerm}></AutocompleteInput>
           </div>
 
           <div className="flex items-center space-x-2">
