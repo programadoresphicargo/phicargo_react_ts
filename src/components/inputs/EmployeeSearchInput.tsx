@@ -22,12 +22,12 @@ interface Props<T extends FieldValues> {
   name: Path<T>;
   label?: string;
   required?: boolean;
-  driverId?: number | null;
+  employeeId?: number | null;
   isDisabled?: boolean;
 }
 
 export const EmployeeSearchInput = <T extends FieldValues>(props: Props<T>) => {
-  const { control, name, label, driverId, required, isDisabled } = props;
+  const { control, name, label, employeeId, required, isDisabled } = props;
 
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
@@ -36,9 +36,9 @@ export const EmployeeSearchInput = <T extends FieldValues>(props: Props<T>) => {
 
   const { employeesQuery } = useDriverQueries();
 
-  const driver = useMemo(
-    () => (driverId ? employeesQuery.data?.find((v) => v.id_empleado === driverId) : null),
-    [driverId, employeesQuery.data],
+  const employee = useMemo(
+    () => (employeeId ? employeesQuery.data?.find((v) => v.id_empleado === employeeId) : null),
+    [employeeId, employeesQuery.data],
   );
 
   useEffect(() => {
@@ -60,7 +60,7 @@ export const EmployeeSearchInput = <T extends FieldValues>(props: Props<T>) => {
       label={label || 'Empleado'}
       items={data}
       isLoading={employeesQuery.isFetching}
-      searchInput={searchTerm ? searchTerm : driver?.empleado || ''}
+      searchInput={searchTerm ? searchTerm : employee?.empleado || ''}
       setSearchInput={setSearchTerm}
       rules={required ? { required: 'Empleado obligatorio' } : {}}
       isDisabled={isDisabled}

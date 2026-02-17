@@ -7,7 +7,6 @@ import {
   TextInput,
 } from '@/components/inputs';
 import { SubmitHandler, useForm } from 'react-hook-form';
-
 import type { FullUser } from '../../auth/models';
 import { SaveButton } from '@/components/ui';
 import type { UserUpdate } from '../models';
@@ -139,7 +138,7 @@ const UserForm = (props: Props) => {
             <EmployeeSearchInput
               control={control}
               name="id_odoo"
-              driverId={OdooId}
+              employeeId={OdooId}
             />
           </div>
 
