@@ -57,7 +57,7 @@ export const EmployeeSearchInput = <T extends FieldValues>(props: Props<T>) => {
     <AutocompleteInput
       control={control}
       name={name}
-      label={label || 'Empleado'}
+      label={label || 'Empleado en Odoo'}
       items={data}
       isLoading={employeesQuery.isFetching}
       searchInput={searchTerm ? searchTerm : employee?.empleado || ''}
