@@ -1,6 +1,6 @@
-import type { Driver, DriverEdit, Maneuver } from '../models';
+import type { Driver, DriverEdit, Employee, Maneuver } from '../models';
 import { DriverAdapter, maneuverToLocal } from '../adapters';
-import type { DriverApi, ManeuverApi } from '../models/api';
+import type { DriverApi, EmployeeApi, ManeuverApi } from '../models/api';
 
 import { AxiosError } from 'axios';
 import { UpdatableItem } from '@/types';
@@ -19,6 +19,21 @@ export class DriverService {
         );
       }
       throw new Error('Error al obtener los operadores');
+    }
+  }
+
+  static async getAllEmployees(): Promise<Employee[]> {
+    try {
+      const response = await odooApi.get<EmployeeApi[]>('/drivers/employees/');
+      return response.data.map(DriverAdapter.employeeToLocal);
+    } catch (error) {
+      console.error(error);
+      if (error instanceof AxiosError) {
+        throw new Error(
+          error.response?.data?.detail || 'Error al obtener los empleados',
+        );
+      }
+      throw new Error('Error al obtener los empleados');
     }
   }
 

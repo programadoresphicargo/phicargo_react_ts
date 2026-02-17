@@ -4,6 +4,7 @@ import type {
   DriverEdit,
   DriverPosturaSimple,
   DriverSimple,
+  Employee,
 } from '../models';
 import type {
   DriverApi,
@@ -11,6 +12,7 @@ import type {
   DriverEditApi,
   DriverPosturaSimpleApi,
   DriverSimpleApi,
+  EmployeeApi,
 } from '../models/api';
 
 import { UnavailabilityAdapter } from './unavailability-adapter';
@@ -54,42 +56,42 @@ export class DriverAdapter {
       ...DriverAdapter.driverBaseToLocal(driver),
       vehicle: driver.vehicle
         ? {
-            id: driver.vehicle.id,
-            name: driver.vehicle.name2,
-            fleetType: driver.vehicle.fleet_type,
-            status: driver.vehicle.x_status,
-            modality: driver.vehicle.x_modalidad,
-            loadType: driver.vehicle.x_tipo_carga,
-            branch: driver.vehicle.branch,
-          }
+          id: driver.vehicle.id,
+          name: driver.vehicle.name2,
+          fleetType: driver.vehicle.fleet_type,
+          status: driver.vehicle.x_status,
+          modality: driver.vehicle.x_modalidad,
+          loadType: driver.vehicle.x_tipo_carga,
+          branch: driver.vehicle.branch,
+        }
         : null,
       permission: driver.permission
         ? UnavailabilityAdapter.driverPermissionSimpleToLocal(driver.permission)
         : null,
       travel: driver.tms_travel
         ? {
-            id: driver.tms_travel.id,
-            name: driver.tms_travel.name,
-            status: driver.tms_travel.x_status_viaje,
-          }
+          id: driver.tms_travel.id,
+          name: driver.tms_travel.name,
+          status: driver.tms_travel.x_status_viaje,
+        }
         : null,
       maneuver: driver.maniobra
         ? {
-            id: driver.maniobra.id_maniobra,
-            type: driver.maniobra.tipo_maniobra,
-            status: driver.maniobra.estado_maniobra,
-            finishedDate: null,
-          }
+          id: driver.maniobra.id_maniobra,
+          type: driver.maniobra.tipo_maniobra,
+          status: driver.maniobra.estado_maniobra,
+          finishedDate: null,
+        }
         : null,
       lastManeuver: driver.last_maneuver
         ? {
-            id: driver.last_maneuver.id_maniobra,
-            type: driver.last_maneuver.tipo_maniobra,
-            status: driver.last_maneuver.estado_maniobra,
-            finishedDate: driver.last_maneuver.fecha_finalizada
-              ? dayjs(driver.last_maneuver.fecha_finalizada)
-              : null,
-          }
+          id: driver.last_maneuver.id_maniobra,
+          type: driver.last_maneuver.tipo_maniobra,
+          status: driver.last_maneuver.estado_maniobra,
+          finishedDate: driver.last_maneuver.fecha_finalizada
+            ? dayjs(driver.last_maneuver.fecha_finalizada)
+            : null,
+        }
         : null,
       password: driver.password,
     };
@@ -161,6 +163,13 @@ export class DriverAdapter {
     }
 
     return driverApi;
+  }
+
+  static employeeToLocal(employee: EmployeeApi): Employee {
+    return {
+      id_empleado: employee.id_empleado,
+      empleado: employee.empleado,
+    };
   }
 }
 

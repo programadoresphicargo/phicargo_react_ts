@@ -11,11 +11,9 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import type { FullUser } from '../../auth/models';
 import { SaveButton } from '@/components/ui';
 import type { UserUpdate } from '../models';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useUsersQueries } from '../hooks/useUsersQueries';
-import odooApi from '@/api/odoo-api';
-import toast from 'react-hot-toast';
-import { SelectItem } from '@/types/gloabal-types';
+import { EmployeeSearchInput } from '@/components/inputs/EmployeeSearchInput';
 
 const initialState: UserUpdate = {
   username: '',
@@ -32,18 +30,14 @@ interface Props {
   user?: FullUser;
 }
 
-interface Employee {
-  id_empleado: number;
-  empleado: string;
-}
-
 const UserForm = (props: Props) => {
   const { user } = props;
-  const [searchTerm, setSearchTerm] = useState('');
 
-  const { control, handleSubmit, reset } = useForm<UserUpdate>({
+  const { control, handleSubmit, reset, watch } = useForm<UserUpdate>({
     defaultValues: user ? (user as unknown as UserUpdate) : initialState,
   });
+
+  const OdooId = watch('id_odoo');
 
   const {
     userUpdateMutattion: { mutate: updateUser, isPending },
@@ -83,26 +77,6 @@ const UserForm = (props: Props) => {
     { key: 'Comercial', value: 'Comercial' },
     { key: 'Legal', value: 'Legal' },
   ];
-
-  const [empleados, setEmpleados] = useState<SelectItem[]>([]);
-  const [isLoading, setLoading] = useState(false);
-
-  useEffect(() => {
-    odooApi.get<Employee[]>('/drivers/employees/')
-      .then(response => {
-        const data: SelectItem[] = response.data.map((item) => ({
-          key: Number(item.id_empleado),
-          value: item.empleado,
-        }));
-        setEmpleados(data);
-      })
-      .catch(() => {
-        toast.error("Error al obtener empleados.");
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
 
   return (
     <Card
@@ -162,15 +136,11 @@ const UserForm = (props: Props) => {
           </div>
 
           <div className="flex items-center space-x-2">
-            <AutocompleteInput
+            <EmployeeSearchInput
               control={control}
-              name='id_odoo'
-              items={empleados}
-              label="Usuario Odoo"
-              variant="faded"
-              isLoading={isLoading}
-              searchInput={searchTerm}
-              setSearchInput={setSearchTerm}></AutocompleteInput>
+              name="id_odoo"
+              driverId={OdooId}
+            />
           </div>
 
           <div className="flex items-center space-x-2">

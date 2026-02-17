@@ -71,3 +71,7 @@ export interface DriverWithRealStatus extends Driver {
   readonly realStatus: string;
 }
 
+export interface Employee {
+  id_empleado: number;
+  empleado: string;
+}

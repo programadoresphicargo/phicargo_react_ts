@@ -67,6 +67,11 @@ export interface DriverApi extends DriverBaseApi {
   last_maneuver: ManeuverSimpleApi | null;
 }
 
+export interface EmployeeApi {
+  id_empleado: number;
+  empleado: string;
+}
+
 export interface DriverEditApi {
   job_id?: number | null;
   tms_driver_license_id?: string | null;

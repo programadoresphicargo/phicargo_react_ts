@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { Driver } from '../../models';
+import { Driver, Employee } from '../../models';
 import { DriverService } from '../../services';
 import { SelectItem } from '@/types';
 import toast from 'react-hot-toast';
@@ -10,9 +10,17 @@ const mainKey = 'drivers';
 
 export const useDriverQueries = () => {
   const queryClient = useQueryClient();
+
   const driversQuery = useQuery<Driver[]>({
     queryKey: [mainKey],
     queryFn: DriverService.getAllDrivers,
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 10,
+  });
+
+  const employeesQuery = useQuery<Employee[]>({
+    queryKey: ['employees'],
+    queryFn: DriverService.getAllEmployees,
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 10,
   });
@@ -43,5 +51,7 @@ export const useDriverQueries = () => {
     AvailableDrivers,
     driversQuery,
     driverUpdateMutattion,
+    employees: employeesQuery.data || [],
+    employeesQuery
   };
 };
