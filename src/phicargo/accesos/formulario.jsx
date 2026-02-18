@@ -285,8 +285,12 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                 }
                 setIsLoading(false);
             } catch (error) {
+                const mensaje =
+                    error.response?.data?.detail || error.message || "Error desconocido";
+
+                toast.error("Error al procesar los datos. " + mensaje);
+            } finally {
                 setIsLoading(false);
-                toast.error('Error al enviar los datos:' + error);
             }
         } else {
             toast.error('Faltan campos obligatorios.');

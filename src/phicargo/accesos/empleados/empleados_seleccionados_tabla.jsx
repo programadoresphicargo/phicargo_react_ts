@@ -69,13 +69,15 @@ const SelectedEmpleadosTable = ({ }) => {
                 <TableHeader>
                     <TableColumn>ID del empleado</TableColumn>
                     <TableColumn>Empleado</TableColumn>
+                    <TableColumn>Jefe</TableColumn>
                     <TableColumn>Acciones</TableColumn>
                 </TableHeader>
                 <TableBody>
                     {empleadosFiltrados.map((visitor, index) => (
                         <TableRow key={index}>
-                            <TableCell>{visitor.id_empleado}</TableCell>
-                            <TableCell>{visitor.empleado.toUpperCase()}</TableCell>
+                            <TableCell>{visitor?.id_empleado}</TableCell>
+                            <TableCell>{visitor?.empleado?.toUpperCase()}</TableCell>
+                            <TableCell>{visitor?.jefe?.toUpperCase()}</TableCell>
                             <TableCell>
                                 <Button
                                     size='sm'

@@ -62,6 +62,10 @@ const ListadoEmpleados = ({ open, handleClose }) => {
         accessorKey: 'puesto',
         header: 'Puesto',
       },
+      {
+        accessorKey: 'jefe',
+        header: 'Jefe',
+      },
     ],
     [],
   );
