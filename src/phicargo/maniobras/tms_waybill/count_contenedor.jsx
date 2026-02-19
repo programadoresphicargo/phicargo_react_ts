@@ -61,8 +61,8 @@ const CountContenedor = ({
   return (
     <HeaderBase backRoute="/menu">
       <div className="mx-8">
-        <h1 className="text-xl text-gray-100 font-bold">
-          Pendientes de ingreso
+        <h1 className="text-md text-gray-100 font-bold">
+          Pendientes <br /> de ingreso
         </h1>
       </div>
 
@@ -73,6 +73,7 @@ const CountContenedor = ({
           {branches.map(branch => (
             <li key={branch.id}>
               <Checkbox
+                size="sm"
                 isSelected={selectedBranches.includes(branch.id)}
                 onValueChange={(checked) => {
                   setSelectedBranches(prev =>

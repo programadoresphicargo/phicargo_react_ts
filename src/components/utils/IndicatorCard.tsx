@@ -34,7 +34,7 @@ export const IndicatorCard = (props: Props) => {
       <p
         className={
           props.classNames?.title ||
-          'text-gray-200 text-center font-bold uppercase text-sm m-0'
+          'text-gray-200 text-center font-bold uppercase text-xs m-0'
         }
       >
         {props.title}
