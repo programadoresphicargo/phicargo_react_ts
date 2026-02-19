@@ -374,7 +374,10 @@ const AccesoForm = ({ id_acceso, onClose }) => {
 
             try {
                 setIsLoading(true);
-                const response = await odooApi.patch(`/accesos/estado/${id_acceso}/${nuevo_estado}`);
+                const response = await odooApi.patch(`/accesos/${id_acceso}/estado?estado=${nuevo_estado}`,
+                    {
+                        estado: nuevo_estado
+                    });
 
                 if (response.data.status === "success") {
                     toast.success(response.data.message);
