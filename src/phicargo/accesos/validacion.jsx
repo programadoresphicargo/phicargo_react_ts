@@ -51,11 +51,11 @@ const Validador = ({ id_acceso, estado_acceso, open, handleClose }) => {
         try {
             var baseUrl = '';
             if (estado_acceso == 'espera' || estado_acceso == 'autorizado') {
-                baseUrl = '/accesos/validar_acceso/';
+                baseUrl = '/accesos/' + id_acceso + '/accion?accion=validar&id_usuario=' + id_usuario;
             } else if (estado_acceso == 'validado' || estado_acceso == 'rechazado') {
-                baseUrl = '/accesos/archivar_acceso/';
+                baseUrl = '/accesos/' + id_acceso + '/accion?accion=archivar&id_usuario=' + id_usuario;
             }
-            const response = await odooApi.get(baseUrl + id_acceso + '/' + id_usuario);
+            const response = await odooApi.patch(baseUrl);
             if (response.data.status == 'success') {
                 toast.success(response.data.message);
                 handleClose();
@@ -63,7 +63,12 @@ const Validador = ({ id_acceso, estado_acceso, open, handleClose }) => {
                 toast.error(response.data.message);
             }
         } catch (error) {
-            console.error("Error obteniendo los datos:", error);
+            const mensaje =
+                error?.response?.data?.detail ||
+                error?.response?.data?.message ||
+                "Ocurrió un error inesperado";
+
+            toast.error(mensaje);
         }
     };
 
