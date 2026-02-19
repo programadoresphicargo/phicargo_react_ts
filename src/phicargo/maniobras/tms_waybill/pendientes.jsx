@@ -105,7 +105,9 @@ const ContenedoresPendientes = () => {
           pm: { color: "primary", text: "PATIO MÉXICO" },
           P: { color: "primary", text: "EN PATIO" },
           V: { color: "success", text: "EN VIAJE" },
+          PR: { color: "success", text: "PROGRAMADO PARA RETIRO" },
           ER: { color: "success", text: "EN PROCESO DE RETIRO" },
+          PI: { color: "warning", text: "PROGRAMADO PARA INGRESO" },
           EI: { color: "warning", text: "EN PROCESO DE INGRESO" },
           T: { color: "danger", text: "EN TERRAPORTS" },
         };
@@ -155,6 +157,7 @@ const ContenedoresPendientes = () => {
       density: "compact",
       showColumnFilters: true,
       showGlobalFilter: true,
+      grouping: ['x_status_bel']
     },
     muiSkeletonProps: {
       animation: 'pulse',
