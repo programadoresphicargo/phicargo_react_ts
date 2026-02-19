@@ -98,7 +98,7 @@ const ContenedoresPendientes = () => {
       accessorKey: "x_status_bel",
       header: "Estatus",
       Cell: ({ row, cell }) => {
-        console.log(row.original);
+
         const value = cell.getValue();
         const map = {
           sm: { color: "secondary", text: "SIN MANIOBRA" },
