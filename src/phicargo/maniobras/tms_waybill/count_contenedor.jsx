@@ -38,6 +38,16 @@ const CountContenedor = ({
     [filteredData]
   );
 
+  const ER = useMemo(
+    () => filteredData.filter(i => i.x_status_bel === "ER").length,
+    [filteredData]
+  );
+
+  const EI = useMemo(
+    () => filteredData.filter(i => i.x_status_bel === "EI").length,
+    [filteredData]
+  );
+
   return (
     <HeaderBase backRoute="/menu">
       <div className="mx-8">
@@ -71,7 +81,9 @@ const CountContenedor = ({
         {/* ===== INDICADORES ===== */}
         <IndicatorCard title="Sin maniobra" content={SM} isLoading={false} />
         <IndicatorCard title="En patio" content={P} isLoading={false} />
+        <IndicatorCard title="En proceso de retiro" content={ER} isLoading={false} />
         <IndicatorCard title="Viaje" content={V} isLoading={false} />
+        <IndicatorCard title="En proceso de ingreso" content={EI} isLoading={false} />
         <IndicatorCard title="Patio México" content={pm} isLoading={false} />
 
       </div>
