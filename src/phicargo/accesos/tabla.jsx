@@ -135,6 +135,27 @@ const TablaAccesos = ({ title, tipo, background }) => {
         },
       },
       {
+        accessorKey: 'personas',
+        header: 'Personas',
+        Cell: ({ cell }) => {
+          const personas = cell.getValue();
+
+          if (!personas || personas.length === 0) {
+            return <span>-</span>;
+          }
+
+          return (
+            <div>
+              {personas.map((p) => (
+                <div key={p.id_persona}>
+                  {p.persona}
+                </div>
+              ))}
+            </div>
+          );
+        },
+      },
+      {
         accessorKey: 'empresa_visitada',
         header: 'Empresa visitada',
         Cell: ({ cell }) => (
@@ -200,6 +221,7 @@ const TablaAccesos = ({ title, tipo, background }) => {
       pagination: { pageSize: 80 },
       showGlobalFilter: true,
       columnVisibility: {
+        personas: tipo == 'autorizacion' ? true : false,
         marca: tipo == 'vehicular' ? true : false,
         modelo: tipo == 'vehicular' ? true : false,
         placas: tipo == 'vehicular' ? true : false,
