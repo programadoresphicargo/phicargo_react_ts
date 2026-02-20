@@ -136,7 +136,7 @@ const TablaAccesos = ({ title, tipo, background }) => {
       },
       {
         accessorKey: 'personas',
-        header: 'Personas',
+        header: 'Visitantes / Empleados',
         Cell: ({ cell }) => {
           const personas = cell.getValue();
 
