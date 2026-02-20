@@ -509,22 +509,25 @@ const AccesoForm = ({ id_acceso, onClose }) => {
 
                 {((formData.id_empresa === 1 || [1, 5].includes(formData.id_empresa_visitada))) && (
                     <>
-                        <div className="w-full flex items-center mb-3">
-                            <Alert
-                                color="danger"
-                                title="Tu salida debe ser validada previamente."
-                                description="Si no se valida, vigilancia no podrá verla y no podrás salir."
-                                variant="solid"
-                            />
-                        </div>
-                        <div className="w-full flex items-center mb-3">
-                            <Alert
-                                color="danger"
-                                className="text-white"
-                                title="Las entradas vehiculares deben validarse previamente."
-                                description="Si no están validadas, vigilancia no podrá ver el acceso y no podrás ingresar."
-                                variant="solid"
-                            />
+                        <div className="w-full flex gap-4 mb-3">
+                            <div className="w-1/2">
+                                <Alert
+                                    color="danger"
+                                    title="Tu salida debe ser validada previamente."
+                                    description="Si no se valida, vigilancia no podrá verla y no podrás salir."
+                                    variant="solid"
+                                />
+                            </div>
+
+                            <div className="w-1/2">
+                                <Alert
+                                    color="danger"
+                                    className="text-white"
+                                    title="Las entradas vehiculares deben validarse previamente."
+                                    description="Si no están validadas, vigilancia no podrá ver el acceso y no podrás ingresar."
+                                    variant="solid"
+                                />
+                            </div>
                         </div>
                     </>
                 )}
