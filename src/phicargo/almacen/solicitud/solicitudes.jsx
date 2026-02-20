@@ -84,6 +84,10 @@ const Solicitudes = ({ x_tipo, vista }) => {
         header: 'Viaje',
       },
       {
+        accessorKey: 'cliente',
+        header: 'Cliente',
+      },
+      {
         accessorKey: 'inicio_programado',
         header: 'Inicio prog. viaje',
       },
