@@ -110,6 +110,7 @@ const ContenedoresPendientes = () => {
           PI: { color: "warning", text: "PROGRAMADO PARA INGRESO" },
           EI: { color: "warning", text: "EN PROCESO DE INGRESO" },
           T: { color: "danger", text: "EN TERRAPORTS" },
+          ru: { color: "danger", text: "REUTILIZADO" },
         };
 
         const cfg = map[value] || { color: "danger", text: value || "N/A" };
