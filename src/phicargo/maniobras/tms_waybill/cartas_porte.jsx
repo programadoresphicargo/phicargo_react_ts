@@ -114,6 +114,10 @@ const CartasPorte = () => {
             P: { variant: 'primary', text: 'EN PATIO' },
             T: { variant: 'warning', text: 'EN TERRAPORTS' },
             V: { variant: 'success', text: 'EN VIAJE' },
+            PR: { variant: 'success', text: 'PROGRAMADO PARA RETIRO' },
+            PI: { variant: 'warning', text: 'PROGRAMADO PARA INGRESO' },
+            ER: { variant: 'warning', text: 'EN PROCESO DE RETIRO' },
+            EV: { variant: 'secondary', text: 'EN ESPERA DE VIAJE' },
           };
 
           if (mappings[value]) {
