@@ -18,6 +18,7 @@ export const status = [
  { label: "EN TERRAPORTS", key: "T" },
  { label: "EN VIAJE", key: "V" },
  { label: "EN PATIO", key: "P" },
+ { label: "EN ESPERA DE VIAJE", key: "EV" },
 ];
 
 const ContenedorEdit = ({ open, onClose, data }) => {

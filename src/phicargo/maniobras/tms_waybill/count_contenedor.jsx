@@ -58,6 +58,11 @@ const CountContenedor = ({
     [filteredData]
   );
 
+  const EV = useMemo(
+    () => filteredData.filter(i => i.x_status_bel === "EV").length,
+    [filteredData]
+  );
+
   return (
     <HeaderBase backRoute="/menu">
       <div className="mx-8">
@@ -94,6 +99,7 @@ const CountContenedor = ({
         <IndicatorCard title="En patio" content={P} isLoading={false} />
         <IndicatorCard title="Retiro programado" content={PR} isLoading={false} />
         <IndicatorCard title="En proceso de retiro" content={ER} isLoading={false} />
+        <IndicatorCard title="En espera de viaje" content={EV} isLoading={false} />
         <IndicatorCard title="Viaje" content={V} isLoading={false} />
         <IndicatorCard title="Ingreso programado" content={PI} isLoading={false} />
         <IndicatorCard title="En proceso de ingreso" content={EI} isLoading={false} />
