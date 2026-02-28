@@ -212,7 +212,7 @@ function PanelEnvio({ open, cerrar, id_reporte }) {
       imageAlt: 'Imagen de confirmación',
     }).then((result) => {
       if (result.isConfirmed) {
-        reenviar_estatus(id_viaje, id_reporte, estatus_seleccionado, fileList, comentarios);
+        reenviar_estatus(id_viaje, id_reporte, estatus_seleccionado, fileList, comentarios, FechaModificada);
         setFileList([]);
         cerrar();
       }

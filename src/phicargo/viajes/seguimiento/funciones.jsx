@@ -165,7 +165,7 @@ export const useJourneyDialogs = () => {
         }
     };
 
-    const reenviar_estatus = async (id_viaje, id_reporte, id_estatus, archivos, comentarios) => {
+    const reenviar_estatus = async (id_viaje, id_reporte, id_estatus, archivos, comentarios, fecha_modificada = null) => {
         const loadingToast = toast.loading('Procesando, espere...');
 
         try {
@@ -175,6 +175,9 @@ export const useJourneyDialogs = () => {
             data.append('id_estatus', id_estatus);
             data.append('comentarios', comentarios);
             data.append('id_usuario', session.user.id);
+            if (fecha_modificada) {
+                data.append('fecha_modificada', fecha_modificada);
+            }
 
             archivos.forEach((file) => {
                 data.append('files[]', file);
