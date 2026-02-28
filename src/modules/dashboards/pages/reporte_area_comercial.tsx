@@ -99,6 +99,7 @@ function ReporteAreaComercial() {
         return (
          <DatePicker
           variant="bordered"
+          showMonthAndYearPickers
           label="Fecha de Incidencia"
           value={calendarValue} // ✅ CalendarDate compatible con HeroUI
           onChange={(val) => {
