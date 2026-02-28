@@ -32,7 +32,7 @@ function ReporteAreaComercial() {
  const [searchTerm, setSearchTerm] = useState('');
  const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
- const { control, handleSubmit, reset } = useForm<OptionsSelection>({
+ const { control, handleSubmit } = useForm<OptionsSelection>({
   defaultValues: initialFormState,
  });
 
