@@ -6,13 +6,17 @@ import { YearlyContainersCountChart } from '../components/finance/YearlyContaine
 import { YearlyRevenueChart } from '../components/finance/YearlyRevenueChart';
 import { useWaybillStatsQueries } from '../hooks/useWaybillStatsQueries';
 import ReporteIngresosClientes from './report';
+import ReporteAreaComercial from './reporte_area_comercial';
 
 const FinanceDashbordPage = () => {
   const { waybillStatsQuery } = useWaybillStatsQueries();
 
   return (
     <section className="p-4">
-      <ReporteIngresosClientes></ReporteIngresosClientes>
+      <div className="flex gap-6">
+        <ReporteIngresosClientes />
+        <ReporteAreaComercial />
+      </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <RevenueByBranchChart
           isLoading={waybillStatsQuery.isFetching}
