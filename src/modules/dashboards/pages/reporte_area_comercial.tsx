@@ -1,12 +1,10 @@
 import { Button, Card, DatePicker, Select, SelectItem } from "@heroui/react";
 import odooApi from "@/api/odoo-api";
-import { useDebounce } from "@/hooks";
 import { Controller, useForm } from "react-hook-form";
-import { useContacts } from "@/modules/cashflow-report/hooks";
-import { AutocompleteInput } from "@/components/inputs";
 import { useState } from "react";
 import { parseDate } from "@internationalized/date";
 import dayjs, { Dayjs } from "dayjs";
+import SelectCliente from "@/components/inputs/ClienteAutocomplete";
 
 export const conceptos = [
  { id: "Contenedor", label: "Contenedor" },
@@ -34,17 +32,9 @@ const initialFormState: OptionsSelection = {
 function ReporteAreaComercial() {
  const [loading, setLoading] = useState(false);
 
- const [searchTerm, setSearchTerm] = useState('');
- const debouncedSearchTerm = useDebounce(searchTerm, 300);
-
- const { control, handleSubmit } = useForm<OptionsSelection>({
+ const { control, handleSubmit, setValue } = useForm<OptionsSelection>({
   defaultValues: initialFormState,
  });
-
- const {
-  searchContactByNameQuery: { isFetching },
-  ContactsSelection,
- } = useContacts({ name: debouncedSearchTerm });
 
  const generarReporte = async (data: OptionsSelection) => {
 
@@ -89,16 +79,21 @@ function ReporteAreaComercial() {
 
     <div className="flex gap-4 items-end">
      <div className="flex flex-col gap-1">
-      <AutocompleteInput
+
+      <Controller
        control={control}
        name="partner_id"
-       label="Cliente"
-       items={ContactsSelection || []}
-       variant="bordered"
-       isLoading={isFetching}
-       searchInput={searchTerm}
-       setSearchInput={setSearchTerm}
        rules={{ required: 'Cliente obligatorio' }}
+       render={({ field }) => (
+        <SelectCliente
+         variant="bordered"
+         key_name="partner_id"
+         label="Cliente"
+         value={field.value}
+         setValue={setValue}
+         placeholder={"Campo obligatorio"}
+        />
+       )}
       />
 
       <Controller
