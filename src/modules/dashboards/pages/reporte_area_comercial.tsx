@@ -107,10 +107,9 @@ function ReporteAreaComercial() {
          <DatePicker
           variant="bordered"
           showMonthAndYearPickers
-          label="Fecha de Incidencia"
-          value={calendarValue} // ✅ CalendarDate compatible con HeroUI
+          label="Fecha"
+          value={calendarValue}
           onChange={(val) => {
-           // Convertimos CalendarDate de vuelta a Dayjs
            field.onChange(val ? dayjs(val.toString()) : null);
           }}
           isInvalid={!!fieldState.error}
