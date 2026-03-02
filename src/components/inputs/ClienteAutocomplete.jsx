@@ -31,7 +31,6 @@ export default function SelectCliente({ key_name, label, setValue, value, isEdit
 
  const [selectedKey, setSelectedKey] = useState(0);
  const [data, setData] = useState([]);
- const [isLoading, setLoading] = useState(false);
 
  const handleSelection = (key) => {
   const item = list.items.find((i) => i.id == key);
@@ -45,12 +44,12 @@ export default function SelectCliente({ key_name, label, setValue, value, isEdit
  return (
   <React.Fragment>
    <Autocomplete
+    label={label}
     key={selectedKey ?? 'empty'}
     selectedKey={selectedKey}
     fullWidth
     variant={variant}
     placeholder={placeholder}
-    label={label}
     onSelectionChange={handleSelection}
     errorMessage="Campo obligatorio"
     isDisabled={isDisabled}
