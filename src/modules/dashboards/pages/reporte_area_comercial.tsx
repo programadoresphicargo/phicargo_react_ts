@@ -1,17 +1,22 @@
-import { Button, Card, DatePicker } from "@heroui/react";
+import { Button, Card, DatePicker, Select, SelectItem } from "@heroui/react";
 import odooApi from "@/api/odoo-api";
 import { useDebounce } from "@/hooks";
 import { Controller, useForm } from "react-hook-form";
 import { useContacts } from "@/modules/cashflow-report/hooks";
 import { AutocompleteInput } from "@/components/inputs";
-import { SelectElement } from "react-hook-form-mui";
 import { useState } from "react";
 import { parseDate } from "@internationalized/date";
 import dayjs, { Dayjs } from "dayjs";
 
-export const animals = [
+export const conceptos = [
  { id: "Contenedor", label: "Contenedor" },
+ { id: "Viaje", label: "Viaje" },
+ { id: "Facturacion", label: "Facturación" },
+ { id: "Sucursal", label: "Sucursal" },
  { id: "Ejecutivo", label: "Ejecutivo" },
+ { id: "Ruta", label: "Ruta" },
+ { id: "TipoServicio", label: "Tipo de servicio" },
+ { id: "Circuito", label: "Circuito" },
 ];
 
 interface OptionsSelection {
@@ -113,14 +118,31 @@ function ReporteAreaComercial() {
        }}
       />
 
-      <SelectElement
+      <Controller
        control={control}
        name="concepto"
-       label="Concepto"
-       required
-       rules={{ required: 'Concepto obligatorio' }}
-       options={animals}
+       rules={{ required: "Tipo de incidencia requerida" }}
+       render={({ field, fieldState }) => (
+        <Select
+         label="Concepto"
+         variant="bordered"
+         selectedKeys={field.value ? [field.value] : []}
+         onSelectionChange={(keys) => {
+          const value = Array.from(keys)[0];
+          field.onChange(value);
+         }}
+         isInvalid={!!fieldState.error}
+         errorMessage={fieldState.error?.message}
+        >
+         {conceptos.map((option) => (
+          <SelectItem key={option.id}>
+           {option.label}
+          </SelectItem>
+         ))}
+        </Select>
+       )}
       />
+
      </div>
 
      <Button
