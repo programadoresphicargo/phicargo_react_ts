@@ -64,7 +64,14 @@ function ReporteAreaComercial() {
    });
 
    const url = window.URL.createObjectURL(blob);
-   window.open(url, "_blank");
+   const a = document.createElement("a");
+   a.href = url;
+   a.download = `Reporte_${data.concepto}_${data.date_start?.format("YYYY-MM-DD")}.xlsx`;
+   document.body.appendChild(a);
+   a.click();
+   document.body.removeChild(a);
+   window.URL.revokeObjectURL(url);
+
   } catch (error) {
    alert("Error al generar el reporte");
    console.error(error);
