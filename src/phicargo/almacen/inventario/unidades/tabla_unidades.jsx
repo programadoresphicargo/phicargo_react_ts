@@ -25,20 +25,23 @@ import DialogTitle from '@mui/material/DialogTitle';
 import EPPForm from '../form';
 import { useAlmacen } from '../../contexto/contexto';
 import { exportToCSV } from '@/phicargo/utils/export';
+import SolicitudForm from '../../solicitud/form';
 
 const TablaUnidades = ({ close, tipo }) => {
 
   const { data, setData } = useAlmacen();
-  const [id_epp, setIDEpp] = React.useState(null);
+
   const [open, setOpen] = React.useState(false);
 
-  const handleClickOpen = () => {
+  const [id_solicitud, setIDSolicitud] = React.useState(null);
+
+  const handleClickOpen = (id) => {
     setOpen(true);
+    setIDSolicitud(id);
   };
 
   const handleClose = () => {
     setOpen(false);
-    fetchData();
   };
 
   const [dataEquipos, setDataEquipo] = useState([]);
@@ -70,9 +73,31 @@ const TablaUnidades = ({ close, tipo }) => {
         header: 'Nombre',
       },
       {
+        accessorKey: 'x_tipo',
+        header: 'Tipo',
+      },
+      {
         accessorKey: 'estado',
         header: 'Estado',
       },
+      {
+        accessorKey: 'x_solicitud_id',
+        header: 'Solicitud',
+        Cell: ({ cell }) => {
+          const value = cell.getValue();
+
+          if (!value) return null; // si es null no muestra nada
+
+          return (
+            <Chip
+              className='text-white'
+              color="success"
+              size="sm"
+            >{value}
+            </Chip>
+          );
+        },
+      }
     ],
     [],
   );
@@ -89,8 +114,8 @@ const TablaUnidades = ({ close, tipo }) => {
     positionGlobalFilter: "right",
     localization: MRT_Localization_ES,
     muiSearchTextFieldProps: {
-      placeholder: `Buscar en solicitud`,
-      sx: { minWidth: '300px' },
+      placeholder: `Buscar`,
+      sx: { minWidth: '400px' },
       variant: 'outlined',
     },
     columnResizeMode: "onEnd",
@@ -119,15 +144,12 @@ const TablaUnidades = ({ close, tipo }) => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 260px)',
+        maxHeight: 'calc(100vh - 250px)',
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
       onClick: ({ event }) => {
-        const newItem = { id: Date.now(), isNew: true, ...row.original, x_cantidad_solicitada: 1, x_solicitud_id: data?.id };
-        setEPP(prev => [...prev, newItem]);
-        setEPPAdded(prev => [...eppAdded, newItem]);
-        close();
+        handleClickOpen(row.original.x_solicitud_id);
       },
     }),
     muiTableBodyCellProps: ({ row }) => ({
@@ -154,30 +176,7 @@ const TablaUnidades = ({ close, tipo }) => {
 
         <Button
           className='text-white'
-          startContent={<i class="bi bi-plus-lg"></i>}
-          color='primary'
-          isDisabled={false}
-          onPress={async () => {
-            setIDEpp(null);
-            handleClickOpen();
-          }}
-        >Nuevo producto
-        </Button>
-
-        <Button
-          className='text-white'
-          startContent={<i class="bi bi-plus-lg"></i>}
-          color='primary'
-          isDisabled={false}
-          onPress={async () => {
-            setIDEpp(null);
-            handleClickOpen();
-          }}
-        >Nuevo producto
-        </Button>
-
-        <Button
-          className='text-white'
+          radius='full'
           startContent={<i class="bi bi-arrow-clockwise"></i>}
           color='primary'
           isDisabled={false}
@@ -186,6 +185,7 @@ const TablaUnidades = ({ close, tipo }) => {
         </Button>
 
         <Button
+          radius='full'
           color='success'
           className='text-white'
           startContent={<i class="bi bi-file-earmark-excel"></i>}
@@ -203,7 +203,8 @@ const TablaUnidades = ({ close, tipo }) => {
         table={table}
       />
 
-      <EPPForm id_epp={id_epp} open={open} handleClose={handleClose}></EPPForm>
+      <SolicitudForm id_solicitud={id_solicitud} open={open} handleClose={handleClose} x_tipo={"epp"} setID={setIDSolicitud} vista={'solicitudes'}></SolicitudForm>
+
     </>
   );
 };
