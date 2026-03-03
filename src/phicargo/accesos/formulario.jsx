@@ -507,7 +507,7 @@ const AccesoForm = ({ id_acceso, onClose }) => {
                     </>
                 )}
 
-                {((formData.id_empresa === 1 || [1, 5].includes(formData.id_empresa_visitada))) && (
+                {((formData.id_empresa === 1 && formData.tipo_movimiento == "salida") || (selectVehiculos.length > 0)) && (
                     <>
                         <div className="w-full flex gap-4 mb-3">
                             <div className="w-1/2">
