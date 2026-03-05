@@ -151,6 +151,14 @@ const ViajesFinalizados = ({ }) => {
         header: 'Subcliente',
       },
       {
+        accessorKey: 'motogenerador_1',
+        header: 'Motogenerador 1',
+      },
+      {
+        accessorKey: 'motogenerador_2',
+        header: 'Motogenerador 2',
+      },
+      {
         accessorKey: 'pod_enviado',
         header: 'POD',
         Cell: ({ cell }) => {

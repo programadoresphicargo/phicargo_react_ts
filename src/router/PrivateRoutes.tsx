@@ -77,6 +77,7 @@ const EstadiasInfo = lazy(() => import('../phicargo/estadias/index_estadia'));
 const Accesos = lazy(() => import('../phicargo/accesos/Accesos'));
 const SolicitudesEPP = lazy(() => import('../phicargo/almacen/solicitud/index_solicitudes_epp'));
 const SolicitudesAmarre = lazy(() => import('../phicargo/almacen/solicitud/index_solicitudes_amarre'));
+const SolicitudesLlantas = lazy(() => import('../phicargo/llantas/index_solicitudes_llantas'));
 const Inventario = lazy(() => import('../phicargo/almacen/inventario/index'));
 const EntregaMonitoreo = lazy(() => import('../phicargo/monitoreo/monitoreo'));
 const CodigosPostales = lazy(() => import('../phicargo/viajes/codigos_postales/index'));
@@ -434,6 +435,16 @@ export const PrivateRoutes = () => {
           element={
             <Suspense fallback={<LoadingPage />}>
               <SolicitudesAmarre></SolicitudesAmarre>
+            </Suspense>
+          }
+        />
+
+
+        <Route
+          path="/solicitudes_llantas"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <SolicitudesLlantas></SolicitudesLlantas>
             </Suspense>
           }
         />
