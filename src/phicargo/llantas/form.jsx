@@ -87,67 +87,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
         }
     };
 
-    const confirmar = async () => {
-        const result = await Swal.fire({
-            title: '¿Estás seguro?',
-            text: 'Al confirmar, este equipo se marcará como reservado.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Sí, confirmar',
-        });
-
-        if (result.isConfirmed) {
-            setSaving(true);
-            try {
-                setLoading(true);
-                const response = await odooApi.patch('/solicitudes_llantas/' + id_solicitud + '/status/confirmado');
-                if (response.data.status == 'success') {
-                    toast.success(response.data.message);
-                    fetchData(id_solicitud);
-                    handleClose();
-                } else {
-                    toast.error(response.data.message);
-                }
-            } catch (error) {
-                toast.error('Error al guardar:', error);
-            } finally {
-                setLoading(false);
-                setSaving(false);
-            }
-        }
-    };
-
-    const reservar = async () => {
-        const result = await Swal.fire({
-            title: '¿Estás seguro?',
-            text: 'Al confirmar, este equipo se marcará como entregado y se descontará del inventario disponible.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Sí, confirmar',
-        });
-
-        if (result.isConfirmed) {
-            setSaving(true);
-            try {
-                setLoading(true);
-                const response = await odooApi.patch('/tms_travel/solicitudes_equipo/reservar/' + id_solicitud);
-                if (response.data.status == 'success') {
-                    toast.success(response.data.message);
-                    fetchData(id_solicitud);
-                    handleClose();
-                } else {
-                    toast.error(response.data.message);
-                }
-            } catch (error) {
-                toast.error('Error al guardar:', error);
-            } finally {
-                setLoading(false);
-                setSaving(false);
-            }
-        }
-    };
-
-    const entregar = async () => {
+    const changeState = async (estado) => {
         const result = await Swal.fire({
             title: '¿Estás seguro?',
             text: 'Entregar equipo al operador',
@@ -160,46 +100,21 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
             setSaving(true);
             setLoading(true);
             try {
-                const response = await odooApi.patch('/solicitudes_llantas/' + id_solicitud + '/status/entregado');
+                const response = await odooApi.patch('/solicitudes_llantas/' + id_solicitud + '/status/' + estado);
                 if (response.data.status == 'success') {
                     toast.success(response.data.message);
                     fetchData(id_solicitud);
                     handleClose();
                 } else {
-                    toast.error(response.data.message);
+                    toast.error('Error al guarda22r:' + response.data.message);
                 }
             } catch (error) {
-                toast.error('Error al guardar:', error);
-            } finally {
-                setSaving(false);
-                setLoading(false);
-            }
-        }
-    };
-
-    const cambiar_borrador = async () => {
-        const result = await Swal.fire({
-            title: '¿Estás seguro?',
-            text: 'Regresar solicitud a borrador para hacer cambios',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Sí, confirmar',
-        });
-
-        if (result.isConfirmed) {
-            setSaving(true);
-            setLoading(true);
-            try {
-                const response = await odooApi.patch('/solicitudes_llantas/' + id_solicitud + '/status/borrador');
-                if (response.data.status == 'success') {
-                    toast.success(response.data.message);
-                    fetchData(id_solicitud);
-                    handleClose();
+                const detail = error?.response?.data?.detail;
+                if (detail) {
+                    toast.error(detail);
                 } else {
-                    toast.error(response.data.message);
+                    toast.error('Error al guardar');
                 }
-            } catch (error) {
-                toast.error('Error al guardar:', error);
             } finally {
                 setSaving(false);
                 setLoading(false);
@@ -261,7 +176,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
 
     return (
         <>
-            <Dialog open={open} onClose={handleClose} maxWidth="xl" fullWidth slots={{
+            <Dialog open={open} onClose={handleClose} maxWidth="xl" fullScreen slots={{
                 transition: Transition,
             }}
                 keepMounted>
@@ -322,23 +237,23 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                                     radius="full"
                                     color="success"
                                     className="text-white"
-                                    onPress={() => confirmar()}
+                                    onPress={() => changeState('confirmado')}
                                     isLoading={isLoading}>
                                     Confirmar y reservar
                                 </Button>
                             )}
                             {data?.x_studio_status == "confirmado" && (
-                                <Button color='warning' className='text-white' onPress={() => cambiar_borrador()} isLoading={isLoading} radius="full">Regresar a borrador</Button>
+                                <Button color='warning' className='text-white' onPress={() => changeState('borrador')} isLoading={isLoading} radius="full">Regresar a borrador</Button>
                             )}
                             {data?.x_studio_status == "confirmado" && (
-                                <Button color='success' className='text-white' onPress={() => entregar()} isLoading={isLoading} radius="full">Entregar</Button>
+                                <Button color='success' className='text-white' onPress={() => changeState('entregado')} isLoading={isLoading} radius="full">Entregar</Button>
                             )}
-                            {((data?.x_studio_status == "entregado" || data?.x_studio_status == "recepcionado_operador") && data?.es_asignacion) && (
+                            {((data?.x_studio_status == "entregado" || data?.x_studio_status == "recepcionado_operador")) && (
                                 <Button
                                     radius="full"
-                                    color='secondary'
+                                    color='danger'
                                     className='text-white'
-                                    onPress={() => devolver()}
+                                    onPress={() => changeState('cerrado')}
                                     isLoading={isLoading}>
                                     Cerrar solicitud
                                 </Button>

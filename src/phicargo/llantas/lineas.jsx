@@ -25,6 +25,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import toast from 'react-hot-toast';
 import { useSolicitudesLlantas } from './contexto';
 import LlantasDisponibles from './llantas_disponibles';
+import Swal from 'sweetalert2';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -34,6 +35,7 @@ const LlantasAsignadas = ({ }) => {
 
   const { modoEdicion, setModoEdicion, lineasGlobales, setLineasGlobales, data, setData } = useSolicitudesLlantas();
   const [open, setOpen] = React.useState(false);
+  const [isLoading, setLoading] = useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -43,8 +45,40 @@ const LlantasAsignadas = ({ }) => {
     setOpen(false);
   };
 
+  const devolver = async (row) => {
+    const result = await Swal.fire({
+      title: '¿Estás seguro?',
+      text: '-',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, confirmar',
+    });
+
+    if (result.isConfirmed) {
+      try {
+        setLoading(true);
+        const response = await odooApi.patch('/solicitudes_llantas/devolver/', row);
+        if (response.data.status == 'success') {
+          toast.success(response.data.message);
+          handleClose();
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error('Error al guardar:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
   const columns = useMemo(
     () => [
+      {
+        accessorKey: 'id_line',
+        header: 'ID Linea',
+        enableEditing: false,
+      },
       {
         accessorKey: 'name',
         header: 'Llanta',
@@ -61,11 +95,32 @@ const LlantasAsignadas = ({ }) => {
         enableEditing: false,
       },
       {
+        accessorKey: 'condicion',
+        header: 'Condicion',
+        enableEditing: true,
+        editVariant: 'select',
+        editSelectOptions: ['buena', 'dañada', 'ponchada', 'perdida'],
+      },
+      {
+        accessorKey: 'observaciones',
+        header: 'Observaciones',
+        enableEditing: true,
+      },
+      {
+        accessorKey: 'fecha_devolucion',
+        header: 'Fecha devolución',
+        enableEditing: true,
+        muiEditTextFieldProps: {
+          type: 'date',
+        },
+      },
+      {
         accessorKey: 'devolver',
-        header: 'Acción',
+        header: 'Devolver',
         enableEditing: false,
         Cell: ({ cell, row, table }) => {
-          return <Button radius='full' color='success' size='sm' className="text-white" onPress={() => deleteReserva(row.original.id)} isDisabled={!modoEdicion}>
+          console.log(row.original);
+          return <Button radius='full' color='success' size='sm' className="text-white" onPress={() => devolver(row.original)}>
             Devolver
           </Button>
         },
@@ -81,7 +136,7 @@ const LlantasAsignadas = ({ }) => {
         },
       }
     ],
-    [modoEdicion],
+    [data],
   );
 
   const deleteReserva = (id) => {
@@ -95,7 +150,7 @@ const LlantasAsignadas = ({ }) => {
     enableGlobalFilter: true,
     enableFilters: true,
     enableEditing: true,
-    editDisplayMode: "table",
+    editDisplayMode: "modal",
     positionActionsColumn: 'last',
     enableColumnPinning: true,
     enableStickyHeader: true,
@@ -113,6 +168,11 @@ const LlantasAsignadas = ({ }) => {
       expanded: true,
       showColumnFilters: true,
       pagination: { pageSize: 80 },
+      columnVisibility: {
+        condicion: data.x_studio_status == 'borrador' ? true : false,
+        fecha_devolucion: data.x_studio_status == 'borrador' ? true : false,
+        observaciones: data.x_studio_status == 'borrador' ? true : false,
+      },
     },
     muiTablePaperProps: {
       elevation: 0,
@@ -131,6 +191,11 @@ const LlantasAsignadas = ({ }) => {
       sx: {
         maxHeight: 'calc(100vh - 300px)',
       },
+    },
+    onEditingRowSave: ({ values, row }) => {
+      setLineasGlobales(prev =>
+        prev.map(r => r.id === row.original.id ? { ...r, ...values } : r)
+      );
     },
     renderTopToolbarCustomActions: ({ table }) => (
       <Box
