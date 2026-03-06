@@ -196,6 +196,7 @@ const LlantasAsignadas = ({ }) => {
       setLineasGlobales(prev =>
         prev.map(r => r.id === row.original.id ? { ...r, ...values } : r)
       );
+      table.setEditingRow(null);
     },
     renderTopToolbarCustomActions: ({ table }) => (
       <Box
