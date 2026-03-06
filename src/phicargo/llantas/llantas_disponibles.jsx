@@ -23,13 +23,14 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useSolicitudesLlantas } from './contexto';
+import toast from 'react-hot-toast';
 
 const LlantasDisponibles = ({ onClose }) => {
   const { data, setData, lineasGlobales, setLineasGlobales } = useSolicitudesLlantas();
 
   const [dataEquipos, setDataEquipo] = useState([]);
   const [isLoading, setLoading] = useState(false);
-  const [rowSelection, setRowSelection] = useState({}); 
+  const [rowSelection, setRowSelection] = useState({});
 
   const fetchData = async () => {
     try {
@@ -115,19 +116,43 @@ const LlantasDisponibles = ({ onClose }) => {
           color="secondary"
           isDisabled={Object.keys(rowSelection).length === 0} // deshabilitado si no hay selección
           onPress={() => {
-            const selectedRows = table.getSelectedRowModel().rows;
-            const nuevas = selectedRows.map((row) => ({
-              id: -(Date.now() + Math.floor(Math.random() * 1000)),
-              x_solicitud_id: data.id,
-              x_tire_id: row.original.id,
-              name: row.original.name,
-              marca: row.original.marca,
-              modelo: row.original.modelo,
-            }));
 
-            setLineasGlobales((prev) => [...prev, ...nuevas]);
-            setRowSelection({}); // limpiar selección
-            onClose(); // cerrar modal si quieres
+            const selectedRows = table.getSelectedRowModel().rows;
+
+            const nuevas = [];
+            let repetidas = [];
+
+            selectedRows.forEach((row) => {
+
+              const existe = lineasGlobales.some(
+                (l) => l.x_tire_id === row.original.id
+              );
+
+              if (existe) {
+                repetidas.push(row.original.name);
+              } else {
+                nuevas.push({
+                  id: -(Date.now() + Math.floor(Math.random() * 1000)),
+                  x_solicitud_id: data.id,
+                  x_tire_id: row.original.id,
+                  name: row.original.name,
+                  marca: row.original.marca,
+                  modelo: row.original.modelo,
+                });
+              }
+
+            });
+
+            if (repetidas.length > 0) {
+              toast.error(`Las siguientes llantas ya están agregadas: ${repetidas.join(', ')}`);
+            }
+
+            if (nuevas.length > 0) {
+              setLineasGlobales((prev) => [...prev, ...nuevas]);
+            }
+
+            setRowSelection({});
+            onClose();
           }}
         >
           Agregar a solicitud

@@ -160,6 +160,10 @@ const SolicitudesLlantas = ({ x_tipo = "", vista }) => {
         accessorKey: 'x_cantidad_solicitada',
         header: 'Cantidad solicitada',
       },
+      {
+        accessorKey: 'llantas',
+        header: 'Llantas asignadas',
+      },
     ],
     [],
   );
