@@ -50,6 +50,11 @@ const EstadoSolicitud = () => {
                         title: 'Devuelto',
                         value: 'devuelto',
                     },
+                    {
+                        status: current === 'cancelado' ? 'process' : 'wait',
+                        title: 'Cancelado',
+                        value: 'cancelado',
+                    },
                 ]}
             />
         </>

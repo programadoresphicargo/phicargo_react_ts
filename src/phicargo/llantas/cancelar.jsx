@@ -29,7 +29,7 @@ const CancelarSolicitudDialog = ({ open, onClose, id_solicitud }) => {
 
         setLoading(true);
         try {
-            const response = await odooApi.patch(`/tms_travel/solicitudes_equipo/cancelar/`, {
+            const response = await odooApi.patch('/solicitudes_llantas/' + id_solicitud + '/status/cancelado', {
                 id_solicitud,
                 motivo_cancelacion,
                 comentarios_cancelacion,
@@ -62,6 +62,7 @@ const CancelarSolicitudDialog = ({ open, onClose, id_solicitud }) => {
                         onSelectionChange={(keys) => setMotivo(Array.from(keys)[0])}
                         isInvalid={!!errors.motivo_cancelacion}
                         errorMessage={errors.motivo_cancelacion}
+                        variant="faded"
                     >
                         <SelectItem key="error de captura">Error de captura</SelectItem>
                         <SelectItem key="solicitud duplicada">Solicitud duplicada</SelectItem>
@@ -80,6 +81,7 @@ const CancelarSolicitudDialog = ({ open, onClose, id_solicitud }) => {
                         onChange={(e) => setComentario(e.target.value)}
                         isInvalid={!!errors.comentarios_cancelacion}
                         errorMessage={errors.comentarios_cancelacion}
+                        variant="faded"
                     />
                 </div>
             </DialogContent>
@@ -92,7 +94,7 @@ const CancelarSolicitudDialog = ({ open, onClose, id_solicitud }) => {
                     isDisabled={loading}
                     isLoading={loading}
                 >
-                    Confirmar cancelación
+                    Confirmar
                 </Button>
             </DialogActions>
         </Dialog>

@@ -2,7 +2,6 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import { Popover, PopoverContent, PopoverTrigger, User, useDisclosure } from "@heroui/react";
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import { Avatar } from "@heroui/react";
@@ -14,8 +13,6 @@ import IconButton from '@mui/material/IconButton';
 import { Image } from 'antd';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import Slide from '@mui/material/Slide';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import odooApi from '@/api/odoo-api';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -60,7 +57,6 @@ const LlantasAsignadas = ({ }) => {
         const response = await odooApi.patch('/solicitudes_llantas/devolver/', row);
         if (response.data.status == 'success') {
           toast.success(response.data.message);
-          handleClose();
         } else {
           toast.error(response.data.message);
         }
@@ -119,7 +115,6 @@ const LlantasAsignadas = ({ }) => {
         header: 'Devolver',
         enableEditing: false,
         Cell: ({ cell, row, table }) => {
-          console.log(row.original);
           return <Button radius='full' color='success' size='sm' className="text-white" onPress={() => devolver(row.original)}>
             Devolver
           </Button>
@@ -130,17 +125,17 @@ const LlantasAsignadas = ({ }) => {
         header: 'Borrar',
         enableEditing: false,
         Cell: ({ cell, row, table }) => {
-          return <Button radius='full' color='danger' size='sm' onPress={() => deleteReserva(row.original.id)} isDisabled={!modoEdicion}>
+          return <Button radius='full' color='danger' size='sm' onPress={() => deleteLine(row.original.id_line)} isDisabled={!modoEdicion}>
             Eliminar
           </Button>
         },
       }
     ],
-    [data],
+    [data, modoEdicion],
   );
 
-  const deleteReserva = (id) => {
-    setLineasGlobales(prev => prev.filter(r => r.id !== id));
+  const deleteLine = (id_line) => {
+    setLineasGlobales(prev => prev.filter(r => r.id_line !== id_line));
   };
 
   const table = useMaterialReactTable({
@@ -169,9 +164,9 @@ const LlantasAsignadas = ({ }) => {
       showColumnFilters: true,
       pagination: { pageSize: 80 },
       columnVisibility: {
-        condicion: data.x_studio_status == 'borrador' ? true : false,
-        fecha_devolucion: data.x_studio_status == 'borrador' ? true : false,
-        observaciones: data.x_studio_status == 'borrador' ? true : false,
+        condicion: data.x_studio_status != 'borrador' ? true : false,
+        fecha_devolucion: data.x_studio_status != 'borrador' ? true : false,
+        observaciones: data.x_studio_status != 'borrador' ? true : false,
       },
     },
     muiTablePaperProps: {
@@ -194,7 +189,7 @@ const LlantasAsignadas = ({ }) => {
     },
     onEditingRowSave: ({ values, row }) => {
       setLineasGlobales(prev =>
-        prev.map(r => r.id === row.original.id ? { ...r, ...values } : r)
+        prev.map(r => r.id_line === row.original.id_line ? { ...r, ...values } : r)
       );
       table.setEditingRow(null);
     },
