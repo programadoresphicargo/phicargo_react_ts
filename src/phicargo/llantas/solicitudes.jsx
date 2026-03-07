@@ -137,9 +137,9 @@ const SolicitudesLlantas = ({ x_tipo = "", vista }) => {
             badgeClass = 'success';
           } else if (estatus === 'borrador') {
             badgeClass = 'warning';
-          } else if (estatus === 'devuelto') {
+          } else if (estatus === 'cerrado') {
             badgeClass = 'success';
-          } else if (estatus === 'cancelada') {
+          } else if (estatus === 'cancelado') {
             badgeClass = 'danger';
           } else {
             badgeClass = 'secondary';
