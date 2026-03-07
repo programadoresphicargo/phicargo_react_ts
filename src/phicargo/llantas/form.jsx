@@ -312,21 +312,18 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                                                 <NumberInput label="Cantidad solicitada:" value={data?.x_cantidad_solicitada} isReadOnly></NumberInput>
                                             </Grid>
 
-                                            {vista == 'solicitudes' && (<>
-                                                <Grid item xs={12} sm={6}>
-                                                    Operador asignado:
-                                                    <Typography variant="body1">{data?.operador || '---'}</Typography>
-                                                </Grid>
+                                            <Grid item xs={12} sm={6}>
+                                                Operador asignado:
+                                                <Typography variant="body1">{data?.operador || '---'}</Typography>
+                                            </Grid>
 
-                                                <Grid item xs={12} sm={6}>
-                                                    <Input
-                                                        value={data?.inicio_programado || '---'}
-                                                        label="Inicio programado de viaje:"
-                                                        isReadOnly
-                                                    />
-                                                </Grid>
-                                            </>
-                                            )}
+                                            <Grid item xs={12} sm={6}>
+                                                <Input
+                                                    value={data?.inicio_programado || '---'}
+                                                    label="Inicio programado de viaje:"
+                                                    isReadOnly
+                                                />
+                                            </Grid>
 
                                             {vista == 'asignaciones' && (<>
                                                 <Grid item xs={12} sm={6}>
@@ -386,7 +383,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
 
                 )}
 
-            </Dialog>
+            </Dialog >
 
             <CancelarSolicitudDialog
                 open={openCancelar}
