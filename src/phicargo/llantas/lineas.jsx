@@ -3,22 +3,15 @@ import {
   useMaterialReactTable,
 } from 'material-react-table';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import AppBar from '@mui/material/AppBar';
-import { Avatar } from "@heroui/react";
 import { Box } from '@mui/material';
 import { Button } from "@heroui/react"
 import { Chip } from "@heroui/react";
-import CloseIcon from '@mui/icons-material/Close';
-import IconButton from '@mui/material/IconButton';
-import { Image } from 'antd';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import Slide from '@mui/material/Slide';
 import odooApi from '@/api/odoo-api';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 import toast from 'react-hot-toast';
 import { useSolicitudesLlantas } from './contexto';
 import LlantasDisponibles from './llantas_disponibles';
@@ -30,7 +23,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const LlantasAsignadas = ({ }) => {
 
-  const { modoEdicion, setModoEdicion, lineasGlobales, setLineasGlobales, data, setData } = useSolicitudesLlantas();
+  const { modoEdicion, setModoEdicion, lineasGlobales, setLineasGlobales, data, setData, fetchData } = useSolicitudesLlantas();
   const [open, setOpen] = React.useState(false);
   const [isLoading, setLoading] = useState(false);
 
@@ -42,37 +35,16 @@ const LlantasAsignadas = ({ }) => {
     setOpen(false);
   };
 
-  const devolver = async (row) => {
-    const result = await Swal.fire({
-      title: '¿Estás seguro?',
-      text: '-',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Sí, confirmar',
-    });
-
-    if (result.isConfirmed) {
-      try {
-        setLoading(true);
-        const response = await odooApi.patch('/solicitudes_llantas/devolver/', row);
-        if (response.data.status == 'success') {
-          toast.success(response.data.message);
-        } else {
-          toast.error(response.data.message);
-        }
-      } catch (error) {
-        toast.error('Error al guardar:', error);
-      } finally {
-        setLoading(false);
-      }
-    }
-  };
-
   const columns = useMemo(
     () => [
       {
         accessorKey: 'id_line',
         header: 'ID Linea',
+        enableEditing: false,
+      },
+      {
+        accessorKey: 'id_devolucion',
+        header: 'ID Devolucion',
         enableEditing: false,
       },
       {
@@ -96,11 +68,17 @@ const LlantasAsignadas = ({ }) => {
         enableEditing: true,
         editVariant: 'select',
         editSelectOptions: ['buena', 'dañada', 'ponchada', 'perdida'],
+        muiEditTextFieldProps: {
+          required: true,
+        },
       },
       {
         accessorKey: 'observaciones',
         header: 'Observaciones',
         enableEditing: true,
+        muiEditTextFieldProps: {
+          required: true,
+        },
       },
       {
         accessorKey: 'fecha_devolucion',
@@ -108,16 +86,7 @@ const LlantasAsignadas = ({ }) => {
         enableEditing: true,
         muiEditTextFieldProps: {
           type: 'date',
-        },
-      },
-      {
-        accessorKey: 'devolver',
-        header: 'Devolver',
-        enableEditing: false,
-        Cell: ({ cell, row, table }) => {
-          return <Button radius='full' color='success' size='sm' className="text-white" onPress={() => devolver(row.original)}>
-            Devolver
-          </Button>
+          required: true,
         },
       },
       {
@@ -131,11 +100,43 @@ const LlantasAsignadas = ({ }) => {
         },
       }
     ],
-    [data, modoEdicion],
+    [modoEdicion],
   );
 
   const deleteLine = (id_line) => {
     setLineasGlobales(prev => prev.filter(r => r.id_line !== id_line));
+  };
+
+  const guardarCambios = async () => {
+
+    const lineasActualizadas = lineasGlobales;
+
+    try {
+
+      setLoading(true);
+      const response = await odooApi.patch(
+        '/solicitudes_llantas/update_lines/', lineasActualizadas
+      );
+
+      if (response.data.status === 'success') {
+        toast.success('Líneas actualizadas');
+        fetchData(data?.id);
+        setLineasGlobales(prev =>
+          prev.map(r => ({ ...r }))
+        );
+      } else {
+        toast.error(response.data.message);
+      }
+
+    } catch (error) {
+
+      console.error(error);
+      toast.error('Error al guardar cambios');
+
+    } finally {
+      setLoading(false);
+    }
+
   };
 
   const table = useMaterialReactTable({
@@ -164,9 +165,9 @@ const LlantasAsignadas = ({ }) => {
       showColumnFilters: true,
       pagination: { pageSize: 80 },
       columnVisibility: {
-        condicion: data.x_studio_status != 'borrador' ? true : false,
-        fecha_devolucion: data.x_studio_status != 'borrador' ? true : false,
-        observaciones: data.x_studio_status != 'borrador' ? true : false,
+        condicion: data?.x_studio_status != 'borrador' ? true : false,
+        fecha_devolucion: data?.x_studio_status != 'borrador' ? true : false,
+        observaciones: data?.x_studio_status != 'borrador' ? true : false,
       },
     },
     muiTablePaperProps: {
@@ -187,10 +188,25 @@ const LlantasAsignadas = ({ }) => {
         maxHeight: 'calc(100vh - 300px)',
       },
     },
-    onEditingRowSave: ({ values, row }) => {
+    onEditingRowSave: ({ values, row, table }) => {
+
+      if (!values.condicion || !values.observaciones || !values.fecha_devolucion) {
+        toast.error("Todos los campos son obligatorios");
+        return; // evita cerrar el modal
+      }
+
       setLineasGlobales(prev =>
-        prev.map(r => r.id_line === row.original.id_line ? { ...r, ...values } : r)
+        prev.map(r =>
+          r.id_line === row.original.id_line
+            ? {
+              ...r,
+              ...values,
+              updated: row.original.id_devolucion ? true : false
+            }
+            : r
+        )
       );
+
       table.setEditingRow(null);
     },
     renderTopToolbarCustomActions: ({ table }) => (
@@ -211,13 +227,25 @@ const LlantasAsignadas = ({ }) => {
         <Button
           radius='full'
           className='text-white'
-          startContent={<i class="bi bi-plus-lg"></i>}
+          startContent={<i className="bi bi-plus-lg"></i>}
           color='secondary'
           onPress={() => handleClickOpen()}
           isDisabled={!modoEdicion}
         >
           Añadir llantas
         </Button>
+
+        {data?.x_studio_status == "entregado" && (
+          <Button
+            radius="full"
+            color="primary"
+            className="text-white"
+            onPress={guardarCambios}
+            isLoading={isLoading}
+          >
+            Devolver llantas
+          </Button>
+        )}
 
       </Box >
     ),
