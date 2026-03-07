@@ -23,7 +23,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const LlantasAsignadas = ({ }) => {
 
-  const { modoEdicion, setModoEdicion, lineasGlobales, setLineasGlobales, data, setData, fetchData } = useSolicitudesLlantas();
+  const { modoEdicion, setModoEdicion, lineasGlobales, setLineasGlobales, data, setData, fetchData, lineasOriginales, setLineasOriginales } = useSolicitudesLlantas();
   const [open, setOpen] = React.useState(false);
   const [isLoading, setLoading] = useState(false);
 
@@ -109,34 +109,47 @@ const LlantasAsignadas = ({ }) => {
 
   const guardarCambios = async () => {
 
-    const lineasActualizadas = lineasGlobales;
+    const lineasModificadas = lineasGlobales.filter(linea => {
+
+      const original = lineasOriginales.find(
+        o => o.id_line === linea.id_line
+      );
+
+      if (!original) return true; // línea nueva
+
+      return (
+        linea.condicion !== original.condicion ||
+        linea.observaciones !== original.observaciones ||
+        linea.fecha_devolucion !== original.fecha_devolucion
+      );
+    });
+
+    if (lineasModificadas.length === 0) {
+      toast("No hay cambios para guardar");
+      return;
+    }
 
     try {
 
       setLoading(true);
+
       const response = await odooApi.patch(
-        '/solicitudes_llantas/update_lines/', lineasActualizadas
+        '/solicitudes_llantas/update_lines/',
+        lineasModificadas
       );
 
       if (response.data.status === 'success') {
         toast.success('Líneas actualizadas');
         fetchData(data?.id);
-        setLineasGlobales(prev =>
-          prev.map(r => ({ ...r }))
-        );
-      } else {
-        toast.error(response.data.message);
       }
 
     } catch (error) {
 
-      console.error(error);
-      toast.error('Error al guardar cambios');
+      toast.error("Error al guardar");
 
     } finally {
       setLoading(false);
     }
-
   };
 
   const table = useMaterialReactTable({
@@ -145,7 +158,7 @@ const LlantasAsignadas = ({ }) => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
-    enableEditing: true,
+    enableEditing: data?.x_studio_status === "entregado",
     editDisplayMode: "modal",
     positionActionsColumn: 'last',
     enableColumnPinning: true,
@@ -168,6 +181,7 @@ const LlantasAsignadas = ({ }) => {
         condicion: data?.x_studio_status != 'borrador' ? true : false,
         fecha_devolucion: data?.x_studio_status != 'borrador' ? true : false,
         observaciones: data?.x_studio_status != 'borrador' ? true : false,
+        delete: data?.x_studio_status === "borrador",
       },
     },
     muiTablePaperProps: {

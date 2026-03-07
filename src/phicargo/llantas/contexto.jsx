@@ -11,6 +11,7 @@ export const SolicitudesLlantasProvider = ({ children }) => {
     });
     const [modoEdicion, setModoEdicion] = useState(false);
     const [lineasGlobales, setLineasGlobales] = useState([]);
+    const [lineasOriginales, setLineasOriginales] = useState([]);
     const [isDisabled, setDisabled] = useState(false);
     const [loading, setLoading] = useState(false);
 
@@ -20,7 +21,8 @@ export const SolicitudesLlantasProvider = ({ children }) => {
             setLoading(true);
             const response = await odooApi.get(`/solicitudes_llantas/${id_solicitud}`);
             setData(response.data);
-            setLineasGlobales(response.data.lineas || []);
+            setLineasGlobales(response.data.lines || []);
+            setLineasOriginales(response.data.lines || []);
         } catch (error) {
             console.error('Error al obtener los datos:', error);
         } finally {
@@ -34,6 +36,7 @@ export const SolicitudesLlantasProvider = ({ children }) => {
                 modoEdicion, setModoEdicion,
                 data, setData,
                 lineasGlobales, setLineasGlobales,
+                lineasOriginales, setLineasOriginales,
                 isDisabled, setDisabled,
                 loading,
                 fetchData, // 🔹 se expone la función aquí
