@@ -36,11 +36,11 @@ const SolicitudesLlantasIndex = () => {
                                         height: '3px',
                                     }
                                 }}>
-                                <Tab label="Solicitudes de llantas" value="1" sx={{ fontFamily: 'Inter' }} />
+                                <Tab label="Solicitudes" value="1" sx={{ fontFamily: 'Inter' }} />
                                 <Tab label="Inventario" value="2" sx={{ fontFamily: 'Inter' }} />
                             </TabList>
                         </Box>
-                        <TabPanel value="1" sx={{ padding: 0, margin: 0 }}><SolicitudesLlantas vista={'solicitudes de llantas'}></SolicitudesLlantas></TabPanel>
+                        <TabPanel value="1" sx={{ padding: 0, margin: 0 }}><SolicitudesLlantas vista={'solicitudes de llantas de refacción'}></SolicitudesLlantas></TabPanel>
                         <TabPanel value="2" sx={{ padding: 0, margin: 0 }}><InventarioLlantas></InventarioLlantas></TabPanel>
                     </TabContext>
                 </Box>
