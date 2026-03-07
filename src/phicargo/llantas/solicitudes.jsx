@@ -250,7 +250,7 @@ const SolicitudesLlantas = ({ x_tipo = "", vista }) => {
           className='text-white'
           startContent={<i class="bi bi-plus-lg"></i>}
           color='primary'
-          isDisabled={false}
+          isDisabled={true}
           onPress={() => {
             setIDSolicitud(null);
             setModoEdicion(true);
