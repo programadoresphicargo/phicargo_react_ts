@@ -132,7 +132,7 @@ const AptosMedicos = () => {
         </Button>
 
         <Button
-          onPress={() => exportToCSV(data, columns, "equipos.csv")}
+          onPress={() => exportToCSV(data, columns, "aptos_medicos.csv")}
           color="success"
           className="text-white"
           radius="full"

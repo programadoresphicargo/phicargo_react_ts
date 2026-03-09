@@ -132,7 +132,7 @@ const LicenciasProximasVencer = () => {
         </Button>
 
         <Button
-          onPress={() => exportToCSV(data, columns, "equipos.csv")}
+          onPress={() => exportToCSV(data, columns, "licencias.csv")}
           color="success"
           className="text-white"
           radius="full"

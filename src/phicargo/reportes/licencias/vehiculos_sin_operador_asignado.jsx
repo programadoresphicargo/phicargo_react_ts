@@ -15,7 +15,7 @@ import { useDateFormatter } from "@react-aria/i18n";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { exportToCSV } from '../../utils/export';
 
-const ViajesTipoArmado = () => {
+const VehiculosSinOperadorAsignado = () => {
 
   const [isLoading, setisLoading] = useState('');
   const [data, setData] = useState([]);
@@ -27,7 +27,7 @@ const ViajesTipoArmado = () => {
   const fetchData = async () => {
     try {
       setisLoading(true);
-      const response = await odooApi.get(`/tms_waybill/viajes_tipo_armado/?date_start=2020-01-01&date_end=2026-12-31`);
+      const response = await odooApi.get(`/vehicles/vacantes/`);
       setData(response.data);
     } catch (error) {
       toast.error('Error al enviar los datos: ' + error);
@@ -39,7 +39,7 @@ const ViajesTipoArmado = () => {
   const EnviarCorreo = async () => {
     try {
       setisLoading(true);
-      const response = await odooApi.get(`/drivers/correo_km_recorridos/`);
+      const response = await odooApi.get(`/vehicles/unidades_vacantes/`);
     } catch (error) {
       toast.error('Error al enviar los datos: ' + error);
     } finally {
@@ -48,62 +48,11 @@ const ViajesTipoArmado = () => {
   };
 
   const columns = [
-    { accessorKey: 'periodo', header: 'Periodo' },
-    { accessorKey: 'year', header: 'Año' },
-
-    {
-      accessorKey: 'sencillo',
-      header: 'Sencillos',
-      aggregationFn: 'sum',
-      AggregatedCell: ({ cell }) => (
-        <strong>{cell.getValue()}</strong>
-      ),
-      muiTableBodyCellProps: {
-        align: 'right',
-      },
-    },
-
-    { accessorKey: 'sencillo_pct', header: '%' },
-
-    {
-      accessorKey: 'full',
-      header: 'Full',
-      aggregationFn: 'sum',
-      AggregatedCell: ({ cell }) => (
-        <strong>{cell.getValue()}</strong>
-      ),
-      muiTableBodyCellProps: {
-        align: 'right',
-      },
-    },
-
-    { accessorKey: 'full_pct', header: '%' },
-
-    {
-      accessorKey: 'sin_especificar',
-      header: 'Sin tipo',
-      aggregationFn: 'sum',
-      AggregatedCell: ({ cell }) => (
-        <strong>{cell.getValue()}</strong>
-      ),
-      muiTableBodyCellProps: {
-        align: 'right',
-      },
-    },
-
-    { accessorKey: 'sin_especificar_pct', header: '%' },
-
-    {
-      accessorKey: 'total',
-      header: 'Total',
-      aggregationFn: 'sum',
-      AggregatedCell: ({ cell }) => (
-        <strong>{cell.getValue()}</strong>
-      ),
-      muiTableBodyCellProps: {
-        align: 'right',
-      },
-    },
+    { accessorKey: 'res_store.name', header: 'Sucursal', },
+    { accessorKey: 'name2', header: 'Vehiculo' },
+    { accessorKey: 'x_tipo_vehiculo', header: 'Tipo' },
+    { accessorKey: 'x_tipo_carga', header: 'Tipo de carga' },
+    { accessorKey: 'x_modalidad', header: 'Modalidad' },
   ];
 
   const table = useMaterialReactTable({
@@ -118,9 +67,9 @@ const ViajesTipoArmado = () => {
     enableColumnAggregations: true,
     columnResizeMode: "onEnd",
     initialState: {
-      grouping: ["year"],
+      grouping: ["res_store.name"],
       density: 'compact',
-      expanded: false,
+      expanded: true,
       pagination: { pageSize: 80 },
       showColumnFilters: true,
     },
@@ -165,7 +114,7 @@ const ViajesTipoArmado = () => {
         <h1
           className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
         >
-          Viajes tipo armado
+          Vehiculos sin operador asignado
         </h1>
 
         <Button
@@ -178,7 +127,7 @@ const ViajesTipoArmado = () => {
         </Button>
 
         <Button
-          onPress={() => exportToCSV(data, columns, "tipo_armado.csv")}
+          onPress={() => exportToCSV(data, columns, "unidades_vacantes.csv")}
           color="success"
           className="text-white"
           radius="full"
@@ -209,4 +158,4 @@ const ViajesTipoArmado = () => {
   );
 };
 
-export default ViajesTipoArmado;
+export default VehiculosSinOperadorAsignado;

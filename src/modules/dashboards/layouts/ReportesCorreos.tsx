@@ -12,6 +12,7 @@ import DailyOperationsPage from '@/modules/availability-report/pages/DailyOperat
 import ViajesTipoArmado from '@/phicargo/reportes/licencias/tipo_armado';
 import IncidentsPage from '@/modules/incidents/pages/IncidentsPage';
 import { IncidentsProvider } from '@/modules/incidents/context/IncidentsContext';
+import VehiculosSinOperadorAsignado from '@/phicargo/reportes/licencias/vehiculos_sin_operador_asignado';
 
 const ReportesCorreos = () => {
 
@@ -53,14 +54,14 @@ const ReportesCorreos = () => {
       <TabPanel value="1" sx={{ border: 'none', p: 0 }}><ContenedoresPendientes /></TabPanel>
       <TabPanel value="2" sx={{ border: 'none', p: 0 }}><UltimosUsosUnidades /></TabPanel>
       <TabPanel value="3" sx={{ border: 'none', p: 0 }}><ViajesTipoArmado /></TabPanel>
-      <TabPanel value="4" sx={{ border: 'none', p: 0 }}></TabPanel>
+      <TabPanel value="4" sx={{ border: 'none', p: 0 }}><VehiculosSinOperadorAsignado /></TabPanel>
       <TabPanel value="5" sx={{ border: 'none', p: 0 }}><LicenciasProximasVencer /></TabPanel>
       <TabPanel value="6" sx={{ border: 'none', p: 0 }}><AptosMedicos /></TabPanel>
       <TabPanel value="7" sx={{ border: 'none', p: 0 }}><DailyOperationsPage /></TabPanel>
       <TabPanel value="8" sx={{ border: 'none', p: 0 }}><ViajesTipoArmado /></TabPanel>
       <TabPanel value="9" sx={{ border: 'none', p: 0 }}><IncidentsProvider><IncidentsPage /></IncidentsProvider></TabPanel>
     </TabContext>
-  </Box>;
+  </Box >;
 };
 
 export default ReportesCorreos;
