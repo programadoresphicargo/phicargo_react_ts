@@ -55,7 +55,12 @@ const ViajesTipoArmado = () => {
       accessorKey: 'sencillo',
       header: 'Sencillos',
       aggregationFn: 'sum',
-      AggregatedCell: ({ cell }) => <strong>{cell.getValue()}</strong>,
+      AggregatedCell: ({ cell }) => (
+        <strong>{cell.getValue()}</strong>
+      ),
+      muiTableBodyCellProps: {
+        align: 'right',
+      },
     },
 
     { accessorKey: 'sencillo_pct', header: '%' },
@@ -64,7 +69,12 @@ const ViajesTipoArmado = () => {
       accessorKey: 'full',
       header: 'Full',
       aggregationFn: 'sum',
-      AggregatedCell: ({ cell }) => <strong>{cell.getValue()}</strong>,
+      AggregatedCell: ({ cell }) => (
+        <strong>{cell.getValue()}</strong>
+      ),
+      muiTableBodyCellProps: {
+        align: 'right',
+      },
     },
 
     { accessorKey: 'full_pct', header: '%' },
@@ -73,7 +83,12 @@ const ViajesTipoArmado = () => {
       accessorKey: 'sin_especificar',
       header: 'Sin tipo',
       aggregationFn: 'sum',
-      AggregatedCell: ({ cell }) => <strong>{cell.getValue()}</strong>,
+      AggregatedCell: ({ cell }) => (
+        <strong>{cell.getValue()}</strong>
+      ),
+      muiTableBodyCellProps: {
+        align: 'right',
+      },
     },
 
     { accessorKey: 'sin_especificar_pct', header: '%' },
@@ -82,7 +97,12 @@ const ViajesTipoArmado = () => {
       accessorKey: 'total',
       header: 'Total',
       aggregationFn: 'sum',
-      AggregatedCell: ({ cell }) => <strong>{cell.getValue()}</strong>,
+      AggregatedCell: ({ cell }) => (
+        <strong>{cell.getValue()}</strong>
+      ),
+      muiTableBodyCellProps: {
+        align: 'right',
+      },
     },
   ];
 
