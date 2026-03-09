@@ -14,20 +14,26 @@ import { toast } from "react-toastify";
 import { useDateFormatter } from "@react-aria/i18n";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { exportToCSV } from '../../utils/export';
+import { DateRangePicker } from 'rsuite';
 
 const ViajesTipoArmado = () => {
+
+  const now = new Date();
+  const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+  const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+  const [range, setRange] = useState([firstDay, lastDay]);
 
   const [isLoading, setisLoading] = useState('');
   const [data, setData] = useState([]);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [range]);
 
   const fetchData = async () => {
     try {
       setisLoading(true);
-      const response = await odooApi.get(`/tms_waybill/viajes_tipo_armado/?date_start=2020-01-01&date_end=2026-12-31`);
+      const response = await odooApi.get(`/tms_waybill/viajes_tipo_armado/?date_start=${range[0].toISOString().slice(0, 10)}&date_end=${range[1].toISOString().slice(0, 10)}`);
       setData(response.data);
     } catch (error) {
       toast.error('Error al enviar los datos: ' + error);
@@ -167,6 +173,14 @@ const ViajesTipoArmado = () => {
         >
           Viajes tipo armado
         </h1>
+
+        <DateRangePicker
+          value={range}
+          onChange={(value) => setRange(value)}
+          placeholder="Selecciona un rango de fechas"
+          format="yyyy-MM-dd"
+          loading={isLoading}
+        />
 
         <Button
           onPress={() => EnviarCorreo()}

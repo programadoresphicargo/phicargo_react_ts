@@ -27,7 +27,7 @@ const KMRecorridosVehiculos = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [range]);
 
   const fetchData = async () => {
     try {
