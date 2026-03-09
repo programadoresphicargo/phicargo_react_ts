@@ -48,15 +48,42 @@ const ViajesTipoArmado = () => {
   };
 
   const columns = [
-    { accessorKey: 'periodo', header: 'Periodo', },
-    { accessorKey: 'year', header: 'Año', },
-    { accessorKey: 'sencillo', header: 'Sencillos' },
+    { accessorKey: 'periodo', header: 'Periodo' },
+    { accessorKey: 'year', header: 'Año' },
+
+    {
+      accessorKey: 'sencillo',
+      header: 'Sencillos',
+      aggregationFn: 'sum',
+      AggregatedCell: ({ cell }) => <strong>{cell.getValue()}</strong>,
+    },
+
     { accessorKey: 'sencillo_pct', header: '%' },
-    { accessorKey: 'full', header: 'Full' },
+
+    {
+      accessorKey: 'full',
+      header: 'Full',
+      aggregationFn: 'sum',
+      AggregatedCell: ({ cell }) => <strong>{cell.getValue()}</strong>,
+    },
+
     { accessorKey: 'full_pct', header: '%' },
-    { accessorKey: 'sin_especificar', header: '%' },
+
+    {
+      accessorKey: 'sin_especificar',
+      header: 'Sin tipo',
+      aggregationFn: 'sum',
+      AggregatedCell: ({ cell }) => <strong>{cell.getValue()}</strong>,
+    },
+
     { accessorKey: 'sin_especificar_pct', header: '%' },
-    { accessorKey: 'total', header: 'Total' },
+
+    {
+      accessorKey: 'total',
+      header: 'Total',
+      aggregationFn: 'sum',
+      AggregatedCell: ({ cell }) => <strong>{cell.getValue()}</strong>,
+    },
   ];
 
   const table = useMaterialReactTable({
@@ -66,7 +93,9 @@ const ViajesTipoArmado = () => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
+    enableBottomToolbar: true,
     localization: MRT_Localization_ES,
+    enableColumnAggregations: true,
     columnResizeMode: "onEnd",
     initialState: {
       grouping: ["year"],
