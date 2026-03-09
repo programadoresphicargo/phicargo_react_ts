@@ -83,17 +83,27 @@ const AptosMedicos = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 220px)',
+        maxHeight: 'calc(100vh - 180px)',
       },
     },
     muiTableBodyCellProps: ({ row }) => ({
       sx: {
-        backgroundColor: row.subRows?.length ? '#0456cf' : '#FFFFFF',
+        backgroundColor: row.original?.dias_restantes <= 0
+          ? '#fa022f'
+          : row.subRows?.length
+            ? '#0456cf'
+            : '#FFFFFF',
+
         fontFamily: 'Inter',
         fontWeight: 'normal',
         fontSize: '14px',
-        color: row.subRows?.length ? '#FFFFFF' : '#000000',
-      },
+
+        color: row.original?.dias_restantes <= 0
+          ? '#FFFFFF'
+          : row.subRows?.length
+            ? '#FFFFFF'
+            : '#000000',
+      }
     }),
     renderTopToolbarCustomActions: ({ table }) => (
       <Box
