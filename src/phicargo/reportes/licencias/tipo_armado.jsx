@@ -15,20 +15,19 @@ import { useDateFormatter } from "@react-aria/i18n";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { exportToCSV } from '../../utils/export';
 
-const UltimosUsosUnidades = () => {
+const ViajesTipoArmado = () => {
 
-  const [value, setValue] = React.useState(5);
   const [isLoading, setisLoading] = useState('');
   const [data, setData] = useState([]);
 
   useEffect(() => {
     fetchData();
-  }, [value]);
+  }, []);
 
   const fetchData = async () => {
     try {
       setisLoading(true);
-      const response = await odooApi.get(`/vehicles/ultimos_usos/${value}`);
+      const response = await odooApi.get(`/tms_waybill/viajes_tipo_armado/?date_start=2020-01-01&date_end=2026-12-31`);
       setData(response.data);
     } catch (error) {
       toast.error('Error al enviar los datos: ' + error);
@@ -40,7 +39,7 @@ const UltimosUsosUnidades = () => {
   const EnviarCorreo = async () => {
     try {
       setisLoading(true);
-      const response = await odooApi.get(`/vehicles/ultimos_usos_correo/${value}`);
+      const response = await odooApi.get(`/drivers/correo_km_recorridos/`);
     } catch (error) {
       toast.error('Error al enviar los datos: ' + error);
     } finally {
@@ -49,13 +48,15 @@ const UltimosUsosUnidades = () => {
   };
 
   const columns = [
-    { accessorKey: 'vehiculo', header: 'Vehiculo', },
-    { accessorKey: 'tipo_vehiculo', header: 'Tipo' },
-    { accessorKey: 'sucursal', header: 'Sucursal' },
-    { accessorKey: 'tipo_uso', header: 'Último uso' },
-    { accessorKey: 'ultima_fecha_uso', header: 'Última fecha' },
-    { accessorKey: 'dias_sin_uso', header: 'Días sin usar' },
-    { accessorKey: 'origen_id', header: 'Origen' },
+    { accessorKey: 'periodo', header: 'Periodo', },
+    { accessorKey: 'year', header: 'Año', },
+    { accessorKey: 'sencillo', header: 'Sencillos' },
+    { accessorKey: 'sencillo_pct', header: '%' },
+    { accessorKey: 'full', header: 'Full' },
+    { accessorKey: 'full_pct', header: '%' },
+    { accessorKey: 'sin_especificar', header: '%' },
+    { accessorKey: 'sin_especificar_pct', header: '%' },
+    { accessorKey: 'total', header: 'Total' },
   ];
 
   const table = useMaterialReactTable({
@@ -68,6 +69,7 @@ const UltimosUsosUnidades = () => {
     localization: MRT_Localization_ES,
     columnResizeMode: "onEnd",
     initialState: {
+      grouping: ["year"],
       density: 'compact',
       expanded: false,
       pagination: { pageSize: 80 },
@@ -113,39 +115,39 @@ const UltimosUsosUnidades = () => {
       >
         <h1
           className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
-          >
-          Últimos usos
+        >
+          Viajes tipo armado
         </h1>
-        <NumberInput
-          label="Días sin usar"
-          placeholder="Días sin usar"
-          value={value}
-          onValueChange={setValue}
-        />
+
         <Button
           onPress={() => EnviarCorreo()}
           color="primary"
           radius="full"
-          fullWidth>
+          style={{ flex: 1 }}
+        >
           Enviar correo
         </Button>
+
         <Button
           onPress={() => exportToCSV(data, columns, "equipos.csv")}
           color="success"
           className="text-white"
           radius="full"
-          fullWidth>
+          style={{ flex: 1 }}
+        >
           Exportar
         </Button>
+
         <Button
           onPress={() => fetchData()}
           color="danger"
           className="text-white"
           radius="full"
-          fullWidth>
+          style={{ flex: 1 }}
+        >
           Recargar
         </Button>
-      </Box >
+      </Box>
     ),
   })
 
@@ -158,4 +160,4 @@ const UltimosUsosUnidades = () => {
   );
 };
 
-export default UltimosUsosUnidades;
+export default ViajesTipoArmado;

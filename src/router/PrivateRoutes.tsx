@@ -114,6 +114,7 @@ const AsignacionesComputo = lazy(() => import('../phicargo/inventarioti/celulare
 const Lineas = lazy(() => import('../phicargo/inventarioti/celulares/lineas/index'))
 const AsignacionEquipo = lazy(() => import('../phicargo/viajes/asignacion_equipo/index'))
 const OnedriveAjustes = lazy(() => import('../phicargo/ajustes/onedrive'))
+const ReportesCorreos = lazy(() => import('../modules/dashboards/layouts/ReportesCorreos'));
 
 export const PrivateRoutes = () => {
   const updateAvailable = useCheckVersion();
@@ -616,6 +617,14 @@ export const PrivateRoutes = () => {
           }
         />
 
+        <Route
+          path="reportes_correos"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <ReportesCorreos></ReportesCorreos>
+            </Suspense>
+          }
+        />
         {/* Modulo de reportes */}
         {ReportsRoutes()}
 

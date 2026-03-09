@@ -6,6 +6,10 @@ import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import ContenedoresPendientes from '@/phicargo/maniobras/tms_waybill/pendientes';
 import UltimosUsosUnidades from '@/phicargo/reportes/ultimos_usos/equipos';
+import LicenciasProximasVencer from '@/phicargo/reportes/licencias/licencias';
+import AptosMedicos from '@/phicargo/reportes/licencias/aptos_medicos';
+import DailyOperationsPage from '@/modules/availability-report/pages/DailyOperationsPage';
+import ViajesTipoArmado from '@/phicargo/reportes/licencias/tipo_armado';
 
 const ReportesCorreos = () => {
 
@@ -17,16 +21,40 @@ const ReportesCorreos = () => {
 
   return <Box sx={{ width: '100%' }}>
     <TabContext value={value}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <TabList onChange={handleChange}>
-          <Tab label="Maniobras" value="1" />
-          <Tab label="Ultimo uso de equipos" value="2" />
-          <Tab label="Item Three" value="3" />
+      <Box sx={{
+        background: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
+        color: 'white',
+      }}>
+        <TabList
+          onChange={handleChange}
+          variant="scrollable"
+          scrollButtons="auto"
+          allowScrollButtonsMobile
+          textColor="inherit"
+          sx={{
+            '& .MuiTabs-indicator': {
+              backgroundColor: 'white',
+              height: '3px',
+            }
+          }}>
+          <Tab sx={{ fontFamily: 'Inter' }} label="Contenedores" value="1" />
+          <Tab sx={{ fontFamily: 'Inter' }} label="Último uso de equipos" value="2" />
+          <Tab sx={{ fontFamily: 'Inter' }} label="KM Recorridos" value="3" />
+          <Tab sx={{ fontFamily: 'Inter' }} label="Unidades sin operador asignado" value="4" />
+          <Tab sx={{ fontFamily: 'Inter' }} label="Licencias próximas a vencer" value="5" />
+          <Tab sx={{ fontFamily: 'Inter' }} label="Aptos medicos próximos a vencer" value="6" />
+          <Tab sx={{ fontFamily: 'Inter' }} label="Disponibilidad" value="7" />
+          <Tab sx={{ fontFamily: 'Inter' }} label="Viajes por tipo de armado" value="8" />
         </TabList>
       </Box>
       <TabPanel value="1" sx={{ border: 'none', p: 0 }}><ContenedoresPendientes /></TabPanel>
       <TabPanel value="2" sx={{ border: 'none', p: 0 }}><UltimosUsosUnidades /></TabPanel>
-      <TabPanel value="3" sx={{ border: 'none', p: 0 }}>Item Three</TabPanel>
+      <TabPanel value="3" sx={{ border: 'none', p: 0 }}><ViajesTipoArmado /></TabPanel>
+      <TabPanel value="4" sx={{ border: 'none', p: 0 }}></TabPanel>
+      <TabPanel value="5" sx={{ border: 'none', p: 0 }}><LicenciasProximasVencer /></TabPanel>
+      <TabPanel value="6" sx={{ border: 'none', p: 0 }}><AptosMedicos /></TabPanel>
+      <TabPanel value="7" sx={{ border: 'none', p: 0 }}><DailyOperationsPage /></TabPanel>
+      <TabPanel value="8" sx={{ border: 'none', p: 0 }}><ViajesTipoArmado /></TabPanel>
     </TabContext>
   </Box>;
 };
