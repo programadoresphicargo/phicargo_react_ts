@@ -14,6 +14,7 @@ import { useIncidentsContext } from '../hooks/useIncidentsContext';
 import EditIcon from '@mui/icons-material/Edit';
 import { Button, Tooltip } from '@heroui/react';
 import odooApi from '@/api/odoo-api';
+import toast from 'react-hot-toast';
 
 const dialogProps: DialogProps = {
   slots: {
@@ -45,6 +46,7 @@ const IncidentsPage = () => {
   const EnviarCorreo = async () => {
     try {
       const response = await odooApi.get(`/drivers/incidents_email/`);
+      toast.success(response.data.message);
     } catch (error) {
       console.error('Error al enviar los datos: ' + error);
     } finally {
