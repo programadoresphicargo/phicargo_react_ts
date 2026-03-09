@@ -13,6 +13,7 @@ import { DateRangePicker } from '@/components/inputs';
 import { useIncidentsContext } from '../hooks/useIncidentsContext';
 import EditIcon from '@mui/icons-material/Edit';
 import { Button, Tooltip } from '@heroui/react';
+import odooApi from '@/api/odoo-api';
 
 const dialogProps: DialogProps = {
   slots: {
@@ -40,6 +41,15 @@ const IncidentsPage = () => {
     startDate: formatedDateRange.startDate,
     endDate: formatedDateRange.endDate,
   });
+
+  const EnviarCorreo = async () => {
+    try {
+      const response = await odooApi.get(`/drivers/incidents_email/`);
+    } catch (error) {
+      console.error('Error al enviar los datos: ' + error);
+    } finally {
+    }
+  };
 
   const columns = useIncidentsColumns();
 
@@ -86,6 +96,13 @@ const IncidentsPage = () => {
           onPress={() => table.setCreatingRow(true)}
         >
           Crear incidencia
+        </Button>
+        <Button
+          color='primary'
+          radius='full'
+          onPress={() => EnviarCorreo()}
+        >
+          Enviar Correo
         </Button>
         <DateRangePicker
           showOneCalendar

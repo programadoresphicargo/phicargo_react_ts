@@ -10,6 +10,8 @@ import LicenciasProximasVencer from '@/phicargo/reportes/licencias/licencias';
 import AptosMedicos from '@/phicargo/reportes/licencias/aptos_medicos';
 import DailyOperationsPage from '@/modules/availability-report/pages/DailyOperationsPage';
 import ViajesTipoArmado from '@/phicargo/reportes/licencias/tipo_armado';
+import IncidentsPage from '@/modules/incidents/pages/IncidentsPage';
+import { IncidentsProvider } from '@/modules/incidents/context/IncidentsContext';
 
 const ReportesCorreos = () => {
 
@@ -45,6 +47,7 @@ const ReportesCorreos = () => {
           <Tab sx={{ fontFamily: 'Inter' }} label="Aptos medicos próximos a vencer" value="6" />
           <Tab sx={{ fontFamily: 'Inter' }} label="Disponibilidad" value="7" />
           <Tab sx={{ fontFamily: 'Inter' }} label="Viajes por tipo de armado" value="8" />
+          <Tab sx={{ fontFamily: 'Inter' }} label="Incidencias" value="9" />
         </TabList>
       </Box>
       <TabPanel value="1" sx={{ border: 'none', p: 0 }}><ContenedoresPendientes /></TabPanel>
@@ -55,6 +58,7 @@ const ReportesCorreos = () => {
       <TabPanel value="6" sx={{ border: 'none', p: 0 }}><AptosMedicos /></TabPanel>
       <TabPanel value="7" sx={{ border: 'none', p: 0 }}><DailyOperationsPage /></TabPanel>
       <TabPanel value="8" sx={{ border: 'none', p: 0 }}><ViajesTipoArmado /></TabPanel>
+      <TabPanel value="9" sx={{ border: 'none', p: 0 }}><IncidentsProvider><IncidentsPage /></IncidentsProvider></TabPanel>
     </TabContext>
   </Box>;
 };
