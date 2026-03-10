@@ -13,9 +13,10 @@ import odooApi from '@/api/odoo-api';
 import { toast } from "react-toastify";
 import { useDateFormatter } from "@react-aria/i18n";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import { exportToCSV } from '../../utils/export';
+import { exportToCSV } from '../utils/export';
+import CustomNavbar from "@/pages/CustomNavbar";
 
-const VehiculosSinOperadorAsignado = () => {
+const AptosMedicos = () => {
 
   const [isLoading, setisLoading] = useState('');
   const [data, setData] = useState([]);
@@ -27,7 +28,7 @@ const VehiculosSinOperadorAsignado = () => {
   const fetchData = async () => {
     try {
       setisLoading(true);
-      const response = await odooApi.get(`/vehicles/vacantes/`);
+      const response = await odooApi.get(`/drivers/aptos_medicos/`);
       setData(response.data);
     } catch (error) {
       toast.error('Error al enviar los datos: ' + error);
@@ -39,7 +40,7 @@ const VehiculosSinOperadorAsignado = () => {
   const EnviarCorreo = async () => {
     try {
       setisLoading(true);
-      const response = await odooApi.get(`/vehicles/unidades_vacantes/`);
+      const response = await odooApi.get(`/drivers/correo_licencias_vencidas/`);
     } catch (error) {
       toast.error('Error al enviar los datos: ' + error);
     } finally {
@@ -48,11 +49,9 @@ const VehiculosSinOperadorAsignado = () => {
   };
 
   const columns = [
-    { accessorKey: 'res_store.name', header: 'Sucursal', },
-    { accessorKey: 'name2', header: 'Vehiculo' },
-    { accessorKey: 'x_tipo_vehiculo', header: 'Tipo' },
-    { accessorKey: 'x_tipo_carga', header: 'Tipo de carga' },
-    { accessorKey: 'x_modalidad', header: 'Modalidad' },
+    { accessorKey: 'name', header: 'Operador', },
+    { accessorKey: 'x_exmedic_end', header: 'Fecha expiración' },
+    { accessorKey: 'dias_restantes', header: 'Días restantes' },
   ];
 
   const table = useMaterialReactTable({
@@ -62,14 +61,11 @@ const VehiculosSinOperadorAsignado = () => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
-    enableBottomToolbar: true,
     localization: MRT_Localization_ES,
-    enableColumnAggregations: true,
     columnResizeMode: "onEnd",
     initialState: {
-      grouping: ["res_store.name"],
       density: 'compact',
-      expanded: true,
+      expanded: false,
       pagination: { pageSize: 80 },
       showColumnFilters: true,
     },
@@ -88,17 +84,27 @@ const VehiculosSinOperadorAsignado = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 220px)',
+        maxHeight: 'calc(100vh - 200px)',
       },
     },
     muiTableBodyCellProps: ({ row }) => ({
       sx: {
-        backgroundColor: row.subRows?.length ? '#0456cf' : '#FFFFFF',
+        backgroundColor: row.original?.dias_restantes <= 0
+          ? '#fa022f'
+          : row.subRows?.length
+            ? '#0456cf'
+            : '#FFFFFF',
+
         fontFamily: 'Inter',
         fontWeight: 'normal',
         fontSize: '14px',
-        color: row.subRows?.length ? '#FFFFFF' : '#000000',
-      },
+
+        color: row.original?.dias_restantes <= 0
+          ? '#FFFFFF'
+          : row.subRows?.length
+            ? '#FFFFFF'
+            : '#000000',
+      }
     }),
     renderTopToolbarCustomActions: ({ table }) => (
       <Box
@@ -114,7 +120,7 @@ const VehiculosSinOperadorAsignado = () => {
         <h1
           className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
         >
-          Vehiculos sin operador asignado
+          Aptos medicos proximos a vencer
         </h1>
 
         <Button
@@ -127,7 +133,7 @@ const VehiculosSinOperadorAsignado = () => {
         </Button>
 
         <Button
-          onPress={() => exportToCSV(data, columns, "unidades_vacantes.csv")}
+          onPress={() => exportToCSV(data, columns, "aptos_medicos.csv")}
           color="success"
           className="text-white"
           radius="full"
@@ -151,6 +157,7 @@ const VehiculosSinOperadorAsignado = () => {
 
   return (
     <>
+      <CustomNavbar></CustomNavbar>
       <MaterialReactTable
         table={table}
       />
@@ -158,4 +165,4 @@ const VehiculosSinOperadorAsignado = () => {
   );
 };
 
-export default VehiculosSinOperadorAsignado;
+export default AptosMedicos;

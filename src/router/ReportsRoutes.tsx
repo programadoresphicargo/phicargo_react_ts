@@ -7,8 +7,8 @@ import ReportsMenuPage from '@/pages/ReportsMenuPage';
 import { Route } from 'react-router-dom';
 import MaintenanceReportRoutesRemolques from '@/modules/maintenance/routes/MaintenanceReportRoutes copy';
 
-const ReporteLicenciasVencidas = lazy(() => import('../phicargo/reportes/licencias/licencias'));
-const ReporteAptosMedicos = lazy(() => import('../phicargo/reportes/licencias/aptos_medicos'));
+const ReporteLicenciasVencidas = lazy(() => import('../phicargo/reportes/licencias'));
+const ReporteAptosMedicos = lazy(() => import('../phicargo/reportes/aptos_medicos'));
 const Saldos = lazy(() => import('@/phicargo/saldos_contabilidad/ControlUsuarios'));
 const VehicleRevenueProjectionPage = lazy(() => import('@/modules/vehicles/pages/VehicleRevenueProjectionPage'));
 const ReporteCumplimiento = lazy(() => import('../phicargo/reportes/cumplimiento'));

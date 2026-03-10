@@ -13,22 +13,27 @@ import odooApi from '@/api/odoo-api';
 import { toast } from "react-toastify";
 import { useDateFormatter } from "@react-aria/i18n";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import { exportToCSV } from '../../utils/export';
-import CustomNavbar from "@/pages/CustomNavbar";
+import { exportToCSV } from '../utils/export';
+import { DateRangePicker } from 'rsuite';
 
-const LicenciasProximasVencer = () => {
+const ViajesTipoArmado = () => {
+
+  const now = new Date();
+  const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+  const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+  const [range, setRange] = useState([firstDay, lastDay]);
 
   const [isLoading, setisLoading] = useState('');
   const [data, setData] = useState([]);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [range]);
 
   const fetchData = async () => {
     try {
       setisLoading(true);
-      const response = await odooApi.get(`/drivers/licencias_vencidas/`);
+      const response = await odooApi.get(`/tms_waybill/viajes_tipo_armado/?date_start=${range[0].toISOString().slice(0, 10)}&date_end=${range[1].toISOString().slice(0, 10)}`);
       setData(response.data);
     } catch (error) {
       toast.error('Error al enviar los datos: ' + error);
@@ -40,7 +45,7 @@ const LicenciasProximasVencer = () => {
   const EnviarCorreo = async () => {
     try {
       setisLoading(true);
-      const response = await odooApi.get(`/drivers/correo_licencias_vencidas/`);
+      const response = await odooApi.get(`/drivers/correo_km_recorridos/`);
     } catch (error) {
       toast.error('Error al enviar los datos: ' + error);
     } finally {
@@ -49,9 +54,62 @@ const LicenciasProximasVencer = () => {
   };
 
   const columns = [
-    { accessorKey: 'name', header: 'Operador', },
-    { accessorKey: 'tms_driver_license_expiration', header: 'Fecha expiración' },
-    { accessorKey: 'dias_restantes', header: 'Días restantes' },
+    { accessorKey: 'periodo', header: 'Periodo' },
+    { accessorKey: 'year', header: 'Año' },
+
+    {
+      accessorKey: 'sencillo',
+      header: 'Sencillos',
+      aggregationFn: 'sum',
+      AggregatedCell: ({ cell }) => (
+        <strong>{cell.getValue()}</strong>
+      ),
+      muiTableBodyCellProps: {
+        align: 'right',
+      },
+    },
+
+    { accessorKey: 'sencillo_pct', header: '%' },
+
+    {
+      accessorKey: 'full',
+      header: 'Full',
+      aggregationFn: 'sum',
+      AggregatedCell: ({ cell }) => (
+        <strong>{cell.getValue()}</strong>
+      ),
+      muiTableBodyCellProps: {
+        align: 'right',
+      },
+    },
+
+    { accessorKey: 'full_pct', header: '%' },
+
+    {
+      accessorKey: 'sin_especificar',
+      header: 'Sin tipo',
+      aggregationFn: 'sum',
+      AggregatedCell: ({ cell }) => (
+        <strong>{cell.getValue()}</strong>
+      ),
+      muiTableBodyCellProps: {
+        align: 'right',
+      },
+    },
+
+    { accessorKey: 'sin_especificar_pct', header: '%' },
+
+    {
+      accessorKey: 'total',
+      header: 'Total',
+      aggregationFn: 'sum',
+      AggregatedCell: ({ cell }) => (
+        <strong>{cell.getValue()}</strong>
+      ),
+      muiTableBodyCellProps: {
+        align: 'right',
+      },
+    },
   ];
 
   const table = useMaterialReactTable({
@@ -61,9 +119,12 @@ const LicenciasProximasVencer = () => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
+    enableBottomToolbar: true,
     localization: MRT_Localization_ES,
+    enableColumnAggregations: true,
     columnResizeMode: "onEnd",
     initialState: {
+      grouping: ["year"],
       density: 'compact',
       expanded: false,
       pagination: { pageSize: 80 },
@@ -89,22 +150,12 @@ const LicenciasProximasVencer = () => {
     },
     muiTableBodyCellProps: ({ row }) => ({
       sx: {
-        backgroundColor: row.original?.dias_restantes <= 0
-          ? '#fa022f'
-          : row.subRows?.length
-            ? '#0456cf'
-            : '#FFFFFF',
-
+        backgroundColor: row.subRows?.length ? '#0456cf' : '#FFFFFF',
         fontFamily: 'Inter',
         fontWeight: 'normal',
         fontSize: '14px',
-
-        color: row.original?.dias_restantes <= 0
-          ? '#FFFFFF'
-          : row.subRows?.length
-            ? '#FFFFFF'
-            : '#000000',
-      }
+        color: row.subRows?.length ? '#FFFFFF' : '#000000',
+      },
     }),
     renderTopToolbarCustomActions: ({ table }) => (
       <Box
@@ -120,8 +171,16 @@ const LicenciasProximasVencer = () => {
         <h1
           className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
         >
-          Licencias proximas a vencer
+          Viajes tipo armado
         </h1>
+
+        <DateRangePicker
+          value={range}
+          onChange={(value) => setRange(value)}
+          placeholder="Selecciona un rango de fechas"
+          format="yyyy-MM-dd"
+          loading={isLoading}
+        />
 
         <Button
           onPress={() => EnviarCorreo()}
@@ -133,7 +192,7 @@ const LicenciasProximasVencer = () => {
         </Button>
 
         <Button
-          onPress={() => exportToCSV(data, columns, "licencias.csv")}
+          onPress={() => exportToCSV(data, columns, "tipo_armado.csv")}
           color="success"
           className="text-white"
           radius="full"
@@ -157,7 +216,6 @@ const LicenciasProximasVencer = () => {
 
   return (
     <>
-      <CustomNavbar></CustomNavbar>
       <MaterialReactTable
         table={table}
       />
@@ -165,4 +223,4 @@ const LicenciasProximasVencer = () => {
   );
 };
 
-export default LicenciasProximasVencer;
+export default ViajesTipoArmado;

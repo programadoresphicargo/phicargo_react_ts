@@ -13,10 +13,10 @@ import odooApi from '@/api/odoo-api';
 import { toast } from "react-toastify";
 import { useDateFormatter } from "@react-aria/i18n";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import { exportToCSV } from '../../utils/export';
+import { exportToCSV } from '../utils/export';
 import CustomNavbar from "@/pages/CustomNavbar";
 
-const AptosMedicos = () => {
+const LicenciasProximasVencer = () => {
 
   const [isLoading, setisLoading] = useState('');
   const [data, setData] = useState([]);
@@ -28,7 +28,7 @@ const AptosMedicos = () => {
   const fetchData = async () => {
     try {
       setisLoading(true);
-      const response = await odooApi.get(`/drivers/aptos_medicos/`);
+      const response = await odooApi.get(`/drivers/licencias_vencidas/`);
       setData(response.data);
     } catch (error) {
       toast.error('Error al enviar los datos: ' + error);
@@ -50,7 +50,7 @@ const AptosMedicos = () => {
 
   const columns = [
     { accessorKey: 'name', header: 'Operador', },
-    { accessorKey: 'x_exmedic_end', header: 'Fecha expiración' },
+    { accessorKey: 'tms_driver_license_expiration', header: 'Fecha expiración' },
     { accessorKey: 'dias_restantes', header: 'Días restantes' },
   ];
 
@@ -84,7 +84,7 @@ const AptosMedicos = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 200px)',
+        maxHeight: 'calc(100vh - 220px)',
       },
     },
     muiTableBodyCellProps: ({ row }) => ({
@@ -120,7 +120,7 @@ const AptosMedicos = () => {
         <h1
           className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
         >
-          Aptos medicos proximos a vencer
+          Licencias proximas a vencer
         </h1>
 
         <Button
@@ -133,7 +133,7 @@ const AptosMedicos = () => {
         </Button>
 
         <Button
-          onPress={() => exportToCSV(data, columns, "aptos_medicos.csv")}
+          onPress={() => exportToCSV(data, columns, "licencias.csv")}
           color="success"
           className="text-white"
           radius="full"
@@ -165,4 +165,4 @@ const AptosMedicos = () => {
   );
 };
 
-export default AptosMedicos;
+export default LicenciasProximasVencer;

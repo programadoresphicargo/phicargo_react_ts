@@ -6,13 +6,13 @@ import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import ContenedoresPendientes from '@/phicargo/maniobras/tms_waybill/pendientes';
 import UltimosUsosUnidades from '@/phicargo/reportes/ultimos_usos/equipos';
-import LicenciasProximasVencer from '@/phicargo/reportes/licencias/licencias';
-import AptosMedicos from '@/phicargo/reportes/licencias/aptos_medicos';
+import LicenciasProximasVencer from '@/phicargo/reportes/licencias';
+import AptosMedicos from '@/phicargo/reportes/aptos_medicos';
 import DailyOperationsPage from '@/modules/availability-report/pages/DailyOperationsPage';
-import ViajesTipoArmado from '@/phicargo/reportes/licencias/tipo_armado';
+import ViajesTipoArmado from '@/phicargo/reportes/tipo_armado';
 import IncidentsPage from '@/modules/incidents/pages/IncidentsPage';
 import { IncidentsProvider } from '@/modules/incidents/context/IncidentsContext';
-import VehiculosSinOperadorAsignado from '@/phicargo/reportes/licencias/vehiculos_sin_operador_asignado';
+import VehiculosSinOperadorAsignado from '@/phicargo/reportes/vehiculos_sin_operador_asignado';
 import IndexKMRecorridos from '@/phicargo/reportes/km_recorridos';
 
 const ReportesCorreos = () => {
