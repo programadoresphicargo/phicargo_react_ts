@@ -14,6 +14,7 @@ const VehicleRevenueProjectionPage = lazy(() => import('@/modules/vehicles/pages
 const ReporteCumplimiento = lazy(() => import('../phicargo/reportes/cumplimiento'));
 const ViajesTipoArmado = lazy(() => import('../phicargo/reportes/tipo_armado'));
 const UnidadesVacantes = lazy(() => import('../phicargo/reportes/unidades_vacantes'));
+const KMRecorridos = lazy(() => import('../phicargo/reportes/km_recorridos/index'));
 
 const reportsPermission = 4;
 
@@ -99,6 +100,16 @@ export const ReportsRoutes = () => (
           }
           requiredPermissionId={PROJECTION_PERMISSION}
         />
+      }
+    />
+
+    {/* Reporte de km recorridos */}
+    <Route
+      path="km_recorridos"
+      element={
+        <Suspense fallback={<LoadingPage />}>
+          <KMRecorridos />
+        </Suspense>
       }
     />
 

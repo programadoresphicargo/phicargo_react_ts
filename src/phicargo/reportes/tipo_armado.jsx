@@ -46,7 +46,7 @@ const ViajesTipoArmado = () => {
   const EnviarCorreo = async () => {
     try {
       setisLoading(true);
-      const response = await odooApi.get(`/drivers/correo_km_recorridos/`);
+      const response = await odooApi.get(`/drivers/correo_viajes_tipo_armado/`);
     } catch (error) {
       toast.error('Error al enviar los datos: ' + error);
     } finally {

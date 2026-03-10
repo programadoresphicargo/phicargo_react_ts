@@ -23,6 +23,7 @@ import logo from '../assets/img/phicargo_logo_white.png';
 import { motion } from 'framer-motion';
 import viajesIcon from '../assets/menu/viajes.png';
 import calendarIcon from '../assets/menu/calendario.png';
+import kmIcon from '../assets/menu/calle.png';
 
 type MenuItemType = {
   icon: string;
@@ -129,6 +130,12 @@ const reports: MenuItemType[] = [
     label: 'Último uso equipos',
     path: '/disponibilidad/ultimos_usos',
     icon: calendarIcon,
+    requiredPermissions: [211],
+  },
+  {
+    label: 'KM Recorridos',
+    path: '/reportes/km_recorridos',
+    icon: kmIcon,
     requiredPermissions: [211],
   },
 ];

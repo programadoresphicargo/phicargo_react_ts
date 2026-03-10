@@ -15,7 +15,7 @@ import { useDateFormatter } from "@react-aria/i18n";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { exportToCSV } from '../../utils/export';
 
-const KMRecorridosVehiculos = () => {
+const KMRecorridosOperadores = ({ tipo_reporte }) => {
 
   const now = new Date();
   const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -31,9 +31,21 @@ const KMRecorridosVehiculos = () => {
 
   const fetchData = async () => {
     try {
+      let url;
       setisLoading(true);
-      const response = await odooApi.get(`/vehicles/stats/?start_date=${range[0].toISOString().slice(0, 10)}&end_date=${range[1].toISOString().slice(0, 10)}`);
-      setData(response.data.distance_and_revenue_by_vehicle);
+      if (tipo_reporte == "operadores") {
+        url = `/drivers/stats/?start_date=${range[0].toISOString().slice(0, 10)}&end_date=${range[1].toISOString().slice(0, 10)}`;
+        const response = await odooApi.get(url);
+        setData(response.data.distance_and_revenue_by_driver);
+      } else if (tipo_reporte == "vehiculos") {
+        url = `/vehicles/stats/?start_date=${range[0].toISOString().slice(0, 10)}&end_date=${range[1].toISOString().slice(0, 10)}`;
+        const response = await odooApi.get(url);
+        setData(response.data.distance_and_revenue_by_vehicle);
+      } else if (tipo_reporte == "sucursal") {
+        url = `/tms_waybill/km_recorridos_sucursal/?start_date=${range[0].toISOString().slice(0, 10)}&end_date=${range[1].toISOString().slice(0, 10)}`;
+        const response = await odooApi.get(url);
+        setData(response.data);
+      }
     } catch (error) {
       toast.error('Error al enviar los datos: ' + error);
     } finally {
@@ -44,7 +56,7 @@ const KMRecorridosVehiculos = () => {
   const EnviarCorreo = async () => {
     try {
       setisLoading(true);
-      const response = await odooApi.get(`/drivers/correo_licencias_vencidas/`);
+      const response = await odooApi.get(`/drivers/correo_km_recorridos/`);
     } catch (error) {
       toast.error('Error al enviar los datos: ' + error);
     } finally {
@@ -52,10 +64,30 @@ const KMRecorridosVehiculos = () => {
     }
   };
 
+  let columnasExtra = [];
+
+  if (tipo_reporte === 'operadores') {
+    columnasExtra = [
+      { accessorKey: 'driver', header: 'Operador' },
+    ];
+  }
+
+  if (tipo_reporte === 'vehiculos') {
+    columnasExtra = [
+      { accessorKey: 'vehicle', header: 'Vehiculo' },
+    ];
+  }
+
+  if (tipo_reporte === 'sucursal') {
+    columnasExtra = [
+      { accessorKey: 'sucursal', header: 'Sucursal' },
+    ];
+  }
+
   const columns = [
-    { accessorKey: 'vehicle', header: 'Vehiculo', },
-    { accessorKey: 'year', header: 'Año', },
-    { accessorKey: 'month', header: 'Periodo', },
+    ...columnasExtra,
+    { accessorKey: 'year', header: 'Año' },
+    { accessorKey: 'month', header: 'Periodo' },
     { accessorKey: 'distance', header: 'Distancia' },
     { accessorKey: 'travels_single', header: 'Viajes sencillos' },
     { accessorKey: 'travels_full', header: 'Viajes full' },
@@ -74,7 +106,7 @@ const KMRecorridosVehiculos = () => {
     initialState: {
       grouping: ["year", "month"],
       density: 'compact',
-      expanded: false,
+      expanded: true,
       pagination: { pageSize: 80 },
       showColumnFilters: true,
     },
@@ -93,26 +125,22 @@ const KMRecorridosVehiculos = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 230px)',
+        maxHeight: 'calc(100vh - 240px)',
       },
     },
     muiTableBodyCellProps: ({ row }) => ({
       sx: {
-        backgroundColor: row.original?.dias_restantes <= 0
-          ? '#fa022f'
-          : row.subRows?.length
-            ? '#0456cf'
-            : '#FFFFFF',
+        backgroundColor: row.subRows?.length
+          ? '#0456cf'
+          : '#FFFFFF',
 
         fontFamily: 'Inter',
         fontWeight: 'normal',
         fontSize: '14px',
 
-        color: row.original?.dias_restantes <= 0
+        color: row.subRows?.length
           ? '#FFFFFF'
-          : row.subRows?.length
-            ? '#FFFFFF'
-            : '#000000',
+          : '#000000',
       }
     }),
     renderTopToolbarCustomActions: ({ table }) => (
@@ -121,15 +149,14 @@ const KMRecorridosVehiculos = () => {
           display: 'flex',
           gap: '16px',
           padding: '8px',
-          flexWrap: 'nowrap',
-          flexDirection: 'row',
           alignItems: 'center',
         }}
       >
         <h1
+          style={{ flex: 1 }}
           className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
         >
-          Vehiculos
+          {tipo_reporte}
         </h1>
 
         <DateRangePicker
@@ -144,17 +171,15 @@ const KMRecorridosVehiculos = () => {
           onPress={() => EnviarCorreo()}
           color="primary"
           radius="full"
-          style={{ flex: 1 }}
         >
           Enviar correo
         </Button>
 
         <Button
-          onPress={() => exportToCSV(data, columns, "vehiculos.csv")}
+          onPress={() => exportToCSV(data, columns, `${tipo_reporte}.csv`)}
           color="success"
           className="text-white"
           radius="full"
-          style={{ flex: 1 }}
         >
           Exportar
         </Button>
@@ -164,7 +189,6 @@ const KMRecorridosVehiculos = () => {
           color="danger"
           className="text-white"
           radius="full"
-          style={{ flex: 1 }}
         >
           Recargar
         </Button>
@@ -181,4 +205,4 @@ const KMRecorridosVehiculos = () => {
   );
 };
 
-export default KMRecorridosVehiculos;
+export default KMRecorridosOperadores;
