@@ -15,6 +15,7 @@ import { useDateFormatter } from "@react-aria/i18n";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { exportToCSV } from '../utils/export';
 import { DateRangePicker } from 'rsuite';
+import CustomNavbar from "@/pages/CustomNavbar";
 
 const ViajesTipoArmado = () => {
 
@@ -69,7 +70,11 @@ const ViajesTipoArmado = () => {
       },
     },
 
-    { accessorKey: 'sencillo_pct', header: '%' },
+    {
+      accessorKey: 'sencillo_pct', header: '%', muiTableBodyCellProps: {
+        align: 'right',
+      },
+    },
 
     {
       accessorKey: 'full',
@@ -83,7 +88,11 @@ const ViajesTipoArmado = () => {
       },
     },
 
-    { accessorKey: 'full_pct', header: '%' },
+    {
+      accessorKey: 'full_pct', header: '%', muiTableBodyCellProps: {
+        align: 'right',
+      },
+    },
 
     {
       accessorKey: 'sin_especificar',
@@ -97,7 +106,11 @@ const ViajesTipoArmado = () => {
       },
     },
 
-    { accessorKey: 'sin_especificar_pct', header: '%' },
+    {
+      accessorKey: 'sin_especificar_pct', header: '%', muiTableBodyCellProps: {
+        align: 'right',
+      },
+    },
 
     {
       accessorKey: 'total',
@@ -171,7 +184,7 @@ const ViajesTipoArmado = () => {
         <h1
           className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
         >
-          Viajes tipo armado
+          Viajes por tipo armado
         </h1>
 
         <DateRangePicker
@@ -186,7 +199,8 @@ const ViajesTipoArmado = () => {
           onPress={() => EnviarCorreo()}
           color="primary"
           radius="full"
-          style={{ flex: 1 }}
+          fullWidth
+          style={{ flex: 2 }}
         >
           Enviar correo
         </Button>
@@ -196,17 +210,17 @@ const ViajesTipoArmado = () => {
           color="success"
           className="text-white"
           radius="full"
-          style={{ flex: 1 }}
+          style={{ flex: 2 }}
         >
           Exportar
         </Button>
 
         <Button
           onPress={() => fetchData()}
-          color="danger"
+          color="warning"
           className="text-white"
           radius="full"
-          style={{ flex: 1 }}
+          style={{ flex: 2 }}
         >
           Recargar
         </Button>
@@ -216,6 +230,7 @@ const ViajesTipoArmado = () => {
 
   return (
     <>
+      <CustomNavbar></CustomNavbar>
       <MaterialReactTable
         table={table}
       />

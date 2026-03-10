@@ -144,7 +144,7 @@ const LicenciasProximasVencer = () => {
 
         <Button
           onPress={() => fetchData()}
-          color="danger"
+          color="warning"
           className="text-white"
           radius="full"
           style={{ flex: 1 }}
