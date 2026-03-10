@@ -20,7 +20,7 @@ import CustomNavbar from "@/pages/CustomNavbar";
 const ViajesTipoArmado = () => {
 
   const now = new Date();
-  const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+  const firstDay = new Date(now.getFullYear(), 0, 1);
   const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
   const [range, setRange] = useState([firstDay, lastDay]);
 
@@ -139,7 +139,7 @@ const ViajesTipoArmado = () => {
     initialState: {
       grouping: ["year"],
       density: 'compact',
-      expanded: false,
+      expanded: true,
       pagination: { pageSize: 80 },
       showColumnFilters: true,
     },
