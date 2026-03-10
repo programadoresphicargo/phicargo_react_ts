@@ -116,6 +116,9 @@ const AsignacionEquipo = lazy(() => import('../phicargo/viajes/asignacion_equipo
 const OnedriveAjustes = lazy(() => import('../phicargo/ajustes/onedrive'))
 const ReportesCorreos = lazy(() => import('../modules/dashboards/layouts/ReportesCorreos'));
 
+const ReporteLicenciasVencidas = lazy(() => import('../phicargo/reportes/licencias/licencias'));
+const ReporteAptosMedicos = lazy(() => import('../phicargo/reportes/licencias/aptos_medicos'));
+
 export const PrivateRoutes = () => {
   const updateAvailable = useCheckVersion();
 
@@ -622,6 +625,24 @@ export const PrivateRoutes = () => {
           element={
             <Suspense fallback={<LoadingPage />}>
               <ReportesCorreos></ReportesCorreos>
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="licencias_vencidas"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <ReporteLicenciasVencidas></ReporteLicenciasVencidas>
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="aptos_medicos"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <ReporteAptosMedicos></ReporteAptosMedicos>
             </Suspense>
           }
         />

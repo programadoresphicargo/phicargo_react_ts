@@ -1,6 +1,6 @@
 import accesos_img from '../assets/menu/accesos.png';
 import bonos_img from '../assets/menu/bonos.png';
-import calendar3d from '../assets/menu/calendar3d.png';
+import calendar from '../assets/menu/calendario.png';
 import ce_img from '../assets/menu/costos_extras.png';
 import dashboardIcon from '../assets/menu/dashboardIcon.png';
 import maniobras_img from '../assets/menu/maniobras.png';
@@ -95,7 +95,7 @@ export const menuItems: MenuItemType[] = [
  {
   label: 'Disponibilidad',
   link: '/operaciones-diarias',
-  icon: calendar3d,
+  icon: calendar,
   requiredPermissions: [201],
  },
  {

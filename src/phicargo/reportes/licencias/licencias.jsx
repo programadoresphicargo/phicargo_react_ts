@@ -14,6 +14,7 @@ import { toast } from "react-toastify";
 import { useDateFormatter } from "@react-aria/i18n";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { exportToCSV } from '../../utils/export';
+import CustomNavbar from "@/pages/CustomNavbar";
 
 const LicenciasProximasVencer = () => {
 
@@ -156,6 +157,7 @@ const LicenciasProximasVencer = () => {
 
   return (
     <>
+      <CustomNavbar></CustomNavbar>
       <MaterialReactTable
         table={table}
       />

@@ -14,6 +14,7 @@ import { toast } from "react-toastify";
 import { useDateFormatter } from "@react-aria/i18n";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { exportToCSV } from '../../utils/export';
+import CustomNavbar from "@/pages/CustomNavbar";
 
 const AptosMedicos = () => {
 
@@ -83,7 +84,7 @@ const AptosMedicos = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 180px)',
+        maxHeight: 'calc(100vh - 200px)',
       },
     },
     muiTableBodyCellProps: ({ row }) => ({
@@ -156,6 +157,7 @@ const AptosMedicos = () => {
 
   return (
     <>
+      <CustomNavbar></CustomNavbar>
       <MaterialReactTable
         table={table}
       />

@@ -10,6 +10,8 @@ import maintenanceIcon from '../assets/menu/maintenanceIcon.png';
 import phoneIcon from '../assets/menu/app.png';
 import reportIcon from '../assets/menu/reportes.png';
 import revenueIcon from '../assets/menu/revenue.png';
+import licenciaIcon from '../assets/menu/licencia.png';
+import aptoIcon from '../assets/menu/apto.png';
 import { useAuthContext } from '@/modules/auth/hooks';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -19,6 +21,8 @@ import Toolbar from '@mui/material/Toolbar';
 import { Grid } from '@mui/system';
 import logo from '../assets/img/phicargo_logo_white.png';
 import { motion } from 'framer-motion';
+import viajesIcon from '../assets/menu/viajes.png';
+import calendarIcon from '../assets/menu/calendario.png';
 
 type MenuItemType = {
   icon: string;
@@ -74,13 +78,13 @@ const reports: MenuItemType[] = [
     requiredPermissions: [197],
   },
   {
-    label: 'Tiempos de salidas y llegadas',
+    label: 'Tiempos de salidas y llegadas viajes',
     path: '/detenciones',
     icon: clockIcon,
     requiredPermissions: [209],
   },
   {
-    label: 'Cumplimiento estatus',
+    label: 'Cumplimiento estatus App',
     path: '/cumplimiento',
     icon: phoneIcon,
     requiredPermissions: [210],
@@ -96,6 +100,36 @@ const reports: MenuItemType[] = [
     path: '/reporte_detenciones',
     icon: detencionesIcon,
     requiredPermissions: [0],
+  },
+  {
+    label: 'Unidades vacantes',
+    path: '/viajes_armado',
+    icon: viajesIcon,
+    requiredPermissions: [211],
+  },
+  {
+    label: 'Licencias próximas a vencer',
+    path: '/licencias_vencidas',
+    icon: licenciaIcon,
+    requiredPermissions: [520],
+  },
+  {
+    label: 'Aptos medicos próximos a vencer',
+    path: '/aptos_medicos',
+    icon: aptoIcon,
+    requiredPermissions: [520],
+  },
+  {
+    label: 'Viajes por tipo de armado',
+    path: '/viajes_armado',
+    icon: viajesIcon,
+    requiredPermissions: [211],
+  },
+  {
+    label: 'Último uso equipos',
+    path: '/disponibilidad/ultimos_usos',
+    icon: calendarIcon,
+    requiredPermissions: [211],
   },
 ];
 
