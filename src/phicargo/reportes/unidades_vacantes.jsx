@@ -14,6 +14,7 @@ import { toast } from "react-toastify";
 import { useDateFormatter } from "@react-aria/i18n";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { exportToCSV } from '../utils/export';
+import CustomNavbar from "@/pages/CustomNavbar";
 
 const VehiculosSinOperadorAsignado = () => {
 
@@ -106,22 +107,19 @@ const VehiculosSinOperadorAsignado = () => {
           display: 'flex',
           gap: '16px',
           padding: '8px',
-          flexWrap: 'nowrap',
-          flexDirection: 'row',
           alignItems: 'center',
         }}
       >
-        <h1
-          className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
+        <h1 style={{ flex: 1 }}
+          className="tracking-tight font-semibold lg:text-2xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
         >
-          Vehiculos sin operador asignado
+          Unidades vacantes
         </h1>
 
         <Button
           onPress={() => EnviarCorreo()}
           color="primary"
           radius="full"
-          style={{ flex: 1 }}
         >
           Enviar correo
         </Button>
@@ -131,17 +129,15 @@ const VehiculosSinOperadorAsignado = () => {
           color="success"
           className="text-white"
           radius="full"
-          style={{ flex: 1 }}
         >
           Exportar
         </Button>
 
         <Button
           onPress={() => fetchData()}
-          color="danger"
+          color="warning"
           className="text-white"
           radius="full"
-          style={{ flex: 1 }}
         >
           Recargar
         </Button>
@@ -151,6 +147,7 @@ const VehiculosSinOperadorAsignado = () => {
 
   return (
     <>
+      <CustomNavbar></CustomNavbar>
       <MaterialReactTable
         table={table}
       />

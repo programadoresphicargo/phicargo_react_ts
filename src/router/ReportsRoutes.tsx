@@ -13,6 +13,7 @@ const Saldos = lazy(() => import('@/phicargo/saldos_contabilidad/ControlUsuarios
 const VehicleRevenueProjectionPage = lazy(() => import('@/modules/vehicles/pages/VehicleRevenueProjectionPage'));
 const ReporteCumplimiento = lazy(() => import('../phicargo/reportes/cumplimiento'));
 const ViajesTipoArmado = lazy(() => import('../phicargo/reportes/tipo_armado'));
+const UnidadesVacantes = lazy(() => import('../phicargo/reportes/unidades_vacantes'));
 
 const reportsPermission = 4;
 
@@ -64,6 +65,15 @@ export const ReportsRoutes = () => (
       element={
         <Suspense fallback={<LoadingPage />}>
           <ViajesTipoArmado></ViajesTipoArmado>
+        </Suspense>
+      }
+    />
+
+    <Route
+      path="unidades_vacantes"
+      element={
+        <Suspense fallback={<LoadingPage />}>
+          <UnidadesVacantes />
         </Suspense>
       }
     />

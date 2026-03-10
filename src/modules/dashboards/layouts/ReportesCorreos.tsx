@@ -12,7 +12,7 @@ import DailyOperationsPage from '@/modules/availability-report/pages/DailyOperat
 import ViajesTipoArmado from '@/phicargo/reportes/tipo_armado';
 import IncidentsPage from '@/modules/incidents/pages/IncidentsPage';
 import { IncidentsProvider } from '@/modules/incidents/context/IncidentsContext';
-import VehiculosSinOperadorAsignado from '@/phicargo/reportes/vehiculos_sin_operador_asignado';
+import VehiculosSinOperadorAsignado from '@/phicargo/reportes/unidades_vacantes';
 import IndexKMRecorridos from '@/phicargo/reportes/km_recorridos';
 
 const ReportesCorreos = () => {

@@ -214,7 +214,7 @@ const DetencionesTable = () => {
         }}
       >
         <h1
-          className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
+          className="tracking-tight font-semibold lg:text-2xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
         >
           Salidas y llegadas tarde
         </h1>

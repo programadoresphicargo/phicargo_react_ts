@@ -176,13 +176,12 @@ const ViajesTipoArmado = () => {
           display: 'flex',
           gap: '16px',
           padding: '8px',
-          flexWrap: 'nowrap',
-          flexDirection: 'row',
           alignItems: 'center',
         }}
       >
         <h1
-          className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
+          style={{ flex: 1 }}
+          className="tracking-tight font-semibold lg:text-2xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
         >
           Viajes por tipo armado
         </h1>
@@ -199,8 +198,6 @@ const ViajesTipoArmado = () => {
           onPress={() => EnviarCorreo()}
           color="primary"
           radius="full"
-          fullWidth
-          style={{ flex: 2 }}
         >
           Enviar correo
         </Button>
@@ -210,7 +207,6 @@ const ViajesTipoArmado = () => {
           color="success"
           className="text-white"
           radius="full"
-          style={{ flex: 2 }}
         >
           Exportar
         </Button>
@@ -220,7 +216,6 @@ const ViajesTipoArmado = () => {
           color="warning"
           className="text-white"
           radius="full"
-          style={{ flex: 2 }}
         >
           Recargar
         </Button>

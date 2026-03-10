@@ -103,7 +103,7 @@ const reports: MenuItemType[] = [
   },
   {
     label: 'Unidades vacantes',
-    path: '/viajes_armado',
+    path: '/reportes/unidades_vacantes',
     icon: viajesIcon,
     requiredPermissions: [211],
   },
