@@ -85,7 +85,7 @@ const reports: MenuItemType[] = [
   },
   {
     label: 'Cumplimiento estatus App',
-    path: '/cumplimiento',
+    path: '/reportes/cumplimiento',
     icon: phoneIcon,
     requiredPermissions: [210],
   },
@@ -109,13 +109,13 @@ const reports: MenuItemType[] = [
   },
   {
     label: 'Licencias próximas a vencer',
-    path: '/licencias_vencidas',
+    path: '/reportes/licencias_vencidas',
     icon: licenciaIcon,
     requiredPermissions: [520],
   },
   {
     label: 'Aptos medicos próximos a vencer',
-    path: '/aptos_medicos',
+    path: '/reportes/aptos_medicos',
     icon: aptoIcon,
     requiredPermissions: [520],
   },

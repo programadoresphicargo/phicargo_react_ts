@@ -1,5 +1,4 @@
 import { Suspense, lazy } from 'react';
-
 import CashflowReportRoutes from '@/modules/cashflow-report/routes/CashflowReportRoutes';
 import { LoadingPage } from '@/pages/LoadingPage';
 import MaintenanceReportRoutes from '@/modules/maintenance/routes/MaintenanceReportRoutes';
@@ -8,14 +7,11 @@ import ReportsMenuPage from '@/pages/ReportsMenuPage';
 import { Route } from 'react-router-dom';
 import MaintenanceReportRoutesRemolques from '@/modules/maintenance/routes/MaintenanceReportRoutes copy';
 
-const Saldos = lazy(
-  () => import('@/phicargo/saldos_contabilidad/ControlUsuarios'),
-);
-
-const VehicleRevenueProjectionPage = lazy(
-  () =>
-    import('@/modules/vehicles/pages/VehicleRevenueProjectionPage'),
-);
+const ReporteLicenciasVencidas = lazy(() => import('../phicargo/reportes/licencias/licencias'));
+const ReporteAptosMedicos = lazy(() => import('../phicargo/reportes/licencias/aptos_medicos'));
+const Saldos = lazy(() => import('@/phicargo/saldos_contabilidad/ControlUsuarios'));
+const VehicleRevenueProjectionPage = lazy(() => import('@/modules/vehicles/pages/VehicleRevenueProjectionPage'));
+const ReporteCumplimiento = lazy(() => import('../phicargo/reportes/cumplimiento'));
 
 const reportsPermission = 4;
 
@@ -40,6 +36,35 @@ export const ReportsRoutes = () => (
 
     {/* Reporte de Cobranza */}
     {CashflowReportRoutes()}
+
+    {/* Reporte de licencias vencidas */}
+    <Route
+      path="licencias_vencidas"
+      element={
+        <Suspense fallback={<LoadingPage />}>
+          <ReporteLicenciasVencidas></ReporteLicenciasVencidas>
+        </Suspense>
+      }
+    />
+
+    {/* Reporte de aptos medicos */}
+    <Route
+      path="aptos_medicos"
+      element={
+        <Suspense fallback={<LoadingPage />}>
+          <ReporteAptosMedicos></ReporteAptosMedicos>
+        </Suspense>
+      }
+    />
+
+    <Route
+      path="cumplimiento"
+      element={
+        <Suspense fallback={<LoadingPage />}>
+          <ReporteCumplimiento />
+        </Suspense>
+      }
+    />
 
     {/* Reporte de Projeccion por unidad */}
     <Route

@@ -57,9 +57,6 @@ const EnvioMasivoViajes = lazy(
 const CorreosElectronicos = lazy(
   () => import('../phicargo/correos_electronicos/correos_electronicos'),
 );
-const ReporteCumplimiento = lazy(
-  () => import('../phicargo/reportes/cumplimiento'),
-);
 const FoliosCostosExtras = lazy(
   () => import('../phicargo/costos/folios/control'),
 );
@@ -115,9 +112,6 @@ const Lineas = lazy(() => import('../phicargo/inventarioti/celulares/lineas/inde
 const AsignacionEquipo = lazy(() => import('../phicargo/viajes/asignacion_equipo/index'))
 const OnedriveAjustes = lazy(() => import('../phicargo/ajustes/onedrive'))
 const ReportesCorreos = lazy(() => import('../modules/dashboards/layouts/ReportesCorreos'));
-
-const ReporteLicenciasVencidas = lazy(() => import('../phicargo/reportes/licencias/licencias'));
-const ReporteAptosMedicos = lazy(() => import('../phicargo/reportes/licencias/aptos_medicos'));
 
 export const PrivateRoutes = () => {
   const updateAvailable = useCheckVersion();
@@ -381,15 +375,6 @@ export const PrivateRoutes = () => {
         />
 
         <Route
-          path="/cumplimiento"
-          element={
-            <Suspense fallback={<LoadingPage />}>
-              <ReporteCumplimiento />
-            </Suspense>
-          }
-        />
-
-        <Route
           path="/estadias"
           element={
             <Suspense fallback={<LoadingPage />}>
@@ -629,23 +614,6 @@ export const PrivateRoutes = () => {
           }
         />
 
-        <Route
-          path="licencias_vencidas"
-          element={
-            <Suspense fallback={<LoadingPage />}>
-              <ReporteLicenciasVencidas></ReporteLicenciasVencidas>
-            </Suspense>
-          }
-        />
-
-        <Route
-          path="aptos_medicos"
-          element={
-            <Suspense fallback={<LoadingPage />}>
-              <ReporteAptosMedicos></ReporteAptosMedicos>
-            </Suspense>
-          }
-        />
         {/* Modulo de reportes */}
         {ReportsRoutes()}
 
