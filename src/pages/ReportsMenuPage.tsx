@@ -106,7 +106,7 @@ const reports: MenuItemType[] = [
     label: 'Unidades vacantes',
     path: '/reportes/unidades_vacantes',
     icon: viajesIcon,
-    requiredPermissions: [211],
+    requiredPermissions: [289],
   },
   {
     label: 'Licencias próximas a vencer',
@@ -124,7 +124,7 @@ const reports: MenuItemType[] = [
     label: 'Viajes por tipo de armado',
     path: '/reportes/viajes_tipo_armado',
     icon: viajesIcon,
-    requiredPermissions: [211],
+    requiredPermissions: [288],
   },
   {
     label: 'Último uso equipos',
@@ -136,7 +136,7 @@ const reports: MenuItemType[] = [
     label: 'KM Recorridos',
     path: '/reportes/km_recorridos',
     icon: kmIcon,
-    requiredPermissions: [211],
+    requiredPermissions: [288],
   },
 ];
 
