@@ -46,7 +46,7 @@ const ViajesTipoArmado = () => {
   const EnviarCorreo = async () => {
     try {
       setisLoading(true);
-      const response = await odooApi.get(`/drivers/correo_viajes_tipo_armado/`);
+      const response = await odooApi.get(`/drivers/correo_viajes_tipo_armado/?date_start=${range[0].toISOString().slice(0, 10)}&date_end=${range[1].toISOString().slice(0, 10)}`);
     } catch (error) {
       toast.error('Error al enviar los datos: ' + error);
     } finally {

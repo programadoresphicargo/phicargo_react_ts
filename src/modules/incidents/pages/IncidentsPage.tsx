@@ -45,7 +45,7 @@ const IncidentsPage = () => {
 
   const EnviarCorreo = async () => {
     try {
-      const response = await odooApi.get(`/drivers/incidents_email/`);
+      const response = await odooApi.get(`/drivers/incidents_email/?date_start=${ formatedDateRange.startDate}&date_end=${formatedDateRange.endDate}`);
       toast.success(response.data.message);
     } catch (error) {
       console.error('Error al enviar los datos: ' + error);
