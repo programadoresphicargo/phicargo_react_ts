@@ -11,6 +11,8 @@ import { useBaseTable } from '@/hooks';
 import { Button } from '@heroui/react';
 import { ExportConfig, ExportToExcel } from '@/utilities';
 import { Tooltip } from "@heroui/tooltip";
+import odooApi from '@/api/odoo-api';
+import toast from 'react-hot-toast';
 
 const dialogProps: DialogProps = {
   slots: {
@@ -44,6 +46,15 @@ const MaintenanceReportTable = (props: MaintenanceReportTableProps) => {
   useEffect(() => {
     refetch();
   }, [type]);
+
+  const EnviarCorreo = async () => {
+    try {
+      const response = await odooApi.get(`/maintenance-record/email/`);
+      toast.success(response.data.message);
+    } catch (error) {
+      console.error('Error al enviar los datos: ' + error);
+    }
+  };
 
   const columns = useMaintenanceReportColumns(type, records || []);
 
@@ -102,6 +113,13 @@ const MaintenanceReportTable = (props: MaintenanceReportTableProps) => {
           color='success'
           onPress={() => exportTo.exportData(records || [])}>
           Exportar
+        </Button>
+        <Button
+          radius='full'
+          className='text-white'
+          color='primary'
+          onPress={() => EnviarCorreo()}>
+          Enviar correo
         </Button>
       </>
     ),
