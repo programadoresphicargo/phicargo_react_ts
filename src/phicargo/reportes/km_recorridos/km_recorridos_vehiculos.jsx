@@ -54,6 +54,8 @@ const KMRecorridosVehiculos = () => {
 
   const columns = [
     { accessorKey: 'vehicle', header: 'Vehiculo', },
+    { accessorKey: 'year', header: 'Año', },
+    { accessorKey: 'month', header: 'Periodo', },
     { accessorKey: 'distance', header: 'Distancia' },
     { accessorKey: 'travels_single', header: 'Viajes sencillos' },
     { accessorKey: 'travels_full', header: 'Viajes full' },
@@ -70,6 +72,7 @@ const KMRecorridosVehiculos = () => {
     localization: MRT_Localization_ES,
     columnResizeMode: "onEnd",
     initialState: {
+      grouping: ["year", "month"],
       density: 'compact',
       expanded: false,
       pagination: { pageSize: 80 },
@@ -147,7 +150,7 @@ const KMRecorridosVehiculos = () => {
         </Button>
 
         <Button
-          onPress={() => exportToCSV(data, columns, "aptos_medicos.csv")}
+          onPress={() => exportToCSV(data, columns, "vehiculos.csv")}
           color="success"
           className="text-white"
           radius="full"
