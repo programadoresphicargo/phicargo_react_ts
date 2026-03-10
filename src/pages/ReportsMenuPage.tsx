@@ -121,7 +121,7 @@ const reports: MenuItemType[] = [
   },
   {
     label: 'Viajes por tipo de armado',
-    path: '/viajes_armado',
+    path: '/reportes/viajes_tipo_armado',
     icon: viajesIcon,
     requiredPermissions: [211],
   },

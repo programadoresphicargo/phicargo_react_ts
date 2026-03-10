@@ -84,7 +84,7 @@ const Minutas = lazy(() => import('../phicargo/minutas/control_minutas'));
 const EventosGPS = lazy(() => import('../modules/vehicles/components/motum-events/VehicleEventsPage'));
 
 const DetencionesTable = lazy(
-  () => import('../phicargo/reportes/llegadas_tarde/llegadas_tarde'),
+  () => import('../phicargo/reportes/llegadas_tarde'),
 );
 const ReporteDetencionesViajes = lazy(
   () => import('../phicargo/viajes/detenciones/reporte_detenciones_viajes'),
