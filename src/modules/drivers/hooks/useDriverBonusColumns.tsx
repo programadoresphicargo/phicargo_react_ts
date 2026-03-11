@@ -149,6 +149,10 @@ export const useDriverBonusColumns = (
             cell.getValue<number>()
           ),
       },
+      {
+        accessorKey: 'comentarios',
+        header: 'Comentarios',
+      },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [editedRecords, isEditing, userPermissions],

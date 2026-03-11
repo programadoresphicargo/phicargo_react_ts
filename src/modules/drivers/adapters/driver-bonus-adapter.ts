@@ -35,6 +35,7 @@ export class DriverBonusAdapter {
       vehicleCare: data.cuidado_unidad,
       performance: data.rendimiento,
       createdAt: data.fecha_creacion ? dayjs(data.fecha_creacion) : null,
+      comentarios: data.comentarios
     };
   }
 

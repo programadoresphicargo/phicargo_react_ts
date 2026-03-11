@@ -26,6 +26,7 @@ export interface DriverBonusApi extends DriverBonusBaseApi {
   anio: number;
   km_recorridos: number;
   fecha_creacion: string | null;
+  comentarios: string | null;
 }
 
 export type DriverBonusUpdateApi = DriverBonusBaseApi & {

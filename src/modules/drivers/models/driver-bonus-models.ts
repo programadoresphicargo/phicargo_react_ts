@@ -17,6 +17,7 @@ interface DriverBonusBase {
   roadSafety: number | null;
   vehicleCare: number | null;
   performance: number | null;
+  comentarios: string | null;
 }
 
 export interface DriverBonus extends DriverBonusBase {
