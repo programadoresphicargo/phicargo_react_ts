@@ -287,6 +287,7 @@ const getColumnVisibility = (
   year: true,
   distance: true,
   createdAt: true,
+  comentarios: true
 });
 
 const exportConf: ExportConfig<DriverBonus> = {
