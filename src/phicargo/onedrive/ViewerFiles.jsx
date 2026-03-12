@@ -8,7 +8,12 @@ const ViewerFiles = ({ id, tabla }) => {
     const [previewUrl, setPreviewUrl] = useState(null);
 
     useEffect(() => {
-        if (!id) return;
+        if (!id) {
+            setBlobUrls([]);
+            setPreviewUrl(null);
+            return;
+        }
+
         let isCancelled = false;
 
         const fetchAllBlobs = async () => {
