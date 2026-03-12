@@ -26,6 +26,8 @@ import EstadoSolicitud from "./estado";
 import CancelarSolicitudDialog from "./cancelar";
 import { Select, SelectItem, Link } from "@heroui/react";
 import SelectEmpleado from "@/phicargo/descuentos/solicitante";
+import UploadFiles from "@/phicargo/onedrive/UploadFiles";
+
 const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -36,6 +38,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
     const [isLoading, setLoading] = useState(false);
     const [isSaving, setSaving] = useState(false);
     const [openCancelar, setOpenCancelar] = useState(false);
+    const [fileList, setFileList] = useState([]);
 
     const
         { modoEdicion, setModoEdicion,
@@ -57,13 +60,24 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
         setSaving(true);
         try {
             if (id_solicitud === null) {
+
+                const formDataToSend = new FormData();
+
                 const payload = {
                     data: data,
                     lineas: lineasGlobales,
                     reservas: reservasGlobales
                 };
 
-                const response = await odooApi.post('/tms_travel/solicitudes_equipo/', payload);
+                formDataToSend.append("payload", JSON.stringify(payload));
+
+                fileList.forEach((file) => {
+                    if (file.originFileObj) {
+                        formDataToSend.append("files", file.originFileObj);
+                    }
+                });
+
+                const response = await odooApi.post('/tms_travel/solicitudes_equipo/', formDataToSend);
                 if (response.data.status == 'success') {
                     toast.success(response.data.message);
                     setID(response.data.data.id);
@@ -71,24 +85,38 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                     toast.error(response.data.message);
                 }
             } else {
+
+                const formDataToSend = new FormData();
+
                 const payload = {
                     data: data,
                     lineas: lineasGlobales,
                     reservas: reservasGlobales
                 };
-                const response = await odooApi.patch(`/tms_travel/solicitudes_equipo/${id_solicitud}`, payload);
+
+                formDataToSend.append("payload", JSON.stringify(payload));
+
+                fileList.forEach((file) => {
+                    if (file.originFileObj) {
+                        formDataToSend.append("files", file.originFileObj);
+                    }
+                });
+
+                const response = await odooApi.patch(`/tms_travel/solicitudes_equipo/${id_solicitud}`, formDataToSend);
                 if (response.data.status == 'success') {
                     toast.success(response.data.message);
                     fetchData(id_solicitud);
+                    setSaving(false);
+                    setModoEdicion(false);
                 } else {
                     toast.error(response.data.message);
                 }
             }
         } catch (error) {
+            setSaving(false);
             toast.error('Error al guardar:', error);
         } finally {
             setSaving(false);
-            setModoEdicion(false);
         }
     };
 
@@ -250,10 +278,12 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
     useEffect(() => {
         if (open && id_solicitud !== null) {
             fetchData(id_solicitud);
+            setFileList([]);
         } else if (open && id_solicitud === null) {
             setData({ x_tipo: x_tipo });
             setLineasGlobales([]);
             setReservasGlobales([]);
+            setFileList([]);
         }
     }, [open, id_solicitud]);
 
@@ -482,6 +512,21 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                                         <HistorialCambios cambios={data?.mails || []} />
                                     </CardBody>
                                 </Card>
+
+                                <Card className="mt-5">
+                                    <CardHeader
+                                        style={{
+                                            background: 'linear-gradient(90deg, #0b2149, #002887)',
+                                            color: 'white',
+                                            fontWeight: 'bold'
+                                        }}>Evidencias
+                                    </CardHeader>
+                                    <Divider></Divider>
+                                    <CardBody>
+                                        <UploadFiles fileList={fileList} setFileList={setFileList} id={id_solicitud} tabla={"x_solicitudes_equipo"} disabledFom={!modoEdicion} key={isSaving}></UploadFiles>
+                                    </CardBody>
+                                </Card>
+
                             </Grid>
                         </Grid>
 
