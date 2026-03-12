@@ -188,6 +188,7 @@ const Solicitudes = ({ x_tipo, vista }) => {
     initialState: {
       showGlobalFilter: true,
       columnVisibility: {
+        cliente: vista == 'solicitudes' ? true : false,
         carta_porte: vista == 'solicitudes' ? true : false,
         referencia_viaje: vista == 'solicitudes' ? true : false,
         inicio_programado: vista == 'solicitudes' ? true : false,
