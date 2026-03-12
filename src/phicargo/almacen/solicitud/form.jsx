@@ -139,7 +139,6 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                 if (response.data.status == 'success') {
                     toast.success(response.data.message);
                     fetchData(id_solicitud);
-                    handleClose();
                 } else {
                     toast.error(response.data.message);
                 }
@@ -199,7 +198,6 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                 if (response.data.status == 'success') {
                     toast.success(response.data.message);
                     fetchData(id_solicitud);
-                    handleClose();
                 } else {
                     toast.error(response.data.message);
                 }
@@ -229,7 +227,6 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                 if (response.data.status == 'success') {
                     toast.success(response.data.message);
                     fetchData(id_solicitud);
-                    handleClose();
                 } else {
                     toast.error(response.data.message);
                 }
@@ -260,7 +257,6 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                 if (response.data.status === 'success') {
                     toast.success(response.data.message);
                     fetchData(id_solicitud);
-                    handleClose();
                 } else {
                     toast.error(response.data.message);
                 }
@@ -327,214 +323,212 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                     </Toolbar>
                 </AppBar>
 
-                {isLoading ? (
+                {isLoading && (
                     <Progress isIndeterminate size="sm" />
-                ) : (
+                )}
 
-                    <DialogContent>
+                <DialogContent>
 
-                        <Stack spacing={1} direction="row" className="mb-5">
+                    <Stack spacing={1} direction="row" className="mb-5">
 
-                            {(!modoEdicion && (data?.x_studio_estado === 'borrador' || data?.x_studio_estado === 'entregado')) && (
-                                <Button
-                                    radius="full"
-                                    color="primary"
-                                    onPress={handleEdit}>
-                                    Editar
-                                </Button>
-                            )}
+                        {(!modoEdicion && (data?.x_studio_estado === 'borrador' || data?.x_studio_estado === 'entregado')) && (
+                            <Button
+                                radius="full"
+                                color="primary"
+                                onPress={handleEdit}>
+                                Editar
+                            </Button>
+                        )}
 
-                            {modoEdicion && (
-                                <Button
-                                    radius="full"
-                                    onPress={handleSave}
-                                    color={id_solicitud ? 'success' : 'primary'}
-                                    isDisabled={isSaving}
-                                    className={id_solicitud ? 'text-white' : ''}
-                                >
-                                    {isSaving ? 'Guardando...' : id_solicitud ? 'Actualizar' : 'Registrar'}
-                                </Button>
-                            )}
-                            {data?.x_studio_estado === "borrador" && modoEdicion != true && (
-                                <Button
-                                    radius="full"
-                                    color="success"
-                                    className="text-white"
-                                    onPress={() => confirmar()}
-                                    isLoading={isLoading}>
-                                    Confirmar y reservar
-                                </Button>
-                            )}
-                            {data?.x_studio_estado == "confirmado" && (
-                                <Button color='warning' className='text-white' onPress={() => cambiar_borrador()} isLoading={isLoading} radius="full">Regresar a borrador</Button>
-                            )}
-                            {data?.x_studio_estado == "confirmado" && (
-                                <Button color='success' className='text-white' onPress={() => entregar()} isLoading={isLoading} radius="full">Entregar</Button>
-                            )}
-                            {((data?.x_studio_estado == "entregado" || data?.x_studio_estado == "recepcionado_operador") && data?.es_asignacion) && (
-                                <Button
-                                    radius="full"
-                                    color='secondary'
-                                    className='text-white'
-                                    onPress={() => devolver()}
-                                    isLoading={isLoading}>
-                                    Cerrar solicitud
-                                </Button>
-                            )}
-                            {data?.x_studio_estado !== "borrador" && data?.x_studio_estado !== "cancelada" && (
-                                <Button
-                                    radius="full"
-                                    color="success"
-                                    as={Link}
-                                    isExternal={true}
-                                    color="primary"
-                                    href={`${apiUrl}/tms_travel/solicitudes_equipo/pdf/${id_solicitud}`}>
-                                    Formato de entrega
-                                </Button>
-                            )}
-                            {(!modoEdicion && data?.x_studio_estado == 'borrador') && (
-                                <Button
-                                    radius="full"
-                                    color="danger"
-                                    className="text-white"
-                                    onPress={() => setOpenCancelar(true)}
-                                    isLoading={isLoading}>
-                                    Cancelar
-                                </Button>
-                            )}
+                        {modoEdicion && (
+                            <Button
+                                radius="full"
+                                onPress={handleSave}
+                                color={id_solicitud ? 'success' : 'primary'}
+                                isDisabled={isSaving}
+                                className={id_solicitud ? 'text-white' : ''}
+                            >
+                                {isSaving ? 'Guardando...' : id_solicitud ? 'Actualizar' : 'Registrar'}
+                            </Button>
+                        )}
+                        {data?.x_studio_estado === "borrador" && modoEdicion != true && (
+                            <Button
+                                radius="full"
+                                color="success"
+                                className="text-white"
+                                onPress={() => confirmar()}
+                                isLoading={isLoading}>
+                                Confirmar y reservar
+                            </Button>
+                        )}
+                        {data?.x_studio_estado == "confirmado" && (
+                            <Button color='warning' className='text-white' onPress={() => cambiar_borrador()} isLoading={isLoading} radius="full">Regresar a borrador</Button>
+                        )}
+                        {data?.x_studio_estado == "confirmado" && (
+                            <Button color='success' className='text-white' onPress={() => entregar()} isLoading={isLoading} radius="full">Entregar</Button>
+                        )}
+                        {((data?.x_studio_estado == "entregado" || data?.x_studio_estado == "recepcionado_operador") && data?.es_asignacion) && (
+                            <Button
+                                radius="full"
+                                color='secondary'
+                                className='text-white'
+                                onPress={() => devolver()}
+                                isLoading={isLoading}>
+                                Cerrar solicitud
+                            </Button>
+                        )}
+                        {data?.x_studio_estado !== "borrador" && data?.x_studio_estado !== "cancelada" && (
+                            <Button
+                                radius="full"
+                                color="success"
+                                as={Link}
+                                isExternal={true}
+                                color="primary"
+                                href={`${apiUrl}/tms_travel/solicitudes_equipo/pdf/${id_solicitud}`}>
+                                Formato de entrega
+                            </Button>
+                        )}
+                        {(!modoEdicion && data?.x_studio_estado == 'borrador') && (
+                            <Button
+                                radius="full"
+                                color="danger"
+                                className="text-white"
+                                onPress={() => setOpenCancelar(true)}
+                                isLoading={isLoading}>
+                                Cancelar
+                            </Button>
+                        )}
 
-                            <div style={{ marginLeft: 'auto', width: '1000px' }}>
-                                <EstadoSolicitud />
-                            </div>
-                        </Stack>
+                        <div style={{ marginLeft: 'auto', width: '1000px' }}>
+                            <EstadoSolicitud />
+                        </div>
+                    </Stack>
 
 
-                        <Grid container spacing={2}>
-                            <Grid item xs={12} md={9}>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} md={9}>
 
-                                <Card>
-                                    <CardHeader style={{
+                            <Card>
+                                <CardHeader style={{
+                                    background: 'linear-gradient(90deg, #0b2149, #002887)',
+                                    color: 'white',
+                                    fontWeight: 'bold'
+                                }}>
+                                    Datos de la solicitud
+                                </CardHeader>
+                                <Divider></Divider>
+                                <CardBody>
+                                    <Grid container spacing={2}>
+                                        <Grid item xs={12} sm={6}>
+                                            <Input value={data?.usuario || '---'} label="Creada por:" isReadOnly></Input>
+                                        </Grid>
+
+                                        <Grid item xs={12} sm={6}>
+                                            <Input value={data?.create_date || '---'} label="Fecha de solicitud:" isReadOnly></Input>
+                                        </Grid>
+
+                                        {vista == 'solicitudes' && (<>
+                                            <Grid item xs={12} sm={6}>
+                                                <ViajeEPP id_viaje={data?.x_waybill_id} />
+                                            </Grid>
+
+                                            <Grid item xs={12} sm={6}>
+                                                Operador asignado:
+                                                <Typography variant="body1">{data?.operador || '---'}</Typography>
+                                            </Grid>
+
+                                            <Grid item xs={12} sm={6}>
+                                                <Input
+                                                    value={data?.inicio_programado || '---'}
+                                                    label="Inicio programado de viaje:"
+                                                    isReadOnly
+                                                />
+                                            </Grid>
+                                        </>
+                                        )}
+
+                                        {vista == 'asignaciones' && (<>
+                                            <Grid item xs={12} sm={6}>
+                                                <SelectEmpleado
+                                                    key_name={"x_operador_id"}
+                                                    label={"Empleado"}
+                                                    isDisabled={!modoEdicion}
+                                                    value={data?.x_operador_id}
+                                                    setSolicitante={handleSelectChange}>
+                                                </SelectEmpleado>
+                                            </Grid>
+                                        </>
+                                        )}
+
+                                        <Grid item xs={12} sm={6}>
+                                            <Select
+                                                label="Tipo de solicitud"
+                                                isReadOnly
+                                                placeholder="Seleccionar tipo de solicitud"
+                                                selectedKeys={[data?.x_tipo]}
+                                            >
+                                                <SelectItem key={'epp'}>Equipo de protección personal</SelectItem>
+                                                <SelectItem key={'amarre'}>Equipo de amarre</SelectItem>
+                                            </Select>
+                                        </Grid>
+
+                                    </Grid>
+                                </CardBody>
+                            </Card>
+
+                            <Card className="mt-4">
+                                <CardBody>
+                                    <EPPSolicitados></EPPSolicitados>
+                                </CardBody>
+                            </Card>
+                        </Grid>
+
+                        <Grid item xs={12} md={3}>
+                            <Card>
+                                <CardHeader
+                                    style={{
                                         background: 'linear-gradient(90deg, #0b2149, #002887)',
                                         color: 'white',
                                         fontWeight: 'bold'
-                                    }}>
-                                        Datos de la solicitud
-                                    </CardHeader>
-                                    <Divider></Divider>
-                                    <CardBody>
-                                        <Grid container spacing={2}>
-                                            <Grid item xs={12} sm={6}>
-                                                <Input value={data?.usuario || '---'} label="Creada por:" isReadOnly></Input>
-                                            </Grid>
+                                    }}>Historial de cambios</CardHeader>
+                                <Divider></Divider>
 
-                                            <Grid item xs={12} sm={6}>
-                                                <Input value={data?.create_date || '---'} label="Fecha de solicitud:" isReadOnly></Input>
-                                            </Grid>
+                                {(data?.x_studio_estado == 'cancelada') && (
+                                    <Card className="m-3">
+                                        <CardHeader className="bg-danger text-white">
+                                            Cancelada
+                                        </CardHeader>
+                                        <Divider></Divider>
+                                        <CardContent>
+                                            <p>Motivo de cancelación: {data?.x_motivo_cancelacion}</p>
+                                            <p>Comentarios: {data?.x_comentarios_cancelacion}</p>
+                                        </CardContent>
+                                    </Card>
+                                )}
 
-                                            {vista == 'solicitudes' && (<>
-                                                <Grid item xs={12} sm={6}>
-                                                    <ViajeEPP id_viaje={data?.x_waybill_id} />
-                                                </Grid>
+                                <CardBody>
+                                    <HistorialCambios cambios={data?.mails || []} />
+                                </CardBody>
+                            </Card>
 
-                                                <Grid item xs={12} sm={6}>
-                                                    Operador asignado:
-                                                    <Typography variant="body1">{data?.operador || '---'}</Typography>
-                                                </Grid>
+                            <Card className="mt-5">
+                                <CardHeader
+                                    style={{
+                                        background: 'linear-gradient(90deg, #0b2149, #002887)',
+                                        color: 'white',
+                                        fontWeight: 'bold'
+                                    }}>Evidencias
+                                </CardHeader>
+                                <Divider></Divider>
+                                <CardBody>
+                                    <UploadFiles fileList={fileList} setFileList={setFileList} id={id_solicitud} tabla={"x_solicitudes_equipo"} disabledFom={!modoEdicion} key={isSaving}></UploadFiles>
+                                </CardBody>
+                            </Card>
 
-                                                <Grid item xs={12} sm={6}>
-                                                    <Input
-                                                        value={data?.inicio_programado || '---'}
-                                                        label="Inicio programado de viaje:"
-                                                        isReadOnly
-                                                    />
-                                                </Grid>
-                                            </>
-                                            )}
-
-                                            {vista == 'asignaciones' && (<>
-                                                <Grid item xs={12} sm={6}>
-                                                    <SelectEmpleado
-                                                        key_name={"x_operador_id"}
-                                                        label={"Empleado"}
-                                                        isDisabled={!modoEdicion}
-                                                        value={data?.x_operador_id}
-                                                        setSolicitante={handleSelectChange}>
-                                                    </SelectEmpleado>
-                                                </Grid>
-                                            </>
-                                            )}
-
-                                            <Grid item xs={12} sm={6}>
-                                                <Select
-                                                    label="Tipo de solicitud"
-                                                    isReadOnly
-                                                    placeholder="Seleccionar tipo de solicitud"
-                                                    selectedKeys={[data?.x_tipo]}
-                                                >
-                                                    <SelectItem key={'epp'}>Equipo de protección personal</SelectItem>
-                                                    <SelectItem key={'amarre'}>Equipo de amarre</SelectItem>
-                                                </Select>
-                                            </Grid>
-
-                                        </Grid>
-                                    </CardBody>
-                                </Card>
-
-                                <Card className="mt-4">
-                                    <CardBody>
-                                        <EPPSolicitados></EPPSolicitados>
-                                    </CardBody>
-                                </Card>
-                            </Grid>
-
-                            <Grid item xs={12} md={3}>
-                                <Card>
-                                    <CardHeader
-                                        style={{
-                                            background: 'linear-gradient(90deg, #0b2149, #002887)',
-                                            color: 'white',
-                                            fontWeight: 'bold'
-                                        }}>Historial de cambios</CardHeader>
-                                    <Divider></Divider>
-
-                                    {(data?.x_studio_estado == 'cancelada') && (
-                                        <Card className="m-3">
-                                            <CardHeader className="bg-danger text-white">
-                                                Cancelada
-                                            </CardHeader>
-                                            <Divider></Divider>
-                                            <CardContent>
-                                                <p>Motivo de cancelación: {data?.x_motivo_cancelacion}</p>
-                                                <p>Comentarios: {data?.x_comentarios_cancelacion}</p>
-                                            </CardContent>
-                                        </Card>
-                                    )}
-
-                                    <CardBody>
-                                        <HistorialCambios cambios={data?.mails || []} />
-                                    </CardBody>
-                                </Card>
-
-                                <Card className="mt-5">
-                                    <CardHeader
-                                        style={{
-                                            background: 'linear-gradient(90deg, #0b2149, #002887)',
-                                            color: 'white',
-                                            fontWeight: 'bold'
-                                        }}>Evidencias
-                                    </CardHeader>
-                                    <Divider></Divider>
-                                    <CardBody>
-                                        <UploadFiles fileList={fileList} setFileList={setFileList} id={id_solicitud} tabla={"x_solicitudes_equipo"} disabledFom={!modoEdicion} key={isSaving}></UploadFiles>
-                                    </CardBody>
-                                </Card>
-
-                            </Grid>
                         </Grid>
+                    </Grid>
 
-                    </DialogContent>
-
-                )}
+                </DialogContent>
 
             </Dialog>
 
