@@ -70,7 +70,7 @@ const EPPSolicitados = ({ tipo }) => {
         header: 'Tipo de entrega',
         editVariant: 'select',
         editSelectOptions: ['prestamo', 'asignacion'],
-        enableEditing: () => modoEdicion && data?.x_studio_estado === "borrador",
+        enableEditing: () => modoEdicion && (!data?.x_studio_estado || data?.x_studio_estado === "borrador"),
         muiEditTextFieldProps: {
           select: true,
           defaultValue: 'prestamo',
@@ -84,7 +84,7 @@ const EPPSolicitados = ({ tipo }) => {
       {
         accessorKey: 'x_cantidad_solicitada',
         header: 'Cantidad solicitada',
-        enableEditing: () => modoEdicion && data?.x_studio_estado === "borrador",
+        enableEditing: () => modoEdicion && (!data?.x_studio_estado || data?.x_studio_estado === "borrador"),
       },
       {
         accessorKey: 'equipo_asignado',
@@ -201,7 +201,11 @@ const EPPSolicitados = ({ tipo }) => {
         const columnId = cell.column.id;
         const isEditable = cell.column.columnDef?.enableEditing;
 
-        if (modoEdicion && isEditable && data?.x_studio_estado === 'borrador') {
+        if (
+          modoEdicion &&
+          isEditable &&
+          (!data?.x_studio_estado || data.x_studio_estado === 'borrador')
+        ) {
           const newValue = event.target.value;
 
           const updatedRow = {
@@ -217,7 +221,7 @@ const EPPSolicitados = ({ tipo }) => {
             })
           );
 
-          toast.success(`Campo "${columnId}" actualizado`);
+          console.log(`Campo "${columnId}" actualizado`);
         }
       },
       sx: {
