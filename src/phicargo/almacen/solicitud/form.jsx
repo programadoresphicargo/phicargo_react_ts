@@ -81,6 +81,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                 if (response.data.status == 'success') {
                     toast.success(response.data.message);
                     setID(response.data.data.id);
+                    setFileList([]);
                 } else {
                     toast.error(response.data.message);
                 }
@@ -108,6 +109,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                     fetchData(id_solicitud);
                     setSaving(false);
                     setModoEdicion(false);
+                    setFileList([]);
                 } else {
                     toast.error(response.data.message);
                 }
