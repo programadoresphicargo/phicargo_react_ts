@@ -32,6 +32,10 @@ const Solicitudes = ({ x_tipo, vista }) => {
   const [id_solicitud, setIDSolicitud] = React.useState(null);
   const [open, setOpen] = React.useState(false);
   const { modoEdicion, setModoEdicion, data, setData } = useAlmacen();
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 80,
+  });
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -95,7 +99,9 @@ const Solicitudes = ({ x_tipo, vista }) => {
         accessorKey: 'operador',
         header: 'Operador',
         Cell: ({ cell }) => {
-          const estatus_viaje = cell.getValue();
+          const operador = cell.getValue();
+
+          if (!operador) return;
 
           return (
             <Chip
@@ -103,7 +109,7 @@ const Solicitudes = ({ x_tipo, vista }) => {
               color="primary"
               className="text-white"
             >
-              {estatus_viaje}
+              {operador}
             </Chip>
           );
         },
@@ -162,7 +168,13 @@ const Solicitudes = ({ x_tipo, vista }) => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
-    state: { showProgressBars: isLoading },
+    autoResetPageIndex: false,
+    onPaginationChange: setPagination,
+    state: {
+      pagination,
+      showProgressBars: isLoading
+    },
+    enablePagination: true,
     enableColumnPinning: true,
     enableStickyHeader: true,
     positionGlobalFilter: "right",
@@ -184,7 +196,6 @@ const Solicitudes = ({ x_tipo, vista }) => {
       density: 'compact',
       expanded: false,
       showColumnFilters: true,
-      pagination: { pageSize: 80 },
     },
     muiTablePaperProps: {
       elevation: 0,
