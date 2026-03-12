@@ -336,6 +336,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                                 radius="full"
                                 color="primary"
                                 onPress={handleEdit}>
+                                <i class="bi bi-pen"></i>
                                 Editar
                             </Button>
                         )}
@@ -348,6 +349,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                                 isDisabled={isSaving}
                                 className={id_solicitud ? 'text-white' : ''}
                             >
+                                <i class="bi bi-floppy-fill"></i>
                                 {isSaving ? 'Guardando...' : id_solicitud ? 'Actualizar' : 'Registrar'}
                             </Button>
                         )}
@@ -358,14 +360,21 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                                 className="text-white"
                                 onPress={() => confirmar()}
                                 isLoading={isLoading}>
+                                <i class="bi bi-check-circle-fill"></i>
                                 Confirmar y reservar
                             </Button>
                         )}
                         {data?.x_studio_estado == "confirmado" && (
-                            <Button color='warning' className='text-white' onPress={() => cambiar_borrador()} isLoading={isLoading} radius="full">Regresar a borrador</Button>
+                            <Button color='warning' className='text-white' onPress={() => cambiar_borrador()} isLoading={isLoading} radius="full">
+                                <i class="bi bi-backspace-fill"></i>
+                                Regresar a borrador
+                            </Button>
                         )}
                         {data?.x_studio_estado == "confirmado" && (
-                            <Button color='success' className='text-white' onPress={() => entregar()} isLoading={isLoading} radius="full">Entregar</Button>
+                            <Button color='success' className='text-white' onPress={() => entregar()} isLoading={isLoading} radius="full">
+                                <i class="bi bi-arrow-right-circle-fill"></i>
+                                Entregar
+                            </Button>
                         )}
                         {((data?.x_studio_estado == "entregado" || data?.x_studio_estado == "recepcionado_operador") && data?.es_asignacion) && (
                             <Button
@@ -385,6 +394,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                                 isExternal={true}
                                 color="primary"
                                 href={`${apiUrl}/tms_travel/solicitudes_equipo/pdf/${id_solicitud}`}>
+                                <i class="bi bi-file-earmark-pdf-fill"></i>
                                 Formato de entrega
                             </Button>
                         )}
@@ -395,6 +405,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                                 className="text-white"
                                 onPress={() => setOpenCancelar(true)}
                                 isLoading={isLoading}>
+                                <i class="bi bi-x-circle-fill"></i>
                                 Cancelar
                             </Button>
                         )}
