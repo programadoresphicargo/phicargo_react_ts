@@ -3,7 +3,7 @@ import { useDropzone } from 'react-dropzone';
 import ViewerFiles from './ViewerFiles';
 
 const UploadFiles = ({ fileList = [], setFileList, disabledFom, id, tabla }) => {
-    
+
     const [previewImage, setPreviewImage] = useState(null);
     const [previewOpen, setPreviewOpen] = useState(false);
 
@@ -36,6 +36,10 @@ const UploadFiles = ({ fileList = [], setFileList, disabledFom, id, tabla }) => 
         setPreviewOpen(true);
     };
 
+    const handleRemove = (uid) => {
+        setFileList(prev => prev.filter(file => file.uid !== uid));
+    };
+
     return (
         <div>
             <div
@@ -56,12 +60,42 @@ const UploadFiles = ({ fileList = [], setFileList, disabledFom, id, tabla }) => 
 
             <div style={{ marginTop: 16, display: 'flex', gap: 10, flexWrap: 'wrap' }}>
                 {fileList.map((file, idx) => (
-                    <div key={idx} onClick={() => handlePreview(file)} style={{ cursor: 'pointer' }}>
+                    <div key={idx} style={{ position: 'relative' }}>
+
                         <img
                             src={file.url}
                             alt={file.name}
-                            style={{ width: 100, height: 100, objectFit: 'cover', borderRadius: 8 }}
+                            onClick={() => handlePreview(file)}
+                            style={{
+                                width: 100,
+                                height: 100,
+                                objectFit: 'cover',
+                                borderRadius: 8,
+                                cursor: 'pointer'
+                            }}
                         />
+
+                        {!disabledFom && (
+                            <button
+                                onClick={() => handleRemove(file.uid)}
+                                style={{
+                                    position: 'absolute',
+                                    top: -5,
+                                    right: -5,
+                                    background: 'red',
+                                    color: '#fff',
+                                    border: 'none',
+                                    borderRadius: '50%',
+                                    width: 22,
+                                    height: 22,
+                                    cursor: 'pointer',
+                                    fontSize: 12
+                                }}
+                            >
+                                ✕
+                            </button>
+                        )}
+
                     </div>
                 ))}
             </div>
