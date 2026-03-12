@@ -115,24 +115,6 @@ const Solicitudes = ({ x_tipo, vista }) => {
       {
         accessorKey: 'create_date',
         header: 'Fecha de solicitud',
-        Cell: ({ cell }) => {
-          const rawValue = cell.getValue();
-          const date = new Date(rawValue);
-
-          if (!rawValue || isNaN(date.getTime())) {
-            return "Fecha inválida";
-          }
-
-          return new Intl.DateTimeFormat('es-MX', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-            hour: 'numeric',
-            minute: '2-digit',
-            hour12: true,
-          }).format(date).replace(',', '');
-          // Ejemplo: 11/09/2025 5:56 p. m.
-        },
       },
       {
         accessorKey: 'x_studio_estado',
@@ -200,7 +182,7 @@ const Solicitudes = ({ x_tipo, vista }) => {
       },
       hiddenColumns: ["empresa"],
       density: 'compact',
-      expanded: true,
+      expanded: false,
       showColumnFilters: true,
       pagination: { pageSize: 80 },
     },
@@ -231,10 +213,18 @@ const Solicitudes = ({ x_tipo, vista }) => {
     }),
     muiTableBodyCellProps: ({ row }) => ({
       sx: {
+        backgroundColor: row.subRows?.length
+          ? '#0456cf'
+          : '#FFFFFF',
+
         fontFamily: 'Inter',
         fontWeight: 'normal',
         fontSize: '12px',
-      },
+
+        color: row.subRows?.length
+          ? '#FFFFFF'
+          : '#000000',
+      }
     }),
     renderTopToolbarCustomActions: ({ table }) => (
       <Box
