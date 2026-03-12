@@ -25,8 +25,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { useAlmacen } from '../../contexto/contexto';
 
 const TablaProductosDetalle = ({ close, tipo }) => {
-  const { data, setData, lineasGlobales, setLineasGlobales } = useAlmacen();
 
+  const { data, setData, lineasGlobales, setLineasGlobales } = useAlmacen();
   const [dataEquipos, setDataEquipo] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const [rowSelection, setRowSelection] = useState({}); // 👈 manejar selección
@@ -35,7 +35,8 @@ const TablaProductosDetalle = ({ close, tipo }) => {
     try {
       setLoading(true);
       const response = await odooApi.get('/tms_travel/inventario_equipo/');
-      setDataEquipo(response.data);
+      const filtrados = response.data.filter(item => item.x_tipo === tipo);
+      setDataEquipo(filtrados);
       setLoading(false);
     } catch (error) {
       console.error('Error al obtener los datos:', error);

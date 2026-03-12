@@ -469,6 +469,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                                             >
                                                 <SelectItem key={'epp'}>Equipo de protección personal</SelectItem>
                                                 <SelectItem key={'amarre'}>Equipo de amarre</SelectItem>
+                                                <SelectItem key={'herramienta'}>Herramienta</SelectItem>
                                             </Select>
                                         </Grid>
 
@@ -478,7 +479,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
 
                             <Card className="mt-4">
                                 <CardBody>
-                                    <EPPSolicitados></EPPSolicitados>
+                                    <EPPSolicitados tipo={x_tipo}></EPPSolicitados>
                                 </CardBody>
                             </Card>
                         </Grid>

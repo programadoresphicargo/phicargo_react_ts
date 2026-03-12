@@ -32,7 +32,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const EPPSolicitados = ({ }) => {
+const EPPSolicitados = ({ tipo }) => {
 
   const { modoEdicion, setModoEdicion, lineasGlobales, setLineasGlobales, data, setData } = useAlmacen();
   const [id_solicitud, setIDSolicitud] = React.useState(null);
@@ -247,7 +247,7 @@ const EPPSolicitados = ({ }) => {
           }
         }}>
         <DialogContent>
-          <TablaProductosDetalle close={handleClose}></TablaProductosDetalle>
+          <TablaProductosDetalle close={handleClose} tipo={tipo}></TablaProductosDetalle>
         </DialogContent>
         <DialogActions>
           <Button onPress={handleClose}>Cancelar</Button>

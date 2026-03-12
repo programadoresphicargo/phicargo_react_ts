@@ -77,6 +77,7 @@ const FormProducto = ({ data, setData, fetchData2, close }) => {
         <>
             <Stack spacing={2} direction="row" className="mb-3">
                 <Button
+                    radius="full"
                     onPress={handleSave}
                     color={data.id ? 'success' : 'primary'}
                     isDisabled={isSaving || !data.x_name || !data.x_tipo}
@@ -116,6 +117,7 @@ const FormProducto = ({ data, setData, fetchData2, close }) => {
                 >
                     <SelectItem key="epp">Equipo de protección personal</SelectItem>
                     <SelectItem key="amarre">Equipo de amarre</SelectItem>
+                    <SelectItem key="herramienta">Herramienta</SelectItem>
                 </Select>
 
             </div>
