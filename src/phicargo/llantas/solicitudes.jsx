@@ -87,6 +87,8 @@ const SolicitudesLlantas = ({ x_tipo = "", vista }) => {
         Cell: ({ cell }) => {
           const estatus_viaje = cell.getValue();
 
+          if (!estatus_viaje) return;
+
           return (
             <Chip
               size="sm"
