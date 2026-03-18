@@ -73,6 +73,27 @@ const LlantasAsignadas = ({ }) => {
         },
       },
       {
+        accessorKey: 'descuento',
+        header: 'Descuento',
+        enableEditing: true,
+        muiEditTextFieldProps: ({ row }) => {
+          const condicionActual =
+            row._valuesCache?.condicion ?? row.original.condicion;
+
+          return {
+            type: 'number',
+            placeholder: 'Monto del descuento',
+            sx: {
+              display: condicionActual === 'perdida' ? 'block' : 'none',
+            },
+          };
+        },
+        Cell: ({ cell }) => {
+          if (!cell.row.original.descuento) return null;
+          return `$${cell.row.original.descuento}`;
+        },
+      },
+      {
         accessorKey: 'observaciones',
         header: 'Observaciones',
         enableEditing: true,
@@ -120,7 +141,8 @@ const LlantasAsignadas = ({ }) => {
       return (
         linea.condicion !== original.condicion ||
         linea.observaciones !== original.observaciones ||
-        linea.fecha_devolucion !== original.fecha_devolucion
+        linea.fecha_devolucion !== original.fecha_devolucion ||
+        linea.descuento !== original.descuento
       );
     });
 
@@ -158,7 +180,7 @@ const LlantasAsignadas = ({ }) => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
-    enableEditing: data?.x_studio_status === "entregado",
+    enableEditing: data?.x_studio_status === "entregado" || data?.x_studio_status === "recepcionado_operador",
     editDisplayMode: "modal",
     positionActionsColumn: 'last',
     enableColumnPinning: true,
@@ -209,6 +231,15 @@ const LlantasAsignadas = ({ }) => {
         return; // evita cerrar el modal
       }
 
+      if (values.condicion !== "perdida") {
+        values.descuento = null;
+      }
+
+      if (values.condicion === "perdida" && !values.descuento) {
+        toast.error("Debes ingresar el descuento cuando la llanta está perdida");
+        return;
+      }
+
       setLineasGlobales(prev =>
         prev.map(r =>
           r.id_line === row.original.id_line
@@ -223,6 +254,15 @@ const LlantasAsignadas = ({ }) => {
 
       table.setEditingRow(null);
     },
+    muiEditRowDialogProps: ({ row }) => ({
+      sx: {
+        '& .MuiDialogContent-root': {
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '16px',
+        },
+      },
+    }),
     renderTopToolbarCustomActions: ({ table }) => (
       <Box
         sx={{
@@ -249,7 +289,7 @@ const LlantasAsignadas = ({ }) => {
           Añadir llantas
         </Button>
 
-        {data?.x_studio_status == "entregado" && (
+        {(data?.x_studio_status == "entregado" || data?.x_studio_status == "recepcionado_operador") && (
           <Button
             radius="full"
             color="primary"

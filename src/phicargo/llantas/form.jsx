@@ -204,184 +204,184 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                     </Toolbar>
                 </AppBar>
 
-                {isLoading ? (
+                {isLoading && (
                     <Progress isIndeterminate size="sm" />
-                ) : (
+                )}
 
-                    <DialogContent>
+                <DialogContent>
 
-                        <Stack spacing={1} direction="row" className="mb-5">
+                    <Stack spacing={1} direction="row" className="mb-5">
 
-                            {(!modoEdicion && (data?.x_studio_status === 'borrador' || data?.x_studio_status === 'entregado')) && (
-                                <Button
-                                    radius="full"
-                                    color="primary"
-                                    onPress={handleEdit}>
-                                    Editar
-                                </Button>
-                            )}
+                        {(!modoEdicion && (data?.x_studio_status === 'borrador' || data?.x_studio_status === 'entregado')) && (
+                            <Button
+                                radius="full"
+                                color="primary"
+                                onPress={handleEdit}>
+                                Editar
+                            </Button>
+                        )}
 
-                            {modoEdicion && (
-                                <Button
-                                    radius="full"
-                                    onPress={handleSave}
-                                    color={id_solicitud ? 'success' : 'primary'}
-                                    isDisabled={isSaving}
-                                    className={id_solicitud ? 'text-white' : ''}
-                                >
-                                    {isSaving ? 'Guardando...' : id_solicitud ? 'Actualizar' : 'Registrar'}
-                                </Button>
-                            )}
-                            {data?.x_studio_status === "borrador" && modoEdicion != true && (
-                                <Button
-                                    radius="full"
-                                    color="success"
-                                    className="text-white"
-                                    onPress={() => changeState('confirmado')}
-                                    isLoading={isLoading}>
-                                    Confirmar y reservar
-                                </Button>
-                            )}
-                            {data?.x_studio_status == "confirmado" && (
-                                <Button color='warning' className='text-white' onPress={() => changeState('borrador')} isLoading={isLoading} radius="full">Regresar a borrador</Button>
-                            )}
-                            {data?.x_studio_status == "confirmado" && (
-                                <Button color='success' className='text-white' onPress={() => changeState('entregado')} isLoading={isLoading} radius="full">Entregar</Button>
-                            )}
-                            {((data?.x_studio_status == "entregado" || data?.x_studio_status == "recepcionado_operador")) && (
-                                <Button
-                                    radius="full"
-                                    color='danger'
-                                    className='text-white'
-                                    onPress={() => changeState('cerrado')}
-                                    isLoading={isLoading}>
-                                    Cerrar solicitud
-                                </Button>
-                            )}
-                            {data?.x_studio_status !== "borrador" && data?.x_studio_status !== "cancelada" && (
-                                <Button
-                                    radius="full"
-                                    color="success"
-                                    as={Link}
-                                    isExternal={true}
-                                    color="primary"
-                                    href={`${apiUrl}/solicitudes_llantas/formato/${id_solicitud}`}>
-                                    Formato de entrega
-                                </Button>
-                            )}
-                            {(!modoEdicion && data?.x_studio_status == 'borrador') && (
-                                <Button
-                                    radius="full"
-                                    color="danger"
-                                    className="text-white"
-                                    onPress={() => setOpenCancelar(true)}
-                                    isLoading={isLoading}>
-                                    Cancelar
-                                </Button>
-                            )}
+                        {modoEdicion && (
+                            <Button
+                                radius="full"
+                                onPress={handleSave}
+                                color={id_solicitud ? 'success' : 'primary'}
+                                isDisabled={isSaving}
+                                className={id_solicitud ? 'text-white' : ''}
+                            >
+                                {isSaving ? 'Guardando...' : id_solicitud ? 'Actualizar' : 'Registrar'}
+                            </Button>
+                        )}
+                        {data?.x_studio_status === "borrador" && modoEdicion != true && (
+                            <Button
+                                radius="full"
+                                color="success"
+                                className="text-white"
+                                onPress={() => changeState('confirmado')}
+                                isLoading={isLoading}>
+                                Confirmar y reservar
+                            </Button>
+                        )}
+                        {data?.x_studio_status == "confirmado" && (
+                            <Button color='warning' className='text-white' onPress={() => changeState('borrador')} isLoading={isLoading} radius="full">Regresar a borrador</Button>
+                        )}
+                        {data?.x_studio_status == "confirmado" && (
+                            <Button color='success' className='text-white' onPress={() => changeState('entregado')} isLoading={isLoading} radius="full">Entregar</Button>
+                        )}
+                        {((data?.x_studio_status == "entregado" || data?.x_studio_status == "recepcionado_operador")) && (
+                            <Button
+                                radius="full"
+                                color='danger'
+                                className='text-white'
+                                onPress={() => changeState('cerrado')}
+                                isLoading={isLoading}>
+                                <i class="bi bi-door-open"></i>
+                                Cerrar solicitud
+                            </Button>
+                        )}
+                        {data?.x_studio_status !== "borrador" && data?.x_studio_status !== "cancelada" && (
+                            <Button
+                                radius="full"
+                                color="success"
+                                as={Link}
+                                isExternal={true}
+                                color="primary"
+                                href={`${apiUrl}/solicitudes_llantas/formato/${id_solicitud}`}>
+                                <i class="bi bi-file-earmark-pdf-fill"></i>
+                                Formato de entrega
+                            </Button>
+                        )}
+                        {(!modoEdicion && data?.x_studio_status == 'borrador') && (
+                            <Button
+                                radius="full"
+                                color="danger"
+                                className="text-white"
+                                onPress={() => setOpenCancelar(true)}
+                                isLoading={isLoading}>
+                                Cancelar
+                            </Button>
+                        )}
 
-                            <div style={{ marginLeft: 'auto', width: '1000px' }}>
-                                <EstadoSolicitud />
-                            </div>
-                        </Stack>
+                        <div style={{ marginLeft: 'auto', width: '1000px' }}>
+                            <EstadoSolicitud />
+                        </div>
+                    </Stack>
 
 
-                        <Grid container spacing={2}>
-                            <Grid item xs={12} md={9}>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} md={9}>
 
-                                <Card>
-                                    <CardHeader style={{
+                            <Card>
+                                <CardHeader style={{
+                                    background: 'linear-gradient(90deg, #5A189A, #7B2CBF)',
+                                    color: 'white',
+                                    fontWeight: 'bold'
+                                }}>
+                                    Datos de la solicitud
+                                </CardHeader>
+                                <Divider></Divider>
+                                <CardBody>
+                                    <Grid container spacing={2}>
+                                        <Grid item xs={12} sm={6}>
+                                            <Input value={data?.usuario || '---'} label="Creada por:" isReadOnly></Input>
+                                        </Grid>
+
+                                        <Grid item xs={12} sm={6}>
+                                            <Input value={data?.create_date || '---'} label="Fecha de solicitud:" isReadOnly></Input>
+                                        </Grid>
+
+                                        <Grid item xs={12} sm={6}>
+                                            <NumberInput label="Cantidad solicitada:" value={data?.x_cantidad_solicitada} isReadOnly></NumberInput>
+                                        </Grid>
+
+                                        <Grid item xs={12} sm={6}>
+                                            Operador asignado:
+                                            <Typography variant="body1">{data?.operador || '---'}</Typography>
+                                        </Grid>
+
+                                        <Grid item xs={12} sm={6}>
+                                            <Input
+                                                value={data?.inicio_programado || '---'}
+                                                label="Inicio programado de viaje:"
+                                                isReadOnly
+                                            />
+                                        </Grid>
+
+                                        {vista == 'asignaciones' && (<>
+                                            <Grid item xs={12} sm={6}>
+                                                <SelectEmpleado
+                                                    key_name={"x_operador_id"}
+                                                    label={"Empleado"}
+                                                    isDisabled={!modoEdicion}
+                                                    value={data?.x_operador_id}
+                                                    setSolicitante={handleSelectChange}>
+                                                </SelectEmpleado>
+                                            </Grid>
+                                        </>
+                                        )}
+
+                                    </Grid>
+                                </CardBody>
+                            </Card>
+
+                            <Card className="mt-4">
+                                <CardBody>
+                                    <LlantasAsignadas></LlantasAsignadas>
+                                </CardBody>
+                            </Card>
+                        </Grid>
+
+                        <Grid item xs={12} md={3}>
+                            <Card>
+                                <CardHeader
+                                    style={{
                                         background: 'linear-gradient(90deg, #5A189A, #7B2CBF)',
                                         color: 'white',
                                         fontWeight: 'bold'
-                                    }}>
-                                        Datos de la solicitud
-                                    </CardHeader>
-                                    <Divider></Divider>
-                                    <CardBody>
-                                        <Grid container spacing={2}>
-                                            <Grid item xs={12} sm={6}>
-                                                <Input value={data?.usuario || '---'} label="Creada por:" isReadOnly></Input>
-                                            </Grid>
+                                    }}>Historial de cambios</CardHeader>
+                                <Divider></Divider>
 
-                                            <Grid item xs={12} sm={6}>
-                                                <Input value={data?.create_date || '---'} label="Fecha de solicitud:" isReadOnly></Input>
-                                            </Grid>
+                                {(data?.x_studio_status == 'cancelada') && (
+                                    <Card className="m-3">
+                                        <CardHeader className="bg-danger text-white">
+                                            Cancelada
+                                        </CardHeader>
+                                        <Divider></Divider>
+                                        <CardContent>
+                                            <p>Motivo de cancelación: {data?.x_motivo_cancelacion}</p>
+                                            <p>Comentarios: {data?.x_comentarios_cancelacion}</p>
+                                        </CardContent>
+                                    </Card>
+                                )}
 
-                                            <Grid item xs={12} sm={6}>
-                                                <NumberInput label="Cantidad solicitada:" value={data?.x_cantidad_solicitada} isReadOnly></NumberInput>
-                                            </Grid>
-
-                                            <Grid item xs={12} sm={6}>
-                                                Operador asignado:
-                                                <Typography variant="body1">{data?.operador || '---'}</Typography>
-                                            </Grid>
-
-                                            <Grid item xs={12} sm={6}>
-                                                <Input
-                                                    value={data?.inicio_programado || '---'}
-                                                    label="Inicio programado de viaje:"
-                                                    isReadOnly
-                                                />
-                                            </Grid>
-
-                                            {vista == 'asignaciones' && (<>
-                                                <Grid item xs={12} sm={6}>
-                                                    <SelectEmpleado
-                                                        key_name={"x_operador_id"}
-                                                        label={"Empleado"}
-                                                        isDisabled={!modoEdicion}
-                                                        value={data?.x_operador_id}
-                                                        setSolicitante={handleSelectChange}>
-                                                    </SelectEmpleado>
-                                                </Grid>
-                                            </>
-                                            )}
-
-                                        </Grid>
-                                    </CardBody>
-                                </Card>
-
-                                <Card className="mt-4">
-                                    <CardBody>
-                                        <LlantasAsignadas></LlantasAsignadas>
-                                    </CardBody>
-                                </Card>
-                            </Grid>
-
-                            <Grid item xs={12} md={3}>
-                                <Card>
-                                    <CardHeader
-                                        style={{
-                                            background: 'linear-gradient(90deg, #5A189A, #7B2CBF)',
-                                            color: 'white',
-                                            fontWeight: 'bold'
-                                        }}>Historial de cambios</CardHeader>
-                                    <Divider></Divider>
-
-                                    {(data?.x_studio_status == 'cancelada') && (
-                                        <Card className="m-3">
-                                            <CardHeader className="bg-danger text-white">
-                                                Cancelada
-                                            </CardHeader>
-                                            <Divider></Divider>
-                                            <CardContent>
-                                                <p>Motivo de cancelación: {data?.x_motivo_cancelacion}</p>
-                                                <p>Comentarios: {data?.x_comentarios_cancelacion}</p>
-                                            </CardContent>
-                                        </Card>
-                                    )}
-
-                                    <CardBody>
-                                        <HistorialCambios cambios={data?.mails || []} />
-                                    </CardBody>
-                                </Card>
-                            </Grid>
+                                <CardBody>
+                                    <HistorialCambios cambios={data?.mails || []} />
+                                </CardBody>
+                            </Card>
                         </Grid>
+                    </Grid>
 
-                    </DialogContent>
-
-                )}
+                </DialogContent>
 
             </Dialog >
 

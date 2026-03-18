@@ -383,6 +383,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                                 className='text-white'
                                 onPress={() => devolver()}
                                 isLoading={isLoading}>
+                                <i class="bi bi-door-open"></i>
                                 Cerrar solicitud
                             </Button>
                         )}
