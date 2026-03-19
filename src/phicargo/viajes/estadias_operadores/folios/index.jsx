@@ -358,6 +358,7 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
                                             >
                                                 <SelectItem key={"demora_descarga"}>Demora en descarga</SelectItem>
                                                 <SelectItem key={"demora_carga"}>Demora en Carga</SelectItem>
+                                                <SelectItem key={"estadias_puerto"}>Estadías en puerto</SelectItem>
                                             </Select>
                                         </TableCell>
                                     </TableRow>
