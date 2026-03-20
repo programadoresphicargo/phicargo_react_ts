@@ -56,7 +56,7 @@ const AñadirContenedor = ({ show, handleClose, id_maniobra }) => {
         };
 
         fetchData();
-    }, [value]);
+    }, [value, show]);
 
     const añadir_contenedor = (data) => {
         toast.success('Añadiendo contenedor');
