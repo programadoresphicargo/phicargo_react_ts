@@ -68,9 +68,11 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, dataCP }) => {
     const [tractores, setTractores] = useState([]);
     const [trailers, setTrailers] = useState([]);
     const [dollies, setDollies] = useState([]);
+    const [terminales, setTerminales] = useState([]);
     const [motogeneradores, setMotogeneradores] = useState([]);
     const [isLoadingDrivers, setLoadingDrivers] = useState(false);
     const [isLoadingFlota, setLoadingFlota] = useState(false);
+    const [isLoadingTerminales, setLoadingTerminales] = useState(false);
 
     const getFlotaByTipo = async (tipo) => {
         const response = await odooApi.get(`/vehicles/fleet_type/${tipo}`);
@@ -92,10 +94,20 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, dataCP }) => {
         }));
     };
 
+    const getTerminales = async () => {
+        const response = await odooApi.get('/maniobras/terminales/');
+
+        return response.data.map(item => ({
+            key: Number(item.id_terminal),
+            label: item.terminal,
+        }));
+    };
+
     useEffect(() => {
         const cargarTodo = async () => {
             setLoadingFlota(true);
             setLoadingDrivers(true);
+            setLoadingTerminales(true);
 
             try {
                 const [
@@ -103,13 +115,15 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, dataCP }) => {
                     trailersData,
                     dolliesData,
                     motogeneradoresData,
-                    driversData
+                    driversData,
+                    terminalesData
                 ] = await Promise.all([
                     getFlotaByTipo("tractor"),
                     getFlotaByTipo("trailer"),
                     getFlotaByTipo("dolly"),
                     getFlotaByTipo("other"),
-                    getDrivers()
+                    getDrivers(),
+                    getTerminales()
                 ]);
 
                 setTractores(tractoresData);
@@ -117,34 +131,18 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, dataCP }) => {
                 setDollies(dolliesData);
                 setMotogeneradores(motogeneradoresData);
                 setDrivers(driversData);
+                setTerminales(terminalesData)
 
             } catch (error) {
                 console.error(error);
             } finally {
                 setLoadingFlota(false);
                 setLoadingDrivers(false);
+                setLoadingTerminales(false);
             }
         };
 
         cargarTodo();
-    }, []);
-
-    useEffect(() => {
-        const cargarDrivers = async () => {
-            setLoadingDrivers(true);
-
-            try {
-                const driversData = await getDrivers();
-                setDrivers(driversData);
-
-            } catch (error) {
-                console.error(error);
-            } finally {
-                setLoadingDrivers(false);
-            }
-        };
-
-        cargarDrivers();
     }, []);
 
     const {
@@ -742,6 +740,8 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, dataCP }) => {
                                                             value={formData.id_terminal}
                                                             disabled={formDisabled}
                                                             error_terminal={errors['id_terminal']}
+                                                            options={terminales}
+                                                            isLoading={isLoadingTerminales}
                                                         />
                                                     </Grid>
                                                     <Grid size={{ xs: 12, md: 4 }}>

@@ -5,30 +5,7 @@ import TextField from '@mui/material/TextField';
 import axios from 'axios';
 import odooApi from '@/api/odoo-api';
 
-const SelectTerminal = ({ label, id, name, onChange, value, disabled, error_terminal }) => {
-    const [options, setOptions] = useState([]);
-    const [isLoading, setLoading] = useState(false);
-
-
-    useEffect(() => {
-        setLoading(true);
-
-        odooApi
-            .get('/maniobras/terminales/')
-            .then(response => {
-                const data = response.data.map(item => ({
-                    key: Number(item.id_terminal),
-                    label: item.terminal,
-                }));
-                setOptions(data);
-            })
-            .catch(err => {
-                console.error(err);
-            })
-            .finally(() => {
-                setLoading(false);
-            });
-    }, []);
+const SelectTerminal = ({ label, id, name, onChange, value, disabled, error_terminal, options = [], isLoading = false }) => {
 
     return (
         <div>
