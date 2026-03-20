@@ -42,7 +42,7 @@ export default function FormEquipoViaje({ open, handleClose }) {
     const [formData, setFormData] = useState({});
 
     useEffect(() => {
-        if (open) {
+        if (open && !Object.keys(formData).length) {
             const data = {
                 employee_id: viaje?.employee?.id || null,
                 vehicle_id: viaje?.vehicle?.id || null,
@@ -58,6 +58,13 @@ export default function FormEquipoViaje({ open, handleClose }) {
         }
     }, [open, viaje]);
 
+    useEffect(() => {
+        if (!open) {
+            setFormData({});
+            setOriginalData({});
+        }
+    }, [open]);
+
     const handleSelectChange = (value, name) => {
         setFormData(prev => ({
             ...prev,
@@ -66,7 +73,10 @@ export default function FormEquipoViaje({ open, handleClose }) {
     };
 
     const handleCloseWithValidation = () => {
-        const hasChanges = JSON.stringify(formData) !== JSON.stringify(originalData);
+        const hasChanges = Object.keys(formData).some(
+            key => formData[key] !== originalData[key]
+        );
+
         if (hasChanges) {
             if (!confirm("Tienes cambios sin guardar. ¿Seguro que quieres salir?")) {
                 return;
@@ -76,7 +86,6 @@ export default function FormEquipoViaje({ open, handleClose }) {
     };
 
     const SaveForm = async () => {
-        console.log(viaje);
         try {
             setLoading(true);
 
@@ -86,6 +95,7 @@ export default function FormEquipoViaje({ open, handleClose }) {
             if (res.data.status === "success") {
                 toast.success(res.data.message);
                 getViaje(id_viaje);
+                handleClose();
             }
 
         } catch (error) {
@@ -181,7 +191,7 @@ export default function FormEquipoViaje({ open, handleClose }) {
                     </DialogContent>
                     <DialogActions>
                         <Button onPress={handleCloseWithValidation} radius="full">Cancelar</Button>
-                        <Button onPress={SaveForm} color="success" className="text-white" radius="full" isLoading={isLoading} isDisabled={![null, "disponible"].includes(viaje?.x_status_viaje)}><i class="bi bi-floppy-fill"></i>Guardar cambios</Button>
+                        <Button onPress={SaveForm} color="success" className="text-white" radius="full" isLoading={isLoading}><i className="bi bi-floppy-fill"></i>Guardar cambios</Button>
                     </DialogActions>
                 </Dialog>
             </React.Fragment>

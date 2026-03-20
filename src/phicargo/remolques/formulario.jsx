@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
-import SelectFlota from '@/phicargo/maniobras/maniobras/selects_flota';
 import Swal from "sweetalert2";
 import { Button, Textarea } from '@heroui/react';
 import { Select, SelectItem } from '@heroui/react';

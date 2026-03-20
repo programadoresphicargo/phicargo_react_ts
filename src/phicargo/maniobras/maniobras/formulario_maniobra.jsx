@@ -56,6 +56,58 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const Formulariomaniobra = ({ show, handleClose, id_maniobra, dataCP }) => {
 
+    useEffect(() => {
+        console.log("MONTADO");
+
+        return () => {
+            console.log("DESTRUIDO");
+        };
+    }, []);
+
+    const [tractores, setTractores] = useState([]);
+    const [trailers, setTrailers] = useState([]);
+    const [dollies, setDollies] = useState([]);
+    const [motogeneradores, setMotogeneradores] = useState([]);
+    const [isLoadingFlota, setLoadingFlota] = useState(false);
+
+    const getFlotaByTipo = async (tipo) => {
+        const response = await odooApi.get(`/vehicles/fleet_type/${tipo}`);
+
+        return response.data.map(item => ({
+            key: item.id,
+            label: item.name,
+            x_tipo_carga: item.x_tipo_carga,
+            x_modalidad: item.x_modalidad
+        }));
+    };
+
+    useEffect(() => {
+        const cargarDatos = async () => {
+            setLoadingFlota(true);
+
+            try {
+                const [tractoresData, trailersData, dolliesData, motogeneradores] = await Promise.all([
+                    getFlotaByTipo("tractor"),
+                    getFlotaByTipo("trailer"),
+                    getFlotaByTipo("dolly"),
+                    getFlotaByTipo("other")
+                ]);
+
+                setTractores(tractoresData);
+                setTrailers(trailersData);
+                setDollies(dolliesData);
+                setMotogeneradores(motogeneradores)
+
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setLoadingFlota(false);
+            }
+        };
+
+        cargarDatos();
+    }, []);
+
     const {
         formDisabled, setFormDisabled,
         correos_ligados, setCorreosLigados,
@@ -700,8 +752,9 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, dataCP }) => {
                                                             name={'vehicle_id'}
                                                             onChange={handleSelectChange}
                                                             value={formData.vehicle_id}
-                                                            tipo={'tractor'}
                                                             disabled={formDisabled}
+                                                            isLoading={isLoadingFlota}
+                                                            options={tractores}
                                                         />
                                                     </Grid>
                                                     <Grid size={{ xs: 12, md: 4 }}>
@@ -711,8 +764,9 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, dataCP }) => {
                                                             name={'trailer1_id'}
                                                             onChange={handleSelectChange}
                                                             value={formData.trailer1_id}
-                                                            tipo={'trailer'}
                                                             disabled={formDisabled}
+                                                            isLoading={isLoadingFlota}
+                                                            options={trailers}
                                                         />
                                                     </Grid>
                                                     <Grid size={{ xs: 12, md: 4 }}>
@@ -722,8 +776,9 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, dataCP }) => {
                                                             name={'trailer2_id'}
                                                             onChange={handleSelectChange}
                                                             value={formData.trailer2_id}
-                                                            tipo={'trailer'}
                                                             disabled={formDisabled}
+                                                            isLoading={isLoadingFlota}
+                                                            options={trailers}
                                                         />
                                                     </Grid>
                                                     <Grid size={{ xs: 12, md: 4 }}>
@@ -733,8 +788,9 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, dataCP }) => {
                                                             name={'dolly_id'}
                                                             onChange={handleSelectChange}
                                                             value={formData.dolly_id}
-                                                            tipo={'dolly'}
                                                             disabled={formDisabled}
+                                                            isLoading={isLoadingFlota}
+                                                            options={dollies}
                                                         />
                                                     </Grid>
                                                     <Grid size={{ xs: 12, md: 6 }}>
@@ -744,8 +800,9 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, dataCP }) => {
                                                             name={'motogenerador_1'}
                                                             onChange={handleSelectChange}
                                                             value={formData.motogenerador_1}
-                                                            tipo={'other'}
                                                             disabled={formDisabled}
+                                                            isLoading={isLoadingFlota}
+                                                            options={motogeneradores}
                                                         />
                                                     </Grid>
                                                     <Grid size={{ xs: 12, md: 6 }}>
@@ -755,8 +812,9 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, dataCP }) => {
                                                             name={'motogenerador_2'}
                                                             onChange={handleSelectChange}
                                                             value={formData.motogenerador_2}
-                                                            tipo={'other'}
                                                             disabled={formDisabled}
+                                                            isLoading={isLoadingFlota}
+                                                            options={motogeneradores}
                                                         />
                                                     </Grid>
 

@@ -19,6 +19,50 @@ import { Grid } from '@mui/system';
 
 const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
 
+    const [tractores, setTractores] = useState([]);
+    const [trailers, setTrailers] = useState([]);
+    const [dollies, setDollies] = useState([]);
+    const [motogeneradores, setMotogeneradores] = useState([]);
+    const [isLoadingFlota, setLoadingFlota] = useState(false);
+
+    const getFlotaByTipo = async (tipo) => {
+        const response = await odooApi.get(`/vehicles/fleet_type/${tipo}`);
+
+        return response.data.map(item => ({
+            key: item.id,
+            label: item.name,
+            x_tipo_carga: item.x_tipo_carga,
+            x_modalidad: item.x_modalidad
+        }));
+    };
+
+    useEffect(() => {
+        const cargarDatos = async () => {
+            setLoadingFlota(true);
+
+            try {
+                const [tractoresData, trailersData, dolliesData, motogeneradores] = await Promise.all([
+                    getFlotaByTipo("tractor"),
+                    getFlotaByTipo("trailer"),
+                    getFlotaByTipo("dolly"),
+                    getFlotaByTipo("other")
+                ]);
+
+                setTractores(tractoresData);
+                setTrailers(trailersData);
+                setDollies(dolliesData);
+                setMotogeneradores(motogeneradores)
+
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setLoadingFlota(false);
+            }
+        };
+
+        cargarDatos();
+    }, []);
+
     const historialRef = useRef(null);
     const [isEditMode, setEditMode] = useState(false);
     const [formData, setFormData] = useState({
@@ -344,11 +388,12 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
                                             name="trailer1_id"
                                             onChange={handleSelectChange}
                                             value={formData.trailer1_id}
-                                            tipo="trailer"
                                             disabled={isDisabled}
                                             filtroActivo={filtroActivo}
                                             modalidad={data?.x_tipo_bel == 'single' ? 'sencillo' : 'full'}
                                             tipoCarga={TipoCarga(data?.waybill_category)}
+                                            isLoading={isLoadingFlota}
+                                            options={trailers}
                                         />
 
                                         {data?.x_tipo_bel == 'full' && (
@@ -357,11 +402,12 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
                                                 name="trailer2_id"
                                                 onChange={handleSelectChange}
                                                 value={formData.trailer2_id}
-                                                tipo="trailer"
                                                 disabled={isDisabled}
                                                 filtroActivo={filtroActivo}
                                                 modalidad={data?.x_tipo_bel == 'single' ? 'sencillo' : 'full'}
                                                 tipoCarga={TipoCarga(data?.waybill_category)}
+                                                isLoading={isLoadingFlota}
+                                                options={trailers}
                                             />
                                         )}
 
@@ -371,8 +417,9 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
                                                 name="dolly_id"
                                                 onChange={handleSelectChange}
                                                 value={formData.dolly_id}
-                                                tipo="dolly"
                                                 disabled={isDisabled}
+                                                isLoading={isLoadingFlota}
+                                                options={dollies}
                                             />
                                         )}
 
@@ -381,8 +428,9 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
                                             name="motogenerador1_id"
                                             onChange={handleSelectChange}
                                             value={formData.motogenerador1_id}
-                                            tipo="other"
                                             disabled={isDisabled}
+                                            isLoading={isLoadingFlota}
+                                            options={motogeneradores}
                                         />
 
                                         {data?.x_tipo_bel == 'full' && (
@@ -391,8 +439,9 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
                                                 name="motogenerador2_id"
                                                 onChange={handleSelectChange}
                                                 value={formData.motogenerador2_id}
-                                                tipo="other"
                                                 disabled={isDisabled}
+                                                isLoading={isLoadingFlota}
+                                                options={motogeneradores}
                                             />
                                         )}
 

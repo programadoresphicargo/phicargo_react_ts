@@ -11,38 +11,15 @@ const SelectFlota = ({
     name,
     onChange,
     value,
-    tipo,
     disabled = false,
-    error_flota,
-
+    isLoading = false,
+    options = [],
     filtroActivo = false,      // true = filtrar, false = mostrar todos
     modalidad = null,           // "single" | "full"
     tipoCarga = null        // "imo" | "general"
 }) => {
-    const [options, setOptions] = useState([]);
-    const [filteredOptions, setFilteredOptions] = useState([]);
-    const [isLoading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
 
-    useEffect(() => {
-        setLoading(true);
-        odooApi.get(`/vehicles/fleet_type/${tipo}`)
-            .then(response => {
-                const data = response.data.map(item => ({
-                    key: item.id,
-                    label: item.name,
-                    x_tipo_carga: item.x_tipo_carga,
-                    x_modalidad: item.x_modalidad
-                }));
-                setOptions(data);
-            })
-            .catch(err => {
-                setError(err);
-            })
-            .finally(() => {
-                setLoading(false);
-            });
-    }, [tipo]);
+    const [filteredOptions, setFilteredOptions] = useState([]);
 
     useEffect(() => {
         if (!filtroActivo) {
