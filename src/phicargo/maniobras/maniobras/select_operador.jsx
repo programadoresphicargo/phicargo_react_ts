@@ -5,27 +5,7 @@ import TextField from '@mui/material/TextField';
 import axios from 'axios';
 import odooApi from '@/api/odoo-api';
 
-const SelectOperador = ({ label, id, name, onChange, value, disabled, error_operador }) => {
-    const [options, setOptions] = useState([]);
-    const [isLoading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-
-    useEffect(() => {
-        odooApi.get('/drivers/')
-            .then(response => {
-                const data = response.data.map(item => ({
-                    key: Number(item.id),
-                    label: item.name,
-                }));
-                setOptions(data);
-            })
-            .catch(err => {
-                setError(err);
-            })
-            .finally(() => {
-                setLoading(false);
-            });
-    }, []);
+const SelectOperador = ({ label, id, name, onChange, value, disabled, error_operador, options = [], isLoading = false }) => {
 
     return (
         <div>

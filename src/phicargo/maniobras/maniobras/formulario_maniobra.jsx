@@ -64,10 +64,12 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, dataCP }) => {
         };
     }, []);
 
+    const [drivers, setDrivers] = useState([]);
     const [tractores, setTractores] = useState([]);
     const [trailers, setTrailers] = useState([]);
     const [dollies, setDollies] = useState([]);
     const [motogeneradores, setMotogeneradores] = useState([]);
+    const [isLoadingDrivers, setLoadingDrivers] = useState(false);
     const [isLoadingFlota, setLoadingFlota] = useState(false);
 
     const getFlotaByTipo = async (tipo) => {
@@ -81,31 +83,68 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, dataCP }) => {
         }));
     };
 
+    const getDrivers = async () => {
+        const response = await odooApi.get('/drivers/');
+
+        return response.data.map(item => ({
+            key: Number(item.id),
+            label: item.name,
+        }));
+    };
+
     useEffect(() => {
-        const cargarDatos = async () => {
+        const cargarTodo = async () => {
             setLoadingFlota(true);
+            setLoadingDrivers(true);
 
             try {
-                const [tractoresData, trailersData, dolliesData, motogeneradores] = await Promise.all([
+                const [
+                    tractoresData,
+                    trailersData,
+                    dolliesData,
+                    motogeneradoresData,
+                    driversData
+                ] = await Promise.all([
                     getFlotaByTipo("tractor"),
                     getFlotaByTipo("trailer"),
                     getFlotaByTipo("dolly"),
-                    getFlotaByTipo("other")
+                    getFlotaByTipo("other"),
+                    getDrivers()
                 ]);
 
                 setTractores(tractoresData);
                 setTrailers(trailersData);
                 setDollies(dolliesData);
-                setMotogeneradores(motogeneradores)
+                setMotogeneradores(motogeneradoresData);
+                setDrivers(driversData);
 
             } catch (error) {
                 console.error(error);
             } finally {
                 setLoadingFlota(false);
+                setLoadingDrivers(false);
             }
         };
 
-        cargarDatos();
+        cargarTodo();
+    }, []);
+
+    useEffect(() => {
+        const cargarDrivers = async () => {
+            setLoadingDrivers(true);
+
+            try {
+                const driversData = await getDrivers();
+                setDrivers(driversData);
+
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setLoadingDrivers(false);
+            }
+        };
+
+        cargarDrivers();
     }, []);
 
     const {
@@ -743,6 +782,8 @@ const Formulariomaniobra = ({ show, handleClose, id_maniobra, dataCP }) => {
                                                             onChange={handleSelectChange}
                                                             value={formData.operador_id}
                                                             disabled={formDisabled}
+                                                            options={drivers}
+                                                            isLoading={isLoadingDrivers}
                                                         />
                                                     </Grid>
                                                     <Grid size={{ xs: 12, md: 6 }}>
