@@ -22,6 +22,7 @@ import { fontFamily } from "@mui/system";
 import { useJourneyDialogs } from "./funciones";
 import Custodia from "../custodia/custodia";
 import LlegadaTarde from "../llegada_tarde";
+import FormEquipoViaje from "./editar_equipo";
 
 export default function Seguimiento() {
 
@@ -36,6 +37,16 @@ export default function Seguimiento() {
 
     const handleClose = () => {
         setOpen(false);
+    };
+
+    const [openFormViaje, setOpenFormViaje] = React.useState(false);
+
+    const handleClickOpenFormViaje = () => {
+        setOpenFormViaje(true);
+    };
+
+    const handleCloseFormViaje = () => {
+        setOpenFormViaje(false);
     };
 
     return (
@@ -68,6 +79,7 @@ export default function Seguimiento() {
                                         )}
 
                                         <Button color="danger" onPress={() => calcular_estadia(id_viaje)} className="text-white" radius="full">Generar estadías</Button>
+                                        <Button color="success" onPress={() => handleClickOpenFormViaje(id_viaje)} className="text-white" radius="full"><i class="bi bi-pen"></i>Editar equipo</Button>
                                     </Stack>
                                 </div>
 
@@ -236,6 +248,7 @@ export default function Seguimiento() {
             </Grid>
 
             <PanelEnvio open={open} cerrar={handleClose}></PanelEnvio>
+            <FormEquipoViaje open={openFormViaje} handleClose={handleCloseFormViaje}></FormEquipoViaje>
         </>
 
     );
