@@ -149,7 +149,7 @@ const Asignaciones = () => {
             size='sm'
             radius="full"
           >
-            Botón de panico{row.original.id_asignacion}
+            Botón de panico
           </Button>
         ),
       },
