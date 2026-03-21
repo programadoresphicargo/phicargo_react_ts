@@ -128,8 +128,28 @@ const Asignaciones = () => {
             href={`${apiUrl}/inventarioti/asignaciones/celulares/responsiva/${row.original.id_asignacion}`}
             variant="solid"
             size='sm'
+            radius="full"
           >
             Responsiva
+          </Button>
+        ),
+      },
+      {
+        accessorKey: 'boton',
+        header: 'Botón de panico',
+        Cell: ({ row }) => (
+          <Button
+            className='text-white'
+            showAnchorIcon
+            as={Link}
+            isExternal={true}
+            color="warning"
+            href={`${apiUrl}/inventarioti/asignaciones/boton_panico/${row.original.id_asignacion}`}
+            variant="solid"
+            size='sm'
+            radius="full"
+          >
+            Botón de panico{row.original.id_asignacion}
           </Button>
         ),
       },
@@ -142,6 +162,7 @@ const Asignaciones = () => {
             onPress={() => Devolver(row.original)}
             variant="solid"
             size='sm'
+            radius='full'
           >
             Desasignar
           </Button>
