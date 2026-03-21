@@ -23,7 +23,6 @@ import { fontFamily } from '@mui/system';
 import { useJourneyDialogs } from './seguimiento/funciones';
 import { useDisclosure } from "@heroui/react";
 import DialogActions from '@mui/material/DialogActions';
-import WhatsAppContatcsTravel from "./canales/tabla";
 import PlantaViaje from "./plantas/tabla";
 import Seguimiento from "./seguimiento";
 
@@ -67,12 +66,6 @@ const Viaje = ({ idViaje }) => {
     setOpenCorreos(false);
   };
 
-  const {
-    isOpen: isOpen1,
-    onOpen: onOpen1,
-    onOpenChange: onOpenChange1,
-  } = useDisclosure();
-
   return (
     <>
       {isLoading && (
@@ -98,15 +91,6 @@ const Viaje = ({ idViaje }) => {
         </div>
         <div style={{ display: 'flex', gap: '10px' }}>
           <PlantaViaje></PlantaViaje>
-          <Button
-            radius="full"
-            isDisabled
-            color='success'
-            onPress={() => onOpen1()}
-            className="text-white">
-            <i class="bi bi-whatsapp"></i>
-            Destinatarios
-          </Button>
           <Button
             radius="full"
             color='primary'
@@ -186,7 +170,6 @@ const Viaje = ({ idViaje }) => {
         </DialogActions>
       </Dialog>
 
-      <WhatsAppContatcsTravel isOpen={isOpen1} onOpenChange={onOpenChange1}></WhatsAppContatcsTravel>
     </>
   );
 };

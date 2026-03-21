@@ -35,7 +35,7 @@ function Contenedores() {
                 </div>
             ) : (
                 data.map((step, index) => (
-                    <Card key={index} className="mb-2 w-full" isPressable>
+                    <Card key={index} className="mb-2 w-full">
                         <CardHeader className="justify-between">
                             <div className="flex gap-5">
                                 <Avatar

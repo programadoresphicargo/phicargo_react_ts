@@ -9,7 +9,6 @@ const EstadoSolicitud = () => {
     const [current, setCurrent] = useState('');
 
     const onChange = (value) => {
-        console.log('onChange:', value);
         setCurrent(value);
     };
 

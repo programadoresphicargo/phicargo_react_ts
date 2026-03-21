@@ -418,7 +418,6 @@ const ViajesActivos = ({ }) => {
       onClick: ({ event }) => {
         handleClickOpen();
         setIDViaje(row.original.id_viaje);
-        setDrawerOpen(false);
       },
     }),
     muiTableBodyCellProps: ({ row }) => {
@@ -471,7 +470,7 @@ const ViajesActivos = ({ }) => {
         <Button
           radius='full'
           className='text-white'
-          startContent={<i class="bi bi-send-plus-fill"></i>}
+          startContent={<i className="bi bi-send-plus-fill"></i>}
           color='success'
           isDisabled={false}
           onPress={() => setMasivoOpen(true)}
@@ -482,7 +481,7 @@ const ViajesActivos = ({ }) => {
         <Button
           radius='full'
           className='text-white'
-          startContent={<i class="bi bi-arrow-clockwise"></i>}
+          startContent={<i className="bi bi-arrow-clockwise"></i>}
           color='primary'
           isDisabled={false}
           onPress={() => {
@@ -498,7 +497,7 @@ const ViajesActivos = ({ }) => {
           radius='full'
           color='danger'
           className='text-white'
-          startContent={<i class="bi bi-sign-stop"></i>}
+          startContent={<i className="bi bi-sign-stop"></i>}
           onPress={() => handleOpen()} size='sm'>
           Unidades detenidas
         </Button>
@@ -507,7 +506,7 @@ const ViajesActivos = ({ }) => {
           radius='full'
           color='success'
           className='text-white'
-          startContent={<i class="bi bi-file-earmark-excel"></i>}
+          startContent={<i className="bi bi-file-earmark-excel"></i>}
           onPress={() => exportToCSV(data, columns, "viajes_activos.csv")}
           size='sm'>
           Exportar

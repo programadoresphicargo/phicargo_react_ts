@@ -27,6 +27,7 @@ import SelectFlota from "@/phicargo/maniobras/maniobras/selects_flota";
 import toast from "react-hot-toast";
 import odooApi from "@/api/odoo-api";
 import SelectOperador from "@/phicargo/maniobras/maniobras/select_operador";
+import { useCatalogos } from "@/phicargo/catalogos/useCatalogos";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -34,9 +35,18 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export default function FormEquipoViaje({ open, handleClose }) {
 
+    const {
+        drivers,
+        tractores,
+        trailers,
+        dollies,
+        motogeneradores,
+        isLoading
+    } = useCatalogos();
+
     const { iniciar_viaje, finalizar_viaje, liberar_resguardo, reactivar_viaje, comprobar_operador, comprobar_disponibilidad, calcular_estadia } = useJourneyDialogs();
     const { id_viaje, viaje, getViaje } = useContext(ViajeContext);
-    const [isLoading, setLoading] = useState(false);
+    const [isLoadingUpdate, setLoadingUpdate] = useState(false);
     const [originalData, setOriginalData] = useState({});
 
     const [formData, setFormData] = useState({});
@@ -87,7 +97,7 @@ export default function FormEquipoViaje({ open, handleClose }) {
 
     const SaveForm = async () => {
         try {
-            setLoading(true);
+            setLoadingUpdate(true);
 
             let url = '/tms_travel/' + id_viaje;
             const res = await odooApi.patch(url, formData);
@@ -102,7 +112,7 @@ export default function FormEquipoViaje({ open, handleClose }) {
             const detail = error.response?.data?.detail || error.message;
             toast.error("Error: " + detail);
         } finally {
-            setLoading(false);
+            setLoadingUpdate(false);
         }
     };
 
@@ -135,6 +145,8 @@ export default function FormEquipoViaje({ open, handleClose }) {
                                 name={'employee_id'}
                                 onChange={handleSelectChange}
                                 value={formData.employee_id}
+                                options={drivers}
+                                isLoading={isLoading}
                             />
 
                             <SelectFlota
@@ -142,7 +154,9 @@ export default function FormEquipoViaje({ open, handleClose }) {
                                 name="vehicle_id"
                                 onChange={handleSelectChange}
                                 value={formData.vehicle_id}
-                                tipo="tractor">
+                                tipo="tractor"
+                                options={tractores}
+                                isLoading={isLoading}>
                             </SelectFlota>
 
                             <SelectFlota
@@ -150,7 +164,9 @@ export default function FormEquipoViaje({ open, handleClose }) {
                                 name="trailer1_id"
                                 onChange={handleSelectChange}
                                 value={formData.trailer1_id}
-                                tipo="trailer">
+                                tipo="trailer"
+                                options={trailers}
+                                isLoading={isLoading}>
                             </SelectFlota>
 
                             <SelectFlota
@@ -158,7 +174,9 @@ export default function FormEquipoViaje({ open, handleClose }) {
                                 name="trailer2_id"
                                 onChange={handleSelectChange}
                                 value={formData.trailer2_id}
-                                tipo="trailer">
+                                tipo="trailer"
+                                options={trailers}
+                                isLoading={isLoading}>
                             </SelectFlota>
 
                             <SelectFlota
@@ -166,32 +184,36 @@ export default function FormEquipoViaje({ open, handleClose }) {
                                 name="dolly_id"
                                 onChange={handleSelectChange}
                                 value={formData.dolly_id}
-                                tipo="dolly">
+                                tipo="dolly"
+                                options={dollies}
+                                isLoading={isLoading}>
                             </SelectFlota>
-
 
                             <SelectFlota
                                 label="Motogenerador 1"
                                 name="x_motogenerador_1"
                                 onChange={handleSelectChange}
                                 value={formData.x_motogenerador_1}
-                                tipo="other">
+                                tipo="other"
+                                options={motogeneradores}
+                                isLoading={isLoading}>
                             </SelectFlota>
-
 
                             <SelectFlota
                                 label="Motogenerador 2"
                                 name="x_motogenerador_2"
                                 onChange={handleSelectChange}
                                 value={formData.x_motogenerador_2}
-                                tipo="other">
+                                tipo="other"
+                                options={motogeneradores}
+                                isLoading={isLoading}>
                             </SelectFlota>
 
                         </Stack>
                     </DialogContent>
                     <DialogActions>
                         <Button onPress={handleCloseWithValidation} radius="full">Cancelar</Button>
-                        <Button onPress={SaveForm} color="success" className="text-white" radius="full" isLoading={isLoading}><i className="bi bi-floppy-fill"></i>Guardar cambios</Button>
+                        <Button onPress={SaveForm} color="success" className="text-white" radius="full" isLoading={isLoadingUpdate}><i className="bi bi-floppy-fill"></i>Guardar cambios</Button>
                     </DialogActions>
                 </Dialog>
             </React.Fragment>
