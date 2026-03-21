@@ -137,6 +137,10 @@ const ViajesProgramados = ({ }) => {
         header: 'Operador',
       },
       {
+        accessorKey: 'ruta',
+        header: 'Ruta',
+      },
+      {
         accessorKey: 'custodia',
         header: 'Custodia',
         Cell: ({ cell }) => {

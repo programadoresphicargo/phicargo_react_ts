@@ -7,6 +7,9 @@ import {
 } from 'react-icons/fa';
 
 import type { Complaint } from '../models';
+import { Button, Link } from '@heroui/react';
+
+const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
 interface Props {
   complaint: Complaint;
@@ -17,8 +20,22 @@ export const ComplaintInfo = ({ complaint }: Props) => {
     <section className="px-2 space-y-3">
       <h2 className="text-lg font-semibold text-gray-700 flex items-center gap-2">
         <span className="bg-blue-100 p-1 rounded-full">📋</span>
-        Detalles de la No Conformidad
+        Detalles de la No Conformidad #{complaint.id}
       </h2>
+
+      <Button
+        className='text-white'
+        showAnchorIcon
+        as={Link}
+        isExternal={true}
+        color="success"
+        href={`${apiUrl}/complaints/format/${complaint.id}`}
+        variant="solid"
+        size='sm'
+        radius="full"
+      >
+        Exportar
+      </Button>
 
       <div className="grid grid-cols-1 gap-3">
         <div className="flex items-start gap-3 p-2 hover:bg-gray-50 rounded transition-colors">
