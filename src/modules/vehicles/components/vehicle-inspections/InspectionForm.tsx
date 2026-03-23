@@ -61,11 +61,12 @@ export const InspectionForm = ({
 
     const answer0 = checklist[0]?.answer;
     const answer1 = checklist[1]?.answer;
+    const answer2 = checklist[2]?.answer;
 
     if (inspectionType != 'legal') {
-      if (answer0 === 'si' || answer1 === 'no') {
+      if (answer0 === 'si' || answer1 === 'no' || answer2 === 'si') {
         setValue('result', 'rejected', { shouldValidate: true });
-      } else if (answer0 === 'no' || answer1 === 'si') {
+      } else if (answer0 === 'no' || answer1 === 'si' || answer2 === 'no') {
         setValue('result', 'approved', { shouldValidate: true });
       }
     } else {

@@ -12,8 +12,14 @@ const checklistItems: ChecklistItem[] = [
   {
     type: 'boolean',
     label: 'Camión limpio',
-    name: 'camion_limpio',
+    name: 'cámion_limpio',
     defaultValue: 'si',
+  },
+  {
+    type: 'boolean',
+    label: 'Cámara obstruida',
+    name: 'camara_obstruida',
+    defaultValue: 'no',
   },
   {
     type: 'file',
@@ -37,7 +43,7 @@ interface Props {
 export const InspectionChecklist = ({ onSubmit }: Props) => {
   const handleSubmit = async (values: Record<string, unknown>) => {
     const questions = Object.entries(values).map(([key, value]) => {
-      const checklistItem = checklistItems.find(item => item.name === key); 
+      const checklistItem = checklistItems.find(item => item.name === key);
 
       return {
         question: checklistItem?.label || key,
