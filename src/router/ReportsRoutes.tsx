@@ -15,6 +15,7 @@ const ReporteCumplimiento = lazy(() => import('../phicargo/reportes/cumplimiento
 const ViajesTipoArmado = lazy(() => import('../phicargo/reportes/tipo_armado'));
 const UnidadesVacantes = lazy(() => import('../phicargo/reportes/unidades_vacantes'));
 const KMRecorridos = lazy(() => import('../phicargo/reportes/km_recorridos/index'));
+const ServiciosCategoria = lazy(() => import('../phicargo/reportes/categoria'));
 
 const reportsPermission = 4;
 
@@ -109,6 +110,16 @@ export const ReportsRoutes = () => (
       element={
         <Suspense fallback={<LoadingPage />}>
           <KMRecorridos />
+        </Suspense>
+      }
+    />
+
+    {/* Reporte de km recorridos */}
+    <Route
+      path="servicios_categoria"
+      element={
+        <Suspense fallback={<LoadingPage />}>
+          <ServiciosCategoria />
         </Suspense>
       }
     />

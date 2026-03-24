@@ -24,6 +24,7 @@ import { motion } from 'framer-motion';
 import viajesIcon from '../assets/menu/viajes.png';
 import calendarIcon from '../assets/menu/calendario.png';
 import kmIcon from '../assets/menu/calle.png';
+import containerIcon from '../assets/menu/shiping-container.png';
 
 type MenuItemType = {
   icon: string;
@@ -136,6 +137,12 @@ const reports: MenuItemType[] = [
     label: 'KM Recorridos',
     path: '/reportes/km_recorridos',
     icon: kmIcon,
+    requiredPermissions: [288],
+  },
+  {
+    label: 'Servicios por categoría',
+    path: '/reportes/servicios_categoria',
+    icon: containerIcon,
     requiredPermissions: [288],
   },
 ];
