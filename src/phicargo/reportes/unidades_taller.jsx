@@ -3,12 +3,9 @@ import { MaterialReactTable, useMaterialReactTable } from 'material-react-table'
 import React, { useEffect, useState } from 'react';
 import { download, generateCsv, mkConfig } from 'export-to-csv';
 import { getLocalTimeZone, parseDate } from "@internationalized/date";
-
 import Badge from 'react-bootstrap/Badge';
 import { Box } from '@mui/material';
 import { Component } from "react";
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import axios from 'axios';
 import odooApi from '@/api/odoo-api';
 import { toast } from "react-toastify";
 import { useDateFormatter } from "@react-aria/i18n";

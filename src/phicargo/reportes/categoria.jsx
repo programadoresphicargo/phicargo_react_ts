@@ -3,7 +3,6 @@ import { MaterialReactTable, useMaterialReactTable } from 'material-react-table'
 import React, { useEffect, useState, useMemo} from 'react';
 import { download, generateCsv, mkConfig } from 'export-to-csv';
 import { getLocalTimeZone, parseDate } from "@internationalized/date";
-
 import Badge from 'react-bootstrap/Badge';
 import { Box } from '@mui/material';
 import { Component } from "react";
@@ -23,7 +22,6 @@ const ViajesTipoCategoria = () => {
   const firstDay = new Date(now.getFullYear(), 0, 1);
   const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
   const [range, setRange] = useState([firstDay, lastDay]);
-
   const [isLoading, setisLoading] = useState('');
   const [data, setData] = useState([]);
 
