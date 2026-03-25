@@ -127,6 +127,7 @@ const VehicleForm = (props: Props) => {
                 { key: 1, value: 'Veracruz' },
                 { key: 9, value: 'Manzanillo' },
                 { key: 2, value: 'México' },
+                { key: 160, value: 'Altamira' },
               ]}
             />
           </div>
