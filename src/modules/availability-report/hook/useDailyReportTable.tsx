@@ -61,9 +61,7 @@ export const useDailyReportColumns = () => {
             size: 50,
             enableSorting: false,
             enableColumnFilter: false,
-            muiEditTextFieldProps: {
-              type: 'number',
-            },
+            enableEditing: false,
             Cell: ({ row }) => (
               <CommentCell
                 value={row.original.fullLoadLocals}
@@ -81,9 +79,7 @@ export const useDailyReportColumns = () => {
             size: 50,
             enableSorting: false,
             enableColumnFilter: false,
-            muiEditTextFieldProps: {
-              type: 'number',
-            },
+            enableEditing: false,
             Cell: ({ row }) => (
               <CommentCell
                 value={row.original.simpleLoadLocals}
