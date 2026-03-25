@@ -25,6 +25,7 @@ import viajesIcon from '../assets/menu/viajes.png';
 import calendarIcon from '../assets/menu/calendario.png';
 import kmIcon from '../assets/menu/calle.png';
 import containerIcon from '../assets/menu/shiping-container.png';
+import idealeaseIcon from '../assets/menu/idealease.png';
 
 type MenuItemType = {
   icon: string;
@@ -143,6 +144,12 @@ const reports: MenuItemType[] = [
     label: 'Servicios por categoría',
     path: '/reportes/servicios_categoria',
     icon: containerIcon,
+    requiredPermissions: [288],
+  },
+  {
+    label: 'Unidades en taller IDEALEASE',
+    path: '/reportes/unidades_taller',
+    icon: idealeaseIcon,
     requiredPermissions: [288],
   },
 ];
