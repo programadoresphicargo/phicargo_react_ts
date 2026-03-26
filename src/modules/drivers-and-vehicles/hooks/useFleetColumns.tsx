@@ -36,6 +36,18 @@ export const useFleetColumns = () => {
         header: 'Tipo de vehiculo',
       },
       {
+        accessorKey: 'x_transmision',
+        header: 'Transmisión',
+      },
+      {
+        accessorKey: 'x_inicio_arrendamiento',
+        header: 'Inicio de arrendamiento',
+      },
+      {
+        accessorKey: 'x_fin_arrendamiento',
+        header: 'Fin arrendamiento',
+      },
+      {
         accessorKey: 'tipoVehiculo',
         header: 'Categoria',
       },

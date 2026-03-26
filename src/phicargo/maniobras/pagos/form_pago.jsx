@@ -25,11 +25,37 @@ import autoTable from 'jspdf-autotable';
 import axios from 'axios';
 import { daDK } from '@mui/x-date-pickers/locales';
 import { jsPDF } from 'jspdf';
+import odooApi from '@/api/odoo-api';
 
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
 
 const Nomina_form = ({ show, handleClose, id_pago, id_operador, fecha_inicio, fecha_fin, disabled }) => {
+
+    const [drivers, setDrivers] = useState([]);
+
+    const getDrivers = async () => {
+        const response = await odooApi.get('/drivers/');
+
+        return response.data.map(item => ({
+            key: Number(item.id),
+            label: item.name,
+        }));
+    };
+
+    useEffect(() => {
+        const cargarTodo = async () => {
+            try {
+                const driversData = await getDrivers();
+                setDrivers(driversData);
+            } catch (error) {
+                console.error(error);
+            } finally {
+            }
+        };
+
+        cargarTodo();
+    }, []);
 
     const [form, setFormData] = useState({
         operador_id: '',
@@ -311,7 +337,7 @@ const Nomina_form = ({ show, handleClose, id_pago, id_operador, fecha_inicio, fe
                 <DialogContent>
 
                     <div className="flex flex-wrap gap-2 items-center mt-5 mb-5">
-                        <Button color='success' onPress={() => registrar_pago()} className='text-white'>Guardar nomina</Button>
+                        <Button color='success' onPress={() => registrar_pago()} className='text-white' radius='full'>Guardar nomina</Button>
                     </div>
 
                     <Box sx={{ flexGrow: 1 }} mb={4}>
@@ -322,6 +348,7 @@ const Nomina_form = ({ show, handleClose, id_pago, id_operador, fecha_inicio, fe
                                     id={'operador_id'}
                                     name={'operador_id'}
                                     onChange={handleSelectChange}
+                                    options={drivers}
                                     value={form.operador_id}
                                     disabled={disabled}
                                 />
