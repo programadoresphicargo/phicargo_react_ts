@@ -48,6 +48,7 @@ const CustomNavbar = ({
   extraButtons,
   rightComponents,
   showBackButton = true,
+  background = "linear-gradient(90deg, #002887 0%, #0059b3 100%)",
 }: any) => {
   const { session } = useAuthContext();
 
@@ -59,7 +60,7 @@ const CustomNavbar = ({
         position="static"
         elevation={0}
         sx={{
-          background: "linear-gradient(90deg, #002887 0%, #0059b3 100%)",
+          background: background,
           padding: "0 16px",
         }}
       >

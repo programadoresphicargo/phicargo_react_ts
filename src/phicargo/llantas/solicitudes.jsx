@@ -204,7 +204,7 @@ const SolicitudesLlantas = ({ x_tipo = "", vista }) => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 250px)',
+        maxHeight: 'calc(100vh - 240px)',
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
@@ -242,6 +242,7 @@ const SolicitudesLlantas = ({ x_tipo = "", vista }) => {
           startContent={<i class="bi bi-plus-lg"></i>}
           color='primary'
           isDisabled={true}
+          size='sm'
           onPress={() => {
             setIDSolicitud(null);
             setModoEdicion(true);
@@ -258,6 +259,7 @@ const SolicitudesLlantas = ({ x_tipo = "", vista }) => {
           startContent={<i class="bi bi-arrow-clockwise"></i>}
           color='secondary'
           onPress={() => fetchData()}
+          size='sm'
         >Actualizar
         </Button>
 
@@ -266,6 +268,7 @@ const SolicitudesLlantas = ({ x_tipo = "", vista }) => {
           color='success'
           className='text-white'
           startContent={<i class="bi bi-file-earmark-excel"></i>}
+          size='sm'
           onPress={() => exportToCSV(dataSolicitudes, columns, "solicitudes.csv")}>
           Exportar
         </Button>

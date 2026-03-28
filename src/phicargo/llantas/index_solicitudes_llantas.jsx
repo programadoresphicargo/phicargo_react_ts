@@ -22,10 +22,10 @@ const SolicitudesLlantasIndex = () => {
     return (
         <>
             <SolicitudesLlantasProvider>
-                <CustomNavbar pages={pages}></CustomNavbar>
+                <CustomNavbar pages={pages} background="linear-gradient(90deg, #343434 0%, #28282B 100%)"></CustomNavbar>
                 <Box sx={{ width: '100%' }}>
                     <TabContext value={value}>
-                        <Box sx={{ borderColor: 'divider', backgroundColor: '#002887', color: 'white' }}>
+                        <Box sx={{ borderColor: 'divider', backgroundColor: '#28282B', color: 'white' }}>
                             <TabList
                                 visibleScrollbar
                                 onChange={handleChange}
