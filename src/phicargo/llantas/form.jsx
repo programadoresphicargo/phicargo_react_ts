@@ -203,7 +203,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                     </Toolbar>
                 </AppBar>
 
-                {isLoading && (
+                {loading && (
                     <Progress isIndeterminate size="sm" />
                 )}
 
