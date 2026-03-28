@@ -112,10 +112,10 @@ const LlantasAsignadas = ({ }) => {
       },
       {
         accessorKey: 'delete',
-        header: 'Borrar',
+        header: 'Eliminar',
         enableEditing: false,
         Cell: ({ cell, row, table }) => {
-          return <Button radius='full' color='danger' size='sm' onPress={() => deleteLine(row.original.id_line)} isDisabled={!modoEdicion}>
+          return <Button radius='full' color='danger' size='sm' onPress={() => deleteLine(row.original.id_line)} isDisabled={!modoEdicion || data?.x_studio_status != "borrador"}>
             Eliminar
           </Button>
         },
@@ -203,7 +203,6 @@ const LlantasAsignadas = ({ }) => {
         condicion: data?.x_studio_status != 'borrador' ? true : false,
         fecha_devolucion: data?.x_studio_status != 'borrador' ? true : false,
         observaciones: data?.x_studio_status != 'borrador' ? true : false,
-        delete: data?.x_studio_status === "borrador",
       },
     },
     muiTablePaperProps: {
