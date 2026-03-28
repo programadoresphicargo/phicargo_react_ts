@@ -64,6 +64,22 @@ const SolicitudesLlantas = ({ x_tipo = "", vista }) => {
       {
         accessorKey: 'id',
         header: 'Solicitud',
+        Cell: ({ cell }) => {
+          const ID = cell.getValue();
+          let badgeClass = '';
+
+          return (
+            <h1
+              size="sm"
+            >
+              SL-{ID}
+            </h1>
+          );
+        },
+      },
+      {
+        accessorKey: 'create_date',
+        header: 'Fecha de solicitud',
       },
       {
         accessorKey: 'carta_porte',
@@ -72,14 +88,6 @@ const SolicitudesLlantas = ({ x_tipo = "", vista }) => {
       {
         accessorKey: 'referencia_viaje',
         header: 'Viaje',
-      },
-      {
-        accessorKey: 'cliente',
-        header: 'Cliente',
-      },
-      {
-        accessorKey: 'inicio_programado',
-        header: 'Inicio prog. viaje',
       },
       {
         accessorKey: 'operador',
@@ -107,10 +115,6 @@ const SolicitudesLlantas = ({ x_tipo = "", vista }) => {
       {
         accessorKey: 'ruta',
         header: 'Ruta',
-      },
-      {
-        accessorKey: 'create_date',
-        header: 'Fecha de solicitud',
       },
       {
         accessorKey: 'x_studio_status',
@@ -179,11 +183,6 @@ const SolicitudesLlantas = ({ x_tipo = "", vista }) => {
     columnResizeMode: "onEnd",
     initialState: {
       showGlobalFilter: true,
-      columnVisibility: {
-        carta_porte: vista == 'solicitudes' ? true : false,
-        referencia_viaje: vista == 'solicitudes' ? true : false,
-        inicio_programado: vista == 'solicitudes' ? true : false,
-      },
       hiddenColumns: ["empresa"],
       density: 'compact',
       expanded: true,

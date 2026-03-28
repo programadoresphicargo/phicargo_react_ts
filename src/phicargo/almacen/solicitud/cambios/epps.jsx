@@ -29,14 +29,47 @@ const HistorialCambios = ({ cambios }) => {
 
   return (
     <>
-      <div>
+      <div className="space-y-4">
         {cambios.map((cambio, index) => (
-          <>
-            <p key={index} className='mb-5'>
-              <Chip color='primary' size='sm'>{new Date(cambio.create_date).toLocaleString()}</Chip>
-              {` ${cambio.body} ${cambio.usuario} cambió ${cambio.field_desc} de "${cambio.old_value_char}" a "${cambio.new_value_char}"`}
+          <div
+            key={index}
+            className="border rounded-xl p-4 shadow-sm bg-white hover:shadow-md transition"
+          >
+            {/* Fecha */}
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-xs text-gray-500">
+                {new Date(cambio.create_date).toLocaleString()}
+              </span>
+
+              <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
+                {cambio.usuario}
+              </span>
+            </div>
+
+            {/* Descripción */}
+            <p className="text-sm text-gray-700 mb-2">
+              {cambio.body}
             </p>
-          </>
+
+            {/* Cambio */}
+            <div className="text-sm">
+              <span className="font-medium text-gray-600">
+                {cambio.field_desc}
+              </span>
+
+              <div className="flex items-center gap-2 mt-1">
+                <span className="bg-red-100 text-red-600 px-2 py-1 rounded text-xs">
+                  {cambio.old_value_char || "—"}
+                </span>
+
+                <span className="text-gray-400">→</span>
+
+                <span className="bg-green-100 text-green-600 px-2 py-1 rounded text-xs">
+                  {cambio.new_value_char || "—"}
+                </span>
+              </div>
+            </div>
+          </div>
         ))}
       </div>
     </>

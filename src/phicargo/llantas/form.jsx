@@ -104,7 +104,6 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                 if (response.data.status == 'success') {
                     toast.success(response.data.message);
                     fetchData(id_solicitud);
-                    handleClose();
                 } else {
                     toast.error('Error al guarda22r:' + response.data.message);
                 }
@@ -182,7 +181,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                 keepMounted>
                 <AppBar elevation={0}
                     sx={{
-                        background: 'linear-gradient(90deg, #5A189A, #7B2CBF)',
+                        background: 'linear-gradient(90deg, #343434, #28282B)',
                         padding: '0 16px',
                         position: 'relative'
                     }}>
@@ -196,7 +195,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                             <CloseIcon />
                         </IconButton>
                         <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-                            {id_solicitud ? `Solicitud (ID: ${id_solicitud})` : 'Nueva solicitud'}
+                            {id_solicitud ? `SL-${id_solicitud}` : 'Nueva solicitud'}
                         </Typography>
                         <Button autoFocus color="inherit" onPress={handleClose}>
                             Cerrar
@@ -293,7 +292,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
 
                             <Card>
                                 <CardHeader style={{
-                                    background: 'linear-gradient(90deg, #5A189A, #7B2CBF)',
+                                    background: 'linear-gradient(90deg, #343434, #28282B)',
                                     color: 'white',
                                     fontWeight: 'bold'
                                 }}>
@@ -312,6 +311,11 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
 
                                         <Grid item xs={12} sm={6}>
                                             <NumberInput label="Cantidad solicitada:" value={data?.x_cantidad_solicitada} isReadOnly></NumberInput>
+                                        </Grid>
+
+                                        <Grid item xs={12} sm={6}>
+                                            Carta porte:
+                                            <Typography variant="body1">{data?.carta_porte || '---'}</Typography>
                                         </Grid>
 
                                         <Grid item xs={12} sm={6}>
@@ -355,7 +359,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                             <Card>
                                 <CardHeader
                                     style={{
-                                        background: 'linear-gradient(90deg, #5A189A, #7B2CBF)',
+                                        background: 'linear-gradient(90deg, #343434, #28282B)',
                                         color: 'white',
                                         fontWeight: 'bold'
                                     }}>Historial de cambios</CardHeader>
