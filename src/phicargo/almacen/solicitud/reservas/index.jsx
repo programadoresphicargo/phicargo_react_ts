@@ -14,6 +14,18 @@ import odooApi from '@/api/odoo-api';
 import { User } from "@heroui/user";
 
 const ReservasDetalle = ({ open, handleClose, dataLinea }) => {
+
+    const [openDisponible, setOpenDisponible] = React.useState(false);
+
+    const handleClickOpenDisponible = () => {
+        setOpenDisponible(true);
+    };
+
+    const handleCloseDisponible = () => {
+        console.log('prubea');
+        setOpenDisponible(false);
+    };
+
     const { reservasGlobales, setReservasGlobales, modoEdicion, setModoEdicion, data, fetchData } = useAlmacen();
     const mostrarColumnasRecepcion = ['entregado', 'recepcionado_operador', 'devuelto'].includes(data?.x_studio_estado);
     const [reservasLinea, setReservasLinea] = useState([]);
@@ -292,7 +304,10 @@ const ReservasDetalle = ({ open, handleClose, dataLinea }) => {
         renderTopToolbarCustomActions: () => (
             <>
                 {(data?.x_studio_estado === 'borrador' || data?.x_studio_estado === undefined) && (
-                    <SearchUnidad data={dataLinea}></SearchUnidad>
+                    <>
+                        <SearchUnidad data={dataLinea} open={openDisponible} handleClose={handleCloseDisponible}></SearchUnidad>
+                        <Button color='success' radius='full' onPress={handleClickOpenDisponible} className='text-white'>Equipo disponible</Button>
+                    </>
                 )}
                 {(data?.x_studio_estado === 'entregado' || data?.x_studio_estado === 'recepcionado_operador') && (
                     <>
@@ -351,7 +366,7 @@ const ReservasDetalle = ({ open, handleClose, dataLinea }) => {
                 <MaterialReactTable table={table} />
             </DialogContent>
             <DialogActions>
-                <Button onPress={handleClose} color='primary'>Listo</Button>
+                <Button onPress={handleClose} color='primary' radius='full'>Listo</Button>
             </DialogActions>
         </Dialog>
     );
