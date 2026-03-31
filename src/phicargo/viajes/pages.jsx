@@ -15,6 +15,7 @@ export const pages = [
  {
   name: 'ESTATUS OPERATIVOS', permiso: 500,
   subpages: [
+   { name: 'Checklist', path: '/checklist' },
    { name: 'Control de estatus', path: '/controlestatus' },
    { name: 'Reporte cumplimiento por horas', path: '/cumplimiento_estatus_ejecutivos' },
    { name: 'Reporte cumplimiento por porcentaje ', path: '/cumplimiento_estatus_viajes_general' },
