@@ -36,55 +36,50 @@ const SearchUnidad = ({ data, open, handleClose }) => {
         }
 
         const nuevasReservas = [];
+        let contador = 0;
+
+        // Obtener reservas de esta línea una sola vez
+        const reservasLinea = reservasGlobales.filter(
+            (r) => r.id_solicitud_equipo_line === data.id
+        );
 
         for (const row of selectedRows) {
             const item = row.original;
             const idNum = item.key;
 
-            const reservasLinea = reservasGlobales.filter(
-                (r) => r.id_solicitud_equipo_line === data.id
+            // 🔐 validar duplicados globales
+            const yaExiste = reservasGlobales.some(
+                (r) => r.id_unidad === idNum
             );
 
-            // 🔐 validar duplicados globales
-            const yaExiste = reservasGlobales.some((r) => r.id_unidad === idNum);
             if (yaExiste) {
                 toast.error(`La unidad ${item.label} ${item.key} ya fue seleccionada.`);
                 continue;
             }
 
             // 🔐 validar límite por línea
-            if (reservasLinea.length + nuevasReservas.length >= data.x_cantidad_solicitada) {
+            if (
+                reservasLinea.length + nuevasReservas.length >=
+                data.x_cantidad_solicitada
+            ) {
                 toast.error("Excedes el número permitido para esta línea.");
                 break;
             }
 
-            let contador = 0;
+            const idUnico = -(Date.now() + contador++);
 
-            for (const row of selectedRows) {
-                const item = row.original;
-                const idNum = item.key;
-
-                const idUnico = -(Date.now() + contador++);
-
-                nuevasReservas.push({
-                    id_reserva: idUnico,
-                    id_solicitud_equipo_line: data.id,
-                    id_unidad: idNum,
-                    x_name: item.label,
-                });
-            }
-            handleClose();
+            nuevasReservas.push({
+                id_reserva: idUnico,
+                id_solicitud_equipo_line: data.id,
+                id_unidad: idNum,
+                x_name: item.label,
+            });
         }
 
         if (nuevasReservas.length) {
             setReservasGlobales((prev) => [...prev, ...nuevasReservas]);
-
-            // eliminar de la tabla
-            // const idsSeleccionados = nuevasReservas.map((r) => r.id_unidad);
-            // setOptions((prev) => prev.filter((item) => !idsSeleccionados.includes(item.key)));
-
-            // limpiar selección
             setRowSelection({});
+            handleClose();
         }
     };
 
@@ -123,7 +118,46 @@ const SearchUnidad = ({ data, open, handleClose }) => {
         localization: MRT_Localization_ES,
         positionActionsColumn: "last",
         enableRowSelection: true,
-        onRowSelectionChange: setRowSelection,
+        onRowSelectionChange: (updater) => {
+            const newSelection =
+                typeof updater === 'function' ? updater(rowSelection) : updater;
+
+            const selectedIds = Object.keys(newSelection);
+
+            // 🧹 si el usuario deselecciona todo → permitirlo sin restricciones
+            if (selectedIds.length === 0) {
+                setRowSelection({});
+                return;
+            }
+
+            const reservasLinea = reservasGlobales.filter(
+                (r) => r.id_solicitud_equipo_line === data.id
+            );
+
+            const limiteDisponible =
+                data.x_cantidad_solicitada - reservasLinea.length;
+
+            const isSelectAll = selectedIds.length === options.length;
+
+            // ✅ dentro del límite
+            if (selectedIds.length <= limiteDisponible) {
+                setRowSelection(newSelection);
+                return;
+            }
+
+            // 🔥 recortar selección
+            const limitedSelection = {};
+            selectedIds.slice(0, limiteDisponible).forEach((id) => {
+                limitedSelection[id] = true;
+            });
+
+            // 🚫 evitar toast en "select all"
+            if (!isSelectAll && Object.keys(rowSelection).length > 0) {
+                toast.error(`Solo puedes seleccionar ${limiteDisponible} unidades.`);
+            }
+
+            setRowSelection(limitedSelection);
+        },
         state: {
             rowSelection,
             showProgressBars: isLoading
