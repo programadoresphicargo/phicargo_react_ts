@@ -58,12 +58,22 @@ const SearchUnidad = ({ data, open, handleClose }) => {
                 break;
             }
 
-            nuevasReservas.push({
-                id_reserva: -Date.now(),
-                id_solicitud_equipo_line: data.id,
-                id_unidad: idNum,
-                x_name: item.label,
-            });
+            let contador = 0;
+
+            for (const row of selectedRows) {
+                const item = row.original;
+                const idNum = item.key;
+
+                const idUnico = -(Date.now() + contador++);
+
+                nuevasReservas.push({
+                    id_reserva: idUnico,
+                    id_solicitud_equipo_line: data.id,
+                    id_unidad: idNum,
+                    x_name: item.label,
+                });
+            }
+            handleClose();
         }
 
         if (nuevasReservas.length) {
