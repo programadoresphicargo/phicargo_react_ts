@@ -245,7 +245,7 @@ export const useDailyReportColumns = () => {
       },
       {
         accessorFn: (row) => row.operatorPermission,
-        header: 'Operadores permiso',
+        header: 'Operadores con permiso',
         size: 50,
         enableEditing: false,
         enableSorting: false,
