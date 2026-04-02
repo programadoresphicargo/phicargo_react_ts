@@ -244,6 +244,14 @@ export const useDailyReportColumns = () => {
         ),
       },
       {
+        accessorFn: (row) => row.operatorPermission,
+        header: 'Operadores permiso',
+        size: 50,
+        enableEditing: false,
+        enableSorting: false,
+        enableColumnFilter: false,
+      },
+      {
         accessorFn: (row) => row.totalUnits,
         header: 'Total Unidades',
         size: 50,

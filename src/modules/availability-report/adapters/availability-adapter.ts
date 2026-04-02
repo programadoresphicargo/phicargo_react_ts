@@ -32,6 +32,7 @@ export class AvailibilityAdapter {
       longTripUnits: record.long_trip_units,
       unitsInMaintenance: record.units_in_maintenance,
       unitsNoOperator: record.units_no_operator,
+      operatorPermission: record.operator_permission,
       totalUnits: record.total_units,
       observations: record.observations,
       createdAt: dayjs(record.created_at),

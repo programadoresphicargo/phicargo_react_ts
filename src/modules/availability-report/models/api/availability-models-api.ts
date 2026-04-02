@@ -15,6 +15,7 @@ interface RecordApiBase {
   long_trip_units: number;
   units_in_maintenance: number;
   units_no_operator: number;
+  operator_permission: number;
   total_units: number;
   observations: string;
   comments: RecordCommentApi[];
