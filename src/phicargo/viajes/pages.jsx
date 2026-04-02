@@ -2,6 +2,7 @@ export const pages = [
  { name: 'ACTIVOS', path: '/viajes', permiso: 500 },
  { name: 'FINALIZADOS', path: '/viajesfinalizados', permiso: 501 },
  { name: 'PROGRAMACIÓN', path: '/viajesprogramados', permiso: 502 },
+ { name: 'PDV', path: '/pdv', permiso: 500 },
  { name: 'CORREOS', path: '/CorreosElectronicos', permiso: 103 },
  { name: 'ASIGNACION', path: '/asignacion_equipo', permiso: 188 },
  {
@@ -13,7 +14,7 @@ export const pages = [
   ],
  },
  {
-  name: 'ESTATUS OPERATIVOS', permiso: 500,
+  name: 'ESTATUS OP', permiso: 500,
   subpages: [
    { name: 'Checklist', path: '/checklist' },
    { name: 'Control de estatus', path: '/controlestatus' },

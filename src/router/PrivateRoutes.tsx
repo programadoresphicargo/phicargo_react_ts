@@ -48,6 +48,9 @@ const ControlViajesProgramados = lazy(
 const ControlViajesFinalizados = lazy(
   () => import('../phicargo/viajes/viajes/finalizados'),
 );
+const ControlPDV = lazy(
+  () => import('../phicargo/viajes/viajes/pdv'),
+);
 const ControlEstatusOperativos = lazy(
   () => import('../phicargo/control_estatus/ControlEstatusOperativos'),
 );
@@ -284,6 +287,16 @@ export const PrivateRoutes = () => {
             </Suspense>
           }
         />
+
+        <Route
+          path="/PDV"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <ControlPDV></ControlPDV>
+            </Suspense>
+          }
+        />
+
         <Route
           path="/controlestatus"
           element={
