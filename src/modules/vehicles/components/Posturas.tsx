@@ -128,7 +128,6 @@ export const Posturas = ({ vehicle }: Props) => {
                         open={itemSelected?.id === item.id}
                         tooltipMessage="Terminar Postrura"
                         openButtonIcon={<IoMdExit className="text-xl" />}
-                        openDisabled={!item.endDate.isAfter(dayjs())}
                       />
                     </div>
                   </h3>
