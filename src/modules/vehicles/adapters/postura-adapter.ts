@@ -15,6 +15,7 @@ export class PosturaAdapter {
       reason: data.reason,
       startDate: dayjs(data.start_date),
       endDate: dayjs(data.end_date),
+      finished: data.finished
     };
   }
 
@@ -24,6 +25,7 @@ export class PosturaAdapter {
       reason: data.reason,
       start_date: data.startDate.format('YYYY-MM-DD'),
       end_date: data.endDate.format('YYYY-MM-DD'),
+      finished: data.finished
     };
   }
 }

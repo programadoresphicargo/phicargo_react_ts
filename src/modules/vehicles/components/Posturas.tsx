@@ -18,12 +18,14 @@ import { IoMdExit } from 'react-icons/io';
 import { SaveButton } from '@/components/ui';
 import { useGetPosturasByVehicleQuery } from '../hooks/queries';
 import { useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 
 const initialState: PosturaCreate = {
   driverId: '' as unknown as number,
   reason: '',
   startDate: null as unknown as Dayjs,
   endDate: null as unknown as Dayjs,
+  finished: false
 };
 
 interface Props {
@@ -31,6 +33,9 @@ interface Props {
 }
 
 export const Posturas = ({ vehicle }: Props) => {
+
+  const queryClient = useQueryClient();
+
   const { control, handleSubmit, reset } = useForm<PosturaCreate>({
     defaultValues: initialState,
   });
@@ -63,6 +68,9 @@ export const Posturas = ({ vehicle }: Props) => {
     finishPosturaMutation.mutate(posturaId, {
       onSuccess: () => {
         setItemSelected(null);
+        queryClient.invalidateQueries({
+          queryKey: ['posturas-vehicle', vehicle.id],
+        });
       },
     });
   };
@@ -128,6 +136,7 @@ export const Posturas = ({ vehicle }: Props) => {
                         open={itemSelected?.id === item.id}
                         tooltipMessage="Terminar Postrura"
                         openButtonIcon={<IoMdExit className="text-xl" />}
+                        openDisabled={item.finished}
                       />
                     </div>
                   </h3>

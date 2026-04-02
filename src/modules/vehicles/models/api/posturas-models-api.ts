@@ -4,6 +4,7 @@ interface PosturaBaseApi {
   reason: string;
   start_date: string;
   end_date: string;
+  finished: boolean;
 }
 
 export interface PosturaApi extends PosturaBaseApi {

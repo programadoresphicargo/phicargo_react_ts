@@ -4,7 +4,8 @@ import type { UserRead } from '../../users-management/models';
 interface PosturaBase {
   reason: string;
   startDate: Dayjs;
-  endDate: Dayjs; 
+  endDate: Dayjs;
+  finished: boolean;
 }
 
 export interface Postura extends PosturaBase {
