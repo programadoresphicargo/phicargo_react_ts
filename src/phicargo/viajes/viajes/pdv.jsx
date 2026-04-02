@@ -108,11 +108,11 @@ const PDV = ({ }) => {
         header: 'Modo',
       },
       {
-        accessorKey: 'date_start',
+        accessorKey: 'ip',
         header: 'Inicio programado',
       },
       {
-        accessorKey: 'x_date_arrival_shed',
+        accessorKey: 'lpp',
         header: 'Llegada a planta',
       },
       {
