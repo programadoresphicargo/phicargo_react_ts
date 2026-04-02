@@ -6,7 +6,7 @@ import {
 } from '@/components/inputs';
 import type { Postura, PosturaCreate, Vehicle } from '../../vehicles/models';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import dayjs, { Dayjs } from 'dayjs';
+import { Dayjs } from 'dayjs';
 import {
   useCreatePosturaMutation,
   useFinishPosturaMutation,
