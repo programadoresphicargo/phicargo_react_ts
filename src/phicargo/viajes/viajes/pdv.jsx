@@ -51,7 +51,7 @@ const PDV = ({ }) => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await odooApi.get('/tms_waybill/get_waybills/', {
+      const response = await odooApi.get('/tms_waybill/pdv/', {
         params: {
           date_start: range[0].toISOString().slice(0, 10),
           date_end: range[1].toISOString().slice(0, 10)
@@ -80,7 +80,7 @@ const PDV = ({ }) => {
 
       },
       {
-        accessorKey: 'carta_porte',
+        accessorKey: 'cartas_porte',
         header: 'Carta porte',
       },
       {
@@ -88,8 +88,12 @@ const PDV = ({ }) => {
         header: 'Comentarios maniobra',
       },
       {
-        accessorKey: 'x_reference',
-        header: 'Contenedor',
+        accessorKey: 'referencias',
+        header: 'Contenedores',
+      },
+      {
+        accessorKey: 'categoria',
+        header: 'Categoria',
       },
       {
         accessorKey: 'cliente',
@@ -118,6 +122,14 @@ const PDV = ({ }) => {
       {
         accessorKey: 'referencia_viaje',
         header: 'Viaje',
+      },
+      {
+        accessorKey: 'vehiculo',
+        header: 'Vehiculo',
+      },
+      {
+        accessorKey: 'operador',
+        header: 'Operador',
       },
     ],
     [],
