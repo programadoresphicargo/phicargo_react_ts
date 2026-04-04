@@ -13,17 +13,16 @@ export const pages = [
    { name: 'Folios de pago estadias operadores', path: '/pagos_estadias_operadores' },
   ],
  },
+ { name: 'ENVIO MASIVO', path: '/envio_masivo_viajes', permiso: 500 },
  {
-  name: 'ESTATUS OP', permiso: 500,
+  name: 'MÁS', permiso: 500,
   subpages: [
-   { name: 'Checklist', path: '/checklist' },
+   { name: 'Checklist de equipos', path: '/checklist' },
    { name: 'Control de estatus', path: '/controlestatus' },
    { name: 'Reporte cumplimiento por horas', path: '/cumplimiento_estatus_ejecutivos' },
    { name: 'Reporte cumplimiento por porcentaje ', path: '/cumplimiento_estatus_viajes_general' },
    { name: 'Codigos postales', path: '/codigos_postales' },
-   { name: 'GEOCERCAS', path: '/geocercas', permiso: 500 },
-   { name: 'EVENTOS GPS', path: '/eventos_gps' },
+   { name: 'Eventos GPS', path: '/eventos_gps' },
   ],
  },
- { name: 'ENVIO MASIVO', path: '/envio_masivo_viajes', permiso: 500 },
 ];
