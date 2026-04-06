@@ -98,6 +98,7 @@ export const useMaintenanceReportColumns = (type: 'tractocamion' | 'remolques', 
           { label: 'Completado', value: 'completed' },
           { label: 'Cancelado', value: 'canceled' },
           { label: 'Programado', value: 'programmed' },
+          { label: 'Borrador', value: 'draft' },
         ],
         header: 'Estatus',
         Cell: ({ cell }) => {
@@ -110,7 +111,7 @@ export const useMaintenanceReportColumns = (type: 'tractocamion' | 'remolques', 
                   status === 'completed' ? 'success' :
                     status === 'cancelled' ? 'danger' :
                       status === 'programmed' ? 'primary' :
-                        'default'
+                        'warning'
               }
             >{maintenanceStatus.getLabel(status)}
             </Chip>

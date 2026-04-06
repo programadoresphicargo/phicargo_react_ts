@@ -7,6 +7,7 @@ export type MaintenanceRecordStatus =
   | 'pending'
   | 'completed'
   | 'cancelled'
+  | 'draft'
   | 'programmed';
 
 export interface VehicleInfo {

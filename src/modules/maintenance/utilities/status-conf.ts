@@ -6,6 +6,7 @@ export const conf: KeyLabelConf<MaintenanceRecordStatus>[] = [
   { key: 'completed', label: 'Completado', color: 'success' },
   { key: 'pending', label: 'Pendiente', color: 'warning' },
   { key: 'programmed', label: 'Programado', color: 'primary' },
+  { key: 'draft', label: 'Borrador', color: 'warning' },
 ];
 
 export const maintenanceStatus = new KeyLabel(conf);
