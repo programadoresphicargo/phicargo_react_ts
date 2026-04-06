@@ -131,6 +131,35 @@ const PDV = ({ }) => {
         accessorKey: 'operador',
         header: 'Operador',
       },
+      {
+        accessorKey: "x_status_bel",
+        header: "Estatus",
+        Cell: ({ row, cell }) => {
+
+          const value = cell.getValue();
+          const map = {
+            sm: { color: "secondary", text: "SIN MANIOBRA" },
+            pm: { color: "primary", text: "PATIO MÉXICO" },
+            P: { color: "primary", text: "EN PATIO" },
+            V: { color: "success", text: "EN VIAJE" },
+            PR: { color: "success", text: "PROGRAMADO PARA RETIRO" },
+            ER: { color: "success", text: "EN PROCESO DE RETIRO" },
+            PI: { color: "warning", text: "PROGRAMADO PARA INGRESO" },
+            EI: { color: "warning", text: "EN PROCESO DE INGRESO" },
+            T: { color: "danger", text: "EN TERRAPORTS" },
+            ru: { color: "danger", text: "REUTILIZADO" },
+            EV: { color: "secondary", text: "EN ESPERA DE VIAJE" },
+          };
+
+          const cfg = map[value] || { color: "default", text: value || "N/A" };
+
+          return (
+            <Chip color={cfg.color} size="sm" className="text-white" radius="full">
+              {cfg.text}
+            </Chip>
+          );
+        },
+      },
     ],
     [],
   );
