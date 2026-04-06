@@ -8,7 +8,7 @@ import { MaterialReactTable } from 'material-react-table';
 import { MuiTransition } from '@/components';
 import { RecordDetailsModal } from '../RecordDetailsModal';
 import { useBaseTable } from '@/hooks';
-import { Button } from '@heroui/react';
+import { Button, Select, SelectItem } from '@heroui/react';
 import { ExportConfig, ExportToExcel } from '@/utilities';
 import { Tooltip } from "@heroui/tooltip";
 import odooApi from '@/api/odoo-api';
@@ -103,12 +103,14 @@ const MaintenanceReportTable = (props: MaintenanceReportTableProps) => {
         </h1>
         <Button
           radius='full'
+          fullWidth
           color={type == 'tractocamion' ? 'primary' : 'secondary'}
           onPress={() => table.setCreatingRow(true)}
         >Añadir Servicio
         </Button>
         <Button
           radius='full'
+          fullWidth
           className='text-white'
           color='success'
           onPress={() => exportTo.exportData(records || [])}>
@@ -116,11 +118,29 @@ const MaintenanceReportTable = (props: MaintenanceReportTableProps) => {
         </Button>
         <Button
           radius='full'
+          fullWidth
           className='text-white'
           color='primary'
           onPress={() => EnviarCorreo()}>
           Enviar correo
         </Button>
+        <Select
+          label="Estatus"
+          radius="full"
+          size="sm"
+          style={{ minWidth: "150px" }}
+          selectedKeys={[status]}
+          onChange={(e) => {
+            const value = e.target.value;
+            table.getColumn('status')?.setFilterValue(value);
+          }}
+        >
+          <SelectItem key="draft">Borrador</SelectItem>
+          <SelectItem key="pending">Pendiente</SelectItem>
+          <SelectItem key="completed">Completado</SelectItem>
+          <SelectItem key="programmed">Programado</SelectItem>
+          <SelectItem key="cancelled">Cancelado</SelectItem>
+        </Select>
       </>
     ),
     muiEditRowDialogProps: dialogProps,
