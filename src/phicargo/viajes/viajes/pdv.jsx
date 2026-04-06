@@ -142,6 +142,7 @@ const PDV = ({ }) => {
             pm: { color: "primary", text: "PATIO MÉXICO" },
             P: { color: "primary", text: "EN PATIO" },
             V: { color: "success", text: "EN VIAJE" },
+            V: { color: "ing", text: "INGRESADO" },
             PR: { color: "success", text: "PROGRAMADO PARA RETIRO" },
             ER: { color: "success", text: "EN PROCESO DE RETIRO" },
             PI: { color: "warning", text: "PROGRAMADO PARA INGRESO" },
