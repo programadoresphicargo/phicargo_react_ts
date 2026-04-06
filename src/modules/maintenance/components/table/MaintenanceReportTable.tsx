@@ -147,7 +147,10 @@ const MaintenanceReportTable = (props: MaintenanceReportTableProps) => {
     muiCreateRowModalProps: dialogProps,
     renderEditRowDialogContent: ({ table, row }) => (
       <EditRecordForm
-        onClose={() => table.setEditingRow(null)}
+        onClose={() => {
+          table.setEditingRow(null);
+          refetch();
+        }}
         record={row.original}
       />
     ),
@@ -175,7 +178,10 @@ const MaintenanceReportTable = (props: MaintenanceReportTableProps) => {
       {detail && (
         <RecordDetailsModal
           open={!!detail}
-          onClose={() => setDetail(null)}
+          onClose={() => {
+            setDetail(null);
+            refetch();
+          }}
           record={detail}
         />
       )}

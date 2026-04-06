@@ -12,6 +12,7 @@ import { TextareaInput } from '@/components/inputs';
 import { useMaintenanceRecord } from '../hooks';
 import { useState } from 'react';
 import { Button } from '@heroui/react';
+import ConfirmDialog from './ConfirmDialog';
 
 interface RegisterDetailForm {
   comment: string;
@@ -29,6 +30,7 @@ interface Props {
 
 export const RecordDetailsModal = ({ open, onClose, record }: Props) => {
   const [completeModal, setCompleteModal] = useState(false);
+  const [confirmModal, setConfirmModal] = useState(false);
 
   const {
     addRecordCommentMutation: { mutate: addComment, isPending },
@@ -55,12 +57,19 @@ export const RecordDetailsModal = ({ open, onClose, record }: Props) => {
         onClose={onClose}
         maxWidth="md"
         header={
-          <h2 className="uppercase font-thin">
-            <span className="font-bold">{record.vehicle.name}</span>
-          </h2>
+          <>
+            <h2 className="uppercase font-thin">
+              <span className="font-bold">{record.vehicle.name}</span>
+            </h2>
+            <span>{"Reporte: " + record.id}</span>
+          </>
         }
       >
         <div className="flex flex-row justify-between gap-4 p-4">
+          {record.status == "draft" && (
+            <Button onPress={() => setConfirmModal(true)} color='success' className='text-white' radius='full'>Confirmar</Button>
+          )
+          }
           <RecordInfo record={record} />
           <div>
             <TextareaInput
@@ -86,7 +95,7 @@ export const RecordDetailsModal = ({ open, onClose, record }: Props) => {
                 startContent={<CheckIcon width={'1.5em'} height={'1.5em'} />}
                 onPress={() => setCompleteModal(true)}
               >
-                Finalizar
+                Actualizar
               </Button>
             </div>
           </div>
@@ -114,6 +123,11 @@ export const RecordDetailsModal = ({ open, onClose, record }: Props) => {
       <CompleteDialog
         open={completeModal}
         onClose={() => setCompleteModal(false)}
+        itemId={record.id}
+      />
+      <ConfirmDialog
+        open={confirmModal}
+        onClose={() => setConfirmModal(false)}
         itemId={record.id}
       />
     </>
