@@ -46,22 +46,25 @@ const Checklist = () => {
   };
 
   const columns = [
-    { accessorKey: 'id_checklist', header: 'Periodo' },
+    { accessorKey: 'id_checklist', header: 'ID' },
     { accessorKey: 'equipo', header: 'Equipo' },
     { accessorKey: 'nombre', header: 'Usuario creacion' },
     { accessorKey: 'fecha_creacion', header: 'Fecha creacion' },
+    { accessorKey: 'resultado', header: 'Resultado' },
     {
       accessorKey: 'id_checklist',
       header: 'Descargar',
       Cell: ({ cell, row }) => {
         const id = cell.getValue() || '';
         return (
-          <Button className="text-white" size="sm" color="success" radius="full" onPress={() => OpenChecklist(id)}>
+          <Button className="text-white" size="sm" color="primary" radius="full" onPress={() => OpenChecklist(id)}>
+            <i class="bi bi-file-pdf"></i>
             Descargar
           </Button>
         );
       },
     },
+    { accessorKey: 'comentarios', header: 'Comentarios' },
   ];
 
   const table = useMaterialReactTable({
