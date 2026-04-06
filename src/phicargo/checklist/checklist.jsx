@@ -50,7 +50,18 @@ const Checklist = () => {
     { accessorKey: 'equipo', header: 'Equipo' },
     { accessorKey: 'nombre', header: 'Usuario creacion' },
     { accessorKey: 'fecha_creacion', header: 'Fecha creacion' },
-    { accessorKey: 'resultado', header: 'Resultado' },
+    {
+      accessorFn: (row) => {
+        const map = {
+          correcto: 'Correcto',
+          danoMenor: 'Daño menor',
+          danoMayor: 'Daño mayor',
+        };
+        return map[row.resultado] || row.resultado;
+      },
+      id: 'resultado',
+      header: 'Resultado',
+    },
     {
       accessorKey: 'id_checklist',
       header: 'Descargar',
@@ -64,7 +75,6 @@ const Checklist = () => {
         );
       },
     },
-    { accessorKey: 'comentarios', header: 'Comentarios' },
   ];
 
   const table = useMaterialReactTable({
