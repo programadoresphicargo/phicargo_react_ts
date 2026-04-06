@@ -5,7 +5,7 @@ import {
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import { Box } from '@mui/material';
-import { Button } from '@heroui/react';
+import { Button, Tooltip } from '@heroui/react';
 import { Chip } from "@heroui/react";
 import CloseIcon from '@mui/icons-material/Close';
 import Dialog from '@mui/material/Dialog';
@@ -86,6 +86,25 @@ const PDV = ({ }) => {
       {
         accessorKey: 'x_comentarios_maniobra',
         header: 'Comentarios maniobra',
+        Cell: ({ row, cell }) => {
+
+          const value = cell.getValue();
+
+          return (
+            <Tooltip
+              color='primary'
+              content={
+                <div className="px-1 py-2">
+                  <div className="text-small font-bold">Comentarios</div>
+                  <div className="text-tiny">{value}</div>
+                </div>
+              }>
+              <span className="truncate block max-w-xs cursor-pointer">
+                {value}
+              </span>
+            </Tooltip>
+          );
+        },
       },
       {
         accessorKey: 'referencias',
