@@ -35,7 +35,7 @@ export default function OndriveConfiguracion() {
  const fetchData = async () => {
   try {
    setLoading(true);
-   const response = await odooApi.get('/onedrive/json');
+   const response = await odooApi.get('/onedrive/provider/onedrive');
    setData(response.data);
    console.log(response.data);
    setLoading(false);
