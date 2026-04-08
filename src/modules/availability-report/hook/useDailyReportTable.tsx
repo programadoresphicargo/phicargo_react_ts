@@ -2,6 +2,8 @@ import type { Record } from '../models';
 import { type MRT_ColumnDef } from 'material-react-table';
 import { useMemo } from 'react';
 import { CommentCell } from '../components/tables/CommentCell';
+import { UnidadesSinOperador } from '../components/tables/UnidadesSinOperador';
+
 
 export const useDailyReportColumns = () => {
   const columns = useMemo<MRT_ColumnDef<Record>[]>(
@@ -234,13 +236,20 @@ export const useDailyReportColumns = () => {
         enableSorting: false,
         enableColumnFilter: false,
         Cell: ({ row }) => (
-          <CommentCell
-            value={row.original.unitsNoOperator}
-            date={row.original.date}
-            recordId={row.original.id}
-            recordColumn="no_operator"
-            comment={row.original.comments.noOperator}
-          />
+          <>
+            <div style={{ display: "flex", gap: "10px" }}>
+              <CommentCell
+                value={row.original.unitsNoOperator}
+                date={row.original.date}
+                recordId={row.original.id}
+                recordColumn="no_operator"
+                comment={row.original.comments.noOperator}
+              />
+              <UnidadesSinOperador
+                data={row.original.unitsNoOperatorDetail || null}
+              />
+            </div>
+          </>
         ),
       },
       {

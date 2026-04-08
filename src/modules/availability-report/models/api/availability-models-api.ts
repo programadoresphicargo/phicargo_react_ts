@@ -15,6 +15,7 @@ interface RecordApiBase {
   long_trip_units: number;
   units_in_maintenance: number;
   units_no_operator: number;
+  units_no_operator_detail: string | null;
   operator_permission: number;
   total_units: number;
   observations: string;

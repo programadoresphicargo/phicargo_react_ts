@@ -141,9 +141,9 @@ const DailyReportTable = () => {
         sx: {
           backgroundColor: row.original?.date
             ? row.original?.date.isBefore(dayjs(), 'day')
-              ? '#829399'
+              ? '#dedede'
               : row.original?.date.isSame(dayjs(), 'day')
-              ? '#E8FCC2'
+              ? '#fcff52'
               : 'inherit'
             : 'inherit',
         },

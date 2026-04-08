@@ -15,6 +15,7 @@ interface RecordBase {
   longTripUnits: number;
   unitsInMaintenance: number;
   unitsNoOperator: number;
+  unitsNoOperatorDetail: string | null;
   operatorPermission: number;
   totalUnits: number;
   observations: string;
