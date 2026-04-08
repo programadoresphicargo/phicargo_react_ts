@@ -13,6 +13,7 @@ import { useMaintenanceRecord } from '../hooks';
 import { useState } from 'react';
 import { Button } from '@heroui/react';
 import ConfirmDialog from './ConfirmDialog';
+import odooApi from '@/api/odoo-api';
 
 interface RegisterDetailForm {
   comment: string;
@@ -50,12 +51,17 @@ export const RecordDetailsModal = ({ open, onClose, record }: Props) => {
     });
   };
 
+  const OpenChecklist = async (id_checklist: number | null): Promise<void> => {
+    const url = `${odooApi.defaults.baseURL}/tms_travel/checklist/export/${id_checklist}`;
+    window.open(url, "_blank");
+  };
+
   return (
     <>
       <MuiModal
         open={open}
         onClose={onClose}
-        maxWidth="md"
+        maxWidth="xl"
         header={
           <>
             <h2 className="uppercase font-thin">
@@ -65,11 +71,22 @@ export const RecordDetailsModal = ({ open, onClose, record }: Props) => {
           </>
         }
       >
-        <div className="flex flex-row justify-between gap-4 p-4">
+        <div className='p-3'>
           {record.status == "draft" && (
-            <Button onPress={() => setConfirmModal(true)} color='success' className='text-white' radius='full'>Confirmar</Button>
-          )
-          }
+            <Button onPress={() => setConfirmModal(true)} color='success' className='text-white' radius='full'>
+              <i className="bi bi-check-circle-fill"></i>
+              Confirmar
+            </Button>
+          )}
+          {record.id_checklist && (
+            <Button onPress={() => OpenChecklist(record.id_checklist)} color='primary' className='text-white' radius='full'>
+              <i className="bi bi-file-pdf"></i>
+              Checklist equipo
+            </Button>
+          )}
+        </div>
+
+        <div className="flex flex-row justify-between gap-4 p-4">
           <RecordInfo record={record} />
           <div>
             <TextareaInput
@@ -89,13 +106,13 @@ export const RecordDetailsModal = ({ open, onClose, record }: Props) => {
               />
               <Button
                 className='text-white'
-                color="success"
+                color="primary"
                 size="sm"
                 radius='full'
-                startContent={<CheckIcon width={'1.5em'} height={'1.5em'} />}
+                startContent={<CheckIcon />}
                 onPress={() => setCompleteModal(true)}
               >
-                Actualizar
+                Actualizar estado
               </Button>
             </div>
           </div>

@@ -60,7 +60,8 @@ export class MaintenaceRecordAdapter {
       supervisor: record.supervisor,
       comments: record.comments,
       order: record.order_service,
-      daysInWorkshop: record.days_in_workshop
+      daysInWorkshop: record.days_in_workshop,
+      createdDate: record.createdDate
     };
   }
 
@@ -83,6 +84,9 @@ export class MaintenaceRecordAdapter {
       lastCommentDate: record.last_comment_date
         ? dayjs(record.last_comment_date)
         : null,
+      usuarioCreacion: record.usuario_creacion,
+      createdDate: dayjs(record.createdDate),
+      id_checklist: record.id_checklist
     };
   }
 
@@ -106,7 +110,8 @@ export class MaintenaceRecordAdapter {
       order_service: record.order,
       workshop_id: record.workshopId,
       tract_id: record.vehicleId,
-      days_in_workshop: record.daysInWorkshop
+      days_in_workshop: record.daysInWorkshop,
+      createdDate: record.createdDate,
     };
   }
 

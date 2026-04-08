@@ -2,6 +2,7 @@ import { BranchSimple } from '../../../core/models';
 import { MaintenanceRecordStatus } from '../maintenance-record-model';
 import { UserReadApi } from '@/modules/users-management/models';
 import { WorkshopApi } from './workshop-api-model';
+import type { Dayjs } from 'dayjs';
 
 export interface VehicleInfoApi {
   id: number;
@@ -22,6 +23,7 @@ export interface MaintenanceRecordBaseApi {
   comments: string | null;
   order_service: string;
   days_in_workshop: number | null;
+  createdDate: Dayjs;
 }
 
 export interface MaintenanceRecordApi extends MaintenanceRecordBaseApi {
@@ -30,6 +32,8 @@ export interface MaintenanceRecordApi extends MaintenanceRecordBaseApi {
   vehicle: VehicleInfoApi;
   workshop: WorkshopApi;
   last_comment_date: string | null;
+  usuario_creacion: string
+  id_checklist: number | null;
 }
 
 export interface MaintenanceRecordCreateApi extends MaintenanceRecordBaseApi {

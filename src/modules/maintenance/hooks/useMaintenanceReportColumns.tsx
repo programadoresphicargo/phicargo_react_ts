@@ -178,6 +178,24 @@ export const useMaintenanceReportColumns = (type: 'tractocamion' | 'remolques', 
           },
         ],
       },
+      {
+        accessorFn: (originalRow) =>
+          originalRow.usuarioCreacion,
+        id: 'createdAt',
+        header: 'Usuario creación',
+        size: 4,
+        Cell: ({ row }) =>
+          row.original.usuarioCreacion,
+      },
+      {
+        accessorFn: (originalRow) =>
+          originalRow.createdDate?.format('YYYY-MM-DD'),
+        id: 'createdDate',
+        header: 'Fecha creación',
+        size: 4,
+        Cell: ({ row }) =>
+          row.original.createdDate?.format('DD/MM/YYYY') || 'N/A',
+      },
     ];
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);

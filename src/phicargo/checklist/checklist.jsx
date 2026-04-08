@@ -16,17 +16,12 @@ import CustomNavbar from "@/pages/CustomNavbar";
 
 const Checklist = () => {
 
-  const now = new Date();
-  const firstDay = new Date(now.getFullYear(), 0, 1);
-  const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-  const [range, setRange] = useState([firstDay, lastDay]);
-
   const [isLoading, setisLoading] = useState(false);
   const [data, setData] = useState([]);
 
   useEffect(() => {
     fetchData();
-  }, [range]);
+  }, []);
 
   const fetchData = async () => {
     try {
@@ -47,7 +42,17 @@ const Checklist = () => {
 
   const columns = [
     { accessorKey: 'id_checklist', header: 'ID' },
-    { accessorKey: 'equipo', header: 'Equipo' },
+    {
+      accessorKey: 'equipo', header: 'Equipo',
+      Cell: ({ cell, row }) => {
+        const value = cell.getValue() || '';
+        return (
+          <Chip className="text-white" size="sm" color="success" radius="full">
+            {value}
+          </Chip>
+        );
+      },
+    },
     { accessorKey: 'nombre', header: 'Usuario creacion' },
     { accessorKey: 'fecha_creacion', header: 'Fecha creacion' },
     {
@@ -134,16 +139,8 @@ const Checklist = () => {
           style={{ flex: 1 }}
           className="tracking-tight font-semibold lg:text-2xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
         >
-          Checklist
+          Checklist de equipos
         </h1>
-
-        <DateRangePicker
-          value={range}
-          onChange={(value) => setRange(value)}
-          placeholder="Selecciona un rango de fechas"
-          format="yyyy-MM-dd"
-          loading={isLoading}
-        />
 
         <Button
           onPress={() => exportToCSV(data, columns, "checklist.csv")}

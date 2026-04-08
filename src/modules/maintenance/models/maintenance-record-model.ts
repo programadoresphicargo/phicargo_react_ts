@@ -29,6 +29,7 @@ export interface MaintenanceRecordBase {
   comments: string | null;
   order: string;
   daysInWorkshop: number | null;
+  createdDate: Dayjs;
 }
 
 export interface MaintenanceRecord extends MaintenanceRecordBase {
@@ -37,6 +38,8 @@ export interface MaintenanceRecord extends MaintenanceRecordBase {
   vehicle: VehicleInfo;
   workshop: Workshop;
   lastCommentDate: Dayjs | null;
+  usuarioCreacion: string;
+  id_checklist: number | null;
 }
 
 export interface MaintenanceRecordCreate extends MaintenanceRecordBase {
