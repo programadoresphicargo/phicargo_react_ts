@@ -48,7 +48,8 @@ const initialFormState: MaintenanceRecordCreate = {
   comments: '',
   order: '',
   vehicleId: '' as unknown as number,
-  daysInWorkshop: 0
+  daysInWorkshop: 0,
+  createdDate: dayjs()
 };
 
 interface Props {
