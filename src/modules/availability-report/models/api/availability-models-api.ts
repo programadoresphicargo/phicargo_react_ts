@@ -17,6 +17,7 @@ interface RecordApiBase {
   units_no_operator: number;
   units_no_operator_detail: string | null;
   operator_permission: number;
+  operator_permission_detail: string | null;
   total_units: number;
   observations: string;
   comments: RecordCommentApi[];

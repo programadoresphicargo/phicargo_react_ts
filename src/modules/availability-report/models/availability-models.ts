@@ -17,6 +17,7 @@ interface RecordBase {
   unitsNoOperator: number;
   unitsNoOperatorDetail: string | null;
   operatorPermission: number;
+  operatorPermissionDetail: string | null;
   totalUnits: number;
   observations: string;
   comments: RecordComments;
