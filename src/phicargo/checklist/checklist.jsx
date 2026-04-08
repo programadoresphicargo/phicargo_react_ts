@@ -54,7 +54,7 @@ const Checklist = () => {
       },
     },
     { accessorKey: 'nombre', header: 'Usuario creacion' },
-    { accessorKey: 'fecha_creacion', header: 'Fecha creacion' },
+    { accessorKey: 'fecha', header: 'Fecha creacion' },
     {
       accessorFn: (row) => {
         const map = {
