@@ -98,6 +98,10 @@ function EstatusHistorial() {
         }
     };
 
+    const exportPDF = () => {
+        window.open(`${odooApi.defaults.baseURL}/tms_travel/reportes_estatus_viajes/pdf/${id_viaje}`, "_blank");
+    };
+
     return (
         <>
             <Dialog
@@ -156,7 +160,7 @@ function EstatusHistorial() {
                 </Button>
                 <Button
                     radius="full"
-                    onPress={generarReporte}
+                    onPress={exportPDF}
                     color="danger"
                     className="text-white w-fit self-end mb-3" // ancho mínimo y alineado a la derecha
                 >
