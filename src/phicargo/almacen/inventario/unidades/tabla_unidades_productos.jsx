@@ -38,6 +38,8 @@ const UnidadesProductos = ({ data2, fetch }) => {
   const [id_unidad, setUnidad] = useState(0);
 
   const [cantidad, setCantidad] = useState(1);
+  const [oc, setOC] = useState(null);
+
   const [isLoading, setLoading] = useState(false);
   console.log(data2);
 
@@ -45,7 +47,7 @@ const UnidadesProductos = ({ data2, fetch }) => {
 
     const form = {
       id_producto: data2.id,
-      estado: "disponible"
+      estado: "disponible",
     };
 
     try {
@@ -53,6 +55,7 @@ const UnidadesProductos = ({ data2, fetch }) => {
       const response = await odooApi.post("/tms_travel/unidades_equipo/", {
         form: form,
         cantidad: parseInt(cantidad),
+        oc: oc
       });
 
       if (response.data.status == "success") {
@@ -64,8 +67,9 @@ const UnidadesProductos = ({ data2, fetch }) => {
       console.log("Respuesta:", response.data);
       setLoading(false);
     } catch (error) {
-      console.error("Error al registrar:", error);
-      toast.error("Error al registrar unidades");
+      console.error("Error completo:", error);
+      console.error("Detail:", error.response?.data?.detail);
+      toast.error(error.response?.data?.detail || "Error al registrar unidades");
       setLoading(false);
     }
   };
@@ -119,6 +123,10 @@ const UnidadesProductos = ({ data2, fetch }) => {
             </Chip>
           );
         },
+      },
+      {
+        accessorKey: 'oc_ref',
+        header: 'OC',
       },
     ],
     [],
@@ -217,7 +225,14 @@ const UnidadesProductos = ({ data2, fetch }) => {
                   onValueChange={setCantidad}
                   minValue={1}
                 />
-                <Button color="primary" onPress={registrarUnidades} isLoading={isLoading}>
+                <Input
+                  label="OC"
+                  variant="bordered"
+                  value={oc}
+                  onValueChange={setOC}
+                >
+                </Input>
+                <Button color="primary" onPress={registrarUnidades} isLoading={isLoading} radius='full'>
                   Registrar
                 </Button>
               </div>
