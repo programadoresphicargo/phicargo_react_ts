@@ -87,7 +87,7 @@ const PDV = ({ }) => {
 
           return (
             <Tooltip
-              color='primary'
+              color="foreground"
               content={
                 <div className="px-1 py-2">
                   <div className="text-small font-bold">Comentarios</div>
