@@ -71,17 +71,12 @@ const PDV = ({ }) => {
   const columns = useMemo(
     () => [
       {
-        accessorKey: 'date_order',
-        header: 'Fecha',
+        accessorKey: 'vehiculo',
+        header: 'Vehiculo programado',
       },
       {
-        accessorKey: 'sucursal',
-        header: 'Sucursal',
-
-      },
-      {
-        accessorKey: 'cartas_porte',
-        header: 'Carta porte',
+        accessorKey: 'operador',
+        header: 'Operador programado',
       },
       {
         accessorKey: 'x_comentarios_maniobra',
@@ -105,6 +100,45 @@ const PDV = ({ }) => {
             </Tooltip>
           );
         },
+      },
+      {
+        accessorKey: "x_status_bel",
+        header: "Estatus",
+        Cell: ({ row, cell }) => {
+
+          const value = cell.getValue();
+          const map = {
+            sm: { color: "secondary", text: "SIN MANIOBRA" },
+            pm: { color: "primary", text: "PATIO MÉXICO" },
+            P: { color: "primary", text: "EN PATIO" },
+            V: { color: "success", text: "EN VIAJE" },
+            Ing: { color: "warning", text: "INGRESADO" },
+            PR: { color: "success", text: "PROGRAMADO PARA RETIRO" },
+            ER: { color: "success", text: "EN PROCESO DE RETIRO" },
+            PI: { color: "warning", text: "PROGRAMADO PARA INGRESO" },
+            EI: { color: "warning", text: "EN PROCESO DE INGRESO" },
+            T: { color: "danger", text: "EN TERRAPORTS" },
+            ru: { color: "danger", text: "REUTILIZADO" },
+            EV: { color: "secondary", text: "EN ESPERA DE VIAJE" },
+          };
+
+          const cfg = map[value] || { color: "default", text: value || "N/A" };
+
+          return (
+            <Chip color={cfg.color} size="sm" className="text-white" radius="full">
+              {cfg.text}
+            </Chip>
+          );
+        },
+      },
+      {
+        accessorKey: 'date_order',
+        header: 'Fecha',
+      },
+      {
+        accessorKey: 'sucursal',
+        header: 'Sucursal',
+
       },
       {
         accessorKey: 'referencias',
@@ -139,46 +173,12 @@ const PDV = ({ }) => {
         header: 'Llegada a planta',
       },
       {
+        accessorKey: 'cartas_porte',
+        header: 'Carta porte',
+      },
+      {
         accessorKey: 'referencia_viaje',
         header: 'Viaje',
-      },
-      {
-        accessorKey: 'vehiculo',
-        header: 'Vehiculo',
-      },
-      {
-        accessorKey: 'operador',
-        header: 'Operador',
-      },
-      {
-        accessorKey: "x_status_bel",
-        header: "Estatus",
-        Cell: ({ row, cell }) => {
-
-          const value = cell.getValue();
-          const map = {
-            sm: { color: "secondary", text: "SIN MANIOBRA" },
-            pm: { color: "primary", text: "PATIO MÉXICO" },
-            P: { color: "primary", text: "EN PATIO" },
-            V: { color: "success", text: "EN VIAJE" },
-            Ing: { color: "warning", text: "INGRESADO" },
-            PR: { color: "success", text: "PROGRAMADO PARA RETIRO" },
-            ER: { color: "success", text: "EN PROCESO DE RETIRO" },
-            PI: { color: "warning", text: "PROGRAMADO PARA INGRESO" },
-            EI: { color: "warning", text: "EN PROCESO DE INGRESO" },
-            T: { color: "danger", text: "EN TERRAPORTS" },
-            ru: { color: "danger", text: "REUTILIZADO" },
-            EV: { color: "secondary", text: "EN ESPERA DE VIAJE" },
-          };
-
-          const cfg = map[value] || { color: "default", text: value || "N/A" };
-
-          return (
-            <Chip color={cfg.color} size="sm" className="text-white" radius="full">
-              {cfg.text}
-            </Chip>
-          );
-        },
       },
     ],
     [],
