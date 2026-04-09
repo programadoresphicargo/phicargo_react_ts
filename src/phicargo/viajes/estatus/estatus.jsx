@@ -69,6 +69,35 @@ function EstatusHistorial() {
         getHistorialEstatus();
     }, []);
 
+    const generarReporte = async () => {
+        try {
+            setLoading(true);
+
+            const response = await odooApi.get(
+                `/tms_travel/reportes_estatus_viajes/excel/${id_viaje}`,
+                {
+                    responseType: "blob",
+                }
+            );
+
+            const blob = new Blob([response.data]);
+            const url = window.URL.createObjectURL(blob);
+
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `historial_estatus_${id_viaje}.csv`;
+            a.click();
+
+            window.URL.revokeObjectURL(url);
+
+        } catch (error) {
+            alert("Error al generar el reporte");
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <>
             <Dialog
@@ -114,6 +143,25 @@ function EstatusHistorial() {
                     className="w-fit self-end mb-3" // ancho mínimo y alineado a la derecha
                 >
                     Ordenar: {sortOrder === 'asc' ? 'Ascendente' : 'Descendente'}
+                </Button>
+
+                <Button
+                    radius="full"
+                    onPress={generarReporte}
+                    color="success"
+                    className="text-white w-fit self-end mb-3" // ancho mínimo y alineado a la derecha
+                >
+                    <i class="bi bi-file-earmark-excel"></i>
+                    Exportar Excel
+                </Button>
+                <Button
+                    radius="full"
+                    onPress={generarReporte}
+                    color="danger"
+                    className="text-white w-fit self-end mb-3" // ancho mínimo y alineado a la derecha
+                >
+                    <i class="bi bi-file-earmark-pdf"></i>
+                    Exportar PDF
                 </Button>
             </Stack>
 
