@@ -38,10 +38,8 @@ const UnidadesProductos = ({ data2, fetch }) => {
   const [id_unidad, setUnidad] = useState(0);
 
   const [cantidad, setCantidad] = useState(1);
-  const [oc, setOC] = useState(null);
-
+  const [id_po, setPO] = useState(null);
   const [isLoading, setLoading] = useState(false);
-  console.log(data2);
 
   const registrarUnidades = async () => {
 
@@ -55,7 +53,7 @@ const UnidadesProductos = ({ data2, fetch }) => {
       const response = await odooApi.post("/tms_travel/unidades_equipo/", {
         form: form,
         cantidad: parseInt(cantidad),
-        oc: oc
+        id_po: id_po
       });
 
       if (response.data.status == "success") {
@@ -228,8 +226,8 @@ const UnidadesProductos = ({ data2, fetch }) => {
                 <Input
                   label="OC"
                   variant="bordered"
-                  value={oc}
-                  onValueChange={setOC}
+                  value={id_po}
+                  onValueChange={setPO}
                 >
                 </Input>
                 <Button color="primary" onPress={registrarUnidades} isLoading={isLoading} radius='full'>
