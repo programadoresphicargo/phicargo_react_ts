@@ -71,32 +71,24 @@ function EstatusHistorial() {
 
     const generarReporte = async () => {
         try {
-            setLoading(true);
-
             const response = await odooApi.get(
                 `/tms_travel/reportes_estatus_viajes/excel/${id_viaje}`,
                 {
                     responseType: "blob",
                 }
             );
-
             const blob = new Blob([response.data]);
             const url = window.URL.createObjectURL(blob);
-
             const a = document.createElement("a");
             a.href = url;
             a.download = `historial_estatus_${id_viaje}.csv`;
             a.click();
-
             window.URL.revokeObjectURL(url);
-
         } catch (error) {
             alert("Error al generar el reporte");
             console.error(error);
-        } finally {
-            setLoading(false);
-        }
-    };
+        };
+    }
 
     const exportPDF = () => {
         window.open(`${odooApi.defaults.baseURL}/tms_travel/reportes_estatus_viajes/pdf/${id_viaje}`, "_blank");
