@@ -1,4 +1,5 @@
 import {
+  MRT_ExpandAllButton,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
@@ -21,6 +22,7 @@ import odooApi from '@/api/odoo-api';
 import { DateRangePicker } from 'rsuite';
 import NavbarTravel from '../navbar_viajes';
 import Travel from '../control/viaje';
+import { Stack } from '@mui/material';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -32,6 +34,7 @@ const PDV = ({ }) => {
   const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
   const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
   const [range, setRange] = useState([firstDay, lastDay]);
+  const [grouping, setGrouping] = useState(['sucursal', 'date_order']);
 
   const [open, setOpen] = React.useState(false);
   const [idViaje, setIDViaje] = React.useState(null);
@@ -190,7 +193,11 @@ const PDV = ({ }) => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
-    state: { showProgressBars: isLoading, },
+    state: {
+      grouping,
+      showProgressBars: isLoading,
+    },
+    onGroupingChange: setGrouping,
     groupedColumnMode: "remove",
     enableColumnPinning: true,
     enableStickyHeader: true,
@@ -207,6 +214,29 @@ const PDV = ({ }) => {
       elevation: 0,
       sx: {
         borderRadius: '0',
+      },
+    },
+    displayColumnDefOptions: {
+      'mrt-row-expand': {
+        Header: () => (
+          <Stack direction="row" alignItems="center">
+            <MRT_ExpandAllButton table={table} />
+            <Box>Grupos</Box>
+          </Stack>
+        ),
+        GroupedCell: ({ row, table }) => {
+          const { grouping } = table.getState();
+
+          return grouping.map((col) => {
+            const value = row.getValue(col);
+
+            return (
+              <span key={col}>
+                <strong>{value}</strong>{' '}
+              </span>
+            );
+          });
+        },
       },
     },
     muiTableBodyRowProps: ({ row }) => {
