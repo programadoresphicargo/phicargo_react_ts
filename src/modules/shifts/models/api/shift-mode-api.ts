@@ -2,6 +2,7 @@ import { Dayjs } from 'dayjs';
 import type { BranchSimple } from '../../../core/models';
 import type { ShiftTravelInfoApi } from './travel-models-models-api';
 import type { UserBasicApi } from '@/modules/auth/models';
+import { DriverUnavailableApi } from '@/modules/drivers/models/api';
 
 export interface DriverInfoApi {
   id: number;
@@ -48,6 +49,7 @@ export interface ShiftApi extends ShiftBaseApi {
   vehicle: VehicleInfoApi;
   register_user: UserBasicApi;
   travel: ShiftTravelInfoApi | null;
+  permisos: DriverUnavailableApi[];
 }
 
 export type ShiftSimpleApi = Pick<ShiftApi, 'id' | 'shift' | 'arrival_at' | 'driver'>;

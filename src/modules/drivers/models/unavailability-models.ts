@@ -1,11 +1,11 @@
 import type { Dayjs } from 'dayjs';
 
-interface DriverUnavailabilityBase {
+export interface DriverUnavailabilityBase {
   startDate: Dayjs;
   endDate: Dayjs;
   employeeId: number;
   reasonType: string;
-  description: string;
+  description: string | null;
   vacationDocId: number | null;
 }
 

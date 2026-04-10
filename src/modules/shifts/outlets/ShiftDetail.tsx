@@ -1,4 +1,5 @@
 import {
+  Alert,
   Button,
 } from "@heroui/react";
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
@@ -104,7 +105,6 @@ const ShiftDetail = () => {
           </Toolbar>
         </AppBar>
         <DialogContent>
-
           <div className="flex flex-row gap-4 p-2 border-2 rounded-lg">
             <Button
               size="sm"
@@ -169,7 +169,23 @@ const ShiftDetail = () => {
               Asignar viaje
             </Button>
           </div>
+
+          <div className="flex flex-col gap-4 border-2 rounded-lg p-3 mt-1">
+            <div className="flex flex-col gap-4 w-full">
+              <span>Permisos activos</span>
+              {shift?.permisos?.map((p, index) => (
+                <Alert
+                  color="danger"
+                  title={`Tipo de permiso: ${p.reasonType}`}
+                  description={`Descripción: ${p.description ?? "Sin descripción"} De ${p.startDate.format("YYYY-MM-DD")} a ${p.endDate.format("YYYY-MM-DD")}`}
+                  variant="solid"
+                />
+              ))}
+            </div>
+          </div>
+
           <div className="flex flex-col md:flex-row p-1 gap-4">
+
             <div className="w-5/12 flex flex-col gap-4 border-2 rounded-lg p-3">
               <EditShiftForm shift={shift} enabled={formEnabled} />
             </div>

@@ -226,14 +226,19 @@ const ShiftsPage = () => {
           fontSize: '14px',
         },
       },
-      muiTableBodyCellProps: {
+      muiTableBodyCellProps: ({ row }) => ({
         sx: {
           fontFamily: 'Inter',
           fontWeight: 'normal',
           fontSize: '12px',
-          padding: '2px'
+          padding: '2px',
+
+          backgroundColor:
+            row.original.permisos && row.original.permisos.length > 0
+              ? '#FFCDD2'
+              : 'inherit',
         },
-      },
+      }),
     },
   });
 
