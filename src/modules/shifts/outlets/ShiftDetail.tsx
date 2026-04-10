@@ -173,7 +173,7 @@ const ShiftDetail = () => {
           <div className="flex flex-col gap-4 border-2 rounded-lg p-3 mt-1">
             <div className="flex flex-col gap-4 w-full">
               <span>Permisos activos</span>
-              {shift?.permisos?.map((p, index) => (
+              {shift?.permisos?.map((p) => (
                 <Alert
                   color="danger"
                   title={`Tipo de permiso: ${p.reasonType}`}
