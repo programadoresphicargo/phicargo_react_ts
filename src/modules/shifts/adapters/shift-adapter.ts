@@ -21,7 +21,6 @@ import { ShiftTravelInfo } from '../models/travels-models';
 import { ShiftTravelInfoApi } from '../models/api/travel-models-models-api';
 import dayjs from 'dayjs';
 import { userBasicToLocal } from '../../auth/adapters';
-import { UnavailabilityAdapter } from '@/modules/drivers/adapters';
 
 /**
  * Mapper to convert the data of a driver from the API to the local model
