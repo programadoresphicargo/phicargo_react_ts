@@ -22,6 +22,8 @@ interface RecordApiBase {
   observations: string;
   comments: RecordCommentApi[];
   motor_generators: number;
+  amount_increase: number;
+  amount_decrease: number;
 }
 
 export interface RecordApi extends RecordApiBase {
@@ -45,6 +47,8 @@ export type RecordApiUpdate = Partial<
     | 'unloading_units'
     | 'observations'
     | 'motor_generators'
+    | 'amount_increase'
+    | 'amount_decrease'
   >
 >;
 

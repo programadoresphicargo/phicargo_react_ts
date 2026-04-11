@@ -40,11 +40,14 @@ export class AvailibilityAdapter {
       createdAt: dayjs(record.created_at),
       comments: AvailibilityAdapter.recordCommentsToLocal(record.comments),
       motorGenerators: record.motor_generators,
+      amountDecrease: record.amount_decrease,
+      amountIncrease: record.amount_increase
     };
   }
 
   static recordUpdateToApi(record: RecordUpdate): RecordApiUpdate {
     const apiRecord: RecordApiUpdate = {};
+    console.log(apiRecord);
 
     if (record.simpleLoad !== undefined) {
       apiRecord.simple_load = Number(record.simpleLoad);
@@ -78,6 +81,14 @@ export class AvailibilityAdapter {
       apiRecord.motor_generators = Number(record.motorGenerators);
     }
 
+    if (record.amountIncrease !== undefined) {
+      apiRecord.amount_increase = Number(record.amountIncrease);
+    }
+
+    if (record.amountDecrease !== undefined) {
+      apiRecord.amount_decrease = Number(record.amountDecrease);
+    }
+
     return apiRecord;
   }
 
@@ -97,6 +108,12 @@ export class AvailibilityAdapter {
     const fullLoadLocals = comments.filter(
       (comment) => comment.record_column === 'full_load_locals',
     )[0];
+    const amountIncrease = comments.filter(
+      (comment) => comment.record_column === 'amount_increase',
+    )[0];
+    const amountDecrease = comments.filter(
+      (comment) => comment.record_column === 'amount_decrease',
+    )[0];
 
     return {
       unloading: unloading
@@ -111,6 +128,12 @@ export class AvailibilityAdapter {
         : null,
       fullLoadLocals: fullLoadLocals
         ? AvailibilityAdapter.recordCommentToLocal(fullLoadLocals)
+        : null,
+      amountIncrease: amountIncrease
+        ? AvailibilityAdapter.recordCommentToLocal(amountIncrease)
+        : null,
+      amountDecrease: amountDecrease
+        ? AvailibilityAdapter.recordCommentToLocal(amountDecrease)
         : null,
     };
   }

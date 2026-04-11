@@ -33,6 +33,12 @@ export const editRecordComment = (
     case 'simple_load_locals':
       existingRecord.comments.simpleLoadLocals = newComment;
       break;
+    case 'amount_increase':
+      existingRecord.comments.amountIncrease = newComment;
+      break;
+    case 'amount_decrease':
+      existingRecord.comments.amountDecrease = newComment;
+      break;
     default:
       throw new Error('Invalid record column');
   }

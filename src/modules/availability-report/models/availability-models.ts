@@ -22,6 +22,8 @@ interface RecordBase {
   observations: string;
   comments: RecordComments;
   motorGenerators: number;
+  amountIncrease: number;
+  amountDecrease: number;
 }
 
 export interface Record extends RecordBase {
@@ -43,6 +45,8 @@ export type RecordUpdate = Partial<
     | 'unloadingUnits'
     | 'observations'
     | 'motorGenerators'
+    | 'amountIncrease'
+    | 'amountDecrease'
   >
 >;
 
@@ -51,7 +55,9 @@ export type RecordColumnComment =
   | 'long'
   | 'no_operator'
   | 'simple_load_locals'
-  | 'full_load_locals';
+  | 'full_load_locals'
+  | 'amount_increase'
+  | 'amount_decrease'
 
 interface RecordCommentBase {
   recordColumn: RecordColumnComment;
@@ -70,4 +76,6 @@ export interface RecordComments {
   noOperator: RecordComment | null;
   simpleLoadLocals: RecordComment | null;
   fullLoadLocals: RecordComment | null;
+  amountDecrease: RecordComment | null;
+  amountIncrease: RecordComment | null;
 }

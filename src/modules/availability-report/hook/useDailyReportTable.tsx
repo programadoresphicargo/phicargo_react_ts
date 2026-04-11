@@ -271,6 +271,52 @@ export const useDailyReportColumns = () => {
         ),
       },
       {
+        accessorFn: (row) => row.amountIncrease,
+        id: "amountIncrease",
+        header: 'Incremento',
+        size: 50,
+        enableSorting: false,
+        enableColumnFilter: false,
+        muiEditTextFieldProps: {
+          type: 'number',
+          inputProps: {
+            min: 0,
+          },
+        },
+        Cell: ({ row }) => (
+          <CommentCell
+            value={row.original.amountIncrease}
+            date={row.original.date}
+            recordId={row.original.id}
+            recordColumn="amount_increase"
+            comment={row.original.comments.amountIncrease}
+          />
+        ),
+      },
+      {
+        accessorFn: (row) => row.amountDecrease,
+        id: "amountDecrease",
+        header: 'Decremento',
+        size: 50,
+        enableSorting: false,
+        enableColumnFilter: false,
+        muiEditTextFieldProps: {
+          type: 'number',
+          inputProps: {
+            min: 0,
+          },
+        },
+        Cell: ({ row }) => (
+          <CommentCell
+            value={row.original.amountDecrease}
+            date={row.original.date}
+            recordId={row.original.id}
+            recordColumn="amount_decrease"
+            comment={row.original.comments.amountDecrease}
+          />
+        ),
+      },
+      {
         accessorFn: (row) => row.totalUnits,
         header: 'Total Unidades',
         size: 50,
