@@ -450,6 +450,16 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                                             </Grid>
 
                                             <Grid item xs={12} sm={6}>
+                                                Cliente:
+                                                <Typography variant="body1">{data?.cliente || '---'}</Typography>
+                                            </Grid>
+
+                                            <Grid item xs={12} sm={6}>
+                                                Subcliente:
+                                                <Typography variant="body1">{data?.subcliente || '---'}</Typography>
+                                            </Grid>
+
+                                            <Grid item xs={12} sm={6}>
                                                 <Input
                                                     value={data?.inicio_programado || '---'}
                                                     label="Inicio programado de viaje:"
