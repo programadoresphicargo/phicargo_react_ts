@@ -92,6 +92,10 @@ const Solicitudes = ({ x_tipo, vista }) => {
         header: 'Cliente',
       },
       {
+        accessorKey: 'subcliente',
+        header: 'Subcliente',
+      },
+      {
         accessorKey: 'inicio_programado',
         header: 'Inicio prog. viaje',
       },
@@ -116,7 +120,7 @@ const Solicitudes = ({ x_tipo, vista }) => {
       },
       {
         accessorKey: 'usuario',
-        header: 'Solicitador por',
+        header: 'Solicitado por',
       },
       {
         accessorKey: 'create_date',
