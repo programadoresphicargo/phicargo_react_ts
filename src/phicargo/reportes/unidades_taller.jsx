@@ -83,6 +83,8 @@ const UnidadesTaller = () => {
     enableBottomToolbar: true,
     localization: MRT_Localization_ES,
     enableColumnAggregations: true,
+    groupedColumnMode: 'remove',
+    positionToolbarAlertBanner: 'bottom',
     columnResizeMode: "onEnd",
     initialState: {
       grouping: ["periodo"],
@@ -106,7 +108,7 @@ const UnidadesTaller = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 220px)',
+        maxHeight: 'calc(100vh - 200px)',
       },
     },
     muiTableBodyCellProps: ({ row }) => ({
