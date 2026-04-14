@@ -250,6 +250,8 @@ const ViajesProgramados = ({ }) => {
     enableGlobalFilter: true,
     enableFilters: true,
     state: { showProgressBars: isLoading },
+    groupedColumnMode: 'remove',
+    positionToolbarAlertBanner: 'bottom',
     enableColumnPinning: true,
     enableStickyHeader: true,
     localization: MRT_Localization_ES,
