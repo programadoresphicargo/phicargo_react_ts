@@ -26,6 +26,7 @@ import calendarIcon from '../assets/menu/calendario.png';
 import kmIcon from '../assets/menu/calle.png';
 import containerIcon from '../assets/menu/shiping-container.png';
 import idealeaseIcon from '../assets/menu/idealease.png';
+import ganttIcon from '../assets/menu/gantt.png';
 
 type MenuItemType = {
   icon: string;
@@ -150,6 +151,12 @@ const reports: MenuItemType[] = [
     label: 'Unidades en taller IDEALEASE',
     path: '/reportes/unidades_taller',
     icon: idealeaseIcon,
+    requiredPermissions: [288],
+  },
+  {
+    label: 'Disponibildad Diaria de Flota',
+    path: '/reportes/disponibilidad_diaria',
+    icon: ganttIcon,
     requiredPermissions: [288],
   },
 ];
