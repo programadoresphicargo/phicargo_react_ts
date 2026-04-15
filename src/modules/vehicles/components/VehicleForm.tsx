@@ -146,7 +146,8 @@ const VehicleForm = (props: Props) => {
                     <input
                       type="datetime-local"
                       {...field}
-                      value={field.value ?? ''} // ✅ aquí lo corriges
+                      value={field.value ?? ''} 
+                      max={new Date().toISOString().slice(0, 16)}
                       className="w-full border border-gray-300 rounded px-2 py-1"
                     />
                   </div>
