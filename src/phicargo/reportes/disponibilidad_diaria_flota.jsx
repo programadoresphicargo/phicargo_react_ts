@@ -52,24 +52,24 @@ const DisponibilidadDiariaFlota = () => {
       Cell: ({ cell }) => {
         const estado = cell.getValue();
 
+        if (!estado) return null;
+
         return (
           <Chip
             className="text-white"
-            style={{
-              width: '100%',
-              height: '20px',
-              background:
-                estado === 'VT'
-                  ? 'linear-gradient(to bottom, green 50%, orange 50%)'
-                  : estado === 'V'
-                    ? 'green'
-                    : estado === 'T'
-                      ? 'orange'
-                      : estado === 'SO'
-                        ? 'yellow'
-                        : 'transparent',
-            }}
-          > {estado}
+            color={
+              estado === 'V/T'
+                ? 'primary'
+                : estado === 'V'
+                  ? 'success'
+                  : estado === 'T'
+                    ? 'warning'
+                    : estado === 'LIBRE'
+                      ? 'default'
+                      : 'default'
+            }
+          >
+            {estado}
           </Chip>
         );
       },
