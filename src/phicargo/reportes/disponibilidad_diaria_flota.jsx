@@ -17,7 +17,7 @@ import CustomNavbar from "@/pages/CustomNavbar";
 const DisponibilidadDiariaFlota = () => {
 
   const now = new Date();
-  const firstDay = new Date(now.getFullYear(), 0, 1);
+  const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
   const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
   const [range, setRange] = useState([firstDay, lastDay]);
 
@@ -81,7 +81,13 @@ const DisponibilidadDiariaFlota = () => {
   const fetchData = async () => {
     try {
       setisLoading(true);
-      const response = await odooApi.get(`/vehicles/disponibilidad_diaria/`);
+      const response = await odooApi.get(`/vehicles/disponibilidad_diaria/`,
+        {
+          params: {
+            fecha_inicio: range[0].toISOString().slice(0, 10),
+            fecha_fin: range[1].toISOString().slice(0, 10),
+          },
+        });
       setData(response.data);
 
       const cols = generateColumns(response.data);
