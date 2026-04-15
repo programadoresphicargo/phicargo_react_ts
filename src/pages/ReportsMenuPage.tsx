@@ -155,7 +155,13 @@ const reports: MenuItemType[] = [
   },
   {
     label: 'Disponibildad Diaria de Flota',
-    path: '/reportes/disponibilidad_diaria',
+    path: '/reportes/disponibilidad_diaria_flota',
+    icon: ganttIcon,
+    requiredPermissions: [288],
+  },
+  {
+    label: 'Disponibildad Diaria de Operadores',
+    path: '/reportes/disponibilidad_diaria_operadores',
     icon: ganttIcon,
     requiredPermissions: [288],
   },

@@ -18,6 +18,7 @@ const KMRecorridos = lazy(() => import('../phicargo/reportes/km_recorridos/index
 const ServiciosCategoria = lazy(() => import('../phicargo/reportes/categoria'));
 const UnidadesTaller = lazy(() => import('../phicargo/reportes/unidades_taller'));
 const DisponibilidadDiariaFlota = lazy(() => import('../phicargo/reportes/disponibilidad_diaria_flota'));
+const DisponibilidadDiariaOperador = lazy(() => import('../phicargo/reportes/disponibilidad_diaria_operador'));
 
 const reportsPermission = 4;
 
@@ -136,12 +137,22 @@ export const ReportsRoutes = () => (
       }
     />
 
-    {/* Reporte de km recorridos */}
+    {/* Reporte disponibilidad flota */}
     <Route
-      path="disponibilidad_diaria"
+      path="disponibilidad_diaria_flota"
       element={
         <Suspense fallback={<LoadingPage />}>
           <DisponibilidadDiariaFlota></DisponibilidadDiariaFlota>
+        </Suspense>
+      }
+    />
+
+    {/* Reporte disponibilidad operador*/}
+    <Route
+      path="disponibilidad_diaria_operadores"
+      element={
+        <Suspense fallback={<LoadingPage />}>
+          <DisponibilidadDiariaOperador></DisponibilidadDiariaOperador>
         </Suspense>
       }
     />

@@ -35,12 +35,12 @@ const DisponibilidadDiariaFlota = () => {
 
     // columnas fijas
     const baseColumns = [
-      { accessorKey: 'name2', header: 'Vehículo' },
+      { accessorKey: 'name', header: 'Operador' },
     ];
 
     // obtener todas las fechas (keys dinámicas)
     const dateKeys = Object.keys(data[0]).filter(
-      (key) => key !== 'name2'
+      (key) => key !== 'name'
     );
 
     // crear columnas dinámicas
@@ -82,7 +82,7 @@ const DisponibilidadDiariaFlota = () => {
   const fetchData = async () => {
     try {
       setisLoading(true);
-      const response = await odooApi.get(`/vehicles/disponibilidad_diaria/`,
+      const response = await odooApi.get(`/drivers/disponibilidad_diaria/`,
         {
           params: {
             fecha_inicio: range[0].toISOString().slice(0, 10),
@@ -127,7 +127,7 @@ const DisponibilidadDiariaFlota = () => {
     columnResizeMode: "onEnd",
     enableColumnPinning: "true",
     initialState: {
-      columnPinning: { left: ['name2'] },
+      columnPinning: { left: ['name'] },
       density: 'compact',
       expanded: false,
       pagination: { pageSize: 80 },
@@ -175,7 +175,7 @@ const DisponibilidadDiariaFlota = () => {
           style={{ flex: 1 }}
           className="tracking-tight font-semibold lg:text-2xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
         >
-          Disponibilidad Diaria Flota
+          Disponibilidad Diaria Operadores
         </h1>
 
         <DateRangePicker
