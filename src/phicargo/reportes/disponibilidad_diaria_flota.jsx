@@ -57,6 +57,7 @@ const DisponibilidadDiariaFlota = () => {
         return (
           <Chip
             className="text-white"
+            size="sm"
             color={
               estado === 'V/T'
                 ? 'primary'
@@ -157,7 +158,7 @@ const DisponibilidadDiariaFlota = () => {
     }),
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 220px)',
+        maxHeight: 'calc(100vh - 190px)',
         overflowX: 'auto',
       },
     },
@@ -189,15 +190,18 @@ const DisponibilidadDiariaFlota = () => {
           onPress={() => EnviarCorreo()}
           color="primary"
           radius="full"
+          isDisabled
+          size="sm"
         >
           Enviar correo
         </Button>
 
         <Button
-          onPress={() => exportToCSV(data, columns, "tipo_armado.csv")}
+          onPress={() => exportToCSV(data, columns, "disponibilidad_flota.csv")}
           color="success"
           className="text-white"
           radius="full"
+          size="sm"
         >
           Exportar
         </Button>
@@ -207,6 +211,7 @@ const DisponibilidadDiariaFlota = () => {
           color="warning"
           className="text-white"
           radius="full"
+          size="sm"
         >
           Recargar
         </Button>
