@@ -28,7 +28,7 @@ interface Conteo {
 
 const DisponibilidadDiariaFlota: React.FC = () => {
   const now = new Date();
-  const firstDay = new Date(now.getFullYear(), 0, 1);
+  const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
   const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
 
   const [range, setRange] = useState<[Date, Date] | null>([
@@ -55,8 +55,9 @@ const DisponibilidadDiariaFlota: React.FC = () => {
 
   // 🚀 Cargar datos
   useEffect(() => {
+    if (!range) return;
     odooApi
-      .get("/vehicles/disponibilidad_diaria/?fecha_inicio=2026-04-01&fecha_fin=2026-04-30")
+      .get(`/vehicles/disponibilidad_diaria/?fecha_inicio=${range[0].toISOString().slice(0, 10)}&fecha_fin=${range[1].toISOString().slice(0, 10)}`)
       .then((res: any) => setData(res.data))
       .catch((err: any) => console.error("Error:", err));
   }, []);
@@ -201,6 +202,7 @@ const DisponibilidadDiariaFlota: React.FC = () => {
       <CustomNavbar />
 
       <div style={{ padding: "10px" }}>
+        <h1>Disponibilidad de flota</h1>
         <input
           type="text"
           placeholder="Buscar operador..."
