@@ -9,6 +9,7 @@ import Travel from "../viajes/control/viaje";
 import { DataGroup } from "vis-timeline";
 import { RecordDetailsModal } from "@/modules/maintenance/components/RecordDetailsModal";
 import { MaintenanceRecord } from "@/modules/maintenance/models";
+import { Progress } from "@heroui/progress";
 
 // 🧠 Tipo de datos del backend
 interface Item {
@@ -56,11 +57,29 @@ const DisponibilidadDiariaFlota: React.FC = () => {
   // 🚀 Cargar datos
   useEffect(() => {
     if (!range) return;
-    odooApi
-      .get(`/vehicles/disponibilidad_diaria/?fecha_inicio=${range[0].toISOString().slice(0, 10)}&fecha_fin=${range[1].toISOString().slice(0, 10)}`)
-      .then((res: any) => setData(res.data))
-      .catch((err: any) => console.error("Error:", err));
-  }, []);
+
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+
+        const [inicio, fin] = range;
+
+        const res = await odooApi.get(
+          `/vehicles/disponibilidad_diaria/?fecha_inicio=${inicio
+            .toISOString()
+            .slice(0, 10)}&fecha_fin=${fin.toISOString().slice(0, 10)}`
+        );
+
+        setData(res.data);
+      } catch (err) {
+        console.error("Error:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [range]);
 
   // 🎯 Render cuando cambian datos o búsqueda
   useEffect(() => {
@@ -189,6 +208,7 @@ const DisponibilidadDiariaFlota: React.FC = () => {
 
   return (
     <div>
+
       <Travel idViaje={idViaje} open={open} handleClose={handleClose} />
 
       {reportDetail && (
@@ -224,6 +244,10 @@ const DisponibilidadDiariaFlota: React.FC = () => {
           format="yyyy-MM-dd"
           loading={isLoading}
         />
+
+        {isLoading && (
+          <Progress isIndeterminate aria-label="Loading..." size="sm" />
+        )}
 
         <div
           ref={containerRef}
