@@ -9,3 +9,17 @@
 .mi-timeline .vis-tooltip {
  font-size: 13px;
 }
+
+/* 🚚 viaje */
+.mi-timeline .vis-item.viaje {
+ background-color: #28a745;
+ border-color: #28a745;
+ color: white;
+}
+
+/* 🔧 taller */
+.mi-timeline .vis-item.taller {
+ background-color: #ffc107;
+ border-color: #ffc107;
+ color: black;
+}
