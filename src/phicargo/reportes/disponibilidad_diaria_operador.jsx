@@ -1,232 +1,91 @@
-import { Button, Chip, DatePicker, NumberInput } from "@heroui/react";
-import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
-import React, { useEffect, useState } from 'react';
-import { download, generateCsv, mkConfig } from 'export-to-csv';
-import { getLocalTimeZone, parseDate } from "@internationalized/date";
-import Badge from 'react-bootstrap/Badge';
-import { Box } from '@mui/material';
-import { Component } from "react";
-import odooApi from '@/api/odoo-api';
-import { toast } from "react-toastify";
-import { useDateFormatter } from "@react-aria/i18n";
-import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import { exportToCSV } from '../utils/export';
-import { DateRangePicker } from 'rsuite';
+import odooApi from "@/api/odoo-api";
 import CustomNavbar from "@/pages/CustomNavbar";
+import React, { useEffect, useRef } from "react";
+import { Timeline } from "vis-timeline/standalone";
+import "vis-timeline/styles/vis-timeline-graph2d.css";
+import "./timeline.css";
 
-const DisponibilidadDiariaFlota = () => {
-
-  const now = new Date();
-  const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
-  const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-  const [range, setRange] = useState([firstDay, lastDay]);
-
-  const [isLoading, setisLoading] = useState('');
-  const [data, setData] = useState([]);
-  const [columns, setColumns] = useState([]);
-
+const DisponibilidadDiariaOperadores = () => {
+  const containerRef = useRef(null);
+  const timelineRef = useRef(null);
+  const [search, setSearch] = React.useState("");
+  const [data, setData] = React.useState([]);
 
   useEffect(() => {
-    fetchData();
-  }, [range]);
+    odooApi
+      .get("/drivers/disponibilidad_diaria/?fecha_inicio=2026-04-01&fecha_fin=2026-04-30")
+      .then(res => setData(res.data));
+  }, []);
 
-  const generateColumns = (data) => {
-    if (!data || data.length === 0) return [];
+  useEffect(() => {
+    if (data.length) {
+      renderTimeline(data);
+    }
+  }, [data, search]);
 
-    // columnas fijas
-    const baseColumns = [
-      { accessorKey: 'name', header: 'Operador' },
-    ];
-
-    // obtener todas las fechas (keys dinámicas)
-    const dateKeys = Object.keys(data[0]).filter(
-      (key) => key !== 'name'
+  const renderTimeline = (data) => {
+    // 🎯 Agrupar conductores
+    let groups = Object.values(
+      data.reduce((acc, item) => {
+        acc[item.driver_id] = {
+          id: item.driver_id,
+          content: item.name
+        };
+        return acc;
+      }, {})
     );
 
-    // crear columnas dinámicas
-    const dynamicColumns = dateKeys.map((date) => ({
-      accessorKey: date,
-      header: date.split('-')[2], // solo día (01, 02, etc)
-      size: 50,
-
-      Cell: ({ cell }) => {
-        const estado = cell.getValue();
-
-        if (!estado) return null;
-
-        return (
-          <Chip
-            className="text-white"
-            size="sm"
-            color={
-              estado === 'V/T'
-                ? 'primary'
-                : estado === 'V'
-                  ? 'success'
-                  : estado === 'T'
-                    ? 'warning'
-                    : estado === 'LIBRE'
-                      ? 'default'
-                      : 'default'
-            }
-          >
-            {estado}
-          </Chip>
-        );
-      },
-    }));
-
-    return [...baseColumns, ...dynamicColumns];
-  };
-
-  const fetchData = async () => {
-    try {
-      setisLoading(true);
-      const response = await odooApi.get(`/drivers/disponibilidad_diaria/`,
-        {
-          params: {
-            fecha_inicio: range[0].toISOString().slice(0, 10),
-            fecha_fin: range[1].toISOString().slice(0, 10),
-          },
-        });
-      setData(response.data);
-
-      const cols = generateColumns(response.data);
-      setColumns(cols);
-
-    } catch (error) {
-      toast.error('Error al enviar los datos: ' + error);
-    } finally {
-      setisLoading(false);
+    // 🔍 FILTRO
+    if (search) {
+      groups = groups.filter(g =>
+        g.content.toLowerCase().includes(search.toLowerCase())
+      );
     }
-  };
 
-  const EnviarCorreo = async () => {
-    try {
-      setisLoading(true);
-      const response = await odooApi.get(`/maintenance-record/email_unidades_taller/`);
-    } catch (error) {
-      toast.error('Error al enviar los datos: ' + error);
-    } finally {
-      setisLoading(false);
+    const groupIds = groups.map(g => g.id);
+
+    // 📊 Items filtrados según grupos visibles
+    const items = data
+      .filter(item => groupIds.includes(item.driver_id))
+      .map(item => ({
+        id: `${item.tipo}-${item.id}`,
+        content: item.nombre,
+        start: item.fecha_inicio,
+        end: item.fecha_fin,
+        group: item.driver_id,
+        className: item.tipo,
+        data: item
+      }));
+
+    // ⚠️ destruir timeline anterior
+    if (timelineRef.current) {
+      timelineRef.current.destroy();
     }
+
+    timelineRef.current = new Timeline(
+      containerRef.current,
+      items,
+      groups,
+      { stack: false, orientation: "top" }
+    );
   };
-
-  const table = useMaterialReactTable({
-    columns,
-    data,
-    state: { showProgressBars: isLoading },
-    enableGrouping: true,
-    enableGlobalFilter: true,
-    enableFilters: true,
-    enableBottomToolbar: true,
-    enableStickyHeader: true,
-    enableStickyFooter: true,
-    localization: MRT_Localization_ES,
-    enableColumnAggregations: true,
-    columnResizeMode: "onEnd",
-    enableColumnPinning: "true",
-    initialState: {
-      columnPinning: { left: ['name'] },
-      density: 'compact',
-      expanded: false,
-      pagination: { pageSize: 80 },
-      showColumnFilters: true,
-    },
-    muiTablePaperProps: {
-      elevation: 0,
-      sx: {
-        borderRadius: '0',
-      },
-    },
-    muiTableHeadCellProps: {
-      sx: {
-        fontFamily: 'Inter',
-        fontWeight: 'Bold',
-        fontSize: '14px',
-      },
-    },
-    muiTableBodyCellProps: ({ row }) => ({
-      sx: {
-        backgroundColor: row.subRows?.length ? '#0456cf' : '#FFFFFF',
-        fontFamily: 'Inter',
-        fontWeight: 'normal',
-        fontSize: '14px',
-        color: row.subRows?.length ? '#FFFFFF' : '#000000',
-        padding: '0 !important',
-      },
-    }),
-    muiTableContainerProps: {
-      sx: {
-        maxHeight: 'calc(100vh - 190px)',
-        overflowX: 'auto',
-      },
-    },
-    renderTopToolbarCustomActions: ({ table }) => (
-      <Box
-        sx={{
-          display: 'flex',
-          gap: '16px',
-          padding: '8px',
-          alignItems: 'center',
-        }}
-      >
-        <h1
-          style={{ flex: 1 }}
-          className="tracking-tight font-semibold lg:text-2xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
-        >
-          Disponibilidad Diaria Operadores
-        </h1>
-
-        <DateRangePicker
-          value={range}
-          onChange={(value) => setRange(value)}
-          placeholder="Selecciona un rango de fechas"
-          format="yyyy-MM-dd"
-          loading={isLoading}
-        />
-
-        <Button
-          onPress={() => EnviarCorreo()}
-          color="primary"
-          radius="full"
-          isDisabled
-          size="sm"
-        >
-          Enviar correo
-        </Button>
-
-        <Button
-          onPress={() => exportToCSV(data, columns, "disponibilidad_flota.csv")}
-          color="success"
-          className="text-white"
-          radius="full"
-          size="sm"
-        >
-          Exportar
-        </Button>
-
-        <Button
-          onPress={() => fetchData()}
-          color="warning"
-          className="text-white"
-          radius="full"
-          size="sm"
-        >
-          Recargar
-        </Button>
-      </Box>
-    ),
-  })
 
   return (
-    <>
+    <div>
       <CustomNavbar></CustomNavbar>
-      <MaterialReactTable
-        table={table}
+      <input
+        type="text"
+        placeholder="Buscar conductor..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
       />
-    </>
+      <div
+        ref={containerRef}
+        className="mi-timeline"
+        style={{ height: "100px", border: "1px solid #ccc" }}
+      />
+    </div>
   );
 };
 
-export default DisponibilidadDiariaFlota;
+export default DisponibilidadDiariaOperadores;
