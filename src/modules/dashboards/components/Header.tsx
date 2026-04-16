@@ -65,6 +65,7 @@ export const Header = () => {
           <SelectItem key={1}>{'VERACRUZ'}</SelectItem>
           <SelectItem key={9}>{'MANZANILLO'}</SelectItem>
           <SelectItem key={2}>{'MÉXICO'}</SelectItem>
+          <SelectItem key={160}>{'ALTAMIRA'}</SelectItem>
         </Select>
       </div>
       <DatePicker />
