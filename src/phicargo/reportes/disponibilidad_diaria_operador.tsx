@@ -215,9 +215,7 @@ const DisponibilidadDiariaOperadores: React.FC = () => {
         if (tipo === "viaje") {
           setIDViaje(id);
           handleClickOpen();
-        } else {
-          handleOpen(id);
-        }
+        } 
       }
     });
   };
