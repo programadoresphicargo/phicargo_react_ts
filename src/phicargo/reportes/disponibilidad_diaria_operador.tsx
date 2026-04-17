@@ -14,7 +14,7 @@ import Travel from "../viajes/control/viaje";
 interface TravelItem {
   driver_id: number;
   name: string;
-  tipo: "viaje" | "taller";
+  tipo: "viaje" | "permiso";
   id: number;
   nombre: string;
   fecha_inicio: string;
@@ -116,21 +116,21 @@ const DisponibilidadDiariaOperadores: React.FC = () => {
     if (!containerRef.current) return;
 
     // 🧠 1. Contar viajes y talleres por operador
-    const conteo: Record<number, { viajes: number; taller: number }> = data.reduce(
+    const conteo: Record<number, { viajes: number; permiso: number }> = data.reduce(
       (acc, item) => {
         if (!acc[item.driver_id]) {
-          acc[item.driver_id] = { viajes: 0, taller: 0 };
+          acc[item.driver_id] = { viajes: 0, permiso: 0 };
         }
 
         if (item.tipo === "viaje") {
           acc[item.driver_id].viajes++;
         } else {
-          acc[item.driver_id].taller++;
+          acc[item.driver_id].permiso++;
         }
 
         return acc;
       },
-      {} as Record<number, { viajes: number; taller: number }>
+      {} as Record<number, { viajes: number; permiso: number }>
     );
 
     // 🎯 2. Crear grupos
@@ -146,7 +146,7 @@ const DisponibilidadDiariaOperadores: React.FC = () => {
               <div class="grupo-row">
                 <div class="nombre">${item.name}</div>
                 <div class="stats">
-                  🚚 ${stats.viajes} | 🔧 ${stats.taller}
+                  🚚 ${stats.viajes} | 📄 ${stats.permiso}
                 </div>
               </div>
             `,
@@ -178,7 +178,9 @@ const DisponibilidadDiariaOperadores: React.FC = () => {
         title: `
           <b>${item.nombre}</b><br/>
           Tipo: ${item.tipo}<br/>
-          ID: ${item.id}
+          ID: ${item.id}<br/>
+          Inicio: ${item.fecha_inicio}<br/>
+          Fin: ${item.fecha_fin}<br/>
         `,
         data: item,
       }));
@@ -194,7 +196,7 @@ const DisponibilidadDiariaOperadores: React.FC = () => {
       items,
       groups,
       {
-        stack: false,
+        stack: true,
         orientation: "top",
         zoomMin: 1000 * 60 * 60 * 24,
         zoomMax: 1000 * 60 * 60 * 24 * 60,
