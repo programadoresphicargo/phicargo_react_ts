@@ -25,7 +25,7 @@
 }
 
 .mi-timeline .vis-item.asignacion {
- background-color: #00a2ff;
- border-color: #00a2ff;
- color: rgb(255, 255, 255);
+ background-color: #ececec;
+ border-color: #ececec;
+ color: black;
 }
