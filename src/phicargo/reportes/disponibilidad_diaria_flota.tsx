@@ -31,7 +31,7 @@ interface Conteo {
 const DisponibilidadDiariaFlota: React.FC = () => {
   const now = new Date();
   const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
-  const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+  const lastDay = now;
 
   const [range, setRange] = useState<[Date, Date] | null>([
     firstDay,
