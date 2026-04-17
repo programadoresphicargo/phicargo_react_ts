@@ -225,25 +225,40 @@ const DisponibilidadDiariaFlota: React.FC = () => {
       <CustomNavbar />
 
       <div style={{ padding: "10px" }}>
-        <h1>Disponibilidad de flota</h1>
-        <Input
-          className="max-w-xs"
-          label="Buscar vehiculo..."
-          value={search}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setSearch(e.target.value)
-          }
-        />
 
-        <DateRangePicker
-          value={range}
-          onChange={(value: any) => setRange(value)}
-          placeholder="Selecciona un rango de fechas"
-          format="yyyy-MM-dd"
-          loading={isLoading}
-        />
+        <div className="flex items-start gap-4 flex-wrap">
+          <h1 className="text-xl font-semibold whitespace-nowrap">
+            Disponibilidad de flota
+          </h1>
 
-        <Button color="success" onPress={() => fetchData()} radius="full" className="text-white">Recargar</Button>
+          <Input
+            size="sm"
+            variant="bordered"
+            className="max-w-xs"
+            label="Buscar vehiculo..."
+            value={search}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setSearch(e.target.value)
+            }
+          />
+
+          <DateRangePicker
+            value={range}
+            onChange={(value: any) => setRange(value)}
+            placeholder="Selecciona un rango de fechas"
+            format="yyyy-MM-dd"
+            loading={isLoading}
+          />
+
+          <Button
+            color="success"
+            onPress={() => fetchData()}
+            radius="full"
+            className="text-white"
+          >
+            Recargar
+          </Button>
+        </div>
 
         {isLoading && (
           <Progress isIndeterminate aria-label="Loading..." size="sm" />

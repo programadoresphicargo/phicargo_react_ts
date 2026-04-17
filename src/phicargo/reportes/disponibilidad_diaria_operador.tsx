@@ -9,6 +9,8 @@ import { MaintenanceRecord } from "@/modules/maintenance/models";
 import { Progress } from "@heroui/progress";
 import { DateRangePicker } from "rsuite";
 import Travel from "../viajes/control/viaje";
+import { Input } from "@heroui/input";
+import { Button } from "@heroui/react";
 
 // 🧠 Tipos base
 interface TravelItem {
@@ -71,30 +73,28 @@ const DisponibilidadDiariaOperadores: React.FC = () => {
     setOpenReport(true);
   };
 
+  const fetchData = async () => {
+    if (!range) return;
+    try {
+      setIsLoading(true);
+
+      const [inicio, fin] = range;
+
+      const res = await odooApi.get(
+        `/drivers/disponibilidad_diaria/?fecha_inicio=${inicio
+          .toISOString()
+          .slice(0, 10)}&fecha_fin=${fin.toISOString().slice(0, 10)}`
+      );
+
+      setData(res.data);
+    } catch (err) {
+      console.error("Error:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   // 🚀 Cargar datos
   useEffect(() => {
-    if (!range) return;
-
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-
-        const [inicio, fin] = range;
-
-        const res = await odooApi.get(
-          `/drivers/disponibilidad_diaria/?fecha_inicio=${inicio
-            .toISOString()
-            .slice(0, 10)}&fecha_fin=${fin.toISOString().slice(0, 10)}`
-        );
-
-        setData(res.data);
-      } catch (err) {
-        console.error("Error:", err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchData();
   }, [range]);
 
@@ -238,28 +238,38 @@ const DisponibilidadDiariaOperadores: React.FC = () => {
       <CustomNavbar />
 
       <div style={{ padding: "10px" }}>
-        <h1>Disponibilidad de operadores</h1>
-        <input
-          type="text"
-          placeholder="Buscar operador..."
-          value={search}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setSearch(e.target.value)
-          }
-          style={{
-            padding: "5px",
-            width: "250px",
-            marginBottom: "10px"
-          }}
-        />
+        <div className="flex items-start gap-4 flex-wrap">
+          <h1 className="text-xl font-semibold whitespace-nowrap">
+            Disponibilidad de operadores
+          </h1>
+          <Input
+            size="sm"
+            variant="bordered"
+            className="max-w-xs"
+            label="Buscar operador..."
+            value={search}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setSearch(e.target.value)
+            }
+          />
 
-        <DateRangePicker
-          value={range}
-          onChange={(value: any) => setRange(value)}
-          placeholder="Selecciona un rango de fechas"
-          format="yyyy-MM-dd"
-          loading={isLoading}
-        />
+          <DateRangePicker
+            value={range}
+            onChange={(value: any) => setRange(value)}
+            placeholder="Selecciona un rango de fechas"
+            format="yyyy-MM-dd"
+            loading={isLoading}
+          />
+
+          <Button
+            color="success"
+            onPress={() => fetchData()}
+            radius="full"
+            className="text-white"
+          >
+            Recargar
+          </Button>
+        </div>
 
         {isLoading && (
           <Progress isIndeterminate aria-label="Loading..." size="sm" />
