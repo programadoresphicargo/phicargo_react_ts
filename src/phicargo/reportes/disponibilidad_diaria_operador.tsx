@@ -4,17 +4,15 @@ import React, { useEffect, useRef, useState } from "react";
 import { Timeline } from "vis-timeline/standalone";
 import "vis-timeline/styles/vis-timeline-graph2d.css";
 import "./timeline.css";
-import { DateRangePicker } from "rsuite";
-import Travel from "../viajes/control/viaje";
-import { DataGroup } from "vis-timeline";
 import { RecordDetailsModal } from "@/modules/maintenance/components/RecordDetailsModal";
 import { MaintenanceRecord } from "@/modules/maintenance/models";
 import { Progress } from "@heroui/progress";
-import { Input } from "@heroui/input";
+import { DateRangePicker } from "rsuite";
+import Travel from "../viajes/control/viaje";
 
-// 🧠 Tipo de datos del backend
-interface Item {
-  vehicle_id: number;
+// 🧠 Tipos base
+interface TravelItem {
+  driver_id: number;
   name: string;
   tipo: "viaje" | "taller";
   id: number;
@@ -23,12 +21,30 @@ interface Item {
   fecha_fin: string;
 }
 
-interface Conteo {
-  viajes: number;
-  taller: number;
+interface TimelineItem {
+  id: string;
+  content: string;
+  start: string;
+  end: string;
+  group: number;
+  className: string;
+  title: string;
+  data: TravelItem;
 }
 
-const DisponibilidadDiariaFlota: React.FC = () => {
+interface Group {
+  id: number;
+  name: string;
+  content: string;
+}
+
+const DisponibilidadDiariaOperadores: React.FC = () => {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const timelineRef = useRef<Timeline | null>(null);
+
+  const [search, setSearch] = useState<string>("");
+  const [data, setData] = useState<TravelItem[]>([]);
+
   const now = new Date();
   const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
   const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
@@ -40,20 +56,20 @@ const DisponibilidadDiariaFlota: React.FC = () => {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  const [openReport, setOpenReport] = useState(false);
+  const [reportDetail, setReportDetail] = useState<MaintenanceRecord | null>(null);
+
   const [open, setOpen] = useState<boolean>(false);
   const [idViaje, setIDViaje] = useState<number | null>(null);
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const timelineRef = useRef<Timeline | null>(null);
-
-  const [search, setSearch] = useState<string>("");
-  const [data, setData] = useState<Item[]>([]);
-
-  const [openReport, setOpenReport] = useState(false);
-  const [reportDetail, setReportDetail] = useState<MaintenanceRecord | null>(null);
+  const handleOpen = async (id: number) => {
+    const response = await odooApi.get(`/maintenance-record/${id}`);
+    setReportDetail(response.data);
+    setOpenReport(true);
+  };
 
   // 🚀 Cargar datos
   useEffect(() => {
@@ -66,7 +82,7 @@ const DisponibilidadDiariaFlota: React.FC = () => {
         const [inicio, fin] = range;
 
         const res = await odooApi.get(
-          `/vehicles/disponibilidad_diaria/?fecha_inicio=${inicio
+          `/drivers/disponibilidad_diaria/?fecha_inicio=${inicio
             .toISOString()
             .slice(0, 10)}&fecha_fin=${fin.toISOString().slice(0, 10)}`
         );
@@ -96,32 +112,36 @@ const DisponibilidadDiariaFlota: React.FC = () => {
     };
   }, [data, search]);
 
-  const renderTimeline = (data: Item[]) => {
+  const renderTimeline = (data: TravelItem[]) => {
     if (!containerRef.current) return;
 
-    // 🧠 1. Conteo
-    const conteo: Record<number, Conteo> = data.reduce(
+    // 🧠 1. Contar viajes y talleres por operador
+    const conteo: Record<number, { viajes: number; taller: number }> = data.reduce(
       (acc, item) => {
-        if (!acc[item.vehicle_id]) {
-          acc[item.vehicle_id] = { viajes: 0, taller: 0 };
+        if (!acc[item.driver_id]) {
+          acc[item.driver_id] = { viajes: 0, taller: 0 };
         }
 
-        if (item.tipo === "viaje") acc[item.vehicle_id].viajes++;
-        else acc[item.vehicle_id].taller++;
+        if (item.tipo === "viaje") {
+          acc[item.driver_id].viajes++;
+        } else {
+          acc[item.driver_id].taller++;
+        }
 
         return acc;
       },
-      {} as Record<number, Conteo>
+      {} as Record<number, { viajes: number; taller: number }>
     );
 
-    // 🎯 2. Grupos
-    let groups = Object.values(
-      data.reduce((acc: Record<number, DataGroup & { name: string }>, item) => {
-        if (!acc[item.vehicle_id]) {
-          const stats = conteo[item.vehicle_id];
+    // 🎯 2. Crear grupos
+    let groups: Group[] = Object.values(
+      data.reduce((acc: Record<number, Group>, item) => {
+        if (!acc[item.driver_id]) {
+          const stats = conteo[item.driver_id];
 
-          acc[item.vehicle_id] = {
-            id: item.vehicle_id,
+          acc[item.driver_id] = {
+            id: item.driver_id,
+            name: item.name,
             content: `
               <div class="grupo-row">
                 <div class="nombre">${item.name}</div>
@@ -130,40 +150,37 @@ const DisponibilidadDiariaFlota: React.FC = () => {
                 </div>
               </div>
             `,
-            name: item.name // 👈 propiedad extra
           };
         }
         return acc;
       }, {})
-    ) as (DataGroup & { name: string })[];
+    );
 
-    // 🔍 3. Filtro
+    // 🔍 3. Filtro por búsqueda
     if (search) {
-      groups = groups.filter((g: any) =>
+      groups = groups.filter((g) =>
         g.name.toLowerCase().includes(search.toLowerCase())
       );
     }
 
-    const groupIds = groups.map((g: any) => g.id);
+    const groupIds = groups.map((g) => g.id);
 
-    // 📊 4. Items
-    const items = data
-      .filter((item) => groupIds.includes(item.vehicle_id))
+    // 📊 4. Items filtrados
+    const items: TimelineItem[] = data
+      .filter((item) => groupIds.includes(item.driver_id))
       .map((item) => ({
         id: `${item.tipo}-${item.id}`,
         content: item.nombre,
         start: item.fecha_inicio,
         end: item.fecha_fin,
-        group: item.vehicle_id,
+        group: item.driver_id,
         className: item.tipo,
         title: `
           <b>${item.nombre}</b><br/>
           Tipo: ${item.tipo}<br/>
-          ID: ${item.id}<br/>
-          Inicio: ${item.fecha_inicio}<br/>
-          Fin: ${item.fecha_fin}<br/>
+          ID: ${item.id}
         `,
-        data: item
+        data: item,
       }));
 
     // 🧹 destruir anterior
@@ -177,18 +194,12 @@ const DisponibilidadDiariaFlota: React.FC = () => {
       items,
       groups,
       {
-        stack: true,
+        stack: false,
         orientation: "top",
         zoomMin: 1000 * 60 * 60 * 24,
-        zoomMax: 1000 * 60 * 60 * 24 * 60
+        zoomMax: 1000 * 60 * 60 * 24 * 60,
       }
     );
-
-    const handleOpen = async (id: number) => {
-      const response = await odooApi.get(`/maintenance-record/${id}`);
-      setReportDetail(response.data);
-      setOpenReport(true);
-    };
 
     // 🖱️ Click
     timelineRef.current.on("select", (props: any) => {
@@ -202,7 +213,7 @@ const DisponibilidadDiariaFlota: React.FC = () => {
         if (tipo === "viaje") {
           setIDViaje(id);
           handleClickOpen();
-        } else if (tipo === "taller") {
+        } else {
           handleOpen(id);
         }
       }
@@ -225,14 +236,19 @@ const DisponibilidadDiariaFlota: React.FC = () => {
       <CustomNavbar />
 
       <div style={{ padding: "10px" }}>
-        <h1>Disponibilidad de flota</h1>
-        <Input
-          className="max-w-xs"
-          label="Buscar vehiculo..."
+        <h1>Disponibilidad de operadores</h1>
+        <input
+          type="text"
+          placeholder="Buscar operador..."
           value={search}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setSearch(e.target.value)
           }
+          style={{
+            padding: "5px",
+            width: "250px",
+            marginBottom: "10px"
+          }}
         />
 
         <DateRangePicker
@@ -252,7 +268,7 @@ const DisponibilidadDiariaFlota: React.FC = () => {
           className="mi-timeline"
           style={{
             height: "500px",
-            border: "1px solid #ccc"
+            border: "1px solid #ccc",
           }}
         />
       </div>
@@ -260,4 +276,4 @@ const DisponibilidadDiariaFlota: React.FC = () => {
   );
 };
 
-export default DisponibilidadDiariaFlota;
+export default DisponibilidadDiariaOperadores;
