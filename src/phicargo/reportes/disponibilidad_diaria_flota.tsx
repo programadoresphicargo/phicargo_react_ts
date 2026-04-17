@@ -11,6 +11,7 @@ import { RecordDetailsModal } from "@/modules/maintenance/components/RecordDetai
 import { MaintenanceRecord } from "@/modules/maintenance/models";
 import { Progress } from "@heroui/progress";
 import { Input } from "@heroui/input";
+import { Button } from "@heroui/react";
 
 // 🧠 Tipo de datos del backend
 interface Item {
@@ -55,30 +56,29 @@ const DisponibilidadDiariaFlota: React.FC = () => {
   const [openReport, setOpenReport] = useState(false);
   const [reportDetail, setReportDetail] = useState<MaintenanceRecord | null>(null);
 
-  // 🚀 Cargar datos
-  useEffect(() => {
+  const fetchData = async () => {
     if (!range) return;
 
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
+    try {
+      setIsLoading(true);
 
-        const [inicio, fin] = range;
+      const [inicio, fin] = range;
 
-        const res = await odooApi.get(
-          `/vehicles/disponibilidad_diaria/?fecha_inicio=${inicio
-            .toISOString()
-            .slice(0, 10)}&fecha_fin=${fin.toISOString().slice(0, 10)}`
-        );
+      const res = await odooApi.get(
+        `/vehicles/disponibilidad_diaria/?fecha_inicio=${inicio
+          .toISOString()
+          .slice(0, 10)}&fecha_fin=${fin.toISOString().slice(0, 10)}`
+      );
 
-        setData(res.data);
-      } catch (err) {
-        console.error("Error:", err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
+      setData(res.data);
+    } catch (err) {
+      console.error("Error:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  // 🚀 Cargar datos
+  useEffect(() => {
     fetchData();
   }, [range]);
 
@@ -242,6 +242,8 @@ const DisponibilidadDiariaFlota: React.FC = () => {
           format="yyyy-MM-dd"
           loading={isLoading}
         />
+
+        <Button color="success" onPress={() => fetchData()} radius="full" className="text-white">Recargar</Button>
 
         {isLoading && (
           <Progress isIndeterminate aria-label="Loading..." size="sm" />
