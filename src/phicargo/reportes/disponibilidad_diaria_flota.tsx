@@ -22,11 +22,14 @@ interface Item {
   nombre: string;
   fecha_inicio: string;
   fecha_fin: string;
+  dias: number;
 }
 
 interface Conteo {
   viajes: number;
   taller: number;
+  dias_viajes: number;
+  dias_taller: number;
 }
 
 const DisponibilidadDiariaFlota: React.FC = () => {
@@ -103,11 +106,16 @@ const DisponibilidadDiariaFlota: React.FC = () => {
     const conteo: Record<number, Conteo> = data.reduce(
       (acc, item) => {
         if (!acc[item.vehicle_id]) {
-          acc[item.vehicle_id] = { viajes: 0, taller: 0 };
+          acc[item.vehicle_id] = { viajes: 0, taller: 0, dias_viajes: 0, dias_taller: 0 };
         }
 
-        if (item.tipo === "viaje") acc[item.vehicle_id].viajes++;
-        else acc[item.vehicle_id].taller++;
+        if (item.tipo === "viaje") {
+          acc[item.vehicle_id].viajes++;
+          acc[item.vehicle_id].dias_viajes += item.dias || 0;
+        } else if (item.tipo === "taller") {
+          acc[item.vehicle_id].taller++;
+          acc[item.vehicle_id].dias_taller += item.dias || 0;
+        }
 
         return acc;
       },
@@ -126,8 +134,11 @@ const DisponibilidadDiariaFlota: React.FC = () => {
               <div class="grupo-row">
                 <div class="nombre">${item.name}</div>
                 <div class="stats">
-                  🚚 ${stats.viajes} | 🔧 ${stats.taller}
+                  🚚 ${stats.viajes} viajes | 🕒 ${stats.dias_viajes} días
                 </div>
+                <div class="stats">
+                🔧 ${stats.taller} reportes | 🕒 ${stats.dias_taller} días
+              </div>
               </div>
             `,
             name: item.name // 👈 propiedad extra
