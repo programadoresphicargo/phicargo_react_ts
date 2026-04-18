@@ -109,6 +109,7 @@ const Asignaciones = () => {
           );
         },
       },
+      { accessorKey: 'puesto', header: 'Puesto' },
       { accessorKey: 'marca', header: 'Marca' },
       { accessorKey: 'modelo', header: 'Modelo' },
       { accessorKey: 'imei', header: 'IMEI' },
