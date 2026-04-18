@@ -9,16 +9,18 @@ import { DateRangePicker } from "rsuite";
 import Travel from "../viajes/control/viaje";
 import { Input } from "@heroui/input";
 import { Button } from "@heroui/react";
+import * as XLSX from "xlsx";
 
 // 🧠 Tipos base
 interface TravelItem {
   driver_id: number;
   name: string;
-  tipo: "viaje" | "permiso";
+  tipo: "viaje" | "permiso" | "asignacion";
   id: number;
   nombre: string;
   fecha_inicio: string;
   fecha_fin: string;
+  dias: number;
 }
 
 interface TimelineItem {
@@ -36,6 +38,13 @@ interface Group {
   id: number;
   name: string;
   content: string;
+}
+
+interface Conteo {
+  viajes: number;
+  permiso: number;
+  dias_viajes: number;
+  dias_taller: number;
 }
 
 const DisponibilidadDiariaOperadores: React.FC = () => {
@@ -104,21 +113,23 @@ const DisponibilidadDiariaOperadores: React.FC = () => {
     if (!containerRef.current) return;
 
     // 🧠 1. Contar viajes y talleres por operador
-    const conteo: Record<number, { viajes: number; permiso: number }> = data.reduce(
+    const conteo: Record<number, Conteo> = data.reduce(
       (acc, item) => {
         if (!acc[item.driver_id]) {
-          acc[item.driver_id] = { viajes: 0, permiso: 0 };
+          acc[item.driver_id] = { viajes: 0, permiso: 0, dias_viajes: 0, dias_taller: 0 };
         }
 
         if (item.tipo === "viaje") {
           acc[item.driver_id].viajes++;
-        } else {
+          acc[item.driver_id].dias_viajes += item.dias || 0;
+        } else if (item.tipo === "permiso") {
           acc[item.driver_id].permiso++;
+          acc[item.driver_id].dias_taller += item.dias || 0;
         }
 
         return acc;
       },
-      {} as Record<number, { viajes: number; permiso: number }>
+      {} as Record<number, Conteo>
     );
 
     // 🎯 2. Crear grupos
@@ -131,12 +142,15 @@ const DisponibilidadDiariaOperadores: React.FC = () => {
             id: item.driver_id,
             name: item.name,
             content: `
-              <div class="grupo-row">
-                <div class="nombre">${item.name}</div>
-                <div class="stats">
-                  🚚 ${stats.viajes} | 📄 ${stats.permiso}
-                </div>
+            <div class="grupo-row">
+              <div class="nombre">${item.name}</div>
+              <div class="stats">
+                🚚 ${stats.viajes} viajes | 🕒 ${stats.dias_viajes} días
               </div>
+              <div class="stats">
+              🔧 ${stats.permiso} reportes | 🕒 ${stats.dias_taller} días
+            </div>
+          </div>
             `,
           };
         }
@@ -208,6 +222,100 @@ const DisponibilidadDiariaOperadores: React.FC = () => {
     });
   };
 
+  const exportToExcel = () => {
+    if (!range || !data.length) return;
+
+    const [inicio, fin] = range;
+
+    const startDate = new Date(inicio);
+    const endDate = new Date(fin);
+
+    // 📅 días como YYYY-MM-DD (clave correcta)
+    const days: string[] = [];
+    let temp = new Date(startDate);
+
+    while (temp <= endDate) {
+      days.push(temp.toISOString().slice(0, 10));
+      temp.setDate(temp.getDate() + 1);
+    }
+
+    // 🚚 filtrar tipos
+    const filteredData = data.filter(d => d.tipo !== "asignacion");
+
+    // 🚚 vehículos únicos
+    const vehicles = [...new Set(filteredData.map((d) => d.name))];
+
+    const result: any[] = [];
+
+    vehicles.forEach((vehicle) => {
+      const row: any = { name: vehicle };
+
+      let diasViaje = 0;
+      let diasTaller = 0;
+
+      // inicializar columnas
+      days.forEach((d) => {
+        row[d] = "";
+      });
+
+      const events = filteredData.filter((d) => d.name === vehicle);
+
+      events.forEach((event) => {
+        // 🔢 sumar días
+        if (event.tipo === "viaje") {
+          diasViaje += event.dias || 0;
+        }
+
+        if (event.tipo === "permiso") {
+          diasTaller += event.dias || 0;
+        }
+
+        let start = new Date(event.fecha_inicio);
+        let end = new Date(event.fecha_fin);
+
+        let current = new Date(start);
+
+        while (current <= end) {
+          const dayKey = current.toISOString().slice(0, 10);
+
+          if (days.includes(dayKey)) {
+            if (row[dayKey]) {
+              row[dayKey] += `, ${event.tipo}`;
+            } else {
+              row[dayKey] = event.tipo;
+            }
+          }
+
+          current.setDate(current.getDate() + 1);
+        }
+      });
+
+      // ➕ columnas resumen
+      row["dias_viaje"] = diasViaje;
+      row["dias_taller"] = diasTaller;
+
+      result.push(row);
+    });
+
+    // 📄 headers ordenados
+    const headers = [
+      "name",
+      "dias_viaje",
+      "dias_taller",
+      ...days
+    ];
+
+    const worksheet = XLSX.utils.json_to_sheet(result, {
+      header: headers
+    });
+
+    const workbook = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Disponibilidad");
+
+    XLSX.writeFile(workbook, "disponibilidad_flota.xlsx");
+  };
+
   return (
     <div>
 
@@ -244,9 +352,20 @@ const DisponibilidadDiariaOperadores: React.FC = () => {
             onPress={() => fetchData()}
             radius="full"
             className="text-white"
+            size="sm"
           >
             Recargar
           </Button>
+
+          <Button
+            color="primary"
+            onPress={exportToExcel}
+            radius="full"
+            size="sm"
+          >
+            Exportar Excel
+          </Button>
+
         </div>
 
         {isLoading && (

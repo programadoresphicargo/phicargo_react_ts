@@ -12,12 +12,13 @@ import { MaintenanceRecord } from "@/modules/maintenance/models";
 import { Progress } from "@heroui/progress";
 import { Input } from "@heroui/input";
 import { Button } from "@heroui/react";
+import * as XLSX from "xlsx";
 
 // 🧠 Tipo de datos del backend
 interface Item {
   vehicle_id: number;
   name: string;
-  tipo: "viaje" | "taller";
+  tipo: "viaje" | "taller" | "asignacion";
   id: number;
   nombre: string;
   fecha_inicio: string;
@@ -58,6 +59,97 @@ const DisponibilidadDiariaFlota: React.FC = () => {
 
   const [openReport, setOpenReport] = useState(false);
   const [reportDetail, setReportDetail] = useState<MaintenanceRecord | null>(null);
+
+  const exportToExcel = () => {
+    if (!range || !data.length) return;
+
+    const [inicio, fin] = range;
+
+    const startDate = new Date(inicio);
+    const endDate = new Date(fin);
+
+    // ✅ usar fechas completas
+    const days: string[] = [];
+    let temp = new Date(startDate);
+
+    while (temp <= endDate) {
+      days.push(temp.toISOString().slice(0, 10)); // 👈 clave correcta
+      temp.setDate(temp.getDate() + 1);
+    }
+
+    const filteredData = data.filter(d => d.tipo !== "asignacion");
+    const vehicles = [...new Set(filteredData.map((d) => d.name))];
+
+    const result: any[] = [];
+
+    vehicles.forEach((vehicle) => {
+      const row: any = { name: vehicle };
+
+      let diasViaje = 0;
+      let diasTaller = 0;
+
+      // inicializar columnas
+      days.forEach((d) => {
+        row[d] = "";
+      });
+
+      const events = filteredData.filter((d) => d.name === vehicle);
+
+      events.forEach((event) => {
+        // 🔢 sumar días
+        if (event.tipo === "viaje") {
+          diasViaje += event.dias || 0;
+        }
+
+        if (event.tipo === "taller") {
+          diasTaller += event.dias || 0;
+        }
+
+        let start = new Date(event.fecha_inicio);
+        let end = new Date(event.fecha_fin);
+
+        let current = new Date(start);
+
+        while (current <= end) {
+          const dayKey = current.toISOString().slice(0, 10);
+
+          if (days.includes(dayKey)) {
+            if (row[dayKey]) {
+              row[dayKey] += `, ${event.tipo}`;
+            } else {
+              row[dayKey] = event.tipo;
+            }
+          }
+
+          current.setDate(current.getDate() + 1);
+        }
+      });
+
+      // columnas resumen
+      row["dias_viaje"] = diasViaje;
+      row["dias_taller"] = diasTaller;
+
+      result.push(row);
+    });
+
+    // 📄 headers (orden correcto)
+    const headers = [
+      "name",
+      "dias_viaje",
+      "dias_taller",
+      ...days,
+    ];
+
+    const worksheet = XLSX.utils.json_to_sheet(result, {
+      header: headers
+    });
+
+    const workbook = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Disponibilidad");
+
+    XLSX.writeFile(workbook, "disponibilidad_flota.xlsx");
+  };
 
   const fetchData = async () => {
     if (!range) return;
@@ -266,8 +358,18 @@ const DisponibilidadDiariaFlota: React.FC = () => {
             onPress={() => fetchData()}
             radius="full"
             className="text-white"
+            size="sm"
           >
             Recargar
+          </Button>
+
+          <Button
+            color="primary"
+            onPress={exportToExcel}
+            radius="full"
+            size="sm"
+          >
+            Exportar Excel
           </Button>
         </div>
 
