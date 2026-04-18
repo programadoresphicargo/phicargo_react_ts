@@ -4,8 +4,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { Timeline } from "vis-timeline/standalone";
 import "vis-timeline/styles/vis-timeline-graph2d.css";
 import "./timeline.css";
-import { RecordDetailsModal } from "@/modules/maintenance/components/RecordDetailsModal";
-import { MaintenanceRecord } from "@/modules/maintenance/models";
 import { Progress } from "@heroui/progress";
 import { DateRangePicker } from "rsuite";
 import Travel from "../viajes/control/viaje";
@@ -57,21 +55,11 @@ const DisponibilidadDiariaOperadores: React.FC = () => {
   ]);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const [openReport, setOpenReport] = useState(false);
-  const [reportDetail, setReportDetail] = useState<MaintenanceRecord | null>(null);
-
   const [open, setOpen] = useState<boolean>(false);
   const [idViaje, setIDViaje] = useState<number | null>(null);
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
-  const handleOpen = async (id: number) => {
-    const response = await odooApi.get(`/maintenance-record/${id}`);
-    setReportDetail(response.data);
-    setOpenReport(true);
-  };
 
   const fetchData = async () => {
     if (!range) return;
@@ -215,7 +203,7 @@ const DisponibilidadDiariaOperadores: React.FC = () => {
         if (tipo === "viaje") {
           setIDViaje(id);
           handleClickOpen();
-        } 
+        }
       }
     });
   };
@@ -224,14 +212,6 @@ const DisponibilidadDiariaOperadores: React.FC = () => {
     <div>
 
       <Travel idViaje={idViaje} open={open} handleClose={handleClose} />
-
-      {reportDetail && (
-        <RecordDetailsModal
-          open={openReport}
-          onClose={() => setOpenReport(false)}
-          record={reportDetail}
-        />
-      )}
 
       <CustomNavbar />
 
