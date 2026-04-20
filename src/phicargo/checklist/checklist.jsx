@@ -54,7 +54,8 @@ const Checklist = () => {
       },
     },
     { accessorKey: 'nombre', header: 'Usuario creacion' },
-    { accessorKey: 'fecha', header: 'Fecha creacion' },
+    { accessorKey: 'fecha', header: 'Fecha' },
+    { accessorKey: 'fecha_creacion', header: 'Fecha creacion' },
     {
       accessorFn: (row) => {
         const map = {
@@ -114,7 +115,7 @@ const Checklist = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 220px)',
+        maxHeight: 'calc(100vh - 200px)',
       },
     },
     muiTableBodyCellProps: ({ row }) => ({
