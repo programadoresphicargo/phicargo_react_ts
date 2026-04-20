@@ -18,7 +18,7 @@ import * as XLSX from "xlsx";
 interface Item {
   vehicle_id: number;
   name: string;
-  tipo: "viaje" | "taller" | "asignacion";
+  tipo: "viaje" | "taller" | "asignacion" | "sin_asignar";
   id: number;
   nombre: string;
   fecha_inicio: string;
@@ -31,6 +31,8 @@ interface Conteo {
   taller: number;
   dias_viajes: number;
   dias_taller: number;
+  dias_asignacion: number;
+  dias_sin_asignar: number;
 }
 
 const DisponibilidadDiariaFlota: React.FC = () => {
@@ -77,8 +79,7 @@ const DisponibilidadDiariaFlota: React.FC = () => {
       temp.setDate(temp.getDate() + 1);
     }
 
-    const filteredData = data.filter(d => d.tipo !== "asignacion");
-    const vehicles = [...new Set(filteredData.map((d) => d.name))];
+    const vehicles = [...new Set(data.map((d) => d.name))];
 
     const result: any[] = [];
 
@@ -87,13 +88,15 @@ const DisponibilidadDiariaFlota: React.FC = () => {
 
       let diasViaje = 0;
       let diasTaller = 0;
+      let diasAsignado = 0;
+      let diasSinAsignacion = 0;
 
       // inicializar columnas
       days.forEach((d) => {
         row[d] = "";
       });
 
-      const events = filteredData.filter((d) => d.name === vehicle);
+      const events = data.filter((d) => d.name === vehicle);
 
       events.forEach((event) => {
         // 🔢 sumar días
@@ -103,6 +106,14 @@ const DisponibilidadDiariaFlota: React.FC = () => {
 
         if (event.tipo === "taller") {
           diasTaller += event.dias || 0;
+        }
+
+        if (event.tipo === "asignacion") {
+          diasAsignado += event.dias || 0;
+        }
+
+        if (event.tipo === "sin_asignar") {
+          diasSinAsignacion += event.dias || 0;
         }
 
         let start = new Date(event.fecha_inicio);
@@ -128,7 +139,8 @@ const DisponibilidadDiariaFlota: React.FC = () => {
       // columnas resumen
       row["dias_viaje"] = diasViaje;
       row["dias_taller"] = diasTaller;
-
+      row["dias_asignado"] = diasAsignado;
+      row["dias_sin_asignacion"] = diasSinAsignacion;
       result.push(row);
     });
 
@@ -137,6 +149,8 @@ const DisponibilidadDiariaFlota: React.FC = () => {
       "name",
       "dias_viaje",
       "dias_taller",
+      "dias_asignado",
+      "dias_sin_asignacion",
       ...days,
     ];
 
@@ -198,7 +212,7 @@ const DisponibilidadDiariaFlota: React.FC = () => {
     const conteo: Record<number, Conteo> = data.reduce(
       (acc, item) => {
         if (!acc[item.vehicle_id]) {
-          acc[item.vehicle_id] = { viajes: 0, taller: 0, dias_viajes: 0, dias_taller: 0 };
+          acc[item.vehicle_id] = { viajes: 0, taller: 0, dias_viajes: 0, dias_taller: 0, dias_asignacion: 0, dias_sin_asignar: 0 };
         }
 
         if (item.tipo === "viaje") {
@@ -207,6 +221,10 @@ const DisponibilidadDiariaFlota: React.FC = () => {
         } else if (item.tipo === "taller") {
           acc[item.vehicle_id].taller++;
           acc[item.vehicle_id].dias_taller += item.dias || 0;
+        } else if (item.tipo === "asignacion") {
+          acc[item.vehicle_id].dias_asignacion += item.dias || 0;
+        } else if (item.tipo === "sin_asignar") {
+          acc[item.vehicle_id].dias_sin_asignar += item.dias || 0;
         }
 
         return acc;

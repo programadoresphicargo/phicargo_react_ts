@@ -12,6 +12,7 @@ const Header = () => {
   const veracruz = data?.find((item) => item.branch === 'VER');
   const manzanillo = data?.find((item) => item.branch === 'MZN');
   const mexico = data?.find((item) => item.branch === 'MEX');
+  const altamira = data?.find((item) => item.branch === 'ALT');
 
   const veracruzRevenue = useMemo(
     () => (veracruz?.realMonthlyRevenue ?? 0) + (veracruz?.extraCosts ?? 0),
@@ -25,6 +26,11 @@ const Header = () => {
   const mexicoRevenue = useMemo(
     () => (mexico?.realMonthlyRevenue ?? 0) + (mexico?.extraCosts ?? 0),
     [mexico],
+  );
+
+  const altamiraRevenue = useMemo(
+    () => (altamira?.realMonthlyRevenue ?? 0) + (altamira?.extraCosts ?? 0),
+    [altamira],
   );
 
   return (
@@ -65,6 +71,16 @@ const Header = () => {
             <CardContent
               real={mexicoRevenue}
               ideal={mexico?.idealMonthlyRevenue ?? 0}
+            />
+          }
+          isLoading={isFetching}
+        />
+        <IndicatorCard
+          title="Altamira"
+          content={
+            <CardContent
+              real={altamiraRevenue}
+              ideal={altamira?.idealMonthlyRevenue ?? 0}
             />
           }
           isLoading={isFetching}

@@ -15,7 +15,7 @@ import * as XLSX from "xlsx";
 interface TravelItem {
   driver_id: number;
   name: string;
-  tipo: "viaje" | "permiso" | "asignacion";
+  tipo: "viaje" | "permiso" | "asignacion" | "sin_asignar";
   id: number;
   nombre: string;
   fecha_inicio: string;
@@ -45,6 +45,8 @@ interface Conteo {
   permiso: number;
   dias_viajes: number;
   dias_taller: number;
+  dias_asignacion: number;
+  dias_sin_asignar: number;
 }
 
 const DisponibilidadDiariaOperadores: React.FC = () => {
@@ -116,7 +118,7 @@ const DisponibilidadDiariaOperadores: React.FC = () => {
     const conteo: Record<number, Conteo> = data.reduce(
       (acc, item) => {
         if (!acc[item.driver_id]) {
-          acc[item.driver_id] = { viajes: 0, permiso: 0, dias_viajes: 0, dias_taller: 0 };
+          acc[item.driver_id] = { viajes: 0, permiso: 0, dias_viajes: 0, dias_taller: 0, dias_asignacion: 0, dias_sin_asignar: 0 };
         }
 
         if (item.tipo === "viaje") {
@@ -252,6 +254,8 @@ const DisponibilidadDiariaOperadores: React.FC = () => {
 
       let diasViaje = 0;
       let diasTaller = 0;
+      let diasAsignado = 0;
+      let diasSinAsignacion = 0;
 
       // inicializar columnas
       days.forEach((d) => {
@@ -268,6 +272,14 @@ const DisponibilidadDiariaOperadores: React.FC = () => {
 
         if (event.tipo === "permiso") {
           diasTaller += event.dias || 0;
+        }
+
+        if (event.tipo === "asignacion") {
+          diasAsignado += event.dias || 0;
+        }
+
+        if (event.tipo === "sin_asignar") {
+          diasSinAsignacion += event.dias || 0;
         }
 
         let start = new Date(event.fecha_inicio);
