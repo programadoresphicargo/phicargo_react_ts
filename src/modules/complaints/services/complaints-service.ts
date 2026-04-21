@@ -12,6 +12,9 @@ import { AxiosError } from 'axios';
 import { ComplaintActionCreate } from '../models/complaint-actions-models';
 import type { UpdatableItem } from '@/types';
 import odooApi from '@/api/odoo-api';
+import { CausaRaizBase } from '../models/causa_raiz';
+import { CausaRaizBaseApi } from '../models/api/causa_raiz-models-api';
+import { ComplaintCausaRaizAdapter } from '../adapters/complaint-causa_raiz-adapter';
 
 export class ComplaintsService {
   static async getComplaints(): Promise<Complaint[]> {
@@ -80,7 +83,27 @@ export class ComplaintsService {
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data.detail ||
-            'Error al obtener las acciones de la queja',
+          'Error al obtener las acciones de la queja',
+        );
+      }
+      throw new Error('Error al obtener las acciones de la queja');
+    }
+  }
+
+  static async getComplaintCausaRaizByComplaint(
+    complaintId: number,
+  ): Promise<CausaRaizBase> {
+    try {
+      const response = await odooApi.get<CausaRaizBaseApi>(
+        `/complaints/${complaintId}/causa_raiz`,
+      );
+      return ComplaintCausaRaizAdapter.toComplaintCausaRaiz(response.data);
+    } catch (error) {
+      console.error(error);
+      if (error instanceof AxiosError) {
+        throw new Error(
+          error.response?.data.detail ||
+          'Error al obtener las acciones de la queja',
         );
       }
       throw new Error('Error al obtener las acciones de la queja');
@@ -104,9 +127,31 @@ export class ComplaintsService {
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data.detail ||
-            'Error al actualizar la acción de la queja',
+          'Error al actualizar la acción de la queja',
         );
       }
+      throw new Error('Error al actualizar la acción de la queja');
+    }
+  }
+
+  static async updateComplaintCausaRaiz({ id, updatedItem }: any) {
+    try {
+      const response = await odooApi.patch(
+        `/complaints/causa_raiz/${id}`,
+        updatedItem,
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error(error);
+
+      if (error instanceof AxiosError) {
+        throw new Error(
+          error.response?.data.detail ||
+          'Error al actualizar la acción de la queja',
+        );
+      }
+
       throw new Error('Error al actualizar la acción de la queja');
     }
   }
@@ -132,7 +177,7 @@ export class ComplaintsService {
       if (error instanceof AxiosError) {
         throw new Error(
           error.response?.data.detail ||
-            'Error al crear las acciones de la queja',
+          'Error al crear las acciones de la queja',
         );
       }
       throw new Error('Error al crear las acciones de la queja');

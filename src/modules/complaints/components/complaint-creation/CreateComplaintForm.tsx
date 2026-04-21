@@ -22,6 +22,7 @@ import { CreateActionsForm } from './CreateActionsForm';
 import { DatePickerElement } from 'react-hook-form-mui/date-pickers';
 import dayjs from 'dayjs';
 import { useCreateComplaintMutation } from '../../hooks/mutations';
+import { CreatePorquesForm } from '../causa_raiz/Form';
 
 const initialFormState: ComplaintCreate = {
   customerId: null as unknown as number,
@@ -36,6 +37,10 @@ const initialFormState: ComplaintCreate = {
   responseDate: null,
   complaintDate: dayjs(),
   origin: 'QUEJA DE CLIENTE',
+  causa_raiz: {
+    descripcion: '',
+    porques: [],
+  },
   actions: [],
 };
 
@@ -240,6 +245,12 @@ export const CreateComplaintForm = ({ onClose }: Props) => {
             />
           </section>
           <section className="flex flex-col gap-2 border px-2 rounded-md w-1/2 overflow-y-auto h-[calc(100vh-250px)]">
+            <Typography sx={{ textAlign: 'center' }} variant="h6">
+              Causa raiz
+            </Typography>
+
+            <CreatePorquesForm control={control}></CreatePorquesForm>
+
             <Typography sx={{ textAlign: 'center' }} variant="h6">
               Plan de Acción
             </Typography>

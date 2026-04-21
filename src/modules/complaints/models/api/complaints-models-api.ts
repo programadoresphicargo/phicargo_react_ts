@@ -1,3 +1,4 @@
+import { CausaRaizCreate } from '../causa_raiz';
 import type { ComplaintPriority, ComplaintStatus } from '../complaints-models';
 
 import { ComplaintActionCreateApi } from './complaint-actions-models-api';
@@ -25,6 +26,7 @@ export interface ComplaintBaseApi {
 export interface ComplaintCreateApi extends ComplaintBaseApi {
   customer_id: number;
   actions: ComplaintActionCreateApi[];
+  causa_raiz: CausaRaizCreate
 }
 
 export type ComplaintUpdateApi = Partial<ComplaintBaseApi> & {
