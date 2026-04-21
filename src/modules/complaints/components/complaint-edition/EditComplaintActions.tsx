@@ -44,7 +44,8 @@ export const EditComplaintActions = ({ complaint }: Props) => {
       },
       {
         onSuccess: () => {
-          reset();
+          reset({ actions: [] });
+          remove(); // elimina todos los fields
         },
       },
     );
