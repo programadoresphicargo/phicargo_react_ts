@@ -1,6 +1,7 @@
 import { ComplaintActionCreate } from './complaint-actions-models';
 import type { Dayjs } from 'dayjs';
 import type { UserRead } from '@/modules/users-management/models';
+import { CausaRaizCreate } from './causa_raiz';
 
 interface Customer {
   id: number;
@@ -27,6 +28,7 @@ export interface ComplaintBase {
 export interface ComplaintCreate extends ComplaintBase {
   customerId: number;
   actions: ComplaintActionCreate[];
+  causa_raiz: CausaRaizCreate;
 }
 
 export type ComplaintUpdate = Partial<ComplaintBase> & {
