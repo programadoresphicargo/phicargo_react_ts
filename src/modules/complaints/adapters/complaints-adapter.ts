@@ -54,6 +54,10 @@ export class ComplaintsAdapter {
       actions: data.actions.map(
         ComplaintActionsAdapter.toComplaintActionCreateApi,
       ),
+      causa_raiz: {
+        descripcion: data.causa_raiz.descripcion,
+        porques: data.causa_raiz.porques,
+      },
     };
   }
 

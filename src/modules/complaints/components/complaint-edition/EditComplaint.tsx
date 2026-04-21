@@ -10,6 +10,7 @@ import { Button, MuiCloseButton } from '@/components/ui';
 import type { Complaint } from '../../models';
 import { EditComplaintActions } from './EditComplaintActions';
 import { EditComplaintForm } from './EditComplaintForm';
+import { EditComplaintCausaRaiz } from '../causa_raiz/Edit';
 
 interface Props {
   onClose: () => void;
@@ -46,6 +47,7 @@ export const EditComplaint = ({ onClose, complaint }: Props) => {
       <DialogContent>
         <section className="flex flex-row gap-4 mt-6">
           <EditComplaintForm complaint={complaint} />
+          <EditComplaintCausaRaiz complaint={complaint} />
           <EditComplaintActions complaint={complaint} />
         </section>
       </DialogContent>
