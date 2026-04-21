@@ -70,6 +70,7 @@ const Checklist = () => {
     },
     {
       accessorKey: 'id_checklist',
+      id: 'descargar',
       header: 'Descargar',
       Cell: ({ cell, row }) => {
         const id = cell.getValue() || '';
@@ -93,8 +94,11 @@ const Checklist = () => {
     enableBottomToolbar: true,
     localization: MRT_Localization_ES,
     enableColumnAggregations: true,
+    groupedColumnMode: 'remove',
     columnResizeMode: "onEnd",
+    positionToolbarAlertBanner: "bottom",
     initialState: {
+      grouping: ['fecha_creacion'],
       density: 'compact',
       expanded: false,
       pagination: { pageSize: 80 },
