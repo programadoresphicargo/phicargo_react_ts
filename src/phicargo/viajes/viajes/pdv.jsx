@@ -156,6 +156,10 @@ const PDV = ({ }) => {
         header: 'Cliente',
       },
       {
+        accessorKey: 'client_order_ref',
+        header: 'Referencia cliente',
+      },
+      {
         accessorKey: 'x_ruta_bel',
         header: 'Ruta',
       },
