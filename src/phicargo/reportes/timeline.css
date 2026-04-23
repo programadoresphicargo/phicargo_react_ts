@@ -35,3 +35,24 @@
  border-color: #0099ff;
  color: white;
 }
+
+.mi-timeline .vis-item {
+ border-radius: 8px;
+ color: white;
+}
+
+.grupo-row {
+ padding: 6px;
+ border-radius: 6px;
+}
+
+.grupo-movedor {
+ background-color: #00ff4c1c !important;
+ color: white;
+}
+
+.grupo-operador {
+ background-color: #0077ff1c !important;
+ /* verde */
+ color: white;
+}

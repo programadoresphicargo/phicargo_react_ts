@@ -15,6 +15,7 @@ import * as XLSX from "xlsx";
 interface TravelItem {
   driver_id: number;
   name: string;
+  puesto: string;
   tipo: "viaje" | "permiso" | "asignacion" | "sin_asignar";
   id: number;
   nombre: string;
@@ -38,6 +39,7 @@ interface Group {
   id: number;
   name: string;
   content: string;
+  className: string;
 }
 
 interface Conteo {
@@ -143,9 +145,11 @@ const DisponibilidadDiariaOperadores: React.FC = () => {
           acc[item.driver_id] = {
             id: item.driver_id,
             name: item.name,
+            className: item.puesto === 'MOVEDOR' ? 'grupo-movedor' : 'grupo-operador',
             content: `
-            <div class="grupo-row">
+            <div class="grupo-row ${item.puesto === 'MOVEDOR' ? 'movedor' : 'operador'}">
               <div class="nombre">${item.name}</div>
+              <div class="text-primary">${item.puesto}</div>
               <div class="stats">
                 🚚 ${stats.viajes} viajes | 🕒 ${stats.dias_viajes} días
               </div>
