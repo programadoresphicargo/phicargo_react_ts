@@ -147,8 +147,8 @@ const DisponibilidadDiariaOperadores: React.FC = () => {
             name: item.name,
             className: item.puesto === 'MOVEDOR' ? 'grupo-movedor' : 'grupo-operador',
             content: `
-            <div class="grupo-row ${item.puesto === 'MOVEDOR' ? 'movedor' : 'operador'}">
-              <div class="nombre">${item.name}</div>
+            <div class="grupo-row">
+              <div>${item.name}</div>
               <div class="text-primary">${item.puesto}</div>
               <div class="stats">
                 🚚 ${stats.viajes} viajes | 🕒 ${stats.dias_viajes} días

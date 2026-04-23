@@ -18,6 +18,7 @@ import * as XLSX from "xlsx";
 interface Item {
   vehicle_id: number;
   name: string;
+  x_tipo_vehiculo: string;
   tipo: "viaje" | "taller" | "asignacion" | "sin_asignar";
   id: number;
   nombre: string;
@@ -240,9 +241,11 @@ const DisponibilidadDiariaFlota: React.FC = () => {
 
           acc[item.vehicle_id] = {
             id: item.vehicle_id,
+            className: item.x_tipo_vehiculo === 'local' ? 'grupo-local' : 'grupo-carretera',
             content: `
               <div class="grupo-row">
                 <div class="nombre">${item.name}</div>
+                <div class="nombre">${item.x_tipo_vehiculo}</div>
                 <div class="stats">
                   🚚 ${stats.viajes} viajes | 🕒 ${stats.dias_viajes} días
                 </div>
