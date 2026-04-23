@@ -338,7 +338,7 @@ const DisponibilidadDiariaOperadores: React.FC = () => {
       <div style={{ padding: "10px" }}>
         <div className="flex items-start gap-4 flex-wrap">
           <h1 className="text-xl font-semibold whitespace-nowrap">
-            Disponibilidad de operadores
+            Ocupación diaria de operadores
           </h1>
           <Input
             size="sm"

@@ -349,7 +349,7 @@ const DisponibilidadDiariaFlota: React.FC = () => {
 
         <div className="flex items-start gap-4 flex-wrap">
           <h1 className="text-xl font-semibold whitespace-nowrap">
-            Disponibilidad de flota
+            Ocupación diaria de flota
           </h1>
 
           <Input
