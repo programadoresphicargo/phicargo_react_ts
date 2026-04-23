@@ -104,7 +104,7 @@ export const useVehicleRevenueProjectionByBranchColumns = () => {
           const total = column
             .getFacetedRowModel()
             .rows.reduce(
-              (sum, row) => sum + (row.original.realMonthlyRevenue ?? 0),
+              (sum, row) => sum + (row.original.extraCosts ?? 0),
               0,
             );
           return <CurrencyFooterCell value={total} />;
