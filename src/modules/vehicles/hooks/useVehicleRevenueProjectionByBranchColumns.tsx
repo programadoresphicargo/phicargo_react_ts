@@ -2,7 +2,7 @@ import { CurrencyCell, CurrencyFooterCell } from '@/components/ui';
 
 import type { MRT_ColumnDef } from 'material-react-table';
 import type { VehicleRevenueProjectionByBranch } from '../models';
-import { formatPercentage } from '@/utilities';
+import { formatCurrency, formatPercentage } from '@/utilities';
 import { useMemo } from 'react';
 
 export const useVehicleRevenueProjectionByBranchColumns = () => {
@@ -89,7 +89,7 @@ export const useVehicleRevenueProjectionByBranchColumns = () => {
       {
         accessorKey: 'parcialObject',
         id: 'parcialObject',
-        header: 'OBJETIVO PARCIAL DIARIO',
+        header: 'OBJETIVO PARCIAL',
         Cell: ({ row }) => {
           const idealDailyRevenue = row.original.idealDailyRevenue ?? 0;
           const operativeDays = row.original.operativeDays ?? 0;
@@ -110,7 +110,21 @@ export const useVehicleRevenueProjectionByBranchColumns = () => {
       {
         accessorKey: 'realMonthlyRevenue',
         header: 'REAL MENSUAL',
-        Cell: ({ cell }) => <CurrencyCell value={cell.getValue<number>()} />,
+        Cell: ({ row, cell }) => {
+          const realMonthlyRevenue = cell.getValue<number>() ?? 0;
+          const parcialObject = (row.original.idealDailyRevenue ?? 0) * (row.original.operativeDays ?? 0);
+          return (
+            <>
+              <span
+                className={`px-2 py-1 rounded font-semibold text-medium font-mono ${realMonthlyRevenue >= parcialObject
+                  ? 'text-green-700 bg-green-50'
+                  : 'text-red-700 bg-red-50'}`}
+              >
+                {formatCurrency(cell.getValue<number>())}
+              </span >
+            </>
+          );
+        },
         Footer: ({ column }) => {
           const total = column
             .getFacetedRowModel()
