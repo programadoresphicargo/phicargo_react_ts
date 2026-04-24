@@ -48,6 +48,7 @@ export class VehicleRevenueProjectionAdapter {
       realMonthlyRevenue: data.real_monthly_revenue,
       realMonthlyRevenueLocal: data.real_monthly_revenue_local,
       extraCosts: data.extra_costs,
+      operativeDays: data.operative_days
     };
   }
   static toVehicleRevenueProjectionByBranchHistory(

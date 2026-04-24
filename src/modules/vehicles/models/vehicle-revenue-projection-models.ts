@@ -30,6 +30,7 @@ export interface VehicleRevenueProjectionByBranch {
   realMonthlyRevenue: number;
   realMonthlyRevenueLocal: number;
   extraCosts: number;
+  operativeDays: number;
 }
 
 export interface VehicleRevenueProjectionByBranchHistory {

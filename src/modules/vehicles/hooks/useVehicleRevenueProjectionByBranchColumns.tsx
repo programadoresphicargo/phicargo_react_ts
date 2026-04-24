@@ -55,6 +55,21 @@ export const useVehicleRevenueProjectionByBranchColumns = () => {
         header: 'DÍAS OPS',
       },
       {
+        accessorKey: 'operativeDays',
+        header: 'DÍAS OPERATIVOS',
+      },
+      {
+        accessorKey: 'parcialObject',
+        header: 'OBJETIVO PARCIAL',
+        Cell: ({ row }) => {
+          const dailyTarget = row.original.dailyTarget ?? 0;
+          const operativeDays = row.original.operativeDays ?? 0;
+          return (
+            <CurrencyCell value={dailyTarget * operativeDays} />
+          );
+        },
+      },
+      {
         accessorKey: 'idealMonthlyRevenue',
         header: 'OBJETIVO MENS',
         Cell: ({ cell }) => <CurrencyCell value={cell.getValue<number>()} />,
