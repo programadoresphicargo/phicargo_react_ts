@@ -27,7 +27,7 @@ export const VehicleRevenueProjectionByBranchTable = () => {
     isLoading: query.isLoading,
     refetchFn: query.refetch,
     exportFn: (data) => toExcel.exportData(data),
-    tableId: 'vehicle-revenue-projection-by-branch-table',
+    tableId: 'vehicle-revenue-projection-by-branch-table-',
     containerHeight: 'calc(100vh - 280px)',
     enableRowActions: false,
   });
