@@ -27,6 +27,7 @@ export interface VehicleRevenueProjectionByBranch {
   dailyTarget: number;
   totalWorkingDays: number;
   idealMonthlyRevenue: number;
+  idealDailyRevenue: number;
   realMonthlyRevenue: number;
   realMonthlyRevenueLocal: number;
   extraCosts: number;

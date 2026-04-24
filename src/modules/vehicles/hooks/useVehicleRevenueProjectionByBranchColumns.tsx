@@ -60,19 +60,20 @@ export const useVehicleRevenueProjectionByBranchColumns = () => {
       },
       {
         accessorKey: 'parcialObject',
-        header: 'OBJETIVO PARCIAL',
+        id: 'parcialObject',
+        header: 'OBJETIVO PARCIAL DIARIO',
         Cell: ({ row }) => {
-          const dailyTarget = row.original.dailyTarget ?? 0;
+          const idealDailyRevenue = row.original.idealDailyRevenue ?? 0;
           const operativeDays = row.original.operativeDays ?? 0;
           return (
-            <CurrencyCell value={dailyTarget * operativeDays} />
+            <CurrencyCell value={idealDailyRevenue * operativeDays} />
           );
         },
         Footer: ({ column }) => {
           const total = column
             .getFacetedRowModel()
             .rows.reduce(
-              (sum, row) => sum + (row.original.dailyTarget * row.original.operativeDays),
+              (sum, row) => sum + (row.original.idealDailyRevenue * row.original.operativeDays),
               0,
             );
           return <CurrencyFooterCell value={total} />;
@@ -87,6 +88,20 @@ export const useVehicleRevenueProjectionByBranchColumns = () => {
             .getFacetedRowModel()
             .rows.reduce(
               (sum, row) => sum + (row.original.idealMonthlyRevenue ?? 0),
+              0,
+            );
+          return <CurrencyFooterCell value={total} />;
+        },
+      },
+      {
+        accessorKey: 'idealDailyRevenue',
+        header: 'OBJETIVO DIARIO REAL',
+        Cell: ({ cell }) => <CurrencyCell value={cell.getValue<number>()} />,
+        Footer: ({ column }) => {
+          const total = column
+            .getFacetedRowModel()
+            .rows.reduce(
+              (sum, row) => sum + (row.original.idealDailyRevenue ?? 0),
               0,
             );
           return <CurrencyFooterCell value={total} />;
