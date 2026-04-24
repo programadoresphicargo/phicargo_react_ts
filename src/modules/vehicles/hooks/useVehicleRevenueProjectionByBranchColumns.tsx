@@ -55,31 +55,6 @@ export const useVehicleRevenueProjectionByBranchColumns = () => {
         header: 'DÍAS OPS',
       },
       {
-        accessorKey: 'operativeDays',
-        header: 'DÍAS OPERATIVOS',
-      },
-      {
-        accessorKey: 'parcialObject',
-        id: 'parcialObject',
-        header: 'OBJETIVO PARCIAL DIARIO',
-        Cell: ({ row }) => {
-          const idealDailyRevenue = row.original.idealDailyRevenue ?? 0;
-          const operativeDays = row.original.operativeDays ?? 0;
-          return (
-            <CurrencyCell value={idealDailyRevenue * operativeDays} />
-          );
-        },
-        Footer: ({ column }) => {
-          const total = column
-            .getFacetedRowModel()
-            .rows.reduce(
-              (sum, row) => sum + (row.original.idealDailyRevenue * row.original.operativeDays),
-              0,
-            );
-          return <CurrencyFooterCell value={total} />;
-        },
-      },
-      {
         accessorKey: 'idealMonthlyRevenue',
         header: 'OBJETIVO MENS',
         Cell: ({ cell }) => <CurrencyCell value={cell.getValue<number>()} />,
@@ -102,6 +77,31 @@ export const useVehicleRevenueProjectionByBranchColumns = () => {
             .getFacetedRowModel()
             .rows.reduce(
               (sum, row) => sum + (row.original.idealDailyRevenue ?? 0),
+              0,
+            );
+          return <CurrencyFooterCell value={total} />;
+        },
+      },
+      {
+        accessorKey: 'operativeDays',
+        header: 'DÍAS OPERATIVOS',
+      },
+      {
+        accessorKey: 'parcialObject',
+        id: 'parcialObject',
+        header: 'OBJETIVO PARCIAL DIARIO',
+        Cell: ({ row }) => {
+          const idealDailyRevenue = row.original.idealDailyRevenue ?? 0;
+          const operativeDays = row.original.operativeDays ?? 0;
+          return (
+            <CurrencyCell value={idealDailyRevenue * operativeDays} />
+          );
+        },
+        Footer: ({ column }) => {
+          const total = column
+            .getFacetedRowModel()
+            .rows.reduce(
+              (sum, row) => sum + (row.original.idealDailyRevenue * row.original.operativeDays),
               0,
             );
           return <CurrencyFooterCell value={total} />;
