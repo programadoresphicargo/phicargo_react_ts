@@ -129,6 +129,10 @@ const DisponibilidadDiariaOperadores: React.FC = () => {
         } else if (item.tipo === "permiso") {
           acc[item.driver_id].permiso++;
           acc[item.driver_id].dias_taller += item.dias || 0;
+        } else if (item.tipo === "asignacion") {
+          acc[item.driver_id].dias_asignacion += item.dias || 0;
+        } else if (item.tipo === "sin_asignar") {
+          acc[item.driver_id].dias_sin_asignar += item.dias || 0;
         }
 
         return acc;
@@ -156,6 +160,9 @@ const DisponibilidadDiariaOperadores: React.FC = () => {
               <div class="stats">
               🔧 ${stats.permiso} reportes | 🕒 ${stats.dias_taller} días
             </div>
+            <div class="stats">
+            ${stats.dias_asignacion} días asignado | ${stats.dias_sin_asignar} días sin asignar
+          </div>
           </div>
             `,
           };
@@ -309,6 +316,8 @@ const DisponibilidadDiariaOperadores: React.FC = () => {
       // ➕ columnas resumen
       row["dias_viaje"] = diasViaje;
       row["dias_taller"] = diasTaller;
+      row["dias_asignacion"] = diasAsignado;
+      row["dias_sin_asignar"] = diasSinAsignacion;
 
       result.push(row);
     });
@@ -318,6 +327,8 @@ const DisponibilidadDiariaOperadores: React.FC = () => {
       "name",
       "dias_viaje",
       "dias_taller",
+      "dias_asignacion",
+      "dias_sin_asignar",
       ...days
     ];
 

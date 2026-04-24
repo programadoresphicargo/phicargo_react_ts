@@ -449,7 +449,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                                                 <Typography variant="body1">{data?.operador || '---'}</Typography>
                                             </Grid>
 
-                                            <Grid item xs={12} sm={6}>
+                                            <Grid item xs={12} sm={12}>
                                                 Cliente:
                                                 <Typography variant="body1">{data?.cliente || '---'}</Typography>
                                             </Grid>
@@ -457,6 +457,11 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                                             <Grid item xs={12} sm={6}>
                                                 Subcliente:
                                                 <Typography variant="body1">{data?.subcliente || '---'}</Typography>
+                                            </Grid>
+
+                                            <Grid item xs={12} sm={6}>
+                                                Dirección:
+                                                <Typography variant="body1">{data?.direccion || '---'}</Typography>
                                             </Grid>
 
                                             <Grid item xs={12} sm={6}>
