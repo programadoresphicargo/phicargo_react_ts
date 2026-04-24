@@ -241,7 +241,7 @@ const DisponibilidadDiariaFlota: React.FC = () => {
 
           acc[item.vehicle_id] = {
             id: item.vehicle_id,
-            className: item.x_tipo_vehiculo === 'local' ? 'grupo-local' : 'grupo-carretera',
+            className: item.x_tipo_vehiculo === 'local' ? 'grupo-local' : '',
             content: `
               <div class="grupo-row">
                 <div class="nombre">${item.name}</div>

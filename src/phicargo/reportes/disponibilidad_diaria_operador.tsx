@@ -149,7 +149,7 @@ const DisponibilidadDiariaOperadores: React.FC = () => {
           acc[item.driver_id] = {
             id: item.driver_id,
             name: item.name,
-            className: item.puesto === 'MOVEDOR' ? 'grupo-movedor' : 'grupo-operador',
+            className: item.puesto === 'MOVEDOR' ? 'grupo-movedor' : '',
             content: `
             <div class="grupo-row">
               <div>${item.name}</div>
