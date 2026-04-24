@@ -68,6 +68,15 @@ export const useVehicleRevenueProjectionByBranchColumns = () => {
             <CurrencyCell value={dailyTarget * operativeDays} />
           );
         },
+        Footer: ({ column }) => {
+          const total = column
+            .getFacetedRowModel()
+            .rows.reduce(
+              (sum, row) => sum + (row.original.dailyTarget * row.original.operativeDays),
+              0,
+            );
+          return <CurrencyFooterCell value={total} />;
+        },
       },
       {
         accessorKey: 'idealMonthlyRevenue',
