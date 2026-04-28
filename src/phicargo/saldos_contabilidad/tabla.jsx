@@ -272,6 +272,7 @@ const Operadores = ({ estado }) => {
     localization: MRT_Localization_ES,
     groupedColumnMode: "remove",
     state: { showProgressBars: isLoading2 },
+    positionToolbarAlertBanner: "bottom",
     enableColumnPinning: true,
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
