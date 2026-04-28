@@ -270,6 +270,7 @@ const Operadores = ({ estado }) => {
     enableGlobalFilter: true,
     enableFilters: true,
     localization: MRT_Localization_ES,
+    groupedColumnMode: "remove",
     state: { showProgressBars: isLoading2 },
     enableColumnPinning: true,
     enableStickyHeader: true,
