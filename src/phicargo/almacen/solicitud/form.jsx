@@ -34,7 +34,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo, setID, vista }) => {
+const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo, setID, vista, travel_id }) => {
     const [isLoading, setLoading] = useState(false);
     const [isSaving, setSaving] = useState(false);
     const [openCancelar, setOpenCancelar] = useState(false);
@@ -116,7 +116,8 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
             }
         } catch (error) {
             setSaving(false);
-            toast.error('Error al guardar:', error);
+            const mensaje = error?.response?.data?.detail || 'Error al guardar';
+            toast.error(mensaje);
         } finally {
             setSaving(false);
         }
@@ -278,7 +279,11 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
             fetchData(id_solicitud);
             setFileList([]);
         } else if (open && id_solicitud === null) {
-            setData({ x_tipo: x_tipo });
+            setData(prev => ({
+                ...prev,
+                x_tipo: x_tipo,
+                travel_id: travel_id ?? prev?.travel_id
+            }));
             setLineasGlobales([]);
             setReservasGlobales([]);
             setFileList([]);
@@ -431,13 +436,6 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                                 <Divider></Divider>
                                 <CardBody>
                                     <Grid container spacing={2}>
-                                        <Grid item xs={12} sm={6}>
-                                            <Input value={data?.usuario || '---'} label="Creada por:" isReadOnly></Input>
-                                        </Grid>
-
-                                        <Grid item xs={12} sm={6}>
-                                            <Input value={data?.create_date || '---'} label="Fecha de solicitud:" isReadOnly></Input>
-                                        </Grid>
 
                                         {vista == 'solicitudes' && (<>
                                             <Grid item xs={12} sm={6}>
@@ -445,31 +443,38 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                                             </Grid>
 
                                             <Grid item xs={12} sm={6}>
-                                                Operador asignado:
-                                                <Typography variant="body1">{data?.operador || '---'}</Typography>
+                                                <span style={{ color: '#666', fontSize: '12px' }}>Operador:</span><br />
+                                                <span style={{ fontSize: '16px', fontWeight: '500' }}>
+                                                    {data?.operador || '---'}
+                                                </span>
                                             </Grid>
 
                                             <Grid item xs={12} sm={12}>
-                                                Cliente:
-                                                <Typography variant="body1">{data?.cliente || '---'}</Typography>
+                                                <span style={{ color: '#666', fontSize: '12px' }}>Cliente:</span><br />
+                                                <span style={{ fontSize: '16px', fontWeight: '500' }}>
+                                                    {data?.cliente || '---'}
+                                                </span>
                                             </Grid>
 
                                             <Grid item xs={12} sm={6}>
-                                                Subcliente:
-                                                <Typography variant="body1">{data?.subcliente || '---'}</Typography>
+                                                <span style={{ color: '#666', fontSize: '12px' }}>Subcliente:</span><br />
+                                                <span style={{ fontSize: '16px', fontWeight: '500' }}>
+                                                    {data?.subcliente || '---'}
+                                                </span>
                                             </Grid>
 
                                             <Grid item xs={12} sm={6}>
-                                                Dirección:
-                                                <Typography variant="body1">{data?.direccion || '---'}</Typography>
+                                                <span style={{ color: '#666', fontSize: '12px' }}>Dirección:</span><br />
+                                                <span style={{ fontSize: '16px', fontWeight: '500' }}>
+                                                    {data?.direccion || '---'}
+                                                </span>
                                             </Grid>
 
                                             <Grid item xs={12} sm={6}>
-                                                <Input
-                                                    value={data?.inicio_programado || '---'}
-                                                    label="Inicio programado de viaje:"
-                                                    isReadOnly
-                                                />
+                                                <span style={{ color: '#666', fontSize: '12px' }}>Inicio programado:</span><br />
+                                                <span style={{ fontSize: '16px', fontWeight: '500' }}>
+                                                    {data?.inicio_programado || '---'}
+                                                </span>
                                             </Grid>
                                         </>
                                         )}
