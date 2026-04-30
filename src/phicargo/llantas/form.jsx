@@ -301,34 +301,26 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                                 <Divider></Divider>
                                 <CardBody>
                                     <Grid container spacing={2}>
+
                                         <Grid item xs={12} sm={6}>
-                                            <Input value={data?.usuario || '---'} label="Creada por:" isReadOnly></Input>
+                                            <span style={{ color: '#666', fontSize: '12px' }}>Carta porte:</span><br />
+                                            <span style={{ fontSize: '16px', fontWeight: '500' }}>
+                                                {data?.carta_porte || '---'}
+                                            </span>
                                         </Grid>
 
                                         <Grid item xs={12} sm={6}>
-                                            <Input value={data?.create_date || '---'} label="Fecha de solicitud:" isReadOnly></Input>
+                                            <span style={{ color: '#666', fontSize: '12px' }}>Operador:</span><br />
+                                            <span style={{ fontSize: '16px', fontWeight: '500' }}>
+                                                {data?.operador || '---'}
+                                            </span>
                                         </Grid>
 
                                         <Grid item xs={12} sm={6}>
-                                            <NumberInput label="Cantidad solicitada:" value={data?.x_cantidad_solicitada} isReadOnly></NumberInput>
-                                        </Grid>
-
-                                        <Grid item xs={12} sm={6}>
-                                            Carta porte:
-                                            <Typography variant="body1">{data?.carta_porte || '---'}</Typography>
-                                        </Grid>
-
-                                        <Grid item xs={12} sm={6}>
-                                            Operador asignado:
-                                            <Typography variant="body1">{data?.operador || '---'}</Typography>
-                                        </Grid>
-
-                                        <Grid item xs={12} sm={6}>
-                                            <Input
-                                                value={data?.inicio_programado || '---'}
-                                                label="Inicio programado de viaje:"
-                                                isReadOnly
-                                            />
+                                            <span style={{ color: '#666', fontSize: '12px' }}>Inicio programado:</span><br />
+                                            <span style={{ fontSize: '16px', fontWeight: '500' }}>
+                                                {data?.inicio_programado || '---'}
+                                            </span>
                                         </Grid>
 
                                         {vista == 'asignaciones' && (<>
