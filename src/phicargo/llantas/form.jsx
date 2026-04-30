@@ -323,6 +323,13 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                                             </span>
                                         </Grid>
 
+                                        <Grid item xs={12} sm={6}>
+                                            <span style={{ color: '#666', fontSize: '12px' }}>Cantidad solicitada:</span><br />
+                                            <span style={{ fontSize: '16px', fontWeight: '500' }}>
+                                                {data?.x_cantidad_solicitada || '---'}
+                                            </span>
+                                        </Grid>
+
                                         {vista == 'asignaciones' && (<>
                                             <Grid item xs={12} sm={6}>
                                                 <SelectEmpleado
