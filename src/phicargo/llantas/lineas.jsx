@@ -38,16 +38,6 @@ const LlantasAsignadas = ({ }) => {
   const columns = useMemo(
     () => [
       {
-        accessorKey: 'id_line',
-        header: 'ID Linea',
-        enableEditing: false,
-      },
-      {
-        accessorKey: 'id_devolucion',
-        header: 'ID Devolucion',
-        enableEditing: false,
-      },
-      {
         accessorKey: 'name',
         header: 'Llanta',
         enableEditing: false,
