@@ -86,10 +86,6 @@ const SolicitudesLlantas = ({ x_tipo = "", vista }) => {
         header: 'Carta porte',
       },
       {
-        accessorKey: 'referencia_viaje',
-        header: 'Viaje',
-      },
-      {
         accessorKey: 'operador',
         header: 'Operador',
         Cell: ({ cell }) => {
@@ -159,6 +155,10 @@ const SolicitudesLlantas = ({ x_tipo = "", vista }) => {
       {
         accessorKey: 'usuario',
         header: 'Solicitado por',
+      },
+      {
+        accessorKey: 'referencia_viaje',
+        header: 'Viaje',
       },
     ],
     [],
