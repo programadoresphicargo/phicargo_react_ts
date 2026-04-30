@@ -438,9 +438,12 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                                     <Grid container spacing={2}>
 
                                         {vista == 'solicitudes' && (<>
-                                            <Grid item xs={12} sm={6}>
-                                                <ViajeEPP id_viaje={data?.x_waybill_id} />
-                                            </Grid>
+
+                                            {!travel_id && (
+                                                <Grid item xs={12} sm={6}>
+                                                    <ViajeEPP id_viaje={data?.x_waybill_id} />
+                                                </Grid>
+                                            )}
 
                                             <Grid item xs={12} sm={6}>
                                                 <span style={{ color: '#666', fontSize: '12px' }}>Operador:</span><br />
@@ -493,16 +496,10 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                                         )}
 
                                         <Grid item xs={12} sm={6}>
-                                            <Select
-                                                label="Tipo de solicitud"
-                                                isReadOnly
-                                                placeholder="Seleccionar tipo de solicitud"
-                                                selectedKeys={[data?.x_tipo]}
-                                            >
-                                                <SelectItem key={'epp'}>Equipo de protección personal</SelectItem>
-                                                <SelectItem key={'amarre'}>Equipo de amarre</SelectItem>
-                                                <SelectItem key={'herramienta'}>Herramienta</SelectItem>
-                                            </Select>
+                                            <span style={{ color: '#666', fontSize: '12px' }}>Tipo de solicitud:</span><br />
+                                            <span style={{ fontSize: '16px', fontWeight: '500' }}>
+                                                {data?.x_tipo || '---'}
+                                            </span>
                                         </Grid>
 
                                     </Grid>

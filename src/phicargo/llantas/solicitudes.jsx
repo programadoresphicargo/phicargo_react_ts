@@ -26,7 +26,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import SolicitudForm from './form';
 import { useSolicitudesLlantas } from './contexto';
 
-const SolicitudesLlantas = ({ x_tipo = "", vista }) => {
+const SolicitudesLlantas = ({ x_tipo = "", vista, travel_id }) => {
 
   const [id_solicitud, setIDSolicitud] = React.useState(null);
   const [open, setOpen] = React.useState(false);
@@ -47,7 +47,12 @@ const SolicitudesLlantas = ({ x_tipo = "", vista }) => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await odooApi.get('/solicitudes_llantas/');
+      let url = `/solicitudes_llantas/`;
+
+      if (travel_id) {
+        url += `?travel_id=${travel_id}`;
+      }
+      const response = await odooApi.get(url);
       setDataSolicitudes(response.data);
       setLoading(false);
     } catch (error) {
@@ -241,7 +246,6 @@ const SolicitudesLlantas = ({ x_tipo = "", vista }) => {
           className='text-white'
           startContent={<i class="bi bi-plus-lg"></i>}
           color='primary'
-          isDisabled={true}
           size='sm'
           onPress={() => {
             setIDSolicitud(null);
@@ -283,7 +287,7 @@ const SolicitudesLlantas = ({ x_tipo = "", vista }) => {
         table={table}
       />
 
-      <SolicitudForm id_solicitud={id_solicitud} open={open} handleClose={handleClose} x_tipo={x_tipo} setID={setIDSolicitud} vista={vista}></SolicitudForm>
+      <SolicitudForm id_solicitud={id_solicitud} open={open} handleClose={handleClose} x_tipo={x_tipo} setID={setIDSolicitud} vista={vista} travel_id={travel_id}></SolicitudForm>
     </>
   );
 };

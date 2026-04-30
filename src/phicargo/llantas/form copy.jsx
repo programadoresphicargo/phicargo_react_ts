@@ -31,7 +31,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo, setID, vista }) => {
+const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo, setID, vista, travel_id }) => {
     const [isLoading, setLoading] = useState(false);
     const [isSaving, setSaving] = useState(false);
     const [openCancelar, setOpenCancelar] = useState(false);
@@ -55,15 +55,18 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
         setSaving(true);
         try {
             if (id_solicitud === null) {
-                const payload = {
+                const formData = new FormData();
+
+                formData.append("payload", JSON.stringify({
                     data: data,
                     lineas: lineasGlobales,
-                };
+                }));
 
-                const response = await odooApi.post('/tms_travel/solicitudes_equipo/', payload);
+                const response = await odooApi.post('/solicitudes_llantas/', formData);
                 if (response.data.status == 'success') {
                     toast.success(response.data.message);
                     setID(response.data.data.id);
+                    setModoEdicion(false);
                 } else {
                     toast.error(response.data.message);
                 }
@@ -75,6 +78,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                 if (response.data.status == 'success') {
                     toast.success(response.data.message);
                     fetchData(id_solicitud);
+                    setModoEdicion(false);
                 } else {
                     toast.error(response.data.message);
                 }
@@ -83,7 +87,6 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
             toast.error('Error al guardar:', error);
         } finally {
             setSaving(false);
-            setModoEdicion(false);
         }
     };
 
@@ -160,7 +163,10 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
         if (open && id_solicitud !== null) {
             fetchData(id_solicitud);
         } else if (open && id_solicitud === null) {
-            setData({ x_tipo: x_tipo });
+            setData(prev => ({
+                ...prev,
+                travel_id: travel_id ?? prev?.travel_id
+            }));
             setLineasGlobales([]);
         }
     }, [open, id_solicitud]);
@@ -324,10 +330,11 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                                         </Grid>
 
                                         <Grid item xs={12} sm={6}>
-                                            <span style={{ color: '#666', fontSize: '12px' }}>Cantidad solicitada:</span><br />
-                                            <span style={{ fontSize: '16px', fontWeight: '500' }}>
-                                                {data?.x_cantidad_solicitada || '---'}
-                                            </span>
+                                            <NumberInput
+                                                label="Cantidad solicitada"
+                                                value={data?.x_cantidad_solicitada}
+                                                placeholder="Cantidad solicitada"
+                                            />
                                         </Grid>
 
                                         {vista == 'asignaciones' && (<>

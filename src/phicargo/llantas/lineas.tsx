@@ -1,31 +1,41 @@
 import {
+  MRT_Cell,
+  MRT_Row,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useMemo} from 'react';
 import { Box } from '@mui/material';
 import { Button } from "@heroui/react"
-import { Chip } from "@heroui/react";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import Slide from '@mui/material/Slide';
-import odooApi from '@/api/odoo-api';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import toast from 'react-hot-toast';
 import { useSolicitudesLlantas } from './contexto';
 import LlantasDisponibles from './llantas_disponibles';
-import Swal from 'sweetalert2';
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+type Linea = {
+  id_line: number;
+  x_tire_id: number;
+  descuento?: number;
+  condicion?: string;
+};
 
-const LlantasAsignadas = ({ }) => {
+type SolicitudLlantaLineProps = {
+  meta: any;
+  lineas: Linea[];
+  setLineas: (lineas: any[]) => void;
+};
 
-  const { modoEdicion, setModoEdicion, lineasGlobales, setLineasGlobales, data, setData, fetchData, lineasOriginales, setLineasOriginales } = useSolicitudesLlantas();
+const LlantasAsignadas: React.FC<SolicitudLlantaLineProps> = ({
+  meta,
+  lineas,
+  setLineas
+}) => {
+
+  const { modoEdicion } = useSolicitudesLlantas();
   const [open, setOpen] = React.useState(false);
-  const [isLoading, setLoading] = useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -56,7 +66,7 @@ const LlantasAsignadas = ({ }) => {
         accessorKey: 'condicion',
         header: 'Condicion',
         enableEditing: true,
-        editVariant: 'select',
+        editVariant: 'select' as const,
         editSelectOptions: ['buena', 'dañada', 'ponchada', 'perdida'],
         muiEditTextFieldProps: {
           required: true,
@@ -66,7 +76,7 @@ const LlantasAsignadas = ({ }) => {
         accessorKey: 'descuento',
         header: 'Descuento',
         enableEditing: true,
-        muiEditTextFieldProps: ({ row }) => {
+        muiEditTextFieldProps: ({ row }: { row: MRT_Row<Linea> }) => {
           const condicionActual =
             row._valuesCache?.condicion ?? row.original.condicion;
 
@@ -78,7 +88,7 @@ const LlantasAsignadas = ({ }) => {
             },
           };
         },
-        Cell: ({ cell }) => {
+        Cell: ({ cell }: { cell: MRT_Cell<Linea> }) => {
           if (!cell.row.original.descuento) return null;
           return `$${cell.row.original.descuento}`;
         },
@@ -104,8 +114,8 @@ const LlantasAsignadas = ({ }) => {
         accessorKey: 'delete',
         header: 'Eliminar',
         enableEditing: false,
-        Cell: ({ cell, row, table }) => {
-          return <Button radius='full' color='danger' size='sm' onPress={() => deleteLine(row.original.id_line)} isDisabled={!modoEdicion || data?.x_studio_status != "borrador"}>
+        muiEditTextFieldProps: ({ row }: { row: MRT_Row<Linea> }) => {
+          return <Button radius='full' color='danger' size='sm' onPress={() => deleteLine(row.original.id_line)} isDisabled={!modoEdicion || meta?.x_studio_status != "borrador"}>
             Eliminar
           </Button>
         },
@@ -114,63 +124,17 @@ const LlantasAsignadas = ({ }) => {
     [modoEdicion],
   );
 
-  const deleteLine = (id_line) => {
-    setLineasGlobales(prev => prev.filter(r => r.id_line !== id_line));
-  };
-
-  const guardarCambios = async () => {
-
-    const lineasModificadas = lineasGlobales.filter(linea => {
-
-      const original = lineasOriginales.find(
-        o => o.id_line === linea.id_line
-      );
-
-      if (!original) return true; // línea nueva
-
-      return (
-        linea.condicion !== original.condicion ||
-        linea.observaciones !== original.observaciones ||
-        linea.fecha_devolucion !== original.fecha_devolucion ||
-        linea.descuento !== original.descuento
-      );
-    });
-
-    if (lineasModificadas.length === 0) {
-      toast("No hay cambios para guardar");
-      return;
-    }
-
-    try {
-
-      setLoading(true);
-
-      const response = await odooApi.patch(
-        '/solicitudes_llantas/update_lines/',
-        lineasModificadas
-      );
-
-      if (response.data.status === 'success') {
-        toast.success('Líneas actualizadas');
-        fetchData(data?.id);
-      }
-
-    } catch (error) {
-
-      toast.error("Error al guardar");
-
-    } finally {
-      setLoading(false);
-    }
+  const deleteLine = (id_line: number) => {
+    setLineas(prev => prev.filter(r => r.id_line !== id_line));
   };
 
   const table = useMaterialReactTable({
     columns,
-    data: lineasGlobales,
+    data: lineas,
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
-    enableEditing: data?.x_studio_status === "entregado" || data?.x_studio_status === "recepcionado_operador",
+    enableEditing: meta?.x_studio_status === "entregado" || meta?.x_studio_status === "recepcionado_operador",
     editDisplayMode: "modal",
     positionActionsColumn: 'last',
     enableColumnPinning: true,
@@ -188,11 +152,10 @@ const LlantasAsignadas = ({ }) => {
       density: 'compact',
       expanded: true,
       showColumnFilters: true,
-      pagination: { pageSize: 80 },
       columnVisibility: {
-        condicion: data?.x_studio_status != 'borrador' ? true : false,
-        fecha_devolucion: data?.x_studio_status != 'borrador' ? true : false,
-        observaciones: data?.x_studio_status != 'borrador' ? true : false,
+        condicion: meta?.x_studio_status != 'borrador' ? true : false,
+        fecha_devolucion: meta?.x_studio_status != 'borrador' ? true : false,
+        observaciones: meta?.x_studio_status != 'borrador' ? true : false,
       },
     },
     muiTablePaperProps: {
@@ -217,42 +180,29 @@ const LlantasAsignadas = ({ }) => {
 
       if (!values.condicion || !values.observaciones || !values.fecha_devolucion) {
         toast.error("Todos los campos son obligatorios");
-        return; // evita cerrar el modal
+        return;
       }
 
       if (values.condicion !== "perdida") {
         values.descuento = null;
       }
 
-      if (values.condicion === "perdida" && !values.descuento) {
-        toast.error("Debes ingresar el descuento cuando la llanta está perdida");
+      if (values.condicion === "perdida" && (values.descuento === null || values.descuento === undefined)) {
+        toast.error("Debes ingresar el descuento");
         return;
       }
 
-      setLineasGlobales(prev =>
+      setLineas(prev =>
         prev.map(r =>
           r.id_line === row.original.id_line
-            ? {
-              ...r,
-              ...values,
-              updated: row.original.id_devolucion ? true : false
-            }
+            ? { ...r, ...values }
             : r
         )
       );
 
       table.setEditingRow(null);
     },
-    muiEditRowDialogProps: ({ row }) => ({
-      sx: {
-        '& .MuiDialogContent-root': {
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '16px',
-        },
-      },
-    }),
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -277,22 +227,9 @@ const LlantasAsignadas = ({ }) => {
         >
           Añadir llantas
         </Button>
-
-        {(data?.x_studio_status == "entregado" || data?.x_studio_status == "recepcionado_operador") && (
-          <Button
-            radius="full"
-            color="primary"
-            className="text-white"
-            onPress={guardarCambios}
-            isLoading={isLoading}
-          >
-            Devolver llantas
-          </Button>
-        )}
-
       </Box >
     ),
-    muiTableBodyCellProps: ({ cell, row, table }) => ({
+    muiTableBodyCellProps: () => ({
       sx: {
         fontFamily: 'Inter',
         fontWeight: 'normal',
@@ -312,7 +249,6 @@ const LlantasAsignadas = ({ }) => {
         onClose={handleClose}
         maxWidth="lg"
         fullWidth
-        TransitionComponent={Transition}
         scroll="body"
         sx={{
           '& .MuiPaper-root': {
