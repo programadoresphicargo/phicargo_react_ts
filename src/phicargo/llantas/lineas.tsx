@@ -4,7 +4,7 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import React, { useMemo} from 'react';
+import React, { Dispatch, SetStateAction, useMemo } from 'react';
 import { Box } from '@mui/material';
 import { Button } from "@heroui/react"
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
@@ -25,7 +25,7 @@ type Linea = {
 type SolicitudLlantaLineProps = {
   meta: any;
   lineas: Linea[];
-  setLineas: (lineas: any[]) => void;
+  setLineas: Dispatch<SetStateAction<Linea[]>>;
 };
 
 const LlantasAsignadas: React.FC<SolicitudLlantaLineProps> = ({
