@@ -117,10 +117,9 @@ const SolicitudFormLlantas: React.FC<SolicitudFormProps> = ({
     const onSubmit = async (values: FormValues) => {
         setSaving(true);
         try {
+            const formData = new FormData(); formData.append("payload", JSON.stringify(values));
             if (id_solicitud === null) {
-                const formData = new FormData(); formData.append("payload", JSON.stringify(values));
-
-                const response = await odooApi.post('/tms_travel/solicitudes_equipo/', formData);
+                const response = await odooApi.post('/solicitudes_llantas/', formData);
                 if (response.data.status == 'success') {
                     toast.success(response.data.message);
                     setID(response.data.data.id);
@@ -128,7 +127,7 @@ const SolicitudFormLlantas: React.FC<SolicitudFormProps> = ({
                     toast.error(response.data.message);
                 }
             } else {
-                const response = await odooApi.patch(`/solicitudes_llantas/${id_solicitud}`, FormData);
+                const response = await odooApi.patch(`/solicitudes_llantas/${id_solicitud}`, formData);
                 if (response.data.status == 'success') {
                     toast.success(response.data.message);
                     refresh();
@@ -328,6 +327,7 @@ const SolicitudFormLlantas: React.FC<SolicitudFormProps> = ({
                             <Button
                                 radius="full"
                                 color="success"
+                                className="text-white"
                                 as={Link}
                                 isExternal={true}
                                 href={`${apiUrl}/solicitudes_llantas/formato/${id_solicitud}`}>
