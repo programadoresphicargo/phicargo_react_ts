@@ -13,15 +13,11 @@ import odooApi from '@/api/odoo-api';
 import { useSolicitudesLlantas } from './contexto';
 import SolicitudForm from '../almacen/solicitud/form';
 
-<<<<<<< HEAD:src/phicargo/llantas/solicitudes.tsx
 type Solicitudes = {
   id: number;
   operador: string;
   x_studio_status: string;
 };
-=======
-const SolicitudesLlantas = ({ x_tipo = "", vista, travel_id }) => {
->>>>>>> wip/cambios-casa:src/phicargo/llantas/solicitudes.jsx
 
 type SolicitudesLlantasProps = {
   vista?: string;
@@ -285,7 +281,7 @@ const SolicitudesLlantas: React.FC<SolicitudesLlantasProps> = ({
         table={table}
       />
 
-      <SolicitudForm id_solicitud={id_solicitud} open={open} handleClose={handleClose} x_tipo={x_tipo} setID={setIDSolicitud} vista={vista} travel_id={travel_id}></SolicitudForm>
+      <SolicitudForm id_solicitud={id_solicitud} open={open} handleClose={handleClose} setID={setIDSolicitud} vista={vista} travel_id={travel_id}></SolicitudForm>
     </>
   );
 };
