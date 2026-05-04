@@ -233,7 +233,7 @@ const SolicitudFormLlantas: React.FC<SolicitudFormProps> = ({
         if (open && id_solicitud !== null) {
             fetchData(id_solicitud);
         }
-    }, [open, id_solicitud]);
+    }, [open, id_solicitud, openCancelar]);
 
     const handleEdit = () => {
         setModoEdicion(true);
