@@ -204,7 +204,6 @@ const SolicitudFormLlantas: React.FC<SolicitudFormProps> = ({
 
     useEffect(() => {
         if (open && id_solicitud === null) {
-
             setMeta(null);
 
             reset({
@@ -217,7 +216,7 @@ const SolicitudFormLlantas: React.FC<SolicitudFormProps> = ({
                 lineas: []
             });
         }
-    });
+    }, [open, id_solicitud, travel_id]);
 
     useEffect(() => {
         if (open && id_solicitud !== null) {
@@ -402,11 +401,14 @@ const SolicitudFormLlantas: React.FC<SolicitudFormProps> = ({
                                                     <NumberInput
                                                         label="Cantidad solicitada"
                                                         value={field.value}
-                                                        min={1}
-                                                        onChange={field.onChange}
+                                                        isDisabled={!modoEdicion}
                                                         isInvalid={!!fieldState.error}
                                                         errorMessage={fieldState.error?.message}
-                                                        isDisabled={!modoEdicion} />)} />
+                                                        min={1}
+                                                        onChange={(value) => field.onChange(Number(value))}
+                                                    />
+                                                )}
+                                            />
                                         </Grid>
 
                                     </Grid>
