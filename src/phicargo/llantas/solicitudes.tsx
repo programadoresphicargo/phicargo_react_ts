@@ -12,6 +12,7 @@ import { exportToCSV } from '../utils/export';
 import odooApi from '@/api/odoo-api';
 import { useSolicitudesLlantas } from './contexto';
 import SolicitudForm from '../almacen/solicitud/form';
+import SolicitudFormLlantas from './form';
 
 type Solicitudes = {
   id: number;
@@ -281,7 +282,7 @@ const SolicitudesLlantas: React.FC<SolicitudesLlantasProps> = ({
         table={table}
       />
 
-      <SolicitudForm id_solicitud={id_solicitud} open={open} handleClose={handleClose} setID={setIDSolicitud} vista={vista} travel_id={travel_id}></SolicitudForm>
+      <SolicitudFormLlantas id_solicitud={id_solicitud} open={open} handleClose={handleClose} setID={setIDSolicitud} travel_id={travel_id}></SolicitudFormLlantas>
     </>
   );
 };

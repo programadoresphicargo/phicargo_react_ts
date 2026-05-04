@@ -67,7 +67,7 @@ type SolicitudFormProps = {
     travel_id?: number;
 };
 
-const SolicitudForm: React.FC<SolicitudFormProps> = ({
+const SolicitudFormLlantas: React.FC<SolicitudFormProps> = ({
     id_solicitud,
     open,
     handleClose,
@@ -446,4 +446,4 @@ const SolicitudForm: React.FC<SolicitudFormProps> = ({
     );
 };
 
-export default SolicitudForm;
+export default SolicitudFormLlantas;

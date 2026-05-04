@@ -34,7 +34,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const SolicitudForm = ({ id_solicitud, open, handleClose, setID, vista, travel_id }) => {
+const SolicitudForm = ({ id_solicitud, open, handleClose, setID, vista, travel_id, x_tipo }) => {
     const [isLoading, setLoading] = useState(false);
     const [isSaving, setSaving] = useState(false);
     const [openCancelar, setOpenCancelar] = useState(false);
