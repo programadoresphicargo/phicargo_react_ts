@@ -1,44 +1,40 @@
 import {
+  MRT_Cell,
+  MRT_Column,
+  MRT_Row,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-
-import AppBar from '@mui/material/AppBar';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
 import { Button } from '@heroui/react';
 import { Chip } from "@heroui/react";
-import CloseIcon from '@mui/icons-material/Close';
-import Dialog from '@mui/material/Dialog';
-import IconButton from '@mui/material/IconButton';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import Slide from '@mui/material/Slide';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Viaje from '../viaje';
-import { ViajeContext } from '../context/viajeContext';
 import { exportToCSV } from '../../utils/export';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import { DateRangePicker } from 'rsuite';
-import EstatusHistorialAgrupado from '../estatus/estatus_agrupados';
-import { Drawer } from '@mui/material';
 import NavbarTravel from '../navbar_viajes';
 import Travel from '../control/viaje';
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+type ViajeFinalizado = {
+  id_viaje: number | null;
+  fecha_inicio: string;
+  fecha_finalizado: string;
+  pod_enviado: string;
+  tipo_armado: string;
+  tipo: string;
+};
 
 const ViajesFinalizados = ({ }) => {
 
   const [open, setOpen] = React.useState(false);
-  const [idViaje, setIDViaje] = React.useState(null);
+  const [idViaje, setIDViaje] = React.useState<number | null>(null);
 
   const now = new Date();
   const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
   const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-  const [range, setRange] = useState([firstDay, lastDay]);
+  const [range, setRange] = useState<[Date, Date] | null>([firstDay, lastDay]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -49,9 +45,10 @@ const ViajesFinalizados = ({ }) => {
   };
 
   const [data, setData] = useState([]);
-  const [isLoading, setLoading] = useState();
+  const [isLoading, setLoading] = useState(false);
 
   const fetchData = async () => {
+    if (!range) return;
     try {
       setLoading(true);
       const response = await odooApi.get('/tms_travel/completed_travels/', {
@@ -68,7 +65,7 @@ const ViajesFinalizados = ({ }) => {
     }
   };
 
-  const formatFecha = (fechaISO) => {
+  const formatFecha = (fechaISO: string) => {
     if (!fechaISO) return "";
     return new Date(fechaISO).toLocaleString("es-MX", {
       day: "2-digit",
@@ -105,34 +102,43 @@ const ViajesFinalizados = ({ }) => {
       {
         accessorKey: 'fecha_inicio',
         header: 'Fecha de inicio',
-        Cell: ({ cell }) => formatFecha(cell.getValue()),
+        Cell: ({ cell }: { cell: MRT_Cell<ViajeFinalizado> }) => formatFecha(cell.getValue<string>()),
       },
       {
         accessorKey: 'fecha_finalizado',
         header: 'Fecha finalización',
-        Cell: ({ cell }) => formatFecha(cell.getValue()),
+        Cell: ({ cell }: { cell: MRT_Cell<ViajeFinalizado> }) => formatFecha(cell.getValue<string>()),
       },
       {
         accessorKey: 'duracion',
         header: 'Duración',
-        AggregatedCell: ({ column, row }) => {
-          // Sumamos minutos de todas las subRows
-          const totalMinutos = row.subRows.reduce((sum, subRow) => {
-            let value = subRow.getValue(column.id) || '0:00';
+        AggregatedCell: ({
+          column,
+          row,
+        }: {
+          column: MRT_Column<any>;
+          row: MRT_Row<any>;
+        }) => {
+          const subRows = row.subRows ?? [];
+          const totalMinutos = subRows.reduce((sum: number, subRow: any) => {
 
+            const rawValue = subRow.getValue(column.id); // 👈 sin genérico
+            const value = typeof rawValue === 'string' ? rawValue : '0:00';
             const [h, m] = value.split(':').map(Number);
-            const minutos = (isNaN(h) ? 0 : h * 60) + (isNaN(m) ? 0 : m);
+
+            const minutos =
+              (isNaN(h) ? 0 : h * 60) +
+              (isNaN(m) ? 0 : m);
 
             return sum + minutos;
           }, 0);
 
           if (totalMinutos === 0) return '';
-
           const horas = Math.floor(totalMinutos / 60);
           const minutos = totalMinutos % 60;
 
           return `${horas}:${minutos.toString().padStart(2, '0')}`;
-        }
+        },
       },
       {
         accessorKey: 'vehiculo',
@@ -161,8 +167,8 @@ const ViajesFinalizados = ({ }) => {
       {
         accessorKey: 'pod_enviado',
         header: 'POD',
-        Cell: ({ cell }) => {
-          var valor = cell.getValue();
+        Cell: ({ cell }: { cell: MRT_Cell<ViajeFinalizado> }) => {
+          var valor = cell.getValue<string>();
           var bg = valor === 'enviado' ? 'bg-success' : 'bg-primary';
 
           return (
@@ -187,8 +193,8 @@ const ViajesFinalizados = ({ }) => {
       {
         accessorKey: 'tipo_armado',
         header: 'Armado',
-        Cell: ({ cell }) => {
-          const tipoMovimiento = cell.getValue();
+        Cell: ({ cell }: { cell: MRT_Cell<ViajeFinalizado> }) => {
+          const tipoMovimiento = cell.getValue<string>();
           let badgeClass = 'badge rounded-pill text-white ';
 
           if (tipoMovimiento === 'single') {
@@ -209,8 +215,8 @@ const ViajesFinalizados = ({ }) => {
       {
         accessorKey: 'tipo',
         header: 'Modalidad',
-        Cell: ({ cell }) => {
-          const tipoMovimiento = cell.getValue();
+        Cell: ({ cell }: { cell: MRT_Cell<ViajeFinalizado> }) => {
+          const tipoMovimiento = cell.getValue<string>();
           let badgeClass = 'badge rounded-pill text-white ';
 
           if (tipoMovimiento === 'imp') {
@@ -242,13 +248,12 @@ const ViajesFinalizados = ({ }) => {
     groupedColumnMode: 'remove',
     positionToolbarAlertBanner: "bottom",
     enableColumnPinning: true,
-    enableStickyHeader: true,
     columnResizeMode: "onEnd",
     localization: MRT_Localization_ES,
     initialState: {
       density: 'compact',
       showColumnFilters: true,
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
       columnVisibility: { 'empresa': false }
     },
     muiTablePaperProps: {
@@ -258,7 +263,7 @@ const ViajesFinalizados = ({ }) => {
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
-      onClick: ({ event }) => {
+      onClick: () => {
         handleClickOpen();
         setIDViaje(row.original.id_viaje);
       },
@@ -307,7 +312,7 @@ const ViajesFinalizados = ({ }) => {
         maxHeight: 'calc(100vh - 200px)',
       },
     },
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -333,7 +338,7 @@ const ViajesFinalizados = ({ }) => {
         <Button
           color='success'
           className='text-white'
-          startContent={<i class="bi bi-file-earmark-excel"></i>}
+          startContent={<i className="bi bi-file-earmark-excel"></i>}
           onPress={() => exportToCSV(data, columns, "viajes_finalizados.csv")}
           radius='full'>
           Exportar
@@ -347,7 +352,6 @@ const ViajesFinalizados = ({ }) => {
       <NavbarTravel></NavbarTravel>
       <MaterialReactTable
         table={table}
-        enableStickyHeader={true}
       />
       <Travel idViaje={idViaje} open={open} handleClose={handleClose}></Travel>
     </>
