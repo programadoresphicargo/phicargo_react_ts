@@ -1,7 +1,5 @@
 import {
   MRT_Cell,
-  MRT_Column,
-  MRT_Row,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
