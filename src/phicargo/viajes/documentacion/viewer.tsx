@@ -4,9 +4,16 @@ import CloseIcon from '@mui/icons-material/Close';
 import odooApi from "@/api/odoo-api";
 import { Progress } from "@heroui/react";
 
-const OneDriveViewerDialog = ({ open, onClose, id_onedrive }) => {
-    const [blobUrl, setBlobUrl] = useState(null);
-    const [isLoading, setLoading] = useState(false);
+type Props = {
+    id_onedrive: string;
+    open: boolean;
+    onClose: () => void;
+};
+
+const OneDriveViewerDialog = ({ id_onedrive, open, onClose }: Props) => {
+
+    const [blobUrl, setBlobUrl] = useState<string | null>(null);
+    const [isLoading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
         if (!id_onedrive) return;
@@ -14,15 +21,16 @@ const OneDriveViewerDialog = ({ open, onClose, id_onedrive }) => {
         const fetchBlob = async () => {
             try {
                 setLoading(true);
-                const response_download = await odooApi.get('/onedrive/download_link/' + id_onedrive);
+                const response_download = await odooApi.get<string>('/onedrive/download_link/' + id_onedrive);
                 const response = await fetch(response_download.data);
                 const blob = await response.blob();
                 const localUrl = URL.createObjectURL(blob);
                 setBlobUrl(localUrl);
                 setLoading(false);
             } catch (error) {
-                setLoading(false);
                 console.error("Error al convertir en blob:", error);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -40,7 +48,7 @@ const OneDriveViewerDialog = ({ open, onClose, id_onedrive }) => {
     return (
         <Dialog open={open} onClose={onClose} maxWidth="lg" fullScreen>
             <DialogTitle>
-                Vista previa del archivo
+                Vista previa
                 <IconButton
                     onClick={onClose}
                     style={{ position: 'absolute', right: 8, top: 8 }}
@@ -48,17 +56,23 @@ const OneDriveViewerDialog = ({ open, onClose, id_onedrive }) => {
                     <CloseIcon />
                 </IconButton>
             </DialogTitle>
+
             {isLoading && (
                 <Progress isIndeterminate aria-label="Loading..." size="sm" />
             )}
+
             <DialogContent>
-                <iframe
-                    src={blobUrl}
-                    width="100%"
-                    height="100%"
-                    style={{ border: "none" }}
-                    title="Viewer"
-                />
+                {blobUrl ? (
+                    <iframe
+                        src={blobUrl}
+                        width="100%"
+                        height="100%"
+                        style={{ border: "none" }}
+                        title="Viewer"
+                    />
+                ) : (
+                    !isLoading && <p>No se pudo cargar el archivo</p>
+                )}
             </DialogContent>
         </Dialog>
     );
