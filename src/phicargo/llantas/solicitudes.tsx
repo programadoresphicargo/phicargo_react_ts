@@ -188,6 +188,7 @@ const SolicitudesLlantas: React.FC<SolicitudesLlantasProps> = ({
       density: 'compact',
       expanded: true,
       showColumnFilters: true,
+      pagination: { pageIndex: 0, pageSize: 80 }
     },
     muiTablePaperProps: {
       elevation: 0,
