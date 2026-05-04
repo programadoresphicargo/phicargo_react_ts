@@ -376,28 +376,28 @@ const SolicitudFormLlantas: React.FC<SolicitudFormProps> = ({
                                 <CardBody>
                                     <Grid container spacing={2}>
 
-                                        <Grid item xs={12} sm={6}>
+                                        <Grid item xs={12} sm={12}>
                                             <span style={{ color: '#666', fontSize: '12px' }}>Carta porte:</span><br />
                                             <span style={{ fontSize: '16px', fontWeight: '500' }}>
                                                 {meta?.carta_porte || '---'}
                                             </span>
                                         </Grid>
 
-                                        <Grid item xs={12} sm={6}>
+                                        <Grid item xs={12} sm={12}>
                                             <span style={{ color: '#666', fontSize: '12px' }}>Operador:</span><br />
                                             <span style={{ fontSize: '16px', fontWeight: '500' }}>
                                                 {meta?.operador || '---'}
                                             </span>
                                         </Grid>
 
-                                        <Grid item xs={12} sm={6}>
+                                        <Grid item xs={12} sm={12}>
                                             <span style={{ color: '#666', fontSize: '12px' }}>Inicio programado:</span><br />
                                             <span style={{ fontSize: '16px', fontWeight: '500' }}>
                                                 {meta?.inicio_programado || '---'}
                                             </span>
                                         </Grid>
 
-                                        <Grid item xs={12} sm={6}>
+                                        <Grid item xs={12} sm={12}>
                                             <Controller
                                                 control={control}
                                                 name="data.x_cantidad_solicitada"

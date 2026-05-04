@@ -39,7 +39,7 @@ const SolicitudesLlantasIndex = () => {
                                 <Tab label="Inventario" value="2" sx={{ fontFamily: 'Inter' }} />
                             </TabList>
                         </Box>
-                        <TabPanel value="1" sx={{ padding: 0, margin: 0 }}><SolicitudesLlantas vista={'solicitudes de llantas de refacción'}></SolicitudesLlantas></TabPanel>
+                        <TabPanel value="1" sx={{ padding: 0, margin: 0 }}><SolicitudesLlantas vista={'solicitudes'}></SolicitudesLlantas></TabPanel>
                         <TabPanel value="2" sx={{ padding: 0, margin: 0 }}><InventarioLlantas></InventarioLlantas></TabPanel>
                     </TabContext>
                 </Box>

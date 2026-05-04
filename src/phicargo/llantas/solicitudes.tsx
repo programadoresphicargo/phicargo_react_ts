@@ -166,6 +166,9 @@ const SolicitudesLlantas: React.FC<SolicitudesLlantasProps> = ({
     [],
   );
 
+  const capitalize = (text: string) =>
+    text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+
   const table = useMaterialReactTable({
     columns,
     data: dataSolicitudes,
@@ -234,23 +237,25 @@ const SolicitudesLlantas: React.FC<SolicitudesLlantasProps> = ({
         <h2
           className="tracking-tight font-semibold lg:text-2xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
         >
-          {vista?.toUpperCase()}
+          {vista ? capitalize(vista) : ""}
         </h2>
 
-        <Button
-          radius="full"
-          className='text-white'
-          startContent={<i className="bi bi-plus-lg"></i>}
-          color='primary'
-          size='sm'
-          onPress={() => {
-            setIDSolicitud(null);
-            setModoEdicion(true);
-            handleClickOpen();
-          }}
-        >
-          Nueva solicitud
-        </Button>
+        {travel_id && (
+          <Button
+            radius="full"
+            className='text-white'
+            startContent={<i className="bi bi-plus-lg"></i>}
+            color='primary'
+            size='sm'
+            onPress={() => {
+              setIDSolicitud(null);
+              setModoEdicion(true);
+              handleClickOpen();
+            }}
+          >
+            Nueva solicitud
+          </Button>
+        )}
 
         <Button
           radius="full"
