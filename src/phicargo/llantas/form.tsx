@@ -274,7 +274,7 @@ const SolicitudFormLlantas: React.FC<SolicitudFormProps> = ({
 
                     <Stack spacing={1} direction="row" className="mb-5">
 
-                        {(!modoEdicion && (meta?.x_studio_status === 'borrador' || meta?.x_studio_status === 'entregado')) && (
+                        {(!modoEdicion && (meta?.x_studio_status === 'borrador')) && (
                             <Button
                                 radius="full"
                                 color="primary"
