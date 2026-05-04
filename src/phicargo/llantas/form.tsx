@@ -83,7 +83,6 @@ const SolicitudFormLlantas: React.FC<SolicitudFormProps> = ({
         {
             modoEdicion,
             setModoEdicion,
-            loading
         } = useSolicitudesLlantas();
 
     const { handleSubmit, control, reset, watch, setValue } = useForm<FormValues>({ defaultValues: { data: {}, lineas: [], }, });
@@ -266,7 +265,7 @@ const SolicitudFormLlantas: React.FC<SolicitudFormProps> = ({
                     </Toolbar>
                 </AppBar>
 
-                {loading && (
+                {isLoading && (
                     <Progress isIndeterminate size="sm" />
                 )}
 
