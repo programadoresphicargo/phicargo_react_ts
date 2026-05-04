@@ -20,6 +20,7 @@ import { useSolicitudesLlantas } from "./contexto";
 import LlantasAsignadas from "./lineas";
 import HistorialCambios from "../almacen/solicitud/cambios/epps";
 import { Controller, useForm } from "react-hook-form";
+import axios from "axios";
 const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
 type Meta = {
@@ -161,10 +162,20 @@ const SolicitudFormLlantas: React.FC<SolicitudFormProps> = ({
                     toast.success(response.data.message);
                     refresh();
                 } else {
-                    toast.error('Error al guarda22r:' + response.data.message);
+                    toast.error('Error al guardar:' + response.data.message);
                 }
-            } catch (error) {
-                toast.error('Error al guardar');
+            } catch (error: unknown) {
+                if (axios.isAxiosError(error)) {
+                    const message = error.response?.data?.detail;
+
+                    if (message) {
+                        toast.error(message);
+                    } else {
+                        toast.error("Error al guardar");
+                    }
+                } else {
+                    toast.error("Error inesperado");
+                }
             } finally {
                 setSaving(false);
                 setLoading(false);
