@@ -37,7 +37,7 @@ const EstadoSolicitud: React.FC<EstadoSolicitudProps> = ({
                     { title: 'Confirmado' },
                     { title: 'Entregado' },
                     { title: 'Recepcionado por operador' },
-                    { title: 'Devuelto' },
+                    { title: 'Cerrado' },
                     { title: 'Cancelado' },
                 ]}
             />
