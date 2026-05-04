@@ -120,7 +120,8 @@ const SolicitudFormLlantas: React.FC<SolicitudFormProps> = ({
                 const response = await odooApi.post('/solicitudes_llantas/', formData);
                 if (response.data.status == 'success') {
                     toast.success(response.data.message);
-                    setID(response.data.data.id);
+                    setID(response.data.data['id']);
+                    refresh();
                 } else {
                     toast.error(response.data.message);
                 }
@@ -134,8 +135,8 @@ const SolicitudFormLlantas: React.FC<SolicitudFormProps> = ({
                     toast.error(response.data.message);
                 }
             }
-        } catch (error) {
-            toast.error('Error al guardar:');
+        } catch (error: any) {
+            toast.error('Error al guardar: ' + error);
         } finally {
             setSaving(false);
             setModoEdicion(false);
@@ -386,7 +387,27 @@ const SolicitudFormLlantas: React.FC<SolicitudFormProps> = ({
                                             </span>
                                         </Grid>
 
-                                        <Grid item xs={12} sm={6}> <Controller control={control} name="data.x_cantidad_solicitada" render={({ field }) => (<NumberInput label="Cantidad solicitada" value={field.value} onChange={field.onChange} isDisabled={!modoEdicion} />)} /> </Grid>
+                                        <Grid item xs={12} sm={6}>
+                                            <Controller
+                                                control={control}
+                                                name="data.x_cantidad_solicitada"
+                                                rules={{
+                                                    required: "La cantidad es obligatoria",
+                                                    min: {
+                                                        value: 1,
+                                                        message: "Debe ser mayor o igual a 1",
+                                                    },
+                                                }}
+                                                render={({ field, fieldState }) => (
+                                                    <NumberInput
+                                                        label="Cantidad solicitada"
+                                                        value={field.value}
+                                                        min={1}
+                                                        onChange={field.onChange}
+                                                        isInvalid={!!fieldState.error}
+                                                        errorMessage={fieldState.error?.message}
+                                                        isDisabled={!modoEdicion} />)} />
+                                        </Grid>
 
                                     </Grid>
                                 </CardBody>
