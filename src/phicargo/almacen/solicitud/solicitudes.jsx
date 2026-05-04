@@ -27,7 +27,7 @@ import EPP from '../inventario/tabla_productos';
 import SolicitudForm from './form';
 import { useAlmacen } from '../contexto/contexto';
 
-const Solicitudes = ({ x_tipo, vista }) => {
+const Solicitudes = ({ x_tipo, vista, travel_id }) => {
 
   const [id_solicitud, setIDSolicitud] = React.useState(null);
   const [open, setOpen] = React.useState(false);
@@ -52,8 +52,12 @@ const Solicitudes = ({ x_tipo, vista }) => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await odooApi.get('/tms_travel/solicitudes_equipo/tipo/' + x_tipo);
+      let url = `/tms_travel/solicitudes_equipo/tipo/${x_tipo}`;
 
+      if (travel_id) {
+        url += `?travel_id=${travel_id}`;
+      }
+      const response = await odooApi.get(url);
       let solicitudes = response.data;
 
       if (vista === 'solicitudes') {
@@ -301,7 +305,7 @@ const Solicitudes = ({ x_tipo, vista }) => {
         table={table}
       />
 
-      <SolicitudForm id_solicitud={id_solicitud} open={open} handleClose={handleClose} x_tipo={x_tipo} setID={setIDSolicitud} vista={vista}></SolicitudForm>
+      <SolicitudForm id_solicitud={id_solicitud} open={open} handleClose={handleClose} x_tipo={x_tipo} setID={setIDSolicitud} vista={vista} travel_id={travel_id}></SolicitudForm>
     </>
   );
 };

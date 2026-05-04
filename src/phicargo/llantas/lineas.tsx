@@ -5,9 +5,12 @@ import {
   useMaterialReactTable,
 } from 'material-react-table';
 import React, { useMemo } from 'react';
-import { Box, Dialog, DialogActions, DialogContent } from '@mui/material';
+import { Box } from '@mui/material';
 import { Button } from "@heroui/react"
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
 import toast from 'react-hot-toast';
 import { useSolicitudesLlantas } from './contexto';
 import LlantasDisponibles from './llantas_disponibles';
@@ -187,15 +190,15 @@ const LlantasAsignadas: React.FC<SolicitudLlantaLineProps> = ({
 
       if (!values.condicion || !values.observaciones || !values.fecha_devolucion) {
         toast.error("Todos los campos son obligatorios");
-        return; // evita cerrar el modal
+        return;
       }
 
       if (values.condicion !== "perdida") {
         values.descuento = null;
       }
 
-      if (values.condicion === "perdida" && !values.descuento) {
-        toast.error("Debes ingresar el descuento cuando la llanta está perdida");
+      if (values.condicion === "perdida" && (values.descuento === null || values.descuento === undefined)) {
+        toast.error("Debes ingresar el descuento");
         return;
       }
 
@@ -234,7 +237,6 @@ const LlantasAsignadas: React.FC<SolicitudLlantaLineProps> = ({
         >
           Añadir llantas
         </Button>
-
       </Box >
     ),
     muiTableBodyCellProps: () => ({

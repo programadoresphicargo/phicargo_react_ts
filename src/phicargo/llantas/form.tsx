@@ -1,9 +1,11 @@
 import {
-    Progress, Button, Card, CardBody, CardHeader, Divider, NumberInput
+    Input, Progress, Button, Card, CardBody, Textarea, CardHeader, Divider, NumberInput
 } from "@heroui/react";
 import React, { useEffect, useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 import odooApi from '@/api/odoo-api';
 import toast from 'react-hot-toast';
 import { AppBar, CardContent, Stack } from "@mui/material";

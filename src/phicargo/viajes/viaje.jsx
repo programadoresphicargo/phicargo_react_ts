@@ -25,6 +25,10 @@ import { useDisclosure } from "@heroui/react";
 import DialogActions from '@mui/material/DialogActions';
 import PlantaViaje from "./plantas/tabla";
 import Seguimiento from "./seguimiento";
+import SolicitudesEquipoViaje from "./solicitudes/tabla";
+import { AlmacenProvider } from "../almacen/contexto/contexto";
+import SolicitudesLlantasIndex from "../llantas/index_solicitudes_llantas";
+import SolicitudesLlantasViajesIndex from "./llantas/index_solicitudes_llantas";
 
 const Viaje = ({ idViaje }) => {
 
@@ -125,27 +129,51 @@ const Viaje = ({ idViaje }) => {
               <Tab sx={{ fontFamily: 'Inter' }} label="Documentos" value="3" />
               <Tab sx={{ fontFamily: 'Inter' }} label="Detenciones" value="4" />
               <Tab sx={{ fontFamily: 'Inter' }} label="Costos extras" value="5" />
+              <Tab sx={{ fontFamily: 'Inter' }} label="Solicitudes de equipo" value="6" />
+              <Tab sx={{ fontFamily: 'Inter' }} label="Llantas de refacción" value="7" />
             </TabList>
           </Box>
 
-          <TabPanel value="1" sx={{ backgroundColor: '#f8f9fa', padding: 2 }}>
-            <Seguimiento></Seguimiento>
+          <TabPanel value="1">
+            {value === "1" && <Seguimiento />}
           </TabPanel>
-          <TabPanel value="2" sx={{ padding: 0, margin: 0 }}>
-            <Map />
+
+          <TabPanel value="2" sx={{ padding: 0 }}>
+            {value === "2" && <Map />}
           </TabPanel>
+
           <TabPanel value="3" sx={{ padding: 0 }}>
-            <Documentacion />
+            {value === "3" && <Documentacion />}
           </TabPanel>
+
           <TabPanel value="4" sx={{ padding: 0 }}>
-            <TiemposViajeProvider>
-              <Detenciones />
-            </TiemposViajeProvider>
+            {value === "4" && (
+              <TiemposViajeProvider>
+                <Detenciones />
+              </TiemposViajeProvider>
+            )}
           </TabPanel>
+
           <TabPanel value="5" sx={{ padding: 0 }}>
-            <CostosExtrasProvider>
-              <FoliosCostosExtrasViaje />
-            </CostosExtrasProvider>
+            {value === "5" && (
+              <CostosExtrasProvider>
+                <FoliosCostosExtrasViaje />
+              </CostosExtrasProvider>
+            )}
+          </TabPanel>
+
+          <TabPanel value="6" sx={{ padding: 0 }}>
+            {value === "6" && (
+              <AlmacenProvider>
+                <SolicitudesEquipoViaje />
+              </AlmacenProvider>
+            )}
+          </TabPanel>
+
+          <TabPanel value="7" sx={{ padding: 0 }}>
+            {value === "7" && (
+              <SolicitudesLlantasViajesIndex></SolicitudesLlantasViajesIndex>
+            )}
           </TabPanel>
 
         </TabContext>
