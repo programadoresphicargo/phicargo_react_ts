@@ -1,5 +1,5 @@
-import { Button, Chip, Progress, Spacer } from "@heroui/react";
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { Button, Chip, Progress } from "@heroui/react";
+import React, { useContext, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import CorreosElectronicosViaje from './correos/correos_electronicos';
 import { CostosExtrasProvider } from '../costos/context/context';
@@ -8,31 +8,31 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Documentacion from './documentacion/documentacion';
-import FoliosCostosExtras from '../costos/folios/tabla';
 import FoliosCostosExtrasViaje from './costos_extras/tabla';
 import Map from './mapa/mapa';
-import Notificaciones from './panel_notificaciones/panel';
-import Slide from '@mui/material/Slide';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import { TiemposViajeProvider } from './detenciones/TiemposViajeContext';
 import { ViajeContext } from './context/viajeContext';
-import { fontFamily } from '@mui/system';
 import { useJourneyDialogs } from './seguimiento/funciones';
-import { useDisclosure } from "@heroui/react";
 import DialogActions from '@mui/material/DialogActions';
 import PlantaViaje from "./plantas/tabla";
 import Seguimiento from "./seguimiento";
 import SolicitudesEquipoViaje from "./solicitudes/tabla";
 import { AlmacenProvider } from "../almacen/contexto/contexto";
-import SolicitudesLlantasIndex from "../llantas/index_solicitudes_llantas";
 import SolicitudesLlantasViajesIndex from "./llantas/index_solicitudes_llantas";
 
-const Viaje = ({ idViaje }) => {
+type ViajeProps = {
+  idViaje: number;
+};
 
-  const { id_viaje, viaje, getViaje, loading, error, setIDViaje, isLoading } = useContext(ViajeContext);
+const Viaje: React.FC<ViajeProps> = ({
+  idViaje
+}) => {
+
+  const { id_viaje, viaje, getViaje, setIDViaje, isLoading } = useContext(ViajeContext);
 
   useEffect(() => {
     setIDViaje(idViaje);
@@ -48,7 +48,7 @@ const Viaje = ({ idViaje }) => {
 
   const [value, setValue] = React.useState('1');
 
-  const handleChange = (event, newValue) => {
+  const handleChange = (_event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
 
@@ -99,7 +99,7 @@ const Viaje = ({ idViaje }) => {
             radius="full"
             color='primary'
             onPress={handleClickOpenCorreos}>
-            <i class="bi bi-envelope-at"></i>
+            <i className="bi bi-envelope-at"></i>
             Correos electronicos
           </Button>
         </div>
@@ -182,7 +182,7 @@ const Viaje = ({ idViaje }) => {
       <Dialog
         open={openCorreos}
         onClose={handleCloseCorreos}
-        maxWidth="md" // similar a size="5xl"
+        maxWidth="md"
         fullWidth
       >
         <DialogTitle>Destinatarios</DialogTitle>
@@ -192,7 +192,7 @@ const Viaje = ({ idViaje }) => {
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={handleCloseCorreos} color="primary" variant="contained">
+          <Button onClick={handleCloseCorreos} color="primary">
             Cerrar
           </Button>
         </DialogActions>
