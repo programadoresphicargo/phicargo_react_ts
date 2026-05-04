@@ -80,21 +80,21 @@ const LlantasAsignadas: React.FC<SolicitudLlantaLineProps> = ({
       {
         accessorKey: 'descuento',
         header: 'Descuento',
-        enableEditing: true,
-        muiEditTextFieldProps: ({ row }: { row: MRT_Row<Linea> }) => {
-          const condicionActual = row.original.condicion;
 
-          return {
-            type: 'number',
-            placeholder: 'Monto del descuento',
-            sx: {
-              display: condicionActual === 'perdida' ? 'block' : 'none',
-            },
-          };
+        muiEditTextFieldProps: {
+          type: 'number',
+          placeholder: 'Monto del descuento',
         },
+
         Cell: ({ cell }: { cell: MRT_Cell<Linea> }) => {
           if (!cell.row.original.descuento) return null;
           return `$${cell.row.original.descuento}`;
+        },
+
+        enableEditing: (row: MRT_Row<Linea>) => {
+          const condicion = row.getValue<string>('condicion');
+
+          return condicion === 'perdida' || condicion === 'ponchada';
         },
       },
       {

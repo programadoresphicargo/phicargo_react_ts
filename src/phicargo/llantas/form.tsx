@@ -244,7 +244,7 @@ const SolicitudFormLlantas: React.FC<SolicitudFormProps> = ({
             <Dialog open={open} onClose={handleClose} maxWidth="xl" fullScreen keepMounted>
                 <AppBar elevation={0}
                     sx={{
-                        background: 'linear-gradient(90deg, #152c45, #152c45)',
+                        background: 'linear-gradient(90deg, #002d65, #002d65)',
                         padding: '0 16px',
                         position: 'relative'
                     }}>
@@ -366,7 +366,7 @@ const SolicitudFormLlantas: React.FC<SolicitudFormProps> = ({
 
                             <Card>
                                 <CardHeader style={{
-                                    background: 'linear-gradient(90deg, #0073ec, #1c74d5)',
+                                    background: 'linear-gradient(90deg, #002d65, #002d65)',
                                     color: 'white',
                                     fontWeight: 'bold'
                                 }}>
@@ -429,7 +429,7 @@ const SolicitudFormLlantas: React.FC<SolicitudFormProps> = ({
                             <Card className="mt-2">
                                 <CardHeader
                                     style={{
-                                        background: 'linear-gradient(90deg, #0073ec, #1c74d5)',
+                                        background: 'linear-gradient(90deg, #002d65, #002d65)',
                                         color: 'white',
                                         fontWeight: 'bold'
                                     }}>Historial de cambios</CardHeader>
