@@ -1,12 +1,9 @@
 import {
-    Input, Progress, Button, Card, CardBody, Textarea, CardHeader, Divider, NumberInput
+    Progress, Button, Card, CardBody, CardHeader, Divider, NumberInput
 } from "@heroui/react";
 import React, { useEffect, useState } from 'react';
 import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 import odooApi from '@/api/odoo-api';
 import toast from 'react-hot-toast';
 import { AppBar, CardContent, Stack } from "@mui/material";
@@ -14,53 +11,114 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
-import Slide from '@mui/material/Slide';
 import Swal from "sweetalert2";
 import { Grid } from '@mui/material';
-import SelectOperador from "@/phicargo/maniobras/maniobras/select_operador";
 import EstadoSolicitud from "./estado";
 import CancelarSolicitudDialog from "./cancelar";
-import { Select, SelectItem, Link } from "@heroui/react";
-import SelectEmpleado from "@/phicargo/descuentos/solicitante";
+import { Link } from "@heroui/react";
 import { useSolicitudesLlantas } from "./contexto";
 import LlantasAsignadas from "./lineas";
 import HistorialCambios from "../almacen/solicitud/cambios/epps";
+import { Controller, useForm } from "react-hook-form";
 const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-});
+type Meta = {
+    x_studio_status?: string;
+    carta_porte?: string;
+    operador?: string;
+    inicio_programado?: string;
+    x_cantidad_solicitada?: number;
+    x_motivo_cancelacion?: string;
+    x_comentarios_cancelacion?: string;
+    mails?: any[];
+};
 
-const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo, setID, vista }) => {
+type SolicitudLlanta = {
+    travel_id?: number;
+    x_cantidad_solicitada?: number;
+    x_operador_id?: number;
+    x_waybill_id: number;
+};
+
+type Linea = {
+    id: number;
+    x_tire_id: number;
+    name?: string;
+    marca?: string;
+    modelo?: string;
+    descuento?: number | null;
+    condicion?: string;
+    observaciones?: string;
+    fecha_devolucion?: string;
+};
+
+type FormValues = {
+    data: SolicitudLlanta;
+    lineas: Linea[];
+};
+
+type SolicitudFormProps = {
+    id_solicitud: number | null;
+    open: boolean;
+    handleClose: () => void;
+    setID: (id: number) => void;
+    travel_id?: number;
+};
+
+const SolicitudForm: React.FC<SolicitudFormProps> = ({
+    id_solicitud,
+    open,
+    handleClose,
+    setID,
+    travel_id
+}) => {
+
     const [isLoading, setLoading] = useState(false);
     const [isSaving, setSaving] = useState(false);
     const [openCancelar, setOpenCancelar] = useState(false);
+    const [meta, setMeta] = useState<Meta | null>(null);
 
     const
-        { modoEdicion, setModoEdicion,
-            data, setData,
-            isDisabled, setDisabled,
-            lineasGlobales, setLineasGlobales,
-            loading, fetchData
+        {
+            modoEdicion,
+            setModoEdicion,
+            loading
         } = useSolicitudesLlantas();
 
-    const handleChange = (e) => {
-        setData((prev) => ({
-            ...prev,
-            observaciones: e,
-        }));
+    const { handleSubmit, control, reset, watch, setValue } = useForm<FormValues>({ defaultValues: { data: {}, lineas: [], }, });
+
+    const lineas = watch("lineas");
+
+    const fetchData = async (id: number) => {
+        const response = await odooApi.get(`/solicitudes_llantas/${id}`);
+        const res = response.data;
+
+        setMeta(res);
+
+        reset({
+            data: {
+                travel_id: res.travel_id,
+                x_cantidad_solicitada: res.x_cantidad_solicitada,
+                x_operador_id: res.x_operador_id,
+                x_waybill_id: res.x_waybill_id
+            },
+            lineas: res.lines || []
+        });
     };
 
-    const handleSave = async () => {
+    const refresh = () => {
+        if (id_solicitud) {
+            fetchData(id_solicitud);
+        }
+    };
+
+    const onSubmit = async (values: FormValues) => {
         setSaving(true);
         try {
             if (id_solicitud === null) {
-                const payload = {
-                    data: data,
-                    lineas: lineasGlobales,
-                };
+                const formData = new FormData(); formData.append("payload", JSON.stringify(values));
 
-                const response = await odooApi.post('/tms_travel/solicitudes_equipo/', payload);
+                const response = await odooApi.post('/tms_travel/solicitudes_equipo/', formData);
                 if (response.data.status == 'success') {
                     toast.success(response.data.message);
                     setID(response.data.data.id);
@@ -68,26 +126,24 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                     toast.error(response.data.message);
                 }
             } else {
-                const payload = {
-                    lineas: lineasGlobales,
-                };
-                const response = await odooApi.patch(`/solicitudes_llantas/${id_solicitud}`, payload);
+                const response = await odooApi.patch(`/solicitudes_llantas/${id_solicitud}`, FormData);
                 if (response.data.status == 'success') {
                     toast.success(response.data.message);
-                    fetchData(id_solicitud);
+                    refresh();
+                    setModoEdicion(false);
                 } else {
                     toast.error(response.data.message);
                 }
             }
         } catch (error) {
-            toast.error('Error al guardar:', error);
+            toast.error('Error al guardar:');
         } finally {
             setSaving(false);
             setModoEdicion(false);
         }
     };
 
-    const changeState = async (estado) => {
+    const changeState = async (estado: string) => {
         const result = await Swal.fire({
             title: '¿Estás seguro?',
             text: 'Entregar equipo al operador',
@@ -103,65 +159,69 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                 const response = await odooApi.patch('/solicitudes_llantas/' + id_solicitud + '/status/' + estado);
                 if (response.data.status == 'success') {
                     toast.success(response.data.message);
-                    fetchData(id_solicitud);
+                    refresh();
                 } else {
                     toast.error('Error al guarda22r:' + response.data.message);
                 }
             } catch (error) {
-                const detail = error?.response?.data?.detail;
-                if (detail) {
-                    toast.error(detail);
-                } else {
-                    toast.error('Error al guardar');
-                }
+                toast.error('Error al guardar');
             } finally {
                 setSaving(false);
                 setLoading(false);
             }
         }
-    };
+    }
 
-    const devolver = async () => {
-
-        const result = await Swal.fire({
-            title: '¿Estás seguro?',
-            text: 'Cerrar solicitud',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Sí, confirmar',
-        });
-
-        if (result.isConfirmed) {
-            setSaving(true);
-            try {
-                setLoading(true);
-                const response = await odooApi.patch('/tms_travel/solicitudes_equipo/devolver/' + id_solicitud);
-                if (response.data.status === 'success') {
-                    toast.success(response.data.message);
-                    fetchData(id_solicitud);
-                    handleClose();
-                } else {
-                    toast.error(response.data.message);
-                }
-            } catch (error) {
-                if (error.response) {
-                    toast.error("Error del servidor:" + error.response.data);
-                } else {
-                    console.error("Error de red:", error.message);
-                }
-            } finally {
-                setLoading(false);
-                setSaving(false);
+    const DevolverLlantas = async (values: FormValues) => {
+        setSaving(true);
+        setLoading(true);
+        try {
+            const response = await odooApi.patch('/solicitudes_llantas/update_lines/',
+                values.lineas,
+            );
+            if (response.data.status == 'success') {
+                toast.success(response.data.message);
+                refresh();
+            } else {
+                toast.error('Error al guarda:' + response.data.message);
             }
+        } catch (error: any) {
+            const detail = error?.response?.data?.detail;
+            if (detail) {
+                const message = Array.isArray(detail)
+                    ? detail.map((e: any) => e.msg).join(", ")
+                    : detail;
+
+                toast.error(message);
+            } else {
+                toast.error('Error al guardar');
+            }
+        } finally {
+            setSaving(false);
+            setLoading(false);
         }
     };
 
     useEffect(() => {
+        if (open && id_solicitud === null) {
+
+            setMeta(null);
+
+            reset({
+                data: {
+                    travel_id: travel_id ?? undefined,
+                    x_cantidad_solicitada: undefined,
+                    x_operador_id: undefined,
+                    x_waybill_id: undefined
+                },
+                lineas: []
+            });
+        }
+    });
+
+    useEffect(() => {
         if (open && id_solicitud !== null) {
             fetchData(id_solicitud);
-        } else if (open && id_solicitud === null) {
-            setData({ x_tipo: x_tipo });
-            setLineasGlobales([]);
         }
     }, [open, id_solicitud]);
 
@@ -169,19 +229,12 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
         setModoEdicion(true);
     };
 
-    const handleSelectChange = (key, value) => {
-        setData((prev) => ({ ...prev, [key]: value }));
-    };
-
     return (
         <>
-            <Dialog open={open} onClose={handleClose} maxWidth="xl" fullScreen slots={{
-                transition: Transition,
-            }}
-                keepMounted>
+            <Dialog open={open} onClose={handleClose} maxWidth="xl" fullScreen keepMounted>
                 <AppBar elevation={0}
                     sx={{
-                        background: 'linear-gradient(90deg, #343434, #28282B)',
+                        background: 'linear-gradient(90deg, #152c45, #152c45)',
                         padding: '0 16px',
                         position: 'relative'
                     }}>
@@ -197,7 +250,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                         <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
                             {id_solicitud ? `SL-${id_solicitud}` : 'Nueva solicitud'}
                         </Typography>
-                        <Button autoFocus color="inherit" onPress={handleClose}>
+                        <Button autoFocus onPress={handleClose}>
                             Cerrar
                         </Button>
                     </Toolbar>
@@ -211,7 +264,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
 
                     <Stack spacing={1} direction="row" className="mb-5">
 
-                        {(!modoEdicion && (data?.x_studio_status === 'borrador' || data?.x_studio_status === 'entregado')) && (
+                        {(!modoEdicion && (meta?.x_studio_status === 'borrador' || meta?.x_studio_status === 'entregado')) && (
                             <Button
                                 radius="full"
                                 color="primary"
@@ -223,7 +276,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                         {modoEdicion && (
                             <Button
                                 radius="full"
-                                onPress={handleSave}
+                                onPress={() => handleSubmit(onSubmit)()}
                                 color={id_solicitud ? 'success' : 'primary'}
                                 isDisabled={isSaving}
                                 className={id_solicitud ? 'text-white' : ''}
@@ -231,7 +284,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                                 {isSaving ? 'Guardando...' : id_solicitud ? 'Actualizar' : 'Registrar'}
                             </Button>
                         )}
-                        {data?.x_studio_status === "borrador" && modoEdicion != true && (
+                        {meta?.x_studio_status === "borrador" && modoEdicion != true && (
                             <Button
                                 radius="full"
                                 color="success"
@@ -241,36 +294,46 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                                 Confirmar y reservar
                             </Button>
                         )}
-                        {data?.x_studio_status == "confirmado" && (
+                        {meta?.x_studio_status == "confirmado" && (
                             <Button color='warning' className='text-white' onPress={() => changeState('borrador')} isLoading={isLoading} radius="full">Regresar a borrador</Button>
                         )}
-                        {data?.x_studio_status == "confirmado" && (
+                        {meta?.x_studio_status == "confirmado" && (
                             <Button color='success' className='text-white' onPress={() => changeState('entregado')} isLoading={isLoading} radius="full">Entregar</Button>
                         )}
-                        {((data?.x_studio_status == "entregado" || data?.x_studio_status == "recepcionado_operador")) && (
-                            <Button
-                                radius="full"
-                                color='danger'
-                                className='text-white'
-                                onPress={() => changeState('cerrado')}
-                                isLoading={isLoading}>
-                                <i class="bi bi-door-open"></i>
-                                Cerrar solicitud
-                            </Button>
+                        {((meta?.x_studio_status == "entregado" || meta?.x_studio_status == "recepcionado_operador")) && (
+                            <>
+                                <Button
+                                    radius="full"
+                                    color='warning'
+                                    className='text-white'
+                                    onPress={() => handleSubmit(DevolverLlantas)()}
+                                    isLoading={isLoading}>
+                                    <i className="bi bi-arrow-clockwise"></i>
+                                    Devolver llantas
+                                </Button>
+                                <Button
+                                    radius="full"
+                                    color='danger'
+                                    className='text-white'
+                                    onPress={() => changeState('cerrado')}
+                                    isLoading={isLoading}>
+                                    <i className="bi bi-door-open"></i>
+                                    Cerrar solicitud
+                                </Button>
+                            </>
                         )}
-                        {data?.x_studio_status !== "borrador" && data?.x_studio_status !== "cancelada" && (
+                        {meta?.x_studio_status !== "borrador" && meta?.x_studio_status !== "cancelada" && (
                             <Button
                                 radius="full"
                                 color="success"
                                 as={Link}
                                 isExternal={true}
-                                color="primary"
                                 href={`${apiUrl}/solicitudes_llantas/formato/${id_solicitud}`}>
-                                <i class="bi bi-file-earmark-pdf-fill"></i>
+                                <i className="bi bi-file-earmark-pdf-fill"></i>
                                 Formato de entrega
                             </Button>
                         )}
-                        {(!modoEdicion && data?.x_studio_status == 'borrador') && (
+                        {(!modoEdicion && meta?.x_studio_status == 'borrador') && (
                             <Button
                                 radius="full"
                                 color="danger"
@@ -282,17 +345,17 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                         )}
 
                         <div style={{ marginLeft: 'auto', width: '1000px' }}>
-                            <EstadoSolicitud />
+                            <EstadoSolicitud meta={meta} />
                         </div>
                     </Stack>
 
 
                     <Grid container spacing={2}>
-                        <Grid item xs={12} md={9}>
+                        <Grid item xs={12} md={3}>
 
                             <Card>
                                 <CardHeader style={{
-                                    background: 'linear-gradient(90deg, #343434, #28282B)',
+                                    background: 'linear-gradient(90deg, #0073ec, #1c74d5)',
                                     color: 'white',
                                     fontWeight: 'bold'
                                 }}>
@@ -305,80 +368,64 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, onSaveSuccess, x_tipo,
                                         <Grid item xs={12} sm={6}>
                                             <span style={{ color: '#666', fontSize: '12px' }}>Carta porte:</span><br />
                                             <span style={{ fontSize: '16px', fontWeight: '500' }}>
-                                                {data?.carta_porte || '---'}
+                                                {meta?.carta_porte || '---'}
                                             </span>
                                         </Grid>
 
                                         <Grid item xs={12} sm={6}>
                                             <span style={{ color: '#666', fontSize: '12px' }}>Operador:</span><br />
                                             <span style={{ fontSize: '16px', fontWeight: '500' }}>
-                                                {data?.operador || '---'}
+                                                {meta?.operador || '---'}
                                             </span>
                                         </Grid>
 
                                         <Grid item xs={12} sm={6}>
                                             <span style={{ color: '#666', fontSize: '12px' }}>Inicio programado:</span><br />
                                             <span style={{ fontSize: '16px', fontWeight: '500' }}>
-                                                {data?.inicio_programado || '---'}
+                                                {meta?.inicio_programado || '---'}
                                             </span>
                                         </Grid>
 
-                                        <Grid item xs={12} sm={6}>
-                                            <span style={{ color: '#666', fontSize: '12px' }}>Cantidad solicitada:</span><br />
-                                            <span style={{ fontSize: '16px', fontWeight: '500' }}>
-                                                {data?.x_cantidad_solicitada || '---'}
-                                            </span>
-                                        </Grid>
-
-                                        {vista == 'asignaciones' && (<>
-                                            <Grid item xs={12} sm={6}>
-                                                <SelectEmpleado
-                                                    key_name={"x_operador_id"}
-                                                    label={"Empleado"}
-                                                    isDisabled={!modoEdicion}
-                                                    value={data?.x_operador_id}
-                                                    setSolicitante={handleSelectChange}>
-                                                </SelectEmpleado>
-                                            </Grid>
-                                        </>
-                                        )}
+                                        <Grid item xs={12} sm={6}> <Controller control={control} name="data.x_cantidad_solicitada" render={({ field }) => (<NumberInput label="Cantidad solicitada" value={field.value} onChange={field.onChange} isDisabled={!modoEdicion} />)} /> </Grid>
 
                                     </Grid>
                                 </CardBody>
                             </Card>
 
-                            <Card className="mt-4">
-                                <CardBody>
-                                    <LlantasAsignadas></LlantasAsignadas>
-                                </CardBody>
-                            </Card>
-                        </Grid>
-
-                        <Grid item xs={12} md={3}>
-                            <Card>
+                            <Card className="mt-2">
                                 <CardHeader
                                     style={{
-                                        background: 'linear-gradient(90deg, #343434, #28282B)',
+                                        background: 'linear-gradient(90deg, #0073ec, #1c74d5)',
                                         color: 'white',
                                         fontWeight: 'bold'
                                     }}>Historial de cambios</CardHeader>
                                 <Divider></Divider>
 
-                                {(data?.x_studio_status == 'cancelada') && (
+                                {(meta?.x_studio_status == 'cancelada') && (
                                     <Card className="m-3">
                                         <CardHeader className="bg-danger text-white">
                                             Cancelada
                                         </CardHeader>
                                         <Divider></Divider>
                                         <CardContent>
-                                            <p>Motivo de cancelación: {data?.x_motivo_cancelacion}</p>
-                                            <p>Comentarios: {data?.x_comentarios_cancelacion}</p>
+                                            <p>Motivo de cancelación: {meta?.x_motivo_cancelacion}</p>
+                                            <p>Comentarios: {meta?.x_comentarios_cancelacion}</p>
                                         </CardContent>
                                     </Card>
                                 )}
 
                                 <CardBody>
-                                    <HistorialCambios cambios={data?.mails || []} />
+                                    <HistorialCambios cambios={meta?.mails || []} />
+                                </CardBody>
+                            </Card>
+
+                        </Grid>
+
+                        <Grid item xs={12} md={9}>
+
+                            <Card>
+                                <CardBody>
+                                    <LlantasAsignadas meta={meta} lineas={lineas} setLineas={(nuevas) => setValue("lineas", nuevas)}></LlantasAsignadas>
                                 </CardBody>
                             </Card>
                         </Grid>

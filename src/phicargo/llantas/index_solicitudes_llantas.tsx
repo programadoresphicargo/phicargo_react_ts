@@ -1,5 +1,4 @@
 import React from 'react';
-import Solicitudes from '../almacen/solicitud/solicitudes';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
@@ -13,9 +12,9 @@ import InventarioLlantas from './inventario_llantas';
 
 const SolicitudesLlantasIndex = () => {
 
-    const [value, setValue] = React.useState('1');
+    const [value, setValue] = React.useState<string>('1');
 
-    const handleChange = (event, newValue) => {
+    const handleChange = (_: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
     };
 

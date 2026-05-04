@@ -1,36 +1,37 @@
 import {
+  MRT_Cell,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import { Popover, PopoverContent, PopoverTrigger, User, useDisclosure } from "@heroui/react";
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-import AppBar from '@mui/material/AppBar';
-import { Avatar } from "@heroui/react";
-import { Box, Stack } from '@mui/material';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Box } from '@mui/material';
 import { Button } from "@heroui/react"
 import { Chip } from "@heroui/react";
-import CloseIcon from '@mui/icons-material/Close';
-import IconButton from '@mui/material/IconButton';
-import { Image } from 'antd';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import Slide from '@mui/material/Slide';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import { exportToCSV } from '../utils/export';
 import odooApi from '@/api/odoo-api';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import SolicitudForm from './form';
 import { useSolicitudesLlantas } from './contexto';
+import SolicitudForm from '../almacen/solicitud/form';
 
-const SolicitudesLlantas = ({ x_tipo = "", vista }) => {
+type Solicitudes = {
+  id: number;
+  operador: string;
+  x_studio_status: string;
+};
 
-  const [id_solicitud, setIDSolicitud] = React.useState(null);
+type SolicitudesLlantasProps = {
+  vista?: string;
+  travel_id?: number;
+};
+
+const SolicitudesLlantas: React.FC<SolicitudesLlantasProps> = ({
+  vista,
+  travel_id
+}) => {
+
+  const [id_solicitud, setIDSolicitud] = React.useState<number | null>(null);
   const [open, setOpen] = React.useState(false);
-  const { modoEdicion, setModoEdicion, data, setData } = useSolicitudesLlantas();
+  const { setModoEdicion } = useSolicitudesLlantas();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -47,7 +48,12 @@ const SolicitudesLlantas = ({ x_tipo = "", vista }) => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await odooApi.get('/solicitudes_llantas/');
+      let url = `/solicitudes_llantas/`;
+
+      if (travel_id) {
+        url += `?travel_id=${travel_id}`;
+      }
+      const response = await odooApi.get(url);
       setDataSolicitudes(response.data);
       setLoading(false);
     } catch (error) {
@@ -64,14 +70,10 @@ const SolicitudesLlantas = ({ x_tipo = "", vista }) => {
       {
         accessorKey: 'id',
         header: 'Solicitud',
-        Cell: ({ cell }) => {
-          const ID = cell.getValue();
-          let badgeClass = '';
-
+        Cell: ({ cell }: { cell: MRT_Cell<Solicitudes> }) => {
+          const ID = cell.getValue() as number;
           return (
-            <h1
-              size="sm"
-            >
+            <h1>
               SL-{ID}
             </h1>
           );
@@ -88,8 +90,8 @@ const SolicitudesLlantas = ({ x_tipo = "", vista }) => {
       {
         accessorKey: 'operador',
         header: 'Operador',
-        Cell: ({ cell }) => {
-          const estatus_viaje = cell.getValue();
+        Cell: ({ cell }: { cell: MRT_Cell<Solicitudes> }) => {
+          const estatus_viaje = cell.getValue() as string;
 
           if (!estatus_viaje) return;
 
@@ -115,28 +117,28 @@ const SolicitudesLlantas = ({ x_tipo = "", vista }) => {
       {
         accessorKey: 'x_studio_status',
         header: 'Estado',
-        Cell: ({ cell }) => {
-          const estatus = cell.getValue();
-          let badgeClass = '';
+        Cell: ({ cell }: { cell: MRT_Cell<Solicitudes> }) => {
+          const estatus = cell.getValue() as string;
+          let badgeClass = "";
 
-          if (estatus === 'entregado') {
-            badgeClass = 'primary';
-          } else if (estatus === 'confirmado') {
-            badgeClass = 'success';
-          } else if (estatus === 'borrador') {
-            badgeClass = 'warning';
-          } else if (estatus === 'cerrado') {
-            badgeClass = 'success';
-          } else if (estatus === 'cancelado') {
-            badgeClass = 'danger';
+          if (estatus === "entregado") {
+            badgeClass = "primary";
+          } else if (estatus === "confirmado") {
+            badgeClass = "success";
+          } else if (estatus === "borrador") {
+            badgeClass = "warning";
+          } else if (estatus === "cerrado") {
+            badgeClass = "success";
+          } else if (estatus === "cancelado") {
+            badgeClass = "danger";
           } else {
-            badgeClass = 'secondary';
+            badgeClass = "secondary";
           }
 
           return (
             <Chip
               size="sm"
-              color={badgeClass}
+              color={badgeClass as any}
               className="text-white"
             >
               {estatus}
@@ -183,11 +185,9 @@ const SolicitudesLlantas = ({ x_tipo = "", vista }) => {
     columnResizeMode: "onEnd",
     initialState: {
       showGlobalFilter: true,
-      hiddenColumns: ["empresa"],
       density: 'compact',
       expanded: true,
       showColumnFilters: true,
-      pagination: { pageSize: 80 },
     },
     muiTablePaperProps: {
       elevation: 0,
@@ -208,20 +208,20 @@ const SolicitudesLlantas = ({ x_tipo = "", vista }) => {
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
-      onClick: ({ event }) => {
+      onClick: () => {
         setIDSolicitud(row.original.id);
         setModoEdicion(false);
         handleClickOpen();
       },
     }),
-    muiTableBodyCellProps: ({ row }) => ({
+    muiTableBodyCellProps: () => ({
       sx: {
         fontFamily: 'Inter',
         fontWeight: 'normal',
         fontSize: '12px',
       },
     }),
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -233,21 +233,19 @@ const SolicitudesLlantas = ({ x_tipo = "", vista }) => {
         <h2
           className="tracking-tight font-semibold lg:text-2xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
         >
-          {vista.toUpperCase()}
+          {vista?.toUpperCase()}
         </h2>
 
         <Button
           radius="full"
           className='text-white'
-          startContent={<i class="bi bi-plus-lg"></i>}
+          startContent={<i className="bi bi-plus-lg"></i>}
           color='primary'
-          isDisabled={true}
           size='sm'
           onPress={() => {
             setIDSolicitud(null);
             setModoEdicion(true);
             handleClickOpen();
-            setData({});
           }}
         >
           Nueva solicitud
@@ -256,7 +254,7 @@ const SolicitudesLlantas = ({ x_tipo = "", vista }) => {
         <Button
           radius="full"
           className='text-white'
-          startContent={<i class="bi bi-arrow-clockwise"></i>}
+          startContent={<i className="bi bi-arrow-clockwise"></i>}
           color='secondary'
           onPress={() => fetchData()}
           size='sm'
@@ -267,7 +265,7 @@ const SolicitudesLlantas = ({ x_tipo = "", vista }) => {
           radius="full"
           color='success'
           className='text-white'
-          startContent={<i class="bi bi-file-earmark-excel"></i>}
+          startContent={<i className="bi bi-file-earmark-excel"></i>}
           size='sm'
           onPress={() => exportToCSV(dataSolicitudes, columns, "solicitudes.csv")}>
           Exportar
@@ -283,7 +281,7 @@ const SolicitudesLlantas = ({ x_tipo = "", vista }) => {
         table={table}
       />
 
-      <SolicitudForm id_solicitud={id_solicitud} open={open} handleClose={handleClose} x_tipo={x_tipo} setID={setIDSolicitud} vista={vista}></SolicitudForm>
+      <SolicitudForm id_solicitud={id_solicitud} open={open} handleClose={handleClose} setID={setIDSolicitud} travel_id={travel_id} onSaveSuccess={undefined} x_tipo={undefined} vista={undefined}></SolicitudForm>
     </>
   );
 };

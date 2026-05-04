@@ -1,36 +1,49 @@
 import {
+  MRT_RowSelectionState,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import { Input, Popover, PopoverContent, PopoverTrigger, User, useDisclosure } from "@heroui/react";
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-import AppBar from '@mui/material/AppBar';
-import { Avatar } from "@heroui/react";
+import { useEffect, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
 import { Button } from "@heroui/react"
-import { Chip } from "@heroui/react";
-import CloseIcon from '@mui/icons-material/Close';
-import IconButton from '@mui/material/IconButton';
-import { Image } from 'antd';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import Slide from '@mui/material/Slide';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import odooApi from '@/api/odoo-api';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import { useSolicitudesLlantas } from './contexto';
 import toast from 'react-hot-toast';
 
-const LlantasDisponibles = ({ onClose }) => {
-  const { data, setData, lineasGlobales, setLineasGlobales } = useSolicitudesLlantas();
+type Llanta = {
+  id: number;
+  name: string;
+  marca: string;
+  modelo: string;
+};
 
-  const [dataEquipos, setDataEquipo] = useState([]);
+type Linea = {
+  id: number;
+  x_tire_id: number;
+  name?: string;
+  marca?: string;
+  modelo?: string;
+  descuento?: number | null;
+  condicion?: string;
+  observaciones?: string;
+  fecha_devolucion?: string;
+};
+
+type LlantasDisponiblesProps = {
+  onClose: () => void;
+  lineas: Linea[];
+  setLineas: (lineas: Linea[]) => void;
+};
+
+const LlantasDisponibles: React.FC<LlantasDisponiblesProps> = ({
+  onClose,
+  lineas,
+  setLineas
+}) => {
+
+  const [dataEquipos, setDataEquipo] = useState<Llanta[]>([]);
   const [isLoading, setLoading] = useState(false);
-  const [rowSelection, setRowSelection] = useState({});
+  const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
 
   const fetchData = async () => {
     try {
@@ -59,9 +72,9 @@ const LlantasDisponibles = ({ onClose }) => {
   const table = useMaterialReactTable({
     columns,
     data: dataEquipos,
-    enableRowSelection: true, // 👈 habilitar checkboxes
+    enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
-    state: { showProgressBars: isLoading, rowSelection }, // 👈 conectar estado
+    state: { showProgressBars: isLoading, rowSelection },
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
@@ -75,7 +88,6 @@ const LlantasDisponibles = ({ onClose }) => {
       density: 'compact',
       expanded: true,
       showColumnFilters: true,
-      pagination: { pageSize: 80 },
     },
     muiTablePaperProps: {
       elevation: 0,
@@ -87,7 +99,7 @@ const LlantasDisponibles = ({ onClose }) => {
     muiTableContainerProps: {
       sx: { maxHeight: 'calc(100vh - 300px)' },
     },
-    muiTableBodyCellProps: ({ row }) => ({
+    muiTableBodyCellProps: () => ({
       sx: { fontFamily: 'Inter', fontWeight: 'normal', fontSize: '12px' },
     }),
     renderTopToolbarCustomActions: ({ table }) => (
@@ -119,12 +131,12 @@ const LlantasDisponibles = ({ onClose }) => {
 
             const selectedRows = table.getSelectedRowModel().rows;
 
-            const nuevas = [];
-            let repetidas = [];
+            const nuevas: Linea[] = [];
+            const repetidas: string[] = [];
 
             selectedRows.forEach((row) => {
 
-              const existe = lineasGlobales.some(
+              const existe = lineas.some(
                 (l) => l.x_tire_id === row.original.id
               );
 
@@ -133,7 +145,6 @@ const LlantasDisponibles = ({ onClose }) => {
               } else {
                 nuevas.push({
                   id: -(Date.now() + Math.floor(Math.random() * 1000)),
-                  x_solicitud_id: data.id,
                   x_tire_id: row.original.id,
                   name: row.original.name,
                   marca: row.original.marca,
@@ -148,7 +159,7 @@ const LlantasDisponibles = ({ onClose }) => {
             }
 
             if (nuevas.length > 0) {
-              setLineasGlobales((prev) => [...prev, ...nuevas]);
+              setLineas([...lineas, ...nuevas]);
             }
 
             setRowSelection({});
