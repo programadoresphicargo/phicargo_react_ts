@@ -1,38 +1,35 @@
-import { Button, DatePicker, Link, NumberInput } from "@heroui/react";
+import { Button, Link } from "@heroui/react";
 import {
+  MRT_Row,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import FormularioDocumentacion from './formulario';
-import Slide from '@mui/material/Slide';
 import { ViajeContext } from '../context/viajeContext';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
-import { InputNumber } from "rsuite";
-import { now, getLocalTimeZone } from "@internationalized/date";
 import FormularioCorte from "./corte_estadias";
 import OneDriveViewer from "./viewer";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
-const apiUrl = import.meta.env.VITE_ODOO_API_URL;
+type Documentacion = {
+  id_onedrive: string;
+  filename: string;
+};
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
 const Documentacion = ({ }) => {
 
-  const { id_viaje, viaje, getViaje, loading, error, setIDViaje, isLoading } = useContext(ViajeContext);
+  const { id_viaje } = useContext(ViajeContext);
 
   const [data, setData] = useState([]);
-  const [isLoading2, setLoading] = useState();
+  const [isLoading2, setLoading] = useState(false);
   const [idOnedrive, setOnedrive] = useState('');
 
   const fetchData = async () => {
@@ -50,7 +47,7 @@ const Documentacion = ({ }) => {
     fetchData();
   }, []);
 
-  const obtenerUrlPublico = async (idOnedrive) => {
+  const obtenerUrlPublico = async (idOnedrive: string) => {
     try {
       const response = await odooApi.get('/onedrive/generate_link/' + idOnedrive);
       if (response.data.url) {
@@ -89,7 +86,7 @@ const Documentacion = ({ }) => {
       {
         accessorKey: 'ver',
         header: 'Ver',
-        Cell: ({ row }) => (
+        Cell: ({ row }: { row: MRT_Row<Documentacion> }) => (
           <Button
             color='primary'
             size="sm"
@@ -103,7 +100,7 @@ const Documentacion = ({ }) => {
       {
         accessorKey: 'visualizar',
         header: 'Visualizar',
-        Cell: ({ row }) => (
+        Cell: ({ row }: { row: MRT_Row<Documentacion> }) => (
           <Button
             size="sm"
             color='danger'
@@ -132,7 +129,6 @@ const Documentacion = ({ }) => {
     initialState: {
       showColumnFilters: true,
       density: 'compact',
-      pagination: { pageSize: 80 },
     },
     muiTablePaperProps: {
       elevation: 0,
@@ -160,7 +156,7 @@ const Documentacion = ({ }) => {
         overflow: 'hidden',
       },
     },
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -229,7 +225,6 @@ const Documentacion = ({ }) => {
 
         <Button
           radius="full"
-          showAnchorIcon
           color="danger"
           className='text-white'
           variant="solid"
@@ -255,18 +250,14 @@ const Documentacion = ({ }) => {
 
   const [openCorte, setOpenCorte] = React.useState(false);
 
-  const handleClickOpenCorte = () => {
-    setOpenCorte(true);
-  };
-
   const handleCloseCorte = () => {
     setOpenCorte(false);
   };
 
   const [openV, setOpenV] = React.useState(false);
 
-  const handleClickOpenV = async (id_onedrive) => {
-    setOnedrive(id_onedrive);
+  const handleClickOpenV = async (idOnedrive: string) => {
+    setOnedrive(idOnedrive);
     setOpenV(true);
   };
 
@@ -281,11 +272,10 @@ const Documentacion = ({ }) => {
 
       <Dialog
         open={open}
-        TransitionComponent={Transition}
         keepMounted
         onClose={handleClose}
         aria-describedby="alert-dialog-slide-description"
-        fullWidth="sm"
+        fullWidth
         maxWidth="sm"
       >
         <DialogTitle>{"Envio de documentos"}</DialogTitle>
@@ -294,9 +284,7 @@ const Documentacion = ({ }) => {
         </DialogContent>
       </Dialog>
 
-      <OneDriveViewer
-        open={openV} onClose={handleCloseV} id_onedrive={idOnedrive}>
-      </OneDriveViewer>
+      <OneDriveViewer open={openV} onClose={handleCloseV} id_onedrive={idOnedrive} />
 
       <FormularioCorte opened={openCorte} onClose={handleCloseCorte}></FormularioCorte>
     </>
