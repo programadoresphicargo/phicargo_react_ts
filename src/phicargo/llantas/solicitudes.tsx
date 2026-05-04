@@ -11,7 +11,6 @@ import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { exportToCSV } from '../utils/export';
 import odooApi from '@/api/odoo-api';
 import { useSolicitudesLlantas } from './contexto';
-import SolicitudForm from '../almacen/solicitud/form';
 import SolicitudFormLlantas from './form';
 
 type Solicitudes = {
