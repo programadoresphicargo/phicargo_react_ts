@@ -1,44 +1,19 @@
 import {
+  MRT_Cell,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import { Popover, PopoverContent, PopoverTrigger, User, useDisclosure } from "@heroui/react";
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-import AppBar from '@mui/material/AppBar';
-import { Avatar } from "@heroui/react";
-import { Box, Stack } from '@mui/material';
+import { useEffect, useMemo, useState } from 'react';
+import { Box } from '@mui/material';
 import { Button } from "@heroui/react"
 import { Chip } from "@heroui/react";
-import CloseIcon from '@mui/icons-material/Close';
-import IconButton from '@mui/material/IconButton';
-import { Image } from 'antd';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import Slide from '@mui/material/Slide';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import { exportToCSV } from '../utils/export';
 import odooApi from '@/api/odoo-api';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import SolicitudForm from './form';
-import { useSolicitudesLlantas } from './contexto';
+
+type ChipColor = "primary" | "success" | "warning" | "danger" | "secondary" | "default";
 
 const InventarioLlantas = ({ }) => {
-
-  const [id_solicitud, setIDSolicitud] = React.useState(null);
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-    fetchData();
-  };
 
   const [dataSolicitudes, setDataSolicitudes] = useState([]);
   const [isLoading, setLoading] = useState(false);
@@ -79,9 +54,9 @@ const InventarioLlantas = ({ }) => {
       {
         accessorKey: 'x_estado_operativo',
         header: 'Estado',
-        Cell: ({ cell }) => {
-          const estatus = cell.getValue();
-          let badgeClass = '';
+        Cell: ({ cell }: { cell: MRT_Cell<any> }) => {
+          const estatus = cell.getValue<string>();
+          let badgeClass: ChipColor = "default";
 
           if (estatus === 'entregado') {
             badgeClass = 'primary';
@@ -107,7 +82,7 @@ const InventarioLlantas = ({ }) => {
             </Chip>
           );
         },
-      },
+      }
     ],
     [],
   );
@@ -131,11 +106,10 @@ const InventarioLlantas = ({ }) => {
     columnResizeMode: "onEnd",
     initialState: {
       showGlobalFilter: true,
-      hiddenColumns: ["empresa"],
       density: 'compact',
       expanded: true,
       showColumnFilters: true,
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
     },
     muiTablePaperProps: {
       elevation: 0,
@@ -155,20 +129,14 @@ const InventarioLlantas = ({ }) => {
         maxHeight: 'calc(100vh - 250px)',
       },
     },
-    muiTableBodyRowProps: ({ row }) => ({
-      onClick: ({ event }) => {
-        setIDSolicitud(row.original.id);
-        handleClickOpen();
-      },
-    }),
-    muiTableBodyCellProps: ({ row }) => ({
+    muiTableBodyCellProps: () => ({
       sx: {
         fontFamily: 'Inter',
         fontWeight: 'normal',
         fontSize: '12px',
       },
     }),
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -186,7 +154,7 @@ const InventarioLlantas = ({ }) => {
         <Button
           radius="full"
           className='text-white'
-          startContent={<i class="bi bi-arrow-clockwise"></i>}
+          startContent={<i className="bi bi-arrow-clockwise"></i>}
           color='secondary'
           onPress={() => fetchData()}
         >Actualizar
@@ -196,7 +164,7 @@ const InventarioLlantas = ({ }) => {
           radius="full"
           color='success'
           className='text-white'
-          startContent={<i class="bi bi-file-earmark-excel"></i>}
+          startContent={<i className="bi bi-file-earmark-excel"></i>}
           onPress={() => exportToCSV(dataSolicitudes, columns, "solicitudes.csv")}>
           Exportar
         </Button>
