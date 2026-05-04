@@ -1,22 +1,14 @@
 import {
+  MRT_Cell,
   MRT_ExpandAllButton,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-import AppBar from '@mui/material/AppBar';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
 import { Button, Tooltip } from '@heroui/react';
 import { Chip } from "@heroui/react";
-import CloseIcon from '@mui/icons-material/Close';
-import Dialog from '@mui/material/Dialog';
-import IconButton from '@mui/material/IconButton';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import Slide from '@mui/material/Slide';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Viaje from '../viaje';
-import { ViajeContext } from '../context/viajeContext';
 import { exportToCSV } from '../../utils/export';
 import odooApi from '@/api/odoo-api';
 import { DateRangePicker } from 'rsuite';
@@ -24,20 +16,21 @@ import NavbarTravel from '../navbar_viajes';
 import Travel from '../control/viaje';
 import { Stack } from '@mui/material';
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+type PDV = {
+  id_viaje: number;
+  x_comentarios_maniobra?: string;
+};
 
 const PDV = ({ }) => {
 
   const now = new Date();
   const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
   const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-  const [range, setRange] = useState([firstDay, lastDay]);
+  const [range, setRange] = useState<[Date, Date] | null>([firstDay, lastDay]);
   const [grouping, setGrouping] = useState(['sucursal', 'date_order']);
 
   const [open, setOpen] = React.useState(false);
-  const [idViaje, setIDViaje] = React.useState(null);
+  const [idViaje, setIDViaje] = React.useState<number | null>(null);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -49,9 +42,10 @@ const PDV = ({ }) => {
   };
 
   const [data, setData] = useState([]);
-  const [isLoading, setLoading] = useState();
+  const [isLoading, setLoading] = useState(false);
 
   const fetchData = async () => {
+    if (!range) return;
     try {
       setLoading(true);
       const response = await odooApi.get('/tms_waybill/pdv/', {
@@ -84,9 +78,9 @@ const PDV = ({ }) => {
       {
         accessorKey: 'x_comentarios_maniobra',
         header: 'Comentarios maniobra',
-        Cell: ({ row, cell }) => {
+        Cell: ({ cell }: { cell: MRT_Cell<PDV> }) => {
 
-          const value = cell.getValue();
+          const value = cell.getValue<string>();
 
           return (
             <Tooltip
@@ -107,10 +101,29 @@ const PDV = ({ }) => {
       {
         accessorKey: "x_status_bel",
         header: "Estatus",
-        Cell: ({ row, cell }) => {
+        Cell: ({ cell }) => {
+          const value = cell.getValue<string>();
 
-          const value = cell.getValue();
-          const map = {
+          type StatusKey =
+            | "sm"
+            | "pm"
+            | "P"
+            | "V"
+            | "Ing"
+            | "PR"
+            | "ER"
+            | "PI"
+            | "EI"
+            | "T"
+            | "ru"
+            | "EV";
+
+          type StatusConfig = {
+            color: "secondary" | "primary" | "success" | "warning" | "danger" | "default";
+            text: string;
+          };
+
+          const map: Record<StatusKey, StatusConfig> = {
             sm: { color: "secondary", text: "SIN MANIOBRA" },
             pm: { color: "primary", text: "PATIO MÉXICO" },
             P: { color: "primary", text: "EN PATIO" },
@@ -125,14 +138,22 @@ const PDV = ({ }) => {
             EV: { color: "secondary", text: "EN ESPERA DE VIAJE" },
           };
 
-          const cfg = map[value] || { color: "default", text: value || "N/A" };
+          const cfg: StatusConfig =
+            value && value in map
+              ? map[value as StatusKey]
+              : { color: "default", text: value || "N/A" };
 
           return (
-            <Chip color={cfg.color} size="sm" className="text-white" radius="full">
+            <Chip
+              color={cfg.color}
+              size="sm"
+              className="text-white"
+              radius="full"
+            >
               {cfg.text}
             </Chip>
           );
-        },
+        }
       },
       {
         accessorKey: 'date_order',
@@ -212,7 +233,7 @@ const PDV = ({ }) => {
       grouping: ['sucursal', 'date_order'],
       density: 'compact',
       showColumnFilters: true,
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
     },
     muiTablePaperProps: {
       elevation: 0,
@@ -232,7 +253,7 @@ const PDV = ({ }) => {
           const { grouping } = table.getState();
 
           return grouping.map((col) => {
-            const value = row.getValue(col);
+            const value = row.getValue<string>(col);
 
             return (
               <span key={col}>
@@ -244,19 +265,6 @@ const PDV = ({ }) => {
       },
     },
     muiTableBodyRowProps: ({ row }) => {
-      const inicioProgramado = new Date(row.original.inicio_programado);
-      const ahora = new Date();
-      const diferenciaMs = inicioProgramado - ahora;
-      const diferenciaHoras = diferenciaMs / (1000 * 60 * 60);
-
-      let backgroundColor = 'inherit'; // valor por defecto
-
-      if (diferenciaMs < 0) {
-        backgroundColor = '#f31260'; // rojo si ya pasó
-      } else if (diferenciaHoras <= 1) {
-        backgroundColor = '#f5a524'; // amarillo si falta 1 hora o menos
-      }
-
       return {
         onClick: () => {
           handleClickOpen();
@@ -299,22 +307,6 @@ const PDV = ({ }) => {
       },
     },
     muiTableBodyCellProps: ({ row }) => {
-      const inicioProgramado = new Date(row.original.inicio_programado);
-      const ahora = new Date();
-      const diferenciaMs = inicioProgramado - ahora;
-      const diferenciaHoras = diferenciaMs / (1000 * 60 * 60);
-
-      let backgroundColor = '';
-      let ColorText = '';
-
-      if (diferenciaMs < 0) {
-        backgroundColor = '#f31260';
-        ColorText = '#FFFFFF';
-      } else if (diferenciaHoras <= 1) {
-        backgroundColor = '#f5a524';
-        ColorText = '#FFFFFF';
-      }
-
       return {
         sx: {
           backgroundColor: row.subRows?.length ? '#0456cf' : '#FFFFFF',
@@ -325,7 +317,7 @@ const PDV = ({ }) => {
         },
       }
     },
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -346,8 +338,8 @@ const PDV = ({ }) => {
           format="yyyy-MM-dd"
           loading={isLoading}
         />
-        <Button color='primary' startContent={<i class="bi bi-arrow-clockwise"></i>} onPress={() => fetchData()} radius='full'>Actualizar</Button>
-        <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "programacion_viajes.csv")} radius='full'>Exportar</Button>
+        <Button color='primary' startContent={<i className="bi bi-arrow-clockwise"></i>} onPress={() => fetchData()} radius='full'>Actualizar</Button>
+        <Button color='success' className='text-white' startContent={<i className="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "programacion_viajes.csv")} radius='full'>Exportar</Button>
       </Box >
     ),
   });
