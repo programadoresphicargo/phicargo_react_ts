@@ -1,7 +1,6 @@
 import { Autocomplete, AutocompleteItem, Avatar, Progress } from "@heroui/react";
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, getKeyValue } from "@heroui/react";
-
+import React, { useContext, useEffect, useState } from 'react';
+import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/react";
 import { Button } from "@heroui/react";
 import { Chip } from "@heroui/react";
 import Dialog from '@mui/material/Dialog';
@@ -14,12 +13,32 @@ import { ViajeContext } from '../context/viajeContext';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 
-const CorreosElectronicosViaje = ({ openCorreos }) => {
+type CorreoCliente = {
+  id_correo: number;
+  correo: string;
+  tipo: string;
+};
+
+type CorreoLigado = {
+  id: number;
+  id_correo: number;
+  correo: string;
+  tipo: string;
+  nombre_completo: string;
+};
+
+type CorreosElectronicosViajeProps = {
+  openCorreos: boolean;
+};
+
+const CorreosElectronicosViaje: React.FC<CorreosElectronicosViajeProps> = ({
+  openCorreos
+}) => {
 
   const { id_viaje, viaje, comprobacion_correos } = useContext(ViajeContext);
-  const [correosCliente, setCorreosCliente] = useState([]);
-  const [correosLigados, setCorreosLigados] = useState([]);
-  const [isLoading2, setLoading] = useState(false);
+  const [correosCliente, setCorreosCliente] = useState<CorreoCliente[]>([]);
+  const [correosLigados, setCorreosLigados] = useState<CorreoLigado[]>([]);
+  const [isLoading, setLoading] = useState(false);
   const [isLoadingCM, setLoadingCM] = useState(false);
 
   const getCorreosCliente = async () => {
@@ -48,7 +67,7 @@ const CorreosElectronicosViaje = ({ openCorreos }) => {
     }
   };
 
-  const enlazarCorreo = async (id_correo) => {
+  const enlazarCorreo = async (id_correo: number) => {
     try {
       setLoading(true);
       const response = await odooApi.get(`/tms_travel/correos/enlazar/${id_viaje}/${id_correo}`);
@@ -66,10 +85,10 @@ const CorreosElectronicosViaje = ({ openCorreos }) => {
     }
   };
 
-  const enlazarCorreoManiobras = async (id_correo) => {
+  const enlazarCorreoManiobras = async () => {
     try {
       setLoadingCM(true);
-      const response = await odooApi.get(`/maniobras/correos/ligar_correos_maniobra/${id_viaje}`);
+      await odooApi.get(`/maniobras/correos/ligar_correos_maniobra/${id_viaje}`);
       getCorreosLigados();
       comprobacion_correos();
     } catch (error) {
@@ -79,10 +98,15 @@ const CorreosElectronicosViaje = ({ openCorreos }) => {
     }
   };
 
-  const desvincularCorreo = async (id_correo) => {
+  const desvincularCorreo = async (id_correo: number) => {
     try {
       setLoading(true);
       const response = await odooApi.get('/tms_travel/correos/desvincular/' + id_correo);
+      if (response.data.success == true) {
+        toast.success(response.data.message);
+      } else {
+        toast.error(response.data.message);
+      }
       getCorreosLigados();
       comprobacion_correos();
     } catch (error) {
@@ -126,8 +150,11 @@ const CorreosElectronicosViaje = ({ openCorreos }) => {
         isLoading={isLoadingCM}>
         Ligar correos de maniobras
       </Button>
+      {isLoading && (
+        <Progress isIndeterminate size="sm"></Progress>
+      )}
       <Autocomplete
-        fullWidth="true"
+        fullWidth
         defaultItems={correosCliente}
         variant="bordered"
         label="Correos electronicos del cliente"
@@ -164,6 +191,7 @@ const CorreosElectronicosViaje = ({ openCorreos }) => {
                 onPress={() => enlazarCorreo(correosCliente.id_correo)}
                 color='primary'
                 size="sm"
+                radius="full"
               >
                 Ligar
               </Button>
@@ -192,7 +220,7 @@ const CorreosElectronicosViaje = ({ openCorreos }) => {
         </div>
       </div>
 
-      {isLoadingCM ? <Progress isIndeterminate></Progress> :
+      {isLoadingCM ? <Progress isIndeterminate size="sm"></Progress> :
         <Table aria-label="Example static collection table" isStriped>
           <TableHeader>
             <TableColumn>Correo electronico</TableColumn>
@@ -208,7 +236,7 @@ const CorreosElectronicosViaje = ({ openCorreos }) => {
                     classNames={{
                       description: "text-default-500",
                     }}
-                    description={visitor.nombre}
+                    description={visitor.nombre_completo}
                     name={visitor.correo}
                   >
                     {visitor.tipo}
@@ -224,7 +252,7 @@ const CorreosElectronicosViaje = ({ openCorreos }) => {
                 </TableCell>
                 <TableCell>
                   <Button color='danger' size='sm' onPress={() => desvincularCorreo(visitor.id)} radius="full">
-                    <i class="bi bi-x-circle"></i>
+                    <i className="bi bi-x-circle"></i>
                   </Button>
                 </TableCell>
               </TableRow>
@@ -237,7 +265,7 @@ const CorreosElectronicosViaje = ({ openCorreos }) => {
     <Dialog
       open={open}
       onClose={handleClose}
-      fullWidth="sm"
+      fullWidth
       maxWidth="sm"
       sx={{
         '& .MuiPaper-root': {
@@ -255,9 +283,9 @@ const CorreosElectronicosViaje = ({ openCorreos }) => {
       <DialogContent>
 
         <FormularioCorreoGeneral
+          data={null}
           handleClose={handleClose}
-          idCliente={viaje?.partner?.id}>
-        </FormularioCorreoGeneral>
+          idCliente={viaje?.partner?.id} />
 
       </DialogContent>
     </Dialog>
