@@ -1,40 +1,41 @@
 import {
+  MRT_Cell,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-import AppBar from '@mui/material/AppBar';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
 import { Button } from '@heroui/react';
 import { Chip } from "@heroui/react";
-import CloseIcon from '@mui/icons-material/Close';
-import Dialog from '@mui/material/Dialog';
-import IconButton from '@mui/material/IconButton';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import Slide from '@mui/material/Slide';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Viaje from '../viaje';
-import { ViajeContext } from '../context/viajeContext';
 import { exportToCSV } from '../../utils/export';
 import odooApi from '@/api/odoo-api';
 import { DateRangePicker } from 'rsuite';
 import NavbarTravel from '../navbar_viajes';
 import Travel from '../control/viaje';
+import Viaje from '../viaje';
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+type Viaje = {
+  id_viaje: number;
+  name: string;
+  ejecutivo: string;
+  ultimo_envio_ejecutivo: string;
+  codigo_postal: number;
+  distancia_km: number;
+  tiempo_estimado_horas: number;
+  observacion_ubicacion: string;
+  inicio_programado: string;
+};
 
 const ViajesProgramados = ({ }) => {
 
   const now = new Date();
   const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
   const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-  const [range, setRange] = useState([firstDay, lastDay]);
+  const [range, setRange] = useState<[Date, Date] | null>([firstDay, lastDay]);
 
   const [open, setOpen] = React.useState(false);
-  const [idViaje, setIDViaje] = React.useState(null);
+  const [idViaje, setIDViaje] = React.useState<number | null>(null);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -46,9 +47,10 @@ const ViajesProgramados = ({ }) => {
   };
 
   const [data, setData] = useState([]);
-  const [isLoading, setLoading] = useState();
+  const [isLoading, setLoading] = useState(false);
 
   const fetchData = async () => {
+    if (!range) return;
     try {
       setLoading(true);
       const response = await odooApi.get('/tms_travel/scheduled_travels/', {
@@ -73,9 +75,9 @@ const ViajesProgramados = ({ }) => {
     let amarillo = 0;
     const ahora = new Date();
 
-    data.forEach((item) => {
+    data.forEach((item: Viaje) => {
       const inicio = new Date(item.inicio_programado);
-      const diffMs = inicio - ahora;
+      const diffMs = inicio.getTime() - ahora.getTime();
       const diffHoras = diffMs / (1000 * 60 * 60);
 
       if (diffMs < 0) {
@@ -102,7 +104,7 @@ const ViajesProgramados = ({ }) => {
       {
         accessorKey: 'name',
         header: 'Referencia',
-        Cell: ({ cell }) => {
+        Cell: ({ cell }: { cell: MRT_Cell<Viaje> }) => {
           const Referencia = cell.getValue();
 
           return (
@@ -151,7 +153,7 @@ const ViajesProgramados = ({ }) => {
           return (
             <div
               style={{
-                backgroundColor: '#4caf50', // verde
+                backgroundColor: '#4caf50',
                 color: 'white',
                 padding: '6px 12px',
                 borderRadius: '12px',
@@ -167,7 +169,7 @@ const ViajesProgramados = ({ }) => {
         accessorKey: 'estado_correos',
         header: 'Correos ligados',
         Cell: ({ cell }) => {
-          const value = cell.getValue();
+          const value = cell.getValue<string>();
           let badgeClass = 'badge rounded-pill text-white ';
 
           if (value === 'Correos ligados') {
@@ -199,19 +201,10 @@ const ViajesProgramados = ({ }) => {
         accessorKey: 'tipo_armado',
         header: 'Armado',
         Cell: ({ cell }) => {
-          const tipoMovimiento = cell.getValue();
-          let badgeClass = '';
-
-          if (tipoMovimiento === 'single') {
-            badgeClass = 'success';
-          } else if (tipoMovimiento === 'full') {
-            badgeClass = 'danger';
-          } else {
-            badgeClass = 'primary';
-          }
+          const tipoMovimiento = cell.getValue<string>();
 
           return (
-            <Chip color={badgeClass} style={{ width: '60px' }} className={'text-white'}>
+            <Chip color={tipoMovimiento === "single" ? "success" : "danger"} style={{ width: '60px' }} className={'text-white'}>
               {tipoMovimiento}
             </Chip>
           );
@@ -221,19 +214,10 @@ const ViajesProgramados = ({ }) => {
         accessorKey: 'tipo',
         header: 'Modalidad',
         Cell: ({ cell }) => {
-          const tipoMovimiento = cell.getValue();
-          let badgeClass = '';
-
-          if (tipoMovimiento === 'imp') {
-            badgeClass = 'warning';
-          } else if (tipoMovimiento === 'exp') {
-            badgeClass = 'danger';
-          } else {
-            badgeClass = 'primary';
-          }
+          const tipoMovimiento = cell.getValue<string>();
 
           return (
-            <Chip color={badgeClass} style={{ width: '60px' }} className={"text-white"}>
+            <Chip color={tipoMovimiento == "imp" ? "warning" : "danger"} style={{ width: '60px' }} className={"text-white"}>
               {tipoMovimiento}
             </Chip>
           );
@@ -259,7 +243,7 @@ const ViajesProgramados = ({ }) => {
     initialState: {
       density: 'compact',
       showColumnFilters: true,
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
     },
     muiTablePaperProps: {
       elevation: 0,
@@ -268,19 +252,6 @@ const ViajesProgramados = ({ }) => {
       },
     },
     muiTableBodyRowProps: ({ row }) => {
-      const inicioProgramado = new Date(row.original.inicio_programado);
-      const ahora = new Date();
-      const diferenciaMs = inicioProgramado - ahora;
-      const diferenciaHoras = diferenciaMs / (1000 * 60 * 60);
-
-      let backgroundColor = 'inherit'; // valor por defecto
-
-      if (diferenciaMs < 0) {
-        backgroundColor = '#f31260'; // rojo si ya pasó
-      } else if (diferenciaHoras <= 1) {
-        backgroundColor = '#f5a524'; // amarillo si falta 1 hora o menos
-      }
-
       return {
         onClick: () => {
           handleClickOpen();
@@ -325,7 +296,7 @@ const ViajesProgramados = ({ }) => {
     muiTableBodyCellProps: ({ row }) => {
       const inicioProgramado = new Date(row.original.inicio_programado);
       const ahora = new Date();
-      const diferenciaMs = inicioProgramado - ahora;
+      const diferenciaMs = inicioProgramado.getTime() - ahora.getTime();
       const diferenciaHoras = diferenciaMs / (1000 * 60 * 60);
 
       let backgroundColor = '';
@@ -349,7 +320,7 @@ const ViajesProgramados = ({ }) => {
         },
       }
     },
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -376,8 +347,8 @@ const ViajesProgramados = ({ }) => {
         <Chip color="warning" className="text-white" size='lg'>
           Proximos a salir: {cantidadAmarillo}
         </Chip>
-        <Button color='primary' startContent={<i class="bi bi-arrow-clockwise"></i>} onPress={() => fetchData()} radius='full'>Actualizar</Button>
-        <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "programacion_viajes.csv")} radius='full'>Exportar</Button>
+        <Button color='primary' startContent={<i className="bi bi-arrow-clockwise"></i>} onPress={() => fetchData()} radius='full' size='sm'>Actualizar</Button>
+        <Button color='success' className='text-white' startContent={<i className="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "programacion_viajes.csv")} radius='full' size='sm'>Exportar</Button>
       </Box >
     ),
   });
