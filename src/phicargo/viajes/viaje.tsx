@@ -192,7 +192,7 @@ const Viaje: React.FC<ViajeProps> = ({
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={handleCloseCorreos} color="primary">
+          <Button onPress={handleCloseCorreos} color="primary" radius="full">
             Cerrar
           </Button>
         </DialogActions>
