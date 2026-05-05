@@ -1,14 +1,20 @@
-import { Avatar, Badge, Card, CardHeader } from "@heroui/react";
-import React, { useContext, useEffect, useState } from 'react';
+import { Avatar, Card, CardHeader } from "@heroui/react";
+import { useContext, useEffect, useState } from 'react';
 import { Snippet } from "@heroui/snippet";
 import { ViajeContext } from '../context/viajeContext';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import { Spinner } from "@heroui/spinner";
 
+type Contenedores = {
+    name: string;
+    x_reference: string;
+    x_medida_bel: string;
+};
+
 function Contenedores() {
     const { id_viaje } = useContext(ViajeContext);
-    const [data, setData] = useState([]);
+    const [data, setData] = useState<Contenedores[]>([]);
     const [isLoading, setIsLoading] = useState(false);
 
     const fetchData = async () => {
