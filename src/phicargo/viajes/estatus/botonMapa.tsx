@@ -1,7 +1,6 @@
 import { Button } from "@heroui/react";
-import React from 'react';
 
-function BotonMapa({ latitud, longitud }) {
+function BotonMapa({ latitud, longitud }: { latitud: number; longitud: number }) {
     const enlace = `https://www.google.com/maps?q=${latitud},${longitud}&hl=es-PY&gl=py&shorturl=1`;
 
     return (
@@ -9,9 +8,9 @@ function BotonMapa({ latitud, longitud }) {
             radius="full"
             color='primary'
             className='text-white me-2'
-            onClick={() => window.open(enlace, '_blank')}
+            onPress={() => window.open(enlace, '_blank')}
         >
-            <i class="bi bi-geo-alt"></i>
+            <i className="bi bi-geo-alt"></i>
             Ver en Google Maps
         </Button>
     );
