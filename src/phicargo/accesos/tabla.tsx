@@ -1,5 +1,6 @@
 import { Button, Chip } from "@heroui/react";
 import {
+  MRT_Cell,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
@@ -10,29 +11,52 @@ import AppBar from '@mui/material/AppBar';
 import { Box } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import Dialog from '@mui/material/Dialog';
-import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import Slide from '@mui/material/Slide';
-import { TextField } from '@mui/material';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { button } from "@heroui/theme";
 import dayjs from 'dayjs';
 import odooApi from '@/api/odoo-api';
-import { width } from '@mui/system';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+type EstadoAcceso = 'espera' | 'validado' | 'autorizado' | 'rechazado';
 
-const TablaAccesos = ({ title, tipo, background }) => {
+const colorMap: Record<EstadoAcceso, "warning" | "success" | "primary" | "danger"> = {
+  espera: 'warning',
+  validado: 'success',
+  autorizado: 'primary',
+  rechazado: 'danger',
+};
+
+const iconMap: Record<EstadoAcceso | 'default', string> = {
+  espera: 'bi-clock',
+  validado: 'bi-check-circle',
+  autorizado: 'bi-shield-check',
+  rechazado: 'bi-x-circle',
+  default: 'bi-info-circle',
+};
+
+type Acceso = {
+  id_acceso: number;
+  empresa: string;
+};
+
+type TablaAccesosProps = {
+  title: string;
+  tipo: string;
+  background: string;
+};
+
+const TablaAccesos: React.FC<TablaAccesosProps> = ({
+  title,
+  tipo,
+  background
+}) => {
 
   const [open, setOpen] = React.useState(false);
-  const [id_acceso, setIDAcceso] = useState(0);
+  const [id_acceso, setIDAcceso] = useState<number | null>(null);
+  const [data, setData] = useState<Acceso[]>([]);
+  const [isLoading, setLoading] = useState(false);
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -46,9 +70,6 @@ const TablaAccesos = ({ title, tipo, background }) => {
     setOpen(true);
     setIDAcceso(null);
   };
-
-  const [data, setData] = useState([]);
-  const [isLoading2, setLoading] = useState();
 
   const fetchData = async () => {
     try {
@@ -74,8 +95,8 @@ const TablaAccesos = ({ title, tipo, background }) => {
       {
         accessorKey: 'empresa',
         header: 'Empresa visitante',
-        Cell: ({ cell }) => (
-          <span style={{ fontWeight: 'bold' }}>{cell.getValue()?.toUpperCase()}</span>
+        Cell: ({ cell }: { cell: MRT_Cell<Acceso> }) => (
+          <span style={{ fontWeight: 'bold' }}>{cell.getValue<string>()?.toUpperCase()}</span>
         ),
       },
       {
@@ -94,19 +115,10 @@ const TablaAccesos = ({ title, tipo, background }) => {
         accessorKey: 'tipo_movimiento',
         header: 'Tipo de movimiento',
         Cell: ({ cell }) => {
-          const tipoMovimiento = cell.getValue();
-          let badgeClass = '';
-
-          if (tipoMovimiento === 'entrada') {
-            badgeClass += 'success';
-          } else if (tipoMovimiento === 'salida') {
-            badgeClass += 'danger';
-          } else {
-            badgeClass += 'primary';
-          }
+          const tipoMovimiento = cell.getValue<string>();
 
           return (
-            <Chip color={badgeClass} size="sm" className={"text-white"}>
+            <Chip color={tipoMovimiento === "entrada" ? "success" : "danger"} size="sm" className={"text-white"}>
               {tipoMovimiento?.toUpperCase()}
             </Chip>
           );
@@ -116,19 +128,19 @@ const TablaAccesos = ({ title, tipo, background }) => {
         accessorKey: 'fecha_entrada',
         header: 'Fecha de entrada',
         Cell: ({ cell }) => {
-          const rawDate = cell.getValue();
-          return dayjs(rawDate).format('DD/MM/YYYY h:mm A'); // Formato: 20/01/2025 6:00 am
+          const rawDate = cell.getValue<string>();
+          return dayjs(rawDate).format('DD/MM/YYYY h:mm A');
         },
       },
       {
         accessorKey: 'nombre',
         header: 'Solicita',
         Cell: ({ cell }) => {
-          const usuario = cell.getValue()?.toUpperCase();
+          const usuario = cell.getValue<string>()?.toUpperCase();
 
           return (
             <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <i class="bi bi-person-fill"></i>
+              <i className="bi bi-person-fill"></i>
               {usuario}
             </span>
           );
@@ -138,7 +150,7 @@ const TablaAccesos = ({ title, tipo, background }) => {
         accessorKey: 'personas',
         header: 'Visitantes / Empleados',
         Cell: ({ cell }) => {
-          const personas = cell.getValue();
+          const personas = cell.getValue<string[]>();
 
           if (!personas || personas.length === 0) {
             return <span>-</span>;
@@ -146,7 +158,7 @@ const TablaAccesos = ({ title, tipo, background }) => {
 
           return (
             <div>
-              {personas.map((p) => (
+              {personas.map((p: any) => (
                 <div key={p.id_persona}>
                   {p.persona}
                 </div>
@@ -159,34 +171,17 @@ const TablaAccesos = ({ title, tipo, background }) => {
         accessorKey: 'empresa_visitada',
         header: 'Empresa visitada',
         Cell: ({ cell }) => (
-          <span style={{ fontWeight: 'bold' }}>{cell.getValue()?.toUpperCase()}</span>
+          <span style={{ fontWeight: 'bold' }}>{cell.getValue<string>()?.toUpperCase()}</span>
         ),
       },
       {
         accessorKey: 'estado_acceso',
         header: 'Estado del acceso',
         Cell: ({ cell }) => {
-          const tipoMovimiento = cell.getValue();
+          const tipoMovimiento = cell.getValue<string>() as EstadoAcceso;
 
-          // Colores según el estado
-          const colorMap = {
-            espera: 'warning',
-            validado: 'success',
-            autorizado: 'primary',
-            rechazado: 'danger',
-          };
-
-          // Íconos según el estado (Bootstrap Icons)
-          const iconMap = {
-            espera: 'bi-clock',
-            validado: 'bi-check-circle',
-            autorizado: 'bi-shield-check',
-            rechazado: 'bi-x-circle',
-            default: 'bi-info-circle',
-          };
-
-          const badgeClass = colorMap[tipoMovimiento] || 'secondary';
-          const iconClass = iconMap[tipoMovimiento] || iconMap['default'];
+          const badgeClass = colorMap[tipoMovimiento] ?? 'secondary';
+          const iconClass = iconMap[tipoMovimiento] ?? iconMap.default;
 
           const displayText =
             tipoMovimiento === 'espera'
@@ -210,7 +205,7 @@ const TablaAccesos = ({ title, tipo, background }) => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
-    state: { showProgressBars: isLoading2 },
+    state: { showProgressBars: isLoading },
     enableColumnPinning: true,
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
@@ -218,7 +213,7 @@ const TablaAccesos = ({ title, tipo, background }) => {
     initialState: {
       showColumnFilters: true,
       density: 'compact',
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
       showGlobalFilter: true,
       columnVisibility: {
         personas: tipo == 'autorizacion' ? true : false,
@@ -234,8 +229,7 @@ const TablaAccesos = ({ title, tipo, background }) => {
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
-      onClick: ({ event }) => {
-
+      onClick: () => {
         if (row.subRows?.length) {
         } else {
           handleClickOpen();
@@ -283,7 +277,7 @@ const TablaAccesos = ({ title, tipo, background }) => {
         },
       },
     },
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -304,7 +298,7 @@ const TablaAccesos = ({ title, tipo, background }) => {
             NuevoAcceso()
           }
         >
-          <i class="bi bi-plus-lg"></i> Nuevo registro
+          <i className="bi bi-plus-lg"></i> Nuevo registro
         </Button>
         <Button
           radius="full"
@@ -314,7 +308,7 @@ const TablaAccesos = ({ title, tipo, background }) => {
             fetchData()
           }
         >
-          <i class="bi bi-arrow-clockwise"></i> Recargar
+          <i className="bi bi-arrow-clockwise"></i> Recargar
         </Button>
       </Box>
     ),
@@ -326,7 +320,6 @@ const TablaAccesos = ({ title, tipo, background }) => {
       fullScreen
       open={open}
       onClose={handleClose}
-      TransitionComponent={Transition}
     >
       <AppBar elevation={0}
         position="static"
@@ -347,7 +340,7 @@ const TablaAccesos = ({ title, tipo, background }) => {
           <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
             Acceso
           </Typography>
-          <Button autoFocus color="inherit" onClick={handleClose}>
+          <Button autoFocus onPress={handleClose}>
             Cerrar
           </Button>
         </Toolbar>
