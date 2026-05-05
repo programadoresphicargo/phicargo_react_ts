@@ -1,5 +1,5 @@
 import { Button, Chip } from "@heroui/react";
-import { MRT_Cell, MaterialReactTable, useMaterialReactTable } from 'material-react-table';
+import { MRT_Cell, MRT_ColumnDef, MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 import { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import odooApi from '@/api/odoo-api';
@@ -16,10 +16,19 @@ const map: Record<Resultado, string> = {
   danoMayor: 'Daño mayor',
 };
 
+type ChecklistItem = {
+  id_checklist: number;
+  equipo: string;
+  nombre: string;
+  fecha: string;
+  fecha_creacion: string;
+  resultado: Resultado;
+};
+
 const Checklist = () => {
 
   const [isLoading, setisLoading] = useState(false);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<ChecklistItem[]>([]);
 
   useEffect(() => {
     fetchData();
@@ -30,8 +39,8 @@ const Checklist = () => {
       setisLoading(true);
       const response = await odooApi.get(`/tms_travel/checklist/?tipo_checklist=diario`);
       setData(response.data);
-    } catch (error) {
-      toast.error('Error al enviar los datos: ' + error);
+    } catch (error: any) {
+      toast.error('Error al enviar los datos: ' + (error?.message || 'Error desconocido'));
     } finally {
       setisLoading(false);
     }
@@ -42,11 +51,11 @@ const Checklist = () => {
     window.open(url, "_blank");
   };
 
-  const columns = [
+  const columns: MRT_ColumnDef<ChecklistItem>[] = [
     { accessorKey: 'id_checklist', header: 'ID' },
     {
       accessorKey: 'equipo', header: 'Equipo',
-      Cell: ({ cell }: { cell: MRT_Cell<any> }) => {
+      Cell: ({ cell }: { cell: MRT_Cell<ChecklistItem> }) => {
         const value = cell.getValue<string>() || '';
         return (
           <Chip className="text-white" size="sm" color="success" radius="full">
@@ -69,7 +78,7 @@ const Checklist = () => {
       accessorKey: 'id_checklist',
       id: 'descargar',
       header: 'Descargar',
-      Cell: ({ cell }: { cell: MRT_Cell<any> }) => {
+      Cell: ({ cell }: { cell: MRT_Cell<ChecklistItem> }) => {
         const id = cell.getValue<number>();
         return (
           <Button className="text-white" size="sm" color="primary" radius="full" onPress={() => OpenChecklist(id)}>
@@ -153,6 +162,7 @@ const Checklist = () => {
 
         <Button
           onPress={() => fetchData()}
+          isDisabled={isLoading}
           color="warning"
           className="text-white"
           radius="full"
