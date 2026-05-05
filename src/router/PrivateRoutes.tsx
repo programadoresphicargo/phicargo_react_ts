@@ -82,7 +82,6 @@ const SolicitudesLlantas = lazy(() => import('../phicargo/llantas/index_solicitu
 const Inventario = lazy(() => import('../phicargo/almacen/inventario/index'));
 const EntregaMonitoreo = lazy(() => import('../phicargo/monitoreo/monitoreo'));
 const CodigosPostales = lazy(() => import('../phicargo/viajes/codigos_postales/index'));
-const Geocercas = lazy(() => import('../phicargo/viajes/geocercas/geocerca'));
 const ChatBot = lazy(() => import('../phicargo/chat/chat'));
 const Minutas = lazy(() => import('../phicargo/minutas/control_minutas'));
 const EventosGPS = lazy(() => import('../modules/vehicles/components/motum-events/VehicleEventsPage'));
@@ -320,16 +319,6 @@ export const PrivateRoutes = () => {
           element={
             <Suspense fallback={<LoadingPage />}>
               <EnvioMasivoViajes />
-            </Suspense>
-          }
-        />
-
-
-        <Route
-          path="/geocercas"
-          element={
-            <Suspense fallback={<LoadingPage />}>
-              <Geocercas></Geocercas>
             </Suspense>
           }
         />
