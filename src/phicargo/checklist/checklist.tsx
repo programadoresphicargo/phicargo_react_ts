@@ -1,18 +1,20 @@
-import { Button, ButtonGroup, Chip, DatePicker, NumberInput } from "@heroui/react";
-import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
-import React, { useEffect, useState } from 'react';
-import { download, generateCsv, mkConfig } from 'export-to-csv';
-import { getLocalTimeZone, parseDate } from "@internationalized/date";
-import Badge from 'react-bootstrap/Badge';
+import { Button, Chip } from "@heroui/react";
+import { MRT_Cell, MaterialReactTable, useMaterialReactTable } from 'material-react-table';
+import { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
-import { Component } from "react";
 import odooApi from '@/api/odoo-api';
 import { toast } from "react-toastify";
-import { useDateFormatter } from "@react-aria/i18n";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { exportToCSV } from '../utils/export';
-import { DateRangePicker } from 'rsuite';
 import CustomNavbar from "@/pages/CustomNavbar";
+
+type Resultado = 'correcto' | 'danoMenor' | 'danoMayor';
+
+const map: Record<Resultado, string> = {
+  correcto: 'Correcto',
+  danoMenor: 'Daño menor',
+  danoMayor: 'Daño mayor',
+};
 
 const Checklist = () => {
 
@@ -35,7 +37,7 @@ const Checklist = () => {
     }
   };
 
-  const OpenChecklist = async (id_checklist) => {
+  const OpenChecklist = async (id_checklist: number) => {
     const url = `${odooApi.defaults.baseURL}/tms_travel/checklist/export/${id_checklist}`;
     window.open(url, "_blank");
   };
@@ -44,8 +46,8 @@ const Checklist = () => {
     { accessorKey: 'id_checklist', header: 'ID' },
     {
       accessorKey: 'equipo', header: 'Equipo',
-      Cell: ({ cell, row }) => {
-        const value = cell.getValue() || '';
+      Cell: ({ cell }: { cell: MRT_Cell<any> }) => {
+        const value = cell.getValue<string>() || '';
         return (
           <Chip className="text-white" size="sm" color="success" radius="full">
             {value}
@@ -57,13 +59,8 @@ const Checklist = () => {
     { accessorKey: 'fecha', header: 'Fecha' },
     { accessorKey: 'fecha_creacion', header: 'Fecha creacion' },
     {
-      accessorFn: (row) => {
-        const map = {
-          correcto: 'Correcto',
-          danoMenor: 'Daño menor',
-          danoMayor: 'Daño mayor',
-        };
-        return map[row.resultado] || row.resultado;
+      accessorFn: (row: { resultado: Resultado }) => {
+        return map[row.resultado];
       },
       id: 'resultado',
       header: 'Resultado',
@@ -72,11 +69,11 @@ const Checklist = () => {
       accessorKey: 'id_checklist',
       id: 'descargar',
       header: 'Descargar',
-      Cell: ({ cell, row }) => {
-        const id = cell.getValue() || '';
+      Cell: ({ cell }: { cell: MRT_Cell<any> }) => {
+        const id = cell.getValue<number>();
         return (
           <Button className="text-white" size="sm" color="primary" radius="full" onPress={() => OpenChecklist(id)}>
-            <i class="bi bi-file-pdf"></i>
+            <i className="bi bi-file-pdf"></i>
             Descargar
           </Button>
         );
@@ -93,15 +90,13 @@ const Checklist = () => {
     enableFilters: true,
     enableBottomToolbar: true,
     localization: MRT_Localization_ES,
-    enableColumnAggregations: true,
     groupedColumnMode: 'remove',
     columnResizeMode: "onEnd",
     positionToolbarAlertBanner: "bottom",
     initialState: {
       grouping: ['fecha_creacion'],
       density: 'compact',
-      expanded: false,
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
       showColumnFilters: true,
     },
     muiTablePaperProps: {
@@ -131,7 +126,7 @@ const Checklist = () => {
         color: row.subRows?.length ? '#FFFFFF' : '#000000',
       },
     }),
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
