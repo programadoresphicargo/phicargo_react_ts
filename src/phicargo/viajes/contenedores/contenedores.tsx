@@ -18,14 +18,14 @@ function Contenedores() {
     const [isLoading, setIsLoading] = useState(false);
 
     const fetchData = async () => {
-        setIsLoading(true); // Inicia la carga
+        setIsLoading(true);
         try {
             const response = await odooApi.get('/tms_waybill/get_by_travel_id/' + id_viaje);
             setData(response.data);
         } catch (error) {
             toast.error('Error al obtener los contenedores: ' + error);
         } finally {
-            setIsLoading(false); // Finaliza la carga
+            setIsLoading(false);
         }
     };
 
