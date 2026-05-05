@@ -1,4 +1,4 @@
-import { Avatar, Card, CardBody, CardFooter, CardHeader, CircularProgress } from "@heroui/react";
+import { Avatar, Card, CardFooter, CardHeader, CircularProgress } from "@heroui/react";
 import {
     Button,
     Drawer,
@@ -6,33 +6,37 @@ import {
     DrawerContent,
     DrawerFooter,
     DrawerHeader,
-    useDisclosure,
 } from "@heroui/react";
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
+import React, { useEffect } from 'react';
 import { Chip } from "@heroui/react";
-import { Container } from '@mui/material';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
 import ReporteOperador from "./reporte";
-import Toolbar from '@mui/material/Toolbar';
-import Travel from '../control/viaje';
-import Typography from '@mui/material/Typography';
-import { ViajeContext } from '../context/viajeContext';
 import odooApi from '@/api/odoo-api';
-import { tiempoTranscurrido } from '../../funciones/tiempo';
 
-export default function ProblemasOperadores2({ isOpen, onOpen, onOpenChange }) {
+type Reporte = {
+    id_reporte: number;
+    atendido: boolean;
+    nombre_operador: string;
+    referencia: string;
+    fecha_creacion: string;
+};
 
-    const [id_reporte, setIDReporte] = React.useState("");
-    const [estatus, setEstatus] = React.useState([]);
+type ProblemasOperadoresProps = {
+    isOpen: boolean;
+    onOpenChange: () => void;
+};
+
+const ProblemasOperadores: React.FC<ProblemasOperadoresProps> = ({
+    isOpen,
+    onOpenChange
+}) => {
+
+    const [id_reporte, setIDReporte] = React.useState<number | null>(null);
+    const [estatus, setEstatus] = React.useState<Reporte[]>([]);
     const [isLoading, setLoading] = React.useState(false);
 
     const [openReporte, setOpenReporte] = React.useState(false);
 
-    const handleClickOpen = (id_reporte) => {
+    const handleClickOpen = (id_reporte: number) => {
         setIDReporte(id_reporte);
         setOpenReporte(true);
     };
@@ -70,12 +74,10 @@ export default function ProblemasOperadores2({ isOpen, onOpen, onOpenChange }) {
                         enter: {
                             opacity: 1,
                             x: 0,
-                            duration: 0.3,
                         },
                         exit: {
                             x: 100,
                             opacity: 0,
-                            duration: 0.3,
                         },
                     },
                 }}
@@ -87,7 +89,7 @@ export default function ProblemasOperadores2({ isOpen, onOpen, onOpenChange }) {
                             <DrawerHeader className="flex flex-col gap-1">Problemas operador</DrawerHeader>
                             <DrawerBody>
 
-                                <ul class="list-group list-group-flush navbar-card-list-group">
+                                <ul className="list-group list-group-flush navbar-card-list-group">
 
                                     {isLoading && (
                                         <div style={{ marginTop: '20px' }} className="d-flex justify-content-center">
@@ -95,7 +97,7 @@ export default function ProblemasOperadores2({ isOpen, onOpen, onOpenChange }) {
                                         </div>
                                     )}
 
-                                    {estatus.map((step, index) => (
+                                    {estatus.map((step) => (
                                         <>
                                             <Card className='m-2' onPress={() => handleClickOpen(step.id_reporte)} isPressable fullWidth>
                                                 <CardHeader className="justify-between">
@@ -127,7 +129,7 @@ export default function ProblemasOperadores2({ isOpen, onOpen, onOpenChange }) {
                                 </ul>
                             </DrawerBody>
                             <DrawerFooter>
-                                <Button color="primary" onPress={onClose}>
+                                <Button color="primary" onPress={onClose} radius="full">
                                     Cerrar
                                 </Button>
                             </DrawerFooter>
@@ -138,3 +140,5 @@ export default function ProblemasOperadores2({ isOpen, onOpen, onOpenChange }) {
         </>
     );
 }
+
+export default ProblemasOperadores;

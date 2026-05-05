@@ -1,37 +1,17 @@
-import { Link } from 'react-router-dom';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Alert } from '@heroui/react';
-import AppBar from '@mui/material/AppBar';
-import AppsIcon from '@mui/icons-material/Apps';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Badge from '@mui/material/Badge';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
-import MailIcon from '@mui/icons-material/Mail';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import { MotumAlertsPanel } from '@/modules/vehicles/components/motum-events/MotumAlertsPanel';
 import Notificaciones from './panel_notificaciones/panel';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import ProblemasOperadores from './problemas_operadores/panel';
-import ProblemasOperadores2 from './problemas_operadores/panel';
 import ReportIcon from '@mui/icons-material/Report';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import { makeStyles } from '@mui/styles';
 import odooApi from '@/api/odoo-api';
 import { useDisclosure } from '@heroui/react';
-import { useJourneyDialogs } from './seguimiento/funciones';
-import logo from '../../assets/img/phicargo-vertical.png';
-import { useAuthContext } from '@/modules/auth/hooks';
-import AvatarProfile from '@/components/ui/AvatarProfile';
-import Slide from "@mui/material/Slide";
-import { ViajeContext } from './context/viajeContext';
 import CustomNavbar from '@/pages/CustomNavbar';
-import { pages } from '../viajes/pages';
+import { pages } from './pages';
+import ProblemasOperadores from './problemas_operadores/panel';
 
 function NavbarTravel() {
 
@@ -98,12 +78,12 @@ function NavbarTravel() {
         isOpen={isOpen}
         onOpen={onOpen}
         onOpenChange={onOpenChange}
-      ></Notificaciones>
+      />
 
-      <ProblemasOperadores2
+      <ProblemasOperadores
         isOpen={isOpenPO}
         onOpenChange={onOpenChangePO}
-      ></ProblemasOperadores2>
+      />
 
     </>
   );
