@@ -336,8 +336,10 @@ const DisponibilidadDiariaFlota: React.FC = () => {
   return (
     <div>
 
-      <Travel idViaje={idViaje} open={open} handleClose={handleClose} />
-
+      {idViaje && (
+        <Travel idViaje={idViaje} open={open} handleClose={handleClose} />
+      )}
+      
       {reportDetail && (
         <RecordDetailsModal
           open={openReport}

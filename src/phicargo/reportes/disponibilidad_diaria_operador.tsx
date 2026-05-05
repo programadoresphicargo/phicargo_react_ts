@@ -345,9 +345,9 @@ const DisponibilidadDiariaOperadores: React.FC = () => {
 
   return (
     <div>
-
-      <Travel idViaje={idViaje} open={open} handleClose={handleClose} />
-
+      {idViaje && (
+        <Travel idViaje={idViaje} open={open} handleClose={handleClose} />
+      )}
       <CustomNavbar />
 
       <div style={{ padding: "10px" }}>
