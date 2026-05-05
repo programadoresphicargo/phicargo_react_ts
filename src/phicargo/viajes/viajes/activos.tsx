@@ -182,7 +182,7 @@ const ViajesActivos = ({ }) => {
       {
         accessorKey: 'modo',
         header: 'Modalidad',
-        Cell: ({ cell }) => {
+        Cell: ({ cell }: { cell: MRT_Cell<Viaje> }) => {
           const tipoMovimiento = cell.getValue<string>() || '';
 
           return (
@@ -512,8 +512,9 @@ const ViajesActivos = ({ }) => {
       <DetencionesViajesActivos isOpen={isOpen} close={onClose}></DetencionesViajesActivos>
       <NavbarTravel></NavbarTravel>
       <MaterialReactTable table={table} />
-      <Travel idViaje={idViaje} open={open} handleClose={handleClose}></Travel>
-
+      {idViaje !== null && (
+        <Travel idViaje={idViaje} open={open} handleClose={handleClose}></Travel>
+      )}
       <Dialog
         open={openMasivo}
         fullScreen={true}

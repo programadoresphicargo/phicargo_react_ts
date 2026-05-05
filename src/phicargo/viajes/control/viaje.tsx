@@ -1,17 +1,20 @@
-import React, { useContext } from "react";
-import { Dialog, AppBar, Toolbar, IconButton, Typography, Slide, Drawer } from "@mui/material";
+import { Dialog, AppBar, Toolbar, IconButton, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import Viaje from "../viaje";
 import { Button } from "@heroui/react";
-import { styled } from '@mui/material/styles';
-import { ViajeContext, ViajeProvider } from "../context/viajeContext";
-import EstatusHistorialAgrupado from "../estatus/estatus_agrupados";
+import { ViajeProvider } from "../context/viajeContext";
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-});
+type TravelProps = {
+    idViaje: number;
+    open: boolean;
+    handleClose: () => void;
+};
 
-const Travel = ({ idViaje, open, handleClose }) => {
+const Travel: React.FC<TravelProps> = ({
+    idViaje,
+    open,
+    handleClose
+}) => {
 
     return (
         <ViajeProvider>
@@ -19,7 +22,6 @@ const Travel = ({ idViaje, open, handleClose }) => {
                 fullScreen
                 open={open}
                 onClose={handleClose}
-                TransitionComponent={Transition}
             >
                 <AppBar
                     elevation={0} position="static"

@@ -357,7 +357,9 @@ const ViajesProgramados = ({ }) => {
     <>
       <NavbarTravel></NavbarTravel>
       <MaterialReactTable table={table} />
-      <Travel idViaje={idViaje} open={open} handleClose={handleClose}></Travel>
+      {idViaje !== null && (
+        <Travel idViaje={idViaje} open={open} handleClose={handleClose}></Travel>
+      )}
     </>
   );
 };
