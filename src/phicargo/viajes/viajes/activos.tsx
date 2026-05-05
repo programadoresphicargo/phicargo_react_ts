@@ -1,11 +1,12 @@
 import {
+  MRT_Cell,
+  MRT_Row,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import { Popover, PopoverContent, PopoverTrigger, User, useDisclosure } from "@heroui/react";
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { useDisclosure } from "@heroui/react";
+import React, { useEffect, useMemo, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
-import { Avatar } from "@heroui/react";
 import { Box } from '@mui/material';
 import { Button } from "@heroui/react"
 import { Chip } from "@heroui/react";
@@ -14,14 +15,10 @@ import DetencionesViajesActivos from '../detenciones/detenciones_modal';
 import Dialog from '@mui/material/Dialog';
 import EstatusDropdown from '../estatus/resumen_estatus';
 import IconButton from '@mui/material/IconButton';
-import { Image } from 'antd';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import Slide from '@mui/material/Slide';
 import Toolbar from '@mui/material/Toolbar';
 import Travel from '../control/viaje';
 import Typography from '@mui/material/Typography';
-import Viaje from '../viaje';
-import { ViajeContext } from '../context/viajeContext';
 import ViajesActivosMasivo from '../envio_masivo/viajes_activos';
 import { exportToCSV } from '../../utils/export';
 import odooApi from '@/api/odoo-api';
@@ -31,16 +28,22 @@ import EstatusChipLlegadaPlanta from '../componentes/status_chip_planta';
 import NavbarTravel from '../navbar_viajes';
 import WebSocketWithToast from '@/phicargo/websocket/websocket';
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+type Viaje = {
+  id_viaje: number;
+  name: string;
+  ejecutivo: string;
+  ultimo_envio_ejecutivo: string;
+  codigo_postal: number;
+  distancia_km: number;
+  tiempo_estimado_horas: number;
+  observacion_ubicacion: string;
+};
 
 const ViajesActivos = ({ }) => {
 
   const [open, setOpen] = React.useState(false);
   const [openMasivo, setMasivoOpen] = React.useState(false);
-  const [idViaje, setIDViaje] = React.useState(null);
-  const [blinkRows, setBlinkRows] = useState({});
+  const [idViaje, setIDViaje] = React.useState<number | null>(null);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -77,18 +80,13 @@ const ViajesActivos = ({ }) => {
         toast.success(response.data.message);
       } else {
         toast.error('Respuesta inesperada del servidor.');
-        console.warn('Respuesta:', response.data); // Log de respaldo para depurar
+        console.warn('Respuesta:', response.data);
       }
-    } catch (error) {
-      // 1. Error devuelto por FastAPI con detail
+    } catch (error: any) {
       if (error.response?.data?.detail) {
         toast.error('Error conexión SMTP: ' + error.response.data.detail);
-
-        // 2. Error con solo mensaje
       } else if (error.message) {
         toast.error('Error conexión SMTP: ' + error.message);
-
-        // 3. Cualquier otro caso raro
       } else {
         toast.error('Error desconocido al validar conexión SMTP');
         console.error('Error desconocido:', error);
@@ -99,7 +97,7 @@ const ViajesActivos = ({ }) => {
   const updateCP = async () => {
     try {
       const response = await odooApi.get('/tms_travel/codigos_postales/obtener_coordenadas/');
-      const { status, message, codigos_insertados, codigos_no_encontrados } = response.data;
+      const { message, codigos_insertados, codigos_no_encontrados } = response.data;
 
       toast.success(
         `${message}
@@ -130,7 +128,7 @@ const ViajesActivos = ({ }) => {
       {
         accessorKey: 'name',
         header: 'Referencia',
-        Cell: ({ cell }) => {
+        Cell: ({ cell }: { cell: MRT_Cell<Viaje> }) => {
           const Referencia = cell.getValue();
 
           return (
@@ -155,9 +153,10 @@ const ViajesActivos = ({ }) => {
       {
         accessorKey: 'x_status_viaje',
         header: 'Estado',
-        Cell: ({ cell }) => {
-          const estatus = cell.getValue();
-          let badgeClass = '';
+        Cell: ({ cell }: { cell: MRT_Cell<Viaje> }) => {
+          const estatus = cell.getValue<string>();
+
+          let badgeClass: "default" | "primary" | "success" | "warning" | "secondary" | "danger" = "default";
 
           if (estatus === 'ruta') {
             badgeClass = 'primary';
@@ -184,19 +183,10 @@ const ViajesActivos = ({ }) => {
         accessorKey: 'modo',
         header: 'Modalidad',
         Cell: ({ cell }) => {
-          const tipoMovimiento = cell.getValue() || '';
-          let badgeClass = 'default';
-
-          if (tipoMovimiento === 'imp') {
-            badgeClass = 'warning';
-          } else if (tipoMovimiento === 'exp') {
-            badgeClass = 'danger';
-          } else {
-            badgeClass = 'primary';
-          }
+          const tipoMovimiento = cell.getValue<string>() || '';
 
           return (
-            <Chip color={badgeClass} className="text-white" size="sm">
+            <Chip color={tipoMovimiento === 'imp' ? "warning" : "danger"} className="text-white" size="sm">
               {tipoMovimiento.charAt(0).toUpperCase() + tipoMovimiento.slice(1)}
             </Chip>
           );
@@ -205,7 +195,7 @@ const ViajesActivos = ({ }) => {
       {
         accessorKey: 'ultimo_estatus_enviado',
         header: 'Último estatus',
-        Cell: ({ cell }) => (
+        Cell: ({ cell }: { cell: MRT_Cell<Viaje> }) => (
           <EstatusDropdown
             data={cell.row.original}
           />
@@ -215,8 +205,8 @@ const ViajesActivos = ({ }) => {
         accessorKey: 'vehiculo',
         header: 'Vehiculo',
         id: 'vehiculo',
-        Cell: ({ cell }) => {
-          const vehiculo = cell.getValue() || '';
+        Cell: ({ cell }: { cell: MRT_Cell<Viaje> }) => {
+          const vehiculo = cell.getValue<string>() || '';
 
           return (
             <Chip color={"primary"} size="sm">
@@ -229,7 +219,7 @@ const ViajesActivos = ({ }) => {
         accessorKey: 'operador',
         header: 'Operador',
         Cell: ({ cell }) => {
-          const value = cell.getValue();
+          const value = cell.getValue<string>();
 
           return (
             <Chip color='secondary' size='sm'>{value}</Chip>
@@ -243,7 +233,7 @@ const ViajesActivos = ({ }) => {
       {
         accessorKey: 'codigo_postal',
         header: 'Distancia al punto de carga/descarga (50km/h)',
-        Cell: ({ row }) => {
+        Cell: ({ row }: { row: MRT_Row<Viaje> }) => {
           const distancia = row.original.distancia_km;
           const tiempo_estimado_horas = row.original.tiempo_estimado_horas;
           const observacion_ubicacion = row.original.observacion_ubicacion;
@@ -298,19 +288,10 @@ const ViajesActivos = ({ }) => {
         accessorKey: 'tipo_armado',
         header: 'Armado',
         Cell: ({ cell }) => {
-          const value = cell.getValue() || '';
-          let badgeClass = 'default';
-
-          if (value === 'single') {
-            badgeClass = 'success';
-          } else if (value === 'full') {
-            badgeClass = 'danger';
-          } else {
-            badgeClass = 'primary';
-          }
+          const value = cell.getValue<string>() || '';
 
           return (
-            <Chip color={badgeClass} className="text-white" size="sm">
+            <Chip color={value === 'single' ? "success" : "danger"} className="text-white" size="sm">
               {value}
             </Chip>
           );
@@ -328,15 +309,10 @@ const ViajesActivos = ({ }) => {
         accessorKey: 'estado_estadia',
         header: 'Estado estadias',
         Cell: ({ cell }) => {
-          const estado = cell.getValue();
-          let color = 'default';
-
-          if (estado === 'Generando estadías') {
-            color = 'danger';
-          }
+          const estado = cell.getValue<string>();
 
           return (
-            <Chip color={color} size='sm'>
+            <Chip color={estado === 'Generando estadías' ? "danger" : "default"} size='sm'>
               {estado}
             </Chip>
           );
@@ -370,17 +346,14 @@ const ViajesActivos = ({ }) => {
     },
     columnResizeMode: "onEnd",
     initialState: {
-      expanded: false,
       grouping: ["sucursal"],
       showGlobalFilter: true,
       columnVisibility: {
         empresa: false,
       },
-      hiddenColumns: ["empresa"],
       density: 'compact',
-      expanded: false,
       showColumnFilters: true,
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
     },
     muiTablePaperProps: {
       elevation: 0,
@@ -419,7 +392,7 @@ const ViajesActivos = ({ }) => {
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
-      onClick: ({ event }) => {
+      onClick: () => {
         handleClickOpen();
         setIDViaje(row.original.id_viaje);
       },
@@ -427,7 +400,7 @@ const ViajesActivos = ({ }) => {
     muiTableBodyCellProps: ({ row }) => {
       const ultimoEnvio = new Date(row.original.ultimo_envio_ejecutivo);
       const ahora = new Date();
-      const diferenciaMs = ahora - ultimoEnvio; // ahora - ultimoEnvio, no al revés
+      const diferenciaMs = ahora.getTime() - ultimoEnvio.getTime();
       const diferenciaHoras = diferenciaMs / (1000 * 60 * 60);
 
       // Si han pasado más de 1 hora, aplicar estilo
@@ -457,7 +430,7 @@ const ViajesActivos = ({ }) => {
         },
       };
     },
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -529,7 +502,7 @@ const ViajesActivos = ({ }) => {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const handleOpen = (size) => {
+  const handleOpen = () => {
     onOpen();
   };
 
@@ -546,13 +519,11 @@ const ViajesActivos = ({ }) => {
         fullScreen={true}
         scroll='paper'
         onClose={handleClose2}
-        TransitionComponent={Transition}
       >
         <AppBar sx={{ position: 'relative', backgroundColor: 'white' }} elevation={0}>
           <Toolbar>
             <IconButton
               edge="start"
-              color="black"
               onClick={handleClose2}
               aria-label="close"
             >
@@ -561,7 +532,7 @@ const ViajesActivos = ({ }) => {
             <Typography sx={{ ml: 2, flex: 1, color: 'black' }} variant="h6" component="div">
             </Typography>
             <Button autoFocus color="primary" onPress={handleClose2}>
-              SALIR
+              Salir
             </Button>
           </Toolbar>
         </AppBar>
