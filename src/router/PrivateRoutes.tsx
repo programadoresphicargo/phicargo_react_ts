@@ -28,7 +28,7 @@ const ContenedoresPendientes = lazy(
   () => import('../phicargo/maniobras/tms_waybill/pendientes'),
 );
 const ControlManiobras = lazy(
-  () => import('../phicargo/maniobras/control/control'),
+  () => import('../phicargo/maniobras/control/control.tsx'),
 );
 const Nominas = lazy(() => import('../phicargo/maniobras/pagos/pagos'));
 const NominasViejas = lazy(() => import('../phicargo/maniobras/pagos/pagos_viejos'));

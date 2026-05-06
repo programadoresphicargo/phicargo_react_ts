@@ -11,9 +11,12 @@ import { pages } from '../pages';
 
 export default function control_maniobras() {
 
-    const [value, setValue] = React.useState('1');
+    const [value, setValue] = React.useState<string>('1');
 
-    const handleChange = (event, newValue) => {
+    const handleChange = (
+        _: any,
+        newValue: string
+    ) => {
         setValue(newValue);
     };
 

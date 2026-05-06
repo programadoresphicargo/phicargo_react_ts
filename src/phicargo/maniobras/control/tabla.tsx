@@ -1,5 +1,6 @@
 import { Button, Chip } from "@heroui/react";
 import {
+  MRT_Cell,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
@@ -19,21 +20,39 @@ import Typography from '@mui/material/Typography';
 import { User } from "@heroui/react";
 import { exportToCSV } from '../../utils/export';
 import odooApi from '@/api/odoo-api';
-import { DateRangePicker } from 'rsuite';
+import { DateRangePicker, TransitionProps } from 'rsuite';
 import { Checkbox } from "@heroui/react";
 
-const getMonthStartAndEnd = () => {
-  const now = new Date();
-  const start = new Date(now.getFullYear(), now.getMonth(), 1); // 1er día
-  const end = new Date(now.getFullYear(), now.getMonth() + 1, 0); // Último día
-  return [start, end];
+type Params = {
+  estado: string;
+  fecha_inicio?: string;
+  fecha_fin?: string;
 };
 
-const Transition = React.forwardRef(function Transition(props, ref) {
+type Maniobra = {
+  id_maniobra: number;
+  tipo_maniobra: string;
+  fecha_registro: string;
+  usuario_ultimo_estatus: string;
+  fecha_ultimo_estatus: string;
+};
+
+const Transition = React.forwardRef(function Transition(
+  props: TransitionProps & {
+    children: React.ReactElement<any, any>;
+  },
+  ref: React.Ref<unknown>,
+) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const Maniobras = ({ estado_maniobra }) => {
+type ManiobrasProps = {
+  estado_maniobra: string;
+};
+
+const Maniobras: React.FC<ManiobrasProps> = ({
+  estado_maniobra
+}) => {
 
   const tipo_maniobra = [
     { tipo: 'retiro', label: "Retiro" },
@@ -46,16 +65,20 @@ const Maniobras = ({ estado_maniobra }) => {
     'cancelada',
   ];
 
-  const [filteredData, setFilteredData] = useState([]);
-  const [selectedManiobras, setSelectedManiobras] = useState([]);
-  const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState<Maniobra[]>([]);
+  const [selectedManiobras, setSelectedManiobras] = useState<string[]>([]);
+  const [data, setData] = useState<Maniobra[]>([]);
   const [isLoading, setLoading] = useState(false);
   const [modalShow, setModalShow] = useState(false);
-  const [id_maniobra, setIDManiobra] = useState(null);
+  const [id_maniobra, setIDManiobra] = useState<number | null>(null);
   const [dataCP, setDataCP] = useState({});
-  const [range, setRange] = useState(getMonthStartAndEnd());
 
-  const handleShowModal = (id_maniobra, data) => {
+  const now = new Date();
+  const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+  const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+  const [range, setRange] = useState<[Date, Date] | null>([firstDay, lastDay]);
+
+  const handleShowModal = (id_maniobra: number, data: Maniobra) => {
     setModalShow(true);
     setIDManiobra(id_maniobra);
     setDataCP(data);
@@ -68,13 +91,14 @@ const Maniobras = ({ estado_maniobra }) => {
 
   const fetchData = async () => {
     try {
+      if (!range) return;
+
       setLoading(true);
 
-      const params = {
-        estado: estado_maniobra, // 👈 SIEMPRE
+      const params: Params = {
+        estado: estado_maniobra,
       };
 
-      // 👇 solo agregar fechas si el estado las necesita
       if (ESTADOS_CON_FECHA.includes(estado_maniobra)) {
         params.fecha_inicio = range[0].toISOString().split('T')[0];
         params.fecha_fin = range[1].toISOString().split('T')[0];
@@ -121,25 +145,9 @@ const Maniobras = ({ estado_maniobra }) => {
         accessorKey: 'inicio_programado',
         header: 'Inicio programado',
         size: 150,
-        Cell: ({ cell }) => {
-          const rawDate = cell.getValue();
-          const date = new Date(rawDate);
-
-          if (isNaN(date.getTime())) {
-            return "Fecha no válida";
-          }
-
-          const options = {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-            hour: 'numeric',
-            minute: '2-digit',
-            hour12: true,
-          };
-
-          const formattedDate = date.toLocaleString('es-ES', options);
-          return formattedDate;
+        Cell: ({ cell }: { cell: MRT_Cell<Maniobra> }) => {
+          const date = cell.getValue<string>();
+          return date;
         },
       },
       {
@@ -149,8 +157,9 @@ const Maniobras = ({ estado_maniobra }) => {
       {
         accessorKey: 'unidad',
         header: 'Unidad',
-        Cell: ({ cell }) => {
-          const value = cell.getValue();
+        Cell: ({ cell }: { cell: MRT_Cell<Maniobra> }) => {
+          const value = cell.getValue<string>();
+          if (!value) return;
           return (
             <Chip color='primary' size="sm">
               {value}
@@ -166,20 +175,17 @@ const Maniobras = ({ estado_maniobra }) => {
       {
         accessorKey: 'tipo_empleado',
         header: 'Tipo',
-        Cell: ({ cell }) => {
-          const value = cell.getValue();
-
-          let color = 'success';
-          if (value === 'MOVEDOR') {
-            color = 'success';
-          } else if (value === 'OPERADOR') {
-            color = 'primary';
-          } else if (value === 'OPERADOR POSTURERO') {
-            color = 'danger';
-          }
+        Cell: ({ cell }: { cell: MRT_Cell<Maniobra> }) => {
+          const value = cell.getValue<string>();
+          if (!value) return;
 
           return (
-            <Chip color={color} size="sm" className="text-white capitalize">
+            <Chip color={
+              value === "MOVEDOR" ? "success" :
+                value === "OPERADOR" ? "primary" :
+                  value === "OPERADOR POSTURERO"
+                    ? "danger" : "default"} size="sm"
+              className="text-white capitalize">
               {value}
             </Chip>
           );
@@ -188,44 +194,32 @@ const Maniobras = ({ estado_maniobra }) => {
       {
         accessorKey: 'tipo_maniobra',
         header: 'Tipo de maniobra',
-        Cell: ({ cell }) => {
-          const value = cell.getValue();
-
-          let variant = 'secondary';
-          if (value === 'retiro') {
-            variant = 'success';
-          } else if (value === 'ingreso') {
-            variant = 'primary';
-          } else if (value === 'local') {
-            variant = 'danger';
-          }
+        Cell: ({ cell }: { cell: MRT_Cell<Maniobra> }) => {
+          const value = cell.getValue<string>();
 
           return (
-            <Chip color={variant} className="text-white" size="sm">
+            <Chip color={
+              value === 'retiro'
+                ? 'success'
+                : value === 'ingreso'
+                  ? 'primary'
+                  : value === 'local'
+                    ? 'danger'
+                    : 'secondary'} className="text-white" size="sm">
               {value}
             </Chip>
           );
         },
-
       },
       {
         accessorKey: 'modo',
         header: 'Modo',
-        Cell: ({ cell }) => {
-          const tipoMovimiento = String(cell.getValue() || '');
-          let badgeClass = 'default';
-
-          if (tipoMovimiento === 'imp') {
-            badgeClass = 'warning';
-          } else if (tipoMovimiento === 'exp') {
-            badgeClass = 'danger';
-          } else {
-            badgeClass = 'primary';
-          }
+        Cell: ({ cell }: { cell: MRT_Cell<Maniobra> }) => {
+          const modo = String(cell.getValue() || '');
 
           return (
-            <Chip color={badgeClass} className="text-white" size="sm">
-              {tipoMovimiento.charAt(0).toUpperCase() + tipoMovimiento.slice(1)}
+            <Chip color={modo == "imp" ? "warning" : "danger"} className="text-white" size="sm">
+              {modo.charAt(0).toUpperCase() + modo.slice(1)}
             </Chip>
           );
         },
@@ -242,7 +236,7 @@ const Maniobras = ({ estado_maniobra }) => {
         accessorKey: 'ultimo_estatus',
         header: 'Último estatus enviado',
         size: 300,
-        Cell: ({ cell }) => (
+        Cell: ({ cell }: { cell: MRT_Cell<Maniobra> }) => (
           <EstatusDropdownManiobra
             id_maniobra={cell.row.original.id_maniobra}
             ultimo_estatus={cell.getValue() || ''}
@@ -280,8 +274,8 @@ const Maniobras = ({ estado_maniobra }) => {
         accessorKey: 'usuario_creacion',
         header: 'Usuario registro',
         size: 150,
-        Cell: ({ cell }) => {
-          const nombre = cell.getValue();
+        Cell: ({ cell }: { cell: MRT_Cell<Maniobra> }) => {
+          const nombre = cell.getValue<string>();
           const fecha_registro = cell.row.original.fecha_registro;
 
           return (
@@ -315,7 +309,7 @@ const Maniobras = ({ estado_maniobra }) => {
     initialState: {
       density: 'compact',
       showColumnFilters: true,
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
     },
     muiTablePaperProps: {
       elevation: 0,
@@ -329,7 +323,7 @@ const Maniobras = ({ estado_maniobra }) => {
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
-      onClick: (event) => {
+      onClick: () => {
         if (!row.subRows?.length) {
           handleShowModal(row.original.id_maniobra, row.original);
         }
@@ -353,7 +347,7 @@ const Maniobras = ({ estado_maniobra }) => {
       },
     },
 
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -390,9 +384,9 @@ const Maniobras = ({ estado_maniobra }) => {
             </li>
           ))}
         </ul>
-        <Button color="primary" isLoading={isLoading} onPress={() => fetchData()} startContent={<i class="bi bi-arrow-clockwise"></i>} size="sm" radius="full">Refrescar</Button>
-        <Button color="secondary" isLoading={isLoading} onPress={() => handleClickOpen()} className='text-white' startContent={<i class="bi bi-send-plus"></i>} size="sm" radius="full">Envio masivo</Button>
-        <Button color='success' isLoading={isLoading} className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(filteredData, columns, `maniobras ${estado_maniobra}.csv`)} size="sm" radius="full">Exportar</Button>
+        <Button color="primary" isLoading={isLoading} onPress={() => fetchData()} startContent={<i className="bi bi-arrow-clockwise"></i>} size="sm" radius="full">Refrescar</Button>
+        <Button color="secondary" isLoading={isLoading} onPress={() => handleClickOpen()} className='text-white' startContent={<i className="bi bi-send-plus"></i>} size="sm" radius="full">Envio masivo</Button>
+        <Button color='success' isLoading={isLoading} className='text-white' startContent={<i className="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(filteredData, columns, `maniobras ${estado_maniobra}.csv`)} size="sm" radius="full">Exportar</Button>
       </Box >
     ),
   });
@@ -414,7 +408,6 @@ const Maniobras = ({ estado_maniobra }) => {
         handleClose={handleCloseModal}
         id_maniobra={id_maniobra}
         dataCP={dataCP}
-        form_deshabilitado={true}
       />
 
       <MaterialReactTable table={table} />
@@ -423,8 +416,9 @@ const Maniobras = ({ estado_maniobra }) => {
         fullScreen
         open={open}
         onClose={handleClose}
-        TransitionComponent={Transition}
-      >
+        slots={{
+          transition: Transition,
+        }}>
         <AppBar
           elevation={0}
           sx={{
@@ -444,7 +438,7 @@ const Maniobras = ({ estado_maniobra }) => {
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
               Envio masivo de estatus
             </Typography>
-            <Button autoFocus color="inherit" onPress={handleClose}>
+            <Button autoFocus onPress={handleClose}>
               Cerrar
             </Button>
           </Toolbar>
