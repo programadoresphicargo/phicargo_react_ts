@@ -1,14 +1,18 @@
-import { Alert, Avatar, Badge, Card, CardHeader } from "@heroui/react";
-import React, { useContext, useEffect, useState } from 'react';
-import { Snippet } from "@heroui/snippet";
+import { Alert } from "@heroui/react";
+import { useContext, useEffect, useState } from 'react';
 import { ViajeContext } from '../context/viajeContext';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import { Spinner } from "@heroui/spinner";
 
+type Custodia = {
+    x_custodia_bel: string;
+};
+
 function Custodia() {
+    
     const { id_viaje } = useContext(ViajeContext);
-    const [data, setData] = useState([]);
+    const [data, setData] = useState<Custodia[]>([]);
     const [isLoading, setIsLoading] = useState(false);
 
     const fetchData = async () => {
@@ -35,10 +39,9 @@ function Custodia() {
                 </div>
             ) : (
                 data
-                    .filter((step) => step.x_custodia_bel === 'yes') // Filtra solo los que tienen 'yes'
-                    .map((step, index) => (
+                    .filter((step) => step.x_custodia_bel === 'yes')
+                    .map(() => (
                         <Alert
-                            key={index}
                             color="danger"
                             title="Servicio con custodia"
                             variant="solid"
@@ -47,7 +50,6 @@ function Custodia() {
             )}
         </>
     );
-
 }
 
 export default Custodia;

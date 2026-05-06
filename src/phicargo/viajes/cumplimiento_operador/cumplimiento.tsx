@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useMemo, useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { Progress } from "@heroui/react";
 import { ViajeContext } from '../context/viajeContext';
 import odooApi from '@/api/odoo-api';
-import { User, Link } from "@heroui/react";
 
 function CumplimientoOperador() {
 
