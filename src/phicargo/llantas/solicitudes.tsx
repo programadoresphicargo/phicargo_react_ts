@@ -141,7 +141,7 @@ const SolicitudesLlantas: React.FC<SolicitudesLlantasProps> = ({
               color={badgeClass as any}
               className="text-white"
             >
-              {estatus}
+              {estatus.toUpperCase()}
             </Chip>
           );
         },
