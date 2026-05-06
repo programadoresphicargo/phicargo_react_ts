@@ -12,6 +12,7 @@ import { ViajeContext } from "../context/viajeContext";
 import { toast } from "react-toastify";
 
 export default function PlantaViaje() {
+
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const { viaje, getViaje } = useContext(ViajeContext);
 
