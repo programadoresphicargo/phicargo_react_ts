@@ -1,8 +1,8 @@
 import { Button } from "@heroui/react";
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { useContext } from 'react';
 import { ViajeContext } from "../context/viajeContext";
 
-function crearEnlaceDistancia(latitud, longitud, tipo, codigoPostal, sucursal) {
+function crearEnlaceDistancia({ latitud, longitud, codigoPostal, sucursal }: { latitud: number; longitud: number, codigoPostal: string, sucursal: number }) {
     let codigoPostalOrigen = codigoPostal;
 
     if (sucursal === 1) {
@@ -14,11 +14,16 @@ function crearEnlaceDistancia(latitud, longitud, tipo, codigoPostal, sucursal) {
     return `https://www.google.com.mx/maps/dir/${latitud},${longitud}/${codigoPostalOrigen}/`;
 }
 
-function BotonDistanciaMapa({ latitud, longitud, tipo }) {
-    const { id_viaje, viaje } = useContext(ViajeContext);
+function BotonDistanciaMapa({ latitud, longitud }: { latitud: number, longitud: number }) {
+    const { viaje } = useContext(ViajeContext);
 
-    const enlace = crearEnlaceDistancia(latitud, longitud, tipo, viaje?.x_codigo_postal, viaje?.store_id);
-
+    const enlace = crearEnlaceDistancia({
+        latitud,
+        longitud,
+        codigoPostal: viaje?.x_codigo_postal ?? '',
+        sucursal: viaje?.store_id ?? 0,
+    });
+    
     return (
         <Button
             radius="full"
@@ -26,7 +31,7 @@ function BotonDistanciaMapa({ latitud, longitud, tipo }) {
             className='text-white'
             color="secondary"
         >
-            <i class="bi bi-geo-alt"></i>
+            <i className="bi bi-geo-alt"></i>
             Ver Ruta en Google Maps
         </Button>
     );
