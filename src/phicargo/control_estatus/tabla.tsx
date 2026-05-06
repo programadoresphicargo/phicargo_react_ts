@@ -1,40 +1,27 @@
 import {
+  MRT_Row,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
-import { Button } from "@heroui/react";
 import { Checkbox } from '@mui/material';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import Slide from '@mui/material/Slide';
 import odooApi from '@/api/odoo-api';
+import toast from 'react-hot-toast';
 const { VITE_ODOO_API_URL } = import.meta.env;
+
+type Estatus = {
+  id_estatus: number;
+  monitoreo: boolean;
+  operador: boolean;
+  es_justificante: boolean;
+  imagen: string;
+};
 
 const EstatusOperativos = ({ }) => {
 
-  const [open, setOpen] = React.useState(false);
-  const [id_acceso, setIDAcceso] = useState(0);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-    fetchData();
-  };
-
-  const NuevoAcceso = () => {
-    setOpen(true);
-    setIDAcceso(null);
-  };
-
-  const [data, setData] = useState([]);
-  const [isLoading2, setLoading] = useState();
+  const [data, setData] = useState<Estatus[]>([]);
+  const [isLoading, setLoading] = useState(false);
 
   const fetchData = async () => {
 
@@ -49,18 +36,18 @@ const EstatusOperativos = ({ }) => {
     }
   };
 
-  const cambiarPermiso = async (id_estatus, columna, estado) => {
+  const cambiarPermiso = async (id_estatus: number, columna: String, estado: String) => {
     try {
       setLoading(true);
-      const response = await odooApi.post(`/estatus_operativos/cambiar_permisos/?id_estatus=${id_estatus}&columna=${columna}&estado=${estado}`);
+      const response = await odooApi.post(`/estatus_operativos/cambiar_permisos/?id_estatus=${String(id_estatus)}&columna=${columna}&estado=${estado}`);
       setLoading(false);
       if (response.data.success === true) {
         fetchData();
       } else {
       }
-    } catch (error) {
+    } catch (error: any) {
       setLoading(false);
-      toast.error('Error al obtener los datos:', error);
+      toast.error('Error al obtener los datos: ' + error);
     }
   };
 
@@ -77,7 +64,7 @@ const EstatusOperativos = ({ }) => {
       {
         accessorKey: 'imagen',
         header: 'Icono',
-        Cell: ({ row }) => {
+        Cell: ({ row }: { row: MRT_Row<Estatus> }) => {
           const imagen = row.original.imagen;
 
           return (
@@ -103,7 +90,7 @@ const EstatusOperativos = ({ }) => {
           const id_estatus = row.original.id_estatus;
           const isChecked = row.original.monitoreo;
 
-          const handleCheckboxClick = (event) => {
+          const handleCheckboxClick = (event: any) => {
             const isCheckedNow = event.target.checked;
             cambiarPermiso(id_estatus, 'monitoreo', isCheckedNow);
           };
@@ -123,7 +110,7 @@ const EstatusOperativos = ({ }) => {
           const id_estatus = row.original.id_estatus;
           const isChecked = row.original.operador;
 
-          const handleCheckboxClick = (event) => {
+          const handleCheckboxClick = (event: any) => {
             const isCheckedNow = event.target.checked;
             cambiarPermiso(id_estatus, 'operador', isCheckedNow);
           };
@@ -143,7 +130,7 @@ const EstatusOperativos = ({ }) => {
           const id_estatus = row.original.id_estatus;
           const isChecked = row.original.es_justificante;
 
-          const handleCheckboxClick = (event) => {
+          const handleCheckboxClick = (event: any) => {
             const isCheckedNow = event.target.checked;
             cambiarPermiso(id_estatus, 'es_justificante', isCheckedNow);
           };
@@ -166,13 +153,13 @@ const EstatusOperativos = ({ }) => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
-    state: { showProgressBars: isLoading2 },
+    state: { showProgressBars: isLoading },
     enableColumnPinning: true,
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
     initialState: {
       density: 'compact',
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
     },
     muiTablePaperProps: {
       elevation: 0,
@@ -199,7 +186,7 @@ const EstatusOperativos = ({ }) => {
         maxHeight: 'calc(100vh - 220px)',
       },
     },
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -208,16 +195,6 @@ const EstatusOperativos = ({ }) => {
           flexWrap: 'wrap',
         }}
       >
-        <Button
-          color='primary'
-          radius='full'
-          disabled={table.getPrePaginationRowModel().rows.length === 0}
-          onPress={() =>
-            NuevoAcceso()
-          }
-        >
-          Nuesto estatus
-        </Button>
       </Box>
     ),
   });
