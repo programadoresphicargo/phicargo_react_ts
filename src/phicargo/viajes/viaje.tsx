@@ -23,6 +23,7 @@ import Seguimiento from "./seguimiento";
 import SolicitudesEquipoViaje from "./solicitudes/tabla";
 import { AlmacenProvider } from "../almacen/contexto/contexto";
 import SolicitudesLlantasViajesIndex from "./llantas/index_solicitudes_llantas";
+import ManiobrasViajes from "./maniobras/control";
 
 type ViajeProps = {
   idViaje: number;
@@ -124,13 +125,14 @@ const Viaje: React.FC<ViajeProps> = ({
                   height: '3px',
                 }
               }}>
-              <Tab sx={{ fontFamily: 'Inter' }} label="Seguimiento" value="1" />
-              <Tab sx={{ fontFamily: 'Inter' }} label="Mapa" value="2" />
-              <Tab sx={{ fontFamily: 'Inter' }} label="Documentos" value="3" />
-              <Tab sx={{ fontFamily: 'Inter' }} label="Detenciones" value="4" />
-              <Tab sx={{ fontFamily: 'Inter' }} label="Costos extras" value="5" />
-              <Tab sx={{ fontFamily: 'Inter' }} label="Solicitudes de equipo" value="6" />
-              <Tab sx={{ fontFamily: 'Inter' }} label="Llantas de refacción" value="7" />
+              <Tab sx={{ fontFamily: 'Inter' }} label="Viaje" value="1" />
+              <Tab sx={{ fontFamily: 'Inter' }} label="Maniobras" value="2" />
+              <Tab sx={{ fontFamily: 'Inter' }} label="Mapa" value="3" />
+              <Tab sx={{ fontFamily: 'Inter' }} label="Documentos" value="4" />
+              <Tab sx={{ fontFamily: 'Inter' }} label="Detenciones" value="5" />
+              <Tab sx={{ fontFamily: 'Inter' }} label="Costos extras" value="6" />
+              <Tab sx={{ fontFamily: 'Inter' }} label="Solicitudes de equipo" value="7" />
+              <Tab sx={{ fontFamily: 'Inter' }} label="Llantas de refacción" value="8" />
             </TabList>
           </Box>
 
@@ -139,39 +141,45 @@ const Viaje: React.FC<ViajeProps> = ({
           </TabPanel>
 
           <TabPanel value="2" sx={{ padding: 0 }}>
-            {value === "2" && <Map />}
+            {value === "2" && (
+              <ManiobrasViajes></ManiobrasViajes>
+            )}
           </TabPanel>
 
           <TabPanel value="3" sx={{ padding: 0 }}>
-            {value === "3" && <Documentacion />}
+            {value === "3" && <Map />}
           </TabPanel>
 
           <TabPanel value="4" sx={{ padding: 0 }}>
-            {value === "4" && (
+            {value === "4" && <Documentacion />}
+          </TabPanel>
+
+          <TabPanel value="5" sx={{ padding: 0 }}>
+            {value === "5" && (
               <TiemposViajeProvider>
                 <Detenciones />
               </TiemposViajeProvider>
             )}
           </TabPanel>
 
-          <TabPanel value="5" sx={{ padding: 0 }}>
-            {value === "5" && (
+          <TabPanel value="6" sx={{ padding: 0 }}>
+            {value === "6" && (
               <CostosExtrasProvider>
                 <FoliosCostosExtrasViaje />
               </CostosExtrasProvider>
             )}
           </TabPanel>
 
-          <TabPanel value="6" sx={{ padding: 0 }}>
-            {value === "6" && (
+          <TabPanel value="7" sx={{ padding: 0 }}>
+            {value === "7" && (
               <AlmacenProvider>
                 <SolicitudesEquipoViaje />
               </AlmacenProvider>
             )}
           </TabPanel>
 
-          <TabPanel value="7" sx={{ padding: 0 }}>
-            {value === "7" && (
+          <TabPanel value="8" sx={{ padding: 0 }}>
+            {value === "8" && (
               <SolicitudesLlantasViajesIndex></SolicitudesLlantasViajesIndex>
             )}
           </TabPanel>
