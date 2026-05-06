@@ -1,4 +1,5 @@
 import {
+  MRT_Cell,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
@@ -7,28 +8,36 @@ import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { AccesoContext } from '../context';
 import AppBar from '@mui/material/AppBar';
 import { Button } from '@heroui/react';
-import CloseIcon from '@mui/icons-material/Close';
 import Dialog from '@mui/material/Dialog';
-import FormEmpresa from '../visitantes/formulario';
-import IconButton from '@mui/material/IconButton';
 import Slide from '@mui/material/Slide';
-import Stack from '@mui/material/Stack';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import axios from 'axios';
-import dayjs from 'dayjs';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import { Box } from '@mui/material';
+import { TransitionProps } from '@mui/material/transitions';
 
-const Transition = React.forwardRef(function Transition(props, ref) {
+const Transition = React.forwardRef(function Transition(
+  props: TransitionProps & {
+    children: React.ReactElement<any, any>;
+  },
+  ref: React.Ref<unknown>,
+) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const ListadoEmpleados = ({ open, handleClose }) => {
+type ListadoEmpleadosProps = {
+  open: boolean;
+  handleClose: () => void;
+};
 
-  const [isLoading, setLoading] = useState();
-  const { formData, setEmpleados, empleados, setAddedEmpleados, AñadirEmpleadoAcceso } = useContext(AccesoContext);
+const ListadoEmpleados: React.FC<ListadoEmpleadosProps> = ({
+  open,
+  handleClose
+}) => {
+
+  const [isLoading, setLoading] = useState(false);
+  const { formData, setEmpleados, empleados, AñadirEmpleadoAcceso } = useContext(AccesoContext);
 
   const fetchEmpleados = async () => {
     try {
@@ -38,7 +47,7 @@ const ListadoEmpleados = ({ open, handleClose }) => {
 
       setEmpleados(response.data);
 
-    } catch (error) {
+    } catch (error: any) {
       toast.error("Error al obtener visitantes: " + error.message);
     } finally {
       setLoading(false);
@@ -56,7 +65,7 @@ const ListadoEmpleados = ({ open, handleClose }) => {
       {
         accessorKey: 'empleado',
         header: 'Empleado',
-        Cell: ({ cell }) => cell.getValue()?.toUpperCase(),
+        Cell: ({ cell }: { cell: MRT_Cell<any> }) => cell.getValue<string>()?.toUpperCase(),
       },
       {
         accessorKey: 'puesto',
@@ -64,7 +73,7 @@ const ListadoEmpleados = ({ open, handleClose }) => {
       },
       {
         accessorKey: 'jefe',
-        header: 'Jefe',
+        header: 'Jefe directo',
       },
     ],
     [],
@@ -83,7 +92,7 @@ const ListadoEmpleados = ({ open, handleClose }) => {
     columnResizeMode: "onEnd",
     initialState: {
       density: 'compact',
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
     },
     muiTablePaperProps: {
       elevation: 0,
@@ -92,8 +101,7 @@ const ListadoEmpleados = ({ open, handleClose }) => {
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
-      onClick: ({ event }) => {
-
+      onClick: () => {
         if (row.subRows?.length) {
         } else {
           AñadirEmpleadoAcceso(row.original.id_empleado);
@@ -104,7 +112,7 @@ const ListadoEmpleados = ({ open, handleClose }) => {
         cursor: 'pointer',
       },
     }),
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -136,7 +144,6 @@ const ListadoEmpleados = ({ open, handleClose }) => {
     },
   });
 
-  const [scroll, setScroll] = React.useState('paper');
 
   return (<>
 
@@ -144,7 +151,6 @@ const ListadoEmpleados = ({ open, handleClose }) => {
       open={open}
       onClose={handleClose}
       TransitionComponent={Transition}
-      scroll={scroll}
       maxWidth="lg"
       fullWidth
     >
@@ -157,7 +163,7 @@ const ListadoEmpleados = ({ open, handleClose }) => {
           <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
             Empleados Transportes Belchez (Nuevos empleados se registran desde Odoo)
           </Typography>
-          <Button autoFocus color="inherit" onPress={handleClose}>
+          <Button autoFocus onPress={handleClose}>
             Cerrar
           </Button>
         </Toolbar>
