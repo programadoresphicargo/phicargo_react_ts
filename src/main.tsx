@@ -4,6 +4,7 @@ import { App } from './App';
 import { BrowserRouter } from 'react-router-dom';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import '@fontsource/inter';
 
 // import { getEnvVariables } from './phicargo/modules/cashflow-report/utils';
 // import { init as sentryInit } from '@sentry/react';
