@@ -49,7 +49,7 @@ export const copiarHTML = async (travel_id: number) => {
             <td>${data.vehicle.name}</td>
             <td>${data.employee.name}</td>
             <td>${data.route.name}</td>
-            <td>${data.x_tipo_bel}</td>
+            <td>${data.x_tipo_bel.toUpperCase()}</td>
             <td>${data.x_references}</td>
           </tr>
         </table>
