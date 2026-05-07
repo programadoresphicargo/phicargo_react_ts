@@ -64,6 +64,7 @@ const Checklist = () => {
         );
       },
     },
+    { accessorKey: 'fleet_type', header: 'Tipo' },
     { accessorKey: 'nombre', header: 'Usuario creacion' },
     { accessorKey: 'fecha', header: 'Fecha' },
     { accessorKey: 'fecha_creacion', header: 'Fecha creacion' },
