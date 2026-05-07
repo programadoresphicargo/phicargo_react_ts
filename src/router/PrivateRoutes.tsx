@@ -149,7 +149,11 @@ export const PrivateRoutes = () => {
         </div>
       )}
       <Toaster />
-      <ToastContainer />
+      <ToastContainer
+        toastStyle={{
+          fontFamily: 'Inter',
+          borderRadius: '12px',
+        }} />
       <Routes>
         {/* Menú */}
         <Route path="/" element={<Navigate to="/menu" />} />
