@@ -1,7 +1,6 @@
 import { Badge, Chip } from "@heroui/react";
 import { Card, CardHeader } from "@heroui/react";
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-
 import { Avatar } from "@heroui/react";
 import { Button } from "@heroui/react";
 import Dialog from '@mui/material/Dialog';
@@ -58,7 +57,7 @@ function EstatusHistorialManiobras({ id_maniobra }) {
     return (
         <>
             <Stack className='mb-3'>
-                <Button color='primary' onPress={getHistorialEstatus} isLoading={isLoading} radius="full">Actualizar historial</Button>
+                <Button color='primary' onPress={getHistorialEstatus} isLoading={isLoading} radius="full" size="sm">Actualizar</Button>
             </Stack>
             <Dialog
                 open={open}
