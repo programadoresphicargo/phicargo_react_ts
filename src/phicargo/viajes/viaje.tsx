@@ -24,6 +24,7 @@ import SolicitudesEquipoViaje from "./solicitudes/tabla";
 import { AlmacenProvider } from "../almacen/contexto/contexto";
 import SolicitudesLlantasViajesIndex from "./llantas/index_solicitudes_llantas";
 import ManiobrasViajes from "./maniobras/control";
+import { copiarHTML } from "./cuenta_espejo/cuenta_espejo";
 
 type ViajeProps = {
   idViaje: number;
@@ -102,6 +103,14 @@ const Viaje: React.FC<ViajeProps> = ({
             onPress={handleClickOpenCorreos}>
             <i className="bi bi-envelope-at"></i>
             Correos electronicos
+          </Button>
+          <Button
+            radius="full"
+            color="warning"
+            className="text-white"
+            onPress={() => copiarHTML(id_viaje)}>
+            <i className="bi bi-clipboard"></i>
+            Copiar Cuenta Espejo
           </Button>
         </div>
       </div>
