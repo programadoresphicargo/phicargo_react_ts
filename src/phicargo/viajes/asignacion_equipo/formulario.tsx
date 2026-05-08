@@ -30,7 +30,7 @@ type PreasignacionForm = {
 type Props = {
     isOpen: boolean;
     onOpenChange: (open: boolean) => void;
-    data?: any;
+    dataCP: any;
 };
 
 type HistorialCambioEquipoRef = {
@@ -40,7 +40,7 @@ type HistorialCambioEquipoRef = {
 const FormularioAsignacionEquipo: React.FC<Props> = ({
     isOpen,
     onOpenChange,
-    data
+    dataCP
 }) => {
 
     const {
@@ -50,11 +50,12 @@ const FormularioAsignacionEquipo: React.FC<Props> = ({
         watch,
     } = useForm<PreasignacionForm>({
         defaultValues: {
-            id_cp: data?.id_cp,
+            id_cp: dataCP?.id,
             trailer1_id: null,
             trailer2_id: null,
             dolly_id: null,
             comentarios: "",
+            estado: "borrador",
         },
     });
 
@@ -104,7 +105,7 @@ const FormularioAsignacionEquipo: React.FC<Props> = ({
     }, []);
 
     const [isEditMode, setEditMode] = useState(false);
-    const isDisabled = data?.id_pre_asignacion ? !isEditMode : false;
+    const isDisabled = dataCP?.id_pre_asignacion ? !isEditMode : false;
     const [isLoading, setLoading] = useState(false);
     const [filtroActivo, setFiltroActivo] = useState(false);
 
@@ -120,9 +121,10 @@ const FormularioAsignacionEquipo: React.FC<Props> = ({
         setEditMode(false);
         getData();
         setFiltroActivo(false);
-    }, [data]);
+    }, [dataCP]);
 
     const guardar = async (data: PreasignacionForm) => {
+
         try {
             setLoading(true);
 
@@ -158,7 +160,7 @@ const FormularioAsignacionEquipo: React.FC<Props> = ({
             setLoading(true);
 
             const res = await odooApi.patch(
-                `/preasignacion_equipo/${data?.id_pre_asignacion}?comentarios=${encodeURIComponent(comentarios)}`,
+                `/preasignacion_equipo/${data.id_pre_asignacion}?comentarios=${encodeURIComponent(comentarios)}`,
                 data
             );
 
@@ -179,7 +181,7 @@ const FormularioAsignacionEquipo: React.FC<Props> = ({
     const asignar_viaje = async () => {
         try {
             setLoading(true);
-            const res = await odooApi.post(`/preasignacion_equipo/asignar_viaje/${data?.id_pre_asignacion}`);
+            const res = await odooApi.post(`/preasignacion_equipo/asignar_viaje/${dataCP?.id_pre_asignacion}`);
             if (res.data.status === "success") toast.success(res.data.message);
             historialRef.current?.reload();
             getData();
@@ -194,7 +196,7 @@ const FormularioAsignacionEquipo: React.FC<Props> = ({
     const cambiar_estado = async (estado: string) => {
         try {
             setLoading(true);
-            const res = await odooApi.patch(`/preasignacion_equipo/estado/${data?.id_pre_asignacion}?estado=${estado}&comentario="Se reabrió esta asignación de equipo."`);
+            const res = await odooApi.patch(`/preasignacion_equipo/estado/${dataCP?.id_pre_asignacion}?estado=${estado}&comentario="Se reabrió esta asignación de equipo."`);
             if (res.data.status === "success") toast.success(res.data.message);
             getData();
             historialRef.current?.reload();
@@ -207,16 +209,25 @@ const FormularioAsignacionEquipo: React.FC<Props> = ({
     };
 
     const getData = async () => {
-        if (!data?.id_pre_asignacion) return;
-
-        try {
-            setLoading(true);
-            const res = await odooApi.get(`/preasignacion_equipo/${data?.id_pre_asignacion}`);
-            reset(res.data);
-        } catch (error: any) {
-            toast.error("Error: " + (error.response?.data?.message || error.message));
-        } finally {
-            setLoading(false);
+        if (dataCP?.id_pre_asignacion) {
+            try {
+                setLoading(true);
+                const res = await odooApi.get(`/preasignacion_equipo/${dataCP?.id_pre_asignacion}`);
+                reset(res.data);
+            } catch (error: any) {
+                toast.error("Error: " + (error.response?.data?.message || error.message));
+            } finally {
+                setLoading(false);
+            }
+        } else {
+            reset({
+                id_cp: dataCP?.id,
+                trailer1_id: null,
+                trailer2_id: null,
+                dolly_id: null,
+                comentarios: "",
+                estado: "borrador"
+            });
         }
     };
 
@@ -278,7 +289,7 @@ const FormularioAsignacionEquipo: React.FC<Props> = ({
 
                         <div style={{ display: "flex", gap: "10px", marginBottom: "15px" }}>
 
-                            {data?.id_pre_asignacion == null && (
+                            {dataCP?.id_pre_asignacion == null && (
                                 <Button
                                     color="success"
                                     isDisabled={isLoading}
@@ -290,7 +301,7 @@ const FormularioAsignacionEquipo: React.FC<Props> = ({
                                 </Button>
                             )}
 
-                            {data?.id_pre_asignacion != null && !isEditMode && estado !== 'asignado_viaje' && (
+                            {dataCP?.id_pre_asignacion != null && !isEditMode && estado !== 'asignado_viaje' && (
                                 <>
                                     <Button
                                         color="primary"
@@ -311,7 +322,7 @@ const FormularioAsignacionEquipo: React.FC<Props> = ({
                                 </>
                             )}
 
-                            {data?.id_pre_asignacion != null && isEditMode && (
+                            {dataCP?.id_pre_asignacion != null && isEditMode && (
                                 <Button
                                     color="warning"
                                     isDisabled={isLoading}
@@ -342,7 +353,7 @@ const FormularioAsignacionEquipo: React.FC<Props> = ({
 
                         <div className="w-full flex flex-col gap-4">
 
-                            {data && (
+                            {dataCP && (
                                 <Card fullWidth>
                                     <CardHeader
                                         style={{
@@ -364,32 +375,32 @@ const FormularioAsignacionEquipo: React.FC<Props> = ({
                                         >
                                             <div>
                                                 <div style={{ color: "#6B7280", fontSize: "12px" }}>CP</div>
-                                                <div style={{ fontWeight: 600 }}>{data.name}</div>
+                                                <div style={{ fontWeight: 600 }}>{dataCP.name}</div>
                                             </div>
 
                                             <div>
                                                 <div style={{ color: "#6B7280", fontSize: "12px" }}>Modo</div>
-                                                <div style={{ fontWeight: 600 }}>{data.x_modo_bel}</div>
+                                                <div style={{ fontWeight: 600 }}>{dataCP.x_modo_bel}</div>
                                             </div>
 
                                             <div>
                                                 <div style={{ color: "#6B7280", fontSize: "12px" }}>Tipo</div>
-                                                <div style={{ fontWeight: 600 }}>{data.x_tipo_bel}</div>
+                                                <div style={{ fontWeight: 600 }}>{dataCP.x_tipo_bel}</div>
                                             </div>
 
                                             <div>
                                                 <div style={{ color: "#6B7280", fontSize: "12px" }}>Contenedor</div>
-                                                <div style={{ fontWeight: 600 }}>{data.x_reference}</div>
+                                                <div style={{ fontWeight: 600 }}>{dataCP.x_reference}</div>
                                             </div>
 
                                             <div>
                                                 <div style={{ color: "#6B7280", fontSize: "12px" }}>Ruta</div>
-                                                <div style={{ fontWeight: 600 }}>{data.x_ruta_bel}</div>
+                                                <div style={{ fontWeight: 600 }}>{dataCP.x_ruta_bel}</div>
                                             </div>
 
                                             <div>
                                                 <div style={{ color: "#6B7280", fontSize: "12px" }}>Clase</div>
-                                                <div style={{ fontWeight: 600 }}>{data.x_clase_bel}</div>
+                                                <div style={{ fontWeight: 600 }}>{dataCP.x_clase_bel}</div>
                                             </div>
                                         </div>
                                     </CardBody>
@@ -420,14 +431,14 @@ const FormularioAsignacionEquipo: React.FC<Props> = ({
                                                     value={field.value ?? undefined}
                                                     disabled={isDisabled}
                                                     filtroActivo={filtroActivo}
-                                                    modalidad={data?.x_tipo_bel == 'single' ? 'sencillo' : 'full'}
-                                                    tipoCarga={TipoCarga(data?.waybill_category)}
+                                                    modalidad={dataCP?.x_tipo_bel == 'single' ? 'sencillo' : 'full'}
+                                                    tipoCarga={TipoCarga(dataCP?.waybill_category)}
                                                     isLoading={isLoadingFlota}
                                                     options={trailers}
                                                 />
                                             )}
                                         />
-                                        {data?.x_tipo_bel == 'full' && (
+                                        {dataCP?.x_tipo_bel == 'full' && (
                                             <Controller
                                                 control={control}
                                                 name="trailer2_id"
@@ -440,8 +451,8 @@ const FormularioAsignacionEquipo: React.FC<Props> = ({
                                                         value={field.value ?? undefined}
                                                         disabled={isDisabled}
                                                         filtroActivo={filtroActivo}
-                                                        modalidad={data?.x_tipo_bel == 'single' ? 'sencillo' : 'full'}
-                                                        tipoCarga={TipoCarga(data?.waybill_category)}
+                                                        modalidad={dataCP?.x_tipo_bel == 'single' ? 'sencillo' : 'full'}
+                                                        tipoCarga={TipoCarga(dataCP?.waybill_category)}
                                                         isLoading={isLoadingFlota}
                                                         options={trailers}
                                                     />
@@ -449,7 +460,7 @@ const FormularioAsignacionEquipo: React.FC<Props> = ({
                                             />
                                         )}
 
-                                        {data?.x_tipo_bel == 'full' && (
+                                        {dataCP?.x_tipo_bel == 'full' && (
                                             <Controller
                                                 control={control}
                                                 name="dolly_id"
@@ -485,7 +496,7 @@ const FormularioAsignacionEquipo: React.FC<Props> = ({
                                             )}
                                         />
 
-                                        {data?.x_tipo_bel == 'full' && (
+                                        {dataCP?.x_tipo_bel == 'full' && (
                                             <Controller
                                                 control={control}
                                                 name="motogenerador2_id"
@@ -529,7 +540,7 @@ const FormularioAsignacionEquipo: React.FC<Props> = ({
                         overflowY: "auto",
                         paddingRight: "5px"
                     }}>
-                        <HistorialCambioEquipo ref={historialRef} id_pre_asignacion={data?.id_pre_asignacion} />
+                        <HistorialCambioEquipo ref={historialRef} id_pre_asignacion={dataCP?.id_pre_asignacion} />
                     </div>
                 </div>
 

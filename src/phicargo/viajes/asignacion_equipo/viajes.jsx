@@ -340,7 +340,7 @@ const ViajesProgramados = () => {
       <MaterialReactTable table={table} />
 
       <FormularioAsignacionEquipo
-        data={Preasignacion}
+        dataCP={Preasignacion}
         isOpen={isOpen}
         onOpenChange={(open) => {
           onOpenChange(open);
