@@ -37,7 +37,6 @@ const FormEquipoViaje: React.FC<Props> = ({
         control,
         handleSubmit,
         reset,
-        watch,
     } = useForm<ViajeForm>({
         defaultValues: {
             vehicle_id: null,
