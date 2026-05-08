@@ -777,12 +777,29 @@ const Formulariomaniobra: React.FC<Props> = ({
                                                                 <DatePicker
                                                                     label="Inicio programado"
                                                                     variant={formDisabled ? 'flat' : 'bordered'}
-                                                                    value={field.value ? parseDateTime(field.value) : null}
+                                                                    value={
+                                                                        field.value
+                                                                            ? parseDateTime(field.value.replace(' ', 'T'))
+                                                                            : null
+                                                                    }
                                                                     isInvalid={!!fieldState.error}
                                                                     errorMessage={fieldState.error?.message}
                                                                     onChange={(val) => {
                                                                         const date = val?.toDate(getLocalTimeZone());
-                                                                        const formatted = date?.toISOString().slice(0, 19);
+
+                                                                        if (!date) {
+                                                                            field.onChange(null);
+                                                                            return;
+                                                                        }
+
+                                                                        const formatted =
+                                                                            `${date.getFullYear()}-` +
+                                                                            `${String(date.getMonth() + 1).padStart(2, '0')}-` +
+                                                                            `${String(date.getDate()).padStart(2, '0')} ` +
+                                                                            `${String(date.getHours()).padStart(2, '0')}:` +
+                                                                            `${String(date.getMinutes()).padStart(2, '0')}:` +
+                                                                            `${String(date.getSeconds()).padStart(2, '0')}`;
+
                                                                         field.onChange(formatted);
                                                                     }}
                                                                 />
