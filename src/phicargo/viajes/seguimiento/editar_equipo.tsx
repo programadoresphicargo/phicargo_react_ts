@@ -71,13 +71,13 @@ const FormEquipoViaje: React.FC<Props> = ({
             };
             reset(data);
         }
-    }, [open, viaje]);
+    }, [open, viaje, reset]);
 
     useEffect(() => {
         if (!open) {
             reset();
         }
-    }, [open]);
+    }, [open, reset]);
 
     const SaveForm = async (data: ViajeForm) => {
         try {
@@ -102,151 +102,149 @@ const FormEquipoViaje: React.FC<Props> = ({
 
     return (
         <>
-            <React.Fragment>
-                <Dialog
-                    open={open}
-                    keepMounted
-                    aria-describedby="alert-dialog-slide-description"
-                    maxWidth="sm"
-                    fullWidth
-                    PaperProps={{
-                        sx: {
-                            borderRadius: "20px" // puedes subirlo a 20, 24, etc.
-                        }
-                    }}
-                >
-                    <DialogTitle>{"Equipo asignado a viaje"}</DialogTitle>
-                    <DialogContent>
-                        <Stack spacing={2}>
+            <Dialog
+                open={open}
+                keepMounted
+                aria-describedby="alert-dialog-slide-description"
+                maxWidth="sm"
+                fullWidth
+                PaperProps={{
+                    sx: {
+                        borderRadius: "20px" // puedes subirlo a 20, 24, etc.
+                    }
+                }}
+            >
+                <DialogTitle>{"Equipo asignado a viaje"}</DialogTitle>
+                <DialogContent>
+                    <Stack spacing={2}>
 
-                            <Controller
-                                control={control}
-                                name="employee_id"
-                                rules={{ required: "Operador es requerido" }}
-                                render={({ field }) => (
-                                    <SelectOperador
-                                        label={'Operador'}
-                                        id={'employee_id'}
-                                        name={'employee_id'}
-                                        onChange={(val: number | null) => field.onChange(val)}
-                                        value={field.value ?? undefined}
-                                        options={drivers}
-                                        isLoading={isLoading}
-                                    />
-                                )}
-                            />
+                        <Controller
+                            control={control}
+                            name="employee_id"
+                            rules={{ required: "Operador es requerido" }}
+                            render={({ field }) => (
+                                <SelectOperador
+                                    label={'Operador'}
+                                    id={'employee_id'}
+                                    name={'employee_id'}
+                                    onChange={(val: number | null) => field.onChange(val)}
+                                    value={field.value ?? undefined}
+                                    options={drivers}
+                                    isLoading={isLoading}
+                                />
+                            )}
+                        />
 
-                            <Controller
-                                control={control}
-                                name="vehicle_id"
-                                rules={{ required: "Vehiculo es requerido" }}
-                                render={({ field }) => (
-                                    <SelectFlota
-                                        id="vehicle_id"
-                                        label="Vehiculo"
-                                        name="vehicle_id"
-                                        onChange={(val: number | null) => field.onChange(val)}
-                                        value={field.value ?? undefined}
-                                        options={tractores}
-                                        isLoading={isLoading}
-                                    />
-                                )}
-                            />
+                        <Controller
+                            control={control}
+                            name="vehicle_id"
+                            rules={{ required: "Vehiculo es requerido" }}
+                            render={({ field }) => (
+                                <SelectFlota
+                                    id="vehicle_id"
+                                    label="Vehiculo"
+                                    name="vehicle_id"
+                                    onChange={(val: number | null) => field.onChange(val)}
+                                    value={field.value ?? undefined}
+                                    options={tractores}
+                                    isLoading={isLoading}
+                                />
+                            )}
+                        />
 
-                            <Controller
-                                control={control}
-                                name="trailer1_id"
-                                render={({ field }) => (
-                                    <SelectFlota
-                                        id="trailer1_id"
-                                        label="Remolque 1"
-                                        name="trailer1_id"
-                                        onChange={(val: number | null) => field.onChange(val)}
-                                        value={field.value ?? undefined}
-                                        options={trailers}
-                                        isLoading={isLoading}
-                                    />
-                                )}
-                            />
+                        <Controller
+                            control={control}
+                            name="trailer1_id"
+                            render={({ field }) => (
+                                <SelectFlota
+                                    id="trailer1_id"
+                                    label="Remolque 1"
+                                    name="trailer1_id"
+                                    onChange={(val: number | null) => field.onChange(val)}
+                                    value={field.value ?? undefined}
+                                    options={trailers}
+                                    isLoading={isLoading}
+                                />
+                            )}
+                        />
 
-                            <Controller
-                                control={control}
-                                name="trailer2_id"
-                                render={({ field }) => (
-                                    <SelectFlota
-                                        id="trailer2_id"
-                                        label="Remolque 2"
-                                        name="trailer2_id"
-                                        onChange={(val: number | null) => field.onChange(val)}
-                                        value={field.value ?? undefined}
-                                        options={trailers}
-                                        isLoading={isLoading}
-                                    />
-                                )}
-                            />
+                        <Controller
+                            control={control}
+                            name="trailer2_id"
+                            render={({ field }) => (
+                                <SelectFlota
+                                    id="trailer2_id"
+                                    label="Remolque 2"
+                                    name="trailer2_id"
+                                    onChange={(val: number | null) => field.onChange(val)}
+                                    value={field.value ?? undefined}
+                                    options={trailers}
+                                    isLoading={isLoading}
+                                />
+                            )}
+                        />
 
-                            <Controller
-                                control={control}
-                                name="dolly_id"
-                                render={({ field }) => (
-                                    <SelectFlota
-                                        id="dolly_id"
-                                        label="Dolly"
-                                        name="dolly_id"
-                                        onChange={(val: number | null) => field.onChange(val)}
-                                        value={field.value ?? undefined}
-                                        options={dollies}
-                                        isLoading={isLoading}
-                                    />
-                                )}
-                            />
+                        <Controller
+                            control={control}
+                            name="dolly_id"
+                            render={({ field }) => (
+                                <SelectFlota
+                                    id="dolly_id"
+                                    label="Dolly"
+                                    name="dolly_id"
+                                    onChange={(val: number | null) => field.onChange(val)}
+                                    value={field.value ?? undefined}
+                                    options={dollies}
+                                    isLoading={isLoading}
+                                />
+                            )}
+                        />
 
-                            <Controller
-                                control={control}
-                                name="x_motogenerador_1"
-                                render={({ field }) => (
-                                    <SelectFlota
-                                        id="x_motogenerador_1"
-                                        label="Motogenerador 1"
-                                        name="x_motogenerador_1"
-                                        onChange={(val: number | null) => field.onChange(val)}
-                                        value={field.value ?? undefined}
-                                        options={motogeneradores}
-                                        isLoading={isLoading}
-                                    />
-                                )}
-                            />
+                        <Controller
+                            control={control}
+                            name="x_motogenerador_1"
+                            render={({ field }) => (
+                                <SelectFlota
+                                    id="x_motogenerador_1"
+                                    label="Motogenerador 1"
+                                    name="x_motogenerador_1"
+                                    onChange={(val: number | null) => field.onChange(val)}
+                                    value={field.value ?? undefined}
+                                    options={motogeneradores}
+                                    isLoading={isLoading}
+                                />
+                            )}
+                        />
 
-                            <Controller
-                                control={control}
-                                name="x_motogenerador_2"
-                                render={({ field }) => (
-                                    <SelectFlota
-                                        id="x_motogenerador_2"
-                                        label="Motogenerador 2"
-                                        name="x_motogenerador_2"
-                                        onChange={(val: number | null) => field.onChange(val)}
-                                        value={field.value ?? undefined}
-                                        options={motogeneradores}
-                                        isLoading={isLoading}
-                                    />
-                                )}
-                            />
+                        <Controller
+                            control={control}
+                            name="x_motogenerador_2"
+                            render={({ field }) => (
+                                <SelectFlota
+                                    id="x_motogenerador_2"
+                                    label="Motogenerador 2"
+                                    name="x_motogenerador_2"
+                                    onChange={(val: number | null) => field.onChange(val)}
+                                    value={field.value ?? undefined}
+                                    options={motogeneradores}
+                                    isLoading={isLoading}
+                                />
+                            )}
+                        />
 
-                        </Stack>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onPress={handleClose} radius="full">Cancelar</Button>
-                        <Button onPress={() => handleSubmit(SaveForm)()}
-                            color="success"
-                            className="text-white"
-                            radius="full" isLoading={isLoadingUpdate}>
-                            <i className="bi bi-floppy-fill">
-                            </i>Guardar
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-            </React.Fragment>
+                    </Stack>
+                </DialogContent>
+                <DialogActions>
+                    <Button onPress={handleClose} radius="full">Cancelar</Button>
+                    <Button onPress={() => handleSubmit(SaveForm)()}
+                        color="success"
+                        className="text-white"
+                        radius="full" isLoading={isLoadingUpdate}>
+                        <i className="bi bi-floppy-fill">
+                        </i>Guardar
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </>
     );
 }
