@@ -36,7 +36,7 @@ import { useAuthContext } from '@/modules/auth/hooks';
 import { TransitionProps } from '@mui/material/transitions';
 import { Controller, useForm } from 'react-hook-form';
 import HistorialCambios from '@/phicargo/almacen/solicitud/cambios/epps';
-import { OptionFlota } from './tipado';
+import { Flota, OptionFlota } from './tipado';
 
 const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
