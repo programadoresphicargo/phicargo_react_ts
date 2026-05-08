@@ -812,7 +812,7 @@ const Formulariomaniobra: React.FC<Props> = ({
                                                                     label={'Operador'}
                                                                     id={'operador_id'}
                                                                     name={'operador_id'}
-                                                                    onChange={(val: number) => field.onChange(val)}
+                                                                    onChange={(val: number | null) => field.onChange(val)}
                                                                     value={field.value ?? undefined}
                                                                     disabled={formDisabled}
                                                                     options={drivers}
