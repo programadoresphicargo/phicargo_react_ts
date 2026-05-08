@@ -58,6 +58,12 @@ const itemVariants = {
 
 const reports: MenuItemType[] = [
   {
+    label: 'Flota',
+    path: '/reportes/flota/',
+    icon: viajesIcon,
+    requiredPermissions: [190],
+  },
+  {
     label: 'Reporte gerencial',
     path: '/reportes/saldos/',
     icon: reportIcon,

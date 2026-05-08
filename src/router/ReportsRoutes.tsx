@@ -19,6 +19,7 @@ const ServiciosCategoria = lazy(() => import('../phicargo/reportes/categoria'));
 const UnidadesTaller = lazy(() => import('../phicargo/reportes/unidades_taller'));
 const DisponibilidadDiariaFlota = lazy(() => import('../phicargo/reportes/disponibilidad_diaria_flota'));
 const DisponibilidadDiariaOperador = lazy(() => import('../phicargo/reportes/disponibilidad_diaria_operador'));
+const Flota = lazy(() => import('../phicargo/reportes/flota'));
 
 const reportsPermission = 4;
 
@@ -166,6 +167,17 @@ export const ReportsRoutes = () => (
         </Suspense>
       }
     />
+
+    {/* Flota */}
+    <Route
+      path="flota"
+      element={
+        <Suspense fallback={<LoadingPage />}>
+          <Flota />
+        </Suspense>
+      }
+    />
   </Route>
+
 );
 
