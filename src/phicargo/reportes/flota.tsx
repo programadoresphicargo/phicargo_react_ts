@@ -1,21 +1,16 @@
-import { Button, Chip, DatePicker, NumberInput } from "@heroui/react";
+import { Button, } from "@heroui/react";
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
-import React, { useEffect, useState } from 'react';
-import { download, generateCsv, mkConfig } from 'export-to-csv';
-import { getLocalTimeZone, parseDate } from "@internationalized/date";
-import Badge from 'react-bootstrap/Badge';
+import { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
-import { Component } from "react";
 import odooApi from '@/api/odoo-api';
 import { toast } from "react-toastify";
-import { useDateFormatter } from "@react-aria/i18n";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { exportToCSV } from '../utils/export';
 import CustomNavbar from "@/pages/CustomNavbar";
 
 const Flota = () => {
 
-  const [isLoading, setisLoading] = useState('');
+  const [isLoading, setisLoading] = useState(false);
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -37,7 +32,8 @@ const Flota = () => {
   const EnviarCorreo = async () => {
     try {
       setisLoading(true);
-      const response = await odooApi.get(`/vehicles/flota/`);
+      const response = await odooApi.get(`/vehicles/correo_flota/`);
+      console.log(response.data);
     } catch (error) {
       toast.error('Error al enviar los datos: ' + error);
     } finally {
@@ -68,13 +64,12 @@ const Flota = () => {
     enableFilters: true,
     enableBottomToolbar: true,
     localization: MRT_Localization_ES,
-    enableColumnAggregations: true,
+    groupedColumnMode: "remove",
     positionToolbarAlertBanner: "bottom",
     columnResizeMode: "onEnd",
     initialState: {
       density: 'compact',
-      expanded: true,
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
       showColumnFilters: true,
     },
     muiTablePaperProps: {
@@ -104,7 +99,7 @@ const Flota = () => {
         color: row.subRows?.length ? '#FFFFFF' : '#000000',
       },
     }),
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -128,7 +123,7 @@ const Flota = () => {
         </Button>
 
         <Button
-          onPress={() => exportToCSV(data, columns, "unidades_vacantes.csv")}
+          onPress={() => exportToCSV(data, columns, "flota.csv")}
           color="success"
           className="text-white"
           radius="full"
