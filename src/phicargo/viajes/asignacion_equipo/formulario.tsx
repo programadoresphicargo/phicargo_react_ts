@@ -1,13 +1,10 @@
-import React, { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import {
     Dialog,
     DialogTitle,
     DialogContent,
     DialogActions,
     Button as MUIButton,
-    TextField,
-    Typography,
-    Box,
 } from "@mui/material";
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
@@ -15,18 +12,63 @@ import SelectFlota from '@/phicargo/maniobras/maniobras/selects_flota';
 import HistorialCambioEquipo from './historial';
 import Swal from "sweetalert2";
 import { Button, Card, CardBody, CardHeader, Divider, Progress, Textarea } from '@heroui/react';
-import { Grid } from '@mui/system';
+import { Controller, useForm } from 'react-hook-form';
+import { Flota, OptionFlota } from '@/phicargo/maniobras/maniobras/tipado';
 
-const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
+type PreasignacionForm = {
+    id_pre_asignacion: number;
+    id_cp: number;
+    trailer1_id: number | null;
+    trailer2_id: number | null;
+    dolly_id: number | null;
+    motogenerador1_id?: number | null;
+    motogenerador2_id?: number | null;
+    comentarios: string;
+    estado: string;
+};
 
-    const [tractores, setTractores] = useState([]);
-    const [trailers, setTrailers] = useState([]);
-    const [dollies, setDollies] = useState([]);
-    const [motogeneradores, setMotogeneradores] = useState([]);
-    const [isLoadingFlota, setLoadingFlota] = useState(false);
+type Props = {
+    isOpen: boolean;
+    onOpenChange: (open: boolean) => void;
+    data?: any;
+};
 
-    const getFlotaByTipo = async (tipo) => {
-        const response = await odooApi.get(`/vehicles/fleet_type/${tipo}`);
+type HistorialCambioEquipoRef = {
+    reload: () => void;
+};
+
+const FormularioAsignacionEquipo: React.FC<Props> = ({
+    isOpen,
+    onOpenChange,
+    data
+}) => {
+
+    const {
+        control,
+        handleSubmit,
+        reset,
+        watch,
+    } = useForm<PreasignacionForm>({
+        defaultValues: {
+            id_cp: data?.id_cp,
+            trailer1_id: null,
+            trailer2_id: null,
+            dolly_id: null,
+            comentarios: "",
+        },
+    });
+
+    const [trailers, setTrailers] = useState<OptionFlota[]>([]);
+    const [dollies, setDollies] = useState<OptionFlota[]>([]);
+    const [motogeneradores, setMotogeneradores] = useState<OptionFlota[]>([]);
+    const [isLoadingFlota, setLoadingFlota] = useState<boolean>(false);
+
+    const historialRef = useRef<HistorialCambioEquipoRef | null>(null);
+    const estado = watch("estado");
+    const comentarios = watch("comentarios");
+
+    const getFlotaByTipo = async (tipo: string): Promise<OptionFlota[]> => {
+        const response = await odooApi.get<Flota[]>(`/vehicles/fleet_type/${tipo}`);
 
         return response.data.map(item => ({
             key: item.id,
@@ -41,14 +83,12 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
             setLoadingFlota(true);
 
             try {
-                const [tractoresData, trailersData, dolliesData, motogeneradores] = await Promise.all([
-                    getFlotaByTipo("tractor"),
+                const [trailersData, dolliesData, motogeneradores] = await Promise.all([
                     getFlotaByTipo("trailer"),
                     getFlotaByTipo("dolly"),
                     getFlotaByTipo("other")
                 ]);
 
-                setTractores(tractoresData);
                 setTrailers(trailersData);
                 setDollies(dolliesData);
                 setMotogeneradores(motogeneradores)
@@ -63,17 +103,12 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
         cargarDatos();
     }, []);
 
-    const historialRef = useRef(null);
     const [isEditMode, setEditMode] = useState(false);
-    const [formData, setFormData] = useState({
-        id_cp: data?.id_cp || null,
-    });
     const isDisabled = data?.id_pre_asignacion ? !isEditMode : false;
     const [isLoading, setLoading] = useState(false);
-    const [comentarios, setComentarios] = useState("");
     const [filtroActivo, setFiltroActivo] = useState(false);
 
-    const TipoCarga = (waybill_category) => {
+    const TipoCarga = (waybill_category: number) => {
         if ([25, 28, 33, 39, 42, 47, 49, 52].includes(waybill_category)) {
             return 'imo';
         } else {
@@ -82,20 +117,12 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
     };
 
     useEffect(() => {
-        setFormData({ id_cp: data?.id_cp || null });
         setEditMode(false);
         getData();
         setFiltroActivo(false);
     }, [data]);
 
-    const handleSelectChange = (value, name) => {
-        setFormData(prev => ({
-            ...prev,
-            [name]: value ?? null,
-        }));
-    };
-
-    const guardar = async () => {
+    const guardar = async (data: PreasignacionForm) => {
         try {
             setLoading(true);
 
@@ -105,16 +132,15 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
                 url += `?comentarios=${encodeURIComponent(comentarios.trim())}`;
             }
 
-            const res = await odooApi.post(url, formData);
+            const res = await odooApi.post(url, data);
 
             if (res.data.status === "success") {
                 toast.success(res.data.message);
                 historialRef.current?.reload();
-                setComentarios("");
             }
 
             onOpenChange(false);
-        } catch (error) {
+        } catch (error: any) {
             const detail = error.response?.data?.detail || error.message;
             toast.error("Error: " + detail);
         } finally {
@@ -122,7 +148,7 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
         }
     };
 
-    const actualizar = async () => {
+    const actualizar = async (data: PreasignacionForm) => {
         if (!comentarios.trim()) {
             toast.error("El campo comentarios es obligatorio.");
             return;
@@ -133,18 +159,17 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
 
             const res = await odooApi.patch(
                 `/preasignacion_equipo/${data?.id_pre_asignacion}?comentarios=${encodeURIComponent(comentarios)}`,
-                formData
+                data
             );
 
             if (res.data.status === "success") {
                 toast.success(res.data.message);
                 setEditMode(false);
-                setComentarios("");
                 historialRef.current?.reload();
             }
 
             setEditMode(false);
-        } catch (error) {
+        } catch (error: any) {
             toast.error("Error: " + (error.response?.data?.message || error.message));
         } finally {
             setLoading(false);
@@ -159,14 +184,14 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
             historialRef.current?.reload();
             getData();
 
-        } catch (error) {
+        } catch (error: any) {
             toast.error("Error: " + (error.response?.data?.detail || error.message));
         } finally {
             setLoading(false);
         }
     };
 
-    const cambiar_estado = async (estado) => {
+    const cambiar_estado = async (estado: string) => {
         try {
             setLoading(true);
             const res = await odooApi.patch(`/preasignacion_equipo/estado/${data?.id_pre_asignacion}?estado=${estado}&comentario="Se reabrió esta asignación de equipo."`);
@@ -174,7 +199,7 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
             getData();
             historialRef.current?.reload();
 
-        } catch (error) {
+        } catch (error: any) {
             toast.error("Error: " + (error.response?.data?.message || error.message));
         } finally {
             setLoading(false);
@@ -187,8 +212,8 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
         try {
             setLoading(true);
             const res = await odooApi.get(`/preasignacion_equipo/${data?.id_pre_asignacion}`);
-            setFormData(res.data);
-        } catch (error) {
+            reset(res.data);
+        } catch (error: any) {
             toast.error("Error: " + (error.response?.data?.message || error.message));
         } finally {
             setLoading(false);
@@ -210,7 +235,7 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
         }
     };
 
-    const confirmarCambioEstadoPreasignacion = async (estado) => {
+    const confirmarCambioEstadoPreasignacion = async (estado: string) => {
         const result = await Swal.fire({
             title: "¿Estás seguro?",
             text: "Se reabrira esta preasignación de equipo",
@@ -257,7 +282,7 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
                                 <Button
                                     color="success"
                                     isDisabled={isLoading}
-                                    onPress={guardar}
+                                    onPress={() => handleSubmit(guardar)()}
                                     className='text-white'
                                     radius='full'
                                 >
@@ -265,7 +290,7 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
                                 </Button>
                             )}
 
-                            {data?.id_pre_asignacion != null && !isEditMode && formData.estado !== 'asignado_viaje' && (
+                            {data?.id_pre_asignacion != null && !isEditMode && estado !== 'asignado_viaje' && (
                                 <>
                                     <Button
                                         color="primary"
@@ -290,15 +315,15 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
                                 <Button
                                     color="warning"
                                     isDisabled={isLoading}
-                                    onPress={actualizar}
+                                    onPress={() => handleSubmit(actualizar)()}
                                     radius='full'
                                     className='text-white'
                                 >
-                                    Actualizar asignación
+                                    Actualizar
                                 </Button>
                             )}
 
-                            {formData.estado == 'asignado_viaje' && (
+                            {estado == 'asignado_viaje' && (
                                 <Button
                                     color="primary"
                                     isDisabled={isLoading}
@@ -383,75 +408,115 @@ const FormularioAsignacionEquipo = ({ isOpen, onOpenChange, data }) => {
                                 <Divider></Divider>
                                 <CardBody>
                                     <div className="w-full grid grid-cols-2 gap-4">
-                                        <SelectFlota
-                                            label="Remolque 1"
+                                        <Controller
+                                            control={control}
                                             name="trailer1_id"
-                                            onChange={handleSelectChange}
-                                            value={formData.trailer1_id}
-                                            disabled={isDisabled}
-                                            filtroActivo={filtroActivo}
-                                            modalidad={data?.x_tipo_bel == 'single' ? 'sencillo' : 'full'}
-                                            tipoCarga={TipoCarga(data?.waybill_category)}
-                                            isLoading={isLoadingFlota}
-                                            options={trailers}
+                                            render={({ field }) => (
+                                                <SelectFlota
+                                                    label="Remolque 1"
+                                                    id={'trailer1_id'}
+                                                    name="trailer1_id"
+                                                    onChange={(val: number | null) => field.onChange(val)}
+                                                    value={field.value ?? undefined}
+                                                    disabled={isDisabled}
+                                                    filtroActivo={filtroActivo}
+                                                    modalidad={data?.x_tipo_bel == 'single' ? 'sencillo' : 'full'}
+                                                    tipoCarga={TipoCarga(data?.waybill_category)}
+                                                    isLoading={isLoadingFlota}
+                                                    options={trailers}
+                                                />
+                                            )}
                                         />
-
                                         {data?.x_tipo_bel == 'full' && (
-                                            <SelectFlota
-                                                label="Remolque 2"
+                                            <Controller
+                                                control={control}
                                                 name="trailer2_id"
-                                                onChange={handleSelectChange}
-                                                value={formData.trailer2_id}
-                                                disabled={isDisabled}
-                                                filtroActivo={filtroActivo}
-                                                modalidad={data?.x_tipo_bel == 'single' ? 'sencillo' : 'full'}
-                                                tipoCarga={TipoCarga(data?.waybill_category)}
-                                                isLoading={isLoadingFlota}
-                                                options={trailers}
+                                                render={({ field }) => (
+                                                    <SelectFlota
+                                                        label="Remolque 2"
+                                                        id="trailer2_id"
+                                                        name="trailer2_id"
+                                                        onChange={(val: number | null) => field.onChange(val)}
+                                                        value={field.value ?? undefined}
+                                                        disabled={isDisabled}
+                                                        filtroActivo={filtroActivo}
+                                                        modalidad={data?.x_tipo_bel == 'single' ? 'sencillo' : 'full'}
+                                                        tipoCarga={TipoCarga(data?.waybill_category)}
+                                                        isLoading={isLoadingFlota}
+                                                        options={trailers}
+                                                    />
+                                                )}
                                             />
                                         )}
 
                                         {data?.x_tipo_bel == 'full' && (
-                                            <SelectFlota
-                                                label="Dolly"
+                                            <Controller
+                                                control={control}
                                                 name="dolly_id"
-                                                onChange={handleSelectChange}
-                                                value={formData.dolly_id}
-                                                disabled={isDisabled}
-                                                isLoading={isLoadingFlota}
-                                                options={dollies}
+                                                render={({ field }) => (
+                                                    <SelectFlota
+                                                        id="dolly_id"
+                                                        label="Dolly"
+                                                        name="dolly_id"
+                                                        onChange={(val: number | null) => field.onChange(val)}
+                                                        value={field.value ?? undefined}
+                                                        disabled={isDisabled}
+                                                        isLoading={isLoadingFlota}
+                                                        options={dollies}
+                                                    />
+                                                )}
                                             />
                                         )}
 
-                                        <SelectFlota
-                                            label="Motogenerador 1"
+                                        <Controller
+                                            control={control}
                                             name="motogenerador1_id"
-                                            onChange={handleSelectChange}
-                                            value={formData.motogenerador1_id}
-                                            disabled={isDisabled}
-                                            isLoading={isLoadingFlota}
-                                            options={motogeneradores}
+                                            render={({ field }) => (
+                                                <SelectFlota
+                                                    id="motogenerador1_id"
+                                                    label="Motogenerador 1"
+                                                    name="motogenerador1_id"
+                                                    onChange={(val: number | null) => field.onChange(val)}
+                                                    value={field.value ?? undefined}
+                                                    disabled={isDisabled}
+                                                    isLoading={isLoadingFlota}
+                                                    options={motogeneradores}
+                                                />
+                                            )}
                                         />
 
                                         {data?.x_tipo_bel == 'full' && (
-                                            <SelectFlota
-                                                label="Motogenerador 2"
+                                            <Controller
+                                                control={control}
                                                 name="motogenerador2_id"
-                                                onChange={handleSelectChange}
-                                                value={formData.motogenerador2_id}
-                                                disabled={isDisabled}
-                                                isLoading={isLoadingFlota}
-                                                options={motogeneradores}
+                                                render={({ field }) => (
+                                                    <SelectFlota
+                                                        id="motogenerador2_id"
+                                                        label="Motogenerador 2"
+                                                        name="motogenerador2_id"
+                                                        onChange={(val: number | null) => field.onChange(val)}
+                                                        value={field.value ?? undefined}
+                                                        disabled={isDisabled}
+                                                        isLoading={isLoadingFlota}
+                                                        options={motogeneradores}
+                                                    />
+                                                )}
                                             />
                                         )}
 
-                                        <Textarea
-                                            label="Comentarios"
-                                            value={comentarios}
-                                            variant={isDisabled ? "flat" : "bordered"}
-                                            isDisabled={isDisabled}
-                                            onChange={(e) => setComentarios(e.target.value)}
+                                        <Controller
+                                            control={control}
+                                            name="comentarios"
+                                            render={({ field }) => (
+                                                <Textarea
+                                                    label="Comentarios"
+                                                    variant={isDisabled ? "flat" : "bordered"}
+                                                    isDisabled={isDisabled}
+                                                    value={field.value || ""}
+                                                    onValueChange={(val: string) => field.onChange(val)}
+                                                />)}
                                         />
+
                                     </div>
                                 </CardBody>
                             </Card>
