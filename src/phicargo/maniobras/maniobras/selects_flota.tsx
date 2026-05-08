@@ -1,11 +1,29 @@
 import { Autocomplete, AutocompleteItem } from "@heroui/react";
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import TextField from '@mui/material/TextField';
-import axios from 'axios';
-import odooApi from '@/api/odoo-api';
+type OptionFlota = {
+    key: number;
+    label: string;
+    x_tipo_carga: string;
+    x_modalidad: string;
+};
 
-const SelectFlota = ({
+type Props = {
+    options: OptionFlota[];
+    label: string;
+    id: string;
+    name: string;
+    value?: number;
+    disabled?: boolean;
+    isLoading?: boolean;
+    error_operador?: string;
+    onChange: (val: number | null) => void;
+    filtroActivo?: boolean;
+    modalidad?: string;
+    tipoCarga?: string;
+};
+
+const SelectFlota: React.FC<Props> = ({
     label,
     id,
     name,
@@ -14,12 +32,12 @@ const SelectFlota = ({
     disabled = false,
     isLoading = false,
     options = [],
-    filtroActivo = false,      // true = filtrar, false = mostrar todos
-    modalidad = null,           // "single" | "full"
-    tipoCarga = null        // "imo" | "general"
+    filtroActivo = false,
+    modalidad = null,
+    tipoCarga = null
 }) => {
 
-    const [filteredOptions, setFilteredOptions] = useState([]);
+    const [filteredOptions, setFilteredOptions] = useState<OptionFlota[]>([]);
 
     useEffect(() => {
         if (!filtroActivo) {
@@ -51,7 +69,9 @@ const SelectFlota = ({
             defaultItems={filteredOptions}
             variant={disabled ? 'flat' : 'bordered'}
             selectedKey={String(value)}
-            onSelectionChange={(e) => onChange(e, name)}
+            onSelectionChange={(key) =>
+                onChange(key ? Number(key) : null)
+            }
         >
             {(item) => <AutocompleteItem key={item.key}>{item.label}</AutocompleteItem>}
         </Autocomplete>

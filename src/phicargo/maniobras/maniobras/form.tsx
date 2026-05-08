@@ -829,7 +829,7 @@ const Formulariomaniobra: React.FC<Props> = ({
                                                                     label={'Vehiculo'}
                                                                     id={'vehicle_id'}
                                                                     name={'vehicle_id'}
-                                                                    onChange={(val: number) => field.onChange(val)}
+                                                                    onChange={(val: number | null) => field.onChange(val)}
                                                                     value={field.value ?? undefined}
                                                                     disabled={formDisabled}
                                                                     isLoading={isLoadingFlota}
@@ -846,7 +846,7 @@ const Formulariomaniobra: React.FC<Props> = ({
                                                                     label={'Remolque 1'}
                                                                     id={'trailer1_id'}
                                                                     name={'trailer1_id'}
-                                                                    onChange={(val: number) => field.onChange(val)}
+                                                                    onChange={(val: number | null) => field.onChange(val)}
                                                                     value={field.value ?? undefined}
                                                                     disabled={formDisabled}
                                                                     isLoading={isLoadingFlota}
@@ -863,7 +863,7 @@ const Formulariomaniobra: React.FC<Props> = ({
                                                                     label={'Remolque 2'}
                                                                     id={'trailer2_id'}
                                                                     name={'trailer2_id'}
-                                                                    onChange={(val: number) => field.onChange(val)}
+                                                                    onChange={(val: number | null) => field.onChange(val)}
                                                                     value={field.value ?? undefined}
                                                                     disabled={formDisabled}
                                                                     isLoading={isLoadingFlota}
@@ -881,7 +881,7 @@ const Formulariomaniobra: React.FC<Props> = ({
                                                                     label={'Dolly'}
                                                                     id={'dolly_id'}
                                                                     name={'dolly_id'}
-                                                                    onChange={(val: number) => field.onChange(val)}
+                                                                    onChange={(val: number | null) => field.onChange(val)}
                                                                     value={field.value ?? undefined}
                                                                     disabled={formDisabled}
                                                                     isLoading={isLoadingFlota}
@@ -899,7 +899,7 @@ const Formulariomaniobra: React.FC<Props> = ({
                                                                     label={'Motogenerador 1'}
                                                                     id={'motogenerador_1'}
                                                                     name={'motogenerador_1'}
-                                                                    onChange={(val: number) => field.onChange(val)}
+                                                                    onChange={(val: number | null) => field.onChange(val)}
                                                                     value={field.value ?? undefined}
                                                                     disabled={formDisabled}
                                                                     isLoading={isLoadingFlota}
@@ -917,7 +917,7 @@ const Formulariomaniobra: React.FC<Props> = ({
                                                                     label={'Motogenerador 2'}
                                                                     id={'motogenerador_2'}
                                                                     name={'motogenerador_2'}
-                                                                    onChange={(val: number) => field.onChange(val)}
+                                                                    onChange={(val: number | null) => field.onChange(val)}
                                                                     value={field.value ?? undefined}
                                                                     disabled={formDisabled}
                                                                     isLoading={isLoadingFlota}
