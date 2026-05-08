@@ -1,27 +1,34 @@
-import React, { useState, useEffect, useMemo, useCallback, useContext } from 'react';
-import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
+import React, { useState, useMemo, useContext } from 'react';
+import { MRT_Cell, MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 import AñadirContenedor from './modal_cps';
-import axios from 'axios';
 import { Button, CardHeader } from "@heroui/react";
 import Box from '@mui/material/Box';
-import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { toast } from 'react-toastify';
 import { Card, CardBody } from "@heroui/react";
-import odooApi from '@/api/odoo-api';
 import { ManiobraContext } from '../../context/viajeContext';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
-const ManiobraContenedores = ({ id_maniobra = null }) => {
+type Contenedores = {
+    id: number;
+    dangerous_cargo: boolean;
+};
+
+type Props = {
+    id_maniobra?: number | null;
+};
+
+const ManiobraContenedores: React.FC<Props> = ({
+    id_maniobra
+}) => {
+
     const [modalShow, setModalShow] = useState(false);
     const [openDialog, setOpenDialog] = useState(false);
-    const [selectedId, setSelectedId] = useState(null);
-    const { formDisabled, cps_ligadas, setCpsLigadas, cps_desligadas, setCpsDesligadas } = useContext(ManiobraContext);
+    const [selectedId, setSelectedId] = useState<number | null>(null);
+    const { formDisabled, cps_ligadas, setCpsLigadas, setCpsDesligadas } = useContext(ManiobraContext);
 
     const handleShowModal = () => {
         setModalShow(true);
@@ -33,7 +40,7 @@ const ManiobraContenedores = ({ id_maniobra = null }) => {
 
 
     //Dialog para confirmar borrado
-    const handleOpenDialog = (id) => {
+    const handleOpenDialog = (id: number) => {
         setSelectedId(id);
         setOpenDialog(true);
     };
@@ -81,8 +88,8 @@ const ManiobraContenedores = ({ id_maniobra = null }) => {
             {
                 accessorKey: 'dangerous_cargo',
                 header: 'Peligroso',
-                Cell: ({ cell }) => {
-                    const value = cell.getValue();
+                Cell: ({ cell }: { cell: MRT_Cell<Contenedores> }) => {
+                    const value = cell.getValue<boolean>();
                     return value ? 'SI' : 'NO';
                 }
             },
@@ -99,7 +106,7 @@ const ManiobraContenedores = ({ id_maniobra = null }) => {
         localization: MRT_Localization_ES,
         initialState: {
             density: 'compact',
-            pagination: { pageSize: 80 },
+            pagination: { pageIndex: 0, pageSize: 80 },
         },
         muiTablePaperProps: {
             elevation: 0,
@@ -141,11 +148,12 @@ const ManiobraContenedores = ({ id_maniobra = null }) => {
     return (
         <>
             <Card>
-                <CardHeader style={{
-                    background: 'linear-gradient(90deg, #0b2149, #002887)',
-                    color: 'white',
-                    fontWeight: 'bold'
-                }}>
+                <CardHeader
+                    style={{
+                        background: 'linear-gradient(90deg, #0b2149, #002887)',
+                        color: 'white',
+                        fontWeight: 'bold'
+                    }}>
                     Contenedores
                 </CardHeader>
                 <CardBody>

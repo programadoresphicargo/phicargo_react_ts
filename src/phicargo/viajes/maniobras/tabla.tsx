@@ -12,7 +12,7 @@ import { exportToCSV } from '../../utils/export';
 import odooApi from '@/api/odoo-api';
 import { Checkbox } from "@heroui/react";
 import EstatusDropdownManiobra from "@/phicargo/maniobras/reportes_estatus/resumen_estatus";
-import Formulariomaniobra from "@/phicargo/maniobras/maniobras/formulario_maniobra";
+import Formulariomaniobra from "@/phicargo/maniobras/maniobras/form";
 import { ViajeContext } from "../context/viajeContext";
 import { toast } from "react-toastify";
 

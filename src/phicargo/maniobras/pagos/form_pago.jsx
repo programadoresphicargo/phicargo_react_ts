@@ -14,7 +14,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import Formulariomaniobra from '../maniobras/formulario_maniobra';
+import Formulariomaniobra from '../maniobras/form';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import SelectOperador from '../maniobras/select_operador';

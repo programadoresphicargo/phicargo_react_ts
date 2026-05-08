@@ -13,7 +13,7 @@ import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import Travel from "../viajes/control/viaje";
 import { RecordDetailsModal } from "@/modules/maintenance/components/RecordDetailsModal";
 import { MaintenanceRecord } from "@/modules/maintenance/models";
-import Formulariomaniobra from "../maniobras/maniobras/formulario_maniobra";
+import Formulariomaniobra from "../maniobras/maniobras/form";
 import { ManiobraProvider } from "../maniobras/context/viajeContext";
 
 /* =========================

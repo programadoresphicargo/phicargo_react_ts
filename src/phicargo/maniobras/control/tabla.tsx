@@ -11,7 +11,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Dialog from '@mui/material/Dialog';
 import EnviosMasivosManiobras from '../envio_masivo';
 import EstatusDropdownManiobra from '../reportes_estatus/resumen_estatus';
-import Formulariomaniobra from '../maniobras/formulario_maniobra';
+import Formulariomaniobra from '../maniobras/form';
 import IconButton from '@mui/material/IconButton';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import Slide from '@mui/material/Slide';

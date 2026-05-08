@@ -14,7 +14,7 @@ import { exportToCSV } from '../../../utils/export';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { User } from "@heroui/react";
 import Travel from '@/phicargo/viajes/control/viaje';
-import Formulariomaniobra from '@/phicargo/maniobras/maniobras/formulario_maniobra';
+import Formulariomaniobra from '@/phicargo/maniobras/maniobras/form';
 import { Progress } from '@heroui/react';
 import { pages } from '../../../maniobras/pages';
 import CustomNavbar from '@/pages/CustomNavbar';

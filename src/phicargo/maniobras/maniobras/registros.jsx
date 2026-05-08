@@ -5,7 +5,7 @@ import { format, isValid } from 'date-fns';
 import { Box } from '@mui/system';
 import { Chip } from "@heroui/react";
 import DocumentacionManiobra from '../documentacion/documentacion';
-import Formulariomaniobra from './formulario_maniobra';
+import Formulariomaniobra from './form';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
