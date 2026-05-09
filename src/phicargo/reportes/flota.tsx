@@ -53,6 +53,9 @@ const Flota = () => {
     { accessorKey: 'x_tipo_carga', header: 'Tipo de carga' },
     { accessorKey: 'x_modalidad', header: 'Modalidad' },
     { accessorKey: 'x_dueno', header: 'Dueño' },
+    { accessorKey: 'x_transmision', header: 'Transmision' },
+    { accessorKey: 'x_inicio_arrendamiento', header: 'Inicio arrendamiento' },
+    { accessorKey: 'x_fin_arrendamiento', header: 'Fin arrendamiento' },
   ];
 
   const table = useMaterialReactTable({
