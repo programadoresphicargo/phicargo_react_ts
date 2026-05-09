@@ -1,25 +1,43 @@
 import {
+  MRT_Cell,
+  MRT_ColumnDef,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
 import { Button, Select, SelectItem, Chip, useDisclosure } from "@heroui/react";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import Slide from '@mui/material/Slide';
 import { DatePicker } from 'rsuite';
 import CustomNavbar from '@/pages/CustomNavbar';
 import FormularioAsignacionEquipo from './formulario';
 import odooApi from '@/api/odoo-api';
 import { exportToCSV } from '../../utils/export';
 
+type ViajeProgramado = {
+  carta_porte: string;
+  vehiculo_programado: string;
+  operador_programado: string;
+  x_reference: string;
+  estado: string;
+  x_tipo_bel: 'single' | 'full' | string;
+  x_medida_bel: string;
+  x_modo_bel: 'exp' | 'imp' | string;
+  x_ruta_bel: string;
+  x_clase_bel: string;
+  trailer1?: string | null;
+  trailer2?: string | null;
+  dolly?: string | null;
+  waybill_category: string;
+};
+
 const ViajesProgramados = () => {
 
-  const [date, setDate] = useState(new Date());
-  const [storeValue, setStoreValue] = useState(new Set(["1"]));
-  const [data, setData] = useState([]);
+  const [date, setDate] = useState<Date | null>(new Date());
+  const [storeValue, setStoreValue] = useState<Set<string>>(new Set(["1"]));
+  const [data, setData] = useState<ViajeProgramado[]>([]);
   const [isLoading, setLoading] = useState(false);
-  const [Preasignacion, setPreasignacion] = useState(null);
+  const [Preasignacion, setPreasignacion] = useState<ViajeProgramado | null>(null);
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
@@ -28,7 +46,7 @@ const ViajesProgramados = () => {
       setLoading(true);
 
       const storeId = Array.from(storeValue)[0];
-      const fecha = date.toISOString().slice(0, 10);
+      const fecha = date?.toISOString().slice(0, 10);
 
       const response = await odooApi.get('/tms_waybill/plan_viaje/', {
         params: {
@@ -59,7 +77,7 @@ const ViajesProgramados = () => {
 
     const printWindow = window.open('', '', 'width=1200,height=900');
 
-    printWindow.document.write(`
+    printWindow?.document.write(`
       <html>
         <head>
           <title>Imprimir tabla</title>
@@ -125,99 +143,88 @@ const ViajesProgramados = () => {
       </html>
     `);
 
-    printWindow.document.close();
-    printWindow.focus();
-    printWindow.print();
-    printWindow.close();
+    printWindow?.document.close();
+    printWindow?.focus();
+    printWindow?.print();
+    printWindow?.close();
   };
 
-  const columns = useMemo(() => [
-    { accessorKey: 'carta_porte', header: 'Carta Porte' },
-    { accessorKey: 'vehiculo_programado', header: 'Vehículo' },
-    { accessorKey: 'operador_programado', header: 'Operador' },
-    { accessorKey: 'x_reference', header: 'Contenedor' },
-    { accessorKey: 'estado', header: 'Estado' },
-    {
-      accessorKey: 'x_tipo_bel',
-      header: 'Tipo',
-      Cell: ({ cell }) => {
-        const tipo = cell.getValue();
-        let color = tipo === 'single' ? 'warning' :
-          tipo === 'full' ? 'danger' :
-            'default';
-        return <Chip color={color} size="sm" className="text-white">{tipo}</Chip>;
+  const columns = useMemo<MRT_ColumnDef<ViajeProgramado>[]>(
+    () => [
+      { accessorKey: 'carta_porte', header: 'Carta Porte' },
+      { accessorKey: 'vehiculo_programado', header: 'Vehículo' },
+      { accessorKey: 'operador_programado', header: 'Operador' },
+      { accessorKey: 'x_reference', header: 'Contenedor' },
+      { accessorKey: 'estado', header: 'Estado' },
+      {
+        accessorKey: 'x_tipo_bel',
+        header: 'Tipo',
+        Cell: ({ cell }: { cell: MRT_Cell<ViajeProgramado> }) => {
+          const tipo = cell.getValue<string>();
+          return <Chip color={tipo === 'single' ? 'warning' :
+            tipo === 'full' ? 'danger' :
+              'default'
+          } size="sm" className="text-white" > {tipo}</Chip>;
+        },
       },
-    },
-
-    { accessorKey: 'x_medida_bel', header: 'Medida' },
-
-    {
-      accessorKey: 'x_modo_bel',
-      header: 'Modo',
-      Cell: ({ cell }) => {
-        const tipo = cell.getValue();
-        let color = tipo === 'exp' ? 'success' :
-          tipo === 'imp' ? 'primary' :
-            'default';
-        return <Chip color={color} size="sm" className="text-white">{tipo}</Chip>;
+      { accessorKey: 'x_medida_bel', header: 'Medida' },
+      {
+        accessorKey: 'x_modo_bel',
+        header: 'Modo',
+        Cell: ({ cell }: { cell: MRT_Cell<ViajeProgramado> }) => {
+          const tipo = cell.getValue<string>();
+          return <Chip color={tipo === 'exp' ? 'success' :
+            tipo === 'imp' ? 'primary' :
+              'default'
+          } size="sm" className="text-white" >{tipo}</Chip>;
+        },
       },
-    },
 
-    { accessorKey: 'x_ruta_bel', header: 'Ruta' },
-    { accessorKey: 'x_clase_bel', header: 'Clase' },
-    {
-      accessorKey: 'trailer1',
-      header: 'Remolque 1',
-      Cell: ({ cell }) => {
-        const val = cell.getValue();
+      { accessorKey: 'x_ruta_bel', header: 'Ruta' },
+      { accessorKey: 'x_clase_bel', header: 'Clase' },
+      {
+        accessorKey: 'trailer1',
+        header: 'Remolque 1',
+        Cell: ({ cell }: { cell: MRT_Cell<ViajeProgramado> }) => {
+          const val = cell.getValue<string>();
+          if (!val) return;
 
-        if (!val) {
-          return null; // No renderizar nada si está vacío o nulo
-        }
-
-        return (
-          <Chip color="primary" size="sm" className="text-white">
-            {val}
-          </Chip>
-        );
+          return (
+            <Chip color="primary" size="sm" className="text-white">
+              {val}
+            </Chip>
+          );
+        },
       },
-    },
-    {
-      accessorKey: 'trailer2',
-      header: 'Remolque 2',
-      Cell: ({ cell }) => {
-        const val = cell.getValue();
+      {
+        accessorKey: 'trailer2',
+        header: 'Remolque 2',
+        Cell: ({ cell }) => {
+          const val = cell.getValue<string>();
+          if (!val) return;
 
-        if (!val) {
-          return null;
-        }
-
-        return (
-          <Chip color="success" size="sm" className="text-white">
-            {val}
-          </Chip>
-        );
+          return (
+            <Chip color="success" size="sm" className="text-white">
+              {val}
+            </Chip>
+          );
+        },
       },
-    },
-    {
-      accessorKey: 'dolly', header: 'Dolly',
-      Cell: ({ cell }) => {
-        const val = cell.getValue();
+      {
+        accessorKey: 'dolly', header: 'Dolly',
+        Cell: ({ cell }) => {
+          const val = cell.getValue<string>();
+          if (!val) return;
 
-        if (!val) {
-          return null;
-        }
-
-        return (
-          <Chip color="warning" size="sm" className="text-white">
-            {val}
-          </Chip>
-        );
+          return (
+            <Chip color="warning" size="sm" className="text-white">
+              {val}
+            </Chip>
+          );
+        },
       },
-    },
-    { accessorKey: 'waybill_category', header: 'Waybill category' },
-
-  ], []);
+      { accessorKey: 'waybill_category', header: 'Waybill category' },
+    ], []);
 
   const table = useMaterialReactTable({
     columns,
@@ -231,11 +238,10 @@ const ViajesProgramados = () => {
     state: { showProgressBars: isLoading },
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
-
     initialState: {
       density: 'compact',
       showColumnFilters: true,
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
       columnPinning: { right: ['trailer1', 'trailer2', 'dolly'] },
     },
     muiTableHeadCellProps: {
@@ -264,9 +270,7 @@ const ViajesProgramados = () => {
         '& .MuiInputBase-root': { color: 'white' },
       },
     },
-
-    muiTableBodyCellProps: ({ row }) => { return { sx: { fontFamily: 'Inter', fontWeight: 'normal', fontSize: '12px', }, } },
-
+    muiTableBodyCellProps: () => { return { sx: { fontFamily: 'Inter', fontWeight: 'normal', fontSize: '12px', }, } },
     renderTopToolbarCustomActions: () => (
       <Box
         sx={{
@@ -283,8 +287,12 @@ const ViajesProgramados = () => {
           size="sm"
           label="Sucursal"
           selectedKeys={storeValue}
-          onSelectionChange={setStoreValue}
-          radius='full'
+          onSelectionChange={(keys) => {
+            if (keys !== 'all') {
+              setStoreValue(new Set(keys as Set<string>));
+            }
+          }}
+          radius="full"
         >
           <SelectItem key="1">Veracruz</SelectItem>
           <SelectItem key="9">Manzanillo</SelectItem>
@@ -343,7 +351,7 @@ const ViajesProgramados = () => {
         dataCP={Preasignacion}
         isOpen={isOpen}
         onOpenChange={(open) => {
-          onOpenChange(open);
+          onOpenChange();
           if (!open) fetchData(); // recargar al cerrar modal
         }}
       />
