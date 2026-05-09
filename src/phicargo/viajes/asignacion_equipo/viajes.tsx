@@ -256,11 +256,10 @@ const ViajesProgramados = () => {
     muiTableBodyRowProps: ({ row }) => ({
       onClick: () => {
         setPreasignacion(row.original);
-        onOpen(); // abrir modal
+        onOpen(); 
       },
       style: { cursor: 'pointer' },
     }),
-
     muiTopToolbarProps: {
       sx: {
         background: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
