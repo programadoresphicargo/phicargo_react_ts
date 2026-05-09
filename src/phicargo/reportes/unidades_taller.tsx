@@ -1,32 +1,21 @@
-import { Button, Chip, DatePicker, NumberInput } from "@heroui/react";
+import { Button } from "@heroui/react";
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
-import React, { useEffect, useState } from 'react';
-import { download, generateCsv, mkConfig } from 'export-to-csv';
-import { getLocalTimeZone, parseDate } from "@internationalized/date";
-import Badge from 'react-bootstrap/Badge';
+import { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
-import { Component } from "react";
 import odooApi from '@/api/odoo-api';
 import { toast } from "react-toastify";
-import { useDateFormatter } from "@react-aria/i18n";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { exportToCSV } from '../utils/export';
-import { DateRangePicker } from 'rsuite';
 import CustomNavbar from "@/pages/CustomNavbar";
 
 const UnidadesTaller = () => {
 
-  const now = new Date();
-  const firstDay = new Date(now.getFullYear(), 0, 1);
-  const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-  const [range, setRange] = useState([firstDay, lastDay]);
-
-  const [isLoading, setisLoading] = useState('');
+  const [isLoading, setisLoading] = useState(false);
   const [data, setData] = useState([]);
 
   useEffect(() => {
     fetchData();
-  }, [range]);
+  }, []);
 
   const fetchData = async () => {
     try {
@@ -44,6 +33,7 @@ const UnidadesTaller = () => {
     try {
       setisLoading(true);
       const response = await odooApi.get(`/maintenance-record/email_unidades_taller/`);
+      console.log(response.data);
     } catch (error) {
       toast.error('Error al enviar los datos: ' + error);
     } finally {
@@ -58,19 +48,7 @@ const UnidadesTaller = () => {
     { accessorKey: 'brand', header: 'Marca' },
     { accessorKey: 'check_in', header: 'Entrada' },
     { accessorKey: 'check_out', header: 'Salida' },
-
-    {
-      accessorKey: 'days_in_workshop',
-      header: 'Días en taller',
-      aggregationFn: 'sum',
-      AggregatedCell: ({ cell }) => (
-        <strong>{cell.getValue()}</strong>
-      ),
-      muiTableBodyCellProps: {
-        align: 'right',
-      },
-    },
-
+    { accessorKey: 'days_in_workshop', header: 'Días en taller' },
   ];
 
   const table = useMaterialReactTable({
@@ -82,15 +60,13 @@ const UnidadesTaller = () => {
     enableFilters: true,
     enableBottomToolbar: true,
     localization: MRT_Localization_ES,
-    enableColumnAggregations: true,
     groupedColumnMode: 'remove',
     positionToolbarAlertBanner: 'bottom',
     columnResizeMode: "onEnd",
     initialState: {
       grouping: ["periodo"],
       density: 'compact',
-      expanded: false,
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
       showColumnFilters: true,
     },
     muiTablePaperProps: {
@@ -120,7 +96,7 @@ const UnidadesTaller = () => {
         color: row.subRows?.length ? '#FFFFFF' : '#000000',
       },
     }),
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -135,14 +111,6 @@ const UnidadesTaller = () => {
         >
           Unidades en taller IDEALEASE
         </h1>
-
-        <DateRangePicker
-          value={range}
-          onChange={(value) => setRange(value)}
-          placeholder="Selecciona un rango de fechas"
-          format="yyyy-MM-dd"
-          loading={isLoading}
-        />
 
         <Button
           onPress={() => EnviarCorreo()}

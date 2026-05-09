@@ -1,21 +1,16 @@
-import { Button, Chip, DatePicker, NumberInput } from "@heroui/react";
+import { Button } from "@heroui/react";
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
-import React, { useEffect, useState } from 'react';
-import { download, generateCsv, mkConfig } from 'export-to-csv';
-import { getLocalTimeZone, parseDate } from "@internationalized/date";
-import Badge from 'react-bootstrap/Badge';
+import { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
-import { Component } from "react";
 import odooApi from '@/api/odoo-api';
 import { toast } from "react-toastify";
-import { useDateFormatter } from "@react-aria/i18n";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { exportToCSV } from '../utils/export';
 import CustomNavbar from "@/pages/CustomNavbar";
 
 const VehiculosSinOperadorAsignado = () => {
 
-  const [isLoading, setisLoading] = useState('');
+  const [isLoading, setisLoading] = useState(false);
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -38,6 +33,7 @@ const VehiculosSinOperadorAsignado = () => {
     try {
       setisLoading(true);
       const response = await odooApi.get(`/vehicles/unidades_vacantes/`);
+      console.log(response.data);
     } catch (error) {
       toast.error('Error al enviar los datos: ' + error);
     } finally {
@@ -62,13 +58,12 @@ const VehiculosSinOperadorAsignado = () => {
     enableFilters: true,
     enableBottomToolbar: true,
     localization: MRT_Localization_ES,
-    enableColumnAggregations: true,
     columnResizeMode: "onEnd",
     initialState: {
       grouping: ["res_store.name"],
       density: 'compact',
       expanded: true,
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
       showColumnFilters: true,
     },
     muiTablePaperProps: {
@@ -98,7 +93,7 @@ const VehiculosSinOperadorAsignado = () => {
         color: row.subRows?.length ? '#FFFFFF' : '#000000',
       },
     }),
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',

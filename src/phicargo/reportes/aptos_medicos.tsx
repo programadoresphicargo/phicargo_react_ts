@@ -1,25 +1,22 @@
-import { Button, Chip, DatePicker, NumberInput } from "@heroui/react";
+import { Button } from "@heroui/react";
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
-import React, { useEffect, useState } from 'react';
-import { download, generateCsv, mkConfig } from 'export-to-csv';
-import { getLocalTimeZone, parseDate } from "@internationalized/date";
-
-import Badge from 'react-bootstrap/Badge';
+import { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
-import { Component } from "react";
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import axios from 'axios';
 import odooApi from '@/api/odoo-api';
 import { toast } from "react-toastify";
-import { useDateFormatter } from "@react-aria/i18n";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { exportToCSV } from '../utils/export';
 import CustomNavbar from "@/pages/CustomNavbar";
 
-const LicenciasProximasVencer = () => {
+type AptoMedico = {
+  name: string;
+  dias_restantes: number;
+};
 
-  const [isLoading, setisLoading] = useState('');
-  const [data, setData] = useState([]);
+const AptosMedicos = () => {
+
+  const [isLoading, setisLoading] = useState(false);
+  const [data, setData] = useState<AptoMedico[]>([]);
 
   useEffect(() => {
     fetchData();
@@ -28,7 +25,7 @@ const LicenciasProximasVencer = () => {
   const fetchData = async () => {
     try {
       setisLoading(true);
-      const response = await odooApi.get(`/drivers/licencias_vencidas/`);
+      const response = await odooApi.get(`/drivers/aptos_medicos/`);
       setData(response.data);
     } catch (error) {
       toast.error('Error al enviar los datos: ' + error);
@@ -41,6 +38,7 @@ const LicenciasProximasVencer = () => {
     try {
       setisLoading(true);
       const response = await odooApi.get(`/drivers/correo_licencias_vencidas/`);
+      console.log(response.data);
     } catch (error) {
       toast.error('Error al enviar los datos: ' + error);
     } finally {
@@ -50,7 +48,7 @@ const LicenciasProximasVencer = () => {
 
   const columns = [
     { accessorKey: 'name', header: 'Operador', },
-    { accessorKey: 'tms_driver_license_expiration', header: 'Fecha expiración' },
+    { accessorKey: 'x_exmedic_end', header: 'Fecha expiración' },
     { accessorKey: 'dias_restantes', header: 'Días restantes' },
   ];
 
@@ -65,8 +63,7 @@ const LicenciasProximasVencer = () => {
     columnResizeMode: "onEnd",
     initialState: {
       density: 'compact',
-      expanded: false,
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
       showColumnFilters: true,
     },
     muiTablePaperProps: {
@@ -84,7 +81,7 @@ const LicenciasProximasVencer = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 220px)',
+        maxHeight: 'calc(100vh - 200px)',
       },
     },
     muiTableBodyCellProps: ({ row }) => ({
@@ -106,7 +103,7 @@ const LicenciasProximasVencer = () => {
             : '#000000',
       }
     }),
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -116,9 +113,10 @@ const LicenciasProximasVencer = () => {
         }}
       >
         <h1
+          style={{ flex: 1 }}
           className="tracking-tight font-semibold lg:text-2xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
         >
-          Licencias proximas a vencer
+          Aptos medicos proximos a vencer
         </h1>
 
         <Button
@@ -130,7 +128,7 @@ const LicenciasProximasVencer = () => {
         </Button>
 
         <Button
-          onPress={() => exportToCSV(data, columns, "licencias.csv")}
+          onPress={() => exportToCSV(data, columns, "aptos_medicos.csv")}
           color="success"
           className="text-white"
           radius="full"
@@ -160,4 +158,4 @@ const LicenciasProximasVencer = () => {
   );
 };
 
-export default LicenciasProximasVencer;
+export default AptosMedicos;
