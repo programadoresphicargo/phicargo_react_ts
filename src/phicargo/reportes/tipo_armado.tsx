@@ -1,39 +1,46 @@
-import { Button, Chip, DatePicker, NumberInput } from "@heroui/react";
-import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
-import React, { useEffect, useState, useMemo} from 'react';
-import { download, generateCsv, mkConfig } from 'export-to-csv';
-import { getLocalTimeZone, parseDate } from "@internationalized/date";
-import Badge from 'react-bootstrap/Badge';
+import { Button } from "@heroui/react";
+import { MRT_Cell, MRT_ColumnDef, MaterialReactTable, useMaterialReactTable } from 'material-react-table';
+import { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
-import { Component } from "react";
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import axios from 'axios';
 import odooApi from '@/api/odoo-api';
 import { toast } from "react-toastify";
-import { useDateFormatter } from "@react-aria/i18n";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { exportToCSV } from '../utils/export';
 import { DateRangePicker } from 'rsuite';
 import CustomNavbar from "@/pages/CustomNavbar";
 
-const ViajesTipoCategoria = () => {
+type Viaje = {
+  periodo: string;
+  year: number;
+  sencillo: number;
+  sencillo_pct: number;
+  full: number;
+  full_pct: number;
+  sin_especificar: number;
+  sin_especificar_pct: number;
+  total: number;
+}
+
+const ViajesTipoArmado = () => {
 
   const now = new Date();
   const firstDay = new Date(now.getFullYear(), 0, 1);
   const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-  const [range, setRange] = useState([firstDay, lastDay]);
-  const [isLoading, setisLoading] = useState('');
-  const [data, setData] = useState([]);
+  const [range, setRange] = useState<[Date, Date] | null>([firstDay, lastDay]);
+
+  const [isLoading, setisLoading] = useState(false);
+  const [data, setData] = useState<Viaje[]>([]);
 
   useEffect(() => {
     fetchData();
   }, [range]);
 
   const fetchData = async () => {
+    if (!range) return;
     try {
       setisLoading(true);
-      const response = await odooApi.get(`/tms_waybill/servicios_categoria/?date_start=${range[0].toISOString().slice(0, 10)}&date_end=${range[1].toISOString().slice(0, 10)}`);
-      setData(response.data.data);
+      const response = await odooApi.get(`/tms_waybill/viajes_tipo_armado/?date_start=${range[0].toISOString().slice(0, 10)}&date_end=${range[1].toISOString().slice(0, 10)}`);
+      setData(response.data);
     } catch (error) {
       toast.error('Error al enviar los datos: ' + error);
     } finally {
@@ -42,9 +49,11 @@ const ViajesTipoCategoria = () => {
   };
 
   const EnviarCorreo = async () => {
+    if (!range) return;
     try {
       setisLoading(true);
-      const response = await odooApi.get(`/tms_waybill/correo_servicios_categoria/?date_start=${range[0].toISOString().slice(0, 10)}&date_end=${range[1].toISOString().slice(0, 10)}`);
+      const response = await odooApi.get(`/drivers/correo_viajes_tipo_armado/?date_start=${range[0].toISOString().slice(0, 10)}&date_end=${range[1].toISOString().slice(0, 10)}`);
+      console.log(response.data);
     } catch (error) {
       toast.error('Error al enviar los datos: ' + error);
     } finally {
@@ -52,14 +61,69 @@ const ViajesTipoCategoria = () => {
     }
   };
 
-  const columns = useMemo(() => {
-    if (!data.length) return [];
-
-    return Object.keys(data[0]).map(key => ({
-      accessorKey: key,
-      header: key,
-    }));
-  }, [data]);
+  const columns: MRT_ColumnDef<Viaje>[] = [
+    { accessorKey: 'periodo', header: 'Periodo' },
+    { accessorKey: 'year', header: 'Año' },
+    {
+      accessorKey: 'sencillo',
+      header: 'Sencillos',
+      aggregationFn: 'sum' as const,
+      AggregatedCell: ({ cell }: { cell: MRT_Cell<Viaje> }) => (
+        <strong>{cell.getValue<number>()}</strong>
+      ),
+      muiTableBodyCellProps: {
+        align: 'right',
+      },
+    },
+    {
+      accessorKey: 'sencillo_pct', header: '%', muiTableBodyCellProps: {
+        align: 'right',
+      },
+    },
+    {
+      accessorKey: 'full',
+      header: 'Full',
+      aggregationFn: 'sum' as const,
+      AggregatedCell: ({ cell }: { cell: MRT_Cell<Viaje> }) => (
+        <strong>{cell.getValue<number>()}</strong>
+      ),
+      muiTableBodyCellProps: {
+        align: 'right',
+      },
+    },
+    {
+      accessorKey: 'full_pct', header: '%', muiTableBodyCellProps: {
+        align: 'right',
+      },
+    },
+    {
+      accessorKey: 'sin_especificar',
+      header: 'Sin tipo',
+      aggregationFn: 'sum' as const,
+      AggregatedCell: ({ cell }: { cell: MRT_Cell<Viaje> }) => (
+        <strong>{cell.getValue<number>()}</strong>
+      ),
+      muiTableBodyCellProps: {
+        align: 'right',
+      },
+    },
+    {
+      accessorKey: 'sin_especificar_pct', header: '%', muiTableBodyCellProps: {
+        align: 'right',
+      },
+    },
+    {
+      accessorKey: 'total',
+      header: 'Total',
+      aggregationFn: 'sum' as const,
+      AggregatedCell: ({ cell }: { cell: MRT_Cell<Viaje> }) => (
+        <strong>{cell.getValue<number>()}</strong>
+      ),
+      muiTableBodyCellProps: {
+        align: 'right',
+      },
+    },
+  ];
 
   const table = useMaterialReactTable({
     columns,
@@ -70,12 +134,13 @@ const ViajesTipoCategoria = () => {
     enableFilters: true,
     enableBottomToolbar: true,
     localization: MRT_Localization_ES,
-    enableColumnAggregations: true,
+    positionToolbarAlertBanner: "bottom",
     columnResizeMode: "onEnd",
     initialState: {
+      grouping: ["year"],
       density: 'compact',
       expanded: true,
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
       showColumnFilters: true,
     },
     muiTablePaperProps: {
@@ -105,7 +170,7 @@ const ViajesTipoCategoria = () => {
         color: row.subRows?.length ? '#FFFFFF' : '#000000',
       },
     }),
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -118,7 +183,7 @@ const ViajesTipoCategoria = () => {
           style={{ flex: 1 }}
           className="tracking-tight font-semibold lg:text-2xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
         >
-          Viajes por categoría
+          Viajes por tipo armado
         </h1>
 
         <DateRangePicker
@@ -168,4 +233,4 @@ const ViajesTipoCategoria = () => {
   );
 };
 
-export default ViajesTipoCategoria;
+export default ViajesTipoArmado;

@@ -1,27 +1,21 @@
-import { Button, Chip, DatePicker, NumberInput } from "@heroui/react";
+import { Button, } from "@heroui/react";
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
-import React, { useEffect, useState } from 'react';
-import { download, generateCsv, mkConfig } from 'export-to-csv';
-import { getLocalTimeZone, parseDate } from "@internationalized/date";
-import Badge from 'react-bootstrap/Badge';
+import { useEffect, useState, useMemo } from 'react';
 import { Box } from '@mui/material';
-import { Component } from "react";
 import odooApi from '@/api/odoo-api';
 import { toast } from "react-toastify";
-import { useDateFormatter } from "@react-aria/i18n";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { exportToCSV } from '../utils/export';
 import { DateRangePicker } from 'rsuite';
 import CustomNavbar from "@/pages/CustomNavbar";
 
-const ViajesTipoArmado = () => {
+const ViajesTipoCategoria = () => {
 
   const now = new Date();
   const firstDay = new Date(now.getFullYear(), 0, 1);
   const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-  const [range, setRange] = useState([firstDay, lastDay]);
-
-  const [isLoading, setisLoading] = useState('');
+  const [range, setRange] = useState<[Date, Date] | null>([firstDay, lastDay]);
+  const [isLoading, setisLoading] = useState(false);
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -29,10 +23,11 @@ const ViajesTipoArmado = () => {
   }, [range]);
 
   const fetchData = async () => {
+    if (!range) return;
     try {
       setisLoading(true);
-      const response = await odooApi.get(`/tms_waybill/viajes_tipo_armado/?date_start=${range[0].toISOString().slice(0, 10)}&date_end=${range[1].toISOString().slice(0, 10)}`);
-      setData(response.data);
+      const response = await odooApi.get(`/tms_waybill/servicios_categoria/?date_start=${range[0].toISOString().slice(0, 10)}&date_end=${range[1].toISOString().slice(0, 10)}`);
+      setData(response.data.data);
     } catch (error) {
       toast.error('Error al enviar los datos: ' + error);
     } finally {
@@ -41,9 +36,11 @@ const ViajesTipoArmado = () => {
   };
 
   const EnviarCorreo = async () => {
+    if (!range) return;
     try {
       setisLoading(true);
-      const response = await odooApi.get(`/drivers/correo_viajes_tipo_armado/?date_start=${range[0].toISOString().slice(0, 10)}&date_end=${range[1].toISOString().slice(0, 10)}`);
+      const response = await odooApi.get(`/tms_waybill/correo_servicios_categoria/?date_start=${range[0].toISOString().slice(0, 10)}&date_end=${range[1].toISOString().slice(0, 10)}`);
+      console.log(response.data);
     } catch (error) {
       toast.error('Error al enviar los datos: ' + error);
     } finally {
@@ -51,76 +48,14 @@ const ViajesTipoArmado = () => {
     }
   };
 
-  const columns = [
-    { accessorKey: 'periodo', header: 'Periodo' },
-    { accessorKey: 'year', header: 'Año' },
+  const columns = useMemo(() => {
+    if (!data.length) return [];
 
-    {
-      accessorKey: 'sencillo',
-      header: 'Sencillos',
-      aggregationFn: 'sum',
-      AggregatedCell: ({ cell }) => (
-        <strong>{cell.getValue()}</strong>
-      ),
-      muiTableBodyCellProps: {
-        align: 'right',
-      },
-    },
-
-    {
-      accessorKey: 'sencillo_pct', header: '%', muiTableBodyCellProps: {
-        align: 'right',
-      },
-    },
-
-    {
-      accessorKey: 'full',
-      header: 'Full',
-      aggregationFn: 'sum',
-      AggregatedCell: ({ cell }) => (
-        <strong>{cell.getValue()}</strong>
-      ),
-      muiTableBodyCellProps: {
-        align: 'right',
-      },
-    },
-
-    {
-      accessorKey: 'full_pct', header: '%', muiTableBodyCellProps: {
-        align: 'right',
-      },
-    },
-
-    {
-      accessorKey: 'sin_especificar',
-      header: 'Sin tipo',
-      aggregationFn: 'sum',
-      AggregatedCell: ({ cell }) => (
-        <strong>{cell.getValue()}</strong>
-      ),
-      muiTableBodyCellProps: {
-        align: 'right',
-      },
-    },
-
-    {
-      accessorKey: 'sin_especificar_pct', header: '%', muiTableBodyCellProps: {
-        align: 'right',
-      },
-    },
-
-    {
-      accessorKey: 'total',
-      header: 'Total',
-      aggregationFn: 'sum',
-      AggregatedCell: ({ cell }) => (
-        <strong>{cell.getValue()}</strong>
-      ),
-      muiTableBodyCellProps: {
-        align: 'right',
-      },
-    },
-  ];
+    return Object.keys(data[0]).map(key => ({
+      accessorKey: key,
+      header: key,
+    }));
+  }, [data]);
 
   const table = useMaterialReactTable({
     columns,
@@ -131,13 +66,11 @@ const ViajesTipoArmado = () => {
     enableFilters: true,
     enableBottomToolbar: true,
     localization: MRT_Localization_ES,
-    enableColumnAggregations: true,
     columnResizeMode: "onEnd",
     initialState: {
-      grouping: ["year"],
       density: 'compact',
       expanded: true,
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
       showColumnFilters: true,
     },
     muiTablePaperProps: {
@@ -167,7 +100,7 @@ const ViajesTipoArmado = () => {
         color: row.subRows?.length ? '#FFFFFF' : '#000000',
       },
     }),
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -180,7 +113,7 @@ const ViajesTipoArmado = () => {
           style={{ flex: 1 }}
           className="tracking-tight font-semibold lg:text-2xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
         >
-          Viajes por tipo armado
+          Viajes por categoría
         </h1>
 
         <DateRangePicker
@@ -230,4 +163,4 @@ const ViajesTipoArmado = () => {
   );
 };
 
-export default ViajesTipoArmado;
+export default ViajesTipoCategoria;
