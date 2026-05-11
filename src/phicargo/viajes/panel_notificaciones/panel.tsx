@@ -1,4 +1,4 @@
-import { Avatar, Card, CardBody, CardFooter, CardHeader, CircularProgress, Progress } from "@heroui/react";
+import { Avatar, Card, CardBody, CardFooter, CardHeader, Progress } from "@heroui/react";
 import {
     Button,
     Drawer,
@@ -6,30 +6,37 @@ import {
     DrawerContent,
     DrawerFooter,
     DrawerHeader,
-    useDisclosure,
 } from "@heroui/react";
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import { Container } from '@mui/material';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import Toolbar from '@mui/material/Toolbar';
+import React, { useEffect } from 'react';
 import Travel from '../control/viaje';
-import Typography from '@mui/material/Typography';
 import odooApi from '@/api/odoo-api';
 import { tiempoTranscurrido } from '../../funciones/tiempo';
 
-export default function Notificaciones({ isOpen, onOpen, onOpenChange }) {
+type Notificacion = {
+    id_origen: number;
+    name: string;
+    referencia_viaje: string;
+    titulo: string;
+    mensaje: string;
+    fecha_creacion: string;
+}
 
-    const [estatus, setEstatus] = React.useState([]);
+type Props = {
+    isOpen: boolean,
+    onOpenChange: (open: boolean) => void;
+};
+
+const Notificaciones: React.FC<Props> = ({
+    isOpen,
+    onOpenChange
+}) => {
+
+    const [estatus, setEstatus] = React.useState<Notificacion[]>([]);
     const [isLoading, setLoading] = React.useState(false);
     const [openTravel, setOpenTravel] = React.useState(false);
-    const [idViaje, setIDViaje] = React.useState(false);
+    const [idViaje, setIDViaje] = React.useState<number | null>(null);
 
-    const handleClickOpen = (id_viaje) => {
-        console.log(id_viaje);
+    const handleClickOpen = (id_viaje: number) => {
         setIDViaje(id_viaje);
         setOpenTravel(true);
     };
@@ -56,24 +63,12 @@ export default function Notificaciones({ isOpen, onOpen, onOpenChange }) {
 
     return (
         <>
-            <Travel idViaje={idViaje} open={openTravel} handleClose={handleClose}></Travel>
+            {idViaje && (
+                <Travel idViaje={idViaje} open={openTravel} handleClose={handleClose}></Travel>
+            )}
             <Drawer
                 isOpen={isOpen}
                 size='lg'
-                motionProps={{
-                    variants: {
-                        enter: {
-                            opacity: 1,
-                            x: 0,
-                            duration: 0.3,
-                        },
-                        exit: {
-                            x: 100,
-                            opacity: 0,
-                            duration: 0.3,
-                        },
-                    },
-                }}
                 onOpenChange={onOpenChange}
             >
                 <DrawerContent>
@@ -81,13 +76,13 @@ export default function Notificaciones({ isOpen, onOpen, onOpenChange }) {
                         <>
                             <DrawerHeader className="flex flex-col gap-1">Notificaciones</DrawerHeader>
                             <DrawerBody>
-                                <ul class="list-group list-group-flush navbar-card-list-group">
+                                <ul className="list-group list-group-flush navbar-card-list-group">
 
                                     {isLoading && (
                                         <Progress isIndeterminate aria-label="Loading..." size="sm" />
                                     )}
 
-                                    {estatus.map((step, index) => (
+                                    {estatus.map((step) => (
                                         <>
                                             <Card className='m-2' onPress={() => handleClickOpen(step.id_origen)} isPressable fullWidth>
                                                 <CardHeader className="justify-between">
@@ -119,7 +114,7 @@ export default function Notificaciones({ isOpen, onOpen, onOpenChange }) {
                                 </ul>
                             </DrawerBody>
                             <DrawerFooter>
-                                <Button color="primary" onPress={onClose}>
+                                <Button color="primary" onPress={onClose} radius="full">
                                     Cerrar
                                 </Button>
                             </DrawerFooter>
@@ -130,3 +125,5 @@ export default function Notificaciones({ isOpen, onOpen, onOpenChange }) {
         </>
     );
 }
+
+export default Notificaciones;
