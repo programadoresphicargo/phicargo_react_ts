@@ -17,13 +17,7 @@ type Contenedores = {
     dangerous_cargo: boolean;
 };
 
-type Props = {
-    id_maniobra?: number | null;
-};
-
-const ManiobraContenedores: React.FC<Props> = ({
-    id_maniobra
-}) => {
+const ManiobraContenedores: React.FC<any> = () => {
 
     const [modalShow, setModalShow] = useState(false);
     const [openDialog, setOpenDialog] = useState(false);
