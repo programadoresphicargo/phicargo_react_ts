@@ -1,23 +1,35 @@
 import {
+  MRT_Cell,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-
 import { AccesoContext } from '../context';
 import Box from '@mui/material/Box';
-import { Button } from "@heroui/react";
+import { Button, Chip } from "@heroui/react";
 import Dialog from '@mui/material/Dialog';
 import { DialogContent } from '@mui/material';
-import VehiculoForm from './vehiculoForm';
+import VehiculoForm from './form';
 import odooApi from '@/api/odoo-api';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
-const RegistroVehiculos = ({ onClose }) => {
-  const { AñadirVehiculo, formData } = useContext(AccesoContext);
+type Vehiculo = {
+  id_vehiculo: number
+}
 
+type Props = {
+  onClose: () => void,
+};
+
+const RegistroVehiculos: React.FC<Props> = ({
+  onClose
+}) => {
+
+  const { AñadirVehiculo } = useContext(AccesoContext);
   const [open, setOpen] = React.useState(false);
-  const [VehicleID, setVehicleID] = React.useState(0);
+  const [data, setData] = useState<Vehiculo[]>([]);
+  const [isLoading, setLoading] = useState(false);
+  const [VehicleID, setVehicleID] = React.useState<number | null>(null);
 
   const handleClose = () => {
     setOpen(false);
@@ -28,9 +40,6 @@ const RegistroVehiculos = ({ onClose }) => {
     setOpen(true);
     setVehicleID(null);
   };
-
-  const [data, setData] = useState([]);
-  const [isLoading, setLoading] = useState();
 
   const fetchData = async () => {
     try {
@@ -72,6 +81,15 @@ const RegistroVehiculos = ({ onClose }) => {
       {
         accessorKey: 'utilitario',
         header: 'Utilitario',
+        Cell: ({ cell }: { cell: MRT_Cell<any> }) => {
+          var valor = cell.getValue<boolean>();
+          if (!valor) return;
+          return (
+            <Chip color={'success'} className='text-white' radius='full'>
+              {valor == true ? "Si" : 'No'}
+            </Chip>
+          );
+        },
       },
       {
         accessorKey: 'contenedor1',
@@ -99,7 +117,7 @@ const RegistroVehiculos = ({ onClose }) => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
-    state: { isLoading: isLoading },
+    state: { showProgressBars: isLoading },
     enableColumnPinning: true,
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
@@ -107,7 +125,7 @@ const RegistroVehiculos = ({ onClose }) => {
     initialState: {
       showColumnFilters: true,
       density: 'compact',
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
     },
     muiTablePaperProps: {
       elevation: 0,
@@ -141,7 +159,7 @@ const RegistroVehiculos = ({ onClose }) => {
       </Box >
     ),
     muiTableBodyRowProps: ({ row }) => ({
-      onClick: ({ event }) => {
+      onClick: () => {
         if (row.subRows?.length) {
         } else {
         }
@@ -169,7 +187,7 @@ const RegistroVehiculos = ({ onClose }) => {
         maxHeight: 'calc(100vh - 250px)',
       },
     },
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -183,27 +201,28 @@ const RegistroVehiculos = ({ onClose }) => {
         >
           Registro de vehículos
         </h2>
-        <Button color='primary' onPress={NuevoVehiculo} radius='full'>Nuevo vehiculo</Button>
+        <Button color='primary' onPress={NuevoVehiculo} radius='full'>Nuevo</Button>
       </Box>
     ),
   });
 
   return (<>
-
     <Dialog
-      fullWidth="md"
+      fullWidth={true}
       maxWidth="md"
       open={open}
       onClose={handleClose}
     >
       <DialogContent>
-        <VehiculoForm onClose={handleClose} id_vehiculo={VehicleID}></VehiculoForm>
+        <VehiculoForm
+          open={open}
+          onClose={handleClose}
+          id_vehiculo={VehicleID} />
       </DialogContent>
     </Dialog>
     <MaterialReactTable table={table} />
   </>
   );
-
 };
 
 export default RegistroVehiculos;

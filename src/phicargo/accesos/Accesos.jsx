@@ -12,7 +12,7 @@ import TabPanel from '@mui/lab/TabPanel';
 import { useNavigate } from "react-router-dom";
 
 import TablaAccesos from "./tabla";
-import RegistroVehiculos from "./vehiculos/registros_vehiculos";
+import RegistroVehiculos from "./vehiculos/tabla";
 import AccesoCompo from "./AccesoCompo";
 
 import logo from '../../assets/img/phicargo-vertical.png';

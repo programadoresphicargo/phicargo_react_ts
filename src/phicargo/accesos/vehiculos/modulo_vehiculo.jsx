@@ -12,7 +12,7 @@ import axios from 'axios';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@heroui/react";
 import AccesoCompo from '../AccesoCompo';
 import { AccesoContext } from '../context';
-import RegistroVehiculos from './registros_vehiculos';
+import RegistroVehiculos from './tabla';
 import Slide from '@mui/material/Slide';
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
