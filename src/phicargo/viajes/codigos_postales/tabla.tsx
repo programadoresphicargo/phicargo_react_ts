@@ -1,16 +1,10 @@
-import { Button, Input, Link, NumberInput } from "@heroui/react";
+import { Button, Input, NumberInput } from "@heroui/react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import Slide from '@mui/material/Slide';
 import { toast } from 'react-toastify';
 import odooApi from "@/api/odoo-api";
 import {
@@ -47,7 +41,7 @@ const CodigosPostales = ({ }) => {
       if (response.data.status === "success") {
         toast.success(response.data.message);
         fetchData();
-        setCodigoPostal('');
+        setCodigoPostal(0);
         setCoordenadas('');
         onOpenChange();
       } else {
@@ -104,7 +98,7 @@ const CodigosPostales = ({ }) => {
     columnResizeMode: "onEnd",
     initialState: {
       density: 'compact',
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
     },
     muiTablePaperProps: {
       elevation: 0,
@@ -131,7 +125,7 @@ const CodigosPostales = ({ }) => {
         maxHeight: 'calc(100vh - 210px)',
       },
     },
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
