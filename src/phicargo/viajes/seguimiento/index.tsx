@@ -215,7 +215,7 @@ export default function Seguimiento() {
                     <Grid size={12}>
                         <Card className="mt-3">
                             <CardHeader>
-                                <p>Porcentaje de cumplimiento de envio de estatus del operador</p>
+                                Porcentaje de cumplimiento de envio de estatus del operador
                             </CardHeader>
                             <CardBody>
                                 <CumplimientoOperador></CumplimientoOperador>
@@ -227,7 +227,7 @@ export default function Seguimiento() {
                 <Grid size={8}>
                     <Card>
                         <CardHeader>
-                            <p>Historial de estatus</p>
+                            Historial de estatus
                         </CardHeader>
                         <Divider></Divider>
                         <CardBody>
