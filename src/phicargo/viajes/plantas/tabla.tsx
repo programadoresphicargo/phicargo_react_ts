@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useContext } from "react";
+import { useState, useMemo, useEffect, useContext } from "react";
 import {
     Button,
     Textarea,
@@ -10,6 +10,15 @@ import { Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material
 import odooApi from "@/api/odoo-api";
 import { ViajeContext } from "../context/viajeContext";
 import { toast } from "react-toastify";
+
+type ClienteEditable = {
+    id?: number;
+    x_url_google_maps: string;
+};
+
+type ErrorsType = {
+    x_url_google_maps?: string;
+};
 
 export default function PlantaViaje() {
 
@@ -30,10 +39,10 @@ export default function PlantaViaje() {
     }, [direccion]);
 
     // estados locales para edición
-    const [clienteEditable, setClienteEditable] = useState(cliente);
+    const [clienteEditable, setClienteEditable] = useState<ClienteEditable>(cliente);
     const [isEditing, setIsEditing] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [errors, setErrors] = useState({});
+    const [errors, setErrors] = useState<ErrorsType>({});
 
     // cuando cambia la `cliente` o se abre/cierra el modal, sincronizamos
     useEffect(() => {
@@ -42,15 +51,16 @@ export default function PlantaViaje() {
         setErrors({});
     }, [cliente, isOpen]);
 
-    const esLinkGoogleMaps = (texto) => {
+    const esLinkGoogleMaps = (texto: string) => {
         if (!texto) return false;
         // permitimos maps.app.goo.gl y variantes de google maps
         const regex = /^https?:\/\/(maps\.app\.goo\.gl|www\.google\.com\/maps|google\.com\/maps)/i;
         return regex.test(texto);
     };
 
-    const validarFormulario = (c) => {
-        const newErrors = {};
+    const validarFormulario = (c: ClienteEditable): boolean => {
+        const newErrors: ErrorsType = {};
+
         if (!c?.x_url_google_maps || c.x_url_google_maps.trim() === "") {
             newErrors.x_url_google_maps = "El link es obligatorio";
         } else if (!esLinkGoogleMaps(c.x_url_google_maps.trim())) {
