@@ -1,35 +1,30 @@
 import {
+  MRT_Cell,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { AccesoContext } from '../context';
 import AppBar from '@mui/material/AppBar';
 import { Button } from '@heroui/react';
-import CloseIcon from '@mui/icons-material/Close';
 import Dialog from '@mui/material/Dialog';
 import FormEmpresa from './formulario';
-import IconButton from '@mui/material/IconButton';
-import Slide from '@mui/material/Slide';
-import Stack from '@mui/material/Stack';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import axios from 'axios';
-import dayjs from 'dayjs';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import { Box } from '@mui/material';
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+type Props = {
+  open: boolean;
+  handleClose: () => void;
+};
 
-const ListadoVisitantes = ({ open, handleClose }) => {
+const ListadoVisitantes: React.FC<Props> = ({ open, handleClose }) => {
 
-  const [isLoading, setLoading] = useState();
-  const { formData, setVisitantes, visitantes, setAddedVisitors, AñadirVisitanteAcceso } = useContext(AccesoContext);
-
+  const [isLoading, setLoading] = useState(false);
+  const { formData, setVisitantes, visitantes, AñadirVisitanteAcceso } = useContext(AccesoContext);
   const [openFormulario, setOpenForm] = useState(false);
 
   const handleClickOpenForm = () => {
@@ -44,12 +39,9 @@ const ListadoVisitantes = ({ open, handleClose }) => {
   const fetchVisitantes = async () => {
     try {
       setLoading(true);
-
       let response = await odooApi.get('/visitantes/empresas/' + formData.id_empresa);
-
       setVisitantes(response.data);
-
-    } catch (error) {
+    } catch (error: any) {
       toast.error("Error al obtener visitantes: " + error.message);
     } finally {
       setLoading(false);
@@ -67,7 +59,7 @@ const ListadoVisitantes = ({ open, handleClose }) => {
       {
         accessorKey: 'nombre_visitante',
         header: 'Nombre del visitante',
-        Cell: ({ cell }) => cell.getValue()?.toUpperCase(),
+        Cell: ({ cell }: { cell: MRT_Cell<any> }) => cell.getValue<string>()?.toUpperCase(),
       },
       {
         accessorKey: 'fecha_creacion',
@@ -76,8 +68,6 @@ const ListadoVisitantes = ({ open, handleClose }) => {
     ],
     [],
   );
-
-  const manualGrouping = ['nombre_operador'];
 
   const table = useMaterialReactTable({
     columns,
@@ -90,10 +80,9 @@ const ListadoVisitantes = ({ open, handleClose }) => {
     enableColumnPinning: true,
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
-    grouping: manualGrouping,
     initialState: {
       density: 'compact',
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
     },
     muiTablePaperProps: {
       elevation: 0,
@@ -102,8 +91,7 @@ const ListadoVisitantes = ({ open, handleClose }) => {
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
-      onClick: ({ event }) => {
-
+      onClick: () => {
         if (row.subRows?.length) {
         } else {
           AñadirVisitanteAcceso(row.original.id_visitante);
@@ -114,7 +102,7 @@ const ListadoVisitantes = ({ open, handleClose }) => {
         cursor: 'pointer',
       },
     }),
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -147,15 +135,11 @@ const ListadoVisitantes = ({ open, handleClose }) => {
     },
   });
 
-  const [scroll, setScroll] = React.useState('paper');
-
   return (<>
 
     <Dialog
       open={open}
       onClose={handleClose}
-      TransitionComponent={Transition}
-      scroll={scroll}
       maxWidth="lg"
       fullWidth
     >
@@ -168,7 +152,7 @@ const ListadoVisitantes = ({ open, handleClose }) => {
           <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
             Registro de visitantes
           </Typography>
-          <Button autoFocus color="inherit" onClick={handleClose}>
+          <Button autoFocus onPress={handleClose}>
             Cerrar
           </Button>
         </Toolbar>

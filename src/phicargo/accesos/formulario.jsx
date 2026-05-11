@@ -25,7 +25,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import ModuloVehiculo from './vehiculos/modulo';
 import { Progress } from "@heroui/react";
 import SearchIcon from '@mui/icons-material/Search';
-import SelectedVisitantesTable from './visitantes/visitantes_seleccionados_tabla';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import { Textarea } from "@heroui/react";
@@ -50,6 +49,7 @@ import { RadioGroup, Radio } from "@heroui/react";
 import Swal from 'sweetalert2';
 import AppCamara from "./archivos";
 import SelectedEmpleadosTable from "./empleados/empleados_seleccionados_tabla";
+import SelectedVisitantesTable from "./visitantes/visitantes_seleccionados_tabla";
 
 const AccesoForm = ({ id_acceso, onClose }) => {
 
