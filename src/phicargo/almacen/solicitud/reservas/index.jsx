@@ -213,13 +213,29 @@ const ReservasDetalle = ({ open, handleClose, dataLinea }) => {
     );
 
     const marcarTodas = (valor) => {
+
         const idsLinea = reservasLinea.map(r => r.id_reserva);
+
         setReservasGlobales(prev =>
-            prev.map(r =>
-                idsLinea.includes(r.id_reserva)
-                    ? { ...r, devuelta: valor }
-                    : r
-            )
+            prev.map(r => {
+
+                if (r.fecha_devuelto != null) {
+                    return r;
+                }
+
+                return idsLinea.includes(r.id_reserva)
+                    ? {
+                        ...r,
+                        devuelta: valor,
+                        motivo_no_devuelta: valor
+                            ? ''
+                            : r.motivo_no_devuelta,
+                        comentarios_no_devuelta: valor
+                            ? ''
+                            : r.comentarios_no_devuelta,
+                    }
+                    : r;
+            })
         );
     };
 
@@ -241,7 +257,9 @@ const ReservasDetalle = ({ open, handleClose, dataLinea }) => {
         if (result.isConfirmed) {
             try {
                 setLoading(true);
-                const response = await odooApi.patch('/tms_travel/solicitudes_equipo/devolver/reserva/' + data?.id, row);
+                const response = await odooApi.patch('/tms_travel/solicitudes_equipo/devolver/reserva/' + data?.id, {
+                    reservas: [row]
+                });
                 if (response.data.status === 'success') {
                     toast.success(response.data.message);
                     fetchData(data?.id);
@@ -257,6 +275,72 @@ const ReservasDetalle = ({ open, handleClose, dataLinea }) => {
             } finally {
                 setLoading(false);
             }
+        }
+    };
+
+    const devolverTodo = async () => {
+
+        // validar registros
+        const invalidas = reservasLinea.filter(
+            r =>
+                r.devuelta === false &&
+                (!r.motivo_no_devuelta || !r.comentarios_no_devuelta)
+        );
+
+        if (invalidas.length > 0) {
+            toast.error(
+                'Hay reservas no devueltas sin motivo o comentario.'
+            );
+            return;
+        }
+
+        const result = await Swal.fire({
+            title: '¿Estás seguro?',
+            text: 'Se devolverán todas las reservas.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, confirmar',
+        });
+
+        if (!result.isConfirmed) return;
+
+        try {
+
+            setLoading(true);
+
+            const payload = reservasLinea.map(r => ({
+                id_reserva: r.id_reserva,
+                id_solicitud_equipo_line: r.id_solicitud_equipo_line,
+                id_unidad: r.id_unidad,
+                devuelta: r.devuelta,
+                motivo_no_devuelta: r.motivo_no_devuelta,
+                comentarios_no_devuelta: r.comentarios_no_devuelta,
+            }));
+
+            const response = await odooApi.patch(
+                '/tms_travel/solicitudes_equipo/devolver/reserva/' + data?.id,
+                {
+                    reservas: payload
+                }
+            );
+
+            if (response.data.status === 'success') {
+                toast.success(response.data.message);
+                fetchData(data?.id);
+            } else {
+                toast.error(response.data.message);
+            }
+
+        } catch (error) {
+
+            if (error.response) {
+                toast.error("Error del servidor: " + error.response.data);
+            } else {
+                toast.error("Error de red");
+            }
+
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -302,24 +386,42 @@ const ReservasDetalle = ({ open, handleClose, dataLinea }) => {
             },
         }),
         renderTopToolbarCustomActions: () => (
-            <>
-                {(data?.x_studio_estado === 'borrador' || data?.x_studio_estado === undefined) && (
-                    <>
-                        <SearchUnidad data={dataLinea} open={openDisponible} handleClose={handleCloseDisponible}></SearchUnidad>
-                        <Button color='success' radius='full' onPress={handleClickOpenDisponible} className='text-white'>Equipo disponible</Button>
-                    </>
-                )}
-                {(data?.x_studio_estado === 'entregado' || data?.x_studio_estado === 'recepcionado_operador') && (
-                    <>
-                        <Button color="primary" onPress={() => marcarTodas(true)} radius='full' isDisabled>
-                            Marcar todas
-                        </Button>
-                        <Button color="danger" onPress={() => marcarTodas(false)} radius='full' isDisabled>
-                            Desmarcar todas
-                        </Button>
-                    </>
-                )}
-            </>
+            <Box
+                sx={{
+                    display: 'flex',
+                    gap: '16px',
+                    padding: '8px',
+                    alignItems: 'center',
+                }}
+            >
+                <>
+                    {(data?.x_studio_estado === 'borrador' || data?.x_studio_estado === undefined) && (
+                        <>
+                            <SearchUnidad data={dataLinea} open={openDisponible} handleClose={handleCloseDisponible}></SearchUnidad>
+                            <Button color='success' radius='full' onPress={handleClickOpenDisponible} className='text-white'>Equipo disponible</Button>
+                        </>
+                    )}
+                    {(data?.x_studio_estado === 'entregado' || data?.x_studio_estado === 'recepcionado_operador') && (
+                        <>
+                            <Button color="primary" onPress={() => marcarTodas(true)} radius='full'>
+                                Marcar todo devuelto
+                            </Button>
+                            <Button color="danger" onPress={() => marcarTodas(false)} radius='full'>
+                                Marcar todo no devuelto
+                            </Button>
+                            <Button
+                                color="success"
+                                radius="full"
+                                className="text-white"
+                                onPress={devolverTodo}
+                                isLoading={isLoading}
+                            >
+                                Devolver todo
+                            </Button>
+                        </>
+                    )}
+                </>
+            </Box >
         ),
         renderRowActions: ({ row }) => (
             <Box sx={{ display: 'flex', gap: 1 }}>
