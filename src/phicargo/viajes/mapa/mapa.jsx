@@ -1,10 +1,7 @@
 import 'leaflet/dist/leaflet.css';
-
 import { MapContainer, Marker, Polyline, Popup, TileLayer } from 'react-leaflet';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { ViajeContext } from '../context/viajeContext';
-import axios from 'axios';
 import odooApi from '@/api/odoo-api';
 import { Progress } from '@heroui/react';
 
@@ -24,7 +21,6 @@ const lastPositionIcon = new L.Icon({
 
 const Map = () => {
     const { id_viaje } = useContext(ViajeContext);
-    const [estatusHistorial, setHistorial] = useState([]);
     const [estatus, setEstatus] = useState([]);
     const [locations, setLocations] = useState([]);
     const [isLoading, setIsLoading] = useState(false);

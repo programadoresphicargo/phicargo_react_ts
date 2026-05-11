@@ -5,18 +5,27 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import axios from 'axios';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
-import { useAuthContext } from "@/modules/auth/hooks";
 import { Select, SelectItem } from "@heroui/react";
 
-const CancelarManiobraDialog = ({ open, handleClose, id_maniobra }) => {
+type Props = {
+    open: boolean;
+    handleClose: () => void;
+    id_maniobra: number;
+}
+
+const CancelarManiobraDialog: React.FC<Props> = ({
+    open,
+    handleClose,
+    id_maniobra
+}) => {
+
     const [loading, setLoading] = useState(false);
     const [motivo, setValue] = React.useState("");
     const [comentarios, setComentarios] = React.useState("");
 
-    const handleSelectionChange = (e) => {
+    const handleSelectionChange = (e: any) => {
         setValue(e.target.value);
     };
 

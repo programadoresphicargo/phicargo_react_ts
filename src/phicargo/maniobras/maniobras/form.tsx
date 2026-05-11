@@ -6,7 +6,7 @@ import { Textarea } from "@heroui/react";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import { Button } from "@heroui/react";
-import CancelarManiobraDialog from './cancelar_maniobra';
+import CancelarManiobraDialog from './cancelar';
 import CorreosLigadosManiobra from './correos_electronicos/dialog_correos';
 import Dialog from '@mui/material/Dialog';
 import DocumentacionManiobra from '../documentacion/documentacion';
@@ -599,11 +599,14 @@ const Formulariomaniobra: React.FC<Props> = ({
 
             <CorreosLigadosManiobra open={openCL} handleClose={handleCloseCL} id_cliente={dataCP?.id_cliente}></CorreosLigadosManiobra>
 
-            <CancelarManiobraDialog
-                open={dialogOpen}
-                handleClose={handleCloseDialog}
-                id_maniobra={id_maniobra}
-            />
+            {id_maniobra && (
+                <CancelarManiobraDialog
+                    open={dialogOpen}
+                    handleClose={handleCloseDialog}
+                    id_maniobra={id_maniobra}
+                />
+            )}
+
             <Dialog
                 open={show}
                 onClose={handleClose}
