@@ -1,37 +1,38 @@
 import {
+  MRT_Cell,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import { Popover, PopoverContent, PopoverTrigger, User, useDisclosure } from "@heroui/react";
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-import AppBar from '@mui/material/AppBar';
-import { Avatar } from "@heroui/react";
-import { Box, Stack } from '@mui/material';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Box } from '@mui/material';
 import { Button } from "@heroui/react"
 import { Chip } from "@heroui/react";
-import CloseIcon from '@mui/icons-material/Close';
-import IconButton from '@mui/material/IconButton';
-import { Image } from 'antd';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import Slide from '@mui/material/Slide';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import { exportToCSV } from '../../utils/export';
 import odooApi from '@/api/odoo-api';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import EPP from '../inventario/tabla_productos';
 import SolicitudForm from './form';
 import { useAlmacen } from '../contexto/contexto';
 
-const Solicitudes = ({ x_tipo, vista, travel_id }) => {
+type Solicitudes = {
+  id: number;
+  x_waybill_id: number;
+}
 
-  const [id_solicitud, setIDSolicitud] = React.useState(null);
+type Props = {
+  x_tipo: string,
+  vista: string,
+  travel_id?: number,
+};
+
+const Solicitudes: React.FC<Props> = ({
+  x_tipo,
+  vista,
+  travel_id
+}) => {
+
+  const [id_solicitud, setIDSolicitud] = React.useState<number | null>(null);
   const [open, setOpen] = React.useState(false);
-  const { modoEdicion, setModoEdicion, data, setData } = useAlmacen();
+  const { setModoEdicion, setData } = useAlmacen();
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 80,
@@ -46,7 +47,7 @@ const Solicitudes = ({ x_tipo, vista, travel_id }) => {
     fetchData();
   };
 
-  const [dataSolicitudes, setDataSolicitudes] = useState([]);
+  const [dataSolicitudes, setDataSolicitudes] = useState<Solicitudes[]>([]);
   const [isLoading, setLoading] = useState(false);
 
   const fetchData = async () => {
@@ -58,7 +59,7 @@ const Solicitudes = ({ x_tipo, vista, travel_id }) => {
         url += `?travel_id=${travel_id}`;
       }
       const response = await odooApi.get(url);
-      let solicitudes = response.data;
+      let solicitudes: Solicitudes[] = response.data;
 
       if (vista === 'solicitudes') {
         solicitudes = solicitudes.filter((sol) => sol.x_waybill_id !== null);
@@ -106,8 +107,8 @@ const Solicitudes = ({ x_tipo, vista, travel_id }) => {
       {
         accessorKey: 'operador',
         header: 'Operador',
-        Cell: ({ cell }) => {
-          const operador = cell.getValue();
+        Cell: ({ cell }: { cell: MRT_Cell<Solicitudes> }) => {
+          const operador = cell.getValue<string>();
 
           if (!operador) return;
 
@@ -134,27 +135,22 @@ const Solicitudes = ({ x_tipo, vista, travel_id }) => {
         accessorKey: 'x_studio_estado',
         header: 'Estado',
         Cell: ({ cell }) => {
-          const estatus = cell.getValue();
-          let badgeClass = '';
-
-          if (estatus === 'entregado') {
-            badgeClass = 'primary';
-          } else if (estatus === 'confirmado') {
-            badgeClass = 'success';
-          } else if (estatus === 'borrador') {
-            badgeClass = 'warning';
-          } else if (estatus === 'devuelto') {
-            badgeClass = 'success';
-          } else if (estatus === 'cancelada') {
-            badgeClass = 'danger';
-          } else {
-            badgeClass = 'secondary';
-          }
+          const estatus = cell.getValue<string>();
 
           return (
             <Chip
               size="sm"
-              color={badgeClass}
+              color={estatus === 'entregado'
+                ? 'primary'
+                : estatus === 'confirmado'
+                  ? 'success'
+                  : estatus === 'borrador'
+                    ? 'warning'
+                    : estatus === 'devuelto'
+                      ? 'success'
+                      : estatus === 'cancelada'
+                        ? 'danger'
+                        : 'secondary'}
               className="text-white"
             >
               {estatus}
@@ -201,9 +197,7 @@ const Solicitudes = ({ x_tipo, vista, travel_id }) => {
         referencia_viaje: vista == 'solicitudes' ? true : false,
         inicio_programado: vista == 'solicitudes' ? true : false,
       },
-      hiddenColumns: ["empresa"],
       density: 'compact',
-      expanded: false,
       showColumnFilters: true,
     },
     muiTablePaperProps: {
@@ -225,7 +219,7 @@ const Solicitudes = ({ x_tipo, vista, travel_id }) => {
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
-      onClick: ({ event }) => {
+      onClick: () => {
         setIDSolicitud(row.original.id);
         setModoEdicion(false);
         handleClickOpen();
@@ -246,7 +240,7 @@ const Solicitudes = ({ x_tipo, vista, travel_id }) => {
           : '#000000',
       }
     }),
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -264,7 +258,7 @@ const Solicitudes = ({ x_tipo, vista, travel_id }) => {
         <Button
           radius="full"
           className='text-white'
-          startContent={<i class="bi bi-plus-lg"></i>}
+          startContent={<i className="bi bi-plus-lg"></i>}
           color='primary'
           isDisabled={false}
           onPress={() => {
@@ -280,7 +274,7 @@ const Solicitudes = ({ x_tipo, vista, travel_id }) => {
         <Button
           radius="full"
           className='text-white'
-          startContent={<i class="bi bi-arrow-clockwise"></i>}
+          startContent={<i className="bi bi-arrow-clockwise"></i>}
           color='secondary'
           onPress={() => fetchData()}
         >Actualizar
@@ -290,7 +284,7 @@ const Solicitudes = ({ x_tipo, vista, travel_id }) => {
           radius="full"
           color='success'
           className='text-white'
-          startContent={<i class="bi bi-file-earmark-excel"></i>}
+          startContent={<i className="bi bi-file-earmark-excel"></i>}
           onPress={() => exportToCSV(dataSolicitudes, columns, "solicitudes.csv")}>
           Exportar
         </Button>

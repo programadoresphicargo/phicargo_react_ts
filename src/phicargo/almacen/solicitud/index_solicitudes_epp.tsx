@@ -13,7 +13,10 @@ const Almacen = () => {
 
     const [value, setValue] = React.useState('1');
 
-    const handleChange = (event, newValue) => {
+    const handleChange = (
+        _: React.SyntheticEvent,
+        newValue: string
+    ) => {
         setValue(newValue);
     };
 
@@ -34,10 +37,12 @@ const Almacen = () => {
                                         height: '3px',
                                     }
                                 }}>
+                                <Tab label="Solicitudes para viaje" value="1" sx={{ fontFamily: 'Inter' }} />
                                 <Tab label="Asignaciones" value="2" sx={{ fontFamily: 'Inter' }} />
                             </TabList>
                         </Box>
-                        <TabPanel value="1" sx={{ padding: 0, margin: 0 }}><Solicitudes x_tipo={'herramienta'} vista={'asignaciones'}></Solicitudes></TabPanel>
+                        <TabPanel value="1" sx={{ padding: 0, margin: 0 }}><Solicitudes x_tipo={'epp'} vista={'solicitudes'}></Solicitudes></TabPanel>
+                        <TabPanel value="2" sx={{ padding: 0, margin: 0 }}><Solicitudes x_tipo={'epp'} vista={'asignaciones'}></Solicitudes></TabPanel>
                     </TabContext>
                 </Box>
 
