@@ -4,23 +4,28 @@ import {
 } from 'material-react-table';
 import React, { useEffect, useMemo, useState, useContext } from 'react';
 import { Box } from '@mui/material';
-import { Button } from '@heroui/react';
+import { Button, RangeValue } from '@heroui/react';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Select, SelectItem } from "@heroui/react";
 import { ManiobraContext } from '../../context/viajeContext';
 import odooApi from '@/api/odoo-api';
 import { DateRangePicker } from "@heroui/react";
-import { parseDate, getLocalTimeZone } from "@internationalized/date";
-import { useDateFormatter } from "@react-aria/i18n";
+import { CalendarDate, parseDate } from "@internationalized/date";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
-const AñadirContenedor = ({ show, handleClose, id_maniobra }) => {
+type Props = {
+    show: boolean;
+    handleClose: () => void;
+};
 
-    function formatDateToYYYYMMDD(date) {
+const AñadirContenedor: React.FC<Props> = ({
+    show,
+    handleClose
+}) => {
+
+    function formatDateToYYYYMMDD(date: any) {
         return date.toISOString().slice(0, 10);
     }
 
@@ -28,16 +33,17 @@ const AñadirContenedor = ({ show, handleClose, id_maniobra }) => {
     const first = formatDateToYYYYMMDD(new Date(now.getFullYear(), now.getMonth(), 1));
     const last = formatDateToYYYYMMDD(new Date(now.getFullYear(), now.getMonth() + 1, 0));
 
-    const [value, setValue] = React.useState({
+    const [value, setValue] = React.useState<RangeValue<CalendarDate> | null>({
         start: parseDate(first),
-        end: parseDate(last)
+        end: parseDate(last),
     });
 
     const [data, setData] = useState([]);
-    const [isLoading2, setILoading] = useState();
-    const { cps_ligadas, setCpsLigadas, cps_desligadas, setCpsDesligadas } = useContext(ManiobraContext);
+    const [isLoading2, setILoading] = useState(false);
+    const { cps_ligadas, setCpsLigadas } = useContext(ManiobraContext);
 
     useEffect(() => {
+        if (!value) return;
         const fetchData = async () => {
             try {
                 setILoading(true);
@@ -58,7 +64,7 @@ const AñadirContenedor = ({ show, handleClose, id_maniobra }) => {
         fetchData();
     }, [value, show]);
 
-    const añadir_contenedor = (data) => {
+    const añadir_contenedor = (data: any) => {
         toast.success('Añadiendo contenedor');
 
         const yaExiste = cps_ligadas?.some(item => item.id === data.id);
@@ -108,7 +114,6 @@ const AñadirContenedor = ({ show, handleClose, id_maniobra }) => {
     const table = useMaterialReactTable({
         columns,
         data,
-        elevation: 0,
         enableGrouping: true,
         enableGlobalFilter: false,
         enableFilters: true,
@@ -128,7 +133,7 @@ const AñadirContenedor = ({ show, handleClose, id_maniobra }) => {
         },
         initialState: {
             density: 'compact',
-            pagination: { pageSize: 80 },
+            pagination: { pageIndex: 0, pageSize: 80 },
         },
         muiTablePaperProps: {
             elevation: 0,
@@ -181,11 +186,12 @@ const AñadirContenedor = ({ show, handleClose, id_maniobra }) => {
                 cursor: 'pointer',
             },
         }),
-        renderTopToolbarCustomActions: ({ table }) => (
+        renderTopToolbarCustomActions: () => (
             <Box display="flex" alignItems="center" m={2}>
                 <DateRangePicker
                     visibleMonths={2}
-                    value={value} onChange={setValue}
+                    value={value}
+                    onChange={setValue}
                     className="max-w-xs"
                     label="Cartas porte"
                 />
@@ -198,7 +204,6 @@ const AñadirContenedor = ({ show, handleClose, id_maniobra }) => {
             <Dialog
                 open={show}
                 onClose={handleClose}
-                fullWidth="xl"
                 maxWidth="xl"
             >
                 <DialogTitle id="example-custom-modal-styling-title">

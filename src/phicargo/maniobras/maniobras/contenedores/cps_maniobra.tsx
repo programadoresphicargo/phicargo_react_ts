@@ -164,7 +164,6 @@ const ManiobraContenedores: React.FC<Props> = ({
                         <AñadirContenedor
                             show={modalShow}
                             handleClose={handleCloseModal}
-                            id_maniobra={id_maniobra}
                         />
                         <MaterialReactTable table={table} />
 
