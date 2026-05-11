@@ -1,11 +1,7 @@
-import React, { useContext, useState } from 'react';
-import { AccesoContext } from '../context';
+import { useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import TextField from '@mui/material/TextField';
-import axios from 'axios';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import { Button } from '@heroui/react';
@@ -14,11 +10,16 @@ import { AppBar } from '@mui/material';
 import { Toolbar } from '@mui/material';
 import Typography from '@mui/material/Typography';
 
-export default function FormEmpresa({ open, handleClose }) {
-    const [nombreEmpresa, setNombreEmpresa] = useState('');
-    const { setEmpresas } = useContext(AccesoContext);
+type Props = {
+    open: boolean;
+    handleClose: () => void;
+};
 
-    const handleChange = (e) => {
+const FormEmpresa: React.FC<Props> = ({ open, handleClose }) => {
+
+    const [nombreEmpresa, setNombreEmpresa] = useState('');
+
+    const handleChange = (e: any) => {
         const inputValue = e.target.value;
 
         // Validar que solo contenga letras y espacios
@@ -47,7 +48,7 @@ export default function FormEmpresa({ open, handleClose }) {
             } else {
                 toast.error(response.data.message);
             }
-        } catch (error) {
+        } catch (error: any) {
             toast.error('Error en la solicitud: ' + error.message);
         }
     };
@@ -90,3 +91,5 @@ export default function FormEmpresa({ open, handleClose }) {
         </Dialog>
     );
 }
+
+export default FormEmpresa;

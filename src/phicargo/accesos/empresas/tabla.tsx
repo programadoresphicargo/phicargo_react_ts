@@ -1,35 +1,38 @@
 import {
+  MRT_Cell,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { AccesoContext } from '../context';
 import AppBar from '@mui/material/AppBar';
 import { Button } from '@heroui/react';
-import CloseIcon from '@mui/icons-material/Close';
 import Dialog from '@mui/material/Dialog';
-import FormEmpresa from './formulario';
-import IconButton from '@mui/material/IconButton';
-import Slide from '@mui/material/Slide';
-import Stack from '@mui/material/Stack';
+import FormEmpresa from './form';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import dayjs from 'dayjs';
 import odooApi from '@/api/odoo-api';
 import { Box } from '@mui/material';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+type Empresa = {
+  id_empresa: number;
+  empresa: string;
+}
 
-const ListadoEmpresas = ({ open, handleClose }) => {
+type Props = {
+  open: boolean,
+  handleClose: () => void;
+};
 
-  const [data, setData] = useState([]);
-  const [isLoading, setLoading] = useState();
-  const { ActualizarIDAacceso, selectVehiculos, vehiculosAñadidos, vehiculosEliminados, empresas, formData, setFormData, setEmpresas } = useContext(AccesoContext);
+const ListadoEmpresas: React.FC<Props> = ({
+  open,
+  handleClose
+}) => {
 
+  const [data, setData] = useState<Empresa[]>([]);
+  const [isLoading, setLoading] = useState(false);
+  const { setFormData } = useContext(AccesoContext);
   const [openFormulario, setOpenForm] = useState(false);
 
   const handleClickOpenForm = () => {
@@ -63,12 +66,12 @@ const ListadoEmpresas = ({ open, handleClose }) => {
       {
         accessorKey: 'empresa',
         header: 'Nombre de la empresa',
-        Cell: ({ cell }) => cell.getValue()?.toUpperCase(),
+        Cell: ({ cell }: { cell: MRT_Cell<Empresa> }) => cell.getValue<string>()?.toUpperCase(),
       },
       {
         accessorKey: 'fecha_creacion',
         header: 'Creación',
-        Cell: ({ cell }) => cell.getValue()?.toUpperCase(),
+        Cell: ({ cell }: { cell: MRT_Cell<Empresa> }) => cell.getValue<string>()?.toUpperCase(),
       },
     ],
     [],
@@ -88,7 +91,7 @@ const ListadoEmpresas = ({ open, handleClose }) => {
     initialState: {
       showColumnFilters: true,
       density: 'compact',
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
     },
     muiTablePaperProps: {
       elevation: 0,
@@ -97,11 +100,10 @@ const ListadoEmpresas = ({ open, handleClose }) => {
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
-      onClick: ({ event }) => {
-
+      onClick: () => {
         if (row.subRows?.length) {
         } else {
-          setFormData((prevData) => ({
+          setFormData((prevData: any) => ({
             ...prevData,
             ['id_empresa']: row.original.id_empresa,
             ['empresa']: row.original.empresa,
@@ -132,7 +134,7 @@ const ListadoEmpresas = ({ open, handleClose }) => {
         maxHeight: 'calc(100vh - 300px)',
       },
     },
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -141,20 +143,16 @@ const ListadoEmpresas = ({ open, handleClose }) => {
           flexWrap: 'wrap',
         }}
       >
-        <Button color='primary' onPress={handleClickOpenForm} radius='full'>Nueva empresa</Button>
+        <Button color='primary' onPress={handleClickOpenForm} radius='full'>Nueva</Button>
       </Box>
     ),
   });
-
-  const [scroll, setScroll] = React.useState('paper');
 
   return (<>
 
     <Dialog
       open={open}
       onClose={handleClose}
-      TransitionComponent={Transition}
-      scroll={scroll}
       fullWidth
       maxWidth="lg"
     >
@@ -169,7 +167,7 @@ const ListadoEmpresas = ({ open, handleClose }) => {
           <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
             Registro de empresas
           </Typography>
-          <Button autoFocus color="inherit" onClick={handleClose}>
+          <Button autoFocus onClick={handleClose}>
             Cerrar
           </Button>
         </Toolbar>
