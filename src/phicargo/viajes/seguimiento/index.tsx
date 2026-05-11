@@ -1,24 +1,15 @@
-import { Button, ButtonGroup } from "@heroui/react";
+import { Button } from "@heroui/react";
 import { Card, Chip, Divider } from "@heroui/react";
 import { CardBody, CardHeader, Snippet } from "@heroui/react";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import Contenedores from "../contenedores/contenedores";
 import CumplimientoOperador from "../cumplimiento_operador/cumplimiento";
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
 import EstatusHistorial from "../estatus/estatus";
 import EstatusViaje from "./estado_viaje";
 import Grid from '@mui/material/Grid2';
 import PanelEnvio from '../panel_envio_estatus/panel_envio';
-import Slide from '@mui/material/Slide';
-import { Spacer } from "@heroui/react";
 import Stack from '@mui/material/Stack';
-import { Steps } from 'antd';
 import { ViajeContext } from "../context/viajeContext";
-import axios from "axios";
-import { fontFamily } from "@mui/system";
 import { useJourneyDialogs } from "./funciones";
 import Custodia from "../custodia/custodia";
 import LlegadaTarde from "../llegada_tarde";
@@ -26,9 +17,8 @@ import FormEquipoViaje from "./editar_equipo";
 
 export default function Seguimiento() {
 
-    const { iniciar_viaje, finalizar_viaje, liberar_resguardo, reactivar_viaje, comprobar_operador, comprobar_disponibilidad, calcular_estadia } = useJourneyDialogs();
+    const { finalizar_viaje, liberar_resguardo, reactivar_viaje, comprobar_disponibilidad, calcular_estadia } = useJourneyDialogs();
     const { id_viaje, viaje, correosLigados, isLoading } = useContext(ViajeContext);
-
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
@@ -55,7 +45,7 @@ export default function Seguimiento() {
 
                 <Custodia></Custodia>
 
-                <Grid item size={12}>
+                <Grid size={12}>
                     <Card>
                         <CardBody>
                             <div className="flex items-center justify-between">
@@ -63,10 +53,10 @@ export default function Seguimiento() {
                                 <div>
                                     <Stack spacing={1} direction="row">
                                         {viaje?.x_status_viaje == null && (
-                                            <Button color="primary" onPress={comprobar_disponibilidad} isDisabled={correosLigados || isLoading} radius="full"><i class="bi bi-play-fill"></i> Iniciar viaje</Button>
+                                            <Button color="primary" onPress={comprobar_disponibilidad} isDisabled={correosLigados || isLoading} radius="full"><i className="bi bi-play-fill"></i> Iniciar viaje</Button>
                                         )}
                                         {['ruta', 'planta', 'retorno'].includes(viaje?.x_status_viaje) && (
-                                            <Button color="danger" onPress={finalizar_viaje} isDisabled={correosLigados || isLoading} radius="full"><i class="bi bi-stop-fill"></i> Finalizar viaje</Button>
+                                            <Button color="danger" onPress={finalizar_viaje} isDisabled={correosLigados || isLoading} radius="full"><i className="bi bi-stop-fill"></i> Finalizar viaje</Button>
                                         )}
                                         <Button color="success" onPress={handleClickOpen} className="text-white" isDisabled={correosLigados || isLoading} radius="full">
                                             <i className="bi bi-send-plus-fill"></i> Nuevo estatus
@@ -79,7 +69,7 @@ export default function Seguimiento() {
                                         )}
 
                                         <Button color="danger" onPress={() => calcular_estadia(id_viaje)} className="text-white" radius="full">Generar estadías</Button>
-                                        <Button color="success" onPress={() => handleClickOpenFormViaje(id_viaje)} className="text-white" radius="full"><i class="bi bi-pen"></i>Editar equipo</Button>
+                                        <Button color="success" onPress={() => handleClickOpenFormViaje()} className="text-white" radius="full"><i className="bi bi-pen"></i>Editar equipo</Button>
                                     </Stack>
                                 </div>
 
@@ -92,11 +82,11 @@ export default function Seguimiento() {
                     </Card>
                 </Grid>
 
-                <Grid item size={4}>
+                <Grid size={4}>
 
                     <LlegadaTarde></LlegadaTarde>
 
-                    <Grid item size={12}>
+                    <Grid size={12}>
 
                         <Card>
                             <CardHeader>
@@ -222,7 +212,7 @@ export default function Seguimiento() {
                         </CardBody>
                     </Card>
 
-                    <Grid item size={12}>
+                    <Grid size={12}>
                         <Card className="mt-3">
                             <CardHeader>
                                 <p>Porcentaje de cumplimiento de envio de estatus del operador</p>
@@ -234,20 +224,20 @@ export default function Seguimiento() {
                     </Grid>
                 </Grid>
 
-                <Grid item size={8}>
+                <Grid size={8}>
                     <Card>
                         <CardHeader>
                             <p>Historial de estatus</p>
                         </CardHeader>
                         <Divider></Divider>
                         <CardBody>
-                            <EstatusHistorial fetchData={iniciar_viaje} key={isLoading}></EstatusHistorial>
+                            <EstatusHistorial key={isLoading}></EstatusHistorial>
                         </CardBody>
                     </Card>
                 </Grid>
             </Grid>
 
-            <PanelEnvio open={open} cerrar={handleClose}></PanelEnvio>
+            <PanelEnvio open={open} cerrar={handleClose} id_reporte={null}></PanelEnvio>
             <FormEquipoViaje open={openFormViaje} handleClose={handleCloseFormViaje}></FormEquipoViaje>
         </>
 
