@@ -1,20 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from "@heroui/react";
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 import { InputOtp } from "@heroui/react";
-import TextField from '@mui/material/TextField';
-import axios from 'axios';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
-import { useAuthContext } from '@/modules/auth/hooks';
 import LockIcon from '@mui/icons-material/Lock';
 import { Box, Typography, Divider } from '@mui/material';
 
-const Validador = ({ id_acceso, estado_acceso, open, handleClose }) => {
+type Props = {
+    id_acceso: number,
+    estado_acceso: string,
+    open: boolean,
+    handleClose: () => void;
+};
+
+const Validador: React.FC<Props> = ({
+    id_acceso,
+    estado_acceso,
+    open,
+    handleClose
+}) => {
 
     const [pin, setPin] = useState('');
 
@@ -47,7 +54,7 @@ const Validador = ({ id_acceso, estado_acceso, open, handleClose }) => {
         }
     };
 
-    const cambiar_estado = async (id_acceso, id_usuario) => {
+    const cambiar_estado = async (id_acceso: number, id_usuario: number) => {
         try {
             var baseUrl = '';
             if (estado_acceso == 'espera' || estado_acceso == 'autorizado') {
@@ -62,7 +69,7 @@ const Validador = ({ id_acceso, estado_acceso, open, handleClose }) => {
             } else {
                 toast.error(response.data.message);
             }
-        } catch (error) {
+        } catch (error: any) {
             const mensaje =
                 error?.response?.data?.detail ||
                 error?.response?.data?.message ||
@@ -107,14 +114,6 @@ const Validador = ({ id_acceso, estado_acceso, open, handleClose }) => {
                         onValueChange={setPin}
                         size="lg"
                         autoFocus
-                        inputStyle={{
-                            width: '3rem',
-                            height: '3rem',
-                            fontSize: '1.5rem',
-                            borderRadius: '10px',
-                            border: '1px solid #ccc',
-                            margin: '0 0.5rem',
-                        }}
                     />
                 </Box>
             </DialogContent>
