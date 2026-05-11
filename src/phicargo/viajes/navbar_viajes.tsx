@@ -76,7 +76,6 @@ function NavbarTravel() {
 
       <Notificaciones
         isOpen={isOpen}
-        onOpen={onOpen}
         onOpenChange={onOpenChange}
       />
 
