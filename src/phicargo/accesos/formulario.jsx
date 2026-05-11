@@ -22,7 +22,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import LaptopMacIcon from '@mui/icons-material/LaptopMac';
 import ListadoEmpresas from './empresas/tabla';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import ModuloVehiculo from './vehiculos/modulo_vehiculo';
+import ModuloVehiculo from './vehiculos/modulo';
 import { Progress } from "@heroui/react";
 import SearchIcon from '@mui/icons-material/Search';
 import SelectedVisitantesTable from './visitantes/visitantes_seleccionados_tabla';
