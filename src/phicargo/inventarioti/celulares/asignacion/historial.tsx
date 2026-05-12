@@ -1,24 +1,16 @@
-import { Button, Chip, Link, User } from '@heroui/react';
+import { Button, User } from '@heroui/react';
 import {
+  MRT_Row,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Box from '@mui/material/Box';
-import { DatePicker } from 'antd';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import odooApi from '@/api/odoo-api';
-import NavbarInventarioTI from '../../navbar';
-import {
-  useDisclosure,
-} from "@heroui/react";
-import Swal from 'sweetalert2';
-import { toast } from 'react-toastify';
-import ModalAsignacion from './form';
 
-const apiUrl = import.meta.env.VITE_ODOO_API_URL;
+const HistorialAsignaciones = ({ id_dispositivo }: { id_dispositivo: number }) => {
 
-const HistorialAsignaciones = ({ id_dispositivo }) => {
   const [isLoading, setLoading] = useState(false);
   const [data, setData] = useState([]);
 
@@ -43,10 +35,9 @@ const HistorialAsignaciones = ({ id_dispositivo }) => {
       {
         accessorKey: 'nombre_empleado',
         header: 'Empleado',
-        Cell: ({ row }) => {
+        Cell: ({ row }: { row: MRT_Row<any> }) => {
           const nombre = row.original.nombre_empleado;
 
-          // Si es nulo o vacío, no renderiza nada
           if (!nombre) return null;
 
           return (
@@ -78,11 +69,10 @@ const HistorialAsignaciones = ({ id_dispositivo }) => {
     initialState: {
       showGlobalFilter: true,
       density: 'compact',
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
       showColumnFilters: true,
     },
-    muiTableBodyRowProps: ({ row }) => ({
-      onClick: ({ event }) => { },
+    muiTableBodyRowProps: () => ({
       style: {
         cursor: 'pointer',
       },
@@ -112,7 +102,7 @@ const HistorialAsignaciones = ({ id_dispositivo }) => {
         maxHeight: 'calc(100vh - 250px)',
       },
     },
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -121,12 +111,12 @@ const HistorialAsignaciones = ({ id_dispositivo }) => {
           flexWrap: 'wrap',
         }}
       >
-        <h1
-          className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
+        <h2
+          className="tracking-tight font-semibold lg:text-2xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
         >
           Historial de asignaciones
-        </h1>
-        <Button color='danger' onPress={() => fetchData()}>Refrescar</Button>
+        </h2>
+        <Button color='danger' onPress={() => fetchData()} radius='full'>Refrescar</Button>
       </Box>
     ),
   });
