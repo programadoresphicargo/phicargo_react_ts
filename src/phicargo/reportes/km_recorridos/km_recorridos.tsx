@@ -127,7 +127,7 @@ const KMRecorridosOperadores: React.FC<Props> = ({
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 240px)',
+        maxHeight: 'calc(100vh - 250px)',
       },
     },
     muiTableBodyCellProps: ({ row }) => ({

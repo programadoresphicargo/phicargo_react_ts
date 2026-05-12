@@ -1,4 +1,4 @@
-import { Avatar, Card, CardFooter, CardHeader, CircularProgress } from "@heroui/react";
+import { Avatar, Card, CardFooter, CardHeader, CircularProgress, Progress } from "@heroui/react";
 import {
     Button,
     Drawer,
@@ -94,9 +94,7 @@ const ProblemasOperadores: React.FC<ProblemasOperadoresProps> = ({
                                 <ul className="list-group list-group-flush navbar-card-list-group">
 
                                     {isLoading && (
-                                        <div style={{ marginTop: '20px' }} className="d-flex justify-content-center">
-                                            <CircularProgress size="lg" aria-label="Loading..." />
-                                        </div>
+                                        <Progress color="primary" isIndeterminate size="sm" />
                                     )}
 
                                     {estatus.map((step) => (
