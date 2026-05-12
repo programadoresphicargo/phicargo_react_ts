@@ -1,26 +1,34 @@
 import { Button, Chip } from '@heroui/react';
 import {
+    MRT_Row,
     MaterialReactTable,
     useMaterialReactTable,
 } from 'material-react-table';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Box from '@mui/material/Box';
-import { DatePicker } from 'antd';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import odooApi from '@/api/odoo-api';
-import NavbarInventarioTI from '../../navbar';
 import FormCelulares from './form';
 import {
     useDisclosure,
 } from "@heroui/react";
 import { exportToCSV } from '../../../utils/export';
 
-const CelularesTabla = ({ active }) => {
+type Celular = { id_celular: number }
+
+type Props = {
+    active: boolean;
+};
+
+const CelularesTabla: React.FC<Props> = ({
+    active
+}) => {
+
     const [isLoading, setLoading] = useState(false);
-    const [id_celular, setCelular] = useState(0);
+    const [id_celular, setCelular] = useState<number | null>(null);
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-    const [data, setData] = useState([]);
+    const [data, setData] = useState<Celular[]>([]);
 
     const fetchData = async () => {
         try {
@@ -48,7 +56,7 @@ const CelularesTabla = ({ active }) => {
             { accessorKey: 'passwoord', header: 'Contraseña' },
             {
                 accessorKey: 'estado', header: 'Estado',
-                Cell: ({ row }) => (
+                Cell: ({ row }: { row: MRT_Row<any> }) => (
                     <Chip
                         className='text-white'
                         color={row.original.estado == 'disponible' ? 'success' : 'primary'}
@@ -86,11 +94,11 @@ const CelularesTabla = ({ active }) => {
         initialState: {
             showGlobalFilter: true,
             density: 'compact',
-            pagination: { pageSize: 80 },
+            pagination: { pageIndex: 0, pageSize: 80 },
             showColumnFilters: true,
         },
         muiTableBodyRowProps: ({ row }) => ({
-            onClick: ({ event }) => {
+            onClick: () => {
                 setCelular(row.original.id_celular);
                 onOpen();
             },
@@ -123,7 +131,7 @@ const CelularesTabla = ({ active }) => {
                 maxHeight: 'calc(100vh - 260px)',
             },
         },
-        renderTopToolbarCustomActions: ({ table }) => (
+        renderTopToolbarCustomActions: () => (
             <Box
                 sx={{
                     display: 'flex',
@@ -143,21 +151,21 @@ const CelularesTabla = ({ active }) => {
                     onPress={() => {
                         onOpen();
                         setCelular(null);
-                    }}><i class="bi bi-plus-circle"></i>Nuevo</Button>
+                    }}><i className="bi bi-plus-circle"></i>Nuevo</Button>
 
                 <Button
                     radius='full'
                     color="danger"
                     onPress={() => {
                         fetchData();
-                    }}><i class="bi bi-arrow-clockwise"></i>Refrescar
+                    }}><i className="bi bi-arrow-clockwise"></i>Refrescar
                 </Button>
 
                 <Button
                     radius='full'
                     color='success'
                     className='text-white'
-                    startContent={<i class="bi bi-file-earmark-excel"></i>}
+                    startContent={<i className="bi bi-file-earmark-excel"></i>}
                     onPress={() => exportToCSV(data, columns, "celulares.csv")}>
                     Exportar
                 </Button>
@@ -166,10 +174,13 @@ const CelularesTabla = ({ active }) => {
     });
 
     return (
-        <div>
+        <>
             <MaterialReactTable table={table} />
-            <FormCelulares isOpen={isOpen} onOpen={onOpen} onOpenChange={onOpenChange} id_celular={id_celular}></FormCelulares>
-        </div>
+            <FormCelulares
+                isOpen={isOpen}
+                onOpenChange={onOpenChange}
+                id_celular={id_celular} />
+        </>
     );
 };
 

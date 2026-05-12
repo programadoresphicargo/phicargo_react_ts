@@ -1,27 +1,33 @@
-import { Button, Chip } from '@heroui/react';
+import { Button } from '@heroui/react';
 import {
     MaterialReactTable,
     useMaterialReactTable,
 } from 'material-react-table';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Box from '@mui/material/Box';
-import { DatePicker } from 'antd';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import odooApi from '@/api/odoo-api';
-import NavbarInventarioTI from '../../navbar';
 import FormCelulares from './form';
 import {
     useDisclosure,
 } from "@heroui/react";
-import { Tabs, Tab, Card, CardBody } from "@heroui/react";
 import { exportToCSV } from '@/phicargo/utils/export';
 
-const EmpleadosTI = ({ active }) => {
+type Empleado = { id_empleado: number }
+
+type Props = {
+    active: boolean;
+};
+
+const EmpleadosTI: React.FC<Props> = ({
+    active
+}) => {
+
     const [isLoading, setLoading] = useState(false);
-    const [id_celular, setCelular] = useState(0);
+    const [id_empleado, setEmpleado] = useState<number | null>(null);
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-    const [data, setData] = useState([]);
+    const [data, setData] = useState<Empleado[]>([]);
 
     const fetchData = async () => {
         try {
@@ -62,12 +68,12 @@ const EmpleadosTI = ({ active }) => {
         initialState: {
             showGlobalFilter: true,
             density: 'compact',
-            pagination: { pageSize: 80 },
+            pagination: { pageIndex: 0, pageSize: 80 },
             showColumnFilters: true,
         },
         muiTableBodyRowProps: ({ row }) => ({
-            onClick: ({ event }) => {
-                setCelular(row.original.id_empleado);
+            onClick: () => {
+                setEmpleado(row.original.id_empleado);
                 onOpen();
             },
             style: {
@@ -99,7 +105,7 @@ const EmpleadosTI = ({ active }) => {
                 maxHeight: 'calc(100vh - 260px)',
             },
         },
-        renderTopToolbarCustomActions: ({ table }) => (
+        renderTopToolbarCustomActions: () => (
             <Box
                 sx={{
                     display: 'flex',
@@ -118,7 +124,7 @@ const EmpleadosTI = ({ active }) => {
                     color="primary"
                     onPress={() => {
                         onOpen();
-                        setCelular(null);
+                        setEmpleado(null);
                     }}>Nuevo</Button>
 
                 <Button
@@ -133,7 +139,7 @@ const EmpleadosTI = ({ active }) => {
                     radius='full'
                     color='success'
                     className='text-white'
-                    startContent={<i class="bi bi-file-earmark-excel"></i>}
+                    startContent={<i className="bi bi-file-earmark-excel"></i>}
                     onPress={() => exportToCSV(data, columns, "empleados.csv")}>
                     Exportar
                 </Button>
@@ -143,10 +149,10 @@ const EmpleadosTI = ({ active }) => {
     });
 
     return (
-        <div>
+        <>
             <MaterialReactTable table={table} />
-            <FormCelulares isOpen={isOpen} onOpen={onOpen} onOpenChange={onOpenChange} id_celular={id_celular}></FormCelulares>
-        </div>
+            <FormCelulares isOpen={isOpen} onOpen={onOpen} onOpenChange={onOpenChange} id_celular={id_empleado}></FormCelulares>
+        </>
     );
 };
 
