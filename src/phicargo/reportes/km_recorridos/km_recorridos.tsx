@@ -1,28 +1,27 @@
-import { Button, Chip, DatePicker, NumberInput } from "@heroui/react";
+import { Button } from "@heroui/react";
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
-import React, { useEffect, useState } from 'react';
-import { download, generateCsv, mkConfig } from 'export-to-csv';
-import { getLocalTimeZone, parseDate } from "@internationalized/date";
+import { useEffect, useState } from 'react';
 import { DateRangePicker } from 'rsuite';
-import Badge from 'react-bootstrap/Badge';
 import { Box } from '@mui/material';
-import { Component } from "react";
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import axios from 'axios';
 import odooApi from '@/api/odoo-api';
 import { toast } from "react-toastify";
-import { useDateFormatter } from "@react-aria/i18n";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { exportToCSV } from '../../utils/export';
 
-const KMRecorridosOperadores = ({ tipo_reporte }) => {
+type Props = {
+  tipo_reporte: string;
+};
+
+const KMRecorridosOperadores: React.FC<Props> = ({
+  tipo_reporte
+}) => {
 
   const now = new Date();
   const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
   const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-  const [range, setRange] = useState([firstDay, lastDay]);
+  const [range, setRange] = useState<[Date, Date] | null>([firstDay, lastDay]);
 
-  const [isLoading, setisLoading] = useState('');
+  const [isLoading, setisLoading] = useState(false);
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -30,6 +29,7 @@ const KMRecorridosOperadores = ({ tipo_reporte }) => {
   }, [range]);
 
   const fetchData = async () => {
+    if (!range) return;
     try {
       let url;
       setisLoading(true);
@@ -57,6 +57,7 @@ const KMRecorridosOperadores = ({ tipo_reporte }) => {
     try {
       setisLoading(true);
       const response = await odooApi.get(`/drivers/correo_km_recorridos/`);
+      console.log(response.data);
     } catch (error) {
       toast.error('Error al enviar los datos: ' + error);
     } finally {
@@ -64,7 +65,7 @@ const KMRecorridosOperadores = ({ tipo_reporte }) => {
     }
   };
 
-  let columnasExtra = [];
+  let columnasExtra: any = [];
 
   if (tipo_reporte === 'operadores') {
     columnasExtra = [
@@ -102,12 +103,13 @@ const KMRecorridosOperadores = ({ tipo_reporte }) => {
     enableGlobalFilter: true,
     enableFilters: true,
     localization: MRT_Localization_ES,
+    positionToolbarAlertBanner: "bottom",
     columnResizeMode: "onEnd",
     initialState: {
       grouping: ["year", "month"],
       density: 'compact',
       expanded: true,
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
       showColumnFilters: true,
     },
     muiTablePaperProps: {
@@ -143,7 +145,7 @@ const KMRecorridosOperadores = ({ tipo_reporte }) => {
           : '#000000',
       }
     }),
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
