@@ -1,24 +1,27 @@
-import { Button, Chip } from '@heroui/react';
+import { Chip } from '@heroui/react';
 import {
+  MRT_Cell,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import React, { useEffect, useMemo, useState } from 'react';
-
+import { useEffect, useMemo, useState } from 'react';
 import Box from '@mui/material/Box';
-import { DatePicker } from 'antd';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import odooApi from '@/api/odoo-api';
 
-const ContactosCelulares = () => {
-  const [isLoading, setLoading] = useState(false);
+type Asignaciones = {
+  id_departamento: number;
+}
 
-  const [data, setData] = useState([]);
+const ContactosCelulares = () => {
+
+  const [isLoading, setLoading] = useState(false);
+  const [data, setData] = useState<Asignaciones[]>([]);
 
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await odooApi.get('/inventarioti/asignaciones/tipo/celular');
+      const response = await odooApi.get<Asignaciones[]>('/inventarioti/asignaciones/tipo/celular');
       const filteredData = response.data.filter(item => ![1, 12, 13, 14].includes(item.id_departamento));
       setData(filteredData);
       setLoading(false);
@@ -40,12 +43,12 @@ const ContactosCelulares = () => {
       {
         accessorKey: 'numero',
         header: 'Número celular',
-        Cell: ({ cell }) => {
-          const estatus_viaje = cell.getValue();
+        Cell: ({ cell }: { cell: MRT_Cell<Asignaciones> }) => {
+          const numero = cell.getValue<number>();
 
           return (
             <Chip color="primary" size="sm">
-              {estatus_viaje}
+              {numero}
             </Chip>
           );
         },
@@ -65,11 +68,10 @@ const ContactosCelulares = () => {
     initialState: {
       showGlobalFilter: true,
       density: 'compact',
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
       showColumnFilters: true,
     },
-    muiTableBodyRowProps: ({ row }) => ({
-      onClick: ({ event }) => { },
+    muiTableBodyRowProps: () => ({
       style: {
         cursor: 'pointer',
       },
@@ -99,7 +101,7 @@ const ContactosCelulares = () => {
         maxHeight: 'calc(100vh - 170px)',
       },
     },
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
