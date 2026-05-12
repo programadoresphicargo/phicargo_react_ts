@@ -1,23 +1,23 @@
 import { Button, Chip } from '@heroui/react';
 import {
+    MRT_Cell,
     MaterialReactTable,
     useMaterialReactTable,
 } from 'material-react-table';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Box from '@mui/material/Box';
-import { DatePicker } from 'antd';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import odooApi from '@/api/odoo-api';
-import NavbarInventarioTI from '../../navbar';
 import FormCelulares from './form';
 import {
     useDisclosure,
 } from "@heroui/react";
 import { exportToCSV } from '@/phicargo/utils/export';
 
-const EquipoTI = ({ active }) => {
+const EquipoTI = ({ active }: { active: boolean }) => {
+
     const [isLoading, setLoading] = useState(false);
-    const [id_celular, setCelular] = useState(0);
+    const [id_equipo, setEquipo] = useState<number | null>(null);
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
     const [data, setData] = useState([]);
@@ -53,17 +53,21 @@ const EquipoTI = ({ active }) => {
             { accessorKey: 'ram', header: 'RAM' },
             { accessorKey: 'fecha_compra', header: 'Fecha compra' },
             {
-                accessorKey: 'estado', header: 'Estado',
-                Cell: ({ row }) => (
-                    <Chip
-                        className='text-white'
-                        color={row.original.estado == 'disponible' ? 'success' : 'primary'}
-                        variant="solid"
-                        size='sm'
-                    >
-                        {row.original.estado}
-                    </Chip >
-                ),
+                accessorKey: 'estado',
+                header: 'Estado',
+                Cell: ({ cell }: { cell: MRT_Cell<any>, row: any }) => {
+                    const valor = cell.getValue<string>();
+                    return (
+                        <Chip
+                            className='text-white'
+                            color={valor === 'disponible' ? 'success' : 'primary'}
+                            variant="solid"
+                            size='sm'
+                        >
+                            {valor}
+                        </Chip>
+                    );
+                },
             },
         ],
         [],
@@ -80,12 +84,12 @@ const EquipoTI = ({ active }) => {
         initialState: {
             showGlobalFilter: true,
             density: 'compact',
-            pagination: { pageSize: 80 },
+            pagination: { pageIndex: 0, pageSize: 80 },
             showColumnFilters: true,
         },
         muiTableBodyRowProps: ({ row }) => ({
-            onClick: ({ event }) => {
-                setCelular(row.original.id_ec);
+            onClick: () => {
+                setEquipo(row.original.id_ec);
                 onOpen();
             },
             style: {
@@ -117,7 +121,7 @@ const EquipoTI = ({ active }) => {
                 maxHeight: 'calc(100vh - 260px)',
             },
         },
-        renderTopToolbarCustomActions: ({ table }) => (
+        renderTopToolbarCustomActions: () => (
             <Box
                 sx={{
                     display: 'flex',
@@ -136,7 +140,7 @@ const EquipoTI = ({ active }) => {
                     color="primary"
                     onPress={() => {
                         onOpen();
-                        setCelular(null);
+                        setEquipo(null);
                     }}>Nuevo</Button>
 
                 <Button
@@ -151,7 +155,7 @@ const EquipoTI = ({ active }) => {
                     radius='full'
                     color='success'
                     className='text-white'
-                    startContent={<i class="bi bi-file-earmark-excel"></i>}
+                    startContent={<i className="bi bi-file-earmark-excel"></i>}
                     onPress={() => exportToCSV(data, columns, "computo.csv")}>
                     Exportar
                 </Button>
@@ -161,10 +165,10 @@ const EquipoTI = ({ active }) => {
     });
 
     return (
-        <div>
+        <>
             <MaterialReactTable table={table} />
-            <FormCelulares isOpen={isOpen} onOpen={onOpen} onOpenChange={onOpenChange} id_celular={id_celular}></FormCelulares>
-        </div>
+            <FormCelulares isOpen={isOpen} onOpen={onOpen} onOpenChange={onOpenChange} id_celular={id_equipo}></FormCelulares>
+        </>
     );
 };
 
