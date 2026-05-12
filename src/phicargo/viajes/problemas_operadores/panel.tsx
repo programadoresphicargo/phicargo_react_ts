@@ -65,7 +65,9 @@ const ProblemasOperadores: React.FC<ProblemasOperadoresProps> = ({
 
     return (
         <>
-            <ReporteOperador id_reporte={id_reporte} isOpen={openReporte} onOpenChange={handleCloseReporte}></ReporteOperador>
+            {id_reporte && (
+                <ReporteOperador id_reporte={id_reporte} isOpen={openReporte} onOpenChange={handleCloseReporte}></ReporteOperador>
+            )}
             <Drawer
                 isOpen={isOpen}
                 size='lg'
