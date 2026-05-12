@@ -1,4 +1,4 @@
-import { Avatar, Card, CardFooter, CardHeader, CircularProgress, Progress } from "@heroui/react";
+import { Avatar, Card, CardFooter, CardHeader, Progress } from "@heroui/react";
 import {
     Button,
     Drawer,
