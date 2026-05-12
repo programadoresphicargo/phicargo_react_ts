@@ -1,34 +1,29 @@
 import odooApi from "@/api/odoo-api";
 import {
-    Modal, ModalContent, ModalHeader, ModalBody, ModalFooter,
-    Button, NumberInput, Input, DatePicker, Textarea, Progress, Checkbox
+    Button
 } from "@heroui/react";
-import { Select, SelectItem } from "@heroui/react";
-import toast from 'react-hot-toast';
-import { parseDate } from "@internationalized/date";
-import BajaCelular from "../../celulares/baja_form";
 import Box from '@mui/material/Box';
-import Tab from '@mui/material/Tab';
-import TabContext from '@mui/lab/TabContext';
-import TabList from '@mui/lab/TabList';
-import TabPanel from '@mui/lab/TabPanel';
-import HistorialAsignaciones from "../../asignacion/historial";
 import {
     MaterialReactTable,
     useMaterialReactTable,
 } from 'material-react-table';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
-export default function DispositivosSinAsignar({ tipo }) {
+type Empleado = {
+    tiene_celular: string,
+    tiene_computo: string
+}
+
+export default function DispositivosSinAsignar({ tipo }: { tipo: string }) {
 
     const [isLoading, setLoading] = useState(false);
-    const [data, setData] = useState([]);
+    const [data, setData] = useState<Empleado[]>([]);
 
     const fetchData = async () => {
         try {
             setLoading(true);
-            const response = await odooApi.get('/inventarioti/empleados/activo/true');
+            const response = await odooApi.get<Empleado[]>('/inventarioti/empleados/activo/true');
             if (tipo == 'celular') {
                 const filtrados = response.data.filter(item => item.tiene_celular === 'No');
                 setData(filtrados);
@@ -70,7 +65,7 @@ export default function DispositivosSinAsignar({ tipo }) {
         initialState: {
             showGlobalFilter: true,
             density: 'compact',
-            pagination: { pageSize: 80 },
+            pagination: { pageIndex: 0, pageSize: 80 },
             showColumnFilters: true,
             columnVisibility:
             {
@@ -78,9 +73,7 @@ export default function DispositivosSinAsignar({ tipo }) {
                 tiene_computo: tipo == 'computo' ? true : false,
             }
         },
-        muiTableBodyRowProps: ({ row }) => ({
-            onClick: ({ event }) => {
-            },
+        muiTableBodyRowProps: () => ({
             style: {
                 cursor: 'pointer',
             },
@@ -110,7 +103,7 @@ export default function DispositivosSinAsignar({ tipo }) {
                 maxHeight: 'calc(100vh - 260px)',
             },
         },
-        renderTopToolbarCustomActions: ({ table }) => (
+        renderTopToolbarCustomActions: () => (
             <Box
                 sx={{
                     display: 'flex',
@@ -119,7 +112,9 @@ export default function DispositivosSinAsignar({ tipo }) {
                     flexWrap: 'wrap',
                 }}
             >
-                <Button color="danger"
+                <Button
+                    color="danger"
+                    radius="full"
                     onPress={() => {
                         fetchData();
                     }}>Refrescar

@@ -1,31 +1,31 @@
-import odooApi from "@/api/odoo-api";
 import {
     Modal, ModalContent, ModalHeader, ModalBody, ModalFooter,
-    Button, NumberInput, Input, DatePicker, Textarea, Progress, Checkbox
+    Button
 } from "@heroui/react";
-import { Select, SelectItem } from "@heroui/react";
-import toast from 'react-hot-toast';
-import { parseDate } from "@internationalized/date";
-import BajaCelular from "../../celulares/baja_form";
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import HistorialAsignaciones from "../../asignacion/historial";
-import {
-    MaterialReactTable,
-    useMaterialReactTable,
-} from 'material-react-table';
-import React, { useEffect, useMemo, useState } from 'react';
-import { MRT_Localization_ES } from 'material-react-table/locales/es';
+import React from 'react';
 import DispositivosSinAsignar from "./dispositivos";
 
-export default function EmpleadosSinAsignarCelular({ isOpen, onOpenChange, tipo }) {
+type Props = {
+    isOpen: boolean;
+    onOpenChange: () => void;
+};
+
+const EmpleadosSinAsignarCelular: React.FC<Props> = ({
+    isOpen,
+    onOpenChange
+}) => {
 
     const [value, setValue] = React.useState('1');
 
-    const handleChange = (event, newValue) => {
+    const handleChange = (
+        _: React.SyntheticEvent,
+        newValue: string
+    ) => {
         setValue(newValue);
     };
 
@@ -34,7 +34,8 @@ export default function EmpleadosSinAsignarCelular({ isOpen, onOpenChange, tipo 
             <Modal
                 isOpen={isOpen}
                 onOpenChange={onOpenChange}
-                size="6xl" scrollBehavior="outside"
+                size="5xl"
+                scrollBehavior="outside"
                 isDismissable={false}
                 isKeyboardDismissDisabled={true}>
                 <ModalContent>
@@ -45,8 +46,8 @@ export default function EmpleadosSinAsignarCelular({ isOpen, onOpenChange, tipo 
                                 style={{
                                     background: 'linear-gradient(90deg, #a10003, #002887)',
                                     color: 'white',
-                                    borderTopLeftRadius: '12px', 
-                                    borderTopRightRadius: '12px', 
+                                    borderTopLeftRadius: '12px',
+                                    borderTopRightRadius: '12px',
                                 }}
                             >
                                 Dispositivos sin asignar
@@ -74,7 +75,7 @@ export default function EmpleadosSinAsignarCelular({ isOpen, onOpenChange, tipo 
                                 </Box>
                             </ModalBody>
                             <ModalFooter>
-                                <Button color="danger" onPress={onClose}>
+                                <Button color="danger" onPress={onClose} radius="full">
                                     Cancelar
                                 </Button>
                             </ModalFooter>
@@ -85,3 +86,5 @@ export default function EmpleadosSinAsignarCelular({ isOpen, onOpenChange, tipo 
         </>
     );
 }
+
+export default EmpleadosSinAsignarCelular;
