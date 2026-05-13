@@ -96,13 +96,13 @@ const FormularioDocumentacion = ({ onClose }: Props) => {
         className="w-full sm:max-w-[100%] mb-4 mt-4"
         onChange={(e) => setSelectedValue(e.target.value)}
       >
-        <SelectItem key="POD">
+        <SelectItem key="pod">
           POD
         </SelectItem>
-        <SelectItem key="EIR">
+        <SelectItem key="eir">
           EIR
         </SelectItem>
-        <SelectItem key="CUENTA_OP">
+        <SelectItem key="cuenta_op">
           Cuenta de operador
         </SelectItem>
       </Select>
