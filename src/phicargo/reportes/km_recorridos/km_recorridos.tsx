@@ -89,10 +89,12 @@ const KMRecorridosOperadores: React.FC<Props> = ({
     ...columnasExtra,
     { accessorKey: 'year', header: 'Año' },
     { accessorKey: 'month', header: 'Periodo' },
-    { accessorKey: 'distance', header: 'Distancia' },
     { accessorKey: 'travels_single', header: 'Viajes sencillos' },
     { accessorKey: 'travels_full', header: 'Viajes full' },
-    { accessorKey: 'travels', header: 'Total viajes' },
+    { accessorKey: 'services', header: 'Servicios' },
+    { accessorKey: 'distance_with_waybill', header: 'Distancia cargado(km)' },
+    { accessorKey: 'distance_without_waybill', header: 'Distancia vacio (km)' },
+    { accessorKey: 'distance', header: 'Distancia (km)' },
   ];
 
   const table = useMaterialReactTable({
