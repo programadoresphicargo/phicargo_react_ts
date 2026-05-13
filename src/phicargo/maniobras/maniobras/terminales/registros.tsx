@@ -1,17 +1,19 @@
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button } from "@heroui/react";
-import FormularioTerminales from './informacion';
+import FormularioTerminales from './form';
 import odooApi from '@/api/odoo-api';
 import CustomNavbar from '@/pages/CustomNavbar';
-import { pages } from '../../../maniobras/pages';
+import { pages } from '../../pages';
+import Box from '@mui/material/Box';
+import { Terminal } from './type';
 
 const Terminales = () => {
 
     const [open, setOpen] = useState(false);
-    const [id_terminal, setIDTerminal] = useState(0);
+    const [id_terminal, setIDTerminal] = useState<number | null>(null);
 
-    const handleClickOpen = (id_terminal) => {
+    const handleClickOpen = (id_terminal: number | null) => {
         setOpen(true);
         setIDTerminal(id_terminal);
     };
@@ -21,8 +23,8 @@ const Terminales = () => {
         fetchData();
     };
 
-    const [isLoading2, setILoading] = useState(false);
-    const [data, setData] = useState([]);
+    const [isLoading, setILoading] = useState(false);
+    const [data, setData] = useState<Terminal[]>([]);
 
     const fetchData = useCallback(async () => {
         try {
@@ -38,7 +40,7 @@ const Terminales = () => {
 
     useEffect(() => {
         fetchData();
-    }, [fetchData]);
+    }, []);
 
     const columns = useMemo(
         () => [
@@ -50,6 +52,10 @@ const Terminales = () => {
                 accessorKey: 'terminal',
                 header: 'Terminal',
             },
+            {
+                accessorKey: 'fecha_creacion',
+                header: 'Fecha creaciòn',
+            },
         ],
         [],
     );
@@ -60,7 +66,7 @@ const Terminales = () => {
         enableGrouping: true,
         initialState: {
             density: 'compact',
-            pagination: { pageSize: 80 },
+            pagination: { pageIndex: 0, pageSize: 80 },
         },
         muiTablePaperProps: {
             elevation: 0,
@@ -68,7 +74,7 @@ const Terminales = () => {
                 borderRadius: '0',
             },
         },
-        state: { isLoading: isLoading2 },
+        state: { showProgressBars: isLoading },
         muiCircularProgressProps: {
             color: 'primary',
             thickness: 5,
@@ -103,22 +109,34 @@ const Terminales = () => {
         },
         muiTableContainerProps: {
             sx: {
-                maxHeight: 'calc(100vh - 250px)',
+                maxHeight: 'calc(100vh - 200px)',
             },
         },
+        renderTopToolbarCustomActions: () => (
+            <Box
+                sx={{
+                    display: 'flex',
+                    gap: '16px',
+                    padding: '8px',
+                    flexWrap: 'wrap',
+                }}
+            >
+                <h1 className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text">
+                    Terminales
+                </h1>
+                <Button color="primary" onPress={() => handleClickOpen(null)} radius='full'>
+                    Nueva
+                </Button>
+            </Box>
+        ),
     });
 
     return (
-        <div>
+        <>
             <CustomNavbar pages={pages}></CustomNavbar>
-            <div className="flex flex-wrap gap-2 items-center p-2">
-                <Button color="primary" onPress={() => handleClickOpen(0)} radius='full'>
-                    Nueva
-                </Button>
-            </div>
             <MaterialReactTable table={table} />
             <FormularioTerminales open={open} onClose={handleClose} id_terminal={id_terminal} />
-        </div>
+        </>
     );
 };
 
