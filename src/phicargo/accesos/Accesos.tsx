@@ -4,21 +4,24 @@ import Tab from '@mui/material/Tab';
 import IconButton from '@mui/material/IconButton';
 import AppsIcon from '@mui/icons-material/Apps';
 import AvatarProfile from "@/components/ui/AvatarProfile";
-
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-
 import { useNavigate } from "react-router-dom";
-
 import TablaAccesos from "./tabla";
 import RegistroVehiculos from "./vehiculos/tabla";
 import AccesoCompo from "./AccesoCompo";
-
 import logo from '../../assets/img/phicargo-vertical.png';
 
-/* 🎨 Tema por tipo de acceso */
-const accessTheme = {
+type AccessThemeKey = '1' | '2' | '3' | '4' | '5' | '6';
+
+const accessTheme: Record<
+    AccessThemeKey,
+    {
+        gradient: string;
+        indicator: string;
+    }
+> = {
     '1': {
         gradient: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
         indicator: '#4fc3f7',
@@ -48,10 +51,16 @@ const accessTheme = {
 export default function Accesos() {
 
     const navigate = useNavigate();
-    const [value, setValue] = React.useState('1');
+    const [value, setValue] = React.useState<AccessThemeKey>('1');
 
     const handleBackClick = () => navigate("/menu");
-    const handleChange = (event, newValue) => setValue(newValue);
+
+    const handleChange = (
+        _: React.SyntheticEvent,
+        newValue: AccessThemeKey
+    ) => {
+        setValue(newValue);
+    };
 
     const currentTheme = accessTheme[value];
 
@@ -70,7 +79,6 @@ export default function Accesos() {
         <Box sx={{ width: '100%' }}>
             <TabContext value={value}>
 
-                {/* HEADER */}
                 <Box
                     sx={{
                         display: 'flex',
@@ -80,13 +88,11 @@ export default function Accesos() {
                         color: 'white',
 
                         backgroundImage: currentTheme.gradient,
-                        backgroundPosition: '0% 50%',
                         transition: 'background-position 0.6s ease',
 
                         ...(value && { backgroundPosition: '100% 50%' }),
                     }}
                 >
-                    {/* Logo */}
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <IconButton color="inherit" onClick={handleBackClick}>
                             <AppsIcon />
@@ -131,7 +137,6 @@ export default function Accesos() {
                     </Box>
                 </Box>
 
-                {/* PANELS */}
                 <TabPanel
                     value="1"
                     sx={{
@@ -156,7 +161,7 @@ export default function Accesos() {
 
                 <AccesoCompo>
                     <TabPanel value="5" sx={{ p: 0, animation: 'fadeIn 0.35s ease' }}>
-                        <RegistroVehiculos />
+                        <RegistroVehiculos onClose={() => console.log()} />
                     </TabPanel>
                 </AccesoCompo>
 
@@ -166,7 +171,6 @@ export default function Accesos() {
 
             </TabContext>
 
-            {/* Animación global */}
             <style>
                 {`
           @keyframes fadeIn {
