@@ -1,25 +1,15 @@
 import {
+  MRT_Cell,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
 import React, { useEffect, useMemo, useState } from 'react';
-import { Avatar, AvatarGroup } from "@heroui/react";
 import { Box } from '@mui/material';
 import { Button } from "@heroui/react";
-import { Checkbox } from '@mui/material';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import Slide from '@mui/material/Slide';
 import odooApi from '@/api/odoo-api';
-import MinutaForm from './form';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import { Tooltip } from "@heroui/react";
 import { Chip } from '@heroui/react';
 import DescuentoForm from './form';
-
-const { VITE_ODOO_API_URL } = import.meta.env;
 
 const Descuentos = ({ }) => {
 
@@ -37,7 +27,7 @@ const Descuentos = ({ }) => {
   };
 
   const [data, setData] = useState([]);
-  const [isLoading2, setLoading] = useState();
+  const [isLoading, setLoading] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -84,22 +74,23 @@ const Descuentos = ({ }) => {
       {
         accessorKey: 'estado',
         header: 'Estado',
-        Cell: ({ cell }) => {
-          const status = cell.getValue() || '';
-          let badgeClass = 'default';
-
-          if (status === 'borrador') {
-            badgeClass = 'warning';
-          } else if (status === 'aplicado') {
-            badgeClass = 'success';
-          } else if (status === 'cancelado') {
-            badgeClass = 'danger';
-          } else if (status === 'confirmado') {
-            badgeClass = 'primary';
-          }
-
+        Cell: ({ cell }: { cell: MRT_Cell<any> }) => {
+          const status = cell.getValue<string>() || '';
           return (
-            <Chip color={badgeClass} size="sm" className="text-white">
+            <Chip
+              color={
+                status === 'borrador'
+                  ? 'warning'
+                  : status === 'aplicado'
+                    ? 'success'
+                    : status === 'cancelado'
+                      ? 'danger'
+                      : status === 'confirmado'
+                        ? 'primary'
+                        : 'default'
+              }
+              size="sm"
+              className="text-white">
               {status}
             </Chip>
           );
@@ -136,19 +127,19 @@ const Descuentos = ({ }) => {
     enableGlobalFilter: true,
     groupedColumnMode: 'remove',
     localization: MRT_Localization_ES,
-    positionToolbarAlertBanner:"head-overlay",
+    positionToolbarAlertBanner: "head-overlay",
     enableFilters: true,
-    state: { showProgressBars: isLoading2 },
+    state: { showProgressBars: isLoading },
     enableColumnPinning: true,
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
     initialState: {
       grouping: ['departamento'],
       density: 'compact',
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
     },
     muiTableBodyRowProps: ({ row }) => ({
-      onClick: ({ event }) => {
+      onClick: () => {
         handleClickOpen();
         setMinuta(row.original.id_descuento);
       },
@@ -183,7 +174,7 @@ const Descuentos = ({ }) => {
         maxHeight: 'calc(100vh - 180px)',
       },
     },
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -196,17 +187,16 @@ const Descuentos = ({ }) => {
           Descuentos
         </h1>
         <DescuentoForm open={open} handleClose={handleClose} id_descuento={id_minuta}></DescuentoForm>
-        <Button color='primary' className='text-white' onPress={() => handleClickOpen()} radius='full'><i class="bi bi-plus-circle"></i> Nuevo registro</Button>
-        <Button color='success' className='text-white' onPress={() => fetchData()} radius='full'><i class="bi bi-arrow-clockwise"></i> Refrescar</Button>
+        <Button color='primary' className='text-white' onPress={() => handleClickOpen()} radius='full'><i className="bi bi-plus-circle"></i> Nuevo registro</Button>
+        <Button color='success' className='text-white' onPress={() => fetchData()} radius='full'><i className="bi bi-arrow-clockwise"></i> Refrescar</Button>
       </Box>
     ),
   });
 
-  return (<>
-    <div>
+  return (
+    <>
       <MaterialReactTable table={table} />
-    </div >
-  </>
+    </>
   );
 
 };
