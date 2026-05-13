@@ -1,92 +1,50 @@
 import odooApi from '@/api/odoo-api';
 import { toast } from "react-toastify";
+import templateHTML from '../cuenta_espejo/template.html?raw';
 
 export const copiarHTML = async (travel_id: number) => {
 
- try {
+  try {
 
-  const response = await odooApi.get(
-   `/tms_travel/${travel_id}`
-  );
+    const response = await odooApi.get(
+      `/tms_travel/${travel_id}`
+    );
 
-  const data = response.data;
+    const data = response.data;
+    console.log(data);
 
-  const html = `
-      <div style="
-        font-family: Arial;
-        font-size: 14px;
-      ">
+    const html = templateHTML
+      .replace('{{vehicle}}', data.vehicle.name)
+      .replace('{{marca}}', data.vehicle.marca)
+      .replace('{{modelo}}', data.vehicle.model)
+      .replace('{{employee}}', data.employee.name)
+      .replace('{{route}}', data.route.name)
+      .replace('{{modalidad}}', data.x_tipo_bel.toUpperCase())
+      .replace('{{contenedores}}', data.x_references)
+      .replace('{{cliente}}', data.partner.name)
+      .replace('{{origen}}', data.origen)
+      .replace('{{destino}}', data.destino)
+      .replace('{{client_order_ref}}', data.client_order_ref)
+      .replace('{{trailer1}}', data.trailer1.name)
+      .replace('{{trailer2}}', data.trailer2.name);
 
-        <h2 style="
-          color: blue;
-          margin-bottom: 10px;
-        ">
-          Cuenta espejo
-        </h2>
+    await navigator.clipboard.write([
+      new ClipboardItem({
+        'text/html': new Blob(
+          [html],
+          { type: 'text/html' }
+        ),
+      }),
+    ]);
 
-        <table
-          border="1"
-          cellpadding="5"
-          cellspacing="0"
-          style="
-            border-collapse: collapse;
-            width: 100%;
-          "
-        >
-          <tr
-            style="
-              background: #003466;
-            "
-          >
-            <th>ECO PLACAS</th>
-            <th>OPERADOR</th>
-            <th>DESTINO</th>
-            <th>MODALIDAD</th>
-            <th>CONTENEDOR</th>
-          </tr>
+    toast.success('Contenido copiado');
 
-          <tr>
-            <td>${data.vehicle.name}</td>
-            <td>${data.employee.name}</td>
-            <td>${data.route.name}</td>
-            <td>${data.x_tipo_bel.toUpperCase()}</td>
-            <td>${data.x_references}</td>
-          </tr>
-        </table>
+  } catch (error) {
 
-        <br>
+    console.error(error);
 
-        <a href="https://telematics.tecnomotum.com/">
-          Enlace Tecnomotum
-        </a>
-
-        <br><br>
-
-        <b>Usuario:</b> 
-        <br>
-
-        <b>Contraseña:</b> 
-
-      </div>
-    `;
-
-  await navigator.clipboard.write([
-   new ClipboardItem({
-    'text/html': new Blob(
-     [html],
-     { type: 'text/html' }
-    ),
-   }),
-  ]);
-
-  toast.success('Contenido copiado');
-
- } catch (error) {
-
-  console.error(error);
-
-  toast.error(
-   'Error al generar el contenido'
-  );
- }
+    toast.error(
+      'Error al generar el contenido'
+    );
+  }
 };
