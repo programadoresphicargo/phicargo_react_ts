@@ -108,7 +108,6 @@ const KMRecorridosOperadores: React.FC<Props> = ({
     positionToolbarAlertBanner: "bottom",
     columnResizeMode: "onEnd",
     initialState: {
-      grouping: ["year", "month"],
       density: 'compact',
       expanded: true,
       pagination: { pageIndex: 0, pageSize: 80 },
