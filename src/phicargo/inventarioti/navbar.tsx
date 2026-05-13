@@ -1,31 +1,38 @@
 import { Link, useNavigate } from 'react-router-dom';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { Alert } from '@heroui/react';
+import React, { useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import AppsIcon from '@mui/icons-material/Apps';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import Badge from '@mui/material/Badge';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
-import MailIcon from '@mui/icons-material/Mail';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { MotumAlertsPanel } from '@/modules/vehicles/components/motum-events/MotumAlertsPanel';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import ReportIcon from '@mui/icons-material/Report';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { makeStyles } from '@mui/styles';
-import odooApi from '@/api/odoo-api';
-import { useDisclosure } from '@heroui/react';
 import logo from '../../assets/img/phicargo-vertical.png';
 import { useAuthContext } from '@/modules/auth/hooks';
 import AvatarProfile from '@/components/ui/AvatarProfile';
 
-const pages = [
+type SubPage = {
+  name: string;
+  path: string;
+};
+
+type SubMenuProps = {
+  title: string;
+  items: SubPage[];
+};
+
+type Page = {
+  name: string;
+  path: string;
+  permiso?: number;
+  subpages?: SubPage[];
+};
+
+const pages: Page[] = [
   {
     name: 'CELULARES', path: '/celulares',
     subpages: [
@@ -46,11 +53,11 @@ const pages = [
   { name: 'EMPLEADOS', path: '/empleados_ti' },
 ];
 
-function SubMenu({ title, items }) {
-  const [anchorEl, setAnchorEl] = useState(null);
+function SubMenu({ title, items }: SubMenuProps) {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
-  const handleOpen = (event) => {
+  const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -79,23 +86,19 @@ function SubMenu({ title, items }) {
 
 function NavbarInventarioTI() {
   const navigate = useNavigate();
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElNav, setAnchorElNav] =
+    React.useState<HTMLElement | null>(null);
   const { session } = useAuthContext();
 
-  const handleOpenNavMenu = (event) => {
+  const handleOpenNavMenu = (
+    event: React.MouseEvent<HTMLElement>
+  ) => {
     setAnchorElNav(event.currentTarget);
   };
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
-
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const {
-    isOpen: isOpenPO,
-    onOpen: onOpenPO,
-    onOpenChange: onOpenChangePO,
-  } = useDisclosure();
 
   const handleBackClick = () => {
     navigate('/menu');
