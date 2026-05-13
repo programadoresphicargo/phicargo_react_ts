@@ -8,7 +8,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import Box from '@mui/material/Box';
 import { exportToCSV } from '../utils/export';
 import odooApi from '@/api/odoo-api';
-import FormularioRemolques from "./formulario";
+import FormularioRemolques from "./form";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import Travel from "../viajes/control/viaje";
 import { RecordDetailsModal } from "@/modules/maintenance/components/RecordDetailsModal";
@@ -220,6 +220,8 @@ const Remolques: React.FC = () => {
                 );
             },
         },
+        { accessorKey: 'x_dc_compatible', header: 'DC Compatible' },
+        { accessorKey: 'x_hc_compatible', header: 'HC Compatible' },
     ], []);
 
     /* =========================
