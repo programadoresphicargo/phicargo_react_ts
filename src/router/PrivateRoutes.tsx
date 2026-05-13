@@ -39,7 +39,7 @@ const InventarioContenedores = lazy(
   () => import('../phicargo/maniobras/inventario/index'),
 );
 const Terminales = lazy(
-  () => import('../phicargo/maniobras/maniobras/terminales/registros'),
+  () => import('../phicargo/maniobras/maniobras/terminales/registros.tsx'),
 );
 const ControlViajesActivos = lazy(() => import('../phicargo/viajes/viajes/activos'));
 const ControlViajesProgramados = lazy(
