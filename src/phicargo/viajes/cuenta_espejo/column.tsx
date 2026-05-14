@@ -19,6 +19,7 @@ export const createActionColumn = (
    radius="full"
    onPress={() => onClick(row.original.id_viaje)}
   >
+   <i className="bi bi-file-text"></i>
    Cuenta espejo
   </Button>
  ),
