@@ -1,23 +1,30 @@
 import { Button, Checkbox, Chip, User } from '@heroui/react';
 import {
+    MRT_Cell,
+    MRT_Row,
     MaterialReactTable,
     useMaterialReactTable,
 } from 'material-react-table';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Box from '@mui/material/Box';
-import { DatePicker } from 'antd';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import odooApi from '@/api/odoo-api';
-import NavbarInventarioTI from '../../navbar';
 import {
     useDisclosure,
 } from "@heroui/react";
 import { exportToCSV } from '../../../utils/export';
 import FormLineas from './form';
 
-const LineasTabla = ({ active }) => {
+type Linea = {
+    id_linea: number;
+    nombre_empleado: string;
+    puesto: string;
+}
+
+const LineasTabla = ({ active }: { active: boolean }) => {
+
     const [isLoading, setLoading] = useState(false);
-    const [id_linea, setCelular] = useState(0);
+    const [id_linea, setCelular] = useState<number | null>(null);
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
     const [data, setData] = useState([]);
@@ -48,7 +55,7 @@ const LineasTabla = ({ active }) => {
             {
                 accessorKey: 'activo',
                 header: 'Activo',
-                Cell: ({ cell }) => {
+                Cell: ({ cell }: { cell: MRT_Cell<Linea> }) => {
                     const activo = cell.getValue();
 
                     return (
@@ -61,11 +68,11 @@ const LineasTabla = ({ active }) => {
             {
                 accessorKey: 'estado',
                 header: 'Estado',
-                Cell: ({ cell }) => {
-                    const estado = cell.getValue();
+                Cell: ({ cell }: { cell: MRT_Cell<Linea> }) => {
+                    const estado = cell.getValue<string>();
 
                     return (
-                        <Chip color="primary" size="sm" color={estado == 'asignada' ? 'success' : 'primary'} className='text-white'>
+                        <Chip size="sm" color={estado == 'asignada' ? 'success' : 'primary'} className='text-white'>
                             {estado}
                         </Chip>
                     );
@@ -74,10 +81,9 @@ const LineasTabla = ({ active }) => {
             {
                 accessorKey: 'nombre_empleado',
                 header: 'Asignado',
-                Cell: ({ row }) => {
+                Cell: ({ row }: { row: MRT_Row<Linea> }) => {
                     const nombre = row.original.nombre_empleado;
 
-                    // Si es nulo o vacío, no renderiza nada
                     if (!nombre) return null;
 
                     return (
@@ -108,11 +114,11 @@ const LineasTabla = ({ active }) => {
         initialState: {
             showGlobalFilter: true,
             density: 'compact',
-            pagination: { pageSize: 80 },
+            pagination: { pageIndex: 0, pageSize: 80 },
             showColumnFilters: true,
         },
         muiTableBodyRowProps: ({ row }) => ({
-            onClick: ({ event }) => {
+            onClick: () => {
                 setCelular(row.original.id_linea);
                 onOpen();
             },
@@ -145,7 +151,7 @@ const LineasTabla = ({ active }) => {
                 maxHeight: 'calc(100vh - 270px)',
             },
         },
-        renderTopToolbarCustomActions: ({ table }) => (
+        renderTopToolbarCustomActions: () => (
             <Box
                 sx={{
                     display: 'flex',
@@ -180,7 +186,7 @@ const LineasTabla = ({ active }) => {
                     radius='full'
                     color='success'
                     className='text-white'
-                    startContent={<i class="bi bi-file-earmark-excel"></i>}
+                    startContent={<i className="bi bi-file-earmark-excel"></i>}
                     onPress={() => exportToCSV(data, columns, "lineas.csv")}>
                     Exportar
                 </Button>
@@ -189,10 +195,10 @@ const LineasTabla = ({ active }) => {
     });
 
     return (
-        <div>
+        <>
             <MaterialReactTable table={table} />
             <FormLineas isOpen={isOpen} onOpen={onOpen} onOpenChange={onOpenChange} id_linea={id_linea}></FormLineas>
-        </div>
+        </>
     );
 };
 
