@@ -75,7 +75,7 @@ const Descuentos = ({ }) => {
       {
         accessorKey: 'estado',
         header: 'Estado',
-        Cell: ({ cell }: { cell: MRT_Cell<any> }) => {
+        Cell: ({ cell }: { cell: MRT_Cell<Descuento> }) => {
           const status = cell.getValue<string>() || '';
           return (
             <Chip
