@@ -1,15 +1,15 @@
-import React, { useEffect, useMemo, useState, useContext } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
+    MRT_Cell,
+    MRT_Row,
     MaterialReactTable,
     useMaterialReactTable,
 } from 'material-react-table';
 import Box from '@mui/material/Box';
-import { Button, Chip } from "@heroui/react"
-import { DatePicker } from 'antd';
+import { Button, Chip, RangeValue } from "@heroui/react"
 import odooApi from '@/api/odoo-api';
-import { Slider } from "@heroui/react";
 import { DateRangePicker } from "@heroui/react";
-import { parseDate } from "@internationalized/date";
+import { CalendarDate, parseDate } from "@internationalized/date";
 import { exportToCSV } from '../../../utils/export';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { User } from "@heroui/react";
@@ -17,12 +17,33 @@ import Travel from '@/phicargo/viajes/control/viaje';
 import { Progress } from "@heroui/react";
 import NavbarTravel from '@/phicargo/viajes/navbar_viajes';
 
-const { VITE_ODOO_API_URL } = import.meta.env;
+type Viaje = {
+    id_viaje: number;
+    llegada_planta: string;
+    inicio_viaje: string;
+    fecha_inicio_viaje: string;
+    fecha_llegada_planta: string;
+    salida_planta: string;
+    fecha_salida_planta: string;
+    asignacion_rampa: string;
+    fecha_asignacion_rampa: string;
+    inicio_carga_descarga: string;
+    fecha_inicio_carga_descarga: string;
+    ingreso_planta: string;
+    fecha_ingreso_planta: string;
+    fin_carga_descarga: string;
+    fecha_fin_carga_descarga: string;
+    ultimo_estatus_enviado: string;
+    fecha_ultimo_estatus: string;
+    ultimo_estatus_usuario: string;
+    viaje_finalizado: string;
+    fecha_viaje_finalizado: string;
+}
 
 const ReporteCumplimientoV = () => {
 
     const [open, setOpen] = React.useState(false);
-    const [idViaje, setIDViaje] = React.useState(false);
+    const [idViaje, setIDViaje] = React.useState<number | null>(null);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -35,21 +56,16 @@ const ReporteCumplimientoV = () => {
     const today = new Date();
     const todayStr = today.toISOString().split("T")[0];
 
-    const [dates, setDates] = React.useState({
+    const [dates, setDates] = React.useState<RangeValue<CalendarDate> | null>({
         start: parseDate(todayStr),
         end: parseDate(todayStr),
     });
 
     const [isLoading, setLoading] = useState(false);
-    const [value, setValue] = React.useState([0, 24]);
-
-    const handleDateChange = (dates) => {
-        setDates(dates);
-    };
-
     const [data, setData] = useState([]);
 
     const fetchData = async () => {
+        if (!dates) return;
         const startDate = dates.start;
         const endDate = dates.end;
         try {
@@ -70,7 +86,7 @@ const ReporteCumplimientoV = () => {
 
     useEffect(() => {
         fetchData();
-    }, [dates, value]);
+    }, [dates]);
 
     const columns = useMemo(
         () => [
@@ -85,26 +101,23 @@ const ReporteCumplimientoV = () => {
             {
                 accessorKey: 'x_status_viaje',
                 header: 'Estado',
-                Cell: ({ cell }) => {
-                    const estatus_viaje = cell.getValue();
-                    let badgeClass = '';
-
-                    if (estatus_viaje === 'ruta') {
-                        badgeClass = 'primary';
-                    } else if (estatus_viaje === 'planta') {
-                        badgeClass = 'success';
-                    } else if (estatus_viaje === 'retorno') {
-                        badgeClass = 'warning';
-                    } else if (estatus_viaje === 'resguardo') {
-                        badgeClass = 'secondary';
-                    } else if (estatus_viaje === 'finalizado') {
-                        badgeClass = 'default';
-                    }
+                Cell: ({ cell }: { cell: MRT_Cell<Viaje> }) => {
+                    const estatus_viaje = cell.getValue<string>();
 
                     return (
                         <Chip
                             size="sm"
-                            color={badgeClass}
+                            color={
+                                estatus_viaje === 'ruta'
+                                    ? 'primary'
+                                    : estatus_viaje === 'planta'
+                                        ? 'success'
+                                        : estatus_viaje === 'retorno'
+                                            ? 'warning'
+                                            : estatus_viaje === 'resguardo'
+                                                ? 'secondary'
+                                                : 'default'
+                            }
                             className="text-white"
                         >
                             {estatus_viaje.charAt(0).toUpperCase() + estatus_viaje.slice(1)}
@@ -120,7 +133,7 @@ const ReporteCumplimientoV = () => {
                 accessorKey: 'porcentaje_cumplimiento',
                 header: 'Porcentaje cumplimiento',
                 Cell: ({ cell }) => {
-                    const porcentaje = cell.getValue();
+                    const porcentaje = cell.getValue<number>();
 
                     return (
                         <Progress
@@ -136,7 +149,7 @@ const ReporteCumplimientoV = () => {
             {
                 accessorKey: 'ultimo_estatus_enviado',
                 header: 'Ultimo estatus enviado',
-                Cell: ({ row }) => {
+                Cell: ({ row }: { row: MRT_Row<Viaje> }) => {
                     const estatus = row.original.ultimo_estatus_enviado;
                     const nombre = row.original.fecha_ultimo_estatus;
                     const fecha = row.original.ultimo_estatus_usuario;
@@ -160,7 +173,7 @@ const ReporteCumplimientoV = () => {
             {
                 accessorKey: 'inicio_viaje',
                 header: 'Inicio de viaje',
-                Cell: ({ row }) => {
+                Cell: ({ row }: { row: MRT_Row<Viaje> }) => {
                     const nombre = row.original.inicio_viaje;
                     const fecha = row.original.fecha_inicio_viaje;
 
@@ -187,7 +200,7 @@ const ReporteCumplimientoV = () => {
             {
                 accessorKey: 'llegada_planta',
                 header: 'Llegada a planta',
-                Cell: ({ row }) => {
+                Cell: ({ row }: { row: MRT_Row<Viaje> }) => {
                     const nombre = row.original.llegada_planta;
                     const fecha = row.original.fecha_llegada_planta;
 
@@ -214,7 +227,7 @@ const ReporteCumplimientoV = () => {
             {
                 accessorKey: 'ingreso_planta',
                 header: 'Ingreso a planta',
-                Cell: ({ row }) => {
+                Cell: ({ row }: { row: MRT_Row<Viaje> }) => {
                     const nombre = row.original.ingreso_planta;
                     const fecha = row.original.fecha_ingreso_planta;
 
@@ -241,7 +254,7 @@ const ReporteCumplimientoV = () => {
             {
                 accessorKey: 'asignacion_rampa',
                 header: 'Asignación de rampa',
-                Cell: ({ row }) => {
+                Cell: ({ row }: { row: MRT_Row<Viaje> }) => {
                     const nombre = row.original.asignacion_rampa;
                     const fecha = row.original.fecha_asignacion_rampa;
 
@@ -268,7 +281,7 @@ const ReporteCumplimientoV = () => {
             {
                 accessorKey: 'inicio_carga_descarga',
                 header: 'Inicio de carga o descarga',
-                Cell: ({ row }) => {
+                Cell: ({ row }: { row: MRT_Row<Viaje> }) => {
                     const nombre = row.original.inicio_carga_descarga;
                     const fecha = row.original.fecha_inicio_carga_descarga;
 
@@ -295,7 +308,7 @@ const ReporteCumplimientoV = () => {
             {
                 accessorKey: 'fin_carga_descarga',
                 header: 'Fin de carga o descarga',
-                Cell: ({ row }) => {
+                Cell: ({ row }: { row: MRT_Row<Viaje> }) => {
                     const nombre = row.original.fin_carga_descarga;
                     const fecha = row.original.fecha_fin_carga_descarga;
 
@@ -322,7 +335,7 @@ const ReporteCumplimientoV = () => {
             {
                 accessorKey: 'salida_planta',
                 header: 'Salida de planta',
-                Cell: ({ row }) => {
+                Cell: ({ row }: { row: MRT_Row<Viaje> }) => {
                     const nombre = row.original.salida_planta;
                     const fecha = row.original.fecha_salida_planta;
 
@@ -349,7 +362,7 @@ const ReporteCumplimientoV = () => {
             {
                 accessorKey: 'viaje_finalizado',
                 header: 'Viaje finalizado',
-                Cell: ({ row }) => {
+                Cell: ({ row }: { row: MRT_Row<Viaje> }) => {
                     const nombre = row.original.viaje_finalizado;
                     const fecha = row.original.fecha_viaje_finalizado;
 
@@ -373,7 +386,7 @@ const ReporteCumplimientoV = () => {
                 accessorKey: 'fecha_viaje_finalizado',
                 header: 'Fecha fin de viaje',
             },
-        ]
+        ], []
     );
 
     const table = useMaterialReactTable({
@@ -400,10 +413,10 @@ const ReporteCumplimientoV = () => {
             columnPinning: { left: ['referencia', 'sucursal', 'estatus', 'nombre'] },
             showColumnFilters: true,
             density: 'compact',
-            pagination: { pageSize: 80 },
+            pagination: { pageIndex: 0, pageSize: 80 },
         },
         muiTableBodyRowProps: ({ row }) => ({
-            onClick: ({ event }) => {
+            onClick: () => {
                 handleClickOpen();
                 setIDViaje(row.original.id_viaje);
             },
@@ -436,7 +449,7 @@ const ReporteCumplimientoV = () => {
                 borderRadius: '0',
             },
         },
-        renderTopToolbarCustomActions: ({ table }) => (
+        renderTopToolbarCustomActions: () => (
             <Box
                 sx={{
                     display: 'flex',
@@ -460,8 +473,8 @@ const ReporteCumplimientoV = () => {
                     variant='bordered'
                     onChange={setDates} />
 
-                <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} radius='full' onPress={() => exportToCSV(data, columns, "reporte_estatus.csv")} fullWidth>Exportar</Button>
-                <Button color='primary' className='text-white' startContent={<i class="bi bi-arrow-clockwise"></i>} radius='full' onPress={() => fetchData()} fullWidth>Recargar</Button>
+                <Button color='success' className='text-white' startContent={<i className="bi bi-file-earmark-excel"></i>} radius='full' onPress={() => exportToCSV(data, columns, "reporte_estatus.csv")} fullWidth>Exportar</Button>
+                <Button color='primary' className='text-white' startContent={<i className="bi bi-arrow-clockwise"></i>} radius='full' onPress={() => fetchData()} fullWidth>Recargar</Button>
 
             </Box>
 
@@ -472,7 +485,9 @@ const ReporteCumplimientoV = () => {
         <>
             <NavbarTravel></NavbarTravel>
             <MaterialReactTable table={table} />
-            <Travel idViaje={idViaje} open={open} handleClose={handleClose}></Travel>
+            {idViaje && (
+                <Travel idViaje={idViaje} open={open} handleClose={handleClose}></Travel>
+            )}
         </>
     );
 };

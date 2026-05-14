@@ -30,7 +30,7 @@ import {
 } from "@mui/material";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
-const Cuentas = ({ estado }) => {
+const Cuentas = () => {
 
   const fechaActual = new Date().toISOString().split('T')[0];
   const [value, setValue] = React.useState(parseDate(fechaActual));
