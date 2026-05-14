@@ -1,21 +1,18 @@
 import {
+  MRT_Cell,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
 import React, { useEffect, useMemo, useState } from 'react';
-
 import { Box } from '@mui/material';
-import { Button, Checkbox, Chip } from "@heroui/react";
+import { Button, Checkbox } from "@heroui/react";
 import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
 import FormularioCorreoGeneral from './correoForm';
-import Slide from '@mui/material/Slide';
 import odooApi from '@/api/odoo-api';
 import CustomNavbar from '@/pages/CustomNavbar';
 
-const CorreosElectronicos = ({ estado }) => {
+const CorreosElectronicos = () => {
 
   const [open, setOpen] = React.useState(false);
   const [correo, setCorreo] = useState({});
@@ -30,10 +27,9 @@ const CorreosElectronicos = ({ estado }) => {
   };
 
   const [data, setData] = useState([]);
-  const [isLoading2, setLoading] = useState();
+  const [isLoading, setLoading] = useState(false);
 
   const fetchData = async () => {
-
     try {
       setLoading(true);
       const response = await odooApi.get('/correos/');
@@ -69,8 +65,8 @@ const CorreosElectronicos = ({ estado }) => {
       {
         accessorKey: 'activo',
         header: 'Activo',
-        Cell: ({ row }) => (
-          <Checkbox isSelected={row.original.activo ? true : false}></Checkbox>
+        Cell: ({ cell }: { cell: MRT_Cell<any> }) => (
+          <Checkbox isSelected={cell.getValue<boolean>() ? true : false}></Checkbox>
         ),
       },
       {
@@ -91,13 +87,13 @@ const CorreosElectronicos = ({ estado }) => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
-    state: { showProgressBars: isLoading2 },
+    state: { showProgressBars: isLoading },
     enableColumnPinning: true,
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
     initialState: {
       density: 'compact',
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
     },
     muiTablePaperProps: {
       elevation: 0,
@@ -106,8 +102,7 @@ const CorreosElectronicos = ({ estado }) => {
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
-      onClick: ({ event }) => {
-
+      onClick: () => {
         if (row.subRows?.length) {
         } else {
           handleClickOpen();
@@ -134,10 +129,10 @@ const CorreosElectronicos = ({ estado }) => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 210px)',
+        maxHeight: 'calc(100vh - 200px)',
       },
     },
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -148,6 +143,7 @@ const CorreosElectronicos = ({ estado }) => {
       >
         Correos electronicos
         <Button
+          radius='full'
           color='primary'
           onPress={() => fetchData()}
         >Recargar</Button>
@@ -168,13 +164,11 @@ const CorreosElectronicos = ({ estado }) => {
       aria-describedby="alert-dialog-description"
     >
       <DialogContent>
-        <FormularioCorreoGeneral idCliente={null} handleClose={handleClose} data={correo}>
-        </FormularioCorreoGeneral>
+        <FormularioCorreoGeneral idCliente={null} handleClose={handleClose} data={correo} />
       </DialogContent>
     </Dialog>
   </>
   );
-
 };
 
 export default CorreosElectronicos;
