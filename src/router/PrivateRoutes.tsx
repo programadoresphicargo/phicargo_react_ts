@@ -376,7 +376,7 @@ export const PrivateRoutes = () => {
           path="/CorreosElectronicos"
           element={
             <Suspense fallback={<LoadingPage />}>
-              <CorreosElectronicos estado={undefined} />
+              <CorreosElectronicos />
             </Suspense>
           }
         />
