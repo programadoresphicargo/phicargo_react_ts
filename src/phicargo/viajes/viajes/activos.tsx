@@ -27,6 +27,8 @@ import EstatusChipInicioViaje from '../componentes/status_chip_inicio';
 import EstatusChipLlegadaPlanta from '../componentes/status_chip_planta';
 import NavbarTravel from '../navbar_viajes';
 import WebSocketWithToast from '@/phicargo/websocket/websocket';
+import { createActionColumn } from '../cuenta_espejo/column';
+import { copiarHTML } from '../cuenta_espejo/cuenta_espejo';
 
 type Viaje = {
   id_viaje: number;
@@ -115,8 +117,13 @@ const ViajesActivos = ({ }) => {
     updateCP();
   }, []);
 
+  const CuentaEspejo = (id: number) => {
+    copiarHTML(id);
+  };
+
   const columns = useMemo(
     () => [
+      createActionColumn<Viaje>(CuentaEspejo),
       {
         accessorKey: 'empresa',
         header: 'Empresa',
@@ -218,7 +225,7 @@ const ViajesActivos = ({ }) => {
       {
         accessorKey: 'operador',
         header: 'Operador',
-        Cell: ({ cell }) => {
+        Cell: ({ cell }: { cell: MRT_Cell<Viaje> }) => {
           const value = cell.getValue<string>();
 
           return (
@@ -257,7 +264,7 @@ const ViajesActivos = ({ }) => {
       {
         accessorKey: 'mensaje_inicio_programado',
         header: 'Resultado',
-        Cell: ({ cell }) => <EstatusChipInicioViaje valor={cell.getValue()}></EstatusChipInicioViaje>
+        Cell: ({ cell }: { cell: MRT_Cell<Viaje> }) => <EstatusChipInicioViaje valor={cell.getValue()}></EstatusChipInicioViaje>
       },
       {
         accessorKey: 'llegada_planta_programada',
@@ -270,7 +277,7 @@ const ViajesActivos = ({ }) => {
       {
         accessorKey: 'mensaje_llegada_planta',
         header: 'Resultado',
-        Cell: ({ cell }) => <EstatusChipLlegadaPlanta valor={cell.getValue()}></EstatusChipLlegadaPlanta>
+        Cell: ({ cell }: { cell: MRT_Cell<Viaje> }) => <EstatusChipLlegadaPlanta valor={cell.getValue()}></EstatusChipLlegadaPlanta>
       },
       {
         accessorKey: 'nombre_cliente',
@@ -287,7 +294,7 @@ const ViajesActivos = ({ }) => {
       {
         accessorKey: 'tipo_armado',
         header: 'Armado',
-        Cell: ({ cell }) => {
+        Cell: ({ cell }: { cell: MRT_Cell<Viaje> }) => {
           const value = cell.getValue<string>() || '';
 
           return (
@@ -308,7 +315,7 @@ const ViajesActivos = ({ }) => {
       {
         accessorKey: 'estado_estadia',
         header: 'Estado estadias',
-        Cell: ({ cell }) => {
+        Cell: ({ cell }: { cell: MRT_Cell<Viaje> }) => {
           const estado = cell.getValue<string>();
 
           return (

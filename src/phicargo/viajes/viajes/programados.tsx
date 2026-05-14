@@ -14,6 +14,8 @@ import { DateRangePicker } from 'rsuite';
 import NavbarTravel from '../navbar_viajes';
 import Travel from '../control/viaje';
 import Viaje from '../viaje';
+import { createActionColumn } from '../cuenta_espejo/column';
+import { copiarHTML } from '../cuenta_espejo/cuenta_espejo';
 
 type Viaje = {
   id_viaje: number;
@@ -90,8 +92,13 @@ const ViajesProgramados = ({ }) => {
     return { cantidadRojo: rojo, cantidadAmarillo: amarillo };
   }, [data]);
 
+  const CuentaEspejo = (id: number) => {
+    copiarHTML(id);
+  };
+
   const columns = useMemo(
     () => [
+      createActionColumn<Viaje>(CuentaEspejo),
       {
         accessorKey: 'empresa',
         header: 'Empresa',
@@ -145,7 +152,7 @@ const ViajesProgramados = ({ }) => {
       {
         accessorKey: 'custodia',
         header: 'Custodia',
-        Cell: ({ cell }) => {
+        Cell: ({ cell }: { cell: MRT_Cell<Viaje> }) => {
           const value = cell.getValue();
 
           if (value !== 'yes') return null;
@@ -168,7 +175,7 @@ const ViajesProgramados = ({ }) => {
       {
         accessorKey: 'estado_correos',
         header: 'Correos ligados',
-        Cell: ({ cell }) => {
+        Cell: ({ cell }: { cell: MRT_Cell<Viaje> }) => {
           const value = cell.getValue<string>();
           let badgeClass = 'badge rounded-pill text-white ';
 
@@ -200,7 +207,7 @@ const ViajesProgramados = ({ }) => {
       {
         accessorKey: 'tipo_armado',
         header: 'Armado',
-        Cell: ({ cell }) => {
+        Cell: ({ cell }: { cell: MRT_Cell<Viaje> }) => {
           const tipoMovimiento = cell.getValue<string>();
 
           return (
@@ -213,7 +220,7 @@ const ViajesProgramados = ({ }) => {
       {
         accessorKey: 'tipo',
         header: 'Modalidad',
-        Cell: ({ cell }) => {
+        Cell: ({ cell }: { cell: MRT_Cell<Viaje> }) => {
           const tipoMovimiento = cell.getValue<string>();
 
           return (
