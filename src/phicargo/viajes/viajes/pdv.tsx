@@ -15,6 +15,8 @@ import { DateRangePicker } from 'rsuite';
 import NavbarTravel from '../navbar_viajes';
 import Travel from '../control/viaje';
 import { Stack } from '@mui/material';
+import { createActionColumn } from '../cuenta_espejo/column';
+import { copiarHTML } from '../cuenta_espejo/cuenta_espejo';
 
 type PDV = {
   id_viaje: number;
@@ -65,8 +67,13 @@ const PDV = ({ }) => {
     fetchData();
   }, [range]);
 
+  const CuentaEspejo = (id: number) => {
+    copiarHTML(id);
+  };
+
   const columns = useMemo(
     () => [
+      createActionColumn(CuentaEspejo),
       {
         accessorKey: 'vehiculo',
         header: 'Vehiculo programado',
@@ -101,7 +108,7 @@ const PDV = ({ }) => {
       {
         accessorKey: "x_status_bel",
         header: "Estatus",
-        Cell: ({ cell }) => {
+        Cell: ({ cell }: { cell: MRT_Cell<PDV> }) => {
           const value = cell.getValue<string>();
 
           type StatusKey =
