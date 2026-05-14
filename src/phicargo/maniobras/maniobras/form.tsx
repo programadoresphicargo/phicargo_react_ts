@@ -986,7 +986,9 @@ const Formulariomaniobra: React.FC<Props> = ({
                                                                 />
                                                             )}
                                                         </div>
-                                                        <EstatusHistorialManiobras id_maniobra={id_maniobra}></EstatusHistorialManiobras>
+                                                        {id_maniobra && (
+                                                            <EstatusHistorialManiobras id_maniobra={id_maniobra}></EstatusHistorialManiobras>
+                                                        )}
                                                     </>
                                                 )}
                                             </CardBody>
