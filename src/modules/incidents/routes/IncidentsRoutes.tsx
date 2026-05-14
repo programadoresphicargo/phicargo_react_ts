@@ -10,7 +10,7 @@ const IncidentsPage = lazy(() => import('../pages/IncidentsPage'));
 const DirectionIncidentsPage = lazy(() => import('../pages/DirectionIncidentsPage'));
 const VehicleInspectionPage = lazy(() => import('../pages/VehicleInspectionPage'));
 const VehicleLegalInspectionPage = lazy(() => import('../pages/VehicleLegalInspectionPage'));
-const DescuentosPage = lazy(() => import('../../../phicargo/descuentos/control_descuentos'));
+const DescuentosPage = lazy(() => import('../../../phicargo/descuentos'));
 
 const INCIDENTS_PERMISSION = 214;
 const DIRECTION_INCIDENTS_PERMISSION = 215;

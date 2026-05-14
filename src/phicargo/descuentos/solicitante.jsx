@@ -38,25 +38,23 @@ export default function SelectEmpleado({ key_name, label, setSolicitante, value,
   }, []);
 
   return (
-    <React.Fragment>
-      <Autocomplete
-        fullWidth
-        variant={variant}
-        placeholder={placeholder}
-        label={label}
-        selectedKey={String(value) || null}
-        onSelectionChange={(key) => setSolicitante(key_name, key)}
-        isDisabled={!isEditing}
-        isInvalid={!value}
-        errorMessage="Campo obligatorio"
-        isDisabled={isDisabled}
-      >
-        {data.map((user) => (
-          <AutocompleteItem key={user.id_empleado}>
-            {user.empleado}
-          </AutocompleteItem>
-        ))}
-      </Autocomplete>
-    </React.Fragment>
+    <Autocomplete
+      fullWidth
+      variant={variant}
+      placeholder={placeholder}
+      label={label}
+      selectedKey={String(value) || null}
+      onSelectionChange={(key) => setSolicitante(key_name, key)}
+      isDisabled={!isEditing}
+      isInvalid={!value}
+      errorMessage="Campo obligatorio"
+      isDisabled={isDisabled}
+    >
+      {data.map((user) => (
+        <AutocompleteItem key={user.id_empleado}>
+          {user.empleado}
+        </AutocompleteItem>
+      ))}
+    </Autocomplete>
   );
 }

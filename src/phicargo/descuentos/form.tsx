@@ -1,19 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
-  Dialog,
-  AppBar,
-  Toolbar,
-  IconButton,
-  Typography,
-  Slide,
-  Grid,
   Divider,
   Stack,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import { Button, Card, CardBody, CardHeader, Chip, Progress, Textarea, NumberInput, DatePicker, Select, SelectItem } from "@heroui/react";
-import { parseDate } from "@internationalized/date";
-import toast from "react-hot-toast";
+import { Button, Card, CardBody, CardHeader, Chip, Progress, DatePicker } from "@heroui/react";
 import Swal from "sweetalert2";
 import odooApi from "@/api/odoo-api";
 import { useDescuentos } from "./context";
@@ -25,30 +15,48 @@ import {
   ModalBody,
   ModalFooter
 } from "@heroui/modal";
+import { Controller, useForm } from "react-hook-form";
+import { NumberInput, SelectInput, TextareaInput } from "@/components/inputs";
+import { toast } from "react-toastify";
+import { Descuento } from "./type";
+import { parseDate } from "@internationalized/date";
+import dayjs from "dayjs";
 
-export default function DescuentoForm({ open, handleClose, id_descuento }) {
-  const [data, setData] = useState({});
+const initialForm: Descuento = {
+  id_descuento: null,
+  id_empleado: null,
+  id_solicitante: null,
+  importe: 0,
+  motivo: '',
+  periodicidad: "viaje",
+  comentarios: '',
+  monto: 0,
+  estado: "borrador",
+  fecha: dayjs()
+};
+
+export default function DescuentoForm({ open, handleClose, id_descuento }: { open: boolean, handleClose: () => void, id_descuento: number | null }) {
+
+  const { control, handleSubmit, reset, watch, setValue } = useForm<Descuento>({
+    defaultValues: initialForm,
+  });
   const [isLoading, setLoading] = useState(false);
   const {
     isEditing,
     setIsEditing,
   } = useDescuentos();
 
-  const handleChange = (key, value) => {
-    setData((prev) => ({ ...prev, [key]: value }));
-  };
-
   const fetchData = async () => {
-    if (!id_descuento) {
-      setData({});
-      setIsEditing(true);
-      return;
-    }
     setIsEditing(false);
     try {
       setLoading(true);
       const response = await odooApi.get("/descuentos/" + id_descuento);
-      setData(response.data);
+      reset({
+        ...response.data,
+        fecha: response.data.fecha
+          ? dayjs(response.data.fecha)
+          : null,
+      });
     } catch (error) {
       toast.error("Error al obtener los datos.");
     } finally {
@@ -57,23 +65,24 @@ export default function DescuentoForm({ open, handleClose, id_descuento }) {
   };
 
   useEffect(() => {
-    fetchData();
-  }, [open]);
+    if (open && id_descuento) {
+      fetchData();
+    } else {
+      reset(initialForm);
+      setIsEditing(true);
+    }
+  }, [open, id_descuento]);
 
-  const handleSubmit = async () => {
-    if (!data?.id_empleado) return toast.error("El empleado es obligatorio.");
-    if (!data?.monto) return toast.error("El monto es obligatorio.");
-    if (!data?.importe) return toast.error("Importe es obligatorio.");
-    if (!data?.fecha) return toast.error("La fecha es obligatoria.");
-    if (!data?.motivo) return toast.error("Motivo es obligatorio.");
-    if (!data?.comentarios) return toast.error("Comentarios es obligatorio.");
-    if (!data?.periodicidad) return toast.error("Periodicidad es obligatorio.");
-
+  const Save = async (data: Descuento) => {
     try {
+      const payload = {
+        ...data,
+        fecha: data.fecha?.format("YYYY-MM-DD"),
+      };
       setLoading(true);
       let response;
-      if (id_descuento) response = await odooApi.patch(`/descuentos/${id_descuento}/`, data);
-      else response = await odooApi.post("/descuentos/", data);
+      if (id_descuento) response = await odooApi.patch(`/descuentos/${id_descuento}/`, payload);
+      else response = await odooApi.post("/descuentos/", payload);
 
       if (response.data.status === "success") {
         toast.success(response.data.message);
@@ -81,7 +90,7 @@ export default function DescuentoForm({ open, handleClose, id_descuento }) {
       } else {
         toast.error(response.data.message);
       }
-    } catch (error) {
+    } catch (error: any) {
       const message =
         error.response?.data?.detail ||
         error.message ||
@@ -93,7 +102,7 @@ export default function DescuentoForm({ open, handleClose, id_descuento }) {
     }
   };
 
-  const CambiarEstado = async (estado) => {
+  const CambiarEstado = async (estado: string) => {
     const result = await Swal.fire({
       title: `¿Marcar como ${estado} el descuento?`,
       text: "Esta acción no se puede deshacer.",
@@ -122,8 +131,10 @@ export default function DescuentoForm({ open, handleClose, id_descuento }) {
     window.open(url, "_blank");
   };
 
+  const estado = watch("estado");
+
   return (
-    <Modal isOpen={open} scrollBehavior="outside" onOpenChange={handleClose} size="3xl">
+    <Modal isOpen={open} scrollBehavior="outside" onOpenChange={handleClose} size="5xl">
       <ModalContent>
         {(onClose) => (
           <>
@@ -132,28 +143,27 @@ export default function DescuentoForm({ open, handleClose, id_descuento }) {
 
               {isLoading && <Progress isIndeterminate size="sm" />}
 
-              {/* Header Actions */}
               <Stack direction="row" spacing={2} alignItems="center">
                 {id_descuento && (
                   <Chip color="warning" className="uppercase text-sm font-semibold text-white">
-                    {data?.estado || "pendiente"}
+                    {estado || "pendiente"}
                   </Chip>
                 )}
 
                 {!id_descuento && (
-                  <Button color="success" onPress={handleSubmit} radius="full" className="text-white" isLoading={isLoading}>
+                  <Button color="success" onPress={() => handleSubmit(Save)()} radius="full" className="text-white" isLoading={isLoading}>
                     Registrar
                   </Button>
                 )}
 
-                {id_descuento && !isEditing && data?.estado == "borrador" && (
+                {id_descuento && !isEditing && estado == "borrador" && (
                   <Button color="primary" onPress={() => setIsEditing(true)} radius="full" className="text-white">
                     Editar
                   </Button>
                 )}
 
                 {isEditing && id_descuento && (
-                  <Button color="success" onPress={handleSubmit} radius="full" className="text-white" isLoading={isLoading}>
+                  <Button color="success" onPress={() => handleSubmit(Save)()} radius="full" className="text-white" isLoading={isLoading}>
                     Guardar cambios
                   </Button>
                 )}
@@ -163,17 +173,17 @@ export default function DescuentoForm({ open, handleClose, id_descuento }) {
                     <Button color="success" onPress={ImprimirFormato} radius="full" className="text-white">
                       Imprimir formato
                     </Button>
-                    {data?.estado == "borrador" && (
+                    {estado == "borrador" && (
                       <Button color="success" onPress={() => CambiarEstado('confirmado')} radius="full" className="text-white" isLoading={isLoading}>
                         Confirmar
                       </Button>
                     )}
-                    {data?.estado == "confirmado" && (
+                    {estado == "confirmado" && (
                       <Button color="warning" onPress={() => CambiarEstado('aplicado')} radius="full" className="text-white" isLoading={isLoading}>
                         Aplicar
                       </Button>
                     )}
-                    {data?.estado == "borrador" && (
+                    {estado == "borrador" && (
                       <Button color="danger" onPress={() => CambiarEstado('cancelado')} radius="full" className="text-white" isLoading={isLoading}>
                         Cancelar
                       </Button>
@@ -193,15 +203,22 @@ export default function DescuentoForm({ open, handleClose, id_descuento }) {
                 </CardHeader>
                 <Divider />
                 <CardBody>
-                  <SelectEmpleado
-                    setSolicitante={handleChange}
-                    key_name={"id_solicitante"}
-                    label={"Solicitante"}
-                    value={data?.id_solicitante}
-                    placeholder={"Encargado de departamento que hace la solicitud"}
-                    isEditing={isEditing}
-                    variant="bordered"
-                    isDisabled={!isEditing}
+                  <Controller
+                    control={control}
+                    name="id_solicitante"
+                    rules={{ required: 'Solicitante requerido' }}
+                    render={({ field }) => (
+                      <SelectEmpleado
+                        key_name={"id_solicitante"}
+                        label={"Solicitante"}
+                        value={field.value}
+                        setSolicitante={setValue}
+                        placeholder={"Encargado de departamento que hace la solicitud"}
+                        isEditing={isEditing}
+                        variant="bordered"
+                        isDisabled={!isEditing}
+                      />
+                    )}
                   />
                 </CardBody>
               </Card>
@@ -218,15 +235,22 @@ export default function DescuentoForm({ open, handleClose, id_descuento }) {
                 </CardHeader>
                 <Divider />
                 <CardBody>
-                  <SelectEmpleado
-                    setSolicitante={handleChange}
-                    key_name={"id_empleado"}
-                    label={"Empleado"}
-                    value={data?.id_empleado}
-                    placeholder={"Empleado responsable del descuento"}
-                    isEditing={isEditing}
-                    variant="bordered"
-                    isDisabled={!isEditing}
+                  <Controller
+                    control={control}
+                    name="id_empleado"
+                    rules={{ required: 'Empleado requerido' }}
+                    render={({ field }) => (
+                      <SelectEmpleado
+                        key_name={"id_empleado"}
+                        label={"Empleado"}
+                        value={field.value}
+                        setSolicitante={setValue}
+                        placeholder={"Empleado responsable del descuento"}
+                        isEditing={isEditing}
+                        variant="bordered"
+                        isDisabled={!isEditing}
+                      />
+                    )}
                   />
                 </CardBody>
               </Card>
@@ -243,70 +267,80 @@ export default function DescuentoForm({ open, handleClose, id_descuento }) {
                 <Divider />
                 <CardBody className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-                  <DatePicker
-                    label="Fecha"
-                    variant="bordered"
-                    hideTimeZone
-                    showMonthAndYearPickers
-                    value={data?.fecha ? parseDate(data.fecha.split("T")[0]) : null}
-                    onChange={(date) => handleChange("fecha", date.toString())}
-                    isDisabled={!isEditing}
-                    isInvalid={!data?.fecha}
-                    errorMessage="Campo obligatorio"
+                  <Controller
+                    control={control}
+                    name="fecha"
+                    rules={{ required: "Fecha de incidencia requerida" }}
+                    render={({ field, fieldState }) => {
+                      const calendarValue =
+                        field.value
+                          ? parseDate(field.value.format("YYYY-MM-DD"))
+                          : null;
+
+                      return (
+                        <DatePicker
+                          label="Fecha de Incidencia"
+                          variant="bordered"
+                          isDisabled={!isEditing}
+                          value={calendarValue}
+                          onChange={(val) => {
+                            field.onChange(val ? dayjs(val.toString()) : null);
+                          }}
+                          isInvalid={!!fieldState.error}
+                          errorMessage={fieldState.error?.message}
+                        />
+                      );
+                    }}
                   />
 
                   <NumberInput
+                    control={control}
                     label="Monto"
-                    variant="bordered"
-                    value={data?.monto || ""}
-                    onValueChange={(v) => handleChange("monto", v)}
+                    name="monto"
                     isDisabled={!isEditing}
-                    isInvalid={!data?.monto}
-                    errorMessage="Campo obligatorio"
+                    variant="bordered"
+                    rules={{ required: 'Monto obligatorio' }}
                   />
 
-                  <Select
+                  <SelectInput
+                    isDisabled={!isEditing}
+                    control={control}
+                    name="periodicidad"
                     label="Periodicidad"
                     variant="bordered"
-                    placeholder="Seleccionar..."
-                    onSelectionChange={(keys) => handleChange("periodicidad", Array.from(keys)[0])}
-                    selectedKeys={data?.periodicidad ? [data?.periodicidad] : []}
-                    isDisabled={!isEditing}
-                    isInvalid={!data?.periodicidad}
-                    errorMessage="Campo obligatorio"
-                  >
-                    <SelectItem key="viaje">Por viaje</SelectItem>
-                    <SelectItem key="quincenal">Quincenal</SelectItem>
-                  </Select>
+                    items={
+                      [
+                        { value: 'Viaje', key: 'viaje' },
+                        { value: 'Quincenal', key: 'quincenal' },
+                      ]}
+                    rules={{ required: 'Periodicidad obligatoria' }}
+                  />
 
                   <NumberInput
+                    control={control}
+                    name="importe"
                     label="Importe"
-                    variant="bordered"
-                    value={data?.importe || ""}
-                    onValueChange={(v) => handleChange("importe", v)}
                     isDisabled={!isEditing}
-                    isInvalid={!data?.importe}
-                    errorMessage="Campo obligatorio"
+                    variant="bordered"
+                    rules={{ required: 'Importe obligatorio' }}
                   />
 
-                  <Textarea
+                  <TextareaInput
+                    control={control}
+                    name="motivo"
                     label="Motivo"
                     variant="bordered"
-                    value={data?.motivo || ""}
-                    onValueChange={(v) => handleChange("motivo", v)}
                     isDisabled={!isEditing}
-                    isInvalid={!data?.motivo}
-                    errorMessage="Campo obligatorio"
+                    rules={{ required: 'Motivo obligatorio' }}
                   />
 
-                  <Textarea
+                  <TextareaInput
+                    control={control}
+                    name="comentarios"
                     label="Comentarios"
                     variant="bordered"
-                    value={data?.comentarios || ""}
-                    onValueChange={(v) => handleChange("comentarios", v)}
                     isDisabled={!isEditing}
-                    isInvalid={!data?.comentarios}
-                    errorMessage="Campo obligatorio"
+                    rules={{ required: 'Comentarios obligatorios' }}
                   />
 
                 </CardBody>

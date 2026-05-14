@@ -10,11 +10,12 @@ import odooApi from '@/api/odoo-api';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { Chip } from '@heroui/react';
 import DescuentoForm from './form';
+import { Descuento } from './type';
 
 const Descuentos = ({ }) => {
 
   const [open, setOpen] = React.useState(false);
-  const [id_minuta, setMinuta] = React.useState(null);
+  const [id_descuento, setDescuento] = React.useState<number | null>(null);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -22,11 +23,11 @@ const Descuentos = ({ }) => {
 
   const handleClose = () => {
     setOpen(false);
-    setMinuta(null);
+    setDescuento(null);
     fetchData();
   };
 
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<Descuento[]>([]);
   const [isLoading, setLoading] = useState(false);
 
   const fetchData = async () => {
@@ -91,7 +92,7 @@ const Descuentos = ({ }) => {
               }
               size="sm"
               className="text-white">
-              {status}
+              {status.toUpperCase()}
             </Chip>
           );
         },
@@ -141,7 +142,7 @@ const Descuentos = ({ }) => {
     muiTableBodyRowProps: ({ row }) => ({
       onClick: () => {
         handleClickOpen();
-        setMinuta(row.original.id_descuento);
+        setDescuento(row.original.id_descuento);
       },
       style: {
         cursor: 'pointer',
@@ -186,8 +187,8 @@ const Descuentos = ({ }) => {
         <h1 className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text">
           Descuentos
         </h1>
-        <DescuentoForm open={open} handleClose={handleClose} id_descuento={id_minuta}></DescuentoForm>
-        <Button color='primary' className='text-white' onPress={() => handleClickOpen()} radius='full'><i className="bi bi-plus-circle"></i> Nuevo registro</Button>
+        <DescuentoForm open={open} handleClose={handleClose} id_descuento={id_descuento}></DescuentoForm>
+        <Button color='primary' className='text-white' onPress={() => handleClickOpen()} radius='full'><i className="bi bi-plus-circle"></i> Nuevo</Button>
         <Button color='success' className='text-white' onPress={() => fetchData()} radius='full'><i className="bi bi-arrow-clockwise"></i> Refrescar</Button>
       </Box>
     ),
