@@ -3,51 +3,63 @@ import {
   Modal,
   ModalBody,
   ModalContent,
-  ModalFooter,
   ModalHeader,
-  useDisclosure,
 } from "@heroui/react";
 import {
   Dialog,
   DialogContent,
-  DialogTitle,
   DialogActions
 } from "@mui/material";
 import {
+  MRT_Cell,
+  MRT_Column,
+  MRT_ColumnDef,
+  MRT_Row,
+  MRT_TableInstance,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
 import React, { useEffect, useMemo, useState } from 'react';
-import { getLocalTimeZone, parseDate } from "@internationalized/date";
-
+import { CalendarDate, parseDate } from "@internationalized/date";
 import { Box } from '@mui/material';
 import { Chip } from "@heroui/react";
 import Cuentas from './cuentas';
 import { DatePicker } from "@heroui/react";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import OperadorForm from './saldoForm';
 import SaldoForm from './saldoForm';
-import Slide from '@mui/material/Slide';
 import odooApi from '@/api/odoo-api';
 
-const Operadores = ({ estado }) => {
+type Saldo = {
+  id_cuenta: number;
+  id_saldo: number;
+  empresa: string;
+  banco: string;
+  referencia: string;
+  tipo: string;
+  moneda: string;
+  saldo_anterior: number;
+  saldo_actual: number;
+  variacion: number;
+}
 
-  const [id_cuenta, setCuenta] = React.useState(0);
-  const [referencia, setReferencia] = React.useState(0);
+const Operadores = () => {
+
+  const [id_cuenta, setCuenta] = React.useState<number | null>(null);
+  const [referencia, setReferencia] = React.useState<string>("");
 
   const [fechaAnterior, setFechaAnterior] = useState('');
   const fechaActual = new Date().toISOString().split('T')[0];
-  const [value, setValue] = React.useState(parseDate(fechaActual));
-
+  const [value, setValue] = React.useState<CalendarDate | null>(
+    parseDate(fechaActual)
+  );
   const [open, setOpen] = React.useState(false);
   const [open2, setOpen2] = React.useState(false);
 
-  const [id_operador, setIDOperador] = useState(0);
   const handleClickOpen = () => {
     setOpen(true);
   };
 
-  const abrirForm = (id_cuenta, referencia) => {
+  const abrirForm = (id_cuenta: number, referencia: string) => {
     setOpen2(true);
     setCuenta(id_cuenta);
     setReferencia(referencia);
@@ -63,18 +75,16 @@ const Operadores = ({ estado }) => {
     fetchData();
   };
 
-  const [data, setData] = useState([]);
-  const [isLoading2, setLoading] = useState();
+  const [data, setData] = useState<Saldo[]>([]);
+  const [isLoading, setLoading] = useState(false);
 
   const fetchData = async () => {
     try {
       setLoading(true);
       const response = await odooApi.get(`/saldos/fecha_actual/${value}`);
-
       if (response.data.length > 0) {
         setFechaAnterior(String(response.data[0].fecha_anterior || ''));
       } else {
-        console.warn("No hay datos en la respuesta.");
         setFechaAnterior('');
       }
 
@@ -90,7 +100,7 @@ const Operadores = ({ estado }) => {
     fetchData();
   }, [value]);
 
-  const columns = useMemo(
+  const columns = useMemo<MRT_ColumnDef<Saldo>[]>(
     () => [
       {
         accessorKey: 'empresa',
@@ -99,8 +109,8 @@ const Operadores = ({ estado }) => {
       {
         accessorKey: 'banco',
         header: 'Banco',
-        Cell: ({ cell }) => {
-          const referencia = cell.getValue() || '';
+        Cell: ({ cell }: { cell: MRT_Cell<Saldo> }) => {
+          const referencia = cell.getValue<string>() || '';
           return (
             <Chip color='primary'>
               {referencia}
@@ -111,8 +121,8 @@ const Operadores = ({ estado }) => {
       {
         accessorKey: 'referencia',
         header: 'Referencia',
-        Cell: ({ cell }) => {
-          const referencia = cell.getValue() || '';
+        Cell: ({ cell }: { cell: MRT_Cell<Saldo> }) => {
+          const referencia = cell.getValue<string>() || '';
           return (
             <Chip color='success' className='text-white'>
               {referencia}
@@ -130,17 +140,22 @@ const Operadores = ({ estado }) => {
       },
       {
         accessorKey: 'saldo_anterior',
-        header: `Saldo anterior`,
+        header: 'Saldo anterior',
         muiTableBodyCellProps: {
           align: 'right',
         },
-        Footer: ({ column, table }) => {
+        Footer: ({
+          column,
+          table,
+        }: {
+          column: MRT_Column<Saldo>;
+          table: MRT_TableInstance<Saldo>;
+        }) => {
           const totalGlobal = table
             .getFilteredRowModel()
             .rows.reduce((sum, row) => {
-              const value = row.getValue(column.id) || '0';
-              const numericValue = parseFloat(value.replace(/,/g, ''));
-              return sum + (isNaN(numericValue) ? 0 : numericValue);
+              const value = row.getValue<number>(column.id) || 0;
+              return sum + value;
             }, 0);
 
           if (totalGlobal === 0) return '';
@@ -152,18 +167,17 @@ const Operadores = ({ estado }) => {
 
           return `Total Global: ${formattedTotal}`;
         },
-        AggregatedCell: ({ column, row }) => {
-          const groupTotal = row
-            .subRows.reduce((sum, subRow) => {
-              let value = subRow.getValue(column.id) || '0';
-
-              if (typeof value !== 'string') {
-                value = String(value);
-              }
-
-              const numericValue = parseFloat(value.replace(/,/g, ''));
-              return sum + (isNaN(numericValue) ? 0 : numericValue);
-            }, 0);
+        AggregatedCell: ({
+          column,
+          row,
+        }: {
+          column: MRT_Column<Saldo>;
+          row: MRT_Row<Saldo>;
+        }) => {
+          const groupTotal = (row.subRows ?? []).reduce((sum, subRow) => {
+            const value = subRow.getValue<number>(column.id) || 0;
+            return sum + value;
+          }, 0);
 
           if (groupTotal === 0) return '';
 
@@ -174,8 +188,8 @@ const Operadores = ({ estado }) => {
 
           return `Total: ${formattedTotal}`;
         },
-        Cell: ({ cell }) => {
-          const value = parseFloat((cell.getValue() || '0').replace(/,/g, ''));
+        Cell: ({ cell }: { cell: MRT_Cell<Saldo> }) => {
+          const value = cell.getValue<number>() || 0;
 
           return new Intl.NumberFormat('en-US', {
             minimumFractionDigits: 2,
@@ -185,17 +199,22 @@ const Operadores = ({ estado }) => {
       },
       {
         accessorKey: 'saldo_actual',
-        header: 'Saldo actual: ' + `${value.year}-${value.month}-${value.day}`,
+        header: `Saldo actual: ${value?.year}-${value?.month}-${value?.day}`,
         muiTableBodyCellProps: {
           align: 'right',
         },
-        Footer: ({ column, table }) => {
+        Footer: ({
+          column,
+          table,
+        }: {
+          column: MRT_Column<Saldo>;
+          table: MRT_TableInstance<Saldo>;
+        }) => {
           const totalGlobal = table
             .getFilteredRowModel()
             .rows.reduce((sum, row) => {
-              const value = row.getValue(column.id) || '0';
-              const numericValue = parseFloat(value.replace(/,/g, ''));
-              return sum + (isNaN(numericValue) ? 0 : numericValue);
+              const value = row.getValue<number>(column.id) || 0;
+              return sum + value;
             }, 0);
 
           if (totalGlobal === 0) return '';
@@ -207,18 +226,17 @@ const Operadores = ({ estado }) => {
 
           return `Total Global: ${formattedTotal}`;
         },
-        AggregatedCell: ({ column, row }) => {
-          const groupTotal = row
-            .subRows.reduce((sum, subRow) => {
-              let value = subRow.getValue(column.id) || '0';
-
-              if (typeof value !== 'string') {
-                value = String(value);
-              }
-
-              const numericValue = parseFloat(value.replace(/,/g, ''));
-              return sum + (isNaN(numericValue) ? 0 : numericValue);
-            }, 0);
+        AggregatedCell: ({
+          column,
+          row,
+        }: {
+          column: MRT_Column<Saldo>;
+          row: MRT_Row<Saldo>;
+        }) => {
+          const groupTotal = (row.subRows ?? []).reduce((sum, subRow) => {
+            const value = subRow.getValue<number>(column.id) || 0;
+            return sum + value;
+          }, 0);
 
           if (groupTotal === 0) return '';
 
@@ -229,8 +247,8 @@ const Operadores = ({ estado }) => {
 
           return `Total: ${formattedTotal}`;
         },
-        Cell: ({ cell }) => {
-          const value = parseFloat((cell.getValue() || '0').replace(/,/g, ''));
+        Cell: ({ cell }: { cell: MRT_Cell<Saldo> }) => {
+          const value = cell.getValue<number>() || 0;
 
           return new Intl.NumberFormat('en-US', {
             minimumFractionDigits: 2,
@@ -248,7 +266,7 @@ const Operadores = ({ estado }) => {
       {
         accessorKey: 'id_saldo',
         header: 'Acción',
-        Cell: ({ row }) => (
+        Cell: ({ row }: { row: MRT_Row<Saldo> }) => (
           <Button
             size='sm'
             color='success'
@@ -256,9 +274,10 @@ const Operadores = ({ estado }) => {
             radius="full"
             onPress={() => abrirForm(row.original.id_cuenta, row.original.referencia)}
           >
-            <i class="bi bi-pen"></i>
-          </Button>)
-      },
+            <i className="bi bi-pen"></i>
+          </Button>
+        ),
+      }
     ],
     [fechaActual, value]
   );
@@ -271,14 +290,13 @@ const Operadores = ({ estado }) => {
     enableFilters: true,
     localization: MRT_Localization_ES,
     groupedColumnMode: "remove",
-    state: { showProgressBars: isLoading2 },
+    state: { showProgressBars: isLoading },
     positionToolbarAlertBanner: "bottom",
     enableColumnPinning: true,
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
     initialState: {
       density: 'compact',
-      expanded: false,
       grouping: ['empresa', 'tipo', 'moneda'],
       pagination: { pageIndex: 0, pageSize: 100 },
       showColumnFilters: true,
@@ -290,7 +308,7 @@ const Operadores = ({ estado }) => {
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
-      onClick: ({ event }) => {
+      onClick: () => {
         if (row.subRows?.length) {
         } else {
         }
@@ -308,19 +326,19 @@ const Operadores = ({ estado }) => {
     },
     muiTableBodyCellProps: ({ row }) => ({
       sx: {
-        backgroundColor: row.subRows?.length ? '#0456cf' : '#FFFFFF',
+        backgroundColor: row.getCanExpand() ? '#0456cf' : '#FFFFFF',
         fontFamily: 'Inter',
         fontWeight: 'normal',
         fontSize: '14px',
-        color: row.subRows?.length ? '#FFFFFF' : '#000000',
+        color: row.getCanExpand() ? '#FFFFFF' : '#000000',
       },
     }),
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 290px)',
+        maxHeight: 'calc(100vh - 235px)',
       },
     },
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -387,10 +405,7 @@ const Operadores = ({ estado }) => {
         </ModalBody>
       </ModalContent>
     </Modal>
-
-    <div>
-      <MaterialReactTable table={table} />
-    </div >
+    <MaterialReactTable table={table} />
   </>
   );
 
