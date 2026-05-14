@@ -1,33 +1,50 @@
-import React, { useEffect, useMemo, useState, useContext } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
+    MRT_Cell,
+    MRT_Row,
     MaterialReactTable,
     useMaterialReactTable,
 } from 'material-react-table';
 import Box from '@mui/material/Box';
-import { Button, Chip } from "@heroui/react"
-import { DatePicker } from 'antd';
+import { Button, Chip, RangeValue } from "@heroui/react"
 import odooApi from '@/api/odoo-api';
-import { Slider } from "@heroui/react";
 import { DateRangePicker } from "@heroui/react";
-import { parseDate } from "@internationalized/date";
+import { CalendarDate, parseDate } from "@internationalized/date";
 import { exportToCSV } from '../../../utils/export';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { User } from "@heroui/react";
-import Travel from '@/phicargo/viajes/control/viaje';
 import Formulariomaniobra from '@/phicargo/maniobras/maniobras/form';
 import { Progress } from '@heroui/react';
 import { pages } from '../../../maniobras/pages';
 import CustomNavbar from '@/pages/CustomNavbar';
 
-const { VITE_ODOO_API_URL } = import.meta.env;
+type Maniobra = {
+    id_maniobra: number;
+    inicio_maniobra: string;
+    fecha_inicio_maniobra: string;
+    modulacion: string;
+    fecha_modulacion: string;
+    inicio_salida_terminal: string;
+    fin_salida_terminal: string;
+    ruta_fiscal: string;
+    fecha_ruta_fiscal: string;
+    llegada_terminal: string;
+    fecha_llegada_terminal: string;
+    fecha_salida_terminal: string;
+    fin_maniobra: string;
+    fecha_fin_maniobra: string;
+    ultimo_estatus_enviado: string;
+    fecha_ultimo_estatus: string;
+    ultimo_estatus_usuario: string;
+}
 
 const ReporteCumplimientoManiobra = () => {
 
     const [modalShow, setModalShow] = React.useState(false);
-    const [id_maniobra, setIdmaniobra] = useState('');
+    const [id_maniobra, setIdmaniobra] = useState<number | null>(null);
     const [dataCP, setDataCP] = useState({});
 
-    const handleShowModal = (id_maniobra, data) => {
+    const handleShowModal = (id_maniobra: number, data: any) => {
         setModalShow(true);
         setIdmaniobra(id_maniobra);
         setDataCP({ data });
@@ -41,23 +58,17 @@ const ReporteCumplimientoManiobra = () => {
     const today = new Date();
     const todayStr = today.toISOString().split("T")[0];
 
-    const [dates, setDates] = React.useState({
+    const [dates, setDates] = useState<RangeValue<CalendarDate> | null>({
         start: parseDate(todayStr),
         end: parseDate(todayStr),
     });
 
-    const [columnOrder, setColumnOrder] = useState([]);
     const [isLoading, setLoading] = useState(false);
-    const [value, setValue] = React.useState([0, 24]);
-
-
-    const handleDateChange = (dates) => {
-        setDates(dates);
-    };
-
     const [data, setData] = useState([]);
 
     const fetchData = async () => {
+        if (!dates) return;
+
         const startDate = dates.start;
         const endDate = dates.end;
         try {
@@ -78,14 +89,7 @@ const ReporteCumplimientoManiobra = () => {
 
     useEffect(() => {
         fetchData();
-    }, [dates, value]);
-
-    useEffect(() => {
-        if (data.length > 0) {
-            const orderedKeys = Object.keys(data[0]);
-            setColumnOrder(orderedKeys);
-        }
-    }, [data, value]);
+    }, [dates]);
 
     const columns = useMemo(
         () => [
@@ -100,20 +104,12 @@ const ReporteCumplimientoManiobra = () => {
             {
                 accessorKey: 'estado_maniobra',
                 header: 'Estado',
-                Cell: ({ cell }) => {
-                    const estatus_viaje = cell.getValue();
-                    let badgeClass = '';
-
-                    if (estatus_viaje === 'finalizada') {
-                        badgeClass = 'primary';
-                    } else if (estatus_viaje === 'activa') {
-                        badgeClass = 'success';
-                    }
-
+                Cell: ({ cell }: { cell: MRT_Cell<Maniobra> }) => {
+                    const estatus_viaje = cell.getValue<string>();
                     return (
                         <Chip
                             size="sm"
-                            color={badgeClass}
+                            color={estatus_viaje == "finalizada" ? "primary" : "success"}
                             className="text-white"
                         >
                             {estatus_viaje.charAt(0).toUpperCase() + estatus_viaje.slice(1)}
@@ -128,8 +124,8 @@ const ReporteCumplimientoManiobra = () => {
             {
                 accessorKey: 'porcentaje_cumplimiento',
                 header: 'Porcentaje cumplimiento',
-                Cell: ({ cell }) => {
-                    const porcentaje = cell.getValue();
+                Cell: ({ cell }: { cell: MRT_Cell<Maniobra> }) => {
+                    const porcentaje = cell.getValue<number>();
 
                     return (
                         <Progress
@@ -145,7 +141,7 @@ const ReporteCumplimientoManiobra = () => {
             {
                 accessorKey: 'ultimo_estatus_enviado',
                 header: 'Ultimo estatus enviado',
-                Cell: ({ row }) => {
+                Cell: ({ row }: { row: MRT_Row<Maniobra> }) => {
                     const estatus = row.original.ultimo_estatus_enviado;
                     const nombre = row.original.fecha_ultimo_estatus;
                     const fecha = row.original.ultimo_estatus_usuario;
@@ -169,7 +165,7 @@ const ReporteCumplimientoManiobra = () => {
             {
                 accessorKey: 'inicio_maniobra',
                 header: 'Inicio de maniobra',
-                Cell: ({ row }) => {
+                Cell: ({ row }: { row: MRT_Row<Maniobra> }) => {
                     const nombre = row.original.inicio_maniobra
                     const fecha = row.original.fecha_inicio_maniobra
 
@@ -196,7 +192,7 @@ const ReporteCumplimientoManiobra = () => {
             {
                 accessorKey: 'llegada_terminal',
                 header: 'Llegada a terminal',
-                Cell: ({ row }) => {
+                Cell: ({ row }: { row: MRT_Row<Maniobra> }) => {
                     const nombre = row.original.llegada_terminal;
                     const fecha = row.original.fecha_llegada_terminal;
 
@@ -223,7 +219,7 @@ const ReporteCumplimientoManiobra = () => {
             {
                 accessorKey: 'ruta_fiscal',
                 header: 'Ruta fiscal',
-                Cell: ({ row }) => {
+                Cell: ({ row }: { row: MRT_Row<Maniobra> }) => {
                     const nombre = row.original.ruta_fiscal;
                     const fecha = row.original.fecha_ruta_fiscal;
 
@@ -250,7 +246,7 @@ const ReporteCumplimientoManiobra = () => {
             {
                 accessorKey: 'modulacion',
                 header: 'Modulación',
-                Cell: ({ row }) => {
+                Cell: ({ row }: { row: MRT_Row<Maniobra> }) => {
                     const nombre = row.original.modulacion;
                     const fecha = row.original.fecha_modulacion;
 
@@ -277,7 +273,7 @@ const ReporteCumplimientoManiobra = () => {
             {
                 accessorKey: 'salida_terminal',
                 header: 'Salida_terminal',
-                Cell: ({ row }) => {
+                Cell: ({ row }: { row: MRT_Row<Maniobra> }) => {
                     const nombre = row.original.inicio_salida_terminal;
                     const fecha = row.original.fecha_salida_terminal;
 
@@ -304,7 +300,7 @@ const ReporteCumplimientoManiobra = () => {
             {
                 accessorKey: 'fin_maniobra',
                 header: 'Fin maniobra',
-                Cell: ({ row }) => {
+                Cell: ({ row }: { row: MRT_Row<Maniobra> }) => {
                     const nombre = row.original.fin_maniobra;
                     const fecha = row.original.fecha_fin_maniobra;
 
@@ -328,7 +324,7 @@ const ReporteCumplimientoManiobra = () => {
                 accessorKey: 'fecha_fin_maniobra',
                 header: 'Fecha fin_maniobra',
             },
-        ]
+        ], []
     );
 
     const table = useMaterialReactTable({
@@ -345,10 +341,10 @@ const ReporteCumplimientoManiobra = () => {
             columnPinning: { left: ['id_maniobra', 'estado_maniobra', 'nombre', 'contenedores', 'tipo_maniobra'] },
             showColumnFilters: true,
             density: 'compact',
-            pagination: { pageSize: 80 },
+            pagination: { pageIndex: 0, pageSize: 80 },
         },
         muiTableBodyRowProps: ({ row }) => ({
-            onClick: ({ event }) => {
+            onClick: () => {
                 handleShowModal(row.original.id_maniobra, row.original);
             },
             style: {
@@ -380,7 +376,7 @@ const ReporteCumplimientoManiobra = () => {
                 borderRadius: '0',
             },
         },
-        renderTopToolbarCustomActions: ({ table }) => (
+        renderTopToolbarCustomActions: () => (
             <Box
                 sx={{
                     display: 'flex',
@@ -403,12 +399,9 @@ const ReporteCumplimientoManiobra = () => {
                     value={dates}
                     variant='bordered'
                     onChange={setDates} />
-
-                <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "reporte_estatus.csv")} fullWidth>Exportar</Button>
-                <Button color='primary' className='text-white' startContent={<i class="bi bi-arrow-clockwise"></i>} onPress={() => fetchData()} fullWidth>Recargar</Button>
-
+                <Button color='success' className='text-white' startContent={<i className="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "reporte_estatus.csv")} fullWidth>Exportar</Button>
+                <Button color='primary' className='text-white' startContent={<i className="bi bi-arrow-clockwise"></i>} onPress={() => fetchData()} fullWidth>Recargar</Button>
             </Box>
-
         ),
     });
 
@@ -420,8 +413,7 @@ const ReporteCumplimientoManiobra = () => {
                 show={modalShow}
                 handleClose={handleCloseModal}
                 id_maniobra={id_maniobra}
-                data={dataCP}
-                form_deshabilitado={true}
+                dataCP={dataCP}
             />
         </>
     );
