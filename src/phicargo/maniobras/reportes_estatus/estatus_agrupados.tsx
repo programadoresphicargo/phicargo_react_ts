@@ -1,7 +1,6 @@
 import { Avatar, Progress } from "@heroui/react";
 import { Card, CardBody, CardFooter, CardHeader, Chip } from "@heroui/react";
 import React, { useEffect } from 'react';
-import { CircularProgress } from "@heroui/react";
 import DialogTitle from '@mui/material/DialogTitle';
 import odooApi from '@/api/odoo-api';
 import { tiempoTranscurrido } from '../../funciones/tiempo';
