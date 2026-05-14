@@ -1,36 +1,16 @@
-import { Accordion, AccordionItem, Avatar } from "@heroui/react";
+import { Avatar, Progress } from "@heroui/react";
 import { Card, CardBody, CardFooter, CardHeader, Chip } from "@heroui/react";
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { Button } from "@heroui/react";
+import React, { useEffect } from 'react';
 import { CircularProgress } from "@heroui/react";
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import Slide from '@mui/material/Slide';
-import axios from 'axios';
 import odooApi from '@/api/odoo-api';
 import { tiempoTranscurrido } from '../../funciones/tiempo';
+import { Estatus } from "./type";
 
-function EstatusHistorialAgrupado({ id_reporte }) {
+function EstatusHistorialAgrupado({ id_reporte }: { id_reporte: number }) {
 
-    const [open, setOpen] = React.useState(false);
-    const [estatus, setEstatus] = React.useState([]);
+    const [estatus, setEstatus] = React.useState<Estatus[]>([]);
     const [isLoading, setLoading] = React.useState(false);
-
-    const [comentarios, setComentarios] = useState('');
-    const [estatus_seleccionado, setEstatusSeleccionado] = useState(null);
-    const [fileList, setFileList] = useState([]);
-
-    const handleClickOpen = (id_reporte) => {
-        setOpen(true);
-        getEstatusReenvio(id_reporte);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
 
     useEffect(() => {
         getEstatus();
@@ -57,14 +37,12 @@ function EstatusHistorialAgrupado({ id_reporte }) {
             </DialogTitle>
 
             {isLoading && (
-                <div style={{ marginTop: '20px' }} className="d-flex justify-content-center">
-                    <CircularProgress size="lg" aria-label="Loading..." />
-                </div>
+                <Progress size="sm" isIndeterminate />
             )}
 
             {!isLoading && (
                 <div>
-                    {estatus.map((step, index) => (
+                    {estatus.map((step) => (
                         <div key={step.id_reporte} className="mb-4">
                             <div className="d-flex align-items-start mt-3">
                                 <Card className="max-w-full m-3 w-100">

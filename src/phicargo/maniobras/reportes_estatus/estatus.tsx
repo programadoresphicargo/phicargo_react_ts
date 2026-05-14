@@ -1,34 +1,27 @@
 import { Badge, Chip } from "@heroui/react";
 import { Card, CardHeader } from "@heroui/react";
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Avatar } from "@heroui/react";
 import { Button } from "@heroui/react";
 import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import EstatusHistorialAgrupado from './estatus_agrupados';
-import Slide from '@mui/material/Slide';
 import { Stack } from 'rsuite';
 import odooApi from '@/api/odoo-api';
 import { tiempoTranscurrido } from '../../funciones/tiempo';
-import { toast } from 'react-toastify';
+import { Estatus } from "./type";
+
 const { VITE_ODOO_API_URL } = import.meta.env;
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-});
+function EstatusHistorialManiobras({ id_maniobra }: { id_maniobra: number }) {
 
-function EstatusHistorialManiobras({ id_maniobra }) {
-
-    const [estatusHistorial, setHistorial] = React.useState([]);
-    const [id_reporte, setReporte] = React.useState(0);
+    const [estatusHistorial, setHistorial] = React.useState<Estatus[]>([]);
+    const [id_reporte, setReporte] = React.useState<number | null>(null);
     const [open, setOpen] = React.useState(false);
-    const [scroll, setScroll] = React.useState('paper');
     const [isLoading, setLoading] = React.useState(false);
 
-    const handleClickOpen = (id_registro, scrollType) => {
+    const handleClickOpen = (id_registro: number) => {
         setOpen(true);
-        setScroll(scrollType);
         setReporte(id_registro);
     };
 
@@ -61,8 +54,6 @@ function EstatusHistorialManiobras({ id_maniobra }) {
             </Stack>
             <Dialog
                 open={open}
-                TransitionComponent={Transition}
-                scroll={scroll}
                 keepMounted
                 onClose={handleClose}
                 fullWidth={true}
@@ -79,13 +70,15 @@ function EstatusHistorialManiobras({ id_maniobra }) {
                     },
                 }}
             >
-                <DialogContent dividers={scroll === 'paper'}>
-                    <EstatusHistorialAgrupado id_reporte={id_reporte}></EstatusHistorialAgrupado>
+                <DialogContent>
+                    {id_reporte && (
+                        <EstatusHistorialAgrupado id_reporte={id_reporte}></EstatusHistorialAgrupado>
+                    )}
                 </DialogContent>
             </Dialog>
 
             <ol className="step">
-                {estatusHistorial.map((step, index) => {
+                {estatusHistorial.map((step) => {
 
                     const getBadgeClass = () => {
                         if (step.id_usuario == 172 || step.id_usuario == 8) return "primary";
@@ -94,18 +87,16 @@ function EstatusHistorialManiobras({ id_maniobra }) {
                     };
 
                     return (
-                        <Card className="mb-2 w-full" isPressable onClick={() => handleClickOpen(step.id_reporte, "body")}>
+                        <Card className="mb-2 w-full" isPressable onClick={() => handleClickOpen(step.id_reporte)}>
                             <CardHeader className="justify-between">
                                 <div className="flex gap-5">
-                                    <Badge color="danger" content={step.registros} placement="top-right" isInvisible={step.registros > 1 ? false : true}>
-                                        <Avatar
-                                            color={`${getBadgeClass()}`}
-                                            isBordered
-                                            radius="full"
-                                            size="sm"
-                                            src={VITE_ODOO_API_URL + `/assets/trafico/estatus_operativos/${step.imagen}`}
-                                        />
-                                    </Badge>
+                                    <Avatar
+                                        color={`${getBadgeClass()}`}
+                                        isBordered
+                                        radius="full"
+                                        size="sm"
+                                        src={VITE_ODOO_API_URL + `/assets/trafico/estatus_operativos/${step.imagen}`}
+                                    />
                                     <div className="flex flex-col gap-1 items-start justify-center">
                                         <h4 className="text-small font-semibold leading-none text-default-600">{step.nombre_estatus}</h4>
                                         {step.comentarios_estatus != '' && (
