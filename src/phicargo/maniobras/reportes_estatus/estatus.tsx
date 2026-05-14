@@ -1,4 +1,4 @@
-import { Badge, Chip } from "@heroui/react";
+import { Chip } from "@heroui/react";
 import { Card, CardHeader } from "@heroui/react";
 import React, { useEffect } from 'react';
 import { Avatar } from "@heroui/react";

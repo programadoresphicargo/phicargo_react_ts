@@ -16,6 +16,7 @@ export const conceptos = [
  { id: "Ruta", label: "Ruta" },
  { id: "TipoServicio", label: "Tipo de servicio" },
  { id: "Circuito", label: "Circuito" },
+ { id: "Armado", label: "Tipo de armado" },
 ];
 
 interface OptionsSelection {
