@@ -47,6 +47,7 @@ const Flota = () => {
     { accessorKey: 'categoria', header: 'Categoría' },
     { accessorKey: 'modelo', header: 'Modelo' },
     { accessorKey: 'marca', header: 'Marca' },
+    { accessorKey: 'x_color', header: 'Color' },
     { accessorKey: 'model_year', header: 'Año' },
     { accessorKey: 'fleet_type', header: 'Tipo' },
     { accessorKey: 'x_tipo_vehiculo', header: 'Tipo' },

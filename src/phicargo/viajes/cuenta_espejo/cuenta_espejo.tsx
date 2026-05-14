@@ -17,6 +17,7 @@ export const copiarHTML = async (travel_id: number) => {
     .replace('{{vehicle}}', data.vehicle?.name ?? '')
     .replace('{{marca}}', data.vehicle?.marca ?? '')
     .replace('{{modelo}}', data.vehicle?.model ?? '')
+    .replace('{{color}}', data.vehicle?.color ?? '')
     .replace('{{employee}}', data.employee?.name ?? '')
     .replace('{{route}}', data.route?.name ?? '')
     .replace('{{modalidad}}', data.x_tipo_bel?.toUpperCase() ?? '')
