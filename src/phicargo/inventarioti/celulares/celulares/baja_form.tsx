@@ -13,9 +13,9 @@ import toast from 'react-hot-toast';
 import SelectEmpleadosTI from "../empleados/select_empleados";
 import { Controller, useForm } from "react-hook-form";
 import { SelectInput, TextareaInput } from "@/components/inputs";
-import { BajaCelular } from "./schema";
+import { BajaCelularData } from "./schema";
 
-const initialForm: BajaCelular = {
+const initialForm: BajaCelularData = {
     tipo: "celular",
     motivo_baja: "",
     comentarios_baja: "",
@@ -24,12 +24,12 @@ const initialForm: BajaCelular = {
 
 export default function BajaCelular({ isOpen, onOpenChange, id_celular }: { isOpen: boolean, onOpenChange: React.Dispatch<React.SetStateAction<boolean>>, id_celular: number }) {
 
-    const { control, handleSubmit, setValue } = useForm<BajaCelular>({
+    const { control, handleSubmit, setValue } = useForm<BajaCelularData>({
         defaultValues: initialForm,
     });
     const [isLoading, setLoading] = useState(false);
 
-    const handleSave = async (data: BajaCelular) => {
+    const handleSave = async (data: BajaCelularData) => {
         try {
 
             setLoading(true);

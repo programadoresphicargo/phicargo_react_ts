@@ -34,7 +34,7 @@ const initialForm: Celular = {
 
 export default function FormCelulares({ isOpen, onOpenChange, id_celular }: { isOpen: boolean, onOpenChange: () => void, id_celular: number | null }) {
 
-    const { control, handleSubmit, reset, watch, getValues } = useForm<Celular>({
+    const { control, handleSubmit, reset, watch } = useForm<Celular>({
         defaultValues: initialForm,
     });
 

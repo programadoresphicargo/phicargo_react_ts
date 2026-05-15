@@ -14,7 +14,7 @@ export type Celular = {
  comentarios: string,
 }
 
-export type BajaCelular = {
+export type BajaCelularData = {
  tipo: string;
  motivo_baja: string;
  comentarios_baja: string;
