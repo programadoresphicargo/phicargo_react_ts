@@ -8,7 +8,7 @@ import {
     Button,
     Progress,
 } from "@heroui/react";
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import toast from 'react-hot-toast';
 import SelectEmpleadosTI from "../empleados/select_empleados";
 import { Controller, useForm } from "react-hook-form";
@@ -24,7 +24,7 @@ const initialForm: BajaCelular = {
 
 export default function BajaCelular({ isOpen, onOpenChange, id_celular }: { isOpen: boolean, onOpenChange: React.Dispatch<React.SetStateAction<boolean>>, id_celular: number }) {
 
-    const { control, handleSubmit, reset, setValue } = useForm<BajaCelular>({
+    const { control, handleSubmit, setValue } = useForm<BajaCelular>({
         defaultValues: initialForm,
     });
     const [isLoading, setLoading] = useState(false);
