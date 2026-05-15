@@ -42,7 +42,7 @@ type Saldo = {
   variacion: number;
 }
 
-const Operadores = () => {
+const SaldosTable = () => {
 
   const [id_cuenta, setCuenta] = React.useState<number | null>(null);
   const [referencia, setReferencia] = React.useState<string>("");
@@ -112,7 +112,7 @@ const Operadores = () => {
         Cell: ({ cell }: { cell: MRT_Cell<Saldo> }) => {
           const referencia = cell.getValue<string>() || '';
           return (
-            <Chip color='primary'>
+            <Chip color='primary' size="sm">
               {referencia}
             </Chip>
           );
@@ -124,7 +124,7 @@ const Operadores = () => {
         Cell: ({ cell }: { cell: MRT_Cell<Saldo> }) => {
           const referencia = cell.getValue<string>() || '';
           return (
-            <Chip color='success' className='text-white'>
+            <Chip color='success' className='text-white' size="sm">
               {referencia}
             </Chip>
           );
@@ -365,7 +365,7 @@ const Operadores = () => {
 
             <h1 className='text-primary'>Fecha saldo anterior: {fechaAnterior || 'N/A'}</h1>
 
-            <Button color='primary' onPress={handleClickOpen} radius="full">Registros cuentas</Button>
+            <Button color='primary' onPress={handleClickOpen} radius="full">Cuentas</Button>
           </div>
         </div>
 
@@ -392,7 +392,7 @@ const Operadores = () => {
     </Dialog>
 
     <Modal
-      size='xl'
+      size="full"
       isOpen={open2}
       onOpenChange={handleClose2}
     >
@@ -411,4 +411,4 @@ const Operadores = () => {
 
 };
 
-export default Operadores;
+export default SaldosTable;
