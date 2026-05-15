@@ -22,7 +22,7 @@ import { parseDate, parseDateTime, getLocalTimeZone } from "@internationalized/d
 import { today } from "@internationalized/date";
 import SelectEmpleadosTI from "../empleados/select_empleados";
 
-export default function BajaCelular({ isOpen, onOpen, onOpenChange, dataCel }) {
+export default function BajaCelular({ isOpen, onOpenChange, dataCel }) {
 
     const [isLoading, setLoading] = useState(false);
     const [data, setData] = useState([]);
