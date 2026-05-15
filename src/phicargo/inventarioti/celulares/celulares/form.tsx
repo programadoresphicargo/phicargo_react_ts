@@ -14,7 +14,7 @@ import TabPanel from '@mui/lab/TabPanel';
 import HistorialAsignaciones from "../asignacion/historial";
 import { Controller, useForm } from "react-hook-form";
 import { Celular } from "./schema";
-import { CheckboxInput, DatePickerInput, NumberInput, SelectInput, TextInput, TextareaInput } from "@/components/inputs";
+import { CheckboxInput, NumberInput, SelectInput, TextInput, TextareaInput } from "@/components/inputs";
 import dayjs from "dayjs";
 import { parseDate } from "@internationalized/date";
 
@@ -34,7 +34,7 @@ const initialForm: Celular = {
 
 export default function FormCelulares({ isOpen, onOpenChange, id_celular }: { isOpen: boolean, onOpenChange: () => void, id_celular: number | null }) {
 
-    const { control, handleSubmit, reset, watch } = useForm<Celular>({
+    const { control, handleSubmit, reset, watch, getValues } = useForm<Celular>({
         defaultValues: initialForm,
     });
 
@@ -119,12 +119,13 @@ export default function FormCelulares({ isOpen, onOpenChange, id_celular }: { is
 
     return (
         <>
-            <BajaCelular
-                isOpen={isBajaModalOpen}
-                onOpenChange={setBajaModalOpen}
-                dataCel={{}}
-            />
-
+            {id_celular && (
+                <BajaCelular
+                    isOpen={isBajaModalOpen}
+                    onOpenChange={setBajaModalOpen}
+                    id_celular={id_celular}
+                />
+            )}
             <Modal
                 isOpen={isOpen}
                 onOpenChange={onOpenChange}

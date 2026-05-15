@@ -13,3 +13,10 @@ export type Celular = {
  fecha_compra: Dayjs,
  comentarios: string,
 }
+
+export type BajaCelular = {
+ tipo: string;
+ motivo_baja: string;
+ comentarios_baja: string;
+ empleado_baja: number | null;
+}
