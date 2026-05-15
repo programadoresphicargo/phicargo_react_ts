@@ -69,7 +69,7 @@ const SaldoForm = ({ id_cuenta, referencia, onClose }: { id_cuenta: number, refe
         try {
             setLoadingSaldo(true);
             const response = await odooApi.get(
-                `/saldos/get_saldo_by_cuenta_and_fecha/${id_cuenta}/${fechaConsulta.format("YYYY-MM-DD")}`
+                `/saldos/cuenta_and_fecha/${id_cuenta}/${fechaConsulta.format("YYYY-MM-DD")}`
             );
             if (response.data && response.data.length > 0) {
                 const saldoData = response.data[0];
