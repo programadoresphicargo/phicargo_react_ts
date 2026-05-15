@@ -65,7 +65,6 @@ export default function BajaCelular({ isOpen, onOpenChange, id_celular }: { isOp
                             )}
                             <ModalBody>
                                 <div className="grid grid-cols-1 gap-4">
-
                                     <Controller
                                         control={control}
                                         name="empleado_baja"
@@ -76,7 +75,6 @@ export default function BajaCelular({ isOpen, onOpenChange, id_celular }: { isOp
                                             />
                                         )}
                                     />
-
                                     <SelectInput
                                         control={control}
                                         name="motivo_baja"
