@@ -26,7 +26,7 @@ import { Chip } from "@heroui/react";
 import Cuentas from './cuentas';
 import { DatePicker } from "@heroui/react";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import SaldoForm from './saldoForm';
+import SaldoForm from './saldo_form';
 import odooApi from '@/api/odoo-api';
 
 type Saldo = {
@@ -378,8 +378,7 @@ const SaldosTable = () => {
     <Dialog
       open={open}
       onClose={handleClose}
-      maxWidth="xl"
-      fullWidth
+      fullScreen
     >
 
       <DialogContent dividers>
@@ -392,7 +391,7 @@ const SaldosTable = () => {
     </Dialog>
 
     <Modal
-      size="full"
+      size="2xl"
       isOpen={open2}
       onOpenChange={handleClose2}
     >
@@ -401,7 +400,9 @@ const SaldosTable = () => {
           Registro de saldo
         </ModalHeader>
         <ModalBody>
-          <SaldoForm id_cuenta={id_cuenta} referencia={referencia} onClose={handleClose2}></SaldoForm>
+          {id_cuenta && (
+            <SaldoForm id_cuenta={id_cuenta} referencia={referencia} onClose={handleClose2}></SaldoForm>
+          )}
         </ModalBody>
       </ModalContent>
     </Modal>

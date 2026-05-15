@@ -62,8 +62,9 @@ const CuentaForm = ({ id_cuenta, onClose }: { id_cuenta: number | null, onClose:
             reset(response.data);
             setLoading(false);
         } catch (error: any) {
-            setLoading(false);
             console.error('Error al obtener los datos:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -199,6 +200,7 @@ const CuentaForm = ({ id_cuenta, onClose }: { id_cuenta: number | null, onClose:
                     variant="bordered"
                     label="Referencia"
                     name="referencia"
+                    rules={{ required: 'Obligatorio' }}
                 />
 
                 <SelectInput

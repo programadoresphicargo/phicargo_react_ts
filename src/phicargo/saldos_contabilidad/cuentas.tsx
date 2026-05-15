@@ -143,7 +143,7 @@ const Cuentas = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 200px)',
+        maxHeight: 'calc(100vh - 220px)',
       },
     },
     renderTopToolbarCustomActions: () => (
@@ -157,7 +157,11 @@ const Cuentas = () => {
       >
         <div className="flex w-full flex-col gap-4">
           <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-            <h1 className='text-primary'>Cuentas registradas</h1>
+            <h1
+              className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
+            >
+              Registro de cuentas
+            </h1>
             <Button color='primary' onPress={handleClickOpen} radius="full">Nueva</Button>
           </div>
         </div>
