@@ -1,15 +1,18 @@
-import { useMemo, useState } from 'react';
-
+import { useEffect, useMemo, useState } from 'react';
 import odooApi from '@/api/odoo-api';
 import { toast } from "react-toastify";
 import CustomNavbar from "@/pages/CustomNavbar";
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
 import {
   Button,
+  Card,
+  CardBody,
   Progress
 } from '@heroui/react';
 
 import {
+  Box,
   FormControl,
   InputLabel,
   MenuItem,
@@ -35,8 +38,10 @@ import {
 
 import {
   MRT_ColumnDef,
-  MaterialReactTable
+  MaterialReactTable,
+  useMaterialReactTable
 } from 'material-react-table';
+import { exportToCSV } from '../utils/export';
 
 ChartJS.register(
   CategoryScale,
@@ -101,68 +106,50 @@ const VehiculosAgrupados = () => {
   };
 
   const fetchData = async () => {
-
     try {
-
       setIsLoading(true);
-
       const response = await odooApi.post(
         '/vehicles/grouped/', groupedFields,
       );
-
       setData(response.data);
-
     } catch (error: any) {
-
       toast.error(
         error?.response?.data?.detail ||
         'Error al obtener los datos'
       );
-
     } finally {
-
       setIsLoading(false);
-
     }
-
   };
 
+  useEffect(() => {
+    if (!groupedFields.length) return;
+    fetchData();
+  }, [groupedFields]);
+
   const chartData = useMemo(() => {
-
     if (!data.length) {
-
       return {
         labels: [],
         datasets: [],
       };
-
     }
 
     const level1 = groupedFields[0];
-
     const level2 = groupedFields[1];
-
-    // ==========================
-    // 1 NIVEL
-    // ==========================
 
     if (groupedFields.length === 1) {
 
       return {
-
         labels: data.map(
           (item: any) => item[level1]
         ),
-
         datasets: [
           {
-
             label: 'Total',
-
             data: data.map(
               (item: any) => item.total
             ),
-
             backgroundColor:
               data.map(
                 (_: any, index: number) =>
@@ -171,14 +158,8 @@ const VehiculosAgrupados = () => {
 
           },
         ],
-
       };
-
     }
-
-    // ==========================
-    // 2 NIVELES
-    // ==========================
 
     const labels = [
       ...new Set(
@@ -252,6 +233,80 @@ const VehiculosAgrupados = () => {
     [groupedFields]
   );
 
+  const table = useMaterialReactTable({
+    columns,
+    data,
+    enableGrouping: true,
+    enableGlobalFilter: true,
+    enableFilters: true,
+    state: { showProgressBars: isLoading },
+    groupedColumnMode: 'remove',
+    positionToolbarAlertBanner: "bottom",
+    enableColumnPinning: true,
+    columnResizeMode: "onEnd",
+    localization: MRT_Localization_ES,
+    initialState: {
+      density: 'compact',
+      showColumnFilters: true,
+      pagination: { pageIndex: 0, pageSize: 80 },
+    },
+    muiTablePaperProps: {
+      elevation: 0,
+      sx: {
+        borderRadius: '0',
+      },
+    },
+    muiTableHeadCellProps: {
+      sx: {
+        fontFamily: 'Inter',
+        fontWeight: 'Bold',
+        fontSize: '12px',
+      },
+    },
+
+    muiTableBodyCellProps: ({ row }) => {
+      return {
+        sx: {
+          backgroundColor: row.subRows?.length ? '#0456cf' : '#FFFFFF',
+          color: row.subRows?.length ? '#FFFFFF' : '#000000',
+          fontFamily: 'Inter',
+          fontWeight: 'normal',
+          fontSize: '12px',
+        },
+      };
+    },
+    muiTableContainerProps: {
+      sx: {
+        maxHeight: 'calc(100vh - 200px)',
+      },
+    },
+    renderTopToolbarCustomActions: () => (
+      <Box
+        sx={{
+          display: 'flex',
+          gap: '16px',
+          padding: '8px',
+          alignItems: 'center',
+        }}
+      >
+        <h1
+          className="font-semibold lg:text-2xl"
+        >
+          Vehiculos
+        </h1>
+
+        <Button
+          color='success'
+          className='text-white'
+          startContent={<i className="bi bi-file-earmark-excel"></i>}
+          onPress={() => exportToCSV(data, columns, "viajes_finalizados.csv")}
+          radius='full'>
+          Exportar
+        </Button>
+      </Box>
+    ),
+  });
+
   return (
     <>
       <CustomNavbar />
@@ -279,6 +334,9 @@ const VehiculosAgrupados = () => {
             multiple
             value={groupedFields}
             onChange={handleChange}
+            renderValue={(selected) =>
+              selected.join(' > ')
+            }
             input={
               <OutlinedInput label="Agrupar por" />
             }
@@ -303,80 +361,59 @@ const VehiculosAgrupados = () => {
 
         </FormControl>
 
-        {/* BOTON */}
-
-        <div>
-
-          <Button
-            onPress={fetchData}
-          >
-            Ejecutar
-          </Button>
-
-        </div>
-
-        {/* GRAFICA BARRAS */}
 
         {
           data.length > 0 && (
-            <div
-              style={{
-                height: 500,
-                background: '#fff',
-                padding: 20,
-                borderRadius: 12,
-              }}
-            >
+            <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
+              {/* BARRAS */}
+              <Card>
+                <CardBody>
+                  <div style={{ height: 400 }}>
+                    <Bar
+                      data={chartData}
+                    />
+                  </div>
+                </CardBody>
+              </Card>
 
-              <Bar
-                data={chartData}
-              />
+              {/* PASTEL */}
 
+              {
+                groupedFields.length === 1 && (
+                  <Card>
+                    <CardBody>
+                      <div
+                        style={{
+                          position: 'relative',
+                          height: '400px',
+                          width: '100%',
+                        }}
+                      >
+
+                        <Pie
+                          data={chartData}
+                          options={{
+                            responsive: true,
+                            maintainAspectRatio: false,
+                          }}
+                        />
+
+                      </div>
+                    </CardBody>
+                  </Card>
+                )
+              }
             </div>
           )
         }
 
-        {/* PIE SOLO 1 NIVEL */}
-
-        {
-          data.length > 0 &&
-          groupedFields.length === 1 && (
-            <div
-              style={{
-                height: 500,
-                background: '#fff',
-                padding: 20,
-                borderRadius: 12,
-              }}
-            >
-
-              <Pie
-                data={chartData}
-              />
-
-            </div>
-          )
-        }
-
-        {/* TABLA */}
-
-        <MaterialReactTable
-          columns={columns}
-          data={data}
-          enableColumnFilters
-          enableGrouping
-          enablePagination
-          enableDensityToggle
-          enableFullScreenToggle
-          enableColumnOrdering
-          initialState={{
-            density: 'compact',
-            pagination: {
-              pageIndex: 0,
-              pageSize: 20,
-            },
-          }}
-        />
+        <Card>
+          <CardBody>
+            <MaterialReactTable
+              table={table}
+            />
+          </CardBody>
+        </Card>
 
       </div>
     </>
