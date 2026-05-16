@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+
 import odooApi from '@/api/odoo-api';
 import { toast } from "react-toastify";
 import CustomNavbar from "@/pages/CustomNavbar";
@@ -32,6 +33,11 @@ import {
   Pie
 } from 'react-chartjs-2';
 
+import {
+  MRT_ColumnDef,
+  MaterialReactTable
+} from 'material-react-table';
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -42,9 +48,19 @@ ChartJS.register(
 );
 
 const selectOptions = [
+  { label: 'Modelo', value: 'model' },
   { label: 'Marca', value: 'brand' },
   { label: 'Año', value: 'model_year' },
-  { label: 'Estado', value: 'status' },
+];
+
+const colors = [
+  '#3b82f6',
+  '#10b981',
+  '#f59e0b',
+  '#ef4444',
+  '#8b5cf6',
+  '#06b6d4',
+  '#84cc16',
 ];
 
 const VehiculosAgrupados = () => {
@@ -54,7 +70,7 @@ const VehiculosAgrupados = () => {
   const [data, setData] = useState<any[]>([]);
 
   const [groupedFields, setGroupedFields] = useState<string[]>([
-    "model_year"
+    'model_year',
   ]);
 
   const handleChange = (
@@ -65,52 +81,181 @@ const VehiculosAgrupados = () => {
       target: { value },
     } = event;
 
-    setGroupedFields(
+    const values =
       typeof value === 'string'
         ? value.split(',')
-        : value
-    );
+        : value;
+
+    if (values.length > 2) {
+
+      toast.error(
+        'Máximo 2 agrupaciones'
+      );
+
+      return;
+
+    }
+
+    setGroupedFields(values);
 
   };
 
   const fetchData = async () => {
+
     try {
+
       setIsLoading(true);
+
       const response = await odooApi.post(
-        '/vehicles/grouped/', groupedFields
+        '/vehicles/grouped/', groupedFields,
       );
+
       setData(response.data);
+
     } catch (error: any) {
+
       toast.error(
         error?.response?.data?.detail ||
         'Error al obtener los datos'
       );
+
     } finally {
+
       setIsLoading(false);
+
     }
+
   };
 
-  const xField = groupedFields[0];
+  const chartData = useMemo(() => {
 
-  const chartData = {
+    if (!data.length) {
 
-    labels: data.map(
-      (item: any) => item[xField]
-    ),
+      return {
+        labels: [],
+        datasets: [],
+      };
 
-    datasets: [
-      {
-        label: 'Total',
-        data: data.map(
-          (item: any) => item.total
+    }
+
+    const level1 = groupedFields[0];
+
+    const level2 = groupedFields[1];
+
+    // ==========================
+    // 1 NIVEL
+    // ==========================
+
+    if (groupedFields.length === 1) {
+
+      return {
+
+        labels: data.map(
+          (item: any) => item[level1]
         ),
+
+        datasets: [
+          {
+
+            label: 'Total',
+
+            data: data.map(
+              (item: any) => item.total
+            ),
+
+            backgroundColor:
+              data.map(
+                (_: any, index: number) =>
+                  colors[index % colors.length]
+              ),
+
+          },
+        ],
+
+      };
+
+    }
+
+    // ==========================
+    // 2 NIVELES
+    // ==========================
+
+    const labels = [
+      ...new Set(
+        data.map(
+          (item: any) => item[level1]
+        )
+      )
+    ];
+
+    const secondaryGroups = [
+      ...new Set(
+        data.map(
+          (item: any) => item[level2]
+        )
+      )
+    ];
+
+    const datasets = secondaryGroups.map(
+      (group, index) => ({
+
+        label: String(group),
+
+        data: labels.map(label => {
+
+          const found = data.find(
+            (item: any) =>
+              item[level1] === label &&
+              item[level2] === group
+          );
+
+          return found
+            ? found.total
+            : 0;
+
+        }),
+
+        backgroundColor:
+          colors[index % colors.length],
+
+      })
+    );
+
+    return {
+      labels,
+      datasets,
+    };
+
+  }, [data, groupedFields]);
+
+  const columns = useMemo<MRT_ColumnDef<any>[]>(
+    () => [
+
+      ...groupedFields.map((field) => ({
+
+        accessorKey: field,
+
+        header:
+          field
+            .replace(/_/g, ' ')
+            .toUpperCase(),
+
+      })),
+
+      {
+        accessorKey: 'total',
+        header: 'TOTAL',
       },
+
     ],
-  };
+
+    [groupedFields]
+  );
 
   return (
     <>
       <CustomNavbar />
+
       {
         isLoading && (
           <Progress
@@ -119,8 +264,13 @@ const VehiculosAgrupados = () => {
           />
         )
       }
-      <div className='p-4 flex flex-col gap-4'>
+
+      <div className='p-4 flex flex-col gap-6'>
+
+        {/* SELECT */}
+
         <FormControl sx={{ width: 400 }}>
+
           <InputLabel>
             Agrupar por
           </InputLabel>
@@ -129,7 +279,9 @@ const VehiculosAgrupados = () => {
             multiple
             value={groupedFields}
             onChange={handleChange}
-            input={<OutlinedInput label="Agrupar por" />}
+            input={
+              <OutlinedInput label="Agrupar por" />
+            }
           >
 
             {
@@ -148,21 +300,84 @@ const VehiculosAgrupados = () => {
             }
 
           </Select>
-        </FormControl>
-        <Button
-          onPress={fetchData}
-        >
-          Ejecutar
-        </Button>
-        <>
-          <div style={{ height: 400 }}>
-            <Bar data={chartData} />
-          </div>
 
-          <div style={{ height: 400 }}>
-            <Pie data={chartData} />
-          </div>
-        </>
+        </FormControl>
+
+        {/* BOTON */}
+
+        <div>
+
+          <Button
+            onPress={fetchData}
+          >
+            Ejecutar
+          </Button>
+
+        </div>
+
+        {/* GRAFICA BARRAS */}
+
+        {
+          data.length > 0 && (
+            <div
+              style={{
+                height: 500,
+                background: '#fff',
+                padding: 20,
+                borderRadius: 12,
+              }}
+            >
+
+              <Bar
+                data={chartData}
+              />
+
+            </div>
+          )
+        }
+
+        {/* PIE SOLO 1 NIVEL */}
+
+        {
+          data.length > 0 &&
+          groupedFields.length === 1 && (
+            <div
+              style={{
+                height: 500,
+                background: '#fff',
+                padding: 20,
+                borderRadius: 12,
+              }}
+            >
+
+              <Pie
+                data={chartData}
+              />
+
+            </div>
+          )
+        }
+
+        {/* TABLA */}
+
+        <MaterialReactTable
+          columns={columns}
+          data={data}
+          enableColumnFilters
+          enableGrouping
+          enablePagination
+          enableDensityToggle
+          enableFullScreenToggle
+          enableColumnOrdering
+          initialState={{
+            density: 'compact',
+            pagination: {
+              pageIndex: 0,
+              pageSize: 20,
+            },
+          }}
+        />
+
       </div>
     </>
   );
