@@ -171,6 +171,12 @@ const reports: MenuItemType[] = [
     icon: ganttIcon,
     requiredPermissions: [402],
   },
+  {
+    label: 'Flota 2',
+    path: '/reportes/vehiculos_agrupados',
+    icon: viajesIcon,
+    requiredPermissions: [288],
+  },
 ];
 
 const ReportsMenuPage = () => {

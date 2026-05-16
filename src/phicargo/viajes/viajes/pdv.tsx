@@ -1,10 +1,11 @@
 import {
   MRT_Cell,
+  MRT_ColumnDef,
   MRT_ExpandAllButton,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import { Button, Tooltip } from '@heroui/react';
 import { Chip } from "@heroui/react";
@@ -21,6 +22,7 @@ import { copiarHTML } from '../cuenta_espejo/cuenta_espejo';
 type PDV = {
   id_viaje: number;
   x_comentarios_maniobra?: string;
+  date_order: string;
 };
 
 const PDV = ({ }) => {
@@ -71,153 +73,150 @@ const PDV = ({ }) => {
     copiarHTML(id);
   };
 
-  const columns = useMemo(
-    () => [
-      createActionColumn(CuentaEspejo),
-      {
-        accessorKey: 'vehiculo',
-        header: 'Vehiculo programado',
-      },
-      {
-        accessorKey: 'operador',
-        header: 'Operador programado',
-      },
-      {
-        accessorKey: 'x_comentarios_maniobra',
-        header: 'Comentarios maniobra',
-        Cell: ({ cell }: { cell: MRT_Cell<PDV> }) => {
+  const columns: MRT_ColumnDef<PDV>[] = [
+    createActionColumn(CuentaEspejo),
+    {
+      accessorKey: 'vehiculo',
+      header: 'Vehiculo programado',
+    },
+    {
+      accessorKey: 'operador',
+      header: 'Operador programado',
+    },
+    {
+      accessorKey: 'x_comentarios_maniobra',
+      header: 'Comentarios maniobra',
+      Cell: ({ cell }: { cell: MRT_Cell<PDV> }) => {
 
-          const value = cell.getValue<string>();
+        const value = cell.getValue<string>();
 
-          return (
-            <Tooltip
-              color="foreground"
-              content={
-                <div className="px-1 py-2">
-                  <div className="text-small font-bold">Comentarios</div>
-                  <div className="text-tiny">{value}</div>
-                </div>
-              }>
-              <span className="truncate block max-w-xs cursor-pointer">
-                {value}
-              </span>
-            </Tooltip>
-          );
-        },
+        return (
+          <Tooltip
+            color="foreground"
+            content={
+              <div className="px-1 py-2">
+                <div className="text-small font-bold">Comentarios</div>
+                <div className="text-tiny">{value}</div>
+              </div>
+            }>
+            <span className="truncate block max-w-xs cursor-pointer">
+              {value}
+            </span>
+          </Tooltip>
+        );
       },
-      {
-        accessorKey: "x_status_bel",
-        header: "Estatus",
-        Cell: ({ cell }: { cell: MRT_Cell<PDV> }) => {
-          const value = cell.getValue<string>();
+    },
+    {
+      accessorKey: "x_status_bel",
+      header: "Estatus",
+      Cell: ({ cell }: { cell: MRT_Cell<PDV> }) => {
+        const value = cell.getValue<string>();
 
-          type StatusKey =
-            | "sm"
-            | "pm"
-            | "P"
-            | "V"
-            | "Ing"
-            | "PR"
-            | "ER"
-            | "PI"
-            | "EI"
-            | "T"
-            | "ru"
-            | "EV";
+        type StatusKey =
+          | "sm"
+          | "pm"
+          | "P"
+          | "V"
+          | "Ing"
+          | "PR"
+          | "ER"
+          | "PI"
+          | "EI"
+          | "T"
+          | "ru"
+          | "EV";
 
-          type StatusConfig = {
-            color: "secondary" | "primary" | "success" | "warning" | "danger" | "default";
-            text: string;
-          };
+        type StatusConfig = {
+          color: "secondary" | "primary" | "success" | "warning" | "danger" | "default";
+          text: string;
+        };
 
-          const map: Record<StatusKey, StatusConfig> = {
-            sm: { color: "secondary", text: "SIN MANIOBRA" },
-            pm: { color: "primary", text: "PATIO MÉXICO" },
-            P: { color: "primary", text: "EN PATIO" },
-            V: { color: "success", text: "EN VIAJE" },
-            Ing: { color: "warning", text: "INGRESADO" },
-            PR: { color: "success", text: "PROGRAMADO PARA RETIRO" },
-            ER: { color: "success", text: "EN PROCESO DE RETIRO" },
-            PI: { color: "warning", text: "PROGRAMADO PARA INGRESO" },
-            EI: { color: "warning", text: "EN PROCESO DE INGRESO" },
-            T: { color: "danger", text: "EN TERRAPORTS" },
-            ru: { color: "danger", text: "REUTILIZADO" },
-            EV: { color: "secondary", text: "EN ESPERA DE VIAJE" },
-          };
+        const map: Record<StatusKey, StatusConfig> = {
+          sm: { color: "secondary", text: "SIN MANIOBRA" },
+          pm: { color: "primary", text: "PATIO MÉXICO" },
+          P: { color: "primary", text: "EN PATIO" },
+          V: { color: "success", text: "EN VIAJE" },
+          Ing: { color: "warning", text: "INGRESADO" },
+          PR: { color: "success", text: "PROGRAMADO PARA RETIRO" },
+          ER: { color: "success", text: "EN PROCESO DE RETIRO" },
+          PI: { color: "warning", text: "PROGRAMADO PARA INGRESO" },
+          EI: { color: "warning", text: "EN PROCESO DE INGRESO" },
+          T: { color: "danger", text: "EN TERRAPORTS" },
+          ru: { color: "danger", text: "REUTILIZADO" },
+          EV: { color: "secondary", text: "EN ESPERA DE VIAJE" },
+        };
 
-          const cfg: StatusConfig =
-            value && value in map
-              ? map[value as StatusKey]
-              : { color: "default", text: value || "N/A" };
+        const cfg: StatusConfig =
+          value && value in map
+            ? map[value as StatusKey]
+            : { color: "default", text: value || "N/A" };
 
-          return (
-            <Chip
-              color={cfg.color}
-              size="sm"
-              className="text-white"
-              radius="full"
-            >
-              {cfg.text}
-            </Chip>
-          );
-        }
-      },
-      {
-        accessorKey: 'date_order',
-        header: 'Fecha',
-      },
-      {
-        accessorKey: 'sucursal',
-        header: 'Sucursal',
+        return (
+          <Chip
+            color={cfg.color}
+            size="sm"
+            className="text-white"
+            radius="full"
+          >
+            {cfg.text}
+          </Chip>
+        );
+      }
+    },
+    {
+      accessorKey: 'date_order',
+      header: 'Fecha',
+    },
+    {
+      accessorKey: 'sucursal',
+      header: 'Sucursal',
 
-      },
-      {
-        accessorKey: 'referencias',
-        header: 'Contenedores',
-      },
-      {
-        accessorKey: 'categoria',
-        header: 'Categoria',
-      },
-      {
-        accessorKey: 'cliente',
-        header: 'Cliente',
-      },
-      {
-        accessorKey: 'client_order_ref',
-        header: 'Referencia cliente',
-      },
-      {
-        accessorKey: 'x_ruta_bel',
-        header: 'Ruta',
-      },
-      {
-        accessorKey: 'x_tipo_bel',
-        header: 'Tipo armado',
-      },
-      {
-        accessorKey: 'x_modo_bel',
-        header: 'Modo',
-      },
-      {
-        accessorKey: 'ip',
-        header: 'Inicio programado',
-      },
-      {
-        accessorKey: 'lpp',
-        header: 'Llegada a planta',
-      },
-      {
-        accessorKey: 'cartas_porte',
-        header: 'Carta porte',
-      },
-      {
-        accessorKey: 'referencia_viaje',
-        header: 'Viaje',
-      },
-    ],
-    [],
-  );
+    },
+    {
+      accessorKey: 'referencias',
+      header: 'Contenedores',
+    },
+    {
+      accessorKey: 'categoria',
+      header: 'Categoria',
+    },
+    {
+      accessorKey: 'cliente',
+      header: 'Cliente',
+    },
+    {
+      accessorKey: 'client_order_ref',
+      header: 'Referencia cliente',
+    },
+    {
+      accessorKey: 'x_ruta_bel',
+      header: 'Ruta',
+    },
+    {
+      accessorKey: 'x_tipo_bel',
+      header: 'Tipo armado',
+    },
+    {
+      accessorKey: 'x_modo_bel',
+      header: 'Modo',
+    },
+    {
+      accessorKey: 'ip',
+      header: 'Inicio programado',
+    },
+    {
+      accessorKey: 'lpp',
+      header: 'Llegada a planta',
+    },
+    {
+      accessorKey: 'cartas_porte',
+      header: 'Carta porte',
+    },
+    {
+      accessorKey: 'referencia_viaje',
+      header: 'Viaje',
+    },
+  ];
 
   const table = useMaterialReactTable({
     columns,
@@ -272,8 +271,11 @@ const PDV = ({ }) => {
       },
     },
     muiTableBodyRowProps: ({ row }) => {
+      const isGrouped = row.getIsGrouped();
+
       return {
         onClick: () => {
+          if (isGrouped) return;
           handleClickOpen();
           setIDViaje(row.original.id_viaje);
         },
@@ -314,10 +316,26 @@ const PDV = ({ }) => {
       },
     },
     muiTableBodyCellProps: ({ row }) => {
+
+      const date_order = row.original.date_order;
+      const hoy = new Date();
+      const fecha = hoy.toISOString().split('T')[0];
+
+      let backgroundColor = '';
+      let ColorText = '';
+
+      if (date_order === fecha) {
+        backgroundColor = '#FFDE21';
+        ColorText = '#000000';
+      } else {
+        backgroundColor = '#0456cf';
+        ColorText = '#FFFFFF';
+      }
+
       return {
         sx: {
-          backgroundColor: row.subRows?.length ? '#0456cf' : '#FFFFFF',
-          color: row.subRows?.length ? '#FFFFFF' : '#000000',
+          backgroundColor: row.subRows?.length ? backgroundColor : '#FFFFFF',
+          color: row.subRows?.length ? ColorText : '#000000',
           fontFamily: 'Inter',
           fontWeight: 'normal',
           fontSize: '12px',
