@@ -30,7 +30,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import {
   Bar,
   Pie
@@ -49,7 +49,8 @@ ChartJS.register(
   BarElement,
   ArcElement,
   Tooltip,
-  Legend
+  Legend,
+  ChartDataLabels
 );
 
 const selectOptions = [
@@ -368,10 +369,35 @@ const VehiculosAgrupados = () => {
               {/* BARRAS */}
               <Card>
                 <CardBody>
-                  <div style={{ height: 400 }}>
+                  <div
+                    style={{
+                      position: 'relative',
+                      height: '400px',
+                      width: '100%',
+                    }}
+                  >
+
                     <Bar
                       data={chartData}
+                      options={{
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                          legend: {
+                            position: 'bottom',
+                          },
+                          datalabels: {
+                            anchor: 'end',
+                            align: 'top',
+                            formatter: (value) => value,
+                            font: {
+                              weight: 'bold',
+                            },
+                          },
+                        },
+                      }}
                     />
+
                   </div>
                 </CardBody>
               </Card>
@@ -395,6 +421,36 @@ const VehiculosAgrupados = () => {
                           options={{
                             responsive: true,
                             maintainAspectRatio: false,
+                            plugins: {
+                              legend: {
+                                position: 'bottom',
+                              },
+                              datalabels: {
+                                anchor: 'end',
+                                align: 'top',
+                                formatter: (
+                                  value,
+                                  context
+                                ) => {
+
+                                  const data =
+                                    context.chart.data.datasets[0].data;
+
+                                  const total = data.reduce(
+                                    (a: any, b: any) =>
+                                      Number(a) + Number(b),
+                                    0
+                                  );
+
+                                  const percentage =
+                                    ((value / total) * 100)
+                                      .toFixed(1);
+
+                                  return `${percentage}%`;
+
+                                },
+                              },
+                            },
                           }}
                         />
 
