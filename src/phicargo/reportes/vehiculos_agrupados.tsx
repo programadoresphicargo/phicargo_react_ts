@@ -50,7 +50,6 @@ ChartJS.register(
   ArcElement,
   Tooltip,
   Legend,
-  ChartDataLabels
 );
 
 const selectOptions = [
@@ -378,6 +377,7 @@ const VehiculosAgrupados = () => {
                   >
 
                     <Bar
+                      plugins={[ChartDataLabels]}
                       data={chartData}
                       options={{
                         responsive: true,
@@ -417,6 +417,7 @@ const VehiculosAgrupados = () => {
                       >
 
                         <Pie
+                          plugins={[ChartDataLabels]}
                           data={chartData}
                           options={{
                             responsive: true,
