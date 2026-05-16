@@ -434,17 +434,20 @@ const VehiculosAgrupados = () => {
                                 ) => {
 
                                   const data =
-                                    context.chart.data.datasets[0].data;
+                                    context.chart.data.datasets[0]
+                                      .data;
 
-                                  const total = data.reduce(
-                                    (a: any, b: any) =>
-                                      Number(a) + Number(b),
+                                  const total = data.reduce<number>(
+                                    (a, b) => a + Number(b ?? 0),
                                     0
                                   );
 
+                                  if (!total) return '0%';
+
                                   const percentage =
-                                    ((value / total) * 100)
-                                      .toFixed(1);
+                                    (
+                                      (Number(value) / total) * 100
+                                    ).toFixed(1);
 
                                   return `${percentage}%`;
 
