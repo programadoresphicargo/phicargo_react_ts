@@ -1,4 +1,5 @@
 import {
+  MRT_Row,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
@@ -6,23 +7,25 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Avatar, AvatarGroup } from "@heroui/react";
 import { Box } from '@mui/material';
 import { Button } from "@heroui/react";
-import { Checkbox } from '@mui/material';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import Slide from '@mui/material/Slide';
 import odooApi from '@/api/odoo-api';
 import MinutaForm from './form';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { Tooltip } from "@heroui/react";
 
-const { VITE_ODOO_API_URL } = import.meta.env;
+type Participante = {
+  empleado: string;
+};
+
+type Minuta = {
+  id_minuta: number;
+  puntos_discusion: string;
+  participantes: Participante[];
+}
 
 const Minutas = ({ }) => {
 
   const [open, setOpen] = React.useState(false);
-  const [id_minuta, setMinuta] = React.useState(null);
+  const [id_minuta, setMinuta] = React.useState<number | null>(null);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -33,8 +36,8 @@ const Minutas = ({ }) => {
     setMinuta(null);
   };
 
-  const [data, setData] = useState([]);
-  const [isLoading2, setLoading] = useState();
+  const [data, setData] = useState<Minuta[]>([]);
+  const [isLoading, setLoading] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -77,7 +80,7 @@ const Minutas = ({ }) => {
       {
         accessorKey: 'puntos_discusion',
         header: 'Puntos a discusión',
-        Cell: ({ row }) => {
+        Cell: ({ row }: { row: MRT_Row<Minuta> }) => {
           const texto = row.original.puntos_discusion || '';
           const palabras = texto.split(' ');
 
@@ -92,17 +95,31 @@ const Minutas = ({ }) => {
       {
         accessorKey: 'participantes',
         header: 'Participantes',
-        Cell: ({ row }) => {
-          const colors = ["default", "primary", "secondary", "success", "warning", "danger", "foreground"];
+        Cell: ({ row }: { row: MRT_Row<Minuta> }) => {
+
+          const colors = [
+            "default",
+            "primary",
+            "secondary",
+            "success",
+            "warning",
+            "danger",
+          ] as const;
+
           const participantes = row.original.participantes;
+
           return (
             <AvatarGroup isBordered>
               {participantes && participantes.length > 0 ? (
-                participantes.map((p, index) => (
-                  <Tooltip key={index} content={p.empleado} color="primary">
+                participantes.map((p: Participante, index: number) => (
+                  <Tooltip
+                    key={index}
+                    content={p.empleado}
+                    color="primary"
+                  >
                     <Avatar
                       isBordered
-                      color={colors[index % colors.length]} // 🔹 Asigna colores de forma cíclica
+                      color={colors[index % colors.length]}
                       size="sm"
                     />
                   </Tooltip>
@@ -137,16 +154,16 @@ const Minutas = ({ }) => {
     enableGlobalFilter: true,
     localization: MRT_Localization_ES,
     enableFilters: true,
-    state: { showProgressBars: isLoading2 },
+    state: { showProgressBars: isLoading },
     enableColumnPinning: true,
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
     initialState: {
       density: 'compact',
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
     },
     muiTableBodyRowProps: ({ row }) => ({
-      onClick: ({ event }) => {
+      onClick: () => {
         handleClickOpen();
         setMinuta(row.original.id_minuta);
       },
@@ -179,7 +196,7 @@ const Minutas = ({ }) => {
         maxHeight: 'calc(100vh - 200px)',
       },
     },
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -192,8 +209,8 @@ const Minutas = ({ }) => {
           Minutas
         </h1>
         <MinutaForm open={open} handleClose={handleClose} id_minuta={id_minuta}></MinutaForm>
-        <Button color='primary' className='text-white' onPress={() => handleClickOpen()} radius='full'><i class="bi bi-plus-circle"></i> Nuevo registro</Button>
-        <Button color='success' className='text-white' onPress={() => fetchData()} radius='full'><i class="bi bi-arrow-clockwise"></i> Refrescar</Button>
+        <Button color='primary' className='text-white' onPress={() => handleClickOpen()} radius='full'><i className="bi bi-plus-circle"></i> Nuevo</Button>
+        <Button color='success' className='text-white' onPress={() => fetchData()} radius='full'><i className="bi bi-arrow-clockwise"></i> Refrescar</Button>
       </Box>
     ),
   });
