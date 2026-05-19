@@ -15,6 +15,7 @@ import Typography from '@mui/material/Typography';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import { Box } from '@mui/material';
+import { Visitante } from '../types';
 
 type Props = {
   open: boolean;
@@ -60,7 +61,7 @@ const ListadoVisitantes: React.FC<Props> = ({ open, handleClose, id_empresa }) =
       {
         accessorKey: 'nombre_visitante',
         header: 'Nombre del visitante',
-        Cell: ({ cell }: { cell: MRT_Cell<any> }) => cell.getValue<string>()?.toUpperCase(),
+        Cell: ({ cell }: { cell: MRT_Cell<Visitante> }) => cell.getValue<string>()?.toUpperCase(),
       },
       {
         accessorKey: 'fecha_creacion',
