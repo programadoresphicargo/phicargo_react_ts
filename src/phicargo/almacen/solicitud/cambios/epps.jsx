@@ -59,13 +59,17 @@ const HistorialCambios = ({ cambios }) => {
 
               <div className="flex items-center gap-2 mt-1">
                 <span className="bg-red-100 text-red-600 px-2 py-1 rounded text-xs">
-                  {cambio.old_value_char.toUpperCase() || "—"}
+                  {cambio.old_value_char
+                    ? cambio.old_value_char.toUpperCase()
+                    : "—"}
                 </span>
 
                 <span className="text-gray-400">→</span>
 
                 <span className="bg-green-100 text-green-600 px-2 py-1 rounded text-xs">
-                  {cambio.new_value_char.toUpperCase() || "—"}
+                  {cambio.new_value_char
+                    ? cambio.new_value_char.toUpperCase()
+                    : "—"}
                 </span>
               </div>
             </div>
