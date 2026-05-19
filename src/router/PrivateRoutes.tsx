@@ -461,11 +461,6 @@ export const PrivateRoutes = () => {
             </Suspense>
           }
         />
-
-        <Route
-          path="/AccesoForm"
-          element={<AccesoForm id_acceso={undefined} onClose={undefined} />}
-        />
         <Route
           path="/Monitoreo"
           element={
