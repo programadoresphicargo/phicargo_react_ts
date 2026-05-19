@@ -1,17 +1,13 @@
 import Grid from '@mui/material/Grid';
 import Entregas from "./Entregas";
-import React, { useState } from 'react';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import dayjs from 'dayjs';
-import { Card, CardHeader, CardBody } from "@heroui/react";
+import React from 'react';
 import { Calendar } from "@heroui/react";
 import { parseDate } from "@internationalized/date";
 import CustomNavbar from '@/pages/CustomNavbar';
-import { pages } from '../monitoreo/pages';
+import { pages } from './pages';
 
 export default function EntregaMonitoreo() {
+
     const fechaActual = new Date().toISOString().split('T')[0];
     const [selectedDate, setSelectedDate] = React.useState(parseDate(fechaActual));
 
@@ -27,7 +23,7 @@ export default function EntregaMonitoreo() {
                 </Grid>
                 <Grid item xs={8} md={9}>
                     <Entregas
-                        fecha={selectedDate}
+                        fecha={selectedDate.toString()}
                     />
                 </Grid>
             </Grid>

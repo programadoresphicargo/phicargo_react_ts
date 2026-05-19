@@ -1,43 +1,31 @@
-import { Card, CardBody, CardHeader } from "@heroui/react";
+import { Card, CardBody } from "@heroui/react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
 import React, { useEffect, useMemo, useState } from 'react';
-
 import AppBar from '@mui/material/AppBar';
 import { Box } from '@mui/material';
 import { Button } from "@heroui/react";
-import CardActions from '@mui/material/CardActions';
-import { Chip } from "@heroui/react";
 import CloseIcon from '@mui/icons-material/Close';
 import Dialog from '@mui/material/Dialog';
-import { DialogContent } from '@mui/material';
-import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
 import PersistentDrawerRight from './Eventos';
-import Slide from '@mui/material/Slide';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import axios from 'axios';
-import dayjs from 'dayjs';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
-import { useAuthContext } from "@/modules/auth/hooks";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+type Entrega = {
+  id_entrega: number
+}
 
-const Entregas = ({ fecha }) => {
+const Entregas = ({ fecha }: { fecha: string }) => {
 
-  const { session } = useAuthContext();
   const [open, setOpen] = React.useState(false);
-  const [id_entrega, setIDEntrega] = useState(0);
+  const [id_entrega, setIDEntrega] = useState<number | null>(null);
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -47,14 +35,13 @@ const Entregas = ({ fecha }) => {
     fetchData();
   };
 
-  const [data, setData] = useState([]);
-  const [isLoading, setLoading] = useState();
+  const [data, setData] = useState<Entrega[]>([]);
+  const [isLoading, setLoading] = useState(false);
 
   const fetchData = async () => {
-
     try {
       setLoading(true);
-      const response = await odooApi.get('/entregas/get_by_entrega_fecha_abierto/' + fecha);
+      const response = await odooApi.get('/entregas/fecha_abierto/' + fecha);
       setData(response.data);
       setLoading(false);
     } catch (error) {
@@ -65,7 +52,7 @@ const Entregas = ({ fecha }) => {
   const NuevaEntrega = async () => {
     try {
       const response = await odooApi.get('/entregas/abrir_entrega/');
-      toast.success(response);
+      toast.success(response.data);
       handleClose();
     } catch (error) {
       console.error('Error al obtener los datos:', error);
@@ -95,7 +82,6 @@ const Entregas = ({ fecha }) => {
     }
   };
 
-
   useEffect(() => {
     fetchData();
   }, [fecha]);
@@ -117,18 +103,6 @@ const Entregas = ({ fecha }) => {
       {
         accessorKey: 'total_eventos',
         header: 'Eventos',
-        Cell: ({ cell }) => {
-          const value = cell.getValue();
-          if (value != 0) {
-            let variant = 'danger';
-            return (
-              <Chip className={`badge bg-${variant} rounded-pill text-white`} style={{ width: '20px' }}>
-                {value}
-              </Chip>
-            );
-          }
-
-        },
       },
       {
         accessorKey: 'estado',
@@ -151,7 +125,7 @@ const Entregas = ({ fecha }) => {
     columnResizeMode: "onEnd",
     initialState: {
       density: 'compact',
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
     },
     muiTablePaperProps: {
       elevation: 0,
@@ -160,8 +134,7 @@ const Entregas = ({ fecha }) => {
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
-      onClick: ({ event }) => {
-
+      onClick: () => {
         if (row.subRows?.length) {
         } else {
           handleClickOpen();
@@ -186,7 +159,7 @@ const Entregas = ({ fecha }) => {
         fontSize: '14px',
       },
     },
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -201,12 +174,10 @@ const Entregas = ({ fecha }) => {
   });
 
   return (<>
-
     <Dialog
       fullScreen
       open={open}
       onClose={handleClose}
-      TransitionComponent={Transition}
     >
       <AppBar
         elevation={0}
@@ -227,15 +198,13 @@ const Entregas = ({ fecha }) => {
           <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
             Entrega E-{id_entrega}
           </Typography>
-          <Button autoFocus color="inherit" onClick={handleClose}>
+          <Button autoFocus onPress={handleClose}>
             Cerrar
           </Button>
         </Toolbar>
       </AppBar>
       <PersistentDrawerRight id_entrega={id_entrega} onClose={handleClose}></PersistentDrawerRight>
-
     </Dialog>
-
     <Card>
       <CardBody>
         <MaterialReactTable table={table} />

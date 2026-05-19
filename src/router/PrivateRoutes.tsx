@@ -95,7 +95,7 @@ const DriverBonusPage = lazy(
   () => import('@/modules/drivers/pages/DriverBonusPage'),
 );
 const EventosPendientes = lazy(
-  () => import('@/phicargo/monitoreo/Eventos_pendientes'),
+  () => import('@/phicargo/monitoreo/monitoreo.tsx'),
 );
 const PersistentDrawer = lazy(() => import('../phicargo/monitoreo/Eventos'));
 const CumplimientoEjecutivosViajes = lazy(() => import('../phicargo/reportes/cumplimiento/cumplimiento_ejecutivos_viajes'));

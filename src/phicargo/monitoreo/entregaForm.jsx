@@ -73,7 +73,7 @@ const EntregaForm2 = ({ id_entrega, onClose }) => {
         console.log(formData);
 
         try {
-            const response = await odooApi.post('/eventos/crear_evento/', formData);
+            const response = await odooApi.post('/eventos/', formData);
 
             if (response.data.mensaje) {
                 toast.success(response.data.mensaje);
@@ -93,7 +93,7 @@ const EntregaForm2 = ({ id_entrega, onClose }) => {
         <>
             <Grid container spacing={2}>
                 <Stack spacing={2} direction="row" style={{ padding: '20px' }}>
-                    <Button onPress={registrar_evento} style={{ marginTop: '20px' }} color='primary' radius="full">Guardar evento</Button>
+                    <Button onPress={registrar_evento} style={{ marginTop: '20px' }} color='primary' radius="full">Guardar</Button>
                 </Stack>
 
                 <Grid item xs={12} sm={12} md={12}>
