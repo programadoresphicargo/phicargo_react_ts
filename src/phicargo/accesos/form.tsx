@@ -1,7 +1,7 @@
 import { Button } from "@heroui/react";
 import { Card, CardBody, CardFooter, CardHeader, Divider } from "@heroui/react";
 import React, { useEffect, useState } from 'react';
-import { useAcceso } from './context';
+import { useAcceso } from './context/context';
 import { Box, CardContent } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import ListadoEmpresas from './empresas/tabla';
@@ -23,7 +23,7 @@ import SelectedEmpleadosTable from "./empleados/empleados_seleccionados";
 import SelectedVisitantesTable from "./visitantes/visitantes";
 import { AutocompleteInput, NumberInput, TextInput, TextareaInput } from "@/components/inputs";
 import { Controller, useForm } from "react-hook-form";
-import { Empresa } from "./types";
+import { Empresa } from "./types/types";
 import HistorialCambios from "../almacen/solicitud/cambios/epps";
 
 type TipoSalida = {

@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { useEffect, useState } from "react";
 import { Select, SelectItem } from "@heroui/react";
 import { Controller, useForm } from "react-hook-form";
-import { Vehiculo } from "../types";
+import { Vehiculo } from "../types/types";
 
 type Props = {
     open: boolean,

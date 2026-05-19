@@ -4,7 +4,7 @@ import {
   useMaterialReactTable,
 } from 'material-react-table';
 import React, { useEffect, useMemo, useState } from 'react';
-import { useAcceso } from '../context';
+import { useAcceso } from '../context/context';
 import Box from '@mui/material/Box';
 import { Button, Chip } from "@heroui/react";
 import Dialog from '@mui/material/Dialog';

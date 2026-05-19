@@ -5,7 +5,7 @@ import {
   useMaterialReactTable,
 } from 'material-react-table';
 import React, { useEffect, useMemo, useState } from 'react';
-import AccesoCompo from './AccesoCompo';
+import AccesoCompo from './context/AccesoCompo';
 import AccesoForm from './form';
 import AppBar from '@mui/material/AppBar';
 import { Box } from '@mui/material';

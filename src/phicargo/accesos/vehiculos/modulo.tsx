@@ -5,7 +5,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import Grid from '@mui/material/Grid';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@heroui/react";
-import { useAcceso } from '../context';
+import { useAcceso } from '../context/context';
 import RegistroVehiculos from './tabla';
 
 

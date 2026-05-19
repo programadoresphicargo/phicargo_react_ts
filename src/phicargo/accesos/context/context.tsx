@@ -7,7 +7,7 @@ import {
  Empleado,
  Vehiculo,
  Visitante
-} from "./types";
+} from "../types/types";
 
 type AccesoContextType = {
 

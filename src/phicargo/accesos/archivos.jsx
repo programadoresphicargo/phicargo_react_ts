@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useContext } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { AccesoContext } from './context';
+import { AccesoContext } from './context/context';
 import Viewer from './viewer';
 
 const AppCamara = () => {

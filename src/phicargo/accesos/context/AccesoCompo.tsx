@@ -9,7 +9,7 @@ import {
     Empleado,
     Vehiculo,
     Visitante
-} from "./types";
+} from "../types/types";
 
 interface Props {
     children: ReactNode;

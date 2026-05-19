@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Table, TableRow } from "@heroui/react";
-import { useAcceso } from '../context';
+import { useAcceso } from '../context/context';
 import { Button, Input } from '@heroui/react';
 import { Grid } from '@mui/material';
 import { TableBody } from "@heroui/react";

@@ -10,7 +10,7 @@ import TabPanel from '@mui/lab/TabPanel';
 import { useNavigate } from "react-router-dom";
 import TablaAccesos from "./tabla";
 import RegistroVehiculos from "./vehiculos/tabla";
-import AccesoCompo from "./AccesoCompo";
+import AccesoCompo from "./context/AccesoCompo";
 import logo from '../../assets/img/phicargo-vertical.png';
 
 type AccessThemeKey = '1' | '2' | '3' | '4' | '5' | '6';

@@ -5,7 +5,7 @@ import {
 } from 'material-react-table';
 import { useEffect, useMemo, useState } from 'react';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import { useAcceso } from '../context';
+import { useAcceso } from '../context/context';
 import AppBar from '@mui/material/AppBar';
 import { Button } from '@heroui/react';
 import Dialog from '@mui/material/Dialog';
@@ -15,7 +15,7 @@ import Typography from '@mui/material/Typography';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import { Box } from '@mui/material';
-import { Visitante } from '../types';
+import { Visitante } from '../types/types';
 
 type Props = {
   open: boolean;

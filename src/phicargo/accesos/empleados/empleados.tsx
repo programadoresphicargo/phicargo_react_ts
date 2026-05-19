@@ -5,7 +5,7 @@ import {
 } from 'material-react-table';
 import React, { useEffect, useMemo, useState } from 'react';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import { useAcceso } from '../context';
+import { useAcceso } from '../context/context';
 import AppBar from '@mui/material/AppBar';
 import { Button } from '@heroui/react';
 import Dialog from '@mui/material/Dialog';
@@ -16,7 +16,7 @@ import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import { Box } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
-import { Empleado } from '../types';
+import { Empleado } from '../types/types';
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {

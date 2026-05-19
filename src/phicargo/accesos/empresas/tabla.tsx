@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
 import odooApi from '@/api/odoo-api';
 import { Box } from '@mui/material';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import { Empresa } from '../types';
+import { Empresa } from '../types/types';
 import { UseFormSetValue } from 'react-hook-form';
 import { Acceso } from '../form';
 
