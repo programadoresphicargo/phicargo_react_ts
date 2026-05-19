@@ -3,9 +3,9 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import { AccesoContext } from '../context';
+import { useAcceso } from '../context';
 import AppBar from '@mui/material/AppBar';
 import { Button } from '@heroui/react';
 import Dialog from '@mui/material/Dialog';
@@ -16,6 +16,7 @@ import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import { Box } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
+import { Empleado } from '../types';
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -37,16 +38,13 @@ const ListadoEmpleados: React.FC<ListadoEmpleadosProps> = ({
 }) => {
 
   const [isLoading, setLoading] = useState(false);
-  const { formData, setEmpleados, empleados, AñadirEmpleadoAcceso } = useContext(AccesoContext);
+  const { AñadirEmpleadoAcceso, empleadosDisponibles, setEmpleadosDisponibles } = useAcceso()
 
   const fetchEmpleados = async () => {
     try {
       setLoading(true);
-
       let response = await odooApi.get('/drivers/employees/');
-
-      setEmpleados(response.data);
-
+      setEmpleadosDisponibles(response.data);
     } catch (error: any) {
       toast.error("Error al obtener visitantes: " + error.message);
     } finally {
@@ -55,17 +53,15 @@ const ListadoEmpleados: React.FC<ListadoEmpleadosProps> = ({
   };
 
   useEffect(() => {
-    if (formData.id_empresa && open) {
-      fetchEmpleados();
-    }
-  }, [formData.id_empresa, open]);
+    fetchEmpleados();
+  }, [open]);
 
   const columns = useMemo(
     () => [
       {
         accessorKey: 'empleado',
         header: 'Empleado',
-        Cell: ({ cell }: { cell: MRT_Cell<any> }) => cell.getValue<string>()?.toUpperCase(),
+        Cell: ({ cell }: { cell: MRT_Cell<Empleado> }) => cell.getValue<string>()?.toUpperCase(),
       },
       {
         accessorKey: 'puesto',
@@ -81,7 +77,7 @@ const ListadoEmpleados: React.FC<ListadoEmpleadosProps> = ({
 
   const table = useMaterialReactTable({
     columns,
-    data: empleados,
+    data: empleadosDisponibles,
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,

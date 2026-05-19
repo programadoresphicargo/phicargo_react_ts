@@ -5,18 +5,7 @@ import { toast } from 'react-toastify';
 import { useEffect, useState } from "react";
 import { Select, SelectItem } from "@heroui/react";
 import { Controller, useForm } from "react-hook-form";
-
-type Vehiculo = {
-    id_vehiculo?: number;
-    marca: string;
-    modelo: string;
-    placas: string;
-    tipo_vehiculo: string;
-    color: string;
-    contenedor1: string;
-    contenedor2: string;
-    utilitario: boolean;
-}
+import { Vehiculo } from "../types";
 
 type Props = {
     open: boolean,

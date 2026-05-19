@@ -5,18 +5,13 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import Grid from '@mui/material/Grid';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@heroui/react";
-import { AccesoContext } from '../context';
+import { useAcceso } from '../context';
 import RegistroVehiculos from './tabla';
 
-type Props = {
-    isDisabled: boolean,
-};
 
-const ModuloVehiculo: React.FC<Props> = ({
-    isDisabled
-}) => {
+const ModuloVehiculo = () => {
 
-    const { selectVehiculos, EliminarVehiculo } = useContext(AccesoContext);
+    const { disabledForm, vehiculosActuales, EliminarVehiculo } = useAcceso();
 
     const [open, setOpen] = React.useState(false);
 
@@ -45,7 +40,7 @@ const ModuloVehiculo: React.FC<Props> = ({
                         <Button
                             color="primary"
                             onPress={handleClick}
-                            isDisabled={isDisabled}
+                            isDisabled={disabledForm}
                             radius='full'
                         >
                             Añadir vehículo
@@ -68,7 +63,7 @@ const ModuloVehiculo: React.FC<Props> = ({
                             <TableColumn>Descartar</TableColumn>
                         </TableHeader>
                         <TableBody>
-                            {selectVehiculos.map((visitor: any, index: any) => (
+                            {vehiculosActuales.map((visitor: any, index: any) => (
                                 <TableRow key={index}>
                                     <TableCell>{visitor.id_vehiculo}</TableCell>
                                     <TableCell>{visitor.marca}</TableCell>
@@ -78,7 +73,14 @@ const ModuloVehiculo: React.FC<Props> = ({
                                     <TableCell>{visitor.contenedor1}</TableCell>
                                     <TableCell>{visitor.contenedor2}</TableCell>
                                     <TableCell>
-                                        <Button onPress={() => EliminarVehiculo(visitor.id_vehiculo)} size='sm' isDisabled={isDisabled} radius='full'>Eliminar</Button>
+                                        <Button
+                                            color={disabledForm ? "default" : "primary"}
+                                            onPress={() => EliminarVehiculo(visitor.id_vehiculo)}
+                                            size='sm'
+                                            isDisabled={disabledForm}
+                                            radius='full'>
+                                            <i className="bi bi-x-circle"></i>
+                                        </Button>
                                     </TableCell>
                                 </TableRow>
                             ))}

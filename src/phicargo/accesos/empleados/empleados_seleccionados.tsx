@@ -1,19 +1,18 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { useState } from 'react';
 import { Table, TableRow } from "@heroui/react";
-import { AccesoContext } from '../context';
+import { useAcceso } from '../context';
 import { Button, Input } from '@heroui/react';
 import { Grid } from '@mui/material';
 import { TableBody } from "@heroui/react";
 import { TableCell } from "@heroui/react";
 import { TableColumn } from "@heroui/react";
 import { TableHeader } from "@heroui/react";
-import axios from 'axios';
 import ListadoEmpleados from './empleados';
 
 const SelectedEmpleadosTable = ({ }) => {
 
     const [filtroNombre, setFiltroNombre] = useState('');
-    const { id_acceso, selectedEmpleados, setSelectedEmpleados, removedEmpleados, setRemovedEmpleados, disabledFom, formData } = useContext(AccesoContext);
+    const { empleadosActuales, disabledForm, EliminarEmpleadoAcceso } = useAcceso();
 
     const [openVisitantes, setVisitants] = useState(false);
 
@@ -25,19 +24,7 @@ const SelectedEmpleadosTable = ({ }) => {
         setVisitants(false);
     };
 
-    const borrarEmpleado = (valueToDelete) => {
-        setSelectedEmpleados((prevVisitantes) => {
-            const visitanteAEliminar = prevVisitantes.find(visitor => visitor.id_empleado === valueToDelete);
-
-            if (visitanteAEliminar) {
-                setRemovedEmpleados((prevRemoved) => [...prevRemoved, visitanteAEliminar]);
-            }
-
-            return prevVisitantes.filter(visitor => visitor.id_empleado !== valueToDelete);
-        });
-    };
-
-    const empleadosFiltrados = selectedEmpleados.filter(visitor =>
+    const empleadosFiltrados = empleadosActuales.filter(visitor =>
         visitor.empleado.toLowerCase().includes(filtroNombre.toLowerCase())
     );
 
@@ -50,13 +37,14 @@ const SelectedEmpleadosTable = ({ }) => {
                 <Button
                     radius='full'
                     onPress={abrirVisitantes}
-                    color={disabledFom ? "default" : "secondary"}
-                    isDisabled={disabledFom || formData.id_empresa == '' ? true : false}>
+                    color={disabledForm ? "default" : "secondary"}
+                    isDisabled={disabledForm}
+                >
                     Añadir empleados
                 </Button>
 
                 <Input
-                    startContent={<i class="bi bi-search"></i>}
+                    startContent={<i className="bi bi-search"></i>}
                     color='primary'
                     className="max-w-xs"
                     placeholder="Buscar por nombre"
@@ -81,9 +69,9 @@ const SelectedEmpleadosTable = ({ }) => {
                             <TableCell>
                                 <Button
                                     size='sm'
-                                    color={disabledFom ? "default" : "primary"}
-                                    isDisabled={disabledFom}
-                                    onPress={() => borrarEmpleado(visitor.id_empleado)}
+                                    color={disabledForm ? "default" : "primary"}
+                                    isDisabled={disabledForm}
+                                    onPress={() => EliminarEmpleadoAcceso(visitor.id_empleado)}
                                     radius='full'
                                 >
                                     Borrar
@@ -93,7 +81,7 @@ const SelectedEmpleadosTable = ({ }) => {
                     ))}
                 </TableBody>
             </Table>
-        </Grid>
+        </Grid >
 
         <ListadoEmpleados open={openVisitantes} handleClose={cerrarVisitantes}></ListadoEmpleados>
 

@@ -3,13 +3,13 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import { AccesoContext } from '../context';
+import { useAcceso } from '../context';
 import AppBar from '@mui/material/AppBar';
 import { Button } from '@heroui/react';
 import Dialog from '@mui/material/Dialog';
-import FormEmpresa from './formulario';
+import FormEmpresa from './form';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import odooApi from '@/api/odoo-api';
@@ -19,12 +19,13 @@ import { Box } from '@mui/material';
 type Props = {
   open: boolean;
   handleClose: () => void;
+  id_empresa: number;
 };
 
-const ListadoVisitantes: React.FC<Props> = ({ open, handleClose }) => {
+const ListadoVisitantes: React.FC<Props> = ({ open, handleClose, id_empresa }) => {
 
   const [isLoading, setLoading] = useState(false);
-  const { formData, setVisitantes, visitantes, AñadirVisitanteAcceso } = useContext(AccesoContext);
+  const { AñadirVisitanteAcceso, visitantesDisponibles, setVisitantesDisponibles } = useAcceso();
   const [openFormulario, setOpenForm] = useState(false);
 
   const handleClickOpenForm = () => {
@@ -39,8 +40,8 @@ const ListadoVisitantes: React.FC<Props> = ({ open, handleClose }) => {
   const fetchVisitantes = async () => {
     try {
       setLoading(true);
-      let response = await odooApi.get('/visitantes/empresas/' + formData.id_empresa);
-      setVisitantes(response.data);
+      let response = await odooApi.get('/visitantes/empresas/' + id_empresa);
+      setVisitantesDisponibles(response.data);
     } catch (error: any) {
       toast.error("Error al obtener visitantes: " + error.message);
     } finally {
@@ -49,10 +50,10 @@ const ListadoVisitantes: React.FC<Props> = ({ open, handleClose }) => {
   };
 
   useEffect(() => {
-    if (formData.id_empresa && open) {
+    if (id_empresa && open) {
       fetchVisitantes();
     }
-  }, [formData.id_empresa, open]);
+  }, [id_empresa, open]);
 
   const columns = useMemo(
     () => [
@@ -71,7 +72,7 @@ const ListadoVisitantes: React.FC<Props> = ({ open, handleClose }) => {
 
   const table = useMaterialReactTable({
     columns,
-    data: visitantes,
+    data: visitantesDisponibles,
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
@@ -160,8 +161,10 @@ const ListadoVisitantes: React.FC<Props> = ({ open, handleClose }) => {
       <MaterialReactTable table={table} />
     </Dialog>
 
-    <FormEmpresa open={openFormulario} handleClose={handleCloseForm}></FormEmpresa>
-
+    <FormEmpresa
+      open={openFormulario}
+      handleClose={handleCloseForm}
+      id_empresa={id_empresa} />
   </>
   );
 

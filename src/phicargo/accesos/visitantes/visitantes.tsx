@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { useState } from 'react';
 import { Table, TableRow } from "@heroui/react";
-import { AccesoContext } from '../context';
+import { useAcceso } from '../context';
 import { Button, Input } from '@heroui/react';
 import { Grid } from '@mui/material';
 import ListadoVisitantes from './tabla';
@@ -8,12 +8,15 @@ import { TableBody } from "@heroui/react";
 import { TableCell } from "@heroui/react";
 import { TableColumn } from "@heroui/react";
 import { TableHeader } from "@heroui/react";
-import axios from 'axios';
 
-const SelectedVisitantesTable = ({ }) => {
+interface Props {
+    id_empresa: number | null,
+}
+
+const SelectedVisitantesTable = ({ id_empresa }: Props) => {
 
     const [filtroNombre, setFiltroNombre] = useState('');
-    const { id_acceso, selectedVisitantes, setSelectedVisitantes, removedVisitors, setRemovedVisitors, disabledFom, formData } = useContext(AccesoContext);
+    const { EliminarVisitanteAcceso, disabledForm, visitantesActuales } = useAcceso();
 
     const [openVisitantes, setVisitants] = useState(false);
 
@@ -25,19 +28,7 @@ const SelectedVisitantesTable = ({ }) => {
         setVisitants(false);
     };
 
-    const borrarVisitante = (valueToDelete) => {
-        setSelectedVisitantes((prevVisitantes) => {
-            const visitanteAEliminar = prevVisitantes.find(visitor => visitor.id_visitante === valueToDelete);
-
-            if (visitanteAEliminar) {
-                setRemovedVisitors((prevRemoved) => [...prevRemoved, visitanteAEliminar]);
-            }
-
-            return prevVisitantes.filter(visitor => visitor.id_visitante !== valueToDelete);
-        });
-    };
-
-    const visitantesFiltrados = selectedVisitantes.filter(visitor =>
+    const visitantesFiltrados = visitantesActuales.filter(visitor =>
         visitor.nombre_visitante.toLowerCase().includes(filtroNombre.toLowerCase())
     );
 
@@ -49,13 +40,13 @@ const SelectedVisitantesTable = ({ }) => {
                 <Button
                     radius='full'
                     onPress={abrirVisitantes}
-                    color={disabledFom ? "default" : "primary"}
-                    isDisabled={disabledFom || formData.id_empresa == '' ? true : false}>
-                    Añadir visitantes al acceso
+                    color={disabledForm ? "default" : "primary"}
+                    isDisabled={disabledForm}>
+                    Añadir visitantes
                 </Button>
 
                 <Input
-                    startContent={<i class="bi bi-search"></i>}
+                    startContent={<i className="bi bi-search"></i>}
                     color='primary'
                     className="max-w-xs"
                     placeholder="Buscar por nombre"
@@ -78,12 +69,12 @@ const SelectedVisitantesTable = ({ }) => {
                             <TableCell>
                                 <Button
                                     size='sm'
-                                    color={disabledFom ? "default" : "primary"}
-                                    isDisabled={disabledFom}
-                                    onPress={() => borrarVisitante(visitor.id_visitante)}
+                                    color={disabledForm ? "default" : "primary"}
+                                    isDisabled={disabledForm}
+                                    onPress={() => EliminarVisitanteAcceso(visitor.id_visitante)}
                                     radius='full'
                                 >
-                                    Borrar
+                                    <i className="bi bi-x-circle"></i>
                                 </Button>
                             </TableCell>
                         </TableRow>
@@ -92,8 +83,13 @@ const SelectedVisitantesTable = ({ }) => {
             </Table>
         </Grid>
 
-        <ListadoVisitantes open={openVisitantes} handleClose={cerrarVisitantes}></ListadoVisitantes>
-
+        {id_empresa != null && (
+            <ListadoVisitantes
+                open={openVisitantes}
+                handleClose={cerrarVisitantes}
+                id_empresa={id_empresa}
+            />
+        )}
     </>)
 }
 

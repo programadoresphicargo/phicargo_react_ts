@@ -3,8 +3,7 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import { useContext, useEffect, useMemo, useState } from 'react';
-import { AccesoContext } from '../context';
+import { useEffect, useMemo, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import { Button } from '@heroui/react';
 import Dialog from '@mui/material/Dialog';
@@ -14,25 +13,24 @@ import Typography from '@mui/material/Typography';
 import odooApi from '@/api/odoo-api';
 import { Box } from '@mui/material';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-
-type Empresa = {
-  id_empresa: number;
-  empresa: string;
-}
+import { Empresa } from '../types';
+import { UseFormSetValue } from 'react-hook-form';
+import { Acceso } from '../form';
 
 type Props = {
   open: boolean,
   handleClose: () => void;
+  setValue: UseFormSetValue<Acceso>;
 };
 
 const ListadoEmpresas: React.FC<Props> = ({
   open,
-  handleClose
+  handleClose,
+  setValue
 }) => {
 
   const [data, setData] = useState<Empresa[]>([]);
   const [isLoading, setLoading] = useState(false);
-  const { setFormData } = useContext(AccesoContext);
   const [openFormulario, setOpenForm] = useState(false);
 
   const handleClickOpenForm = () => {
@@ -103,11 +101,8 @@ const ListadoEmpresas: React.FC<Props> = ({
       onClick: () => {
         if (row.subRows?.length) {
         } else {
-          setFormData((prevData: any) => ({
-            ...prevData,
-            ['id_empresa']: row.original.id_empresa,
-            ['empresa']: row.original.empresa,
-          }));
+          setValue("id_empresa", row.original.id_empresa);
+          setValue("empresa", row.original.empresa);
           handleClose();
         }
       },

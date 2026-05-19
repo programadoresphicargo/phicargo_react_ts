@@ -6,7 +6,7 @@ import {
 } from 'material-react-table';
 import React, { useEffect, useMemo, useState } from 'react';
 import AccesoCompo from './AccesoCompo';
-import AccesoForm from './formulario';
+import AccesoForm from './form';
 import AppBar from '@mui/material/AppBar';
 import { Box } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
