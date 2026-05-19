@@ -15,6 +15,7 @@ export const TextInput = <T extends FieldValues>(
     variant,
     isUpperCase,
     classNames,
+    readOnly
   } = props;
 
   return (
@@ -25,6 +26,7 @@ export const TextInput = <T extends FieldValues>(
         rules={rules}
         render={({ field: { onChange, name, value }, fieldState }) => (
           <Input
+            readOnly={readOnly}
             type="text"
             isDisabled={isDisabled}
             classNames={classNames}

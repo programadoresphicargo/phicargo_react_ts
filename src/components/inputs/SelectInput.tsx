@@ -25,6 +25,7 @@ export const SelectInput = <T extends FieldValues>(
     isLoading,
     disabledKeys,
     isVirtualized,
+    size,
   } = props;
 
   const handleSelectChange = (value: string) => {
@@ -49,7 +50,7 @@ export const SelectInput = <T extends FieldValues>(
             className={className}
             label={label}
             isLoading={isLoading}
-            size="sm"
+            size={size || 'sm'}
             variant={variant || 'flat'}
             scrollShadowProps={{
               isEnabled: false,

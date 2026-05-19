@@ -28,10 +28,11 @@ export const AutocompleteInput = <T extends FieldValues>(
     searchInput,
     setSearchInput,
     isVirtualized,
+    size
   } = props;
 
   const handleSelectChange = (value: string) => {
-    if (!value){
+    if (!value) {
       return null;
     }
     const toNumber = Number(value);
@@ -54,7 +55,7 @@ export const AutocompleteInput = <T extends FieldValues>(
             className={className}
             inputValue={searchInput}
             isLoading={isLoading}
-            size='sm'
+            size={size || 'sm'}
             name={name}
             value={value}
             items={items}
