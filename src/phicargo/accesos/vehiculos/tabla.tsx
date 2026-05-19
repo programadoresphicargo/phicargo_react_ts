@@ -81,7 +81,7 @@ const RegistroVehiculos: React.FC<Props> = ({
       {
         accessorKey: 'utilitario',
         header: 'Utilitario',
-        Cell: ({ cell }: { cell: MRT_Cell<any> }) => {
+        Cell: ({ cell }: { cell: MRT_Cell<Vehiculo> }) => {
           var valor = cell.getValue<boolean>();
           if (!valor) return;
           return (
