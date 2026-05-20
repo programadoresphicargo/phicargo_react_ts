@@ -4,7 +4,7 @@ export type Celular = {
  id_celular: number,
  activo: true,
  estado: string;
- id_empresa: number,
+ id_empresa: number | null,
  marca: string,
  modelo: string,
  imei: number,

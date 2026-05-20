@@ -7,11 +7,11 @@ import { useEffect, useMemo, useState } from 'react';
 import Box from '@mui/material/Box';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import odooApi from '@/api/odoo-api';
-import FormCelulares from './form';
 import {
     useDisclosure,
 } from "@heroui/react";
 import { exportToCSV } from '@/phicargo/utils/export';
+import FormEmpleado from './form';
 
 type Empleado = { id_empleado: number }
 
@@ -151,7 +151,11 @@ const EmpleadosTI: React.FC<Props> = ({
     return (
         <>
             <MaterialReactTable table={table} />
-            <FormCelulares isOpen={isOpen} onOpen={onOpen} onOpenChange={onOpenChange} id_celular={id_empleado}></FormCelulares>
+            <FormEmpleado
+                isOpen={isOpen}
+                onOpenChange={onOpenChange}
+                id_empleado={id_empleado}
+            />
         </>
     );
 };

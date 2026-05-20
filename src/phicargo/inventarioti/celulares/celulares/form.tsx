@@ -14,7 +14,7 @@ import TabPanel from '@mui/lab/TabPanel';
 import HistorialAsignaciones from "../asignacion/historial";
 import { Controller, useForm } from "react-hook-form";
 import { Celular } from "./schema";
-import { CheckboxInput, NumberInput, SelectInput, TextInput, TextareaInput } from "@/components/inputs";
+import { AutocompleteInput, CheckboxInput, NumberInput, SelectInput, TextInput, TextareaInput } from "@/components/inputs";
 import dayjs from "dayjs";
 import { parseDate } from "@internationalized/date";
 
@@ -22,7 +22,7 @@ const initialForm: Celular = {
     id_celular: 0,
     activo: true,
     estado: "disponible",
-    id_empresa: 0,
+    id_empresa: null,
     marca: "",
     modelo: "",
     imei: 0,
@@ -151,7 +151,7 @@ export default function FormCelulares({ isOpen, onOpenChange, id_celular }: { is
                                         <TabPanel value="1">
                                             <div className="grid grid-cols-2 gap-4">
 
-                                                <SelectInput
+                                                <AutocompleteInput
                                                     control={control}
                                                     label="Empresa"
                                                     name="id_empresa"
@@ -165,7 +165,7 @@ export default function FormCelulares({ isOpen, onOpenChange, id_celular }: { is
                                                         ]
                                                     }
                                                     rules={{ required: 'Obligatorio' }}
-                                                ></SelectInput>
+                                                />
 
                                                 <SelectInput
                                                     control={control}
