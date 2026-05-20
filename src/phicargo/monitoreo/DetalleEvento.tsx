@@ -18,7 +18,8 @@ import { toast } from 'react-toastify';
 import { useForm } from "react-hook-form";
 import { AutocompleteInput, TextInput, TextareaInput } from "@/components/inputs";
 
-type Evento = {
+export type Evento = {
+    id_entrega: number;
     titulo: string;
     descripcion: string;
     sucursal: string | null;
@@ -30,12 +31,12 @@ type Comentario = {
     comentario: string;
 }
 
-type TipoEvento = {
+export type TipoEvento = {
     id_tipo_evento: number;
     nombre_evento: string;
 }
 
-type TipoEventoResponse = {
+export type TipoEventoResponse = {
     key: number;
     value: string;
 }

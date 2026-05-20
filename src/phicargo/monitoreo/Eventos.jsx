@@ -21,7 +21,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Drawer from '@mui/material/Drawer';
-import EntregaForm2 from './entregaForm';
+import EntregaForm2 from './form';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
@@ -301,11 +301,11 @@ export default function PersistentDrawerRight({ id_entrega, onClose }) {
             <Main open={open}>
                 <Stack spacing={2} direction="row">
                     {dataEntrega.length > 0 && dataEntrega[0].estado !== 'cerrado' && (
-                        <Button onClick={handleClickOpen2} color='primary' radius="full">Nuevo evento</Button>
+                        <Button onPress={handleClickOpen2} color='primary' radius="full">Nuevo evento</Button>
                     )}
 
                     {dataEntrega.length > 0 && dataEntrega[0].estado !== 'cerrado' && (
-                        <Button onClick={cerrar_entrega} color='danger' radius="full">Cerrar entrega</Button>
+                        <Button onPress={cerrar_entrega} color='danger' radius="full">Cerrar entrega</Button>
                     )}
 
                 </Stack>
@@ -347,9 +347,7 @@ export default function PersistentDrawerRight({ id_entrega, onClose }) {
             aria-describedby="alert-dialog-description"
         >
             <DialogContent className='p-5'>
-                <DialogContentText id="alert-dialog-description">
-                    <EntregaForm2 id_entrega={id_entrega} onClose={handleClose2}></EntregaForm2>
-                </DialogContentText>
+                <EntregaForm2 id_entrega={id_entrega} onClose={handleClose2}></EntregaForm2>
             </DialogContent>
         </Dialog>
     </>
