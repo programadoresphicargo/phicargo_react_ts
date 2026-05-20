@@ -203,7 +203,9 @@ const Entregas = ({ fecha }: { fecha: string }) => {
           </Button>
         </Toolbar>
       </AppBar>
-      <PersistentDrawerRight id_entrega={id_entrega} onClose={handleClose}></PersistentDrawerRight>
+      {id_entrega && (
+        <PersistentDrawerRight id_entrega={id_entrega} onClose={handleClose}></PersistentDrawerRight>
+      )}
     </Dialog>
     <Card>
       <CardBody>

@@ -1,97 +1,40 @@
-import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@heroui/react";
-import { Card, CardBody, CardFooter, CardHeader, Divider, Image, Link } from "@heroui/react";
+import { Button } from "@heroui/react";
+import { Card, CardBody } from "@heroui/react";
 import {
+    MRT_Cell,
     MaterialReactTable,
     useMaterialReactTable,
 } from 'material-react-table';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/react";
+import React, { useEffect, useMemo, useState } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
-
-import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Chip } from "@heroui/react";
-import CssBaseline from '@mui/material/CssBaseline';
-import DetalleForm from './DetalleEvento';
+import DetalleForm, { Evento } from './DetalleEvento';
 import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 import Drawer from '@mui/material/Drawer';
 import EntregaForm2 from './form';
-import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import MenuIcon from '@mui/icons-material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import MuiAppBar from '@mui/material/AppBar';
-import Select from '@mui/material/Select';
 import Stack from '@mui/material/Stack';
 import Swal from 'sweetalert2';
-import TextField from '@mui/material/TextField';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import axios from 'axios';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
-import { width } from '@mui/system';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-
 const drawerWidth = 650;
 
-const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
-    ({ theme }) => ({
-        flexGrow: 1,
-        padding: theme.spacing(3),
-        transition: theme.transitions.create('margin', {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-        }),
-        marginRight: -drawerWidth,
-        position: 'relative',
-        variants: [
-            {
-                props: ({ open }) => open,
-                style: {
-                    transition: theme.transitions.create('margin', {
-                        easing: theme.transitions.easing.easeOut,
-                        duration: theme.transitions.duration.enteringScreen,
-                    }),
-                    marginRight: 0,
-                },
-            },
-        ],
-    }),
-);
-
-const AppBar = styled(MuiAppBar, {
+const Main = styled('main', {
     shouldForwardProp: (prop) => prop !== 'open',
-})(({ theme }) => ({
-    transition: theme.transitions.create(['margin', 'width'], {
+})<{ open?: boolean }>(({ theme, open }) => ({
+    flexGrow: 1,
+    padding: theme.spacing(3),
+    transition: theme.transitions.create('margin', {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
     }),
-    variants: [
-        {
-            props: ({ open }) => open,
-            style: {
-                width: `calc(100% - ${drawerWidth}px)`,
-                transition: theme.transitions.create(['margin', 'width'], {
-                    easing: theme.transitions.easing.easeOut,
-                    duration: theme.transitions.duration.enteringScreen,
-                }),
-                marginRight: drawerWidth,
-            },
-        },
-    ],
+    marginRight: open ? 0 : -drawerWidth,
+    position: 'relative',
 }));
 
 const DrawerHeader = styled('div')(({ theme }) => ({
@@ -103,11 +46,12 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     justifyContent: 'flex-start',
 }));
 
-export default function PersistentDrawerRight({ id_entrega, onClose }) {
+export default function PersistentDrawerRight({ id_entrega, onClose }: { id_entrega: number, onClose: () => void }) {
+
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
 
-    const [id_evento, setIDEvento] = useState(0);
+    const [id_evento, setIDEvento] = useState<number | null>(null);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -117,24 +61,14 @@ export default function PersistentDrawerRight({ id_entrega, onClose }) {
         setOpen(false);
     };
 
-    const initialFormData = {
-        id_entrega: id_entrega,
-        titulo: '',
-        descripcion: '',
-        sucursal: '',
-        tipo_evento: ''
-    };
-
-    const [formData, setFormData] = useState(initialFormData);
-
     useEffect(() => {
         getEntrega();
         getEventos();
     }, []);
 
     const [data, setEventos] = useState([]);
-    const [isLoading, setLoading] = useState();
-    const [dataEntrega, setDataEntrega] = useState([]);
+    const [isLoading, setLoading] = useState(false);
+    const [dataEntrega, setDataEntrega] = useState<Evento[]>([]);
 
     const getEntrega = async () => {
         try {
@@ -161,19 +95,21 @@ export default function PersistentDrawerRight({ id_entrega, onClose }) {
             {
                 accessorKey: 'sucursal',
                 header: 'Sucursal',
-                Cell: ({ cell }) => {
-                    const value = cell.getValue();
-                    let className;
-
-                    if (value === 'veracruz') {
-                        className = 'badge bg-success text-white';
-                    } else if (value === 'manzanillo') {
-                        className = 'badge bg-warning text-white';
-                    } else {
-                        className = 'badge bg-primary text-white';
-                    }
-
-                    return <Chip className={className}>{value}</Chip>;
+                Cell: ({ cell }: { cell: MRT_Cell<Evento> }) => {
+                    const value = cell.getValue<string>();
+                    return (
+                        <Chip
+                            className={
+                                value === "veracruz"
+                                    ? "success"
+                                    : value === "manzanillo"
+                                        ? "warning"
+                                        : "default"
+                            }
+                        >
+                            {value}
+                        </Chip>
+                    );
                 },
             },
             {
@@ -194,15 +130,9 @@ export default function PersistentDrawerRight({ id_entrega, onClose }) {
                 minSize: 10,
                 maxSize: 10,
                 size: 10,
-                Cell: ({ cell }) => {
-                    const value = cell.getValue();
-                    let className;
-
-                    if (value === 'atendido') {
-                        className = 'badge bg-success rounded-pill text-white';
-                    }
-
-                    return <Chip className={className}>{value}</Chip>;
+                Cell: ({ cell }: { cell: MRT_Cell<Evento> }) => {
+                    const value = cell.getValue<string>();
+                    return <Chip className={value === "atendido" ? "success" : "default"}>{value}</Chip>;
                 },
             },
         ],
@@ -222,7 +152,7 @@ export default function PersistentDrawerRight({ id_entrega, onClose }) {
         columnResizeMode: "onEnd",
         initialState: {
             density: 'compact',
-            pagination: { pageSize: 80 },
+            pagination: { pageIndex: 0, pageSize: 80 },
         },
         muiTablePaperProps: {
             elevation: 0,
@@ -231,7 +161,7 @@ export default function PersistentDrawerRight({ id_entrega, onClose }) {
             },
         },
         muiTableBodyRowProps: ({ row }) => ({
-            onClick: ({ event }) => {
+            onClick: () => {
                 handleDrawerOpen();
                 setIDEvento(row.original.id_evento)
             },
@@ -281,7 +211,6 @@ export default function PersistentDrawerRight({ id_entrega, onClose }) {
             if (result.isConfirmed) {
                 const response = await odooApi.get('/entregas/cerrar_entrega/' + id_entrega);
                 const data = response.data;
-
                 if (data === 1) {
                     toast.success(data.message);
                     onClose();
@@ -297,7 +226,6 @@ export default function PersistentDrawerRight({ id_entrega, onClose }) {
 
     return (<>
         <Box sx={{ display: 'flex' }}>
-
             <Main open={open}>
                 <Stack spacing={2} direction="row">
                     {dataEntrega.length > 0 && dataEntrega[0].estado !== 'cerrado' && (
@@ -307,15 +235,12 @@ export default function PersistentDrawerRight({ id_entrega, onClose }) {
                     {dataEntrega.length > 0 && dataEntrega[0].estado !== 'cerrado' && (
                         <Button onPress={cerrar_entrega} color='danger' radius="full">Cerrar entrega</Button>
                     )}
-
                 </Stack>
-
                 <Card className='mt-3'>
                     <CardBody>
                         <MaterialReactTable table={table} />
                     </CardBody>
                 </Card>
-
             </Main>
             <Drawer
                 sx={{
@@ -334,9 +259,9 @@ export default function PersistentDrawerRight({ id_entrega, onClose }) {
                         {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                     </IconButton>
                 </DrawerHeader>
-
-                <DetalleForm id_evento={id_evento} onClose={handleClose2}></DetalleForm>
-
+                {id_evento && (
+                    <DetalleForm id_evento={id_evento} onClose={handleClose2}></DetalleForm>
+                )}
             </Drawer>
         </Box>
 

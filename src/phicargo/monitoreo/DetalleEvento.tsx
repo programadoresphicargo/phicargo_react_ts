@@ -19,6 +19,7 @@ import { useForm } from "react-hook-form";
 import { AutocompleteInput, TextInput, TextareaInput } from "@/components/inputs";
 
 export type Evento = {
+    id_evento: number | null;
     id_entrega: number;
     titulo: string;
     descripcion: string;
