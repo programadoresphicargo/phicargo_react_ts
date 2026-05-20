@@ -78,7 +78,6 @@ const SolicitudesAmarre = lazy(() => import('../phicargo/almacen/solicitud/index
 const SolicitudesHerramientas = lazy(() => import('../phicargo/almacen/solicitud/index_solicitudes_herramientas'));
 const SolicitudesLlantas = lazy(() => import('../phicargo/llantas/index_solicitudes_llantas'));
 const Inventario = lazy(() => import('../phicargo/almacen/inventario/index'));
-const EntregaMonitoreo = lazy(() => import('../phicargo/monitoreo/monitoreo'));
 const CodigosPostales = lazy(() => import('../phicargo/viajes/codigos_postales/index'));
 const ChatBot = lazy(() => import('../phicargo/chat/chat'));
 const Minutas = lazy(() => import('../phicargo/minutas/control_minutas'));
@@ -97,7 +96,6 @@ const DriverBonusPage = lazy(
 const EventosPendientes = lazy(
   () => import('@/phicargo/monitoreo/monitoreo.tsx'),
 );
-const PersistentDrawer = lazy(() => import('../phicargo/monitoreo/Eventos'));
 const CumplimientoEjecutivosViajes = lazy(() => import('../phicargo/reportes/cumplimiento/cumplimiento_ejecutivos_viajes'));
 const CumplimientoEjecutivosManiobras = lazy(() => import('../phicargo/reportes/cumplimiento/index_cumplimiento_ejecutivo_maniobra'));
 const Redireccion = lazy(() => import('../router/TraficoRouter'));
@@ -459,27 +457,12 @@ export const PrivateRoutes = () => {
             </Suspense>
           }
         />
-        <Route
-          path="/Monitoreo"
-          element={
-            <Suspense fallback={<LoadingPage />}>
-              <EntregaMonitoreo />
-            </Suspense>
-          }
-        />
+
         <Route
           path="/EventosPendientes"
           element={
             <Suspense fallback={<LoadingPage />}>
               <EventosPendientes />
-            </Suspense>
-          }
-        />
-        <Route
-          path="/Monitorista"
-          element={
-            <Suspense fallback={<LoadingPage />}>
-              <PersistentDrawer id_entrega={undefined} onClose={undefined} />
             </Suspense>
           }
         />
