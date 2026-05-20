@@ -280,6 +280,17 @@ const ReservasDetalle = ({ open, handleClose, dataLinea }) => {
 
     const devolverTodo = async () => {
 
+        const sinRespuesta = reservasLinea.filter(
+            r => r.devuelta === null || r.devuelta === undefined
+        );
+
+        if (sinRespuesta.length > 0) {
+            toast.error(
+                'Marca todas las reservas como devueltas o no devueltas.'
+            );
+            return;
+        }
+
         // validar registros
         const invalidas = reservasLinea.filter(
             r =>
