@@ -111,8 +111,14 @@ export default function FormCelulares({ isOpen, onOpenChange, id_equipo }: { isO
 
         const payload = {
             ...data,
-            fecha_compra: data.fecha_compra?.format("YYYY-MM-DD"),
-            expiracion_garantia: data.expiracion_garantia?.format("YYYY-MM-DD"),
+
+            fecha_compra: data.fecha_compra
+                ? dayjs(data.fecha_compra).format("YYYY-MM-DD")
+                : null,
+
+            expiracion_garantia: data.expiracion_garantia
+                ? dayjs(data.expiracion_garantia).format("YYYY-MM-DD")
+                : null,
         };
 
         try {
