@@ -167,7 +167,7 @@ const EquipoTI = ({ active }: { active: boolean }) => {
     return (
         <>
             <MaterialReactTable table={table} />
-            <FormCelulares isOpen={isOpen} onOpen={onOpen} onOpenChange={onOpenChange} id_celular={id_equipo}></FormCelulares>
+            <FormCelulares isOpen={isOpen} onOpenChange={onOpenChange} id_equipo={id_equipo}></FormCelulares>
         </>
     );
 };

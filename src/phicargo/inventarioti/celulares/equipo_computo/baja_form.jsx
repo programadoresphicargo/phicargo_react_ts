@@ -19,7 +19,7 @@ import toast from 'react-hot-toast';
 import { parseDate, parseDateTime, getLocalTimeZone } from "@internationalized/date";
 import { today } from "@internationalized/date";
 
-export default function BajaEquipoComputo({ isOpen, onOpen, onOpenChange, id_celular }) {
+export default function BajaEquipoComputo({ isOpen, onOpenChange, id_equipo }) {
 
     const [isLoading, setLoading] = useState(false);
 
@@ -29,8 +29,8 @@ export default function BajaEquipoComputo({ isOpen, onOpen, onOpenChange, id_cel
         try {
             setLoading(true);
 
-            if (id_celular) {
-                const response = await odooApi.put(`/inventarioti/dispositivos/baja/${id_celular}`,
+            if (id_equipo) {
+                const response = await odooApi.put(`/inventarioti/dispositivos/baja/${id_equipo}`,
                     {},
                     {
                         params: {
@@ -68,7 +68,7 @@ export default function BajaEquipoComputo({ isOpen, onOpen, onOpenChange, id_cel
                 <ModalContent>
                     {(onClose) => (
                         <>
-                            <ModalHeader className="flex flex-col gap-1">Registro de baja {id_celular}</ModalHeader>
+                            <ModalHeader className="flex flex-col gap-1">Registro de baja {id_equipo}</ModalHeader>
                             {isLoading && (
                                 <Progress color="primary" isIndeterminate size="sm" />
                             )}
@@ -100,7 +100,7 @@ export default function BajaEquipoComputo({ isOpen, onOpen, onOpenChange, id_cel
                                     Cancelar
                                 </Button>
                                 <Button
-                                    color={id_celular ? "success" : "primary"}
+                                    color={id_equipo ? "success" : "primary"}
                                     onPress={() => handleSave(onClose)}
                                     className="text-white"
                                     isDisabled={isLoading}
