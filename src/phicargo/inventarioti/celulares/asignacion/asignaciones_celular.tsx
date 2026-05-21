@@ -1,11 +1,11 @@
-import { Button, Chip, Link, User } from '@heroui/react';
+import { Button, Link, User } from '@heroui/react';
 import {
+  MRT_Row,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Box from '@mui/material/Box';
-import { DatePicker } from 'antd';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import odooApi from '@/api/odoo-api';
 import NavbarInventarioTI from '../../navbar';
@@ -18,12 +18,19 @@ import ModalAsignacion from './form';
 import EmpleadosSinAsignarCelular from '../empleados/no_asignados/empleados_no_celulares';
 import { exportToCSV } from '@/phicargo/utils/export';
 
+type AsignacionCelular = {
+  id_asignacion: number;
+  nombre_empleado: string;
+  fecha_asignacion: string;
+  puesto: string;
+}
+
 const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
 const Asignaciones = () => {
-  const [isLoading, setLoading] = useState(false);
 
-  const [data, setData] = useState([]);
+  const [isLoading, setLoading] = useState(false);
+  const [data, setData] = useState<AsignacionCelular[]>([]);
 
   const {
     isOpen: isOpen1,
@@ -33,10 +40,8 @@ const Asignaciones = () => {
 
   const {
     isOpen: isOpen2,
-    onOpen: onOpen2,
     onOpenChange: onOpenChange2,
   } = useDisclosure();
-
 
   const fetchData = async () => {
     try {
@@ -54,7 +59,7 @@ const Asignaciones = () => {
     fetchData();
   }, [isOpen1]);
 
-  const Devolver = async (data) => {
+  const Devolver = async (data: AsignacionCelular) => {
     Swal.fire({
       title: '¿Estás seguro?',
       html: `
@@ -90,10 +95,8 @@ const Asignaciones = () => {
       {
         accessorKey: 'nombre_empleado',
         header: 'Empleado',
-        Cell: ({ row }) => {
+        Cell: ({ row }: { row: MRT_Row<AsignacionCelular> }) => {
           const nombre = row.original.nombre_empleado;
-
-          // Si es nulo o vacío, no renderiza nada
           if (!nombre) return null;
 
           return (
@@ -120,7 +123,7 @@ const Asignaciones = () => {
       {
         accessorKey: 'responsiva',
         header: 'Responsiva',
-        Cell: ({ row }) => (
+        Cell: ({ row }: { row: MRT_Row<AsignacionCelular> }) => (
           <Button
             showAnchorIcon
             as={Link}
@@ -138,7 +141,7 @@ const Asignaciones = () => {
       {
         accessorKey: 'boton',
         header: 'Botón de panico',
-        Cell: ({ row }) => (
+        Cell: ({ row }: { row: MRT_Row<AsignacionCelular> }) => (
           <Button
             className='text-white'
             showAnchorIcon
@@ -184,11 +187,10 @@ const Asignaciones = () => {
     initialState: {
       showGlobalFilter: true,
       density: 'compact',
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
       showColumnFilters: true,
     },
-    muiTableBodyRowProps: ({ row }) => ({
-      onClick: ({ event }) => { },
+    muiTableBodyRowProps: () => ({
       style: {
         cursor: 'pointer',
       },
@@ -218,7 +220,7 @@ const Asignaciones = () => {
         maxHeight: 'calc(100vh - 210px)',
       },
     },
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -239,7 +241,7 @@ const Asignaciones = () => {
           radius='full'
           color='success'
           className='text-white'
-          startContent={<i class="bi bi-file-earmark-excel"></i>}
+          startContent={<i className="bi bi-file-earmark-excel"></i>}
           onPress={() => exportToCSV(data, columns, "asignaciones_celulares.csv")}>
           Exportar
         </Button>
@@ -248,12 +250,12 @@ const Asignaciones = () => {
   });
 
   return (
-    <div>
+    <>
       <NavbarInventarioTI></NavbarInventarioTI>
       <MaterialReactTable table={table} />
       <ModalAsignacion isOpen={isOpen1} onOpenChange={onOpenChange1}></ModalAsignacion>
       <EmpleadosSinAsignarCelular isOpen={isOpen2} onOpenChange={onOpenChange2}></EmpleadosSinAsignarCelular>
-    </div>
+    </>
   );
 };
 

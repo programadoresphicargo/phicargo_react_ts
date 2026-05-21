@@ -31,7 +31,7 @@ import {
 } from "@heroui/react";
 import { Grid } from '@mui/material';
 
-export default function ModalAsignacion({ isOpen, onOpen, onOpenChange, id_celular }) {
+export default function ModalAsignacion({ isOpen, onOpenChange }) {
 
   const { form_data, setFormData } = useInventarioTI();
   const [isLoading, setLoading] = useState(false);

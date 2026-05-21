@@ -1,11 +1,11 @@
-import { Button, Chip, Link, User } from '@heroui/react';
+import { Button, Link, User } from '@heroui/react';
 import {
+  MRT_Row,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Box from '@mui/material/Box';
-import { DatePicker } from 'antd';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import odooApi from '@/api/odoo-api';
 import NavbarInventarioTI from '../../navbar';
@@ -17,12 +17,19 @@ import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
 import { exportToCSV } from '@/phicargo/utils/export';
 
+type AsignacionComputo = {
+  id_asignacion: number;
+  nombre_empleado: string;
+  fecha_asignacion: string;
+  puesto: string;
+}
+
 const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
 const AsignacionesEquipoComputo = () => {
   const [isLoading, setLoading] = useState(false);
 
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<AsignacionComputo[]>([]);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const fetchData = async () => {
@@ -41,7 +48,7 @@ const AsignacionesEquipoComputo = () => {
     fetchData();
   }, [isOpen]);
 
-  const Desasignar = async (data) => {
+  const Desasignar = async (data: AsignacionComputo) => {
     Swal.fire({
       title: '¿Estás seguro?',
       html: `
@@ -76,7 +83,7 @@ const AsignacionesEquipoComputo = () => {
     () => [
       {
         accessorKey: 'nombre_empleado', header: 'Empleado',
-        Cell: ({ row }) => {
+        Cell: ({ row }: { row: MRT_Row<AsignacionComputo> }) => {
           const nombre = row.original.nombre_empleado;
 
           // Si es nulo o vacío, no renderiza nada
@@ -104,7 +111,7 @@ const AsignacionesEquipoComputo = () => {
       {
         accessorKey: 'responsiva',
         header: 'Responsiva',
-        Cell: ({ row }) => (
+        Cell: ({ row }: { row: MRT_Row<AsignacionComputo> }) => (
           <Button
             showAnchorIcon
             as={Link}
@@ -147,11 +154,10 @@ const AsignacionesEquipoComputo = () => {
     initialState: {
       showGlobalFilter: true,
       density: 'compact',
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
       showColumnFilters: true,
     },
-    muiTableBodyRowProps: ({ row }) => ({
-      onClick: ({ event }) => { },
+    muiTableBodyRowProps: () => ({
       style: {
         cursor: 'pointer',
       },
@@ -181,7 +187,7 @@ const AsignacionesEquipoComputo = () => {
         maxHeight: 'calc(100vh - 210px)',
       },
     },
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -201,7 +207,7 @@ const AsignacionesEquipoComputo = () => {
           radius='full'
           color='success'
           className='text-white'
-          startContent={<i class="bi bi-file-earmark-excel"></i>}
+          startContent={<i className="bi bi-file-earmark-excel"></i>}
           onPress={() => exportToCSV(data, columns, "asignaciones_computo.csv")}>
           Exportar
         </Button>
@@ -210,11 +216,11 @@ const AsignacionesEquipoComputo = () => {
   });
 
   return (
-    <div>
+    <>
       <NavbarInventarioTI></NavbarInventarioTI>
       <MaterialReactTable table={table} />
       <ModalAsignacion isOpen={isOpen} onOpenChange={onOpenChange}></ModalAsignacion>
-    </div>
+    </>
   );
 };
 
