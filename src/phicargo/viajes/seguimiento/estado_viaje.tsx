@@ -14,6 +14,7 @@ const EstatusViaje = () => {
         planta: 2,
         retorno: 3,
         finalizado: 4,
+        resguardo: 5,
     };
 
     useEffect(() => {
@@ -34,6 +35,7 @@ const EstatusViaje = () => {
                     { title: 'Planta' },
                     { title: 'Retorno' },
                     { title: 'Finalizado' },
+                    { title: 'Resguardo' },
                 ]}
             />
         </>
