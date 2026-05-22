@@ -154,11 +154,13 @@ export default function FormCelulares({ isOpen, onOpenChange, id_equipo }: { isO
 
     return (
         <>
-            <BajaEquipoComputo
-                isOpen={isBajaModalOpen}
-                onOpenChange={setBajaModalOpen}
-                id_equipo={id_equipo}
-            />
+            {id_equipo && (
+                <BajaEquipoComputo
+                    isOpen={isBajaModalOpen}
+                    onOpenChange={setBajaModalOpen}
+                    id_equipo={id_equipo}
+                />
+            )}
 
             <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="5xl" scrollBehavior="outside">
                 <ModalContent>

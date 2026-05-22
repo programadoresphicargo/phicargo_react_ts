@@ -27,7 +27,7 @@ const initialForm: BajaEquipo = {
     empleado_baja: null,
 }
 
-export default function BajaEquipoComputo({ isOpen, onOpenChange, id_equipo }: { isOpen: boolean, onOpenChange: () => void, id_equipo: number }) {
+export default function BajaEquipoComputo({ isOpen, onOpenChange, id_equipo }: { isOpen: boolean, onOpenChange: (open: boolean) => void, id_equipo: number }) {
 
     const { control, handleSubmit } = useForm<BajaEquipo>({
         defaultValues: initialForm,
