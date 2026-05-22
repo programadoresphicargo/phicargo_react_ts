@@ -1,20 +1,18 @@
-import React, { useEffect, useRef, useState } from "react";
-
+import { useEffect, useRef, useState } from "react";
 import { addToast } from "@heroui/react";
 import audioDetenciones from '../../assets/audio/detencion.mp3';
 import audioFile from '../../assets/audio/estatus_operador.mp3';
 import { useAuthContext } from "@/modules/auth/hooks";
-import { user } from "@heroui/react";
 const { VITE_WEBSOCKET_SERVER } = import.meta.env;
 
 const WebSocketWithToast = () => {
     const { session } = useAuthContext();
-    const webSocketRef = useRef(null);
-    const audioRef = useRef(null);
-    const audioDet = useRef(null);
-    const [selectedVoice, setSelectedVoice] = useState(null);
+    const webSocketRef = useRef<WebSocket | null>(null);
+    const audioRef = useRef<HTMLAudioElement | null>(null);
+    const audioDet = useRef<HTMLAudioElement | null>(null);
+    const [selectedVoice, setSelectedVoice] = useState<SpeechSynthesisVoice | null>(null);
 
-    const speakMessage = (message) => {
+    const speakMessage = (message: string) => {
         if ("speechSynthesis" in window) {
             const utterance = new SpeechSynthesisUtterance(message);
             if (selectedVoice) {
@@ -37,7 +35,7 @@ const WebSocketWithToast = () => {
         }
     };
 
-    const showPushNotification = (title, body) => {
+    const showPushNotification = (title: string, body: string) => {
         if ("Notification" in window && Notification.permission === "granted") {
             new Notification(title, { body, icon: "/icon.png" });
         } else if (Notification.permission !== "granted") {
@@ -53,7 +51,7 @@ const WebSocketWithToast = () => {
         window.speechSynthesis.onvoiceschanged = loadVoices;
         loadVoices();
 
-        const webSocket = new WebSocket(VITE_WEBSOCKET_SERVER + session.user.id);
+        const webSocket = new WebSocket(VITE_WEBSOCKET_SERVER + session?.user.id);
         webSocketRef.current = webSocket;
 
         webSocket.onopen = () => {
@@ -99,7 +97,7 @@ const WebSocketWithToast = () => {
                         variant: 'solid'
                     });
                     //speakMessage(message);
-                    showPushNotification(`Nueva alerta: ${message}`);
+                    showPushNotification(`Nueva alerta: ${message}`,`Nueva alerta: ${message}`);
                 }
 
                 if (audioRef.current) {
