@@ -7,7 +7,6 @@ const { VITE_WEBSOCKET_SERVER } = import.meta.env;
 
 const WebSocketWithToast = () => {
     const { session } = useAuthContext();
-    const webSocketRef = useRef<WebSocket | null>(null);
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const audioDet = useRef<HTMLAudioElement | null>(null);
     const [selectedVoice, setSelectedVoice] = useState<SpeechSynthesisVoice | null>(null);
@@ -36,9 +35,14 @@ const WebSocketWithToast = () => {
     };
 
     const showPushNotification = (title: string, body: string) => {
-        if ("Notification" in window && Notification.permission === "granted") {
+
+        if (!("Notification" in window)) {
+            return;
+        }
+
+        if (Notification.permission === "granted") {
             new Notification(title, { body, icon: "/icon.png" });
-        } else if (Notification.permission !== "granted") {
+        } else {
             Notification.requestPermission().then((permission) => {
                 if (permission === "granted") {
                     new Notification(title, { body, icon: "/icon.png" });
@@ -52,7 +56,6 @@ const WebSocketWithToast = () => {
         loadVoices();
 
         const webSocket = new WebSocket(VITE_WEBSOCKET_SERVER + session?.user.id);
-        webSocketRef.current = webSocket;
 
         webSocket.onopen = () => {
             const message = "Conectado al servidor WebSocket";
@@ -78,7 +81,7 @@ const WebSocketWithToast = () => {
                 }
 
                 console.log(messageType);
-                if (messageType == 'detencion') {
+                if (messageType === 'detencion') {
                     addToast({
                         title: message,
                         color: 'danger',
@@ -97,7 +100,7 @@ const WebSocketWithToast = () => {
                         variant: 'solid'
                     });
                     //speakMessage(message);
-                    showPushNotification(`Nueva alerta: ${message}`,`Nueva alerta: ${message}`);
+                    showPushNotification(`Nueva alerta: ${message}`, `Nueva alerta: ${message}`);
                 }
 
                 if (audioRef.current) {
@@ -125,7 +128,7 @@ const WebSocketWithToast = () => {
         return () => {
             webSocket.close();
         };
-    }, [selectedVoice]);
+    }, [session?.user?.id]);
 
     return (
         <div>
