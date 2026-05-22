@@ -1,24 +1,16 @@
-import { Button, Chip, DatePicker, NumberInput } from "@heroui/react";
+import { Button, NumberInput } from "@heroui/react";
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 import React, { useEffect, useState } from 'react';
-import { download, generateCsv, mkConfig } from 'export-to-csv';
-import { getLocalTimeZone, parseDate } from "@internationalized/date";
-
-import Badge from 'react-bootstrap/Badge';
 import { Box } from '@mui/material';
-import { Component } from "react";
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import axios from 'axios';
 import odooApi from '@/api/odoo-api';
 import { toast } from "react-toastify";
-import { useDateFormatter } from "@react-aria/i18n";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { exportToCSV } from '../../utils/export';
 
 const UltimosUsosUnidades = () => {
 
   const [value, setValue] = React.useState(5);
-  const [isLoading, setisLoading] = useState('');
+  const [isLoading, setisLoading] = useState(false);
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -41,6 +33,7 @@ const UltimosUsosUnidades = () => {
     try {
       setisLoading(true);
       const response = await odooApi.get(`/vehicles/ultimos_usos_correo/${value}`);
+      console.log(response.data);
     } catch (error) {
       toast.error('Error al enviar los datos: ' + error);
     } finally {
@@ -69,8 +62,7 @@ const UltimosUsosUnidades = () => {
     columnResizeMode: "onEnd",
     initialState: {
       density: 'compact',
-      expanded: false,
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
       showColumnFilters: true,
     },
     muiTablePaperProps: {
@@ -100,7 +92,7 @@ const UltimosUsosUnidades = () => {
         color: row.subRows?.length ? '#FFFFFF' : '#000000',
       },
     }),
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
