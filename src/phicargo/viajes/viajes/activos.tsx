@@ -264,7 +264,7 @@ const ViajesActivos = ({ }) => {
       {
         accessorKey: 'mensaje_inicio_programado',
         header: 'Resultado',
-        Cell: ({ cell }: { cell: MRT_Cell<Viaje> }) => <EstatusChipInicioViaje valor={cell.getValue()}></EstatusChipInicioViaje>
+        Cell: ({ cell }: { cell: MRT_Cell<Viaje> }) => <EstatusChipInicioViaje valor={cell.getValue<string>()}></EstatusChipInicioViaje>
       },
       {
         accessorKey: 'llegada_planta_programada',
@@ -277,7 +277,7 @@ const ViajesActivos = ({ }) => {
       {
         accessorKey: 'mensaje_llegada_planta',
         header: 'Resultado',
-        Cell: ({ cell }: { cell: MRT_Cell<Viaje> }) => <EstatusChipLlegadaPlanta valor={cell.getValue()}></EstatusChipLlegadaPlanta>
+        Cell: ({ cell }: { cell: MRT_Cell<Viaje> }) => <EstatusChipLlegadaPlanta valor={cell.getValue<string>()}></EstatusChipLlegadaPlanta>
       },
       {
         accessorKey: 'nombre_cliente',
@@ -400,6 +400,9 @@ const ViajesActivos = ({ }) => {
     },
     muiTableBodyRowProps: ({ row }) => ({
       onClick: () => {
+        const isGrouped = row.getIsGrouped();
+        if (isGrouped) return;
+
         handleClickOpen();
         setIDViaje(row.original.id_viaje);
       },

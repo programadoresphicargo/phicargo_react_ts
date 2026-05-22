@@ -1,8 +1,7 @@
-import React from 'react';
 import { Chip } from '@heroui/react';
 
-const EstatusChipLlegadaPlanta = ({ valor }) => {
-    let color;
+const EstatusChipLlegadaPlanta = ({ valor }: { valor: string }) => {
+    let color: "success" | "primary" | "default" | "secondary" | "warning" | "danger";
 
     switch (valor) {
         case 'Llegó tarde':
