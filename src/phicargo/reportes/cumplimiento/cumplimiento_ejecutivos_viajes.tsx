@@ -1,11 +1,13 @@
-import React, { useEffect, useMemo, useState, useContext } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
+    MRT_Cell,
+    MRT_ColumnDef,
+    MRT_Row,
     MaterialReactTable,
     useMaterialReactTable,
 } from 'material-react-table';
 import Box from '@mui/material/Box';
 import { Button, Chip } from "@heroui/react"
-import { DatePicker } from 'antd';
 import odooApi from '@/api/odoo-api';
 import { Slider } from "@heroui/react";
 import { DateRangePicker } from "@heroui/react";
@@ -17,10 +19,20 @@ import Travel from '@/phicargo/viajes/control/viaje';
 import NavbarTravel from '@/phicargo/viajes/navbar_viajes';
 const { VITE_ODOO_API_URL } = import.meta.env;
 
+interface ReporteRow {
+    id_viaje: number | null;
+    estatus?: string;
+    referencia?: string;
+    sucursal?: string;
+    nombre?: string;
+
+    [key: string]: any;
+}
+
 const ReporteCumplimientoEjecutivo = () => {
 
     const [open, setOpen] = React.useState(false);
-    const [idViaje, setIDViaje] = React.useState(false);
+    const [idViaje, setIDViaje] = React.useState<number | null>(null);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -38,15 +50,10 @@ const ReporteCumplimientoEjecutivo = () => {
         end: parseDate(todayStr),
     });
 
-    const [columnOrder, setColumnOrder] = useState([]);
+    const [columnOrder, setColumnOrder] = useState<string[]>([]);
     const [isLoading, setLoading] = useState(false);
-    const [value, setValue] = React.useState([0, 24]);
-
-    const handleDateChange = (dates) => {
-        setDates(dates);
-    };
-
-    const [data, setData] = useState([]);
+    const [value, setValue] = React.useState<[number, number]>([0, 24]);
+    const [data, setData] = useState<ReporteRow[]>([]);
 
     const fetchData = async () => {
         const startDate = dates.start;
@@ -57,14 +64,16 @@ const ReporteCumplimientoEjecutivo = () => {
                 params: {
                     hora_inicio: value[0],
                     hora_fin: value[1],
-                    fecha_inicio: startDate,
-                    fecha_fin: endDate,
+                    fecha_inicio: startDate.toString(),
+                    fecha_fin: endDate.toString(),
                 },
             });
             setData(response.data);
             setLoading(false);
         } catch (error) {
             console.error('Error al obtener los datos:', error);
+            setLoading(false);
+        } finally {
             setLoading(false);
         }
     };
@@ -80,7 +89,7 @@ const ReporteCumplimientoEjecutivo = () => {
         }
     }, [data, value]);
 
-    const columns = useMemo(() => {
+    const columns = useMemo<MRT_ColumnDef<ReporteRow>[]>(() => {
         if (!data || data.length === 0 || columnOrder.length === 0) return [];
 
         return columnOrder
@@ -96,8 +105,14 @@ const ReporteCumplimientoEjecutivo = () => {
                     header: key.replace(/_/g, " ").toUpperCase(),
                     enableColumnPinning: true,
                     size: 150,
-                    Cell: ({ cell, row }) => {
-                        const value = cell.getValue();
+                    Cell: ({
+                        cell,
+                        row,
+                    }: {
+                        cell: MRT_Cell<ReporteRow>;
+                        row: MRT_Row<ReporteRow>;
+                    }) => {
+                        const value = cell.getValue<string>();
                         const fechaEnvio = row.original?.[`${key}_fecha_envio`];
                         const min20 = row.original?.[`${key}_first_20_min`];
                         const imagen = row.original?.[`${key}_imagen`];
@@ -120,7 +135,7 @@ const ReporteCumplimientoEjecutivo = () => {
                             );
                         }
 
-                        if (isHora && value) {
+                        if (isHora && value != null) {
                             return (
                                 <User
                                     avatarProps={{
@@ -135,7 +150,7 @@ const ReporteCumplimientoEjecutivo = () => {
                             );
                         }
 
-                        return (value ?? "").toUpperCase();
+                        return String(value ?? "").toUpperCase();
                     }
                 };
             });
@@ -155,10 +170,10 @@ const ReporteCumplimientoEjecutivo = () => {
             columnPinning: { left: ['referencia', 'sucursal', 'estatus', 'nombre'] },
             showColumnFilters: true,
             density: 'compact',
-            pagination: { pageSize: 80 },
+            pagination: { pageIndex: 0, pageSize: 80 },
         },
         muiTableBodyRowProps: ({ row }) => ({
-            onClick: ({ event }) => {
+            onClick: () => {
                 handleClickOpen();
                 setIDViaje(row.original.id_viaje);
             },
@@ -191,7 +206,7 @@ const ReporteCumplimientoEjecutivo = () => {
                 borderRadius: '0',
             },
         },
-        renderTopToolbarCustomActions: ({ table }) => (
+        renderTopToolbarCustomActions: () => (
             <Box
                 sx={{
                     display: 'flex',
@@ -213,21 +228,31 @@ const ReporteCumplimientoEjecutivo = () => {
                     label="Fecha"
                     value={dates}
                     variant='bordered'
-                    onChange={setDates} />
+                    onChange={(value) => {
+                        if (value) {
+                            setDates(value);
+                        }
+                    }} />
 
                 <Slider
                     className="flex-1 min-w-[300px]"
-                    fullWidth
                     value={value}
-                    onChange={setValue}
+                    onChange={(val) => {
+                        if (
+                            Array.isArray(val) &&
+                            val.length === 2
+                        ) {
+                            setValue([val[0], val[1]]);
+                        }
+                    }}
                     label="Hora"
                     maxValue={24}
                     minValue={0}
                     step={1}
                 />
 
-                <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} radius='full' onPress={() => exportToCSV(data, columns, "reporte_estatus.csv")} fullWidth>Exportar</Button>
-                <Button color='primary' className='text-white' startContent={<i class="bi bi-arrow-clockwise"></i>} radius='full' onPress={() => fetchData()} fullWidth>Recargar</Button>
+                <Button color='success' className='text-white' startContent={<i className="bi bi-file-earmark-excel"></i>} radius='full' onPress={() => exportToCSV(data, columns, "reporte_estatus.csv")} fullWidth>Exportar</Button>
+                <Button color='primary' className='text-white' startContent={<i className="bi bi-arrow-clockwise"></i>} radius='full' onPress={() => fetchData()} fullWidth>Recargar</Button>
 
             </Box>
 
@@ -238,7 +263,9 @@ const ReporteCumplimientoEjecutivo = () => {
         <>
             <NavbarTravel></NavbarTravel>
             <MaterialReactTable table={table} />
-            <Travel idViaje={idViaje} open={open} handleClose={handleClose}></Travel>
+            {idViaje && (
+                <Travel idViaje={idViaje} open={open} handleClose={handleClose}></Travel>
+            )}
         </>
     );
 };

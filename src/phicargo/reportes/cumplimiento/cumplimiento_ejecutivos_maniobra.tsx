@@ -1,11 +1,13 @@
-import React, { useEffect, useMemo, useState, useContext } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
+    MRT_Cell,
+    MRT_ColumnDef,
+    MRT_Row,
     MaterialReactTable,
     useMaterialReactTable,
 } from 'material-react-table';
 import Box from '@mui/material/Box';
 import { Button, Chip } from "@heroui/react"
-import { DatePicker } from 'antd';
 import odooApi from '@/api/odoo-api';
 import { Slider } from "@heroui/react";
 import { DateRangePicker } from "@heroui/react";
@@ -13,21 +15,29 @@ import { parseDate } from "@internationalized/date";
 import { exportToCSV } from '../../utils/export';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { User } from "@heroui/react";
-import Travel from '@/phicargo/viajes/control/viaje';
 import Formulariomaniobra from '@/phicargo/maniobras/maniobras/form';
 import CustomNavbar from '@/pages/CustomNavbar';
 import { pages } from '../../maniobras/pages';
 
 const { VITE_ODOO_API_URL } = import.meta.env;
 
+interface ReporteRow {
+    id_viaje: number | null;
+    estatus?: string;
+    referencia?: string;
+    sucursal?: string;
+    nombre?: string;
+    [key: string]: any;
+}
+
 const ReporteCumplimientoEjecutivoManiobra = () => {
 
     const [modalShow, setModalShow] = React.useState(false);
 
-    const [id_maniobra, setIdmaniobra] = useState('');
-    const [dataCP, setDataCP] = useState({});
+    const [id_maniobra, setIdmaniobra] = useState<number | null>(null);
+    const [dataCP, setDataCP] = useState<any>();
 
-    const handleShowModal = (id_maniobra, data) => {
+    const handleShowModal = (id_maniobra: number, data: any) => {
         setModalShow(true);
         setIdmaniobra(id_maniobra);
         setDataCP(data);
@@ -46,16 +56,10 @@ const ReporteCumplimientoEjecutivoManiobra = () => {
         end: parseDate(todayStr),
     });
 
-    const [columnOrder, setColumnOrder] = useState([]);
+    const [columnOrder, setColumnOrder] = useState<string[]>([]);
     const [isLoading, setLoading] = useState(false);
     const [value, setValue] = React.useState([0, 24]);
-
-
-    const handleDateChange = (dates) => {
-        setDates(dates);
-    };
-
-    const [data, setData] = useState([]);
+    const [data, setData] = useState<ReporteRow[]>([]);
 
     const fetchData = async () => {
         const startDate = dates.start;
@@ -66,8 +70,8 @@ const ReporteCumplimientoEjecutivoManiobra = () => {
                 params: {
                     hora_inicio: value[0],
                     hora_fin: value[1],
-                    fecha_inicio: startDate,
-                    fecha_fin: endDate,
+                    fecha_inicio: startDate.toString(),
+                    fecha_fin: endDate.toString(),
                 },
             });
             setData(response.data);
@@ -89,7 +93,7 @@ const ReporteCumplimientoEjecutivoManiobra = () => {
         }
     }, [data, value]);
 
-    const columns = useMemo(() => {
+    const columns = useMemo<MRT_ColumnDef<ReporteRow>[]>(() => {
         if (!data || data.length === 0 || columnOrder.length === 0) return [];
 
         return columnOrder
@@ -106,8 +110,14 @@ const ReporteCumplimientoEjecutivoManiobra = () => {
                     header: key.replace(/_/g, " ").toUpperCase(),
                     enableColumnPinning: true,
                     size: 150,
-                    Cell: ({ cell, row }) => {
-                        const value = cell.getValue();
+                    Cell: ({
+                        cell,
+                        row,
+                    }: {
+                        cell: MRT_Cell<ReporteRow>;
+                        row: MRT_Row<ReporteRow>;
+                    }) => {
+                        const value = cell.getValue<string>();
                         const fechaEnvio = row.original?.[`${key}_fecha_hora`];
                         const min20 = row.original?.[`${key}_first_20_min`];
                         const imagen = row.original?.[`${key}_imagen`];
@@ -129,7 +139,7 @@ const ReporteCumplimientoEjecutivoManiobra = () => {
                             );
                         }
 
-                        if (isHora && value) {
+                        if (isHora && value != null) {
                             return (
                                 <User
                                     avatarProps={{
@@ -164,10 +174,10 @@ const ReporteCumplimientoEjecutivoManiobra = () => {
             columnPinning: { left: ['id_maniobra', 'estado_maniobra', 'nombre', 'contenedores', 'tipo_maniobra'] },
             showColumnFilters: true,
             density: 'compact',
-            pagination: { pageSize: 80 },
+            pagination: { pageIndex: 0, pageSize: 80 },
         },
         muiTableBodyRowProps: ({ row }) => ({
-            onClick: ({ event }) => {
+            onClick: () => {
                 handleShowModal(row.original.id_maniobra, row.original);
             },
             style: {
@@ -199,7 +209,7 @@ const ReporteCumplimientoEjecutivoManiobra = () => {
                 borderRadius: '0',
             },
         },
-        renderTopToolbarCustomActions: ({ table }) => (
+        renderTopToolbarCustomActions: () => (
             <Box
                 sx={{
                     display: 'flex',
@@ -210,35 +220,39 @@ const ReporteCumplimientoEjecutivoManiobra = () => {
                     overflowX: 'auto',
                 }}
             >
-
                 <h1
                     className="flex-1 min-w-[300px] tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
                 >
                     Cumplimiento de estatus en maniobra
                 </h1>
-
                 <DateRangePicker
                     label="Fecha"
                     value={dates}
                     variant='bordered'
-                    onChange={setDates} />
-
+                    onChange={(value) => {
+                        if (value) {
+                            setDates(value);
+                        }
+                    }} />
                 <Slider
                     className="flex-1 min-w-[300px]"
-                    fullWidth
                     value={value}
-                    onChange={setValue}
+                    onChange={(val) => {
+                        if (
+                            Array.isArray(val) &&
+                            val.length === 2
+                        ) {
+                            setValue([val[0], val[1]]);
+                        }
+                    }}
                     label="Hora"
                     maxValue={24}
                     minValue={0}
                     step={1}
                 />
-
-                <Button color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "reporte_estatus.csv")} fullWidth>Exportar</Button>
-                <Button color='primary' className='text-white' startContent={<i class="bi bi-arrow-clockwise"></i>} onPress={() => fetchData()} fullWidth>Recargar</Button>
-
+                <Button color='success' className='text-white' startContent={<i className="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "reporte_estatus.csv")} fullWidth>Exportar</Button>
+                <Button color='primary' className='text-white' startContent={<i className="bi bi-arrow-clockwise"></i>} onPress={() => fetchData()} fullWidth>Recargar</Button>
             </Box>
-
         ),
     });
 
@@ -246,13 +260,14 @@ const ReporteCumplimientoEjecutivoManiobra = () => {
         <>
             <CustomNavbar pages={pages}></CustomNavbar>
             <MaterialReactTable table={table} />
-            <Formulariomaniobra
-                show={modalShow}
-                handleClose={handleCloseModal}
-                id_maniobra={id_maniobra}
-                data={dataCP}
-                form_deshabilitado={true}
-            />
+            {id_maniobra && (
+                <Formulariomaniobra
+                    show={modalShow}
+                    handleClose={handleCloseModal}
+                    id_maniobra={id_maniobra}
+                    dataCP={dataCP}
+                />
+            )}
         </>
     );
 };

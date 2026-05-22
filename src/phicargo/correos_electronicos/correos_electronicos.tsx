@@ -8,14 +8,15 @@ import { Box } from '@mui/material';
 import { Button, Checkbox } from "@heroui/react";
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
-import FormularioCorreoGeneral from './correoForm';
+import FormularioCorreoGeneral from './form';
 import odooApi from '@/api/odoo-api';
 import CustomNavbar from '@/pages/CustomNavbar';
+import { CorreoCliente } from '../viajes/correos/correos_electronicos';
 
 const CorreosElectronicos = () => {
 
   const [open, setOpen] = React.useState(false);
-  const [correo, setCorreo] = useState({});
+  const [id_correo, setIDCorreo] = useState<number | null>(null);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -65,7 +66,7 @@ const CorreosElectronicos = () => {
       {
         accessorKey: 'activo',
         header: 'Activo',
-        Cell: ({ cell }: { cell: MRT_Cell<any> }) => (
+        Cell: ({ cell }: { cell: MRT_Cell<CorreoCliente> }) => (
           <Checkbox isSelected={cell.getValue<boolean>() ? true : false}></Checkbox>
         ),
       },
@@ -106,7 +107,7 @@ const CorreosElectronicos = () => {
         if (row.subRows?.length) {
         } else {
           handleClickOpen();
-          setCorreo(row.original);
+          setIDCorreo(row.original.id_correo);
         }
       },
       style: {
@@ -164,7 +165,7 @@ const CorreosElectronicos = () => {
       aria-describedby="alert-dialog-description"
     >
       <DialogContent>
-        <FormularioCorreoGeneral idCliente={null} handleClose={handleClose} data={correo} />
+        <FormularioCorreoGeneral handleClose={handleClose} id_correo={id_correo} />
       </DialogContent>
     </Dialog>
   </>

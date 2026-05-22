@@ -1,9 +1,9 @@
-export function tiempoTranscurrido(fechaDada) {
+export function tiempoTranscurrido(fechaDada: string) {
     const ahora = new Date();
     const fecha = new Date(fechaDada);
-    const diferenciaMilisegundos = ahora - fecha;
+    const diferenciaMilisegundos = ahora.getTime() - fecha.getTime();
 
-    if (isNaN(fecha)) {
+    if (isNaN(fecha.getTime())) {
         return "Fecha no válida";
     }
 
@@ -13,7 +13,11 @@ export function tiempoTranscurrido(fechaDada) {
     const dias = Math.floor(horas / 24);
 
     if (dias >= 1) {
-        const opciones = { day: "2-digit", month: "2-digit", year: "numeric" };
+        const opciones: Intl.DateTimeFormatOptions = {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+        };
         const fechaFormateada = fecha.toLocaleDateString("es-MX", opciones);
 
         const hora = fecha.getHours();
@@ -32,5 +36,5 @@ export function tiempoTranscurrido(fechaDada) {
         return `hace ${horas} horas`;
     }
 
-    return `hace ${dias} días`; 
+    return `hace ${dias} días`;
 }

@@ -50,7 +50,7 @@ const CorreosLigadosManiobra = ({ open, handleClose, id_cliente }) => {
     const fetchCorreos = async () => {
         try {
             setIsLoading(true);
-            const response = await odooApi.get(`/correos/get_by_id_cliente/${id_cliente}`);
+            const response = await odooApi.get(`/correos/id_cliente/${id_cliente}`);
             setCorreosCliente(response.data);
         } catch (error) {
             console.error('Error al obtener los correos:', error);

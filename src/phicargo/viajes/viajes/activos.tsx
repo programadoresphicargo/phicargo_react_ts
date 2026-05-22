@@ -30,7 +30,7 @@ import WebSocketWithToast from '@/phicargo/websocket/websocket';
 import { createActionColumn } from '../cuenta_espejo/column';
 import { copiarHTML } from '../cuenta_espejo/cuenta_espejo';
 
-type Viaje = {
+export type Viaje = {
   id_viaje: number;
   name: string;
   ejecutivo: string;

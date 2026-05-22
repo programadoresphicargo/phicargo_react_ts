@@ -6,17 +6,20 @@ import { Chip } from "@heroui/react";
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import FormularioCorreoGeneral from '@/phicargo/correos_electronicos/correoForm';
+import FormularioCorreoGeneral from '@/phicargo/correos_electronicos/form';
 import { Input } from "@heroui/react";
 import { User } from "@heroui/react";
 import { ViajeContext } from '../context/viajeContext';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 
-type CorreoCliente = {
+export type CorreoCliente = {
   id_correo: number;
+  nombre_completo: string;
+  id_cliente: number | null;
   correo: string;
   tipo: string;
+  activo: boolean;
 };
 
 type CorreoLigado = {
@@ -44,7 +47,7 @@ const CorreosElectronicosViaje: React.FC<CorreosElectronicosViajeProps> = ({
   const getCorreosCliente = async () => {
     try {
       setLoading(true);
-      const response = await odooApi.get('/correos/get_by_id_cliente/' + viaje?.partner?.id);
+      const response = await odooApi.get('/correos/id_cliente/' + viaje?.partner?.id);
       setCorreosCliente(response.data);
     } catch (error) {
       console.error('Error al obtener los datos:', error);
@@ -283,9 +286,8 @@ const CorreosElectronicosViaje: React.FC<CorreosElectronicosViajeProps> = ({
       <DialogContent>
 
         <FormularioCorreoGeneral
-          data={null}
           handleClose={handleClose}
-          idCliente={viaje?.partner?.id} />
+          id_cliente={viaje?.partner?.id} />
 
       </DialogContent>
     </Dialog>
