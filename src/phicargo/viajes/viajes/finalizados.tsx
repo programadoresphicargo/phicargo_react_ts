@@ -235,6 +235,9 @@ const ViajesFinalizados = ({ }) => {
     },
     muiTableBodyRowProps: ({ row }) => ({
       onClick: () => {
+        const isGrouped = row.getIsGrouped();
+        if (isGrouped) return;
+
         handleClickOpen();
         setIDViaje(row.original.id_viaje);
       },
