@@ -2,26 +2,22 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
 import { Button } from '@heroui/react';
 import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import FormularioNewCE from './formulario';
-import Slide from '@mui/material/Slide';
+import FormularioNewCE from './form';
 import odooApi from '@/api/odoo-api';
-import { toast } from 'react-toastify';
 import CustomNavbar from '@/pages/CustomNavbar';
 import { pages } from '../folios/pages';
+import { TipoCostoExtra } from './type';
 
 const TiposCostosExtras = ({ }) => {
 
-  const [data, setData] = useState([]);
-  const [isLoading2, setLoading] = useState();
-  const [id_tipo_costo, setIDTCE] = useState(null);
+  const [data, setData] = useState<TipoCostoExtra[]>([]);
+  const [isLoading, setLoading] = useState(false);
+  const [id_tipo_costo, setIDTCE] = useState<number | null>(null);
 
   const fetchData = async () => {
     try {
@@ -78,13 +74,13 @@ const TiposCostosExtras = ({ }) => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
-    state: { isLoading: isLoading2 },
+    state: { showProgressBars: isLoading },
     enableColumnPinning: true,
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
     initialState: {
       density: 'compact',
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
     },
     muiTablePaperProps: {
       elevation: 0,
@@ -114,7 +110,7 @@ const TiposCostosExtras = ({ }) => {
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
-      onClick: ({ event }) => {
+      onClick: () => {
         if (row.subRows?.length) {
         } else {
           handleClickOpen();
@@ -125,7 +121,7 @@ const TiposCostosExtras = ({ }) => {
         cursor: 'pointer',
       },
     }),
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -162,8 +158,7 @@ const TiposCostosExtras = ({ }) => {
         open={open}
         keepMounted
         onClose={handleClose}
-        aria-describedby="alert-dialog-slide-description"
-        fullWidth="sm"
+        fullWidth
         maxWidth="sm"
       >
         <DialogContent>
