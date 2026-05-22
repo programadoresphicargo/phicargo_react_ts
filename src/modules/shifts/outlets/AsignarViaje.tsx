@@ -3,7 +3,7 @@ import {
  MaterialReactTable,
  useMaterialReactTable,
 } from 'material-react-table';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 import {
  Button,
  Card,
@@ -22,7 +22,6 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
-import { useNavigate } from 'react-router-dom';
 import { DatePicker } from '@heroui/react';
 import { parseDate } from "@internationalized/date";
 import AsignacionViaje from './confirmar_cambios';
@@ -37,11 +36,9 @@ type CartaPorte = {
  dangerous_cargo: boolean;
 }
 
-export default function AsignacionViajeModal({ open, setOpen, shift }: { open: boolean, setOpen: () => void, shift: Shift }) {
+export default function AsignacionViajeModal({ open, setOpen, shift }: { open: boolean, setOpen: Dispatch<SetStateAction<boolean>>, shift: Shift }) {
 
- const navigate = useNavigate();
  const { branchId } = useShiftsContext();
-
  const [isLoading, setLoading] = useState(false);
  const [cp, setCP] = useState<CartaPorte>();
  const [rawData, setRawData] = useState<CartaPorte[]>([]);
@@ -360,7 +357,7 @@ export default function AsignacionViajeModal({ open, setOpen, shift }: { open: b
      <IconButton
       edge="start"
       color="inherit"
-      onClick={() => setOpen()}
+      onClick={() => setOpen(false)}
       aria-label="close"
      >
       <CloseIcon />
@@ -368,7 +365,7 @@ export default function AsignacionViajeModal({ open, setOpen, shift }: { open: b
      <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
       Asignación de viajes
      </Typography>
-     <Button autoFocus onPress={() => setOpen()}>
+     <Button autoFocus onPress={() => setOpen(false)}>
       Cancelar
      </Button>
     </Toolbar>
