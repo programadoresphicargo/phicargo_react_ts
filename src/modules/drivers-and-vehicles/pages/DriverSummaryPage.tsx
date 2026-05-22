@@ -1,13 +1,14 @@
 import { ExportConfig, ExportToExcel } from '@/utilities';
 
-import { DriverWithRealStatus } from '../../drivers/models';
+import { Driver, DriverWithRealStatus } from '../../drivers/models';
 import DriversWithRealStatus from '../utilities/get-drivers-real-status';
 import { MaterialReactTable } from 'material-react-table';
 import { useBaseTable } from '@/hooks';
 import { useDriverQueries } from '../../drivers/hooks/queries';
 import { useDriversSummaryColumns } from '../hooks/useDriversSummaryColumns';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { getDriverRealStatusConf } from '../utilities';
+import { DriverInformationModal } from '@/modules/drivers/components/DriverInformationModal';
 
 const DriverSummaryPage = () => {
   const {
@@ -15,11 +16,16 @@ const DriverSummaryPage = () => {
   } = useDriverQueries();
 
   const { columns } = useDriversSummaryColumns();
+  const [driverInfo, setDriverInfo] = useState<Driver | null>(null);
 
   const driversWithStatus = useMemo(() => {
     const vehiclesTransformr = new DriversWithRealStatus(drivers || []);
     return vehiclesTransformr.getVehiclesWithRealStatus();
   }, [drivers]);
+
+  const onOpenInfo = (driver: Driver) => {
+    setDriverInfo(driver);
+  };
 
   const table = useBaseTable<DriverWithRealStatus>({
     columns,
@@ -29,12 +35,22 @@ const DriverSummaryPage = () => {
     isFetching,
     refetchFn: () => refetch(),
     exportFn: (data) => toExcel.exportData(data),
+    onDoubleClickFn: (row) => onOpenInfo(row.original),
     showColumnFilters: true,
     showGlobalFilter: true,
     containerHeight: 'calc(100vh - 165px)',
   });
 
-  return <MaterialReactTable table={table} />;
+  return <>
+    <MaterialReactTable table={table} />
+    {driverInfo && (
+      <DriverInformationModal
+        open={!!driverInfo}
+        onClose={() => setDriverInfo(null)}
+        driver={driverInfo}
+      />
+    )}
+  </>;
 };
 
 export default DriverSummaryPage;
