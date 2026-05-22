@@ -1,4 +1,3 @@
-import { exportToCSV } from '@/phicargo/utils/export';
 import { MaterialReactTable } from 'material-react-table';
 import { useFleetColumns } from '../hooks/useFleetColumns';
 import { Fleet } from '@/modules/vehicles/models';
@@ -29,7 +28,6 @@ const FleetPage = () => {
     isLoading: getFleetQuery.isLoading,
     isFetching: getFleetQuery.isFetching,
     refetchFn: () => getFleetQuery.refetch(),
-    exportFn: (data) => exportToCSV(data || [], columns, 'unidades1.csv'),
     showColumnFilters: true,
     showGlobalFilter: true,
     containerHeight: 'calc(100vh - 165px)',
