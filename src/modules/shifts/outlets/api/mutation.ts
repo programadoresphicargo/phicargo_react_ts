@@ -21,12 +21,9 @@ export const useAsignarViaje = () => {
    toast.success(data.message);
   },
   onError: (error: AxiosError<ApiError>) => {
-   toast.error("Error completo:" + error);
-
    const message =
     error.response?.data?.detail ?? "Error desconocido";
-
-   toast.error("Error" + message);
+   toast.error(message);
   },
  });
 };

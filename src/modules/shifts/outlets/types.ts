@@ -11,4 +11,6 @@ export interface CartaPorte {
  cliente?: string;
  x_ruta_bel?: string;
  x_custodia_bel?: string;
+ download_point?: string;
+ upload_point?: string;
 }

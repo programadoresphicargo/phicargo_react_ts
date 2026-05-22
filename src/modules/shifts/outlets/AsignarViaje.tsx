@@ -1,29 +1,22 @@
 import {
+ MRT_Cell,
  MaterialReactTable,
  useMaterialReactTable,
 } from 'material-react-table';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { useTheme } from '@mui/material/styles';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
  Button,
  Card,
  CardBody,
  CardHeader,
  Divider,
- useDisclosure,
 } from "@heroui/react";
 import { Box } from '@mui/material';
 import odooApi from '@/api/odoo-api';
-import Swal from 'sweetalert2';
 import { Chip } from '@heroui/react';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import Slide from '@mui/material/Slide';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
@@ -31,33 +24,34 @@ import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from 'react-router-dom';
 import { DatePicker } from '@heroui/react';
-import { parseDate, getLocalTimeZone } from "@internationalized/date";
+import { parseDate } from "@internationalized/date";
 import AsignacionViaje from './confirmar_cambios';
 import { useShiftsContext } from '../hooks/useShiftsContext';
+import { Shift } from '../models';
+import dayjs from 'dayjs';
 
-const Transition = React.forwardRef(function Transition(props, ref) {
- return <Slide direction="up" ref={ref} {...props} />;
-});
+type CartaPorte = {
+ id_cp: number;
+ x_tipo_bel: string;
+ x_modo_bel: string;
+ dangerous_cargo: boolean;
+}
 
-export default function ResponsiveDialog({ open, setOpen, shift }) {
+export default function AsignacionViajeModal({ open, setOpen, shift }: { open: boolean, setOpen: () => void, shift: Shift }) {
 
  const navigate = useNavigate();
  const { branchId } = useShiftsContext();
 
- const theme = useTheme();
- const fullScreen = useMediaQuery(theme.breakpoints.down("lg"));
  const [isLoading, setLoading] = useState(false);
-
- const [cp, setCP] = useState({});
- const [data, setData] = useState([]);
- const [rawData, setRawData] = useState([]);
+ const [cp, setCP] = useState<CartaPorte>();
+ const [rawData, setRawData] = useState<CartaPorte[]>([]);
  const [useFilters, setUseFilters] = useState(true);
 
  const [open2, setOpen2] = useState(false);
  const handleOpen2 = () => setOpen2(true);
  const handleClose2 = () => { setOpen2(false); fetchData(); };
 
- function formatDateToYYYYMMDD(date) {
+ function formatDateToYYYYMMDD(date: Date) {
   return date.toISOString().slice(0, 10);
  }
 
@@ -115,62 +109,12 @@ export default function ResponsiveDialog({ open, setOpen, shift }) {
   }
  }, [open]);
 
- const irTurnos = () => {
-  navigate('/turnos');
- };
-
- const asignar_viaje = async (id_cp) => {
-  const result = await Swal.fire({
-   title: '¿Asignar viaje?',
-   text: '¿Estás seguro de asignar este viaje?',
-   icon: 'warning',
-   showCancelButton: true,
-   confirmButtonText: 'Sí, asignar',
-   cancelButtonText: 'Cancelar',
-   confirmButtonColor: '#3085d6',
-   cancelButtonColor: '#d33',
-  });
-
-  if (!result.isConfirmed) return;
-
-  try {
-   setLoading(true);
-
-   const response = await odooApi.put(
-    `/shifts/${shift?.id}/assign-travel/${id_cp}`
-   );
-
-   setLoading(false);
-
-   Swal.fire({
-    icon: 'success',
-    title: 'Viaje asignado',
-    text: 'El viaje fue asignado correctamente',
-    timer: 2000,
-    showConfirmButton: false,
-   });
-
-   irTurnos();
-
-  } catch (error) {
-   setLoading(false);
-
-   const message =
-    error?.response?.data?.detail ||
-    'No se pudo asignar el viaje';
-
-   console.error('Error al obtener los datos:', error);
-
-   Swal.fire({
-    icon: 'error',
-    title: 'Error',
-    text: message,
-   });
-  }
- };
-
  const columns = useMemo(
   () => [
+   {
+    accessorKey: 'x_comentarios_maniobra',
+    header: 'Comentarios',
+   },
    {
     accessorKey: 'sucursal',
     header: 'Sucursal',
@@ -198,8 +142,8 @@ export default function ResponsiveDialog({ open, setOpen, shift }) {
    {
     accessorKey: 'x_tipo_bel',
     header: 'Tipo de armado',
-    Cell: ({ cell }) => {
-     const value = cell.getValue();
+    Cell: ({ cell }: { cell: MRT_Cell<CartaPorte> }) => {
+     const value = cell.getValue<string>();
 
      return (
       <Chip color={value == 'single' ? 'warning' : 'danger'} size='sm' className='text-white'>{value}</Chip>
@@ -209,8 +153,8 @@ export default function ResponsiveDialog({ open, setOpen, shift }) {
    {
     accessorKey: 'x_modo_bel',
     header: 'Modo',
-    Cell: ({ cell }) => {
-     const value = cell.getValue();
+    Cell: ({ cell }: { cell: MRT_Cell<CartaPorte> }) => {
+     const value = cell.getValue<string>();
 
      return (
       <Chip color={value == 'imp' ? 'success' : 'primary'} size='sm' className='text-white'>{value}</Chip>
@@ -228,7 +172,7 @@ export default function ResponsiveDialog({ open, setOpen, shift }) {
    {
     accessorKey: 'dangerous_cargo',
     header: 'Peligroso',
-    Cell: ({ cell }) => {
+    Cell: ({ cell }: { cell: MRT_Cell<CartaPorte> }) => {
      const value = cell.getValue();
      if (!value) return;
 
@@ -244,8 +188,8 @@ export default function ResponsiveDialog({ open, setOpen, shift }) {
    {
     accessorKey: 'vehiculo_programado',
     header: 'Vehiculo programado',
-    Cell: ({ cell }) => {
-     const value = cell.getValue();
+    Cell: ({ cell }: { cell: MRT_Cell<CartaPorte> }) => {
+     const value = cell.getValue<string>();
      if (!value) return;
 
      return (
@@ -310,7 +254,7 @@ export default function ResponsiveDialog({ open, setOpen, shift }) {
    },
   },
   enableRowActions: true,
-  positionActionsColumn: "last",
+  positionActionsColumn: "first",
   renderRowActions: ({ row }) => (
    <Button color="primary" className="text-white" radius="full" size='sm' onPress={() => {
     setCP(row.original);
@@ -319,7 +263,7 @@ export default function ResponsiveDialog({ open, setOpen, shift }) {
     Seleccionar
    </Button>
   ),
-  renderTopToolbarCustomActions: ({ table }) => (
+  renderTopToolbarCustomActions: () => (
    <Box
     sx={{
      display: 'grid',
@@ -363,7 +307,11 @@ export default function ResponsiveDialog({ open, setOpen, shift }) {
 
        <span className="text-gray-500">Vencimiento</span>
        <span className="font-medium text-gray-900">
-        {shift?.driver.licenseExpiration}
+        {
+         shift?.driver?.licenseExpiration
+          ? dayjs(shift.driver.licenseExpiration).format("DD/MM/YYYY")
+          : "Sin fecha"
+        }
        </span>
 
        {/* Relleno para cuadrar la grilla */}
@@ -377,12 +325,14 @@ export default function ResponsiveDialog({ open, setOpen, shift }) {
 
     <DatePicker
      label="Fecha prevista"
-     format="yyyy-MM-dd"
-     placeholder="Selecciona una fecha"
      value={value}
-     onChange={setValue}
-     isLoading={isLoading}
+     onChange={(value) => {
+      if (value) {
+       setValue(value);
+      }
+     }}
     />
+
     <Button onPress={() => fetchData()} color='success' className='text-white' radius='full'>Recargar</Button>
     <Button
      radius='full'
@@ -400,14 +350,7 @@ export default function ResponsiveDialog({ open, setOpen, shift }) {
   <AsignacionViaje open={open2} onClose={handleClose2} cp={cp} shift={shift}></AsignacionViaje>
   <Dialog
    open={open}
-   onClose={(event, reason) => {
-    if (reason === 'backdropClick') return;
-    setOpen();
-   }}
-   fullScreen
-   slots={{
-    transition: Transition,
-   }}>
+   fullScreen>
    <AppBar sx={{
     position: 'relative',
     background: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
@@ -425,7 +368,7 @@ export default function ResponsiveDialog({ open, setOpen, shift }) {
      <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
       Asignación de viajes
      </Typography>
-     <Button autoFocus color="inherit" onPress={() => setOpen()}>
+     <Button autoFocus onPress={() => setOpen()}>
       Cancelar
      </Button>
     </Toolbar>

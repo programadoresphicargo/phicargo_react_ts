@@ -161,6 +161,12 @@ const AsignacionViaje: React.FC<Props> = ({ open, onClose, cp, shift }) => {
 
               <span className="text-gray-500">Custodia</span>
               <span className="font-medium">{cp?.x_custodia_bel}</span>
+
+              <span className="text-gray-500">Punto de carga</span>
+              <span className="font-medium">{cp?.upload_point}</span>
+
+              <span className="text-gray-500">Punto de descarga</span>
+              <span className="font-medium">{cp?.download_point}</span>
             </div>
 
           </div>
