@@ -17,7 +17,7 @@ type BajaEquipo = {
     tipo: string;
     motivo_baja: string;
     comentarios_baja: string;
-    empleado_baja: null,
+    empleado_baja: number | null,
 }
 
 const initialForm: BajaEquipo = {
