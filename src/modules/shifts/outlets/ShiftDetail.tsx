@@ -25,6 +25,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 import * as React from 'react';
 import { TransitionProps } from '@mui/material/transitions';
+import AsignacionViajeModal from "./AsignarViaje.jsx";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -217,7 +218,9 @@ const ShiftDetail = () => {
           />
         )
       }
-      <ResponsiveDialog open={open} setOpen={setOpen} shift={shift}></ResponsiveDialog>
+      {shift && (
+        <AsignacionViajeModal open={open} setOpen={setOpen} shift={shift}></AsignacionViajeModal>
+      )}
     </>
   );
 };
