@@ -61,7 +61,7 @@ export class MaintenaceRecordAdapter {
       comments: record.comments,
       order: record.order_service,
       daysInWorkshop: record.days_in_workshop,
-      createdDate: record.createdDate
+      createdDate: record.created_date
     };
   }
 
@@ -111,7 +111,7 @@ export class MaintenaceRecordAdapter {
       workshop_id: record.workshopId,
       tract_id: record.vehicleId,
       days_in_workshop: record.daysInWorkshop,
-      createdDate: record.createdDate,
+      created_date: record.createdDate
     };
   }
 
