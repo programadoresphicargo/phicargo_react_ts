@@ -30,7 +30,7 @@ const ContenedoresPendientes = () => {
   const [selectedBranches, setSelectedBranches] = useState<number[]>([]);
   const [isLoading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
-  const [dataCP, setDataCP] = useState({});
+  const [dataCP, setDataCP] = useState<Contenedor>();
   const [openViaje, setOpenViaje] = useState(false);
   const [idViaje, setIDViaje] = React.useState<number | null>(null);
 
