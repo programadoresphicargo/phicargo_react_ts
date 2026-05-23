@@ -1,14 +1,16 @@
 import React, { useEffect, useMemo, useState } from "react";
 import {
-  MRT_ColumnDef,
   MaterialReactTable,
   useMaterialReactTable,
 } from "material-react-table";
-import { Button, Link } from "@heroui/react";
+import { Button, Chip, Link } from "@heroui/react";
 import Box from "@mui/material/Box";
 import { MRT_Localization_ES } from "material-react-table/locales/es";
 import { toast } from "react-toastify";
+
 import odooApi from "@/api/odoo-api";
+import CustomNavbar from "@/pages/CustomNavbar";
+import { pages } from "../pages";
 import { ManiobraProvider } from "../context/viajeContext";
 import ContenedorEdit from "./datos";
 import CountContenedor from "./count_contenedor";
@@ -17,24 +19,22 @@ import Travel from "@/phicargo/viajes/control/viaje";
 
 const { VITE_ODOO_API_URL } = import.meta.env;
 
-type Contenedor = {
-  total_dias: number;
-  store_id: number;
-  travel_id: number;
-}
-
 const ContenedoresPendientes = () => {
 
-  const [data, setData] = useState<Contenedor[]>([]);
-  const [filteredData, setFilteredData] = useState<Contenedor[]>([]);
-  const [selectedBranches, setSelectedBranches] = useState<number[]>([]);
+  /* =======================
+     ESTADOS
+  ======================= */
+  const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [selectedBranches, setSelectedBranches] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
-  const [dataCP, setDataCP] = useState<Contenedor>();
+  const [dataCP, setDataCP] = useState({});
   const [openViaje, setOpenViaje] = useState(false);
-  const [idViaje, setIDViaje] = React.useState<number | null>(null);
+  const [idViaje, setIDViaje] = React.useState(null);
 
-  const handleClickOpen = (id: number) => {
+  const handleClickOpen = (id) => {
+    console.log(id);
     setIDViaje(id);
     setOpenViaje(true);
   };
@@ -43,6 +43,9 @@ const ContenedoresPendientes = () => {
     setOpenViaje(false);
   };
 
+  /* =======================
+     FETCH
+  ======================= */
   const fetchData = async () => {
     setLoading(true);
     try {
@@ -60,6 +63,9 @@ const ContenedoresPendientes = () => {
     fetchData();
   }, []);
 
+  /* =======================
+     FILTRO POR SUCURSAL
+  ======================= */
   useEffect(() => {
     if (selectedBranches.length === 0) {
       setFilteredData(data);
@@ -72,7 +78,10 @@ const ContenedoresPendientes = () => {
     }
   }, [data, selectedBranches]);
 
-  const columns = useMemo<MRT_ColumnDef<Contenedor>[]>(() => [
+  /* =======================
+     COLUMNAS
+  ======================= */
+  const columns = useMemo(() => [
     { accessorKey: "sucursal", header: "Sucursal" },
     { accessorKey: "date_order", header: "Fecha" },
     { accessorKey: "carta_porte", header: "Carta porte" },
@@ -90,20 +99,8 @@ const ContenedoresPendientes = () => {
       header: "Estatus",
       Cell: ({ row, cell }) => {
 
-        const value = cell.getValue<string>();
-
-        const map: Record<
-          string,
-          {
-            color:
-            | "secondary"
-            | "primary"
-            | "success"
-            | "warning"
-            | "danger";
-            text: string;
-          }
-        > = {
+        const value = cell.getValue();
+        const map = {
           sm: { color: "secondary", text: "SIN MANIOBRA" },
           pm: { color: "primary", text: "PATIO MÉXICO" },
           P: { color: "primary", text: "EN PATIO" },
@@ -117,19 +114,10 @@ const ContenedoresPendientes = () => {
           EV: { color: "secondary", text: "EN ESPERA DE VIAJE" },
         };
 
-        const cfg = map[value] || {
-          color: "danger",
-          text: value || "N/A",
-        };
+        const cfg = map[value] || { color: "danger", text: value || "N/A" };
 
         return (
-          <Button
-            color={cfg.color}
-            size="sm"
-            className="text-white"
-            onPress={() => handleClickOpen(row.original.travel_id)}
-            radius="full"
-          >
+          <Button color={cfg.color} size="sm" className="text-white" onPress={() => handleClickOpen(row.original.travel_id)} radius="full">
             {cfg.text}
           </Button>
         );
@@ -138,7 +126,10 @@ const ContenedoresPendientes = () => {
     { accessorKey: "total_dias", header: "Total dias" },
   ], []);
 
-  const table = useMaterialReactTable<Contenedor>({
+  /* =======================
+     TABLA
+  ======================= */
+  const table = useMaterialReactTable({
     columns,
     data: filteredData,
     localization: MRT_Localization_ES,
@@ -146,7 +137,6 @@ const ContenedoresPendientes = () => {
     enableGlobalFilter: true,
     enableRowActions: true,
     positionActionsColumn: "last",
-    positionToolbarAlertBanner: "bottom",
     renderRowActions: ({ row }) => (
       <Box sx={{ display: 'flex', gap: '1rem' }}>
         <Button
@@ -165,7 +155,7 @@ const ContenedoresPendientes = () => {
     ),
     state: { showProgressBars: isLoading },
     initialState: {
-      pagination: { pageIndex: 0, pageSize: 80 },
+      pagination: { pageSize: 80 },
       density: "compact",
       showColumnFilters: true,
       showGlobalFilter: true,
@@ -181,7 +171,7 @@ const ContenedoresPendientes = () => {
         borderRadius: '0',
       },
     },
-    muiTableBodyRowProps: () => ({
+    muiTableBodyRowProps: ({ row }) => ({
       onClick: () => {
 
       },
@@ -220,6 +210,15 @@ const ContenedoresPendientes = () => {
         },
       }
     },
+    muiTableBodyCellProps2: ({ row }) => ({
+      sx: {
+        backgroundColor: row.subRows?.length ? '#1184e8' : '#FFFFFF',
+        fontFamily: 'Inter',
+        fontWeight: 'normal',
+        fontSize: '14px',
+        color: row.subRows?.length ? '#FFFFFF' : '#000000',
+      },
+    }),
     renderTopToolbarCustomActions: () => (
       <Box sx={{ display: "flex", gap: 2 }}>
         <Button
@@ -267,9 +266,7 @@ const ContenedoresPendientes = () => {
         data={dataCP}
       />
 
-      {idViaje && (
-        <Travel idViaje={idViaje} open={openViaje} handleClose={handleClose}></Travel>
-      )}
+      <Travel idViaje={idViaje} open={openViaje} handleClose={handleClose}></Travel>
     </ManiobraProvider>
   );
 };
