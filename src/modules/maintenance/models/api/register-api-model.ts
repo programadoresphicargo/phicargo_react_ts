@@ -23,7 +23,7 @@ export interface MaintenanceRecordBaseApi {
   comments: string | null;
   order_service: string;
   days_in_workshop: number | null;
-  createdDate: Dayjs;
+  created_date: Dayjs;
 }
 
 export interface MaintenanceRecordApi extends MaintenanceRecordBaseApi {

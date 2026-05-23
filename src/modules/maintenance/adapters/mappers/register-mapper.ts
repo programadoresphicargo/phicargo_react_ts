@@ -85,7 +85,7 @@ export class MaintenaceRecordAdapter {
         ? dayjs(record.last_comment_date)
         : null,
       usuarioCreacion: record.usuario_creacion,
-      createdDate: dayjs(record.createdDate),
+      createdDate: dayjs(record.created_date),
       id_checklist: record.id_checklist
     };
   }
