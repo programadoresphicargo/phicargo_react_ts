@@ -138,7 +138,7 @@ const ContenedoresPendientes = () => {
     { accessorKey: "total_dias", header: "Total dias" },
   ], []);
 
-  const table = useMaterialReactTable({
+  const table = useMaterialReactTable<Contenedor>({
     columns,
     data: filteredData,
     localization: MRT_Localization_ES,
