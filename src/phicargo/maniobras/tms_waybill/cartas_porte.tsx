@@ -103,7 +103,7 @@ const CartasPorte = () => {
         accessorKey: 'x_status_bel',
         header: 'Estatus',
         size: 150,
-        Cell: ({ cell }: { cell: MRT_Cell<any> }) => {
+        Cell: ({ cell }: { cell: MRT_Cell<Contenedor> }) => {
 
           const value = String(cell.getValue() ?? '');
 
