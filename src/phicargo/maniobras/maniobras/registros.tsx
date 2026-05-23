@@ -36,13 +36,13 @@ const Registromaniobras = ({ dataCP }: { dataCP: Contenedor }) => {
         fetchData();
     }, [open]);
 
-    const handleShowModal = () => {
+    const handleShow = () => {
         setOpen(true);
     };
 
     const abrir_nueva = () => {
         setIDManiobra(null);
-        handleShowModal();
+        handleShow();
     };
 
     const handleClose = () => {
@@ -140,7 +140,7 @@ const Registromaniobras = ({ dataCP }: { dataCP: Contenedor }) => {
         muiTableBodyRowProps: ({ row }) => ({
             onClick: () => {
                 setIDManiobra(row.original.id_maniobra);
-                handleShowModal();
+                handleShow();
             },
             style: {
                 cursor: 'pointer',
