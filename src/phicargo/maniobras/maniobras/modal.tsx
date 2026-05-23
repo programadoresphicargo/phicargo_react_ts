@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import Registromaniobras from './registros';
 import Dialog from '@mui/material/Dialog';
 import { DialogContent } from '@mui/material';
@@ -7,13 +6,9 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
-import Slide from '@mui/material/Slide';
+import { Contenedor } from '../tms_waybill/cartas_porte';
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-});
-
-const RegistroManiobrasCP = ({ show, handleClose, data }) => {
+const RegistroManiobrasCP = ({ show, handleClose, data }: { show: boolean, handleClose: () => void, data: Contenedor }) => {
     return (
         <>
             <Dialog
@@ -21,9 +16,9 @@ const RegistroManiobrasCP = ({ show, handleClose, data }) => {
                 onClose={handleClose}
                 fullWidth
                 maxWidth="xl"
-                TransitionComponent={Transition}
             >
-                <AppBar elevation={0}
+                <AppBar
+                    elevation={0}
                     position="static"
                     sx={{
                         background: 'linear-gradient(90deg, #0b2149, #002887)',
@@ -43,7 +38,6 @@ const RegistroManiobrasCP = ({ show, handleClose, data }) => {
                         </IconButton>
                     </Toolbar>
                 </AppBar>
-
                 <DialogContent>
                     <Registromaniobras
                         dataCP={data}

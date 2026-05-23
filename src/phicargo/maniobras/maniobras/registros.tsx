@@ -1,22 +1,23 @@
 import { Button, Card, CardBody } from "@heroui/react";
-import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { MRT_Cell, MaterialReactTable, useMaterialReactTable } from 'material-react-table';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { format, isValid } from 'date-fns';
 import { Box } from '@mui/system';
 import { Chip } from "@heroui/react";
-import DocumentacionManiobra from '../documentacion/documentacion';
 import Formulariomaniobra from './form';
-import Tab from '@mui/material/Tab';
-import TabContext from '@mui/lab/TabContext';
-import TabList from '@mui/lab/TabList';
-import TabPanel from '@mui/lab/TabPanel';
 import odooApi from '@/api/odoo-api';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
+import { Contenedor } from "../tms_waybill/cartas_porte";
 
-const Registromaniobras = ({ dataCP }) => {
-    const [isLoading, setLoading] = useState();
-    const [id_maniobra, setIDManiobra] = useState(null);
-    const [modalShow, setModalShow] = useState(false);
+type Maniobra = {
+    id_maniobra: number;
+}
+
+const Registromaniobras = ({ dataCP }: { dataCP: Contenedor }) => {
+
+    const [isLoading, setLoading] = useState(false);
+    const [id_maniobra, setIDManiobra] = useState<number | null>(null);
+    const [open, setOpen] = useState(false);
     const [data, setData] = useState([]);
 
     const fetchData = useCallback(async () => {
@@ -33,19 +34,19 @@ const Registromaniobras = ({ dataCP }) => {
 
     useEffect(() => {
         fetchData();
-    }, [fetchData]);
+    }, [open]);
 
     const handleShowModal = () => {
-        setModalShow(true);
+        setOpen(true);
     };
 
     const abrir_nueva = () => {
         setIDManiobra(null);
-        handleShowModal(null);
+        handleShowModal();
     };
 
-    const handleCloseModal = () => {
-        setModalShow(false);
+    const handleClose = () => {
+        setOpen(false);
         fetchData();
         setIDManiobra(null);
     };
@@ -76,8 +77,8 @@ const Registromaniobras = ({ dataCP }) => {
                 accessorKey: 'inicio_programado',
                 header: 'Inicio programado',
                 size: 150,
-                Cell: ({ cell }) => {
-                    const value = cell.getValue();
+                Cell: ({ cell }: { cell: MRT_Cell<Maniobra> }) => {
+                    const value = cell.getValue<string>();
                     const date = value ? new Date(value) : null;
                     const formattedDate = date && isValid(date) ? format(date, 'yyyy/MM/dd h:mm a') : 'Fecha no válida';
 
@@ -88,8 +89,8 @@ const Registromaniobras = ({ dataCP }) => {
                 accessorKey: 'estado_maniobra',
                 header: 'Estado maniobra',
                 size: 150,
-                Cell: ({ cell }) => {
-                    const value = cell.getValue();
+                Cell: ({ cell }: { cell: MRT_Cell<Maniobra> }) => {
+                    const value = cell.getValue<string>();
 
                     let variant = 'bg-secondary';
                     if (value === 'activa') {
@@ -118,7 +119,7 @@ const Registromaniobras = ({ dataCP }) => {
             showGlobalFilter: true,
             showColumnFilters: true,
             density: 'compact',
-            pagination: { pageSize: 80 },
+            pagination: { pageIndex: 0, pageSize: 80 },
         },
         muiTablePaperProps: {
             elevation: 0,
@@ -139,7 +140,7 @@ const Registromaniobras = ({ dataCP }) => {
         muiTableBodyRowProps: ({ row }) => ({
             onClick: () => {
                 setIDManiobra(row.original.id_maniobra);
-                handleShowModal(row.original.id_maniobra);
+                handleShowModal();
             },
             style: {
                 cursor: 'pointer',
@@ -159,7 +160,7 @@ const Registromaniobras = ({ dataCP }) => {
                 fontSize: '14px',
             },
         },
-        renderTopToolbarCustomActions: ({ table }) => (
+        renderTopToolbarCustomActions: () => (
             <Box
                 sx={{
                     display: 'flex',
@@ -177,10 +178,9 @@ const Registromaniobras = ({ dataCP }) => {
     return (
         <>
             <Formulariomaniobra
-                show={modalShow}
-                handleClose={handleCloseModal}
+                show={open}
+                handleClose={handleClose}
                 id_maniobra={id_maniobra}
-                form_deshabilitado={true}
                 dataCP={dataCP}
             />
 

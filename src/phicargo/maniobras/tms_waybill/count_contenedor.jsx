@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { HeaderBase } from "@/components/ui";
 import { IndicatorCard } from "@/components/utils/IndicatorCard";
 import { Checkbox } from "@heroui/react";

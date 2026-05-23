@@ -1,16 +1,12 @@
 import { Button, Chip, Select, SelectItem } from "@heroui/react";
 import {
+  MRT_Cell,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
 import React, { useEffect, useMemo, useState } from 'react';
 import Box from '@mui/material/Box';
-import Example2 from '../maniobras/modal';
 import { ManiobraProvider } from '../context/viajeContext';
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
-import { ThemeProvider } from '@mui/material/styles';
-import customFontTheme from '../../../theme';
 import { exportToCSV } from '../../utils/export';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
@@ -20,34 +16,44 @@ import CustomNavbar from "@/pages/CustomNavbar";
 import { pages } from '../pages';
 import RegistroManiobrasCP from "../maniobras/modal";
 
+export type Contenedor = {
+  id_cp: number;
+  id_cliente: number;
+  sucursal?: string;
+  date_order?: string;
+  carta_porte?: string;
+  cliente?: string;
+  x_reference?: string;
+  x_status_bel?: string;
+  estado_eir?: string;
+  x_ejecutivo_viaje_bel?: string;
+  state?: string;
+  x_modo_bel?: string;
+};
+
 const CartasPorte = () => {
 
   const now = new Date();
   const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
   const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-  const [range, setRange] = useState([firstDay, lastDay]);
+  const [range, setRange] = useState<[Date, Date] | null>([firstDay, lastDay]);
 
-  const [isLoading2, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState(false);
   const [selectedTab, setSelectedTab] = React.useState("carta");
-
-  const handleTabChange = (e) => {
-    const newTab = e.target.value;
-    setSelectedTab(newTab);
-  };
+  const [data, setData] = useState<Contenedor[]>([]);
 
   const [modalShow, setModalShow] = useState(false);
-  const [dataCP, setDataCP] = useState({});
+  const [dataCP, setDataCP] = useState<Contenedor | null>(null);
 
-  const handleShowModal = (data) => {
+  const handleShowModal = (data: Contenedor) => {
     setModalShow(true);
     setDataCP(data);
   };
 
   const handleCloseModal = () => setModalShow(false);
 
-  const [data, setData] = useState([]);
-
   const fetchData = async () => {
+    if (!range) return;
     setLoading(true);
     try {
       const response = await odooApi.get('/tms_waybill/get_contenedores/',
@@ -97,20 +103,29 @@ const CartasPorte = () => {
         accessorKey: 'x_status_bel',
         header: 'Estatus',
         size: 150,
-        Cell: ({ cell }) => {
-          const value = cell.getValue();
+        Cell: ({ cell }: { cell: MRT_Cell<any> }) => {
 
-          let variant = 'secondary';
-          let text = '';
+          const value = String(cell.getValue() ?? '');
 
-          const mappings = {
+          type ChipColor =
+            | 'default'
+            | 'primary'
+            | 'secondary'
+            | 'success'
+            | 'warning'
+            | 'danger';
+
+          const mappings: Record<
+            string,
+            { variant: ChipColor; text: string }
+          > = {
             sm: { variant: 'secondary', text: 'SIN MANIOBRA' },
             EI: { variant: 'warning', text: 'EN PROCESO DE INGRESO' },
             pm: { variant: 'primary', text: 'PATIO MÉXICO' },
             Ing: { variant: 'success', text: 'INGRESADO' },
             'No Ing': { variant: 'danger', text: 'NO INGRESADO' },
-            ru: { variant: 'info', text: 'REUTILIZADO' },
-            can: { variant: 'error', text: 'CANCELADO' },
+            ru: { variant: 'secondary', text: 'REUTILIZADO' },
+            can: { variant: 'danger', text: 'CANCELADO' },
             P: { variant: 'primary', text: 'EN PATIO' },
             T: { variant: 'warning', text: 'EN TERRAPORTS' },
             V: { variant: 'success', text: 'EN VIAJE' },
@@ -120,20 +135,23 @@ const CartasPorte = () => {
             EV: { variant: 'secondary', text: 'EN ESPERA DE VIAJE' },
           };
 
-          if (mappings[value]) {
-            variant = mappings[value].variant;
-            text = mappings[value].text;
-          } else {
-            variant = 'danger';
-            text = value || 'DESCONOCIDO';
-          }
+          const current = mappings[value];
 
-          return (
-            value !== null ? (
-              <Chip color={variant} size='sm' className="text-white">
-                {text}
-              </Chip>) : null
-          );
+          const variant: ChipColor =
+            current?.variant ?? 'danger';
+
+          const text =
+            current?.text ?? value ?? 'DESCONOCIDO';
+
+          return value ? (
+            <Chip
+              color={variant}
+              size="sm"
+              className="text-white"
+            >
+              {text}
+            </Chip>
+          ) : null;
         },
       },
       {
@@ -178,10 +196,10 @@ const CartasPorte = () => {
     initialState: {
       showColumnFilters: true,
       density: 'compact',
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
       showGlobalFilter: false,
     },
-    state: { showProgressBars: isLoading2 },
+    state: { showProgressBars: isLoading },
     muiCircularProgressProps: {
       color: 'primary',
       thickness: 5,
@@ -229,7 +247,7 @@ const CartasPorte = () => {
         color: row.subRows?.length ? '#FFFFFF' : '#000000',
       },
     }),
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -252,7 +270,10 @@ const CartasPorte = () => {
         />
         <Select
           style={{ minWidth: "300px" }}
-          onChange={handleTabChange}
+          onSelectionChange={(keys) => {
+            const value = Array.from(keys)[0] as string;
+            setSelectedTab(value);
+          }}
           label="Seleccionar una opción"
           size={'sm'}
           variant='bordered'
@@ -266,7 +287,7 @@ const CartasPorte = () => {
           color='success'
           fullWidth
           className='text-white'
-          startContent={<i class="bi bi-file-earmark-excel"></i>}
+          startContent={<i className="bi bi-file-earmark-excel"></i>}
           onPress={() => exportToCSV(data, columns, "contenedores.csv")}
           radius="full"
         >Exportar
@@ -275,7 +296,7 @@ const CartasPorte = () => {
           color='danger'
           fullWidth
           className='text-white'
-          startContent={<i class="bi bi-arrow-clockwise"></i>}
+          startContent={<i className="bi bi-arrow-clockwise"></i>}
           onPress={() => fetchData()}
           radius="full"
         >Recargar
@@ -285,16 +306,18 @@ const CartasPorte = () => {
   });
 
   return (
-    <div>
+    <>
       <ManiobraProvider>
         <CustomNavbar pages={pages}></CustomNavbar>
-        <MaterialReactTable key={selectedTab} table={table} />
-        <RegistroManiobrasCP
-          show={modalShow}
-          handleClose={handleCloseModal}
-          data={dataCP} />
+        <MaterialReactTable table={table} />
+        {dataCP && (
+          <RegistroManiobrasCP
+            show={modalShow}
+            handleClose={handleCloseModal}
+            data={dataCP} />
+        )}
       </ManiobraProvider>
-    </div >
+    </>
   );
 };
 
