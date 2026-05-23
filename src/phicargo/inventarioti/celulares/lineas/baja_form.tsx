@@ -1,4 +1,5 @@
 import odooApi from "@/api/odoo-api";
+import { AutocompleteInput, TextareaInput } from "@/components/inputs";
 import {
     Modal,
     ModalContent,
@@ -6,54 +7,52 @@ import {
     ModalBody,
     ModalFooter,
     Button,
-    useDisclosure,
-    NumberInput,
-    Input,
-    DatePicker,
     Textarea,
     Progress,
 } from "@heroui/react";
 import { Select, SelectItem } from "@heroui/react";
-import React, { useEffect, useMemo, useState } from 'react';
+import { Autocomplete } from "@mui/material";
+import { useState } from 'react';
+import { useForm } from "react-hook-form";
 import toast from 'react-hot-toast';
-import { parseDate, parseDateTime, getLocalTimeZone } from "@internationalized/date";
-import { today } from "@internationalized/date";
 
-export default function BajaLinea({ isOpen, onOpen, onOpenChange, id_linea }) {
+type BajaLinea = {
+    motivo_baja: string | null;
+    comentarios_baja: string | null;
+}
+
+const initialForm: BajaLinea = {
+    motivo_baja: "",
+    comentarios_baja: ""
+}
+
+export default function BajaLinea({ isOpen, onOpenChange, id_linea }: { isOpen: boolean, onOpenChange: React.Dispatch<React.SetStateAction<boolean>>, id_linea: number | null }) {
+
+    const { control, handleSubmit, reset } = useForm<BajaLinea>({
+        defaultValues: initialForm,
+    });
 
     const [isLoading, setLoading] = useState(false);
 
-    const [data, setData] = useState([]);
-
-    const handleSave = async (onClose) => {
+    const handleSave = async (data: BajaLinea) => {
         try {
             setLoading(true);
-
             if (id_linea) {
                 const response = await odooApi.put(`/inventarioti/lineas/baja/${id_linea}`, data);
                 if (response.data.status == "success") {
                     toast.success(response.data.message);
-                    setData([]);
+                    reset(initialForm);
+                    onOpenChange(true);
                 }
             }
-
-            onClose();
-        } catch (error) {
+        } catch (error: any) {
             toast.error("Error al guardar:" + error);
-
             if (error.response && error.response.data) {
                 toast.error("Detalle:" + error.response.data.detail);
             }
         } finally {
             setLoading(false);
         }
-    };
-
-    const handleChange = (field, value) => {
-        setData(prev => ({
-            ...prev,
-            [field]: value
-        }));
     };
 
     return (
@@ -68,25 +67,27 @@ export default function BajaLinea({ isOpen, onOpen, onOpenChange, id_linea }) {
                             )}
                             <ModalBody>
                                 <div className="grid grid-cols-1 gap-4">
-                                    <Select
+                                    <AutocompleteInput
+                                        control={control}
+                                        name="motivo_baja"
                                         label="Motivo de baja"
-                                        selectedKeys={data?.motivo_baja ? [String(data.motivo_baja)] : []}
-                                        onSelectionChange={(keys) => handleChange("motivo_baja", [...keys][0])}
-                                        isInvalid={!data?.motivo_baja}
-                                        errorMessage={!data?.motivo_baja ? "Motivo de baja obligatorio" : ""}
-                                    >
-                                        <SelectItem key={"Perdida"}>Perdida</SelectItem>
-                                        <SelectItem key={"Robo"}>Robo</SelectItem>
-                                        <SelectItem key={"Otro"}>Otro</SelectItem>
-                                    </Select>
+                                        rules={{ required: "Campo obligatorio" }}
+                                        items={
+                                            [
+                                                { key: "Perdida", value: "Perdida" },
+                                                { key: "Robo", value: "Robo" },
+                                                { key: "Otro", value: "Otro" }
+                                            ]
+                                        }
+                                    />
 
-                                    <Textarea
+                                    <TextareaInput
+                                        control={control}
+                                        name="comentarios_baja"
                                         label="Comentarios de baja"
-                                        value={data?.comentarios_baja}
-                                        isInvalid={!data?.comentarios_baja}
-                                        errorMessage={!data?.comentarios_baja ? "Los comentarios son obligatorios" : ""}
-                                        onChange={(e) => handleChange("comentarios_baja", e.target.value)}>
-                                    </Textarea>
+                                        rules={{ required: "Campo obligatorio" }}
+                                    />
+
                                 </div>
                             </ModalBody>
                             <ModalFooter>
@@ -96,7 +97,7 @@ export default function BajaLinea({ isOpen, onOpen, onOpenChange, id_linea }) {
                                 <Button
                                     radius="full"
                                     color={id_linea ? "success" : "primary"}
-                                    onPress={() => handleSave(onClose)}
+                                    onPress={() => handleSubmit(handleSave)()}
                                     className="text-white"
                                     isDisabled={isLoading}
                                 >

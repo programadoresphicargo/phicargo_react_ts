@@ -197,7 +197,7 @@ const LineasTabla = ({ active }: { active: boolean }) => {
     return (
         <>
             <MaterialReactTable table={table} />
-            <FormLineas isOpen={isOpen} onOpen={onOpen} onOpenChange={onOpenChange} id_linea={id_linea}></FormLineas>
+            <FormLineas isOpen={isOpen} onOpenChange={onOpenChange} id_linea={id_linea}></FormLineas>
         </>
     );
 };

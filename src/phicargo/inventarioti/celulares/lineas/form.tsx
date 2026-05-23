@@ -6,59 +6,67 @@ import {
     ModalBody,
     ModalFooter,
     Button,
-    useDisclosure,
-    NumberInput,
-    Input,
-    DatePicker,
-    Textarea,
     Progress,
-    Checkbox,
 } from "@heroui/react";
-import { Select, SelectItem } from "@heroui/react";
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { parseDate, parseDateTime, getLocalTimeZone } from "@internationalized/date";
-import { today } from "@internationalized/date";
 import BajaLinea from "./baja_form";
+import { useForm } from "react-hook-form";
+import { AutocompleteInput, NumberInput, TextInput } from "@/components/inputs";
 
-export default function FormLineas({ isOpen, onOpen, onOpenChange, id_linea }) {
+type Linea = {
+    id_empresa: number | null;
+    activo: boolean;
+    compañia: string | null;
+    plan: string;
+    numero: number | null;
+}
+
+const initialForm: Linea = {
+    id_empresa: null,
+    compañia: null,
+    activo: true,
+    plan: "",
+    numero: null,
+}
+
+export default function FormLineas({ isOpen, onOpenChange, id_linea }: { isOpen: boolean; onOpenChange: () => void, id_linea: number | null }) {
+
+    const { control, handleSubmit, reset, watch } = useForm<Linea>({
+        defaultValues: initialForm,
+    });
 
     const [isBajaModalOpen, setBajaModalOpen] = useState(false);
-
     const openBajaModal = () => setBajaModalOpen(true);
-    const closeBajaModal = () => setBajaModalOpen(false);
-
     const [isLoading, setLoading] = useState(false);
-
-    const [data, setData] = useState([]);
 
     const fetchData = async () => {
         if (id_linea) {
             try {
                 setLoading(true);
                 const response = await odooApi.get('/inventarioti/lineas/id_linea/' + id_linea);
-                setData(response.data);
+                reset(response.data);
                 setLoading(false);
             } catch (error) {
                 console.error('Error al obtener los datos:', error);
                 setLoading(false);
             }
         } else {
-            setData([]);
+            reset(initialForm);
         }
     };
 
     useEffect(() => {
         if (!id_linea) {
-            setData([]);
-            return; // Evita que llame a fetchData si no hay id
+            reset(initialForm);
+            return;
         }
         fetchData();
     }, [id_linea]);
 
     useEffect(() => {
         if (!isOpen) {
-            setData([]);
+            reset(initialForm);
         }
     }, [isOpen, id_linea]);
 
@@ -68,24 +76,22 @@ export default function FormLineas({ isOpen, onOpen, onOpenChange, id_linea }) {
         }
     }, [isBajaModalOpen]);
 
-    const handleSave = async (onClose) => {
+    const handleSave = async (data: Linea) => {
         try {
             setLoading(true);
-
             if (id_linea) {
-                // Actualizar
                 const response = await odooApi.put(`/inventarioti/lineas/${id_linea}`, data);
                 if (response.data.status == "success") {
                     toast.success(response.data.message);
+                    onOpenChange();
                 }
-                console.log("Celular actualizado");
             } else {
-                // Crear
                 const response = await odooApi.post(`/inventarioti/lineas/`, data);
-                console.log("Celular registrado");
+                if (response.data.status == "success") {
+                    toast.success(response.data.message);
+                    onOpenChange();
+                }
             }
-
-            onClose(); // Cierra el modal
         } catch (error) {
             console.error("Error al guardar:", error);
         } finally {
@@ -93,20 +99,15 @@ export default function FormLineas({ isOpen, onOpen, onOpenChange, id_linea }) {
         }
     };
 
-    const handleChange = (field, value) => {
-        setData(prev => ({
-            ...prev,
-            [field]: value
-        }));
-    };
+    const activo = watch("activo");
 
     return (
         <>
             <BajaLinea
                 isOpen={isBajaModalOpen}
                 onOpenChange={setBajaModalOpen}
-                id_linea={id_linea}>
-            </BajaLinea>
+                id_linea={id_linea}
+            />
 
             <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
                 <ModalContent>
@@ -118,44 +119,44 @@ export default function FormLineas({ isOpen, onOpen, onOpenChange, id_linea }) {
                             )}
                             <ModalBody>
 
-                                <Select
+                                <AutocompleteInput
+                                    control={control}
+                                    name="id_empresa"
                                     label="Empresa"
-                                    isInvalid={!data.activo}
-                                    errorMessage={!data?.compañia ? "La compañia es obligatoria" : ""}
-                                    selectedKeys={data.id_empresa ? [String(data.id_empresa)] : []}
-                                    onSelectionChange={(keys) => handleChange("id_empresa", Number([...keys][0]))}
-                                >
-                                    <SelectItem key={"1"}>Transportes Belchez</SelectItem>
-                                    <SelectItem key={"2"}>Servicontainer</SelectItem>
-                                    <SelectItem key={"3"}>Tankcontainer</SelectItem>
-                                    <SelectItem key={"5"}>Phi-Cargo</SelectItem>
-                                </Select>
+                                    rules={{ required: "Campo obligatorio" }}
+                                    items={[
+                                        { key: "1", value: "Transportes Belchez" },
+                                        { key: "2", value: "Servicontainer" },
+                                        { key: "3", value: "Tankcontainer" },
+                                        { key: "5", value: "Phi-Cargo" },
+                                    ]}
+                                />
 
-                                <Select
+                                <AutocompleteInput
+                                    control={control}
+                                    name="compañia"
                                     label="Compañia"
-                                    isInvalid={!data?.compañia}
-                                    errorMessage={!data?.compañia ? "La compañia es obligatoria" : ""}
-                                    selectedKeys={data?.compañia ? new Set([data.compañia]) : new Set()}
-                                    onSelectionChange={(keys) => handleChange("compañia", [...keys][0])}
-                                >
-                                    <SelectItem key="telcel">Telcel</SelectItem>
-                                    <SelectItem key="AT&T">AT&T</SelectItem>
-                                </Select>
+                                    rules={{ required: "Campo obligatorio" }}
+                                    items={[
+                                        { key: "telcel", value: "Telcel" },
+                                        { key: "AT&T", value: "AT&T" },
+                                    ]}
+                                />
 
-                                <Input
+                                <NumberInput
+                                    control={control}
+                                    name="numero"
                                     label="Nùmero"
-                                    value={data?.numero}
-                                    onChange={(e) => handleChange("numero", e.target.value)}
-                                    isInvalid={!data?.numero}
-                                    errorMessage={!data?.numero ? "El numero es obligatorio" : ""}>
-                                </Input>
+                                    rules={{ required: "Campo obligatorio" }}
+                                />
 
-                                <Input label="Plan"
-                                    value={data?.plan}
-                                    onChange={(e) => handleChange("plan", e.target.value)}
-                                    isInvalid={!data?.plan}
-                                    errorMessage={!data?.plan ? "Plan es obligatorio" : ""}>
-                                </Input>
+                                <TextInput
+                                    control={control}
+                                    name="plan"
+                                    label="Plan"
+                                    variant="flat"
+                                    rules={{ required: "Campo obligatorio" }}
+                                />
 
                             </ModalBody>
                             <ModalFooter>
@@ -163,7 +164,7 @@ export default function FormLineas({ isOpen, onOpen, onOpenChange, id_linea }) {
                                     Cancelar
                                 </Button>
 
-                                {data?.activo == true && id_linea && (
+                                {activo == true && id_linea && (
                                     <Button
                                         color="danger"
                                         onPress={openBajaModal}
@@ -176,14 +177,12 @@ export default function FormLineas({ isOpen, onOpen, onOpenChange, id_linea }) {
                                 )}
 
                                 {(
-                                    // Mostrar si es nuevo registro
                                     !id_linea ||
-                                    // O si es edición y está activo
-                                    (id_linea && data?.activo == true)
+                                    (id_linea && activo == true)
                                 ) && (
                                         <Button
                                             color={id_linea ? "success" : "primary"}
-                                            onPress={() => handleSave(onClose)}
+                                            onPress={() => handleSubmit(handleSave)()}
                                             className="text-white"
                                             isDisabled={isLoading}
                                             radius="full"

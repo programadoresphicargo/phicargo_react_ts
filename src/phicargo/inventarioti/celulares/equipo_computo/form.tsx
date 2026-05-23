@@ -127,11 +127,13 @@ export default function FormCelulares({ isOpen, onOpenChange, id_equipo }: { isO
                 const response = await odooApi.put(`/inventarioti/dispositivos/computo/${id_equipo}`, payload);
                 if (response.data.status == "success") {
                     toast.success(response.data.message);
+                    onOpenChange();
                 }
             } else {
                 const response = await odooApi.post(`/inventarioti/dispositivos/computo`, payload);
                 if (response.data.status == "success") {
                     toast.success(response.data.message);
+                    onOpenChange();
                 }
             }
         } catch (error) {
@@ -228,6 +230,7 @@ export default function FormCelulares({ isOpen, onOpenChange, id_equipo }: { isO
                                                     control={control}
                                                     name="nombre"
                                                     label="Nombre"
+                                                    variant="flat"
                                                     rules={{ required: "Campo obligatorio" }}
                                                 />
 
@@ -235,6 +238,7 @@ export default function FormCelulares({ isOpen, onOpenChange, id_equipo }: { isO
                                                     control={control}
                                                     label="SN"
                                                     name="sn"
+                                                    variant="flat"
                                                     rules={{ required: "Campo obligatorio" }}
                                                 />
 
@@ -272,6 +276,7 @@ export default function FormCelulares({ isOpen, onOpenChange, id_equipo }: { isO
                                                     control={control}
                                                     name="modelo"
                                                     label="Modelo"
+                                                    variant="flat"
                                                     rules={{ required: "Campo obligatorio" }}
                                                 />
 
@@ -327,8 +332,8 @@ export default function FormCelulares({ isOpen, onOpenChange, id_equipo }: { isO
 
                                                         return (
                                                             <DatePicker
+                                                                variant="flat"
                                                                 label="Fecha compra"
-                                                                variant="bordered"
                                                                 isDisabled={!activo}
                                                                 value={calendarValue}
                                                                 onChange={(val) => {
@@ -353,7 +358,7 @@ export default function FormCelulares({ isOpen, onOpenChange, id_equipo }: { isO
                                                         return (
                                                             <DatePicker
                                                                 label="Expiracion Garantia"
-                                                                variant="bordered"
+                                                                variant="flat"
                                                                 isDisabled={!activo}
                                                                 value={calendarValue}
                                                                 onChange={(val) => {
