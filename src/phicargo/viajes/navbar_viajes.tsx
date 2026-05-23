@@ -42,8 +42,27 @@ function NavbarTravel() {
 
   return (
     <>
+
+      <style>
+        {`
+          @keyframes blinkAlert {
+            0% { opacity: 1; transform: scale(1); }
+            25% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1); }
+            75% { opacity: 0.5; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1); }
+          }
+
+          .blink-alert {
+            animation: blinkAlert 2s ease-in-out infinite;
+          }
+        `}
+      </style>
+
+
       {numProblemasOperador > 0 && (
         <Alert
+          className='blink-alert'
           color="danger"
           variant="solid"
           title="Atención: Existen problemas de operadores pendientes de atención."
