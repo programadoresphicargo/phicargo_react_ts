@@ -42,15 +42,15 @@ const CartasPorte = () => {
   const [selectedTab, setSelectedTab] = React.useState("carta");
   const [data, setData] = useState<Contenedor[]>([]);
 
-  const [modalShow, setModalShow] = useState(false);
+  const [open, setOpen] = useState(false);
   const [dataCP, setDataCP] = useState<Contenedor | null>(null);
 
-  const handleShowModal = (data: Contenedor) => {
-    setModalShow(true);
+  const handleShow = (data: Contenedor) => {
+    setOpen(true);
     setDataCP(data);
   };
 
-  const handleCloseModal = () => setModalShow(false);
+  const handleClose = () => setOpen(false);
 
   const fetchData = async () => {
     if (!range) return;
@@ -219,7 +219,7 @@ const CartasPorte = () => {
       onClick: () => {
         if (row.subRows?.length) {
         } else {
-          handleShowModal(row.original);
+          handleShow(row.original);
         }
       },
       style: {
@@ -312,8 +312,8 @@ const CartasPorte = () => {
         <MaterialReactTable table={table} />
         {dataCP && (
           <RegistroManiobrasCP
-            show={modalShow}
-            handleClose={handleCloseModal}
+            show={open}
+            handleClose={handleClose}
             data={dataCP} />
         )}
       </ManiobraProvider>
