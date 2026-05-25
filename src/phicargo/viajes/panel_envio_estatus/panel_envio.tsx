@@ -33,7 +33,7 @@ const { Dragger } = Upload;
 
 const steps = ['Seleccion de estatus', 'Anexar comentarios o evidencias'];
 
-function PanelEnvio({ open, cerrar, id_reporte }: { open: boolean, cerrar: () => void, id_reporte: number }) {
+function PanelEnvio({ open, cerrar, id_reporte }: { open: boolean, cerrar: () => void, id_reporte: number | null }) {
 
   const [data, setData] = useState<Estatus[]>([]);
 
@@ -200,7 +200,7 @@ function PanelEnvio({ open, cerrar, id_reporte }: { open: boolean, cerrar: () =>
       imageHeight: 150,
       imageAlt: 'Imagen de confirmación',
     }).then((result) => {
-      if (result.isConfirmed && estatusSeleccionado?.id_estatus) {
+      if (result.isConfirmed && estatusSeleccionado?.id_estatus && id_reporte) {
         reenviar_estatus(id_viaje, id_reporte, estatusSeleccionado?.id_estatus, fileList, comentarios, FechaModificada);
         setFileList([]);
         cerrar();
