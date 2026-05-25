@@ -1,16 +1,31 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { useContext } from 'react';
 import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import { ViajeContext } from '../context/viajeContext';
-import axios from "axios";
 import odooApi from '@/api/odoo-api';
 import { useAuthContext } from "@/modules/auth/hooks";
+import { UploadFile } from 'antd';
 const { VITE_ODOO_API_URL } = import.meta.env;
+
+interface FolioCreado {
+    id_folio: number;
+    mensaje: string;
+}
+
+interface ViajeSinEstadia {
+    id_viaje: number;
+    mensaje: string;
+}
+
+interface CalcularEstadiaResponse {
+    folios_creados: FolioCreado[];
+    viajes_sin_estadia: ViajeSinEstadia[];
+}
 
 export const useJourneyDialogs = () => {
 
     const { session } = useAuthContext();
-    const { id_viaje, getHistorialEstatus, getViaje } = useContext(ViajeContext);
+    const { id_viaje, getViaje } = useContext(ViajeContext);
 
     const iniciar_viaje = () => {
         Swal.fire({
@@ -27,7 +42,7 @@ export const useJourneyDialogs = () => {
             imageAlt: 'Imagen de confirmación',
         }).then((result) => {
             if (result.isConfirmed) {
-                enviar_estatus(id_viaje, 1, [], '');
+                enviar_estatus(id_viaje, 1, []);
             }
         });
     };
@@ -61,7 +76,7 @@ export const useJourneyDialogs = () => {
                 return;
             }
 
-            enviar_estatus(id_viaje, 103, [], '');
+            enviar_estatus(id_viaje, 103, []);
         }
     };
 
@@ -115,15 +130,17 @@ export const useJourneyDialogs = () => {
         });
     };
 
-    const enviar_estatus = async (id_viaje, id_estatus, archivos, comentarios, fecha_modificada = null) => {
+    const enviar_estatus = async (id_viaje: number, id_estatus: number, archivos: UploadFile[], comentarios?: string | null, fecha_modificada?: string | null) => {
         const loadingToast = toast.loading('Procesando, espere...');
 
         try {
             const data = new FormData();
-            data.append('id_viaje', id_viaje);
-            data.append('id_estatus', id_estatus);
-            data.append('id_usuario', session.user.id);
-            data.append('comentarios', comentarios);
+            data.append('id_viaje', String(id_viaje));
+            data.append('id_estatus', String(id_estatus));
+            data.append('id_usuario', String(session?.user.id));
+            if (comentarios !== null && comentarios !== undefined) {
+                data.append('comentarios', comentarios);
+            }
 
             if (fecha_modificada) {
                 data.append('fecha_modificada', fecha_modificada);
@@ -151,44 +168,42 @@ export const useJourneyDialogs = () => {
             }
 
 
-        } catch (error) {
+        } catch (error: any) {
             let mensajeError = 'Ocurrió un error inesperado.';
-
             if (error.response && error.response.data && error.response.data.detail) {
                 mensajeError = error.response.data.detail;
             } else if (error.message) {
                 mensajeError = error.message;
             }
-
             toast.error('Error: ' + mensajeError, { id: loadingToast, duration: 10000 });
             return false;
         }
     };
 
-    const reenviar_estatus = async (id_viaje, id_reporte, id_estatus, archivos, comentarios, fecha_modificada = null) => {
+    const reenviar_estatus = async (id_viaje: number, id_reporte: number, id_estatus: number, archivos: UploadFile[], comentarios: string | null, fecha_modificada: string | null) => {
         const loadingToast = toast.loading('Procesando, espere...');
 
         try {
             const data = new FormData();
-            data.append('id_viaje', id_viaje);
-            data.append('id_reporte', id_reporte);
-            data.append('id_estatus', id_estatus);
-            data.append('comentarios', comentarios);
-            data.append('id_usuario', session.user.id);
+            data.append('id_viaje', String(id_viaje));
+            data.append('id_reporte', String(id_reporte));
+            data.append('id_estatus', String(id_estatus));
+            data.append('comentarios', comentarios ?? '');
+            data.append('id_usuario', String(session?.user.id));
             if (fecha_modificada) {
                 data.append('fecha_modificada', fecha_modificada);
             }
 
-            archivos.forEach((file) => {
-                data.append('files[]', file);
+            archivos.forEach((fileWrapper) => {
+                if (fileWrapper.originFileObj instanceof File) {
+                    data.append('files', fileWrapper.originFileObj);
+                }
             });
 
             const response = await odooApi.post('/tms_travel/reportes_estatus_viajes/envio_estatus/', data);
-
             if (response.data.status == "success") {
                 toast.success('Proceso correcto.', { id: loadingToast });
                 getViaje(id_viaje);
-
             } else {
                 toast.error('Error: ' + response.data.message, { id: loadingToast });
             }
@@ -227,7 +242,7 @@ export const useJourneyDialogs = () => {
                 if (Array.isArray(response.data)) {
                     const viajes = response.data;
 
-                    let errores = [];
+                    let errores: string[] = [];
 
                     viajes.forEach((viaje) => {
 
@@ -251,7 +266,7 @@ export const useJourneyDialogs = () => {
                         inicio = new Date(inicio.getTime() - 6 * 60 * 60 * 1000);
 
                         // Diferencia en milisegundos
-                        const diffMs = ahora - inicio;
+                        const diffMs = ahora.getTime() - inicio.getTime();
 
                         // Validación
                         if (diffMs > 24 * 60 * 60 * 1000) {
@@ -320,9 +335,9 @@ export const useJourneyDialogs = () => {
         }
     };
 
-    const calcular_estadia = async (id_viaje) => {
+    const calcular_estadia = async (id_viaje: number) => {
         try {
-            const response = await odooApi.get('/tms_travel/calcular_estadia/', {
+            const response = await odooApi.get<CalcularEstadiaResponse>('/tms_travel/calcular_estadia/', {
                 params: { travel_id: id_viaje },
             });
             const data = response.data;
@@ -347,18 +362,16 @@ export const useJourneyDialogs = () => {
                 });
             }
 
-        } catch (error) {
+        } catch (error: any) {
             const errorMessage = error.response?.data?.mensaje || "❌ Error al procesar la solicitud.";
             toast.error(errorMessage);
             console.error("Error en calcular_estadia:", error);
         }
     };
 
-    const comprobar_estatus_viajes = async (id_viaje, id_estatus) => {
+    const comprobar_estatus_viajes = async (id_viaje: number, id_estatus: number) => {
         try {
             const response = await odooApi.get(`/tms_travel/reportes_estatus_viajes/buscar_estatus/${id_viaje}/${id_estatus}`);
-            console.log(response.data.status);
-
             if (response.data.status === 'success') {
                 return true;
             } else {

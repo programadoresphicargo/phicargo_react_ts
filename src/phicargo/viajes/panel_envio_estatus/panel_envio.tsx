@@ -1,5 +1,4 @@
 import 'react-quill/dist/quill.snow.css';
-
 import {
   Box,
   Dialog,
@@ -9,17 +8,14 @@ import {
   Stepper,
 } from '@mui/material';
 import { Button, Card, CardBody, CardFooter, CardHeader, Image, Input, Switch, Textarea } from "@heroui/react";
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { Upload, message } from 'antd';
-import { getLocalTimeZone, now, today } from "@internationalized/date";
-import { parseAbsoluteToLocal, parseZonedDateTime } from "@internationalized/date";
-import { parseDate, parseDateTime } from "@internationalized/date";
+import React, { useContext, useEffect, useState } from 'react';
+import { Upload, UploadFile, UploadProps, } from 'antd';
+import { getLocalTimeZone, today } from "@internationalized/date";
+import { parseDateTime } from "@internationalized/date";
 import { DatePicker } from "@heroui/react";
 import { DialogActions } from '@mui/material';
 import { DialogTitle } from '@mui/material';
 import { Progress } from "@heroui/react";
-import ReactQuill from 'react-quill';
-import Slide from '@mui/material/Slide';
 import Swal from 'sweetalert2';
 import { ViajeContext } from '../context/viajeContext';
 import odooApi from '@/api/odoo-api';
@@ -27,17 +23,19 @@ import { toast } from 'react-toastify';
 import { useJourneyDialogs } from '../seguimiento/funciones';
 const { VITE_ODOO_API_URL } = import.meta.env;
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+type Estatus = {
+  id_estatus: number;
+  nombre_estatus: string;
+  imagen: string;
+}
 
 const { Dragger } = Upload;
 
 const steps = ['Seleccion de estatus', 'Anexar comentarios o evidencias'];
 
-function PanelEnvio({ open, cerrar, id_reporte }) {
+function PanelEnvio({ open, cerrar, id_reporte }: { open: boolean, cerrar: () => void, id_reporte: number }) {
 
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<Estatus[]>([]);
 
   const [isLoadingSendEstatus, setLoadingSE] = useState(false);
 
@@ -56,9 +54,7 @@ function PanelEnvio({ open, cerrar, id_reporte }) {
     try {
       setLoadingSE(true);
       const response = await odooApi.get('/tms_travel/reportes_estatus_viajes/id_reporte/' + id_reporte);
-      setEstatusSeleccionado(response.data.id_estatus);
-      setEstatusSeleccionadoNombre(response.data.nombre_estatus);
-      setEstatusSeleccionadoImagen(response.data.imagen);
+      setEstatusSeleccionado(response.data);
       setContenido(response.data.comentarios_estatus);
       setLoadingSE(false);
     } catch (error) {
@@ -75,11 +71,9 @@ function PanelEnvio({ open, cerrar, id_reporte }) {
   }, [id_reporte, open]);
 
   const { enviar_estatus, reenviar_estatus } = useJourneyDialogs();
-  const { id_viaje, viaje } = useContext(ViajeContext);
-  const [estatus_seleccionado, setEstatusSeleccionado] = useState('');
-  const [estatus_seleccionado_nombre, setEstatusSeleccionadoNombre] = useState('');
-  const [estatus_seleccionado_imagen, setEstatusSeleccionadoImagen] = useState('');
-  const [comentarios, setContenido] = useState('');
+  const { id_viaje } = useContext(ViajeContext);
+  const [estatusSeleccionado, setEstatusSeleccionado] = useState<Estatus | null>(null);
+  const [comentarios, setContenido] = useState<string | null>(null);
 
   function getLocalISOString() {
     const now = new Date();
@@ -88,45 +82,40 @@ function PanelEnvio({ open, cerrar, id_reporte }) {
     return localDate.toISOString().slice(0, 19);
   }
 
-  const [FechaModificada, setFechaModificada] = React.useState(getLocalISOString());
-  const updateFecha = (newValue) => {
+  const [FechaModificada, setFechaModificada] = React.useState<string | null>(getLocalISOString());
+
+  const updateFecha = (newValue: any) => {
     const date = newValue.toDate(getLocalTimeZone());
     const formatted = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}T${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}`;
     setFechaModificada(formatted);
   };
 
-  const handleSwitchChange = (value) => {
+  const handleSwitchChange = (value: boolean) => {
     setIsSelected(value);
     if (!value) {
       setFechaModificada(null);
     } else {
-      setFechaModificada(getLocalISOString());
+      setFechaModificada(String(getLocalISOString()));
     }
   };
 
-  const [fileList, setFileList] = useState([]);
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
-  const handleSelectCard = (estatus) => {
-    setEstatusSeleccionado(estatus.id_estatus);
-    setEstatusSeleccionadoNombre(estatus.nombre_estatus);
-    setEstatusSeleccionadoImagen(estatus.imagen);
+  const handleSelectCard = (estatus: Estatus) => {
+    setEstatusSeleccionado(estatus);
   };
 
   const handleNext = () => setActiveStep((prevStep) => prevStep + 1);
   const handleBack = () => setActiveStep((prevStep) => prevStep - 1);
 
   const [isSelected, setIsSelected] = React.useState(false);
-  const [isLoading, setLoading] = useState();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
         const response = await odooApi.get('/estatus_operativos/tipo/viaje/monitoreo');
         setData(response.data);
-        setLoading(false);
       } catch (error) {
-        setLoading(false);
         console.error('Error al obtener los datos:', error);
       }
     };
@@ -137,14 +126,14 @@ function PanelEnvio({ open, cerrar, id_reporte }) {
   useEffect(() => {
     if (!open) {
       setIsSelected(false);
-      setEstatusSeleccionado("");
+      setEstatusSeleccionado(null);
       setContenido("");
       setFileList([]);
       setActiveStep(0);
     }
   }, [open]);
 
-  const props = {
+  const props: UploadProps = {
     name: 'file',
     multiple: true,
     onChange(info) {
@@ -175,12 +164,12 @@ function PanelEnvio({ open, cerrar, id_reporte }) {
       imageAlt: 'Imagen de confirmación',
     });
 
-    if (result.isConfirmed) {
+    if (result.isConfirmed && estatusSeleccionado?.id_estatus) {
       try {
         setLoadingSE(true);
-        const success = await enviar_estatus(id_viaje, estatus_seleccionado, fileList, comentarios, FechaModificada);
+        const success = await enviar_estatus(id_viaje, estatusSeleccionado?.id_estatus, fileList, comentarios, FechaModificada);
         if (success) {
-          setEstatusSeleccionado("");
+          setEstatusSeleccionado(null);
           setContenido("");
           setFileList([]);
           setActiveStep(0);
@@ -211,8 +200,8 @@ function PanelEnvio({ open, cerrar, id_reporte }) {
       imageHeight: 150,
       imageAlt: 'Imagen de confirmación',
     }).then((result) => {
-      if (result.isConfirmed) {
-        reenviar_estatus(id_viaje, id_reporte, estatus_seleccionado, fileList, comentarios, FechaModificada);
+      if (result.isConfirmed && estatusSeleccionado?.id_estatus) {
+        reenviar_estatus(id_viaje, id_reporte, estatusSeleccionado?.id_estatus, fileList, comentarios, FechaModificada);
         setFileList([]);
         cerrar();
       }
@@ -229,17 +218,16 @@ function PanelEnvio({ open, cerrar, id_reporte }) {
     "Motivo de detención:"
   ];
 
-  const seleccionarOpcion = (opcion) => {
+  const seleccionarOpcion = (opcion: string) => {
     setContenido((contenidoAnterior) => `${contenidoAnterior} ${opcion}`);
   };
 
   return (
     <Dialog
-      fullWidth="lg"
+      fullWidth
       maxWidth="lg"
       open={open}
       onClose={cerrar}
-      TransitionComponent={Transition}
       keepMounted
       sx={{
         '& .MuiPaper-root': {
@@ -288,7 +276,7 @@ function PanelEnvio({ open, cerrar, id_reporte }) {
                       isPressable
                       onPress={() => handleSelectCard(item)}
                       style={{
-                        border: estatus_seleccionado === item.id_estatus ? '2px solid blue' : 'none',
+                        border: estatusSeleccionado?.id_estatus === item.id_estatus ? '2px solid blue' : 'none',
                       }}>
                       <CardBody className="overflow-visible flex items-center justify-center">
                         <Image
@@ -325,7 +313,7 @@ function PanelEnvio({ open, cerrar, id_reporte }) {
                   }}>
                     <Image
                       isZoomed
-                      src={`${VITE_ODOO_API_URL}/assets/trafico/estatus_operativos/${estatus_seleccionado_imagen}`}
+                      src={`${VITE_ODOO_API_URL}/assets/trafico/estatus_operativos/${estatusSeleccionado?.imagen}`}
                       style={{ width: '80px' }}
                     />
                     <h1 style={{
@@ -336,7 +324,7 @@ function PanelEnvio({ open, cerrar, id_reporte }) {
                       borderLeft: '5px solid #066ee8',
                       margin: 0 // quitar margen para mejor alineación
                     }}>
-                      {'(' + estatus_seleccionado + ')  ' + estatus_seleccionado_nombre}
+                      {'(' + estatusSeleccionado?.id_estatus + ')  ' + estatusSeleccionado?.nombre_estatus}
                     </h1>
                   </div>
                 </div>
@@ -386,7 +374,7 @@ function PanelEnvio({ open, cerrar, id_reporte }) {
                     </h1>
 
                     <div className="gap-2 grid grid-cols-2 sm:grid-cols-4 mt-3 mb-3">
-                      {sugerencias.map((opcion, index) => (
+                      {sugerencias.map((opcion) => (
                         <>
                           <Card
                             isBlurred
@@ -405,7 +393,7 @@ function PanelEnvio({ open, cerrar, id_reporte }) {
                     <Textarea
                       label="Comentarios"
                       variant='bordered'
-                      value={comentarios}
+                      value={comentarios ?? ''}
                       onValueChange={setContenido}
                       onClear={() => setContenido("")}>
                     </Textarea>
@@ -438,7 +426,7 @@ function PanelEnvio({ open, cerrar, id_reporte }) {
       <DialogActions>
 
         <Box sx={{ display: 'flex', flexDirection: 'row', pt: 1, gap: 1 }}>
-          <Button disabled={activeStep === 0} onPress={handleBack} sx={{ ml: 3 }} radius='full'>
+          <Button disabled={activeStep === 0} onPress={handleBack} radius='full'>
             Atrás
           </Button>
 
@@ -446,7 +434,7 @@ function PanelEnvio({ open, cerrar, id_reporte }) {
             <Button
               color="primary"
               onPress={handleNext}
-              isDisabled={estatus_seleccionado == '' ? true : false}
+              isDisabled={estatusSeleccionado ? false : true}
               radius='full'
             >
               Siguiente
@@ -461,7 +449,7 @@ function PanelEnvio({ open, cerrar, id_reporte }) {
                   isLoading={isLoadingSendEstatus}
                   radius='full'
                 >
-                  <i class="bi bi-send"></i> Enviar estatus
+                  <i className="bi bi-send"></i> Enviar estatus
                 </Button>
               ) : (
                 <Button
@@ -469,9 +457,8 @@ function PanelEnvio({ open, cerrar, id_reporte }) {
                   color="success"
                   onPress={() => confirmar_reenvio()}
                   className='text-white'
-                  isDisabled={isLoadingSendEstatus}
-                  radius='full'>
-                  <i class="bi bi-send"></i> Reenviar estatus
+                  isDisabled={isLoadingSendEstatus}>
+                  <i className="bi bi-send"></i> Reenviar estatus
                 </Button>
               )}
             </>
