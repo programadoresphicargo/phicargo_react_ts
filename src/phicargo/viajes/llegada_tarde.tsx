@@ -1,4 +1,4 @@
-import { Alert } from "@heroui/react";
+import { Alert, Progress } from "@heroui/react";
 import { useContext, useEffect, useState } from 'react';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
@@ -31,7 +31,6 @@ function LlegadaTarde() {
     const [data, setData] = useState<Viaje | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
-    // 🔹 Mapa tipado correctamente
     const arrivalStatusMap: Record<ArrivalStatus, StatusConfig> = {
         arrived_early: {
             label: 'Llegada temprana',
@@ -59,15 +58,21 @@ function LlegadaTarde() {
         if (!id_viaje) return;
 
         setIsLoading(true);
+
         try {
             const response = await odooApi.get(
                 `/tms_travel/departures-arrivals/?travel_id=${id_viaje}`
             );
+
             setData(response.data);
+
         } catch (error: any) {
+
             toast.error(
-                'Error al obtener los datos: ' + (error?.message || 'Error desconocido')
+                'Error al obtener los datos: ' +
+                (error?.message || 'Error desconocido')
             );
+
         } finally {
             setIsLoading(false);
         }
@@ -77,11 +82,22 @@ function LlegadaTarde() {
         fetchData();
     }, [id_viaje]);
 
-    // 🔹 Manejo limpio del render
-    if (isLoading || !data) return null;
+    if (isLoading) {
+        return (
+            <Progress
+                color="primary"
+                isIndeterminate
+                size="sm"
+                aria-label="Cargando..."
+            />
+        );
+    }
+
+    if (!data) return null;
 
     const status =
-        arrivalStatusMap[data.arrival_status] ?? arrivalStatusMap.no_info;
+        arrivalStatusMap[data.arrival_status]
+        ?? arrivalStatusMap.no_info;
 
     return (
         <Alert
@@ -92,10 +108,27 @@ function LlegadaTarde() {
             variant="solid"
             description={
                 <>
-                    <div>🚚 <strong>Viaje:</strong> {data.referencia}</div>
-                    <div>📅 <strong>Llegada programada:</strong> {data.llegada_planta_programada}</div>
-                    <div>🚚 <strong>Llegada real:</strong> {data.llegada_planta}</div>
-                    <div>⏱ <strong>Diferencia:</strong> {data.diferencia_tiempo_llegada}</div>
+                    <div>
+                        🚚 <strong>Viaje:</strong> {data.referencia}
+                    </div>
+
+                    <div>
+                        📅 <strong>Llegada programada:</strong>
+                        {' '}
+                        {data.llegada_planta_programada}
+                    </div>
+
+                    <div>
+                        🚚 <strong>Llegada real:</strong>
+                        {' '}
+                        {data.llegada_planta}
+                    </div>
+
+                    <div>
+                        ⏱ <strong>Diferencia:</strong>
+                        {' '}
+                        {data.diferencia_tiempo_llegada}
+                    </div>
                 </>
             }
         />
