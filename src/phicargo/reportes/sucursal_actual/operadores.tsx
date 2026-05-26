@@ -1,19 +1,31 @@
-import { Button, Chip } from "@heroui/react";
+import { Button } from "@heroui/react";
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import odooApi from '@/api/odoo-api';
 import { toast } from "react-toastify";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import OperadoresDialogPage from "./historial";
 
+type Operadores = {
+  historial: any[];
+}
+
+export type Historial = {
+  sucursal: string;
+  fecha_inicio: string;
+  fecha_fin: string;
+  driver_id: number;
+  operador: string;
+  vehiculo: string;
+}
+
 const SucursalActualOperador = () => {
 
   const [open, setOpen] = useState(false);
-  const [historial, setHistorial] = useState([]);
+  const [historial, setHistorial] = useState<Historial[] | null>();
   const [isLoading, setisLoading] = useState(false);
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState<Operadores[]>([]);
 
   useEffect(() => {
     fetchData();
@@ -21,7 +33,6 @@ const SucursalActualOperador = () => {
 
   const fetchData = async () => {
     try {
-
       setisLoading(true);
       const response = await odooApi.get(`/tms_travel/sucursal_actual_operadores/`);
       setData(response.data);
@@ -32,29 +43,9 @@ const SucursalActualOperador = () => {
     }
   };
 
-
   const columns = [
     { accessorKey: 'operador', header: 'Operador', },
-    {
-      accessorKey: 'sucursal', header: 'Última sucursal', Cell: ({ cell }) => {
-        const valor = cell.getValue() || '';
-        var clase;
-
-        if (valor === 'Manzanillo (Sucursal)') {
-          clase = 'danger';
-        } else if (valor === 'Veracruz (Matriz)') {
-          clase = 'success';
-        } else {
-          clase = 'primary';
-        }
-
-        return (
-          <Chip color={clase} size="sm" className="text-white">
-            {valor}
-          </Chip>
-        );
-      },
-    },
+    { accessorKey: 'sucursal', header: 'Última sucursal' },
     { accessorKey: 'dias_en_sucursal', header: 'Días en sucursal' },
     { accessorKey: 'fecha_inicio_acumulada', header: 'Desde' },
     { accessorKey: 'vehicles_usados', header: 'Vehiculos usados' },
@@ -71,8 +62,7 @@ const SucursalActualOperador = () => {
     columnResizeMode: "onEnd",
     initialState: {
       density: 'compact',
-      expanded: false,
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
       showColumnFilters: true,
     },
     muiTablePaperProps: {
@@ -111,7 +101,7 @@ const SucursalActualOperador = () => {
         cursor: 'pointer',
       },
     }),
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -122,14 +112,12 @@ const SucursalActualOperador = () => {
           alignItems: 'center',
         }}
       >
-
         <h1
           className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
         >
           Operadores
         </h1>
         <Button color="success" onPress={() => fetchData()} className="text-white" radius="full">Recargar</Button>
-
       </Box >
     ),
   })
@@ -139,7 +127,9 @@ const SucursalActualOperador = () => {
       <MaterialReactTable
         table={table}
       />
-      <OperadoresDialogPage open={open} setOpen={setOpen} data={historial}></OperadoresDialogPage>
+      {historial && (
+        <OperadoresDialogPage open={open} setOpen={setOpen} data={historial}></OperadoresDialogPage>
+      )}
     </>
   );
 };

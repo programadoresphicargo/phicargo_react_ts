@@ -1,17 +1,15 @@
-import React, { useEffect, useState } from "react";
 import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import { Card, CardHeader, CardBody, CardFooter } from "@heroui/card";
+import { Card, CardHeader, CardBody } from "@heroui/card";
 import { Button, Divider } from "@heroui/react";
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
+import { Historial } from './operadores';
 
-export default function OperadoresDialogPage({ open, setOpen, data = [] }) {
+export default function OperadoresDialogPage({ open, setOpen, data = [] }: { open: boolean, setOpen: React.Dispatch<React.SetStateAction<boolean>>, data: Historial[] }) {
 
  return (
   <div className="min-h-screen flex items-center justify-center">
@@ -30,7 +28,7 @@ export default function OperadoresDialogPage({ open, setOpen, data = [] }) {
       <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
        Historial
       </Typography>
-      <Button autoFocus color="inherit" onPress={() => setOpen(false)}>
+      <Button autoFocus onPress={() => setOpen(false)}>
        Cerrar
       </Button>
      </Toolbar>
@@ -57,7 +55,7 @@ export default function OperadoresDialogPage({ open, setOpen, data = [] }) {
      </ul>
 
      <div className="flex justify-end mt-6">
-      <Button variant="outline" onPress={() => setOpen(false)}>
+      <Button onPress={() => setOpen(false)}>
        Cerrar
       </Button>
      </div>

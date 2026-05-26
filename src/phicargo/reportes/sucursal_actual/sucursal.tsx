@@ -1,5 +1,4 @@
-import { Button, Chip, DatePicker } from "@heroui/react";
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
@@ -12,7 +11,7 @@ const SucursalActual = () => {
 
   const [value, setValue] = React.useState('1');
 
-  const handleChange = (event, newValue) => {
+  const handleChange = (_: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
 
