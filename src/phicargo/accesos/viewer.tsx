@@ -2,10 +2,15 @@ import { useEffect, useState } from "react";
 import { Progress } from "@heroui/react";
 import odooApi from "@/api/odoo-api";
 
-const Viewer = ({ id }) => {
-    const [blobUrls, setBlobUrls] = useState([]);
-    const [isLoading, setLoading] = useState(false);
-    const [previewUrl, setPreviewUrl] = useState(null);
+type Archivos = {
+    id_onedrive: string;
+}
+
+const Viewer = ({ id }: { id: number }) => {
+
+    const [blobUrls, setBlobUrls] = useState<string[]>([]);
+    const [isLoading, setLoading] = useState<boolean>(false);
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
     useEffect(() => {
         if (!id) return;
@@ -14,10 +19,10 @@ const Viewer = ({ id }) => {
         const fetchAllBlobs = async () => {
             try {
                 setLoading(true);
-                const { data: archivos } = await odooApi.get(`/archivos/accesos/${id}`);
+                const { data: archivos } = await odooApi.get<Archivos[]>(`/archivos/accesos/${id}`);
                 const listaIds = archivos.map(item => item.id_onedrive).filter(Boolean);
 
-                const urls = await Promise.all(listaIds.map(async (id_onedrive) => {
+                const urls = await Promise.all(listaIds.map(async (id_onedrive: string) => {
                     const { data: downloadUrl } = await odooApi.get(`/onedrive/download_link/${id_onedrive}`);
                     const response = await fetch(downloadUrl);
                     const blob = await response.blob();
