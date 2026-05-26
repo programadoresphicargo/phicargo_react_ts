@@ -1,9 +1,9 @@
 import { Tabs, Tab, Card, CardBody } from '@heroui/react';
 import { ViajeProvider } from '@/phicargo/viajes/context/viajeContext';
 import { ManiobraProvider } from '@/phicargo/maniobras/context/viajeContext';
-import HistorialViajesVehiculo from '@/phicargo/disponiblidad/equipos/historial_viajes';
+import HistorialViajesVehiculo from '@/phicargo/disponiblidad/historial_viajes';
 import { Fleet } from '../../models';
-import HistorialManiobrasVehiculo from '@/phicargo/disponiblidad/equipos/historial_maniobras';
+import HistorialManiobrasVehiculo from '@/phicargo/disponiblidad/historial_maniobras';
 
 interface Props {
   vehicle: Fleet;

@@ -33,9 +33,6 @@ const NominasViejas = lazy(() => import('../phicargo/maniobras/pagos/pagos_viejo
 const PreciosManiobras = lazy(
   () => import('../phicargo/maniobras/precios/precios'),
 );
-const InventarioContenedores = lazy(
-  () => import('../phicargo/maniobras/inventario/index'),
-);
 const Terminales = lazy(
   () => import('../phicargo/maniobras/maniobras/terminales/registros.tsx'),
 );
@@ -199,16 +196,6 @@ export const PrivateRoutes = () => {
             </Suspense>
           }
         />
-
-        <Route
-          path="/inventario_contenedores"
-          element={
-            <Suspense fallback={<LoadingPage />}>
-              <InventarioContenedores></InventarioContenedores>
-            </Suspense>
-          }
-        />
-
         <Route
           path="/control_maniobras"
           element={

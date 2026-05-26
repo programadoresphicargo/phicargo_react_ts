@@ -1,11 +1,9 @@
-import React, { useState, useEffect, useMemo } from 'react';
 import { Tabs, Tab, Card, CardBody } from '@heroui/react';
 import HistorialManiobrasVehiculo from './historial_maniobras';
 import HistorialViajesVehiculo from './historial_viajes';
-import { ViajeProvider } from '@/phicargo/viajes/context/viajeContext';
 import { ManiobraProvider } from '@/phicargo/maniobras/context/viajeContext';
 
-const IndexHistorial = ({ vehicle_id }) => {
+const IndexHistorial = ({ vehicle_id }: { vehicle_id: number }) => {
   return (
     <>
       <Tabs aria-label="Options" color="primary">

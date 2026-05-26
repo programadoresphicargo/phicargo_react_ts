@@ -60,7 +60,7 @@ type OptionTerminal = {
     label: string;
 };
 
-type ManiobraForm = {
+export type ManiobraForm = {
     id_terminal: number | null;
     tipo_maniobra: string | null;
     operador_id: number | null;

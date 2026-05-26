@@ -9,7 +9,7 @@ import odooApi from '@/api/odoo-api';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { Contenedor } from "../tms_waybill/cartas_porte";
 
-type Maniobra = {
+export type Maniobra = {
     id_maniobra: number;
 }
 

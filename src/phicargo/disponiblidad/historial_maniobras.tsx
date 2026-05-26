@@ -1,36 +1,36 @@
-import { Card, CardBody, Tab, Tabs } from "@heroui/react";
 import {
     MaterialReactTable,
     useMaterialReactTable,
 } from 'material-react-table';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-
-import { Chip } from "@heroui/react";
-import Travel from '@/phicargo/viajes/control/viaje';
-import { ViajeContext } from '@/phicargo/viajes/context/viajeContext';
+import { useEffect, useMemo, useState } from 'react';
+import Formulariomaniobra from '@/phicargo/maniobras/maniobras/form';
 import odooApi from '@/api/odoo-api';
-import { toast } from 'react-toastify';
+import { Contenedor } from '@/phicargo/maniobras/tms_waybill/cartas_porte';
+import { Maniobra } from '@/phicargo/maniobras/maniobras/registros';
 
-const HistorialViajesVehiculo = ({ vehicle_id }) => {
+const HistorialManiobrasVehiculo = ({ vehicle_id }: { vehicle_id: number }) => {
 
-    const [isLoading, setLoading] = useState();
-    const [data, setData] = useState([]);
-    const [open, setModalShow] = useState(false);
-    const [idViaje, setIDViaje] = useState(false);
+    const [isLoading, setLoading] = useState(false);
+    const [data, setData] = useState<Maniobra[]>([]);
+    const [modalShow, setModalShow] = useState(false);
+    const [id_maniobra, setIdmaniobra] = useState<number | null>(null);
+    const [dataCP, setDataCP] = useState<Contenedor>();
 
-    const handleShowModal = (id_viaje) => {
-        setIDViaje(id_viaje);
+    const handleShowModal = (id_maniobra: number, data: any) => {
         setModalShow(true);
+        setIdmaniobra(id_maniobra);
+        setDataCP(data);
     };
 
     const handleCloseModal = () => {
         setModalShow(false);
+        fetchData();
     };
 
     const fetchData = async () => {
         try {
             setLoading(true);
-            const response = await odooApi.get('/tms_travel/history/' + vehicle_id);
+            const response = await odooApi.get('/maniobras/historial_vehicular/' + vehicle_id);
             setData(response.data);
             setLoading(false);
         } catch (error) {
@@ -45,12 +45,24 @@ const HistorialViajesVehiculo = ({ vehicle_id }) => {
     const columns = useMemo(
         () => [
             {
-                accessorKey: 'name',
-                header: 'Referencia',
+                accessorKey: 'id_maniobra',
+                header: 'ID Maniobra',
             },
             {
                 accessorKey: 'sucursal',
                 header: 'Sucursal',
+            },
+            {
+                accessorKey: 'inicio_programado',
+                header: 'Inicio programado',
+            },
+            {
+                accessorKey: 'tipo_maniobra',
+                header: 'Tipo de maniobra',
+            },
+            {
+                accessorKey: 'terminal',
+                header: 'Terminal',
             },
             {
                 accessorKey: 'unidad',
@@ -59,27 +71,34 @@ const HistorialViajesVehiculo = ({ vehicle_id }) => {
             {
                 accessorKey: 'nombre_operador',
                 header: 'Operador',
-                size: 150,
             },
             {
-                accessorKey: 'fecha_finalizado',
-                header: 'Fecha finalizado',
-                size: 150,
+                accessorKey: 'fecha_activacion',
+                header: 'Fecha de inicio',
+            },
+            {
+                accessorKey: 'fecha_finalizada',
+                header: 'Fecha finalizada',
+            },
+            {
+                accessorKey: 'x_ejecutivo_viaje_bel',
+                header: 'Ejecutivo',
+            },
+            {
+                accessorKey: 'ultimo_estatus',
+                header: 'Ultimo estatus enviado',
             },
             {
                 accessorKey: 'cartas_porte',
                 header: 'Cartas porte',
-                size: 150,
             },
             {
                 accessorKey: 'contenedores_ids',
                 header: 'Contenedor',
-                size: 150,
             },
             {
                 accessorKey: 'nombre_cliente',
                 header: 'Cliente',
-                size: 150,
             },
         ],
         [],
@@ -93,7 +112,7 @@ const HistorialViajesVehiculo = ({ vehicle_id }) => {
         enableFilters: true,
         initialState: {
             density: 'compact',
-            pagination: { pageSize: 80 },
+            pagination: { pageIndex: 0, pageSize: 80 },
         },
         state: { isLoading: isLoading },
         muiTableHeadCellProps: {
@@ -122,10 +141,10 @@ const HistorialViajesVehiculo = ({ vehicle_id }) => {
             },
         },
         muiTableBodyRowProps: ({ row }) => ({
-            onClick: ({ event }) => {
+            onClick: () => {
                 if (row.subRows?.length) {
                 } else {
-                    handleShowModal(row.original.id);
+                    handleShowModal(row.original.id_maniobra, row.original);
                 }
             },
             style: {
@@ -134,12 +153,16 @@ const HistorialViajesVehiculo = ({ vehicle_id }) => {
         }),
     });
 
-    return (
-        <>
-            <MaterialReactTable table={table} />
-            <Travel idViaje={idViaje} open={open} handleClose={handleCloseModal}></Travel>
-        </>
+    return (<>
+        <MaterialReactTable table={table} />
+        <Formulariomaniobra
+            show={modalShow}
+            handleClose={handleCloseModal}
+            id_maniobra={id_maniobra}
+            dataCP={dataCP}
+        />
+    </>
     );
 };
 
-export default HistorialViajesVehiculo;
+export default HistorialManiobrasVehiculo;

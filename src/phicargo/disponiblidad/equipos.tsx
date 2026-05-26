@@ -1,38 +1,34 @@
 import { Button, Chip } from "@heroui/react";
 import {
-    CircularProgress,
     Dialog,
-    DialogActions,
     DialogContent,
-    DialogTitle,
-    MenuItem,
-    Select,
 } from '@mui/material';
 import {
+    MRT_Cell,
     MaterialReactTable,
     useMaterialReactTable,
 } from 'material-react-table';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
-import IndexHistorial from '.';
-import Slide from '@mui/material/Slide';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import { exportToCSV } from '../../utils/export';
+import { exportToCSV } from '../utils/export';
 import odooApi from '@/api/odoo-api';
-import { toast } from 'react-toastify';
+import IndexHistorial from ".";
+
+type Unidad = {
+    id: number;
+    name: string;
+    x_status: string;
+}
 
 const Disponibilidad_unidades = () => {
-    const [isLoading2, setLoading] = useState();
+    const [isLoading, setLoading] = useState(false);
     const [data, setData] = useState([]);
     const [openDialog, setOpenDialog] = useState(false);
-    const [selectedRow, setSelectedRow] = useState(null);
-    const [estado, setStatus] = useState('');
-    const [isUpdating, setIsUpdating] = useState(false);
-    const [vehicle_id, setVehicle] = useState();
+    const [vehicle_id, setVehicle] = useState<number | null>(null);
     const [vehicle_name, setVehicleName] = useState('');
 
     const fetchData = async () => {
@@ -68,18 +64,11 @@ const Disponibilidad_unidades = () => {
             {
                 accessorKey: 'x_status',
                 header: 'Estado',
-                Cell: ({ cell }) => {
-                    const estado = cell.getValue() || 'desconocido';
-                    let badgeClass = 'default';
-
-                    if (estado === 'viaje') {
-                        badgeClass = 'primary';
-                    } else if (estado === 'maniobra') {
-                        badgeClass = 'danger';
-                    }
+                Cell: ({ cell }: { cell: MRT_Cell<Unidad> }) => {
+                    const estado = cell.getValue<string>() || 'desconocido';
 
                     return (
-                        <Chip color={badgeClass} size='sm' className="text-white">
+                        <Chip color={estado === "viaje" ? "primary" : estado === "maniobra" ? "danger" : estado === "mantenimiento" ? "success" : "default"} size='sm' className="text-white">
                             <strong>{estado.toUpperCase()}</strong>
                         </Chip>
                     );
@@ -88,22 +77,11 @@ const Disponibilidad_unidades = () => {
             {
                 accessorKey: 'ultimo_uso',
                 header: 'Último uso',
-                Cell: ({ cell }) => {
-                    const estado = cell.getValue();
-
-                    if (!estado) return null;
-
-                    let badgeClass = 'default';
-
-                    if (estado === 'viaje') {
-                        badgeClass = 'primary';
-                    } else if (estado === 'maniobra') {
-                        badgeClass = 'danger';
-                    }
-
+                Cell: ({ cell }: { cell: MRT_Cell<Unidad> }) => {
+                    const ultimo_uso = cell.getValue<string>();
                     return (
-                        <Chip color={badgeClass} size='sm'>
-                            <strong>{estado.toUpperCase()}</strong>
+                        <Chip color={ultimo_uso === "viaje" ? "primary" : ultimo_uso === "maniobra" ? "danger" : "default"} size='sm'>
+                            <strong>{ultimo_uso.toUpperCase()}</strong>
                         </Chip>
                     );
                 },
@@ -165,12 +143,10 @@ const Disponibilidad_unidades = () => {
         [],
     );
 
-    const handleRowClick = (row) => {
-        setSelectedRow(row.original);
-        setStatus(row.original.x_status);
+    const handleRowClick = (id: number, name: string) => {
         setOpenDialog(true);
-        setVehicle(row.original.vehicle_id)
-        setVehicleName(row.original.vehicle_name)
+        setVehicle(id)
+        setVehicleName(name)
     };
 
     const table = useMaterialReactTable({
@@ -181,11 +157,11 @@ const Disponibilidad_unidades = () => {
         enableFilters: true,
         initialState: {
             density: 'compact',
-            pagination: { pageSize: 80 },
+            pagination: { pageIndex: 0, pageSize: 80 },
         },
-        state: { isLoading: isLoading2 },
+        state: { isLoading: isLoading },
         muiTableBodyRowProps: ({ row }) => ({
-            onClick: () => handleRowClick(row),
+            onClick: () => handleRowClick(row.original.id, row.original.name),
             style: {
                 cursor: 'pointer',
             },
@@ -209,7 +185,7 @@ const Disponibilidad_unidades = () => {
                 maxHeight: 'calc(100vh - 175px)',
             },
         },
-        renderTopToolbarCustomActions: ({ table }) => (
+        renderTopToolbarCustomActions: () => (
             <Box
                 sx={{
                     display: 'flex',
@@ -223,13 +199,13 @@ const Disponibilidad_unidades = () => {
                 >
                     Unidades
                 </h1>
-                <Button size="sm" color='success' className='text-white' startContent={<i class="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "unidades.csv")}>Exportar</Button>
+                <Button size="sm" color='success' className='text-white' startContent={<i className="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "unidades.csv")}>Exportar</Button>
             </Box>
         ),
     });
 
     return (
-        <div>
+        <>
             <MaterialReactTable table={table} />
 
             <Dialog open={openDialog} onClose={() => setOpenDialog(false)} fullScreen={true}>
@@ -252,10 +228,12 @@ const Disponibilidad_unidades = () => {
                     </Toolbar>
                 </AppBar>
                 <DialogContent>
-                    <IndexHistorial vehicle_id={vehicle_id}></IndexHistorial>
+                    {vehicle_id && (
+                        <IndexHistorial vehicle_id={vehicle_id}></IndexHistorial>
+                    )}
                 </DialogContent>
             </Dialog>
-        </div>
+        </>
     );
 };
 

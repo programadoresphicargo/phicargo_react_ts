@@ -2,7 +2,6 @@ export const pages = [
  { name: 'CONTROL DE MANIOBRAS', path: '/control_maniobras' },
  { name: 'CONTENEDORES', path: '/cartas-porte' },
  { name: 'PENDIENTES DE INGRESO', path: '/contenedores_pendientes' },
- { name: 'INVENTARIO', path: '/inventario_contenedores' },
  {
   name: 'NOMINAS',
   subpages: [
