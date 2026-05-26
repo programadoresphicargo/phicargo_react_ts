@@ -5,7 +5,6 @@ import {
 import React, { useEffect, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
 import { Button } from "@heroui/react"
-import { Chip } from "@heroui/react";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import odooApi from '@/api/odoo-api';
 import { exportToCSV } from '@/phicargo/utils/export';
