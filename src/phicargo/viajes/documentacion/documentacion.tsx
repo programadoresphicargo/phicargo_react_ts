@@ -166,6 +166,12 @@ const Documentacion = ({ }) => {
         }}
       >
 
+        <h1
+          className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
+        >
+          Documentación
+        </h1>
+
         <Button
           color='primary'
           radius="full"
