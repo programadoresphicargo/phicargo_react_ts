@@ -5,24 +5,22 @@ import TimelineConnector from '@mui/lab/TimelineConnector';
 import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
 import TimelineDot from '@mui/lab/TimelineDot';
-
-import FastfoodIcon from '@mui/icons-material/Fastfood';
-import LaptopMacIcon from '@mui/icons-material/LaptopMac';
-import HotelIcon from '@mui/icons-material/Hotel';
-import RepeatIcon from '@mui/icons-material/Repeat';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-
 import Typography from '@mui/material/Typography';
-import odooApi from '@/api/odoo-api';
-import React, { useEffect, useState } from 'react';
-import {
-    timelineOppositeContentClasses,
-} from '@mui/lab/TimelineOppositeContent';
 import { Card, CardBody, CardHeader, Divider } from '@heroui/react';
 
-export default function HistorialStock({ data }) {
+type Historial = {
+    id: number,
+    fecha_movimiento: string,
+    observaciones: string,
+    nombre: string,
+    tipo_movimiento: string,
+    cantidad: number,
+}
 
-    const getIcon = (tipo) => {
+export default function HistorialStock({ data }: { data: Historial[] }) {
+
+    const getIcon = (tipo: string) => {
         switch (tipo) {
             case 'alta':
                 return <AccessTimeIcon />;

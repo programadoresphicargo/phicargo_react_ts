@@ -2,55 +2,47 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import { Input, Popover, PopoverContent, PopoverTrigger, User, useDisclosure } from "@heroui/react";
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-import AppBar from '@mui/material/AppBar';
-import { Avatar } from "@heroui/react";
+import React, { useEffect, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
 import { Button } from "@heroui/react"
-import { Chip } from "@heroui/react";
-import CloseIcon from '@mui/icons-material/Close';
-import IconButton from '@mui/material/IconButton';
-import { Image } from 'antd';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import Slide from '@mui/material/Slide';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import odooApi from '@/api/odoo-api';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import EPPForm from '../form';
-import { useAlmacen } from '../../contexto/contexto';
-import { exportToCSV } from '@/phicargo/utils/export';
-import SolicitudForm from '../../solicitud/form';
+import IndexProducto from './form';
+import FormProducto from './form_producto';
+import { useAuthContext } from '@/modules/auth/hooks';
 
-const TablaUnidades = ({ close, tipo }) => {
+export type Producto = {
+  id: number | null;
+  x_name: string;
+  x_tipo: string;
+}
 
-  const { data, setData } = useAlmacen();
+const TablaProductos = ({ }) => {
 
+  const { session } = useAuthContext();
+
+  const [id_producto, setID] = React.useState<number | null>(null);
   const [open, setOpen] = React.useState(false);
+  const [dataEquipos, setDataEquipo] = useState<Producto[]>([]);
+  const [isLoading, setLoading] = useState(false);
 
-  const [id_solicitud, setIDSolicitud] = React.useState(null);
-
-  const handleClickOpen = (id) => {
+  const handleClickOpen = () => {
     setOpen(true);
-    setIDSolicitud(id);
   };
 
   const handleClose = () => {
     setOpen(false);
+    fetchData();
   };
-
-  const [dataEquipos, setDataEquipo] = useState([]);
-  const [isLoading, setLoading] = useState(false);
 
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await odooApi.get('/tms_travel/unidades_equipo/');
+      const response = await odooApi.get('/tms_travel/inventario_equipo/');
       setDataEquipo(response.data);
       setLoading(false);
     } catch (error) {
@@ -65,7 +57,7 @@ const TablaUnidades = ({ close, tipo }) => {
   const columns = useMemo(
     () => [
       {
-        accessorKey: 'id_unidad',
+        accessorKey: 'id',
         header: 'ID',
       },
       {
@@ -73,31 +65,25 @@ const TablaUnidades = ({ close, tipo }) => {
         header: 'Nombre',
       },
       {
+        accessorKey: 'create_date',
+        header: 'Fecha creación',
+      },
+      {
         accessorKey: 'x_tipo',
         header: 'Tipo',
       },
       {
-        accessorKey: 'estado',
-        header: 'Estado',
+        accessorKey: 'disponible',
+        header: 'Disponible',
       },
       {
-        accessorKey: 'x_solicitud_id',
-        header: 'Solicitud',
-        Cell: ({ cell }) => {
-          const value = cell.getValue();
-
-          if (!value) return null; // si es null no muestra nada
-
-          return (
-            <Chip
-              className='text-white'
-              color="success"
-              size="sm"
-            >{value}
-            </Chip>
-          );
-        },
-      }
+        accessorKey: 'reservado',
+        header: 'Reservado',
+      },
+      {
+        accessorKey: 'total_unidades',
+        header: 'Total',
+      },
     ],
     [],
   );
@@ -115,19 +101,16 @@ const TablaUnidades = ({ close, tipo }) => {
     localization: MRT_Localization_ES,
     muiSearchTextFieldProps: {
       placeholder: `Buscar`,
-      sx: { minWidth: '400px' },
+      sx: { minWidth: '300px' },
       variant: 'outlined',
     },
     columnResizeMode: "onEnd",
     initialState: {
       showGlobalFilter: true,
-      columnVisibility: {
-        empresa: false,
-      },
       density: 'compact',
       expanded: true,
       showColumnFilters: true,
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
     },
     muiTablePaperProps: {
       elevation: 0,
@@ -144,22 +127,23 @@ const TablaUnidades = ({ close, tipo }) => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 250px)',
+        maxHeight: 'calc(100vh - 260px)',
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
-      onClick: ({ event }) => {
-        handleClickOpen(row.original.x_solicitud_id);
+      onClick: () => {
+        handleClickOpen();
+        setID(row.original.id);
       },
     }),
-    muiTableBodyCellProps: ({ row }) => ({
+    muiTableBodyCellProps: () => ({
       sx: {
         fontFamily: 'Inter',
         fontWeight: 'normal',
         fontSize: '12px',
       },
     }),
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -171,31 +155,49 @@ const TablaUnidades = ({ close, tipo }) => {
         <h1
           className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
         >
-          Unidades
+          Productos
         </h1>
 
-        <Button
-          className='text-white'
-          radius='full'
-          startContent={<i class="bi bi-arrow-clockwise"></i>}
-          color='primary'
-          isDisabled={false}
-          onPress={() => fetchData()}
-        >Actualizar tablero
-        </Button>
+        {session?.user.permissions.includes(218) && (
+          <Button
+            className='text-white'
+            startContent={<i className="bi bi-plus-lg"></i>}
+            color='primary'
+            radius='full'
+            isDisabled={false}
+            onPress={async () => {
+              setID(null);
+              handleClickOpenF();
+            }}
+          >Nuevo producto
+          </Button>
+        )}
 
         <Button
-          radius='full'
-          color='success'
           className='text-white'
-          startContent={<i class="bi bi-file-earmark-excel"></i>}
-          onPress={() => exportToCSV(dataEquipos, columns, "inventario.csv")}>
-          Exportar
+          startContent={<i className="bi bi-arrow-clockwise"></i>}
+          color='success'
+          radius='full'
+          isDisabled={false}
+          onPress={() => fetchData()}
+        >Actualizar
         </Button>
 
       </Box >
     ),
   });
+
+  const [openF, setOpenF] = React.useState(false);
+
+  const handleClickOpenF = () => {
+    setOpenF(true);
+  };
+
+  const handleCloseF = () => {
+    fetchData();
+    setOpenF(false);
+  };
+
 
   return (
     <>
@@ -203,10 +205,27 @@ const TablaUnidades = ({ close, tipo }) => {
         table={table}
       />
 
-      <SolicitudForm id_solicitud={id_solicitud} open={open} handleClose={handleClose} x_tipo={"epp"} setID={setIDSolicitud} vista={'solicitudes'}></SolicitudForm>
+      <IndexProducto id_producto={id_producto} open={open} handleClose={handleClose} ></IndexProducto>
 
+      <Dialog
+        open={openF}
+        onClose={handleCloseF}
+        fullWidth
+      >
+        <DialogTitle id="responsive-dialog-title">
+          {"Nuevo producto"}
+        </DialogTitle>
+        <DialogContent>
+          <FormProducto id_producto={id_producto} onClose={handleCloseF}></FormProducto>
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus onPress={handleCloseF}>
+            Cancelar
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };
 
-export default TablaUnidades;
+export default TablaProductos;

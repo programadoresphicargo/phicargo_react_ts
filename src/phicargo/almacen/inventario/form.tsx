@@ -1,20 +1,15 @@
 import {
-    Input, Progress, Button, NumberInput
+    Progress, Button
 } from "@heroui/react";
 import React, { useEffect, useState } from 'react';
 import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
 import odooApi from '@/api/odoo-api';
-import toast from 'react-hot-toast';
-import { Select, SelectItem } from "@heroui/react";
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
-import Slide from '@mui/material/Slide';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
@@ -22,23 +17,26 @@ import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import UnidadesProductos from "./unidades/tabla_unidades_productos";
 import FormProducto from "./form_producto";
+import { Producto } from "./tabla_productos";
 
-const IndexProducto = ({ id_producto, open, handleClose, onSaveSuccess }) => {
+const IndexProducto = ({ id_producto, open, handleClose }: { id_producto: number | null, open: boolean, handleClose: () => void }) => {
 
     const [value, setValue] = React.useState('1');
 
-    const handleChange = (event, newValue) => {
+    const handleChange = (
+        _: React.SyntheticEvent,
+        newValue: string
+    ) => {
         setValue(newValue);
     };
 
-    const [data, setData] = useState([]);
+    const [data, setData] = useState<Producto>();
     const [isLoading, setLoading] = useState(false);
 
     const fetchData = async () => {
         try {
             setLoading(true);
             const response = await odooApi.get(`/tms_travel/inventario_equipo/id/${id_producto}`);
-            console.log(response.data)
             setData(response.data);
             setLoading(false);
         } catch (error) {
@@ -68,9 +66,9 @@ const IndexProducto = ({ id_producto, open, handleClose, onSaveSuccess }) => {
                         <CloseIcon />
                     </IconButton>
                     <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-                        {data.x_name}
+                        {data?.x_name}
                     </Typography>
-                    <Button autoFocus color="inherit" onClick={handleClose}>
+                    <Button autoFocus onPress={handleClose}>
                         Salir
                     </Button>
                 </Toolbar>
@@ -100,14 +98,11 @@ const IndexProducto = ({ id_producto, open, handleClose, onSaveSuccess }) => {
                             <UnidadesProductos data2={data || []} fetch={fetchData}></UnidadesProductos>
                         </TabPanel>
                         <TabPanel value="2">
-                            <FormProducto data={data || []} setData={setData}></FormProducto>
+                            <FormProducto id_producto={id_producto}></FormProducto>
                         </TabPanel>
                     </TabContext>
                 </Box>
             </DialogContent>
-
-            <DialogActions>
-            </DialogActions>
         </Dialog>
     );
 };
