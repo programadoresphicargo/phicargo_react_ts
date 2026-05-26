@@ -1,26 +1,24 @@
-import { Avatar, Badge, Card, CardHeader } from "@heroui/react";
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { Spinner } from "@heroui/react";
+import React, { useEffect, useMemo, useState } from 'react';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import { Button } from "@heroui/react";
 import {
     MaterialReactTable,
     useMaterialReactTable,
 } from 'material-react-table';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { Box } from '@mui/material';
-import { DateRangePicker } from "@heroui/react";
-import { parseDate, getLocalTimeZone } from "@internationalized/date";
-import { useDateFormatter } from "@react-aria/i18n";
+import { DateRangePicker, RangeValue } from "@heroui/react";
+import { CalendarDate, parseDate } from "@internationalized/date";
+import { Folio } from './folios/folios';
+import { UseFormSetValue } from 'react-hook-form';
 
-function ListViajes({ open, handleClose, setDataTravel }) {
-    function formatDateToYYYYMMDD(date) {
+type Viaje = { id_viaje: number }
+
+function ListViajes({ open, handleClose, setDataViaje }: { open: boolean, handleClose: () => void, setDataViaje: UseFormSetValue<Folio> }) {
+
+    function formatDateToYYYYMMDD(date: Date) {
         return date.toISOString().slice(0, 10);
     }
 
@@ -28,12 +26,12 @@ function ListViajes({ open, handleClose, setDataTravel }) {
     const first = formatDateToYYYYMMDD(new Date(now.getFullYear(), now.getMonth(), 1));
     const last = formatDateToYYYYMMDD(new Date(now.getFullYear(), now.getMonth() + 1, 0));
 
-    const [value, setValue] = React.useState({
+    const [value, setValue] = React.useState<RangeValue<CalendarDate> | null>({
         start: parseDate(first),
         end: parseDate(last)
     });
 
-    const [data, setData] = useState([]);
+    const [data, setData] = useState<Viaje[]>([]);
     const [isLoading, setLoading] = useState(false);
 
     const fetchData = async () => {
@@ -41,8 +39,8 @@ function ListViajes({ open, handleClose, setDataTravel }) {
             setLoading(true);
             const response = await odooApi.get('/tms_travel/completed_travels/', {
                 params: {
-                    date_start: value.start,
-                    date_end: value.end
+                    date_start: value?.start,
+                    date_end: value?.end
                 }
             });
             setData(response.data);
@@ -57,18 +55,6 @@ function ListViajes({ open, handleClose, setDataTravel }) {
     useEffect(() => {
         fetchData();
     }, [open, value]);
-
-    const formatFecha = (fechaISO) => {
-        if (!fechaISO) return "";
-        return new Date(fechaISO).toLocaleString("es-MX", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-            hour12: true,
-        });
-    };
 
     const columns = useMemo(
         () => [
@@ -87,12 +73,10 @@ function ListViajes({ open, handleClose, setDataTravel }) {
             {
                 accessorKey: 'fecha_inicio',
                 header: 'Fecha de inicio',
-                Cell: ({ cell }) => formatFecha(cell.getValue()),
             },
             {
                 accessorKey: 'fecha_finalizado',
                 header: 'Fecha finalización',
-                Cell: ({ cell }) => formatFecha(cell.getValue()),
             },
             {
                 accessorKey: 'vehiculo',
@@ -143,7 +127,7 @@ function ListViajes({ open, handleClose, setDataTravel }) {
             density: 'compact',
             expanded: true,
             showColumnFilters: true,
-            pagination: { pageSize: 80 },
+            pagination: { pageIndex: 0, pageSize: 80 },
         },
         muiTablePaperProps: {
             elevation: 0,
@@ -160,24 +144,24 @@ function ListViajes({ open, handleClose, setDataTravel }) {
         },
         muiTableContainerProps: {
             sx: {
-                maxHeight: 'calc(100vh - 210px)',
+                maxHeight: 'calc(100vh - 310px)',
             },
         },
         muiTableBodyRowProps: ({ row }) => ({
             onClick: () => {
                 console.log(row.original);
-                setDataTravel([row.original]);
+                setDataViaje("id_viaje", row.original.id_viaje);
                 handleClose();
             },
         }),
-        muiTableBodyCellProps: ({ row }) => ({
+        muiTableBodyCellProps: () => ({
             sx: {
                 fontFamily: 'Inter',
                 fontWeight: 'normal',
                 fontSize: '12px',
             },
         }),
-        renderTopToolbarCustomActions: ({ table }) => (
+        renderTopToolbarCustomActions: () => (
             <Box
                 sx={{
                     display: 'flex',
@@ -194,7 +178,8 @@ function ListViajes({ open, handleClose, setDataTravel }) {
 
                 <DateRangePicker
                     visibleMonths={2}
-                    value={value} onChange={setValue}
+                    value={value}
+                    onChange={setValue}
                     className="max-w-xs"
                     label="Viajes finalizadoss"
                 />

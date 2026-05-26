@@ -1,27 +1,14 @@
 import {
+    MRT_Row,
     MaterialReactTable,
     useMaterialReactTable,
 } from 'material-react-table';
-import { Popover, PopoverContent, PopoverTrigger, User, useDisclosure } from "@heroui/react";
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-import AppBar from '@mui/material/AppBar';
-import { Avatar } from "@heroui/react";
+import React, { useEffect, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
 import { Button } from "@heroui/react"
-import { Chip } from "@heroui/react";
-import CloseIcon from '@mui/icons-material/Close';
-import DetencionesViajesActivos from '../../detenciones/detenciones_modal';
-import Dialog from '@mui/material/Dialog';
-import EstatusDropdown from '../../estatus/resumen_estatus';
-import IconButton from '@mui/material/IconButton';
-import { Image } from 'antd';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import Slide from '@mui/material/Slide';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import { exportToCSV } from '../../../utils/export';
 import odooApi from '@/api/odoo-api';
-import EstadiasOperadores from '../folios';
 import AbrirPeriodo from './modal_periodo';
 import PagosPeriodo from './folios_pago';
 import { Link } from '@heroui/react';
@@ -30,13 +17,13 @@ const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
 const PagosEstadiasOperadores = ({ }) => {
 
-    const [folio, setFolio] = React.useState([]);
+    const [folio, setFolio] = React.useState<number | null>(null);
     const [data, setData] = useState([]);
     const [isLoading, setLoading] = useState(false);
 
-    const [id_usuario, setIDUsuario] = useState(0);
-    const [startDate, setStartDate] = useState("");
-    const [endDate, setEndDate] = useState("");
+    const [id_usuario, setIDUsuario] = useState<number>(0);
+    const [startDate, setStartDate] = useState<string>("");
+    const [endDate, setEndDate] = useState<string>("");
 
     const fetchData = async () => {
         try {
@@ -95,8 +82,9 @@ const PagosEstadiasOperadores = ({ }) => {
             },
             {
                 header: "Acciones",
-                Cell: ({ row }) => {
-                    const id = row.original.id; // asegúrate que esta clave esté disponible
+                id: 'Acciones',
+                Cell: ({ row }: { row: MRT_Row<any> }) => {
+                    const id = row.original.id;
                     return (
                         <Button
                             showAnchorIcon
@@ -138,11 +126,10 @@ const PagosEstadiasOperadores = ({ }) => {
             columnVisibility: {
                 empresa: false,
             },
-            hiddenColumns: ["empresa"],
             density: 'compact',
             expanded: true,
             showColumnFilters: true,
-            pagination: { pageSize: 80 },
+            pagination: { pageIndex: 0, pageSize: 80 },
         },
         muiTablePaperProps: {
             elevation: 0,
@@ -171,14 +158,14 @@ const PagosEstadiasOperadores = ({ }) => {
                 setEndDate(row.original.date_end);
             },
         }),
-        muiTableBodyCellProps: ({ row }) => ({
+        muiTableBodyCellProps: () => ({
             sx: {
                 fontFamily: 'Inter',
                 fontWeight: 'normal',
                 fontSize: '12px',
             },
         }),
-        renderTopToolbarCustomActions: ({ table }) => (
+        renderTopToolbarCustomActions: () => (
             <Box
                 sx={{
                     display: 'flex',
@@ -194,29 +181,33 @@ const PagosEstadiasOperadores = ({ }) => {
                 </h1>
                 <Button
                     className='text-white'
-                    startContent={<i class="bi bi-plus-lg"></i>}
+                    startContent={<i className="bi bi-plus-lg"></i>}
                     color='success'
                     isDisabled={false}
+                    radius='full'
                     onPress={() => {
                         handleClickOpenEO();
                     }}
                     size='sm'
-                >Nuevo registro
+                >Nuevo
                 </Button>
                 <Button
                     className='text-white'
-                    startContent={<i class="bi bi-arrow-clockwise"></i>}
+                    startContent={<i className="bi bi-arrow-clockwise"></i>}
                     color='primary'
                     isDisabled={false}
                     onPress={() => fetchData()}
                     size='sm'
-                >Actualizar tablero
+                    radius='full'
+                >Actualizar
                 </Button>
-                <Button color='success'
+                <Button
+                    color='warning'
                     className='text-white'
-                    startContent={<i class="bi bi-file-earmark-excel"></i>}
+                    startContent={<i className="bi bi-file-earmark-excel"></i>}
                     onPress={() => exportToCSV(data, columns, "viajes_activos.csv")}
-                    size='sm'>
+                    size='sm'
+                    radius='full'>
                     Exportar
                 </Button>
             </Box >

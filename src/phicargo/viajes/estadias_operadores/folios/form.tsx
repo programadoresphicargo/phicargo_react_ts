@@ -1,62 +1,65 @@
-import { Avatar, Badge, Card, CardBody, CardHeader, Divider, Input } from "@heroui/react";
-import React, { useContext, useEffect, useState, useMemo } from 'react';
-import { Spinner } from "@heroui/react";
+import { Card, CardBody, CardHeader, Divider, Input } from "@heroui/react";
+import { useEffect, useState } from 'react';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { CostosExtrasContext } from "@/phicargo/costos/context/context";
 import { Button } from "@heroui/react";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@heroui/react";
-import { NumberInput } from "@heroui/react";
 import ListViajes from "../viajes_modal";
-import {
-    MaterialReactTable,
-    useMaterialReactTable,
-} from 'material-react-table';
-import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import { Box } from '@mui/material';
-import { TextField, MenuItem } from '@mui/material';
-import { Select, SelectItem } from "@heroui/react";
 import Stack from '@mui/material/Stack';
 import { DatePicker } from "@heroui/react";
-import { parseDate, getLocalTimeZone } from "@internationalized/date";
-import { useDateFormatter } from "@react-aria/i18n";
-import dayjs from 'dayjs';
 import { Progress } from "@heroui/react";
+import { Folio } from "./folios";
+import { Controller, useForm } from "react-hook-form";
+import { AutocompleteInput, NumberInput } from "@/components/inputs";
+import { parseDate } from "@internationalized/date";
+import dayjs from "dayjs";
 
-function EstadiasOperadores({ open, handleClose, datapago }) {
-    const [data, setData] = useState([]);
+const initialForm: Folio = {
+    id_viaje: null,
+    horas_pagar: 0,
+    total: 0,
+    estado: "borrador",
+    motivo: "",
+    fecha: dayjs(),
+};
+
+function EstadiasOperadores({ open, handleClose, datapago }: { open: boolean, handleClose: () => void, datapago: Folio | null }) {
+
+    const {
+        control,
+        handleSubmit,
+        reset,
+        watch,
+        setValue
+    } = useForm<Folio>({
+        defaultValues: initialForm,
+    });
+
     const [isLoading, setLoading] = useState(false);
     const [isLoadingRegistro, setLoadingRegistro] = useState(false);
 
-    const [horas_pagar, setHorasPagar] = useState(0);
-    const [total, setTotal] = useState(0);
-    const [motivo, setMotivo] = useState("");
-
-    const today = new Date();
-    const todayString = today.toISOString().slice(0, 10);
-    const [value, setValue] = React.useState(parseDate(todayString));
-
-    const handleSelectionChange = (e) => setMotivo(e.target.value);
+    const id_viaje = watch("id_viaje");
+    const estado = watch("estado");
 
     const fetchData = async () => {
-        if (!data[0]?.id_viaje) return;
+        if (datapago?.id_pago != null) return;
         toast.info('Obteniendo datos de viaje');
 
         try {
             setLoading(true);
             const response = await odooApi.get('/tms_travel/reporte_estadias/', {
-                params: { travel_id: data[0].id_viaje },
+                params: { travel_id: id_viaje },
             });
             const info = response.data[0];
-            setData(info);
-            setHorasPagar(info.horas_planta - info.x_horas_estadias);
-            setTotal((info.horas_planta - info.x_horas_estadias) * 62.50);
-            setMotivo("");
+            reset({
+                ...response.data[0],
+                id_viaje: info.travel_id,
+                horas_pagar: info.horas_planta - info.x_horas_estadias,
+                total: (info.horas_planta - info.x_horas_estadias) * 62.50,
+            })
         } catch (error) {
             console.error('Error al obtener los datos:', error);
             toast.error('Error al obtener los datos.');
@@ -66,20 +69,14 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
     };
 
     const fetchPago = async () => {
-        if (datapago.id_pago == null) {
+        if (datapago?.id_pago == null) {
+            reset(initialForm);
             return;
         }
-
         try {
-            toast.info('Obteniendo folio: ' + datapago.id_pago);
             setLoading(true);
-            const response = await odooApi.get(`/tms_travel/pagos_estadias_operadores/by_id_pago/${datapago.id_pago}`);
-            const info = response.data;
-            setData(info);
-            setHorasPagar(info.horas_pagar);
-            setTotal(info.total);
-            setMotivo(info.motivo);
-            setValue(parseDate(info.fecha));
+            const response = await odooApi.get(`/tms_travel/pagos_estadias_operadores/id_pago/${datapago.id_pago}`);
+            reset(response.data);
         } catch (error) {
             console.error('Error al obtener los datos:', error);
             toast.error('Error al obtener el pago.');
@@ -88,63 +85,36 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
         }
     };
 
-    const registrar_pago_estadia = async () => {
-        console.log('registrar maniobra' + data);
-        if (
-            !horas_pagar || horas_pagar < 0 ||
-            !total || total < 0 ||
-            !motivo
-        ) {
-            if (!horas_pagar) toast.error('Ingresa un valor para las horas a pagar.');
-            if (horas_pagar < 0) toast.error('Las horas a pagar no pueden ser negativas.');
-            if (!total) toast.error('Ingresa un valor para el total.');
-            if (total < 0) toast.error('El total no puede ser negativo.');
-            if (!motivo) toast.error('Ingresa un motivo de pago de estadías.');
-            return;
-        }
-
-        const payload = {
-            id_viaje: data?.travel_id,
-            fecha: dayjs(value).format('YYYY-MM-DD'),
-            horas_pagar,
-            total,
-            motivo,
-        };
-
+    const registrar = async (data: Folio) => {
         try {
+
+            const payload = {
+                ...data,
+                fecha: data.fecha?.format("YYYY-MM-DD"),
+            };
+
             setLoadingRegistro(true);
-            toast.warning('Registrando pago...');
-            const response = await odooApi.post('/tms_travel/pagos_estadias_operadores/create/', payload);
+            const response = await odooApi.post('/tms_travel/pagos_estadias_operadores/', payload);
             if (response.data.status === "success") {
                 toast.success(`${response.data.message}, Folio: ${response.data.data.id_pago}`);
                 handleClose();
             }
-        } catch (error) {
+        } catch (error: any) {
             toast.error('Error al registrar el pago: ' + error.message);
         } finally {
             setLoadingRegistro(false);
         }
     };
 
-    const actualizar_pago = async () => {
-
-        const payload = {
-            id_viaje: data?.id_viaje,
-            fecha: dayjs(value).format('YYYY-MM-DD'),
-            horas_pagar,
-            total,
-            motivo
-        };
-
+    const actualizar = async (data: Folio) => {
         try {
             setLoadingRegistro(true);
-            toast.info('Actualizando folio...');
-            const response = await odooApi.patch(`/tms_travel/pagos_estadias_operadores/update/${datapago.id_pago}`, payload);
+            const response = await odooApi.patch(`/tms_travel/pagos_estadias_operadores/${datapago?.id_pago}`, data);
             if (response.data.status === "success") {
                 toast.success(response.data.message);
                 handleClose();
             }
-        } catch (error) {
+        } catch (error: any) {
             toast.error('Error al actualizar el pago: ' + error.message);
         } finally {
             setLoadingRegistro(false);
@@ -155,12 +125,12 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
         try {
             setLoadingRegistro(true);
             toast.warning('Confirmando folio...');
-            const response = await odooApi.post(`/tms_travel/pagos_estadias_operadores/confirmar/${datapago.id_pago}`);
+            const response = await odooApi.post(`/tms_travel/pagos_estadias_operadores/confirmar/${datapago?.id_pago}`);
             if (response.data.status === "success") {
                 toast.success(response.data.message);
                 handleClose();
             }
-        } catch (error) {
+        } catch (error: any) {
             toast.error('Error al confirmar el pago: ' + error.message);
         } finally {
             setLoadingRegistro(false);
@@ -171,12 +141,12 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
         try {
             setLoadingRegistro(true);
             toast.warning('Cambiando estado a folio...');
-            const response = await odooApi.post(`/tms_travel/pagos_estadias_operadores/pagar/${datapago.id_pago}`);
+            const response = await odooApi.post(`/tms_travel/pagos_estadias_operadores/pagar/${datapago?.id_pago}`);
             if (response.data.status === "success") {
                 toast.success(response.data.message);
                 handleClose();
             }
-        } catch (error) {
+        } catch (error: any) {
             toast.error('Error al confirmar el pago: ' + error.message);
         } finally {
             setLoadingRegistro(false);
@@ -187,12 +157,12 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
         try {
             setLoadingRegistro(true);
             toast.warning('Cancelando folio...');
-            const response = await odooApi.post(`/tms_travel/pagos_estadias_operadores/cancelar/${datapago.id_pago}`);
+            const response = await odooApi.post(`/tms_travel/pagos_estadias_operadores/cancelar/${datapago?.id_pago}`);
             if (response.data.status === "success") {
                 toast.success(response.data.message);
                 handleClose();
             }
-        } catch (error) {
+        } catch (error: any) {
             toast.error('Error al confirmar el pago: ' + error.message);
         } finally {
             setLoadingRegistro(false);
@@ -200,14 +170,14 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
     };
 
     useEffect(() => {
-        fetchData();
-    }, [data]);
+        if (id_viaje != null) {
+            fetchData();
+        }
+    }, [id_viaje]);
 
     useEffect(() => {
-        if (datapago != null) {
+        if (open) {
             fetchPago();
-        } else {
-            setData([]);
         }
     }, [open]);
 
@@ -226,12 +196,6 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
                 maxWidth={"xl"}
                 open={open}
                 onClose={handleClose}
-                sx={{
-                    '& .MuiPaper-root': {
-                        borderRadius: '30px',
-                        boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.0)',
-                    },
-                }}
             >
                 <DialogTitle>
                     Calculo de pago de estadias
@@ -242,16 +206,16 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
                 <DialogContent>
                     <Stack spacing={1} direction="row">
 
-                        {(datapago == "" || datapago == null) && (
-                            <Button color="primary" onPress={registrar_pago_estadia} isLoading={isLoadingRegistro} radius="full">
+                        {datapago == null && (
+                            <Button color="primary" onPress={() => handleSubmit(registrar)()} isLoading={isLoadingRegistro} radius="full">
                                 Registrar pago
                             </Button>
                         )}
 
-                        {datapago && data.estado === 'borrador' && (
+                        {datapago && estado === 'borrador' && (
                             <Button
                                 color="success"
-                                onPress={actualizar_pago}
+                                onPress={() => handleSubmit(actualizar)()}
                                 isLoading={isLoadingRegistro}
                                 className="text-white"
                                 radius="full"
@@ -260,19 +224,19 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
                             </Button>
                         )}
 
-                        {data.estado == 'borrador' && (
+                        {datapago && estado == 'borrador' && (
                             <Button color="danger" onPress={cancelar_pago} isLoading={isLoadingRegistro} radius="full">
                                 Cancelar pago
                             </Button>
                         )}
 
-                        {data.estado == 'borrador' && (
+                        {datapago && estado == 'borrador' && (
                             <Button color="warning" onPress={confirmar_pago} isLoading={isLoadingRegistro} className="text-white" radius="full">
                                 Confirmar pago
                             </Button>
                         )}
 
-                        {data.estado == 'confirmado' && (
+                        {estado == 'confirmado' && (
                             <Button color="success" onPress={pagar_folio} isLoading={isLoadingRegistro} className="text-white" radius="full">
                                 Pagar
                             </Button>
@@ -287,17 +251,42 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
                                 >
                                     Viaje
                                 </h1>
-                                <Button onPress={handleClickOpenEO} color="primary" size="sm" fullWidth radius="full">Ingresar viaje</Button>
+                                {!datapago && estado === 'borrador' && (
+                                    <Button onPress={handleClickOpenEO} color="primary" size="sm" fullWidth radius="full">Ingresar viaje</Button>
+                                )}
                             </Stack>
                         </CardHeader>
                         <Divider></Divider>
                         <CardBody>
                             <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-                                <Input label="Folio No." value={datapago?.id_pago} />
-                                <Input label="Viaje" value={data?.travel_name} />
-                                <Input label="Operador" value={data?.employee_name} />
-                                <Input label="Cartas porte" value={data?.cartas_porte} />
-                                <DatePicker label="Fecha" value={value} onChange={setValue}
+                                <Input label="Folio No." value={watch("id_pago")?.toString() ?? ""} readOnly />
+                                <Input label="Estado:" value={watch("estado")?.toString() ?? ""} readOnly />
+                                <Input label="Viaje" value={String(watch("travel_name") ?? "")} readOnly />
+                                <Input label="Operador" value={String(watch("employee_name") ?? "")} readOnly />
+                                <Input label="Cartas porte" value={String(watch("cartas_porte") ?? "")} readOnly />
+                                <Controller
+                                    control={control}
+                                    name="fecha"
+                                    render={({ field, fieldState }) => {
+                                        const calendarValue =
+                                            field.value
+                                                ? parseDate(dayjs(field.value).format('YYYY-MM-DD'))
+                                                : null;
+
+                                        return (
+                                            <DatePicker
+                                                variant="flat"
+                                                label="Fecha"
+                                                value={calendarValue}
+                                                isDisabled={(estado === "confirmado" || estado === "pagado") ? true : false}
+                                                onChange={(val) => {
+                                                    field.onChange(val ? dayjs(val.toString()) : null);
+                                                }}
+                                                isInvalid={!!fieldState.error}
+                                                errorMessage={fieldState.error?.message}
+                                            />
+                                        );
+                                    }}
                                 />
                             </div>
                         </CardBody>
@@ -325,41 +314,44 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
                                 </TableHeader>
                                 <TableBody>
                                     <TableRow key="1">
-                                        <TableCell>{data?.llegada_planta}</TableCell>
-                                        <TableCell>{data?.salida_planta}</TableCell>
-                                        <TableCell>{data?.horas_planta}</TableCell>
-                                        <TableCell>{data?.x_horas_estadias}</TableCell>
-                                        <TableCell>
+                                        <TableCell>{watch("llegada_planta")}</TableCell>
+                                        <TableCell>{watch("salida_planta")}</TableCell>
+                                        <TableCell>{watch("horas_planta")}</TableCell>
+                                        <TableCell>{watch("x_horas_estadias")}</TableCell>
+                                        < TableCell >
                                             <NumberInput
+                                                control={control}
+                                                label="Horas a pagar"
+                                                name="horas_pagar"
+                                                size="md"
                                                 isDisabled={true}
-                                                className="max-w-xs"
-                                                defaultValue={horas_pagar}
-                                                value={horas_pagar}
-                                                onValueChange={setHorasPagar}
+                                                rules={{ required: "Campo obligatorio" }}
                                             />
                                         </TableCell>
                                         <TableCell>
                                             <NumberInput
+                                                control={control}
+                                                label="Total"
+                                                name="total"
+                                                size="md"
                                                 isDisabled={true}
-                                                className="max-w-xs"
-                                                defaultValue={horas_pagar * 62.50}
-                                                value={total}
-                                                onValueChange={setTotal} />
+                                                rules={{ required: "Campo obligatorio" }}
+                                            />
                                         </TableCell>
                                         <TableCell>
-                                            <Select
-                                                fullWidth
-                                                className="min-w-[200px]"
-                                                isDisabled={data?.estado == 'confirmado' ? true : false}
+                                            <AutocompleteInput
+                                                control={control}
                                                 label="Motivo"
-                                                selectedKeys={[motivo]}
-                                                variant="flat"
-                                                onChange={handleSelectionChange}
-                                            >
-                                                <SelectItem key={"demora_descarga"}>Demora en descarga</SelectItem>
-                                                <SelectItem key={"demora_carga"}>Demora en Carga</SelectItem>
-                                                <SelectItem key={"estadias_puerto"}>Estadías en puerto</SelectItem>
-                                            </Select>
+                                                name="motivo"
+                                                size="md"
+                                                isDisabled={(estado === "confirmado" || estado === "pagado") ? true : false}
+                                                rules={{ required: "Campo obligatorio" }}
+                                                items={[
+                                                    { key: "demora_descarga", value: "Demora en descarga" },
+                                                    { key: "demora_carga", value: "Demora en Carga" },
+                                                    { key: "estadias_puerto", value: "Estadías en puerto" }
+                                                ]}
+                                            />
                                         </TableCell>
                                     </TableRow>
                                 </TableBody>
@@ -370,7 +362,7 @@ function EstadiasOperadores({ open, handleClose, datapago }) {
                 </DialogContent>
             </Dialog >
 
-            <ListViajes open={openOP} handleClose={handleCloseEO} setDataTravel={setData}></ListViajes>
+            <ListViajes open={openOP} handleClose={handleCloseEO} setDataViaje={setValue}></ListViajes>
         </>
     );
 }

@@ -23,6 +23,7 @@ export const NumberInput = <T extends FieldValues>(
     placeholder,
     startContent,
     endContent,
+    size
   } = props;
 
   return (
@@ -38,7 +39,7 @@ export const NumberInput = <T extends FieldValues>(
             isDisabled={isDisabled}
             label={label}
             placeholder={placeholder}
-            size="sm"
+            size={size || 'sm'}
             variant={variant || 'flat'}
             name={name}
             startContent={startContent}

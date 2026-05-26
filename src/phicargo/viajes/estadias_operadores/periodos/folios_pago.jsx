@@ -21,7 +21,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { exportToCSV } from '../../../utils/export';
 import odooApi from '@/api/odoo-api';
-import EstadiasOperadores from '../folios';
+import EstadiasOperadores from '../folios/form';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
@@ -231,6 +231,7 @@ const PagosPeriodo = ({ open, handleClose, id_usuario, startDate, endDate }) => 
                     startContent={<i class="bi bi-plus-lg"></i>}
                     color='success'
                     isDisabled={false}
+                    radius='full'
                     onPress={() => {
                         handleClickOpenEO();
                     }}
@@ -244,13 +245,15 @@ const PagosPeriodo = ({ open, handleClose, id_usuario, startDate, endDate }) => 
                     isDisabled={false}
                     onPress={() => fetchData()}
                     size='sm'
+                    radius='full'
                 >Actualizar tablero
                 </Button>
                 <Button color='success'
                     className='text-white'
                     startContent={<i class="bi bi-file-earmark-excel"></i>}
                     onPress={() => exportToCSV(data, columns, "viajes_activos.csv")}
-                    size='sm'>
+                    size='sm'
+                    radius='full'>
                     Exportar
                 </Button>
             </Box >
@@ -260,18 +263,12 @@ const PagosPeriodo = ({ open, handleClose, id_usuario, startDate, endDate }) => 
     return (
         <>
             <Dialog
-                fullWidth={true}
-                maxWidth={"xl"}
+                fullScreen
                 open={open}
                 onClose={handleClose}
-                sx={{
-                    '& .MuiPaper-root': {
-                        borderRadius: '30px',
-                        boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.0)',
-                    },
-                }}
             >
                 <DialogTitle>
+                    <Button onPress={handleClose}>Cerrar</Button>
                 </DialogTitle>
                 <DialogContent>
                     <MaterialReactTable

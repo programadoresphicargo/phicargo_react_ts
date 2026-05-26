@@ -1,32 +1,40 @@
 import {
+    MRT_Cell,
     MaterialReactTable,
     useMaterialReactTable,
 } from 'material-react-table';
-import { Popover, PopoverContent, PopoverTrigger, User, useDisclosure } from "@heroui/react";
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-import AppBar from '@mui/material/AppBar';
-import { Avatar } from "@heroui/react";
+import React, { useEffect, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
 import { Button } from "@heroui/react"
 import { Chip } from "@heroui/react";
-import CloseIcon from '@mui/icons-material/Close';
-import Dialog from '@mui/material/Dialog';
-import EstatusDropdown from '../../estatus/resumen_estatus';
-import IconButton from '@mui/material/IconButton';
-import { Image } from 'antd';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import Slide from '@mui/material/Slide';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import { exportToCSV } from '../../../utils/export';
 import odooApi from '@/api/odoo-api';
 import { ViajeProvider } from '../../context/viajeContext';
-import EstadiasOperadores from '.';
+import EstadiasOperadores from './form';
 import NavbarTravel from '../../navbar_viajes';
+import { Dayjs } from 'dayjs';
+
+export type Folio = {
+    id_pago?: number | null,
+    id_viaje: number | null,
+    estado: string;
+    horas_pagar: number,
+    total: number,
+    motivo: string,
+    llegada_planta?: string,
+    salida_planta?: string,
+    horas_planta?: number,
+    x_horas_estadias?: number,
+    travel_name?: string;
+    employee_name?: string;
+    cartas_porte?: string;
+    fecha: Dayjs,
+}
 
 const PagosEstadiasOperadores = ({ }) => {
 
-    const [folio, setFolio] = React.useState([]);
+    const [folio, setFolio] = React.useState<Folio | null>(null);
     const [data, setData] = useState([]);
     const [isLoading, setLoading] = useState(false);
 
@@ -46,14 +54,14 @@ const PagosEstadiasOperadores = ({ }) => {
         fetchData();
     }, []);
 
-    const [openOP, setOpenOP] = React.useState(false);
+    const [open, setOpen] = React.useState(false);
 
-    const handleClickOpenEO = () => {
-        setOpenOP(true);
+    const handleClickOpen = () => {
+        setOpen(true);
     };
 
-    const handleCloseEO = () => {
-        setOpenOP(false);
+    const handleClose = () => {
+        setOpen(false);
         fetchData();
         setFolio(null);
     };
@@ -119,22 +127,23 @@ const PagosEstadiasOperadores = ({ }) => {
             {
                 accessorKey: 'estado',
                 header: 'Estado',
-                Cell: ({ cell }) => {
-                    const estado = cell.getValue() || '';
-                    let badgeClass = 'default';
-
-                    if (estado === 'confirmado') {
-                        badgeClass = 'success';
-                    } else if (estado === 'borrador') {
-                        badgeClass = 'warning';
-                    } else if (estado === 'cancelado') {
-                        badgeClass = 'danger';
-                    } else if (estado === 'pagado') {
-                        badgeClass = 'primary';
-                    }
+                Cell: ({ cell }: { cell: MRT_Cell<Folio> }) => {
+                    const estado = cell.getValue<string>() || '';
 
                     return (
-                        <Chip color={badgeClass} className="text-white" size="sm">
+                        <Chip color={
+                            estado === 'confirmado'
+                                ? 'success'
+                                : estado === 'borrador'
+                                    ? 'warning'
+                                    : estado === 'cancelado'
+                                        ? 'danger'
+                                        : estado === 'pagado'
+                                            ? 'primary'
+                                            : 'default'
+                        }
+                            className="text-white"
+                            size="sm">
                             {estado}
                         </Chip>
                     );
@@ -156,7 +165,7 @@ const PagosEstadiasOperadores = ({ }) => {
         positionGlobalFilter: "right",
         localization: MRT_Localization_ES,
         muiSearchTextFieldProps: {
-            placeholder: `Buscar en ${data.length} viajes`,
+            placeholder: `Buscar en ${data.length} registro`,
             sx: { minWidth: '300px' },
             variant: 'outlined',
         },
@@ -166,7 +175,7 @@ const PagosEstadiasOperadores = ({ }) => {
             density: 'compact',
             expanded: true,
             showColumnFilters: true,
-            pagination: { pageSize: 80 },
+            pagination: { pageIndex: 0, pageSize: 80 },
         },
         muiTablePaperProps: {
             elevation: 0,
@@ -183,24 +192,24 @@ const PagosEstadiasOperadores = ({ }) => {
         },
         muiTableContainerProps: {
             sx: {
-                maxHeight: 'calc(100vh - 210px)',
+                maxHeight: 'calc(100vh - 200px)',
             },
         },
 
         muiTableBodyRowProps: ({ row }) => ({
             onClick: () => {
-                handleClickOpenEO();
+                handleClickOpen();
                 setFolio(row.original);
             },
         }),
-        muiTableBodyCellProps: ({ row }) => ({
+        muiTableBodyCellProps: () => ({
             sx: {
                 fontFamily: 'Inter',
                 fontWeight: 'normal',
                 fontSize: '12px',
             },
         }),
-        renderTopToolbarCustomActions: ({ table }) => (
+        renderTopToolbarCustomActions: () => (
             <Box
                 sx={{
                     display: 'flex',
@@ -217,31 +226,31 @@ const PagosEstadiasOperadores = ({ }) => {
                 <Button
                     className='text-white'
                     radius="full"
-                    startContent={<i class="bi bi-plus-lg"></i>}
+                    startContent={<i className="bi bi-plus-lg"></i>}
                     color='success'
                     isDisabled={false}
                     onPress={() => {
-                        handleClickOpenEO();
+                        handleClickOpen();
                     }}
                     size='sm'
-                >Nuevo registro
+                >Nuevo
                 </Button>
                 <Button
                     radius="full"
                     className='text-white'
-                    startContent={<i class="bi bi-arrow-clockwise"></i>}
+                    startContent={<i className="bi bi-arrow-clockwise"></i>}
                     color='primary'
                     isDisabled={false}
                     onPress={() => fetchData()}
                     size='sm'
-                >Actualizar tablero
+                >Actualizar
                 </Button>
                 <Button
-                    color='success'
+                    color='warning'
                     radius="full"
                     className='text-white'
-                    startContent={<i class="bi bi-file-earmark-excel"></i>}
-                    onPress={() => exportToCSV(data, columns, "viajes_activos.csv")}
+                    startContent={<i className="bi bi-file-earmark-excel"></i>}
+                    onPress={() => exportToCSV(data, columns, "folios_estadias.csv")}
                     size='sm'>
                     Exportar
                 </Button>
@@ -256,9 +265,7 @@ const PagosEstadiasOperadores = ({ }) => {
                 <MaterialReactTable
                     table={table}
                 />
-
-                <EstadiasOperadores open={openOP} handleClose={handleCloseEO} datapago={folio}></EstadiasOperadores>
-
+                <EstadiasOperadores open={open} handleClose={handleClose} datapago={folio}></EstadiasOperadores>
             </ViajeProvider>
         </>
     );
