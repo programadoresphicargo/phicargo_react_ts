@@ -11,6 +11,7 @@ import { ViajeContext } from '../context/viajeContext';
 import odooApi from '@/api/odoo-api';
 import { tiempoTranscurrido } from '../../funciones/tiempo';
 import { Stack } from "rsuite";
+import { DialogTitle } from "@mui/material";
 const { VITE_ODOO_API_URL } = import.meta.env;
 
 type EstatusHistorial = {
@@ -102,6 +103,15 @@ function EstatusHistorial() {
                 fullWidth
                 maxWidth="md"
             >
+                <DialogTitle
+                    sx={{
+                        background: "linear-gradient(90deg, #002887 0%, #0059b3 100%)",
+                        color: "white",
+                        fontFamily: "Inter",
+                    }}
+                >
+                    Detalles de estatus
+                </DialogTitle>
                 <DialogContent>
                     <EstatusHistorialAgrupado id_reportes_agrupados={id_reportes_agrupados} />
                 </DialogContent>
