@@ -1,11 +1,11 @@
-import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Spinner } from "@heroui/react";
-
+import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Spinner } from "@heroui/react";
 import { User } from "@heroui/react";
 import odooApi from '@/api/odoo-api';
 import { useState } from "react";
+import { EstatusAgrupados } from "./estatus_agrupados";
 
-const EstatusDropdown = ({ data }) => {
-    const [items, setItems] = useState([]);
+const EstatusDropdown = ({ data }: { data: any }) => {
+    const [items, setItems] = useState<EstatusAgrupados[]>([]);
     const [isOpen, setIsOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -23,7 +23,7 @@ const EstatusDropdown = ({ data }) => {
             });
     };
 
-    const handleOpen = (open) => {
+    const handleOpen = (open: boolean) => {
         setIsOpen(open);
         if (open) fetchItems();
     };

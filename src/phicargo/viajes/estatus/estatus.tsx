@@ -1,40 +1,41 @@
 import { Card, CardHeader, Input } from "@heroui/react";
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { toast } from 'react-toastify';
+import { useContext, useEffect, useState } from 'react';
 import { Avatar } from "@heroui/react";
 import { Badge } from "@heroui/react";
-import { Button, Chip } from "@heroui/react";
+import { Button } from "@heroui/react";
 import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import EstatusHistorialAgrupado from './estatus_agrupados';
 import { Progress } from "@heroui/react";
-import Slide from '@mui/material/Slide';
 import { ViajeContext } from '../context/viajeContext';
 import odooApi from '@/api/odoo-api';
 import { tiempoTranscurrido } from '../../funciones/tiempo';
-import { DatePicker } from "@heroui/react";
-import { parseZonedDateTime, parseAbsoluteToLocal } from "@internationalized/date";
 import { Stack } from "rsuite";
 const { VITE_ODOO_API_URL } = import.meta.env;
 
+type EstatusHistorial = {
+    nombre_estatus: string;
+    tipo_registrante: string;
+    ultima_fecha_envio: string;
+    nombre_registrante: string;
+    imagen: string;
+    registros: number;
+    id_reportes_agrupados: number[]
+}
+
 function EstatusHistorial() {
 
-    const { id_viaje, drawerOpen, setDrawerOpen, id_reportes_agrupados, setEstatusAgrupados } = useContext(ViajeContext);
+    const { id_viaje, drawerOpen, setDrawerOpen } = useContext(ViajeContext);
+    const [id_reportes_agrupados, setEstatusAgrupados] = useState<number[]>([]);
 
-    const [estatusHistorial, setHistorial] = useState([]);
+    const [estatusHistorial, setHistorial] = useState<EstatusHistorial[]>([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [sortOrder, setSortOrder] = useState('desc');
+    const [isLoading, setLoading] = useState(false);
 
-    const [isLoading, setLoading] = useState([]);
-
-    const handleClickOpen = (id_registros) => {
-        setEstatusAgrupados(id_registros);
+    const handleClickOpen = (registros: number[]) => {
+        setEstatusAgrupados(registros);
         setDrawerOpen(true);
-    };
-
-    const handleClose = () => {
-        getHistorialEstatus();
     };
 
     const filteredHistorial = estatusHistorial.filter((item) =>
@@ -43,8 +44,8 @@ function EstatusHistorial() {
     );
 
     const sortedHistorial = [...filteredHistorial].sort((a, b) => {
-        const fechaA = new Date(a.ultima_fecha_envio);
-        const fechaB = new Date(b.ultima_fecha_envio);
+        const fechaA = new Date(a.ultima_fecha_envio).getTime();
+        const fechaB = new Date(b.ultima_fecha_envio).getTime();
         return sortOrder === 'asc' ? fechaA - fechaB : fechaB - fechaA;
     });
 
@@ -63,7 +64,6 @@ function EstatusHistorial() {
             setLoading(false);
         }
     };
-
 
     useEffect(() => {
         getHistorialEstatus();
@@ -100,10 +100,10 @@ function EstatusHistorial() {
                 open={drawerOpen}
                 onClose={() => setDrawerOpen(false)}
                 fullWidth
-                maxWidth="md" // puedes usar 'sm', 'md', 'lg', 'xl'
+                maxWidth="md"
             >
                 <DialogContent>
-                    <EstatusHistorialAgrupado />
+                    <EstatusHistorialAgrupado id_reportes_agrupados={id_reportes_agrupados} />
                 </DialogContent>
             </Dialog>
 
@@ -113,7 +113,7 @@ function EstatusHistorial() {
                     color="primary"
                     onPress={() => getHistorialEstatus()}
                     className="w-fit self-end mb-3"
-                    startContent={<i class="bi bi-arrow-clockwise"></i>}>
+                    startContent={<i className="bi bi-arrow-clockwise"></i>}>
                     Refrescar historial
                 </Button>
 
@@ -124,19 +124,18 @@ function EstatusHistorial() {
                     label="Buscador"
                     color="primary"
                     fullWidth
-                    size="sm" // puedes cambiarlo por "md" o "sm" si quieres más compacto
+                    size="sm"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     onClear={() => setSearchTerm('')}
                     startContent={<i className="bi bi-search"></i>}
-                    sx={{ flexGrow: 1 }}
                 />
 
                 <Button
                     radius="full"
                     onPress={toggleSortOrder}
                     color="primary"
-                    className="w-fit self-end mb-3" // ancho mínimo y alineado a la derecha
+                    className="w-fit self-end mb-3"
                 >
                     Ordenar: {sortOrder === 'asc' ? 'Ascendente' : 'Descendente'}
                 </Button>
@@ -145,18 +144,18 @@ function EstatusHistorial() {
                     radius="full"
                     onPress={generarReporte}
                     color="success"
-                    className="text-white w-fit self-end mb-3" // ancho mínimo y alineado a la derecha
+                    className="text-white w-fit self-end mb-3"
                 >
-                    <i class="bi bi-file-earmark-excel"></i>
+                    <i className="bi bi-file-earmark-excel"></i>
                     Exportar Excel
                 </Button>
                 <Button
                     radius="full"
                     onPress={exportPDF}
                     color="danger"
-                    className="text-white w-fit self-end mb-3" // ancho mínimo y alineado a la derecha
+                    className="text-white w-fit self-end mb-3"
                 >
-                    <i class="bi bi-file-earmark-pdf"></i>
+                    <i className="bi bi-file-earmark-pdf"></i>
                     Exportar PDF
                 </Button>
             </Stack>
@@ -165,7 +164,7 @@ function EstatusHistorial() {
                 <Progress size="sm" isIndeterminate color="primary" />
             ) : (
                 <ol className="step">
-                    {sortedHistorial.map((step, index) => {
+                    {sortedHistorial.map((step) => {
 
                         const getBadgeClass = () => {
                             if (step.tipo_registrante == 'automatico') return "primary";
@@ -194,7 +193,6 @@ function EstatusHistorial() {
                                             </h5>
                                         </div>
                                     </div>
-
                                     {tiempoTranscurrido(step.ultima_fecha_envio)}
                                 </CardHeader>
                             </Card>

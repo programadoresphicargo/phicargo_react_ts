@@ -62,9 +62,7 @@ const ViajeProvider = ({ children }) => {
         }
     };
 
-    const [id_reportes_agrupados, setEstatusAgrupados] = useState([]);
     const [drawerOpen, setDrawerOpen] = React.useState(false);
-
     const handleDrawerOpen = () => setDrawerOpen(true);
     const handleDrawerClose = () => setDrawerOpen(false);
 
@@ -77,8 +75,7 @@ const ViajeProvider = ({ children }) => {
             comprobacion_correos,
             correosLigados,
             isLoading,
-            drawerOpen, setDrawerOpen,
-            id_reportes_agrupados, setEstatusAgrupados,
+            drawerOpen, setDrawerOpen
         }}>
             {children}
         </ViajeContext.Provider>
