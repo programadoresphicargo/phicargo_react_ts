@@ -1,21 +1,17 @@
 import { Accordion, AccordionItem, Avatar, Progress } from "@heroui/react";
 import { Card, CardBody, CardFooter, CardHeader, Chip } from "@heroui/react";
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ArchivosAdjuntos from './archivos_adjuntos';
 import BotonDistanciaMapa from './enlaceDistancia';
 import BotonMapa from './botonMapa';
 import { Button } from "@heroui/react";
-import DialogTitle from '@mui/material/DialogTitle';
 import PanelEnvio from '../panel_envio_estatus/panel_envio';
-import { ViajeContext } from '../context/viajeContext';
 import odooApi from '@/api/odoo-api';
 import { tiempoTranscurrido } from '../../funciones/tiempo';
 import { DatePicker } from "@heroui/react";
 import { parseZonedDateTime } from "@internationalized/date";
 import { toast } from 'react-toastify';
 import { useAuthContext } from "@/modules/auth/hooks";
-import CloseIcon from '@mui/icons-material/Close';
-import { IconButton, Box } from '@mui/material';
 
 export type EstatusAgrupados = {
     nombre_estatus: string;
