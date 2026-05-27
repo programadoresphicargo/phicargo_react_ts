@@ -1,0 +1,80 @@
+import odooApi from "@/api/odoo-api";
+import { tiempoTranscurrido } from "@/phicargo/funciones/tiempo";
+import { Avatar, Button, Card, CardBody, Progress } from "@heroui/react";
+import { useEffect, useState } from "react";
+const { VITE_ODOO_API_URL } = import.meta.env;
+
+type Step = {
+ id_estatus: number;
+ nombre_estatus: string;
+ fecha_envio: string | null;
+ imagen: string;
+};
+
+export default function SeguimientoSimple({
+ id_viaje,
+}: {
+ id_viaje: number;
+}) {
+
+ const [data, setData] = useState<Step[]>([]);
+ const [isLoading, setLoading] = useState<boolean>(false);
+
+ const fetchData = async () => {
+  try {
+   setLoading(true);
+   const response = await odooApi.get(
+    '/tms_travel/reportes_estatus_viajes/seguimiento_simple/' + id_viaje
+   );
+
+   setData(response.data);
+   setLoading(false);
+  } catch (error) {
+   console.error(error);
+  } finally {
+   setLoading(false);
+  }
+ };
+
+ useEffect(() => {
+  fetchData();
+ }, []);
+
+ return (
+  <div>
+   <Button onPress={() => fetchData()} color="success" className="text-white" radius="full">Recargar</Button>
+   {isLoading && (
+    <Progress isIndeterminate size="sm" color="primary"></Progress>
+   )}
+   {data.map((step) => {
+    return (
+     <>
+      <div className="mt-3">
+       <Card isDisabled={step.fecha_envio ? false : true} isPressable fullWidth>
+        <CardBody>
+         <div className="flex gap-5">
+          <Avatar
+           color={step.fecha_envio ? "success" : "default"}
+           isBordered
+           radius="full"
+           size="md"
+           src={VITE_ODOO_API_URL + `/assets/trafico/estatus_operativos/${step.imagen}`}
+          />
+          <div className="flex flex-col gap-1 items-start justify-center">
+           <h4 className="text-small font-semibold leading-none text-default-600">{step.nombre_estatus}</h4>
+           <h5 className="text-small tracking-tight text-default-400">
+            {step.fecha_envio && (
+             tiempoTranscurrido(step.fecha_envio)
+            )}
+           </h5>
+          </div>
+         </div>
+        </CardBody>
+       </Card>
+      </div>
+     </>
+    );
+   })}
+  </div>
+ );
+}

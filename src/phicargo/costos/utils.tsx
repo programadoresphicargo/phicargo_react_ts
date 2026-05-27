@@ -1,5 +1,5 @@
-// utils.jsx
-export const getEstadoChip = (estado) => {
+
+export const getEstadoChip = (estado: string) => {
     switch (estado) {
         case "draft":
             return { color: "warning", text: "Borrador" };

@@ -1,4 +1,4 @@
-import { Button } from "@heroui/react";
+import { Button, Tab, Tabs } from "@heroui/react";
 import { Card, Chip, Divider } from "@heroui/react";
 import { CardBody, CardHeader, Snippet } from "@heroui/react";
 import React, { useContext } from "react";
@@ -14,6 +14,7 @@ import { useJourneyDialogs } from "./funciones";
 import Custodia from "../custodia/custodia";
 import LlegadaTarde from "../llegada_tarde";
 import FormEquipoViaje from "./editar_equipo";
+import SeguimientoSimple from "../estatus/simple/estatus";
 
 export default function Seguimiento() {
 
@@ -225,15 +226,32 @@ export default function Seguimiento() {
                 </Grid>
 
                 <Grid size={8}>
-                    <Card>
-                        <CardHeader>
-                            Historial de estatus
-                        </CardHeader>
-                        <Divider></Divider>
-                        <CardBody>
-                            <EstatusHistorial key={isLoading}></EstatusHistorial>
-                        </CardBody>
-                    </Card>
+                    <div className="flex w-full flex-col">
+                        <Tabs aria-label="Options" color="primary" radius="full">
+                            <Tab key="photos" title="Seguimiento completo">
+                                <Card>
+                                    <CardHeader>
+                                        Historial de estatus
+                                    </CardHeader>
+                                    <Divider></Divider>
+                                    <CardBody>
+                                        <EstatusHistorial key={isLoading}></EstatusHistorial>
+                                    </CardBody>
+                                </Card>
+                            </Tab>
+                            <Tab key="music" title="Seguimiento simple">
+                                <Card>
+                                    <CardHeader>
+                                        Seguimiento simple
+                                    </CardHeader>
+                                    <Divider></Divider>
+                                    <CardBody>
+                                        <SeguimientoSimple id_viaje={id_viaje}></SeguimientoSimple>
+                                    </CardBody>
+                                </Card>
+                            </Tab>
+                        </Tabs>
+                    </div>
                 </Grid>
             </Grid>
 
