@@ -245,7 +245,6 @@ function EstatusHistorialAgrupado({ id_reportes_agrupados }: { id_reportes_agrup
                                                     isBordered
                                                     radius="full"
                                                     size="md"
-                                                    src={VITE_ODOO_API_URL + "/img/operador.png"}
                                                 />
                                                 <div className="flex flex-col gap-1 items-start justify-center">
                                                     <h4 className="text-small font-semibold leading-none text-default-600">Añadio un comentario</h4>
@@ -273,7 +272,6 @@ function EstatusHistorialAgrupado({ id_reportes_agrupados }: { id_reportes_agrup
                                                     isBordered
                                                     radius="full"
                                                     size="md"
-                                                    src={VITE_ODOO_API_URL + "/img/operador.png"}
                                                 />
                                                 <div className="flex flex-col gap-1 items-start justify-center">
                                                     <h4 className="text-small font-semibold leading-none text-default-600">Enviado por</h4>
