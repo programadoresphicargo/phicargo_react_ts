@@ -246,8 +246,6 @@ export default function AsignacionViajeModal({ open, setOpen, shift }: { open: b
         maxHeight: 'calc(100vh - 350px)',
       },
     },
-    enableRowActions: true,
-    positionActionsColumn: "last",
     muiTableBodyRowProps: ({ row }) => ({
       onDoubleClick: () => {
         setCP(row.original);
