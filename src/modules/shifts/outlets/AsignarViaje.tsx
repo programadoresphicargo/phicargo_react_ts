@@ -248,14 +248,12 @@ export default function AsignacionViajeModal({ open, setOpen, shift }: { open: b
     },
     enableRowActions: true,
     positionActionsColumn: "last",
-    renderRowActions: ({ row }) => (
-      <Button color="primary" className="text-white" radius="full" size='sm' onPress={() => {
+    muiTableBodyRowProps: ({ row }) => ({
+      onDoubleClick: () => {
         setCP(row.original);
         handleOpen2();
-      }}>
-        Seleccionar
-      </Button>
-    ),
+      },
+    }),
     renderTopToolbarCustomActions: () => (
       <Box
         sx={{
