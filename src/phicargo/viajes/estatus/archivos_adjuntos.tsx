@@ -1,16 +1,17 @@
-import React, { useContext, useEffect, useState } from "react";
-
-import FsLightbox from "fslightbox-react";
-import { Image } from "antd";
+import { useEffect, useState } from "react";
 import { Card, CardBody, CardHeader, Divider, Link } from "@heroui/react";
 import { Progress } from "@heroui/react";
-import { ViajeContext } from "../context/viajeContext";
 import odooApi from "@/api/odoo-api";
 
-function ArchivosAdjuntos({ id_reporte }) {
-    const { id_viaje } = useContext(ViajeContext);
+type Images = {
+    webUrl: string;
+    filename: string
+}
+
+function ArchivosAdjuntos({ id_reporte }: { id_reporte: number }) {
+
     const [isLoading, setLoading] = useState(false);
-    const [images, setData] = useState([]);
+    const [images, setData] = useState<Images[]>([]);
 
     useEffect(() => {
         fetchData();
@@ -43,7 +44,7 @@ function ArchivosAdjuntos({ id_reporte }) {
                 </CardHeader>
                 <Divider></Divider>
                 <CardBody>
-                    {images.map((item, index) => (
+                    {images.map((item) => (
                         <div className="col-12">
                             <>
                                 <Link href={item?.webUrl} isExternal showAnchorIcon>
