@@ -1,6 +1,6 @@
 import odooApi from "@/api/odoo-api";
 import { tiempoTranscurrido } from "@/phicargo/funciones/tiempo";
-import { Accordion, AccordionItem, Avatar, Button, Card, CardBody, CardHeader, Divider, Progress } from "@heroui/react";
+import { Accordion, AccordionItem, Avatar, Card, CardBody, Progress } from "@heroui/react";
 import { useEffect, useState } from "react";
 const { VITE_ODOO_API_URL } = import.meta.env;
 
