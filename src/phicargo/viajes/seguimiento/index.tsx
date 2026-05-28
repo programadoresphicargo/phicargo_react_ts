@@ -14,7 +14,9 @@ import { useJourneyDialogs } from "./funciones";
 import Custodia from "../custodia/custodia";
 import LlegadaTarde from "../llegada_tarde";
 import FormEquipoViaje from "./editar_equipo";
-import SeguimientoSimple from "../estatus/simple/estatus";
+import SeguimientoSimple from "../estatus/simple/estatus_viajes";
+import SeguimientoSimpleManiobra from "../estatus/simple/estatus_maniobras";
+import SeguimientoSimpleViaje from "../estatus/simple/estatus_viajes";
 
 export default function Seguimiento() {
 
@@ -240,15 +242,11 @@ export default function Seguimiento() {
                                 </Card>
                             </Tab>
                             <Tab key="music" title="Seguimiento simple">
-                                <Card>
-                                    <CardHeader>
-                                        Seguimiento simple
-                                    </CardHeader>
-                                    <Divider></Divider>
-                                    <CardBody>
-                                        <SeguimientoSimple id_viaje={id_viaje}></SeguimientoSimple>
-                                    </CardBody>
-                                </Card>
+                                <div className="flex flex-col gap-4">
+                                    <SeguimientoSimpleManiobra id_viaje={id_viaje} tipo_maniobra="ingreso"></SeguimientoSimpleManiobra>
+                                    <SeguimientoSimpleViaje id_viaje={id_viaje}></SeguimientoSimpleViaje>
+                                    <SeguimientoSimpleManiobra id_viaje={id_viaje} tipo_maniobra="retiro"></SeguimientoSimpleManiobra>
+                                </div>
                             </Tab>
                         </Tabs>
                     </div>
