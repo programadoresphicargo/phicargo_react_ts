@@ -1,4 +1,3 @@
-// api/asignacionViaje.ts
 import odooApi from "@/api/odoo-api";
 
 interface ApiSuccessResponse {
@@ -14,12 +13,11 @@ export interface AsignacionViajePayload {
  x_operador_bel_id: number | null;
 }
 
-export const postAsignacionViaje = async (
- shiftId: number,
+export const postAsignacionViajeSinTurno = async (
  payload: AsignacionViajePayload
 ): Promise<ApiSuccessResponse> => {
- const { data } = await odooApi.put(
-  `/shifts/${shiftId}/assign-travel`,
+ const { data } = await odooApi.post(
+  `/shifts/assign-travel/`,
   payload
  );
 

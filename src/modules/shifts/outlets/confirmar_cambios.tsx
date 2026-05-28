@@ -25,6 +25,8 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from "react-router-dom";
+import { DriverAutocompleteInput } from "@/modules/drivers/components/DriverAutocompleteInput.tsx";
+import { useAsignarViajeSinTurno } from "./api/mutation_no_shift.ts";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -33,19 +35,21 @@ interface Props {
   open: boolean;
   onClose: () => void;
   cp?: CartaPorte;
-  shift: Shift;
+  shift: Shift | null
 }
 
 interface FormValues {
   date_start: Dayjs | null;
   x_date_arrival_shed: Dayjs | null;
   x_eco_bel_id: number | null;
+  x_operador_bel_id: number | null;
 }
 
 const AsignacionViaje: React.FC<Props> = ({ open, onClose, cp, shift }) => {
 
   const navigate = useNavigate();
   const asignarViajeMutation = useAsignarViaje();
+  const asignarViajeSinTurnoMutation = useAsignarViajeSinTurno();
 
   const { control, reset, handleSubmit, setValue, formState: { errors }, } = useForm<FormValues>({
     defaultValues: {
@@ -67,12 +71,12 @@ const AsignacionViaje: React.FC<Props> = ({ open, onClose, cp, shift }) => {
         : null,
 
       x_eco_bel_id: cp?.x_eco_bel_id ?? shift?.vehicle?.id ?? null,
+      x_operador_bel_id: shift?.driver.id ?? null,
     });
   }, [cp, open, reset]);
 
   React.useEffect(() => {
     if (asignarViajeMutation.isSuccess) {
-      //onClose();
     }
   }, [asignarViajeMutation.isSuccess, onClose]);
 
@@ -90,10 +94,33 @@ const AsignacionViaje: React.FC<Props> = ({ open, onClose, cp, shift }) => {
           ? data.x_date_arrival_shed.utc().format()
           : null,
         x_eco_bel_id: data.x_eco_bel_id ? data.x_eco_bel_id : null,
+        x_operador_bel_id: shift.driver.id ?? null,
       },
     }, {
       onSuccess: () => {
         navigate('/turnos');
+      },
+    });
+  };
+
+  const onSubmit2 = (data: FormValues) => {
+    if (!cp?.id) return;
+
+    asignarViajeSinTurnoMutation.mutate({
+      payload: {
+        id_cp: cp.id,
+        date_start: data.date_start
+          ? data.date_start.utc().format()
+          : null,
+        x_date_arrival_shed: data.x_date_arrival_shed
+          ? data.x_date_arrival_shed.utc().format()
+          : null,
+        x_eco_bel_id: data.x_eco_bel_id ? data.x_eco_bel_id : null,
+        x_operador_bel_id: data.x_operador_bel_id
+      },
+    }, {
+      onSuccess: () => {
+        onClose();
       },
     });
   };
@@ -119,7 +146,7 @@ const AsignacionViaje: React.FC<Props> = ({ open, onClose, cp, shift }) => {
             Asignación de viaje
           </Typography>
           <Button autoFocus color="inherit" onClick={() => onClose()}>
-            Cancelar
+            Cerrar
           </Button>
         </Toolbar>
       </AppBar>
@@ -221,6 +248,13 @@ const AsignacionViaje: React.FC<Props> = ({ open, onClose, cp, shift }) => {
                     />
                   )}
                 />
+                <DriverAutocompleteInput
+                  control={control}
+                  label="Operador"
+                  name="x_operador_bel_id"
+                  setValue={setValue}
+                  isDisabled={shift ? true : false}
+                  rules={{ required: "El Operador es obligatorio" }} />
                 <VehicleAutocompleteInput
                   control={control}
                   name="x_eco_bel_id"
@@ -237,16 +271,29 @@ const AsignacionViaje: React.FC<Props> = ({ open, onClose, cp, shift }) => {
 
       <DialogActions>
         <Button onClick={onClose} variant="outlined">
-          Cancelar
+          Cerrar
         </Button>
 
-        <Button
-          variant="contained"
-          onClick={handleSubmit(onSubmit)}
-          disabled={asignarViajeMutation.isPending}
-        >
-          {asignarViajeMutation.isPending ? "Guardando..." : "Guardar"}
-        </Button>
+        {shift && (
+          <Button
+            variant="contained"
+            onClick={handleSubmit(onSubmit)}
+            disabled={asignarViajeMutation.isPending}
+          >
+            {asignarViajeMutation.isPending ? "Guardando..." : "Guardar"}
+          </Button>
+        )}
+
+        {!shift && (
+          <Button
+            color="success"
+            variant="contained"
+            onClick={handleSubmit(onSubmit2)}
+            disabled={asignarViajeSinTurnoMutation.isPending}
+          >
+            {asignarViajeSinTurnoMutation.isPending ? "Guardando..." : "Guardar"}
+          </Button>
+        )}
       </DialogActions>
     </Dialog>
   );

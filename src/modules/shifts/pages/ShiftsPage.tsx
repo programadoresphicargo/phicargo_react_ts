@@ -45,16 +45,17 @@ const ShiftsPage = () => {
   const isDetailsOpen = location.pathname.startsWith('/turnos/detalles');
   const isHistoryOpen = location.pathname.startsWith('/turnos/historial-asignado');
   const isActividadOpen = location.pathname.startsWith('/turnos/actividad');
+  const Asignacion = location.pathname.startsWith('/turnos/asignacion');
 
   const Descargnado = location.pathname.startsWith('/turnos/unidades-descargando');
   const Bajando = location.pathname.startsWith('/turnos/unidades-bajando');
   const Planta = location.pathname.startsWith('/turnos/unidades-planta');
 
   useEffect(() => {
-    if (!isDetailsOpen || !isHistoryOpen || !isCrearOpen || !isActividadOpen || !Descargnado || !Bajando || !Planta) {
+    if (!isDetailsOpen || !isHistoryOpen || !isCrearOpen || !isActividadOpen || !Descargnado || !Bajando || !Planta || !Asignacion) {
       refetch();
     }
-  }, [isDetailsOpen, isHistoryOpen, isCrearOpen, isActividadOpen, Descargnado, Bajando, Planta]);
+  }, [isDetailsOpen, isHistoryOpen, isCrearOpen, isActividadOpen, Descargnado, Bajando, Planta, Asignacion]);
 
 
   const onOpenDetails = (id: number) => {
@@ -205,6 +206,16 @@ const ShiftsPage = () => {
             format="yyyy-MM-dd"
           />
         </div>
+
+        <Button
+          radius="full"
+          size='sm'
+          color="danger"
+          className='text-white'
+          onPress={() => navigate('/turnos/asignacion')}
+        >
+          Asignación de viajes
+        </Button>
       </div>
     ),
     muiTableContainerProps: {

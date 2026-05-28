@@ -34,9 +34,10 @@ type CartaPorte = {
   x_tipo_bel: string;
   x_modo_bel: string;
   dangerous_cargo: boolean;
+  x_operador_bel_id: number;
 }
 
-export default function AsignacionViajeModal({ open, setOpen, shift }: { open: boolean, setOpen: Dispatch<SetStateAction<boolean>>, shift: Shift }) {
+export default function AsignacionViajeModal({ open, setOpen, shift }: { open: boolean, setOpen: Dispatch<SetStateAction<boolean>>, shift: Shift | null }) {
 
   const { branchId } = useShiftsContext();
   const [isLoading, setLoading] = useState(false);
@@ -44,9 +45,9 @@ export default function AsignacionViajeModal({ open, setOpen, shift }: { open: b
   const [rawData, setRawData] = useState<CartaPorte[]>([]);
   const [useFilters, setUseFilters] = useState(true);
 
-  const [open2, setOpen2] = useState(false);
-  const handleOpen2 = () => setOpen2(true);
-  const handleClose2 = () => { setOpen2(false); fetchData(); };
+  const [openConfirm, setOpenConfirm] = useState(false);
+  const handleOpenConfirm = () => setOpenConfirm(true);
+  const handleCloseConfirm = () => { setOpenConfirm(false); fetchData(); };
 
   function formatDateToYYYYMMDD(date: Date) {
     return date.toISOString().slice(0, 10);
@@ -59,16 +60,14 @@ export default function AsignacionViajeModal({ open, setOpen, shift }: { open: b
   const fetchData = async () => {
     try {
       setLoading(true);
-
-      const response = await odooApi.get('/tms_waybill/plan_viaje_asignacion', {
+      const response = await odooApi.get('/tms_waybill/plan_viaje_asignacion/', {
         params: {
           date_order: value,
-          operador_asignado: false,
+          operador_asignado: null,
           store_id: branchId,
         },
       });
-
-      setRawData(response.data); // ← sin filtrar
+      setRawData(response.data);
       setLoading(false);
     } catch (error) {
       console.error('Error al obtener los datos:', error);
@@ -191,6 +190,10 @@ export default function AsignacionViajeModal({ open, setOpen, shift }: { open: b
         },
       },
       {
+        accessorKey: 'operador_programado',
+        header: 'Operador programado',
+      },
+      {
         accessorKey: 'date_order',
         header: 'Fecha',
       },
@@ -243,13 +246,20 @@ export default function AsignacionViajeModal({ open, setOpen, shift }: { open: b
     muiTableContainerProps: {
       sx: {
         borderRadius: '8px',
-        maxHeight: 'calc(100vh - 350px)',
+        maxHeight: 'calc(100vh - 300px)',
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
       onDoubleClick: () => {
         setCP(row.original);
-        handleOpen2();
+        handleOpenConfirm();
+      },
+      sx: {
+        opacity: row.original.x_operador_bel_id ? 0.5 : 1,
+        pointerEvents: row.original.x_operador_bel_id ? 'none' : 'auto',
+        backgroundColor: row.original.x_operador_bel_id
+          ? '#d4edda'
+          : 'inherit',
       },
     }),
     renderTopToolbarCustomActions: () => (
@@ -262,56 +272,55 @@ export default function AsignacionViajeModal({ open, setOpen, shift }: { open: b
           width: '100%',
         }}
       >
-        <Card>
-          <CardHeader>
-            <h2 className="text-lg font-semibold text-gray-800">
-              Operador
-            </h2>
-          </CardHeader>
-          <Divider></Divider>
-          <CardBody>
 
-            <div className="grid grid-cols-4 gap-x-6 gap-y-2 text-sm">
+        {shift && (
+          <Card>
+            <CardHeader>
+              <h2 className="text-lg font-semibold text-gray-800">
+                Operador
+              </h2>
+            </CardHeader>
+            <Divider></Divider>
+            <CardBody>
 
-              {/* IZQUIERDA */}
-              <span className="text-gray-500">Nombre</span>
-              <span className="font-medium text-gray-900">
-                {shift?.driver.name}
-              </span>
+              <div className="grid grid-cols-4 gap-x-6 gap-y-2 text-sm">
 
-              <span className="text-gray-500">Modalidad</span>
-              <span className="font-medium text-gray-900">
-                {shift?.driver.modality}
-              </span>
+                <span className="text-gray-500">Nombre</span>
+                <span className="font-medium text-gray-900">
+                  {shift?.driver.name}
+                </span>
 
-              <span className="text-gray-500">Licencia</span>
-              <span className="font-medium text-gray-900">
-                {shift?.driver.license}
-              </span>
+                <span className="text-gray-500">Modalidad</span>
+                <span className="font-medium text-gray-900">
+                  {shift?.driver.modality}
+                </span>
 
-              <span className="text-gray-500">Peligroso</span>
-              <span className="font-medium text-gray-900">
-                {shift?.driver.isDangerous.toString()}
-              </span>
+                <span className="text-gray-500">Licencia</span>
+                <span className="font-medium text-gray-900">
+                  {shift?.driver.license}
+                </span>
 
-              <span className="text-gray-500">Vencimiento</span>
-              <span className="font-medium text-gray-900">
-                {
-                  shift?.driver?.licenseExpiration
-                    ? dayjs(shift.driver.licenseExpiration).format("DD/MM/YYYY")
-                    : "Sin fecha"
-                }
-              </span>
+                <span className="text-gray-500">Peligroso</span>
+                <span className="font-medium text-gray-900">
+                  {shift?.driver.isDangerous.toString()}
+                </span>
 
-              {/* Relleno para cuadrar la grilla */}
-              <span />
-              <span />
+                <span className="text-gray-500">Vencimiento</span>
+                <span className="font-medium text-gray-900">
+                  {
+                    shift?.driver?.licenseExpiration
+                      ? dayjs(shift.driver.licenseExpiration).format("DD/MM/YYYY")
+                      : "Sin fecha"
+                  }
+                </span>
 
-            </div>
+                <span />
+                <span />
+              </div>
 
-          </CardBody>
-        </Card>
-
+            </CardBody>
+          </Card>
+        )}
         <DatePicker
           label="Fecha prevista"
           value={value}
@@ -321,8 +330,11 @@ export default function AsignacionViajeModal({ open, setOpen, shift }: { open: b
             }
           }}
         />
-
-        <Button onPress={() => fetchData()} color='success' className='text-white' radius='full'>Recargar</Button>
+        <Button
+          onPress={() => fetchData()}
+          color='success'
+          className='text-white'
+          radius='full'>Recargar</Button>
         <Button
           radius='full'
           color='primary'
@@ -330,21 +342,28 @@ export default function AsignacionViajeModal({ open, setOpen, shift }: { open: b
         >
           {useFilters ? 'Desactivar filtros' : 'Activar filtros'}
         </Button>
-
       </Box>
     )
   });
 
   return (<>
-    <AsignacionViaje open={open2} onClose={handleClose2} cp={cp} shift={shift}></AsignacionViaje>
+    <AsignacionViaje
+      open={openConfirm}
+      onClose={handleCloseConfirm}
+      cp={cp}
+      shift={shift}
+    />
+
     <Dialog
       open={open}
       fullScreen>
-      <AppBar sx={{
-        position: 'relative',
-        background: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
-        color: 'white',
-      }} elevation={0}>
+      <AppBar
+        sx={{
+          position: 'relative',
+          background: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
+          color: 'white',
+        }}
+        elevation={0}>
         <Toolbar>
           <IconButton
             edge="start"
@@ -358,7 +377,7 @@ export default function AsignacionViajeModal({ open, setOpen, shift }: { open: b
             Asignación de viajes
           </Typography>
           <Button autoFocus onPress={() => setOpen(false)}>
-            Cancelar
+            Cerrar
           </Button>
         </Toolbar>
       </AppBar>

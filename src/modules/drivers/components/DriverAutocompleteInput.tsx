@@ -13,6 +13,7 @@ interface Props<T extends FieldValues> {
   variant?: "bordered" | "flat" | "faded" | "underlined";
   setValue: UseFormSetValue<T>;
   isDisabled?: boolean;
+  rules?: any;
 }
 
 export const DriverAutocompleteInput = <T extends FieldValues>({
@@ -21,7 +22,8 @@ export const DriverAutocompleteInput = <T extends FieldValues>({
   label,
   variant = "bordered",
   setValue,
-  isDisabled = false
+  isDisabled = false,
+  rules,
 }: Props<T>) => {
   const { AvailableDrivers, isLoading } = useDriverQueries();
 
@@ -29,6 +31,7 @@ export const DriverAutocompleteInput = <T extends FieldValues>({
     <Controller
       control={control}
       name={name}
+      rules={rules}
       render={({ field, fieldState }) => (
         <Autocomplete
           label={label}

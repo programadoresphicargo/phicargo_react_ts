@@ -16,6 +16,7 @@ const TravelsUnloading = lazy(() => import('../outlets/TravelsUnloading'));
 const TravelsInPlant = lazy(() => import('../outlets/TravelsInPlant'));
 const HistorialAsignado = lazy(() => import('../outlets/HistorialAsignado'));
 const Actividad = lazy(() => import('../outlets/Operadores'));
+const Asignacion = lazy(() => import('../outlets/AsignaciónViajeGeneral'));
 
 const permission = 202;
 
@@ -98,6 +99,15 @@ const ShiftsRoutes = () => (
         element={
           <Suspense fallback={<LoadingPage />}>
             <Actividad></Actividad>
+          </Suspense>
+        }
+      />
+
+      <Route
+        path="asignacion"
+        element={
+          <Suspense fallback={<LoadingPage />}>
+            <Asignacion></Asignacion>
           </Suspense>
         }
       />
