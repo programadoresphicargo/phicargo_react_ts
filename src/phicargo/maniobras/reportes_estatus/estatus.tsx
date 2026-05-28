@@ -52,31 +52,11 @@ function EstatusHistorialManiobras({ id_maniobra }: { id_maniobra: number }) {
             <Stack className='mb-3'>
                 <Button color='primary' onPress={getHistorialEstatus} isLoading={isLoading} radius="full" size="sm">Actualizar</Button>
             </Stack>
-            <Dialog
-                open={open}
-                keepMounted
-                onClose={handleClose}
-                fullWidth={true}
-                maxWidth={"md"}
-                sx={{
-                    '& .MuiPaper-root': {
-                        borderRadius: '20px',
-                        boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.0)',
-                    },
-                }}
-                BackdropProps={{
-                    sx: {
-                        backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                    },
-                }}
-            >
-                <DialogContent>
-                    {id_reporte && (
-                        <EstatusHistorialAgrupado id_reporte={id_reporte}></EstatusHistorialAgrupado>
-                    )}
-                </DialogContent>
-            </Dialog>
 
+            {id_reporte && (
+                <EstatusHistorialAgrupado id_reporte={id_reporte} open={open} handleClose={handleClose}></EstatusHistorialAgrupado>
+            )}
+            
             <ol className="step">
                 {estatusHistorial.map((step) => {
 

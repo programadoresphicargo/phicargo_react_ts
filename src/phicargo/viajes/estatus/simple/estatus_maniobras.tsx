@@ -1,10 +1,13 @@
 import odooApi from "@/api/odoo-api";
 import { tiempoTranscurrido } from "@/phicargo/funciones/tiempo";
-import { Accordion, AccordionItem, Avatar,  Card, CardBody, Progress } from "@heroui/react";
+import EstatusHistorialAgrupado from "@/phicargo/maniobras/reportes_estatus/estatus_agrupados";
+import { Accordion, AccordionItem, Avatar, Card, CardBody, Progress } from "@heroui/react";
 import { useEffect, useState } from "react";
+import React from "react";
 const { VITE_ODOO_API_URL } = import.meta.env;
 
 type Step = {
+ id_reporte: number;
  id_estatus: number;
  nombre_estatus: string;
  fecha_hora: string | null;
@@ -22,6 +25,7 @@ export default function SeguimientoSimpleManiobra({
 
  const [data, setData] = useState<Step[]>([]);
  const [isLoading, setLoading] = useState<boolean>(false);
+ const [id_reporte, setReporte] = useState<number | null>(null);
 
  const fetchData = async () => {
   try {
@@ -43,8 +47,24 @@ export default function SeguimientoSimpleManiobra({
   fetchData();
  }, []);
 
+ const [open, setOpen] = React.useState(false);
+
+ const handleClickOpen = (id_registro: number) => {
+  setOpen(true);
+  setReporte(id_registro);
+ };
+
+ const handleClose = () => {
+  setOpen(false);
+ };
+
  return (
   <div>
+
+   {id_reporte && (
+    <EstatusHistorialAgrupado id_reporte={id_reporte} open={open} handleClose={handleClose}></EstatusHistorialAgrupado>
+   )}
+
    <Accordion variant="splitted">
     <AccordionItem key="1" aria-label="Accordion 1" title={`Maniobra de ${tipo_maniobra}`}>
 
@@ -56,7 +76,7 @@ export default function SeguimientoSimpleManiobra({
       return (
        <>
         <div className="mt-3">
-         <Card isDisabled={step.fecha_hora ? false : true} isPressable fullWidth>
+         <Card isDisabled={step.fecha_hora ? false : true} isPressable fullWidth onPress={() => handleClickOpen(step.id_reporte)}>
           <CardBody>
            <div className="flex gap-5">
             <Avatar
