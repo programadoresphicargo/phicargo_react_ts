@@ -37,7 +37,7 @@ type CartaPorte = {
   x_operador_bel_id: number;
 }
 
-export default function AsignacionViajeModal({ open, setOpen, shift }: { open: boolean, setOpen: Dispatch<SetStateAction<boolean>>, shift: Shift | null }) {
+export default function AsignacionViajeModal({ open, setOpen, shift, driver_id, vehicle_id }: { open: boolean, setOpen: Dispatch<SetStateAction<boolean>>, shift: Shift | null, driver_id?: number | null, vehicle_id?: number | null }) {
 
   const { branchId } = useShiftsContext();
   const [isLoading, setLoading] = useState(false);
@@ -352,6 +352,8 @@ export default function AsignacionViajeModal({ open, setOpen, shift }: { open: b
       onClose={handleCloseConfirm}
       cp={cp}
       shift={shift}
+      driver_id={driver_id}
+      vehicle_id={vehicle_id}
     />
 
     <Dialog

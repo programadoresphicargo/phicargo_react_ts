@@ -15,6 +15,8 @@ import { useNavigate } from 'react-router-dom';
 import { useShiftsContext } from '../hooks/useShiftsContext';
 import { useShiftQueries } from '../hooks/useShiftQueries';
 import dayjs from 'dayjs';
+import AsignacionViajeModal from '../outlets/AsignarViaje';
+import { useState } from 'react';
 
 const columns: MRT_ColumnDef<Travel>[] = [
   {
@@ -116,6 +118,10 @@ interface Props {
 
 export const TravelsModal = (props: Props) => {
 
+  const [open, setOpen] = useState(false);
+  const [driver, setDriver] = useState<number | null>(null);
+  const [vehicle, setVehicle] = useState<number | null>(null);
+
   const navigate = useNavigate();
   const { branchId } = useShiftsContext();
   const { createShift } = useShiftQueries();
@@ -175,6 +181,13 @@ export const TravelsModal = (props: Props) => {
         fontSize: '14px',
       },
     },
+    muiTableBodyRowProps: ({ row }) => ({
+      onDoubleClick: () => {
+        setDriver(row.original.driver_id);
+        setVehicle(row.original.vehicle_id);
+        setOpen(true);
+      },
+    }),
     muiTableBodyCellProps: ({ row }) => ({
       sx: {
         backgroundColor: row.subRows?.length ? '#1184e8' : '#FFFFFF',
@@ -208,30 +221,34 @@ export const TravelsModal = (props: Props) => {
   });
 
   return (
-    <Modal
-      isOpen={true}
-      size="5xl"
-      onOpenChange={props.onClose}
-      isDismissable={false}
-      classNames={{
-        base: 'w-[80%] max-w-[90%] overflow-hidden',
-      }}
-    >
-      <ModalContent>
-        {() => (
-          <>
-            <ModalHeader className="flex items-center justify-center bg-[#dadfeb] pb-2">
-              <h3 className="font-bold text-xl text-center text-gray-800 uppercase">
-                {props.title}
-              </h3>
-            </ModalHeader>
-            <ModalBody className="p-0">
-              <MaterialReactTable table={table} />
-            </ModalBody>
-          </>
-        )}
-      </ModalContent>
-    </Modal>
+    <>
+      <AsignacionViajeModal open={open} setOpen={setOpen} shift={null} driver_id={driver} vehicle_id={vehicle}></AsignacionViajeModal>
+
+      <Modal
+        isOpen={true}
+        size="5xl"
+        onOpenChange={props.onClose}
+        isDismissable={false}
+        classNames={{
+          base: 'w-[80%] max-w-[90%] overflow-hidden',
+        }}
+      >
+        <ModalContent>
+          {() => (
+            <>
+              <ModalHeader className="flex items-center justify-center bg-[#dadfeb] pb-2">
+                <h3 className="font-bold text-xl text-center text-gray-800 uppercase">
+                  {props.title}
+                </h3>
+              </ModalHeader>
+              <ModalBody className="p-0">
+                <MaterialReactTable table={table} />
+              </ModalBody>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+    </>
   );
 };
 

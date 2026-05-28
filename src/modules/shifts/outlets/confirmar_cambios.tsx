@@ -35,7 +35,9 @@ interface Props {
   open: boolean;
   onClose: () => void;
   cp?: CartaPorte;
-  shift: Shift | null
+  shift: Shift | null;
+  driver_id?: number | null;
+  vehicle_id?: number | null;
 }
 
 interface FormValues {
@@ -45,7 +47,7 @@ interface FormValues {
   x_operador_bel_id: number | null;
 }
 
-const AsignacionViaje: React.FC<Props> = ({ open, onClose, cp, shift }) => {
+const AsignacionViaje: React.FC<Props> = ({ open, onClose, cp, shift, driver_id, vehicle_id }) => {
 
   const navigate = useNavigate();
   const asignarViajeMutation = useAsignarViaje();
@@ -70,8 +72,9 @@ const AsignacionViaje: React.FC<Props> = ({ open, onClose, cp, shift }) => {
         ? dayjs.utc(cp.x_date_arrival_shed).tz("America/Mexico_City")
         : null,
 
-      x_eco_bel_id: cp?.x_eco_bel_id ?? shift?.vehicle?.id ?? null,
-      x_operador_bel_id: shift?.driver.id ?? null,
+      x_eco_bel_id: vehicle_id ?? cp?.x_eco_bel_id ?? shift?.vehicle?.id ?? null,
+      x_operador_bel_id: driver_id ? driver_id : shift?.driver.id ?? null,
+
     });
   }, [cp, open, reset]);
 
@@ -94,7 +97,7 @@ const AsignacionViaje: React.FC<Props> = ({ open, onClose, cp, shift }) => {
           ? data.x_date_arrival_shed.utc().format()
           : null,
         x_eco_bel_id: data.x_eco_bel_id ? data.x_eco_bel_id : null,
-        x_operador_bel_id: shift.driver.id ?? null,
+        x_operador_bel_id: driver_id ? driver_id : shift.driver.id ?? null,
       },
     }, {
       onSuccess: () => {
@@ -127,7 +130,6 @@ const AsignacionViaje: React.FC<Props> = ({ open, onClose, cp, shift }) => {
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="lg">
-
       <AppBar sx={{
         position: 'relative',
         background: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
