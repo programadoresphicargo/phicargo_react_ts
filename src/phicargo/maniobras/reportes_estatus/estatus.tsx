@@ -3,8 +3,6 @@ import { Card, CardHeader } from "@heroui/react";
 import React, { useEffect } from 'react';
 import { Avatar } from "@heroui/react";
 import { Button } from "@heroui/react";
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
 import EstatusHistorialAgrupado from './estatus_agrupados';
 import { Stack } from 'rsuite';
 import odooApi from '@/api/odoo-api';
@@ -56,7 +54,7 @@ function EstatusHistorialManiobras({ id_maniobra }: { id_maniobra: number }) {
             {id_reporte && (
                 <EstatusHistorialAgrupado id_reporte={id_reporte} open={open} handleClose={handleClose}></EstatusHistorialAgrupado>
             )}
-            
+
             <ol className="step">
                 {estatusHistorial.map((step) => {
 
