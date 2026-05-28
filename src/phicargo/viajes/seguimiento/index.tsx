@@ -14,7 +14,6 @@ import { useJourneyDialogs } from "./funciones";
 import Custodia from "../custodia/custodia";
 import LlegadaTarde from "../llegada_tarde";
 import FormEquipoViaje from "./editar_equipo";
-import SeguimientoSimple from "../estatus/simple/estatus_viajes";
 import SeguimientoSimpleManiobra from "../estatus/simple/estatus_maniobras";
 import SeguimientoSimpleViaje from "../estatus/simple/estatus_viajes";
 
