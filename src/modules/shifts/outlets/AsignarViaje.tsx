@@ -3,7 +3,7 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import React, { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 import {
   Button,
   Card,
@@ -22,12 +22,14 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
-import { DatePicker } from '@heroui/react';
-import { parseDate } from "@internationalized/date";
 import AsignacionViaje from './confirmar_cambios';
 import { useShiftsContext } from '../hooks/useShiftsContext';
 import { Shift } from '../models';
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from "dayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+
 
 type CartaPorte = {
   id_cp: number;
@@ -49,20 +51,14 @@ export default function AsignacionViajeModal({ open, setOpen, shift, driver_id, 
   const handleOpenConfirm = () => setOpenConfirm(true);
   const handleCloseConfirm = () => { setOpenConfirm(false); fetchData(); };
 
-  function formatDateToYYYYMMDD(date: Date) {
-    return date.toISOString().slice(0, 10);
-  }
-
-  const now = new Date();
-  const first = formatDateToYYYYMMDD(new Date(now.getFullYear(), now.getMonth(), now.getDate()));
-  const [value, setValue] = React.useState(parseDate(first));
+  const [fecha, setFecha] = useState<Dayjs | null>(dayjs());
 
   const fetchData = async () => {
     try {
       setLoading(true);
       const response = await odooApi.get('/tms_waybill/plan_viaje_asignacion/', {
         params: {
-          date_order: value.toString(),
+          date_order: fecha?.format("YYYY-MM-DD"),
           operador_asignado: null,
           store_id: branchId,
         },
@@ -70,7 +66,6 @@ export default function AsignacionViajeModal({ open, setOpen, shift, driver_id, 
       setRawData(response.data);
     } catch (error) {
       console.error('Error al obtener los datos:', error);
-      setLoading(false);
     } finally {
       setLoading(false);
     }
@@ -100,7 +95,7 @@ export default function AsignacionViajeModal({ open, setOpen, shift, driver_id, 
     if (open) {
       fetchData();
     }
-  }, [open, value]);
+  }, [open, fecha, branchId]);
 
   const columns = useMemo(
     () => [
@@ -298,7 +293,7 @@ export default function AsignacionViajeModal({ open, setOpen, shift, driver_id, 
 
                 <span className="text-gray-500">Peligroso</span>
                 <span className="font-medium text-gray-900">
-                  {shift?.driver.isDangerous.toString()}
+                  {shift?.driver?.isDangerous?.toString() ?? 'No'}
                 </span>
 
                 <span className="text-gray-500">Vencimiento</span>
@@ -317,15 +312,18 @@ export default function AsignacionViajeModal({ open, setOpen, shift, driver_id, 
             </CardBody>
           </Card>
         )}
-        <DatePicker
-          label="Fecha prevista"
-          value={value}
-          onChange={(value) => {
-            if (value) {
-              setValue(value);
-            }
-          }}
-        />
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker
+            label="Fecha"
+            value={fecha}
+            onChange={(newValue) => setFecha(newValue)}
+            slotProps={{
+              textField: {
+                size: "small",
+              },
+            }}
+          />
+        </LocalizationProvider>
         <Button
           onPress={() => fetchData()}
           color='success'

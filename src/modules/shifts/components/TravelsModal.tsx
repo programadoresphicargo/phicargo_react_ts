@@ -1,11 +1,10 @@
-import { IconButton, Tooltip } from '@mui/material';
+import { Dialog, DialogContent, DialogTitle, IconButton, Tooltip } from '@mui/material';
 import {
   MaterialReactTable,
   type MRT_ColumnDef,
   useMaterialReactTable,
 } from 'material-react-table';
-import { Button, Chip, Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/react";
-
+import { Button, Chip, } from "@heroui/react";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import type { Travel } from '../models/travels-models';
 import { FaSearchLocation } from 'react-icons/fa';
@@ -187,6 +186,12 @@ export const TravelsModal = (props: Props) => {
         fontSize: '14px',
       },
     },
+    muiTablePaperProps: {
+      elevation: 0,
+      sx: {
+        borderRadius: '0',
+      },
+    },
     muiTableBodyRowProps: ({ row }) => ({
       onDoubleClick: () => {
         setDriver(row.original.driver_id);
@@ -230,30 +235,21 @@ export const TravelsModal = (props: Props) => {
     <>
       <AsignacionViajeModal open={open} setOpen={setOpen} shift={null} driver_id={driver} vehicle_id={vehicle}></AsignacionViajeModal>
 
-      <Modal
-        isOpen={true}
-        size="5xl"
-        onOpenChange={props.onClose}
-        isDismissable={false}
-        classNames={{
-          base: 'w-[80%] max-w-[90%] overflow-hidden',
-        }}
+      <Dialog
+        open={true}
+        onClose={props.onClose}
+        fullWidth
+        maxWidth="xl"
       >
-        <ModalContent>
-          {() => (
-            <>
-              <ModalHeader className="flex items-center justify-center bg-[#dadfeb] pb-2">
-                <h3 className="font-bold text-xl text-center text-gray-800 uppercase">
-                  {props.title}
-                </h3>
-              </ModalHeader>
-              <ModalBody className="p-0">
-                <MaterialReactTable table={table} />
-              </ModalBody>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
+        <DialogTitle className="flex items-center justify-center bg-[#dadfeb] pb-2">
+          <h3 className="font-bold text-xl text-center text-gray-800 uppercase">
+            {props.title}
+          </h3>
+        </DialogTitle>
+        <DialogContent>
+          <MaterialReactTable table={table} />
+        </DialogContent>
+      </Dialog >
     </>
   );
 };
