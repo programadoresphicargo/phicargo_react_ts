@@ -154,6 +154,10 @@ export default function AsignacionViajeModal({ open, setOpen, shift, driver_id, 
         header: 'Custodia',
       },
       {
+        accessorKey: 'weight_real',
+        header: 'Peso real',
+      },
+      {
         accessorKey: 'dangerous_cargo',
         header: 'Peligroso',
         Cell: ({ cell }: { cell: MRT_Cell<CartaPorte> }) => {
