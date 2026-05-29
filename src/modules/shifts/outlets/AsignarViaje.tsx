@@ -152,6 +152,14 @@ export default function AsignacionViajeModal({ open, setOpen, shift, driver_id, 
       {
         accessorKey: 'x_custodia_bel',
         header: 'Custodia',
+        Cell: ({ cell }: { cell: MRT_Cell<CartaPorte> }) => {
+          const value = cell.getValue();
+          if (!value) return;
+
+          return (
+            <Chip color={value === "yes" ? "success" : "default"} size='sm' className='text-white'>{value === "yes" ? "Si" : "No"}</Chip>
+          );
+        },
       },
       {
         accessorKey: 'weight_real',
