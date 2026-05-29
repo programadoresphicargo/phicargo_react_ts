@@ -69,7 +69,7 @@ const TablaUnidades = ({ }) => {
       {
         accessorKey: 'x_solicitud_id',
         header: 'Solicitud',
-        Cell: ({ cell }: { cell: MRT_Cell<any> }) => {
+        Cell: ({ cell }: { cell: MRT_Cell<Unidad> }) => {
           const solicitud = cell.getValue<string>();
 
           return (
