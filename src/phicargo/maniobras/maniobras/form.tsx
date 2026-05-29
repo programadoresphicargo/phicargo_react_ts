@@ -595,7 +595,9 @@ const Formulariomaniobra: React.FC<Props> = ({
 
     return (
         <>
-            <PanelEstatus id_maniobra={id_maniobra} open={openPanelEstatus} handleClose={handleClosePE} />
+            {id_maniobra && (
+                <PanelEstatus id_maniobra={id_maniobra} open={openPanelEstatus} handleClose={handleClosePE} />
+            )}
 
             <CorreosLigadosManiobra open={openCL} handleClose={handleCloseCL} id_cliente={dataCP?.id_cliente}></CorreosLigadosManiobra>
 
