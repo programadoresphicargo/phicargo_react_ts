@@ -1,10 +1,11 @@
 import {
+  MRT_Cell,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
-import { Button } from "@heroui/react"
+import { Button, Chip } from "@heroui/react"
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import odooApi from '@/api/odoo-api';
 import { exportToCSV } from '@/phicargo/utils/export';
@@ -68,6 +69,19 @@ const TablaUnidades = ({ }) => {
       {
         accessorKey: 'x_solicitud_id',
         header: 'Solicitud',
+        Cell: ({ cell }: { cell: MRT_Cell<any> }) => {
+          const solicitud = cell.getValue<string>();
+
+          return (
+            <Chip
+              size="sm"
+              color="success"
+              className="text-white"
+            >
+              {solicitud}
+            </Chip>
+          );
+        },
       }
     ],
     [],

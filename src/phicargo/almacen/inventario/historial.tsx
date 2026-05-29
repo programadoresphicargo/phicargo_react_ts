@@ -9,7 +9,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import Typography from '@mui/material/Typography';
 import { Card, CardBody, CardHeader, Divider } from '@heroui/react';
 
-type Historial = {
+export type Historial = {
     id: number,
     fecha_movimiento: string,
     observaciones: string,

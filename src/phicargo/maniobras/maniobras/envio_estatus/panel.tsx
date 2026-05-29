@@ -1,34 +1,31 @@
-import { Box, Grid, Typography } from '@mui/material';
-import { Button, CardHeader, Divider, Textarea, user } from '@heroui/react';
+import { Box, } from '@mui/material';
+import { Button, CardHeader, Divider, Progress, Textarea, } from '@heroui/react';
 import { Card, CardBody, CardFooter } from "@heroui/react";
-import React, { useCallback, useEffect, useState } from 'react';
-
-import CardMedia from '@mui/material/CardMedia';
-import { CircularProgress } from "@heroui/react";
+import React, { useEffect, useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import axios from 'axios';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import { useAuthContext } from "@/modules/auth/hooks";
-import { Upload, message } from 'antd';
+import { Upload, UploadFile, UploadProps } from 'antd';
 
 const { Dragger } = Upload;
 
-export default function PanelEstatus({ id_maniobra, open, handleClose }) {
+type Estatus = { id_estatus: number, nombre_estatus: string }
 
-    const [data, setData] = useState([]);
+export default function PanelEstatus({ id_maniobra, open, handleClose }: { id_maniobra: number, open: boolean, handleClose: () => void }) {
+
+    const [data, setData] = useState<Estatus[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isLoadingEnvio, setIsLoadingEnvio] = useState(false);
-    const [estatus_seleccionado, setEstatusSeleccionado] = useState(null);
+    const [estatus_seleccionado, setEstatusSeleccionado] = useState<number | null>(null);
     const [comentarios, setComentarios] = useState('');
-    const [fileList, setFileList] = useState([]);
+    const [fileList, setFileList] = useState<UploadFile[]>([]);
     const { session } = useAuthContext();
 
-    const handleSelectCard = (id) => {
+    const handleSelectCard = (id: number) => {
         setEstatusSeleccionado(id);
     };
 
@@ -46,11 +43,7 @@ export default function PanelEstatus({ id_maniobra, open, handleClose }) {
             });
     }, [open]);
 
-    const handleCardClick = (id) => {
-        setSelectedCard(id);
-    };
-
-    const props = {
+    const props: UploadProps = {
         name: 'file',
         multiple: true,
         onChange(info) {
@@ -74,9 +67,9 @@ export default function PanelEstatus({ id_maniobra, open, handleClose }) {
         }
 
         const formData = new FormData();
-        formData.append('id_maniobra', id_maniobra);
-        formData.append('id_estatus', estatus_seleccionado);
-        formData.append('id_usuario', session.user.id);
+        formData.append('id_maniobra', String(id_maniobra));
+        formData.append('id_estatus', String(estatus_seleccionado));
+        formData.append('id_usuario', String(session?.user.id));
         formData.append('comentarios', comentarios);
         fileList.forEach((fileWrapper) => {
             if (fileWrapper.originFileObj instanceof File) {
@@ -114,11 +107,13 @@ export default function PanelEstatus({ id_maniobra, open, handleClose }) {
         "Unidad en terminal esperando turno",
     ];
 
-    const handleComentariosChange = (event) => {
+    const handleComentariosChange = (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
         setComentarios(event.target.value);
     };
 
-    const seleccionarOpcion = (opcion) => {
+    const seleccionarOpcion = (opcion: string) => {
         setComentarios((contenidoAnterior) => `${contenidoAnterior} ${opcion}`);
     };
 
@@ -135,6 +130,7 @@ export default function PanelEstatus({ id_maniobra, open, handleClose }) {
                     {"Envio estatus"}
                 </DialogTitle>
                 <DialogContent>
+
                     <div className="flex flex-col gap-6">
 
                         <Card>
@@ -144,6 +140,9 @@ export default function PanelEstatus({ id_maniobra, open, handleClose }) {
                                 </div>
                             </CardHeader>
                             <CardBody>
+                                {isLoading && (
+                                    <Progress isIndeterminate size='sm'></Progress>
+                                )}
                                 <Box>
                                     <div className="gap-4 grid grid-cols-2 sm:grid-cols-4">
                                         {data.map((item, index) => (
@@ -199,7 +198,7 @@ export default function PanelEstatus({ id_maniobra, open, handleClose }) {
                                 </h1>
 
                                 <div className="gap-2 grid grid-cols-2 sm:grid-cols-4 mt-3 mb-3">
-                                    {sugerencias.map((opcion, index) => (
+                                    {sugerencias.map((opcion) => (
                                         <>
                                             <Card
                                                 isBlurred
@@ -231,9 +230,9 @@ export default function PanelEstatus({ id_maniobra, open, handleClose }) {
                     </div>
                 </DialogContent>
                 <DialogActions>
-                    <Button onPress={handleClose} color='danger'>Cancelar</Button>
-                    <Button onPress={enviar_estatus} color='primary' isLoading={isLoadingEnvio}>
-                        <i class="bi bi-send"></i> Enviar estatus
+                    <Button onPress={handleClose} color='danger' radius='full'>Cancelar</Button>
+                    <Button onPress={enviar_estatus} color='primary' isLoading={isLoadingEnvio} radius='full'>
+                        <i className="bi bi-send"></i> Enviar estatus
                     </Button>
                 </DialogActions>
             </Dialog>

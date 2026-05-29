@@ -30,7 +30,7 @@ const IndexProducto = ({ id_producto, open, handleClose }: { id_producto: number
         setValue(newValue);
     };
 
-    const [data, setData] = useState<Producto>();
+    const [data, setData] = useState<Producto | null>(null);
     const [isLoading, setLoading] = useState(false);
 
     const fetchData = async () => {
@@ -95,7 +95,9 @@ const IndexProducto = ({ id_producto, open, handleClose }: { id_producto: number
                             </TabList>
                         </Box>
                         <TabPanel value="1">
-                            <UnidadesProductos data2={data || []} fetch={fetchData}></UnidadesProductos>
+                            {data && (
+                                <UnidadesProductos dataProducto={data} fetchData={fetchData}></UnidadesProductos>
+                            )}
                         </TabPanel>
                         <TabPanel value="2">
                             <FormProducto id_producto={id_producto}></FormProducto>

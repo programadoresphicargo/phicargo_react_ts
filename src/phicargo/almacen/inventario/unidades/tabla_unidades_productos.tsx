@@ -1,29 +1,14 @@
 import {
+  MRT_Cell,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import { Card, CardBody, CardHeader, User, useDisclosure } from "@heroui/react";
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-import AppBar from '@mui/material/AppBar';
-import { Avatar } from "@heroui/react";
+import React, { useMemo, useState } from 'react';
 import { Box } from '@mui/material';
 import { Button } from "@heroui/react"
 import { Chip } from "@heroui/react";
-import CloseIcon from '@mui/icons-material/Close';
-import IconButton from '@mui/material/IconButton';
-import { Image } from 'antd';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import Slide from '@mui/material/Slide';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import odooApi from '@/api/odoo-api';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import EPPForm from '../form';
-import { useAlmacen } from '../../contexto/contexto';
 import { Popover, PopoverTrigger, PopoverContent, Input } from "@heroui/react";
 import { NumberInput } from "@heroui/react";
 import { toast } from 'react-toastify';
@@ -31,20 +16,21 @@ import Grid from '@mui/material/Grid';
 import HistorialStock from '../historial';
 import Unidad from './unidad_individual';
 import { useAuthContext } from '@/modules/auth/hooks';
+import { Producto } from '../tabla_productos';
 
-const UnidadesProductos = ({ data2, fetch }) => {
+const UnidadesProductos = ({ dataProducto, fetchData }: { dataProducto: Producto, fetchData: () => void }) => {
 
   const { session } = useAuthContext();
   const [id_unidad, setUnidad] = useState(0);
 
-  const [cantidad, setCantidad] = useState(1);
-  const [id_po, setPO] = useState(null);
+  const [cantidad, setCantidad] = useState<number>(1);
+  const [id_po, setPO] = useState<string>("");
   const [isLoading, setLoading] = useState(false);
 
   const registrarUnidades = async () => {
 
     const form = {
-      id_producto: data2.id,
+      id_producto: dataProducto.id,
       estado: "disponible",
     };
 
@@ -52,19 +38,18 @@ const UnidadesProductos = ({ data2, fetch }) => {
       setLoading(true);
       const response = await odooApi.post("/tms_travel/unidades_equipo/", {
         form: form,
-        cantidad: parseInt(cantidad),
+        cantidad: cantidad,
         id_po: id_po
       });
 
       if (response.data.status == "success") {
         toast.success(response.data.message);
-        fetch();
+        fetchData();
       } else {
-        toast.success(response.data.message);
+        toast.error(response.data.message);
       }
-      console.log("Respuesta:", response.data);
       setLoading(false);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error completo:", error);
       console.error("Detail:", error.response?.data?.detail);
       toast.error(error.response?.data?.detail || "Error al registrar unidades");
@@ -93,28 +78,23 @@ const UnidadesProductos = ({ data2, fetch }) => {
       {
         accessorKey: 'estado',
         header: 'Estado',
-        Cell: ({ cell }) => {
-          const estado = cell.getValue();
-          let color = '';
-
-          if (estado === 'alta') {
-            color = 'primary';
-          } else if (estado === 'baja') {
-            color = 'danger';
-          } else if (estado === 'borrador') {
-            color = 'warning';
-          } else if (estado === 'devuelto') {
-            color = 'success';
-          } else if (estado === 'disponible') {
-            color = 'success';
-          } else {
-            color = 'secondary';
-          }
+        Cell: ({ cell }: { cell: MRT_Cell<any> }) => {
+          const estado = cell.getValue<string>();
 
           return (
             <Chip
               size="sm"
-              color={color}
+              color={
+                estado === 'alta'
+                  ? 'primary'
+                  : estado === 'baja'
+                    ? 'danger'
+                    : estado === 'borrador'
+                      ? 'warning'
+                      : estado === 'devuelto' || estado === 'disponible'
+                        ? 'success'
+                        : 'secondary'
+              }
               className="text-white"
             >
               {estado}
@@ -132,7 +112,7 @@ const UnidadesProductos = ({ data2, fetch }) => {
 
   const table = useMaterialReactTable({
     columns,
-    data: data2.unidades || [],
+    data: dataProducto?.unidades || [],
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
@@ -154,7 +134,7 @@ const UnidadesProductos = ({ data2, fetch }) => {
       density: 'compact',
       expanded: true,
       showColumnFilters: true,
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
     },
     muiTablePaperProps: {
       elevation: 0,
@@ -175,19 +155,19 @@ const UnidadesProductos = ({ data2, fetch }) => {
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
-      onClick: ({ event }) => {
-        handleClickOpen();
+      onClick: () => {
         setUnidad(row.original.id_unidad);
+        handleClickOpen();
       },
     }),
-    muiTableBodyCellProps: ({ row }) => ({
+    muiTableBodyCellProps: () => ({
       sx: {
         fontFamily: 'Inter',
         fontWeight: 'normal',
         fontSize: '12px',
       },
     }),
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -260,7 +240,7 @@ const UnidadesProductos = ({ data2, fetch }) => {
           />
         </Grid>
         <Grid item xs={12} sm={6} md={4}>
-          <HistorialStock data={data2?.historial || []}></HistorialStock>
+          <HistorialStock data={dataProducto?.historial || []}></HistorialStock>
         </Grid>
       </Grid>
       <Unidad id_unidad={id_unidad} open={open} handleClose={handleClose}></Unidad>

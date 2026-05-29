@@ -153,7 +153,7 @@ export default function StockComputo({ isOpen, onOpen, onOpenChange }) {
                                     background: 'linear-gradient(90deg, #a10003, #002887)',
                                     color: 'white',
                                     fontWeight: 'bold'
-                                }}>Equipo de computo disponible
+                                }}>Equipo de computo disponible2
                             </ModalHeader>
                             {isLoading && (
                                 <Progress color="primary" isIndeterminate size="sm" />

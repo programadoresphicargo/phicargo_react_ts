@@ -14,11 +14,23 @@ import DialogTitle from '@mui/material/DialogTitle';
 import IndexProducto from './form';
 import FormProducto from './form_producto';
 import { useAuthContext } from '@/modules/auth/hooks';
+import { Historial } from './historial';
+
+type UnidadType = {
+  id_unidad: number;
+  x_name: string;
+  fecha_creacion: string;
+  nombre: string;
+  estado: string;
+  oc_ref: string;
+};
 
 export type Producto = {
   id: number | null;
   x_name: string;
   x_tipo: string;
+  historial?: Historial[];
+  unidades?: UnidadType[];
 }
 
 const TablaProductos = ({ }) => {
