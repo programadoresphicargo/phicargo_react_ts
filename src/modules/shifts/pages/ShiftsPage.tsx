@@ -14,12 +14,14 @@ import { useShiftQueries } from '../hooks/useShiftQueries';
 import { useEffect, useState } from 'react';
 import odooApi from '@/api/odoo-api';
 import { DateRangePicker } from 'rsuite';
+import AsignacionViajeModal from '../outlets/AsignarViaje';
 
 const ShiftsPage = () => {
   const now = new Date();
   const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
   const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
   const [range, setRange] = useState<[Date, Date]>([firstDay, lastDay]);
+  const [open, setOpen] = useState<boolean>(false);
 
   type KmData = {
     total_km: number | null;
@@ -45,17 +47,16 @@ const ShiftsPage = () => {
   const isDetailsOpen = location.pathname.startsWith('/turnos/detalles');
   const isHistoryOpen = location.pathname.startsWith('/turnos/historial-asignado');
   const isActividadOpen = location.pathname.startsWith('/turnos/actividad');
-  const Asignacion = location.pathname.startsWith('/turnos/asignacion');
 
   const Descargnado = location.pathname.startsWith('/turnos/unidades-descargando');
   const Bajando = location.pathname.startsWith('/turnos/unidades-bajando');
   const Planta = location.pathname.startsWith('/turnos/unidades-planta');
 
   useEffect(() => {
-    if (!isDetailsOpen || !isHistoryOpen || !isCrearOpen || !isActividadOpen || !Descargnado || !Bajando || !Planta || !Asignacion) {
+    if (!isDetailsOpen || !isHistoryOpen || !isCrearOpen || !isActividadOpen || !Descargnado || !Bajando || !Planta) {
       refetch();
     }
-  }, [isDetailsOpen, isHistoryOpen, isCrearOpen, isActividadOpen, Descargnado, Bajando, Planta, Asignacion]);
+  }, [isDetailsOpen, isHistoryOpen, isCrearOpen, isActividadOpen, Descargnado, Bajando, Planta]);
 
 
   const onOpenDetails = (id: number) => {
@@ -212,7 +213,7 @@ const ShiftsPage = () => {
           size='sm'
           color="danger"
           className='text-white'
-          onPress={() => navigate('/turnos/asignacion')}
+          onPress={() => setOpen(true)}
         >
           Asignación de viajes
         </Button>
@@ -257,6 +258,7 @@ const ShiftsPage = () => {
     <>
       <MaterialReactTable table={table} />
       <Outlet />
+      <AsignacionViajeModal open={open} setOpen={setOpen} shift={null}></AsignacionViajeModal>
     </>
   );
 };

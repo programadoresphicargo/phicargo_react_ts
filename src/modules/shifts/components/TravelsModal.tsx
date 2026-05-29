@@ -170,9 +170,15 @@ export const TravelsModal = (props: Props) => {
       showColumnFilters: false,
       density: 'compact',
       pagination: { pageSize: 100, pageIndex: 0 },
+      sorting: [
+        {
+          id: 'distanceToBranch',
+          desc: true,
+        },
+      ],
     },
     state: {
-      isLoading: props.isLoading,
+      showProgressBars: props.isLoading
     },
     muiTableHeadCellProps: {
       sx: {

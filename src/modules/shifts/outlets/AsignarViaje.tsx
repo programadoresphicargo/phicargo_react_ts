@@ -62,15 +62,16 @@ export default function AsignacionViajeModal({ open, setOpen, shift, driver_id, 
       setLoading(true);
       const response = await odooApi.get('/tms_waybill/plan_viaje_asignacion/', {
         params: {
-          date_order: value,
+          date_order: value.toString(),
           operador_asignado: null,
           store_id: branchId,
         },
       });
       setRawData(response.data);
-      setLoading(false);
     } catch (error) {
       console.error('Error al obtener los datos:', error);
+      setLoading(false);
+    } finally {
       setLoading(false);
     }
   };
@@ -96,14 +97,10 @@ export default function AsignacionViajeModal({ open, setOpen, shift, driver_id, 
   }, [rawData, useFilters, shift]);
 
   useEffect(() => {
-    fetchData();
-  }, [value]);
-
-  useEffect(() => {
     if (open) {
       fetchData();
     }
-  }, [open]);
+  }, [open, value]);
 
   const columns = useMemo(
     () => [
@@ -219,7 +216,6 @@ export default function AsignacionViajeModal({ open, setOpen, shift, driver_id, 
     initialState: {
       showGlobalFilter: true,
       density: 'compact',
-      expanded: true,
       showColumnFilters: true,
       pagination: { pageSize: 80, pageIndex: 0 },
     },
@@ -378,7 +374,7 @@ export default function AsignacionViajeModal({ open, setOpen, shift, driver_id, 
           <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
             Asignación de viajes
           </Typography>
-          <Button autoFocus onPress={() => setOpen(false)}>
+          <Button onPress={() => setOpen(false)}>
             Cerrar
           </Button>
         </Toolbar>

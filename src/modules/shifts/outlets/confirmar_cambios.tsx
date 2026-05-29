@@ -147,7 +147,7 @@ const AsignacionViaje: React.FC<Props> = ({ open, onClose, cp, shift, driver_id,
           <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
             Asignación de viaje
           </Typography>
-          <Button autoFocus color="inherit" onClick={() => onClose()}>
+          <Button color="inherit" onClick={() => onClose()}>
             Cerrar
           </Button>
         </Toolbar>
