@@ -12,7 +12,7 @@ import odooApi from "@/api/odoo-api";
 import CustomNavbar from "@/pages/CustomNavbar";
 import { pages } from "../pages";
 import { ManiobraProvider } from "../context/viajeContext";
-import ContenedorEdit from "./datos";
+import ContenedorEdit from "./form";
 import CountContenedor from "./count_contenedor";
 import { exportToCSV } from "../../utils/export";
 import Travel from "@/phicargo/viajes/control/viaje";

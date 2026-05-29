@@ -11,18 +11,19 @@ import toast from "react-hot-toast";
 import odooApi from "@/api/odoo-api";
 
 export const status = [
- { label: "SIN MANIOBRA", key: "sm" },
- { label: "EN PROCESO DE INGRESO", key: "EI" },
- { label: "PATIO MÉXICO", key: "pm" },
- { label: "REUTILIZADO", key: "ru" },
- { label: "EN TERRAPORTS", key: "T" },
- { label: "EN VIAJE", key: "V" },
- { label: "EN PATIO", key: "P" },
- { label: "EN ESPERA DE VIAJE", key: "EV" },
+ { value: "SIN MANIOBRA", key: "sm" },
+ { value: "EN PROCESO DE INGRESO", key: "EI" },
+ { value: "PATIO MÉXICO", key: "pm" },
+ { value: "REUTILIZADO", key: "ru" },
+ { value: "EN TERRAPORTS", key: "T" },
+ { value: "EN VIAJE", key: "V" },
+ { value: "EN PATIO", key: "P" },
+ { value: "EN ESPERA DE VIAJE", key: "EV" },
 ];
 
-const ContenedorEdit = ({ open, onClose, data }) => {
- const [selectedKey, setSelectedKey] = useState("");
+const ContenedorEdit = ({ open, onClose, data }: { open: boolean, onClose: () => void, data: any }) => {
+
+ const [selectedKey, setSelectedKey] = useState<React.Key | null>("");
  const [isLoading, setLoading] = useState(false);
 
  useEffect(() => {
@@ -68,7 +69,7 @@ const ContenedorEdit = ({ open, onClose, data }) => {
     >
      {(item) => (
       <AutocompleteItem key={item.key}>
-       {item.label}
+       {item.value}
       </AutocompleteItem>
      )}
     </Autocomplete>
