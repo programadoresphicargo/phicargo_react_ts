@@ -3,13 +3,11 @@ import {
   useMaterialReactTable,
 } from 'material-react-table';
 import {
-  Card, CardBody, CardHeader, User, useDisclosure,
-  Avatar, Chip, Input, Progress, NumberInput, Button,
-  Popover, PopoverTrigger, PopoverContent,
+  Progress, Button,
 } from "@heroui/react";
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
-import { Box, Grid } from '@mui/material';
+import { Box, } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
@@ -21,14 +19,28 @@ import DialogContent from '@mui/material/DialogContent';
 import odooApi from '@/api/odoo-api';
 import toast from 'react-hot-toast';
 
-const Unidad = ({ id_unidad, open, handleClose }) => {
-  const [data, setData] = useState({});
+type Historial = {
+  fecha_evento: string;
+  tipo_evento: string;
+  descripcion: string;
+  nombre: string;
+};
+
+type UnidadType = {
+  id_unidad: number;
+  x_name: string;
+  historial: Historial[];
+};
+
+const Unidad = ({ id_unidad, open, handleClose }: { id_unidad: number, open: boolean, handleClose: () => void }) => {
+
+  const [data, setData] = useState<UnidadType | null>(null);
   const [isLoading, setLoading] = useState(false);
 
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await odooApi.get('/tms_travel/unidades_equipo/id_unidad/' + id_unidad);
+      const response = await odooApi.get<UnidadType | null>('/tms_travel/unidades_equipo/id_unidad/' + id_unidad);
       setData(response.data);
       setLoading(false);
     } catch (error) {
@@ -38,7 +50,7 @@ const Unidad = ({ id_unidad, open, handleClose }) => {
 
   useEffect(() => {
     if (open) fetchData();
-  }, [open]);
+  }, [open, id_unidad]);
 
   const columns = useMemo(
     () => [
@@ -62,23 +74,18 @@ const Unidad = ({ id_unidad, open, handleClose }) => {
     [],
   );
 
-  const historialData = useMemo(() => {
-    if (!data?.historial) return [];
-    return Array.isArray(data.historial) ? data.historial : [data.historial];
-  }, [data]);
-
   const [isLoadingBaja, setLoadingBaja] = useState(false);
 
   const BajaUnidad = async () => {
     try {
       setLoadingBaja(true);
       let response = await odooApi.patch('/tms_travel/unidades_equipo/baja/' + id_unidad);
-      if (response.data.status == 'success') {
+      if (response.data.status === 'success') {
         toast.success(response.data.message);
       } else {
         toast.error(response.data.message);
       }
-    } catch (error) {
+    } catch (error: any) {
       toast.error('Error al guardar: ' + (error?.message || JSON.stringify(error)));
     } finally {
       setLoadingBaja(false);
@@ -87,7 +94,7 @@ const Unidad = ({ id_unidad, open, handleClose }) => {
 
   const table = useMaterialReactTable({
     columns,
-    data: historialData,
+    data: data?.historial || [],
     enableGrouping: false,
     enableGlobalFilter: true,
     enableFilters: true,
@@ -104,7 +111,7 @@ const Unidad = ({ id_unidad, open, handleClose }) => {
     initialState: {
       showGlobalFilter: true,
       density: 'compact',
-      pagination: { pageSize: 50 },
+      pagination: { pageIndex: 0, pageSize: 50 },
     },
     muiTablePaperProps: {
       elevation: 0,
@@ -164,7 +171,7 @@ const Unidad = ({ id_unidad, open, handleClose }) => {
           <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
             {data?.x_name || 'Unidad'}
           </Typography>
-          <Button autoFocus color="inherit" onClick={handleClose}>
+          <Button autoFocus onPress={handleClose}>
             Salir
           </Button>
         </Toolbar>
