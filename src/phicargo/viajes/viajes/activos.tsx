@@ -257,6 +257,10 @@ const ViajesActivos = ({ }) => {
         }
       },
       {
+        accessorKey: 'fecha_salida_planta',
+        header: 'Salida de planta',
+      },
+      {
         accessorKey: 'inicio_programado',
         header: 'Inicio programado',
       },
@@ -308,10 +312,6 @@ const ViajesActivos = ({ }) => {
         },
       },
       {
-        accessorKey: 'fecha_salida_planta',
-        header: 'Salida de planta',
-      },
-      {
         accessorKey: 'horas_transcurridas',
         header: 'Horas en planta',
       },
@@ -327,10 +327,6 @@ const ViajesActivos = ({ }) => {
             </Chip>
           );
         },
-      },
-      {
-        accessorKey: 'ejecutivo',
-        header: 'Ejecutivo',
       },
     ],
     [],

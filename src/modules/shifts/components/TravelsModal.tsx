@@ -47,11 +47,6 @@ const columns: MRT_ColumnDef<Travel>[] = [
     id: 'travelName',
   },
   {
-    accessorFn: (row) => row.status,
-    header: 'Estatus Viaje',
-    id: 'travelStatus',
-  },
-  {
     accessorFn: (row) => row.operativeStatus,
     header: 'Estatus Operativo',
     id: 'travelOperativeStatus',
@@ -84,7 +79,6 @@ const columns: MRT_ColumnDef<Travel>[] = [
       );
     },
   },
-
   {
     accessorFn: (row) => row.distanceToBranch,
     header: 'Distancia a Sucursal',
@@ -103,6 +97,11 @@ const columns: MRT_ColumnDef<Travel>[] = [
         </div>
       );
     },
+  },
+  {
+    accessorFn: (row) => row.status,
+    header: 'Estatus Viaje',
+    id: 'travelStatus',
   },
 ];
 
@@ -132,12 +131,13 @@ export const TravelsModal = (props: Props) => {
     enableStickyHeader: true,
     autoResetPageIndex: false,
     // PAGINATION, FILTERS, SORTING
-    enableSorting: false,
+    enableSorting: true,
     enableGrouping: true,
     enableDensityToggle: false,
     enableFullScreenToggle: false,
     columnFilterDisplayMode: 'subheader',
     enableRowActions: true,
+    enableRowOrdering: true,
     renderRowActions: (({ row }) => (
       <Button
         color="primary"
@@ -172,7 +172,7 @@ export const TravelsModal = (props: Props) => {
       sorting: [
         {
           id: 'distanceToBranch',
-          desc: true,
+          desc: false,
         },
       ],
     },
