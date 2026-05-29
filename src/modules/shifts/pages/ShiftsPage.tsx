@@ -71,8 +71,6 @@ const ShiftsPage = () => {
       driver_id: s.driver.id,
     }));
 
-    console.log(range[0].toISOString().slice(0, 10));
-
     const fetchKmBatch = async () => {
       try {
         const res = await odooApi.post(
