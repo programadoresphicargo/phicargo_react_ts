@@ -32,6 +32,7 @@ import { copiarHTML } from '../cuenta_espejo/cuenta_espejo';
 
 export type Viaje = {
   id_viaje: number;
+  x_status_viaje: string;
   name: string;
   ejecutivo: string;
   ultimo_envio_ejecutivo: string;
@@ -241,13 +242,15 @@ const ViajesActivos = ({ }) => {
         accessorKey: 'codigo_postal',
         header: 'Distancia al punto de carga/descarga (50km/h)',
         Cell: ({ row }: { row: MRT_Row<Viaje> }) => {
+          const estado = row.original.x_status_viaje;
           const distancia = row.original.distancia_km;
           const tiempo_estimado_horas = row.original.tiempo_estimado_horas;
           const observacion_ubicacion = row.original.observacion_ubicacion;
           const codigo_postal = row.original.codigo_postal;
 
           return (
-            <Chip className="text-white" color="primary" size="sm">
+            <Chip className="text-white" color={estado === "retorno" ? "warning" : "success"} size="sm">
+              {estado === "retorno" ? <i className="bi bi-arrow-left"></i> : <i className="bi bi-arrow-right"></i>}
               {distancia !== null && distancia !== undefined ? `${distancia} km / ${tiempo_estimado_horas} hrs` : observacion_ubicacion + ' CP: ' + codigo_postal}
             </Chip>
           );
