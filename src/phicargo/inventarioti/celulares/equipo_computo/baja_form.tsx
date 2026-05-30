@@ -30,7 +30,7 @@ const initialForm: BajaEquipo = {
 
 export default function BajaEquipoComputo({ isOpen, onOpenChange, id_equipo }: { isOpen: boolean, onOpenChange: (open: boolean) => void, id_equipo: number }) {
 
-    const { control, handleSubmit, setValue } = useForm<BajaEquipo>({
+    const { control, handleSubmit } = useForm<BajaEquipo>({
         defaultValues: initialForm,
     });
 
