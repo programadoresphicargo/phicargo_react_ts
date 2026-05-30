@@ -11,8 +11,8 @@ import {
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import SelectEmpleadosTI from "../empleados/select_empleados";
-import { Controller, useForm } from "react-hook-form";
-import { SelectInput, TextareaInput } from "@/components/inputs";
+import { useForm } from "react-hook-form";
+import { AutocompleteInput, TextareaInput } from "@/components/inputs";
 import { BajaCelularData } from "./schema";
 
 const initialForm: BajaCelularData = {
@@ -24,7 +24,7 @@ const initialForm: BajaCelularData = {
 
 export default function BajaCelular({ isOpen, onOpenChange, id_celular }: { isOpen: boolean, onOpenChange: React.Dispatch<React.SetStateAction<boolean>>, id_celular: number }) {
 
-    const { control, handleSubmit, setValue } = useForm<BajaCelularData>({
+    const { control, handleSubmit } = useForm<BajaCelularData>({
         defaultValues: initialForm,
     });
     const [isLoading, setLoading] = useState(false);
@@ -65,17 +65,12 @@ export default function BajaCelular({ isOpen, onOpenChange, id_celular }: { isOp
                             )}
                             <ModalBody>
                                 <div className="grid grid-cols-1 gap-4">
-                                    <Controller
+                                    <SelectEmpleadosTI
                                         control={control}
                                         name="empleado_baja"
-                                        render={({ field }) => (
-                                            <SelectEmpleadosTI
-                                                value={field.value}
-                                                handleChange={setValue}
-                                            />
-                                        )}
+                                        label="Empleado baja"
                                     />
-                                    <SelectInput
+                                    <AutocompleteInput
                                         control={control}
                                         name="motivo_baja"
                                         label="Motivo de baja"

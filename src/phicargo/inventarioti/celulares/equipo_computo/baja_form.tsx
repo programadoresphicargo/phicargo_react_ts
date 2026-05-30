@@ -10,7 +10,7 @@ import {
     Progress,
 } from "@heroui/react";
 import { useState } from 'react';
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import toast from 'react-hot-toast';
 import SelectEmpleadosTI from "../empleados/select_empleados";
 
@@ -72,15 +72,10 @@ export default function BajaEquipoComputo({ isOpen, onOpenChange, id_equipo }: {
                             )}
                             <ModalBody>
                                 <div className="grid grid-cols-1 gap-4">
-                                    <Controller
+                                    <SelectEmpleadosTI
                                         control={control}
                                         name="empleado_baja"
-                                        render={({ field }) => (
-                                            <SelectEmpleadosTI
-                                                value={field.value}
-                                                handleChange={setValue}
-                                            />
-                                        )}
+                                        label="Empleado baja"
                                     />
                                     <AutocompleteInput
                                         control={control}
