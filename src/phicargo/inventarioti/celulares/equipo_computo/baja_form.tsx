@@ -10,8 +10,9 @@ import {
     Progress,
 } from "@heroui/react";
 import { useState } from 'react';
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import toast from 'react-hot-toast';
+import SelectEmpleadosTI from "../empleados/select_empleados";
 
 type BajaEquipo = {
     tipo: string;
@@ -29,7 +30,7 @@ const initialForm: BajaEquipo = {
 
 export default function BajaEquipoComputo({ isOpen, onOpenChange, id_equipo }: { isOpen: boolean, onOpenChange: (open: boolean) => void, id_equipo: number }) {
 
-    const { control, handleSubmit } = useForm<BajaEquipo>({
+    const { control, handleSubmit, setValue } = useForm<BajaEquipo>({
         defaultValues: initialForm,
     });
 
@@ -47,6 +48,7 @@ export default function BajaEquipoComputo({ isOpen, onOpenChange, id_equipo }: {
                     });
                 if (response.data.status == "success") {
                     toast.success(response.data.message);
+                    onOpenChange(false);
                 } else {
                     toast.error(response.data.message);
                 }
@@ -64,12 +66,22 @@ export default function BajaEquipoComputo({ isOpen, onOpenChange, id_equipo }: {
                 <ModalContent>
                     {(onClose) => (
                         <>
-                            <ModalHeader className="flex flex-col gap-1">Registro de baja {id_equipo}</ModalHeader>
+                            <ModalHeader className="flex flex-col gap-1">Registro de baja computo {id_equipo}</ModalHeader>
                             {isLoading && (
                                 <Progress color="primary" isIndeterminate size="sm" />
                             )}
                             <ModalBody>
                                 <div className="grid grid-cols-1 gap-4">
+                                    <Controller
+                                        control={control}
+                                        name="empleado_baja"
+                                        render={({ field }) => (
+                                            <SelectEmpleadosTI
+                                                value={field.value}
+                                                handleChange={setValue}
+                                            />
+                                        )}
+                                    />
                                     <AutocompleteInput
                                         control={control}
                                         label="Motivo de baja"
