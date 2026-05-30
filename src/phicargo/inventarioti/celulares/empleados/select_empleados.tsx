@@ -43,7 +43,7 @@ export const SelectEmpleadosTI = <T extends FieldValues>(
             .then(response => {
                 setLoading(true);
                 const data = response.data.map(item => ({
-                    key: item.id_empleado,
+                    key: String(item.id_empleado),
                     value: item.nombre_empleado,
                 }));
                 setEmpleados(data);

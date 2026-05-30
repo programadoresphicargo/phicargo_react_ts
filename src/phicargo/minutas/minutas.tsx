@@ -216,9 +216,7 @@ const Minutas = ({ }) => {
   });
 
   return (<>
-    <div>
-      <MaterialReactTable table={table} />
-    </div >
+    <MaterialReactTable table={table} />
   </>
   );
 
