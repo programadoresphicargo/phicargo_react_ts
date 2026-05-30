@@ -93,7 +93,6 @@ function PanelEnvio({ open, cerrar, id_reporte }: { open: boolean, cerrar: () =>
   };
 
   const handleSwitchChange = (value: boolean) => {
-    console.log(value);
     setIsSelected(value);
     if (!value) {
       setFechaModificada(null);
