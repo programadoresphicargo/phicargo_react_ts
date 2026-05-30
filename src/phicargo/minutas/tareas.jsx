@@ -13,7 +13,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 
-const TareasMinutas = ({ estado }) => {
+const TareasMinutas = ({ }) => {
   const [data, setData] = useState([]);
   const [isLoading2, setLoading] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);

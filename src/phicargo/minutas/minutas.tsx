@@ -11,15 +11,20 @@ import odooApi from '@/api/odoo-api';
 import MinutaForm from './form';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { Tooltip } from "@heroui/react";
+import { Dayjs } from 'dayjs';
 
 type Participante = {
   empleado: string;
 };
 
-type Minuta = {
-  id_minuta: number;
+export type Minuta = {
+  id_minuta: number | null;
+  id_solicitante: number | null;
+  fecha: Dayjs;
+  estado: string;
   puntos_discusion: string;
-  participantes: Participante[];
+  participantes?: Participante[];
+  desarrollo_reunion: string;
 }
 
 const Minutas = ({ }) => {
