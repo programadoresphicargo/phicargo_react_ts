@@ -56,16 +56,18 @@ function PanelEnvio({ open, cerrar, id_reporte }: { open: boolean, cerrar: () =>
       const response = await odooApi.get('/tms_travel/reportes_estatus_viajes/id_reporte/' + id_reporte);
       setEstatusSeleccionado(response.data);
       setContenido(response.data.comentarios_estatus);
-      setLoadingSE(false);
     } catch (error) {
-      setLoadingSE(false);
       toast.error('Error al obtener los datos:' + error);
+    } finally {
+      setLoadingSE(false);
     }
   };
 
   const [activeStep, setActiveStep] = useState(0);
 
   useEffect(() => {
+    if (!open) return;
+
     setActiveStep(id_reporte ? 1 : 0);
     getEstatusReenvio();
   }, [id_reporte, open]);
@@ -82,7 +84,7 @@ function PanelEnvio({ open, cerrar, id_reporte }: { open: boolean, cerrar: () =>
     return localDate.toISOString().slice(0, 19);
   }
 
-  const [FechaModificada, setFechaModificada] = React.useState<string | null>(getLocalISOString());
+  const [FechaModificada, setFechaModificada] = React.useState<string | null>(null);
 
   const updateFecha = (newValue: any) => {
     const date = newValue.toDate(getLocalTimeZone());
@@ -91,6 +93,7 @@ function PanelEnvio({ open, cerrar, id_reporte }: { open: boolean, cerrar: () =>
   };
 
   const handleSwitchChange = (value: boolean) => {
+    console.log(value);
     setIsSelected(value);
     if (!value) {
       setFechaModificada(null);
@@ -139,10 +142,7 @@ function PanelEnvio({ open, cerrar, id_reporte }: { open: boolean, cerrar: () =>
     onChange(info) {
       setFileList(info.fileList);
     },
-    beforeUpload: (file) => {
-      setFileList((prevFileList) => [...prevFileList, file]);
-      return false;
-    },
+    beforeUpload: () => false,
     fileList,
     onRemove: (file) => {
       setFileList((prevFileList) => prevFileList.filter((f) => f.uid !== file.uid));
@@ -219,7 +219,7 @@ function PanelEnvio({ open, cerrar, id_reporte }: { open: boolean, cerrar: () =>
   ];
 
   const seleccionarOpcion = (opcion: string) => {
-    setContenido((contenidoAnterior) => `${contenidoAnterior} ${opcion}`);
+    setContenido((prev) => `${prev ?? ''} ${opcion}`.trim());
   };
 
   return (
@@ -269,10 +269,10 @@ function PanelEnvio({ open, cerrar, id_reporte }: { open: boolean, cerrar: () =>
                 </Input>
 
                 <div className="gap-4 grid grid-cols-2 sm:grid-cols-4">
-                  {filteredData.map((item, index) => (
+                  {filteredData.map((item) => (
                     <Card
                       shadow="sm"
-                      key={index}
+                      key={item.id_estatus}
                       isPressable
                       onPress={() => handleSelectCard(item)}
                       style={{
@@ -347,7 +347,7 @@ function PanelEnvio({ open, cerrar, id_reporte }: { open: boolean, cerrar: () =>
                       firstDayOfWeek="mon"
                       hideTimeZone
                       showMonthAndYearPickers
-                      defaultValue={FechaModificada ? parseDateTime(FechaModificada) : undefined}
+                      value={FechaModificada ? parseDateTime(FechaModificada) : null}
                       label="Nueva hora"
                       variant="bordered"
                       isDisabled={!isSelected}
@@ -375,18 +375,17 @@ function PanelEnvio({ open, cerrar, id_reporte }: { open: boolean, cerrar: () =>
 
                     <div className="gap-2 grid grid-cols-2 sm:grid-cols-4 mt-3 mb-3">
                       {sugerencias.map((opcion) => (
-                        <>
-                          <Card
-                            isBlurred
-                            isPressable
-                            onPress={() => seleccionarOpcion(opcion)}
-                            style={{ backgroundColor: '#25D366' }} // Aquí defines el color
-                          >
-                            <CardBody>
-                              <span style={{ color: 'white' }}>{opcion}</span>
-                            </CardBody>
-                          </Card>
-                        </>
+                        <Card
+                          key={opcion}
+                          isBlurred
+                          isPressable
+                          onPress={() => seleccionarOpcion(opcion)}
+                          style={{ backgroundColor: '#25D366' }} // Aquí defines el color
+                        >
+                          <CardBody>
+                            <span style={{ color: 'white' }}>{opcion}</span>
+                          </CardBody>
+                        </Card>
                       ))}
                     </div>
 
