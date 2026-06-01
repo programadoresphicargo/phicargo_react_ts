@@ -1,35 +1,28 @@
-import { Card, CardBody, CardHeader, Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/react";
+import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@heroui/react";
 import {
+  MRT_Cell,
+  MRT_Row,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-
+import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import { Button } from "@heroui/react";
 import { Chip } from "@heroui/react";
-import { Link } from "@heroui/react";
-import Slide from '@mui/material/Slide';
-import { Typography } from '@mui/material';
-import { addToast } from "@heroui/react";
 import odooApi from '@/api/odoo-api';
+import toast from "react-hot-toast";
 
-const DetencionesViajesActivos = ({ isOpen, close }) => {
+const DetencionesViajesActivos = ({ isOpen, close }: { isOpen: boolean, close: () => void }) => {
 
   const [data, setData] = useState([]);
   const [isLoading, setLoading] = React.useState(false);
-  const [ultimaActualizacion, setUltimaActualizacion] = useState(null);
+  const [ultimaActualizacion, setUltimaActualizacion] = useState<string | null>(null);
 
   const getDetenciones = async () => {
     const ahora = new Date().toLocaleTimeString();
     try {
       setLoading(true);
-      addToast({
-        title: "Obteniendo detenciones, espere un segundo...",
-        color: 'success',
-        variant: 'solid',
-        style: { zIndex: 9999 }
-      });
+      toast.success("Obteniendo detenciones, espere un segundo...");
       const response = await odooApi.get("/detenciones/detenciones_viajes_activos/");
       setData(response.data);
       setUltimaActualizacion(ahora);
@@ -62,23 +55,22 @@ const DetencionesViajesActivos = ({ isOpen, close }) => {
     {
       accessorKey: "x_status_viaje",
       header: "Estado",
-      Cell: ({ cell }) => {
-        const estatus = cell.getValue();
-        let badgeClass = '';
-
-        if (estatus === 'ruta') {
-          badgeClass = 'primary';
-        } else if (estatus === 'planta') {
-          badgeClass = 'success';
-        } else if (estatus === 'retorno') {
-          badgeClass = 'warning';
-        } else if (estatus === 'resguardo') {
-          badgeClass = 'secondary';
-        }
+      Cell: ({ cell }: { cell: MRT_Cell<any> }) => {
+        const estatus = cell.getValue<string>();
 
         return (
           <Chip
-            color={badgeClass}
+            color={
+              estatus === 'ruta'
+                ? 'primary'
+                : estatus === 'planta'
+                  ? 'success'
+                  : estatus === 'retorno'
+                    ? 'warning'
+                    : estatus === 'resguardo'
+                      ? 'secondary'
+                      : 'default'
+            }
             size="sm"
             className="text-white"
           >
@@ -90,19 +82,6 @@ const DetencionesViajesActivos = ({ isOpen, close }) => {
     {
       accessorKey: "recorded_at_inicio",
       header: "Inicio Detención",
-      Cell: ({ cell }) => {
-        const fecha = cell.getValue();
-        return fecha
-          ? new Date(fecha).toLocaleString("es-MX", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-            hour: "numeric",
-            minute: "2-digit",
-            hour12: true,
-          })
-          : "Sin datos";
-      },
     },
     {
       accessorKey: "latitude",
@@ -118,7 +97,8 @@ const DetencionesViajesActivos = ({ isOpen, close }) => {
     },
     {
       header: "Mapa",
-      Cell: ({ row }) => {
+      Cell: ({ row }: { row: MRT_Row<any> }) => {
+
         const lat = row.original.latitude;
         const lng = row.original.longitude;
 
@@ -154,14 +134,14 @@ const DetencionesViajesActivos = ({ isOpen, close }) => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
-    state: { isLoading: isLoading },
+    state: { showProgressBars: isLoading },
     enableColumnPinning: true,
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
     initialState: {
       showProgressBars: isLoading,
       density: 'compact',
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
     },
     muiTablePaperProps: {
       elevation: 0,
@@ -192,7 +172,7 @@ const DetencionesViajesActivos = ({ isOpen, close }) => {
         color: row.subRows?.length ? '#FFFFFF' : '#000000',
       },
     }),
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -201,14 +181,12 @@ const DetencionesViajesActivos = ({ isOpen, close }) => {
           flexWrap: 'wrap',
         }}
       >
-        <div>
-          <Button color="danger" className="text-white" onPress={getDetenciones} startContent={<i class="bi bi-arrow-clockwise"></i>}>
-            Actualizar detenciones
-          </Button>
-          {ultimaActualizacion && (
-            <p className='mt-3'>Última actualización: {ultimaActualizacion}</p>
-          )}
-        </div>
+        <Button color="danger" className="text-white" onPress={getDetenciones} startContent={<i className="bi bi-arrow-clockwise"></i>} radius="full">
+          Actualizar detenciones
+        </Button>
+        {ultimaActualizacion && (
+          <p className='mt-3'>Última actualización: {ultimaActualizacion}</p>
+        )}
       </Box>
     )
   });
@@ -225,6 +203,11 @@ const DetencionesViajesActivos = ({ isOpen, close }) => {
               <ModalBody>
                 <MaterialReactTable table={table} />
               </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  Cerrar
+                </Button>
+              </ModalFooter>
             </>
           )}
         </ModalContent>
