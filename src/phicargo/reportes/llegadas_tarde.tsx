@@ -1,24 +1,30 @@
-import { Button, Chip, DatePicker, Link } from "@heroui/react";
-import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
-import React, { useEffect, useState } from 'react';
+import { Button, Chip, Link } from "@heroui/react";
+import { MRT_Cell, MaterialReactTable, useMaterialReactTable } from 'material-react-table';
+import { useEffect, useState } from 'react';
 import { download, generateCsv, mkConfig } from 'export-to-csv';
-import { getLocalTimeZone, parseDate } from "@internationalized/date";
-import Badge from 'react-bootstrap/Badge';
 import { Box } from '@mui/material';
-import { Component } from "react";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import axios from 'axios';
 import odooApi from '@/api/odoo-api';
 import { toast } from "react-toastify";
-import { useDateFormatter } from "@react-aria/i18n";
 import { DateRangePicker } from 'rsuite';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import CustomNavbar from "@/pages/CustomNavbar";
 const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
+interface DepartureArrival {
+  referencia: string;
+  sucursal: string;
+  x_status_viaje: string;
+  ruta: string;
+  driver: string;
+  departure_status: string;
+  arrival_status: string;
+  [key: string]: any;
+}
+
 const DetencionesTable = () => {
 
-  const departureTranslations = {
+  const departureTranslations: Record<string, string> = {
     no_info: 'Sin información',
     start_early: 'Salió temprano',
     start_late: 'Salió tarde SIN justificación',
@@ -27,7 +33,7 @@ const DetencionesTable = () => {
     late: 'Va tarde',
   };
 
-  const arrivalTranslations = {
+  const arrivalTranslations: Record<string, string> = {
     arrived_late: 'Llegó tarde SIN justificación',
     arrived_late_justified: 'Llegó tarde PERO tiene justificación',
     arrived_early: 'Llegó temprano',
@@ -38,9 +44,9 @@ const DetencionesTable = () => {
   const now = new Date();
   const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
   const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-  const [range, setRange] = useState([firstDay, lastDay]);
+  const [range, setRange] = useState<[Date, Date]>([firstDay, lastDay]);
   const [isLoading, setLoading] = useState(false);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<DepartureArrival[]>([]);
 
   useEffect(() => {
     fetchData();
@@ -60,7 +66,7 @@ const DetencionesTable = () => {
         },
       });
       setData(response.data);
-    } catch (error) {
+    } catch (error: any) {
       const errorMessage = error.response
         ? `Error: ${error.response.status} - ${error.response.data.message}`
         : error.message;
@@ -70,7 +76,6 @@ const DetencionesTable = () => {
       setLoading(false);
     }
   };
-
 
   const columns = [
     { accessorKey: 'referencia', header: 'Referencia' },
@@ -84,11 +89,10 @@ const DetencionesTable = () => {
     {
       accessorKey: 'departure_status',
       header: 'SALIDA',
-      Cell: ({ cell }) => {
-        const raw = cell.getValue() || '';
+      Cell: ({ cell }: { cell: MRT_Cell<any> }) => {
+        const raw = cell.getValue<string>() || '';
 
-        // Colores del Chip según el estado traducido
-        const colores = {
+        const colores: Record<string, any> = {
           'Salió tarde PERO tiene justificación': 'success',
           'Salió tarde SIN justificación': 'danger',
           'Va tarde': 'warning',
@@ -117,10 +121,10 @@ const DetencionesTable = () => {
     {
       accessorKey: 'arrival_status',
       header: 'LLEGADA',
-      Cell: ({ cell }) => {
-        const raw = cell.getValue() || '';
+      Cell: ({ cell }: { cell: MRT_Cell<any> }) => {
+        const raw = cell.getValue<string>() || '';
 
-        const colores = {
+        const colores: Record<string, any> = {
           'Llegó tarde SIN justificación': 'danger',
           'Llegó tarde PERO tiene justificación': 'success',
           'Llegó temprano': 'success',
@@ -175,7 +179,7 @@ const DetencionesTable = () => {
       density: 'compact',
       expanded: true,
       showColumnFilters: true,
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
     },
     muiTablePaperProps: {
       elevation: 0,
@@ -204,7 +208,7 @@ const DetencionesTable = () => {
         color: row.subRows?.length ? '#FFFFFF' : '#000000',
       },
     }),
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -220,7 +224,11 @@ const DetencionesTable = () => {
         </h1>
         <DateRangePicker
           value={range}
-          onChange={(value) => setRange(value)}
+          onChange={(value) => {
+            if (value) {
+              setRange(value as [Date, Date]);
+            }
+          }}
           placeholder="Selecciona un rango de fechas"
           format="yyyy-MM-dd"
         />
