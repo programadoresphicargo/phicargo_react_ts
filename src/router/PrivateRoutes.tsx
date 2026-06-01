@@ -68,7 +68,7 @@ const PeriodosPagosEstadiasOperadores = lazy(
   () => import('../phicargo/viajes/estadias_operadores/periodos/periodos'),
 );
 const Estadias = lazy(() => import('../phicargo/estadias/Control'));
-const EstadiasInfo = lazy(() => import('../phicargo/estadias/index_estadia'));
+const EstadiasInfo = lazy(() => import('../phicargo/estadias/Control.tsx'));
 const Accesos = lazy(() => import('../phicargo/accesos/Accesos'));
 const SolicitudesEPP = lazy(() => import('../phicargo/almacen/solicitud/index_solicitudes_epp'));
 const SolicitudesAmarre = lazy(() => import('../phicargo/almacen/solicitud/index_solicitudes_amarre'));

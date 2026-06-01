@@ -1,49 +1,29 @@
-import { Button, Chip } from "@heroui/react";
-import { FormControl, InputLabel, MenuItem } from '@mui/material';
+import { Button } from "@heroui/react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { Select, SelectItem } from "@heroui/react";
-
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
-import { CostosExtrasContext } from '@/phicargo/costos/context/context';
 import FormularioCostoExtra from '@/phicargo/costos/maniobras/form_costos_extras';
-import { TextField } from '@mui/material';
 import { ViajeContext } from '../context/viajeContext';
-import dayjs from 'dayjs';
 import odooApi from '@/api/odoo-api';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
 const FoliosCostosExtrasViaje = () => {
 
-  const { id_viaje, getHistorialEstatus, getViaje } = useContext(ViajeContext);
-  const { id_folio, setIDFolio, CartasPorte, CartasPorteEliminadas, setCPS, setCPSEliminadas, CostosExtras, setCostosExtras, CostosExtrasEliminados, setCostosExtrasEliminados, formData, setFormData, DisabledForm, setDisabledForm, agregarConcepto, setAC } = useContext(CostosExtrasContext);
-
+  const { id_viaje } = useContext(ViajeContext);
   const [data, setData] = useState([]);
-  const [isLoading2, setLoading] = useState();
+  const [isLoading, setLoading] = useState(false);
   const [modalShow, setModalShow] = useState(false);
 
-  const seleccionar_sucursal = (e) => {
-    setSucursal(e.target.value);
-  };
-
-  const limpiarForm = () => {
-    setIDFolio(null);
-    setCPS([]);
-    setCPSEliminadas([]);
-    setCostosExtras([]);
-    setCostosExtrasEliminados([]);
-  };
-
-  const handleShowModal = () => {
+  const handleShow = () => {
     setModalShow(true);
   };
 
-  const handleCloseModal = () => {
+  const handleClose = () => {
     setModalShow(false);
     fetchData();
-    limpiarForm();
   };
 
   const fetchData = async () => {
@@ -78,27 +58,6 @@ const FoliosCostosExtrasViaje = () => {
       {
         accessorKey: 'fecha_creacion',
         header: 'Fecha creación',
-        size: 150,
-        Cell: ({ cell }) => {
-          const rawDate = cell.getValue();
-          const date = new Date(rawDate);
-
-          if (isNaN(date.getTime())) {
-            return "Fecha no válida";
-          }
-
-          const options = {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-            hour: 'numeric',
-            minute: '2-digit',
-            hour12: true,
-          };
-
-          const formattedDate = date.toLocaleString('es-ES', options);
-          return formattedDate;
-        },
       },
       {
         accessorKey: 'nombre',
@@ -119,24 +78,6 @@ const FoliosCostosExtrasViaje = () => {
       {
         accessorKey: 'status',
         header: 'Estatus',
-        Cell: ({ cell }) => {
-          const status = cell.getValue() || '';
-          let badgeClass = '';
-
-          if (status === 'cancelado') {
-            badgeClass = 'danger';
-          } else if (status === 'facturado') {
-            badgeClass = 'success';
-          } else if (status === 'borrador') {
-            badgeClass = 'warning';
-          }
-
-          return (
-            <Chip color={badgeClass} size='sm' className="text-white">
-              {status}
-            </Chip>
-          );
-        },
       },
       {
         accessorKey: 'ref_factura',
@@ -156,14 +97,15 @@ const FoliosCostosExtrasViaje = () => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
-    state: { isLoading: isLoading2 },
+    state: { isLoading: isLoading },
     enableColumnPinning: true,
     enableStickyHeader: true,
+    localization: MRT_Localization_ES,
     columnResizeMode: "onEnd",
     initialState: {
       density: 'compact',
       showColumnFilters: true,
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
     },
     muiTablePaperProps: {
       elevation: 0,
@@ -177,11 +119,10 @@ const FoliosCostosExtrasViaje = () => {
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
-      onClick: ({ event }) => {
+      onClick: () => {
         if (row.subRows?.length) {
         } else {
-          handleShowModal(row.original.id_folio);
-          setIDFolio(row.original.id_folio);
+          handleShow();
         }
       },
       style: {
@@ -203,7 +144,7 @@ const FoliosCostosExtrasViaje = () => {
       },
     },
 
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -218,9 +159,7 @@ const FoliosCostosExtrasViaje = () => {
             color="primary"
             fullWidth
             onPress={() => {
-              handleShowModal();
-              setIDFolio(null);
-              setAC(true);
+              handleShow();
             }}
           >
             Nuevo folio
@@ -235,7 +174,7 @@ const FoliosCostosExtrasViaje = () => {
     <div>
       <FormularioCostoExtra
         show={modalShow}
-        handleClose={handleCloseModal}
+        handleClose={handleClose}
       />
       <MaterialReactTable table={table} />
     </div >
