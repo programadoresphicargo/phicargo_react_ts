@@ -89,7 +89,7 @@ const DetencionesTable = () => {
     {
       accessorKey: 'departure_status',
       header: 'SALIDA',
-      Cell: ({ cell }: { cell: MRT_Cell<any> }) => {
+      Cell: ({ cell }: { cell: MRT_Cell<DepartureArrival> }) => {
         const raw = cell.getValue<string>() || '';
 
         const colores: Record<string, any> = {
@@ -121,7 +121,7 @@ const DetencionesTable = () => {
     {
       accessorKey: 'arrival_status',
       header: 'LLEGADA',
-      Cell: ({ cell }: { cell: MRT_Cell<any> }) => {
+      Cell: ({ cell }: { cell: MRT_Cell<DepartureArrival> }) => {
         const raw = cell.getValue<string>() || '';
 
         const colores: Record<string, any> = {
