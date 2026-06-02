@@ -191,7 +191,7 @@ export const useShiftColumns = (
         accessorFn: (row) => row.has_recent_incident,
         header: 'Incidencias recientes (últimos 30 días)',
         Cell: ({ row }) => {
-          return (<IncidentsShift data={row.original}></IncidentsShift>
+          return (<IncidentsShift shift={row.original}></IncidentsShift>
           );
         }
       },

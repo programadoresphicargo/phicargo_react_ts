@@ -1,17 +1,17 @@
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Spinner } from "@heroui/react";
-
-import { User } from "@heroui/react";
 import odooApi from '@/api/odoo-api';
 import { useState } from "react";
+import { IncidentApi } from "@/modules/incidents/models/api";
+import { Shift } from "../models";
 
-const IncidentsShift = ({ data }) => {
-    const [items, setItems] = useState([]);
+const IncidentsShift = ({ shift }: { shift: Shift }) => {
+    const [items, setItems] = useState<IncidentApi[]>([]);
     const [isOpen, setIsOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
     const fetchItems = () => {
         setIsLoading(true);
-        odooApi.get(`/drivers/${data.driver.id}/incidents?recent_only=true`)
+        odooApi.get(`/drivers/${shift.driver.id}/incidents?recent_only=true`)
             .then((response) => {
                 setItems(response.data);
             })
@@ -23,7 +23,7 @@ const IncidentsShift = ({ data }) => {
             });
     };
 
-    const handleOpen = (open) => {
+    const handleOpen = (open: boolean) => {
         setIsOpen(open);
         if (open) fetchItems();
     };
@@ -33,7 +33,7 @@ const IncidentsShift = ({ data }) => {
             <DropdownTrigger>
                 {isLoading ? (
                     <Spinner size="sm" />
-                ) : data?.has_recent_incident ? (
+                ) : shift?.has_recent_incident ? (
                     <Button color="danger" size="sm" radius="full">
                         ⚠️ Con incidencias
                     </Button>
@@ -58,7 +58,7 @@ const IncidentsShift = ({ data }) => {
             ) : (
                 <DropdownMenu aria-label="Dynamic Actions" items={items} className="max-h-[400px] overflow-auto">
                     {(item) => (
-                        <DropdownItem key={item.id_viaje}>
+                        <DropdownItem key={item.id}>
                             <div className="flex flex-col gap-1">
                                 <span className="font-semibold text-danger">{item.incidence}</span>
                                 <span className="text-sm text-gray-600 flex items-start gap-1 whitespace-pre-wrap break-words max-w-xs">

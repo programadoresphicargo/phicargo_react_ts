@@ -1,11 +1,20 @@
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Spinner } from "@heroui/react";
-
-import { User } from "@heroui/react";
 import odooApi from '@/api/odoo-api';
 import { useState } from "react";
+import { Shift } from "../models";
 
-const LastTravels = ({ data }) => {
-    const [items, setItems] = useState([]);
+type Viaje = {
+    id_viaje: number;
+    referencia: number;
+    ruta: string;
+    fecha_inicio: string;
+    diferencia_dias: number;
+    diferencia_horas_minutos: string;
+}
+
+const LastTravels = ({ data }: { data: Shift }) => {
+
+    const [items, setItems] = useState<Viaje[]>([]);
     const [isOpen, setIsOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -23,7 +32,7 @@ const LastTravels = ({ data }) => {
             });
     };
 
-    const handleOpen = (open) => {
+    const handleOpen = (open: boolean) => {
         setIsOpen(open);
         if (open) fetchItems();
     };
