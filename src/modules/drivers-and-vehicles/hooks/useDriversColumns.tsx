@@ -66,6 +66,13 @@ export const useDriversColumns = () => {
           );
         },
       },
+      {
+        accessorFn: (row) => row.aduanaControl,
+        header: 'R Control',
+        Cell: ({ cell }) => (
+          <span className="font-bold text-xs">{cell.getValue<string>()}</span>
+        ),
+      },
       { accessorKey: 'licenseId', header: 'Licencia' },
       { accessorKey: 'licenseType', header: 'Tipo Licencia' },
       {

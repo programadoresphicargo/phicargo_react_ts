@@ -43,6 +43,7 @@ export class DriverAdapter {
       maneuverId: driver.x_maniobra,
       job: driver.job,
       company: driver.res_company,
+      aduanaControl: driver.x_aduana_control
     };
   }
 
