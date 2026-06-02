@@ -36,6 +36,7 @@ const driverInfoToLocal = (driver: DriverInfoApi): DriverInfo => ({
   licenseType: driver.tms_driver_license_type,
   licenseExpiration: driver.tms_driver_license_expiration,
   daysLeft: driver.dias_restantes,
+  AduanaControl: driver.x_aduana_control
 });
 
 /**

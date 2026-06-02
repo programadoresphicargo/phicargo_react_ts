@@ -13,6 +13,7 @@ export interface DriverInfoApi {
   x_modalidad: string | null;
   x_peligroso_lic: string | null;
   dias_restantes: number | null;
+  x_aduana_control: string | null;
 }
 
 export interface VehicleInfoApi {

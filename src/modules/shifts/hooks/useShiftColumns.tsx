@@ -89,6 +89,15 @@ export const useShiftColumns = (
         },
       },
       {
+        accessorFn: (row) => row.driver.AduanaControl,
+        header: 'R Control',
+        Cell: ({ cell }) => (
+          <span className="text-sm font-semibold text-blue-600">
+            {cell.getValue<string>()}
+          </span>
+        ),
+      },
+      {
         accessorFn: (row) => row.driver.isDangerous,
         header: 'Peligroso',
         maxSize: 50,

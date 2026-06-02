@@ -13,6 +13,7 @@ export interface DriverInfo {
   daysLeft: number | null;
   modality: string | null;
   isDangerous: boolean;
+  AduanaControl: string | null;
 }
 
 export interface VehicleInfo {
