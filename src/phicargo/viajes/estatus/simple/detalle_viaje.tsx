@@ -3,6 +3,7 @@ import { Accordion, Progress } from "@heroui/react";
 import { Dialog, DialogContent } from "@mui/material";
 import { useEffect, useState } from "react";
 import EstatusDetalle, { Step } from "./estado";
+import PanelEnvio from "../../panel_envio_estatus/panel_envio";
 
 export default function DetalleEstatusViaje({
  id_viaje,
@@ -64,6 +65,7 @@ export default function DetalleEstatusViaje({
     {data.map((step) => {
      return (
       <>
+       <PanelEnvio open={open} cerrar={handleClose} id_reporte={step.id_reporte}></PanelEnvio>
        <Accordion variant="splitted">
         <EstatusDetalle step={step}></EstatusDetalle>
        </Accordion>
