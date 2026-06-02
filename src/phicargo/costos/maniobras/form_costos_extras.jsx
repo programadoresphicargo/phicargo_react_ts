@@ -28,7 +28,7 @@ import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import { useAuthContext } from "@/modules/auth/hooks";
 import { Link } from "@heroui/react";
-import FormularioArchivos from "@/phicargo/archivos/formulario";
+import FormularioArchivos from "@/phicargo/archivos/form";
 const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
 const Transition = React.forwardRef(function Transition(props, ref) {

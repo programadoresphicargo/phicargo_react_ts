@@ -1,24 +1,24 @@
-import { Button, Link } from "@heroui/react";
+import { Button } from "@heroui/react";
 import {
+  MRT_Row,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import FormularioDocumentacion from './formulario';
-import Slide from '@mui/material/Slide';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
-const Archivos = ({ id }) => {
+interface Archivo {
+  id_onedrive: string;
+  nombre: string;
+}
+
+const Archivos = ({ id }: { id: number }) => {
 
   const [data, setData] = useState([]);
-  const [isLoading2, setLoading] = useState();
+  const [isLoading, setLoading] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -35,7 +35,7 @@ const Archivos = ({ id }) => {
     fetchData();
   }, []);
 
-  const obtenerUrlPublico = async (idOnedrive) => {
+  const obtenerUrlPublico = async (idOnedrive: string) => {
     try {
       const response = await odooApi.get('/onedrive/generate_link/' + idOnedrive);
       if (response.data.url) {
@@ -74,9 +74,11 @@ const Archivos = ({ id }) => {
       {
         accessorKey: 'ver',
         header: 'Ver',
-        Cell: ({ row }) => (
+        Cell: ({ row }: { row: MRT_Row<Archivo> }) => (
           <Button
-            color='primary'
+            color="primary"
+            radius="full"
+            size="sm"
             onPress={() => obtenerUrlPublico(row.original.id_onedrive)}
           >
             Ver archivo
@@ -93,13 +95,14 @@ const Archivos = ({ id }) => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
-    state: { isLoading: isLoading2 },
+    state: { isLoading: isLoading },
     enableColumnPinning: true,
     enableStickyHeader: true,
+    localization: MRT_Localization_ES,
     columnResizeMode: "onEnd",
     initialState: {
       density: 'compact',
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
     },
     muiTablePaperProps: {
       elevation: 0,
@@ -127,7 +130,7 @@ const Archivos = ({ id }) => {
         overflow: 'hidden',
       },
     },
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -136,17 +139,13 @@ const Archivos = ({ id }) => {
           flexWrap: 'wrap',
         }}
       >
-
-
       </Box >
     )
   });
 
   return (
     <>
-      <div className='card p-2 rounded'>
-        <MaterialReactTable table={table} />
-      </div>
+      <MaterialReactTable table={table} />
     </>
   );
 };

@@ -1,28 +1,22 @@
-import { Button, select } from "@heroui/react";
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { Select, SelectItem } from "@heroui/react";
-import { Upload, message } from 'antd';
-import { Box } from '@mui/material';
-import Slide from '@mui/material/Slide';
-import { useAuthContext } from "@/modules/auth/hooks";
+import { Button, } from "@heroui/react";
+import { useState } from 'react';
+import { Upload, UploadFile, UploadProps } from 'antd';
 import odooApi from "@/api/odoo-api";
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import toast from 'react-hot-toast';
 import Archivos from "./archivos";
 
 const { Dragger } = Upload;
 
-const FormularioArchivos = ({ open, onClose, ruta, tabla, id }) => {
+const FormularioArchivos = ({ open, onClose, ruta, tabla, id }: { open: boolean, onClose: () => void, ruta: string; tabla: string, id: number }) => {
 
-    const [fileList, setFileList] = useState([]);
-
+    const [fileList, setFileList] = useState<UploadFile[]>([]);
     const [Loading, setLoading] = useState(false);
 
-    const props = {
+    const props: UploadProps = {
         name: 'file',
         multiple: true,
         onChange(info) {
@@ -43,7 +37,7 @@ const FormularioArchivos = ({ open, onClose, ruta, tabla, id }) => {
         const data = new FormData();
         data.append('ruta', ruta + id);
         data.append('tabla', tabla);
-        data.append('id', id);
+        data.append('id', String(id));
         fileList.forEach((fileWrapper) => {
             if (fileWrapper.originFileObj instanceof File) {
                 data.append('files', fileWrapper.originFileObj);
@@ -77,6 +71,7 @@ const FormularioArchivos = ({ open, onClose, ruta, tabla, id }) => {
                         <Button
                             isLoading={Loading}
                             color="primary"
+                            radius="full"
                             onPress={enviarArchivo}
                             style={{ marginTop: 16 }}
                             isDisabled={fileList.length === 0}
@@ -86,7 +81,6 @@ const FormularioArchivos = ({ open, onClose, ruta, tabla, id }) => {
                     </div>
                     <Dragger {...props} style={{ fontFamily: 'Inter' }}>
                         <p className="ant-upload-drag-icon">
-                            {/* <InboxOutlined /> */}
                         </p>
                         <p className="ant-upload-text">Haz clic o arrastra el archivo aquí para subirlo</p>
                         <p className="ant-upload-hint">Soporta múltiples archivos</p>
@@ -96,8 +90,8 @@ const FormularioArchivos = ({ open, onClose, ruta, tabla, id }) => {
                 </DialogContent>
 
                 <DialogActions>
-                    <Button onPress={onClose} color="secondary">
-                        Cancelar
+                    <Button onPress={onClose} color="default">
+                        Cerrar
                     </Button>
                 </DialogActions>
             </Dialog>
