@@ -1,10 +1,11 @@
 import { Button, Card } from "@heroui/react";
-import React, { useState } from "react";
+import { useState } from "react";
 import { DatePicker } from "rsuite";
 import odooApi from "@/api/odoo-api";
 
 function ReporteIngresosClientes() {
- const [fecha, setFecha] = useState(null);
+
+ const [fecha, setFecha] = useState<Date | null>(null);
  const [loading, setLoading] = useState(false);
 
  const generarReporte = async () => {
@@ -15,9 +16,7 @@ function ReporteIngresosClientes() {
 
   try {
    setLoading(true);
-
    const fechaFormateada = fecha.toISOString().split("T")[0];
-
    const response = await odooApi.get(
     "/tms_waybill/ingresos_clientes",
     {
@@ -32,9 +31,13 @@ function ReporteIngresosClientes() {
 
    const url = window.URL.createObjectURL(blob);
    window.open(url, "_blank");
-  } catch (error) {
-   alert("Error al generar el reporte");
+
+   setTimeout(() => {
+    window.URL.revokeObjectURL(url);
+   }, 1000);
+  } catch (error: unknown) {
    console.error(error);
+   alert("Error al generar el reporte");
   } finally {
    setLoading(false);
   }
@@ -51,7 +54,6 @@ function ReporteIngresosClientes() {
      <span className="text-sm text-gray-500">Fecha</span>
      <DatePicker
       oneTap
-      w={180}
       value={fecha}
       onChange={setFecha}
       placeholder="Selecciona fecha"
