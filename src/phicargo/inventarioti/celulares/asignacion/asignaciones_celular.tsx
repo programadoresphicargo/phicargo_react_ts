@@ -118,6 +118,7 @@ const Asignaciones = () => {
       { accessorKey: 'imei', header: 'IMEI' },
       { accessorKey: 'numero', header: 'Número asignado' },
       { accessorKey: 'compañia', header: 'Compañía' },
+      { accessorKey: 'correo', header: 'Correo' },
       { accessorKey: 'fecha_asignacion', header: 'Fecha asignación' },
       { accessorKey: 'dias_asignado', header: 'Días asignado' },
       {
