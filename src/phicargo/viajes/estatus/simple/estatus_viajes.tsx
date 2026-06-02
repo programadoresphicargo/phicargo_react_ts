@@ -2,6 +2,7 @@ import odooApi from "@/api/odoo-api";
 import { tiempoTranscurrido } from "@/phicargo/funciones/tiempo";
 import { Accordion, AccordionItem, Avatar, Card, CardBody, Progress } from "@heroui/react";
 import { useEffect, useState } from "react";
+import DetalleEstatusViaje from "./detalle_viaje";
 const { VITE_ODOO_API_URL } = import.meta.env;
 
 type Step = {
@@ -19,6 +20,7 @@ export default function SeguimientoSimpleViaje({
 
  const [data, setData] = useState<Step[]>([]);
  const [isLoading, setLoading] = useState<boolean>(false);
+ const [id_estatus, setIDEstatus] = useState<number>(0);
 
  const fetchData = async () => {
   try {
@@ -40,8 +42,20 @@ export default function SeguimientoSimpleViaje({
   fetchData();
  }, []);
 
+ const [open, setOpen] = useState(false);
+
+ const handleClose = () => {
+  setOpen(false);
+ };
+
+ const handleClickOpen = (id_estatus: number) => {
+  setOpen(true);
+  setIDEstatus(id_estatus);
+ };
+
  return (
   <div>
+   <DetalleEstatusViaje open={open} handleClose={handleClose} id_viaje={id_viaje} id_estatus={id_estatus}></DetalleEstatusViaje>
 
    <Accordion variant="splitted">
     <AccordionItem key="1" aria-label="Accordion 1" title={`Viaje`}>
@@ -54,7 +68,7 @@ export default function SeguimientoSimpleViaje({
       return (
        <>
         <div className="mt-3">
-         <Card isDisabled={step.fecha_envio ? false : true} isPressable fullWidth>
+         <Card isDisabled={step.fecha_envio ? false : true} isPressable fullWidth onPress={() => handleClickOpen(step.id_estatus)}>
           <CardBody>
            <div className="flex gap-5">
             <Avatar

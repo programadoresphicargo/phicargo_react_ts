@@ -50,6 +50,7 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
 
     const closeCancelDialog = () => {
         setCancelDialog(false);
+        fetchData();
     }
 
     const editar_registro = () => {
@@ -401,7 +402,7 @@ const FormularioCostoExtra = ({ show, handleClose }) => {
             <CancelFolio
                 open={CancelDialog}
                 onClose={closeCancelDialog}
-                fetchData={fetchData}>
+                id_folio={id_folio}>
             </CancelFolio>
 
             <FormularioArchivos
