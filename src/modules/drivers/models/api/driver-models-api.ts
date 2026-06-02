@@ -33,6 +33,8 @@ export interface DriverBaseApi {
   x_maniobra: number | null;
   x_hire_date: string | null;
   x_aduana_control: string | null;
+  x_aduana_gafete: string | null;
+  x_aduana_gafete_inicio: string | null;
 
   job: JobSimple;
   res_company: CompanySimple | null;

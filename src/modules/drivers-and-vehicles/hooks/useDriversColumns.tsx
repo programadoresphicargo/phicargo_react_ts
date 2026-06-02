@@ -73,6 +73,24 @@ export const useDriversColumns = () => {
           <span className="font-bold text-xs">{cell.getValue<string>()}</span>
         ),
       },
+      {
+        accessorFn: (row) => row.aduanaGafete,
+        header: 'Gafete único',
+        Cell: ({ cell }) => (
+          <span className="text-sm font-semibold text-blue-600">
+            {cell.getValue<string>()}
+          </span>
+        ),
+      },
+      {
+        accessorFn: (row) => row.aduanaGafeteInicio,
+        header: 'G.U. Inicio',
+        Cell: ({ cell }) => (
+          <span className="text-sm font-semibold text-blue-600">
+            {cell.getValue<string>()}
+          </span>
+        ),
+      },
       { accessorKey: 'licenseId', header: 'Licencia' },
       { accessorKey: 'licenseType', header: 'Tipo Licencia' },
       {

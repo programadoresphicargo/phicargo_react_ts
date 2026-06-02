@@ -33,6 +33,8 @@ export interface DriverBase {
   readonly maneuverId: number | null;
   hireDate: Dayjs | null;
   aduanaControl: string | null;
+  aduanaGafete: string | null;
+  aduanaGafeteInicio: string | null;
 
   job: JobSimple;
   company: CompanySimple | null;

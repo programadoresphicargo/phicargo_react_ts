@@ -43,7 +43,9 @@ export class DriverAdapter {
       maneuverId: driver.x_maniobra,
       job: driver.job,
       company: driver.res_company,
-      aduanaControl: driver.x_aduana_control
+      aduanaControl: driver.x_aduana_control,
+      aduanaGafete: driver.x_aduana_gafete,
+      aduanaGafeteInicio: driver.x_aduana_gafete_inicio
     };
   }
 
