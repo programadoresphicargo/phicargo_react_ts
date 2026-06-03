@@ -9,7 +9,7 @@ import { useEffect, useMemo, useState } from 'react';
 import Box from '@mui/material/Box';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import odooApi from '@/api/odoo-api';
-import StockCelulares from './stock_celular';
+import StockCelulares from '../stock/stock_celular';
 import {
   useDisclosure,
 } from "@heroui/react";

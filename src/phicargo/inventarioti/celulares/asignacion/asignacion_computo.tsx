@@ -11,7 +11,7 @@ import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import {
   useDisclosure,
 } from "@heroui/react";
-import StockComputo from './stock_computo';
+import StockComputo from '../stock/stock_computo';
 import { FieldArrayWithId, UseFieldArrayAppend, UseFieldArrayRemove } from 'react-hook-form';
 import { AsignacionActivo } from './form';
 import { EquipoComputo } from '../equipo_computo/form';

@@ -6,45 +6,36 @@ import {
     ModalBody,
     ModalFooter,
     Button,
-    useDisclosure,
 } from "@heroui/react";
 import { useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import {
-    MRT_Cell,
     MaterialReactTable,
     useMaterialReactTable,
 } from 'material-react-table';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import Box from '@mui/material/Box';
-import FormCelulares from "../celulares/form";
+import { EquipoComputo } from "../equipo_computo/form";
 import { FieldArrayWithId, UseFieldArrayAppend } from "react-hook-form";
-import { AsignacionActivo } from "./form";
-import { Celular } from "../celulares/schema";
+import { AsignacionActivo } from "../asignacion/form";
 
-interface CelularesProps {
+interface EquipoComputoProps {
     isOpen: boolean;
     onOpenChange: () => void;
-    celularesFields: FieldArrayWithId<AsignacionActivo, "celulares", "id">[];
-    appendCelular: UseFieldArrayAppend<AsignacionActivo, "celulares">;
+    equiposFields: FieldArrayWithId<AsignacionActivo, "equipo_computo", "id">[];
+    appendEquipo: UseFieldArrayAppend<AsignacionActivo, "equipo_computo">;
 }
 
-export default function StockCelulares({ isOpen, onOpenChange, celularesFields, appendCelular }: CelularesProps) {
+export default function StockComputo({ isOpen, onOpenChange, equiposFields, appendEquipo }: EquipoComputoProps) {
 
-    const [id_celular, setCelular] = useState(0);
     const [isLoading, setLoading] = useState(false);
-    const {
-        isOpen: isOpen1,
-        onOpen: onOpen1,
-        onOpenChange: onOpenChange1,
-    } = useDisclosure();
 
-    const [data, setData] = useState<Celular[]>([]);
+    const [data, setData] = useState<EquipoComputo[]>([]);
 
     const fetchData = async () => {
         try {
             setLoading(true);
-            const response = await odooApi.get<Celular[]>('/inventarioti/dispositivos/celular/true');
+            const response = await odooApi.get<EquipoComputo[]>('/inventarioti/dispositivos/computo/true');
             const filtrados = response.data.filter(item => item.estado === 'disponible');
             setData(filtrados);
             setLoading(false);
@@ -56,36 +47,16 @@ export default function StockCelulares({ isOpen, onOpenChange, celularesFields, 
 
     useEffect(() => {
         fetchData();
-    }, [isOpen, isOpen1]);
+    }, [isOpen]);
 
     const columns = useMemo(
         () => [
-            { accessorKey: 'empresa', header: 'Empresa' },
-            { accessorKey: 'imei', header: 'IMEI' },
+            { accessorKey: 'nombre', header: 'Empresa' },
+            { accessorKey: 'sn', header: 'SN' },
             { accessorKey: 'marca', header: 'Marca' },
             { accessorKey: 'modelo', header: 'Modelo' },
-            { accessorKey: 'correo', header: 'Correo' },
-            { accessorKey: 'passwoord', header: 'Contraseña' },
-            {
-                accessorKey: 'id_celular',
-                header: 'Editar',
-                Cell: ({ cell }: { cell: MRT_Cell<Celular> }) => (
-                    <Button
-                        className='text-white'
-                        color={'primary'}
-                        variant="solid"
-                        size='sm'
-                        radius="full"
-                        onPress={() => {
-                            onOpen1();
-                            setCelular(cell.getValue<number>());
-                        }}
-                    >
-                        <i className="bi bi-pen"></i>
-                        Editar
-                    </Button >
-                ),
-            },
+            { accessorKey: 'so', header: 'so' },
+            { accessorKey: 'estado', header: 'Estado' },
         ],
         [],
     );
@@ -106,16 +77,16 @@ export default function StockCelulares({ isOpen, onOpenChange, celularesFields, 
         },
         muiTableBodyRowProps: ({ row }) => ({
             onClick: () => {
-                const existe = (celularesFields || []).some(
-                    cel => cel.id_celular === row.original.id_celular
+                const existe = (equiposFields || []).some(
+                    cel => cel.id_ec === row.original.id_ec
                 );
 
                 if (existe) {
-                    toast.error("El celular ya está dentro");
+                    toast.error("El equipo ya está dentro");
                     return;
                 }
 
-                appendCelular(row.original);
+                appendEquipo(row.original);
                 onOpenChange();
             },
             style: {
@@ -159,7 +130,7 @@ export default function StockCelulares({ isOpen, onOpenChange, celularesFields, 
                 <h1
                     className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
                 >
-                    Celulares disponibles
+                    Equipos disponibles
                 </h1>
             </Box>
         ),
@@ -167,17 +138,9 @@ export default function StockCelulares({ isOpen, onOpenChange, celularesFields, 
 
     return (
         <>
-            <FormCelulares
-                isOpen={isOpen1}
-                onOpenChange={onOpenChange1}
-                id_celular={id_celular}
-            />
-
             <Modal
                 isOpen={isOpen}
                 onOpenChange={onOpenChange}
-                isDismissable={false}
-                isKeyboardDismissDisabled={true}
                 size="full">
                 <ModalContent>
                     {(onClose) => (
@@ -187,7 +150,7 @@ export default function StockCelulares({ isOpen, onOpenChange, celularesFields, 
                                     background: 'linear-gradient(90deg, #a10003, #002887)',
                                     color: 'white',
                                     fontWeight: 'bold'
-                                }}>Celulares disponibles
+                                }}>Equipo de computo disponible
                             </ModalHeader>
                             <ModalBody>
                                 <MaterialReactTable table={table} />
