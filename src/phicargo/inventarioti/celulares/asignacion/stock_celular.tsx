@@ -7,27 +7,30 @@ import {
     ModalFooter,
     Button,
     useDisclosure,
-    NumberInput,
-    Input,
-    DatePicker,
-    Textarea,
-    Progress,
-    Chip
 } from "@heroui/react";
-import { Select, SelectItem } from "@heroui/react";
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import {
+    MRT_Cell,
     MaterialReactTable,
     useMaterialReactTable,
 } from 'material-react-table';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import Box from '@mui/material/Box';
-import { useInventarioTI } from "../../contexto/contexto";
 import FormCelulares from "../celulares/form";
+import { FieldArrayWithId, UseFieldArrayAppend } from "react-hook-form";
+import { AsignacionActivo } from "./form";
+import { Celular } from "../celulares/schema";
 
-export default function StockCelulares({ isOpen, onOpen, onOpenChange }) {
-    const { form_data, setFormData } = useInventarioTI();
+interface CelularesProps {
+    isOpen: boolean;
+    onOpenChange: () => void;
+    celularesFields: FieldArrayWithId<AsignacionActivo, "celulares", "id">[];
+    appendCelular: UseFieldArrayAppend<AsignacionActivo, "celulares">;
+}
+
+export default function StockCelulares({ isOpen, onOpenChange, celularesFields, appendCelular }: CelularesProps) {
+
     const [id_celular, setCelular] = useState(0);
     const [isLoading, setLoading] = useState(false);
     const {
@@ -35,12 +38,13 @@ export default function StockCelulares({ isOpen, onOpen, onOpenChange }) {
         onOpen: onOpen1,
         onOpenChange: onOpenChange1,
     } = useDisclosure();
-    const [data, setData] = useState([]);
+
+    const [data, setData] = useState<Celular[]>([]);
 
     const fetchData = async () => {
         try {
             setLoading(true);
-            const response = await odooApi.get('/inventarioti/dispositivos/celular/true');
+            const response = await odooApi.get<Celular[]>('/inventarioti/dispositivos/celular/true');
             const filtrados = response.data.filter(item => item.estado === 'disponible');
             setData(filtrados);
             setLoading(false);
@@ -63,19 +67,21 @@ export default function StockCelulares({ isOpen, onOpen, onOpenChange }) {
             { accessorKey: 'correo', header: 'Correo' },
             { accessorKey: 'passwoord', header: 'Contraseña' },
             {
-                accessorKey: 'editar', header: 'Editar',
-                Cell: ({ row }) => (
+                accessorKey: 'id_celular',
+                header: 'Editar',
+                Cell: ({ cell }: { cell: MRT_Cell<Celular> }) => (
                     <Button
                         className='text-white'
                         color={'primary'}
                         variant="solid"
                         size='sm'
+                        radius="full"
                         onPress={() => {
                             onOpen1();
-                            setCelular(row.original.id_celular);
+                            setCelular(cell.getValue<number>());
                         }}
                     >
-                        <i class="bi bi-pen"></i>
+                        <i className="bi bi-pen"></i>
                         Editar
                     </Button >
                 ),
@@ -95,12 +101,12 @@ export default function StockCelulares({ isOpen, onOpen, onOpenChange }) {
         initialState: {
             showGlobalFilter: true,
             density: 'compact',
-            pagination: { pageSize: 80 },
+            pagination: { pageIndex: 0, pageSize: 80 },
             showColumnFilters: true,
         },
         muiTableBodyRowProps: ({ row }) => ({
-            onClick: ({ event }) => {
-                const existe = (form_data.celulares || []).some(
+            onClick: () => {
+                const existe = (celularesFields || []).some(
                     cel => cel.id_celular === row.original.id_celular
                 );
 
@@ -109,11 +115,7 @@ export default function StockCelulares({ isOpen, onOpen, onOpenChange }) {
                     return;
                 }
 
-                setFormData(prev => ({
-                    ...prev,
-                    celulares: [...(prev.celulares || []), row.original]
-                }));
-
+                appendCelular(row.original);
                 onOpenChange();
             },
             style: {
@@ -145,7 +147,7 @@ export default function StockCelulares({ isOpen, onOpen, onOpenChange }) {
                 maxHeight: 'calc(100vh - 300px)',
             },
         },
-        renderTopToolbarCustomActions: ({ table }) => (
+        renderTopToolbarCustomActions: () => (
             <Box
                 sx={{
                     display: 'flex',
@@ -168,15 +170,15 @@ export default function StockCelulares({ isOpen, onOpen, onOpenChange }) {
             <FormCelulares
                 isOpen={isOpen1}
                 onOpenChange={onOpenChange1}
-                id_celular={id_celular}>
-            </FormCelulares>
+                id_celular={id_celular}
+            />
 
             <Modal
                 isOpen={isOpen}
                 onOpenChange={onOpenChange}
                 isDismissable={false}
                 isKeyboardDismissDisabled={true}
-                size="6xl">
+                size="full">
                 <ModalContent>
                     {(onClose) => (
                         <>
@@ -185,10 +187,8 @@ export default function StockCelulares({ isOpen, onOpen, onOpenChange }) {
                                     background: 'linear-gradient(90deg, #a10003, #002887)',
                                     color: 'white',
                                     fontWeight: 'bold'
-                                }}>Celulares disponibles</ModalHeader>
-                            {isLoading && (
-                                <Progress color="primary" isIndeterminate size="sm" />
-                            )}
+                                }}>Celulares disponibles
+                            </ModalHeader>
                             <ModalBody>
                                 <MaterialReactTable table={table} />
                             </ModalBody>

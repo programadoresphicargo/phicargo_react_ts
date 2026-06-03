@@ -1,29 +1,36 @@
-import { Button, Card, CardBody, CardHeader, Chip, Divider, Select, SelectItem, Link } from '@heroui/react';
+import { Button, Card, CardBody } from '@heroui/react';
 import {
+  MRT_ColumnDef,
+  MRT_Row,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import React, { useEffect, useMemo, useState } from 'react';
-
+import { useMemo } from 'react';
 import Box from '@mui/material/Box';
-import { DatePicker } from 'antd';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import odooApi from '@/api/odoo-api';
-import NavbarInventarioTI from '../../navbar';
-import StockCelulares from './stock_celular';
 import {
   useDisclosure,
 } from "@heroui/react";
-import { useInventarioTI } from '../../contexto/contexto';
 import StockComputo from './stock_computo';
+import { FieldArrayWithId, UseFieldArrayAppend, UseFieldArrayRemove } from 'react-hook-form';
+import { AsignacionActivo } from './form';
+import { EquipoComputo } from '../equipo_computo/form';
 
-const AsignacionComputo = () => {
+interface EquipoComputoProps {
+  equiposFields: FieldArrayWithId<AsignacionActivo, "equipo_computo", "id">[];
+  appendEquipo: UseFieldArrayAppend<AsignacionActivo, "equipo_computo">;
+  removeEquipo: UseFieldArrayRemove;
+}
 
-  const [isLoading, setLoading] = useState(false);
+const AsignacionComputo = ({
+  equiposFields,
+  appendEquipo,
+  removeEquipo,
+}: EquipoComputoProps) => {
+
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const { form_data, setFormData } = useInventarioTI();
 
-  const columns = useMemo(
+  const columns = useMemo<MRT_ColumnDef<EquipoComputo>[]>(
     () => [
       { accessorKey: 'sn', header: 'SN' },
       { accessorKey: 'so', header: 'SO' },
@@ -32,36 +39,27 @@ const AsignacionComputo = () => {
       {
         accessorKey: 'delete',
         header: 'Borrar',
-        Cell: ({ cell, row, table }) => {
-          return <Button onPress={() => removeCelular(row.original.id_ec)} color='danger' size='sm'> Eliminar</Button>
+        Cell: ({ row }: { row: MRT_Row<EquipoComputo> }) => {
+          return <Button onPress={() => removeEquipo(row.index)} color='danger' size='sm' radius='full'> Eliminar</Button>
         },
       }
     ],
     [],
   );
 
-  const removeCelular = (id) => {
-    setFormData(prev => ({
-      ...prev,
-      equipo_computo: (prev.equipo_computo || []).filter(cel => cel.id_ec !== id)
-    }));
-  };
-
   const table = useMaterialReactTable({
     columns,
-    data: form_data.equipo_computo || [],
+    data: equiposFields || [],
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
     localization: MRT_Localization_ES,
-    state: { showProgressBars: isLoading },
     initialState: {
       showGlobalFilter: true,
       density: 'compact',
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
     },
-    muiTableBodyRowProps: ({ row }) => ({
-      onClick: ({ event }) => { },
+    muiTableBodyRowProps: () => ({
       style: {
         cursor: 'pointer',
       },
@@ -91,7 +89,7 @@ const AsignacionComputo = () => {
         maxHeight: 'calc(100vh - 170px)',
       },
     },
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -105,20 +103,20 @@ const AsignacionComputo = () => {
         >
           Asignación Computo
         </h1>
-        <Button color='success' className='text-white' onPress={onOpen}><i class="bi bi-plus-circle"></i> Añadir equipo de computo</Button>
+        <Button color='success' className='text-white' onPress={onOpen} radius='full'><i className="bi bi-plus-circle"></i> Añadir equipo de computo</Button>
       </Box>
     ),
   });
 
   return (
-    <div>
-      <StockComputo isOpen={isOpen} onOpenChange={onOpenChange}></StockComputo>
+    <>
+      <StockComputo isOpen={isOpen} onOpenChange={onOpenChange} equiposFields={equiposFields} appendEquipo={appendEquipo}></StockComputo>
       <Card className='mt-3'>
         <CardBody>
           <MaterialReactTable table={table} />
         </CardBody>
       </Card>
-    </div>
+    </>
   );
 };
 

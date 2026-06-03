@@ -1,34 +1,49 @@
-import { Autocomplete, Button, Card, CardBody, CardHeader, Chip, Divider, Select, SelectItem, AutocompleteItem } from '@heroui/react';
+import { Autocomplete, Button, Card, CardBody, AutocompleteItem } from '@heroui/react';
 import {
+  MRT_ColumnDef,
+  MRT_Row,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import React, { useEffect, useMemo, useState } from 'react';
-
+import { useEffect, useMemo, useState } from 'react';
 import Box from '@mui/material/Box';
-import { DatePicker } from 'antd';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import odooApi from '@/api/odoo-api';
-import NavbarInventarioTI from '../../navbar';
 import StockCelulares from './stock_celular';
 import {
   useDisclosure,
 } from "@heroui/react";
-import { useInventarioTI } from '../../contexto/contexto';
+import { FieldArrayWithId, UseFieldArrayAppend, UseFieldArrayRemove, UseFieldArrayUpdate } from 'react-hook-form';
+import { AsignacionActivo } from './form';
+import { Celular } from '../celulares/schema';
+import { Linea } from '../lineas/form';
+import { SelectItem } from '@/types';
 
-const AsignacionCelular = () => {
+interface CelularesProps {
+  celularesFields: FieldArrayWithId<AsignacionActivo, "celulares", "id">[];
+  appendCelular: UseFieldArrayAppend<AsignacionActivo, "celulares">;
+  removeCelular: UseFieldArrayRemove;
+  update: UseFieldArrayUpdate<AsignacionActivo, "celulares">;
+}
 
-  const [isLoading, setLoading] = useState(false);
+const AsignacionCelular = ({
+  celularesFields,
+  appendCelular,
+  removeCelular,
+  update
+}: CelularesProps) => {
+
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const { form_data, setFormData } = useInventarioTI();
-  const [opciones, setOpciones] = useState([]);
+  const [opciones, setOpciones] = useState<SelectItem[]>([]);
 
-  // Traer opciones desde la API
   useEffect(() => {
     const fetchOpciones = async () => {
       try {
-        const response = await odooApi.get('/inventarioti/lineas/estado/disponible'); // cambia tu endpoint
-        setOpciones(response.data); // suponiendo que response.data es un array de objetos {id, nombre}
+        const response = await odooApi.get<Linea[]>('/inventarioti/lineas/estado/disponible');
+        setOpciones(response.data.map((item) => ({
+          key: String(item.id_linea),
+          value: String(item.numero),
+        })));
       } catch (error) {
         console.error('Error al obtener opciones:', error);
       }
@@ -36,7 +51,7 @@ const AsignacionCelular = () => {
     fetchOpciones();
   }, [isOpen]);
 
-  const columns = useMemo(
+  const columns = useMemo<MRT_ColumnDef<Celular>[]>(
     () => [
       { accessorKey: 'imei', header: 'IMEI' },
       { accessorKey: 'marca', header: 'Marca' },
@@ -44,33 +59,28 @@ const AsignacionCelular = () => {
       { accessorKey: 'correo', header: 'Correo' },
       { accessorKey: 'passwoord', header: 'Contraseña' },
       {
-        accessorKey: 'asignacion', // clave ficticia para la columna
+        accessorKey: 'asignacion',
         header: 'Linea',
-        Cell: ({ row }) => {
+        Cell: ({ row }: { row: MRT_Row<Celular> }) => {
           return (
             <>
               <Autocomplete
-                selectedKey={row.original.id_linea}
+                items={opciones}
+                selectedKey={row.original.id_linea ? String(row.original.id_linea) : ''}
                 label="Linea"
-                valu
-                onSelectionChange={(e) => {
-                  const nuevoId = e;
-                  row.original.id_linea = nuevoId;
-                  setFormData(prev => ({
-                    ...prev,
-                    celulares: prev.celulares.map(r =>
-                      r.id_celular === row.original.id_celular
-                        ? { ...r, id_linea: nuevoId }
-                        : r
-                    ),
-                  }));
-                  console.log(form_data.celulares);
+                onSelectionChange={(key) => {
+                  update(row.index, {
+                    ...row.original,
+                    id_linea: Number(key),
+                  });
                 }}
               >
-                {opciones.map((animal) => (
-                  <AutocompleteItem key={animal.id_linea}>{animal.compañia + '-' + animal.numero}</AutocompleteItem>
-                ))}
-              </Autocomplete>
+                {(item) => (
+                  <AutocompleteItem key={item.key} className="capitalize">
+                    {item.value}
+                  </AutocompleteItem>
+                )}
+              </Autocomplete >
             </>
           );
         },
@@ -78,36 +88,28 @@ const AsignacionCelular = () => {
       {
         accessorKey: 'delete',
         header: 'Borrar',
-        Cell: ({ cell, row, table }) => {
-          return <Button onPress={() => removeCelular(row.original.id_celular)} color='danger' size='sm'> Eliminar</Button>
+        Cell: ({ row }: { row: MRT_Row<Celular> }) => {
+          return <Button onPress={() => removeCelular(row.index)} color='danger' size='sm' radius='full'> Eliminar</Button>
         },
       }
     ],
     [opciones],
   );
 
-  const removeCelular = (id) => {
-    setFormData(prev => ({
-      ...prev,
-      celulares: (prev.celulares || []).filter(cel => cel.id_celular !== id)
-    }));
-  };
-
   const table = useMaterialReactTable({
     columns,
-    data: form_data.celulares || [],
+    data: celularesFields || [],
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
     localization: MRT_Localization_ES,
-    state: { showProgressBars: isLoading },
     initialState: {
       showGlobalFilter: true,
       density: 'compact',
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
     },
-    muiTableBodyRowProps: ({ row }) => ({
-      onClick: ({ event }) => { },
+    muiTableBodyRowProps: () => ({
+      onClick: () => { },
       style: {
         cursor: 'pointer',
       },
@@ -137,7 +139,7 @@ const AsignacionCelular = () => {
         maxHeight: 'calc(100vh - 170px)',
       },
     },
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -151,20 +153,20 @@ const AsignacionCelular = () => {
         >
           Asignación celular
         </h1>
-        <Button color='success' className='text-white' onPress={onOpen}><i class="bi bi-plus-circle"></i> Añadir celular</Button>
+        <Button color='success' className='text-white' onPress={onOpen} radius='full'><i className="bi bi-plus-circle"></i> Añadir celular</Button>
       </Box>
     ),
   });
 
   return (
-    <div>
-      <StockCelulares isOpen={isOpen} onOpenChange={onOpenChange}></StockCelulares>
+    <>
+      <StockCelulares isOpen={isOpen} onOpenChange={onOpenChange} appendCelular={appendCelular} celularesFields={celularesFields}></StockCelulares>
       <Card>
         <CardBody>
           <MaterialReactTable table={table} />
         </CardBody>
       </Card>
-    </div>
+    </>
   );
 };
 

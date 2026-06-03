@@ -1,7 +1,7 @@
 import { Dayjs } from "dayjs";
 
 export type Celular = {
- id_celular: number,
+ id_celular?: number,
  activo: true,
  estado: string;
  id_empresa: number | null,
@@ -12,6 +12,7 @@ export type Celular = {
  passwoord: string,
  fecha_compra: Dayjs,
  comentarios: string,
+ id_linea?: number,
 }
 
 export type BajaCelularData = {

@@ -23,7 +23,8 @@ import { AutocompleteInput, NumberInput, TextInput, TextareaInput } from "@/comp
 import { parseDate } from "@internationalized/date";
 import dayjs, { Dayjs } from "dayjs";
 
-type EquipoComputo = {
+export type EquipoComputo = {
+    id_ec?: number;
     nombre: string | null;
     id_empresa: string | null;
     so: string | null;

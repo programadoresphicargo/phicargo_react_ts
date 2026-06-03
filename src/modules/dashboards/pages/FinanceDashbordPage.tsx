@@ -5,7 +5,7 @@ import { RevenueByBranchChart } from '../components/finance/RevenueByBranchChart
 import { YearlyContainersCountChart } from '../components/finance/YearlyContainersCountChart';
 import { YearlyRevenueChart } from '../components/finance/YearlyRevenueChart';
 import { useWaybillStatsQueries } from '../hooks/useWaybillStatsQueries';
-import ReporteIngresosClientes from './report';
+import ReporteIngresosClientes from './IngresosClientesReport';
 import ReporteAreaComercial from './reporte_area_comercial';
 
 const FinanceDashbordPage = () => {

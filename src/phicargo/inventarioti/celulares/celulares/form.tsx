@@ -119,7 +119,7 @@ export default function FormCelulares({ isOpen, onOpenChange, id_celular }: { is
 
     return (
         <>
-            {id_celular && (
+            {id_celular !== null && id_celular > 0 && (
                 <BajaCelular
                     isOpen={isBajaModalOpen}
                     onOpenChange={setBajaModalOpen}
@@ -239,7 +239,7 @@ export default function FormCelulares({ isOpen, onOpenChange, id_celular }: { is
 
                                                         return (
                                                             <DatePicker
-                                                                label="Fecha de Incidencia"
+                                                                label="Fecha de compra"
                                                                 variant="bordered"
                                                                 isDisabled={!activo}
                                                                 value={calendarValue}

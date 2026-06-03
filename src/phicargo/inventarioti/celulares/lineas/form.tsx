@@ -14,7 +14,8 @@ import BajaLinea from "./baja_form";
 import { useForm } from "react-hook-form";
 import { AutocompleteInput, NumberInput, TextInput } from "@/components/inputs";
 
-type Linea = {
+export type Linea = {
+    id_linea?: number;
     id_empresa: number | null;
     activo: boolean;
     compañia: string | null;
