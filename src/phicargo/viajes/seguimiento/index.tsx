@@ -14,7 +14,7 @@ import { useJourneyDialogs } from "./funciones";
 import Custodia from "../custodia/custodia";
 import LlegadaTarde from "../llegada_tarde";
 import FormEquipoViaje from "./editar_equipo";
-import SeguimientoSimpleManiobra from "../estatus/simple/estatus_maniobras";
+import SeguimientoSimpleManiobra from "../estatus/maniobras/estatus_maniobras";
 import SeguimientoSimpleViaje from "../estatus/simple/estatus_viajes";
 
 export default function Seguimiento() {
