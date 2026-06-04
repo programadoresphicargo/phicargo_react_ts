@@ -1,8 +1,10 @@
 import odooApi from "@/api/odoo-api";
 import { tiempoTranscurrido } from "@/phicargo/funciones/tiempo";
-import { Accordion, AccordionItem, Avatar, Card, CardBody, Progress } from "@heroui/react";
+import { Accordion, AccordionItem, Avatar, Card, CardBody, Progress, Button } from "@heroui/react";
 import { useEffect, useState } from "react";
 import DetalleEstatusViaje from "./detalle_viaje";
+import { Dialog, DialogContent, DialogTitle } from "@mui/material";
+import EstatusHistorialAgrupado from "../estatus_agrupados";
 const { VITE_ODOO_API_URL } = import.meta.env;
 
 type Step = {
@@ -10,6 +12,7 @@ type Step = {
  nombre_estatus: string;
  fecha_envio: string | null;
  imagen: string;
+ estatus_intermedios: number[];
 };
 
 export default function SeguimientoSimpleViaje({
@@ -21,6 +24,7 @@ export default function SeguimientoSimpleViaje({
  const [data, setData] = useState<Step[]>([]);
  const [isLoading, setLoading] = useState<boolean>(false);
  const [id_estatus, setIDEstatus] = useState<number>(0);
+ const [estatusSeleccionados, setEstatusSeleccionados] = useState<number[]>([]);
 
  const fetchData = async () => {
   try {
@@ -43,6 +47,7 @@ export default function SeguimientoSimpleViaje({
  }, []);
 
  const [open, setOpen] = useState(false);
+ const [openEstatus, setOpenEstatus] = useState(false);
 
  const handleClose = () => {
   setOpen(false);
@@ -65,9 +70,29 @@ export default function SeguimientoSimpleViaje({
       <Progress isIndeterminate size="sm" color="primary"></Progress>
      )}
 
+     <Button onPress={() => fetchData()} size="sm" color="success" radius="full" className="text-white">Recargar</Button>
+
      {data.map((step) => {
       return (
        <>
+
+        {step.estatus_intermedios?.length > 0 && (
+         <div className="mt-2">
+          <Button
+           radius="full"
+           size="sm"
+           variant="light"
+           color="primary"
+           onPress={(e) => {
+            setEstatusSeleccionados(step.estatus_intermedios);
+            setOpenEstatus(true);
+           }}
+          >
+           +{step.estatus_intermedios.length} estatus
+          </Button>
+         </div>
+        )}
+
         <div className="mt-3">
          <Card isDisabled={step.fecha_envio ? false : true} isPressable fullWidth onPress={() => handleClickOpen(step.id_estatus)}>
           <CardBody>
@@ -97,6 +122,26 @@ export default function SeguimientoSimpleViaje({
 
     </AccordionItem>
    </Accordion>
+
+   <Dialog
+    open={openEstatus}
+    onClose={() => setOpenEstatus(false)}
+    fullWidth
+    maxWidth="md"
+   >
+    <DialogTitle
+     sx={{
+      background: "linear-gradient(90deg, #002887 0%, #0059b3 100%)",
+      color: "white",
+      fontFamily: "Inter",
+     }}
+    >
+     Estatus intermedios
+    </DialogTitle>
+    <DialogContent>
+     <EstatusHistorialAgrupado id_reportes_agrupados={estatusSeleccionados} />
+    </DialogContent>
+   </Dialog>
   </div>
  );
 }
