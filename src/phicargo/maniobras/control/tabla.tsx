@@ -135,7 +135,6 @@ const Maniobras: React.FC<ManiobrasProps> = ({
       {
         accessorKey: 'id_maniobra',
         header: 'ID Maniobra',
-        size: 50,
       },
       {
         accessorKey: 'sucursal',
@@ -144,7 +143,6 @@ const Maniobras: React.FC<ManiobrasProps> = ({
       {
         accessorKey: 'inicio_programado',
         header: 'Inicio programado',
-        size: 150,
         Cell: ({ cell }: { cell: MRT_Cell<Maniobra> }) => {
           const date = cell.getValue<string>();
           return date;
@@ -168,9 +166,12 @@ const Maniobras: React.FC<ManiobrasProps> = ({
         },
       },
       {
+        accessorKey: 'equipo',
+        header: 'Equipo',
+      },
+      {
         accessorKey: 'nombre_operador',
         header: 'Operador',
-        size: 150,
       },
       {
         accessorKey: 'tipo_empleado',
@@ -248,32 +249,26 @@ const Maniobras: React.FC<ManiobrasProps> = ({
       {
         accessorKey: 'fecha_activacion',
         header: 'Fecha de inicio',
-        size: 150,
       },
       {
         accessorKey: 'fecha_finalizada',
         header: 'Fecha finalizada',
-        size: 150,
       },
       {
         accessorKey: 'x_ejecutivo_viaje_bel',
         header: 'Ejecutivo',
-        size: 150,
       },
       {
         accessorKey: 'cartas_porte',
         header: 'Cartas porte',
-        size: 150,
       },
       {
         accessorKey: 'nombre_cliente',
         header: 'Cliente',
-        size: 150,
       },
       {
         accessorKey: 'usuario_creacion',
         header: 'Usuario registro',
-        size: 150,
         Cell: ({ cell }: { cell: MRT_Cell<Maniobra> }) => {
           const nombre = cell.getValue<string>();
           const fecha_registro = cell.row.original.fecha_registro;
