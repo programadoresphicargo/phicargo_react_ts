@@ -46,6 +46,7 @@ export default function SeguimientoSimpleViaje({
 
  const handleClose = () => {
   setOpen(false);
+  fetchData();
  };
 
  const handleClickOpen = (id_estatus: number) => {

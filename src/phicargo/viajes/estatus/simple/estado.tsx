@@ -1,11 +1,17 @@
 import { tiempoTranscurrido } from "@/phicargo/funciones/tiempo";
-import { Avatar, Button, Card, CardBody, CardFooter, CardHeader, DatePicker } from "@heroui/react";
+import { Avatar, Button, Card, CardBody, CardFooter, CardHeader } from "@heroui/react";
 import ArchivosAdjuntos from "../archivos_adjuntos";
 import BotonMapa from "../botonMapa";
 import BotonDistanciaMapa from "../enlaceDistancia";
 import { useAuthContext } from "@/modules/auth/hooks";
-import { parseZonedDateTime } from "@internationalized/date";
 import { getBadgeClass } from "../badgeClass";
+import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs, { Dayjs } from "dayjs";
+import { useState } from "react";
+import odooApi from "@/api/odoo-api";
+import toast from "react-hot-toast";
+import PanelEnvio from "../../panel_envio_estatus/panel_envio";
 
 export type Step = {
   nombre_estatus: string;
@@ -36,9 +42,34 @@ export type Step = {
 export default function EstatusDetalle({ step }: { step: Step }) {
 
   const { session } = useAuthContext();
+  const [open, setOpen] = useState<boolean>(false);
+
+  const handleClose = () => {
+    setOpen(false);
+  }
+
+  const [fecha, setFecha] = useState<Dayjs | null>(
+    dayjs(step.fecha_envio)
+  );
+
+  const UpdateDate = async (id_reporte: number, fecha_hora: string) => {
+    if (!fecha_hora) return
+    try {
+      const response = await odooApi.post('/tms_travel/reportes_estatus_viajes/actualizar_estatus_fecha/' + id_reporte + '/' + fecha_hora);
+      if (response.data.status == 'success') {
+        toast.success(response.data.message);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error('Error al obtener los datos:' + error);
+    }
+  };
 
   return (
     <>
+      <PanelEnvio open={open} cerrar={() => handleClose()} id_reporte={step.id_reporte}></PanelEnvio>
+
       <Card className="max-w-full m-3">
         <CardHeader className="justify-between">
           <div className="flex gap-5">
@@ -55,25 +86,32 @@ export default function EstatusDetalle({ step }: { step: Step }) {
           </div>
 
           <div className="flex items-center gap-2">
-
             {session?.user?.permissions?.includes(150) && (
-              <Button
-                radius="full"
-                className="text-white"
-                onPress={() => { }}
-              >
-                Editar
-              </Button>
-            )}
+              <>
+                <Button
+                  radius="full"
+                  className="text-white"
+                  color="success"
+                  onPress={() => {
+                    if (fecha) {
+                      UpdateDate(step.id_reporte, fecha.format("YYYY-MM-DD HH:mm:ss"));
+                    }
+                  }}
+                >
+                  Guadar
+                </Button>
 
-            <DatePicker
-              firstDayOfWeek="mon"
-              className="max-w-xs"
-              hideTimeZone
-              defaultValue={parseZonedDateTime(step.fecha_envio + "[America/Mexico_city]")}
-              variant="bordered"
-              label="Fecha"
-            />
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DateTimePicker
+                    label="Fecha y hora"
+                    value={fecha}
+                    onChange={(newValue) => {
+                      setFecha(newValue);
+                    }}
+                  />
+                </LocalizationProvider>
+              </>
+            )}
           </div>
 
         </CardHeader>
@@ -99,7 +137,7 @@ export default function EstatusDetalle({ step }: { step: Step }) {
             color="success"
             className='text-white me-2'
             variant="solid"
-            onPress={() => console.log(step.id_reporte)}>
+            onPress={() => setOpen(true)}>
             <i className="bi bi-reply"></i>
             Reenviar
           </Button>
