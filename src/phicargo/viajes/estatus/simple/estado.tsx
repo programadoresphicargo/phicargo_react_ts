@@ -1,11 +1,11 @@
 import { tiempoTranscurrido } from "@/phicargo/funciones/tiempo";
-import { AccordionItem, Avatar, Button, Card, CardBody, CardFooter, CardHeader, Chip, DatePicker } from "@heroui/react";
+import { Avatar, Button, Card, CardBody, CardFooter, CardHeader, DatePicker } from "@heroui/react";
 import ArchivosAdjuntos from "../archivos_adjuntos";
 import BotonMapa from "../botonMapa";
 import BotonDistanciaMapa from "../enlaceDistancia";
 import { useAuthContext } from "@/modules/auth/hooks";
 import { parseZonedDateTime } from "@internationalized/date";
-const { VITE_ODOO_API_URL } = import.meta.env;
+import { getBadgeClass } from "../badgeClass";
 
 export type Step = {
   nombre_estatus: string;
@@ -37,38 +37,8 @@ export default function EstatusDetalle({ step }: { step: Step }) {
 
   const { session } = useAuthContext();
 
-  const getBadgeClass = (tipo_registrante: string) => {
-    if (tipo_registrante == 'automatico') return "primary";
-    if (tipo_registrante == 'usuario') return "secondary";
-    if (tipo_registrante == 'operador') return "success";
-    return "secondary";
-  };
-
   return (
-    <AccordionItem
-      title={
-        <>
-          <div className="d-flex">
-            <div>{step.nombre_estatus}</div>
-            {step.id_reenvio !== null && (
-              <div className="ml-auto">
-                <Chip className="text-white" color='success'><i className="bi bi-check2"></i> Reenviado R-{step.id_reenvio}</Chip>
-              </div>
-            )}
-
-          </div>
-        </>
-      }
-      subtitle={tiempoTranscurrido(step.fecha_envio)}
-      isCompact
-      startContent={
-        <Avatar
-          isBordered
-          color={`${getBadgeClass(step.tipo_registrante)}`}
-          src={VITE_ODOO_API_URL + `/assets/trafico/estatus_operativos/${step.imagen}`}
-        />
-      }
-    >
+    <>
       <Card className="max-w-full m-3">
         <CardHeader className="justify-between">
           <div className="flex gap-5">
@@ -107,6 +77,7 @@ export default function EstatusDetalle({ step }: { step: Step }) {
           </div>
 
         </CardHeader>
+
         <CardBody className="text-small text-default-500">
           <span>Referencia reporte: {step.id_reporte}</span>
           <span>Placas: {step.placas}</span>
@@ -121,6 +92,7 @@ export default function EstatusDetalle({ step }: { step: Step }) {
           < ArchivosAdjuntos id_reporte={step.id_reporte} ></ArchivosAdjuntos>
 
         </CardBody>
+
         <CardFooter className="gap-3">
           <Button
             radius="full"
@@ -131,7 +103,6 @@ export default function EstatusDetalle({ step }: { step: Step }) {
             <i className="bi bi-reply"></i>
             Reenviar
           </Button>
-
           <BotonMapa latitud={step.latitud} longitud={step.longitud}></BotonMapa>
           <BotonDistanciaMapa latitud={step.latitud} longitud={step.longitud}></BotonDistanciaMapa>
         </CardFooter>
@@ -164,7 +135,7 @@ export default function EstatusDetalle({ step }: { step: Step }) {
           </CardFooter>
         </Card>) : (null)}
 
-      {step.id_reenvio !== null ? (
+      {step.id_reenvio !== null && (
         <Card className="max-w-full m-4">
           <CardHeader className="justify-between">
             <div className="flex gap-5">
@@ -191,8 +162,8 @@ export default function EstatusDetalle({ step }: { step: Step }) {
               <p className=" text-default-400 text-small">Fecha y Hora: {tiempoTranscurrido(step.fecha_hora)}</p>
             </div>
           </CardFooter>
-        </Card>) : (null)}
-
-    </AccordionItem>
+        </Card>
+      )}
+    </>
   );
 }
