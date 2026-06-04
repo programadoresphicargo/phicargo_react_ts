@@ -83,7 +83,7 @@ export default function SeguimientoSimpleViaje({
            size="sm"
            variant="light"
            color="primary"
-           onPress={(e) => {
+           onPress={() => {
             setEstatusSeleccionados(step.estatus_intermedios);
             setOpenEstatus(true);
            }}
