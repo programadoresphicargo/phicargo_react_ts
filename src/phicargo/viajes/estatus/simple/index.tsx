@@ -74,7 +74,7 @@ export default function SeguimientoSimpleViaje({
        isBordered
        radius="full"
        size="md"
-       src={"https://static.vecteezy.com/system/resources/previews/017/398/595/original/blue-cargo-container-png.png"}
+       src={"https://www.wsnorth.com/wp-content/uploads/2022/07/cirbtn-freightliner.png"}
       />
      }>
 
