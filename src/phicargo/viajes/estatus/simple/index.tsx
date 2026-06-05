@@ -64,7 +64,19 @@ export default function SeguimientoSimpleViaje({
    <DetalleEstatusViaje open={open} handleClose={handleClose} id_viaje={id_viaje} id_estatus={id_estatus}></DetalleEstatusViaje>
 
    <Accordion variant="splitted">
-    <AccordionItem key="1" aria-label="Accordion 1" title={`Viaje`}>
+    <AccordionItem
+     key="1"
+     aria-label="Accordion 1"
+     title={<strong>VIAJE</strong>}
+     startContent={
+      <Avatar
+       color={"danger"}
+       isBordered
+       radius="full"
+       size="md"
+       src={"https://static.vecteezy.com/system/resources/previews/017/398/595/original/blue-cargo-container-png.png"}
+      />
+     }>
 
      {isLoading && (
       <Progress isIndeterminate size="sm" color="primary"></Progress>
