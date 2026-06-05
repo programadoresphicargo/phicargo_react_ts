@@ -1,11 +1,11 @@
-import { Alert, LoadingSpinner, MuiSaveButton } from '@/components/ui';
+import { Alert, LoadingSpinner } from '@/components/ui';
 import type { Complaint } from '../../models';
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
-import { Typography } from '@mui/material';
-import { TextFieldElement } from 'react-hook-form-mui';
 import { useGetComplaintCausaRaizQuery } from '../../hooks/queries/useGetComplaintCausaRaizQuery';
 import { useUpdateComplaintCausaRaizMutation } from '../../hooks/mutations/useUpdateComplaintCausaRaizMutation';
 import { useEffect } from 'react';
+import { TextInput, TextareaInput } from '@/components/inputs';
+import { Button, Card, CardBody, CardHeader, Divider } from '@heroui/react';
 
 interface CausaRaizForm {
  causa_raiz: {
@@ -67,61 +67,62 @@ export const EditComplaintCausaRaiz = ({ complaint }: Props) => {
  }, [data, reset]);
 
  return (
-  <section className="flex flex-col gap-2 border rounded-md p-2 w-1/2 overflow-y-auto h-[calc(100vh-250px)]">
-   <Typography sx={{ textAlign: 'center' }} variant="h6">
+  <Card>
+   <CardHeader>
     Causa Raíz
-   </Typography>
+   </CardHeader>
+   <Divider></Divider>
+   <CardBody>
+    {isLoading && <LoadingSpinner />}
 
-   {isLoading && <LoadingSpinner />}
+    <div className="mb-3 flex gap-3">
+     <Button onPress={() => append('')} radius='full' color="primary">
+      Agregar porqué
+     </Button>
 
-   {!data && (
-    <Alert
-     title="No se encontró causa raíz."
-     color="secondary"
-    />
-   )}
-
-
-   {/* Formulario */}
-   <TextFieldElement
-    control={control}
-    name="causa_raiz.descripcion"
-    label="Descripción"
-    required
-    fullWidth
-   />
-
-   {fields.map((field, index) => (
-    <div key={field.id} className="flex gap-2 mt-2">
-     <TextFieldElement
-      control={control}
-      name={`causa_raiz.porques.${index}`}
-      label={`Por qué ${index + 1}`}
-      size="small"
-      required
-      fullWidth
-     />
-
-     <button type="button" onClick={() => remove(index)}>
-      ❌
-     </button>
+     {fields.length > 0 && (
+      <Button
+       color='success'
+       className='text-white'
+       radius='full'
+       onPress={() => handleSubmit(onSubmit)()}
+       isLoading={updateComplaintCausaRaizMutation.isPending}
+      >
+       Guardar Causa Raíz
+      </Button>
+     )}
     </div>
-   ))}
 
-   <button type="button" onClick={() => append('')}>
-    Agregar porqué
-   </button>
+    {!data && (
+     <Alert
+      title="No se encontró causa raíz."
+      color="secondary"
+     />
+    )}
 
-   {fields.length > 0 && (
-    <MuiSaveButton
-     variant="contained"
-     size="small"
-     onClick={handleSubmit(onSubmit)}
-     loading={updateComplaintCausaRaizMutation.isPending}
-    >
-     Guardar Causa Raíz
-    </MuiSaveButton>
-   )}
-  </section>
+    <TextareaInput
+     control={control}
+     name="causa_raiz.descripcion"
+     label="Descripción"
+     rules={{ required: "Campo obligatorio" }}
+     variant="faded"
+    />
+
+    {fields.map((field, index) => (
+     <div key={field.id} className="flex gap-2 mt-2">
+      <TextInput
+       control={control}
+       name={`causa_raiz.porques.${index}`}
+       label={`Por qué ${index + 1}`}
+       rules={{ required: "Campo obligatorio" }}
+      />
+
+      <Button onPress={() => remove(index)} color='danger' radius='full'>
+       <i className="bi bi-x-circle"></i>
+      </Button>
+     </div>
+    ))}
+   </CardBody>
+  </Card>
  );
 };

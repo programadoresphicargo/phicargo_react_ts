@@ -4,7 +4,6 @@ import {
   IconButton,
   Tooltip,
 } from '@mui/material';
-
 import { AddButton } from '@/components/ui';
 import type { Complaint } from '../models';
 import { CreateComplaintForm } from '../components/complaint-creation/CreateComplaintForm';
@@ -27,11 +26,6 @@ const dialogProps: DialogProps = {
   disableEnforceFocus: true,
   disableScrollLock: true,
   open: true,
-  sx: {
-    '& .MuiPaper-root': {
-      borderRadius: 4,
-    },
-  },
 };
 
 const ComplaintsPage = () => {

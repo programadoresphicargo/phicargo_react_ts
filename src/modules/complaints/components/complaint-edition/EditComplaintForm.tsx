@@ -3,9 +3,9 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { ComplaintInfo } from '../ComplaintInfo';
 import { DatePickerElement } from 'react-hook-form-mui/date-pickers';
-import { MuiSaveButton } from '@/components/ui';
 import { TextFieldElement } from 'react-hook-form-mui';
 import { useUpdateComplaintMutation } from '../../hooks/mutations';
+import { Button } from '@heroui/react';
 
 interface Props {
   complaint: Complaint;
@@ -30,7 +30,18 @@ export const EditComplaintForm = ({ complaint }: Props) => {
   };
 
   return (
-    <section className="flex flex-col gap-4 border p-4 rounded-md w-1/2 overflow-y-auto h-[calc(100vh-250px)]">
+    <section className="flex flex-col border p-4 rounded-md">
+
+      <div className='mb-4'>
+        <Button
+          color="primary"
+          isLoading={isPending}
+          onPress={() => handleSubmit(onSubmit)()}
+          radius="full"
+        >Guardar
+        </Button>
+      </div>
+
       <ComplaintInfo complaint={complaint} />
       <form className="flex flex-col gap-4 mt-6">
         <TextFieldElement
@@ -66,13 +77,6 @@ export const EditComplaintForm = ({ complaint }: Props) => {
           inputProps={{
             size: 'small',
           }}
-        />
-
-        <MuiSaveButton
-          variant="contained"
-          loading={isPending}
-          loadingPosition="end"
-          onClick={handleSubmit(onSubmit)}
         />
       </form>
     </section>

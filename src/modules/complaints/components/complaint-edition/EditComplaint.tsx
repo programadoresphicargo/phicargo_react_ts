@@ -11,6 +11,7 @@ import type { Complaint } from '../../models';
 import { EditComplaintActions } from './EditComplaintActions';
 import { EditComplaintForm } from './EditComplaintForm';
 import { EditComplaintCausaRaiz } from '../causa_raiz/Edit';
+import { Tab, Tabs } from '@heroui/react';
 
 interface Props {
   onClose: () => void;
@@ -38,17 +39,25 @@ export const EditComplaint = ({ onClose, complaint }: Props) => {
             textTransform: 'uppercase',
           }}
         >
-          Editar #{complaint.id}
+          Editar No Conformidad #{complaint.id}
         </Typography>
         <Box sx={{ display: 'flex', gap: '1rem' }}>
           <MuiCloseButton onClick={onClose} />
         </Box>
       </DialogTitle>
       <DialogContent>
-        <section className="flex flex-row gap-4 mt-6">
-          <EditComplaintForm complaint={complaint} />
-          <EditComplaintCausaRaiz complaint={complaint} />
-          <EditComplaintActions complaint={complaint} />
+        <section className="flex w-full flex-col mt-5">
+          <Tabs aria-label="Options" color='primary'>
+            <Tab key="1" title="Información">
+              <EditComplaintForm complaint={complaint} />
+            </Tab>
+            <Tab key="2" title="Causa raíz">
+              <EditComplaintCausaRaiz complaint={complaint} />
+            </Tab>
+            <Tab key="3" title="Plan de acción">
+              <EditComplaintActions complaint={complaint} />
+            </Tab>
+          </Tabs>
         </section>
       </DialogContent>
       <DialogActions
