@@ -1,5 +1,4 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-
 import { COMPLAINTS_QUERY_KEY } from '../queries';
 import type { Complaint } from '../../models';
 import { ComplaintsService } from '../../services';

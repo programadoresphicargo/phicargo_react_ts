@@ -1,7 +1,4 @@
-import { CausaRaizCreate } from '../causa_raiz';
 import type { ComplaintPriority, ComplaintStatus } from '../complaints-models';
-
-import { ComplaintActionCreateApi } from './complaint-actions-models-api';
 import type { UserReadApi } from '@/modules/users-management/models';
 
 interface Customer {
