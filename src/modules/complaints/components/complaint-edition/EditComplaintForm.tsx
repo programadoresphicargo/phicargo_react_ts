@@ -285,7 +285,7 @@ const transformComplaintToComplaintUpdate = (
   origin: complaint.origin,
   phicargoCompany: complaint.phicargoCompany,
   complaintType: complaint.complaintType,
-  customerId: complaint?.customer?.id ?? 0
+  customerId: complaint?.customer?.id ?? null
 });
 
 const initialFormState: ComplaintForm = {

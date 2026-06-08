@@ -44,7 +44,7 @@ export class ComplaintsAdapter {
       complaint_suggestion: data.complaintSuggestion,
       priority: data.priority,
       response: data.response,
-      customer_id: data.customerId,
+      customer_id: data.customerId ?? null,
       response_date: data.responseDate
         ? data.responseDate.format('YYYY-MM-DD')
         : null,
@@ -92,9 +92,8 @@ export class ComplaintsAdapter {
     if (data.status) {
       complaint.status = data.status;
     }
-    if (data.customerId != null) {
-      complaint.customer_id = data.customerId;
-    }
+
+    complaint.customer_id = data.customerId;
 
     return complaint;
   }

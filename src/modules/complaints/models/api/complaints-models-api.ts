@@ -22,7 +22,7 @@ export interface ComplaintBaseApi {
 }
 
 export interface ComplaintCreateApi extends ComplaintBaseApi {
-  customer_id: number;
+  customer_id: number | null;
 }
 
 export type ComplaintUpdateApi = Partial<ComplaintBaseApi> & {
