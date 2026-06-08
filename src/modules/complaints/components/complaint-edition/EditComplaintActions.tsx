@@ -75,11 +75,13 @@ export const EditComplaintActions = ({ complaint }: Props) => {
 
         <div className='gap-3'>
           <Button
-            color="primary"
+            color="success"
+            className='text-white'
             radius="full"
+            size='sm'
             onPress={() => {
               handleClickOpen();
-
+              reset({ actions: [] });
               append({
                 actionPlan: '',
                 responsible: '',
