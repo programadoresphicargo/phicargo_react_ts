@@ -16,9 +16,10 @@ interface ComplaintActionCreateForm {
 
 interface Props {
   complaint: Complaint;
+  type: 'plan de accion' | 'accion inmediata';
 }
 
-export const EditComplaintActions = ({ complaint }: Props) => {
+export const EditComplaintActions = ({ complaint, type }: Props) => {
   const { control, handleSubmit, reset } = useForm<ComplaintActionCreateForm>({
     defaultValues: {
       actions: [],
@@ -67,18 +68,17 @@ export const EditComplaintActions = ({ complaint }: Props) => {
   return (
     <Card>
       <CardHeader>
-        Acciones
+        {type.toUpperCase()}
       </CardHeader>
       <Divider></Divider>
       <CardBody>
         {isLoading && <LoadingSpinner />}
 
-        <div className='gap-3'>
+        <div className='gap-3 mb-3'>
           <Button
             color="success"
             className='text-white'
             radius="full"
-            size='sm'
             onPress={() => {
               handleClickOpen();
               reset({ actions: [] });
@@ -86,7 +86,7 @@ export const EditComplaintActions = ({ complaint }: Props) => {
                 actionPlan: '',
                 responsible: '',
                 commitmentDate: dayjs(),
-                type: '',
+                type: type,
               });
             }}
           >
@@ -101,25 +101,11 @@ export const EditComplaintActions = ({ complaint }: Props) => {
           />
         )}
 
-        <div className="flex gap-4">
-          <section className="flex-1 px-2 space-y-3 border rounded-md">
-            <h2 className='text-lg font-semibold text-gray-700 flex items-center gap-2'>Plan de Acción</h2>
-            {actions
-              ?.filter(action => action.type === 'plan de accion')
-              .map(action => (
-                <ComplaintActionCard key={action.id} action={action} />
-              ))}
-          </section>
-
-          <section className="flex-1 px-2 space-y-3 border rounded-md">
-            <h2 className='text-lg font-semibold text-gray-700 flex items-center gap-2'>Acción Inmediata</h2>
-            {actions
-              ?.filter(action => action.type === 'accion inmediata')
-              .map(action => (
-                <ComplaintActionCard key={action.id} action={action} />
-              ))}
-          </section>
-        </div>
+        {actions
+          ?.filter(action => action.type === type)
+          .map(action => (
+            <ComplaintActionCard key={action.id} action={action} />
+          ))}
 
         <CreateActionsForm
           open={open}

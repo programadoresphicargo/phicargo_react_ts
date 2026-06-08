@@ -76,7 +76,7 @@ export const EditComplaintCausaRaiz = ({ complaint }: Props) => {
     {isLoading && <LoadingSpinner />}
 
     <div className="mb-3 flex gap-3">
-     <Button onPress={() => append('')} radius='full' color="primary" size="sm">
+     <Button onPress={() => append('')} radius='full' color="primary">
       Agregar porqué
      </Button>
 
@@ -87,7 +87,6 @@ export const EditComplaintCausaRaiz = ({ complaint }: Props) => {
        radius='full'
        onPress={() => handleSubmit(onSubmit)()}
        isLoading={updateComplaintCausaRaizMutation.isPending}
-       size="sm"
       >
        Guardar Causa Raíz
       </Button>

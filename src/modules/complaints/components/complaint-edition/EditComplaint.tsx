@@ -38,7 +38,7 @@ export const EditComplaint = ({ onClose, complaint }: Props) => {
       </DialogTitle>
       <DialogContent>
         <section className="flex w-full flex-col mt-5">
-          <Tabs aria-label="Options" color='primary'>
+          <Tabs aria-label="Options" color='primary' radius='full' size="lg">
             <Tab key="1" title="Información">
               <EditComplaintForm complaint={complaint} onClose={onClose} />
             </Tab>
@@ -47,8 +47,11 @@ export const EditComplaint = ({ onClose, complaint }: Props) => {
                 <Tab key="2" title="Causa raíz">
                   <EditComplaintCausaRaiz complaint={complaint} />
                 </Tab>
-                <Tab key="3" title="Plan de acción">
-                  <EditComplaintActions complaint={complaint} />
+                <Tab key="3" title="Acciones inmediatas">
+                  <EditComplaintActions complaint={complaint} type="accion inmediata" />
+                </Tab>
+                <Tab key="4" title="Plan de acción">
+                  <EditComplaintActions complaint={complaint} type="plan de accion" />
                 </Tab>
               </>
             )}

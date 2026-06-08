@@ -25,6 +25,7 @@ export const CreateActionFormItem = <T extends ComplaintActionCreateForm>({
       <AutocompleteInput
         control={control}
         name={`actions.${index}.type` as Path<T>}
+        isDisabled
         label="Tipo"
         variant='bordered'
         size="sm"

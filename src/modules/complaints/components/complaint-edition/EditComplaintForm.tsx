@@ -73,7 +73,6 @@ export const EditComplaintForm = ({ complaint, onClose }: Props) => {
             isLoading={isCreating}
             onPress={() => handleSubmit(onSubmitCreate)()}
             radius="full"
-            size="sm"
             className="text-white"
           >Registrar
           </Button>
@@ -84,7 +83,6 @@ export const EditComplaintForm = ({ complaint, onClose }: Props) => {
             isLoading={isUpdating}
             onPress={() => handleSubmit(onSubmitUpdate)()}
             radius="full"
-            size="sm"
           >Guardar
           </Button>
         )}
@@ -97,7 +95,6 @@ export const EditComplaintForm = ({ complaint, onClose }: Props) => {
             color="success"
             href={`${apiUrl}/complaints/format/${complaint.id}`}
             variant="solid"
-            size='sm'
             radius="full"
           >
             Exportar
