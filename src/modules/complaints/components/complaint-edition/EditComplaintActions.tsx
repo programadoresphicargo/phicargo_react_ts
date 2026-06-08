@@ -1,4 +1,4 @@
-import { Alert, LoadingSpinner, MuiSaveButton } from '@/components/ui';
+import { Alert, LoadingSpinner } from '@/components/ui';
 import type { Complaint, ComplaintActionCreate } from '../../models';
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { ComplaintActionCard } from '../ComplaintActionCard';
@@ -6,6 +6,9 @@ import { CreateActionsForm } from '../complaint-creation/CreateActionsForm';
 import { useCreateComplaintActionsMutation } from '../../hooks/mutations';
 import { useGetComplaintActionsQuery } from '../../hooks/queries';
 import { Card, CardBody, CardHeader, Divider } from '@heroui/react';
+import { Button } from '@heroui/react';
+import { useState } from 'react';
+import dayjs from 'dayjs';
 
 interface ComplaintActionCreateForm {
   actions: ComplaintActionCreate[];
@@ -44,10 +47,21 @@ export const EditComplaintActions = ({ complaint }: Props) => {
       {
         onSuccess: () => {
           reset({ actions: [] });
+          handleClose();
           remove(); // elimina todos los fields
         },
       },
     );
+  };
+
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   return (
@@ -58,6 +72,25 @@ export const EditComplaintActions = ({ complaint }: Props) => {
       <Divider></Divider>
       <CardBody>
         {isLoading && <LoadingSpinner />}
+
+        <div className='gap-3'>
+          <Button
+            color="primary"
+            radius="full"
+            onPress={() => {
+              handleClickOpen();
+
+              append({
+                actionPlan: '',
+                responsible: '',
+                commitmentDate: dayjs(),
+                type: '',
+              });
+            }}
+          >
+            Nueva
+          </Button>
+        </div>
 
         {actions?.length === 0 && (
           <Alert
@@ -87,23 +120,18 @@ export const EditComplaintActions = ({ complaint }: Props) => {
         </div>
 
         <CreateActionsForm
+          open={open}
+          onClose={handleClose}
+          onClick={handleSubmit(onSubmitActions)}
+          isLoading={createComplaintActionaMutation.isPending}
           fields={fields}
           control={control}
           remove={remove}
           append={append}
         />
-        {fields.length !== 0 && (
-          <MuiSaveButton
-            size="small"
-            color="primary"
-            onClick={handleSubmit(onSubmitActions)}
-            loading={createComplaintActionaMutation.isPending}
-          >
-            Crear Acciones
-          </MuiSaveButton>
-        )}
+
       </CardBody>
-    </Card>
+    </Card >
   );
 };
 

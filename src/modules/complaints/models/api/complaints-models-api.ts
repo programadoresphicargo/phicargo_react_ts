@@ -21,12 +21,11 @@ export interface ComplaintBaseApi {
   response_date: string | null;
   origin: string;
   complaint_date: string;
+  customer_id: number | null;
 }
 
 export interface ComplaintCreateApi extends ComplaintBaseApi {
   customer_id: number;
-  actions: ComplaintActionCreateApi[];
-  causa_raiz: CausaRaizCreate
 }
 
 export type ComplaintUpdateApi = Partial<ComplaintBaseApi> & {

@@ -15,7 +15,7 @@ import { Tab, Tabs } from '@heroui/react';
 
 interface Props {
   onClose: () => void;
-  complaint: Complaint;
+  complaint: Complaint | null;
 }
 
 export const EditComplaint = ({ onClose, complaint }: Props) => {
@@ -39,7 +39,9 @@ export const EditComplaint = ({ onClose, complaint }: Props) => {
             textTransform: 'uppercase',
           }}
         >
-          Editar No Conformidad #{complaint.id}
+          {complaint?.id && (
+            `Editar No Conformidad #${complaint.id}`
+          )}
         </Typography>
         <Box sx={{ display: 'flex', gap: '1rem' }}>
           <MuiCloseButton onClick={onClose} />
@@ -49,14 +51,18 @@ export const EditComplaint = ({ onClose, complaint }: Props) => {
         <section className="flex w-full flex-col mt-5">
           <Tabs aria-label="Options" color='primary'>
             <Tab key="1" title="Información">
-              <EditComplaintForm complaint={complaint} />
+              <EditComplaintForm complaint={complaint} onClose={onClose} />
             </Tab>
-            <Tab key="2" title="Causa raíz">
-              <EditComplaintCausaRaiz complaint={complaint} />
-            </Tab>
-            <Tab key="3" title="Plan de acción">
-              <EditComplaintActions complaint={complaint} />
-            </Tab>
+            {complaint && (
+              <>
+                <Tab key="2" title="Causa raíz">
+                  <EditComplaintCausaRaiz complaint={complaint} />
+                </Tab>
+                <Tab key="3" title="Plan de acción">
+                  <EditComplaintActions complaint={complaint} />
+                </Tab>
+              </>
+            )}
           </Tabs>
         </section>
       </DialogContent>

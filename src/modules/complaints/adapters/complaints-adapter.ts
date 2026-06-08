@@ -1,6 +1,6 @@
 import type {
   Complaint,
-  ComplaintCreate,
+  ComplaintForm,
   ComplaintUpdate,
 } from '../models/complaints-models';
 import type {
@@ -8,8 +8,6 @@ import type {
   ComplaintCreateApi,
   ComplaintUpdateApi,
 } from '../models/api';
-
-import { ComplaintActionsAdapter } from './complaint-actions-adapter';
 import { UserAdapter } from '@/modules/users-management/adapters';
 import dayjs from 'dayjs';
 
@@ -32,10 +30,11 @@ export class ComplaintsAdapter {
       responseDate: data.response_date ? dayjs(data.response_date) : null,
       origin: data.origin,
       createdAt: dayjs(data.created_at),
+      customerId: data.customer_id
     };
   }
 
-  static toComplaintCreateApi(data: ComplaintCreate): ComplaintCreateApi {
+  static toComplaintCreateApi(data: ComplaintForm): ComplaintCreateApi {
     return {
       phicargo_company: data.phicargoCompany,
       responsible: data.responsible,
@@ -51,13 +50,6 @@ export class ComplaintsAdapter {
         : null,
       origin: data.origin,
       complaint_date: data.complaintDate.format('YYYY-MM-DD'),
-      actions: data.actions.map(
-        ComplaintActionsAdapter.toComplaintActionCreateApi,
-      ),
-      causa_raiz: {
-        descripcion: data.causa_raiz.descripcion,
-        porques: data.causa_raiz.porques,
-      },
     };
   }
 
@@ -99,6 +91,9 @@ export class ComplaintsAdapter {
     }
     if (data.status) {
       complaint.status = data.status;
+    }
+    if (data.customerId != null) {
+      complaint.customer_id = data.customerId;
     }
 
     return complaint;

@@ -6,7 +6,6 @@ import {
 } from '@mui/material';
 import { AddButton } from '@/components/ui';
 import type { Complaint } from '../models';
-import { CreateComplaintForm } from '../components/complaint-creation/CreateComplaintForm';
 import { EditComplaint } from '../components/complaint-edition/EditComplaint';
 import EditIcon from '@mui/icons-material/Edit';
 import { MaterialReactTable } from 'material-react-table';
@@ -86,7 +85,10 @@ const ComplaintsPage = () => {
       />
     ),
     renderCreateRowDialogContent: ({ table }) => (
-      <CreateComplaintForm onClose={() => table.setCreatingRow(null)} />
+      <EditComplaint
+        onClose={() => table.setEditingRow(null)}
+        complaint={null}
+      />
     ),
   });
 

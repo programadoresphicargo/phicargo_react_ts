@@ -1,8 +1,7 @@
 import { Control, Path, SelectElement, TextFieldElement } from 'react-hook-form-mui';
-
-import { Button } from '@/components/ui';
 import { ComplaintActionCreate } from '../../models';
 import { DatePickerElement } from 'react-hook-form-mui/date-pickers';
+import { Button } from '@heroui/react';
 
 interface ComplaintActionCreateForm {
   actions: ComplaintActionCreate[];
@@ -66,10 +65,9 @@ export const CreateActionFormItem = <T extends ComplaintActionCreateForm>({
 
       <div className="flex justify-end">
         <Button
-          onClick={() => remove(index)}
-          variant="text"
-          color="error"
-          size="small"
+          onPress={() => remove(index)}
+          color="danger"
+          size="sm"
         >
           Eliminar acción
         </Button>

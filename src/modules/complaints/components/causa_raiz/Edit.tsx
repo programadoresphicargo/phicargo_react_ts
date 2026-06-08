@@ -1,4 +1,4 @@
-import { Alert, LoadingSpinner } from '@/components/ui';
+import { LoadingSpinner } from '@/components/ui';
 import type { Complaint } from '../../models';
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { useGetComplaintCausaRaizQuery } from '../../hooks/queries/useGetComplaintCausaRaizQuery';
@@ -76,7 +76,7 @@ export const EditComplaintCausaRaiz = ({ complaint }: Props) => {
     {isLoading && <LoadingSpinner />}
 
     <div className="mb-3 flex gap-3">
-     <Button onPress={() => append('')} radius='full' color="primary">
+     <Button onPress={() => append('')} radius='full' color="primary" size="sm">
       Agregar porqué
      </Button>
 
@@ -87,18 +87,12 @@ export const EditComplaintCausaRaiz = ({ complaint }: Props) => {
        radius='full'
        onPress={() => handleSubmit(onSubmit)()}
        isLoading={updateComplaintCausaRaizMutation.isPending}
+       size="sm"
       >
        Guardar Causa Raíz
       </Button>
      )}
     </div>
-
-    {!data && (
-     <Alert
-      title="No se encontró causa raíz."
-      color="secondary"
-     />
-    )}
 
     <TextareaInput
      control={control}

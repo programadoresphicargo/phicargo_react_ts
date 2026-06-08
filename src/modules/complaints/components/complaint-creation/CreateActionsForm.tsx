@@ -1,4 +1,4 @@
-import type { ComplaintActionCreate, ComplaintCreate } from '../../models';
+import type { ComplaintActionCreate, ComplaintForm } from '../../models';
 import {
   Control,
   FieldArrayMethodProps,
@@ -6,16 +6,21 @@ import {
 } from 'react-hook-form';
 
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { Button } from '@/components/ui';
 import { CreateActionFormItem } from './CreateActionFormItem';
 import dayjs from 'dayjs';
+import { Dialog, DialogContent } from '@mui/material';
+import { Button } from '@heroui/react';
 
 interface ComplaintActionCreateForm {
   actions: ComplaintActionCreate[];
 }
 
 interface Props<T extends ComplaintActionCreateForm> {
-  fields: FieldArrayWithId<ComplaintCreate, 'actions', 'id'>[];
+  open: boolean;
+  onClose: () => void;
+  onClick: () => void;
+  isLoading: boolean;
+  fields: FieldArrayWithId<ComplaintForm, 'actions', 'id'>[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   control: Control<T, any>;
   remove: (index?: number | number[]) => void;
@@ -26,6 +31,10 @@ interface Props<T extends ComplaintActionCreateForm> {
 }
 
 export const CreateActionsForm = <T extends ComplaintActionCreateForm>({
+  open,
+  onClose,
+  onClick,
+  isLoading,
   fields,
   control,
   remove,
@@ -33,30 +42,40 @@ export const CreateActionsForm = <T extends ComplaintActionCreateForm>({
 }: Props<T>) => {
   return (
     <>
-      {fields.map((field, index) => (
-        <CreateActionFormItem
-          key={field.id}
-          control={control}
-          index={index}
-          remove={remove}
-        />
-      ))}
+      <Dialog
+        open={open}
+        onClose={onClose}
+        fullWidth>
+        <DialogContent>
 
-      <Button
-        onClick={() =>
-          append({
-            actionPlan: '',
-            responsible: '',
-            commitmentDate: dayjs(),
-            type: '',
-          })
-        }
-        variant="outlined"
-        startIcon={<AddCircleIcon />}
-        size="small"
-      >
-        Agregar acción
-      </Button>
+          <Button onPress={onClick} isLoading={isLoading}>Guardar</Button>
+
+          {fields.map((field, index) => (
+            <CreateActionFormItem
+              key={field.id}
+              control={control}
+              index={index}
+              remove={remove}
+            />
+          ))}
+
+          <Button
+            color="success"
+            onPress={() =>
+              append({
+                actionPlan: '',
+                responsible: '',
+                commitmentDate: dayjs(),
+                type: '',
+              })
+            }
+            startContent={<AddCircleIcon />}
+            size="sm"
+          >
+            Agregar acción
+          </Button>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };

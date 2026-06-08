@@ -23,17 +23,19 @@ export interface ComplaintBase {
   responseDate: Dayjs | null;
   origin: string;
   complaintDate: Dayjs;
-}
-
-export interface ComplaintCreate extends ComplaintBase {
-  customerId: number;
-  actions: ComplaintActionCreate[];
-  causa_raiz: CausaRaizCreate;
+  customerId: number | null;
 }
 
 export type ComplaintUpdate = Partial<ComplaintBase> & {
   status?: ComplaintStatus;
 };
+
+export interface ComplaintForm extends ComplaintBase {
+  customerId: number;
+  actions?: ComplaintActionCreate[];
+  causa_raiz?: CausaRaizCreate;
+  status?: ComplaintStatus;
+}
 
 export interface Complaint extends ComplaintBase {
   id: number;

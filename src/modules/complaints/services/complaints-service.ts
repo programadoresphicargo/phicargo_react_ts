@@ -2,7 +2,7 @@ import type {
   Complaint,
   ComplaintAction,
   ComplaintActionUpdate,
-  ComplaintCreate,
+  ComplaintForm,
   ComplaintUpdate,
 } from '../models';
 import type { ComplaintActionApi, ComplaintApi } from '../models/api';
@@ -32,7 +32,7 @@ export class ComplaintsService {
     }
   }
 
-  static async createComplaint(complaint: ComplaintCreate): Promise<Complaint> {
+  static async createComplaint(complaint: ComplaintForm): Promise<Complaint> {
     const body = ComplaintsAdapter.toComplaintCreateApi(complaint);
     try {
       const response = await odooApi.post<ComplaintApi>('/complaints', body);
