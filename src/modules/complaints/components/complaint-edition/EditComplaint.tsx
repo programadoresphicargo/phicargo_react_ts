@@ -3,10 +3,8 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  Typography,
 } from '@mui/material';
-import { Button, MuiCloseButton } from '@/components/ui';
-
+import { Button } from '@heroui/react';
 import type { Complaint } from '../../models';
 import { EditComplaintActions } from './EditComplaintActions';
 import { EditComplaintForm } from './EditComplaintForm';
@@ -14,8 +12,8 @@ import { EditComplaintCausaRaiz } from '../causa_raiz/Edit';
 import { Tab, Tabs } from '@heroui/react';
 
 interface Props {
-  onClose: () => void;
   complaint: Complaint | null;
+  onClose: () => void;
 }
 
 export const EditComplaint = ({ onClose, complaint }: Props) => {
@@ -31,20 +29,11 @@ export const EditComplaint = ({ onClose, complaint }: Props) => {
           background: 'linear-gradient(90deg, #0b2149, #002887)',
         }}
       >
-        <Typography
-          variant="h2"
-          sx={{
-            color: 'white',
-            fontSize: '1.25rem',
-            textTransform: 'uppercase',
-          }}
-        >
-          {complaint?.id && (
-            `Editar No Conformidad #${complaint.id}`
-          )}
-        </Typography>
+        {complaint?.id && (
+          `Editar No Conformidad #${complaint.id}`
+        )}
         <Box sx={{ display: 'flex', gap: '1rem' }}>
-          <MuiCloseButton onClick={onClose} />
+          <Button onPress={() => onClose()}>Cerrar</Button>
         </Box>
       </DialogTitle>
       <DialogContent>
@@ -74,7 +63,7 @@ export const EditComplaint = ({ onClose, complaint }: Props) => {
           pt: '0',
         }}
       >
-        <Button variant="outlined" color="error" size="small" onClick={onClose}>
+        <Button color="danger" size="sm" onPress={onClose}>
           Cerrar
         </Button>
       </DialogActions>

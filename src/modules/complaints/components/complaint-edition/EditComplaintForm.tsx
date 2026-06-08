@@ -300,5 +300,5 @@ const initialFormState: ComplaintForm = {
   responseDate: null,
   complaintDate: dayjs(),
   origin: 'QUEJA DE CLIENTE',
-  customerId: 0,
+  customerId: null,
 };

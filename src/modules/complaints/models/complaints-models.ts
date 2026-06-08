@@ -31,7 +31,7 @@ export type ComplaintUpdate = Partial<ComplaintBase> & {
 };
 
 export interface ComplaintForm extends ComplaintBase {
-  customerId: number;
+  customerId: number | null;
   actions?: ComplaintActionCreate[];
   causa_raiz?: CausaRaizCreate;
   status?: ComplaintStatus;

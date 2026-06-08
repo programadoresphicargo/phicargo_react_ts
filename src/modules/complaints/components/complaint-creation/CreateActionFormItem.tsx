@@ -1,7 +1,8 @@
-import { Control, Path, SelectElement, TextFieldElement } from 'react-hook-form-mui';
+import { Control, Path, TextFieldElement } from 'react-hook-form-mui';
 import { ComplaintActionCreate } from '../../models';
 import { DatePickerElement } from 'react-hook-form-mui/date-pickers';
 import { Button } from '@heroui/react';
+import { AutocompleteInput, TextInput, TextareaInput } from '@/components/inputs';
 
 interface ComplaintActionCreateForm {
   actions: ComplaintActionCreate[];
@@ -9,7 +10,6 @@ interface ComplaintActionCreateForm {
 
 interface Props<T extends ComplaintActionCreateForm> {
   index: number;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   control: Control<T, any>;
   remove: (index?: number | number[]) => void;
 }
@@ -22,36 +22,37 @@ export const CreateActionFormItem = <T extends ComplaintActionCreateForm>({
   return (
     <div className="flex flex-col gap-4 border p-4 rounded-md">
 
-      <SelectElement
+      <AutocompleteInput
         control={control}
         name={`actions.${index}.type` as Path<T>}
         label="Tipo"
-        size="small"
-        required
-        options={[
-          { id: 'plan de accion', label: 'Plan de acción' },
-          { id: 'accion inmediata', label: 'Acción inmediata' },
+        variant='bordered'
+        size="sm"
+        rules={{ required: "Obligatorio" }}
+        items={[
+          { key: 'plan de accion', value: 'Plan de acción' },
+          { key: 'accion inmediata', value: 'Acción inmediata' },
         ]}
       />
 
-      <TextFieldElement
+      <TextareaInput
         control={control}
         name={`actions.${index}.actionPlan` as Path<T>} // Aserción de tipo
         label="Acción"
-        size="small"
-        required
-        multiline
-        minRows={3}
-        rules={{ required: 'Acción requerida' }}
+        size="sm"
+        variant='bordered'
+        rules={{ required: "Obligatorio" }}
       />
-      <TextFieldElement
+
+      <TextInput
         control={control}
         name={`actions.${index}.responsible` as Path<T>}
         label="Responsable"
-        size="small"
-        required
-        rules={{ required: 'Responsable requerido' }}
+        size="sm"
+        variant='bordered'
+        rules={{ required: "Obligatorio" }}
       />
+
       <DatePickerElement
         control={control}
         name={`actions.${index}.commitmentDate` as Path<T>}
@@ -68,6 +69,7 @@ export const CreateActionFormItem = <T extends ComplaintActionCreateForm>({
           onPress={() => remove(index)}
           color="danger"
           size="sm"
+          radius="full"
         >
           Eliminar acción
         </Button>

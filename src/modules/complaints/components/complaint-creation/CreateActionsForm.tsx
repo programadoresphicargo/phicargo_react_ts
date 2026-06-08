@@ -21,7 +21,6 @@ interface Props<T extends ComplaintActionCreateForm> {
   onClick: () => void;
   isLoading: boolean;
   fields: FieldArrayWithId<ComplaintForm, 'actions', 'id'>[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   control: Control<T, any>;
   remove: (index?: number | number[]) => void;
   append: (
@@ -48,7 +47,7 @@ export const CreateActionsForm = <T extends ComplaintActionCreateForm>({
         fullWidth>
         <DialogContent>
 
-          <Button onPress={onClick} isLoading={isLoading}>Guardar</Button>
+          <Button onPress={onClick} isLoading={isLoading} radius='full' color='primary'>Guardar</Button>
 
           {fields.map((field, index) => (
             <CreateActionFormItem
@@ -71,6 +70,8 @@ export const CreateActionsForm = <T extends ComplaintActionCreateForm>({
             }
             startContent={<AddCircleIcon />}
             size="sm"
+            className='text-white'
+            radius='full'
           >
             Agregar acción
           </Button>
