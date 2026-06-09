@@ -3,9 +3,10 @@ import {
   Control, Path, useWatch,
 } from 'react-hook-form';
 import { Dialog, DialogContent } from '@mui/material';
-import { Button } from '@heroui/react';
+import { Button, Progress } from '@heroui/react';
 import { AutocompleteInput, TextInput, TextareaInput } from '@/components/inputs';
 import { DatePickerElement } from 'react-hook-form-mui/date-pickers';
+import { useUpdateComplaintActionMutation } from '../../hooks/mutations/useUpdateComplaintActionMutation';
 
 
 interface Props<T extends ComplaintActionCreate> {
@@ -14,6 +15,7 @@ interface Props<T extends ComplaintActionCreate> {
   onClick: () => void;
   isLoading: boolean;
   control: Control<T, any>;
+  getValues: () => T;
 }
 
 export const CreateActionsForm = <T extends ComplaintActionCreate>({
@@ -22,12 +24,35 @@ export const CreateActionsForm = <T extends ComplaintActionCreate>({
   onClick,
   isLoading,
   control,
+  getValues,
 }: Props<T>) => {
 
   const id = useWatch({
     control,
     name: `id` as Path<T>,
   }) as number;
+
+  const {
+    updateComplaintActionMutation: { mutate, isPending },
+  } = useUpdateComplaintActionMutation();
+
+  const onUpdate = () => {
+    const data = getValues();
+    mutate(
+      {
+        id,
+        updatedItem: data,
+      },
+      {
+        onSuccess: () => {
+          onClose();
+        },
+        onError: (error) => {
+          console.error(error);
+        },
+      }
+    );
+  };
 
   return (
     <>
@@ -37,7 +62,10 @@ export const CreateActionsForm = <T extends ComplaintActionCreate>({
         fullWidth>
         <DialogContent>
 
-          <Button onPress={onClick} isLoading={isLoading} radius='full' color={id ? "success" : "primary"} className='text-white'>{id ? "Guardar" : "Registrar"}</Button>
+          <Button onPress={id ? () => onUpdate() : onClick} isLoading={isLoading || isPending} radius='full' color={id ? "success" : "primary"} className='text-white'>{id ? "Guardar" : "Registrar"}</Button>
+
+          {isPending && (<Progress isIndeterminate size='sm' color='success'></Progress>)}
+          {isLoading && (<Progress isIndeterminate size='sm' color='primary'></Progress>)}
 
           <div className="flex flex-col gap-4 border p-4 rounded-md mt-2">
 

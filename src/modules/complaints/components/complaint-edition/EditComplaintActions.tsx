@@ -24,7 +24,7 @@ export const EditComplaintActions = ({ complaint, type }: Props) => {
     type,
   }
 
-  const { control, handleSubmit, reset } = useForm<ComplaintActionCreate>({
+  const { control, handleSubmit, reset, getValues } = useForm<ComplaintActionCreate>({
     defaultValues: initialForm
   });
 
@@ -119,6 +119,7 @@ export const EditComplaintActions = ({ complaint, type }: Props) => {
           onClick={handleSubmit(onSubmitActions)}
           isLoading={createComplaintActionaMutation.isPending}
           control={control}
+          getValues={getValues}
         />
 
       </CardBody>
