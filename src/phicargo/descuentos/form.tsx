@@ -37,7 +37,7 @@ const initialForm: Descuento = {
 
 export default function DescuentoForm({ open, handleClose, id_descuento }: { open: boolean, handleClose: () => void, id_descuento: number | null }) {
 
-  const { control, handleSubmit, reset, watch, setValue } = useForm<Descuento>({
+  const { control, handleSubmit, reset, watch } = useForm<Descuento>({
     defaultValues: initialForm,
   });
   const [isLoading, setLoading] = useState(false);
