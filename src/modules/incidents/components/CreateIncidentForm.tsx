@@ -21,10 +21,10 @@ import { Controller } from "react-hook-form";
 import dayjs from 'dayjs';
 import { parseDate } from "@internationalized/date";
 import { NumberInput } from "@heroui/react";
-import SelectEmpleado from '@/phicargo/descuentos/solicitante';
 import IncidentChip from './IncidentChip';
 import Swal from 'sweetalert2';
 import { useState } from 'react';
+import { SelectEmpleado } from '@/phicargo/descuentos/select_empleados';
 
 interface Props {
   mode: "create" | "edit";
@@ -509,25 +509,12 @@ export const CreateIncidentForm = ({
                 )}
               />
 
-              <Controller
+              <SelectEmpleado
                 control={control}
                 name="id_solicitante"
-                rules={{
-                  validate: (v) => {
-                    if (createDiscount && !v) return "Campo requerido";
-                    return true;
-                  }
-                }}
-                render={({ field }) => (
-                  <SelectEmpleado
-                    key_name="id_solicitante"
-                    label="Solicitante"
-                    value={field.value}
-                    setSolicitante={setValue}
-                    placeholder={"Encargado de departamento que hace la solicitud"}
-                    isDisabled={isDirectionReport || criticalDisabled || (isEditing && !isEditingEnabled)}
-                  />
-                )}
+                label="Solicitante"
+                rules={{ required: 'Requerido' }}
+                isDisabled={isDirectionReport || criticalDisabled || (isEditing && !isEditingEnabled)}
               />
 
               {/* Monto */}

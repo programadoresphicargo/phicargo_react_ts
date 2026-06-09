@@ -12,6 +12,7 @@ import dayjs from 'dayjs';
 import { ContactsSearchInputMatch } from '@/modules/contacts/components/inputs/ContactsSearchInputMatch';
 import { UpdateComplaintStatus } from './UpdateComplaintStatus';
 import { useState } from 'react';
+import { SelectEmpleado } from '@/phicargo/descuentos/select_empleados';
 const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
 interface Props {
@@ -303,6 +304,29 @@ export const EditComplaintForm = ({ complaint, onClose }: Props) => {
             ]}
           />
 
+          <SelectEmpleado
+            control={control}
+            name="elaboroId"
+            label="Elaboró"
+            variant="faded"
+            isDisabled={isDisabled}
+          />
+
+          <SelectEmpleado
+            control={control}
+            name="revisoId"
+            label="Revisó"
+            variant="faded"
+            isDisabled={isDisabled}
+          />
+
+          <SelectEmpleado
+            control={control}
+            name="autorizoId"
+            label="Autorizó"
+            variant="faded"
+            isDisabled={isDisabled}
+          />
         </form>
       </section>
 
@@ -324,7 +348,10 @@ const transformComplaintToComplaintUpdate = (
   origin: complaint.origin,
   phicargoCompany: complaint.phicargoCompany,
   complaintType: complaint.complaintType,
-  customerId: complaint?.customer?.id ?? null
+  customerId: complaint?.customer?.id ?? null,
+  elaboroId: complaint.elaboroId,
+  revisoId: complaint.revisoId,
+  autorizoId: complaint.autorizoId
 });
 
 const initialFormState: ComplaintForm = {
@@ -340,4 +367,7 @@ const initialFormState: ComplaintForm = {
   complaintDate: dayjs(),
   origin: 'QUEJA DE CLIENTE',
   customerId: null,
+  elaboroId: null,
+  revisoId: null,
+  autorizoId: null,
 };

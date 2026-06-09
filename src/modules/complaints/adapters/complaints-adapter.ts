@@ -30,7 +30,10 @@ export class ComplaintsAdapter {
       responseDate: data.response_date ? dayjs(data.response_date) : null,
       origin: data.origin,
       createdAt: dayjs(data.created_at),
-      customerId: data.customer_id
+      customerId: data.customer_id,
+      elaboroId: data.elaboro_id,
+      revisoId: data.reviso_id,
+      autorizoId: data.autorizo_id
     };
   }
 
@@ -50,6 +53,9 @@ export class ComplaintsAdapter {
         : null,
       origin: data.origin,
       complaint_date: data.complaintDate.format('YYYY-MM-DD'),
+      elaboro_id: data.elaboroId,
+      reviso_id: data.revisoId,
+      autorizo_id: data.autorizoId
     };
   }
 
@@ -94,6 +100,10 @@ export class ComplaintsAdapter {
     }
 
     complaint.customer_id = data.customerId;
+
+    complaint.elaboro_id = data.elaboroId;
+    complaint.reviso_id = data.revisoId;
+    complaint.autorizo_id = data.autorizoId;
 
     return complaint;
   }

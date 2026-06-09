@@ -19,6 +19,9 @@ export interface ComplaintBaseApi {
   origin: string;
   complaint_date: string;
   customer_id: number | null;
+  elaboro_id: number | null;
+  reviso_id: number | null;
+  autorizo_id: number | null;
 }
 
 export interface ComplaintCreateApi extends ComplaintBaseApi {

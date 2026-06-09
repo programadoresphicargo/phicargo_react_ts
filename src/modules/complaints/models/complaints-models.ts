@@ -24,6 +24,9 @@ export interface ComplaintBase {
   origin: string;
   complaintDate: Dayjs;
   customerId: number | null;
+  elaboroId: number | null;
+  revisoId: number | null;
+  autorizoId: number | null;
 }
 
 export type ComplaintUpdate = Partial<ComplaintBase> & {
