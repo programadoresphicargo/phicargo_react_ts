@@ -25,8 +25,8 @@ import SelectOperador from "@/phicargo/maniobras/maniobras/select_operador";
 import EstadoSolicitud from "./estado";
 import CancelarSolicitudDialog from "./cancelar";
 import { Select, SelectItem, Link } from "@heroui/react";
-import SelectEmpleado from "@/phicargo/descuentos/solicitante";
 import UploadFiles from "@/phicargo/onedrive/UploadFiles";
+import SelectEmpleado2 from "@/phicargo/descuentos/select_empleado_2";
 
 const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
@@ -484,13 +484,13 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, setID, vista, travel_i
 
                                         {vista == 'asignaciones' && (<>
                                             <Grid item xs={12} sm={6}>
-                                                <SelectEmpleado
+                                                <SelectEmpleado2
                                                     key_name={"x_operador_id"}
                                                     label={"Empleado"}
                                                     isDisabled={!modoEdicion}
                                                     value={data?.x_operador_id}
-                                                    setSolicitante={handleSelectChange}>
-                                                </SelectEmpleado>
+                                                    setSolicitante={handleSelectChange}
+                                                />
                                             </Grid>
                                         </>
                                         )}

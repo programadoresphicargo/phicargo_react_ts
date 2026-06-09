@@ -7,7 +7,6 @@ import { Button, Card, CardBody, CardHeader, Chip, Progress, DatePicker } from "
 import Swal from "sweetalert2";
 import odooApi from "@/api/odoo-api";
 import { useDescuentos } from "./context";
-import SelectEmpleado from "./solicitante";
 import {
   Modal,
   ModalContent,
@@ -21,6 +20,7 @@ import { toast } from "react-toastify";
 import { Descuento } from "./type";
 import { parseDate } from "@internationalized/date";
 import dayjs from "dayjs";
+import { SelectEmpleado } from "./select_empleados";
 
 const initialForm: Descuento = {
   id_descuento: null,
@@ -203,27 +203,17 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
                 </CardHeader>
                 <Divider />
                 <CardBody>
-                  <Controller
+                  <SelectEmpleado
                     control={control}
-                    name="id_solicitante"
                     rules={{ required: 'Solicitante requerido' }}
-                    render={({ field }) => (
-                      <SelectEmpleado
-                        key_name={"id_solicitante"}
-                        label={"Solicitante"}
-                        value={field.value}
-                        setSolicitante={setValue}
-                        placeholder={"Encargado de departamento que hace la solicitud"}
-                        isEditing={isEditing}
-                        variant="bordered"
-                        isDisabled={!isEditing}
-                      />
-                    )}
+                    name={"id_solicitante"}
+                    label={"Solicitante"}
+                    variant="bordered"
+                    isDisabled={!isEditing}
                   />
                 </CardBody>
               </Card>
 
-              {/* Card: PERSONAL A DESCONTAR */}
               <Card shadow="sm" className="border border-gray-200 rounded-2xl h-full">
                 <CardHeader className="bg-gradient-to-r from-[#002887] to-[#0059b3] text-white font-semibold text-center rounded-t-2xl">
                   <div className="flex flex-col items-start">
@@ -235,22 +225,14 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
                 </CardHeader>
                 <Divider />
                 <CardBody>
-                  <Controller
+                  <SelectEmpleado
                     control={control}
-                    name="id_empleado"
+                    name={"id_empleado"}
+                    label={"Empleado"}
                     rules={{ required: 'Empleado requerido' }}
-                    render={({ field }) => (
-                      <SelectEmpleado
-                        key_name={"id_empleado"}
-                        label={"Empleado"}
-                        value={field.value}
-                        setSolicitante={setValue}
-                        placeholder={"Empleado responsable del descuento"}
-                        isEditing={isEditing}
-                        variant="bordered"
-                        isDisabled={!isEditing}
-                      />
-                    )}
+                    placeholder={"Empleado responsable del descuento"}
+                    variant="bordered"
+                    isDisabled={!isEditing}
                   />
                 </CardBody>
               </Card>
