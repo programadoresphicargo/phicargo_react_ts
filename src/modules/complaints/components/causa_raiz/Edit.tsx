@@ -66,6 +66,8 @@ export const EditComplaintCausaRaiz = ({ complaint }: Props) => {
   });
  }, [data, reset]);
 
+ const isDisabled = (complaint.status !== "open" && complaint.status !== "in_process") ? true : false;
+
  return (
   <Card>
    <CardHeader>
@@ -76,7 +78,7 @@ export const EditComplaintCausaRaiz = ({ complaint }: Props) => {
     {isLoading && <LoadingSpinner />}
 
     <div className="mb-3 flex gap-3">
-     <Button onPress={() => append('')} radius='full' color="primary">
+     <Button onPress={() => append('')} radius='full' color="primary" isDisabled={isDisabled}>
       Agregar porqué
      </Button>
 
@@ -87,6 +89,7 @@ export const EditComplaintCausaRaiz = ({ complaint }: Props) => {
        radius='full'
        onPress={() => handleSubmit(onSubmit)()}
        isLoading={updateComplaintCausaRaizMutation.isPending}
+       isDisabled={isDisabled}
       >
        Guardar Causa Raíz
       </Button>
@@ -99,6 +102,7 @@ export const EditComplaintCausaRaiz = ({ complaint }: Props) => {
      label="Descripción"
      rules={{ required: "Campo obligatorio" }}
      variant="faded"
+     isDisabled={isDisabled}
     />
 
     {fields.map((field, index) => (
@@ -108,9 +112,10 @@ export const EditComplaintCausaRaiz = ({ complaint }: Props) => {
        name={`causa_raiz.porques.${index}`}
        label={`Por qué ${index + 1}`}
        rules={{ required: "Campo obligatorio" }}
+       isDisabled={isDisabled}
       />
 
-      <Button onPress={() => remove(index)} color='danger' radius='full'>
+      <Button onPress={() => remove(index)} color='danger' radius='full' isDisabled={isDisabled}>
        <i className="bi bi-x-circle"></i>
       </Button>
      </div>

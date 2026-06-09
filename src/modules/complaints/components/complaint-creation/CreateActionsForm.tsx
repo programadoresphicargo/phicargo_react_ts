@@ -16,6 +16,7 @@ interface Props<T extends ComplaintActionCreate> {
   isLoading: boolean;
   control: Control<T, any>;
   getValues: () => T;
+  isDisabled: boolean;
 }
 
 export const CreateActionsForm = <T extends ComplaintActionCreate>({
@@ -25,6 +26,7 @@ export const CreateActionsForm = <T extends ComplaintActionCreate>({
   isLoading,
   control,
   getValues,
+  isDisabled
 }: Props<T>) => {
 
   const id = useWatch({
@@ -62,7 +64,14 @@ export const CreateActionsForm = <T extends ComplaintActionCreate>({
         fullWidth>
         <DialogContent>
 
-          <Button onPress={id ? () => onUpdate() : onClick} isLoading={isLoading || isPending} radius='full' color={id ? "success" : "primary"} className='text-white'>{id ? "Guardar" : "Registrar"}</Button>
+          <Button
+            onPress={id ? () => onUpdate() : onClick}
+            isLoading={isLoading || isPending}
+            radius='full' color={id ? "success" : "primary"}
+            className='text-white'
+            isDisabled={isDisabled}>
+            {id ? "Guardar" : "Registrar"}
+          </Button>
 
           {isPending && (<Progress isIndeterminate size='sm' color='success'></Progress>)}
           {isLoading && (<Progress isIndeterminate size='sm' color='primary'></Progress>)}

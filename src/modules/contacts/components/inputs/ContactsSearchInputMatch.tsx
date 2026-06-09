@@ -24,6 +24,7 @@ interface Props<T extends FieldValues> {
   placeholder?: string;
   required?: boolean;
   initialInputValue?: string;
+  disabled: boolean;
 }
 
 export const ContactsSearchInputMatch = <T extends FieldValues>({
@@ -33,7 +34,8 @@ export const ContactsSearchInputMatch = <T extends FieldValues>({
   rules,
   placeholder,
   required,
-  initialInputValue
+  initialInputValue,
+  disabled
 }: Props<T>) => {
   const [inputValue, setInputValue] = useState(initialInputValue ?? '');
 
@@ -63,6 +65,7 @@ export const ContactsSearchInputMatch = <T extends FieldValues>({
       }}
       autocompleteProps={{
         size: 'small',
+        disabled: disabled,
         getOptionKey: (option) => option.id,
         getOptionLabel: (option) => option.name,
         onInputChange: (_, newInputValue, reason) => {

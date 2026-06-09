@@ -61,12 +61,19 @@ export const EditComplaintForm = ({ complaint, onClose }: Props) => {
     });
   };
 
+  const isDisabled = !!complaint &&
+    complaint.status !== "open" &&
+    complaint.status !== "in_process";
+
   return (
     <>
 
       <UpdateComplaintStatus
         complaint={itemToUpdate}
-        onClose={() => setItemToUpdate(null)}
+        onClose={() => {
+          setItemToUpdate(null);
+          onClose();
+        }}
       />
 
       <section className="flex flex-col border p-4 rounded-md">
@@ -88,7 +95,7 @@ export const EditComplaintForm = ({ complaint, onClose }: Props) => {
             >Registrar
             </Button>
           )}
-          {complaint && (
+          {complaint && (complaint.status == "open" || complaint.status == "in_process") && (
             <>
               <Button
                 color="primary"
@@ -97,13 +104,15 @@ export const EditComplaintForm = ({ complaint, onClose }: Props) => {
                 radius="full"
               >Guardar
               </Button>
-              <Button
-                color="danger"
-                isLoading={isUpdating}
-                onPress={() => setItemToUpdate(complaint)}
-                radius="full"
-              >Cambiar estado
-              </Button>
+              {(complaint.status == "open" || complaint.status == "in_process") && (
+                <Button
+                  color="danger"
+                  isLoading={isUpdating}
+                  onPress={() => setItemToUpdate(complaint)}
+                  radius="full"
+                >Cambiar estado {complaint.status}
+                </Button>
+              )}
             </>
           )}
           {complaint && (
@@ -128,6 +137,7 @@ export const EditComplaintForm = ({ complaint, onClose }: Props) => {
             control={control}
             name="complaintDate"
             label="Fecha"
+            disabled={isDisabled}
             inputProps={{
               size: 'small',
             }}
@@ -140,6 +150,7 @@ export const EditComplaintForm = ({ complaint, onClose }: Props) => {
             size="sm"
             variant="faded"
             rules={{ required: "Obligatorio" }}
+            isDisabled={isDisabled}
             items={[
               { key: 'TRANSPORTES BELCHEZ', value: 'TRANSPORTES BELCHEZ' },
               { key: 'TANKCONTAINER', value: 'TANKCONTAINER' },
@@ -153,6 +164,7 @@ export const EditComplaintForm = ({ complaint, onClose }: Props) => {
             label="Origen"
             variant='faded'
             size="sm"
+            isDisabled={isDisabled}
             rules={{ required: "Obligatorio" }}
             items={[
               { key: 'QUEJA DE CLIENTE', value: 'QUEJA DE CLIENTE' },
@@ -172,6 +184,7 @@ export const EditComplaintForm = ({ complaint, onClose }: Props) => {
             label="Cliente"
             placeholder="Buscar cliente..."
             initialInputValue={complaint?.customer?.name}
+            disabled={isDisabled}
           />
 
           <AutocompleteElement
@@ -183,6 +196,7 @@ export const EditComplaintForm = ({ complaint, onClose }: Props) => {
             options={COMPLAINT_TYPES}
             autocompleteProps={{
               size: 'small',
+              disabled: isDisabled,
               getOptionKey: (option) => option.id,
               renderOption: (props, option) => {
                 const { key, ...optionProps } = props;
@@ -217,6 +231,7 @@ export const EditComplaintForm = ({ complaint, onClose }: Props) => {
             size="sm"
             rules={{ required: "Obligatorio" }}
             variant="faded"
+            isDisabled={isDisabled}
           />
 
           <TextareaInput
@@ -226,6 +241,7 @@ export const EditComplaintForm = ({ complaint, onClose }: Props) => {
             size="sm"
             rules={{ required: "Obligatorio" }}
             variant="faded"
+            isDisabled={isDisabled}
           />
 
           <TextInput
@@ -234,6 +250,7 @@ export const EditComplaintForm = ({ complaint, onClose }: Props) => {
             label="Responsable"
             size="sm"
             rules={{ required: "Obligatorio" }}
+            isDisabled={isDisabled}
           />
 
           <TextInput
@@ -242,6 +259,7 @@ export const EditComplaintForm = ({ complaint, onClose }: Props) => {
             label="Área"
             size="sm"
             rules={{ required: "Obligatorio" }}
+            isDisabled={isDisabled}
           />
 
           <TextareaInput
@@ -256,6 +274,7 @@ export const EditComplaintForm = ({ complaint, onClose }: Props) => {
             control={control}
             name="responseDate"
             label="Fecha de Respuesta"
+            disabled={isDisabled}
             disablePast
             inputProps={{
               size: 'small',
@@ -265,6 +284,7 @@ export const EditComplaintForm = ({ complaint, onClose }: Props) => {
           <RadioButtonGroup
             control={control}
             row
+            disabled={isDisabled}
             name="priority"
             label="Prioridad"
             options={[

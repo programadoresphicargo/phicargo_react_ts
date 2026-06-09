@@ -61,6 +61,8 @@ export const EditComplaintActions = ({ complaint, type }: Props) => {
     setOpen(false);
   };
 
+  const isDisabled = (complaint.status !== "open" && complaint.status !== "in_process") ? true : false;
+
   return (
     <Card>
       <CardHeader>
@@ -75,6 +77,7 @@ export const EditComplaintActions = ({ complaint, type }: Props) => {
             color="success"
             className='text-white'
             radius="full"
+            isDisabled={isDisabled}
             onPress={() => {
               reset(initialForm);
               handleClickOpen();
@@ -97,7 +100,8 @@ export const EditComplaintActions = ({ complaint, type }: Props) => {
             <div
               key={action.id}
               onClick={() => {
-
+                if (isDisabled) return;
+                
                 reset({
                   id: action.id,
                   actionPlan: action.actionPlan,
@@ -120,6 +124,7 @@ export const EditComplaintActions = ({ complaint, type }: Props) => {
           isLoading={createComplaintActionaMutation.isPending}
           control={control}
           getValues={getValues}
+          isDisabled={isDisabled}
         />
 
       </CardBody>
