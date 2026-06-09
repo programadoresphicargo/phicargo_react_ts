@@ -33,7 +33,7 @@ export const EditComplaint = ({ onClose, complaint }: Props) => {
           `Editar No Conformidad #${complaint.id}`
         )}
         <Box sx={{ display: 'flex', gap: '1rem' }}>
-          <Button onPress={() => onClose()}>Cerrar</Button>
+          <Button onPress={() => onClose()} radius='full' size='sm' color='primary'>Cerrar</Button>
         </Box>
       </DialogTitle>
       <DialogContent>

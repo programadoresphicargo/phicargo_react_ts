@@ -90,6 +90,25 @@ export class ComplaintsService {
     }
   }
 
+  static async getComplaintActions(
+  ): Promise<ComplaintAction[]> {
+    try {
+      const response = await odooApi.get<ComplaintActionApi[]>(
+        `/complaints/actions/`,
+      );
+      return response.data.map(ComplaintActionsAdapter.toComplaintAction);
+    } catch (error) {
+      console.error(error);
+      if (error instanceof AxiosError) {
+        throw new Error(
+          error.response?.data.detail ||
+          'Error al obtener las acciones',
+        );
+      }
+      throw new Error('Error al obtener las acciones');
+    }
+  }
+
   static async getComplaintCausaRaizByComplaint(
     complaintId: number,
   ): Promise<CausaRaizBase> {

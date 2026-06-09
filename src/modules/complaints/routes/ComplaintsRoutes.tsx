@@ -8,6 +8,7 @@ import ProtectedRoute from '@/router/ProtectedRoute';
 const COMPLAINTS_PERMISSION_ID = 213;
 
 const ComplaintsPage = lazy(() => import('../pages/ComplaintsPage'));
+const ActionsPage = lazy(() => import('../pages/ActionsPage'));
 
 const ComplaintsRoutes = () => (
   <Route
@@ -24,6 +25,15 @@ const ComplaintsRoutes = () => (
       element={
         <Suspense fallback={<LoadingPage />}>
           <ComplaintsPage />
+        </Suspense>
+      }
+    />
+
+    <Route
+      path="actions"
+      element={
+        <Suspense fallback={<LoadingPage />}>
+          <ActionsPage />
         </Suspense>
       }
     />

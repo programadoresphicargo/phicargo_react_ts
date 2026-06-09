@@ -1,15 +1,13 @@
 import {
   DialogProps,
 } from '@mui/material';
-import type { Complaint } from '../models';
+import type { ComplaintAction } from '../models';
 import { EditComplaint } from '../components/complaint-edition/EditComplaint';
 import { MaterialReactTable } from 'material-react-table';
 import { MuiTransition } from '@/components';
 import { useBaseTable } from '@/hooks';
-import { useComplaintsColumns } from '../hooks';
-import { useGetComplaintsQuery } from '../hooks/queries';
-import { Button } from '@heroui/react';
-import Header from '../components/ui/Header';
+import { useGetAllComplaintActionsQuery } from '../hooks/queries/useGetComplaintActionsQuery copy';
+import { useComplaintsActionsColumns } from '../hooks/useComplaintsActionsColumns';
 
 const dialogProps: DialogProps = {
   slots: {
@@ -21,48 +19,37 @@ const dialogProps: DialogProps = {
   open: true,
 };
 
-const ComplaintsPage = () => {
+const ActionsPage = () => {
 
   const {
-    getComplaintsQuery: { data, isLoading, isFetching, refetch },
-  } = useGetComplaintsQuery();
+    getAllComplaintActionsQuery: { data: actions, isLoading, isFetching, refetch },
+  } = useGetAllComplaintActionsQuery();
 
-  const columns = useComplaintsColumns();
+  const columns = useComplaintsActionsColumns();
 
-  const table = useBaseTable<Complaint>({
+  const table = useBaseTable<ComplaintAction>({
     columns,
-    data: data || [],
+    data: actions || [],
     isFetching,
     isLoading,
     refetchFn: refetch,
     tableId: 'complaints-table',
-    containerHeight: 'calc(100vh - 270px)',
+    containerHeight: 'calc(100vh - 180px)',
     showColumnFilters: true,
     columnFilterDisplayMode: "subheader",
     initialState: {
       showColumnFilters: true,
     },
     toolbarActions: (
-      <Button
-        color='primary'
-        size="sm"
-        onPress={() => table.setCreatingRow(true)}
-        radius='full'
-      >
-        Nuevo
-      </Button>
+      <>
+        <h1>ACCIONES</h1>
+      </>
     ),
     onDoubleClickFn: (row) => {
       table.setEditingRow(row);
     },
     muiEditRowDialogProps: dialogProps,
     muiCreateRowModalProps: dialogProps,
-    renderEditRowDialogContent: ({ table, row }) => (
-      <EditComplaint
-        onClose={() => table.setEditingRow(null)}
-        complaint={row.original}
-      />
-    ),
     renderCreateRowDialogContent: ({ table }) => (
       <EditComplaint
         onClose={() => table.setCreatingRow(null)}
@@ -73,11 +60,10 @@ const ComplaintsPage = () => {
 
   return (
     <>
-      <Header></Header>
       <MaterialReactTable table={table} />
     </>
   );
 };
 
-export default ComplaintsPage;
+export default ActionsPage;
 
