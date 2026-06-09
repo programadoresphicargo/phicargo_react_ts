@@ -30,7 +30,7 @@ const initialFormState: IncidentCreate = {
   discountReason: null,
   discountComments: null,
   periodicidad: '',
-  id_solicitante: 0,
+  id_solicitante: null,
 };
 
 type Mode = "create" | "edit";
