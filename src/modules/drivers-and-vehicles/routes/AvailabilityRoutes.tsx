@@ -30,8 +30,8 @@ const DriverSummaryPage = lazy(() =>
 const FleetPage = lazy(
   () => import('../pages/FleetPage'),
 );
-const Contactos = lazy(
-  () => import('@/phicargo/inventarioti/celulares/celulares'),
+const ContactosEmpleados = lazy(
+  () => import('@/phicargo/inventarioti/celulares/contactos_empleados'),
 );
 const SucursalActual = lazy(
   () => import('@/phicargo/reportes/sucursal_actual/sucursal'),
@@ -146,10 +146,10 @@ const AvailabilityRoutes = () => {
         }
       />
       <Route
-        path="contactos"
+        path="contactos_empleados"
         element={
           <Suspense fallback={<LoadingPage />}>
-            <Contactos />
+            <ContactosEmpleados />
           </Suspense>
         }
       />

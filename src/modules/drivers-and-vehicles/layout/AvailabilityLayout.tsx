@@ -23,7 +23,7 @@ const pages: MenuItemType[] = [
   },
   {
     name: 'Contactos',
-    path: '/disponibilidad/contactos',
+    path: '/disponibilidad/contactos_empleados',
     requiredPermissions: [],
   },
   {
