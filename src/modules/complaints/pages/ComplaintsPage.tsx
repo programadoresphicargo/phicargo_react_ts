@@ -1,20 +1,14 @@
 import {
-  Box,
   DialogProps,
-  IconButton,
-  Tooltip,
 } from '@mui/material';
 import { AddButton } from '@/components/ui';
 import type { Complaint } from '../models';
 import { EditComplaint } from '../components/complaint-edition/EditComplaint';
 import { MaterialReactTable } from 'material-react-table';
 import { MuiTransition } from '@/components';
-import UpdateIcon from '@mui/icons-material/Update';
 import { useBaseTable } from '@/hooks';
 import { useComplaintsColumns } from '../hooks';
 import { useGetComplaintsQuery } from '../hooks/queries';
-import { useState } from 'react';
-import { UpdateComplaintStatus } from '../components/complaint-edition/UpdateComplaintStatus';
 
 const dialogProps: DialogProps = {
   slots: {
@@ -27,7 +21,6 @@ const dialogProps: DialogProps = {
 };
 
 const ComplaintsPage = () => {
-  const [itemToUpdate, setItemToUpdate] = useState<Complaint | null>(null);
 
   const {
     getComplaintsQuery: { data, isLoading, isFetching, refetch },
@@ -43,11 +36,8 @@ const ComplaintsPage = () => {
     refetchFn: refetch,
     tableId: 'complaints-table',
     containerHeight: 'calc(100vh - 220px)',
-    enableRowActions: true,
-    enableEditing: true,
     showColumnFilters: true,
     columnFilterDisplayMode: "subheader",
-    positionActionsColumn: 'first',
     initialState: {
       showColumnFilters: true,
     },
@@ -61,19 +51,6 @@ const ComplaintsPage = () => {
     onDoubleClickFn: (row) => {
       table.setEditingRow(row);
     },
-    renderRowActions: ({ row }) => (
-      <Box>
-        <Tooltip title="Actualizar status">
-          <IconButton
-            size="small"
-            color="primary"
-            onClick={() => setItemToUpdate(row.original)}
-          >
-            <UpdateIcon />
-          </IconButton>
-        </Tooltip>
-      </Box>
-    ),
     muiEditRowDialogProps: dialogProps,
     muiCreateRowModalProps: dialogProps,
     renderEditRowDialogContent: ({ table, row }) => (
@@ -93,11 +70,6 @@ const ComplaintsPage = () => {
   return (
     <>
       <MaterialReactTable table={table} />
-
-      <UpdateComplaintStatus
-        complaint={itemToUpdate}
-        onClose={() => setItemToUpdate(null)}
-      />
     </>
   );
 };

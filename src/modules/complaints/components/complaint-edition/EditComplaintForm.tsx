@@ -10,6 +10,8 @@ import { Box, Typography } from '@mui/material';
 import { COMPLAINT_TYPES } from '../../utilities';
 import dayjs from 'dayjs';
 import { ContactsSearchInputMatch } from '@/modules/contacts/components/inputs/ContactsSearchInputMatch';
+import { UpdateComplaintStatus } from './UpdateComplaintStatus';
+import { useState } from 'react';
 const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
 interface Props {
@@ -18,6 +20,8 @@ interface Props {
 }
 
 export const EditComplaintForm = ({ complaint, onClose }: Props) => {
+
+  const [itemToUpdate, setItemToUpdate] = useState<Complaint | null>(null);
 
   const { control, handleSubmit } = useForm<ComplaintForm>({
     defaultValues: complaint
@@ -58,213 +62,231 @@ export const EditComplaintForm = ({ complaint, onClose }: Props) => {
   };
 
   return (
-    <section className="flex flex-col border p-4 rounded-md">
+    <>
 
-      <div className="mb-3 flex gap-3">
-        <h2 className="text-lg font-semibold text-gray-700 flex items-center gap-2">
-          <span className="bg-blue-100 p-1 rounded-full">📋</span>
-          {complaint && (
-            `No Conformidad #${complaint.id}`
+      <UpdateComplaintStatus
+        complaint={itemToUpdate}
+        onClose={() => setItemToUpdate(null)}
+      />
+
+      <section className="flex flex-col border p-4 rounded-md">
+
+        <div className="mb-3 flex gap-3">
+          <h2 className="text-lg font-semibold text-gray-700 flex items-center gap-2">
+            <span className="bg-blue-100 p-1 rounded-full">📋</span>
+            {complaint && (
+              `No Conformidad #${complaint.id}`
+            )}
+          </h2>
+          {!complaint && (
+            <Button
+              color="success"
+              isLoading={isCreating}
+              onPress={() => handleSubmit(onSubmitCreate)()}
+              radius="full"
+              className="text-white"
+            >Registrar
+            </Button>
           )}
-        </h2>
-        {!complaint && (
-          <Button
-            color="success"
-            isLoading={isCreating}
-            onPress={() => handleSubmit(onSubmitCreate)()}
-            radius="full"
-            className="text-white"
-          >Registrar
-          </Button>
-        )}
-        {complaint && (
-          <Button
-            color="primary"
-            isLoading={isUpdating}
-            onPress={() => handleSubmit(onSubmitUpdate)()}
-            radius="full"
-          >Guardar
-          </Button>
-        )}
-        {complaint && (
-          <Button
-            className='text-white'
-            showAnchorIcon
-            as={Link}
-            isExternal={true}
-            color="success"
-            href={`${apiUrl}/complaints/format/${complaint.id}`}
-            variant="solid"
-            radius="full"
-          >
-            Exportar
-          </Button>
-        )}
-      </div>
+          {complaint && (
+            <>
+              <Button
+                color="primary"
+                isLoading={isUpdating}
+                onPress={() => handleSubmit(onSubmitUpdate)()}
+                radius="full"
+              >Guardar
+              </Button>
+              <Button
+                color="danger"
+                isLoading={isUpdating}
+                onPress={() => setItemToUpdate(complaint)}
+                radius="full"
+              >Cambiar estado
+              </Button>
+            </>
+          )}
+          {complaint && (
+            <Button
+              className='text-white'
+              showAnchorIcon
+              as={Link}
+              isExternal={true}
+              color="success"
+              href={`${apiUrl}/complaints/format/${complaint.id}`}
+              variant="solid"
+              radius="full"
+            >
+              Exportar
+            </Button>
+          )}
+        </div>
 
-      <form className="grid grid-cols-3 gap-4 mt-6">
+        <form className="grid grid-cols-3 gap-4 mt-6">
 
-        <DatePickerElement
-          control={control}
-          name="complaintDate"
-          label="Fecha"
-          inputProps={{
-            size: 'small',
-          }}
-        />
+          <DatePickerElement
+            control={control}
+            name="complaintDate"
+            label="Fecha"
+            inputProps={{
+              size: 'small',
+            }}
+          />
 
-        <AutocompleteInput
-          control={control}
-          name="phicargoCompany"
-          label="Compañía"
-          size="sm"
-          variant="faded"
-          rules={{ required: "Obligatorio" }}
-          items={[
-            { key: 'TRANSPORTES BELCHEZ', value: 'TRANSPORTES BELCHEZ' },
-            { key: 'TANKCONTAINER', value: 'TANKCONTAINER' },
-            { key: 'SERVICONTAINER', value: 'SERVICONTAINER' },
-          ]}
-        />
+          <AutocompleteInput
+            control={control}
+            name="phicargoCompany"
+            label="Compañía"
+            size="sm"
+            variant="faded"
+            rules={{ required: "Obligatorio" }}
+            items={[
+              { key: 'TRANSPORTES BELCHEZ', value: 'TRANSPORTES BELCHEZ' },
+              { key: 'TANKCONTAINER', value: 'TANKCONTAINER' },
+              { key: 'SERVICONTAINER', value: 'SERVICONTAINER' },
+            ]}
+          />
 
-        <AutocompleteInput
-          control={control}
-          name="origin"
-          label="Origen"
-          variant='faded'
-          size="sm"
-          rules={{ required: "Obligatorio" }}
-          items={[
-            { key: 'QUEJA DE CLIENTE', value: 'QUEJA DE CLIENTE' },
-            { key: 'AUDITORÍA INTERNA', value: 'AUDITORÍA INTERNA' },
-            { key: 'AUDITORÍA EXTERNA', value: 'AUDITORÍA EXTERNA' },
-            {
-              key: 'INCUMPLIMIENTO DE PROCESO',
-              value: 'INCUMPLIMIENTO DE PROCESO',
-            },
-            { key: 'INDICADOR', value: 'INDICADOR' },
-          ]}
-        />
+          <AutocompleteInput
+            control={control}
+            name="origin"
+            label="Origen"
+            variant='faded'
+            size="sm"
+            rules={{ required: "Obligatorio" }}
+            items={[
+              { key: 'QUEJA DE CLIENTE', value: 'QUEJA DE CLIENTE' },
+              { key: 'AUDITORÍA INTERNA', value: 'AUDITORÍA INTERNA' },
+              { key: 'AUDITORÍA EXTERNA', value: 'AUDITORÍA EXTERNA' },
+              {
+                key: 'INCUMPLIMIENTO DE PROCESO',
+                value: 'INCUMPLIMIENTO DE PROCESO',
+              },
+              { key: 'INDICADOR', value: 'INDICADOR' },
+            ]}
+          />
 
-        <ContactsSearchInputMatch
-          control={control}
-          name="customerId"
-          label="Cliente"
-          placeholder="Buscar cliente..."
-          initialInputValue={complaint?.customer?.name}
-        />
+          <ContactsSearchInputMatch
+            control={control}
+            name="customerId"
+            label="Cliente"
+            placeholder="Buscar cliente..."
+            initialInputValue={complaint?.customer?.name}
+          />
 
-        <AutocompleteElement
-          control={control}
-          name="complaintType"
-          label="Tipo de Queja"
-          required
-          matchId
-          options={COMPLAINT_TYPES}
-          autocompleteProps={{
-            size: 'small',
-            getOptionKey: (option) => option.id,
-            renderOption: (props, option) => {
-              const { key, ...optionProps } = props;
-              return (
-                <li key={key} {...optionProps}>
-                  <Grid2 container sx={{ alignItems: 'center' }}>
-                    <Grid2
-                      sx={{
-                        width: 'calc(100% - 44px)',
-                        wordWrap: 'break-word',
-                      }}
-                    >
-                      <Box component="span">{option.label}</Box>
-                      <Typography
-                        variant="body1"
-                        sx={{ color: 'text.secondary' }}
+          <AutocompleteElement
+            control={control}
+            name="complaintType"
+            label="Tipo de Queja"
+            required
+            matchId
+            options={COMPLAINT_TYPES}
+            autocompleteProps={{
+              size: 'small',
+              getOptionKey: (option) => option.id,
+              renderOption: (props, option) => {
+                const { key, ...optionProps } = props;
+                return (
+                  <li key={key} {...optionProps}>
+                    <Grid2 container sx={{ alignItems: 'center' }}>
+                      <Grid2
+                        sx={{
+                          width: 'calc(100% - 44px)',
+                          wordWrap: 'break-word',
+                        }}
                       >
-                        {option.description}
-                      </Typography>
+                        <Box component="span">{option.label}</Box>
+                        <Typography
+                          variant="body1"
+                          sx={{ color: 'text.secondary' }}
+                        >
+                          {option.description}
+                        </Typography>
+                      </Grid2>
                     </Grid2>
-                  </Grid2>
-                </li>
-              );
-            },
-          }}
-        />
+                  </li>
+                );
+              },
+            }}
+          />
 
-        <TextareaInput
-          control={control}
-          name="complaintDescription"
-          label="Descripción"
-          size="sm"
-          rules={{ required: "Obligatorio" }}
-          variant="faded"
-        />
+          <TextareaInput
+            control={control}
+            name="complaintDescription"
+            label="Descripción"
+            size="sm"
+            rules={{ required: "Obligatorio" }}
+            variant="faded"
+          />
 
-        <TextareaInput
-          control={control}
-          name="complaintSuggestion"
-          label="Sugerencia"
-          size="sm"
-          rules={{ required: "Obligatorio" }}
-          variant="faded"
-        />
+          <TextareaInput
+            control={control}
+            name="complaintSuggestion"
+            label="Sugerencia"
+            size="sm"
+            rules={{ required: "Obligatorio" }}
+            variant="faded"
+          />
 
-        <TextInput
-          control={control}
-          name="responsible"
-          label="Responsable"
-          size="sm"
-          rules={{ required: "Obligatorio" }}
-        />
+          <TextInput
+            control={control}
+            name="responsible"
+            label="Responsable"
+            size="sm"
+            rules={{ required: "Obligatorio" }}
+          />
 
-        <TextInput
-          control={control}
-          name="area"
-          label="Área"
-          size="sm"
-          rules={{ required: "Obligatorio" }}
-        />
+          <TextInput
+            control={control}
+            name="area"
+            label="Área"
+            size="sm"
+            rules={{ required: "Obligatorio" }}
+          />
 
-        <TextareaInput
-          control={control}
-          name="response"
-          label="Respuesta"
-          size="sm"
-          variant="faded"
-        />
+          <TextareaInput
+            control={control}
+            name="response"
+            label="Respuesta"
+            size="sm"
+            variant="faded"
+          />
 
-        <DatePickerElement
-          control={control}
-          name="responseDate"
-          label="Fecha de Respuesta"
-          disablePast
-          inputProps={{
-            size: 'small',
-          }}
-        />
+          <DatePickerElement
+            control={control}
+            name="responseDate"
+            label="Fecha de Respuesta"
+            disablePast
+            inputProps={{
+              size: 'small',
+            }}
+          />
 
-        <RadioButtonGroup
-          control={control}
-          row
-          name="priority"
-          label="Prioridad"
-          options={[
-            {
-              id: 'low',
-              label: 'Baja',
-            },
-            {
-              id: 'medium',
-              label: 'Media',
-            },
-            {
-              id: 'high',
-              label: 'Alta',
-            },
-          ]}
-        />
+          <RadioButtonGroup
+            control={control}
+            row
+            name="priority"
+            label="Prioridad"
+            options={[
+              {
+                id: 'low',
+                label: 'Baja',
+              },
+              {
+                id: 'medium',
+                label: 'Media',
+              },
+              {
+                id: 'high',
+                label: 'Alta',
+              },
+            ]}
+          />
 
-      </form>
-    </section>
+        </form>
+      </section>
+
+    </>
   );
 };
 
