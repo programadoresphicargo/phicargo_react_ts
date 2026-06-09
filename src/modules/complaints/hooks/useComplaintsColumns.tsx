@@ -12,7 +12,7 @@ export const useComplaintsColumns = () => {
       {
         accessorKey: 'id',
         header: 'Folio',
-        Cell: ({ cell }) => `#${cell.getValue<string>()}`,
+        Cell: ({ cell }) => `NC-${cell.getValue<string>()}`,
       },
       {
         accessorKey: 'complaintDate',

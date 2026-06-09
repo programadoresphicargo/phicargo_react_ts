@@ -46,8 +46,12 @@ const ComplaintsPage = () => {
     containerHeight: 'calc(100vh - 220px)',
     enableRowActions: true,
     enableEditing: true,
-    columnFilterDisplayMode: 'popover',
+    showColumnFilters: true,
+    columnFilterDisplayMode: "subheader",
     positionActionsColumn: 'first',
+    initialState: {
+      showColumnFilters: true,
+    },
     toolbarActions: (
       <AddButton
         label="Crear No Conformidad"
@@ -58,13 +62,8 @@ const ComplaintsPage = () => {
     onDoubleClickFn: (row) => {
       table.setEditingRow(row);
     },
-    renderRowActions: ({ row, table }) => (
+    renderRowActions: ({ row }) => (
       <Box>
-        <Tooltip title="Editar">
-          <IconButton size="small" onClick={() => table.setEditingRow(row)}>
-            <EditIcon />
-          </IconButton>
-        </Tooltip>
         <Tooltip title="Actualizar status">
           <IconButton
             size="small"

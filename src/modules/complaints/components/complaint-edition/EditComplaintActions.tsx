@@ -87,7 +87,7 @@ export const EditComplaintActions = ({ complaint, type }: Props) => {
         {actions?.length === 0 && (
           <Alert
             title="No se encontraron acciones para el plan de acción."
-            color="secondary"
+            color="primary"
           />
         )}
 
