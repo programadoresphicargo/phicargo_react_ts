@@ -1,44 +1,34 @@
-import type { ComplaintActionCreate, ComplaintForm } from '../../models';
+import type { ComplaintActionCreate } from '../../models';
 import {
-  Control,
-  FieldArrayMethodProps,
-  FieldArrayWithId,
+  Control, Path, useWatch,
 } from 'react-hook-form';
-
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { CreateActionFormItem } from './CreateActionFormItem';
-import dayjs from 'dayjs';
 import { Dialog, DialogContent } from '@mui/material';
 import { Button } from '@heroui/react';
+import { AutocompleteInput, TextInput, TextareaInput } from '@/components/inputs';
+import { DatePickerElement } from 'react-hook-form-mui/date-pickers';
 
-interface ComplaintActionCreateForm {
-  actions: ComplaintActionCreate[];
-}
 
-interface Props<T extends ComplaintActionCreateForm> {
+interface Props<T extends ComplaintActionCreate> {
   open: boolean;
   onClose: () => void;
   onClick: () => void;
   isLoading: boolean;
-  fields: FieldArrayWithId<ComplaintForm, 'actions', 'id'>[];
   control: Control<T, any>;
-  remove: (index?: number | number[]) => void;
-  append: (
-    value: ComplaintActionCreate | ComplaintActionCreate[],
-    options?: FieldArrayMethodProps,
-  ) => void;
 }
 
-export const CreateActionsForm = <T extends ComplaintActionCreateForm>({
+export const CreateActionsForm = <T extends ComplaintActionCreate>({
   open,
   onClose,
   onClick,
   isLoading,
-  fields,
   control,
-  remove,
-  append,
 }: Props<T>) => {
+
+  const id = useWatch({
+    control,
+    name: `id` as Path<T>,
+  }) as number;
+
   return (
     <>
       <Dialog
@@ -47,34 +37,54 @@ export const CreateActionsForm = <T extends ComplaintActionCreateForm>({
         fullWidth>
         <DialogContent>
 
-          <Button onPress={onClick} isLoading={isLoading} radius='full' color='primary'>Guardar</Button>
+          <Button onPress={onClick} isLoading={isLoading} radius='full' color={id ? "success" : "primary"} className='text-white'>{id ? "Guardar" : "Registrar"}</Button>
 
-          {fields.map((field, index) => (
-            <CreateActionFormItem
-              key={field.id}
+          <div className="flex flex-col gap-4 border p-4 rounded-md mt-2">
+
+            <AutocompleteInput
               control={control}
-              index={index}
-              remove={remove}
+              name={`type` as Path<T>}
+              isDisabled
+              label="Tipo"
+              variant='bordered'
+              size="sm"
+              rules={{ required: "Obligatorio" }}
+              items={[
+                { key: 'plan de accion', value: 'Plan de acción' },
+                { key: 'accion inmediata', value: 'Acción inmediata' },
+              ]}
             />
-          ))}
 
-          <Button
-            color="success"
-            onPress={() =>
-              append({
-                actionPlan: '',
-                responsible: '',
-                commitmentDate: dayjs(),
-                type: '',
-              })
-            }
-            startContent={<AddCircleIcon />}
-            size="sm"
-            className='text-white'
-            radius='full'
-          >
-            Agregar acción
-          </Button>
+            <TextareaInput
+              control={control}
+              name={`actionPlan` as Path<T>} // Aserción de tipo
+              label="Acción"
+              size="sm"
+              variant='bordered'
+              rules={{ required: "Obligatorio" }}
+            />
+
+            <TextInput
+              control={control}
+              name={`responsible` as Path<T>}
+              label="Responsable"
+              size="sm"
+              variant='bordered'
+              rules={{ required: "Obligatorio" }}
+            />
+
+            <DatePickerElement
+              control={control}
+              name={`commitmentDate` as Path<T>}
+              label="Fecha Compromiso"
+              inputProps={{
+                size: 'small',
+              }}
+              required
+              rules={{ required: 'Fecha Compromiso requerida' }}
+            />
+          </div>
+
         </DialogContent>
       </Dialog>
     </>

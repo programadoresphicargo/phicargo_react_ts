@@ -14,6 +14,7 @@ export const ComplaintActionCard = ({ action }: Props) => {
         <section className="flex flex-col gap-2">
           {/* Encabezado con responsable */}
           <div className="flex flex-col">
+            <h1>PA-{action.id}</h1>
             <h3 className="text-lg font-semibold text-gray-800 uppercase">
               {action.responsible}{' '}
               <Chip

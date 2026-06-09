@@ -1,6 +1,6 @@
 import { Alert, LoadingSpinner } from '@/components/ui';
 import type { Complaint, ComplaintActionCreate } from '../../models';
-import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { ComplaintActionCard } from '../ComplaintActionCard';
 import { CreateActionsForm } from '../complaint-creation/CreateActionsForm';
 import { useCreateComplaintActionsMutation } from '../../hooks/mutations';
@@ -10,25 +10,22 @@ import { Button } from '@heroui/react';
 import { useState } from 'react';
 import dayjs from 'dayjs';
 
-interface ComplaintActionCreateForm {
-  actions: ComplaintActionCreate[];
-}
-
 interface Props {
   complaint: Complaint;
   type: 'plan de accion' | 'accion inmediata';
 }
 
 export const EditComplaintActions = ({ complaint, type }: Props) => {
-  const { control, handleSubmit, reset } = useForm<ComplaintActionCreateForm>({
-    defaultValues: {
-      actions: [],
-    },
-  });
 
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: 'actions',
+  const initialForm: ComplaintActionCreate = {
+    actionPlan: '',
+    responsible: '',
+    commitmentDate: dayjs(),
+    type,
+  }
+
+  const { control, handleSubmit, reset } = useForm<ComplaintActionCreate>({
+    defaultValues: initialForm
   });
 
   const {
@@ -38,18 +35,17 @@ export const EditComplaintActions = ({ complaint, type }: Props) => {
   const { createComplaintActionaMutation } =
     useCreateComplaintActionsMutation();
 
-  const onSubmitActions: SubmitHandler<ComplaintActionCreateForm> = (data) => {
+  const onSubmitActions: SubmitHandler<ComplaintActionCreate> = (data) => {
     if (createComplaintActionaMutation.isPending) return;
     createComplaintActionaMutation.mutate(
       {
         complaintId: complaint.id,
-        actions: data.actions,
+        actions: [data],
       },
       {
         onSuccess: () => {
-          reset({ actions: [] });
+          reset(initialForm);
           handleClose();
-          remove(); // elimina todos los fields
         },
       },
     );
@@ -80,14 +76,8 @@ export const EditComplaintActions = ({ complaint, type }: Props) => {
             className='text-white'
             radius="full"
             onPress={() => {
+              reset(initialForm);
               handleClickOpen();
-              reset({ actions: [] });
-              append({
-                actionPlan: '',
-                responsible: '',
-                commitmentDate: dayjs(),
-                type: type,
-              });
             }}
           >
             Nueva
@@ -104,7 +94,23 @@ export const EditComplaintActions = ({ complaint, type }: Props) => {
         {actions
           ?.filter(action => action.type === type)
           .map(action => (
-            <ComplaintActionCard key={action.id} action={action} />
+            <div
+              key={action.id}
+              onClick={() => {
+
+                reset({
+                  id: action.id,
+                  actionPlan: action.actionPlan,
+                  responsible: action.responsible,
+                  commitmentDate: dayjs(action.commitmentDate),
+                  type: type,
+                });
+
+                handleClickOpen();
+              }}
+            >
+              <ComplaintActionCard action={action} />
+            </div>
           ))}
 
         <CreateActionsForm
@@ -112,10 +118,7 @@ export const EditComplaintActions = ({ complaint, type }: Props) => {
           onClose={handleClose}
           onClick={handleSubmit(onSubmitActions)}
           isLoading={createComplaintActionaMutation.isPending}
-          fields={fields}
           control={control}
-          remove={remove}
-          append={append}
         />
 
       </CardBody>
