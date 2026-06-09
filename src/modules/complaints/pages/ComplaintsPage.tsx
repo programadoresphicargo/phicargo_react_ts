@@ -7,7 +7,6 @@ import {
 import { AddButton } from '@/components/ui';
 import type { Complaint } from '../models';
 import { EditComplaint } from '../components/complaint-edition/EditComplaint';
-import EditIcon from '@mui/icons-material/Edit';
 import { MaterialReactTable } from 'material-react-table';
 import { MuiTransition } from '@/components';
 import UpdateIcon from '@mui/icons-material/Update';
