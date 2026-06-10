@@ -7,7 +7,7 @@ export const useGetComplaintQuery = (
   complaintId: number | null
 ) => {
   const getComplaintQuery = useQuery<Complaint>({
-    queryKey: [COMPLAINTS_QUERY_KEY, 'actions', complaintId],
+    queryKey: [COMPLAINTS_QUERY_KEY, 'complaint', complaintId],
     queryFn: () =>
       ComplaintsService.getComplaint(complaintId!),
     enabled: complaintId !== null,

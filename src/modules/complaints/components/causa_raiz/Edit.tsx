@@ -19,6 +19,8 @@ interface Props {
 }
 
 export const EditComplaintCausaRaiz = ({ complaint }: Props) => {
+ console.log('HIJO', complaint?.id);
+
  const { control, handleSubmit, reset } = useForm<CausaRaizForm>({
   defaultValues: {
    causa_raiz: {

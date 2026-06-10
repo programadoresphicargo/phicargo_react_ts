@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 
 export const useGetAllComplaintActionsQuery = () => {
   const getAllComplaintActionsQuery = useQuery<ComplaintAction[]>({
-    queryKey: [COMPLAINTS_QUERY_KEY, 'actions'],
+    queryKey: [COMPLAINTS_QUERY_KEY, 'all_actions'],
     queryFn: () => ComplaintsService.getComplaintActions(),
   });
 
