@@ -11,7 +11,7 @@ import { COMPLAINT_TYPES } from '../../utilities';
 import dayjs from 'dayjs';
 import { ContactsSearchInputMatch } from '@/modules/contacts/components/inputs/ContactsSearchInputMatch';
 import { UpdateComplaintStatus } from './UpdateComplaintStatus';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SelectEmpleado } from '@/phicargo/descuentos/select_empleados';
 const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
@@ -24,11 +24,19 @@ export const EditComplaintForm = ({ complaint, onClose }: Props) => {
 
   const [itemToUpdate, setItemToUpdate] = useState<Complaint | null>(null);
 
-  const { control, handleSubmit } = useForm<ComplaintForm>({
-    defaultValues: complaint
-      ? transformComplaintToComplaintUpdate(complaint)
-      : initialFormState,
+  const {
+    control,
+    handleSubmit,
+    reset,
+  } = useForm<ComplaintForm>({
+    defaultValues: initialFormState,
   });
+
+  useEffect(() => {
+    if (complaint) {
+      reset(transformComplaintToComplaintUpdate(complaint));
+    }
+  }, [complaint, reset]);
 
   const {
     createComplaintMutation: {

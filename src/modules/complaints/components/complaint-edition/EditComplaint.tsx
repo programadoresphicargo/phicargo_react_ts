@@ -20,7 +20,7 @@ export const EditComplaint = ({ onClose, id }: Props) => {
 
   const {
     getComplaintQuery: { data: complaint, isLoading },
-  } = useGetComplaintQuery(id!);
+  } = useGetComplaintQuery(id);
 
   return (
     <>

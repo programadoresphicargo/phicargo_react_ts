@@ -45,6 +45,10 @@ export const ContactsSearchInputMatch = <T extends FieldValues>({
   const selectedValue = useWatch({ control, name });
 
   useEffect(() => {
+    setInputValue(initialInputValue ?? '');
+  }, [initialInputValue]);
+
+  useEffect(() => {
     if (selectedValue?.name && inputValue !== selectedValue.name) {
       setInputValue(selectedValue.name);
     }

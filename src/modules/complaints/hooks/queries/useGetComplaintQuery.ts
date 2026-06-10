@@ -3,12 +3,14 @@ import { ComplaintsService } from '../../services';
 import { useQuery } from '@tanstack/react-query';
 import { Complaint } from '../../models';
 
-export const useGetComplaintQuery = (complaintId: number) => {
+export const useGetComplaintQuery = (
+  complaintId: number | null
+) => {
   const getComplaintQuery = useQuery<Complaint>({
     queryKey: [COMPLAINTS_QUERY_KEY, 'actions', complaintId],
     queryFn: () =>
-      ComplaintsService.getComplaint(complaintId),
-    enabled: !!complaintId,
+      ComplaintsService.getComplaint(complaintId!),
+    enabled: complaintId !== null,
   });
 
   return {
