@@ -5,7 +5,7 @@ import type {
   ComplaintForm,
   ComplaintUpdate,
 } from '../models';
-import type { ComplaintActionApi, ComplaintApi } from '../models/api';
+import type { ComplaintActionApi, ComplaintApi, ComplaintBaseApi } from '../models/api';
 import { ComplaintActionsAdapter, ComplaintsAdapter } from '../adapters';
 
 import { AxiosError } from 'axios';
@@ -69,6 +69,27 @@ export class ComplaintsService {
       throw new Error('Error al actualizar la queja');
     }
   }
+
+  static async getComplaint(
+    complaintId: number,
+  ): Promise<Complaint> {
+    try {
+      const response = await odooApi.get<ComplaintApi>(
+        `/complaints/${complaintId}`,
+      );
+      return ComplaintsAdapter.toComplaint(response.data);
+    } catch (error) {
+      console.error(error);
+      if (error instanceof AxiosError) {
+        throw new Error(
+          error.response?.data.detail ||
+          'Error al obtener las acciones de la queja',
+        );
+      }
+      throw new Error('Error al obtener las acciones de la queja');
+    }
+  }
+
 
   static async getComplaintActionsByComplaint(
     complaintId: number,

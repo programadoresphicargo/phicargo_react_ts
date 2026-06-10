@@ -60,13 +60,13 @@ const ComplaintsPage = () => {
     renderEditRowDialogContent: ({ table, row }) => (
       <EditComplaint
         onClose={() => table.setEditingRow(null)}
-        complaint={row.original}
+        id={row.original.id}
       />
     ),
     renderCreateRowDialogContent: ({ table }) => (
       <EditComplaint
         onClose={() => table.setCreatingRow(null)}
-        complaint={null}
+        id={null}
       />
     ),
   });

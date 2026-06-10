@@ -11,7 +11,7 @@ export const useComplaintsActionsColumns = () => {
       {
         accessorKey: 'id',
         header: 'ID',
-        Cell: ({ cell }) => `NC-${cell.getValue<string>()}`,
+        Cell: ({ cell }) => `${cell.getValue<string>()}`,
       },
       {
         accessorKey: 'complaintId',
@@ -19,13 +19,13 @@ export const useComplaintsActionsColumns = () => {
         Cell: ({ cell }) => `NC-${cell.getValue<string>()}`,
       },
       {
-        accessorKey: 'actionPlan',
-        header: 'Descripción',
-      },
-      {
         accessorKey: 'type',
         header: 'Tipo',
         Cell: ({ cell }) => <Chip color={cell.getValue<string>() == "plan de accion" ? "success" : "primary"} label={cell.getValue<string>().toUpperCase()} size="small"></Chip>,
+      },
+      {
+        accessorKey: 'actionPlan',
+        header: 'Descripción',
       },
       {
         accessorKey: 'createdAt',

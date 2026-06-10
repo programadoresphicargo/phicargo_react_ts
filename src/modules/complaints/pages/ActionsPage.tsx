@@ -50,10 +50,10 @@ const ActionsPage = () => {
     },
     muiEditRowDialogProps: dialogProps,
     muiCreateRowModalProps: dialogProps,
-    renderCreateRowDialogContent: ({ table }) => (
+    renderEditRowDialogContent: ({ table, row }) => (
       <EditComplaint
-        onClose={() => table.setCreatingRow(null)}
-        complaint={null}
+        onClose={() => table.setEditingRow(null)}
+        id={row.original.complaintId ?? 0}
       />
     ),
   });

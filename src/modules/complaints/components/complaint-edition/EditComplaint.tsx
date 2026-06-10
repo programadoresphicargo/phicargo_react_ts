@@ -4,19 +4,24 @@ import {
   DialogContent,
   DialogTitle,
 } from '@mui/material';
-import { Button } from '@heroui/react';
-import type { Complaint } from '../../models';
+import { Button, Progress } from '@heroui/react';
 import { EditComplaintActions } from './EditComplaintActions';
 import { EditComplaintForm } from './EditComplaintForm';
 import { EditComplaintCausaRaiz } from '../causa_raiz/Edit';
 import { Tab, Tabs } from '@heroui/react';
+import { useGetComplaintQuery } from '../../hooks/queries/useGetComplaintQuery';
 
 interface Props {
-  complaint: Complaint | null;
+  id: number | null;
   onClose: () => void;
 }
 
-export const EditComplaint = ({ onClose, complaint }: Props) => {
+export const EditComplaint = ({ onClose, id }: Props) => {
+
+  const {
+    getComplaintQuery: { data: complaint, isLoading },
+  } = useGetComplaintQuery(id!);
+
   return (
     <>
       <DialogTitle
@@ -37,10 +42,15 @@ export const EditComplaint = ({ onClose, complaint }: Props) => {
         </Box>
       </DialogTitle>
       <DialogContent>
+
+        {isLoading && (
+          <Progress isIndeterminate size='sm' color='success'></Progress>
+        )}
+
         <section className="flex w-full flex-col mt-5">
           <Tabs aria-label="Options" color='primary' radius='full' size="lg">
             <Tab key="1" title="Información">
-              <EditComplaintForm complaint={complaint} onClose={onClose} />
+              <EditComplaintForm complaint={complaint ?? null} onClose={onClose} />
             </Tab>
             {complaint && (
               <>
