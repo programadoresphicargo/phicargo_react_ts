@@ -5,7 +5,7 @@ import type {
   ComplaintForm,
   ComplaintUpdate,
 } from '../models';
-import type { ComplaintActionApi, ComplaintApi, ComplaintBaseApi } from '../models/api';
+import type { ComplaintActionApi, ComplaintApi } from '../models/api';
 import { ComplaintActionsAdapter, ComplaintsAdapter } from '../adapters';
 
 import { AxiosError } from 'axios';
