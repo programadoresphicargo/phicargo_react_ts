@@ -77,6 +77,7 @@ export default function SeguimientoSimpleManiobra({
      <AccordionItem
       key="1"
       aria-label="Accordion 1"
+      isDisabled={data?.estado_maniobra === "borrador" ? true : false}
       title={
        <div className="flex flex-col gap-1 items-start justify-center">
         <strong>MANIOBRA DE {tipo_maniobra.toUpperCase()}</strong>
@@ -87,7 +88,7 @@ export default function SeguimientoSimpleManiobra({
       }
       startContent={
        <Avatar
-        color={tipo_maniobra == "ingreso" ? "success" : "warning"}
+        color={data?.estado_maniobra === "borrador" ? "default" : tipo_maniobra == "ingreso" ? "success" : "warning"}
         isBordered
         radius="full"
         size="md"
