@@ -77,7 +77,9 @@ function EstatusHistorialAgrupado({ id_reporte, open, handleClose }: { id_report
                                                 {tiempoTranscurrido(step.fecha_hora)}
                                             </CardHeader>
                                             <CardBody className="text-small text-default-500">
-                                                <Chip color='success' className='text-white' size='sm'>{step.comentarios_estatus}</Chip>
+                                                {step.comentarios_estatus && (
+                                                    <Chip color='success' className='text-white' size='sm'>{step.comentarios_estatus}</Chip>
+                                                )}
                                                 <span>Referencia reporte: {step.id_reporte}</span>
                                                 <span>Placas: {step.placas}</span>
                                                 <span>Coordenadas: {step.latitud}, {step.longitud}</span>
