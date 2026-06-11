@@ -392,7 +392,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, setID, vista, travel_i
                                 Cerrar solicitud
                             </Button>
                         )}
-                        {data?.x_studio_estado !== "borrador" && data?.x_studio_estado !== "cancelada" && (
+                        {data?.x_studio_estado !== "cancelada" && (
                             <Button
                                 radius="full"
                                 color="success"
