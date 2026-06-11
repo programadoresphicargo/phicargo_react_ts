@@ -81,7 +81,7 @@ export default function SeguimientoSimpleManiobra({
        <div className="flex flex-col gap-1 items-start justify-center">
         <strong>MANIOBRA DE {tipo_maniobra.toUpperCase()}</strong>
         <h5 className="text-small tracking-tight text-default-400">
-         {data?.estado_maniobra === "borrador" ? "Programada" : data?.estado_maniobra.toUpperCase()}
+         {data?.estado_maniobra === "borrador" ? "PROGRAMADA" : data?.estado_maniobra.toUpperCase()}
         </h5>
        </div>
       }
