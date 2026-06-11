@@ -77,7 +77,7 @@ function EstatusHistorialManiobras({ id_maniobra }: { id_maniobra: number }) {
                                     />
                                     <div className="flex flex-col gap-1 items-start justify-center">
                                         <h4 className="text-small font-semibold leading-none text-default-600">{step.nombre_estatus}</h4>
-                                        {step.comentarios_estatus != '' && (
+                                        {step.comentarios_estatus && (
                                             <Chip color='success' className='text-white' size='sm'>
                                                 {step.comentarios_estatus}
                                             </Chip>
