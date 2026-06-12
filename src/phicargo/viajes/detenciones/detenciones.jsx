@@ -5,7 +5,7 @@ import {
 } from 'material-react-table';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { TiemposViajeProvider, useTiemposViaje } from './TiemposViajeContext';
-
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import Box from '@mui/material/Box';
 import { Button } from "@heroui/react";
 import Dialog from '@mui/material/Dialog';
@@ -124,6 +124,7 @@ const Detenciones = ({ }) => {
           const lng = row.original.start_longitude;
           const url = `https://www.google.com/maps?q=${lat},${lng}`;
           return <Button
+            radius="full"
             showAnchorIcon
             as={Link}
             isExternal={true}
@@ -146,7 +147,9 @@ const Detenciones = ({ }) => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
-    state: { isLoading: isLoading2 },
+    localization: MRT_Localization_ES,
+    positionToolbarAlertBanner: "bottom",
+    state: { showProgressBars: isLoading3 },
     enableColumnPinning: true,
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
