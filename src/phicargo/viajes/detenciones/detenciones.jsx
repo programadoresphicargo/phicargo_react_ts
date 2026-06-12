@@ -47,7 +47,7 @@ const Detenciones = ({ }) => {
   };
 
   const [detenciones, setDetenciones] = useState([]);
-  const [isLoading2, setLoading] = useState();
+  const [isLoadingDetenciones, setLoadingDetenciones] = useState();
 
   const fetchData = async (vehicleId, data) => {
     const keys = Object.keys(data);
@@ -69,6 +69,7 @@ const Detenciones = ({ }) => {
       const url = `/detenciones/by_vehicle_id/`;
 
       try {
+        setLoadingDetenciones(true);
         const response = await odooApi.get(url, {
           params: {
             vehicle_id: vehicleId,
@@ -85,6 +86,7 @@ const Detenciones = ({ }) => {
         }));
 
         newDetenciones.push(...formattedData);
+        setLoadingDetenciones(false);
       } catch (error) {
         console.error(`Error en la solicitud entre ${keys[i]} y ${keys[i + 1]}`, error);
       }
