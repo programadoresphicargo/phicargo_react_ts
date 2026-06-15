@@ -10,6 +10,7 @@ import MaintenanceReportRoutesRemolques from '@/modules/maintenance/routes/Maint
 const ReporteLicenciasVencidas = lazy(() => import('../phicargo/reportes/licencias'));
 const ReporteAptosMedicos = lazy(() => import('../phicargo/reportes/aptos_medicos'));
 const Saldos = lazy(() => import('@/phicargo/saldos_contabilidad'));
+const Flujos = lazy(() => import('@/phicargo/saldos_contabilidad/flujo/index'));
 const VehicleRevenueProjectionPage = lazy(() => import('@/modules/vehicles/pages/VehicleRevenueProjectionPage'));
 const ReporteCumplimiento = lazy(() => import('../phicargo/reportes/cumplimiento'));
 const ViajesTipoArmado = lazy(() => import('../phicargo/reportes/tipo_armado'));
@@ -184,6 +185,15 @@ export const ReportsRoutes = () => (
       element={
         <Suspense fallback={<LoadingPage />}>
           <VehiculosAgrupados></VehiculosAgrupados>
+        </Suspense>
+      }
+    />
+
+    <Route
+      path="flujos"
+      element={
+        <Suspense fallback={<LoadingPage />}>
+          <Flujos></Flujos>
         </Suspense>
       }
     />

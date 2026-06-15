@@ -24,7 +24,7 @@ interface Props<T extends FieldValues> {
   placeholder?: string;
   required?: boolean;
   initialInputValue?: string;
-  disabled: boolean;
+  disabled?: boolean;
 }
 
 export const ContactsSearchInputMatch = <T extends FieldValues>({
