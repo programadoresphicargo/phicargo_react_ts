@@ -69,7 +69,7 @@ const EPPSolicitados = ({ tipo }) => {
         accessorKey: 'x_tipo_entrega',
         header: 'Tipo de entrega',
         editVariant: 'select',
-        editSelectOptions: ['prestamo', 'asignacion'],
+        editSelectOptions: ['prestamo', 'asignacion', 'Sin entrega fisica'],
         enableEditing: () => modoEdicion && (!data?.x_studio_estado || data?.x_studio_estado === "borrador"),
         muiEditTextFieldProps: {
           select: true,
