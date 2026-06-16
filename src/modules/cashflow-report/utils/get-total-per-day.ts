@@ -1,4 +1,4 @@
-import { CollectRegister, DaysOfWeek, WeekBase } from '../models';
+import { CollectRegister, DaysOfWeek } from '../models';
 
 /**
  * Function to calculate the total per day
