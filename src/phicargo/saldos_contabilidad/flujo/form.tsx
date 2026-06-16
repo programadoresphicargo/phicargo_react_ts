@@ -1,5 +1,5 @@
 import {
- Button,
+ Button, Progress,
 } from "@heroui/react";
 import {
  Dialog,
@@ -29,11 +29,13 @@ import { DatePickerElement } from "react-hook-form-mui/date-pickers";
 import { Delete } from "@mui/icons-material";
 import { SelectElement, TextFieldElement } from "react-hook-form-mui";
 import toast from "react-hot-toast";
+import { watch } from "fs";
 
 type Props = {
  open: boolean;
  handleClose: () => void;
  Cuenta: Cuenta;
+ paymentId: number | null;
 };
 
 type Details = {
@@ -54,13 +56,14 @@ type ConceptsResponse = {
 type FlujoForm = {
  account_id: number | null;
  provider_id: number | null;
+ provider_name?: string | null;
  concept_id: number | null;
  comments: string | null;
  payment_date: Dayjs;
  details: Details[]
 }
 
-const FlujoForm = ({ open, handleClose, Cuenta }: Props) => {
+const FlujoForm = ({ open, handleClose, Cuenta, paymentId }: Props) => {
 
  const [concepts, setConcepts] = React.useState<Concepts[]>([]);
 
@@ -77,29 +80,70 @@ const FlujoForm = ({ open, handleClose, Cuenta }: Props) => {
   control,
   handleSubmit,
   reset,
+  watch
  } = useForm<FlujoForm>({
   defaultValues: initialForm,
  });
 
- useEffect(() => {
-  reset({
-   account_id: Cuenta.id_cuenta,
-   provider_id: null,
-   concept_id: null,
-   comments: null,
-   payment_date: dayjs(),
-   details: [{ category_id: null, amount: 0 }],
-  });
- }, [Cuenta, reset]);
+ const provider_name = watch("provider_name");
 
  const {
   fields,
   append,
   remove,
+  replace,
  } = useFieldArray({
   control,
   name: 'details',
  });
+
+ const fetchPayment = async (id: number) => {
+  try {
+   setLoading(true);
+
+   const response = await odooApi.get(`/payments/${id}`);
+   const payment = response.data;
+
+   const detailsData = payment.details.map((item: any) => ({
+    category_id: item.category_id,
+    amount: Number(item.amount),
+   }));
+
+   replace(detailsData);
+
+   reset({
+    account_id: payment.account_id,
+    provider_id: payment.provider_id,
+    provider_name: payment.provider_name,
+    concept_id: payment.concept_id,
+    comments: payment.comments,
+    payment_date: dayjs(payment.payment_date),
+    details: detailsData,
+   });
+
+  } catch (error) {
+   console.error(error);
+  } finally {
+   setLoading(false);
+  }
+ };
+
+ useEffect(() => {
+  if (!open) return;
+
+  if (paymentId) {
+   fetchPayment(paymentId);
+  } else {
+   reset({
+    account_id: Cuenta.id_cuenta,
+    provider_id: null,
+    concept_id: null,
+    comments: null,
+    payment_date: dayjs(),
+    details: [{ category_id: null, amount: 0 }],
+   });
+  }
+ }, [open, paymentId]);
 
  const [isLoading, setLoading] = useState(false);
 
@@ -120,7 +164,14 @@ const FlujoForm = ({ open, handleClose, Cuenta }: Props) => {
      .split('T')[0],
    };
 
-   const response = await odooApi.post(`/payments/`, payload);
+   let response;
+
+   if (paymentId) {
+    response = await odooApi.patch(`/payments/${paymentId}`, payload);
+   } else {
+    response = await odooApi.post('/payments/', payload);
+   }
+
    if (response.data.status == "success") {
     toast.success(response.data.message);
     reset({
@@ -333,16 +384,18 @@ const FlujoForm = ({ open, handleClose, Cuenta }: Props) => {
     <DialogTitle>
      Registro
     </DialogTitle>
+    {(isLoading && (<Progress isIndeterminate size="sm"> </Progress>))}
     <DialogContent dividers>
 
      <Box display="flex" flexDirection="column" gap={2}>
 
       <div>
        <Button
-        color="primary"
+        color={paymentId ? 'success' : 'primary'}
+        className="text-white"
         onPress={() => handleSubmit(SavePayment)()}
        >
-        Registrar
+        {paymentId ? 'Actualizar' : 'Registrar'}
        </Button>
       </div>
 
@@ -359,6 +412,7 @@ const FlujoForm = ({ open, handleClose, Cuenta }: Props) => {
       />
 
       <ContactsSearchInputMatch
+       initialInputValue={provider_name ?? ""}
        control={control}
        name="provider_id"
        label="Proveedor"

@@ -9,8 +9,10 @@ import MaintenanceReportRoutesRemolques from '@/modules/maintenance/routes/Maint
 
 const ReporteLicenciasVencidas = lazy(() => import('../phicargo/reportes/licencias'));
 const ReporteAptosMedicos = lazy(() => import('../phicargo/reportes/aptos_medicos'));
+const Cuentas = lazy(() => import('@/phicargo/saldos_contabilidad/cuenta/cuentas'));
 const Saldos = lazy(() => import('@/phicargo/saldos_contabilidad'));
 const Flujos = lazy(() => import('@/phicargo/saldos_contabilidad/flujo/index'));
+const Conceptos = lazy(() => import('@/phicargo/saldos_contabilidad/conceptos/index'));
 const VehicleRevenueProjectionPage = lazy(() => import('@/modules/vehicles/pages/VehicleRevenueProjectionPage'));
 const ReporteCumplimiento = lazy(() => import('../phicargo/reportes/cumplimiento'));
 const ViajesTipoArmado = lazy(() => import('../phicargo/reportes/tipo_armado'));
@@ -194,6 +196,24 @@ export const ReportsRoutes = () => (
       element={
         <Suspense fallback={<LoadingPage />}>
           <Flujos></Flujos>
+        </Suspense>
+      }
+    />
+
+    <Route
+      path="conceptos"
+      element={
+        <Suspense fallback={<LoadingPage />}>
+          <Conceptos></Conceptos>
+        </Suspense>
+      }
+    />
+
+    <Route
+      path="cuentas"
+      element={
+        <Suspense fallback={<LoadingPage />}>
+          <Cuentas></Cuentas>
         </Suspense>
       }
     />

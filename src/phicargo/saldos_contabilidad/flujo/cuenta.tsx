@@ -25,9 +25,15 @@ type Props = {
   Cuenta: Cuenta;
 };
 
+type Flujo = {
+  id: number | null;
+  amount: number | null;
+};
+
 const FlujosEfectivoTable = ({ open, handleClose, Cuenta }: Props) => {
 
   const [openForm, setOpenForm] = React.useState(false);
+  const [paymentId, setPayment] = React.useState<number | null>(null);
 
   const handleCloseForm = () => {
     setOpenForm(false);
@@ -38,7 +44,7 @@ const FlujosEfectivoTable = ({ open, handleClose, Cuenta }: Props) => {
     setOpenForm(true);
   };
 
-  const [data, setData] = useState<Cuenta[]>([]);
+  const [data, setData] = useState<Flujo[]>([]);
   const [isLoading, setLoading] = useState(false);
 
   const fetchData = async () => {
@@ -57,8 +63,21 @@ const FlujosEfectivoTable = ({ open, handleClose, Cuenta }: Props) => {
     fetchData();
   }, [Cuenta]);
 
-  const columns = useMemo<MRT_ColumnDef<Cuenta>[]>(
+  const totalAmount = useMemo(
+    () =>
+      data.reduce(
+        (sum, item) => sum + Number(item.amount || 0),
+        0
+      ),
+    [data]
+  );
+
+  const columns = useMemo<MRT_ColumnDef<Flujo>[]>(
     () => [
+      {
+        accessorKey: 'id',
+        header: 'ID',
+      },
       {
         accessorKey: 'payment_date',
         header: 'Fecha',
@@ -72,15 +91,38 @@ const FlujosEfectivoTable = ({ open, handleClose, Cuenta }: Props) => {
         header: 'Concepto',
       },
       {
-        accessorKey: 'amount',
-        header: 'Monto',
-      },
-      {
         accessorKey: 'comments',
         header: 'Comentarios',
       },
+      {
+        accessorKey: 'amount',
+        header: 'Monto',
+        Cell: ({ cell }) =>
+          Number(cell.getValue()).toLocaleString('es-MX', {
+            style: 'currency',
+            currency: 'MXN',
+          }),
+        Footer: () =>
+          `Total: ${totalAmount.toLocaleString('es-MX', {
+            style: 'currency',
+            currency: 'MXN',
+          })}`,
+        muiTableHeadCellProps: {
+          align: 'right',
+        },
+        muiTableBodyCellProps: {
+          align: 'right',
+        },
+        muiTableFooterCellProps: {
+          align: 'right',
+          sx: {
+            fontWeight: 'bold',
+            fontSize: '20px',
+          },
+        },
+      }
     ],
-    []
+    [totalAmount]
   );
 
   const table = useMaterialReactTable({
@@ -101,6 +143,7 @@ const FlujosEfectivoTable = ({ open, handleClose, Cuenta }: Props) => {
       pagination: { pageIndex: 0, pageSize: 100 },
       showColumnFilters: true,
     },
+    enableStickyFooter: true,
     muiTablePaperProps: {
       elevation: 0,
       sx: {
@@ -111,6 +154,7 @@ const FlujosEfectivoTable = ({ open, handleClose, Cuenta }: Props) => {
       onClick: () => {
         if (row.subRows?.length) {
         } else {
+          setPayment(row.original.id)
           handleClickOpen();
         }
       },
@@ -160,7 +204,15 @@ const FlujosEfectivoTable = ({ open, handleClose, Cuenta }: Props) => {
             >
               {`${Cuenta?.banco ?? ''} ${Cuenta?.referencia ?? ''}`}
             </h1>
-            <Button color="primary" radius="full" onPress={() => handleClickOpen()}>Agregar</Button>
+            <Button
+              color="primary"
+              radius="full"
+              onPress={() => {
+                handleClickOpen();
+                setPayment(null);
+              }}>
+              Agregar
+            </Button>
           </div>
         </div>
       </Box>
@@ -184,7 +236,7 @@ const FlujosEfectivoTable = ({ open, handleClose, Cuenta }: Props) => {
           <Button onPress={handleClose}>Cerrar</Button>
         </DialogActions>
       </Dialog>
-      <FlujoForm open={openForm} handleClose={handleCloseForm} Cuenta={Cuenta}></FlujoForm>
+      <FlujoForm open={openForm} handleClose={handleCloseForm} Cuenta={Cuenta} paymentId={paymentId}></FlujoForm>
     </>
   );
 };

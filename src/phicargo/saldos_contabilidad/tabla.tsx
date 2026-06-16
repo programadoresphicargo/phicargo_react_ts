@@ -6,11 +6,6 @@ import {
   ModalHeader,
 } from "@heroui/react";
 import {
-  Dialog,
-  DialogContent,
-  DialogActions
-} from "@mui/material";
-import {
   MRT_Cell,
   MRT_Column,
   MRT_ColumnDef,
@@ -23,7 +18,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { CalendarDate, parseDate } from "@internationalized/date";
 import { Box } from '@mui/material';
 import { Chip } from "@heroui/react";
-import Cuentas from './cuentas';
 import { DatePicker } from "@heroui/react";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import SaldoForm from './saldo_form';
@@ -52,22 +46,13 @@ const SaldosTable = () => {
   const [value, setValue] = React.useState<CalendarDate | null>(
     parseDate(fechaActual)
   );
-  const [open, setOpen] = React.useState(false);
-  const [open2, setOpen2] = React.useState(false);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  const [open2, setOpen2] = React.useState(false);
 
   const abrirForm = (id_cuenta: number, referencia: string) => {
     setOpen2(true);
     setCuenta(id_cuenta);
     setReferencia(referencia);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-    fetchData();
   };
 
   const handleClose2 = () => {
@@ -362,10 +347,7 @@ const SaldosTable = () => {
               value={value}
               onChange={setValue}
             />
-
             <h1 className='text-primary'>Fecha saldo anterior: {fechaAnterior || 'N/A'}</h1>
-
-            <Button color='primary' onPress={handleClickOpen} radius="full">Cuentas</Button>
           </div>
         </div>
 
@@ -373,41 +355,26 @@ const SaldosTable = () => {
     ),
   });
 
-  return (<>
-
-    <Dialog
-      open={open}
-      onClose={handleClose}
-      fullScreen
-    >
-
-      <DialogContent dividers>
-        <Cuentas />
-      </DialogContent>
-
-      <DialogActions>
-        <Button onPress={handleClose}>Cerrar</Button>
-      </DialogActions>
-    </Dialog>
-
-    <Modal
-      size="2xl"
-      isOpen={open2}
-      onOpenChange={handleClose2}
-    >
-      <ModalContent>
-        <ModalHeader>
-          Registro de saldo
-        </ModalHeader>
-        <ModalBody>
-          {id_cuenta && (
-            <SaldoForm id_cuenta={id_cuenta} referencia={referencia} onClose={handleClose2}></SaldoForm>
-          )}
-        </ModalBody>
-      </ModalContent>
-    </Modal>
-    <MaterialReactTable table={table} />
-  </>
+  return (
+    <>
+      <Modal
+        size="2xl"
+        isOpen={open2}
+        onOpenChange={handleClose2}
+      >
+        <ModalContent>
+          <ModalHeader>
+            Registro de saldo
+          </ModalHeader>
+          <ModalBody>
+            {id_cuenta && (
+              <SaldoForm id_cuenta={id_cuenta} referencia={referencia} onClose={handleClose2}></SaldoForm>
+            )}
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+      <MaterialReactTable table={table} />
+    </>
   );
 
 };
