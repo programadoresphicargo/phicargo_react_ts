@@ -11,6 +11,8 @@ import {
   MenuItem,
   IconButton,
   Typography,
+  AppBar,
+  Toolbar,
 } from "@mui/material";
 import {
   MRT_ColumnDef,
@@ -65,6 +67,7 @@ type FlujoForm = {
 const FlujoForm = ({ open, handleClose, Cuenta, paymentId }: Props) => {
 
   const [concepts, setConcepts] = React.useState<Concepts[]>([]);
+  const categories = [{ id: 1, label: "Gasto" }];
 
   const initialForm: FlujoForm = {
     account_id: null,
@@ -139,7 +142,7 @@ const FlujoForm = ({ open, handleClose, Cuenta, paymentId }: Props) => {
         concept_id: null,
         comments: null,
         payment_date: dayjs(),
-        details: [{ category_id: null, amount: 0 }],
+        details: [{ category_id: 1, amount: 0 }],
       });
     }
   }, [open, paymentId]);
@@ -230,7 +233,7 @@ const FlujoForm = ({ open, handleClose, Cuenta, paymentId }: Props) => {
                 fullWidth
                 error={!!fieldState.error}
               >
-                {concepts.map((c) => (
+                {categories.map((c) => (
                   <MenuItem
                     key={c.id}
                     value={c.id}
@@ -347,6 +350,9 @@ const FlujoForm = ({ open, handleClose, Cuenta, paymentId }: Props) => {
         <div className="flex w-full flex-col gap-4">
           <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
             <Button
+              color="success"
+              className="text-white"
+              radius="full"
               onPress={() =>
                 append({
                   category_id: null,
@@ -354,7 +360,7 @@ const FlujoForm = ({ open, handleClose, Cuenta, paymentId }: Props) => {
                 })
               }
             >
-              Agregar concepto
+              Agregar
             </Button>
           </div>
         </div>
@@ -380,9 +386,24 @@ const FlujoForm = ({ open, handleClose, Cuenta, paymentId }: Props) => {
         fullWidth
         maxWidth="lg"
       >
-        <DialogTitle>
-          Registro
-        </DialogTitle>
+
+        <AppBar
+          sx={{
+            background: 'linear-gradient(90deg, #0b2149, #002887)',
+            position: 'relative',
+            padding: '0 16px'
+          }}
+          elevation={0}>
+          <Toolbar>
+            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+              Registro
+            </Typography>
+            <Button autoFocus onPress={handleClose} color="primary">
+              Cerrar
+            </Button>
+          </Toolbar>
+        </AppBar>
+
         {(isLoading && (<Progress isIndeterminate size="sm"> </Progress>))}
         <DialogContent dividers>
 
@@ -393,6 +414,7 @@ const FlujoForm = ({ open, handleClose, Cuenta, paymentId }: Props) => {
                 color={paymentId ? 'success' : 'primary'}
                 className="text-white"
                 onPress={() => handleSubmit(SavePayment)()}
+                radius="full"
               >
                 {paymentId ? 'Actualizar' : 'Registrar'}
               </Button>
