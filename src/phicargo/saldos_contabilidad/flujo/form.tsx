@@ -5,7 +5,6 @@ import {
   Dialog,
   DialogContent,
   DialogActions,
-  DialogTitle,
   TextField,
   Select,
   MenuItem,
@@ -29,7 +28,7 @@ import { Controller, useFieldArray, useForm, useWatch } from "react-hook-form";
 import dayjs, { Dayjs } from "dayjs";
 import { DatePickerElement } from "react-hook-form-mui/date-pickers";
 import { Delete } from "@mui/icons-material";
-import { AutocompleteElement, SelectElement, TextFieldElement } from "react-hook-form-mui";
+import { AutocompleteElement, TextFieldElement } from "react-hook-form-mui";
 import toast from "react-hot-toast";
 
 type Props = {
