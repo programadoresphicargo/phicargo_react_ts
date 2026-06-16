@@ -1,4 +1,4 @@
-import { CollectRegister, DaysOfWeek } from '../models';
+import { CollectRegister, DaysOfWeek, Payment } from '../models';
 
 /**
  * Function to calculate the total per day
@@ -6,7 +6,7 @@ import { CollectRegister, DaysOfWeek } from '../models';
  * @param day Dia de la semana
  * @returns Total per day
  */
-export const getTotalPerDay = (data: CollectRegister[], day: DaysOfWeek) => {
+export const getTotalPerDay = (data: Payment[] | CollectRegister[], day: DaysOfWeek) => {
   return (
     data.reduce((acc, curr) => {
 

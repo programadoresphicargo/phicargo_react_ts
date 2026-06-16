@@ -1,11 +1,11 @@
-import { CollectRegister } from '../models';
+import { CollectRegister, Payment } from '../models';
 
 /**
  * Function to get the sum of the amount of each day of the week
  * @param data Object with the week data
  * @returns Returns the sum of the amount of each day of the week
  */
-export const getProjection = (data: CollectRegister) => {
+export const getProjection = (data: Payment | CollectRegister) => {
 
   if (data.observations != null) {
     return 0;
