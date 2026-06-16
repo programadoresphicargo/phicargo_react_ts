@@ -1,4 +1,4 @@
-import { DaysOfWeek, WeekBase } from '../models';
+import { CollectRegister, DaysOfWeek, WeekBase } from '../models';
 
 /**
  * Function to calculate the total per day
@@ -6,9 +6,14 @@ import { DaysOfWeek, WeekBase } from '../models';
  * @param day Dia de la semana
  * @returns Total per day
  */
-export const getTotalPerDay = (data: WeekBase[], day: DaysOfWeek) => {
+export const getTotalPerDay = (data: CollectRegister[], day: DaysOfWeek) => {
   return (
     data.reduce((acc, curr) => {
+
+      if (curr.observations != null) {
+        return acc;
+      }
+
       const value = curr[day].amount;
       return acc + (isNaN(value) ? 0 : value);
     }, 0) || 0
