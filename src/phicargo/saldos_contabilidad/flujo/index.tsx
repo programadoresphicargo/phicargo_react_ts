@@ -10,6 +10,7 @@ import odooApi from '@/api/odoo-api';
 import CustomNavbar from "@/pages/CustomNavbar";
 import { pages } from "../pages";
 import FlujosEfectivoTable from "./cuenta";
+import { DateRangePicker } from 'rsuite';
 
 export type Cuenta = {
   id_cuenta: number;
@@ -21,6 +22,11 @@ export type Cuenta = {
 }
 
 const FlujosTable = () => {
+
+  const now = new Date();
+  const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+  const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+  const [range, setRange] = useState<[Date, Date] | null>([firstDay, lastDay]);
 
   const [Cuenta, setCuenta] = React.useState<Cuenta>();
 
@@ -153,6 +159,15 @@ const FlujosTable = () => {
             >
               Flujo
             </h1>
+
+            <DateRangePicker
+              value={range}
+              onChange={(value) => setRange(value)}
+              placeholder="Selecciona un rango de fechas"
+              format="yyyy-MM-dd"
+              loading={isLoading}
+            />
+
           </div>
         </div>
       </Box>
@@ -161,8 +176,8 @@ const FlujosTable = () => {
 
   return (
     <>
-      {Cuenta && (
-        <FlujosEfectivoTable open={open} handleClose={handleClose} Cuenta={Cuenta}></FlujosEfectivoTable>
+      {Cuenta && range && (
+        <FlujosEfectivoTable open={open} handleClose={handleClose} Cuenta={Cuenta} dateStart={range[0].toISOString().slice(0, 10)} dateEnd={range[1].toISOString().slice(0, 10)}></FlujosEfectivoTable>
       )}
       <CustomNavbar pages={pages}></CustomNavbar>
       <MaterialReactTable table={table} />

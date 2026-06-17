@@ -404,8 +404,9 @@ const FlujoForm = ({ open, handleClose, Cuenta, paymentId }: Props) => {
             display="flex"
             justifyContent="space-between"
             alignItems="center"
+            fontFamily={"Inter"}
           >
-            <Typography variant="h6" color="white">
+            <Typography variant="h6" color="white" fontFamily={"Inter"}>
               {paymentId ? 'Editar Pago' : 'Nuevo Pago'}
             </Typography>
 

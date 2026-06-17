@@ -5,6 +5,7 @@ import {
   Dialog,
   DialogContent,
   DialogActions,
+  Typography,
 } from "@mui/material";
 import {
   MRT_ColumnDef,
@@ -23,6 +24,8 @@ type Props = {
   open: boolean;
   handleClose: () => void;
   Cuenta: Cuenta;
+  dateStart: string;
+  dateEnd: string;
 };
 
 type Flujo = {
@@ -30,7 +33,7 @@ type Flujo = {
   importe: number | null;
 };
 
-const FlujosEfectivoTable = ({ open, handleClose, Cuenta }: Props) => {
+const FlujosEfectivoTable = ({ open, handleClose, Cuenta, dateStart, dateEnd }: Props) => {
 
   const [openForm, setOpenForm] = React.useState(false);
   const [paymentId, setPayment] = React.useState<number | null>(null);
@@ -50,7 +53,12 @@ const FlujosEfectivoTable = ({ open, handleClose, Cuenta }: Props) => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await odooApi.get(`/payments/account_id/${Cuenta.id_cuenta}`);
+      const response = await odooApi.get(`/payments/account_id/${Cuenta.id_cuenta}`, {
+        params: {
+          start_date: dateStart,
+          end_date: dateEnd
+        }
+      });
       setData(response.data);
     } catch (error) {
       console.error("Error al obtener los datos:", error);
@@ -183,51 +191,85 @@ const FlujosEfectivoTable = ({ open, handleClose, Cuenta }: Props) => {
       <Box
         sx={{
           display: 'flex',
-          gap: '16px',
-          padding: '8px',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          width: '100%',
+          p: 1,
           flexWrap: 'wrap',
+          gap: 2,
         }}
       >
-        <div className="flex w-full flex-col gap-4">
-          <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-            <h6
-              className="font-semibold lg:text-1xl"
-            >
-              {`ID: ${Cuenta?.id_cuenta ?? ''}`}
-            </h6>
-            <h1
-              className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
-            >
-              {`${Cuenta?.banco ?? ''} ${Cuenta?.referencia ?? ''}`}
-            </h1>
-            <Button
-              color="primary"
-              radius="full"
-              onPress={() => {
-                handleClickOpen();
-                setPayment(null);
-              }}>
-              Agregar
-            </Button>
-            <Button
-              color="success"
-              radius="full"
-              className="text-white"
-              onPress={() => {
-                fetchData();
-              }}>
-              Recargar
-            </Button>
-            <Button
-              radius='full'
-              color='warning'
-              className='text-white'
-              startContent={<i className="bi bi-file-earmark-excel"></i>}
-              onPress={() => exportToCSV(data, columns, "flujo.csv")}>
-              Exportar
-            </Button>
-          </div>
-        </div>
+        {/* Información */}
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 0.5,
+          }}
+        >
+          <Typography variant="subtitle1" fontWeight={600} fontFamily={"Inter"}>
+            ID: {Cuenta?.id_cuenta ?? ''}
+          </Typography>
+
+          <Typography
+            variant="h4"
+            fontWeight={700}
+            fontFamily={"Inter"}
+            sx={{
+              background:
+                'linear-gradient(to right, #0b2149, #002887)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+            }}
+          >
+            {`${Cuenta?.banco ?? ''} ${Cuenta?.referencia ?? ''}`}
+          </Typography>
+
+          <Typography variant="body1" fontWeight={600} fontFamily={"Inter"}>
+            Periodo: {dateStart} - {dateEnd}
+          </Typography>
+        </Box>
+
+        {/* Botones */}
+        <Box
+          sx={{
+            display: 'flex',
+            gap: 1,
+            alignItems: 'center',
+          }}
+        >
+          <Button
+            color="primary"
+            radius="full"
+            onPress={() => {
+              handleClickOpen();
+              setPayment(null);
+            }}
+          >
+            Agregar
+          </Button>
+
+          <Button
+            color="success"
+            radius="full"
+            className="text-white"
+            onPress={fetchData}
+          >
+            Recargar
+          </Button>
+
+          <Button
+            radius="full"
+            color="warning"
+            className="text-white"
+            startContent={<i className="bi bi-file-earmark-excel"></i>}
+            onPress={() =>
+              exportToCSV(data, columns, `flujo_${Cuenta?.banco}_${Cuenta?.referencia}_${dateStart}_${dateEnd}.csv`)
+            }
+          >
+            Exportar
+          </Button>
+        </Box>
       </Box>
     ),
   });
