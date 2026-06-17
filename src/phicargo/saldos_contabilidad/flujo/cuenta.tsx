@@ -18,6 +18,7 @@ import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import odooApi from '@/api/odoo-api';
 import { Cuenta } from ".";
 import FlujoForm from "./form";
+import { exportToCSV } from "@/phicargo/utils/export";
 
 type Props = {
   open: boolean;
@@ -27,7 +28,7 @@ type Props = {
 
 type Flujo = {
   id: number | null;
-  amount: number | null;
+  importe: number | null;
 };
 
 const FlujosEfectivoTable = ({ open, handleClose, Cuenta }: Props) => {
@@ -63,10 +64,10 @@ const FlujosEfectivoTable = ({ open, handleClose, Cuenta }: Props) => {
     fetchData();
   }, [Cuenta]);
 
-  const totalAmount = useMemo(
+  const total = useMemo(
     () =>
       data.reduce(
-        (sum, item) => sum + Number(item.amount || 0),
+        (sum, item) => sum + Number(item.importe || 0),
         0
       ),
     [data]
@@ -74,10 +75,6 @@ const FlujosEfectivoTable = ({ open, handleClose, Cuenta }: Props) => {
 
   const columns = useMemo<MRT_ColumnDef<Flujo>[]>(
     () => [
-      {
-        accessorKey: 'id',
-        header: 'ID',
-      },
       {
         accessorKey: 'payment_date',
         header: 'Fecha',
@@ -91,19 +88,15 @@ const FlujosEfectivoTable = ({ open, handleClose, Cuenta }: Props) => {
         header: 'Concepto',
       },
       {
-        accessorKey: 'comments',
-        header: 'Comentarios',
-      },
-      {
-        accessorKey: 'amount',
-        header: 'Monto',
+        accessorKey: 'importe',
+        header: 'Importe',
         Cell: ({ cell }) =>
           Number(cell.getValue()).toLocaleString('es-MX', {
             style: 'currency',
             currency: 'MXN',
           }),
         Footer: () =>
-          `Total: ${totalAmount.toLocaleString('es-MX', {
+          `Total: ${total.toLocaleString('es-MX', {
             style: 'currency',
             currency: 'MXN',
           })}`,
@@ -120,9 +113,13 @@ const FlujosEfectivoTable = ({ open, handleClose, Cuenta }: Props) => {
             fontSize: '20px',
           },
         },
-      }
+      },
+      {
+        accessorKey: 'comments',
+        header: 'Comentarios',
+      },
     ],
-    [totalAmount]
+    [total]
   );
 
   const table = useMaterialReactTable({
@@ -197,7 +194,7 @@ const FlujosEfectivoTable = ({ open, handleClose, Cuenta }: Props) => {
             <h6
               className="font-semibold lg:text-1xl"
             >
-              {`${Cuenta?.id_cuenta ?? ''}`}
+              {`ID: ${Cuenta?.id_cuenta ?? ''}`}
             </h6>
             <h1
               className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
@@ -213,6 +210,23 @@ const FlujosEfectivoTable = ({ open, handleClose, Cuenta }: Props) => {
               }}>
               Agregar
             </Button>
+            <Button
+              color="success"
+              radius="full"
+              className="text-white"
+              onPress={() => {
+                fetchData();
+              }}>
+              Recargar
+            </Button>
+            <Button
+              radius='full'
+              color='warning'
+              className='text-white'
+              startContent={<i className="bi bi-file-earmark-excel"></i>}
+              onPress={() => exportToCSV(data, columns, "flujo.csv")}>
+              Exportar
+            </Button>
           </div>
         </div>
       </Box>
@@ -226,9 +240,6 @@ const FlujosEfectivoTable = ({ open, handleClose, Cuenta }: Props) => {
         onClose={handleClose}
         fullScreen
       >
-        <DialogTitle>
-          {`${Cuenta?.banco ?? ''} ${Cuenta?.referencia ?? ''}`}
-        </DialogTitle>
         <DialogContent dividers>
           <MaterialReactTable table={table} />
         </DialogContent>

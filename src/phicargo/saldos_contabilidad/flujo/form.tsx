@@ -10,8 +10,8 @@ import {
   MenuItem,
   IconButton,
   Typography,
-  AppBar,
-  Toolbar,
+  Paper,
+  DialogTitle,
 } from "@mui/material";
 import {
   MRT_ColumnDef,
@@ -28,8 +28,9 @@ import { Controller, useFieldArray, useForm, useWatch } from "react-hook-form";
 import dayjs, { Dayjs } from "dayjs";
 import { DatePickerElement } from "react-hook-form-mui/date-pickers";
 import { Delete } from "@mui/icons-material";
-import { AutocompleteElement, TextFieldElement } from "react-hook-form-mui";
+import { AutocompleteElement, TextFieldElement, TextareaAutosizeElement } from "react-hook-form-mui";
 import toast from "react-hot-toast";
+import Grid from "@mui/system/Grid";
 
 type Props = {
   open: boolean;
@@ -60,19 +61,21 @@ type FlujoForm = {
   concept_id: number | null;
   comments: string | null;
   payment_date: Dayjs;
+  importe: number | null;
   details: Details[]
 }
 
 const FlujoForm = ({ open, handleClose, Cuenta, paymentId }: Props) => {
 
   const [concepts, setConcepts] = React.useState<Concepts[]>([]);
-  const categories = [{ id: 1, label: "Gasto" }];
+  const categories = [{ id: 1, label: "Gasto" }, { id: 2, label: "IVA" }];
 
   const initialForm: FlujoForm = {
     account_id: null,
     provider_id: null,
     concept_id: null,
     comments: null,
+    importe: 0,
     payment_date: dayjs(),
     details: [{ category_id: null, amount: 0 }],
   }
@@ -87,6 +90,7 @@ const FlujoForm = ({ open, handleClose, Cuenta, paymentId }: Props) => {
   });
 
   const provider_name = watch("provider_name");
+  const importe = watch("importe");
 
   const {
     fields,
@@ -118,6 +122,7 @@ const FlujoForm = ({ open, handleClose, Cuenta, paymentId }: Props) => {
         provider_name: payment.provider_name,
         concept_id: payment.concept_id,
         comments: payment.comments,
+        importe: payment.importe,
         payment_date: dayjs(payment.payment_date),
         details: detailsData,
       });
@@ -140,6 +145,7 @@ const FlujoForm = ({ open, handleClose, Cuenta, paymentId }: Props) => {
         provider_id: null,
         concept_id: null,
         comments: null,
+        importe: 0,
         payment_date: dayjs(),
         details: [{ category_id: 1, amount: 0 }],
       });
@@ -181,6 +187,7 @@ const FlujoForm = ({ open, handleClose, Cuenta, paymentId }: Props) => {
           concept_id: null,
           comments: null,
           payment_date: dayjs(),
+          importe: 0,
           details: [{ category_id: null, amount: 0 }],
         });
         handleClose();
@@ -377,6 +384,8 @@ const FlujoForm = ({ open, handleClose, Cuenta, paymentId }: Props) => {
     0
   );
 
+  const diferencia = (importe ?? 0) - total;
+
   return (
     <>
       <Dialog
@@ -386,91 +395,180 @@ const FlujoForm = ({ open, handleClose, Cuenta, paymentId }: Props) => {
         maxWidth="lg"
       >
 
-        <AppBar
+        <DialogTitle
           sx={{
             background: 'linear-gradient(90deg, #0b2149, #002887)',
             position: 'relative',
-            padding: '0 16px'
-          }}
-          elevation={0}>
-          <Toolbar>
-            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              Registro
+          }}>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Typography variant="h6" color="white">
+              {paymentId ? 'Editar Pago' : 'Nuevo Pago'}
             </Typography>
-            <Button autoFocus onPress={handleClose} color="primary">
-              Cerrar
+
+            <Button
+              color={paymentId ? 'success' : 'primary'}
+              className="text-white"
+              radius="full"
+              onPress={() => handleSubmit(SavePayment)()}
+            >
+              {paymentId ? 'Actualizar' : 'Registrar'}
             </Button>
-          </Toolbar>
-        </AppBar>
+          </Box>
+        </DialogTitle>
 
         {(isLoading && (<Progress isIndeterminate size="sm"> </Progress>))}
         <DialogContent dividers>
 
-          <Box display="flex" flexDirection="column" gap={2}>
+          <Paper
+            elevation={0}
+            sx={{
+              p: 2,
+              border: '1px solid',
+              borderColor: 'divider',
+              borderRadius: 2,
+              mb: 2
+            }}
+          >
+            <Typography
+              variant="subtitle1"
+              fontWeight={600}
+              mb={2}
+            >
+              Datos Generales
+            </Typography>
 
-            <div>
-              <Button
-                color={paymentId ? 'success' : 'primary'}
-                className="text-white"
-                onPress={() => handleSubmit(SavePayment)()}
-                radius="full"
+            <Grid container spacing={2}>
+
+              <Grid size={{ xs: 12, md: 6 }}>
+                <DatePickerElement
+                  control={control}
+                  name="payment_date"
+                  label="Fecha"
+                  rules={{ required: "Campo obligatorio" }}
+                  required
+                  inputProps={{
+                    size: 'small',
+                    fullWidth: true,
+                  }}
+                />
+              </Grid>
+
+              <Grid size={{ xs: 12, md: 6 }}>
+                <ContactsSearchInputMatch
+                  initialInputValue={provider_name ?? ""}
+                  control={control}
+                  name="provider_id"
+                  label="Proveedor"
+                  placeholder="Buscar cliente..."
+                  rules={{ required: "Campo obligatorio" }}
+                />
+              </Grid>
+
+              <Grid size={{ xs: 12, md: 6 }}>
+                <AutocompleteElement
+                  options={concepts}
+                  control={control}
+                  name="concept_id"
+                  label="Concepto"
+                  rules={{ required: "Campo obligatorio" }}
+                  matchId
+                  autocompleteProps={{
+                    size: "small"
+                  }}
+                />
+              </Grid>
+
+              <Grid size={{ xs: 12, md: 6 }}>
+                <TextFieldElement
+                  control={control}
+                  name="importe"
+                  type="number"
+                  label="Importe"
+                  size="small"
+                  fullWidth
+                  inputProps={{
+                    step: "0.01"
+                  }}
+                  rules={{
+                    required: "Campo obligatorio",
+                    min: {
+                      value: 0.01,
+                      message: "El importe debe ser mayor a cero"
+                    }
+                  }}
+                />
+              </Grid>
+
+              <Grid size={{ xs: 12, md: 6 }}>
+                <TextareaAutosizeElement
+                  rows={2}
+                  control={control}
+                  name="comments"
+                  label="Comentarios"
+                  size="small"
+                  fullWidth
+                  rules={{ required: "Campo obligatorio" }}
+                />
+              </Grid>
+
+            </Grid>
+          </Paper>
+
+          <Paper
+            elevation={0}
+            sx={{
+              p: 2,
+              border: '1px solid',
+              borderColor: 'divider',
+              borderRadius: 2
+            }}
+          >
+            <Typography
+              variant="subtitle1"
+              fontWeight={600}
+              mb={2}
+            >
+              Detalles
+            </Typography>
+            <MaterialReactTable table={table} />
+          </Paper>
+
+          <Paper
+            elevation={0}
+            sx={{
+              p: 2,
+              border: '1px solid',
+              borderColor: 'divider',
+              borderRadius: 2
+            }}
+          >
+            <Box
+              display="flex"
+              flexDirection="column"
+              alignItems="flex-end"
+            >
+              <Typography
+                variant="h5"
+                fontWeight="bold"
               >
-                {paymentId ? 'Actualizar' : 'Registrar'}
-              </Button>
-            </div>
+                Total: ${total.toLocaleString()}
+              </Typography>
 
-            <DatePickerElement
-              control={control}
-              name="payment_date"
-              label="Fecha"
-              rules={{ required: "Campo obligatorio" }}
-              required
-              inputProps={{
-                size: 'small',
-                fullWidth: true,
-              }}
-            />
-
-            <ContactsSearchInputMatch
-              initialInputValue={provider_name ?? ""}
-              control={control}
-              name="provider_id"
-              label="Proveedor"
-              placeholder="Buscar cliente..."
-              rules={{ required: "Campo obligatorio" }}
-            />
-
-            <AutocompleteElement
-              options={concepts}
-              control={control}
-              name="concept_id"
-              label="Concepto"
-              rules={{ required: "Campo obligatorio" }}
-              autocompleteProps={{
-                size: "small"
-              }}
-            />
-
-            <TextFieldElement
-              control={control}
-              name="comments"
-              label="Comentarios"
-              size="small"
-              fullWidth
-              rules={{ required: "Campo obligatorio" }}
-            />
-
-          </Box>
-
-          <MaterialReactTable table={table} />
-
-          <Typography variant="h6">
-            Total: ${total.toLocaleString()}
-          </Typography>
+              <Typography
+                variant="h6"
+              >
+                Diferencia: ${(diferencia).toLocaleString()}
+              </Typography>
+            </Box>
+          </Paper>
 
         </DialogContent>
         <DialogActions>
-          <Button onPress={handleClose}>Cerrar</Button>
+          <Button onPress={handleClose} color="danger" radius="full">Cerrar</Button>
         </DialogActions>
       </Dialog>
     </>
