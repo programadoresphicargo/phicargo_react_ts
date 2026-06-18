@@ -3,6 +3,7 @@ import { memo } from "react";
 
 interface Unidad {
   name: string;
+  postura: boolean;
 }
 
 interface Props {
@@ -26,11 +27,17 @@ export const UnidadesSinOperador = memo(({ data }: Props) => {
         </button>
       </PopoverTrigger>
       <PopoverContent>
-            <ul>
-              {unidades.map((unidad, index) => (
-                <li key={index}>{unidad.name}</li>
-              ))}
-            </ul>
+        <ul>
+          {unidades.map((unidad, index) => (
+            <>
+              {unidad.postura ? (
+                <li><strong className="text-primary">{unidad.name}</strong></li>
+              ) : (
+                <li key={index} className="fw-bold">{unidad.name}</li>
+              )}
+            </>
+          ))}
+        </ul>
       </PopoverContent>
     </Popover>
   );
