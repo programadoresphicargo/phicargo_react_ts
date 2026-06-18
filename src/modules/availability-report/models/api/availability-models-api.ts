@@ -14,6 +14,7 @@ interface RecordApiBase {
   unloading_units: number;
   long_trip_units: number;
   units_in_maintenance: number;
+  units_in_maintenance_detail: string | null;
   units_no_operator: number;
   units_no_operator_detail: string | null;
   operator_permission: number;

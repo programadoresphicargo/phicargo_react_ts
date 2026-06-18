@@ -273,6 +273,16 @@ export const useDailyReportColumns = () => {
         enableEditing: false,
         enableSorting: false,
         enableColumnFilter: false,
+        Cell: ({ row }) => (
+          <>
+            <div style={{ display: "flex", gap: "10px" }}>
+              {row.original.unitsInMaintenance}
+              <UnidadesSinOperador
+                data={row.original.unitsInMaintenanceDetail || null}
+              />
+            </div>
+          </>
+        ),
       },
       {
         accessorFn: (row) => row.unitsNoOperator,

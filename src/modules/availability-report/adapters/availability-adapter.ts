@@ -31,6 +31,7 @@ export class AvailibilityAdapter {
       unloadingUnits: record.unloading_units,
       longTripUnits: record.long_trip_units,
       unitsInMaintenance: record.units_in_maintenance,
+      unitsInMaintenanceDetail: record.units_in_maintenance_detail,
       unitsNoOperator: record.units_no_operator,
       unitsNoOperatorDetail: record.units_no_operator_detail,
       operatorPermission: record.operator_permission,
