@@ -88,7 +88,7 @@ export const useCollectTableColumns = (data: CollectRegister[]) => {
             type="collect"
             item={row.original}
             dayOfWeek="monday"
-            customColor={row.original.observations ? "#fcd46f" : row.original.monday.confirmed ? '#d4edda' : '#ffcccb'}
+            customColor={(row.original.observations && !row.original.monday.confirmed && cell.getValue<number>() > 0) ? "#fcd46f" : row.original.monday.confirmed ? '#d4edda' : '#ffcccb'}
           />
         ),
       },
@@ -114,7 +114,7 @@ export const useCollectTableColumns = (data: CollectRegister[]) => {
             type="collect"
             item={row.original}
             dayOfWeek="tuesday"
-            customColor={row.original.observations ? "#fcd46f" : row.original.tuesday.confirmed ? '#d4edda' : '#ffcccb'}
+            customColor={(row.original.observations && !row.original.thursday.confirmed && cell.getValue<number>() > 0) ? "#fcd46f" : row.original.tuesday.confirmed ? '#d4edda' : '#ffcccb'}
           />
         ),
       },
@@ -141,7 +141,7 @@ export const useCollectTableColumns = (data: CollectRegister[]) => {
             item={row.original}
             dayOfWeek="wednesday"
             customColor={
-              row.original.observations ? "#fcd46f" : row.original.wednesday.confirmed ? '#d4edda' : '#ffcccb'
+              (row.original.observations && !row.original.wednesday.confirmed && cell.getValue<number>() > 0) ? "#fcd46f" : row.original.wednesday.confirmed ? '#d4edda' : '#ffcccb'
             }
           />
         ),
@@ -169,7 +169,7 @@ export const useCollectTableColumns = (data: CollectRegister[]) => {
             item={row.original}
             dayOfWeek="thursday"
             customColor={
-              row.original.observations ? "#fcd46f" : row.original.thursday.confirmed ? '#d4edda' : '#ffcccb'
+              (row.original.observations && !row.original.thursday.confirmed && cell.getValue<number>() > 0) ? "#fcd46f" : row.original.thursday.confirmed ? '#d4edda' : '#ffcccb'
             }
           />
         ),
@@ -196,7 +196,7 @@ export const useCollectTableColumns = (data: CollectRegister[]) => {
             type="collect"
             item={row.original}
             dayOfWeek="friday"
-            customColor={row.original.observations ? "#fcd46f" : row.original.friday.confirmed ? '#d4edda' : '#ffcccb'}
+            customColor={(row.original.observations && !row.original.friday.confirmed && cell.getValue<number>() > 0) ? "#fcd46f" : row.original.friday.confirmed ? '#d4edda' : '#ffcccb'}
           />
         ),
       },
@@ -223,7 +223,7 @@ export const useCollectTableColumns = (data: CollectRegister[]) => {
             item={row.original}
             dayOfWeek="saturday"
             customColor={
-              row.original.observations ? "#fcd46f" : row.original.saturday.confirmed ? '#d4edda' : '#ffcccb'
+              (row.original.observations && !row.original.saturday.confirmed && cell.getValue<number>() > 0) ? "#fcd46f" : row.original.saturday.confirmed ? '#d4edda' : '#ffcccb'
             }
           />
         ),

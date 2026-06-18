@@ -6,17 +6,20 @@ import { CollectRegister, Payment } from '../models';
  * @returns Returns the sum of the amount of each day of the week
  */
 export const getProjection = (data: Payment | CollectRegister) => {
+  const days = [
+    data.monday,
+    data.tuesday,
+    data.wednesday,
+    data.thursday,
+    data.friday,
+    data.saturday,
+  ];
 
-  if (data.observations != null) {
-    return 0;
-  }
+  return days.reduce((acc, day) => {
+    if (data.observations != null && day.confirmed === false) {
+      return acc;
+    }
 
-  return (
-    data.monday.amount +
-    data.tuesday.amount +
-    data.wednesday.amount +
-    data.thursday.amount +
-    data.friday.amount +
-    data.saturday.amount
-  );
+    return acc + day.amount;
+  }, 0);
 };

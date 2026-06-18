@@ -10,7 +10,7 @@ export const getTotalPerDay = (data: Payment[] | CollectRegister[], day: DaysOfW
   return (
     data.reduce((acc, curr) => {
 
-      if (curr.observations != null) {
+      if (curr.observations != null && curr[day].confirmed == false) {
         return acc;
       }
 
