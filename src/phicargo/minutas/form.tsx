@@ -18,7 +18,7 @@ import Swal from "sweetalert2";
 import { DatePicker } from '@heroui/react';
 import { parseDate } from "@internationalized/date";
 import { Minuta } from './minutas';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { AutocompleteInput, TextareaInput } from '@/components/inputs';
 import dayjs from 'dayjs';
 import { SelectItem } from '@/types';
@@ -30,7 +30,8 @@ const initialForm: Minuta = {
   fecha: dayjs(),
   estado: "borrador",
   puntos_discusion: "",
-  desarrollo_reunion: ""
+  desarrollo_reunion: "",
+  participantes: [],
 }
 
 export default function MinutaForm({ open, handleClose, id_minuta }: { open: boolean, handleClose: () => void, id_minuta: number | null }) {
@@ -39,23 +40,31 @@ export default function MinutaForm({ open, handleClose, id_minuta }: { open: boo
     defaultValues: initialForm,
   });
 
+  const {
+    fields,
+    append,
+    remove,
+    update,
+    replace,
+  } = useFieldArray({
+    control,
+    name: "participantes",
+    keyName: "fieldId",
+  });
+
   const [isLoading, setLoading] = useState(false);
-  const { selectedRows, setSelectedRows, isEditing, setIsEditing, setRecords, nuevas_tareas, setNuevasTareas, actualizadas_tareas, setActualizadasTareas, eliminadas_tareas, setEliminadasTareas, eliminados_participantes, setEliminadosParticipantes, participantes_nuevos, setParticipantesNuevos, } = useMinutas();
+  const { isEditing, setIsEditing, setRecords, nuevas_tareas, setNuevasTareas, actualizadas_tareas, setActualizadasTareas, eliminadas_tareas, setEliminadasTareas, setEliminadosParticipantes, setParticipantesNuevos, } = useMinutas();
 
   const fetchData = async () => {
 
     if (id_minuta == null) {
 
-      setSelectedRows([]);
       setRecords([]);
       setIsEditing(true);
 
       setNuevasTareas([]);
       setActualizadasTareas([]);
       setEliminadasTareas([]);
-
-      setParticipantesNuevos([]);
-      setEliminadosParticipantes([]);
 
       reset(initialForm);
       return;
@@ -66,7 +75,6 @@ export default function MinutaForm({ open, handleClose, id_minuta }: { open: boo
     try {
       setLoading(true);
       const response = await odooApi.get('/minutas/' + id_minuta);
-      setSelectedRows(response.data.participantes);
       setRecords(response.data.tareas);
       reset({
         ...response.data,
@@ -87,7 +95,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }: { open: boo
 
   const handleSave = async (data: Minuta) => {
 
-    if (selectedRows.length <= 0) {
+    if (fields.length <= 0) {
       toast.error('Deben existir participantes a esta minuta.')
       return;
     }
@@ -100,8 +108,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }: { open: boo
     try {
       const payload = {
         data: sendData,
-        participantes_nuevos: participantes_nuevos,
-        participantes_eliminados: eliminados_participantes,
+        participantes: fields,
         tareas_nuevas: nuevas_tareas,
         tareas_actualizadas: actualizadas_tareas,
         tareas_eliminadas: eliminadas_tareas
@@ -337,7 +344,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }: { open: boo
                 />
               </CardBody>
             </Card>
-            <ParticipantesMinutas />
+            <ParticipantesMinutas fields={fields} append={append} remove={remove} />
           </div>
         </Grid>
 

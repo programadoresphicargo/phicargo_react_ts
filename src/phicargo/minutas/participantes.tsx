@@ -5,13 +5,25 @@ import {
 import { useMemo } from 'react';
 import { Box } from '@mui/material';
 import { Card, CardBody, CardHeader } from "@heroui/react";
-import AñadirParticipantes from './list_empleados';
 import { useMinutas } from './context';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
+import { FieldArrayWithId, UseFieldArrayAppend, UseFieldArrayRemove } from 'react-hook-form';
+import { Minuta } from './minutas';
+import { AñadirParticipantes } from './list_empleados';
 
-const ParticipantesMinutas = ({ }) => {
+type Props = {
+  fields: FieldArrayWithId<Minuta, "participantes", "fieldId">[];
+  append: UseFieldArrayAppend<Minuta, "participantes">;
+  remove: UseFieldArrayRemove;
+};
 
-  const { selectedRows, isEditing } = useMinutas();
+const ParticipantesMinutas = ({
+  fields,
+  append,
+  remove,
+}: Props) => {
+
+  const { isEditing } = useMinutas();
 
   const columns = useMemo(
     () => [
@@ -29,8 +41,8 @@ const ParticipantesMinutas = ({ }) => {
 
   const table = useMaterialReactTable({
     columns,
-    data: selectedRows,
-    getRowId: (row) => row.id_empleado,
+    data: fields,
+    getRowId: (row) => `${row.id_empleado}`,
     localization: MRT_Localization_ES,
     enableGrouping: true,
     enableGlobalFilter: true,
@@ -76,7 +88,7 @@ const ParticipantesMinutas = ({ }) => {
           flexWrap: 'wrap',
         }}
       >
-        <AñadirParticipantes></AñadirParticipantes>
+        <AñadirParticipantes fields={fields} append={append} remove={remove}></AñadirParticipantes>
       </Box>
     ),
   });

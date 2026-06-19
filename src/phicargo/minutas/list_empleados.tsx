@@ -5,7 +5,6 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
-import Slide from '@mui/material/Slide';
 import { Button } from '@heroui/react';
 import {
  MaterialReactTable,
@@ -15,33 +14,36 @@ import odooApi from '@/api/odoo-api';
 import { Box } from '@mui/material';
 import { useMinutas } from './context';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
+import { FieldArrayWithId, UseFieldArrayAppend, UseFieldArrayRemove } from 'react-hook-form';
+import { Minuta } from './minutas';
+import { Empleado } from '../accesos/types/types';
 
-const Transition = React.forwardRef(function Transition(props, ref) {
- return <Slide direction="up" ref={ref} {...props} />;
-});
+type Props = {
+ fields: FieldArrayWithId<Minuta, "participantes", "fieldId">[];
+ append: UseFieldArrayAppend<Minuta, "participantes">;
+ remove: UseFieldArrayRemove;
+};
 
-export default function AñadirParticipantes() {
+export const AñadirParticipantes = ({
+ fields,
+ append,
+ remove,
+}: Props) => {
+
  const [open, setOpen] = useState(false);
- const [data, setData] = useState([]);
+ const [data, setData] = useState<Empleado[]>([]);
  const [isLoading2, setLoading] = useState(false);
- const [rowSelection, setRowSelection] = useState({}); // ✅ para controlar la selección visible
-
- const {
-  selectedRows,
-  setSelectedRows,
-  isEditing,
-  participantes_nuevos, setParticipantesNuevos,
-  eliminados_participantes, setEliminadosParticipantes
- } = useMinutas();
+ const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
+ const { isEditing } = useMinutas();
 
  const handleClickOpen = () => {
-  // ✅ Cuando se abre el modal, sincronizamos los seleccionados previos
-  const selectedIds = selectedRows.map((p) => p.id_empleado);
-  const newSelection = {};
 
-  data.forEach((row, index) => {
+  const selectedIds = fields.map((p) => p.id_empleado);
+  const newSelection: Record<string, boolean> = {};
+
+  data.forEach((row) => {
    if (selectedIds.includes(row.id_empleado)) {
-    newSelection[index] = true; // Marca como seleccionado
+    newSelection[row.id_empleado.toString()] = true;
    }
   });
 
@@ -86,6 +88,7 @@ export default function AñadirParticipantes() {
  const table = useMaterialReactTable({
   columns,
   data,
+  getRowId: (row) => row.id_empleado.toString(),
   enableRowSelection: true,
   enableMultiRowSelection: true,
   onRowSelectionChange: setRowSelection, // controlamos selección manualmente
@@ -102,7 +105,7 @@ export default function AñadirParticipantes() {
   columnResizeMode: 'onEnd',
   initialState: {
    density: 'compact',
-   pagination: { pageSize: 80 },
+   pagination: { pageIndex: 0, pageSize: 80 },
   },
   muiTablePaperProps: {
    elevation: 0,
@@ -120,22 +123,35 @@ export default function AñadirParticipantes() {
 
  // 👉 función que toma los seleccionados
  const handleAñadir = () => {
-  const seleccionados = table.getSelectedRowModel().rows.map((row) => row.original);
+  const seleccionados = table
+   .getSelectedRowModel()
+   .rows
+   .map((row) => row.original);
 
-  // --- 🧠 Lógica para detectar nuevos registros ---
-  const idsActuales = selectedRows.map((p) => p.id_empleado);
-  const idsNuevos = seleccionados.map((p) => p.id_empleado);
+  // IDs actuales en el form
+  const idsActuales = fields.map((f) => f.id_empleado);
 
-  const nuevos = seleccionados.filter((p) => !idsActuales.includes(p.id_empleado));
-  const eliminados = selectedRows.filter((p) => !idsNuevos.includes(p.id_empleado));
+  // 1. Agregar nuevos
+  seleccionados.forEach((emp) => {
+   if (!idsActuales.includes(emp.id_empleado)) {
+    append({
+     id_empleado: emp.id_empleado,
+     empleado: emp.empleado,
+     puesto: emp.puesto,
+    });
+   }
+  });
 
-  console.log("✅ Participantes seleccionados:", seleccionados);
-  console.log("🆕 Nuevos participantes:", nuevos);
-  console.log("❌ Participantes eliminados:", eliminados);
+  // 2. Eliminar los que ya no están seleccionados
+  fields.forEach((field, index) => {
+   const stillSelected = seleccionados.some(
+    (e) => e.id_empleado === field.id_empleado
+   );
 
-  setParticipantesNuevos(nuevos);
-  setEliminadosParticipantes(eliminados);
-  setSelectedRows(seleccionados);
+   if (!stillSelected) {
+    remove(index);
+   }
+  });
 
   handleClose();
  };
@@ -148,13 +164,12 @@ export default function AñadirParticipantes() {
     radius="full"
     isDisabled={!isEditing}
    >
-    <i class="bi bi-pencil-square"></i> Editar participantes
+    <i className="bi bi-pencil-square"></i> Editar participantes
    </Button>
 
    <Dialog
     open={open}
     onClose={handleClose}
-    slots={{ transition: Transition }}
     fullWidth
     maxWidth="md"
    >

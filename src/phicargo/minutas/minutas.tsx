@@ -13,8 +13,10 @@ import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { Tooltip } from "@heroui/react";
 import { Dayjs } from 'dayjs';
 
-type Participante = {
+export type Participante = {
+  id_empleado: number;
   empleado: string;
+  puesto: string;
 };
 
 export type Minuta = {
@@ -23,7 +25,7 @@ export type Minuta = {
   fecha: Dayjs;
   estado: string;
   puntos_discusion: string;
-  participantes?: Participante[];
+  participantes: Participante[];
   desarrollo_reunion: string;
 }
 
