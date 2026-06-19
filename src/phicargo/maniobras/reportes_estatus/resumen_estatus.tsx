@@ -1,18 +1,31 @@
-import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Spinner } from "@heroui/react";
-import { Link, User } from "@heroui/react";
+import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Spinner } from "@heroui/react";
+import { User } from "@heroui/react";
 
 import odooApi from '@/api/odoo-api';
 import { useState } from "react";
 
-const EstatusDropdownManiobra = ({ id_maniobra, ultimo_estatus, usuario_ultimo_estatus, fecha_ultimo_estatus }) => {
-    const [items, setItems] = useState([]);
+type Estatus = {
+    nombre_estatus: string;
+    fecha_hora: string;
+}
+
+type Props = {
+    id_maniobra: number,
+    ultimo_estatus: string,
+    usuario_ultimo_estatus: string;
+    fecha_ultimo_estatus: string;
+}
+
+const EstatusDropdownManiobra = ({ id_maniobra, ultimo_estatus, usuario_ultimo_estatus, fecha_ultimo_estatus }: Props) => {
+
+    const [items, setItems] = useState<Estatus[]>([]);
     const [isOpen, setIsOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
     const fetchItems = () => {
         if (!id_maniobra) return;
         setIsLoading(true);
-        odooApi.get(`/maniobras/reportes_estatus_maniobras/id_maniobra/${id_maniobra}`)
+        odooApi.get<Estatus[]>(`/maniobras/reportes_estatus_maniobras/id_maniobra/${id_maniobra}`)
             .then((response) => {
                 setItems(response.data);
             })
@@ -24,7 +37,7 @@ const EstatusDropdownManiobra = ({ id_maniobra, ultimo_estatus, usuario_ultimo_e
             });
     };
 
-    const handleOpen = (open) => {
+    const handleOpen = (open: boolean) => {
         setIsOpen(open);
         if (open) fetchItems();
     };
