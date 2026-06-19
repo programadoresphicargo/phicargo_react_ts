@@ -107,6 +107,8 @@ export default function MinutaForm({ open, handleClose, id_minuta }: { open: boo
     };
 
     try {
+      setLoading(true);
+
       const payload = {
         data: sendData,
         participantes: fields,
@@ -131,6 +133,8 @@ export default function MinutaForm({ open, handleClose, id_minuta }: { open: boo
 
     } catch (error) {
       toast.error("Error al enviar datos: " + error);
+    } finally {
+      setLoading(false);
     }
   };
 
