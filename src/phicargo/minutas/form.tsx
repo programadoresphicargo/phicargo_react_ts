@@ -44,8 +44,6 @@ export default function MinutaForm({ open, handleClose, id_minuta }: { open: boo
     fields,
     append,
     remove,
-    update,
-    replace,
   } = useFieldArray({
     control,
     name: "participantes",
@@ -53,7 +51,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }: { open: boo
   });
 
   const [isLoading, setLoading] = useState(false);
-  const { isEditing, setIsEditing, setRecords, nuevas_tareas, setNuevasTareas, actualizadas_tareas, setActualizadasTareas, eliminadas_tareas, setEliminadasTareas, setEliminadosParticipantes, setParticipantesNuevos, } = useMinutas();
+  const { isEditing, setIsEditing, setRecords, nuevas_tareas, setNuevasTareas, actualizadas_tareas, setActualizadasTareas, eliminadas_tareas, setEliminadasTareas } = useMinutas();
 
   const fetchData = async () => {
 
