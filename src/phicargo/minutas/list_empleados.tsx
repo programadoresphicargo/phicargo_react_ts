@@ -12,7 +12,6 @@ import {
 } from 'material-react-table';
 import odooApi from '@/api/odoo-api';
 import { Box } from '@mui/material';
-import { useMinutas } from './context';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { FieldArrayWithId, UseFieldArrayAppend, UseFieldArrayRemove } from 'react-hook-form';
 import { Minuta } from './minutas';
@@ -22,19 +21,20 @@ type Props = {
  fields: FieldArrayWithId<Minuta, "participantes", "fieldId">[];
  append: UseFieldArrayAppend<Minuta, "participantes">;
  remove: UseFieldArrayRemove;
+ isEditing: boolean;
 };
 
 export const AñadirParticipantes = ({
  fields,
  append,
  remove,
+ isEditing
 }: Props) => {
 
  const [open, setOpen] = useState(false);
  const [data, setData] = useState<Empleado[]>([]);
- const [isLoading2, setLoading] = useState(false);
+ const [isLoading, setLoading] = useState(false);
  const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
- const { isEditing } = useMinutas();
 
  const handleClickOpen = () => {
 
@@ -91,11 +91,11 @@ export const AñadirParticipantes = ({
   getRowId: (row) => row.id_empleado.toString(),
   enableRowSelection: true,
   enableMultiRowSelection: true,
-  onRowSelectionChange: setRowSelection, // controlamos selección manualmente
+  onRowSelectionChange: setRowSelection,
   localization: MRT_Localization_ES,
   state: {
-   rowSelection, // ✅ muestra los seleccionados previos
-   showProgressBars: isLoading2,
+   rowSelection,
+   showProgressBars: isLoading,
   },
   enableGrouping: true,
   enableGlobalFilter: true,

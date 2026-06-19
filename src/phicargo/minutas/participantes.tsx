@@ -5,7 +5,6 @@ import {
 import { useMemo } from 'react';
 import { Box } from '@mui/material';
 import { Card, CardBody, CardHeader } from "@heroui/react";
-import { useMinutas } from './context';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { FieldArrayWithId, UseFieldArrayAppend, UseFieldArrayRemove } from 'react-hook-form';
 import { Minuta } from './minutas';
@@ -15,15 +14,15 @@ type Props = {
   fields: FieldArrayWithId<Minuta, "participantes", "fieldId">[];
   append: UseFieldArrayAppend<Minuta, "participantes">;
   remove: UseFieldArrayRemove;
+  isEditing: boolean;
 };
 
 const ParticipantesMinutas = ({
   fields,
   append,
   remove,
+  isEditing
 }: Props) => {
-
-  const { isEditing } = useMinutas();
 
   const columns = useMemo(
     () => [
@@ -36,7 +35,7 @@ const ParticipantesMinutas = ({
         header: 'Puesto',
       },
     ],
-    [isEditing]
+    []
   );
 
   const table = useMaterialReactTable({
@@ -88,7 +87,7 @@ const ParticipantesMinutas = ({
           flexWrap: 'wrap',
         }}
       >
-        <AñadirParticipantes fields={fields} append={append} remove={remove}></AñadirParticipantes>
+        <AñadirParticipantes fields={fields} append={append} remove={remove} isEditing={isEditing}></AñadirParticipantes>
       </Box>
     ),
   });

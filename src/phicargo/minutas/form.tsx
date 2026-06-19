@@ -12,8 +12,6 @@ import { Grid } from "@mui/material";
 import Stack from '@mui/material/Stack';
 import odooApi from '@/api/odoo-api';
 import toast from 'react-hot-toast';
-import { useMinutas } from './context';
-import ExampleWithProviders from './tareas';
 import Swal from "sweetalert2";
 import { DatePicker } from '@heroui/react';
 import { parseDate } from "@internationalized/date";
@@ -23,6 +21,7 @@ import { AutocompleteInput, TextareaInput } from '@/components/inputs';
 import dayjs from 'dayjs';
 import { SelectItem } from '@/types';
 import { Empleado } from '../accesos/types/types';
+import TareasMinutas from './tareas';
 
 const initialForm: Minuta = {
   id_solicitante: null,
@@ -32,6 +31,7 @@ const initialForm: Minuta = {
   puntos_discusion: "",
   desarrollo_reunion: "",
   participantes: [],
+  tareas: []
 }
 
 export default function MinutaForm({ open, handleClose, id_minuta }: { open: boolean, handleClose: () => void, id_minuta: number | null }) {
@@ -50,20 +50,24 @@ export default function MinutaForm({ open, handleClose, id_minuta }: { open: boo
     keyName: "fieldId",
   });
 
+  const {
+    fields: tareas,
+    append: appendTarea,
+    remove: removeTarea,
+    update: updateTarea
+  } = useFieldArray({
+    control,
+    name: "tareas",
+    keyName: "fieldId",
+  });
+
   const [isLoading, setLoading] = useState(false);
-  const { isEditing, setIsEditing, setRecords, nuevas_tareas, setNuevasTareas, actualizadas_tareas, setActualizadasTareas, eliminadas_tareas, setEliminadasTareas } = useMinutas();
+  const [isEditing, setIsEditing] = useState(false);
 
   const fetchData = async () => {
 
     if (id_minuta == null) {
-
-      setRecords([]);
       setIsEditing(true);
-
-      setNuevasTareas([]);
-      setActualizadasTareas([]);
-      setEliminadasTareas([]);
-
       reset(initialForm);
       return;
     } else {
@@ -73,7 +77,6 @@ export default function MinutaForm({ open, handleClose, id_minuta }: { open: boo
     try {
       setLoading(true);
       const response = await odooApi.get('/minutas/' + id_minuta);
-      setRecords(response.data.tareas);
       reset({
         ...response.data,
         fecha: response.data.fecha
@@ -107,9 +110,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }: { open: boo
       const payload = {
         data: sendData,
         participantes: fields,
-        tareas_nuevas: nuevas_tareas,
-        tareas_actualizadas: actualizadas_tareas,
-        tareas_eliminadas: eliminadas_tareas
+        tareas: tareas,
       };
 
       let response;
@@ -342,7 +343,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }: { open: boo
                 />
               </CardBody>
             </Card>
-            <ParticipantesMinutas fields={fields} append={append} remove={remove} />
+            <ParticipantesMinutas fields={fields} append={append} remove={remove} isEditing={isEditing} />
           </div>
         </Grid>
 
@@ -399,7 +400,7 @@ export default function MinutaForm({ open, handleClose, id_minuta }: { open: boo
             </CardHeader>
             <Divider></Divider>
             <CardBody>
-              <ExampleWithProviders></ExampleWithProviders>
+              <TareasMinutas fields={tareas} append={appendTarea} remove={removeTarea} update={updateTarea} isEditing={isEditing}></TareasMinutas>
             </CardBody>
           </Card>
         </Grid>
