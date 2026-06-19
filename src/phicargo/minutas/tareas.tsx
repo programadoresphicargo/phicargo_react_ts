@@ -253,7 +253,7 @@ const TareasMinutas = ({
               options={data}
               getOptionLabel={(o) => o.empleado}
               value={form.responsables}
-              onChange={(e, value) => handleChange("responsables", value)}
+              onChange={(_, value) => handleChange("responsables", value)}
               renderInput={(params) => (
                 <TextField {...params} label="Responsables" />
               )}
