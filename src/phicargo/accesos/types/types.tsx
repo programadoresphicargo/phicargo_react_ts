@@ -26,4 +26,5 @@ export type Empleado =
   id_empleado: number,
   empleado: string
   jefe: string;
+  puesto: string;
  }
