@@ -80,7 +80,6 @@ export default function SeguimientoSimpleManiobra({
 
    <Accordion variant="splitted">
     <AccordionItem
-     isDisabled={estadoManiobra === "borrador"}
      title={
       <div className="flex flex-col gap-1 items-start justify-center">
        <strong>
