@@ -214,7 +214,7 @@ const Maniobras: React.FC<ManiobrasProps> = ({
         Cell: ({ cell }: { cell: MRT_Cell<Maniobra> }) => (
           <EstatusDropdownManiobra
             id_maniobra={cell.row.original.id_maniobra}
-            ultimo_estatus={cell.getValue() || ''}
+            ultimo_estatus={cell.getValue<string>() || ''}
             usuario_ultimo_estatus={cell.row.original.usuario_ultimo_estatus}
             fecha_ultimo_estatus={cell.row.original.fecha_ultimo_estatus}
           />
