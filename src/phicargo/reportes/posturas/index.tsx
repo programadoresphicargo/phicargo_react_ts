@@ -23,7 +23,7 @@ const ControlPosturas = () => {
   const fetchData = async () => {
     try {
       setisLoading(true);
-      const response = await odooApi.get(`/vehicles/postura/`);
+      const response = await odooApi.get(`/vehicles/posturas/`);
       setData(response.data);
     } catch (error) {
       toast.error('Error al enviar los datos: ' + error);
