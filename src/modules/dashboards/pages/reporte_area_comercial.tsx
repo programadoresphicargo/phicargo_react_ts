@@ -1,22 +1,23 @@
-import { Button, Card, Select, SelectItem } from "@heroui/react";
+import { Button, Card } from "@heroui/react";
 import odooApi from "@/api/odoo-api";
 import { Controller, useForm } from "react-hook-form";
 import { useState } from "react";
 import { Dayjs } from "dayjs";
-import SelectCliente from "@/components/inputs/ClienteAutocomplete";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { ContactsSearchInputMatch } from "@/modules/contacts/components/inputs/ContactsSearchInputMatch";
+import { SelectInput } from "@/components/inputs";
 
 export const conceptos = [
- { id: "Contenedor", label: "Contenedor" },
- { id: "Viaje", label: "Viaje" },
- { id: "Facturacion", label: "Facturación" },
- { id: "Sucursal", label: "Sucursal" },
- { id: "Ejecutivo", label: "Ejecutivo" },
- { id: "Ruta", label: "Ruta" },
- { id: "TipoServicio", label: "Tipo de servicio" },
- { id: "Circuito", label: "Circuito" },
- { id: "Armado", label: "Tipo de armado" },
+ { key: "Contenedor", value: "Contenedor" },
+ { key: "Viaje", value: "Viaje" },
+ { key: "Facturacion", value: "Facturación" },
+ { key: "Sucursal", value: "Sucursal" },
+ { key: "Ejecutivo", value: "Ejecutivo" },
+ { key: "Ruta", value: "Ruta" },
+ { key: "TipoServicio", value: "Tipo de servicio" },
+ { key: "Circuito", value: "Circuito" },
+ { key: "Armado", value: "Tipo de armado" },
 ];
 
 interface OptionsSelection {
@@ -36,7 +37,7 @@ const initialFormState: OptionsSelection = {
 function ReporteAreaComercial() {
  const [loading, setLoading] = useState(false);
 
- const { control, handleSubmit, setValue } = useForm<OptionsSelection>({
+ const { control, handleSubmit } = useForm<OptionsSelection>({
   defaultValues: initialFormState,
  });
 
@@ -92,47 +93,15 @@ function ReporteAreaComercial() {
     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
 
      {/* Cliente */}
-     <Controller
+     <ContactsSearchInputMatch
       control={control}
       name="partner_id"
-      rules={{ required: "Cliente obligatorio" }}
-      render={({ field }) => (
-       <SelectCliente
-        variant="bordered"
-        key_name="partner_id"
-        label="Cliente"
-        value={field.value}
-        setValue={setValue}
-        placeholder="Selecciona un cliente"
-       />
-      )}
+      label="Cliente"
+      placeholder="Selecciona un cliente"
+      rules={{ required: "Mes final requerido" }}
      />
 
-     {/* Concepto */}
-     <Controller
-      control={control}
-      name="concepto"
-      rules={{ required: "Concepto requerido" }}
-      render={({ field, fieldState }) => (
-       <Select
-        label="Concepto"
-        variant="bordered"
-        selectedKeys={field.value ? [field.value] : []}
-        onSelectionChange={(keys) => {
-         const value = Array.from(keys)[0];
-         field.onChange(value);
-        }}
-        isInvalid={!!fieldState.error}
-        errorMessage={fieldState.error?.message}
-       >
-        {conceptos.map((option) => (
-         <SelectItem key={option.id}>
-          {option.label}
-         </SelectItem>
-        ))}
-       </Select>
-      )}
-     />
+     <SelectInput control={control} name="concepto" items={conceptos} label="Concepto" variant="bordered"></SelectInput>
 
      {/* Mes Inicial */}
      <LocalizationProvider dateAdapter={AdapterDayjs}>
