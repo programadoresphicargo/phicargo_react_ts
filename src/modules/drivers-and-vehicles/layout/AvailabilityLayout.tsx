@@ -22,6 +22,11 @@ const pages: MenuItemType[] = [
     requiredPermissions: [EDITION_PERMISSION],
   },
   {
+    name: 'Posturas',
+    path: '/disponibilidad/posturas',
+    requiredPermissions: [],
+  },
+  {
     name: 'Contactos',
     path: '/disponibilidad/contactos_empleados',
     requiredPermissions: [],

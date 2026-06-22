@@ -42,7 +42,9 @@ const UltimoUsoVehiculos = lazy(
 const Remolques = lazy(
   () => import('@/phicargo/remolques/remolques'),
 );
-
+const Posturas = lazy(
+  () => import('@/phicargo/reportes/posturas/index'),
+);
 const permission = 200;
 const EDITION_PERMISSION = 208;
 const RESUMENES_PERMISSION = 220;
@@ -166,6 +168,14 @@ const AvailabilityRoutes = () => {
         element={
           <Suspense fallback={<LoadingPage />}>
             <UltimoUsoVehiculos></UltimoUsoVehiculos>
+          </Suspense>
+        }
+      />
+      <Route
+        path="posturas"
+        element={
+          <Suspense fallback={<LoadingPage />}>
+            <Posturas></Posturas>
           </Suspense>
         }
       />
