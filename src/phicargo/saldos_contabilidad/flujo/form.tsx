@@ -68,7 +68,21 @@ type FlujoForm = {
 const FlujoForm = ({ open, handleClose, Cuenta, paymentId }: Props) => {
 
   const [concepts, setConcepts] = React.useState<Concepts[]>([]);
-  const categories = [{ id: 1, label: "Gasto" }, { id: 2, label: "IVA" }];
+  const categories = [
+    { id: 1, label: "Gasto" },
+    { id: 2, label: "Costo" },
+    { id: 3, label: "Otro" },
+    { id: 4, label: "Traspaso" },
+    { id: 5, label: "Impuestos" },
+    { id: 6, label: "Sueldos" },
+    { id: 7, label: "Prestamos" },
+    { id: 8, label: "Finiquito" },
+    { id: 9, label: "Intereses" },
+    { id: 10, label: "CTA X PAGAR" },
+    { id: 11, label: "Arrendamiento" },
+    { id: 12, label: "ND" },
+    { id: 13, label: "RET" },
+  ];
 
   const initialForm: FlujoForm = {
     account_id: null,
@@ -379,11 +393,15 @@ const FlujoForm = ({ open, handleClose, Cuenta, paymentId }: Props) => {
     name: 'details',
   });
 
-  const total = (details ?? []).reduce(
-    (sum, item) => sum + Number(item.amount || 0),
-    0
-  );
+  const subtotal = details
+    .filter(x => x.category_id === 1)
+    .reduce(
+      (sum, item) => sum + Number(item.amount || 0),
+      0
+    );
 
+  const iva = subtotal * 0.16;
+  const total = subtotal + iva;
   const diferencia = (importe ?? 0) - total;
 
   return (
@@ -552,6 +570,13 @@ const FlujoForm = ({ open, handleClose, Cuenta, paymentId }: Props) => {
               flexDirection="column"
               alignItems="flex-end"
             >
+
+              <Typography
+                variant="h6"
+              >
+                IVA: ${(iva).toLocaleString()}
+              </Typography>
+
               <Typography
                 variant="h5"
                 fontWeight="bold"
