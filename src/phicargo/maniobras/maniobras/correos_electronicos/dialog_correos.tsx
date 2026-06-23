@@ -154,36 +154,28 @@ const CorreosLigadosManiobra = ({ open, handleClose, id_cliente }: { open: boole
                                 <TableColumn>Acciones</TableColumn>
                             </TableHeader>
 
-                            <TableBody>
-                                {correos_ligados.length > 0 ? (
-                                    correos_ligados.map((item) => (
-                                        <TableRow key={item.id_correo}>
-                                            <TableCell>{item.id_correo}</TableCell>
-                                            <TableCell>{item.nombre_completo}</TableCell>
-                                            <TableCell>{item.correo}</TableCell>
-                                            <TableCell>{item.tipo}</TableCell>
-                                            <TableCell>
-                                                <Button
-                                                    color="danger"
-                                                    onPress={() => handleRemove(item.id_correo)}
-                                                    size='sm'
-                                                    isDisabled={formDisabled}
-                                                    radius="full"
-                                                >
-                                                    Eliminar
-                                                </Button>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))
-                                ) : (
-                                    <TableRow>
-                                        <TableCell>No hay correos registrados.</TableCell>
-                                        <TableCell>.</TableCell>
-                                        <TableCell>.</TableCell>
-                                        <TableCell>.</TableCell>
-                                        <TableCell>.</TableCell>
+                            <TableBody
+                                emptyContent="No hay correos registrados."
+                            >
+                                {correos_ligados.map((item) => (
+                                    <TableRow key={item.id_correo}>
+                                        <TableCell>{item.id_correo}</TableCell>
+                                        <TableCell>{item.nombre_completo}</TableCell>
+                                        <TableCell>{item.correo}</TableCell>
+                                        <TableCell>{item.tipo}</TableCell>
+                                        <TableCell>
+                                            <Button
+                                                color="danger"
+                                                onPress={() => handleRemove(item.id_correo)}
+                                                size="sm"
+                                                isDisabled={formDisabled}
+                                                radius="full"
+                                            >
+                                                Eliminar
+                                            </Button>
+                                        </TableCell>
                                     </TableRow>
-                                )}
+                                ))}
                             </TableBody>
                         </Table>
                     )}
