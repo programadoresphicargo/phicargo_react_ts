@@ -9,32 +9,28 @@ import {
     TableHeader,
     TableRow
 } from "@heroui/react";
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import FormularioCorreo from './formulario';
 import { ManiobraContext } from '../../context/viajeContext';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
-import Slide from '@mui/material/Slide';
+import FormularioCorreoGeneral from "@/phicargo/correos_electronicos/form";
+import { CorreoCliente } from "@/phicargo/viajes/correos/correos_electronicos";
+import { Key } from 'react';
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-});
+const CorreosLigadosManiobra = ({ open, handleClose, id_cliente }: { open: boolean, handleClose: () => void, id_cliente: number }) => {
 
-const CorreosLigadosManiobra = ({ open, handleClose, id_cliente }) => {
     const {
-        id_maniobra,
         formDisabled,
         correos_ligados,
         setCorreosLigados,
-        correos_desligados,
         setCorreosDesligados
     } = useContext(ManiobraContext);
 
-    const [correosCliente, setCorreosCliente] = useState([]);
+    const [correosCliente, setCorreosCliente] = useState<CorreoCliente[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [openF, setOpenF] = useState(false);
 
@@ -50,7 +46,7 @@ const CorreosLigadosManiobra = ({ open, handleClose, id_cliente }) => {
     const fetchCorreos = async () => {
         try {
             setIsLoading(true);
-            const response = await odooApi.get(`/correos/id_cliente/${id_cliente}`);
+            const response = await odooApi.get<CorreoCliente[]>(`/correos/id_cliente/${id_cliente}`);
             setCorreosCliente(response.data);
         } catch (error) {
             console.error('Error al obtener los correos:', error);
@@ -59,8 +55,10 @@ const CorreosLigadosManiobra = ({ open, handleClose, id_cliente }) => {
         }
     };
 
-    const handleAdd = (correoId) => {
-        const correoIdNum = Number(correoId.target ? correoId.target.value : correoId);
+    const handleAdd = (correoId: Key | null) => {
+        if (correoId === null) return;
+
+        const correoIdNum = Number(correoId);
         const correoSeleccionado = correosCliente.find(c => c.id_correo === correoIdNum);
 
         if (!correoSeleccionado) {
@@ -76,7 +74,7 @@ const CorreosLigadosManiobra = ({ open, handleClose, id_cliente }) => {
         setCorreosLigados(prev => [...prev, correoSeleccionado]);
     };
 
-    const handleRemove = (correoId) => {
+    const handleRemove = (correoId: number) => {
         const correoIdNum = Number(correoId);
         const correoEliminado = correos_ligados.find(c => c.id_correo === correoIdNum);
 
@@ -93,14 +91,13 @@ const CorreosLigadosManiobra = ({ open, handleClose, id_cliente }) => {
 
     return (
         <>
-            <FormularioCorreo open={openF} handleClose={cerrar} id_cliente={id_cliente} />
+            <FormularioCorreoGeneral open={openF} handleClose={cerrar} id_cliente={id_cliente}></FormularioCorreoGeneral>
 
             <Dialog
                 open={open}
                 onClose={handleClose}
                 maxWidth="md"
                 fullWidth
-                slots={{ transition: Transition }}
                 sx={{
                     '& .MuiPaper-root': {
                         borderRadius: '25px',
@@ -113,7 +110,7 @@ const CorreosLigadosManiobra = ({ open, handleClose, id_cliente }) => {
                     },
                 }}
             >
-                <DialogTitle>Correos Ligados a Maniobra M-{id_maniobra}</DialogTitle>
+                <DialogTitle>Correos Ligados a Maniobra</DialogTitle>
 
                 <DialogContent>
                     <div className='mb-3'>
@@ -132,7 +129,7 @@ const CorreosLigadosManiobra = ({ open, handleClose, id_cliente }) => {
                         isLoading={isLoading}
                     >
                         {correosCliente.map((correo) => (
-                            <AutocompleteItem key={correo.id_correo} value={correo.id_correo}>
+                            <AutocompleteItem key={correo.id_correo}>
                                 {correo.correo}
                             </AutocompleteItem>
                         ))}
@@ -181,10 +178,6 @@ const CorreosLigadosManiobra = ({ open, handleClose, id_cliente }) => {
                                 ) : (
                                     <TableRow>
                                         <TableCell>No hay correos registrados.</TableCell>
-                                        <TableCell />
-                                        <TableCell />
-                                        <TableCell />
-                                        <TableCell />
                                     </TableRow>
                                 )}
                             </TableBody>

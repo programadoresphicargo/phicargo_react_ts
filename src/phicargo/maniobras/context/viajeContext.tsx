@@ -1,3 +1,4 @@
+import { CorreoCliente } from '@/phicargo/viajes/correos/correos_electronicos';
 import React, {
     createContext,
     ReactNode,
@@ -13,11 +14,11 @@ type ManiobraContextType = {
     formDisabled: boolean;
     setFormDisabled: React.Dispatch<React.SetStateAction<boolean>>;
 
-    correos_ligados: string[];
-    setCorreosLigados: React.Dispatch<React.SetStateAction<string[]>>;
+    correos_ligados: CorreoCliente[];
+    setCorreosLigados: React.Dispatch<React.SetStateAction<CorreoCliente[]>>;
 
-    correos_desligados: string[];
-    setCorreosDesligados: React.Dispatch<React.SetStateAction<string[]>>;
+    correos_desligados: CorreoCliente[];
+    setCorreosDesligados: React.Dispatch<React.SetStateAction<CorreoCliente[]>>;
 
     cps_ligadas: CP[];
     setCpsLigadas: React.Dispatch<React.SetStateAction<CP[]>>;
@@ -37,8 +38,8 @@ const ManiobraContext = createContext<ManiobraContextType>(
 const ManiobraProvider = ({ children }: ManiobraProviderProps) => {
     const [formDisabled, setFormDisabled] = useState<boolean>(true);
 
-    const [correos_ligados, setCorreosLigados] = useState<string[]>([]);
-    const [correos_desligados, setCorreosDesligados] = useState<string[]>([]);
+    const [correos_ligados, setCorreosLigados] = useState<CorreoCliente[]>([]);
+    const [correos_desligados, setCorreosDesligados] = useState<CorreoCliente[]>([]);
 
     const [cps_ligadas, setCpsLigadas] = useState<CP[]>([]);
     const [cps_desligadas, setCpsDesligadas] = useState<CP[]>([]);

@@ -286,6 +286,7 @@ const CorreosElectronicosViaje: React.FC<CorreosElectronicosViajeProps> = ({
       <DialogContent>
 
         <FormularioCorreoGeneral
+          open={open}
           handleClose={handleClose}
           id_cliente={viaje?.partner?.id} />
 

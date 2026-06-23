@@ -9,12 +9,15 @@ import {
   CheckboxInput,
   TextInput,
 } from "@/components/inputs";
+import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 
 const FormularioCorreoGeneral = ({
+  open,
   handleClose,
   id_cliente,
   id_correo,
 }: {
+  open: boolean;
   handleClose: () => void;
   id_cliente?: number;
   id_correo?: number | null;
@@ -61,11 +64,15 @@ const FormularioCorreoGeneral = ({
 
   useEffect(() => {
     if (!id_correo) {
-      reset(initialForm);
+      reset({
+        ...initialForm,
+        id_cliente,
+      });
       return;
     }
+
     fetchData();
-  }, [id_correo]);
+  }, [id_correo, id_cliente]);
 
   const crear_correo = async (
     data: CorreoCliente
@@ -122,82 +129,104 @@ const FormularioCorreoGeneral = ({
   };
 
   return (
-    <div className="w-full flex flex-col gap-4">
-      {id_cliente}
-      <TextInput
-        variant="flat"
-        control={control}
-        name="nombre_completo"
-        label="Nombre"
-        rules={{
-          required: "Obligatorio",
-          pattern: {
-            value: /^[A-Za-zÀ-ÿ\s]+$/,
-            message:
-              "Solo letras y espacios",
-          },
-        }}
-      />
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      fullWidth
+      maxWidth="sm"
+      sx={{
+        '& .MuiPaper-root': {
+          borderRadius: '18px',
+          boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.0)',
+        },
+      }}
+      BackdropProps={{
+        sx: {
+          backgroundColor: 'rgba(0, 0, 0, 0.3)',
+        },
+      }}
+    >
+      <DialogTitle>Registro de correo electronico</DialogTitle>
+      <DialogContent>
 
-      <TextInput
-        variant="flat"
-        control={control}
-        name="correo"
-        label="Correo"
-        rules={{
-          required: "Obligatorio",
-          pattern: {
-            value:
-              /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
-            message:
-              "Correo inválido",
-          },
-        }}
-      />
+        <div className="w-full flex flex-col gap-4">
+          {id_cliente}
+          <TextInput
+            variant="flat"
+            control={control}
+            name="nombre_completo"
+            label="Nombre"
+            rules={{
+              required: "Obligatorio",
+              pattern: {
+                value: /^[A-Za-zÀ-ÿ\s]+$/,
+                message:
+                  "Solo letras y espacios",
+              },
+            }}
+          />
 
-      <AutocompleteInput
-        variant="flat"
-        control={control}
-        name="tipo"
-        items={[
-          {
-            key: "Destinatario",
-            value: "Destinatario",
-          },
-          {
-            key: "CC",
-            value: "CC",
-          },
-        ]}
-        label="Tipo"
-        rules={{
-          required: "Obligatorio",
-        }}
-      />
+          <TextInput
+            variant="flat"
+            control={control}
+            name="correo"
+            label="Correo"
+            rules={{
+              required: "Obligatorio",
+              pattern: {
+                value:
+                  /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
+                message:
+                  "Correo inválido",
+              },
+            }}
+          />
 
-      <CheckboxInput
-        control={control}
-        name="activo"
-        label="Activo"
-        isDisabled={watch("activo") ? false : true} />
+          <AutocompleteInput
+            variant="flat"
+            control={control}
+            name="tipo"
+            items={[
+              {
+                key: "Destinatario",
+                value: "Destinatario",
+              },
+              {
+                key: "CC",
+                value: "CC",
+              },
+            ]}
+            label="Tipo"
+            rules={{
+              required: "Obligatorio",
+            }}
+          />
 
-      <Button
-        className="text-white"
-        color={
-          id_correo
-            ? "success"
-            : "primary"
-        }
-        onPress={() =>
-          handleSubmit(crear_correo)()
-        }
-        isLoading={isLoading}
-      >
-        {id_correo
-          ? "Actualizar"
-          : "Registrar"}
-      </Button>
-    </div>
+          <CheckboxInput
+            control={control}
+            name="activo"
+            label="Activo"
+            isDisabled={watch("activo") ? false : true} />
+
+          <Button
+            className="text-white"
+            color={
+              id_correo
+                ? "success"
+                : "primary"
+            }
+            onPress={() =>
+              handleSubmit(crear_correo)()
+            }
+            isLoading={isLoading}
+          >
+            {id_correo
+              ? "Actualizar"
+              : "Registrar"}
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 };
 
