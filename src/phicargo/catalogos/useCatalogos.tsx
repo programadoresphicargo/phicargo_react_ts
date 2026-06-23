@@ -2,15 +2,14 @@ import { useEffect, useState } from "react";
 import odooApi from "@/api/odoo-api";
 import { DriverBaseApi } from "@/modules/drivers/models/api";
 import { VehicleBaseApi } from "@/modules/vehicles/models/api";
-import { Modality } from "@/modules/drivers/models";
 
 export const useCatalogos = () => {
 
  type FlotaOption = {
   key: number,
   label: string;
-  x_tipo_carga: string | null;
-  x_modalidad: Modality | null;
+  x_tipo_carga: string;
+  x_modalidad: string;
  }
 
  type DriverOption = {
@@ -30,8 +29,8 @@ export const useCatalogos = () => {
   return response.data.map(item => ({
    key: item.id,
    label: item.name2,
-   x_tipo_carga: item.x_tipo_carga,
-   x_modalidad: item.x_modalidad
+   x_tipo_carga: item.x_tipo_carga ?? "",
+   x_modalidad: item.x_modalidad ?? ""
   }));
  };
 
