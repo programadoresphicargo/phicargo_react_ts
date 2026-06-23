@@ -6,8 +6,6 @@ import {
 import React, { useEffect, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
 import { Button, Checkbox } from "@heroui/react";
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
 import FormularioCorreoGeneral from './form';
 import odooApi from '@/api/odoo-api';
 import CustomNavbar from '@/pages/CustomNavbar';
@@ -155,19 +153,7 @@ const CorreosElectronicos = () => {
   return (<>
     <CustomNavbar></CustomNavbar>
     <MaterialReactTable table={table} />
-
-    <Dialog
-      fullWidth={true}
-      maxWidth={"sm"}
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
-    >
-      <DialogContent>
-        <FormularioCorreoGeneral handleClose={handleClose} id_correo={id_correo} />
-      </DialogContent>
-    </Dialog>
+    <FormularioCorreoGeneral open={open} handleClose={handleClose} id_correo={id_correo} />
   </>
   );
 };

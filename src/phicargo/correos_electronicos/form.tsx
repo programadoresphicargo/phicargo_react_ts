@@ -150,7 +150,6 @@ const FormularioCorreoGeneral = ({
       <DialogContent>
 
         <div className="w-full flex flex-col gap-4">
-          {id_cliente}
           <TextInput
             variant="flat"
             control={control}
