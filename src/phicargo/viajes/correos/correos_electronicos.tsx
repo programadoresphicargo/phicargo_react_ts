@@ -3,9 +3,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/react";
 import { Button } from "@heroui/react";
 import { Chip } from "@heroui/react";
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
 import FormularioCorreoGeneral from '@/phicargo/correos_electronicos/form';
 import { Input } from "@heroui/react";
 import { User } from "@heroui/react";
@@ -228,7 +225,7 @@ const CorreosElectronicosViaje: React.FC<CorreosElectronicosViajeProps> = ({
           <TableHeader>
             <TableColumn>Correo electronico</TableColumn>
             <TableColumn>Tipo</TableColumn>
-            <TableColumn>Borrar</TableColumn>
+            <TableColumn>Desvincular</TableColumn>
           </TableHeader>
           <TableBody>
             {filteredData.map((visitor, index) => (
@@ -265,33 +262,10 @@ const CorreosElectronicosViaje: React.FC<CorreosElectronicosViajeProps> = ({
       }
     </div>
 
-    <Dialog
+    <FormularioCorreoGeneral
       open={open}
-      onClose={handleClose}
-      fullWidth
-      maxWidth="sm"
-      sx={{
-        '& .MuiPaper-root': {
-          borderRadius: '18px',
-          boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.0)',
-        },
-      }}
-      BackdropProps={{
-        sx: {
-          backgroundColor: 'rgba(0, 0, 0, 0.3)',
-        },
-      }}
-    >
-      <DialogTitle>Registro de correo electronico</DialogTitle>
-      <DialogContent>
-
-        <FormularioCorreoGeneral
-          open={open}
-          handleClose={handleClose}
-          id_cliente={viaje?.partner?.id} />
-
-      </DialogContent>
-    </Dialog>
+      handleClose={handleClose}
+      id_cliente={viaje?.partner?.id} />
   </>
   );
 
