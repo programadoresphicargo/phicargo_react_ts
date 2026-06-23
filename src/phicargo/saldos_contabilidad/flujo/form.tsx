@@ -68,6 +68,7 @@ type FlujoForm = {
 const FlujoForm = ({ open, handleClose, Cuenta, paymentId }: Props) => {
 
   const [concepts, setConcepts] = React.useState<Concepts[]>([]);
+  
   const categories = [
     { id: 1, label: "Gasto" },
     { id: 2, label: "Costo" },
