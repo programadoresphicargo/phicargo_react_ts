@@ -178,6 +178,10 @@ const CorreosLigadosManiobra = ({ open, handleClose, id_cliente }: { open: boole
                                 ) : (
                                     <TableRow>
                                         <TableCell>No hay correos registrados.</TableCell>
+                                        <TableCell>.</TableCell>
+                                        <TableCell>.</TableCell>
+                                        <TableCell>.</TableCell>
+                                        <TableCell>.</TableCell>
                                     </TableRow>
                                 )}
                             </TableBody>
