@@ -9,6 +9,7 @@ import { User } from "@heroui/react";
 import { ViajeContext } from '../context/viajeContext';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
+import { Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 
 export type CorreoCliente = {
   id_correo: number;
@@ -29,10 +30,12 @@ type CorreoLigado = {
 
 type CorreosElectronicosViajeProps = {
   openCorreos: boolean;
+  handleCloseCorreos: () => void;
 };
 
 const CorreosElectronicosViaje: React.FC<CorreosElectronicosViajeProps> = ({
-  openCorreos
+  openCorreos,
+  handleCloseCorreos
 }) => {
 
   const { id_viaje, viaje, comprobacion_correos } = useContext(ViajeContext);
@@ -140,133 +143,157 @@ const CorreosElectronicosViaje: React.FC<CorreosElectronicosViajeProps> = ({
     setOpen(false);
   };
 
-  return (<>
-    <div>
-      <Button
-        color="success"
-        className="text-white mb-3"
-        radius="full"
-        onPress={() => enlazarCorreoManiobras()}
-        isLoading={isLoadingCM}>
-        Ligar correos de maniobras
-      </Button>
-      {isLoading && (
-        <Progress isIndeterminate size="sm"></Progress>
-      )}
-      <Autocomplete
+  return (
+    <>
+      <Dialog
+        open={openCorreos}
+        onClose={handleCloseCorreos}
+        maxWidth="md"
         fullWidth
-        defaultItems={correosCliente}
-        variant="bordered"
-        label="Correos electronicos del cliente"
-        placeholder="Selecciona un correo electronico"
-        labelPlacement="inside"
-        listboxProps={{
-          hideSelectedIcon: true,
-          itemClasses: {
-            base: [
-              "rounded-medium",
-              "text-default-500",
-              "transition-opacity",
-              "data-[hover=true]:text-foreground",
-              "dark:data-[hover=true]:bg-default-50",
-              "data-[pressed=true]:opacity-70",
-              "data-[hover=true]:bg-default-200",
-              "data-[selectable=true]:focus:bg-default-100",
-              "data-[focus-visible=true]:ring-default-500",
-            ],
-          },
-        }}
       >
-        {(correosCliente) => (
-          <AutocompleteItem key={correosCliente.id_correo} textValue={correosCliente.correo}>
-            <div className="flex justify-between items-center">
-              <div className="flex gap-2 items-center">
-                <Avatar alt={correosCliente.correo} className="flex-shrink-0" size="sm" src={""} />
-                <div className="flex flex-col">
-                  <span className="text-small">{correosCliente.correo}</span>
-                  <span className="text-tiny text-default-400">{correosCliente.tipo}</span>
+        <DialogTitle
+          sx={{
+            background: "linear-gradient(90deg, #002887 0%, #0059b3 100%)",
+            color: "white",
+            fontFamily: "Inter",
+          }}>
+          Destinatarios
+        </DialogTitle>
+
+        <DialogContent dividers>
+          <div>
+            <Button
+              color="success"
+              className="text-white mb-3"
+              radius="full"
+              onPress={() => enlazarCorreoManiobras()}
+              isLoading={isLoadingCM}>
+              Ligar correos de maniobras
+            </Button>
+            {isLoading && (
+              <Progress isIndeterminate size="sm"></Progress>
+            )}
+            <Autocomplete
+              fullWidth
+              defaultItems={correosCliente}
+              variant="bordered"
+              label="Correos electronicos del cliente"
+              placeholder="Selecciona un correo electronico"
+              labelPlacement="inside"
+              listboxProps={{
+                hideSelectedIcon: true,
+                itemClasses: {
+                  base: [
+                    "rounded-medium",
+                    "text-default-500",
+                    "transition-opacity",
+                    "data-[hover=true]:text-foreground",
+                    "dark:data-[hover=true]:bg-default-50",
+                    "data-[pressed=true]:opacity-70",
+                    "data-[hover=true]:bg-default-200",
+                    "data-[selectable=true]:focus:bg-default-100",
+                    "data-[focus-visible=true]:ring-default-500",
+                  ],
+                },
+              }}
+            >
+              {(correosCliente) => (
+                <AutocompleteItem key={correosCliente.id_correo} textValue={correosCliente.correo}>
+                  <div className="flex justify-between items-center">
+                    <div className="flex gap-2 items-center">
+                      <Avatar alt={correosCliente.correo} className="flex-shrink-0" size="sm" src={""} />
+                      <div className="flex flex-col">
+                        <span className="text-small">{correosCliente.correo}</span>
+                        <span className="text-tiny text-default-400">{correosCliente.tipo}</span>
+                      </div>
+                    </div>
+                    <Button
+                      onPress={() => enlazarCorreo(correosCliente.id_correo)}
+                      color='primary'
+                      size="sm"
+                      radius="full"
+                    >
+                      Ligar
+                    </Button>
+                  </div>
+                </AutocompleteItem>
+              )}
+            </Autocomplete>
+
+            <div className="flex flex-col gap-4 mb-5 mt-5">
+              <div className="flex justify-between gap-3 items-end">
+
+                <Input
+                  isClearable
+                  variant='bordered'
+                  className="w-full sm:max-w-[100%]"
+                  placeholder="Buscar..."
+                  value={searchTerm}
+                  onClear={() => setSearchTerm('')}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <div className="flex gap-3">
+                  <Button color="primary" onPress={() => handleClickOpen()} radius="full">
+                    Nuevo correo electrónico +
+                  </Button>
                 </div>
               </div>
-              <Button
-                onPress={() => enlazarCorreo(correosCliente.id_correo)}
-                color='primary'
-                size="sm"
-                radius="full"
-              >
-                Ligar
-              </Button>
             </div>
-          </AutocompleteItem>
-        )}
-      </Autocomplete>
 
-      <div className="flex flex-col gap-4 mb-5 mt-5">
-        <div className="flex justify-between gap-3 items-end">
-
-          <Input
-            isClearable
-            variant='bordered'
-            className="w-full sm:max-w-[100%]"
-            placeholder="Buscar..."
-            value={searchTerm}
-            onClear={() => setSearchTerm('')}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <div className="flex gap-3">
-            <Button color="primary" onPress={() => handleClickOpen()} radius="full">
-              Nuevo correo electrónico +
-            </Button>
+            {isLoadingCM ? <Progress isIndeterminate size="sm"></Progress> :
+              <Table aria-label="Example static collection table" isStriped>
+                <TableHeader>
+                  <TableColumn>Correo electronico</TableColumn>
+                  <TableColumn>Tipo</TableColumn>
+                  <TableColumn>Desvincular</TableColumn>
+                </TableHeader>
+                <TableBody emptyContent="No hay correos ligados.">
+                  {filteredData.map((visitor, index) => (
+                    <TableRow key={index}>
+                      <TableCell>
+                        <User
+                          avatarProps={{ radius: "full", size: "sm", src: "https://cdn-icons-png.flaticon.com/512/5611/5611946.png" }}
+                          classNames={{
+                            description: "text-default-500",
+                          }}
+                          description={visitor.nombre_completo}
+                          name={visitor.correo}
+                        >
+                          {visitor.tipo}
+                        </User>
+                      </TableCell>
+                      <TableCell>
+                        <Chip
+                          color={visitor.tipo === 'Destinatario' ? 'primary' : 'success'}
+                          variant="dot"
+                        >
+                          {visitor.tipo}
+                        </Chip>
+                      </TableCell>
+                      <TableCell>
+                        <Button color='danger' size='sm' onPress={() => desvincularCorreo(visitor.id)} radius="full">
+                          <i className="bi bi-x-circle"></i>
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            }
           </div>
-        </div>
-      </div>
+        </DialogContent>
+        <DialogActions>
+          <Button onPress={handleCloseCorreos} color="primary" radius="full">
+            Cerrar
+          </Button>
+        </DialogActions>
+      </Dialog >
 
-      {isLoadingCM ? <Progress isIndeterminate size="sm"></Progress> :
-        <Table aria-label="Example static collection table" isStriped>
-          <TableHeader>
-            <TableColumn>Correo electronico</TableColumn>
-            <TableColumn>Tipo</TableColumn>
-            <TableColumn>Desvincular</TableColumn>
-          </TableHeader>
-          <TableBody>
-            {filteredData.map((visitor, index) => (
-              <TableRow key={index}>
-                <TableCell>
-                  <User
-                    avatarProps={{ radius: "full", size: "sm", src: "https://cdn-icons-png.flaticon.com/512/5611/5611946.png" }}
-                    classNames={{
-                      description: "text-default-500",
-                    }}
-                    description={visitor.nombre_completo}
-                    name={visitor.correo}
-                  >
-                    {visitor.tipo}
-                  </User>
-                </TableCell>
-                <TableCell>
-                  <Chip
-                    color={visitor.tipo === 'Destinatario' ? 'primary' : 'success'}
-                    variant="dot"
-                  >
-                    {visitor.tipo}
-                  </Chip>
-                </TableCell>
-                <TableCell>
-                  <Button color='danger' size='sm' onPress={() => desvincularCorreo(visitor.id)} radius="full">
-                    <i className="bi bi-x-circle"></i>
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      }
-    </div>
-
-    <FormularioCorreoGeneral
-      open={open}
-      handleClose={handleClose}
-      id_cliente={viaje?.partner?.id} />
-  </>
+      <FormularioCorreoGeneral
+        open={open}
+        handleClose={handleClose}
+        id_cliente={viaje?.partner?.id} />
+    </>
   );
 
 };

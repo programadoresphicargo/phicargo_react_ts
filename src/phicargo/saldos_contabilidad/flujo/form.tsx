@@ -68,7 +68,7 @@ type FlujoForm = {
 const FlujoForm = ({ open, handleClose, Cuenta, paymentId }: Props) => {
 
   const [concepts, setConcepts] = React.useState<Concepts[]>([]);
-  
+
   const categories = [
     { id: 1, label: "Gasto" },
     { id: 2, label: "Costo" },
@@ -395,7 +395,7 @@ const FlujoForm = ({ open, handleClose, Cuenta, paymentId }: Props) => {
   });
 
   const subtotal = details
-    .filter(x => x.category_id === 1)
+    .filter(x => [1, 2].includes(x.category_id ?? 0))
     .reduce(
       (sum, item) => sum + Number(item.amount || 0),
       0

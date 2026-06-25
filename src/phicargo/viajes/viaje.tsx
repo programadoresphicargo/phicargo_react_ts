@@ -4,9 +4,6 @@ import Box from '@mui/material/Box';
 import CorreosElectronicosViaje from './correos/correos_electronicos';
 import { CostosExtrasProvider } from '../costos/context/context';
 import Detenciones from './detenciones/detenciones';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
 import Documentacion from './documentacion/documentacion';
 import FoliosCostosExtrasViaje from './costos_extras/tabla';
 import Map from './mapa/mapa';
@@ -17,7 +14,6 @@ import TabPanel from '@mui/lab/TabPanel';
 import { TiemposViajeProvider } from './detenciones/TiemposViajeContext';
 import { ViajeContext } from './context/viajeContext';
 import { useJourneyDialogs } from './seguimiento/funciones';
-import DialogActions from '@mui/material/DialogActions';
 import PlantaViaje from "./plantas/tabla";
 import Seguimiento from "./seguimiento";
 import SolicitudesEquipoViaje from "./solicitudes/tabla";
@@ -196,24 +192,7 @@ const Viaje: React.FC<ViajeProps> = ({
         </TabContext>
       </Box>
 
-      <Dialog
-        open={openCorreos}
-        onClose={handleCloseCorreos}
-        maxWidth="md"
-        fullWidth
-      >
-        <DialogTitle>Destinatarios</DialogTitle>
-
-        <DialogContent dividers>
-          <CorreosElectronicosViaje openCorreos={openCorreos} />
-        </DialogContent>
-
-        <DialogActions>
-          <Button onPress={handleCloseCorreos} color="primary" radius="full">
-            Cerrar
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <CorreosElectronicosViaje openCorreos={openCorreos} handleCloseCorreos={handleCloseCorreos} />
 
     </>
   );
