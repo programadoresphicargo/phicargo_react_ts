@@ -9,13 +9,15 @@ import FormularioCostoExtra from '@/phicargo/costos/maniobras/form_costos_extras
 import { ViajeContext } from '../context/viajeContext';
 import odooApi from '@/api/odoo-api';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
+import { FolioCostoExtra } from "@/phicargo/costos/folios/tabla";
 
 const FoliosCostosExtrasViaje = () => {
 
   const { id_viaje } = useContext(ViajeContext);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<FolioCostoExtra[]>([]);
   const [isLoading, setLoading] = useState(false);
   const [modalShow, setModalShow] = useState(false);
+  const [id_folio, setFolio] = useState<number | null>(null);
 
   const handleShow = () => {
     setModalShow(true);
@@ -122,6 +124,7 @@ const FoliosCostosExtrasViaje = () => {
       onClick: () => {
         if (row.subRows?.length) {
         } else {
+          setFolio(row.original.id_folio);
           handleShow();
         }
       },
@@ -175,6 +178,7 @@ const FoliosCostosExtrasViaje = () => {
       <FormularioCostoExtra
         show={modalShow}
         handleClose={handleClose}
+        id_folio={id_folio}
       />
       <MaterialReactTable table={table} />
     </div >
