@@ -1,48 +1,39 @@
-import { Autocomplete, AutocompleteItem } from "@heroui/react";
-import { Card, CardBody } from "@heroui/react";
-import { CardHeader, Chip, Divider, Input, User } from "@heroui/react";
-import { Container, filledInputClasses } from '@mui/material';
+import { Card, CardBody, RangeValue } from "@heroui/react";
+import { CardHeader, Chip, Divider, Input } from "@heroui/react";
 import {
+    MRT_Cell,
     MaterialReactTable,
     useMaterialReactTable,
 } from 'material-react-table';
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import AppBar from '@mui/material/AppBar';
+import React, { useEffect, useMemo, useState } from 'react';
 import Box from '@mui/material/Box';
 import { Button } from "@heroui/react";
-import CostosExtrasContenedores from './añadir_contenedor/maniobra_contenedores';
-import { CostosExtrasContext } from '../context/context';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import Grid from '@mui/material/Grid';
-import LinearProgress from '@mui/material/LinearProgress';
-import ManiobraContenedores from './añadir_contenedor/maniobra_contenedores';
-import { NumberInput } from "@heroui/react";
-import ServiciosAplicadosCE from './costos_aplicados/costos_aplicados';
-import Slide from '@mui/material/Slide';
-import Stack from '@mui/material/Stack';
-import Swal from 'sweetalert2';
-import TextField from '@mui/material/TextField';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import axios from 'axios';
-import dayjs from 'dayjs';
-import { getEstadoChip } from '../utils';
+import { getEstadoChip } from '../../utils';
 import odooApi from '@/api/odoo-api';
-import { toast } from 'react-toastify';
-import { useAuthContext } from "@/modules/auth/hooks";
 import { DateRangePicker } from "@heroui/react";
-import { parseDate, getLocalTimeZone } from "@internationalized/date";
-import { useDateFormatter } from "@react-aria/i18n";
+import { CalendarDate, parseDate } from "@internationalized/date";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
+import { useCostosExtras } from "../../context/context";
+import { UseFormSetValue, UseFormWatch } from "react-hook-form";
+import { FolioCostoExtra } from "../../folios/tabla";
 
-const FormCE = ({ }) => {
+type Facturas = {
+    id: number,
+    move_name: string;
+}
 
-    function formatDateToYYYYMMDD(date) {
+type Props = {
+    watch: UseFormWatch<FolioCostoExtra>;
+    setValue: UseFormSetValue<FolioCostoExtra>;
+};
+
+const FormCE = ({ watch, setValue }: Props) => {
+
+    function formatDateToYYYYMMDD(date: Date): string {
         return date.toISOString().slice(0, 10);
     }
 
@@ -50,18 +41,21 @@ const FormCE = ({ }) => {
     const first = formatDateToYYYYMMDD(new Date(now.getFullYear(), now.getMonth(), 1));
     const last = formatDateToYYYYMMDD(new Date(now.getFullYear(), now.getMonth() + 1, 0));
 
-    const [value, setValue] = React.useState({
+    const [value, setValue2] = React.useState<
+        RangeValue<CalendarDate> | null
+    >({
         start: parseDate(first),
-        end: parseDate(last)
+        end: parseDate(last),
     });
 
-    const { id_folio, formData, setFormData, DisabledForm } = useContext(CostosExtrasContext);
+    const { DisabledForm } = useCostosExtras();
     const [open, setOpen] = React.useState(false);
     const [isLoading, setLoading] = React.useState(false);
-    const [referencias, setReferencias] = useState([]);
+    const [referencias, setReferencias] = useState<Facturas[]>([]);
 
 
     useEffect(() => {
+        if (!value) return;
         setLoading(true);
         odooApi.get("/folios_costos_extras/account_invoice/", {
             params: {
@@ -100,8 +94,9 @@ const FormCE = ({ }) => {
             {
                 accessorKey: 'state',
                 header: 'Estado',
-                Cell: ({ cell }) => {
-                    const estado = cell.getValue();
+                Cell: ({ cell }: { cell: MRT_Cell<Facturas> }) => {
+
+                    const estado = cell.getValue<string>();
                     const { color, text } = getEstadoChip(estado);
 
                     return (
@@ -128,7 +123,7 @@ const FormCE = ({ }) => {
         columnResizeMode: "onEnd",
         initialState: {
             density: 'compact',
-            pagination: { pageSize: 80 },
+            pagination: { pageIndex: 0, pageSize: 80 },
         },
         muiTablePaperProps: {
             elevation: 0,
@@ -156,23 +151,21 @@ const FormCE = ({ }) => {
             },
         },
         muiTableBodyRowProps: ({ row }) => ({
-            onClick: ({ event }) => {
-                setFormData((prevData) => ({
-                    ...prevData,
-                    id_factura: row.original.id,
-                    referencia_factura: row.original.move_name,
-                }));
+            onClick: () => {
+                setValue("id_factura", row.original.id);
+                setValue("referencia_factura", row.original.move_name);
                 handleClose();
             },
             style: {
                 cursor: 'pointer',
             },
         }),
-        renderTopToolbarCustomActions: ({ table }) => (
+        renderTopToolbarCustomActions: () => (
             <Box display="flex" alignItems="center" m={2}>
                 <DateRangePicker
                     visibleMonths={2}
-                    value={value} onChange={setValue}
+                    value={value}
+                    onChange={setValue2}
                     className="max-w-xs"
                     label="Cartas porte"
                 />
@@ -180,7 +173,9 @@ const FormCE = ({ }) => {
         ),
     });
 
-    const estado = formData.estado_factura ?? "";
+    const estado = watch("estado_factura");
+    const referencia_factura = watch("referencia_factura");
+    const fecha_factura = watch("fecha_factura");
 
     const { color, text } = getEstadoChip(estado);
 
@@ -193,7 +188,7 @@ const FormCE = ({ }) => {
                     >
                         Factura
                     </h1>
-                    <Button onPress={handleClickOpen} color="primary" isDisabled={DisabledForm}>
+                    <Button onPress={handleClickOpen} color="primary" isDisabled={DisabledForm} radius="full">
                         Buscar factura
                     </Button>
                 </CardHeader>
@@ -202,12 +197,12 @@ const FormCE = ({ }) => {
                 <CardBody>
                     <Input
                         label="Referencia factura"
-                        value={formData.referencia_factura ?? ""}
+                        value={referencia_factura ?? ""}
                         isDisabled={true}
                         variant={"underlined"}>
                     </Input>
                     <div className="flex justify-between mt-4">
-                        <p>Fecha factura: {formData.fecha_factura ?? ""}</p>
+                        <p>Fecha factura: {fecha_factura ?? ""}</p>
                         <Chip color={color} variant="flat">
                             {text}
                         </Chip>

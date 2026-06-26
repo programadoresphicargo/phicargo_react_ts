@@ -1,5 +1,14 @@
+type ChipColor =
+    | "default"
+    | "warning"
+    | "primary"
+    | "success"
+    | "secondary"
+    | "danger";
 
-export const getEstadoChip = (estado: string) => {
+export const getEstadoChip = (
+    estado: string
+): { color: ChipColor; text: string } => {
     switch (estado) {
         case "draft":
             return { color: "warning", text: "Borrador" };

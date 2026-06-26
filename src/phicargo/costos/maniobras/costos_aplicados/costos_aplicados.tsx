@@ -1,36 +1,37 @@
 import { Card, CardBody } from "@heroui/react";
 import {
+    MRT_ColumnDef,
+    MRT_Row,
     MaterialReactTable,
     useMaterialReactTable,
 } from 'material-react-table';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-
+import { useMemo, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import { Box } from '@mui/material';
 import { Button } from "@heroui/react";
 import CloseIcon from '@mui/icons-material/Close';
-import { CostosExtrasContext } from '../../context/context';
+import { useCostosExtras } from '../../context/context';
 import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
 import ServiciosExtras from './tipos_costos_extras';
-import Slide from '@mui/material/Slide';
 import Swal from 'sweetalert2';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
+import { FieldArrayWithId, UseFieldArrayAppend, UseFieldArrayRemove, UseFieldArrayUpdate } from "react-hook-form";
+import { CostoExtraAplicado, FolioCostoExtra } from "../../folios/tabla";
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
-const ServiciosAplicadosCE = ({ onClose }) => {
-    const { id_folio, CostosExtras, setCostosExtras, setCostosExtrasEliminados, DisabledForm, setDisabledForm, agregarConcepto, setAC, horasEstadias, setHE } = useContext(CostosExtrasContext);
-    const [loading, setLoading] = useState(false);
+type Props = {
+    fields: FieldArrayWithId<FolioCostoExtra, "costos_extras", "fieldId">[];
+    append: UseFieldArrayAppend<FolioCostoExtra, "costos_extras">;
+    remove: UseFieldArrayRemove;
+    update: UseFieldArrayUpdate<FolioCostoExtra, "costos_extras">;
+};
+
+const ServiciosAplicadosCE = ({ fields, append, remove, update }: Props) => {
+
+    const { DisabledForm } = useCostosExtras();
 
     const [open, setOpen] = useState(false);
 
@@ -38,15 +39,11 @@ const ServiciosAplicadosCE = ({ onClose }) => {
         setOpen(true);
     };
 
-    const guardar = () => {
-        console.log(CostosExtras);
-    };
-
     const handleClose = () => {
         setOpen(false);
     };
 
-    const removeRow = (rowIndex) => {
+    const removeRow = (rowIndex: number) => {
         Swal.fire({
             title: '¿Estás seguro?',
             text: 'Esta acción eliminará el registro.',
@@ -58,16 +55,13 @@ const ServiciosAplicadosCE = ({ onClose }) => {
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
-                const deletedItem = CostosExtras[rowIndex];
-                const updatedData = CostosExtras.filter((_, index) => index !== rowIndex);
-                setCostosExtras(updatedData);
-                setCostosExtrasEliminados(prev => [...prev, deletedItem]);
+                remove(rowIndex);
                 toast.success('Registro eliminado correctamente');
             }
         });
     };
 
-    const columns = useMemo(
+    const columns = useMemo<MRT_ColumnDef<CostoExtraAplicado>[]>(
         () => [
             {
                 accessorKey: 'id_tipo_costo',
@@ -197,7 +191,7 @@ const ServiciosAplicadosCE = ({ onClose }) => {
                 muiTableHeadCellProps: {
                     align: 'right',
                 },
-                Cell: ({ row }) => {
+                Cell: ({ row }: { row: MRT_Row<CostoExtraAplicado> }) => {
                     // Si ajuste_cobro es null o undefined, tomar el valor de subtotal
                     const subtotal = (() => {
                         const costo = row.original.costo || 0;
@@ -214,13 +208,17 @@ const ServiciosAplicadosCE = ({ onClose }) => {
                         maximumFractionDigits: 2,
                     });
                 },
-                muiTableBodyCellEditTextFieldProps: {
+                muiTableBodyCellEditTextFieldProps: ({ row }: { row: MRT_Row<CostoExtraAplicado> }) => ({
                     type: "number",
-                    onChange: (event) => {
-                        const value = parseFloat(event.target.value) || 0;
-                        row.original.ajuste_cobro = value; // Permitir edición manual
+                    onBlur: (event: any) => {
+                        const value = Number(event.target.value) || 0;
+
+                        update(row.index, {
+                            ...row.original,
+                            ajuste_cobro: value,
+                        });
                     },
-                },
+                })
             },
             {
                 accessorKey: 'comentarios',
@@ -232,7 +230,7 @@ const ServiciosAplicadosCE = ({ onClose }) => {
     );
 
     const totalSubtotal = useMemo(() => {
-        return CostosExtras.reduce((total, item) => {
+        return fields.reduce((total, item) => {
             const costo = item.costo || 0;
             const cantidad = item.cantidad || 1;
             const iva = item.iva ?? 0.16;
@@ -244,32 +242,35 @@ const ServiciosAplicadosCE = ({ onClose }) => {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
         });
-    }, [CostosExtras]);
+    }, [fields]);
 
 
-    const table = useMaterialReactTable({
+    const table = useMaterialReactTable<CostoExtraAplicado>({
         columns,
-        data: CostosExtras,
+        data: fields,
         enableEditing: true,
         editDisplayMode: 'modal',
+        localization: MRT_Localization_ES,
         positionActionsColumn: 'last',
-        state: { showProgressBars: loading },
         initialState: {
             density: 'compact',
-            pagination: { pageSize: 80 },
+            pagination: { pageIndex: 0, pageSize: 80 },
         },
         onEditingRowSave: ({ row, values, exitEditingMode }) => {
-            const updatedData = [...CostosExtras];
-            const updatedRow = { ...row.original, ...values };
 
-            updatedRow.costo = parseFloat(updatedRow.costo) || 0;
-            updatedRow.cantidad = parseFloat(updatedRow.cantidad) || 1;
-            updatedRow.subtotal = updatedRow.costo * updatedRow.cantidad;
+            const updatedRow = {
+                ...row.original,
+                ...values,
+            };
 
-            updatedData[row.index] = updatedRow;
-            setCostosExtras(updatedData);
+            updatedRow.costo = Number(updatedRow.costo) || 0;
+            updatedRow.cantidad = Number(updatedRow.cantidad) || 1;
+
+            update(row.index, updatedRow);
+
             exitEditingMode();
             toast.success('Registro actualizado');
+
         },
         muiTablePaperProps: {
             elevation: 0,
@@ -291,7 +292,7 @@ const ServiciosAplicadosCE = ({ onClose }) => {
                 fontSize: '12px',
             },
         },
-        renderTopToolbarCustomActions: ({ table }) => (
+        renderTopToolbarCustomActions: () => (
             <Box
                 sx={{
                     display: 'flex',
@@ -305,7 +306,7 @@ const ServiciosAplicadosCE = ({ onClose }) => {
                 >
                     Costos extras
                 </h1>
-                <Button radius="full" onPress={handleClickOpen} color="primary" size="md" isDisabled={DisabledForm} startContent={<i class="bi bi-plus-lg"></i>}>
+                <Button radius="full" onPress={handleClickOpen} color="primary" size="sm" isDisabled={DisabledForm} startContent={<i className="bi bi-plus-lg"></i>}>
                     Añadir costo extra
                 </Button>
             </Box>
@@ -318,12 +319,14 @@ const ServiciosAplicadosCE = ({ onClose }) => {
                     className='text-white'
                     isDisabled={DisabledForm}
                     onPress={() => table.setEditingRow(row)}
+                    radius="full"
                 >
                     Editar
                 </Button>
                 <Button
                     color="danger"
                     size="sm"
+                    radius="full"
                     isDisabled={DisabledForm}
                     onPress={() => removeRow(row.index)}
                 >
@@ -331,7 +334,7 @@ const ServiciosAplicadosCE = ({ onClose }) => {
                 </Button>
             </Box>
         ),
-        renderBottomToolbarCustomActions: ({ table }) => (
+        renderBottomToolbarCustomActions: () => (
             <Box
                 sx={{
                     display: 'flex',
@@ -348,32 +351,6 @@ const ServiciosAplicadosCE = ({ onClose }) => {
         ),
     });
 
-
-    const agregarServicioConExtras = () => {
-        if (agregarConcepto) {
-            const servicioConExtras = {
-                id_tipo_costo: 4,
-                descripcion: 'Estadias',
-                costo: 0,
-                cantidad: horasEstadias,
-                iva: .16,
-                retencion: 0,
-                subtotal: 0,
-                total: 0,
-                ajuste_cobro: 0,
-                comentarios: ''
-            };
-
-            setCostosExtras((prev) => [...prev, servicioConExtras]);
-        } else {
-            console.log("No se agrega el servicio debido a la condición de contexto.");
-        }
-    };
-
-    useEffect(() => {
-        agregarServicioConExtras();
-    }, []);
-
     return (
         <>
             <Card>
@@ -383,7 +360,7 @@ const ServiciosAplicadosCE = ({ onClose }) => {
             </Card>
 
             <Dialog
-                fullWidth={true}
+                fullScreen
                 maxWidth="lg"
                 scroll='body'
                 open={open}
@@ -402,12 +379,12 @@ const ServiciosAplicadosCE = ({ onClose }) => {
                         <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
                             Costos extras
                         </Typography>
-                        <Button autoFocus color="inherit" onClick={handleClose}>
+                        <Button autoFocus onPress={handleClose}>
                             Cerrar
                         </Button>
                     </Toolbar>
                 </AppBar>
-                <ServiciosExtras onClose={handleClose} />
+                <ServiciosExtras onClose={handleClose} append={append} />
             </Dialog>
         </>
     );

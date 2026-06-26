@@ -1,44 +1,78 @@
 import { Button, Chip } from "@heroui/react";
-import { FormControl, InputLabel, MenuItem } from '@mui/material';
 import {
+  MRT_Cell,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Select, SelectItem } from "@heroui/react";
-
 import { Box } from '@mui/material';
-import { CostosExtrasContext } from '../context/context';
+import { useCostosExtras } from '../context/context';
 import FormularioCostoExtra from '../maniobras/form_costos_extras';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import { TextField } from '@mui/material';
-import dayjs from 'dayjs';
 import { exportToCSV } from '../../utils/export';
 import { getEstadoChip } from '../utils';
 import odooApi from '@/api/odoo-api';
 
+export type CostoExtraAplicado = {
+  id_tipo_costo: number | null;
+  descripcion: string;
+  costo: number;
+  unidad_medida: string;
+  observaciones: string;
+  cantidad: number;
+  iva: number;
+  retencion: number;
+  subtotal: number;
+  total: number;
+  ajuste_cobro: number;
+}
+
+export type FolioCostoExtra = {
+  id_folio: number | null;
+  id_factura: number | null;
+  referencia_factura: string | null;
+  estado_factura: string;
+  fecha_factura: string | null;
+  status: string;
+
+  fecha_creacion?: string | null;
+  usuario_creacion?: string | null;
+
+  usuario_confirmacion?: string | null;
+  fecha_confirmacion?: string | null;
+
+  fecha_facturacion?: string | null;
+  usuario_facturo?: string | null;
+
+  usuario_cancelacion?: string | null;
+  motivo_cancelacion?: string | null;
+  comentarios_cancelacion?: string | null;
+  fecha_cancelacion?: string | null;
+
+  costos_extras: CostoExtraAplicado[];
+};
+
 const FoliosCostosExtras = () => {
 
-  const { id_folio, setIDFolio, CartasPorte, CartasPorteEliminadas, setCPS, setCPSEliminadas, CostosExtras, setCostosExtras, CostosExtrasEliminados, setCostosExtrasEliminados, formData, setFormData, DisabledForm, setDisabledForm } = useContext(CostosExtrasContext);
+  const { setCPS, setCPSEliminadas } = useCostosExtras();
 
-  const [data, setData] = useState([]);
-  const [isLoading2, setLoading] = useState();
+  const [id_folio, setFolio] = useState<number | null>(null);
+  const [data, setData] = useState<FolioCostoExtra[]>([]);
+  const [isLoading, setLoading] = useState(false);
   const [modalShow, setModalShow] = useState(false);
-  const [sucursal, setSucursal] = React.useState("1");
+  const [store, setStore] = React.useState<string>("1");
 
-  const seleccionar_sucursal = (e) => {
-    setSucursal(e.target.value);
+  const changeStore = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setStore(e.target.value);
   };
 
   const limpiarForm = () => {
-    setIDFolio(null);
     setCPS([]);
     setCPSEliminadas([]);
-    setCostosExtras([]);
-    setCostosExtrasEliminados([]);
   };
 
-  const handleShowModal = () => {
+  const handleShow = () => {
     setModalShow(true);
   };
 
@@ -51,7 +85,7 @@ const FoliosCostosExtras = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await odooApi.get('/folios_costos_extras/by_store_id/' + sucursal);
+      const response = await odooApi.get('/folios_costos_extras/by_store_id/' + store);
       setData(response.data);
       setLoading(false);
     } catch (error) {
@@ -61,7 +95,7 @@ const FoliosCostosExtras = () => {
 
   useEffect(() => {
     fetchData();
-  }, [sucursal]);
+  }, [store]);
 
   const columns = useMemo(
     () => [
@@ -80,27 +114,6 @@ const FoliosCostosExtras = () => {
       {
         accessorKey: 'fecha_creacion',
         header: 'Fecha creación',
-        size: 150,
-        Cell: ({ cell }) => {
-          const rawDate = cell.getValue();
-          const date = new Date(rawDate);
-
-          if (isNaN(date.getTime())) {
-            return "Fecha no válida";
-          }
-
-          const options = {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-            hour: 'numeric',
-            minute: '2-digit',
-            hour12: true,
-          };
-
-          const formattedDate = date.toLocaleString('es-ES', options);
-          return formattedDate;
-        },
       },
       {
         accessorKey: 'nombre',
@@ -125,22 +138,11 @@ const FoliosCostosExtras = () => {
       {
         accessorKey: 'status',
         header: 'Estatus',
-        Cell: ({ cell }) => {
-          const status = cell.getValue() || '';
-          let badgeClass = '';
-
-          if (status === 'cancelado') {
-            badgeClass = 'danger';
-          } else if (status === 'facturado') {
-            badgeClass = 'success';
-          } else if (status === 'borrador') {
-            badgeClass = 'warning';
-          } else {
-            badgeClass = 'primary';
-          }
+        Cell: ({ cell }: { cell: MRT_Cell<FolioCostoExtra> }) => {
+          const status = cell.getValue<string>() || '';
 
           return (
-            <Chip color={badgeClass} size='sm' className="text-white">
+            <Chip color={status === "cancelado" ? "danger" : status === "facturado" ? "success" : status === "borrador" ? "warning" : "default"} size='sm' className="text-white">
               {status}
             </Chip>
           );
@@ -157,8 +159,8 @@ const FoliosCostosExtras = () => {
       {
         accessorKey: 'estado_factura',
         header: 'Estado',
-        Cell: ({ cell }) => {
-          const estado = cell.getValue();
+        Cell: ({ cell }: { cell: MRT_Cell<FolioCostoExtra> }) => {
+          const estado = cell.getValue<string>();
           const { color, text } = getEstadoChip(estado);
 
           return (
@@ -183,14 +185,14 @@ const FoliosCostosExtras = () => {
     enableGlobalFilter: true,
     enableFilters: true,
     localization: MRT_Localization_ES,
-    state: { showProgressBars: isLoading2 },
+    state: { showProgressBars: isLoading },
     enableColumnPinning: true,
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
     initialState: {
       density: 'compact',
       showColumnFilters: true,
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
     },
     muiTablePaperProps: {
       elevation: 0,
@@ -204,12 +206,11 @@ const FoliosCostosExtras = () => {
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
-      onClick: ({ event }) => {
-
+      onClick: () => {
         if (row.subRows?.length) {
         } else {
-          handleShowModal(row.original.id_folio);
-          setIDFolio(row.original.id_folio);
+          handleShow();
+          setFolio(row.original.id_folio);
         }
       },
       style: {
@@ -231,7 +232,7 @@ const FoliosCostosExtras = () => {
       },
     },
 
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -248,12 +249,13 @@ const FoliosCostosExtras = () => {
         <Box sx={{ width: '160px' }}>
           <Button
             radius="full"
-            startContent={<i class="bi bi-plus-lg"></i>}
+            startContent={<i className="bi bi-plus-lg"></i>}
             color="primary"
             fullWidth
             onPress={() => {
-              handleShowModal();
-              setIDFolio(null);
+              limpiarForm();
+              handleShow();
+              setFolio(null);
             }}
           >
             Nuevo folio
@@ -263,7 +265,7 @@ const FoliosCostosExtras = () => {
         <Box sx={{ width: '160px' }}>
           <Button
             radius="full"
-            startContent={<i class="bi bi-arrow-clockwise"></i>}
+            startContent={<i className="bi bi-arrow-clockwise"></i>}
             color="success"
             className='text-white'
             fullWidth
@@ -281,7 +283,7 @@ const FoliosCostosExtras = () => {
             color='success'
             fullWidth
             className='text-white'
-            startContent={<i class="bi bi-file-earmark-excel"></i>}
+            startContent={<i className="bi bi-file-earmark-excel"></i>}
             onPress={() => exportToCSV(data, columns, "costos_extras.csv")}>Exportar</Button>
         </Box>
 
@@ -289,8 +291,8 @@ const FoliosCostosExtras = () => {
           <Select
             label="Sucursal"
             placeholder="Selecciona una sucursal"
-            selectedKeys={[sucursal]}
-            onChange={seleccionar_sucursal}
+            selectedKeys={[store]}
+            onChange={changeStore}
             fullWidth
           >
             <SelectItem key={'1'}>Veracruz</SelectItem>
@@ -298,20 +300,19 @@ const FoliosCostosExtras = () => {
             <SelectItem key={'9'}>Manzanillo</SelectItem>
           </Select>
         </Box>
-
       </Box>
-
     ),
   });
 
   return (
-    <div>
+    <>
       <FormularioCostoExtra
         show={modalShow}
         handleClose={handleCloseModal}
+        id_folio={id_folio}
       />
       <MaterialReactTable table={table} />
-    </div >
+    </>
   );
 
 };

@@ -1,30 +1,24 @@
 import {
+    MRT_ColumnDef,
     MaterialReactTable,
     useMaterialReactTable,
 } from 'material-react-table';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-
+import { useEffect, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
-import { Button } from "@heroui/react";
-import { CostosExtrasContext } from '../../context/context';
 import odooApi from '@/api/odoo-api';
+import { CostoExtraAplicado, FolioCostoExtra } from '../../folios/tabla';
+import { UseFieldArrayAppend } from 'react-hook-form';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
-const ServiciosExtras = ({ onClose }) => {
+type Props = {
+    onClose: () => void,
+    append: UseFieldArrayAppend<FolioCostoExtra, "costos_extras">;
+};
 
-    const [open, setOpen] = React.useState(false);
+const ServiciosExtras = ({ onClose, append }: Props) => {
 
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
-
-    const { CostosExtras, setCostosExtras, agregarConcepto, setAC } = useContext(CostosExtrasContext);
-
-    const [data, setData] = useState([]);
-    const [isLoading2, setLoading] = useState();
+    const [data, setData] = useState<CostoExtraAplicado[]>([]);
+    const [isLoading, setLoading] = useState(false);
 
     const fetchData = async () => {
         try {
@@ -41,7 +35,7 @@ const ServiciosExtras = ({ onClose }) => {
         fetchData();
     }, []);
 
-    const columns = useMemo(
+    const columns = useMemo<MRT_ColumnDef<CostoExtraAplicado>[]>(
         () => [
             {
                 accessorKey: 'id_tipo_costo',
@@ -67,19 +61,20 @@ const ServiciosExtras = ({ onClose }) => {
         [],
     );
 
-    const table = useMaterialReactTable({
+    const table = useMaterialReactTable<CostoExtraAplicado>({
         columns,
         data,
         enableGrouping: true,
         enableGlobalFilter: true,
         enableFilters: true,
-        state: { isLoading: isLoading2 },
+        state: { showProgressBars: isLoading },
         enableColumnPinning: true,
         enableStickyHeader: true,
         columnResizeMode: "onEnd",
+        localization: MRT_Localization_ES,
         initialState: {
             density: 'compact',
-            pagination: { pageSize: 80 },
+            pagination: { pageIndex: 0, pageSize: 80 },
         },
         muiTablePaperProps: {
             elevation: 0,
@@ -107,7 +102,7 @@ const ServiciosExtras = ({ onClose }) => {
                 overflow: 'hidden',
             },
         },
-        renderTopToolbarCustomActions: ({ table }) => (
+        renderTopToolbarCustomActions: () => (
             <Box
                 sx={{
                     display: 'flex',
@@ -133,8 +128,7 @@ const ServiciosExtras = ({ onClose }) => {
                     ajuste_cobro: 0
                 };
 
-                // Actualizar el estado con el nuevo servicio
-                setCostosExtras((prev) => [...prev, servicioConExtras]);
+                append(servicioConExtras);
                 onClose();
             },
             sx: {

@@ -1,42 +1,35 @@
 import { Card, CardBody } from "@heroui/react";
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import AñadirContenedor from './modal_añadir_contenedor';
+import { useContext, useEffect, useMemo, useState } from 'react';
+import AñadirContenedor from './añadir_cp';
 import Box from '@mui/material/Box';
 import { Button } from "@heroui/react";
-import { CostosExtrasContext } from '../../context/context';
+import { useCostosExtras } from '../../context/context';
 import DeleteIcon from '@mui/icons-material/Delete';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import { ViajeContext } from '@/phicargo/viajes/context/viajeContext';
-import axios from 'axios';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
-const CostosExtrasContenedores = ({ }) => {
+const CostosExtrasContenedores = ({ id_folio }: { id_folio: number | null }) => {
 
     const contexto = useContext(ViajeContext);
     const id_viaje = contexto?.id_viaje ?? null;
 
-    const { id_folio, CartasPorte, setCPS, CartasPorteEliminadas, setCPSEliminadas, DisabledForm, setDisabledForm } = useContext(CostosExtrasContext);
-    const [modalShow, setModalShow] = useState(false);
-    const [openDialog, setOpenDialog] = useState(false);
-    const [selectedId, setSelectedId] = useState(null);
+    const { CartasPorte, setCPS, setCPSEliminadas, DisabledForm } = useCostosExtras();
+    const [open, setOpen] = useState(false);
     const [isLoading, setLoading] = useState(false);
 
-    const handleDelete = (id) => {
+    const handleDelete = (id: number) => {
         setCPSEliminadas((prev) => [...prev, { id }]);
         setCPS((prev) => prev.filter(item => item.id !== id));
     };
 
-    const handleShowModal = () => setModalShow(true);
+    const handleShow = () => setOpen(true);
 
-    const handleCloseModal = () => {
-        setModalShow(false);
+    const handleClose = () => {
+        setOpen(false);
     };
 
     const columns = useMemo(
@@ -48,20 +41,6 @@ const CostosExtrasContenedores = ({ }) => {
         ],
         []
     );
-
-    const fetchData = async () => {
-        try {
-            setLoading(true);
-            const response = await odooApi.get('/folios_cartas_porte/by_id_folio/' + id_folio);
-            setCPS(response.data);
-            setLoading(false);
-        } catch (error) {
-            console.error('Error al obtener los datos:', error);
-            setLoading(false);
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const fetchDataCP = async () => {
         try {
@@ -79,10 +58,6 @@ const CostosExtrasContenedores = ({ }) => {
     };
 
     useEffect(() => {
-        fetchData();
-    }, []);
-
-    useEffect(() => {
         if (id_folio == null && id_viaje != null) {
             fetchDataCP();
         }
@@ -95,10 +70,11 @@ const CostosExtrasContenedores = ({ }) => {
         enableGlobalFilter: true,
         enableFilters: true,
         positionActionsColumn: 'last',
-        state: { isLoading: isLoading },
+        state: { showProgressBars: isLoading },
+        localization: MRT_Localization_ES,
         initialState: {
             density: 'compact',
-            pagination: { pageSize: 80 },
+            pagination: { pageIndex: 0, pageSize: 80 },
         },
         muiTablePaperProps: { elevation: 0, sx: { boxShadow: 'none' } },
         enableRowActions: true,
@@ -109,13 +85,12 @@ const CostosExtrasContenedores = ({ }) => {
                 </IconButton>
             </Box>
         ),
-        muiTableBodyRowProps: ({ row }) => ({
-            onDoubleClick: () => setOpenDialog(row.original.id),
+        muiTableBodyRowProps: () => ({
             style: { cursor: 'pointer' },
         }),
         muiTableHeadCellProps: { sx: { fontFamily: 'Inter', fontWeight: 'Bold', fontSize: '14px' } },
         muiTableBodyCellProps: { sx: { fontFamily: 'Inter', fontWeight: 'normal', fontSize: '14px' } },
-        renderTopToolbarCustomActions: ({ table }) => (
+        renderTopToolbarCustomActions: () => (
             <Box
                 sx={{
                     display: 'flex',
@@ -129,7 +104,7 @@ const CostosExtrasContenedores = ({ }) => {
                 >
                     Cartas porte
                 </h1>
-                <Button radius="full" color='primary' onPress={handleShowModal} isDisabled={DisabledForm} startContent={<i className="bi bi-plus-lg"></i>}>Añadir carta porte</Button>
+                <Button radius="full" color='primary' onPress={handleShow} isDisabled={DisabledForm} startContent={<i className="bi bi-plus-lg"></i>} size="sm">Añadir carta porte</Button>
             </Box>
         ),
     });
@@ -138,7 +113,7 @@ const CostosExtrasContenedores = ({ }) => {
         <>
             <Card>
                 <CardBody>
-                    <AñadirContenedor show={modalShow} handleClose={handleCloseModal} />
+                    <AñadirContenedor open={open} handleClose={handleClose} />
                     <MaterialReactTable table={table} />
                 </CardBody>
             </Card>

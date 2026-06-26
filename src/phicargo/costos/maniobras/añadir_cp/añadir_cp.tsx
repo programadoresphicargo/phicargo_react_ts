@@ -2,27 +2,25 @@ import {
     MaterialReactTable,
     useMaterialReactTable,
 } from 'material-react-table';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
-import { Button } from "@heroui/react";
-import { CostosExtrasContext } from '../../context/context';
+import { Button, RangeValue } from "@heroui/react";
+import { CartaPorte, useCostosExtras } from '../../context/context';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import odooApi from '@/api/odoo-api';
-import { toast } from 'react-toastify';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { DateRangePicker } from "@heroui/react";
-import { parseDate, getLocalTimeZone } from "@internationalized/date";
-import { useDateFormatter } from "@react-aria/i18n";
+import { DateValue, parseDate } from "@internationalized/date";
 
-const AñadirContenedor = ({ show, handleClose }) => {
+const AñadirContenedor = ({ open, handleClose }: { open: boolean, handleClose: () => void }) => {
 
-    const { id_folio, CartasPorte, setCPS } = useContext(CostosExtrasContext);
+    const { setCPS } = useCostosExtras();
     const [data, setData] = useState([]);
-    const [isLoading2, setILoading] = useState();
+    const [isLoading, setILoading] = useState(false);
 
-    function formatDateToYYYYMMDD(date) {
+    function formatDateToYYYYMMDD(date: Date): string {
         return date.toISOString().slice(0, 10);
     }
 
@@ -30,12 +28,13 @@ const AñadirContenedor = ({ show, handleClose }) => {
     const first = formatDateToYYYYMMDD(new Date(now.getFullYear(), now.getMonth(), 1));
     const last = formatDateToYYYYMMDD(new Date(now.getFullYear(), now.getMonth() + 1, 0));
 
-    const [value, setValue] = React.useState({
+    const [value, setValue] = React.useState<RangeValue<DateValue> | null>({
         start: parseDate(first),
         end: parseDate(last)
     });
 
     useEffect(() => {
+        if (!value) return;
         const fetchData = async () => {
             try {
                 setILoading(true);
@@ -56,7 +55,7 @@ const AñadirContenedor = ({ show, handleClose }) => {
         fetchData();
     }, [value]);
 
-    const añadir_contenedor = (data) => {
+    const añadir_contenedor = (data: CartaPorte) => {
         setCPS(prevCartasPorte => [...prevCartasPorte, data]);
         handleClose();
     };
@@ -70,16 +69,14 @@ const AñadirContenedor = ({ show, handleClose }) => {
             {
                 accessorKey: 'x_ejecutivo_viaje_bel',
                 header: 'Ejecutivo de viaje',
-                size: 150,
             },
             {
                 accessorKey: 'x_reference',
                 header: 'Contenedor',
-                size: 150,
-            }, {
+            },
+            {
                 accessorKey: 'date_order',
                 header: 'Fecha',
-                size: 150,
             },
         ],
         [],
@@ -88,15 +85,13 @@ const AñadirContenedor = ({ show, handleClose }) => {
     const table = useMaterialReactTable({
         columns,
         data,
-        elevation: 0,
         enableGrouping: true,
         enableGlobalFilter: false,
         enableFilters: true,
         localization: MRT_Localization_ES,
         state: {
-            isLoading: isLoading2,
             showColumnFilters: true,
-            showProgressBars: isLoading2
+            showProgressBars: isLoading
         },
         muiCircularProgressProps: {
             color: 'primary',
@@ -109,7 +104,7 @@ const AñadirContenedor = ({ show, handleClose }) => {
         },
         initialState: {
             density: 'compact',
-            pagination: { pageSize: 80 },
+            pagination: { pageIndex: 0, pageSize: 80 },
         },
         enableRowActions: true,
         displayColumnDefOptions: {
@@ -120,7 +115,7 @@ const AñadirContenedor = ({ show, handleClose }) => {
         },
         renderRowActions: ({ row }) => (
             <Box>
-                <Button color='primary' onPress={() => añadir_contenedor(row.original)} size='sm'>
+                <Button color='primary' onPress={() => añadir_contenedor(row.original)} size='sm' radius='full'>
                     Añadir
                 </Button>
             </Box>
@@ -154,11 +149,12 @@ const AñadirContenedor = ({ show, handleClose }) => {
                 borderBottom: '1px solid #e0e0e0'
             },
         }),
-        renderTopToolbarCustomActions: ({ table }) => (
+        renderTopToolbarCustomActions: () => (
             <Box display="flex" alignItems="center" m={2}>
                 <DateRangePicker
                     visibleMonths={2}
-                    value={value} onChange={setValue}
+                    value={value}
+                    onChange={setValue}
                     className="max-w-xs"
                     label="Cartas porte"
                 />
@@ -169,7 +165,7 @@ const AñadirContenedor = ({ show, handleClose }) => {
     return (
         <>
             <Dialog
-                open={show}
+                open={open}
                 onClose={handleClose}
                 fullWidth={true}
                 maxWidth='xl'
