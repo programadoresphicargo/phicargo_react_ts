@@ -19,6 +19,7 @@ import odooApi from '@/api/odoo-api';
 import { Cuenta } from ".";
 import FlujoForm from "./form";
 import { exportToCSV } from "@/phicargo/utils/export";
+import ImportarArchivoExcel from "./archivo";
 
 type Props = {
   open: boolean;
@@ -36,6 +37,8 @@ type Flujo = {
 const FlujosEfectivoTable = ({ open, handleClose, Cuenta, dateStart, dateEnd }: Props) => {
 
   const [openForm, setOpenForm] = React.useState(false);
+  const [openFile, setOpenFile] = React.useState(false);
+
   const [paymentId, setPayment] = React.useState<number | null>(null);
 
   const handleCloseForm = () => {
@@ -45,6 +48,11 @@ const FlujosEfectivoTable = ({ open, handleClose, Cuenta, dateStart, dateEnd }: 
 
   const handleClickOpen = () => {
     setOpenForm(true);
+  };
+
+  const handleCloseFiles = () => {
+    setOpenFile(false);
+    fetchData();
   };
 
   const [data, setData] = useState<Flujo[]>([]);
@@ -269,6 +277,7 @@ const FlujosEfectivoTable = ({ open, handleClose, Cuenta, dateStart, dateEnd }: 
           >
             Exportar
           </Button>
+          <Button onPress={() => setOpenFile(true)} radius="full" color="danger">Importar</Button>
         </Box>
       </Box>
     ),
@@ -289,6 +298,7 @@ const FlujosEfectivoTable = ({ open, handleClose, Cuenta, dateStart, dateEnd }: 
         </DialogActions>
       </Dialog>
       <FlujoForm open={openForm} handleClose={handleCloseForm} Cuenta={Cuenta} paymentId={paymentId}></FlujoForm>
+      <ImportarArchivoExcel accoundId={Cuenta?.id_cuenta} handleClose={handleCloseFiles} open={openFile} ></ImportarArchivoExcel>
     </>
   );
 };

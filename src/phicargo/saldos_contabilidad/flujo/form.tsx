@@ -83,6 +83,8 @@ const FlujoForm = ({ open, handleClose, Cuenta, paymentId }: Props) => {
     { id: 11, label: "Arrendamiento" },
     { id: 12, label: "ND" },
     { id: 13, label: "RET" },
+    { id: 14, label: "Deposito" },
+    { id: 15, label: "Retiro" },
   ];
 
   const initialForm: FlujoForm = {
