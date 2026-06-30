@@ -148,7 +148,7 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
 
               <Stack direction="row" spacing={2} alignItems="center">
                 {id_descuento && (
-                  <Chip color="warning" className="uppercase text-sm font-semibold text-white">
+                  <Chip color={estado == "borrador" ? "warning" : estado == "confirmado" ? "success" : estado == "cancelado" ? "danger" : "default"} className="uppercase text-sm font-semibold text-white">
                     {estado || "pendiente"}
                   </Chip>
                 )}
@@ -341,6 +341,6 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
           </>
         )}
       </ModalContent>
-    </Modal>
+    </Modal >
   );
 }
