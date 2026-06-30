@@ -39,7 +39,7 @@ const ImportarArchivoExcel = ({ open, handleClose, accoundId }: Props) => {
       formData.append("file", file);
 
       const response = await odooApi.post(
-        "/saldos/importar-excel/",
+        "/payments/importar-excel/",
         formData
       );
 
@@ -47,9 +47,13 @@ const ImportarArchivoExcel = ({ open, handleClose, accoundId }: Props) => {
         toast.success(response.data.message);
         handleClose();
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      toast.error("Error al importar el archivo");
+
+      const message =
+        error.response?.data?.detail || "Error al importar el archivo";
+
+      toast.error(message);
     } finally {
       setLoading(false);
     }
