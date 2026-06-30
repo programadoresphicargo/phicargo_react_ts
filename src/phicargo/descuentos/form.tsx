@@ -173,7 +173,7 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
 
                 {!isEditing && id_descuento && (
                   <>
-                    {estado == "confirmado" && (
+                    {(estado == "confirmado" || estado == "aplicado") && (
                       <Button color="success" onPress={ImprimirFormato} radius="full" className="text-white">
                         Imprimir formato
                       </Button>
