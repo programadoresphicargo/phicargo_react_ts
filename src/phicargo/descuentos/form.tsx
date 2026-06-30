@@ -21,6 +21,7 @@ import { Descuento } from "./type";
 import { parseDate } from "@internationalized/date";
 import dayjs from "dayjs";
 import { SelectEmpleado } from "./select_empleados";
+import { useAuthContext } from "@/modules/auth/hooks";
 
 const initialForm: Descuento = {
   id_descuento: null,
@@ -36,6 +37,8 @@ const initialForm: Descuento = {
 };
 
 export default function DescuentoForm({ open, handleClose, id_descuento }: { open: boolean, handleClose: () => void, id_descuento: number | null }) {
+
+  const { session } = useAuthContext();
 
   const { control, handleSubmit, reset, watch } = useForm<Descuento>({
     defaultValues: initialForm,
@@ -170,9 +173,11 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
 
                 {!isEditing && id_descuento && (
                   <>
-                    <Button color="success" onPress={ImprimirFormato} radius="full" className="text-white">
-                      Imprimir formato
-                    </Button>
+                    {estado == "confirmado" && (
+                      <Button color="success" onPress={ImprimirFormato} radius="full" className="text-white">
+                        Imprimir formato
+                      </Button>
+                    )}
                     {estado == "borrador" && (
                       <Button color="success" onPress={() => CambiarEstado('confirmado')} radius="full" className="text-white" isLoading={isLoading}>
                         Confirmar
@@ -183,7 +188,7 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
                         Aplicar
                       </Button>
                     )}
-                    {estado == "borrador" && (
+                    {session?.user?.permissions?.includes(690) && estado == "borrador" && (
                       <Button color="danger" onPress={() => CambiarEstado('cancelado')} radius="full" className="text-white" isLoading={isLoading}>
                         Cancelar
                       </Button>
