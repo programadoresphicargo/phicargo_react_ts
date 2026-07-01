@@ -238,6 +238,9 @@ const ViajesFinalizados = ({ }) => {
         const isGrouped = row.getIsGrouped();
         if (isGrouped) return;
 
+        const selection = window.getSelection()?.toString();
+        if (selection) return;
+
         handleClickOpen();
         setIDViaje(row.original.id_viaje);
       },
