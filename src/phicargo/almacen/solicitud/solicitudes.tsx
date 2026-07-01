@@ -89,8 +89,8 @@ const Solicitudes: React.FC<Props> = ({
         header: 'Carta porte',
       },
       {
-        accessorKey: 'sucursal',
-        header: 'Sucursal',
+        accessorKey: 'sucursal_entrega',
+        header: 'Sucursal entrega',
       },
       {
         accessorKey: 'referencia_viaje',
@@ -196,6 +196,7 @@ const Solicitudes: React.FC<Props> = ({
     initialState: {
       showGlobalFilter: true,
       columnVisibility: {
+        sucursal_entrega: vista == 'solicitudes' && x_tipo == 'amarre' ? true : false,
         cliente: vista == 'solicitudes' ? true : false,
         carta_porte: vista == 'solicitudes' ? true : false,
         referencia_viaje: vista == 'solicitudes' ? true : false,
