@@ -173,6 +173,22 @@ const PDV = ({ }) => {
 
     },
     {
+      accessorKey: 'client_order_ref',
+      header: 'Referencia cliente',
+    },
+    {
+      accessorKey: 'terminal',
+      header: 'Terminal',
+    },
+    {
+      accessorKey: 'operador_maniobra',
+      header: 'Operador maniobra',
+    },
+    {
+      accessorKey: 'vehiculo_maniobra',
+      header: 'Vehiculo maniobra',
+    },
+    {
       accessorKey: 'referencias',
       header: 'Contenedores',
     },
