@@ -89,6 +89,10 @@ const Solicitudes: React.FC<Props> = ({
         header: 'Carta porte',
       },
       {
+        accessorKey: 'sucursal',
+        header: 'Sucursal',
+      },
+      {
         accessorKey: 'referencia_viaje',
         header: 'Viaje',
       },
