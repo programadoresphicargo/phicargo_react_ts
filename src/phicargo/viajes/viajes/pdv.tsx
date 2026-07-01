@@ -170,11 +170,6 @@ const PDV = ({ }) => {
     {
       accessorKey: 'sucursal',
       header: 'Sucursal',
-
-    },
-    {
-      accessorKey: 'client_order_ref',
-      header: 'Referencia cliente',
     },
     {
       accessorKey: 'terminal',
