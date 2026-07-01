@@ -12,6 +12,7 @@ import { DatePicker } from "@heroui/react";
 import { parseZonedDateTime } from "@internationalized/date";
 import { toast } from 'react-toastify';
 import { useAuthContext } from "@/modules/auth/hooks";
+import HistorialCambios from "@/phicargo/almacen/solicitud/cambios/epps";
 
 export type EstatusAgrupados = {
     nombre_estatus: string;
@@ -37,6 +38,7 @@ export type EstatusAgrupados = {
     comentarios_estatus: string;
     name: string;
     primera_fecha_envio: string;
+    mails: any[],
 }
 
 type PickerValue = {
@@ -263,6 +265,8 @@ function EstatusHistorialAgrupado({ id_reportes_agrupados }: { id_reportes_agrup
                                             </div>
                                         </CardFooter>
                                     </Card>) : (null)}
+
+                                <HistorialCambios cambios={step.mails}></HistorialCambios>
 
                                 {step.id_reenvio !== null ? (
                                     <Card className="max-w-full m-4">

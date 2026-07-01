@@ -12,6 +12,7 @@ import { useState } from "react";
 import odooApi from "@/api/odoo-api";
 import toast from "react-hot-toast";
 import PanelEnvio from "../../panel_envio_estatus/panel_envio";
+import HistorialCambios from "@/phicargo/almacen/solicitud/cambios/epps";
 
 export type Step = {
   nombre_estatus: string;
@@ -37,6 +38,7 @@ export type Step = {
   comentarios_estatus: string;
   name: string;
   primera_fecha_envio: string;
+  mails: any[];
 };
 
 export default function EstatusDetalle({ step }: { step: Step }) {
@@ -202,6 +204,8 @@ export default function EstatusDetalle({ step }: { step: Step }) {
           </CardFooter>
         </Card>
       )}
+
+      <HistorialCambios cambios={step.mails}></HistorialCambios>
     </>
   );
 }
