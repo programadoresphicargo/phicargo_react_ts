@@ -829,7 +829,7 @@ const AccesoForm = ({ id_acceso, onClose }: { id_acceso: number | null, onClose:
                         </CardHeader>
                         <Divider />
                         <CardBody>
-                            <HistorialCambios cambios={mails || []} />
+                            <HistorialCambios data={mails || []} />
                         </CardBody>
                         <Divider />
                         <CardFooter>

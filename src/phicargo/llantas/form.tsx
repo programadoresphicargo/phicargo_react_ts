@@ -448,7 +448,7 @@ const SolicitudFormLlantas: React.FC<SolicitudFormProps> = ({
                                 )}
 
                                 <CardBody>
-                                    <HistorialCambios cambios={meta?.mails || []} />
+                                    <HistorialCambios data={meta?.mails || []} />
                                 </CardBody>
                             </Card>
 

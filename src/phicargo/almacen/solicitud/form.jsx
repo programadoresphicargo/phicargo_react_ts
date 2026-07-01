@@ -537,7 +537,7 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, setID, vista, travel_i
                                 )}
 
                                 <CardBody>
-                                    <HistorialCambios cambios={data?.mails || []} />
+                                    <HistorialCambios data={data?.mails || []} />
                                 </CardBody>
                             </Card>
 

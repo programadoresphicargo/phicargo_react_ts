@@ -205,7 +205,7 @@ export default function EstatusDetalle({ step }: { step: Step }) {
         </Card>
       )}
 
-      <HistorialCambios cambios={step.mails}></HistorialCambios>
+      <HistorialCambios data={step.mails}></HistorialCambios>
     </>
   );
 }

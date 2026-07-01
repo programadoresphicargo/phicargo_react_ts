@@ -266,7 +266,7 @@ function EstatusHistorialAgrupado({ id_reportes_agrupados }: { id_reportes_agrup
                                         </CardFooter>
                                     </Card>) : (null)}
 
-                                <HistorialCambios cambios={step.mails}></HistorialCambios>
+                                <HistorialCambios data={step.mails}></HistorialCambios>
 
                                 {step.id_reenvio !== null ? (
                                     <Card className="max-w-full m-4">

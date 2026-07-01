@@ -1009,7 +1009,7 @@ const Formulariomaniobra: React.FC<Props> = ({
                                                     }}>Historial de cambios</CardHeader>
                                                 <Divider></Divider>
                                                 <CardBody>
-                                                    <HistorialCambios cambios={mails || []} />
+                                                    <HistorialCambios data={mails || []} />
                                                 </CardBody>
                                             </Card>
                                         )}
