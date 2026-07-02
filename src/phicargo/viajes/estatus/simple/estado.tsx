@@ -57,7 +57,7 @@ export default function EstatusDetalle({ step }: { step: Step }) {
   const UpdateDate = async (id_reporte: number, fecha_hora: string) => {
     if (!fecha_hora) return
     try {
-      const response = await odooApi.post('/tms_travel/reportes_estatus_viajes/actualizar_estatus_fecha/' + id_reporte + '/' + fecha_hora);
+      const response = await odooApi.patch('/tms_travel/reportes_estatus_viajes/actualizar_estatus_fecha/' + id_reporte + '/' + fecha_hora);
       if (response.data.status == 'success') {
         toast.success(response.data.message);
       } else {
