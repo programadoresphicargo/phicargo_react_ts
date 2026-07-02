@@ -95,6 +95,7 @@ function EstatusHistorialAgrupado({ id_reportes_agrupados }: { id_reportes_agrup
             const response = await odooApi.patch('/tms_travel/reportes_estatus_viajes/actualizar_estatus_fecha/' + id_reporte + '/' + fecha_hora);
             if (response.data.status == 'success') {
                 toast.success(response.data.message);
+                getEstatus();
             } else {
                 toast.error(response.data.message);
             }
