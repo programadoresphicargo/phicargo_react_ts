@@ -37,6 +37,8 @@ import { TransitionProps } from '@mui/material/transitions';
 import { Controller, useForm } from 'react-hook-form';
 import HistorialCambios from '@/phicargo/almacen/solicitud/cambios/epps';
 import { Flota, OptionFlota } from './tipado';
+import { PosturasForm } from '@/modules/vehicles/components/PosturasForm';
+import { VehicleSearchInput } from '@/components/inputs';
 
 const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
@@ -107,7 +109,6 @@ const Formulariomaniobra: React.FC<Props> = ({
 }) => {
 
     const [drivers, setDrivers] = useState<OptionDriver[]>([]);
-    const [tractores, setTractores] = useState<OptionFlota[]>([]);
     const [trailers, setTrailers] = useState<OptionFlota[]>([]);
     const [dollies, setDollies] = useState<OptionFlota[]>([]);
     const [terminales, setTerminales] = useState<OptionTerminal[]>([]);
@@ -150,14 +151,12 @@ const Formulariomaniobra: React.FC<Props> = ({
 
             try {
                 const [
-                    tractoresData,
                     trailersData,
                     dolliesData,
                     motogeneradoresData,
                     driversData,
                     terminalesData
                 ] = await Promise.all([
-                    getFlotaByTipo("tractor"),
                     getFlotaByTipo("trailer"),
                     getFlotaByTipo("dolly"),
                     getFlotaByTipo("other"),
@@ -165,7 +164,6 @@ const Formulariomaniobra: React.FC<Props> = ({
                     getTerminales()
                 ]);
 
-                setTractores(tractoresData);
                 setTrailers(trailersData);
                 setDollies(dolliesData);
                 setMotogeneradores(motogeneradoresData);
@@ -222,6 +220,7 @@ const Formulariomaniobra: React.FC<Props> = ({
         },
     });
 
+    const vehicleId = watch('vehicle_id');
     const estado = watch("estado_maniobra");
     const mails = watch("mails");
 
@@ -366,7 +365,7 @@ const Formulariomaniobra: React.FC<Props> = ({
             }
         } catch (error: any) {
             if (error.response) {
-                toast.error("Respuesta de error: " + JSON.stringify(error.response.data));
+                toast.error(error.response.data.detail);
             } else if (error.request) {
                 toast.error("No se recibió respuesta del servidor.");
             } else {
@@ -593,6 +592,16 @@ const Formulariomaniobra: React.FC<Props> = ({
         setCL(false);
     };
 
+    const [openPosturas, setPosturas] = React.useState(false);
+
+    const handleClickOpenPosturas = () => {
+        setPosturas(true);
+    };
+
+    const handleClosePosturas = () => {
+        setPosturas(false);
+    };
+
     return (
         <>
             {id_maniobra && (
@@ -600,6 +609,8 @@ const Formulariomaniobra: React.FC<Props> = ({
             )}
 
             <CorreosLigadosManiobra open={openCL} handleClose={handleCloseCL} id_cliente={dataCP?.id_cliente}></CorreosLigadosManiobra>
+
+            <PosturasForm open={openPosturas} handleClose={handleClosePosturas}></PosturasForm>
 
             {id_maniobra && (
                 <CancelarManiobraDialog
@@ -707,6 +718,7 @@ const Formulariomaniobra: React.FC<Props> = ({
                                                 >
                                                     Formato de entrega
                                                 </Button>)}
+                                            <Button color='secondary' radius='full' size='sm' onPress={handleClickOpenPosturas}>Posturas</Button>
                                         </Stack>
                                     </Grid>
 
@@ -830,20 +842,15 @@ const Formulariomaniobra: React.FC<Props> = ({
                                                         />
                                                     </Grid>
                                                     <Grid size={{ xs: 12, md: 6 }}>
-                                                        <Controller
+                                                        <VehicleSearchInput
                                                             control={control}
-                                                            name="vehicle_id"
-                                                            render={({ field }) => (
-                                                                <SelectFlota
-                                                                    label={'Vehiculo'}
-                                                                    id={'vehicle_id'}
-                                                                    name={'vehicle_id'}
-                                                                    onChange={(val: number | null) => field.onChange(val)}
-                                                                    value={field.value ?? undefined}
-                                                                    disabled={formDisabled}
-                                                                    isLoading={isLoadingFlota}
-                                                                    options={tractores}
-                                                                />)}
+                                                            label='Vehiculo'
+                                                            name='vehicle_id'
+                                                            vehicleId={vehicleId}
+                                                            variant={formDisabled ? "flat" : "bordered"}
+                                                            isReadOnly={formDisabled}
+                                                            size={"md"}
+                                                            required
                                                         />
                                                     </Grid>
                                                     <Grid size={{ xs: 12, md: 4 }}>

@@ -18,4 +18,5 @@ export interface Postura extends PosturaBase {
 
 export interface PosturaCreate extends PosturaBase {
   driverId: number;
+  vehicleId?: number;
 }

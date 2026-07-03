@@ -25,10 +25,13 @@ interface Props<T extends FieldValues> {
   required?: boolean;
   vehicleId?: number | null;
   isDisabled?: boolean;
+  isReadOnly?: boolean;
+  variant?: "flat" | "bordered" | "underlined" | "faded";
+  size?: "sm" | "lg" | "md"
 }
 
 export const VehicleSearchInput = <T extends FieldValues>(props: Props<T>) => {
-  const { control, name, label, required, vehicleId, isDisabled } = props;
+  const { control, name, label, required, vehicleId, isDisabled, variant, isReadOnly, size } = props;
 
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
@@ -61,11 +64,14 @@ export const VehicleSearchInput = <T extends FieldValues>(props: Props<T>) => {
       name={name}
       label={label || 'Unidad'}
       items={data}
+      variant={variant || 'flat'}
       isLoading={vehicleQuery.isFetching}
       searchInput={searchTerm ? searchTerm : vehicle?.name || ''}
       setSearchInput={setSearchTerm}
       rules={required ? { required: 'Vehiculo obligatorio' } : {}}
       isDisabled={isDisabled}
+      readOnly={isReadOnly}
+      size={size || "sm"}
     />
   );
 };
