@@ -397,14 +397,12 @@ const FlujoForm = ({ open, handleClose, Cuenta, paymentId }: Props) => {
   });
 
   const subtotal = details
-    .filter(x => [1, 2].includes(x.category_id ?? 0))
     .reduce(
       (sum, item) => sum + Number(item.amount || 0),
       0
     );
 
-  const iva = subtotal * 0.16;
-  const total = subtotal + iva;
+  const total = subtotal;
   const diferencia = (importe ?? 0) - total;
 
   return (
@@ -573,12 +571,6 @@ const FlujoForm = ({ open, handleClose, Cuenta, paymentId }: Props) => {
               flexDirection="column"
               alignItems="flex-end"
             >
-
-              <Typography
-                variant="h6"
-              >
-                IVA: ${(iva).toLocaleString()}
-              </Typography>
 
               <Typography
                 variant="h5"
