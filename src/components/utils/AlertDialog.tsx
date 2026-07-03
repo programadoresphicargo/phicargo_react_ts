@@ -1,14 +1,9 @@
 import {
   Button,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
   Tooltip,
 } from '@heroui/react';
-
 import { Alert } from '../ui';
+import { Dialog, DialogActions, DialogContent, DialogTitle, Divider } from '@mui/material';
 
 interface Props {
   iconOnly?: boolean;
@@ -16,21 +11,21 @@ interface Props {
   customCancelText?: string;
   openButtonText?: string;
   buttonVariant?:
-    | 'light'
-    | 'solid'
-    | 'bordered'
-    | 'flat'
-    | 'faded'
-    | 'shadow'
-    | 'ghost';
+  | 'light'
+  | 'solid'
+  | 'bordered'
+  | 'flat'
+  | 'faded'
+  | 'shadow'
+  | 'ghost';
   openButtonIcon?: React.ReactNode;
   severity?:
-    | 'success'
-    | 'warning'
-    | 'primary'
-    | 'default'
-    | 'secondary'
-    | 'danger';
+  | 'success'
+  | 'warning'
+  | 'primary'
+  | 'default'
+  | 'secondary'
+  | 'danger';
   title: string;
   message: string;
   onConfirm: () => void;
@@ -65,54 +60,49 @@ export const AlertDialog = (props: Props) => {
           </Button>
         </Tooltip>
       )}
-      <Modal
-        isOpen={props.open}
-        placement="top-center"
-        onOpenChange={props.onOpenChange}
-        classNames={{
-          header: 'bg-gray-100 text-center p-2 uppercase',
-          body: 'p-0',
-          footer: 'bg-gray-100 p-2',
-        }}
+      <Dialog
+        open={props.open}
+        onClose={props.onOpenChange}
       >
-        <ModalContent>
-          {() => (
-            <>
-              <ModalHeader className="flex flex-col gap-1">
-                <h3 className="text-lg font-semibold uppercase">
-                  {props.title}
-                </h3>
-              </ModalHeader>
-              <ModalBody>
-                <Alert
-                  color={props.severity || 'warning'}
-                  title={props.message}
-                />
-              </ModalBody>
-              <ModalFooter className="flex justify-between">
-                <Button
-                  color="default"
-                  variant="light"
-                  size="sm"
-                  onPress={() => props.onOpenChange(false)}
-                >
-                  {props.customCancelText || 'Cancelar'}
-                </Button>
-                <Button
-                  color={props.severity || 'warning'}
-                  size="sm"
-                  variant="flat"
-                  className="font-bold"
-                  radius="full"
-                  onPress={handleConfirm}
-                >
-                  {props.customOkText || 'Aceptar'}
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
+        <DialogTitle
+          style={{
+            background: 'linear-gradient(70deg, #004494, #002887)',
+            color: 'white',
+            fontWeight: 'bold',
+            fontFamily: 'Inter'
+          }}>
+          {props.title}
+        </DialogTitle>
+        <Divider></Divider>
+        <DialogContent>
+          <>
+            <Alert
+              color={props.severity || 'warning'}
+              title={props.message}
+            />
+            <DialogActions className="flex justify-between">
+              <Button
+                color="default"
+                variant="light"
+                size="sm"
+                onPress={() => props.onOpenChange(false)}
+              >
+                {props.customCancelText || 'Cancelar'}
+              </Button>
+              <Button
+                color={props.severity || 'warning'}
+                size="sm"
+                variant="flat"
+                className="font-bold"
+                radius="full"
+                onPress={handleConfirm}
+              >
+                {props.customOkText || 'Aceptar'}
+              </Button>
+            </DialogActions>
+          </>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };

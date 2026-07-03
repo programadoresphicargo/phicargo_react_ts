@@ -152,7 +152,7 @@ export const PosturasForm = ({ open, handleClose }: Props) => {
                         <div className="flex items-center gap-2 ml-auto">
                           <AlertDialog
                             title="Terminar Postura"
-                            message="¿Está seguro que desea terminar la postura"
+                            message="¿Está seguro que desea terminar la postura?"
                             onConfirm={() => onFinishPostura(item.id)}
                             iconOnly
                             onOpenChange={(isOpen) =>
@@ -162,6 +162,7 @@ export const PosturasForm = ({ open, handleClose }: Props) => {
                             tooltipMessage="Terminar Postrura"
                             openButtonIcon={<IoMdExit className="text-xl" />}
                             openDisabled={item.finished}
+                            severity='danger'
                           />
                         </div>
                       </h3>
