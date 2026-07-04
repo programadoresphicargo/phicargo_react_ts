@@ -410,8 +410,7 @@ const FlujoForm = ({ open, handleClose, Cuenta, paymentId }: Props) => {
       <Dialog
         open={open}
         onClose={handleClose}
-        fullWidth
-        maxWidth="lg"
+        fullScreen
       >
 
         <DialogTitle
