@@ -166,7 +166,7 @@ const FlujoForm = ({ open, handleClose, Cuenta, paymentId }: Props) => {
         comments: null,
         importe: 0,
         payment_date: dayjs(),
-        details: [{ category_id: 1, amount: 0 }],
+        details: [],
       });
     }
   }, [open, paymentId]);
