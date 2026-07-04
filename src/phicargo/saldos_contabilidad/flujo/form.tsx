@@ -42,6 +42,7 @@ type Props = {
 type Details = {
   category_id: number | null;
   amount: number;
+  isAutoTax?: boolean;
 }
 
 type Concepts = {
@@ -101,7 +102,8 @@ const FlujoForm = ({ open, handleClose, Cuenta, paymentId }: Props) => {
     control,
     handleSubmit,
     reset,
-    watch
+    watch,
+    setValue
   } = useForm<FlujoForm>({
     defaultValues: initialForm,
   });
@@ -255,6 +257,23 @@ const FlujoForm = ({ open, handleClose, Cuenta, paymentId }: Props) => {
                 size="small"
                 fullWidth
                 error={!!fieldState.error}
+                onChange={(e) => {
+                  const value = Number(e.target.value);
+                  field.onChange(value);
+                  if (value === 2) {
+                    const existsTaxIndex = fields.findIndex(
+                      f => f.category_id === 5
+                    );
+                    if (existsTaxIndex !== -1) {
+                      remove(existsTaxIndex);
+                    }
+                    append({
+                      category_id: 5,
+                      amount: 0,
+                      isAutoTax: true,
+                    });
+                  }
+                }}
               >
                 {categories.map((c) => (
                   <MenuItem
@@ -290,6 +309,14 @@ const FlujoForm = ({ open, handleClose, Cuenta, paymentId }: Props) => {
                 size="small"
                 fullWidth
                 error={!!fieldState.error}
+                onChange={(e) => {
+                  field.onChange(e);
+
+                  setValue(
+                    `details.${row.index}.isAutoTax`,
+                    false
+                  );
+                }}
               />
             )}
           />
@@ -395,6 +422,24 @@ const FlujoForm = ({ open, handleClose, Cuenta, paymentId }: Props) => {
     control,
     name: 'details',
   });
+
+  const costo = details.find(d => d.category_id === 2);
+  const impuestoIndex = details.findIndex(d => d.category_id === 5);
+
+  useEffect(() => {
+    if (!costo) return;
+
+    const impuesto = details[impuestoIndex];
+    if (!impuesto) return;
+
+    // si el usuario ya lo modificó manualmente, no sobrescribir
+    if (!impuesto.isAutoTax) return;
+
+    const tax = costo.amount * 0.16;
+
+    setValue(`details.${impuestoIndex}.amount`, tax);
+
+  }, [details]);
 
   const subtotal = details
     .reduce(
