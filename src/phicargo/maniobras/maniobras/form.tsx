@@ -398,11 +398,11 @@ const Formulariomaniobra: React.FC<Props> = ({
             }
         } catch (error: any) {
             if (error.response) {
-                toast.error(`Error del servidor: ${error.response.data}`);
+                toast.error(error.response.data.detail);
             } else if (error.request) {
-                toast.error('No se recibió respuesta del servidor.');
+                toast.error("No se recibió respuesta del servidor.");
             } else {
-                toast.error(`Error en la solicitud: ${error.message}`);
+                toast.error("Error al configurar la solicitud: " + error.message);
             }
         } finally {
             setLoading(false);
