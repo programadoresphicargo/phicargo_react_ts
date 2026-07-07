@@ -38,7 +38,8 @@ import { Controller, useForm } from 'react-hook-form';
 import HistorialCambios from '@/phicargo/almacen/solicitud/cambios/epps';
 import { Flota, OptionFlota } from './tipado';
 import { PosturasForm } from '@/modules/vehicles/components/PosturasForm';
-import { VehicleSearchInput } from '@/components/inputs';
+import { AutocompleteInput } from '@/components/inputs';
+import { SelectItem } from '@/types';
 
 const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
@@ -109,6 +110,7 @@ const Formulariomaniobra: React.FC<Props> = ({
 }) => {
 
     const [drivers, setDrivers] = useState<OptionDriver[]>([]);
+    const [tractores, setTractores] = useState<SelectItem[]>([]);
     const [trailers, setTrailers] = useState<OptionFlota[]>([]);
     const [dollies, setDollies] = useState<OptionFlota[]>([]);
     const [terminales, setTerminales] = useState<OptionTerminal[]>([]);
@@ -122,6 +124,17 @@ const Formulariomaniobra: React.FC<Props> = ({
         return response.data.map(item => ({
             key: item.id,
             label: item.name,
+            x_tipo_carga: item.x_tipo_carga,
+            x_modalidad: item.x_modalidad
+        }));
+    };
+
+    const getTractos = async (tipo: string): Promise<SelectItem[]> => {
+        const response = await odooApi.get<Flota[]>(`/vehicles/fleet_type/${tipo}`);
+        return response.data.map(item => ({
+            key: item.id,
+            label: item.name,
+            value: item.name,
             x_tipo_carga: item.x_tipo_carga,
             x_modalidad: item.x_modalidad
         }));
@@ -151,12 +164,14 @@ const Formulariomaniobra: React.FC<Props> = ({
 
             try {
                 const [
+                    tractoresData,
                     trailersData,
                     dolliesData,
                     motogeneradoresData,
                     driversData,
                     terminalesData
                 ] = await Promise.all([
+                    getTractos("tractor"),
                     getFlotaByTipo("trailer"),
                     getFlotaByTipo("dolly"),
                     getFlotaByTipo("other"),
@@ -164,6 +179,7 @@ const Formulariomaniobra: React.FC<Props> = ({
                     getTerminales()
                 ]);
 
+                setTractores(tractoresData);
                 setTrailers(trailersData);
                 setDollies(dolliesData);
                 setMotogeneradores(motogeneradoresData);
@@ -220,7 +236,6 @@ const Formulariomaniobra: React.FC<Props> = ({
         },
     });
 
-    const vehicleId = watch('vehicle_id');
     const estado = watch("estado_maniobra");
     const mails = watch("mails");
 
@@ -842,15 +857,14 @@ const Formulariomaniobra: React.FC<Props> = ({
                                                         />
                                                     </Grid>
                                                     <Grid size={{ xs: 12, md: 6 }}>
-                                                        <VehicleSearchInput
+                                                        <AutocompleteInput
                                                             control={control}
-                                                            label='Vehiculo'
-                                                            name='vehicle_id'
-                                                            vehicleId={vehicleId}
-                                                            variant={formDisabled ? "flat" : "bordered"}
-                                                            isReadOnly={formDisabled}
-                                                            size={"md"}
-                                                            required
+                                                            label="Vehiculo"
+                                                            name="vehicle_id"
+                                                            variant={formDisabled ? 'flat' : 'bordered'}
+                                                            items={tractores}
+                                                            size="md"
+                                                            rules={{ required: 'Campo obligatorio' }}
                                                         />
                                                     </Grid>
                                                     <Grid size={{ xs: 12, md: 4 }}>
