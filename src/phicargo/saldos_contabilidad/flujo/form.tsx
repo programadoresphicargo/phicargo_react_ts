@@ -12,6 +12,7 @@ import {
   Typography,
   Paper,
   DialogTitle,
+  Tooltip,
 } from "@mui/material";
 import {
   MRT_ColumnDef,
@@ -31,6 +32,7 @@ import { Delete } from "@mui/icons-material";
 import { AutocompleteElement, TextFieldElement, TextareaAutosizeElement } from "react-hook-form-mui";
 import toast from "react-hot-toast";
 import Grid from "@mui/system/Grid";
+import CalculateIcon from '@mui/icons-material/Calculate';
 
 type Props = {
   open: boolean;
@@ -102,6 +104,7 @@ const FlujoForm = ({ open, handleClose, Cuenta, paymentId }: Props) => {
     handleSubmit,
     reset,
     watch,
+    getValues,
   } = useForm<FlujoForm>({
     defaultValues: initialForm,
   });
@@ -164,7 +167,7 @@ const FlujoForm = ({ open, handleClose, Cuenta, paymentId }: Props) => {
         comments: null,
         importe: 0,
         payment_date: dayjs(),
-        details: [{ category_id: 1, amount: 0 }],
+        details: [{ category_id: 2, amount: 0 }],
       });
     }
   }, [open, paymentId]);
@@ -216,6 +219,31 @@ const FlujoForm = ({ open, handleClose, Cuenta, paymentId }: Props) => {
     }
   };
 
+  const generarImpuesto = () => {
+    const details = getValues("details");
+
+    const costo = details.find(x => x.category_id === 2);
+
+    if (!costo) {
+      toast.error("Debe existir un costo.");
+      return;
+    }
+
+    console.log(costo.amount);
+
+    const existe = details.some(x => x.category_id === 5);
+
+    if (existe) {
+      toast.error("Ya existe un impuesto.");
+      return;
+    }
+
+    append({
+      category_id: 5,
+      amount: Number((Number(costo.amount) * 0.16).toFixed(2)),
+    });
+  };
+
   const fetchConcepts = async () => {
     try {
       setLoading(true);
@@ -236,6 +264,11 @@ const FlujoForm = ({ open, handleClose, Cuenta, paymentId }: Props) => {
   useEffect(() => {
     fetchConcepts();
   }, []);
+
+  const details = useWatch({
+    control,
+    name: 'details',
+  });
 
   const columns = useMemo<MRT_ColumnDef<any>[]>(
     () => [
@@ -298,17 +331,37 @@ const FlujoForm = ({ open, handleClose, Cuenta, paymentId }: Props) => {
       {
         id: 'acciones',
         header: '',
-        Cell: ({ row }) => (
-          <IconButton
-            color="error"
-            onClick={() => remove(row.index)}
-          >
-            <Delete />
-          </IconButton>
-        ),
+        Cell: ({ row }) => {
+          const categoryId = useWatch({
+            control,
+            name: `details.${row.index}.category_id`,
+          });
+
+          return (
+            <>
+              {categoryId === 2 && (
+                <Tooltip title="Calcular IVA (16%)">
+                  <IconButton
+                    color="primary"
+                    onClick={generarImpuesto}
+                  >
+                    <CalculateIcon />
+                  </IconButton>
+                </Tooltip>
+              )}
+
+              <IconButton
+                color="error"
+                onClick={() => remove(row.index)}
+              >
+                <Delete />
+              </IconButton>
+            </>
+          );
+        }
       },
     ],
-    [control, remove, concepts]
+    [control, remove, concepts, details]
   );
 
   const table = useMaterialReactTable({
@@ -389,11 +442,6 @@ const FlujoForm = ({ open, handleClose, Cuenta, paymentId }: Props) => {
         </div>
       </Box>
     ),
-  });
-
-  const details = useWatch({
-    control,
-    name: 'details',
   });
 
   const subtotal = details
