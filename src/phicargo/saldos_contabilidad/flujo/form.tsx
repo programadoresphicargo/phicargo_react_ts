@@ -181,6 +181,11 @@ const FlujoForm = ({ open, handleClose, Cuenta, paymentId }: Props) => {
       return;
     }
 
+    if (diferencia != 0) {
+      toast.error('El importe debe ser igual al total.');
+      return;
+    }
+
     try {
       setLoading(true);
 
