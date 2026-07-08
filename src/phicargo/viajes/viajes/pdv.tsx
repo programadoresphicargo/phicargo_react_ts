@@ -168,6 +168,19 @@ const PDV = ({ }) => {
       header: 'Fecha',
     },
     {
+      accessorKey: 'x_reference_owr',
+      header: 'Referencia OW/RT',
+      Cell: ({ cell }: { cell: MRT_Cell<PDV> }) => {
+        const value = cell.getValue<string>();
+
+        return (
+          <span>
+            {value.toUpperCase()}
+          </span>
+        );
+      }
+    },
+    {
       accessorKey: 'sucursal',
       header: 'Sucursal',
     },
