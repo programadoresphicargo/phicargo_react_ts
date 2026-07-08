@@ -147,6 +147,7 @@ export const PosturasForm = ({ open, handleClose }: Props) => {
                   control={control}
                   name="reason"
                   label="Motivo de postura"
+                  variant='flat'
                   rules={{ required: 'Este campo es requerido' }}
                 />
 
