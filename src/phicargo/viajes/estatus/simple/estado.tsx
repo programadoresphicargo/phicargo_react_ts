@@ -129,7 +129,7 @@ export default function EstatusDetalle({ step }: { step: Step }) {
           <span>Fecha GPS: {step.fecha_hora}</span>
           <span>Fecha envío: {step.fecha_envio}</span>
 
-          < ArchivosAdjuntos id_reporte={step.id_reporte} ></ArchivosAdjuntos>
+          < ArchivosAdjuntos id_reporte={step.id_reporte} tabla="reportes_estatus_viajes"></ArchivosAdjuntos>
 
         </CardBody>
 

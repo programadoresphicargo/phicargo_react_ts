@@ -8,7 +8,7 @@ type Images = {
     filename: string
 }
 
-function ArchivosAdjuntos({ id_reporte }: { id_reporte: number }) {
+function ArchivosAdjuntos({ id_reporte, tabla }: { id_reporte: number, tabla: string }) {
 
     const [isLoading, setLoading] = useState(false);
     const [images, setData] = useState<Images[]>([]);
@@ -20,7 +20,7 @@ function ArchivosAdjuntos({ id_reporte }: { id_reporte: number }) {
     const fetchData = async () => {
         try {
             setLoading(true);
-            const response = await odooApi.get('/tms_travel/reportes_estatus_viajes/archivos/' + id_reporte);
+            const response = await odooApi.get(`/archivos/${tabla}/${id_reporte}`);
             setData(response.data);
             setLoading(false);
         } catch (error) {

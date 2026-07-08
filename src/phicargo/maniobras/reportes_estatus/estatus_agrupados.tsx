@@ -6,6 +6,7 @@ import odooApi from '@/api/odoo-api';
 import { tiempoTranscurrido } from '../../funciones/tiempo';
 import { Estatus } from "./type";
 import { Dialog, DialogContent } from "@mui/material";
+import ArchivosAdjuntos from "@/phicargo/viajes/estatus/archivos_adjuntos";
 
 function EstatusHistorialAgrupado({ id_reporte, open, handleClose }: { id_reporte: number, open: boolean, handleClose: () => void }) {
 
@@ -88,6 +89,8 @@ function EstatusHistorialAgrupado({ id_reporte, open, handleClose }: { id_report
                                                 <span>Calle: {step.calle}</span>
                                                 <span>Codigo postal: {step.codigo_postal}</span>
                                                 <span>Fecha y hora: {step.fecha_hora}</span>
+
+                                                < ArchivosAdjuntos id_reporte={step.id_reporte} tabla="reportes_estatus_maniobras"></ArchivosAdjuntos>
                                             </CardBody>
                                             <CardFooter className="gap-3">
                                             </CardFooter>
