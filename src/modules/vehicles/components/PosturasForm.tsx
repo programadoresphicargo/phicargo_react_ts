@@ -1,9 +1,9 @@
 import { Card, CardBody, CardFooter, Spinner } from '@heroui/react';
 import {
+  AutocompleteInput,
   DatePickerInput,
   DriverSearchInput,
   TextInput,
-  VehicleSearchInput,
 } from '@/components/inputs';
 import type { Postura, PosturaCreate } from '../models';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -18,9 +18,12 @@ import { FaCalendarMinus } from 'react-icons/fa';
 import { IoMdExit } from 'react-icons/io';
 import { SaveButton } from '@/components/ui';
 import { useGetPosturasByVehicleQuery } from '../hooks/queries';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { Dialog, DialogContent, DialogTitle, Divider } from '@mui/material';
+import odooApi from '@/api/odoo-api';
+import { SelectItem } from '@/types';
+import { Flota } from '@/phicargo/maniobras/maniobras/tipado';
 
 const initialState: PosturaCreate = {
   vehicleId: null as unknown as number,
@@ -83,7 +86,25 @@ export const PosturasForm = ({ open, handleClose }: Props) => {
   };
 
   const driverId = watch('driverId');
-  const vehicleId = watch('vehicleId');
+
+  const [tractores, setTractores] = useState<SelectItem[]>([]);
+
+  const getTractos = async (tipo: string): Promise<SelectItem[]> => {
+    const response = await odooApi.get<Flota[]>(`/vehicles/fleet_type/${tipo}`);
+    const options = response.data.map(item => ({
+      key: item.id,
+      label: item.name,
+      value: item.name,
+      x_tipo_carga: item.x_tipo_carga,
+      x_modalidad: item.x_modalidad
+    }));
+    setTractores(options);
+    return options;
+  };
+
+  useEffect(() => {
+    getTractos("tractor");
+  }, []);
 
   return (
     <Dialog
@@ -111,7 +132,15 @@ export const PosturasForm = ({ open, handleClose }: Props) => {
             <div className="flex flex-row gap-4">
               <form className="flex flex-col gap-4 w-1/2">
 
-                <VehicleSearchInput control={control} name='vehicleId' vehicleId={vehicleId} required />
+                <AutocompleteInput
+                  control={control}
+                  label="Vehiculo"
+                  name="vehicleId"
+                  items={tractores}
+                  size="sm"
+                  rules={{ required: 'Campo obligatorio' }}
+                />
+
                 <DriverSearchInput control={control} name="driverId" driverId={driverId} required />
 
                 <TextInput
