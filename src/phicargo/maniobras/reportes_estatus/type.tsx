@@ -1,6 +1,7 @@
 export type Estatus = {
  id_reporte: number;
  nombre_estatus: string;
+ nombre_registrante: string;
  id_usuario: number;
  department_id: number;
  nombre: string;

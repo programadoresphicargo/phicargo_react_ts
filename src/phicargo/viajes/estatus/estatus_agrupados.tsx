@@ -221,7 +221,7 @@ function EstatusHistorialAgrupado({ id_reportes_agrupados }: { id_reportes_agrup
                                         <span>Fecha GPS: {step.fecha_hora}</span>
                                         <span>Fecha envío: {step.fecha_envio}</span>
 
-                                        < ArchivosAdjuntos id_reporte={step.id_reporte} ></ArchivosAdjuntos>
+                                        < ArchivosAdjuntos id_reporte={step.id_reporte} tabla="reportes_estatus_viajes"></ArchivosAdjuntos>
 
                                     </CardBody>
                                     <CardFooter className="gap-3">

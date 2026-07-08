@@ -83,7 +83,7 @@ function EstatusHistorialManiobras({ id_maniobra }: { id_maniobra: number }) {
                                             </Chip>
                                         )}
                                         <h5 className="text-small tracking-tight text-default-400">
-                                            {step.nombre}
+                                            {step.nombre_registrante}
                                         </h5>
                                     </div>
                                 </div>

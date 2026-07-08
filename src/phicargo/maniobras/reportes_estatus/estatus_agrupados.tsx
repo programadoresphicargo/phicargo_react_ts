@@ -71,7 +71,7 @@ function EstatusHistorialAgrupado({ id_reporte, open, handleClose }: { id_report
                                                             {step.nombre_estatus}
                                                         </h4>
                                                         <h5 className="text-small tracking-tight text-default-400">
-                                                            {step.nombre}
+                                                            {step.nombre_registrante}
                                                         </h5>
                                                     </div>
                                                 </div>
