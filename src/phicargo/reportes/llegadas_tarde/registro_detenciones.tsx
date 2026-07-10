@@ -9,6 +9,7 @@ import { DateRangePicker } from 'rsuite';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import CustomNavbar from "@/pages/CustomNavbar";
 import { pages } from './pages';
+import DetencionDetail from "./registro_detenciones copy";
 
 interface DepartureArrival {
   referencia: string;
@@ -29,6 +30,7 @@ const DetencionesTable = () => {
   const [range, setRange] = useState<[Date, Date]>([firstDay, lastDay]);
   const [isLoading, setLoading] = useState(false);
   const [data, setData] = useState<DepartureArrival[]>([]);
+  const [open, setOpen] = useState<boolean>(false);
 
   useEffect(() => {
     fetchData();
@@ -101,6 +103,11 @@ const DetencionesTable = () => {
         maxHeight: 'calc(100vh - 200px)',
       },
     },
+    muiTableBodyRowProps: () => ({
+      onClick: () => {
+        setOpen(true);
+      },
+    }),
     muiTableBodyCellProps: ({ row }) => ({
       sx: {
         backgroundColor: row.subRows?.length ? '#0456cf' : '#FFFFFF',
@@ -161,6 +168,7 @@ const DetencionesTable = () => {
       <MaterialReactTable
         table={table}
       />
+      <DetencionDetail open={open} onClose={() => setOpen(false)}></DetencionDetail>
     </>
   );
 };
