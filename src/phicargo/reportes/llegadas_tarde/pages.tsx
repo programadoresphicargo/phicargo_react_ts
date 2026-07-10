@@ -1,4 +1,4 @@
 export const pages = [
- { name: 'Llegadas tarde', path: '/detenciones' },
- { name: 'Llegadas tarde', path: '/travel_detentions' },
+ { name: 'Reporte de salidas y llegadas', path: '/detenciones' },
+ { name: 'Detenciones', path: '/travel_detentions' },
 ];
