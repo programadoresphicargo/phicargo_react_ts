@@ -220,7 +220,7 @@ const DetencionDetail = ({ open, onClose, id_detencion }: DetencionDetailProps) 
                 className="text-white"
                 radius="full"
               >
-                Cancelar
+                Rechazar
               </Button>
 
               <Button
