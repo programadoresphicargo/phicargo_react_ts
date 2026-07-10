@@ -81,10 +81,13 @@ const Minutas = lazy(() => import('../phicargo/minutas/control_minutas'));
 const EventosGPS = lazy(() => import('../modules/vehicles/components/motum-events/VehicleEventsPage'));
 
 const DetencionesTable = lazy(
-  () => import('../phicargo/reportes/llegadas_tarde'),
+  () => import('../phicargo/reportes/llegadas_tarde/llegadas_tarde.tsx'),
 );
 const ReporteDetencionesViajes = lazy(
   () => import('../phicargo/viajes/detenciones/reporte_detenciones_viajes'),
+);
+const TravelDetentions = lazy(
+  () => import('../phicargo/reportes/llegadas_tarde/registro_detenciones.tsx'),
 );
 // const BonosOperadores = lazy(() => import('../phicargo/bonos/BonosIndex'));
 const DriverBonusPage = lazy(
@@ -468,6 +471,15 @@ export const PrivateRoutes = () => {
           element={
             <Suspense fallback={<LoadingPage />}>
               <ReporteDetencionesViajes />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/travel_detentions"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <TravelDetentions></TravelDetentions>
             </Suspense>
           }
         />

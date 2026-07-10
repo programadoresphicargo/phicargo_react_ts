@@ -116,7 +116,7 @@ function PanelEnvio({ open, cerrar, id_reporte }: { open: boolean, cerrar: () =>
     const fetchData = async () => {
       try {
 
-        const response = await odooApi.get(`/tms_travel/reportes_estatus_viajes/detencion_abierta/${id_viaje}`);
+        const response = await odooApi.get(`/tms_travel/reportes_estatus_viajes/open_detention/${id_viaje}`);
         const response2 = await odooApi.get('/estatus_operativos/tipo/viaje/monitoreo');
         let data = response2.data;
 

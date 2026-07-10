@@ -9,6 +9,8 @@ import { toast } from "react-toastify";
 import { DateRangePicker } from 'rsuite';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import CustomNavbar from "@/pages/CustomNavbar";
+import { pages } from './pages';
+
 const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
 interface DepartureArrival {
@@ -268,7 +270,7 @@ const DetencionesTable = () => {
 
   return (
     <>
-      <CustomNavbar></CustomNavbar>
+      <CustomNavbar pages={pages}></CustomNavbar>
       <MaterialReactTable
         table={table}
       />
