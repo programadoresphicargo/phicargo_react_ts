@@ -1,5 +1,6 @@
 
 import odooApi from '@/api/odoo-api';
+import { useAuthContext } from '@/modules/auth/hooks';
 import ArchivosAdjuntos from '@/phicargo/viajes/estatus/archivos_adjuntos';
 import { Button, Chip } from '@heroui/react';
 import { Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, Typography } from '@mui/material';
@@ -17,6 +18,7 @@ const DetencionDetail = ({ open, onClose, id_detencion }: DetencionDetailProps) 
 
   const [data, setData] = useState<any>({});
   const [isLoading, setLoading] = useState(false);
+  const { session } = useAuthContext();
 
   useEffect(() => {
     fetchData();
@@ -212,7 +214,7 @@ const DetencionDetail = ({ open, onClose, id_detencion }: DetencionDetailProps) 
         </DialogContent>
         <Divider></Divider>
         <DialogActions>
-          {data.approved == null && (
+          {data.approved == null && session?.user?.permissions?.includes(580) && (
             <>
               <Button
                 onPress={() => confirmApproved(false)}
