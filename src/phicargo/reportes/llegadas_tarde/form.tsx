@@ -5,6 +5,7 @@ import { Button, Chip } from '@heroui/react';
 import { Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import Swal from 'sweetalert2';
 
 interface DetencionDetailProps {
   open: boolean;
@@ -64,6 +65,57 @@ const DetencionDetail = ({ open, onClose, id_detencion }: DetencionDetailProps) 
     }
   };
 
+  const confirmApproved = async (approved: boolean) => {
+    const result = await Swal.fire({
+      title: approved ? "¿Aprobar detención?" : "¿Rechazar detención?",
+      text: approved
+        ? "La detención será aprobada."
+        : "La detención será rechazada.",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: approved ? "Sí, aprobar" : "Sí, rechazar",
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: approved ? "#16a34a" : "#dc2626",
+      reverseButtons: true,
+    });
+
+    if (!result.isConfirmed) return;
+
+    try {
+      setLoading(true);
+
+      await odooApi.patch(
+        `/tms_travel/reportes_estatus_viajes/travel_detentions/approved/${id_detencion}`,
+        {},
+        {
+          params: {
+            approved,
+          },
+        }
+      );
+
+      Swal.fire({
+        icon: "success",
+        title: approved ? "Detención aprobada" : "Detención rechazada",
+        timer: 1500,
+        showConfirmButton: false,
+      });
+
+      fetchData(); // Recargar información si es necesario
+    } catch (error: any) {
+      Swal.fire({
+        icon: "error",
+        title: "Ocurrió un error",
+        text:
+          error.response?.data?.message ??
+          error.message ??
+          "No fue posible realizar la acción.",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <Dialog
@@ -74,7 +126,9 @@ const DetencionDetail = ({ open, onClose, id_detencion }: DetencionDetailProps) 
       >
         <DialogTitle>
           Detención ID:{id_detencion}
-          <Chip color={data.approved === null ? "default" : data?.approved ? "success" : "danger"} className='text-white'>
+          <Chip
+            color={data.approved === null ? "default" : data?.approved ? "success" : "danger"}
+            className='text-white'>
             {data.approved === null
               ? "Pendiente"
               : data.approved
@@ -186,8 +240,27 @@ const DetencionDetail = ({ open, onClose, id_detencion }: DetencionDetailProps) 
         </DialogContent>
         <Divider></Divider>
         <DialogActions>
-          <Button onPress={() => Approved(false)} color='danger' className='text-white' radius='full'>Cancelar</Button>
-          <Button onPress={() => Approved(true)} color='success' className='text-white' radius='full'>Aprobar</Button>
+          {data.approved == null && (
+            <>
+              <Button
+                onPress={() => confirmApproved(false)}
+                color="danger"
+                className="text-white"
+                radius="full"
+              >
+                Cancelar
+              </Button>
+
+              <Button
+                onPress={() => confirmApproved(true)}
+                color="success"
+                className="text-white"
+                radius="full"
+              >
+                Aprobar
+              </Button>
+            </>
+          )}
           <Button onPress={onClose} radius='full'>Cerrar</Button>
         </DialogActions>
       </Dialog>
