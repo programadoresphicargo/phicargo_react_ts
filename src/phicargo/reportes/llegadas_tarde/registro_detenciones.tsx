@@ -1,5 +1,5 @@
-import { Button } from "@heroui/react";
-import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
+import { Button, Chip } from "@heroui/react";
+import { MRT_Cell, MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 import { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
@@ -9,7 +9,7 @@ import { DateRangePicker } from 'rsuite';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import CustomNavbar from "@/pages/CustomNavbar";
 import { pages } from './pages';
-import DetencionDetail from "./registro_detenciones copy";
+import DetencionDetail from "./form";
 
 interface DepartureArrival {
   referencia: string;
@@ -35,7 +35,7 @@ const DetencionesTable = () => {
 
   useEffect(() => {
     fetchData();
-  }, [range]);
+  }, [range, open]);
 
   const fetchData = async () => {
     try {
@@ -68,6 +68,29 @@ const DetencionesTable = () => {
     { accessorKey: 'start_date', header: 'Inicio' },
     { accessorKey: 'end_date', header: 'Fin' },
     { accessorKey: 'usuario_creacion', header: 'Usuario creación' },
+    {
+      accessorKey: 'approved',
+      header: 'Aprobado',
+      Cell: ({ cell }: { cell: MRT_Cell<DepartureArrival> }) => {
+        const valor = cell.getValue<boolean | null>() ?? null;
+
+        return (
+          <Chip
+            color={valor === null ? "default" : valor ? "success" : "danger"}
+            size="sm"
+            className="text-white"
+          >
+            {valor === null
+              ? "Pendiente"
+              : valor
+                ? "Aprobado"
+                : "Rechazado"}
+          </Chip>
+        );
+      },
+    },
+    { accessorKey: 'usuario_aprobo', header: 'Usuario aprobó/rechazo' },
+    { accessorKey: 'approved_date', header: 'Fecha aprobación/rechazo' },
   ];
 
   const table = useMaterialReactTable({

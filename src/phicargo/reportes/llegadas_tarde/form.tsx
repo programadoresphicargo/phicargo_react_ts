@@ -1,7 +1,7 @@
 
 import odooApi from '@/api/odoo-api';
 import ArchivosAdjuntos from '@/phicargo/viajes/estatus/archivos_adjuntos';
-import { Button } from '@heroui/react';
+import { Button, Chip } from '@heroui/react';
 import { Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -36,6 +36,34 @@ const DetencionDetail = ({ open, onClose, id_detencion }: DetencionDetailProps) 
     }
   };
 
+  const Approved = async (Approved: boolean) => {
+    try {
+      setLoading(true);
+      const response = await odooApi.patch(
+        `/tms_travel/reportes_estatus_viajes/travel_detentions/approved/${id_detencion}`,
+        {},
+        {
+          params: {
+            approved: Approved,
+          },
+        }
+      );
+      if (response.data.status == "success") {
+        toast.success(response.data.message);
+        fetchData();
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error: any) {
+      const errorMessage = error.response
+        ? `Error: ${error.response.status} - ${error.response.data.message}`
+        : error.message;
+      toast.error('Error al enviar los datos: ' + errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <Dialog
@@ -46,6 +74,13 @@ const DetencionDetail = ({ open, onClose, id_detencion }: DetencionDetailProps) 
       >
         <DialogTitle>
           Detención ID:{id_detencion}
+          <Chip color={data.approved === null ? "default" : data?.approved ? "success" : "danger"} className='text-white'>
+            {data.approved === null
+              ? "Pendiente"
+              : data.approved
+                ? "Aprobado"
+                : "Rechazado"}
+          </Chip>
         </DialogTitle>
         <Divider></Divider>
         <DialogContent>
@@ -151,8 +186,9 @@ const DetencionDetail = ({ open, onClose, id_detencion }: DetencionDetailProps) 
         </DialogContent>
         <Divider></Divider>
         <DialogActions>
-          <Button onPress={onClose} color='success' className='text-white'>Aprobar</Button>
-          <Button onPress={onClose}>Cerrar</Button>
+          <Button onPress={() => Approved(false)} color='danger' className='text-white' radius='full'>Cancelar</Button>
+          <Button onPress={() => Approved(true)} color='success' className='text-white' radius='full'>Aprobar</Button>
+          <Button onPress={onClose} radius='full'>Cerrar</Button>
         </DialogActions>
       </Dialog>
     </>
