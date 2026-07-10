@@ -73,7 +73,7 @@ function PanelEnvio({ open, cerrar, id_reporte }: { open: boolean, cerrar: () =>
   }, [id_reporte, open]);
 
   const { enviar_estatus, reenviar_estatus } = useJourneyDialogs();
-  const { id_viaje, viaje } = useContext(ViajeContext);
+  const { id_viaje } = useContext(ViajeContext);
   const [estatusSeleccionado, setEstatusSeleccionado] = useState<Estatus | null>(null);
   const [comentarios, setContenido] = useState<string | null>(null);
 
@@ -125,7 +125,7 @@ function PanelEnvio({ open, cerrar, id_reporte }: { open: boolean, cerrar: () =>
         }
 
         setData(data);
-        
+
       } catch (error) {
         console.error('Error al obtener los datos:', error);
       }
