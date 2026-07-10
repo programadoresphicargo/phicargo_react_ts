@@ -31,6 +31,7 @@ const DetencionesTable = () => {
   const [isLoading, setLoading] = useState(false);
   const [data, setData] = useState<DepartureArrival[]>([]);
   const [open, setOpen] = useState<boolean>(false);
+  const [id_detencion, setDetencion] = useState<number | null>(null);
 
   useEffect(() => {
     fetchData();
@@ -43,7 +44,7 @@ const DetencionesTable = () => {
       }
 
       setLoading(true);
-      const response = await odooApi.get('/tms_travel/reportes_estatus_viajes/detentions/', {
+      const response = await odooApi.get('/tms_travel/reportes_estatus_viajes/travel_detentions/', {
         params: {
           fecha_inicio: range[0].toISOString().slice(0, 10),
           fecha_fin: range[1].toISOString().slice(0, 10),
@@ -103,8 +104,9 @@ const DetencionesTable = () => {
         maxHeight: 'calc(100vh - 200px)',
       },
     },
-    muiTableBodyRowProps: () => ({
+    muiTableBodyRowProps: ({ row }) => ({
       onClick: () => {
+        setDetencion(row.original.id)
         setOpen(true);
       },
     }),
@@ -168,7 +170,9 @@ const DetencionesTable = () => {
       <MaterialReactTable
         table={table}
       />
-      <DetencionDetail open={open} onClose={() => setOpen(false)}></DetencionDetail>
+      {id_detencion && (
+        <DetencionDetail open={open} onClose={() => setOpen(false)} id_detencion={id_detencion}></DetencionDetail>
+      )}
     </>
   );
 };
