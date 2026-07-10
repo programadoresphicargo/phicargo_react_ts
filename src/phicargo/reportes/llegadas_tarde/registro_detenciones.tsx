@@ -65,8 +65,10 @@ const DetencionesTable = () => {
   const columns = [
     { accessorKey: 'id', header: 'ID' },
     { accessorKey: 'viaje', header: 'Viaje' },
+    { accessorKey: 'operador', header: 'Operador' },
     { accessorKey: 'start_date', header: 'Inicio' },
     { accessorKey: 'end_date', header: 'Fin' },
+    { accessorKey: 'duracion', header: 'Duracion' },
     { accessorKey: 'usuario_creacion', header: 'Usuario creación' },
     {
       accessorKey: 'approved',
