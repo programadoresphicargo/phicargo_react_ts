@@ -73,7 +73,7 @@ function PanelEnvio({ open, cerrar, id_reporte }: { open: boolean, cerrar: () =>
   }, [id_reporte, open]);
 
   const { enviar_estatus, reenviar_estatus } = useJourneyDialogs();
-  const { id_viaje } = useContext(ViajeContext);
+  const { id_viaje, viaje } = useContext(ViajeContext);
   const [estatusSeleccionado, setEstatusSeleccionado] = useState<Estatus | null>(null);
   const [comentarios, setContenido] = useState<string | null>(null);
 
@@ -115,8 +115,17 @@ function PanelEnvio({ open, cerrar, id_reporte }: { open: boolean, cerrar: () =>
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await odooApi.get('/estatus_operativos/tipo/viaje/monitoreo');
-        setData(response.data);
+
+        const response = await odooApi.get(`/tms_travel/reportes_estatus_viajes/detencion_abierta/${id_viaje}`);
+        const response2 = await odooApi.get('/estatus_operativos/tipo/viaje/monitoreo');
+        let data = response2.data;
+
+        if (response.data !== null) {
+          data = data.filter((item: any) => item.id_estatus === 17);
+        }
+
+        setData(data);
+        
       } catch (error) {
         console.error('Error al obtener los datos:', error);
       }
