@@ -37,34 +37,6 @@ const DetencionDetail = ({ open, onClose, id_detencion }: DetencionDetailProps) 
     }
   };
 
-  const Approved = async (Approved: boolean) => {
-    try {
-      setLoading(true);
-      const response = await odooApi.patch(
-        `/tms_travel/reportes_estatus_viajes/travel_detentions/approved/${id_detencion}`,
-        {},
-        {
-          params: {
-            approved: Approved,
-          },
-        }
-      );
-      if (response.data.status == "success") {
-        toast.success(response.data.message);
-        fetchData();
-      } else {
-        toast.error(response.data.message);
-      }
-    } catch (error: any) {
-      const errorMessage = error.response
-        ? `Error: ${error.response.status} - ${error.response.data.message}`
-        : error.message;
-      toast.error('Error al enviar los datos: ' + errorMessage);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const confirmApproved = async (approved: boolean) => {
     const result = await Swal.fire({
       title: approved ? "¿Aprobar detención?" : "¿Rechazar detención?",
