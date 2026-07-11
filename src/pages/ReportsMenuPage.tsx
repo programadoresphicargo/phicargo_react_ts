@@ -61,7 +61,7 @@ const reports: MenuItemType[] = [
     label: 'Flota',
     path: '/reportes/flota/',
     icon: viajesIcon,
-    requiredPermissions: [190],
+    requiredPermissions: [],
   },
   {
     label: 'Reporte gerencial',
