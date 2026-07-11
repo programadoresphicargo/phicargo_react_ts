@@ -153,6 +153,15 @@ const DetencionDetail = ({ open, onClose, id_detencion }: DetencionDetailProps) 
                     </Typography>
                   </Grid>
 
+                  <Grid item xs={12} md={6}>
+                    <Typography variant="caption" color="text.secondary">
+                      Duración H:M
+                    </Typography>
+                    <Typography>
+                      {data.duracion}
+                    </Typography>
+                  </Grid>
+
                   <Grid item xs={12}>
                     <Typography variant="caption" color="text.secondary">
                       Comentarios
