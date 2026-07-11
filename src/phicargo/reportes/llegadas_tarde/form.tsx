@@ -223,7 +223,7 @@ const DetencionDetail = ({ open, onClose, id_detencion }: DetencionDetailProps) 
         </DialogContent>
         <Divider></Divider>
         <DialogActions>
-          {data.approved == null && session?.user?.permissions?.includes(580) && (
+          {data.approved == null && session?.user?.permissions?.includes(580) && data.end_date && (
             <>
               <Button
                 onPress={() => confirmApproved(false)}
