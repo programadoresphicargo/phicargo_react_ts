@@ -39,7 +39,7 @@ const DetencionesTable = () => {
   const arrivalTranslations: Record<string, string> = {
     arrived_late: 'Llegó tarde',
     arrived_late_justified: 'Llegó tarde, tiene justificación',
-    arrived_late_partially_justified: 'Llego tarde aún con justificación',
+    arrived_late_partially_justified: 'Llegó tarde aún con justificación',
     arrived_early: 'Llegó temprano',
     no_info: 'Sin información',
     no_arrival_recorded: 'Sin registro de llegada',
@@ -157,7 +157,7 @@ const DetencionesTable = () => {
         const colores: Record<string, any> = {
           'Llegó tarde': 'danger',
           'Llegó tarde, tiene justificación': 'success',
-          'Llego tarde aún con justificación': 'primary',
+          'Llegó tarde aún con justificación': 'primary',
           'Llegó temprano': 'success',
           'Sin información': 'default',
           'Sin registro de llegada': 'default'
@@ -174,14 +174,15 @@ const DetencionesTable = () => {
       },
     },
     {
-      accessorKey: 'retraso_final',
+      id: "descuento",
+      accessorKey: 'arrival_status',
       header: 'Descuento',
       Cell: ({ cell }: { cell: MRT_Cell<DepartureArrival> }) => {
-        const retraso_final = cell.getValue<number>() || 0;
+        const descuento = cell.getValue<string>() || null;
 
         return (
-          <Chip color={retraso_final === 0 ? "default" : "danger"} size="sm" className="text-white">
-            {retraso_final === 0 ? "No aplica" : "Aplica"}
+          <Chip color={descuento === "arrived_late" ? "danger" : "default"} size="sm" className="text-white">
+            {descuento === "arrived_late" ? "Aplica" : "No aplica"}
           </Chip>
         );
       },
