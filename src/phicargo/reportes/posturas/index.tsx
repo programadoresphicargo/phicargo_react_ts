@@ -9,6 +9,7 @@ import { Postura } from "@/modules/vehicles/models";
 import { AlertDialog } from "@/components";
 import { useFinishPosturaMutation } from "@/modules/vehicles/hooks/mutations";
 import { IoMdExit } from "react-icons/io";
+import dayjs from "dayjs";
 
 const ControlPosturas = () => {
 
@@ -53,6 +54,13 @@ const ControlPosturas = () => {
           </Chip>
         );
       },
+    },
+    { accessorKey: 'by_user.nombre', header: 'Usuario creación' },
+    {
+      accessorKey: 'created_at',
+      header: 'Fecha creación',
+      Cell: ({ cell }: { cell: MRT_Cell<Postura> }) =>
+        dayjs(cell.getValue<string>()).format('YYYY-MM-DD h:mma'),
     },
   ];
 
