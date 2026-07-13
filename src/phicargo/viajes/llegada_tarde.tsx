@@ -9,6 +9,7 @@ type ArrivalStatus =
     | 'arrived_early'
     | 'arrived_late'
     | 'arrived_late_justified'
+    | 'arrived_late_partially_justified'
     | 'no_arrival_recorded'
     | 'no_info';
 
@@ -18,6 +19,10 @@ type Viaje = {
     llegada_planta_programada: string;
     diferencia_tiempo_llegada: string;
     arrival_status: ArrivalStatus;
+    llegada_limite: string;
+    retraso_final: number;
+    justified_minutes: number;
+    retraso_real_planta: number;
 };
 
 type StatusConfig = {
@@ -43,6 +48,10 @@ function LlegadaTarde() {
         arrived_late_justified: {
             label: 'Llegada tarde con justificación',
             color: 'warning',
+        },
+        arrived_late_partially_justified: {
+            label: 'Llegada tarde aún con justificación',
+            color: 'danger',
         },
         no_arrival_recorded: {
             label: 'Sin registro de llegada',
@@ -125,9 +134,27 @@ function LlegadaTarde() {
                     </div>
 
                     <div>
-                        ⏱ <strong>Diferencia:</strong>
+                        ⏱ <strong>Llegada limite:</strong>
                         {' '}
-                        {data.diferencia_tiempo_llegada}
+                        {data.llegada_limite}
+                    </div>
+
+                    <div>
+                        ⏱ <strong>Retraso real minutos:</strong>
+                        {' '}
+                        {data.retraso_real_planta}
+                    </div>
+
+                    <div>
+                        ⏱ <strong>Minutos justificados:</strong>
+                        {' '}
+                        {data.justified_minutes}
+                    </div>
+
+                    <div>
+                        ⏱ <strong>Retraso final minutos:</strong>
+                        {' '}
+                        {data.retraso_final}
                     </div>
                 </>
             }
