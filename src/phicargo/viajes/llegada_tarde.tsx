@@ -50,7 +50,7 @@ function LlegadaTarde() {
             color: 'warning',
         },
         arrived_late_partially_justified: {
-            label: 'Llegada tarde aún con justificación',
+            label: 'Llegada tarde aún con justificación. Aplica descuento de $1,000.00 MXN.',
             color: 'danger',
         },
         no_arrival_recorded: {

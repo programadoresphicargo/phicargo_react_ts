@@ -140,11 +140,10 @@ const ViajesFinalizados = ({ }) => {
         header: 'POD',
         Cell: ({ cell }: { cell: MRT_Cell<ViajeFinalizado> }) => {
           var valor = cell.getValue<string>();
-          var bg = valor === 'enviado' ? 'bg-success' : 'bg-primary';
 
           return (
-            <Chip className={`badge ${bg} rounded-pill text-white`} style={{ width: '80px' }}>
-              {valor}
+            <Chip color={valor === 'enviado' ? 'success' : 'primary'} className='text-white'>
+              {valor.toUpperCase()}
             </Chip>
           );
         },
