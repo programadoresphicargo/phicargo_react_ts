@@ -68,23 +68,23 @@ const DetencionesTable = () => {
     { accessorKey: 'operador', header: 'Operador' },
     { accessorKey: 'start_date', header: 'Inicio' },
     { accessorKey: 'end_date', header: 'Fin' },
-    { accessorKey: 'duracion', header: 'Duracion' },
+    { accessorKey: 'duration_minutes', header: 'Duración en minutos' },
     { accessorKey: 'usuario_creacion', header: 'Usuario creación' },
     {
-      accessorKey: 'approved',
-      header: 'Aprobado',
+      accessorKey: 'status',
+      header: 'Estado',
       Cell: ({ cell }: { cell: MRT_Cell<DepartureArrival> }) => {
-        const valor = cell.getValue<boolean | null>() ?? null;
+        const valor = cell.getValue<string | null>() ?? null;
 
         return (
           <Chip
-            color={valor === null ? "default" : valor ? "success" : "danger"}
+            color={valor === "pending" ? "default" : valor === "approved" ? "success" : "danger"}
             size="sm"
             className="text-white"
           >
-            {valor === null
+            {valor === "pending"
               ? "Pendiente"
-              : valor
+              : valor == "approved"
                 ? "Aprobado"
                 : "Rechazado"}
           </Chip>

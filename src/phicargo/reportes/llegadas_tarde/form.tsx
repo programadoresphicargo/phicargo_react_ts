@@ -2,7 +2,7 @@
 import odooApi from '@/api/odoo-api';
 import { useAuthContext } from '@/modules/auth/hooks';
 import ArchivosAdjuntos from '@/phicargo/viajes/estatus/archivos_adjuntos';
-import { Button, Chip } from '@heroui/react';
+import { Button, Chip, Progress } from '@heroui/react';
 import { Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -39,17 +39,17 @@ const DetencionDetail = ({ open, onClose, id_detencion }: DetencionDetailProps) 
     }
   };
 
-  const confirmApproved = async (approved: boolean) => {
+  const confirmApproved = async (status: string) => {
     const result = await Swal.fire({
-      title: approved ? "¿Aprobar detención?" : "¿Rechazar detención?",
-      text: approved
+      title: status == "approved" ? "¿Aprobar detención?" : "¿Rechazar detención?",
+      text: status == "approved"
         ? "La detención será aprobada."
         : "La detención será rechazada.",
       icon: "question",
       showCancelButton: true,
-      confirmButtonText: approved ? "Sí, aprobar" : "Sí, rechazar",
+      confirmButtonText: status == "approved" ? "Sí, aprobar" : "Sí, rechazar",
       cancelButtonText: "Cancelar",
-      confirmButtonColor: approved ? "#16a34a" : "#dc2626",
+      confirmButtonColor: status == "approved" ? "#16a34a" : "#dc2626",
       reverseButtons: true,
     });
 
@@ -59,18 +59,18 @@ const DetencionDetail = ({ open, onClose, id_detencion }: DetencionDetailProps) 
       setLoading(true);
 
       await odooApi.patch(
-        `/tms_travel/reportes_estatus_viajes/travel_detentions/approved/${id_detencion}`,
+        `/tms_travel/reportes_estatus_viajes/travel_detentions/${id_detencion}`,
         {},
         {
           params: {
-            approved,
+            status
           },
         }
       );
 
       Swal.fire({
         icon: "success",
-        title: approved ? "Detención aprobada" : "Detención rechazada",
+        title: status == "approved" ? "Detención aprobada" : "Detención rechazada",
         timer: 1500,
         showConfirmButton: false,
       });
@@ -101,11 +101,11 @@ const DetencionDetail = ({ open, onClose, id_detencion }: DetencionDetailProps) 
         <DialogTitle>
           Detención ID:{id_detencion}
           <Chip
-            color={data.approved === null ? "default" : data?.approved ? "success" : "danger"}
+            color={data.status === "pending" ? "default" : data?.status === "approved" ? "success" : "danger"}
             className='text-white'>
-            {data.approved === null
+            {data.status === "pending"
               ? "Pendiente"
-              : data.approved
+              : data.status === "approved"
                 ? "Aprobado"
                 : "Rechazado"}
           </Chip>
@@ -115,7 +115,7 @@ const DetencionDetail = ({ open, onClose, id_detencion }: DetencionDetailProps) 
 
           <DialogContent dividers>
             {isLoading ? (
-              <Typography>Cargando...</Typography>
+              <Progress isIndeterminate size='sm'></Progress>
             ) : (
               <>
                 <Typography variant="h6" gutterBottom>
@@ -158,7 +158,7 @@ const DetencionDetail = ({ open, onClose, id_detencion }: DetencionDetailProps) 
                       Duración H:M
                     </Typography>
                     <Typography>
-                      {data.duracion}
+                      {data.duration_minutes}
                     </Typography>
                   </Grid>
 
@@ -226,7 +226,7 @@ const DetencionDetail = ({ open, onClose, id_detencion }: DetencionDetailProps) 
           {data.approved == null && session?.user?.permissions?.includes(580) && data.end_date && (
             <>
               <Button
-                onPress={() => confirmApproved(false)}
+                onPress={() => confirmApproved("rejected")}
                 color="danger"
                 className="text-white"
                 radius="full"
@@ -235,7 +235,7 @@ const DetencionDetail = ({ open, onClose, id_detencion }: DetencionDetailProps) 
               </Button>
 
               <Button
-                onPress={() => confirmApproved(true)}
+                onPress={() => confirmApproved("approved")}
                 color="success"
                 className="text-white"
                 radius="full"
