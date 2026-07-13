@@ -37,8 +37,9 @@ const DetencionesTable = () => {
   };
 
   const arrivalTranslations: Record<string, string> = {
-    arrived_late: 'Llegó tarde SIN justificación',
-    arrived_late_justified: 'Llegó tarde PERO tiene justificación',
+    arrived_late: 'Llegó tarde',
+    arrived_late_justified: 'Llegó tarde, tiene justificación',
+    arrived_late_partially_justified: 'Llego tarde aún con justificación',
     arrived_early: 'Llegó temprano',
     no_info: 'Sin información',
     no_arrival_recorded: 'Sin registro de llegada',
@@ -154,11 +155,12 @@ const DetencionesTable = () => {
         const raw = cell.getValue<string>() || '';
 
         const colores: Record<string, any> = {
-          'Llegó tarde SIN justificación': 'danger',
-          'Llegó tarde PERO tiene justificación': 'success',
+          'Llegó tarde': 'danger',
+          'Llegó tarde, tiene justificación': 'success',
+          'Llego tarde aún con justificación': 'primary',
           'Llegó temprano': 'success',
-          'Sin información': 'primary',
-          'Sin registro de llegada': 'primary'
+          'Sin información': 'default',
+          'Sin registro de llegada': 'default'
         };
 
         const label = arrivalTranslations[raw] || raw; // si llega otro valor, lo mostramos tal cual
