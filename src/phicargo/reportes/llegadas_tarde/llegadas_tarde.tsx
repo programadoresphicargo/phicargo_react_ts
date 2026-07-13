@@ -146,7 +146,7 @@ const DetencionesTable = () => {
     },
     { accessorKey: 'retraso_real_planta', header: 'Retraso real con tolerancia (+2h) en minutos' },
     { accessorKey: 'justified_minutes', header: 'Minutos justificados' },
-    { accessorKey: 'retraso_final', header: 'Retraso final' },
+    { accessorKey: 'retraso_final', header: 'Retraso final minutos' },
     {
       accessorKey: 'retraso_final',
       header: 'Descuento',
