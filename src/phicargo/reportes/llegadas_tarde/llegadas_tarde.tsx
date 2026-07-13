@@ -148,14 +148,38 @@ const DetencionesTable = () => {
     { accessorKey: 'justified_minutes', header: 'Minutos justificados' },
     { accessorKey: 'retraso_final', header: 'Retraso final minutos' },
     {
+      accessorKey: 'arrival_status',
+      header: 'Resultado',
+      Cell: ({ cell }: { cell: MRT_Cell<DepartureArrival> }) => {
+        const raw = cell.getValue<string>() || '';
+
+        const colores: Record<string, any> = {
+          'Llegó tarde SIN justificación': 'danger',
+          'Llegó tarde PERO tiene justificación': 'success',
+          'Llegó temprano': 'success',
+          'Sin información': 'primary',
+          'Sin registro de llegada': 'primary'
+        };
+
+        const label = arrivalTranslations[raw] || raw; // si llega otro valor, lo mostramos tal cual
+        const color = colores[label] || 'primary';
+
+        return (
+          <Chip color={color} size="sm" className="text-white">
+            {label}
+          </Chip>
+        );
+      },
+    },
+    {
       accessorKey: 'retraso_final',
       header: 'Descuento',
       Cell: ({ cell }: { cell: MRT_Cell<DepartureArrival> }) => {
         const retraso_final = cell.getValue<number>() || 0;
 
         return (
-          <Chip color={retraso_final === 0 ? "success" : "danger"} size="sm" className="text-white">
-            {retraso_final === 0 ? "No aplica" : "Descuento"}
+          <Chip color={retraso_final === 0 ? "default" : "danger"} size="sm" className="text-white">
+            {retraso_final === 0 ? "No aplica" : "Aplica"}
           </Chip>
         );
       },
