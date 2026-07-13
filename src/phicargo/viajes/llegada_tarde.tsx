@@ -118,43 +118,43 @@ function LlegadaTarde() {
             description={
                 <>
                     <div>
-                        🚚 <strong>Viaje:</strong> {data.referencia}
+                        🚚 <strong>Viaje:</strong> {data?.referencia}
                     </div>
 
                     <div>
                         📅 <strong>Llegada programada:</strong>
                         {' '}
-                        {data.llegada_planta_programada}
+                        {data?.llegada_planta_programada}
                     </div>
 
                     <div>
                         🚚 <strong>Llegada real:</strong>
                         {' '}
-                        {data.llegada_planta}
+                        {data?.llegada_planta}
                     </div>
 
                     <div>
                         ⏱ <strong>Llegada limite:</strong>
                         {' '}
-                        {data.llegada_limite}
+                        {data?.llegada_limite}
                     </div>
 
                     <div>
                         ⏱ <strong>Retraso real minutos:</strong>
                         {' '}
-                        {data.retraso_real_planta}
+                        {data?.retraso_real_planta}
                     </div>
 
                     <div>
                         ⏱ <strong>Minutos justificados:</strong>
                         {' '}
-                        {data.justified_minutes}
+                        {data?.justified_minutes}
                     </div>
 
                     <div>
                         ⏱ <strong>Retraso final minutos:</strong>
                         {' '}
-                        {data.retraso_final}
+                        {data?.retraso_final}
                     </div>
                 </>
             }
