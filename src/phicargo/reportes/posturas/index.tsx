@@ -38,7 +38,7 @@ const ControlPosturas = () => {
     { accessorKey: 'vehicle', header: 'Vehiculo' },
     { accessorKey: 'start_date', header: 'Inicio' },
     { accessorKey: 'end_date', header: 'Fin' },
-    { accessorKey: 'reason', header: 'Razon' },
+    { accessorKey: 'reason', header: 'Razón' },
     {
       accessorKey: 'finished', header: 'Finalizada',
       Cell: ({ cell }: { cell: MRT_Cell<Postura> }) => {
@@ -124,15 +124,34 @@ const ControlPosturas = () => {
         openDisabled={row.original.finished}
       />
     ),
-    muiTableBodyCellProps: ({ row }) => ({
-      sx: {
-        backgroundColor: row.subRows?.length ? '#0456cf' : '#FFFFFF',
-        fontFamily: 'Inter',
-        fontWeight: 'normal',
-        fontSize: '14px',
-        color: row.subRows?.length ? '#FFFFFF' : '#000000',
-      },
-    }),
+    muiTableBodyCellProps: ({ row }) => {
+      const finished = row.original.finished;
+
+      if (finished == null) {
+        return {
+          sx: {
+            backgroundColor: row.subRows?.length
+              ? '#0456cf'
+              : '#c8d9ff'
+            ,
+            color: row.subRows?.length ? '#FFFFFF' : '#000000',
+            fontFamily: 'Inter',
+            fontWeight: 'normal',
+            fontSize: '12px',
+          }
+        };
+      }
+
+      return {
+        sx: {
+          backgroundColor: row.subRows?.length ? '#0456cf' : '#FFFFFF',
+          color: row.subRows?.length ? '#FFFFFF' : '#000000',
+          fontFamily: 'Inter',
+          fontWeight: 'normal',
+          fontSize: '12px',
+        },
+      };
+    },
     renderTopToolbarCustomActions: () => (
       <Box
         sx={{
