@@ -1,4 +1,4 @@
-import { Accordion, AccordionItem, Avatar, Progress } from "@heroui/react";
+import { Accordion, AccordionItem, Avatar, Progress, Tooltip } from "@heroui/react";
 import { Card, CardBody, CardFooter, CardHeader, Chip } from "@heroui/react";
 import React, { useEffect, useState } from 'react';
 import ArchivosAdjuntos from './archivos_adjuntos';
@@ -244,50 +244,62 @@ function EstatusHistorialAgrupado({ id_reportes_agrupados, id_viaje }: { id_repo
 
                                     </CardBody>
                                     <CardFooter className="gap-3">
-                                        <Button
-                                            radius="full"
+
+                                        <Tooltip
+                                            content="Primero envía 'Retomando ruta' para poder enviar otros estatus."
+                                            isDisabled={!isOpenDetention}
                                             color="success"
-                                            className='text-white me-2'
-                                            variant="solid"
-                                            isDisabled={isOpenDetention}
-                                            onPress={() => handleClickOpen(step.id_reporte)}>
-                                            <i className="bi bi-reply"></i>
-                                            Reenviar
-                                        </Button>
+                                            className="text-white"
+                                        >
+                                            <span className="inline-block">
+                                                <Button
+                                                    radius="full"
+                                                    color="success"
+                                                    className='text-white me-2'
+                                                    variant="solid"
+                                                    isDisabled={isOpenDetention}
+                                                    onPress={() => handleClickOpen(step.id_reporte)}>
+                                                    <i className="bi bi-reply"></i>
+                                                    Reenviar
+                                                </Button>
+                                            </span>
+                                        </Tooltip>
 
                                         <BotonMapa latitud={step.latitud} longitud={step.longitud}></BotonMapa>
                                         <BotonDistanciaMapa latitud={step.latitud} longitud={step.longitud}></BotonDistanciaMapa>
                                     </CardFooter>
                                 </Card>
 
-                                {step.comentarios_estatus ? (
-                                    <Card className="max-w-full m-4">
-                                        <CardHeader className="justify-between">
-                                            <div className="flex gap-5">
-                                                <Avatar
-                                                    isBordered
-                                                    radius="full"
-                                                    size="md"
-                                                />
-                                                <div className="flex flex-col gap-1 items-start justify-center">
-                                                    <h4 className="text-small font-semibold leading-none text-default-600">Añadio un comentario</h4>
-                                                    <h5 className="text-small tracking-tight text-default-400">{step.name}</h5>
+                                {
+                                    step.comentarios_estatus ? (
+                                        <Card className="max-w-full m-4">
+                                            <CardHeader className="justify-between">
+                                                <div className="flex gap-5">
+                                                    <Avatar
+                                                        isBordered
+                                                        radius="full"
+                                                        size="md"
+                                                    />
+                                                    <div className="flex flex-col gap-1 items-start justify-center">
+                                                        <h4 className="text-small font-semibold leading-none text-default-600">Añadio un comentario</h4>
+                                                        <h5 className="text-small tracking-tight text-default-400">{step.name}</h5>
+                                                    </div>
                                                 </div>
-                                            </div>
 
-                                            {tiempoTranscurrido(step.fecha_hora)}
-                                        </CardHeader>
-                                        <CardBody className="text-small text-default-500">
-                                            {step.comentarios_estatus}
-                                        </CardBody>
-                                        <CardFooter className="gap-3">
-                                            <div className="flex gap-1">
-                                                <p className=" text-default-400 text-small">{step.fecha_envio}</p>
-                                            </div>
-                                        </CardFooter>
-                                    </Card>) : (null)}
+                                                {tiempoTranscurrido(step.fecha_hora)}
+                                            </CardHeader>
+                                            <CardBody className="text-small text-default-500">
+                                                {step.comentarios_estatus}
+                                            </CardBody>
+                                            <CardFooter className="gap-3">
+                                                <div className="flex gap-1">
+                                                    <p className=" text-default-400 text-small">{step.fecha_envio}</p>
+                                                </div>
+                                            </CardFooter>
+                                        </Card>) : (null)
+                                }
 
-                                <HistorialCambios data={step.mails}></HistorialCambios>
+                                < HistorialCambios data={step.mails} ></HistorialCambios>
 
                                 {step.id_reenvio !== null ? (
                                     <Card className="max-w-full m-4">
@@ -325,7 +337,7 @@ function EstatusHistorialAgrupado({ id_reportes_agrupados, id_viaje }: { id_repo
                 }
 
                 <PanelEnvio open={open} cerrar={handleClose} id_reporte={id_reporte}></PanelEnvio>
-            </div>
+            </div >
         </>
     )
 }
