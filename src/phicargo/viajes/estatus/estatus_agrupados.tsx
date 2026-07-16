@@ -52,7 +52,7 @@ type PickerValue = {
 
 const { VITE_ODOO_API_URL } = import.meta.env;
 
-function EstatusHistorialAgrupado({ id_reportes_agrupados }: { id_reportes_agrupados: number[] }) {
+function EstatusHistorialAgrupado({ id_reportes_agrupados, id_viaje }: { id_reportes_agrupados: number[], id_viaje: number }) {
 
     const [open, setOpen] = React.useState(false);
     const [estatus, setEstatus] = React.useState<EstatusAgrupados[]>([]);
@@ -89,6 +89,25 @@ function EstatusHistorialAgrupado({ id_reportes_agrupados }: { id_reportes_agrup
             console.error('Error al obtener los datos:', error);
         }
     };
+
+    const [isOpenDetention, setOpenDetention] = React.useState(false);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await odooApi.get(`/tms_travel/reportes_estatus_viajes/open_detention/${id_viaje}`);
+                if (response.data !== null) {
+                    setOpenDetention(true);
+                } else {
+                    setOpenDetention(false);
+                }
+            } catch (error) {
+                console.error('Error al obtener los datos:', error);
+            }
+        };
+
+        fetchData();
+    }, [open]);
 
     const ActualizarFechaEstatus = async (id_reporte: number, fecha_hora: string) => {
         try {
@@ -230,6 +249,7 @@ function EstatusHistorialAgrupado({ id_reportes_agrupados }: { id_reportes_agrup
                                             color="success"
                                             className='text-white me-2'
                                             variant="solid"
+                                            isDisabled={isOpenDetention}
                                             onPress={() => handleClickOpen(step.id_reporte)}>
                                             <i className="bi bi-reply"></i>
                                             Reenviar

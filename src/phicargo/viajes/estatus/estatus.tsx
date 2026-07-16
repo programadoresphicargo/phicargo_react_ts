@@ -113,7 +113,7 @@ function EstatusHistorial() {
                     Detalles de estatus
                 </DialogTitle>
                 <DialogContent>
-                    <EstatusHistorialAgrupado id_reportes_agrupados={id_reportes_agrupados} />
+                    <EstatusHistorialAgrupado id_reportes_agrupados={id_reportes_agrupados} id_viaje={id_viaje} />
                 </DialogContent>
             </Dialog>
 
