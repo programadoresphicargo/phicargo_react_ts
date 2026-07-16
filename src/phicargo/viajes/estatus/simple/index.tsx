@@ -151,7 +151,7 @@ export default function SeguimientoSimpleViaje({
      Estatus intermedios
     </DialogTitle>
     <DialogContent>
-     <EstatusHistorialAgrupado id_reportes_agrupados={estatusSeleccionados} />
+     <EstatusHistorialAgrupado id_reportes_agrupados={estatusSeleccionados} id_viaje={id_viaje} />
     </DialogContent>
    </Dialog>
   </div>
