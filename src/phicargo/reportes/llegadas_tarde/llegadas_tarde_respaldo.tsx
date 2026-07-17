@@ -121,7 +121,7 @@ const DetencionesTableRespaldo = () => {
     { accessorKey: 'tipo_registrante', header: 'Tipo registrante' },
     { accessorKey: 'diferencia_tiempo_llegada', header: 'Diferencia tiempo planta' },
     {
-      accessorKey: 'arrival_status',
+      accessorKey: 'arrival_status2',
       header: 'LLEGADA',
       Cell: ({ cell }: { cell: MRT_Cell<DepartureArrival> }) => {
         const raw = cell.getValue<string>() || '';
