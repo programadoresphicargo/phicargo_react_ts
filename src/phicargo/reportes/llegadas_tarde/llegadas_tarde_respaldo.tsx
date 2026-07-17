@@ -10,7 +10,6 @@ import { DateRangePicker } from 'rsuite';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import CustomNavbar from "@/pages/CustomNavbar";
 import { pages } from './pages';
-import dayjs from "dayjs";
 
 const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
@@ -25,7 +24,7 @@ interface DepartureArrival {
   [key: string]: any;
 }
 
-const DetencionesTable = () => {
+const DetencionesTableRespaldo = () => {
 
   const departureTranslations: Record<string, string> = {
     no_info: 'Sin información',
@@ -37,9 +36,8 @@ const DetencionesTable = () => {
   };
 
   const arrivalTranslations: Record<string, string> = {
-    arrived_late: 'Llegó tarde',
-    arrived_late_justified: 'Llegó tarde, tiene justificación',
-    arrived_late_partially_justified: 'Llegó tarde aún con justificación',
+    arrived_late: 'Llegó tarde SIN justificación',
+    arrived_late_justified: 'Llegó tarde PERO tiene justificación',
     arrived_early: 'Llegó temprano',
     no_info: 'Sin información',
     no_arrival_recorded: 'Sin registro de llegada',
@@ -87,18 +85,8 @@ const DetencionesTable = () => {
     { accessorKey: 'x_status_viaje', header: 'Estado del viaje' },
     { accessorKey: 'ruta', header: 'Ruta' },
     { accessorKey: 'driver', header: 'Operador' },
-    {
-      accessorKey: 'inicio_programado',
-      header: 'Inicio programado',
-      Cell: ({ cell }: { cell: MRT_Cell<DepartureArrival> }) =>
-        dayjs(cell.getValue<string>()).format('YYYY/MM/DD h:mm A'),
-    },
-    {
-      accessorKey: 'fecha_inicio',
-      header: 'Fecha inicio',
-      Cell: ({ cell }: { cell: MRT_Cell<DepartureArrival> }) =>
-        dayjs(cell.getValue<string>()).format('YYYY/MM/DD h:mm A'),
-    },
+    { accessorKey: 'inicio_programado', header: 'Inicio programado', },
+    { accessorKey: 'fecha_inicio', header: 'Fecha inicio' },
     { accessorKey: 'diferencia_tiempo_salida', header: 'Diferencia tiempo salida' },
     {
       accessorKey: 'departure_status',
@@ -127,40 +115,23 @@ const DetencionesTable = () => {
       },
     },
     { accessorKey: 'nombre_justificacion_salida', header: 'Estatus justificante' },
-    {
-      accessorKey: 'llegada_planta_programada',
-      header: 'Llegada a planta programada',
-      Cell: ({ cell }: { cell: MRT_Cell<DepartureArrival> }) =>
-        dayjs(cell.getValue<string>()).format('YYYY/MM/DD h:mm A'),
-    },
-    {
-      accessorKey: 'llegada_limite',
-      header: 'Llegada limite',
-      Cell: ({ cell }: { cell: MRT_Cell<DepartureArrival> }) =>
-        dayjs(cell.getValue<string>()).format('YYYY/MM/DD h:mm A'),
-    },
-    {
-      accessorKey: 'llegada_planta',
-      header: 'Llegada a planta reportada',
-      Cell: ({ cell }: { cell: MRT_Cell<DepartureArrival> }) =>
-        dayjs(cell.getValue<string>()).format('YYYY/MM/DD h:mm A'),
-    },
-    { accessorKey: 'retraso_real_planta', header: 'Retraso real con tolerancia (+2h) en minutos' },
-    { accessorKey: 'justified_minutes', header: 'Minutos justificados' },
-    { accessorKey: 'retraso_final', header: 'Retraso final minutos' },
+    { accessorKey: 'llegada_planta_programada', header: 'Llegada a planta programada' },
+    { accessorKey: 'llegada_planta', header: 'Llegada a planta reportada' },
+    { accessorKey: 'id_usuario', header: 'Usuario' },
+    { accessorKey: 'tipo_registrante', header: 'Tipo registrante' },
+    { accessorKey: 'diferencia_tiempo_llegada', header: 'Diferencia tiempo planta' },
     {
       accessorKey: 'arrival_status',
-      header: 'Resultado',
+      header: 'LLEGADA',
       Cell: ({ cell }: { cell: MRT_Cell<DepartureArrival> }) => {
         const raw = cell.getValue<string>() || '';
 
         const colores: Record<string, any> = {
-          'Llegó tarde': 'danger',
-          'Llegó tarde, tiene justificación': 'success',
-          'Llegó tarde aún con justificación': 'primary',
+          'Llegó tarde SIN justificación': 'danger',
+          'Llegó tarde PERO tiene justificación': 'success',
           'Llegó temprano': 'success',
-          'Sin información': 'default',
-          'Sin registro de llegada': 'default'
+          'Sin información': 'primary',
+          'Sin registro de llegada': 'primary'
         };
 
         const label = arrivalTranslations[raw] || raw; // si llega otro valor, lo mostramos tal cual
@@ -173,20 +144,8 @@ const DetencionesTable = () => {
         );
       },
     },
-    {
-      id: "descuento",
-      accessorKey: 'arrival_status',
-      header: 'Descuento',
-      Cell: ({ cell }: { cell: MRT_Cell<DepartureArrival> }) => {
-        const descuento = cell.getValue<string>() || null;
-
-        return (
-          <Chip color={descuento === "arrived_late" ? "danger" : "default"} size="sm" className="text-white">
-            {descuento === "arrived_late" ? "Aplica" : "No aplica"}
-          </Chip>
-        );
-      },
-    },
+    { accessorKey: 'nombre_justificacion_llegada', header: 'Estatus justificante' },
+    { accessorKey: 'fecha_finalizado', header: 'Fecha finalizado' },
   ];
 
   const csvConfig = mkConfig({
@@ -263,7 +222,7 @@ const DetencionesTable = () => {
         <h1
           className="tracking-tight font-semibold lg:text-2xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
         >
-          Salidas y llegadas tarde
+          Salidas y llegadas tarde (Respaldo Julio 2026)
         </h1>
         <DateRangePicker
           value={range}
@@ -319,4 +278,4 @@ const DetencionesTable = () => {
   );
 };
 
-export default DetencionesTable;
+export default DetencionesTableRespaldo;

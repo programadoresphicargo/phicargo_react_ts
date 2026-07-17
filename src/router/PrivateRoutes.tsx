@@ -89,6 +89,9 @@ const ReporteDetencionesViajes = lazy(
 const TravelDetentions = lazy(
   () => import('../phicargo/reportes/llegadas_tarde/registro_detenciones.tsx'),
 );
+const TravelDetentionsRespaldo = lazy(
+  () => import('../phicargo/reportes/llegadas_tarde/llegadas_tarde_respaldo.tsx'),
+);
 // const BonosOperadores = lazy(() => import('../phicargo/bonos/BonosIndex'));
 const DriverBonusPage = lazy(
   () => import('@/modules/drivers/pages/DriverBonusPage'),
@@ -480,6 +483,15 @@ export const PrivateRoutes = () => {
           element={
             <Suspense fallback={<LoadingPage />}>
               <TravelDetentions></TravelDetentions>
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/travel_detentions_respaldo"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <TravelDetentionsRespaldo></TravelDetentionsRespaldo>
             </Suspense>
           }
         />
