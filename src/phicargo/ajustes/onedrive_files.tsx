@@ -72,6 +72,10 @@ const OnedriveFiles = ({ }) => {
         header: 'Origen',
       },
       {
+        accessorKey: 'tipo_archivo',
+        header: 'Tipo archivo',
+      },
+      {
         accessorKey: 'id_onedrive',
         header: 'Onedrive',
       },
