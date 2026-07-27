@@ -114,6 +114,7 @@ const Lineas = lazy(() => import('../phicargo/inventarioti/celulares/lineas/inde
 const AsignacionEquipo = lazy(() => import('../phicargo/viajes/asignacion_equipo/index'))
 const OnedriveAjustes = lazy(() => import('../phicargo/ajustes/onedrive'))
 const Checklist = lazy(() => import('../phicargo/checklist/checklist'))
+const OnedriveFiles = lazy(() => import('../phicargo/ajustes/onedrive_files.tsx'))
 
 export const PrivateRoutes = () => {
   const updateAvailable = useCheckVersion();
@@ -612,6 +613,15 @@ export const PrivateRoutes = () => {
           element={
             <Suspense fallback={<LoadingPage />}>
               <Checklist></Checklist>
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/onedrive_files"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <OnedriveFiles></OnedriveFiles>
             </Suspense>
           }
         />
