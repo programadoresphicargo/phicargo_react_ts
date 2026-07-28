@@ -15,6 +15,7 @@ import { RecordDetailsModal } from "@/modules/maintenance/components/RecordDetai
 import { MaintenanceRecord } from "@/modules/maintenance/models";
 import Formulariomaniobra from "../maniobras/maniobras/form";
 import { ManiobraProvider } from "../maniobras/context/viajeContext";
+import { Link } from "@heroui/link";
 
 /* =========================
    TIPOS
@@ -234,13 +235,13 @@ const Remolques: React.FC = () => {
                 if (!latitude || !longitude) return '-';
 
                 return (
-                    <a
+                    <Link
                         href={`https://www.google.com/maps?q=${latitude},${longitude}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        isExternal
+                        showAnchorIcon
                     >
                         {latitude}, {longitude}
-                    </a>
+                    </Link>
                 );
             },
         },
