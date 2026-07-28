@@ -227,7 +227,7 @@ const Remolques: React.FC = () => {
         { accessorKey: 'x_hc_compatible', header: 'HC Compatible' },
         {
             accessorKey: 'latitude',
-            header: 'Latitud',
+            header: 'Coordenadas',
             Cell: ({ row }) => {
                 const latitude = row.original.latitude;
                 const longitude = row.original.longitude;
