@@ -39,6 +39,8 @@ type Remolque = {
     tipo_maniobra?: string;
     mantenimiento_id?: number;
     mantenimiento_status?: string;
+    latitude?: number;
+    longitude?: number;
 };
 
 /* =========================
@@ -222,6 +224,27 @@ const Remolques: React.FC = () => {
         },
         { accessorKey: 'x_dc_compatible', header: 'DC Compatible' },
         { accessorKey: 'x_hc_compatible', header: 'HC Compatible' },
+        {
+            accessorKey: 'latitude',
+            header: 'Latitud',
+            Cell: ({ row }) => {
+                const latitude = row.original.latitude;
+                const longitude = row.original.longitude;
+
+                if (!latitude || !longitude) return '-';
+
+                return (
+                    <a
+                        href={`https://www.google.com/maps?q=${latitude},${longitude}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        {latitude}, {longitude}
+                    </a>
+                );
+            },
+        },
+        { accessorKey: 'last_position_update', header: 'Última posición GPS' },
     ], []);
 
     /* =========================
