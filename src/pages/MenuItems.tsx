@@ -126,7 +126,7 @@ export const menuItems: MenuItemType[] = [
   icon: incidentsImg,
   label: 'Incidencias',
   link: '/incidencias',
-  requiredPermissions: [214, 215, 216, 217],
+  requiredPermissions: [214, 215, 216, 217, 224],
  },
  {
   icon: chatbot,
