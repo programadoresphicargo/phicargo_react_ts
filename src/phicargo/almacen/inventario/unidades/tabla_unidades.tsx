@@ -120,8 +120,16 @@ const TablaUnidades = ({ }) => {
         },
       },
       {
+        accessorKey: 'fecha_solicitud',
+        header: 'Fecha solicitud',
+      },
+      {
         accessorKey: 'empleado',
         header: 'Empleado',
+      },
+      {
+        accessorKey: 'fecha_devuelto',
+        header: 'Fecha devuelto',
       },
     ],
     [],
