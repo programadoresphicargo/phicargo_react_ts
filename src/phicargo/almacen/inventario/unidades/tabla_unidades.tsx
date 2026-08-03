@@ -128,6 +128,14 @@ const TablaUnidades = ({ }) => {
         header: 'Empleado',
       },
       {
+        accessorKey: 'fecha_prestamo',
+        header: 'Fecha prestamo',
+      },
+      {
+        accessorKey: 'fecha_limite',
+        header: 'Fecha limite',
+      },
+      {
         accessorKey: 'fecha_devuelto',
         header: 'Fecha devuelto',
       },
