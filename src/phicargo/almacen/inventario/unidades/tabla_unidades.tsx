@@ -52,23 +52,59 @@ const TablaUnidades = ({ }) => {
     () => [
       {
         accessorKey: 'id_unidad',
-        header: 'ID',
+        header: 'Folio Artículo',
       },
       {
         accessorKey: 'x_name',
-        header: 'Nombre',
+        header: 'Equipo / Artículo',
       },
       {
         accessorKey: 'x_tipo',
         header: 'Tipo',
+        Cell: ({ cell }: { cell: MRT_Cell<Unidad> }) => {
+          const estado = cell.getValue<string>();
+          if (!estado) return null;
+          return (
+            <Chip
+              size="sm"
+              color={
+                estado == "amarre" ? "success" :
+                  estado == "epp" ? "primary" :
+                    estado == "herramienta" ? "warning" : "default"
+              }
+              className="text-white"
+            >
+              {estado.toUpperCase()}
+            </Chip >
+          );
+        },
       },
       {
         accessorKey: 'estado',
         header: 'Estado',
+        Cell: ({ cell }: { cell: MRT_Cell<Unidad> }) => {
+          const estado = cell.getValue<string>();
+
+          return (
+            <Chip
+              size="sm"
+              color={
+                estado == "disponible" ? "success" :
+                  estado == "baja" ? "danger" :
+                    estado == "reservado" ? "warning" :
+                      estado == "asignado" ? "primary" :
+                        estado == "prestado" ? "secondary" : "default"
+              }
+              className="text-white"
+            >
+              {estado.toUpperCase() || "SIN ESTADO"}
+            </Chip >
+          );
+        },
       },
       {
         accessorKey: 'x_solicitud_id',
-        header: 'Solicitud',
+        header: 'Solicitud Origen',
         Cell: ({ cell }: { cell: MRT_Cell<Unidad> }) => {
           const solicitud = cell.getValue<number>();
 
@@ -98,6 +134,7 @@ const TablaUnidades = ({ }) => {
     enableStickyHeader: true,
     positionGlobalFilter: "right",
     localization: MRT_Localization_ES,
+    positionToolbarAlertBanner: "bottom",
     muiSearchTextFieldProps: {
       placeholder: `Buscar`,
       sx: { minWidth: '400px' },
@@ -166,7 +203,8 @@ const TablaUnidades = ({ }) => {
           color='primary'
           isDisabled={false}
           onPress={() => fetchData()}
-        >Actualizar tablero
+          size='sm'
+        >Actualizar
         </Button>
 
         <Button
@@ -174,6 +212,7 @@ const TablaUnidades = ({ }) => {
           color='success'
           className='text-white'
           startContent={<i className="bi bi-file-earmark-excel"></i>}
+          size='sm'
           onPress={() => exportToCSV(dataEquipos, columns, "inventario.csv")}>
           Exportar
         </Button>
