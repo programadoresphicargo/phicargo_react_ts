@@ -178,7 +178,7 @@ const TablaUnidades = ({ }) => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 250px)',
+        maxHeight: 'calc(100vh - 240px)',
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
