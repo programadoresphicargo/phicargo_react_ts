@@ -118,7 +118,11 @@ const TablaUnidades = ({ }) => {
             </Chip>
           );
         },
-      }
+      },
+      {
+        accessorKey: 'empleado',
+        header: 'Empleado',
+      },
     ],
     [],
   );
