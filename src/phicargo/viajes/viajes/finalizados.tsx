@@ -149,6 +149,10 @@ const ViajesFinalizados = ({ }) => {
         },
       },
       {
+        accessorKey: 'fecha_pod',
+        header: 'Fecha envio POD',
+      },
+      {
         accessorKey: 'eir_enviado',
         header: 'EIR',
       },
