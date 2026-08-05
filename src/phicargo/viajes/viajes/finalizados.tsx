@@ -150,7 +150,7 @@ const ViajesFinalizados = ({ }) => {
       },
       {
         accessorKey: 'fecha_pod',
-        header: 'Fecha envio POD',
+        header: 'Fecha envío POD',
       },
       {
         accessorKey: 'eir_enviado',
@@ -320,8 +320,19 @@ const ViajesFinalizados = ({ }) => {
           className='text-white'
           startContent={<i className="bi bi-file-earmark-excel"></i>}
           onPress={() => exportToCSV(data, columns, "viajes_finalizados.csv")}
-          radius='full'>
+          radius='full'
+          size='sm'>
           Exportar
+        </Button>
+
+        <Button
+          color='primary'
+          className='text-white'
+          startContent={<i className="bi bi-file-earmark-excel"></i>}
+          onPress={() => fetchData()}
+          radius='full'
+          size='sm'>
+          Recargar
         </Button>
       </Box>
     ),
