@@ -10,6 +10,7 @@ import TablaProductos from './tabla_productos';
 import TablaUnidades from './unidades/tabla_unidades';
 import CustomNavbar from '@/pages/CustomNavbar';
 import { pages } from '../pages';
+import TablaPrestamo from './unidades/tabla_prestamo';
 
 const Almacen = () => {
     const [value, setValue] = useState('0');
@@ -52,6 +53,7 @@ const Almacen = () => {
                             }}>
                             <Tab label="Productos" value="0" sx={{ fontFamily: 'Inter' }} />
                             <Tab label="Unidades" value="1" sx={{ fontFamily: 'Inter' }} />
+                            <Tab label="Prestamos" value="2" sx={{ fontFamily: 'Inter' }} />
                         </TabList>
                     </Box>
                     <TabPanel value="0" sx={{ padding: 0 }}>
@@ -59,6 +61,9 @@ const Almacen = () => {
                     </TabPanel>
                     <TabPanel value="1" sx={{ padding: 0 }}>
                         <TablaUnidades></TablaUnidades>
+                    </TabPanel>
+                    <TabPanel value="2" sx={{ padding: 0 }}>
+                        <TablaPrestamo></TablaPrestamo>
                     </TabPanel>
                 </Box>
             </TabContext>
