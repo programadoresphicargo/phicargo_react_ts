@@ -111,7 +111,8 @@ const ShiftsPage = () => {
     getRowId: (row) => String(row.id),
     // STATE
     initialState: {
-      showColumnFilters: false,
+      showColumnFilters: true,
+      showGlobalFilter: true,
       density: 'compact',
       pagination: { pageSize: 100, pageIndex: 0 },
       columnPinning: {
@@ -219,7 +220,7 @@ const ShiftsPage = () => {
     ),
     muiTableContainerProps: {
       sx: {
-        height: 'calc(100vh - 212px)',
+        height: 'calc(100vh - 250px)',
       },
     },
     muiTablePaperProps: {
