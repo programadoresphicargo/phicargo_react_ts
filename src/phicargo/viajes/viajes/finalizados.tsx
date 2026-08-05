@@ -328,7 +328,7 @@ const ViajesFinalizados = ({ }) => {
         <Button
           color='primary'
           className='text-white'
-          startContent={<i className="bi bi-file-earmark-excel"></i>}
+          startContent={<i className="bi bi-arrow-clockwise"></i>}
           onPress={() => fetchData()}
           radius='full'
           size='sm'>
