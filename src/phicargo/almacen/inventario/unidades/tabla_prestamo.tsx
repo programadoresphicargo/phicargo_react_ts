@@ -1,5 +1,6 @@
 import {
   MRT_Cell,
+  MRT_Row,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
@@ -13,6 +14,8 @@ import SolicitudForm from '../../solicitud/form';
 
 type Unidad = {
   x_solicitud_id: number;
+  fecha_limite: string;
+  vencido: boolean;
 }
 
 const TablaPrestamo = ({ }) => {
@@ -111,10 +114,22 @@ const TablaPrestamo = ({ }) => {
       {
         accessorKey: 'fecha_limite',
         header: 'Fecha limite',
-      },
-      {
-        accessorKey: 'fecha_devuelto',
-        header: 'Fecha devuelto',
+        Cell: ({ row }: { row: MRT_Row<Unidad> }) => {
+          const fecha_limite = row.original.fecha_limite;
+          const vencido = row.original.vencido;
+
+          if (!fecha_limite) return;
+
+          return (
+            <Chip
+              size="sm"
+              color={vencido ? "danger" : "success"}
+              className="text-white"
+            >
+              {fecha_limite}
+            </Chip>
+          );
+        },
       },
     ],
     [],
