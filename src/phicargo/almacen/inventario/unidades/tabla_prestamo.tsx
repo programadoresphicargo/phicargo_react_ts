@@ -140,11 +140,7 @@ const TablaPrestamo = ({ }) => {
     columnResizeMode: "onEnd",
     initialState: {
       showGlobalFilter: true,
-      columnVisibility: {
-        empresa: false,
-      },
       density: 'compact',
-      expanded: true,
       showColumnFilters: true,
       pagination: { pageIndex: 0, pageSize: 80 },
     },
