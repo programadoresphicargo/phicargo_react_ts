@@ -1,4 +1,4 @@
-import { Card, CardBody, CardFooter, CardHeader } from '@heroui/react';
+import { Card, CardBody, CardFooter, CardHeader, Select, SelectItem } from '@heroui/react';
 import {
   AutocompleteInput,
   CheckboxInput,
@@ -6,7 +6,7 @@ import {
   PasswordInput2,
   TextInput,
 } from '@/components/inputs';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import type { FullUser } from '../../auth/models';
 import { SaveButton } from '@/components/ui';
 import type { UserUpdate } from '../models';
@@ -23,6 +23,7 @@ const initialState: UserUpdate = {
   password: '',
   pin: '',
   id_odoo: null,
+  store_ids: []
 };
 
 interface Props {
@@ -54,6 +55,7 @@ const UserForm = (props: Props) => {
 
   useEffect(() => {
     if (user) {
+      console.log(user)
       reset((user as unknown as UserUpdate));
     }
   }, [user, reset]);
@@ -75,6 +77,12 @@ const UserForm = (props: Props) => {
     { key: 'RH', value: 'RH' },
     { key: 'Comercial', value: 'Comercial' },
     { key: 'Legal', value: 'Legal' },
+  ];
+
+  const stores = [
+    { key: 1, label: "Veracruz" },
+    { key: 2, label: "Mexico" },
+    { key: 9, label: "Manzanillo" },
   ];
 
   return (
@@ -139,6 +147,29 @@ const UserForm = (props: Props) => {
               control={control}
               name="id_odoo"
               employeeId={OdooId}
+            />
+            <Controller
+              name="store_ids"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  label="Sucursales"
+                  selectionMode="multiple"
+                  variant="faded"
+                  selectedKeys={new Set(field.value.map(String))}
+                  onSelectionChange={(keys) => {
+                    field.onChange(
+                      Array.from(keys as Set<React.Key>).map(Number)
+                    );
+                  }}
+                >
+                  {stores.map((store) => (
+                    <SelectItem key={store.key}>
+                      {store.label}
+                    </SelectItem>
+                  ))}
+                </Select>
+              )}
             />
           </div>
 

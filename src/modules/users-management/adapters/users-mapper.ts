@@ -48,6 +48,10 @@ export class UserAdapter {
       userApi.id_odoo = user.id_odoo;
     }
 
+    if (user.store_ids) {
+      userApi.store_ids = user.store_ids;
+    }
+
     return userApi;
   }
 

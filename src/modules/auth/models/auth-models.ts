@@ -33,6 +33,7 @@ interface UserBase {
 export interface User extends UserBase {
   id: number;
   permissions: number[];
+  store_ids: number[];
 }
 
 export interface FullUser extends User {

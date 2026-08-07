@@ -9,6 +9,7 @@ export interface UserUpdateApi {
   passwoord?: string | null;
   pin?: string | null;
   id_odoo?: number | null;
+  store_ids?: number[]
 }
 
 export interface UserCreateApi {

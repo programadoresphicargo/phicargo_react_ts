@@ -9,6 +9,7 @@ export interface UserUpdate {
   password: string;
   pin: string;
   id_odoo: number | null
+  store_ids: number[]
 }
 
 export interface UserCreate {
