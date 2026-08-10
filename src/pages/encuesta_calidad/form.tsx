@@ -143,6 +143,8 @@ const EncuestaCalidad = () => {
               <CustomerAutocomplete
                 control={control}
                 name="partner_id"
+                label="Empresa"
+                placeholder="Buscar"
                 rules={{
                   required: "Debes seleccionar un cliente",
                 }}></CustomerAutocomplete>
