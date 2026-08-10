@@ -54,7 +54,7 @@ const EncuestaCalidad = () => {
     try {
       setIsLoadingQuestions(true);
 
-      const response = await odooApi.get(`/survey/questions/`);
+      const response = await odooApi.get(`/surveys/questions/`);
       const questions: Question[] = response.data;
       setData(questions);
 
@@ -86,7 +86,7 @@ const EncuestaCalidad = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await odooApi.post(`/survey/`, values);
+      const response = await odooApi.post(`/surveys/`, values);
       if (response.data.status === "success") {
         toast.success(response.data.message);
 

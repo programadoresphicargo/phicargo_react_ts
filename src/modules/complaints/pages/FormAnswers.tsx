@@ -56,7 +56,7 @@ const EncuestaCalidadAnswers = ({ survey_id, open, handleClose }: Props) => {
     try {
       setLoading(true);
 
-      const response = await odooApi.get(`/survey/responses/${survey_id}`);
+      const response = await odooApi.get(`/surveys/responses/${survey_id}`);
       const questions: Question[] = response.data.answers;
       setData(questions);
 

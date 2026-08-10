@@ -29,7 +29,7 @@ const SurveysPage = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await odooApi.get('/survey/responses/');
+      const response = await odooApi.get('/surveys/responses/');
       setData(response.data);
       setLoading(false);
     } catch (error) {
