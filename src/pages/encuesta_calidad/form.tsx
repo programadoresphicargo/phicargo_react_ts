@@ -233,6 +233,7 @@ const EncuestaCalidad = () => {
             size="lg"
             isLoading={isSubmitting}
           >
+            <i className="bi bi-send-check"></i>
             Enviar encuesta
           </Button>
         </div>
