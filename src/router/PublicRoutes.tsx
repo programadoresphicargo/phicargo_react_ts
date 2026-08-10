@@ -1,13 +1,13 @@
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { Suspense, lazy, useEffect } from 'react';
-
 import { LoadingPage } from '@/pages/LoadingPage';
 import LoginPage from '../modules/auth/pages/LoginPage';
 import { useAuthContext } from '@/modules/auth/hooks';
+import EncuestaCalidad from '@/pages/encuesta_calidad';
 
 const UsagePoliciesPage = lazy(() => import('@/pages/UsagePoliciesPage'));
 
-const publicPaths = ['/auth/login', '/politicas'];
+const publicPaths = ['/auth/login', '/politicas', '/encuesta_calidad'];
 
 export const PublicRoutes = () => {
   const location = useLocation();
@@ -27,6 +27,14 @@ export const PublicRoutes = () => {
         element={
           <Suspense fallback={<LoadingPage />}>
             <UsagePoliciesPage />
+          </Suspense>
+        }
+      />
+      <Route
+        path="/encuesta_calidad"
+        element={
+          <Suspense fallback={<LoadingPage />}>
+            <EncuestaCalidad></EncuestaCalidad>
           </Suspense>
         }
       />

@@ -9,6 +9,7 @@ const COMPLAINTS_PERMISSION_ID = 213;
 
 const ComplaintsPage = lazy(() => import('../pages/ComplaintsPage'));
 const ActionsPage = lazy(() => import('../pages/ActionsPage'));
+const SurveyPage = lazy(() => import('../pages/SurveysPage'));
 
 const ComplaintsRoutes = () => (
   <Route
@@ -34,6 +35,15 @@ const ComplaintsRoutes = () => (
       element={
         <Suspense fallback={<LoadingPage />}>
           <ActionsPage />
+        </Suspense>
+      }
+    />
+
+    <Route
+      path="surveys"
+      element={
+        <Suspense fallback={<LoadingPage />}>
+          <SurveyPage></SurveyPage>
         </Suspense>
       }
     />
