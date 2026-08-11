@@ -437,6 +437,7 @@ const AccesoForm = ({ id_acceso, onClose }: { id_acceso: number | null, onClose:
                     isIndeterminate
                     aria-label="Loading..."
                     size="sm"
+                    color="danger"
                 />
             )}
 
