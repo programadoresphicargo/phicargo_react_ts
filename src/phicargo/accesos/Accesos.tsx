@@ -67,7 +67,6 @@ export default function Accesos() {
     const tabStyle = {
         fontFamily: 'Inter',
         color: 'rgba(255,255,255,0.6)',
-        transition: 'color 0.25s ease, transform 0.2s ease',
         '&.Mui-selected': {
             color: '#ffffff',
             fontWeight: 600,
@@ -86,10 +85,7 @@ export default function Accesos() {
                         alignItems: 'center',
                         padding: 1,
                         color: 'white',
-
                         backgroundImage: currentTheme.gradient,
-                        transition: 'background-position 0.6s ease',
-
                         ...(value && { backgroundPosition: '100% 50%' }),
                     }}
                 >
@@ -119,7 +115,6 @@ export default function Accesos() {
                             '& .MuiTabs-indicator': {
                                 height: '3px',
                                 backgroundColor: currentTheme.indicator,
-                                transition: 'background-color 0.35s ease, width 0.35s ease',
                             },
                         }}
                     >
@@ -139,52 +134,34 @@ export default function Accesos() {
 
                 <TabPanel
                     value="1"
-                    sx={{
-                        p: 0,
-                        animation: 'fadeIn 0.35s ease',
-                    }}
+                    sx={{ p: 0 }}
                 >
                     <TablaAccesos tipo="peatonal" title="Acceso Peatonal" background={currentTheme.gradient} />
                 </TabPanel>
 
-                <TabPanel value="2" sx={{ p: 0, animation: 'fadeIn 0.35s ease' }}>
+                <TabPanel value="2" sx={{ p: 0 }}>
                     <TablaAccesos tipo="vehicular" title="Acceso Vehicular" background={currentTheme.gradient} />
                 </TabPanel>
 
-                <TabPanel value="3" sx={{ p: 0, animation: 'fadeIn 0.35s ease' }}>
+                <TabPanel value="3" sx={{ p: 0 }}>
                     <TablaAccesos tipo="user" title="Mis accesos" background={currentTheme.gradient} />
                 </TabPanel>
 
-                <TabPanel value="4" sx={{ p: 0, animation: 'fadeIn 0.35s ease' }}>
+                <TabPanel value="4" sx={{ p: 0 }}>
                     <TablaAccesos tipo="autorizacion" title="Pendientes de autorización" background={currentTheme.gradient} />
                 </TabPanel>
 
                 <AccesoCompo>
-                    <TabPanel value="5" sx={{ p: 0, animation: 'fadeIn 0.35s ease' }}>
+                    <TabPanel value="5" sx={{ p: 0 }}>
                         <RegistroVehiculos onClose={() => console.log()} />
                     </TabPanel>
                 </AccesoCompo>
 
-                <TabPanel value="6" sx={{ p: 0, animation: 'fadeIn 0.35s ease' }}>
+                <TabPanel value="6" sx={{ p: 0 }}>
                     <TablaAccesos tipo="archivado" title="Accesos archivados" background={currentTheme.gradient} />
                 </TabPanel>
 
             </TabContext>
-
-            <style>
-                {`
-          @keyframes fadeIn {
-            from {
-              opacity: 0;
-              transform: translateY(6px);
-            }
-            to {
-              opacity: 1;
-              transform: translateY(0);
-            }
-          }
-        `}
-            </style>
         </Box>
     );
 }
