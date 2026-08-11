@@ -340,7 +340,7 @@ const TablaAccesos: React.FC<TablaAccesosProps> = ({
           <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
             Acceso
           </Typography>
-          <Button autoFocus onPress={handleClose}>
+          <Button autoFocus onPress={handleClose} radius="full" size="sm">
             Cerrar
           </Button>
         </Toolbar>
