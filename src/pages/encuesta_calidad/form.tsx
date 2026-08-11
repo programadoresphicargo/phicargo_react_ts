@@ -144,9 +144,9 @@ const EncuestaCalidad = () => {
                 control={control}
                 name="partner_id"
                 label="Empresa"
-                placeholder="Buscar"
+                placeholder="Escribe para ver resultados"
                 rules={{
-                  required: "Debes seleccionar un cliente",
+                  required: "Debes seleccionar una empresa",
                 }}></CustomerAutocomplete>
               <SelectInput control={control} name="branch_id" label="Por:" items={branches} rules={{ required: "Campo obligatorio" }}></SelectInput>
             </div>
