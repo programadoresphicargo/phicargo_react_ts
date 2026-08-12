@@ -97,14 +97,6 @@ export const VehicleInspectionDetailModal = ({
                 onClose();
               }
             },
-            onError: () => {
-              Swal.fire({
-                title: 'Error',
-                text: 'No se pudo confirmar. Intenta nuevamente.',
-                icon: 'error',
-                confirmButtonText: 'OK',
-              });
-            },
           }
         );
       }
