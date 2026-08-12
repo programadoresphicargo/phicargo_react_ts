@@ -82,10 +82,10 @@ export class DriverBonusService {
 
         // Separar incidencias por coma
         const formattedList = rawMessage
-        .split('\n')
-        .filter((line: string) => line.trim() !== '')
-        .map((item: string) => `<li>${item}</li>`)
-        .join('');
+          .split('\n')
+          .filter((line: string) => line.trim() !== '')
+          .map((item: string) => `<li>${item}</li>`)
+          .join('');
 
         await Swal.fire({
           icon: 'error',
@@ -118,9 +118,7 @@ export class DriverBonusService {
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
-        // Aquí error.response.data contiene el JSON de tu backend
-        toast.error(error.response?.data.message);
-        throw new Error(error.response?.data.message || 'Error al cerrar el periodo');
+        throw new Error(error.response?.data.detail || 'Error al cerrar el periodo');
       }
       throw new Error('Error al cerrar el periodo');
     }

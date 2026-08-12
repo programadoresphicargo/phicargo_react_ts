@@ -91,14 +91,6 @@ export const PeriodBonusView = ({ open, onClose, periodo }: Props) => {
                 onClose();
               }
             },
-            onError: () => {
-              Swal.fire({
-                title: 'Error',
-                text: 'No se pudo cerrar el periodo. Intenta nuevamente.',
-                icon: 'error',
-                confirmButtonText: 'OK',
-              });
-            },
           }
         );
       }
