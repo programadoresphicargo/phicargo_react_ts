@@ -113,14 +113,11 @@ const FormularioCorreoGeneral = ({
         );
       }
     } catch (error: any) {
-      if (error.response?.data?.message) {
-        toast.error(
-          error.response.data.message
-        );
+      if (error.response?.data?.detail) {
+        toast.error(error.response.data.detail);
       } else {
         toast.error(
-          "Error al conectar con el servidor: " +
-          error.message
+          "Error al conectar con el servidor: " + error.message
         );
       }
     } finally {
