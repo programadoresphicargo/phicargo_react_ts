@@ -43,7 +43,13 @@ export default function FormVisitante({ open, handleClose, id_empresa }: { open:
                 toast.error(response.data.message);
             }
         } catch (error: any) {
-            toast.error("Error al comunicarse con el servidor: " + error.message);
+            if (error.response?.data?.detail) {
+                toast.error(error.response.data.detail);
+            } else {
+                toast.error(
+                    "Error al conectar con el servidor: " + error.message
+                );
+            }
         }
     };
 
