@@ -47,7 +47,7 @@ function FormularioTerminales({ open, onClose, id_terminal }: { open: boolean, o
     const actualizar = (data: Terminal) => {
         if (!id_terminal) return;
         setIsLoading(true);
-        odooApi.post('/maniobras/terminales/update/' + id_terminal, data)
+        odooApi.patch('/maniobras/terminales/' + id_terminal, data)
             .then(response => {
                 if (response.data.status === "success") {
                     toast.success(response.data.message);
@@ -56,14 +56,18 @@ function FormularioTerminales({ open, onClose, id_terminal }: { open: boolean, o
                 setIsLoading(false);
             })
             .catch(error => {
-                toast.error('Error:' + error);
+                console.error("Error:", error);
+                const detail = error.response?.data?.detail;
+                toast.error(detail || "Ocurrió un error");
+            })
+            .finally(() => {
                 setIsLoading(false);
             });
     };
 
     const registrar = (data: Terminal) => {
         setIsLoading(true);
-        odooApi.post('/maniobras/terminales/create/', data)
+        odooApi.post('/maniobras/terminales/', data)
             .then(response => {
                 if (response.data.status === "success") {
                     toast.success(response.data.message);
@@ -73,8 +77,11 @@ function FormularioTerminales({ open, onClose, id_terminal }: { open: boolean, o
                 }
             })
             .catch(error => {
-                console.error('Error:', error);
-            }).finally(() => {
+                console.error("Error:", error);
+                const detail = error.response?.data?.detail;
+                toast.error(detail || "Ocurrió un error");
+            })
+            .finally(() => {
                 setIsLoading(false);
             });
     };
