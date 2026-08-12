@@ -69,8 +69,12 @@ const FormularioDocumentacion = ({ onClose }: Props) => {
       } else {
         toast.error(response.data.message);
       }
-    } catch (error) {
-      toast.error("Error en la solicitud de subida");
+    } catch (error: any) {
+      console.log(error.response?.data?.detail);
+
+      toast.error(
+        error.response?.data?.detail || "Error en la solicitud de subida"
+      );
     } finally {
       setLoading(false);
     }
@@ -83,15 +87,16 @@ const FormularioDocumentacion = ({ onClose }: Props) => {
         isLoading={loading}
         color="primary"
         onPress={enviar_documentacion}
-        style={{ marginTop: 16 }}
+        style={{ marginTop: 5 }}
         isDisabled={fileList.length === 0 || !tipo_archivo}
       >
-        Subir Archivos
+        <i className="bi bi-send-check"></i>
+        Enviar y guardar
       </Button>
 
       <Select
         variant="bordered"
-        size="lg"
+        size="md"
         label="Seleccionar tipo de documento"
         className="w-full sm:max-w-[100%] mb-4 mt-4"
         onChange={(e) => setSelectedValue(e.target.value)}

@@ -5,7 +5,7 @@ import {
   useMaterialReactTable,
 } from 'material-react-table';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { Box } from '@mui/material';
+import { Box, DialogActions, Divider } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -280,14 +280,24 @@ const Documentacion = ({ }) => {
         open={open}
         keepMounted
         onClose={handleClose}
-        aria-describedby="alert-dialog-slide-description"
         fullWidth
-        maxWidth="sm"
+        maxWidth="md"
       >
-        <DialogTitle>{"Envio de documentos"}</DialogTitle>
+        <DialogTitle sx={{
+          background: "linear-gradient(90deg, #002887 0%, #0059b3 100%)",
+          color: "white",
+          fontFamily: "Inter",
+        }}>{"Envío de documentos"}
+        </DialogTitle>
+        <Divider></Divider>
         <DialogContent>
           <FormularioDocumentacion onClose={handleClose}></FormularioDocumentacion>
         </DialogContent>
+        <DialogActions>
+          <Button autoFocus onPress={handleClose} radius="full">
+            Cerrar
+          </Button>
+        </DialogActions>
       </Dialog>
 
       <OneDriveViewer open={openV} onClose={handleCloseV} id_onedrive={idOnedrive} />
