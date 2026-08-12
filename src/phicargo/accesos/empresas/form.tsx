@@ -49,7 +49,13 @@ const FormEmpresa: React.FC<Props> = ({ open, handleClose }) => {
                 toast.error(response.data.message);
             }
         } catch (error: any) {
-            toast.error('Error en la solicitud: ' + error.message);
+            if (error.response?.data?.detail) {
+                toast.error(error.response.data.detail);
+            } else {
+                toast.error(
+                    "Error al conectar con el servidor: " + error.message
+                );
+            }
         }
     };
 
