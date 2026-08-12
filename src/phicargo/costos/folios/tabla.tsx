@@ -185,6 +185,7 @@ const FoliosCostosExtras = () => {
     enableGlobalFilter: true,
     enableFilters: true,
     localization: MRT_Localization_ES,
+    positionToolbarAlertBanner: "bottom",
     state: { showProgressBars: isLoading },
     enableColumnPinning: true,
     enableStickyHeader: true,
@@ -192,7 +193,7 @@ const FoliosCostosExtras = () => {
     initialState: {
       density: 'compact',
       showColumnFilters: true,
-      pagination: { pageIndex: 0, pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 100 },
     },
     muiTablePaperProps: {
       elevation: 0,
