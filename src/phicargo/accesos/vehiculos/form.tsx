@@ -82,8 +82,14 @@ const VehiculoForm: React.FC<Props> = ({
             } else {
                 toast.error(response.data.message);
             }
-        } catch (error) {
-            toast.error("Error enviando los datos: " + error);
+        } catch (error: any) {
+            if (error.response?.data?.detail) {
+                toast.error(error.response.data.detail);
+            } else {
+                toast.error(
+                    "Error al conectar con el servidor: " + error.message
+                );
+            }
         } finally {
             setLoading(false);
         }
@@ -93,6 +99,7 @@ const VehiculoForm: React.FC<Props> = ({
         <Grid container spacing={2} className="mb-5">
             <Grid item xs={12}>
                 <Button color="primary" onPress={() => handleSubmit(registrar_vehiculo)()} isLoading={isLoading} radius="full">
+                    <i className="bi bi-floppy"></i>
                     {id_vehiculo ? "Actualizar" : "Registrar"}
                 </Button>
             </Grid>
