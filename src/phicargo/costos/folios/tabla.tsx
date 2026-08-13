@@ -155,9 +155,9 @@ const FoliosCostosExtras = () => {
           const status = cell.getValue<string>() || '';
 
           return (
-            <Chip color={status === "cancelado" ? "danger" : status === "facturado" ? "success" : status === "borrador" ? "warning" : "default"} size='sm' className="text-white">
-              {status}
-            </Chip>
+            <Chip color={status === "cancelado" ? "danger" : status === "facturado" ? "success" : status === "borrador" ? "warning" : status == "confirmado" ? "primary" : "default"} size='sm' className="text-white">
+              {status.toUpperCase()}
+            </Chip >
           );
         },
       },
