@@ -73,7 +73,12 @@ const CorreosElectronicosViaje: React.FC<CorreosElectronicosViajeProps> = ({
   const enlazarCorreo = async (id_correo: number) => {
     try {
       setLoading(true);
-      const response = await odooApi.get(`/tms_travel/correos/enlazar/${id_viaje}/${id_correo}`);
+      const response = await odooApi.get(`/tms_travel/correos/enlazar/`, {
+        params: {
+          id_viaje: id_viaje as number,
+          id_correo: id_correo
+        }
+      });
       if (response.data.status == "success") {
         toast.success(response.data.message);
         getCorreosLigados();
@@ -81,8 +86,10 @@ const CorreosElectronicosViaje: React.FC<CorreosElectronicosViajeProps> = ({
       } else {
         toast.error(response.data.message);
       }
-    } catch (error) {
-      toast.error('Error al obtener los datos:' + error);
+    } catch (error: any) {
+      toast.error(
+        (error.response?.data?.detail || 'Error desconocido')
+      );
     } finally {
       setLoading(false);
     }
@@ -101,19 +108,17 @@ const CorreosElectronicosViaje: React.FC<CorreosElectronicosViajeProps> = ({
     }
   };
 
-  const desvincularCorreo = async (id_correo: number) => {
+  const desvincularCorreo = async (id: number) => {
     try {
       setLoading(true);
-      const response = await odooApi.get('/tms_travel/correos/desvincular/' + id_correo);
-      if (response.data.success == true) {
+      const response = await odooApi.delete('/tms_travel/correos/desvincular/' + id);
+      if (response.data.status == "success") {
         toast.success(response.data.message);
-      } else {
-        toast.error(response.data.message);
       }
       getCorreosLigados();
       comprobacion_correos();
-    } catch (error) {
-      console.error('Error en desvincularCorreo', error);
+    } catch (error: any) {
+      toast.error(error);
     } finally {
       setLoading(false);
     }
