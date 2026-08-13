@@ -114,7 +114,7 @@ export const useJourneyDialogs = () => {
             if (result.isConfirmed) {
                 const loadingToast = toast.loading('Reactivando viaje, espere...');
 
-                odooApi.get('/tms_travel/reactivar_viaje/' + id_viaje)
+                odooApi.patch('/tms_travel/reactivar/' + id_viaje)
                     .then(response => {
                         if (response.data.status === "success") {
                             toast.success(response.data.message, { id: loadingToast });
