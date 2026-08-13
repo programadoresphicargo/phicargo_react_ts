@@ -13,6 +13,7 @@ import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { exportToCSV } from '../../utils/export';
 import { getEstadoChip } from '../utils';
 import odooApi from '@/api/odoo-api';
+import { DateRangePicker } from "rsuite";
 
 export type CostoExtraAplicado = {
   id_tipo_costo: number | null;
@@ -55,6 +56,11 @@ export type FolioCostoExtra = {
 
 const FoliosCostosExtras = () => {
 
+  const now = new Date();
+  const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+  const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+  const [range, setRange] = useState<[Date, Date] | null>([firstDay, lastDay]);
+
   const { setCPS, setCPSEliminadas } = useCostosExtras();
 
   const [id_folio, setFolio] = useState<number | null>(null);
@@ -83,9 +89,16 @@ const FoliosCostosExtras = () => {
   };
 
   const fetchData = async () => {
+    if (!range) return;
     try {
       setLoading(true);
-      const response = await odooApi.get('/folios_costos_extras/by_store_id/' + store);
+      const response = await odooApi.get('/folios_costos_extras/store_id/' + store,
+        {
+          params: {
+            start_date: range[0].toISOString().slice(0, 10),
+            end_date: range[1].toISOString().slice(0, 10)
+          }
+        });
       setData(response.data);
       setLoading(false);
     } catch (error) {
@@ -95,7 +108,7 @@ const FoliosCostosExtras = () => {
 
   useEffect(() => {
     fetchData();
-  }, [store]);
+  }, [store, range]);
 
   const columns = useMemo(
     () => [
@@ -301,6 +314,14 @@ const FoliosCostosExtras = () => {
             <SelectItem key={'9'}>Manzanillo</SelectItem>
           </Select>
         </Box>
+
+        <DateRangePicker
+          value={range}
+          onChange={(value) => setRange(value)}
+          placeholder="Selecciona un rango de fechas"
+          format="yyyy-MM-dd"
+          loading={isLoading}
+        />
       </Box>
     ),
   });
