@@ -231,12 +231,19 @@ const FormularioCostoExtra = ({ show, handleClose, id_folio }: { show: boolean, 
                             toast.error(response.data.message);
                         } else {
                             fetchData();
-                            toast.success('El folio ha sido facturado y cerrado.');
+                            toast.success(response.data.message);
                         }
                     })
                     .catch(error => {
                         console.error('Error en la solicitud:', error);
-                        toast.error('Hubo un problema al facturar el folio.');
+
+                        const detail =
+                            error.response?.data?.detail ||
+                            error.response?.data?.message ||
+                            error.message ||
+                            'Hubo un problema al facturar el folio.';
+
+                        toast.error(detail);
                     });
             }
         });
