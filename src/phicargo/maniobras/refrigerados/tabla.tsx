@@ -3,7 +3,7 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Box from '@mui/material/Box';
 import { ManiobraProvider } from '../context/viajeContext';
 import { exportToCSV } from '../../utils/export';
@@ -38,7 +38,6 @@ const ContenedoresRefrigerados = () => {
   const [range, setRange] = useState<[Date, Date] | null>([firstDay, lastDay]);
 
   const [isLoading, setLoading] = useState(false);
-  const [selectedTab, setSelectedTab] = React.useState("carta");
   const [data, setData] = useState<Contenedor[]>([]);
 
   const [open, setOpen] = useState(false);
@@ -60,7 +59,6 @@ const ContenedoresRefrigerados = () => {
           params: {
             date_start: range[0].toISOString().slice(0, 10),
             date_end: range[1].toISOString().slice(0, 10),
-            tab: selectedTab
           }
         });
       setData(response.data);
@@ -73,7 +71,7 @@ const ContenedoresRefrigerados = () => {
 
   useEffect(() => {
     fetchData();
-  }, [range, selectedTab]);
+  }, [range]);
 
   const columns = useMemo(
     () => [
