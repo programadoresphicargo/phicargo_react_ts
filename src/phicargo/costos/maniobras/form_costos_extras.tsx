@@ -198,9 +198,9 @@ const FormularioCostoExtra = ({ show, handleClose, id_folio }: { show: boolean, 
             if (result.isConfirmed) {
                 odooApi.post(`/folios_costos_extras/confirmar/${id_folio}`)
                     .then(response => {
-                        if (response.data === 1) {
+                        if (response.data.status == "success") {
                             fetchData();
-                            toast.success('El folio ha sido confirmado.');
+                            toast.success(response.data.message);
                         }
                     })
                     .catch(error => {
