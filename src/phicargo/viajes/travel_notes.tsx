@@ -7,7 +7,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
 import odooApi from '@/api/odoo-api';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import CustomNavbar from "@/pages/CustomNavbar";
 import NavbarTravel from "./navbar_viajes";
 
 type Acceso = {
