@@ -144,7 +144,9 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, setID, vista, travel_i
                     toast.error(response.data.message);
                 }
             } catch (error) {
-                toast.error('Error al guardar:', error);
+                const detail = error.response?.data?.detail || error.message;
+
+                toast.error(`Error al guardar: ${detail}`);
             } finally {
                 setLoading(false);
                 setSaving(false);
@@ -262,11 +264,8 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, setID, vista, travel_i
                     toast.error(response.data.message);
                 }
             } catch (error) {
-                if (error.response) {
-                    toast.error("Error del servidor:" + error.response.data);
-                } else {
-                    console.error("Error de red:", error.message);
-                }
+                const detail = error.response?.data?.detail || error.message;
+                toast.error(detail);
             } finally {
                 setLoading(false);
                 setSaving(false);
