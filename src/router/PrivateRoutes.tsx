@@ -115,6 +115,7 @@ const AsignacionEquipo = lazy(() => import('../phicargo/viajes/asignacion_equipo
 const OnedriveAjustes = lazy(() => import('../phicargo/ajustes/onedrive'))
 const Checklist = lazy(() => import('../phicargo/checklist/checklist'))
 const OnedriveFiles = lazy(() => import('../phicargo/ajustes/onedrive_files.tsx'))
+const TravelNotes = lazy(() => import('../phicargo/viajes/travel_notes.tsx'))
 
 export const PrivateRoutes = () => {
   const updateAvailable = useCheckVersion();
@@ -313,6 +314,15 @@ export const PrivateRoutes = () => {
           element={
             <Suspense fallback={<LoadingPage />}>
               <EnvioMasivoViajes />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/travel_notes"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <TravelNotes></TravelNotes>
             </Suspense>
           }
         />

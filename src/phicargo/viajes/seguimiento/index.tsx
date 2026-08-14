@@ -16,6 +16,7 @@ import LlegadaTarde from "../llegada_tarde";
 import FormEquipoViaje from "./editar_equipo";
 import SeguimientoSimpleManiobra from "../estatus/maniobras/estatus_maniobras";
 import SeguimientoSimpleViaje from "../estatus/simple";
+import NotasViaje from "./notas";
 
 export default function Seguimiento() {
 
@@ -39,6 +40,16 @@ export default function Seguimiento() {
 
     const handleCloseFormViaje = () => {
         setOpenFormViaje(false);
+    };
+
+    const [openNotas, setOpenNotas] = React.useState(false);
+
+    const handleClickOpenNotas = () => {
+        setOpenNotas(true);
+    };
+
+    const handleCloseNotas = () => {
+        setOpenNotas(false);
     };
 
     return (
@@ -72,6 +83,7 @@ export default function Seguimiento() {
 
                                         <Button color="danger" onPress={() => calcular_estadia(id_viaje)} className="text-white" radius="full">Generar estadías</Button>
                                         <Button color="success" onPress={() => handleClickOpenFormViaje()} className="text-white" radius="full"><i className="bi bi-pen"></i>Editar equipo</Button>
+                                        <Button color="warning" onPress={() => handleClickOpenNotas()} className="text-white" radius="full"><i className="bi bi-pen"></i>Notas</Button>
                                     </Stack>
                                 </div>
 
@@ -254,6 +266,7 @@ export default function Seguimiento() {
 
             <PanelEnvio open={open} cerrar={handleClose} id_reporte={null}></PanelEnvio>
             <FormEquipoViaje open={openFormViaje} handleClose={handleCloseFormViaje}></FormEquipoViaje>
+            <NotasViaje open={openNotas} onClose={handleCloseNotas} id_viaje={id_viaje}></NotasViaje>
         </>
 
     );

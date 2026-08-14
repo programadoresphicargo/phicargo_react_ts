@@ -23,6 +23,7 @@ export const pages = [
    { name: 'Reporte cumplimiento por porcentaje ', path: '/cumplimiento_estatus_viajes_general' },
    { name: 'Codigos postales', path: '/codigos_postales' },
    { name: 'Eventos GPS', path: '/eventos_gps' },
+   { name: 'Notas de viaje', path: '/travel_notes' },
   ],
  },
 ];
