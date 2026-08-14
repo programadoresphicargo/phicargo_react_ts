@@ -9,14 +9,13 @@ import odooApi from '@/api/odoo-api';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import NavbarTravel from "./navbar_viajes";
 
-type Acceso = {
-  id_acceso: number;
-  empresa: string;
+type TravelNotes = {
+  note: string;
 };
 
 const TravelNotes = () => {
 
-  const [data, setData] = useState<Acceso[]>([]);
+  const [data, setData] = useState<TravelNotes[]>([]);
   const [isLoading, setLoading] = useState(false);
 
   const fetchData = async () => {
