@@ -1,6 +1,5 @@
-import { Button, Chip, Select, SelectItem } from "@heroui/react";
+import { Button } from "@heroui/react";
 import {
-  MRT_Cell,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
