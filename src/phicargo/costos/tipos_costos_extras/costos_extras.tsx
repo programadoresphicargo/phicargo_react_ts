@@ -38,7 +38,7 @@ const TiposCostosExtras = ({ }) => {
     () => [
       {
         accessorKey: 'id_tipo_costo',
-        header: 'Clave',
+        header: 'ID',
       },
       {
         accessorKey: 'descripcion',
@@ -81,6 +81,8 @@ const TiposCostosExtras = ({ }) => {
     initialState: {
       density: 'compact',
       pagination: { pageIndex: 0, pageSize: 80 },
+      showGlobalFilter: true,
+      showColumnFilters: true,
     },
     muiTablePaperProps: {
       elevation: 0,
@@ -104,8 +106,6 @@ const TiposCostosExtras = ({ }) => {
     },
     muiTableContainerProps: {
       sx: {
-        borderRadius: '8px',
-        overflow: 'hidden',
         maxHeight: 'calc(100vh - 210px)',
       },
     },
