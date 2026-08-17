@@ -130,6 +130,7 @@ const TiposCostosExtras = ({ }) => {
           flexWrap: 'wrap',
         }}
       >
+        <h1>Control de costos</h1>
         <Button color='primary' onPress={handleClickOpen} radius='full'>
           Nuevo
         </Button>

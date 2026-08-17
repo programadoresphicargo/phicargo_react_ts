@@ -86,7 +86,10 @@ const Unidad = ({ id_unidad, open, handleClose }: { id_unidad: number, open: boo
         toast.error(response.data.message);
       }
     } catch (error: any) {
-      toast.error('Error al guardar: ' + (error?.message || JSON.stringify(error)));
+      console.log("Error completo:", error);
+      console.log("Detail:", error?.response?.data?.detail);
+
+      toast.error((error?.response?.data?.detail || error?.message || 'Error desconocido'));
     } finally {
       setLoadingBaja(false);
     }
