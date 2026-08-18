@@ -579,7 +579,7 @@ const Formulariomaniobra: React.FC<Props> = ({
                     .catch(() => {
                         Swal.fire(
                             'Error',
-                            'Hubo un problema al eliminar el registro.',
+                            'Hubo un problema al finalizar el registro.',
                             'error'
                         );
                     });
