@@ -11,6 +11,8 @@ import odooApi from '@/api/odoo-api';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { Box } from '@mui/material';
+import FormularioCostoExtra from '@/phicargo/costos/maniobras/form_costos_extras';
+import { CostosExtrasProvider } from '@/phicargo/costos/context/context';
 
 type Props = {
  id: number;
@@ -27,6 +29,7 @@ export type Contenedor = {
  x_reference: string;
  carta_porte: string;
  cliente: string;
+ id_folio: number;
 };
 
 const ReeferYardForm: React.FC<Props> = ({
@@ -54,7 +57,25 @@ const ReeferYardForm: React.FC<Props> = ({
   fetchData();
  }, [id, open]);
 
- return (
+ const [modalShow, setModalShow] = useState(false);
+
+ const handleShow = () => {
+  setModalShow(true);
+ };
+
+ const handleCloseModal = () => {
+  setModalShow(false);
+ };
+
+ return (<>
+  <CostosExtrasProvider>
+   <FormularioCostoExtra
+    show={modalShow}
+    handleClose={handleCloseModal}
+    id_folio={7396}
+   />
+  </CostosExtrasProvider>
+
   <React.Fragment>
    <Dialog
     onClose={handleClose}
@@ -128,6 +149,17 @@ const ReeferYardForm: React.FC<Props> = ({
        </Typography>
       </Box>
 
+      <Box>
+       <Typography variant="caption" color="text.secondary">
+        ID Costo Extra
+       </Typography>
+       <Button onPress={handleShow} size='sm' color='primary'>
+        <Typography variant="body1" fontWeight={600}>
+         {data?.id_folio || '—'}
+        </Typography>
+       </Button>
+      </Box>
+
      </Box>
     </DialogContent>
     <DialogActions>
@@ -137,6 +169,8 @@ const ReeferYardForm: React.FC<Props> = ({
     </DialogActions>
    </Dialog>
   </React.Fragment>
+
+ </>
  );
 }
 
