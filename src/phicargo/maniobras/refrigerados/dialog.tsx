@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
@@ -7,28 +6,64 @@ import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
+import { Button, Progress } from '@heroui/react';
+import odooApi from '@/api/odoo-api';
+import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { Box } from '@mui/material';
 
 type Props = {
- idViaje: number;
+ id: number;
  open: boolean;
  handleClose: () => void;
 };
 
+export type Contenedor = {
+ id: number;
+ id_cp: number;
+ arrival_date_formatted: string;
+ stay_cutoff_date_formatted: string;
+ status: string;
+ x_reference: string;
+ carta_porte: string;
+ cliente: string;
+};
+
 const ReeferYardForm: React.FC<Props> = ({
- idViaje,
+ id,
  open,
  handleClose
 }) => {
+
+ const [isLoading, setLoading] = useState(false);
+ const [data, setData] = useState<Contenedor | null>(null);
+
+ const fetchData = async () => {
+  setLoading(true);
+  try {
+   const response = await odooApi.get(`/reefer_yard_stays/${id}`);
+   setData(response.data);
+  } catch (error) {
+   toast.error('Error al obtener los datos:' + error);
+  } finally {
+   setLoading(false);
+  }
+ };
+
+ useEffect(() => {
+  fetchData();
+ }, [id, open]);
 
  return (
   <React.Fragment>
    <Dialog
     onClose={handleClose}
-    aria-labelledby="customized-dialog-title"
     open={open}
+    maxWidth="md"
+    fullWidth
    >
     <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-     {idViaje}
+     {id}
     </DialogTitle>
     <IconButton
      aria-label="close"
@@ -42,25 +77,62 @@ const ReeferYardForm: React.FC<Props> = ({
     >
      <CloseIcon />
     </IconButton>
+    {isLoading && (
+     <Progress isIndeterminate size='sm'></Progress>
+    )}
     <DialogContent dividers>
-     <Typography gutterBottom>
-      Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-      dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac
-      consectetur ac, vestibulum at eros.
-     </Typography>
-     <Typography gutterBottom>
-      Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
-      Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
-     </Typography>
-     <Typography gutterBottom>
-      Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus
-      magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec
-      ullamcorper nulla non metus auctor fringilla.
-     </Typography>
+     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+
+      <Box>
+       <Typography variant="caption" color="text.secondary">
+        Carta porte
+       </Typography>
+       <Typography variant="body1" fontWeight={600}>
+        {data?.carta_porte || '—'}
+       </Typography>
+      </Box>
+
+      <Box>
+       <Typography variant="caption" color="text.secondary">
+        Contenedor
+       </Typography>
+       <Typography variant="body1" fontWeight={600}>
+        {data?.x_reference || '—'}
+       </Typography>
+      </Box>
+
+      <Box>
+       <Typography variant="caption" color="text.secondary">
+        Llegada a patio
+       </Typography>
+       <Typography variant="body1" fontWeight={600}>
+        {data?.arrival_date_formatted || '—'}
+       </Typography>
+      </Box>
+
+      <Box>
+       <Typography variant="caption" color="text.secondary">
+        Salida de patio
+       </Typography>
+       <Typography variant="body1" fontWeight={600}>
+        {data?.stay_cutoff_date_formatted || '—'}
+       </Typography>
+      </Box>
+
+      <Box>
+       <Typography variant="caption" color="text.secondary">
+        Estado
+       </Typography>
+       <Typography variant="body1" fontWeight={600}>
+        {data?.status || '—'}
+       </Typography>
+      </Box>
+
+     </Box>
     </DialogContent>
     <DialogActions>
-     <Button autoFocus onClick={handleClose}>
-      Save changes
+     <Button autoFocus onPress={handleClose}>
+      Cerrar
      </Button>
     </DialogActions>
    </Dialog>

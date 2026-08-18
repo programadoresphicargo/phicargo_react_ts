@@ -17,6 +17,7 @@ import ReeferYardForm from "./dialog";
 import * as React from 'react';
 
 export type Contenedor = {
+  id: number;
   id_cp: number;
   id_cliente: number;
   sucursal?: string;
@@ -99,11 +100,11 @@ const ContenedoresRefrigerados = () => {
         size: 150,
       },
       {
-        accessorKey: 'arrival_date',
+        accessorKey: 'arrival_date_formatted',
         header: 'Llegada',
       },
       {
-        accessorKey: 'stay_cutoff_date',
+        accessorKey: 'stay_cutoff_date_formatted',
         header: 'Salida',
       },
       {
@@ -159,6 +160,7 @@ const ContenedoresRefrigerados = () => {
       onClick: () => {
         if (row.subRows?.length) {
         } else {
+          if (!row.original.id) return;
           handleClickOpen();
           setDataCP(row.original);
         }
@@ -235,7 +237,7 @@ const ContenedoresRefrigerados = () => {
         <CustomNavbar pages={pages}></CustomNavbar>
         <MaterialReactTable table={table} />
         {dataCP && (
-          <ReeferYardForm open={open} handleClose={handleClose} idViaje={0} />
+          <ReeferYardForm open={open} handleClose={handleClose} id={dataCP.id} />
         )}
       </ManiobraProvider>
     </>
