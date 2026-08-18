@@ -13,7 +13,8 @@ import { DateRangePicker } from 'rsuite';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import CustomNavbar from "@/pages/CustomNavbar";
 import { pages } from '../pages';
-import RegistroManiobrasCP from "../maniobras/modal";
+import ReeferYardForm from "./dialog";
+import * as React from 'react';
 
 export type Contenedor = {
   id_cp: number;
@@ -40,25 +41,26 @@ const ContenedoresRefrigerados = () => {
   const [isLoading, setLoading] = useState(false);
   const [data, setData] = useState<Contenedor[]>([]);
 
-  const [open, setOpen] = useState(false);
-  const [dataCP, setDataCP] = useState<Contenedor | null>(null);
+  const [open, setOpen] = React.useState(false);
 
-  const handleShow = (data: Contenedor) => {
+  const handleClickOpen = () => {
     setOpen(true);
-    setDataCP(data);
+  };
+  const handleClose = () => {
+    setOpen(false);
   };
 
-  const handleClose = () => setOpen(false);
+  const [dataCP, setDataCP] = useState<Contenedor | null>(null);
 
   const fetchData = async () => {
     if (!range) return;
     setLoading(true);
     try {
-      const response = await odooApi.get('/tms_waybill/refrigerados/',
+      const response = await odooApi.get('/reefer_yard_stays/',
         {
           params: {
-            date_start: range[0].toISOString().slice(0, 10),
-            date_end: range[1].toISOString().slice(0, 10),
+            start_date: range[0].toISOString().slice(0, 10),
+            end_date: range[1].toISOString().slice(0, 10),
           }
         });
       setData(response.data);
@@ -75,10 +77,6 @@ const ContenedoresRefrigerados = () => {
 
   const columns = useMemo(
     () => [
-      {
-        accessorKey: 'sucursal',
-        header: 'Sucursal',
-      },
       {
         accessorKey: 'date_order',
         header: 'Fecha',
@@ -101,19 +99,20 @@ const ContenedoresRefrigerados = () => {
         size: 150,
       },
       {
-        accessorKey: 'categoria',
-        header: 'Categoria',
-        size: 150,
+        accessorKey: 'arrival_date',
+        header: 'Llegada',
       },
       {
-        accessorKey: 'x_modo_bel',
-        header: 'Modo',
-        size: 150,
+        accessorKey: 'stay_cutoff_date',
+        header: 'Salida',
       },
       {
-        accessorKey: 'fecha_finalizado',
-        header: 'Fecha finalizado',
-        size: 150,
+        accessorKey: 'status',
+        header: 'Estado',
+      },
+      {
+        accessorKey: 'maneuver_id',
+        header: 'Maniobra',
       },
     ],
     [],
@@ -160,7 +159,8 @@ const ContenedoresRefrigerados = () => {
       onClick: () => {
         if (row.subRows?.length) {
         } else {
-          handleShow(row.original);
+          handleClickOpen();
+          setDataCP(row.original);
         }
       },
       style: {
@@ -235,10 +235,7 @@ const ContenedoresRefrigerados = () => {
         <CustomNavbar pages={pages}></CustomNavbar>
         <MaterialReactTable table={table} />
         {dataCP && (
-          <RegistroManiobrasCP
-            show={open}
-            handleClose={handleClose}
-            data={dataCP} />
+          <ReeferYardForm open={open} handleClose={handleClose} idViaje={0} />
         )}
       </ManiobraProvider>
     </>
