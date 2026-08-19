@@ -91,6 +91,10 @@ const ContenedoresRefrigerados = () => {
         header: 'Carta porte',
       },
       {
+        accessorKey: 'x_modo_bel',
+        header: 'Modo',
+      },
+      {
         accessorKey: 'cliente',
         header: 'Cliente',
       },

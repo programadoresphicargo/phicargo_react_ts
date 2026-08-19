@@ -67,11 +67,12 @@ const ReporteOperador: React.FC<Props> = ({
         }
         try {
             setLoading(true);
-            const response = await odooApi.get(`/problemas_operadores/atender/${data?.id_reporte}`, {
-                params: {
+            const response = await odooApi.patch(
+                `/problemas_operadores/atender/${data?.id_reporte}`,
+                {
                     comentarios_monitorista: data?.comentarios_monitorista
                 }
-            });
+            );
 
             if (response.data) {
                 toast.success(response.data.message);
