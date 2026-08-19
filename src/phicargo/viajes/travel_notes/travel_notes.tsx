@@ -63,10 +63,6 @@ const TravelNotes = () => {
         accessorKey: 'fecha_creacion',
         header: 'Fecha creacion',
       },
-      {
-        accessorKey: 'note',
-        header: 'Notas',
-      },
     ],
     [],
   );
