@@ -45,7 +45,7 @@ const SaldoForm = ({ id_cuenta, referencia, onClose }: { id_cuenta: number, refe
 
         try {
             setLoading(true);
-            const response = await odooApi.patch(`/saldos/`, payload);
+            const response = await odooApi.post(`/saldos/`, payload);
             if (response.data.status === "success") {
                 toast.success(response.data.message);
                 onClose();
@@ -71,8 +71,8 @@ const SaldoForm = ({ id_cuenta, referencia, onClose }: { id_cuenta: number, refe
             const response = await odooApi.get(
                 `/saldos/fecha/${id_cuenta}/${fechaConsulta.format("YYYY-MM-DD")}`
             );
-            if (response.data && response.data.length > 0) {
-                const saldoData = response.data[0];
+            if (response.data) {
+                const saldoData = response.data;
                 reset({
                     ...saldoData,
                     fecha: saldoData.fecha ? dayjs(saldoData.fecha) : null,
