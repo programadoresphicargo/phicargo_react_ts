@@ -7,9 +7,12 @@ import { useEffect, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
 import odooApi from '@/api/odoo-api';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import NavbarTravel from "./navbar_viajes";
+import NavbarTravel from "../navbar_viajes";
+import TravelNoteDetail from "./dialog";
+import React from "react";
 
 type TravelNotes = {
+  id: number;
   note: string;
 };
 
@@ -17,6 +20,7 @@ const TravelNotes = () => {
 
   const [data, setData] = useState<TravelNotes[]>([]);
   const [isLoading, setLoading] = useState(false);
+  const [NoteId, setNoteID] = useState<number | null>(null);
 
   const fetchData = async () => {
     try {
@@ -94,6 +98,8 @@ const TravelNotes = () => {
       onClick: () => {
         if (row.subRows?.length) {
         } else {
+          setNoteID(row.original.id);
+          handleClickOpen();
         }
       },
       style: {
@@ -147,10 +153,22 @@ const TravelNotes = () => {
     ),
   });
 
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <>
       <NavbarTravel></NavbarTravel>
       <MaterialReactTable table={table} />
+      {NoteId && (
+        <TravelNoteDetail open={open} handleClose={handleClose} id={NoteId}></TravelNoteDetail>
+      )}
     </>
   );
 

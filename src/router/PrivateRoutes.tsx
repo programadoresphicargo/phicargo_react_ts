@@ -115,7 +115,7 @@ const AsignacionEquipo = lazy(() => import('../phicargo/viajes/asignacion_equipo
 const OnedriveAjustes = lazy(() => import('../phicargo/ajustes/onedrive'))
 const Checklist = lazy(() => import('../phicargo/checklist/checklist'))
 const OnedriveFiles = lazy(() => import('../phicargo/ajustes/onedrive_files.tsx'))
-const TravelNotes = lazy(() => import('../phicargo/viajes/travel_notes.tsx'))
+const TravelNotes = lazy(() => import('../phicargo/viajes/travel_notes/travel_notes.tsx'))
 const Refrigerados = lazy(() => import('../phicargo/maniobras/refrigerados/tabla.tsx'))
 
 export const PrivateRoutes = () => {
