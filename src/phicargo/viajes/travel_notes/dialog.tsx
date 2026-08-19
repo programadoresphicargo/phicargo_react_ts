@@ -1,16 +1,28 @@
 import * as React from 'react';
+import { useEffect, useState } from 'react';
+
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
+import Chip from '@mui/material/Chip';
+
+import CloseIcon from '@mui/icons-material/Close';
+import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import DirectionsCarOutlinedIcon from '@mui/icons-material/DirectionsCarOutlined';
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
+import StickyNote2OutlinedIcon from '@mui/icons-material/StickyNote2Outlined';
+
 import { Button, Progress } from '@heroui/react';
+
 import odooApi from '@/api/odoo-api';
-import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { Box } from '@mui/material';
 
 type Props = {
  id: number;
@@ -39,115 +51,320 @@ const TravelNoteDetail: React.FC<Props> = ({
 
  const fetchData = async () => {
   setLoading(true);
+
   try {
    const response = await odooApi.get(`/tms_travel/notes/${id}`);
    setData(response.data);
   } catch (error) {
-   toast.error('Error al obtener los datos:' + error);
+   toast.error('Error al obtener los datos: ' + error);
   } finally {
    setLoading(false);
   }
  };
 
  useEffect(() => {
-  fetchData();
+  if (open) {
+   fetchData();
+  }
  }, [id, open]);
 
- return (<>
-  <React.Fragment>
-   <Dialog
-    onClose={handleClose}
-    open={open}
-    maxWidth="md"
-    fullWidth
+ const InfoItem = ({
+  icon,
+  label,
+  value,
+ }: {
+  icon: React.ReactNode;
+  label: string;
+  value?: string;
+ }) => (
+  <Box
+   sx={{
+    display: 'flex',
+    alignItems: 'flex-start',
+    gap: 1.5,
+    p: 1.5,
+    borderRadius: 2,
+    backgroundColor: 'grey.50',
+    border: '1px solid',
+    borderColor: 'grey.200',
+   }}
+  >
+   <Box
+    sx={{
+     display: 'flex',
+     alignItems: 'center',
+     justifyContent: 'center',
+     width: 36,
+     height: 36,
+     borderRadius: '50%',
+     backgroundColor: 'primary.50',
+     color: 'primary.main',
+     flexShrink: 0,
+    }}
    >
-    <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-     Nota: {id}
-    </DialogTitle>
-    <IconButton
-     aria-label="close"
-     onClick={handleClose}
-     sx={(theme) => ({
-      position: 'absolute',
-      right: 8,
-      top: 8,
-      color: theme.palette.grey[500],
-     })}
+    {icon}
+   </Box>
+
+   <Box sx={{ minWidth: 0 }}>
+    <Typography
+     variant="caption"
+     color="text.secondary"
+     sx={{
+      display: 'block',
+      mb: 0.3,
+     }}
     >
-     <CloseIcon />
-    </IconButton>
-    {isLoading && (
-     <Progress isIndeterminate size='sm'></Progress>
-    )}
-    <DialogContent dividers>
-     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+     {label}
+    </Typography>
 
-      <Box>
-       <Typography variant="caption" color="text.secondary">
-        Viaje
-       </Typography>
-       <Typography variant="body1" fontWeight={600}>
-        {data?.viaje || '—'}
-       </Typography>
-      </Box>
-
-      <Box>
-       <Typography variant="caption" color="text.secondary">
-        Operador
-       </Typography>
-       <Typography variant="body1" fontWeight={600}>
-        {data?.operador || '—'}
-       </Typography>
-      </Box>
-
-      <Box>
-       <Typography variant="caption" color="text.secondary">
-        Vehiculo
-       </Typography>
-       <Typography variant="body1" fontWeight={600}>
-        {data?.vehiculo || '—'}
-       </Typography>
-      </Box>
-
-      <Box>
-       <Typography variant="caption" color="text.secondary">
-        Creado por
-       </Typography>
-       <Typography variant="body1" fontWeight={600}>
-        {data?.usuario_creacion || '—'}
-       </Typography>
-      </Box>
-
-      <Box>
-       <Typography variant="caption" color="text.secondary">
-        Fecha creacion
-       </Typography>
-       <Typography variant="body1" fontWeight={600}>
-        {data?.fecha_creacion || '—'}
-       </Typography>
-      </Box>
-
-      <Box>
-       <Typography variant="caption" color="text.secondary">
-        Nota
-       </Typography>
-       <Typography variant="body1" fontWeight={600}>
-        {data?.note || '—'}
-       </Typography>
-      </Box>
-
-     </Box>
-    </DialogContent>
-    <DialogActions>
-     <Button autoFocus onPress={handleClose}>
-      Cerrar
-     </Button>
-    </DialogActions>
-   </Dialog>
-  </React.Fragment>
-
- </>
+    <Typography
+     variant="body2"
+     fontWeight={600}
+     sx={{
+      wordBreak: 'break-word',
+     }}
+    >
+     {value || '—'}
+    </Typography>
+   </Box>
+  </Box>
  );
-}
+
+ return (
+  <Dialog
+   onClose={handleClose}
+   open={open}
+   maxWidth="md"
+   fullWidth
+   PaperProps={{
+    sx: {
+     borderRadius: 3,
+     overflow: 'hidden',
+    },
+   }}
+  >
+   {/* HEADER */}
+   <DialogTitle
+    sx={{
+     px: 3,
+     py: 2.5,
+     backgroundColor: 'grey.50',
+    }}
+   >
+    <Box
+     sx={{
+      display: 'flex',
+      alignItems: 'center',
+      gap: 1.5,
+     }}
+    >
+     <Box
+      sx={{
+       display: 'flex',
+       alignItems: 'center',
+       justifyContent: 'center',
+       width: 44,
+       height: 44,
+       borderRadius: 2,
+       backgroundColor: 'primary.main',
+       color: 'white',
+      }}
+     >
+      <StickyNote2OutlinedIcon />
+     </Box>
+
+     <Box>
+      <Typography
+       variant="h6"
+       fontWeight={700}
+      >
+       Detalle de nota
+      </Typography>
+
+      <Typography
+       variant="body2"
+       color="text.secondary"
+      >
+       Nota #{id}
+      </Typography>
+     </Box>
+    </Box>
+   </DialogTitle>
+
+   <IconButton
+    aria-label="close"
+    onClick={handleClose}
+    sx={{
+     position: 'absolute',
+     right: 12,
+     top: 12,
+     color: 'grey.500',
+     '&:hover': {
+      backgroundColor: 'grey.200',
+     },
+    }}
+   >
+    <CloseIcon />
+   </IconButton>
+
+   {/* LOADING */}
+   {isLoading && (
+    <Progress
+     isIndeterminate
+     size="sm"
+    />
+   )}
+
+   <DialogContent
+    sx={{
+     px: 3,
+     py: 3,
+    }}
+   >
+    {data && (
+     <>
+      {/* RESUMEN */}
+      <Box
+       sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        mb: 3,
+        flexWrap: 'wrap',
+        gap: 1,
+       }}
+      >
+       <Typography
+        variant="subtitle1"
+        fontWeight={700}
+       >
+        Información del viaje
+       </Typography>
+
+       <Chip
+        icon={<LocalShippingOutlinedIcon />}
+        label={data.viaje || 'Sin viaje'}
+        size="medium"
+        color="primary"
+        variant="filled"
+       />
+      </Box>
+
+      {/* INFORMACIÓN */}
+      <Box
+       sx={{
+        display: 'grid',
+        gridTemplateColumns: {
+         xs: '1fr',
+         sm: '1fr 1fr',
+        },
+        gap: 1.5,
+       }}
+      >
+       <InfoItem
+        icon={<LocalShippingOutlinedIcon fontSize="small" />}
+        label="Viaje"
+        value={data.viaje}
+       />
+
+       <InfoItem
+        icon={<PersonOutlineIcon fontSize="small" />}
+        label="Operador"
+        value={data.operador}
+       />
+
+       <InfoItem
+        icon={<DirectionsCarOutlinedIcon fontSize="small" />}
+        label="Vehículo"
+        value={data.vehiculo}
+       />
+
+       <InfoItem
+        icon={<AccountCircleOutlinedIcon fontSize="small" />}
+        label="Creado por"
+        value={data.usuario_creacion}
+       />
+
+       <InfoItem
+        icon={<CalendarTodayOutlinedIcon fontSize="small" />}
+        label="Fecha de creación"
+        value={data.fecha_creacion}
+       />
+      </Box>
+
+      <Divider sx={{ my: 3 }} />
+
+      {/* NOTA */}
+      <Box>
+       <Box
+        sx={{
+         display: 'flex',
+         alignItems: 'center',
+         gap: 1,
+         mb: 1.5,
+        }}
+       >
+        <StickyNote2OutlinedIcon
+         fontSize="small"
+         color="primary"
+        />
+
+        <Typography
+         variant="subtitle1"
+         fontWeight={700}
+        >
+         Nota
+        </Typography>
+       </Box>
+
+       <Box
+        sx={{
+         p: 2,
+         borderRadius: 2,
+         backgroundColor: 'grey.50',
+         border: '1px solid',
+         borderColor: 'grey.200',
+         minHeight: 100,
+        }}
+       >
+        <Typography
+         variant="body2"
+         color={
+          data.note
+           ? 'text.primary'
+           : 'text.secondary'
+         }
+         sx={{
+          whiteSpace: 'pre-wrap',
+          lineHeight: 1.7,
+         }}
+        >
+         {data.note || 'No hay ninguna nota registrada.'}
+        </Typography>
+       </Box>
+      </Box>
+     </>
+    )}
+   </DialogContent>
+
+   <DialogActions
+    sx={{
+     px: 3,
+     py: 2,
+     backgroundColor: 'grey.50',
+     borderTop: '1px solid',
+     borderColor: 'grey.200',
+    }}
+   >
+    <Button
+     autoFocus
+     onPress={handleClose}
+    >
+     Cerrar
+    </Button>
+   </DialogActions>
+  </Dialog>
+ );
+};
 
 export default TravelNoteDetail;
