@@ -40,6 +40,7 @@ const ReeferYardForm: React.FC<Props> = ({
 
  const [isLoading, setLoading] = useState(false);
  const [data, setData] = useState<Contenedor | null>(null);
+ const [FolioId, setFolio] = useState<number | null>(null);
 
  const fetchData = async () => {
   setLoading(true);
@@ -72,7 +73,7 @@ const ReeferYardForm: React.FC<Props> = ({
    <FormularioCostoExtra
     show={modalShow}
     handleClose={handleCloseModal}
-    id_folio={7396}
+    id_folio={FolioId}
    />
   </CostosExtrasProvider>
 
@@ -153,7 +154,14 @@ const ReeferYardForm: React.FC<Props> = ({
        <Typography variant="caption" color="text.secondary">
         ID Costo Extra
        </Typography>
-       <Button onPress={handleShow} size='sm' color='primary'>
+       <Button
+        onPress={() => {
+         setFolio(data?.id_folio ?? null);
+         handleShow();
+        }}
+        size="sm"
+        color="primary"
+       >
         <Typography variant="body1" fontWeight={600}>
          {data?.id_folio || '—'}
         </Typography>
