@@ -98,9 +98,11 @@ const DetalleForm = ({ id_evento, onClose }: { id_evento: number, onClose: () =>
         };
         odooApi.post('/comentarios_eventos/', payload)
             .then((response) => {
-                toast.success(response.data.mensaje);
-                obtenerComentarios();
-                resetComentarios({ comentario: '' });
+                if (response.data.status == "success") {
+                    toast.success(response.data.message);
+                    obtenerComentarios();
+                    resetComentarios({ comentario: '' });
+                }
             })
             .catch((error) => {
                 toast.error('Error al enviar el comentario:' + error);
