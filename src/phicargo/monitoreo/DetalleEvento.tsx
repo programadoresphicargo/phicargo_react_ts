@@ -141,15 +141,16 @@ const DetalleForm = ({ id_evento, onClose }: { id_evento: number, onClose: () =>
         setIsLoading(true);
         odooApi.patch('/eventos/' + id_evento, data)
             .then(response => {
-                toast.success("Datos enviados exitosamente.");
-                onClose();
-                setIsLoading(false);
-                console.log(response.data);
+                if (response.data.status == "success") {
+                    toast.success(response.data.message);
+                    onClose();
+                }
             })
             .catch(err => {
                 toast.error("Error al enviar los datos:" + err);
+            }).finally(() => {
                 setIsLoading(false);
-            });
+            })
     };
 
     const atenderEvento = () => {

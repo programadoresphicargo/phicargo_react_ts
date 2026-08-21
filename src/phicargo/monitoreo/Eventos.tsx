@@ -99,7 +99,8 @@ export default function PersistentDrawerRight({ id_entrega, onClose }: { id_entr
                     const value = cell.getValue<string>();
                     return (
                         <Chip
-                            className={
+                            className="text-white"
+                            color={
                                 value === "veracruz"
                                     ? "success"
                                     : value === "manzanillo"
@@ -132,7 +133,7 @@ export default function PersistentDrawerRight({ id_entrega, onClose }: { id_entr
                 size: 10,
                 Cell: ({ cell }: { cell: MRT_Cell<Evento> }) => {
                     const value = cell.getValue<string>();
-                    return <Chip className={value === "atendido" ? "success" : "default"}>{value}</Chip>;
+                    return <Chip color={value === "atendido" ? "success" : "default"} className="text-white">{value}</Chip>;
                 },
             },
         ],

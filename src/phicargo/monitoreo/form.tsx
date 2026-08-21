@@ -46,8 +46,8 @@ const EntregaForm2 = ({ id_entrega, onClose }: { id_entrega: number, onClose: ()
     const registrar_evento = async (data: Evento) => {
         try {
             const response = await odooApi.post('/eventos/', data);
-            if (response.data.mensaje) {
-                toast.success(response.data.mensaje);
+            if (response.data.status == "success") {
+                toast.success(response.data.message);
                 onClose();
             } else {
                 toast.error(response.data.mensaje);
