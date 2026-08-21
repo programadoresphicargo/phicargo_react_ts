@@ -70,12 +70,14 @@ const KMRecorridosOperadores: React.FC<Props> = ({
   if (tipo_reporte === 'operadores') {
     columnasExtra = [
       { accessorKey: 'driver', header: 'Operador' },
+      { accessorKey: 'total_unavailable_days', header: 'Días de permiso' },
     ];
   }
 
   if (tipo_reporte === 'vehiculos') {
     columnasExtra = [
       { accessorKey: 'vehicle', header: 'Vehiculo' },
+      { accessorKey: 'total_unavailable_days', header: 'Días en taller' },
     ];
   }
 
