@@ -82,7 +82,7 @@ export default function PersistentDrawerRight({ id_entrega, onClose }: { id_entr
     const getEventos = async () => {
         try {
             setLoading(true);
-            const response = await odooApi.get('/eventos/eventos_by_entrega_id/' + id_entrega);
+            const response = await odooApi.get('/eventos/entrega_id/' + id_entrega);
             setEventos(response.data);
             setLoading(false);
         } catch (error) {

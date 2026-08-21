@@ -155,17 +155,19 @@ const DetalleForm = ({ id_evento, onClose }: { id_evento: number, onClose: () =>
 
     const atenderEvento = () => {
         setIsLoading(true);
-        odooApi.get('/eventos/atender/' + id_evento)
+        odooApi.patch('/eventos/atender/' + id_evento)
             .then(response => {
-                onClose();
-                setIsLoading(false);
-                obtenerEvento();
-                console.log(response.data);
+                if (response.data.status == "success") {
+                    onClose();
+                    setIsLoading(false);
+                    obtenerEvento();
+                }
             })
             .catch(err => {
                 console.error("Error al enviar los datos:", err);
+            }).finally(() => {
                 setIsLoading(false);
-            });
+            })
     };
 
     const obtenerComentarios = () => {
