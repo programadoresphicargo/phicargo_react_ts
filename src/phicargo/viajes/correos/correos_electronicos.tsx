@@ -1,11 +1,8 @@
-import { Autocomplete, AutocompleteItem, Avatar, Card, CardBody, CardFooter, CardHeader, Progress } from "@heroui/react";
+import { Autocomplete, AutocompleteItem, Avatar, Card, CardHeader, Progress } from "@heroui/react";
 import React, { useContext, useEffect, useState } from 'react';
-import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/react";
 import { Button } from "@heroui/react";
-import { Chip } from "@heroui/react";
 import FormularioCorreoGeneral from '@/phicargo/correos_electronicos/form';
 import { Input } from "@heroui/react";
-import { User } from "@heroui/react";
 import { ViajeContext } from '../context/viajeContext';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
