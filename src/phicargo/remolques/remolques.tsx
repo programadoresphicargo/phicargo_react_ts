@@ -134,6 +134,21 @@ const Remolques: React.FC = () => {
             },
         },
         {
+            accessorKey: 'x_tipo_vehiculo',
+            header: 'Tipo de vehiculo',
+            Cell: ({ cell }) => {
+                const tipo = cell.getValue<string | undefined>();
+                if (!tipo) return null;
+
+                const color =
+                    tipo === 'local' ? 'success' :
+                        tipo === 'carretera' ? 'danger' :
+                            tipo === "local y carretera" ? "warning" : 'default';
+
+                return <Chip color={color} size="sm" className="text-white">{tipo}</Chip>;
+            },
+        },
+        {
             accessorKey: 'x_status',
             header: 'Estado',
             Cell: ({ cell }) => {

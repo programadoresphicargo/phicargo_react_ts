@@ -17,6 +17,7 @@ type Remolque = {
     x_hc_compatible: string;
     x_modalidad: string;
     x_dc_compatible: string;
+    x_tipo_vehiculo: string;
 }
 
 const initialForm: Remolque = {
@@ -24,7 +25,8 @@ const initialForm: Remolque = {
     x_tipo_carga: '',
     x_hc_compatible: '',
     x_modalidad: '',
-    x_dc_compatible: ''
+    x_dc_compatible: '',
+    x_tipo_vehiculo: ''
 };
 
 const sucursales = [
@@ -199,6 +201,32 @@ const FormularioRemolques = ({ vehicle_data, isOpen, onOpenChange }: { vehicle_d
                                         <SelectItem key={"20"}>20</SelectItem>
                                         <SelectItem key={"40"}>40</SelectItem>
                                         <SelectItem key={"20_40"}>20 40</SelectItem>
+                                    </Select>
+                                )}
+                            />
+
+                            <Controller
+                                control={control}
+                                name="x_tipo_vehiculo"
+                                render={({ field }) => (
+                                    <Select
+                                        size="sm"
+                                        label="Tipo"
+                                        placeholder="Tipo"
+                                        selectedKeys={
+                                            field.value
+                                                ? new Set([String(field.value)])
+                                                : new Set()
+                                        }
+                                        variant="bordered"
+                                        onSelectionChange={(keys) => {
+                                            const value = Array.from(keys)[0];
+                                            field.onChange(value ?? null);
+                                        }}
+                                    >
+                                        <SelectItem key={"local"}>Local</SelectItem>
+                                        <SelectItem key={"carretera"}>Carretera</SelectItem>
+                                        <SelectItem key={"local y carretera"}>Local y Carretera</SelectItem>
                                     </Select>
                                 )}
                             />
