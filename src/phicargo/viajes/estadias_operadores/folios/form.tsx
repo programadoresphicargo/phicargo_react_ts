@@ -121,49 +121,16 @@ function EstadiasOperadores({ open, handleClose, datapago }: { open: boolean, ha
         }
     };
 
-    const confirmar_pago = async () => {
+    const cambiar_estado = async (state: string) => {
         try {
             setLoadingRegistro(true);
-            toast.warning('Confirmando folio...');
-            const response = await odooApi.post(`/tms_travel/pagos_estadias_operadores/confirmar/${datapago?.id_pago}`);
+            const response = await odooApi.patch(`/tms_travel/pagos_estadias_operadores/state/${datapago?.id_pago}?state=${state}`);
             if (response.data.status === "success") {
                 toast.success(response.data.message);
                 handleClose();
             }
         } catch (error: any) {
-            toast.error('Error al confirmar el pago: ' + error.message);
-        } finally {
-            setLoadingRegistro(false);
-        }
-    };
-
-    const pagar_folio = async () => {
-        try {
-            setLoadingRegistro(true);
-            toast.warning('Cambiando estado a folio...');
-            const response = await odooApi.post(`/tms_travel/pagos_estadias_operadores/pagar/${datapago?.id_pago}`);
-            if (response.data.status === "success") {
-                toast.success(response.data.message);
-                handleClose();
-            }
-        } catch (error: any) {
-            toast.error('Error al confirmar el pago: ' + error.message);
-        } finally {
-            setLoadingRegistro(false);
-        }
-    };
-
-    const cancelar_pago = async () => {
-        try {
-            setLoadingRegistro(true);
-            toast.warning('Cancelando folio...');
-            const response = await odooApi.post(`/tms_travel/pagos_estadias_operadores/cancelar/${datapago?.id_pago}`);
-            if (response.data.status === "success") {
-                toast.success(response.data.message);
-                handleClose();
-            }
-        } catch (error: any) {
-            toast.error('Error al confirmar el pago: ' + error.message);
+            toast.error('Error al ejecutar accion: ' + error.message);
         } finally {
             setLoadingRegistro(false);
         }
@@ -225,19 +192,19 @@ function EstadiasOperadores({ open, handleClose, datapago }: { open: boolean, ha
                         )}
 
                         {datapago && estado == 'borrador' && (
-                            <Button color="danger" onPress={cancelar_pago} isLoading={isLoadingRegistro} radius="full">
+                            <Button color="danger" onPress={() => cambiar_estado("cancelar")} isLoading={isLoadingRegistro} radius="full">
                                 Cancelar pago
                             </Button>
                         )}
 
                         {datapago && estado == 'borrador' && (
-                            <Button color="warning" onPress={confirmar_pago} isLoading={isLoadingRegistro} className="text-white" radius="full">
+                            <Button color="warning" onPress={() => cambiar_estado("confirmar")} isLoading={isLoadingRegistro} className="text-white" radius="full">
                                 Confirmar pago
                             </Button>
                         )}
 
                         {estado == 'confirmado' && (
-                            <Button color="success" onPress={pagar_folio} isLoading={isLoadingRegistro} className="text-white" radius="full">
+                            <Button color="success" onPress={() => cambiar_estado("pagar")} isLoading={isLoadingRegistro} className="text-white" radius="full">
                                 Pagar
                             </Button>
                         )}
