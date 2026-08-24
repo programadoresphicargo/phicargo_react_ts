@@ -101,7 +101,6 @@ const ContenedoresRefrigerados = () => {
       {
         accessorKey: 'x_reference',
         header: 'Contenedor',
-        size: 150,
       },
       {
         accessorKey: 'arrival_date_formatted',
@@ -116,8 +115,12 @@ const ContenedoresRefrigerados = () => {
         header: 'Estado',
       },
       {
-        accessorKey: 'maneuver_id',
-        header: 'Maniobra',
+        accessorKey: 'id_folio',
+        header: 'Folio CE',
+      },
+      {
+        accessorKey: 'status_fce',
+        header: 'Estado CE',
       },
     ],
     [],

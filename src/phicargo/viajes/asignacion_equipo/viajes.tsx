@@ -291,7 +291,6 @@ const ViajesProgramados = () => {
               setStoreValue(new Set(keys as Set<string>));
             }
           }}
-          radius="full"
         >
           <SelectItem key="1">Veracruz</SelectItem>
           <SelectItem key="9">Manzanillo</SelectItem>
