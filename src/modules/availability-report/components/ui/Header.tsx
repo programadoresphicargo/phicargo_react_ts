@@ -173,21 +173,23 @@ const Header = () => {
         <div>
           <Button color='success' size='sm' className='text-white' radius='full' onPress={handleSendEmail} isDisabled={isPending}>Enviar por correo</Button>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <Controller
-              name="value"
-              control={control}
-              render={({ field }) => (
-                <NumberInput
-                  size="sm"
-                  label="Enganches"
-                  value={field.value}
-                  onValueChange={(value) => {
-                    field.onChange(value);
-                    handleSubmit(onSubmit)();
-                  }}
-                />
-              )}
-            />
+            {branchId == 1 && (
+              <Controller
+                name="value"
+                control={control}
+                render={({ field }) => (
+                  <NumberInput
+                    size="sm"
+                    label="Número enganches"
+                    value={field.value}
+                    onValueChange={(value) => {
+                      field.onChange(value);
+                      handleSubmit(onSubmit)();
+                    }}
+                  />
+                )}
+              />
+            )}
           </form>
         </div>
       </div>
