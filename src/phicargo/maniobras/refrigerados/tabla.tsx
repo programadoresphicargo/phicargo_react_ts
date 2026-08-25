@@ -103,6 +103,10 @@ const ContenedoresRefrigerados = () => {
         header: 'Contenedor',
       },
       {
+        accessorKey: 'categoria',
+        header: 'Categoría',
+      },
+      {
         accessorKey: 'arrival_date_formatted',
         header: 'Llegada',
       },
