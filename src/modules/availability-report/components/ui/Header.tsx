@@ -1,17 +1,74 @@
 import 'rsuite/dist/rsuite-no-reset.min.css';
-
 import { BackButton } from '@/components/ui';
-import { Button, Checkbox } from '@heroui/react';
+import { Button, Checkbox, NumberInput } from '@heroui/react';
 import { IndicatorCard } from '@/components/utils/IndicatorCard';
 import dayjs from 'dayjs';
 import { useGlobalContext } from '../../hook/useGlobalContext';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useRecordsQuery, useSendReportEmail } from '../../hook/useRecordsQuery';
 import DateRangePicker from 'rsuite/esm/DateRangePicker/DateRangePicker';
+import { Controller, useForm } from 'react-hook-form';
+import odooApi from '@/api/odoo-api';
+import toast from 'react-hot-toast';
+
+interface ConfigForm {
+  id: number;
+  value: number;
+}
 
 const { after } = DateRangePicker;
 
 const Header = () => {
+
+  const {
+    control,
+    handleSubmit,
+    reset,
+  } = useForm<ConfigForm>({
+    defaultValues: {
+      value: 0,
+    }
+  });
+
+  useEffect(() => {
+    const obtenerConfiguracion = async () => {
+
+      const response_one = await odooApi.get(
+        "/ir_config_parameter/key/meta_margin_veracruz"
+      );
+
+      const response = await odooApi.get(
+        `/ir_config_parameter/${response_one.data.id}`
+      );
+
+      reset(response.data);
+    };
+
+    obtenerConfiguracion();
+
+  }, [reset]);
+
+  const onSubmit = async (data: ConfigForm) => {
+    try {
+      const response = await odooApi.patch(
+        `/ir_config_parameter/${data.id}`,
+        {
+          value: data.value
+        }
+      );
+
+      if (response.data.status === "success") {
+        toast.success(response.data.message);
+      }
+
+    } catch (error: any) {
+      console.log(error.response?.data?.detail);
+      toast.error(
+        error.response?.data?.detail ?? "Ocurrió un error"
+      );
+    }
+  };
+
   const { month, setMonth, branchId, setBranchId } = useGlobalContext();
 
   const {
@@ -115,6 +172,24 @@ const Header = () => {
 
         <div>
           <Button color='success' size='sm' className='text-white' radius='full' onPress={handleSendEmail} isDisabled={isPending}>Enviar por correo</Button>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Controller
+              name="value"
+              control={control}
+              render={({ field }) => (
+                <NumberInput
+                  size="sm"
+                  label="Enganches"
+                  value={field.value}
+                  onChange={field.onChange}
+                  onBlur={() => {
+                    field.onBlur();
+                    handleSubmit(onSubmit)();
+                  }}
+                />
+              )}
+            />
+          </form>
         </div>
       </div>
     </div>
