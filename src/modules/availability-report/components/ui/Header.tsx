@@ -181,9 +181,8 @@ const Header = () => {
                   size="sm"
                   label="Enganches"
                   value={field.value}
-                  onChange={field.onChange}
-                  onBlur={() => {
-                    field.onBlur();
+                  onValueChange={(value) => {
+                    field.onChange(value);
                     handleSubmit(onSubmit)();
                   }}
                 />
