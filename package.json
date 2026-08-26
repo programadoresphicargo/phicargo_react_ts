@@ -3,6 +3,14 @@
    "private": true,
    "version": "0.0.0",
    "type": "module",
+   "pnpm": {
+      "onlyBuiltDependencies": [
+         "@sentry/cli",
+         "@swc/core",
+         "core-js",
+         "esbuild"
+      ]
+   },
    "scripts": {
       "dev": "vite",
       "build": "tsc -b && vite build",
