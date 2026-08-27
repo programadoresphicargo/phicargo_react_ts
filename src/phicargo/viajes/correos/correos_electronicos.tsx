@@ -164,7 +164,7 @@ const CorreosElectronicosViaje: React.FC<CorreosElectronicosViajeProps> = ({
             color: "white",
             fontFamily: "Inter",
           }}>
-          Destinatarios
+          Correos electrónicos
         </DialogTitle>
 
         <DialogContent dividers>
