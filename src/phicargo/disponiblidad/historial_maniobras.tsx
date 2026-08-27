@@ -114,7 +114,7 @@ const HistorialManiobrasVehiculo = ({ vehicle_id }: { vehicle_id: number }) => {
             density: 'compact',
             pagination: { pageIndex: 0, pageSize: 80 },
         },
-        state: { isLoading: isLoading },
+        state: { showProgressBars: isLoading },
         muiTableHeadCellProps: {
             sx: {
                 fontFamily: 'Inter',

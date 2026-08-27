@@ -13,7 +13,7 @@ export const FleetVehicleDetails = ({ vehicle }: Props) => {
   return (
     <>
       <Tabs aria-label="Options" color="primary">
-        <Tab key="viajes" title="Viajes" disabled={true}>
+        <Tab key="viajes" title="Viajes">
           <Card>
             <CardBody>
               <ViajeProvider>

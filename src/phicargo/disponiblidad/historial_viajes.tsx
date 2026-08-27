@@ -56,27 +56,22 @@ const HistorialViajesVehiculo = ({ vehicle_id }: { vehicle_id: number }) => {
             {
                 accessorKey: 'nombre_operador',
                 header: 'Operador',
-                size: 150,
             },
             {
                 accessorKey: 'fecha_finalizado',
                 header: 'Fecha finalizado',
-                size: 150,
             },
             {
                 accessorKey: 'cartas_porte',
                 header: 'Cartas porte',
-                size: 150,
             },
             {
                 accessorKey: 'contenedores_ids',
                 header: 'Contenedor',
-                size: 150,
             },
             {
                 accessorKey: 'nombre_cliente',
                 header: 'Cliente',
-                size: 150,
             },
         ],
         [],
@@ -92,7 +87,7 @@ const HistorialViajesVehiculo = ({ vehicle_id }: { vehicle_id: number }) => {
             density: 'compact',
             pagination: { pageIndex: 0, pageSize: 80 },
         },
-        state: { isLoading: isLoading },
+        state: { showProgressBars: isLoading },
         muiTableHeadCellProps: {
             sx: {
                 fontFamily: 'Inter',
