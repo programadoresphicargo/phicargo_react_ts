@@ -30,6 +30,9 @@ export type Contenedor = {
  carta_porte: string;
  cliente: string;
  id_folio: number;
+ diferencia: string;
+ dias: number;
+ horas: number;
 };
 
 const ReeferYardForm: React.FC<Props> = ({
@@ -138,6 +141,24 @@ const ReeferYardForm: React.FC<Props> = ({
        </Typography>
        <Typography variant="body1" fontWeight={600}>
         {data?.stay_cutoff_date_formatted || '—'}
+       </Typography>
+      </Box>
+
+      <Box>
+       <Typography variant="caption" color="text.secondary">
+        Días
+       </Typography>
+       <Typography variant="body1" fontWeight={600}>
+        {data?.dias || '—'}
+       </Typography>
+      </Box>
+
+      <Box>
+       <Typography variant="caption" color="text.secondary">
+        Horas
+       </Typography>
+       <Typography variant="body1" fontWeight={600}>
+        {data?.horas || '—'}
        </Typography>
       </Box>
 
