@@ -8,8 +8,8 @@ import { useMemo } from 'react';
 import { useRecordsQuery, useSendReportEmail } from '../../hook/useRecordsQuery';
 import DateRangePicker from 'rsuite/esm/DateRangePicker/DateRangePicker';
 import React from 'react';
-import EnganchesDialog from './dialog';
 import { useAuthContext } from '@/modules/auth/hooks';
+import EnganchesDialog from './dialog';
 
 const { after } = DateRangePicker;
 
