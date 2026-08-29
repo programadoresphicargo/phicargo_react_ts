@@ -1,4 +1,4 @@
-type Mail = {
+export type Mail = {
   create_date: string;
   usuario: string;
   body: string;
