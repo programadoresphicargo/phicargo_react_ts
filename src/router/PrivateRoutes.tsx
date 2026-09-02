@@ -117,6 +117,7 @@ const Checklist = lazy(() => import('../phicargo/checklist/checklist'))
 const OnedriveFiles = lazy(() => import('../phicargo/ajustes/onedrive_files.tsx'))
 const TravelNotes = lazy(() => import('../phicargo/viajes/travel_notes/travel_notes.tsx'))
 const Refrigerados = lazy(() => import('../phicargo/maniobras/refrigerados/tabla.tsx'))
+const ChecklistRecepcionEntrega = lazy(() => import('../phicargo/checklist_recepcion_entrega/table.tsx'))
 
 export const PrivateRoutes = () => {
   const updateAvailable = useCheckVersion();
@@ -642,6 +643,16 @@ export const PrivateRoutes = () => {
           element={
             <Suspense fallback={<LoadingPage />}>
               <Refrigerados></Refrigerados>
+            </Suspense>
+          }
+        />
+
+
+        <Route
+          path="/checklist_recepcion_entrega"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <ChecklistRecepcionEntrega></ChecklistRecepcionEntrega>
             </Suspense>
           }
         />

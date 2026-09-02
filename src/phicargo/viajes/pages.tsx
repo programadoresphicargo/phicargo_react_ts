@@ -24,6 +24,7 @@ export const pages = [
    { name: 'Codigos postales', path: '/codigos_postales' },
    { name: 'Eventos GPS', path: '/eventos_gps' },
    { name: 'Notas de viaje', path: '/travel_notes' },
+   { name: 'Checklist Recepción-Entrega', path: '/checklist_recepcion_entrega' },
   ],
  },
 ];
