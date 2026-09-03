@@ -57,7 +57,7 @@ const Checklist = () => {
     },
     { accessorKey: 'modelo', header: 'Modelo' },
     { accessorKey: 'usuario_creacion', header: 'Usuario creacion' },
-    { accessorKey: 'created_at', header: 'Fecha creacion' },
+    { accessorKey: 'date', header: 'Fecha creación' },
     {
       accessorKey: 'onedrive_folder_url',
       id: 'evidencias',
