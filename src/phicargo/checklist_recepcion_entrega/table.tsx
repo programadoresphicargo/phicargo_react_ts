@@ -38,6 +38,10 @@ const Checklist = () => {
     window.open(url, "_blank");
   };
 
+  const OpenOndrive = async (url: string) => {
+    window.open(url, "_blank");
+  };
+
   const columns: MRT_ColumnDef<ChecklistItem>[] = [
     { accessorKey: 'id', header: 'ID' },
     {
@@ -54,6 +58,20 @@ const Checklist = () => {
     { accessorKey: 'modelo', header: 'Modelo' },
     { accessorKey: 'usuario_creacion', header: 'Usuario creacion' },
     { accessorKey: 'created_at', header: 'Fecha creacion' },
+    {
+      accessorKey: 'onedrive_folder_url',
+      id: 'evidencias',
+      header: 'Evidencias',
+      Cell: ({ cell }: { cell: MRT_Cell<ChecklistItem> }) => {
+        const url = cell.getValue<string>();
+        return (
+          <Button className="text-white" size="sm" color="success" radius="full" onPress={() => OpenOndrive(url)}>
+            <i className="bi bi-images"></i>
+            Evidencias
+          </Button>
+        );
+      },
+    },
     {
       accessorKey: 'id',
       id: 'descargar',
@@ -102,7 +120,7 @@ const Checklist = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 210px)',
+        maxHeight: 'calc(100vh - 200px)',
       },
     },
     muiTableBodyCellProps: ({ row }) => ({
