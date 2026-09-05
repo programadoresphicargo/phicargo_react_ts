@@ -49,7 +49,7 @@ const TravelNotes = () => {
         header: 'Folio',
       },
       {
-        accessorKey: 'usuario_creacion',
+        accessorKey: 'usuario_creacion_nota',
         header: 'Usuario creacion',
       },
       {
