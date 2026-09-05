@@ -16,7 +16,7 @@ import LlegadaTarde from "../llegada_tarde";
 import FormEquipoViaje from "./editar_equipo";
 import SeguimientoSimpleManiobra from "../estatus/maniobras/estatus_maniobras";
 import SeguimientoSimpleViaje from "../estatus/simple";
-import NotasViaje from "./notas";
+import Notas from "./notas";
 
 export default function Seguimiento() {
 
@@ -266,7 +266,7 @@ export default function Seguimiento() {
 
             <PanelEnvio open={open} cerrar={handleClose} id_reporte={null}></PanelEnvio>
             <FormEquipoViaje open={openFormViaje} handleClose={handleCloseFormViaje}></FormEquipoViaje>
-            <NotasViaje open={openNotas} onClose={handleCloseNotas} id_viaje={id_viaje}></NotasViaje>
+            <Notas open={openNotas} onClose={handleCloseNotas} origen_id={id_viaje} model="tms_travel"></Notas>
         </>
 
     );

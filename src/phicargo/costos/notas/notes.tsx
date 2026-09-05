@@ -7,9 +7,10 @@ import { useEffect, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
 import odooApi from '@/api/odoo-api';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import NavbarTravel from "../navbar_viajes";
 import TravelNoteDetail from "./dialog";
 import React from "react";
+import CustomNavbar from "@/pages/CustomNavbar";
+import { pages } from '../folios/pages';
 
 type TravelNotes = {
   id: number;
@@ -25,7 +26,7 @@ const TravelNotes = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await odooApi.get('/notes/tms_travel/');
+      const response = await odooApi.get('/notes/costos_extras/');
       setData(response.data);
       setLoading(false);
     } catch (error) {
@@ -44,16 +45,8 @@ const TravelNotes = () => {
         header: 'ID',
       },
       {
-        accessorKey: 'viaje',
-        header: 'Viaje',
-      },
-      {
-        accessorKey: 'operador',
-        header: 'Operador',
-      },
-      {
-        accessorKey: 'vehiculo',
-        header: 'Vehiculo',
+        accessorKey: 'id_folio',
+        header: 'Folio',
       },
       {
         accessorKey: 'usuario_creacion',
@@ -133,7 +126,7 @@ const TravelNotes = () => {
         <h2
           className="font-semibold lg:text-2xl text-primary"
         >
-          Notas de viaje
+          Notas Costos Extras
         </h2>
         <Button
           radius="full"
@@ -160,7 +153,7 @@ const TravelNotes = () => {
 
   return (
     <>
-      <NavbarTravel></NavbarTravel>
+      <CustomNavbar pages={pages}></CustomNavbar>
       <MaterialReactTable table={table} />
       {NoteId && (
         <TravelNoteDetail open={open} handleClose={handleClose} id={NoteId}></TravelNoteDetail>

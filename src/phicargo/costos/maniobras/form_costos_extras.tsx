@@ -23,6 +23,8 @@ import { FolioCostoExtra } from "../folios/tabla";
 import { useFieldArray, useForm } from "react-hook-form";
 import FormCE from "./facturas/form";
 import TimeLineCE from "./linea_tiempo";
+import React from "react";
+import Notas from "@/phicargo/viajes/seguimiento/notas";
 const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
 const initialForm: FolioCostoExtra = {
@@ -249,9 +251,22 @@ const FormularioCostoExtra = ({ show, handleClose, id_folio }: { show: boolean, 
         });
     }
 
+    const [openNotas, setOpenNotas] = React.useState(false);
+
+    const handleClickOpenNotas = () => {
+        setOpenNotas(true);
+    };
+
+    const handleCloseNotas = () => {
+        setOpenNotas(false);
+    };
 
     return (
         <>
+            {id_folio && (
+                <Notas open={openNotas} onClose={handleCloseNotas} origen_id={id_folio} model="folios_costos_extras"></Notas>
+            )}
+            
             <Dialog
                 fullScreen
                 open={show}
@@ -294,26 +309,26 @@ const FormularioCostoExtra = ({ show, handleClose, id_folio }: { show: boolean, 
 
                                         {session?.user?.permissions?.includes(151) &&
                                             (status === "borrador" || status === "confirmado") && (
-                                                <Button color="danger" onPress={openCancelDialog} startContent={<i className="bi bi-x-circle"></i>} radius="full">
+                                                <Button color="danger" onPress={openCancelDialog} startContent={<i className="bi bi-x-circle"></i>} radius="full" size="sm">
                                                     Cancelar
                                                 </Button>
                                             )
                                         }
 
                                         {status === 'borrador' && (
-                                            <Button color="success" onPress={confirmar_folio} className='text-white' startContent={<i className="bi bi-check-lg"></i>} radius="full">
+                                            <Button color="success" onPress={confirmar_folio} className='text-white' startContent={<i className="bi bi-check-lg"></i>} radius="full" size="sm">
                                                 Confirmar
                                             </Button>
                                         )}
 
                                         {status === 'confirmado' && (
-                                            <Button color="success" onPress={facturar_folio} className='text-white' radius="full">
+                                            <Button color="success" onPress={facturar_folio} className='text-white' radius="full" size="sm">
                                                 Facturar
                                             </Button>
                                         )}
 
                                         {(status === "borrador" || status === 'confirmado') && !isEditing && (
-                                            <Button color="primary" onPress={() => editar_registro()} startContent={<i className="bi bi-pen"></i>} radius="full">
+                                            <Button color="primary" onPress={() => editar_registro()} startContent={<i className="bi bi-pen"></i>} radius="full" size="sm">
                                                 Editar
                                             </Button>
                                         )}
@@ -326,22 +341,25 @@ const FormularioCostoExtra = ({ show, handleClose, id_folio }: { show: boolean, 
                                                 startContent={<i className="bi bi-floppy"></i>}
                                                 onPress={() => handleSubmit(actualizar_folio)()}
                                                 isLoading={Loading}
+                                                size="sm"
                                             >
                                                 Guardar cambios
                                             </Button>
                                         )}
 
                                         {id_folio != null && (
-                                            <Button radius="full" color="danger" startContent={<i className="bi bi-filetype-pdf"></i>} showAnchorIcon href={`${apiUrl}/tms_travel/estadias/cortes/?id_folio=${id_folio}`} as={Link} isExternal={true}>
+                                            <Button radius="full" color="danger" startContent={<i className="bi bi-filetype-pdf"></i>} showAnchorIcon href={`${apiUrl}/tms_travel/estadias/cortes/?id_folio=${id_folio}`} as={Link} isExternal={true} size="sm">
                                                 Cortes estadías PDF
                                             </Button>
                                         )}
 
                                         {id_folio != null && (
-                                            <Button radius="full" color="success" startContent={<i className="bi bi-filetype-pdf"></i>} className="text-white" onPress={() => setOpen(true)}>
+                                            <Button radius="full" color="success" startContent={<i className="bi bi-filetype-pdf"></i>} className="text-white" onPress={() => setOpen(true)} size="sm">
                                                 Adjuntos
                                             </Button>
                                         )}
+
+                                        <Button className="text-white" color="warning" radius="full" size="sm" onPress={handleClickOpenNotas}>Notas</Button>
 
                                     </Stack>
                                 </CardBody>

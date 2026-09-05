@@ -53,7 +53,7 @@ const TravelNoteDetail: React.FC<Props> = ({
   setLoading(true);
 
   try {
-   const response = await odooApi.get(`/tms_travel/notes/${id}`);
+   const response = await odooApi.get(`/notes/tms_travel/${id}`);
    setData(response.data);
   } catch (error) {
    toast.error('Error al obtener los datos: ' + error);

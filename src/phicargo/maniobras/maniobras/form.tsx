@@ -40,6 +40,7 @@ import { Flota, OptionFlota } from './tipado';
 import { PosturasForm } from '@/modules/vehicles/components/PosturasForm';
 import { AutocompleteInput } from '@/components/inputs';
 import { SelectItem } from '@/types';
+import Notas from '@/phicargo/viajes/seguimiento/notas';
 
 const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
@@ -617,6 +618,16 @@ const Formulariomaniobra: React.FC<Props> = ({
         setPosturas(false);
     };
 
+    const [openNotas, setOpenNotas] = React.useState(false);
+
+    const handleClickOpenNotas = () => {
+        setOpenNotas(true);
+    };
+
+    const handleCloseNotas = () => {
+        setOpenNotas(false);
+    };
+
     return (
         <>
             {id_maniobra && (
@@ -626,6 +637,10 @@ const Formulariomaniobra: React.FC<Props> = ({
             <CorreosLigadosManiobra open={openCL} handleClose={handleCloseCL} id_cliente={dataCP?.id_cliente}></CorreosLigadosManiobra>
 
             <PosturasForm open={openPosturas} handleClose={handleClosePosturas}></PosturasForm>
+
+            {id_maniobra && (
+                <Notas open={openNotas} onClose={handleCloseNotas} origen_id={id_maniobra} model="maniobras"></Notas>
+            )}
 
             {id_maniobra && (
                 <CancelarManiobraDialog
@@ -734,6 +749,7 @@ const Formulariomaniobra: React.FC<Props> = ({
                                                     Formato de entrega
                                                 </Button>)}
                                             <Button color='secondary' radius='full' size='sm' onPress={handleClickOpenPosturas}>Posturas</Button>
+                                            <Button color="warning" radius='full' size='sm' onPress={handleClickOpenNotas} className='text-white'>Notas</Button>
                                         </Stack>
                                     </Grid>
 

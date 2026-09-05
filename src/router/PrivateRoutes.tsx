@@ -61,6 +61,9 @@ const FoliosCostosExtras = lazy(
 const TiposCostosExtras = lazy(
   () => import('../phicargo/costos/tipos_costos_extras/costos_extras'),
 );
+const NotasFoliosCostosExtras = lazy(
+  () => import('../phicargo/costos/notas/notes.tsx'),
+);
 const PagosEstadiasOperadores = lazy(
   () => import('../phicargo/viajes/estadias_operadores/folios/folios'),
 );
@@ -653,6 +656,16 @@ export const PrivateRoutes = () => {
           element={
             <Suspense fallback={<LoadingPage />}>
               <ChecklistRecepcionEntrega></ChecklistRecepcionEntrega>
+            </Suspense>
+          }
+        />
+
+
+        <Route
+          path="/notas_folios_costos_extras"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <NotasFoliosCostosExtras></NotasFoliosCostosExtras>
             </Suspense>
           }
         />
