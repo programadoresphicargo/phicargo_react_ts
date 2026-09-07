@@ -241,7 +241,7 @@ const TravelNoteDetail: React.FC<Props> = ({
 
               <Chip
                 icon={<LocalShippingOutlinedIcon />}
-                label={data.viaje || 'Sin viaje'}
+                label={data.id_maniobra || 'Sin maniobra'}
                 size="medium"
                 color="primary"
                 variant="filled"
