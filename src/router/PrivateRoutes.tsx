@@ -22,6 +22,9 @@ import { useCheckVersion } from '@/useCheckVersion';
 const CartasPorte = lazy(
   () => import('../phicargo/maniobras/tms_waybill/cartas_porte'),
 );
+const NotasManiobras = lazy(
+  () => import('../phicargo/maniobras/notas/notes.tsx'),
+);
 const ContenedoresPendientes = lazy(
   () => import('../phicargo/maniobras/tms_waybill/pendientes'),
 );
@@ -666,6 +669,15 @@ export const PrivateRoutes = () => {
           element={
             <Suspense fallback={<LoadingPage />}>
               <NotasFoliosCostosExtras></NotasFoliosCostosExtras>
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/notas_maniobras"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <NotasManiobras></NotasManiobras>
             </Suspense>
           }
         />

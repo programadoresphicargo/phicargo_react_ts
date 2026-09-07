@@ -12,6 +12,7 @@ export const pages = [
   ],
  },
  { name: 'Terminales', path: '/terminales' },
+ { name: 'Notas', path: '/notas_maniobras' },
  {
   name: 'Reportes',
   subpages: [
