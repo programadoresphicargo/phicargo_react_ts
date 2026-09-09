@@ -1,4 +1,6 @@
-import { Autocomplete, AutocompleteItem } from "@heroui/react";
+import odooApi from "@/api/odoo-api";
+import { Alert, Autocomplete, AutocompleteItem } from "@heroui/react";
+import { motion } from "framer-motion";
 import { useEffect, useState } from 'react';
 
 type OptionFlota = {
@@ -38,6 +40,7 @@ const SelectFlota: React.FC<Props> = ({
 }) => {
 
     const [filteredOptions, setFilteredOptions] = useState<OptionFlota[]>([]);
+    const [isMaintenance, setIsMaintenance] = useState<boolean>(false);
 
     useEffect(() => {
         if (!filtroActivo) {
@@ -59,22 +62,61 @@ const SelectFlota: React.FC<Props> = ({
         setFilteredOptions(filtrados);
     }, [filtroActivo, options, modalidad, tipoCarga]);
 
-    return (
-        <Autocomplete
-            label={label}
-            isLoading={isLoading}
-            id={id}
-            name={name}
-            isReadOnly={disabled}
-            defaultItems={filteredOptions}
-            variant={disabled ? 'flat' : 'bordered'}
-            selectedKey={String(value)}
-            onSelectionChange={(key) =>
-                onChange(key ? Number(key) : null)
+    const getMaintenanceRecord = async (id: number) => {
+        try {
+            const response = await odooApi.get(`/maintenance-record/vehicle_id/${id}`);
+            if (response.data != null) {
+                setIsMaintenance(true);
             }
-        >
-            {(item) => <AutocompleteItem key={item.key}>{item.label}</AutocompleteItem>}
-        </Autocomplete>
+        } catch (error) {
+            setIsMaintenance(false);
+        }
+    };
+
+    return (
+        <>
+            <Autocomplete
+                label={label}
+                isLoading={isLoading}
+                id={id}
+                name={name}
+                isReadOnly={disabled}
+                defaultItems={filteredOptions}
+                variant={disabled ? 'flat' : 'bordered'}
+                selectedKey={String(value)}
+                onSelectionChange={(key) => {
+                    const vehicleId = key ? Number(key) : null;
+
+                    onChange(vehicleId);
+
+                    if (vehicleId) {
+                        getMaintenanceRecord(vehicleId);
+                    } else {
+                        setIsMaintenance(false);
+                    }
+                }
+                }
+            >
+                {(item) => <AutocompleteItem key={item.key}>{item.label}</AutocompleteItem>}
+            </Autocomplete >
+            {isMaintenance && (
+                <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.3 }}
+                >
+                    <Alert
+                        color="danger"
+                        variant="solid"
+                        className="mt-2"
+                        description="Equipo con reporte de mantenimiento pendiente de atención."
+                        title="Precaución"
+                    />
+                </motion.div>
+            )
+            }
+        </>
     );
 };
 
