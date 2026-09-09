@@ -665,6 +665,8 @@ const Formulariomaniobra: React.FC<Props> = ({
 
                 if (valor !== null && valor !== undefined) {
                     getMaintenanceRecord(valor);
+                } else {
+                    setIsMaintenance(false);
                 }
             }
         });
