@@ -1,7 +1,7 @@
-import { Autocomplete, AutocompleteItem } from '@heroui/react';
+import { Alert, Autocomplete, AutocompleteItem } from '@heroui/react';
 import { Card, CardBody, Link } from "@heroui/react";
 import { CardHeader, Divider, User } from "@heroui/react";
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Textarea } from "@heroui/react";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -34,13 +34,14 @@ import { parseDateTime, getLocalTimeZone } from "@internationalized/date";
 import { reactivarManiobra, registrarManiobra, actualizarManiobra } from './services/maniobras.service';
 import { useAuthContext } from '@/modules/auth/hooks';
 import { TransitionProps } from '@mui/material/transitions';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import HistorialCambios from '@/phicargo/almacen/solicitud/cambios/epps';
 import { Flota, OptionFlota } from './tipado';
 import { PosturasForm } from '@/modules/vehicles/components/PosturasForm';
 import { AutocompleteInput } from '@/components/inputs';
 import { SelectItem } from '@/types';
 import Notas from '@/phicargo/viajes/seguimiento/notas';
+import { motion } from 'framer-motion';
 
 const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
@@ -628,6 +629,49 @@ const Formulariomaniobra: React.FC<Props> = ({
         setOpenNotas(false);
     };
 
+    const [isMaintenance, setIsMaintenance] = useState<boolean>(false);
+
+    const valores = useWatch({
+        control,
+        name: ["vehicle_id"],
+    });
+
+    const valoresAnteriores = useRef(valores);
+
+    const getMaintenanceRecord = async (id: number) => {
+        try {
+            const response = await odooApi.get(`/maintenance-record/vehicle_id/${id}`);
+            if (response.data != null) {
+                setIsMaintenance(true);
+            }
+        } catch (error) {
+            toast.error("Error al cargar datos" + error);
+            setIsMaintenance(false);
+        }
+    };
+
+    useEffect(() => {
+        const nombres = [
+            "vehicle_id",
+        ];
+
+        valores.forEach((valor, index) => {
+            const anterior = valoresAnteriores.current[index];
+
+            if (valor !== anterior) {
+                console.log("Campo cambiado:", nombres[index]);
+                console.log("Valor anterior:", anterior);
+                console.log("Nuevo valor:", valor);
+
+                if (valor !== null && valor !== undefined) {
+                    getMaintenanceRecord(valor);
+                }
+            }
+        });
+
+        valoresAnteriores.current = valores;
+    }, [valores]);
+
     return (
         <>
             {id_maniobra && (
@@ -882,6 +926,22 @@ const Formulariomaniobra: React.FC<Props> = ({
                                                             size="md"
                                                             rules={{ required: 'Campo obligatorio' }}
                                                         />
+                                                        {isMaintenance && (
+                                                            <motion.div
+                                                                initial={{ opacity: 0, y: -10 }}
+                                                                animate={{ opacity: 1, y: 0 }}
+                                                                exit={{ opacity: 0, y: -10 }}
+                                                                transition={{ duration: 0.3 }}
+                                                            >
+                                                                <Alert
+                                                                    color="danger"
+                                                                    variant="solid"
+                                                                    className="mt-2"
+                                                                    description="Equipo con reporte de mantenimiento pendiente de atención."
+                                                                    title="Precaución"
+                                                                />
+                                                            </motion.div>
+                                                        )}
                                                     </Grid>
                                                     <Grid size={{ xs: 12, md: 4 }}>
                                                         <Controller
