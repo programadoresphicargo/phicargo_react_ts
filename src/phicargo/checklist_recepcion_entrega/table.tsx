@@ -55,8 +55,9 @@ const Checklist = () => {
         );
       },
     },
+    { accessorKey: 'operador', header: 'Operador' },
     { accessorKey: 'modelo', header: 'Modelo' },
-    { accessorKey: 'usuario_creacion', header: 'Usuario creacion' },
+    { accessorKey: 'usuario_creacion', header: 'Usuario creación' },
     { accessorKey: 'date', header: 'Fecha creación' },
     {
       accessorKey: 'onedrive_folder_url',
