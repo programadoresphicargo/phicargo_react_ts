@@ -112,7 +112,7 @@ export const VehicleHistory = ({ record }: Props) => {
               {data.travels.length > 0 ? (
                 data.travels.map((travel) => (
                   <div
-                    key={travel.referencia}
+                    key={travel.name}
                     className="
               rounded-xl
               border border-default-200
