@@ -12,7 +12,7 @@ interface Props {
 }
 
 interface Travel {
-  referencia: string;
+  operador: string;
   fecha_finalizado: string;
   name: string;
   x_status_viaje: string;
@@ -126,11 +126,11 @@ export const VehicleHistory = ({ record }: Props) => {
                     <div className="flex items-start justify-between">
                       <div>
                         <p className="font-semibold text-default-900">
-                          {travel.referencia}
+                          {travel.name}
                         </p>
 
                         <p className="mt-1 text-sm text-default-500">
-                          {travel.name}
+                          {travel.operador}
                         </p>
                       </div>
 
