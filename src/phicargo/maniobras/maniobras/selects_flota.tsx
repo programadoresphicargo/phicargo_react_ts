@@ -64,7 +64,7 @@ const SelectFlota: React.FC<Props> = ({
 
     const getMaintenanceRecord = async (id: number) => {
         try {
-            const response = await odooApi.get(`/maintenance-record/vehicle_id/${id}`);
+            const response = await odooApi.get(`/maintenance-record/vehicle_id/${id}?statuses=draft`);
             if (response.data != null) {
                 setIsMaintenance(true);
             }
