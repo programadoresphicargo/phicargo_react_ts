@@ -58,7 +58,7 @@ export const VehicleHistory = ({ record }: Props) => {
         classNames={{
           base: 'shadow-none',
           header: 'bg-gray-100 px-4 py-1',
-          body: 'overflow-y-auto h-72',
+          body: 'overflow-y-auto',
         }}
         radius="md"
       >
@@ -74,7 +74,7 @@ export const VehicleHistory = ({ record }: Props) => {
       classNames={{
         base: 'shadow-none',
         header: 'bg-gray-100 px-4 py-1',
-        body: 'overflow-y-auto h-72',
+        body: 'overflow-y-auto',
       }}
       radius="md"
     >
