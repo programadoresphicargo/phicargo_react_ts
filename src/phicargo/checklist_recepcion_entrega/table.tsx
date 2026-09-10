@@ -57,6 +57,18 @@ const Checklist = () => {
     },
     { accessorKey: 'operador', header: 'Operador' },
     { accessorKey: 'modelo', header: 'Modelo' },
+    {
+      accessorKey: 'type', header: 'Tipo de checklist',
+      Cell: ({ cell }: { cell: MRT_Cell<ChecklistItem> }) => {
+        const value = cell.getValue<string>() || '';
+        if (!value) return;
+        return (
+          <Chip className="text-white" size="sm" color={value == "recepcion" ? "primary" : "success"} radius="full">
+            {value.toUpperCase()}
+          </Chip >
+        );
+      },
+    },
     { accessorKey: 'usuario_creacion', header: 'Usuario creación' },
     { accessorKey: 'date', header: 'Fecha creación' },
     {
