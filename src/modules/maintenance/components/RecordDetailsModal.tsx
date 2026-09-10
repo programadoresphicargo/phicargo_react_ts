@@ -14,6 +14,7 @@ import { useState } from 'react';
 import { Button } from '@heroui/react';
 import ConfirmDialog from './ConfirmDialog';
 import odooApi from '@/api/odoo-api';
+import { VehicleHistory } from './history/history';
 
 interface RegisterDetailForm {
   comment: string;
@@ -62,6 +63,7 @@ export const RecordDetailsModal = ({ open, onClose, record }: Props) => {
         open={open}
         onClose={onClose}
         maxWidth="xl"
+        fullWidth
         header={
           <>
             <h2 className="uppercase font-thin">
@@ -133,6 +135,9 @@ export const RecordDetailsModal = ({ open, onClose, record }: Props) => {
           </Tab>
           <Tab key="update-comments" title="Actualización">
             <RecordComments record={record} type="update" />
+          </Tab>
+          <Tab key="vehicle-history" title="Historial de usos">
+            <VehicleHistory record={record} />
           </Tab>
         </Tabs>
       </MuiModal>
