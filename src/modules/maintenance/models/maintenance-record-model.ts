@@ -18,6 +18,7 @@ export interface VehicleInfo {
   vehicle_type_id: number | null;
   model_year: string | null;
   brand: string | null;
+  state_id: number
 }
 
 export interface MaintenanceRecordBase {

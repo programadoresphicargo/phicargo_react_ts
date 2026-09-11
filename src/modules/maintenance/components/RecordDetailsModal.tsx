@@ -15,6 +15,7 @@ import { Button } from '@heroui/react';
 import ConfirmDialog from './ConfirmDialog';
 import odooApi from '@/api/odoo-api';
 import { VehicleHistory } from './history/history';
+import BlockVehicleDialog from './block-vehicle';
 
 interface RegisterDetailForm {
   comment: string;
@@ -33,6 +34,7 @@ interface Props {
 export const RecordDetailsModal = ({ open, onClose, record }: Props) => {
   const [completeModal, setCompleteModal] = useState(false);
   const [confirmModal, setConfirmModal] = useState(false);
+  const [action, setAction] = useState<string>("");
 
   const {
     addRecordCommentMutation: { mutate: addComment, isPending },
@@ -57,6 +59,8 @@ export const RecordDetailsModal = ({ open, onClose, record }: Props) => {
     window.open(url, "_blank");
   };
 
+  const [openBlock, setOpenBlock] = useState(false);
+
   return (
     <>
       <MuiModal
@@ -73,7 +77,7 @@ export const RecordDetailsModal = ({ open, onClose, record }: Props) => {
           </>
         }
       >
-        <div className='p-3'>
+        <div className="p-3 flex gap-2">
           {record.status == "draft" && (
             <Button onPress={() => setConfirmModal(true)} color='success' className='text-white' radius='full'>
               <i className="bi bi-check-circle-fill"></i>
@@ -84,6 +88,24 @@ export const RecordDetailsModal = ({ open, onClose, record }: Props) => {
             <Button onPress={() => OpenChecklist(record.id_checklist)} color='primary' className='text-white' radius='full'>
               <i className="bi bi-file-pdf"></i>
               Checklist equipo
+            </Button>
+          )}
+          {record.vehicle.state_id != 10 && (
+            <Button onPress={() => {
+              setAction("block");
+              setOpenBlock(true);
+            }} color='danger' className='text-white' radius='full'>
+              <i className="bi bi-lock"></i>
+              Bloquear
+            </Button>
+          )}
+          {record.vehicle.state_id == 10 && (
+            <Button onPress={() => {
+              setAction("unblock")
+              setOpenBlock(true);
+            }} color='success' className='text-white' radius='full'>
+              <i className="bi bi-unlock"></i>
+              Desbloquear
             </Button>
           )}
         </div>
@@ -152,6 +174,13 @@ export const RecordDetailsModal = ({ open, onClose, record }: Props) => {
         onClose={() => setConfirmModal(false)}
         itemId={record.id}
       />
+
+      <BlockVehicleDialog
+        open={openBlock}
+        onClose={() => setOpenBlock(false)}
+        onCloseDialog={onClose}
+        record={record}
+        action={action} />
     </>
   );
 };

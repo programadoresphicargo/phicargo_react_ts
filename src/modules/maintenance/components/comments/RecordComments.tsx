@@ -20,6 +20,7 @@ export const RecordComments = ({ record, type }: Props) => {
     commentsQuery: {
       data: advanceComments,
       isLoading: isLoadingAdvanceComments,
+      refetch: refresh_comments,
     },
     updateCommentsQuery: {
       data: updateComments,
@@ -71,7 +72,11 @@ export const RecordComments = ({ record, type }: Props) => {
     >
       <CardHeader className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <RefreshButton onRefresh={() => refetch()} isLoading={isFetching} />
+          <RefreshButton onRefresh={() => {
+            refetch();
+            refresh_comments();
+          }}
+            isLoading={isFetching} />
         </div>
       </CardHeader>
       <CardBody>

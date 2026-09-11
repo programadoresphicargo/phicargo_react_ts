@@ -12,6 +12,7 @@ export interface VehicleInfoApi {
   res_store: BranchSimple | null;
   model_year: string | null;
   brand: string | null;
+  state_id: number
 }
 
 export interface MaintenanceRecordBaseApi {

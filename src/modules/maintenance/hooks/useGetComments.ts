@@ -10,7 +10,6 @@ export const useGetComments = (registerId: number = 0) => {
       MaintenanceRecordServiceApi.getCommentsByRecordId(registerId),
     enabled: registerId !== 0,
     refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5,
   });
 
   const updateCommentsQuery = useQuery({
