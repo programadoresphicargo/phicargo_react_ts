@@ -38,10 +38,7 @@ import { Controller, useForm, useWatch } from 'react-hook-form';
 import HistorialCambios from '@/phicargo/almacen/solicitud/cambios/epps';
 import { Flota, OptionFlota } from './tipado';
 import { PosturasForm } from '@/modules/vehicles/components/PosturasForm';
-import { AutocompleteInput } from '@/components/inputs';
-import { SelectItem } from '@/types';
 import Notas from '@/phicargo/viajes/seguimiento/notas';
-import { motion } from 'framer-motion';
 import MaintenanceRecordsVehicles from './maintenance-record';
 
 const apiUrl = import.meta.env.VITE_ODOO_API_URL;
@@ -113,7 +110,7 @@ const Formulariomaniobra: React.FC<Props> = ({
 }) => {
 
     const [drivers, setDrivers] = useState<OptionDriver[]>([]);
-    const [tractores, setTractores] = useState<SelectItem[]>([]);
+    const [tractores, setTractores] = useState<OptionFlota[]>([]);
     const [trailers, setTrailers] = useState<OptionFlota[]>([]);
     const [dollies, setDollies] = useState<OptionFlota[]>([]);
     const [terminales, setTerminales] = useState<OptionTerminal[]>([]);
@@ -127,17 +124,6 @@ const Formulariomaniobra: React.FC<Props> = ({
         return response.data.map(item => ({
             key: item.id,
             label: item.name,
-            x_tipo_carga: item.x_tipo_carga,
-            x_modalidad: item.x_modalidad
-        }));
-    };
-
-    const getTractos = async (tipo: string): Promise<SelectItem[]> => {
-        const response = await odooApi.get<Flota[]>(`/vehicles/fleet_type/${tipo}`);
-        return response.data.map(item => ({
-            key: item.id,
-            label: item.name,
-            value: item.name,
             x_tipo_carga: item.x_tipo_carga,
             x_modalidad: item.x_modalidad
         }));
@@ -174,7 +160,7 @@ const Formulariomaniobra: React.FC<Props> = ({
                     driversData,
                     terminalesData
                 ] = await Promise.all([
-                    getTractos("tractor"),
+                    getFlotaByTipo("tractor"),
                     getFlotaByTipo("trailer"),
                     getFlotaByTipo("dolly"),
                     getFlotaByTipo("other"),
@@ -630,7 +616,6 @@ const Formulariomaniobra: React.FC<Props> = ({
         setOpenNotas(false);
     };
 
-    const [isMaintenance, setIsMaintenance] = useState<boolean>(false);
     const [valoresValidos, setValoresValidos] = useState<number[]>([]);
 
     const valores = useWatch({
@@ -643,53 +628,13 @@ const Formulariomaniobra: React.FC<Props> = ({
         ],
     });
 
-    const [openMR, setMR] = useState<boolean>(false);
-
     const valoresAnteriores = useRef(valores);
 
-    const getMaintenanceRecord = async (id: number) => {
-        try {
-            const response = await odooApi.get(`/maintenance-record/vehicle_id/${id}?statuses=draft`);
-            if (response.data != null) {
-                setIsMaintenance(true);
-                setMR(true);
-            }
-        } catch (error) {
-            toast.error("Error al cargar datos" + error);
-            setIsMaintenance(false);
-        }
-    };
-
     useEffect(() => {
-        const nombres = [
-            "vehicle_id",
-            "trailer1_id",
-            "trailer2_id",
-            "dolly_id"
-        ];
-
         const valoresFiltrados = valores.filter(
             (valor): valor is number => valor !== null && valor !== undefined
         );
-
         setValoresValidos(valoresFiltrados);
-
-        valores.forEach((valor, index) => {
-            const anterior = valoresAnteriores.current[index];
-
-            if (valor !== anterior) {
-                console.log("Campo cambiado:", nombres[index]);
-                console.log("Valor anterior:", anterior);
-                console.log("Nuevo valor:", valor);
-
-                if (valor !== null && valor !== undefined) {
-                    getMaintenanceRecord(valor);
-                } else {
-                    setIsMaintenance(false);
-                }
-            }
-        });
-
         valoresAnteriores.current = valores;
     }, [valores]);
 
@@ -947,31 +892,21 @@ const Formulariomaniobra: React.FC<Props> = ({
                                                         />
                                                     </Grid>
                                                     <Grid size={{ xs: 12, md: 6 }}>
-                                                        <AutocompleteInput
+                                                        <Controller
                                                             control={control}
-                                                            label="Vehiculo"
                                                             name="vehicle_id"
-                                                            variant={formDisabled ? 'flat' : 'bordered'}
-                                                            items={tractores}
-                                                            size="md"
-                                                            rules={{ required: 'Campo obligatorio' }}
+                                                            render={({ field }) => (
+                                                                <SelectFlota
+                                                                    label={'Vehiculo'}
+                                                                    id={'vehicle_id'}
+                                                                    name={'vehicle_id'}
+                                                                    onChange={(val: number | null) => field.onChange(val)}
+                                                                    value={field.value ?? undefined}
+                                                                    disabled={formDisabled}
+                                                                    isLoading={isLoadingFlota}
+                                                                    options={tractores}
+                                                                />)}
                                                         />
-                                                        {isMaintenance && (
-                                                            <motion.div
-                                                                initial={{ opacity: 0, y: -10 }}
-                                                                animate={{ opacity: 1, y: 0 }}
-                                                                exit={{ opacity: 0, y: -10 }}
-                                                                transition={{ duration: 0.3 }}
-                                                            >
-                                                                <Alert
-                                                                    color="danger"
-                                                                    variant="solid"
-                                                                    className="mt-2"
-                                                                    description="Equipo con reporte de mantenimiento pendiente de atención."
-                                                                    title="Precaución"
-                                                                />
-                                                            </motion.div>
-                                                        )}
                                                     </Grid>
                                                     <Grid size={{ xs: 12, md: 4 }}>
                                                         <Controller
@@ -1155,7 +1090,7 @@ const Formulariomaniobra: React.FC<Props> = ({
                         </TabContext>
                     </Box>
 
-                    <MaintenanceRecordsVehicles vehicle_ids={valoresValidos} open={openMR} setOpen={setMR}></MaintenanceRecordsVehicles>
+                    <MaintenanceRecordsVehicles vehicle_ids={valoresValidos}></MaintenanceRecordsVehicles>
 
                 </Box>
             </Dialog >

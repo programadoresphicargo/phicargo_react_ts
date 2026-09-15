@@ -20,13 +20,12 @@ type MaintenanceRecord = {
 }
 
 interface Props {
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   vehicle_ids: number[];
 }
 
-export default function MaintenanceRecordsVehicles({ open, setOpen, vehicle_ids }: Props) {
+export default function MaintenanceRecordsVehicles({ vehicle_ids }: Props) {
 
+  const [open, setOpen] = React.useState<boolean>(false);
   const [data, setData] = React.useState<MaintenanceRecord[]>([]);
   const [isLoading, setLoading] = React.useState<boolean>(false);
 
@@ -63,6 +62,7 @@ export default function MaintenanceRecordsVehicles({ open, setOpen, vehicle_ids 
         if (nuevosDatos.length === 0) {
           setOpen(false);
         }
+        setOpen(true);
         setLoading(false);
       } catch (error) {
         if (cancelled) return;
