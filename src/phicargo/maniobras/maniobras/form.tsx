@@ -1,4 +1,4 @@
-import { Alert, Autocomplete, AutocompleteItem } from '@heroui/react';
+import { Autocomplete, AutocompleteItem } from '@heroui/react';
 import { Card, CardBody, Link } from "@heroui/react";
 import { CardHeader, Divider, User } from "@heroui/react";
 import React, { useContext, useEffect, useRef, useState } from 'react';
