@@ -130,7 +130,7 @@ export default function MaintenanceRecordsVehicles({ open, setOpen, vehicle_ids 
                   }
                 >
                   {item.comments.map((comment: MaintenanceRecordComment) => (
-                    <Card>
+                    <Card className='mt-2'>
                       <CardHeader className="justify-between">
                         <div className="flex gap-5">
                           <Avatar

@@ -827,7 +827,7 @@ const Formulariomaniobra: React.FC<Props> = ({
                                         </Stack>
                                     </Grid>
 
-                                    <Grid size={{ xs: 12, md: 9, lg: 6 }}>
+                                    <Grid size={{ xs: 12, md: 9, lg: estado == null ? 12 : 6 }}>
                                         <Card>
                                             <CardHeader
                                                 style={{
@@ -1092,38 +1092,39 @@ const Formulariomaniobra: React.FC<Props> = ({
                                         )}
                                     </Grid>
 
-                                    <Grid size={{ xs: 12, md: 3 }}>
-                                        <Card>
-                                            <CardHeader style={{
-                                                background: 'linear-gradient(90deg, #0b2149, #002887)',
-                                                color: 'white',
-                                                fontWeight: 'bold'
-                                            }}>
-                                                Estatus
-                                            </CardHeader>
-                                            <CardBody>
-                                                {estado !== "borrador" && (
-                                                    <>
-                                                        <div className="flex gap-4 items-center">
-                                                            {estado === 'cancelada' && (
-                                                                <User
-                                                                    name={"Cancelada por: " + watch("usuario_cancelacion")}
-                                                                    description={watch("fecha_cancelacion") + ' Motivo: ' + watch("motivo_cancelacion")}
-                                                                    avatarProps={{
-                                                                        color: "danger"
-                                                                    }}
-                                                                />
+                                    {estado != null && (
+                                        <Grid size={{ xs: 12, md: 3 }}>
+                                            <Card>
+                                                <CardHeader style={{
+                                                    background: 'linear-gradient(90deg, #0b2149, #002887)',
+                                                    color: 'white',
+                                                    fontWeight: 'bold'
+                                                }}>
+                                                    Estatus
+                                                </CardHeader>
+                                                <CardBody>
+                                                    {estado !== "borrador" && (
+                                                        <>
+                                                            <div className="flex gap-4 items-center">
+                                                                {estado === 'cancelada' && (
+                                                                    <User
+                                                                        name={"Cancelada por: " + watch("usuario_cancelacion")}
+                                                                        description={watch("fecha_cancelacion") + ' Motivo: ' + watch("motivo_cancelacion")}
+                                                                        avatarProps={{
+                                                                            color: "danger"
+                                                                        }}
+                                                                    />
+                                                                )}
+                                                            </div>
+                                                            {id_maniobra && (
+                                                                <EstatusHistorialManiobras id_maniobra={id_maniobra}></EstatusHistorialManiobras>
                                                             )}
-                                                        </div>
-                                                        {id_maniobra && (
-                                                            <EstatusHistorialManiobras id_maniobra={id_maniobra}></EstatusHistorialManiobras>
-                                                        )}
-                                                    </>
-                                                )}
-                                            </CardBody>
-                                        </Card>
-
-                                    </Grid>
+                                                        </>
+                                                    )}
+                                                </CardBody>
+                                            </Card>
+                                        </Grid>
+                                    )}
 
                                     <Grid size={{ xs: 12, md: 3 }}>
                                         {id_maniobra && (
