@@ -895,7 +895,10 @@ const Formulariomaniobra: React.FC<Props> = ({
                                                         <Controller
                                                             control={control}
                                                             name="vehicle_id"
-                                                            render={({ field }) => (
+                                                            rules={{
+                                                                required: "Campo obligatorio",
+                                                            }}
+                                                            render={({ field, fieldState }) => (
                                                                 <SelectFlota
                                                                     label={'Vehiculo'}
                                                                     id={'vehicle_id'}
@@ -905,6 +908,7 @@ const Formulariomaniobra: React.FC<Props> = ({
                                                                     disabled={formDisabled}
                                                                     isLoading={isLoadingFlota}
                                                                     options={tractores}
+                                                                    fieldState={fieldState}
                                                                 />)}
                                                         />
                                                     </Grid>

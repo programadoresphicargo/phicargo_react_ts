@@ -68,10 +68,7 @@ export default function MaintenanceRecordsVehicles({ vehicle_ids }: Props) {
           )
         );
 
-        if (nuevosDatos.length === 0) {
-          setOpen(false);
-        }
-        setOpen(true);
+        setOpen(nuevosDatos.length > 0);
         setLoading(false);
       } catch (error) {
         if (cancelled) return;

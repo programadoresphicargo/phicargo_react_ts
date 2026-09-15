@@ -2,6 +2,7 @@ import odooApi from "@/api/odoo-api";
 import { Alert, Autocomplete, AutocompleteItem } from "@heroui/react";
 import { motion } from "framer-motion";
 import { useEffect, useState } from 'react';
+import { ControllerFieldState } from "react-hook-form";
 
 type OptionFlota = {
     key: number;
@@ -23,6 +24,7 @@ type Props = {
     filtroActivo?: boolean;
     modalidad?: string;
     tipoCarga?: string;
+    fieldState?: ControllerFieldState;
 };
 
 const SelectFlota: React.FC<Props> = ({
@@ -36,7 +38,8 @@ const SelectFlota: React.FC<Props> = ({
     options = [],
     filtroActivo = false,
     modalidad = null,
-    tipoCarga = null
+    tipoCarga = null,
+    fieldState
 }) => {
 
     const [filteredOptions, setFilteredOptions] = useState<OptionFlota[]>([]);
@@ -64,8 +67,8 @@ const SelectFlota: React.FC<Props> = ({
 
     const getMaintenanceRecord = async (id: number) => {
         try {
-            const response = await odooApi.get(`/maintenance-record/vehicle_id/${id}?statuses=draft`);
-            if (response.data != null) {
+            const response = await odooApi.get(`/maintenance-record/vehicle_id/${id}?statuses=draft&statuses=pending`);
+            if (response.data != null && response.data.length != 0) {
                 setIsMaintenance(true);
             }
         } catch (error) {
@@ -84,6 +87,8 @@ const SelectFlota: React.FC<Props> = ({
                 defaultItems={filteredOptions}
                 variant={disabled ? 'flat' : 'bordered'}
                 selectedKey={String(value)}
+                isInvalid={fieldState?.invalid ?? false}
+                errorMessage={fieldState?.error?.message}
                 onSelectionChange={(key) => {
                     const vehicleId = key ? Number(key) : null;
 
