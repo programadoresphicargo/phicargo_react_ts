@@ -42,6 +42,7 @@ import { AutocompleteInput } from '@/components/inputs';
 import { SelectItem } from '@/types';
 import Notas from '@/phicargo/viajes/seguimiento/notas';
 import { motion } from 'framer-motion';
+import MaintenanceRecordsVehicles from './maintenance-record';
 
 const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
@@ -630,11 +631,19 @@ const Formulariomaniobra: React.FC<Props> = ({
     };
 
     const [isMaintenance, setIsMaintenance] = useState<boolean>(false);
+    const [valoresValidos, setValoresValidos] = useState<number[]>([]);
 
     const valores = useWatch({
         control,
-        name: ["vehicle_id"],
+        name: [
+            "vehicle_id",
+            "trailer1_id",
+            "trailer2_id",
+            "dolly_id"
+        ],
     });
+
+    const [openMR, setMR] = useState<boolean>(false);
 
     const valoresAnteriores = useRef(valores);
 
@@ -643,6 +652,7 @@ const Formulariomaniobra: React.FC<Props> = ({
             const response = await odooApi.get(`/maintenance-record/vehicle_id/${id}?statuses=draft`);
             if (response.data != null) {
                 setIsMaintenance(true);
+                setMR(true);
             }
         } catch (error) {
             toast.error("Error al cargar datos" + error);
@@ -653,7 +663,16 @@ const Formulariomaniobra: React.FC<Props> = ({
     useEffect(() => {
         const nombres = [
             "vehicle_id",
+            "trailer1_id",
+            "trailer2_id",
+            "dolly_id"
         ];
+
+        const valoresFiltrados = valores.filter(
+            (valor): valor is number => valor !== null && valor !== undefined
+        );
+
+        setValoresValidos(valoresFiltrados);
 
         valores.forEach((valor, index) => {
             const anterior = valoresAnteriores.current[index];
@@ -706,23 +725,12 @@ const Formulariomaniobra: React.FC<Props> = ({
                         zIndex: 1,
                     },
                 }}>
-                <Box sx={{ flexGrow: 1 }}>
 
-                    <AppBar elevation={2}
-                        position="static"
-                        sx={{
-                            background: 'linear-gradient(90deg, #0b2149, #002887)',
-                            padding: '0 16px'
-                        }}>
-                        <Toolbar>
-                            <Typography sx={{ fontFamily: 'Inter' }}>
-                                Maniobra M-{id_maniobra} / {dataCP?.id} / {estado}
-                            </Typography>
-                            <Button autoFocus color="primary" onPress={handleClose} radius='full'>
-                                Cerrar
-                            </Button>
-                        </Toolbar>
-                    </AppBar>
+                <Box sx={{
+                    display: 'flex',
+                    width: '100%',
+                    height: '100%',
+                }}>
 
                     {loading && (
                         <Box sx={{ width: '100%' }}>
@@ -730,7 +738,27 @@ const Formulariomaniobra: React.FC<Props> = ({
                         </Box>
                     )}
 
-                    <Box sx={{ width: '100%' }}>
+                    <Box sx={{
+                        flex: 1,
+                        minWidth: 0,
+                    }}>
+
+                        <AppBar elevation={2}
+                            position="static"
+                            sx={{
+                                background: 'linear-gradient(90deg, #0b2149, #002887)',
+                                padding: '0 16px'
+                            }}>
+                            <Toolbar>
+                                <Typography sx={{ fontFamily: 'Inter' }}>
+                                    Maniobra M-{id_maniobra} / {dataCP?.id} / {estado}
+                                </Typography>
+                                <Button autoFocus color="primary" onPress={handleClose} radius='full'>
+                                    Cerrar
+                                </Button>
+                            </Toolbar>
+                        </AppBar>
+
                         <TabContext value={value}>
                             <Box sx={{ borderColor: 'divider', backgroundColor: '#002887', color: 'white' }}>
                                 <TabList
@@ -799,7 +827,7 @@ const Formulariomaniobra: React.FC<Props> = ({
                                         </Stack>
                                     </Grid>
 
-                                    <Grid size={{ xs: 12, md: 6 }}>
+                                    <Grid size={{ xs: 12, md: 9, lg: 6 }}>
                                         <Card>
                                             <CardHeader
                                                 style={{
@@ -1125,6 +1153,9 @@ const Formulariomaniobra: React.FC<Props> = ({
                             </TabPanel>
                         </TabContext>
                     </Box>
+
+                    <MaintenanceRecordsVehicles vehicle_ids={valoresValidos} open={openMR} setOpen={setMR}></MaintenanceRecordsVehicles>
+
                 </Box>
             </Dialog >
         </>
