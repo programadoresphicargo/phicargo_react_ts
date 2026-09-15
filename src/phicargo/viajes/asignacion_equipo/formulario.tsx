@@ -4,7 +4,7 @@ import {
     DialogTitle,
     DialogContent,
     DialogActions,
-    Button as MUIButton,
+    Box,
 } from "@mui/material";
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
@@ -12,8 +12,9 @@ import SelectFlota from '@/phicargo/maniobras/maniobras/selects_flota';
 import HistorialCambioEquipo from './historial';
 import Swal from "sweetalert2";
 import { Button, Card, CardBody, CardHeader, Divider, Progress, Textarea } from '@heroui/react';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { Flota, OptionFlota } from '@/phicargo/maniobras/maniobras/tipado';
+import MaintenanceRecordsVehicles from '@/phicargo/maniobras/maniobras/maintenance-record';
 
 type PreasignacionForm = {
     id_pre_asignacion: number;
@@ -261,295 +262,321 @@ const FormularioAsignacionEquipo: React.FC<Props> = ({
         }
     };
 
+    const [valoresValidos, setValoresValidos] = useState<number[]>([]);
+
+    const valores = useWatch({
+        control,
+        name: [
+            "trailer1_id",
+            "trailer2_id",
+            "dolly_id"
+        ],
+    });
+
+    const valoresAnteriores = useRef(valores);
+
+    useEffect(() => {
+        const valoresFiltrados = valores.filter(
+            (valor): valor is number => valor !== null && valor !== undefined
+        );
+        setValoresValidos(valoresFiltrados);
+        valoresAnteriores.current = valores;
+    }, [valores]);
+
     return (
         <Dialog
             open={isOpen}
             onClose={() => onOpenChange(false)}
-            maxWidth="lg"
-            fullWidth
-            slotProps={{
-                paper: {
-                    elevation: 3,
-                    sx: {
-                        borderRadius: "24px",
-                        padding: "8px 0",
-                    }
-                }
-            }}>
+            fullScreen>
             <DialogTitle>Asignación de equipo</DialogTitle>
 
             {isLoading && (
                 <Progress isIndeterminate size='sm'></Progress>
             )}
 
-            <DialogContent dividers>
+            <DialogContent dividers sx={{ margin: 0, padding: 0 }}>
 
-                <div style={{ display: "flex", gap: "20px" }}>
-                    <div style={{ flex: 2 }}>
+                <Box sx={{
+                    display: 'flex',
+                    width: '100%',
+                    height: '100%',
+                }}>
 
-                        <div style={{ display: "flex", gap: "10px", marginBottom: "15px" }}>
-
-                            {dataCP?.id_pre_asignacion == null && (
-                                <Button
-                                    color="success"
-                                    isDisabled={isLoading}
-                                    onPress={() => handleSubmit(guardar)()}
-                                    className='text-white'
-                                    radius='full'
-                                >
-                                    Guardar asignación
-                                </Button>
-                            )}
-
-                            {dataCP?.id_pre_asignacion != null && !isEditMode && estado !== 'asignado_viaje' && (
-                                <>
-                                    <Button
-                                        color="primary"
-                                        onPress={() => setEditMode(true)}
-                                        radius='full'
-                                    >
-                                        Editar
-                                    </Button>
-
-                                    <Button
-                                        radius='full'
-                                        color="danger"
-                                        isDisabled={isLoading}
-                                        onPress={confirmarEquipoViaje}
-                                    >
-                                        Asignar a viaje
-                                    </Button>
-                                </>
-                            )}
-
-                            {dataCP?.id_pre_asignacion != null && isEditMode && (
-                                <Button
-                                    color="warning"
-                                    isDisabled={isLoading}
-                                    onPress={() => handleSubmit(actualizar)()}
-                                    radius='full'
-                                    className='text-white'
-                                >
-                                    Actualizar
-                                </Button>
-                            )}
-
-                            {estado == 'asignado_viaje' && (
-                                <Button
-                                    color="primary"
-                                    isDisabled={isLoading}
-                                    onPress={() => confirmarCambioEstadoPreasignacion("borrador")}
-                                    radius='full'
-                                    className='text-white'
-                                >
-                                    Reabrir asignación
-                                </Button>
-                            )}
-
-                            <Button onClick={() => setFiltroActivo(!filtroActivo)} color={filtroActivo ? 'danger' : 'primary'} radius='full'>
-                                {filtroActivo ? "Mostrar todos los equipos" : "Aplicar filtros del viaje"}
-                            </Button>
-                        </div>
-
-                        <div className="w-full flex flex-col gap-4">
-
-                            {dataCP && (
-                                <Card fullWidth>
-                                    <CardHeader
-                                        style={{
-                                            background: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
-                                            color: 'white',
-                                            fontWeight: 'bold'
-                                        }}>
-                                        Información del CP
-                                    </CardHeader>
-                                    <Divider></Divider>
-                                    <CardBody>
-                                        <div
-                                            style={{
-                                                display: "grid",
-                                                gridTemplateColumns: "1fr 1fr",
-                                                gap: "14px",
-                                                fontSize: "14px"
-                                            }}
-                                        >
-                                            <div>
-                                                <div style={{ color: "#6B7280", fontSize: "12px" }}>CP</div>
-                                                <div style={{ fontWeight: 600 }}>{dataCP.name}</div>
-                                            </div>
-
-                                            <div>
-                                                <div style={{ color: "#6B7280", fontSize: "12px" }}>Modo</div>
-                                                <div style={{ fontWeight: 600 }}>{dataCP.x_modo_bel}</div>
-                                            </div>
-
-                                            <div>
-                                                <div style={{ color: "#6B7280", fontSize: "12px" }}>Tipo</div>
-                                                <div style={{ fontWeight: 600 }}>{dataCP.x_tipo_bel}</div>
-                                            </div>
-
-                                            <div>
-                                                <div style={{ color: "#6B7280", fontSize: "12px" }}>Contenedor</div>
-                                                <div style={{ fontWeight: 600 }}>{dataCP.x_reference}</div>
-                                            </div>
-
-                                            <div>
-                                                <div style={{ color: "#6B7280", fontSize: "12px" }}>Ruta</div>
-                                                <div style={{ fontWeight: 600 }}>{dataCP.x_ruta_bel}</div>
-                                            </div>
-
-                                            <div>
-                                                <div style={{ color: "#6B7280", fontSize: "12px" }}>Clase</div>
-                                                <div style={{ fontWeight: 600 }}>{dataCP.x_clase_bel}</div>
-                                            </div>
-                                        </div>
-                                    </CardBody>
-                                </Card>
-                            )}
-
-                            <Card fullWidth>
-                                <CardHeader
-                                    style={{
-                                        background: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
-                                        color: 'white',
-                                        fontWeight: 'bold'
-                                    }}>
-                                    Equipo asignado
-                                </CardHeader>
-                                <Divider></Divider>
-                                <CardBody>
-                                    <div className="w-full grid grid-cols-2 gap-4">
-                                        <Controller
-                                            control={control}
-                                            name="trailer1_id"
-                                            render={({ field }) => (
-                                                <SelectFlota
-                                                    label="Remolque 1"
-                                                    id={'trailer1_id'}
-                                                    name="trailer1_id"
-                                                    onChange={(val: number | null) => field.onChange(val)}
-                                                    value={field.value ?? undefined}
-                                                    disabled={isDisabled}
-                                                    filtroActivo={filtroActivo}
-                                                    modalidad={dataCP?.x_tipo_bel == 'single' ? 'sencillo' : 'full'}
-                                                    tipoCarga={TipoCarga(dataCP?.waybill_category)}
-                                                    isLoading={isLoadingFlota}
-                                                    options={trailers}
-                                                />
-                                            )}
-                                        />
-                                        {dataCP?.x_tipo_bel == 'full' && (
-                                            <Controller
-                                                control={control}
-                                                name="trailer2_id"
-                                                render={({ field }) => (
-                                                    <SelectFlota
-                                                        label="Remolque 2"
-                                                        id="trailer2_id"
-                                                        name="trailer2_id"
-                                                        onChange={(val: number | null) => field.onChange(val)}
-                                                        value={field.value ?? undefined}
-                                                        disabled={isDisabled}
-                                                        filtroActivo={filtroActivo}
-                                                        modalidad={dataCP?.x_tipo_bel == 'single' ? 'sencillo' : 'full'}
-                                                        tipoCarga={TipoCarga(dataCP?.waybill_category)}
-                                                        isLoading={isLoadingFlota}
-                                                        options={trailers}
-                                                    />
-                                                )}
-                                            />
-                                        )}
-
-                                        {dataCP?.x_tipo_bel == 'full' && (
-                                            <Controller
-                                                control={control}
-                                                name="dolly_id"
-                                                render={({ field }) => (
-                                                    <SelectFlota
-                                                        id="dolly_id"
-                                                        label="Dolly"
-                                                        name="dolly_id"
-                                                        onChange={(val: number | null) => field.onChange(val)}
-                                                        value={field.value ?? undefined}
-                                                        disabled={isDisabled}
-                                                        isLoading={isLoadingFlota}
-                                                        options={dollies}
-                                                    />
-                                                )}
-                                            />
-                                        )}
-
-                                        <Controller
-                                            control={control}
-                                            name="motogenerador1_id"
-                                            render={({ field }) => (
-                                                <SelectFlota
-                                                    id="motogenerador1_id"
-                                                    label="Motogenerador 1"
-                                                    name="motogenerador1_id"
-                                                    onChange={(val: number | null) => field.onChange(val)}
-                                                    value={field.value ?? undefined}
-                                                    disabled={isDisabled}
-                                                    isLoading={isLoadingFlota}
-                                                    options={motogeneradores}
-                                                />
-                                            )}
-                                        />
-
-                                        {dataCP?.x_tipo_bel == 'full' && (
-                                            <Controller
-                                                control={control}
-                                                name="motogenerador2_id"
-                                                render={({ field }) => (
-                                                    <SelectFlota
-                                                        id="motogenerador2_id"
-                                                        label="Motogenerador 2"
-                                                        name="motogenerador2_id"
-                                                        onChange={(val: number | null) => field.onChange(val)}
-                                                        value={field.value ?? undefined}
-                                                        disabled={isDisabled}
-                                                        isLoading={isLoadingFlota}
-                                                        options={motogeneradores}
-                                                    />
-                                                )}
-                                            />
-                                        )}
-
-                                        <Controller
-                                            control={control}
-                                            name="comentarios"
-                                            render={({ field }) => (
-                                                <Textarea
-                                                    label="Comentarios"
-                                                    variant={isDisabled ? "flat" : "bordered"}
-                                                    isDisabled={isDisabled}
-                                                    value={field.value || ""}
-                                                    onValueChange={(val: string) => field.onChange(val)}
-                                                />)}
-                                        />
-
-                                    </div>
-                                </CardBody>
-                            </Card>
-                        </div>
-                    </div>
-
-                    <div style={{
-                        flex: 2,
-                        height: 600,
-                        overflowY: "auto",
-                        paddingRight: "5px"
+                    <Box sx={{
+                        flex: 1,
+                        minWidth: 0,
+                        padding: 3,
                     }}>
-                        <HistorialCambioEquipo ref={historialRef} id_pre_asignacion={dataCP?.id_pre_asignacion} />
-                    </div>
-                </div>
+
+                        <div style={{ display: "flex", gap: "20px" }}>
+                            <div style={{ flex: 2 }}>
+
+                                <div style={{ display: "flex", gap: "10px", marginBottom: "15px" }}>
+
+                                    {dataCP?.id_pre_asignacion == null && (
+                                        <Button
+                                            color="success"
+                                            isDisabled={isLoading}
+                                            onPress={() => handleSubmit(guardar)()}
+                                            className='text-white'
+                                            radius='full'
+                                        >
+                                            Guardar asignación
+                                        </Button>
+                                    )}
+
+                                    {dataCP?.id_pre_asignacion != null && !isEditMode && estado !== 'asignado_viaje' && (
+                                        <>
+                                            <Button
+                                                color="primary"
+                                                onPress={() => setEditMode(true)}
+                                                radius='full'
+                                            >
+                                                Editar
+                                            </Button>
+
+                                            <Button
+                                                radius='full'
+                                                color="danger"
+                                                isDisabled={isLoading}
+                                                onPress={confirmarEquipoViaje}
+                                            >
+                                                Asignar a viaje
+                                            </Button>
+                                        </>
+                                    )}
+
+                                    {dataCP?.id_pre_asignacion != null && isEditMode && (
+                                        <Button
+                                            color="warning"
+                                            isDisabled={isLoading}
+                                            onPress={() => handleSubmit(actualizar)()}
+                                            radius='full'
+                                            className='text-white'
+                                        >
+                                            Actualizar
+                                        </Button>
+                                    )}
+
+                                    {estado == 'asignado_viaje' && (
+                                        <Button
+                                            color="primary"
+                                            isDisabled={isLoading}
+                                            onPress={() => confirmarCambioEstadoPreasignacion("borrador")}
+                                            radius='full'
+                                            className='text-white'
+                                        >
+                                            Reabrir asignación
+                                        </Button>
+                                    )}
+
+                                    <Button onClick={() => setFiltroActivo(!filtroActivo)} color={filtroActivo ? 'danger' : 'primary'} radius='full'>
+                                        {filtroActivo ? "Mostrar todos los equipos" : "Aplicar filtros del viaje"}
+                                    </Button>
+                                </div>
+
+                                <div className="w-full flex flex-col gap-4">
+
+                                    {dataCP && (
+                                        <Card fullWidth>
+                                            <CardHeader
+                                                style={{
+                                                    background: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
+                                                    color: 'white',
+                                                    fontWeight: 'bold'
+                                                }}>
+                                                Información del CP
+                                            </CardHeader>
+                                            <Divider></Divider>
+                                            <CardBody>
+                                                <div
+                                                    style={{
+                                                        display: "grid",
+                                                        gridTemplateColumns: "1fr 1fr",
+                                                        gap: "14px",
+                                                        fontSize: "14px"
+                                                    }}
+                                                >
+                                                    <div>
+                                                        <div style={{ color: "#6B7280", fontSize: "12px" }}>CP</div>
+                                                        <div style={{ fontWeight: 600 }}>{dataCP.name}</div>
+                                                    </div>
+
+                                                    <div>
+                                                        <div style={{ color: "#6B7280", fontSize: "12px" }}>Modo</div>
+                                                        <div style={{ fontWeight: 600 }}>{dataCP.x_modo_bel}</div>
+                                                    </div>
+
+                                                    <div>
+                                                        <div style={{ color: "#6B7280", fontSize: "12px" }}>Tipo</div>
+                                                        <div style={{ fontWeight: 600 }}>{dataCP.x_tipo_bel}</div>
+                                                    </div>
+
+                                                    <div>
+                                                        <div style={{ color: "#6B7280", fontSize: "12px" }}>Contenedor</div>
+                                                        <div style={{ fontWeight: 600 }}>{dataCP.x_reference}</div>
+                                                    </div>
+
+                                                    <div>
+                                                        <div style={{ color: "#6B7280", fontSize: "12px" }}>Ruta</div>
+                                                        <div style={{ fontWeight: 600 }}>{dataCP.x_ruta_bel}</div>
+                                                    </div>
+
+                                                    <div>
+                                                        <div style={{ color: "#6B7280", fontSize: "12px" }}>Clase</div>
+                                                        <div style={{ fontWeight: 600 }}>{dataCP.x_clase_bel}</div>
+                                                    </div>
+                                                </div>
+                                            </CardBody>
+                                        </Card>
+                                    )}
+
+                                    <Card fullWidth>
+                                        <CardHeader
+                                            style={{
+                                                background: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
+                                                color: 'white',
+                                                fontWeight: 'bold'
+                                            }}>
+                                            Equipo asignado
+                                        </CardHeader>
+                                        <Divider></Divider>
+                                        <CardBody>
+                                            <div className="w-full grid grid-cols-2 gap-4">
+                                                <Controller
+                                                    control={control}
+                                                    name="trailer1_id"
+                                                    render={({ field }) => (
+                                                        <SelectFlota
+                                                            label="Remolque 1"
+                                                            id={'trailer1_id'}
+                                                            name="trailer1_id"
+                                                            onChange={(val: number | null) => field.onChange(val)}
+                                                            value={field.value ?? undefined}
+                                                            disabled={isDisabled}
+                                                            filtroActivo={filtroActivo}
+                                                            modalidad={dataCP?.x_tipo_bel == 'single' ? 'sencillo' : 'full'}
+                                                            tipoCarga={TipoCarga(dataCP?.waybill_category)}
+                                                            isLoading={isLoadingFlota}
+                                                            options={trailers}
+                                                        />
+                                                    )}
+                                                />
+                                                {dataCP?.x_tipo_bel == 'full' && (
+                                                    <Controller
+                                                        control={control}
+                                                        name="trailer2_id"
+                                                        render={({ field }) => (
+                                                            <SelectFlota
+                                                                label="Remolque 2"
+                                                                id="trailer2_id"
+                                                                name="trailer2_id"
+                                                                onChange={(val: number | null) => field.onChange(val)}
+                                                                value={field.value ?? undefined}
+                                                                disabled={isDisabled}
+                                                                filtroActivo={filtroActivo}
+                                                                modalidad={dataCP?.x_tipo_bel == 'single' ? 'sencillo' : 'full'}
+                                                                tipoCarga={TipoCarga(dataCP?.waybill_category)}
+                                                                isLoading={isLoadingFlota}
+                                                                options={trailers}
+                                                            />
+                                                        )}
+                                                    />
+                                                )}
+
+                                                {dataCP?.x_tipo_bel == 'full' && (
+                                                    <Controller
+                                                        control={control}
+                                                        name="dolly_id"
+                                                        render={({ field }) => (
+                                                            <SelectFlota
+                                                                id="dolly_id"
+                                                                label="Dolly"
+                                                                name="dolly_id"
+                                                                onChange={(val: number | null) => field.onChange(val)}
+                                                                value={field.value ?? undefined}
+                                                                disabled={isDisabled}
+                                                                isLoading={isLoadingFlota}
+                                                                options={dollies}
+                                                            />
+                                                        )}
+                                                    />
+                                                )}
+
+                                                <Controller
+                                                    control={control}
+                                                    name="motogenerador1_id"
+                                                    render={({ field }) => (
+                                                        <SelectFlota
+                                                            id="motogenerador1_id"
+                                                            label="Motogenerador 1"
+                                                            name="motogenerador1_id"
+                                                            onChange={(val: number | null) => field.onChange(val)}
+                                                            value={field.value ?? undefined}
+                                                            disabled={isDisabled}
+                                                            isLoading={isLoadingFlota}
+                                                            options={motogeneradores}
+                                                        />
+                                                    )}
+                                                />
+
+                                                {dataCP?.x_tipo_bel == 'full' && (
+                                                    <Controller
+                                                        control={control}
+                                                        name="motogenerador2_id"
+                                                        render={({ field }) => (
+                                                            <SelectFlota
+                                                                id="motogenerador2_id"
+                                                                label="Motogenerador 2"
+                                                                name="motogenerador2_id"
+                                                                onChange={(val: number | null) => field.onChange(val)}
+                                                                value={field.value ?? undefined}
+                                                                disabled={isDisabled}
+                                                                isLoading={isLoadingFlota}
+                                                                options={motogeneradores}
+                                                            />
+                                                        )}
+                                                    />
+                                                )}
+
+                                                <Controller
+                                                    control={control}
+                                                    name="comentarios"
+                                                    render={({ field }) => (
+                                                        <Textarea
+                                                            label="Comentarios"
+                                                            variant={isDisabled ? "flat" : "bordered"}
+                                                            isDisabled={isDisabled}
+                                                            value={field.value || ""}
+                                                            onValueChange={(val: string) => field.onChange(val)}
+                                                        />)}
+                                                />
+
+                                            </div>
+                                        </CardBody>
+                                    </Card>
+                                </div>
+                            </div>
+
+                            <div style={{
+                                flex: 2,
+                                height: 600,
+                                overflowY: "auto",
+                                paddingRight: "5px"
+                            }}>
+                                <HistorialCambioEquipo ref={historialRef} id_pre_asignacion={dataCP?.id_pre_asignacion} />
+                            </div>
+                        </div>
+                    </Box>
+                    <MaintenanceRecordsVehicles vehicle_ids={valoresValidos}></MaintenanceRecordsVehicles>
+                </Box>
 
             </DialogContent>
 
             <DialogActions>
-                <MUIButton color="error" onClick={() => onOpenChange(false)}>
+                <Button color="danger" onClick={() => onOpenChange(false)} radius='full'>
                     Cerrar
-                </MUIButton>
+                </Button>
             </DialogActions>
         </Dialog >
     );
