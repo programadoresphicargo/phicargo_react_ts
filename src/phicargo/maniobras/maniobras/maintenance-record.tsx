@@ -28,6 +28,9 @@ export default function MaintenanceRecordsVehicles({ vehicle_ids }: Props) {
   const [open, setOpen] = React.useState<boolean>(false);
   const [data, setData] = React.useState<MaintenanceRecord[]>([]);
   const [isLoading, setLoading] = React.useState<boolean>(false);
+  const [expandedKeys, setExpandedKeys] = React.useState<Set<string>>(
+    new Set()
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -58,6 +61,12 @@ export default function MaintenanceRecordsVehicles({ vehicle_ids }: Props) {
         );
 
         setData(nuevosDatos);
+
+        setExpandedKeys(
+          new Set(
+            nuevosDatos.map((item: MaintenanceRecord) => String(item.id))
+          )
+        );
 
         if (nuevosDatos.length === 0) {
           setOpen(false);
@@ -114,10 +123,15 @@ export default function MaintenanceRecordsVehicles({ vehicle_ids }: Props) {
                 <Spinner />
               </div>
             )}
-            <Accordion variant="splitted" defaultExpandedKeys={data.map((item: MaintenanceRecord) => String(item.id))}>
+            <Accordion
+              variant="splitted"
+              selectedKeys={expandedKeys}
+              onSelectionChange={(keys) => {
+                setExpandedKeys(keys as Set<string>);
+              }}>
               {data.map((item: MaintenanceRecord) =>
                 <AccordionItem
-                  key={item.id}
+                  key={String(item.id)}
                   title={item.vehicle}
                   subtitle={item.check_in}
                   startContent={
