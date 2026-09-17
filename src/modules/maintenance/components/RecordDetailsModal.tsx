@@ -108,6 +108,15 @@ export const RecordDetailsModal = ({ open, onClose, record }: Props) => {
               Desbloquear
             </Button>
           )}
+          {record.vehicle.state_id == 1 && (
+            <Button onPress={() => {
+              setAction("unblock")
+              setOpenBlock(true);
+            }} color='success' className='text-white' radius='full'>
+              <i className="bi bi-check-lg"></i>
+              Apto para uso
+            </Button>
+          )}
         </div>
 
         <div className="flex flex-row justify-between gap-4 p-4">
