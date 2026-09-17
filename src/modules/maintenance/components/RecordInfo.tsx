@@ -11,10 +11,45 @@ interface Props {
 export const RecordInfo = ({ record }: Props) => {
   return (
     <div className="flex flex-col justify-center gap-2">
-      <div className="flex items-center text-medium">
-        <BsBusFrontFill className="text-blue-500 mr-2" />
-        <span className="font-semibold text-gray-800">Unidad:</span>
-        <span className="ml-1 text-gray-700">{record?.vehicle.name}</span>
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-medium">
+        <div className="flex items-center">
+          <BsBusFrontFill className="mr-2 text-blue-500" />
+
+          <span className="font-semibold text-gray-800">
+            Unidad:
+          </span>
+
+          <span className="ml-1 text-gray-700">
+            {record?.vehicle.name}
+          </span>
+        </div>
+
+        <div className="flex items-center text-sm text-gray-500">
+          <span className="font-medium">
+            Coordenadas:
+          </span>
+
+          <span className="ml-1">
+            {record?.vehicle.latitude}, {record?.vehicle.longitude}
+          </span>
+        </div>
+
+        {record?.vehicle.latitude && record?.vehicle.longitude && (
+          <a
+            href={`https://www.google.com/maps?q=${record.vehicle.latitude},${record.vehicle.longitude}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center rounded-md bg-blue-50 px-3 py-1.5 text-sm font-medium text-blue-600 transition-colors hover:bg-blue-100 hover:text-blue-700"
+          >
+            Ver ubicación
+          </a>
+        )}
+
+        {record?.vehicle.last_position_update && (
+          <span className="text-sm text-gray-400">
+            Actualizado: {record.vehicle.last_position_update}
+          </span>
+        )}
       </div>
       <div className="flex items-center text-medium">
         <FaWarehouse className="text-green-500 mr-2" />

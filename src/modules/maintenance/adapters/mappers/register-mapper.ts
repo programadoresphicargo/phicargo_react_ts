@@ -42,6 +42,9 @@ export class MaintenaceRecordAdapter {
           name: vehicle.res_store.name,
         }
         : null,
+      latitude: vehicle.latitude,
+      longitude: vehicle.longitude,
+      last_position_update: vehicle.last_position_update
     };
   }
 

@@ -18,7 +18,10 @@ export interface VehicleInfo {
   vehicle_type_id: number | null;
   model_year: string | null;
   brand: string | null;
-  state_id: number
+  state_id: number;
+  latitude: number;
+  longitude: number;
+  last_position_update: string;
 }
 
 export interface MaintenanceRecordBase {
