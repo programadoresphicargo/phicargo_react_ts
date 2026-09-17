@@ -173,7 +173,8 @@ const FormularioAsignacionEquipo: React.FC<Props> = ({
 
             setEditMode(false);
         } catch (error: any) {
-            toast.error("Error: " + (error.response?.data?.message || error.message));
+            const detail = error.response?.data?.detail || error.message;
+            toast.error("Error: " + detail);
         } finally {
             setLoading(false);
         }
