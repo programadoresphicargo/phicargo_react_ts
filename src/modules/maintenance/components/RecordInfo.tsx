@@ -46,12 +46,15 @@ export const RecordInfo = ({ record }: Props) => {
           </a>
         )}
 
-        {record?.vehicle.last_position_update && (
-          <span className="text-sm text-gray-400">
-            Actualizado:{" "}
-            {dayjs(record.vehicle.last_position_update).format("DD/MM/YYYY h:mma")}
-          </span>
-        )}
+        {record?.vehicle.last_position_update &&
+          dayjs(record.vehicle.last_position_update).isValid() && (
+            <span className="text-sm text-gray-400">
+              Actualizado:{" "}
+              {dayjs(record.vehicle.last_position_update)
+                .subtract(6, "hour")
+                .format("DD/MM/YYYY h:mma")}
+            </span>
+          )}
       </div>
       <div className="flex items-center text-medium">
         <FaWarehouse className="text-green-500 mr-2" />
