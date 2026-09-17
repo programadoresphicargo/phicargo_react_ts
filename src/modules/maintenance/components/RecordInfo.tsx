@@ -3,6 +3,7 @@ import { FaRegUserCircle } from 'react-icons/fa';
 import { FaWarehouse } from 'react-icons/fa';
 import type { MaintenanceRecord } from '../models';
 import { MdOutlineSmsFailed } from 'react-icons/md';
+import dayjs from 'dayjs';
 
 interface Props {
   record: MaintenanceRecord;
@@ -47,7 +48,8 @@ export const RecordInfo = ({ record }: Props) => {
 
         {record?.vehicle.last_position_update && (
           <span className="text-sm text-gray-400">
-            Actualizado: {record.vehicle.last_position_update}
+            Actualizado:{" "}
+            {dayjs(record.vehicle.last_position_update).format("DD/MM/YYYY h:mma")}
           </span>
         )}
       </div>
