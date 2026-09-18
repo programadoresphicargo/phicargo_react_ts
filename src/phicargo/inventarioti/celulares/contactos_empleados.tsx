@@ -1,4 +1,4 @@
-import { Chip } from '@heroui/react';
+import { Button, Chip } from '@heroui/react';
 import {
   MRT_Cell,
   MaterialReactTable,
@@ -8,6 +8,7 @@ import { useEffect, useMemo, useState } from 'react';
 import Box from '@mui/material/Box';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import odooApi from '@/api/odoo-api';
+import { exportToCSV } from '@/phicargo/utils/export';
 
 type Asignaciones = {
   id_departamento: number;
@@ -115,6 +116,14 @@ const ContactosCelularesEmpleados = () => {
         >
           Líneas telefónicas
         </h1>
+        <Button
+          color='success'
+          className='text-white'
+          startContent={<i className="bi bi-file-earmark-excel"></i>}
+          onPress={() => exportToCSV(data, columns, "lineas.csv")}
+          radius="full"
+        >Exportar
+        </Button>
       </Box>
     ),
   });
