@@ -90,7 +90,7 @@ export const RecordDetailsModal = ({ open, onClose, record }: Props) => {
               Checklist equipo
             </Button>
           )}
-          {record.vehicle.state_id != 10 && (
+          {record.vehicle.state_id != 10 && record.status == "draft" && (
             <Button onPress={() => {
               setAction("block");
               setOpenBlock(true);
@@ -99,7 +99,7 @@ export const RecordDetailsModal = ({ open, onClose, record }: Props) => {
               Bloquear
             </Button>
           )}
-          {record.vehicle.state_id == 10 && (
+          {record.vehicle.state_id == 10 && record.status == "draft" && (
             <Button onPress={() => {
               setAction("unblock")
               setOpenBlock(true);
