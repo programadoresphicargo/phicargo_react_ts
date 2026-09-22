@@ -36,6 +36,7 @@ export type FolioCostoExtra = {
   estado_factura: string;
   fecha_factura: string | null;
   status: string;
+  partner_id: number | null;
 
   fecha_creacion?: string | null;
   usuario_creacion?: string | null;
@@ -67,11 +68,7 @@ const FoliosCostosExtras = () => {
   const [data, setData] = useState<FolioCostoExtra[]>([]);
   const [isLoading, setLoading] = useState(false);
   const [modalShow, setModalShow] = useState(false);
-  const [store, setStore] = React.useState<string>("1");
-
-  const changeStore = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setStore(e.target.value);
-  };
+  const [store, setStore] = React.useState<string | null>("1");
 
   const limpiarForm = () => {
     setCPS([]);
@@ -92,13 +89,16 @@ const FoliosCostosExtras = () => {
     if (!range) return;
     try {
       setLoading(true);
-      const response = await odooApi.get('/folios_costos_extras/store_id/' + store,
-        {
-          params: {
-            start_date: range[0].toISOString().slice(0, 10),
-            end_date: range[1].toISOString().slice(0, 10)
-          }
-        });
+
+      const params = {
+        start_date: range[0].toISOString().slice(0, 10),
+        end_date: range[1].toISOString().slice(0, 10),
+        ...(store != null && { store_id: store }),
+      };
+
+      const response = await odooApi.get('/folios_costos_extras/store_id/', {
+        params,
+      });
       setData(response.data);
       setLoading(false);
     } catch (error) {
@@ -305,13 +305,17 @@ const FoliosCostosExtras = () => {
           <Select
             label="Sucursal"
             placeholder="Selecciona una sucursal"
-            selectedKeys={[store]}
-            onChange={changeStore}
+            selectedKeys={store === null ? ['otros'] : [String(store)]}
+            onChange={(e) => {
+              const value = e.target.value;
+              setStore(value === 'otros' ? null : String(value));
+            }}
             fullWidth
           >
             <SelectItem key={'1'}>Veracruz</SelectItem>
             <SelectItem key={'2'}>México</SelectItem>
             <SelectItem key={'9'}>Manzanillo</SelectItem>
+            <SelectItem key="otros">Otros</SelectItem>
           </Select>
         </Box>
 

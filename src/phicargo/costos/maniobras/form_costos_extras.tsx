@@ -25,6 +25,7 @@ import FormCE from "./facturas/form";
 import TimeLineCE from "./linea_tiempo";
 import React from "react";
 import Notas from "@/phicargo/viajes/seguimiento/notas";
+import { SelectInput } from "@/components/inputs";
 const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
 const initialForm: FolioCostoExtra = {
@@ -35,6 +36,7 @@ const initialForm: FolioCostoExtra = {
     fecha_factura: null,
     status: "",
     costos_extras: [],
+    partner_id: null,
 }
 
 const FormularioCostoExtra = ({ show, handleClose, id_folio }: { show: boolean, handleClose: () => void, id_folio: number | null }) => {
@@ -61,6 +63,7 @@ const FormularioCostoExtra = ({ show, handleClose, id_folio }: { show: boolean, 
     const { session } = useAuthContext();
     const [open, setOpen] = useState(false);
     const status = watch("status");
+    const partnerId = watch("partner_id");
 
     const openCancelDialog = () => {
         setCancelDialog(true);
@@ -103,9 +106,12 @@ const FormularioCostoExtra = ({ show, handleClose, id_folio }: { show: boolean, 
     }, [id_folio, show]);
 
     const validar_folio = () => {
-        if (CartasPorte.length === 0) {
-            toast.error("Añadir cartas porte");
-            return false;
+
+        if (partnerId == null) {
+            if (CartasPorte.length === 0) {
+                toast.error("Añadir cartas porte");
+                return false;
+            }
         }
 
         if (fieldsCostosExtras.length === 0) {
@@ -266,7 +272,7 @@ const FormularioCostoExtra = ({ show, handleClose, id_folio }: { show: boolean, 
             {id_folio && (
                 <Notas open={openNotas} onClose={handleCloseNotas} origen_id={id_folio} model="folios_costos_extras"></Notas>
             )}
-            
+
             <Dialog
                 fullScreen
                 open={show}
@@ -302,7 +308,7 @@ const FormularioCostoExtra = ({ show, handleClose, id_folio }: { show: boolean, 
                                     <Stack spacing={1} direction="row">
 
                                         {id_folio == null && (
-                                            <Button color="primary" onPress={() => handleSubmit(registrar_folio)()} isLoading={Loading} radius="full">
+                                            <Button color="primary" onPress={() => handleSubmit(registrar_folio)()} isLoading={Loading} radius="full" size="sm">
                                                 Registrar
                                             </Button>
                                         )}
@@ -368,6 +374,19 @@ const FormularioCostoExtra = ({ show, handleClose, id_folio }: { show: boolean, 
 
                         <Grid size={12} container spacing={1}>
                             <Grid size={8}>
+                                <div className="mt-3 mb-3">
+                                    <SelectInput
+                                        control={control}
+                                        label="Cliente"
+                                        name="partner_id"
+                                        variant="bordered"
+                                        items={[
+                                            { key: 112803, value: "AGM VERACRUZ S.A. DE C.V." },
+                                            { key: 106116, value: "ALMACENADORA GOLMEX" },
+                                            { key: 118879, value: "ENLACES TERRESTRES GOLMEX" }
+                                        ]}
+                                    />
+                                </div>
                                 <CostosExtrasContenedores id_folio={id_folio}></CostosExtrasContenedores>
                             </Grid>
                             <Grid size={4}>
