@@ -43,7 +43,6 @@ const Checklist = () => {
   };
 
   const columns: MRT_ColumnDef<ChecklistItem>[] = [
-    { accessorKey: 'id', header: 'ID' },
     {
       accessorKey: 'vehiculo', header: 'Vehiculo',
       Cell: ({ cell }: { cell: MRT_Cell<ChecklistItem> }) => {
@@ -142,6 +141,7 @@ const Checklist = () => {
         fontFamily: 'Inter',
         fontWeight: 'normal',
         fontSize: '12px',
+        padding: '2px 8px',
         color: row.subRows?.length ? '#FFFFFF' : '#000000',
       },
     }),
