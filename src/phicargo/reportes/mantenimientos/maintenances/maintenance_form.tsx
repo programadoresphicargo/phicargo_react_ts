@@ -32,14 +32,6 @@ export default function MaintenanceForm({ open, setOpen }: {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>,
 }) {
 
-  const now = new Date();
-
-  const today = [
-    now.getFullYear(),
-    String(now.getMonth() + 1).padStart(2, "0"),
-    String(now.getDate()).padStart(2, "0"),
-  ].join("-");
-
   const initialForm: Configuraciones = {
     vehicle_id: null,
     mileage: null,

@@ -57,6 +57,10 @@ const MaintenanceVehicleReport = () => {
       {
         accessorKey: 'kilometraje',
         header: 'Kilometraje actual',
+        Cell: ({ cell }) => {
+          const value = cell.getValue<number>();
+          return value?.toLocaleString('en-US');
+        },
         muiTableBodyCellProps: {
           align: 'right',
         },
@@ -65,6 +69,10 @@ const MaintenanceVehicleReport = () => {
       {
         accessorKey: 'km_ultimo_mantenimiento',
         header: 'Km ultimo mant',
+        Cell: ({ cell }) => {
+          const value = cell.getValue<number>();
+          return value?.toLocaleString('en-US');
+        },
         muiTableBodyCellProps: {
           align: 'right',
         },
@@ -72,6 +80,10 @@ const MaintenanceVehicleReport = () => {
       {
         accessorKey: 'intervalo_km',
         header: 'Intervalo',
+        Cell: ({ cell }) => {
+          const value = cell.getValue<number>();
+          return value?.toLocaleString('en-US');
+        },
         muiTableBodyCellProps: {
           align: 'right',
         },
@@ -79,6 +91,10 @@ const MaintenanceVehicleReport = () => {
       {
         accessorKey: 'proximo_servicio_km',
         header: 'Proximo servicio',
+        Cell: ({ cell }) => {
+          const value = cell.getValue<number>();
+          return value?.toLocaleString('en-US');
+        },
         muiTableBodyCellProps: {
           align: 'right',
         },
@@ -86,6 +102,10 @@ const MaintenanceVehicleReport = () => {
       {
         accessorKey: 'kilometros_restantes',
         header: 'Km restantes',
+        Cell: ({ cell }) => {
+          const value = cell.getValue<number>();
+          return value?.toLocaleString('en-US');
+        },
         muiTableBodyCellProps: {
           align: 'right',
         },
