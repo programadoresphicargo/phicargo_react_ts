@@ -5,13 +5,14 @@ import odooApi from '@/api/odoo-api';
 import { toast } from "react-toastify";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { Button } from '@heroui/react';
-import MaintenanceForm from './maintenances/maintenance_form';
+import MaintenanceForm, { Maintenance } from './maintenances/maintenance_form';
 
 const Maintenances = () => {
 
   const [isLoading, setisLoading] = useState(false);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<Maintenance[]>([]);
   const [open, setOpen] = useState(false);
+  const [idMaintenance, setMaintenance] = useState<number | null>(null);
 
   useEffect(() => {
     fetchData();
@@ -35,6 +36,7 @@ const Maintenances = () => {
     { accessorKey: 'date', header: 'Fecha', },
     { accessorKey: 'tipo_mantenimiento', header: 'Tipo' },
     { accessorKey: 'usuario_creacion', header: 'Creación' },
+    { accessorKey: 'observaciones', header: 'Observaciones' },
   ];
 
   const table = useMaterialReactTable({
@@ -70,6 +72,15 @@ const Maintenances = () => {
         maxHeight: 'calc(100vh - 270px)',
       },
     },
+    muiTableBodyRowProps: ({ row }) => ({
+      onClick: () => {
+        setOpen(true);
+        setMaintenance(row.original.id);
+      },
+      style: {
+        cursor: 'pointer',
+      },
+    }),
     muiTableBodyCellProps: ({ row }) => ({
       sx: {
         backgroundColor: row.subRows?.length ? '#0456cf' : '#FFFFFF',
@@ -96,7 +107,15 @@ const Maintenances = () => {
         >
           Mantenimientos
         </h1>
-        <Button onPress={() => setOpen(true)} className='text-white' color='success' radius='full' size='sm'>Nuevo</Button>
+        <Button onPress={() => {
+          setMaintenance(null);
+          setOpen(true)
+        }} className='text-white'
+          color='success'
+          radius='full'
+          size='sm'>
+          Nuevo
+        </Button>
         <Button onPress={() => fetchData()} className='text-white' color='primary' radius='full' size='sm'>Recargar</Button>
       </Box >
     ),
@@ -107,7 +126,7 @@ const Maintenances = () => {
       <MaterialReactTable
         table={table}
       />
-      <MaintenanceForm open={open} setOpen={() => setOpen(false)}></MaintenanceForm>
+      <MaintenanceForm open={open} setOpen={() => setOpen(false)} id={idMaintenance}></MaintenanceForm>
     </>
   );
 };

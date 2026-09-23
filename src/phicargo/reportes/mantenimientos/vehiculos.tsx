@@ -5,7 +5,7 @@ import odooApi from '@/api/odoo-api';
 import { toast } from "react-toastify";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { Button } from '@heroui/react';
-import MaintenanceForm, { Task } from './maintenances/maintenance_form';
+import { Task } from './maintenances/maintenance_form';
 import { SelectItem } from '@/types';
 import { AutocompleteInput } from '@/components/inputs';
 import { useForm } from 'react-hook-form';
@@ -29,7 +29,6 @@ const MaintenanceVehicleReport = () => {
 
   const [isLoading, setisLoading] = useState(false);
   const [data, setData] = useState([]);
-  const [open, setOpen] = useState(false);
   const taskId = watch('task_id');
 
   useEffect(() => {
@@ -206,7 +205,6 @@ const MaintenanceVehicleReport = () => {
       <MaterialReactTable
         table={table}
       />
-      <MaintenanceForm open={open} setOpen={() => setOpen(false)}></MaintenanceForm>
     </>
   );
 };

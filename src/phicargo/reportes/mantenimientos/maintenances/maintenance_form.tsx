@@ -14,7 +14,8 @@ import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import dayjs, { Dayjs } from 'dayjs';
 
-type Configuraciones = {
+export type Maintenance = {
+  id: number | null,
   vehicle_id: number | null,
   task_id: number | null,
   mileage: number | null,
@@ -27,12 +28,14 @@ export type Task = {
   name: string;
 };
 
-export default function MaintenanceForm({ open, setOpen }: {
+export default function MaintenanceForm({ open, setOpen, id }: {
   open: boolean,
   setOpen: React.Dispatch<React.SetStateAction<boolean>>,
+  id: number | null,
 }) {
 
-  const initialForm: Configuraciones = {
+  const initialForm: Maintenance = {
+    id: null,
     vehicle_id: null,
     mileage: null,
     task_id: null,
@@ -46,7 +49,7 @@ export default function MaintenanceForm({ open, setOpen }: {
     reset,
     watch,
     setValue
-  } = useForm<Configuraciones>({
+  } = useForm<Maintenance>({
     defaultValues: initialForm,
   });
 
@@ -66,14 +69,15 @@ export default function MaintenanceForm({ open, setOpen }: {
     );
   };
 
-  useEffect(() => {
-    getTask();
-  }, [open]);
-
-  const onSubmit = async (data: Configuraciones) => {
+  const onSubmit = async (data: Maintenance) => {
     try {
       setLoading(true);
-      const res = await odooApi.post("/maintenances/", data);
+      let res;
+      if (id != null) {
+        res = await odooApi.patch(`/maintenances/${id}`, data);
+      } else {
+        res = await odooApi.post("/maintenances/", data);
+      }
       if (res.data.status === "success") {
         toast.success(res.data.message);
         reset(initialForm);
@@ -118,6 +122,23 @@ export default function MaintenanceForm({ open, setOpen }: {
     loadMileage();
   }, [vehicleId, setValue]);
 
+  const getMantenance = async (id: number): Promise<void> => {
+    const response = await odooApi.get<Maintenance>(
+      `/maintenances/${id}`
+    );
+
+    reset(response.data);
+  };
+
+  useEffect(() => {
+    getTask();
+    if (id !== null) {
+      getMantenance(id);
+    } else {
+      reset(initialForm);
+    }
+  }, [open]);
+
   return (
     <Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="sm">
 
@@ -137,9 +158,16 @@ export default function MaintenanceForm({ open, setOpen }: {
           <Button autoFocus onPress={() => setOpen(false)} radius='full' size='sm'>
             Cerrar
           </Button>
-          <Button autoFocus onPress={() => handleSubmit(onSubmit)()} color='success' radius='full' className='text-white' isLoading={isLoading} size='sm'>
-            Guardar
-          </Button>
+          {id == null ? (
+            <Button autoFocus onPress={() => handleSubmit(onSubmit)()} color='success' radius='full' className='text-white' isLoading={isLoading} size='sm'>
+              Guardar
+            </Button>
+          ) : (
+            <Button autoFocus onPress={() => handleSubmit(onSubmit)()} color='warning' radius='full' className='text-white' isLoading={isLoading} size='sm'>
+              Actualizar
+            </Button>
+          )}
+
         </Toolbar>
       </AppBar>
 

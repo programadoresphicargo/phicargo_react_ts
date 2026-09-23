@@ -88,7 +88,6 @@ const MaintenanceRules = () => {
       onClick: () => {
         setOpen(true);
         setRule(row.original.id);
-        console.log(open);
       },
       style: {
         cursor: 'pointer',
