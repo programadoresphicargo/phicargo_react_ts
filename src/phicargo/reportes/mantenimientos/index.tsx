@@ -39,9 +39,9 @@ const MaintenanceIndex = () => {
               <Tab label="Mantenimientos" value="3" sx={{ fontFamily: 'Inter' }} />
             </TabList>
           </Box>
-          <TabPanel value="1" sx={{ padding: 0, margin: 0, fontFamily: "inter" }}><MaintenanceVehicleReport></MaintenanceVehicleReport></TabPanel>
-          <TabPanel value="2" sx={{ padding: 0, margin: 0, fontFamily: "inter" }}><MaintenanceRules></MaintenanceRules></TabPanel>
-          <TabPanel value="3" sx={{ padding: 0, margin: 0, fontFamily: "inter" }}><Maintenances></Maintenances></TabPanel>
+          <TabPanel value="1" sx={{ padding: 0, margin: 0, fontFamily: "inter" }} keepMounted><MaintenanceVehicleReport></MaintenanceVehicleReport></TabPanel>
+          <TabPanel value="2" sx={{ padding: 0, margin: 0, fontFamily: "inter" }} keepMounted><MaintenanceRules></MaintenanceRules></TabPanel>
+          <TabPanel value="3" sx={{ padding: 0, margin: 0, fontFamily: "inter" }} keepMounted><Maintenances></Maintenances></TabPanel>
         </TabContext>
       </Box>
     </>
