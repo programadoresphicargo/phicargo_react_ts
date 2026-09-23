@@ -27,6 +27,7 @@ import kmIcon from '../assets/menu/calle.png';
 import containerIcon from '../assets/menu/shiping-container.png';
 import idealeaseIcon from '../assets/menu/idealease.png';
 import ganttIcon from '../assets/menu/gantt.png';
+import preventivosIcon from '../assets/menu/calendar_maintenance.png';
 
 type MenuItemType = {
   icon: string;
@@ -73,6 +74,12 @@ const reports: MenuItemType[] = [
     label: 'Mantenimiento',
     path: '/reportes/mantenimiento',
     icon: maintenanceIcon,
+    requiredPermissions: [198],
+  },
+  {
+    label: 'Preventivos',
+    path: '/reportes/preventivos',
+    icon: preventivosIcon,
     requiredPermissions: [198],
   },
   {
