@@ -39,9 +39,9 @@ export const useIncidentsColumns = () => {
         Cell: ({ cell }) => {
           const value = cell.getValue<boolean>();
           return value === true ? (
-            <Chip label="Sí" color="error" />
+            <Chip label="Sí" color="error" size="small" />
           ) : (
-            <Chip label="No" color="success" />
+            <Chip label="No" color="success" size="small" />
           );
         },
       },

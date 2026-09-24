@@ -132,14 +132,15 @@ export const useBaseTable = <T extends MRT_RowData & BaseRowData>(
         fontSize: '14px',
       },
     },
-    muiTableBodyCellProps: {
+    muiTableBodyCellProps: ({ row }) => ({
       sx: {
+        backgroundColor: row.index % 2 === 0 ? '#FFFFFF' : '#F8F9FA',
         fontFamily: 'Inter',
         fontWeight: 'normal',
         fontSize: '12px',
-        padding: '10px 20px',
+        padding: '4px 8px',
       },
-    },
+    }),
     muiTablePaperProps: {
       elevation: 0,
       sx: {

@@ -18,7 +18,7 @@ export default function IncidentChip({ incident }: { incident: IncidentModel }) 
  const { label, color } = estadoMap[state] || { label: 'Desconocido', color: 'default' };
 
  return (
-  <Chip color={color} className="text-white">
+  <Chip color={color} className="text-white" size="sm">
    {label}
   </Chip>
  );

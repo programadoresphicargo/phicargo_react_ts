@@ -18,7 +18,7 @@ export const useVehicleInspectionColumns = () => {
         accessorKey: 'name',
         header: 'Unidad',
         Cell: ({ cell }) => (
-          <Chip color='primary'>{cell.getValue<string>()}</Chip>
+          <Chip color='primary' size='sm'>{cell.getValue<string>()}</Chip>
         ),
       },
       {
@@ -54,9 +54,10 @@ export const useVehicleInspectionColumns = () => {
             <Chip
               className='text-white'
               color={value == 'approved' ? 'success' : 'danger'}
+              size='sm'
             >{inspectionResult.getLabel(value)}</Chip>
           ) : (
-            <Chip color="default">{'No Revisada'}</Chip>
+            <Chip color="default" size='sm'>{'No Revisada'}</Chip>
           );
         },
       },
@@ -93,7 +94,7 @@ export const useVehicleInspectionColumns = () => {
           };
 
           return value ? (
-            <Chip color={translations[value] == 'Borrador' ? 'warning' : 'success'} className='text-white'>{translations[value] || value}</Chip>
+            <Chip color={translations[value] == 'Borrador' ? 'warning' : 'success'} className='text-white' size='sm'>{translations[value] || value}</Chip>
           ) : (
             <span className="text-gray-400"></span>
           );
