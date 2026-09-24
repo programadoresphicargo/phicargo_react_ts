@@ -115,6 +115,7 @@ const FormCE = ({ watch, setValue }: Props) => {
         data: referencias,
         enableGrouping: true,
         enableGlobalFilter: true,
+        globalFilterFn: 'contains',
         enableFilters: true,
         state: { showProgressBars: isLoading },
         enableColumnPinning: true,
