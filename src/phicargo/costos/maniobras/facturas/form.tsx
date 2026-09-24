@@ -71,7 +71,7 @@ const FormCE = ({ watch, setValue }: Props) => {
                 console.error("Error al obtener las referencias:", error);
                 setLoading(false);
             });
-    }, [value, open]);
+    }, [open]);
 
     const handleClickOpen = () => {
         setOpen(true);
