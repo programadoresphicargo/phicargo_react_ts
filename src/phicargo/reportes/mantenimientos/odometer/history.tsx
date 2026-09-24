@@ -94,16 +94,22 @@ export default function OdometerHistory({ open, setOpen, id }: {
         maxHeight: 'calc(100vh - 240px)',
       },
     },
-    muiTableBodyCellProps: ({ row }) => ({
-      sx: {
-        backgroundColor: row.subRows?.length ? '#0456cf' : '#FFFFFF',
-        fontFamily: 'Inter',
-        fontWeight: 'normal',
-        fontSize: '12px',
-        padding: '4px 8px',
-        color: row.subRows?.length ? '#FFFFFF' : '#000000',
-      },
-    }),
+    muiTableBodyCellProps: ({ row }) => {
+      return {
+        sx: {
+          backgroundColor: row.subRows?.length
+            ? '#0456cf'
+            : row.index % 2 === 0
+              ? '#FFFFFF'
+              : '#F8F9FA',
+          color: row.subRows?.length ? '#FFFFFF' : '#000000',
+          fontFamily: 'Inter',
+          fontWeight: 'normal',
+          fontSize: '12px',
+          padding: '4px 8px'
+        },
+      };
+    },
     renderTopToolbarCustomActions: () => (
       <Box
         sx={{
