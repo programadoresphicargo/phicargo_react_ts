@@ -71,7 +71,7 @@ const FormCE = ({ watch, setValue }: Props) => {
                 console.error("Error al obtener las referencias:", error);
                 setLoading(false);
             });
-    }, [value]);
+    }, [value, open]);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -226,7 +226,7 @@ const FormCE = ({ watch, setValue }: Props) => {
                     <MaterialReactTable table={table} />
                 </DialogContent>
                 <DialogActions>
-                    <Button onPress={handleClose}>Cerrar</Button>
+                    <Button onPress={handleClose} color="primary" size="sm" radius="full">Cerrar</Button>
                 </DialogActions>
             </Dialog>
         </>
