@@ -220,7 +220,7 @@ const Solicitudes: React.FC<Props> = ({
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 250px)',
+        maxHeight: 'calc(100vh - 245px)',
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
@@ -234,11 +234,14 @@ const Solicitudes: React.FC<Props> = ({
       sx: {
         backgroundColor: row.subRows?.length
           ? '#0456cf'
-          : '#FFFFFF',
+          : row.index % 2 === 0
+            ? '#FFFFFF'
+            : '#F8F9FA',
 
         fontFamily: 'Inter',
         fontWeight: 'normal',
         fontSize: '12px',
+        padding: '4px 8px',
 
         color: row.subRows?.length
           ? '#FFFFFF'

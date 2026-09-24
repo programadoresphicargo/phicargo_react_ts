@@ -124,16 +124,20 @@ const Checklist = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 200px)',
+        maxHeight: 'calc(100vh - 190px)',
       },
     },
     muiTableBodyCellProps: ({ row }) => ({
       sx: {
-        backgroundColor: row.subRows?.length ? '#0456cf' : '#FFFFFF',
+        backgroundColor: row.subRows?.length
+          ? '#0456cf'
+          : row.index % 2 === 0
+            ? '#FFFFFF'
+            : '#F8F9FA',
         fontFamily: 'Inter',
         fontWeight: 'normal',
         fontSize: '12px',
-        padding: '4px 8px',
+        padding: '2px 8px',
         color: row.subRows?.length ? '#FFFFFF' : '#000000',
       },
     }),
@@ -158,6 +162,7 @@ const Checklist = () => {
           color="success"
           className="text-white"
           radius="full"
+          size="sm"
         >
           Exportar
         </Button>
@@ -168,6 +173,7 @@ const Checklist = () => {
           color="warning"
           className="text-white"
           radius="full"
+          size="sm"
         >
           Recargar
         </Button>
