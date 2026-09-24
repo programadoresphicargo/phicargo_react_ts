@@ -367,6 +367,7 @@ const PDV = ({ }) => {
           fontFamily: 'Inter',
           fontWeight: 'normal',
           fontSize: '12px',
+          padding: '2px 8px'
         },
       }
     },

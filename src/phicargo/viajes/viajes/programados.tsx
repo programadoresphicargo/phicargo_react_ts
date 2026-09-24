@@ -330,6 +330,7 @@ const ViajesProgramados = ({ }) => {
           fontFamily: 'Inter',
           fontWeight: 'normal',
           fontSize: '12px',
+          padding: '4px 8px'
         },
       }
     },

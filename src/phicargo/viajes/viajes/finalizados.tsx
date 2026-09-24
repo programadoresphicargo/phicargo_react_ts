@@ -284,12 +284,13 @@ const ViajesFinalizados = ({ }) => {
           fontFamily: 'Inter',
           fontWeight: 'normal',
           fontSize: '12px',
+          padding: '4px 8px'
         },
       };
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 200px)',
+        maxHeight: 'calc(100vh - 190px)',
       },
     },
     renderTopToolbarCustomActions: () => (
