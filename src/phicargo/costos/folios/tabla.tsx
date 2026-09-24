@@ -267,6 +267,7 @@ const FoliosCostosExtras = () => {
         <Box sx={{ width: '160px' }}>
           <Button
             radius="full"
+            size="sm"
             startContent={<i className="bi bi-plus-lg"></i>}
             color="primary"
             fullWidth
@@ -283,6 +284,7 @@ const FoliosCostosExtras = () => {
         <Box sx={{ width: '160px' }}>
           <Button
             radius="full"
+            size="sm"
             startContent={<i className="bi bi-arrow-clockwise"></i>}
             color="success"
             className='text-white'
@@ -298,6 +300,7 @@ const FoliosCostosExtras = () => {
         <Box sx={{ width: '160px' }}>
           <Button
             radius="full"
+            size="sm"
             color='success'
             fullWidth
             className='text-white'
@@ -310,6 +313,7 @@ const FoliosCostosExtras = () => {
             label="Sucursal"
             placeholder="Selecciona una sucursal"
             selectedKeys={store === null ? ['otros'] : [String(store)]}
+            size="sm"
             onChange={(e) => {
               const value = e.target.value;
               setStore(value === 'otros' ? null : String(value));
