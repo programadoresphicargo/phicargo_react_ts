@@ -136,17 +136,26 @@ const Cuentas = () => {
         fontSize: '14px',
       },
     },
-    muiTableBodyCellProps: {
-      sx: {
-        fontFamily: 'Inter',
-        fontWeight: 'normal',
-        fontSize: '14px',
-      },
-    },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 220px)',
+        maxHeight: 'calc(100vh - 200px)',
       },
+    },
+    muiTableBodyCellProps: ({ row }) => {
+      return {
+        sx: {
+          backgroundColor: row.subRows?.length
+            ? '#0456cf'
+            : row.index % 2 === 0
+              ? '#FFFFFF'
+              : '#F8F9FA',
+          color: row.subRows?.length ? '#FFFFFF' : '#000000',
+          fontFamily: 'Inter',
+          fontWeight: 'normal',
+          fontSize: '12px',
+          padding: '4px 8px'
+        },
+      };
     },
     renderTopToolbarCustomActions: () => (
       <Box

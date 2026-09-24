@@ -240,11 +240,15 @@ const CartasPorte = () => {
     },
     muiTableBodyCellProps: ({ row }) => ({
       sx: {
-        backgroundColor: row.subRows?.length ? '#1184e8' : '#FFFFFF',
+        backgroundColor: row.subRows?.length
+          ? '#0456cf'
+          : row.index % 2 === 0
+            ? '#FFFFFF'
+            : '#F8F9FA',
         fontFamily: 'Inter',
         fontWeight: 'normal',
-        fontSize: '14px',
-        color: row.subRows?.length ? '#FFFFFF' : '#000000',
+        fontSize: '12px',
+        padding: '4px 8px'
       },
     }),
     renderTopToolbarCustomActions: () => (
