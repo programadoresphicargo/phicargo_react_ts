@@ -113,7 +113,6 @@ const FormCE = ({ watch, setValue }: Props) => {
     const table = useMaterialReactTable({
         columns,
         data: referencias,
-        enableGrouping: true,
         enableGlobalFilter: true,
         globalFilterFn: 'contains',
         enableFilters: true,
