@@ -279,7 +279,11 @@ const ViajesFinalizados = ({ }) => {
     muiTableBodyCellProps: ({ row }) => {
       return {
         sx: {
-          backgroundColor: row.subRows?.length ? '#0456cf' : '#FFFFFF',
+          backgroundColor: row.subRows?.length
+            ? '#0456cf'
+            : row.index % 2 === 0
+              ? '#FFFFFF'
+              : '#F8F9FA',
           color: row.subRows?.length ? '#FFFFFF' : '#000000',
           fontFamily: 'Inter',
           fontWeight: 'normal',

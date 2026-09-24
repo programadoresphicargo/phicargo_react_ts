@@ -216,10 +216,13 @@ const FoliosCostosExtras = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 220px)',
+        maxHeight: 'calc(100vh - 210px)',
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
+      sx: {
+        backgroundColor: row.index % 2 === 0 ? '#ffffff' : '#f7f7f7',
+      },
       onClick: () => {
         if (row.subRows?.length) {
         } else {
@@ -243,6 +246,7 @@ const FoliosCostosExtras = () => {
         fontFamily: 'Inter',
         fontWeight: 'normal',
         fontSize: '12px',
+        padding: '4px 8px'
       },
     },
 
