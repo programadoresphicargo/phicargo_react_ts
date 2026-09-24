@@ -335,14 +335,19 @@ const Maniobras: React.FC<ManiobrasProps> = ({
         fontSize: '12px',
       },
     },
-    muiTableBodyCellProps: {
+    muiTableBodyCellProps: ({ row }) => ({
       sx: {
+        backgroundColor: row.subRows?.length
+          ? '#0456cf'
+          : row.index % 2 === 0
+            ? '#FFFFFF'
+            : '#F8F9FA',
         fontFamily: 'Inter',
         fontWeight: 'normal',
         fontSize: '12px',
+        padding:'2px 8px'
       },
-    },
-
+    }),
     renderTopToolbarCustomActions: () => (
       <Box
         sx={{
