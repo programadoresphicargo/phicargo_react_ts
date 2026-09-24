@@ -8,7 +8,6 @@ import CustomNavbar from '@/pages/CustomNavbar';
 import MaintenanceRules from './rules/rules';
 import Maintenances from './maintenances';
 import MaintenanceVehicleReport from './vehiculos';
-import Odometer from './odometer/odometers';
 import Odometers from './odometer/odometers';
 
 const MaintenanceIndex = () => {
