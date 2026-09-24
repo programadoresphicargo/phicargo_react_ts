@@ -84,12 +84,12 @@ const FormCE = ({ watch, setValue }: Props) => {
     const columns = useMemo(
         () => [
             {
-                accessorKey: 'move_name',
-                header: 'Referencia',
-            },
-            {
                 accessorKey: 'date_invoice',
                 header: 'Fecha factura',
+            },
+            {
+                accessorKey: 'move_name',
+                header: 'Referencia',
             },
             {
                 accessorKey: 'state',
