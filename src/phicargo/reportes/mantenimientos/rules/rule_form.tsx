@@ -132,7 +132,7 @@ export default function MaintenanceRuleForm({ open, setOpen, id }: { open: boole
     <div className="min-h-screen flex items-center justify-center">
       <Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="sm">
 
-        <AppBar sx={{ position: 'relative' }} elevation={0}>
+        <AppBar sx={{ position: 'relative', backgroundColor: '#002887', }} elevation={0}>
           <Toolbar>
             <IconButton
               edge="start"
@@ -142,7 +142,7 @@ export default function MaintenanceRuleForm({ open, setOpen, id }: { open: boole
             >
               <CloseIcon />
             </IconButton>
-            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+            <Typography sx={{ ml: 2, flex: 1, fontFamily: 'Inter' }} variant="h6" component="div">
               Regla
             </Typography>
             <Button autoFocus onPress={() => setOpen(false)} radius='full' size='sm'>

@@ -55,7 +55,7 @@ export default function OdometerForm({ open, setOpen, vehicle_id }: {
   return (
     <Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="sm">
 
-      <AppBar sx={{ position: 'relative' }} elevation={0}>
+      <AppBar sx={{ position: 'relative', backgroundColor: '#002887' }} elevation={0}>
         <Toolbar>
           <IconButton
             edge="start"

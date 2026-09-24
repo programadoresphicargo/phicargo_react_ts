@@ -128,7 +128,7 @@ export default function OdometerHistory({ open, setOpen, id }: {
   return (
     <Dialog open={open} onClose={() => setOpen(false)} fullScreen>
 
-      <AppBar sx={{ position: 'relative' }} elevation={0}>
+      <AppBar sx={{ position: 'relative', backgroundColor: '#002887' }} elevation={0}>
         <Toolbar>
           <IconButton
             edge="start"
@@ -138,7 +138,7 @@ export default function OdometerHistory({ open, setOpen, id }: {
           >
             <CloseIcon />
           </IconButton>
-          <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+          <Typography sx={{ ml: 2, flex: 1, fontFamily: 'Inter' }} variant="h6" component="div">
             Registro de odometro
           </Typography>
           <Button autoFocus onPress={() => setOpen(false)} radius='full' size='sm'>
