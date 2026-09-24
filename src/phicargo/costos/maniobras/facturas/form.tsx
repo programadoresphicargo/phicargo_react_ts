@@ -116,7 +116,7 @@ const FormCE = ({ watch, setValue }: Props) => {
         enableGrouping: true,
         enableGlobalFilter: true,
         enableFilters: true,
-        state: { isLoading: isLoading },
+        state: { showProgressBars: isLoading },
         enableColumnPinning: true,
         localization: MRT_Localization_ES,
         enableStickyHeader: true,
@@ -124,6 +124,8 @@ const FormCE = ({ watch, setValue }: Props) => {
         initialState: {
             density: 'compact',
             pagination: { pageIndex: 0, pageSize: 80 },
+            showColumnFilters: true,
+            showGlobalFilter: true,
         },
         muiTablePaperProps: {
             elevation: 0,
@@ -142,12 +144,13 @@ const FormCE = ({ watch, setValue }: Props) => {
             sx: {
                 fontFamily: 'Inter',
                 fontWeight: 'normal',
-                fontSize: '14px',
+                fontSize: '12px',
+                padding: '0px 8px'
             },
         },
         muiTableContainerProps: {
             sx: {
-                maxHeight: 'calc(100vh - 200px)',
+                maxHeight: 'calc(100vh - 400px)',
             },
         },
         muiTableBodyRowProps: ({ row }) => ({
@@ -213,8 +216,8 @@ const FormCE = ({ watch, setValue }: Props) => {
             <Dialog
                 open={open}
                 fullWidth={true}
-                maxWidth={"lg"}
-                scroll='body'
+                maxWidth="lg"
+                scroll="paper"
                 onClose={handleClose}
             >
                 <DialogTitle>Facturas</DialogTitle>
