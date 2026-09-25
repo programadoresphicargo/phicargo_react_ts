@@ -5,10 +5,8 @@ import React, { useContext } from "react";
 import Contenedores from "../contenedores/contenedores";
 import CumplimientoOperador from "../cumplimiento_operador/cumplimiento";
 import EstatusHistorial from "../estatus/estatus";
-import EstatusViaje from "./estado_viaje";
 import Grid from '@mui/material/Grid2';
 import PanelEnvio from '../panel_envio_estatus/panel_envio';
-import Stack from '@mui/material/Stack';
 import { ViajeContext } from "../context/viajeContext";
 import { useJourneyDialogs } from "./funciones";
 import Custodia from "../custodia/custodia";
@@ -17,6 +15,7 @@ import FormEquipoViaje from "./editar_equipo";
 import SeguimientoSimpleManiobra from "../estatus/maniobras/estatus_maniobras";
 import SeguimientoSimpleViaje from "../estatus/simple";
 import Notas from "./notas";
+import { EstatusViaje } from "./estado_viaje";
 
 export default function Seguimiento() {
 
@@ -59,36 +58,125 @@ export default function Seguimiento() {
                 <Custodia></Custodia>
 
                 <Grid size={12}>
-                    <Card>
-                        <CardBody>
-                            <div className="flex items-center justify-between">
+                    <Card className="border border-slate-200 bg-white shadow-sm">
+                        <CardBody className="px-4 py-3">
+                            <div className="flex items-center gap-5">
 
-                                <div>
-                                    <Stack spacing={1} direction="row">
+                                {/* Acciones */}
+                                <div className="flex min-w-0 flex-1 items-center gap-2">
+
+                                    <div className="flex flex-wrap gap-2">
                                         {viaje?.x_status_viaje == null && (
-                                            <Button color="primary" onPress={comprobar_disponibilidad} isDisabled={correosLigados || isLoading} radius="full"><i className="bi bi-play-fill"></i> Iniciar viaje</Button>
-                                        )}
-                                        {['ruta', 'planta', 'retorno'].includes(viaje?.x_status_viaje) && (
-                                            <Button color="danger" onPress={finalizar_viaje} isDisabled={correosLigados || isLoading} radius="full"><i className="bi bi-stop-fill"></i> Finalizar viaje</Button>
-                                        )}
-                                        <Button color="success" onPress={handleClickOpen} className="text-white" isDisabled={correosLigados || isLoading} radius="full">
-                                            <i className="bi bi-send-plus-fill"></i> Nuevo estatus
-                                        </Button>
-                                        {viaje?.x_status_viaje == 'resguardo' && (
-                                            <Button color="primary" onPress={liberar_resguardo} isDisabled={correosLigados || isLoading} radius="full">Liberar resguardo</Button>
-                                        )}
-                                        {viaje?.x_status_viaje == 'finalizado' && (
-                                            <Button color="success" onPress={reactivar_viaje} className="text-white" isDisabled={correosLigados || isLoading} radius="full">Reactivar viaje</Button>
+                                            <Button
+                                                color="primary"
+                                                onPress={comprobar_disponibilidad}
+                                                isDisabled={correosLigados || isLoading}
+                                                radius="md"
+                                                size="sm"
+                                                className="min-w-[150px] text-white"
+                                            >
+                                                <i className="bi bi-play-fill" />
+                                                Iniciar
+                                            </Button>
                                         )}
 
-                                        <Button color="danger" onPress={() => calcular_estadia(id_viaje)} className="text-white" radius="full">Generar estadías</Button>
-                                        <Button color="success" onPress={() => handleClickOpenFormViaje()} className="text-white" radius="full"><i className="bi bi-pen"></i>Editar equipo</Button>
-                                        <Button color="warning" onPress={() => handleClickOpenNotas()} className="text-white" radius="full"><i className="bi bi-pen"></i>Notas</Button>
-                                    </Stack>
+                                        {['ruta', 'planta', 'retorno'].includes(
+                                            viaje?.x_status_viaje
+                                        ) && (
+                                                <Button
+                                                    color="danger"
+                                                    onPress={finalizar_viaje}
+                                                    isDisabled={correosLigados || isLoading}
+                                                    radius="md"
+                                                    size="sm"
+                                                    className="min-w-[150px] text-white"
+                                                >
+                                                    <i className="bi bi-stop-fill" />
+                                                    Finalizar
+                                                </Button>
+                                            )}
+
+                                        <Button
+                                            color="success"
+                                            onPress={handleClickOpen}
+                                            isDisabled={correosLigados || isLoading}
+                                            radius="md"
+                                            size="sm"
+                                            className="min-w-[150px] text-white"
+                                        >
+                                            <i className="bi bi-send-plus-fill" />
+                                            Nuevo estatus
+                                        </Button>
+
+                                        {viaje?.x_status_viaje == 'resguardo' && (
+                                            <Button
+                                                color="primary"
+                                                onPress={liberar_resguardo}
+                                                isDisabled={correosLigados || isLoading}
+                                                radius="md"
+                                                size="sm"
+                                                className="min-w-[150px] text-white"
+                                            >
+                                                <i className="bi bi-unlock-fill" />
+                                                Liberar
+                                            </Button>
+                                        )}
+
+                                        {viaje?.x_status_viaje == 'finalizado' && (
+                                            <Button
+                                                color="success"
+                                                onPress={reactivar_viaje}
+                                                isDisabled={correosLigados || isLoading}
+                                                radius="md"
+                                                size="sm"
+                                                className="min-w-[150px] text-white"
+                                            >
+                                                <i className="bi bi-arrow-clockwise" />
+                                                Reactivar
+                                            </Button>
+                                        )}
+
+                                        <Button
+                                            color="danger"
+                                            onPress={() => calcular_estadia(id_viaje)}
+                                            radius="md"
+                                            size="sm"
+                                            className="min-w-[150px] text-white"
+                                        >
+                                            <i className="bi bi-calculator" />
+                                            Estadías
+                                        </Button>
+
+                                        <Button
+                                            color="primary"
+                                            onPress={handleClickOpenFormViaje}
+                                            radius="md"
+                                            size="sm"
+                                            className="min-w-[150px] text-white"
+                                        >
+                                            <i className="bi bi-pencil" />
+                                            Equipo
+                                        </Button>
+
+                                        <Button
+                                            color="warning"
+                                            onPress={handleClickOpenNotas}
+                                            radius="md"
+                                            size="sm"
+                                            className="min-w-[150px] text-white"
+                                        >
+                                            <i className="bi bi-journal-text" />
+                                            Notas
+                                        </Button>
+                                    </div>
                                 </div>
 
-                                <div style={{ width: '55%' }}>
-                                    <EstatusViaje></EstatusViaje>
+                                {/* Separador */}
+                                <div className="hidden h-10 w-px bg-slate-200 xl:block" />
+
+                                {/* Estatus */}
+                                <div className="w-[46%] min-w-[480px]">
+                                    <EstatusViaje />
                                 </div>
 
                             </div>

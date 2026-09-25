@@ -119,7 +119,8 @@ function EstatusHistorial() {
 
             <Stack spacing={2} direction="row">
                 <Button
-                    radius="full"
+                    radius="md"
+                    size="sm"
                     color="primary"
                     onPress={() => getHistorialEstatus()}
                     className="w-fit self-end mb-3"
@@ -128,7 +129,7 @@ function EstatusHistorial() {
                 </Button>
 
                 <Input
-                    radius="full"
+                    radius="md"
                     className="w-96 mb-2"
                     isClearable
                     label="Buscador"
@@ -142,7 +143,8 @@ function EstatusHistorial() {
                 />
 
                 <Button
-                    radius="full"
+                    radius="md"
+                    size="sm"
                     onPress={toggleSortOrder}
                     color="primary"
                     className="w-fit self-end mb-3"
@@ -151,7 +153,8 @@ function EstatusHistorial() {
                 </Button>
 
                 <Button
-                    radius="full"
+                    radius="md"
+                    size="sm"
                     onPress={generarReporte}
                     color="success"
                     className="text-white w-fit self-end mb-3"
@@ -160,7 +163,8 @@ function EstatusHistorial() {
                     Exportar Excel
                 </Button>
                 <Button
-                    radius="full"
+                    radius="md"
+                    size="sm"
                     onPress={exportPDF}
                     color="danger"
                     className="text-white w-fit self-end mb-3"

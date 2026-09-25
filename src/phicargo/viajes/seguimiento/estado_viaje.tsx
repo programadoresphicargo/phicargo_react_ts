@@ -1,12 +1,9 @@
-import { useState, useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { Steps } from 'antd';
 import { ViajeContext } from '../context/viajeContext';
 
-const EstatusViaje = () => {
-
+export const EstatusViaje = () => {
     const { viaje } = useContext(ViajeContext);
-
-    const [current, setCurrent] = useState<number>(0);
 
     const stepsMap: Record<string, number> = {
         disponible: 0,
@@ -17,29 +14,41 @@ const EstatusViaje = () => {
         resguardo: 5,
     };
 
-    useEffect(() => {
-        setCurrent(stepsMap[viaje?.x_status_viaje] ?? 0);
-    }, [viaje?.x_status_viaje]);
+    const current = stepsMap[viaje?.x_status_viaje] ?? 0;
 
     return (
-        <>
+        <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">
             <Steps
                 size="small"
-                style={{ fontFamily: 'Inter' }}
-                type="navigation"
                 current={current}
-                className="site-navigation-steps"
+                responsive
                 items={[
-                    { title: 'Disponible' },
-                    { title: 'Ruta' },
-                    { title: 'Planta' },
-                    { title: 'Retorno' },
-                    { title: 'Finalizado' },
-                    { title: 'Resguardo' },
+                    {
+                        title: 'Disponible',
+                        icon: <i className="bi bi-check-circle" />,
+                    },
+                    {
+                        title: 'Ruta',
+                        icon: <i className="bi bi-truck" />,
+                    },
+                    {
+                        title: 'Planta',
+                        icon: <i className="bi bi-building" />,
+                    },
+                    {
+                        title: 'Retorno',
+                        icon: <i className="bi bi-arrow-return-left" />,
+                    },
+                    {
+                        title: 'Finalizado',
+                        icon: <i className="bi bi-flag-fill" />,
+                    },
+                    {
+                        title: 'Resguardo',
+                        icon: <i className="bi bi-shield-check" />,
+                    },
                 ]}
             />
-        </>
+        </div>
     );
 };
-
-export default EstatusViaje;
