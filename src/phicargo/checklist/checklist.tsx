@@ -161,7 +161,7 @@ const Checklist = () => {
           onPress={() => exportToCSV(data, columns, "checklist.csv")}
           color="success"
           className="text-white"
-          radius="full"
+          radius="md"
           size="sm"
         >
           Exportar
@@ -172,7 +172,7 @@ const Checklist = () => {
           isDisabled={isLoading}
           color="warning"
           className="text-white"
-          radius="full"
+          radius="md"
           size="sm"
         >
           Recargar

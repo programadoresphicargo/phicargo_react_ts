@@ -109,12 +109,21 @@ const TravelNotes = () => {
         fontSize: '14px',
       },
     },
-    muiTableBodyCellProps: {
-      sx: {
-        fontFamily: 'Inter',
-        fontWeight: 'normal',
-        fontSize: '14px',
-      },
+    muiTableBodyCellProps: ({ row }) => {
+      return {
+        sx: {
+          backgroundColor: row.subRows?.length
+            ? '#0456cf'
+            : row.index % 2 === 0
+              ? '#FFFFFF'
+              : '#F8F9FA',
+          color: row.subRows?.length ? '#FFFFFF' : '#000000',
+          fontFamily: 'Inter',
+          fontWeight: 'normal',
+          fontSize: '12px',
+          padding: '4px 8px'
+        },
+      };
     },
     muiTableContainerProps: {
       sx: {
@@ -131,12 +140,13 @@ const TravelNotes = () => {
         }}
       >
         <h2
-          className="font-semibold lg:text-2xl text-primary"
+          className="font-semibold lg:text-2xl"
         >
           Notas de viaje
         </h2>
         <Button
-          radius="full"
+          radius="md"
+          size="sm"
           color='success'
           className="text-white"
           onPress={() =>

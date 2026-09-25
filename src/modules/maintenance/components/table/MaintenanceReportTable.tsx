@@ -102,14 +102,16 @@ const MaintenanceReportTable = (props: MaintenanceReportTableProps) => {
           {type}
         </h1>
         <Button
-          radius='full'
+          radius='md'
+          size='sm'
           fullWidth
           color={type == 'tractocamion' ? 'primary' : 'secondary'}
           onPress={() => table.setCreatingRow(true)}
-        >Añadir Servicio
+        >Nuevo
         </Button>
         <Button
-          radius='full'
+          radius='md'
+          size='sm'
           fullWidth
           className='text-white'
           color='success'
@@ -117,7 +119,8 @@ const MaintenanceReportTable = (props: MaintenanceReportTableProps) => {
           Exportar
         </Button>
         <Button
-          radius='full'
+          radius='md'
+          size='sm'
           fullWidth
           className='text-white'
           color='primary'
@@ -126,7 +129,7 @@ const MaintenanceReportTable = (props: MaintenanceReportTableProps) => {
         </Button>
         <Select
           label="Estatus"
-          radius="full"
+          radius="md"
           size="sm"
           style={{ minWidth: "150px" }}
           selectedKeys={[status]}
