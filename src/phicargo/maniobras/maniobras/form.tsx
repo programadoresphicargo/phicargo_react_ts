@@ -698,7 +698,7 @@ const Formulariomaniobra: React.FC<Props> = ({
                                 <Typography sx={{ fontFamily: 'Inter' }}>
                                     Maniobra M-{id_maniobra} / {dataCP?.id} / {estado}
                                 </Typography>
-                                <Button autoFocus color="primary" onPress={handleClose} radius='full'>
+                                <Button autoFocus color="primary" onPress={handleClose} radius='md' size='sm' variant='flat'>
                                     Cerrar
                                 </Button>
                             </Toolbar>
@@ -728,19 +728,19 @@ const Formulariomaniobra: React.FC<Props> = ({
                                     <Grid size={12}>
                                         <Stack spacing={1} direction="row" className='mb-4'>
                                             {!id_maniobra &&
-                                                <Button color="primary" onPress={() => validar_form()} isLoading={loading} radius='full' size="sm">Registrar</Button>
+                                                <Button color="primary" onPress={() => validar_form()} isLoading={loading} radius='md' size="sm">Registrar</Button>
                                             }
                                             {estado === "borrador" && (
-                                                <Button onPress={handleOpenDialog} color="danger" startContent={<i className="bi bi-x-circle"></i>} radius='full' isLoading={loading} size="sm">Cancelar</Button>
+                                                <Button onPress={handleOpenDialog} color="danger" startContent={<i className="bi bi-x-circle"></i>} radius='md' isLoading={loading} size="sm">Cancelar</Button>
                                             )}
                                             {!formDisabled && id_maniobra && (
-                                                <Button color="success" onPress={() => validar_form_actualizar()} isLoading={loading} className='text-white' startContent={<i className="bi bi-floppy"></i>} radius='full' size="sm">Guardar</Button>
+                                                <Button color="success" onPress={() => validar_form_actualizar()} isLoading={loading} className='text-white' startContent={<i className="bi bi-floppy"></i>} radius='md' size="sm">Guardar</Button>
                                             )}
                                             {estado === "borrador" && formDisabled && (
-                                                <Button color="primary" onPress={toggleForm} startContent={<i className="bi bi-pen"></i>} radius='full' isLoading={loading} size="sm">Editar</Button>
+                                                <Button color="primary" onPress={toggleForm} startContent={<i className="bi bi-pen"></i>} radius='md' isLoading={loading} size="sm">Editar</Button>
                                             )}
                                             {estado === "borrador" && (
-                                                <Button color="success" onPress={comprobar_equipo} className='text-white' startContent={<i className="bi bi-play-fill"></i>} radius='full' isLoading={loading} size="sm">Iniciar</Button>
+                                                <Button color="success" onPress={comprobar_equipo} className='text-white' startContent={<i className="bi bi-play-fill"></i>} radius='md' isLoading={loading} size="sm">Iniciar</Button>
                                             )}
                                             {estado === "activa" && (
                                                 <Button onPress={finalizar_maniobra} color="danger" startContent={<i className="bi bi-stop-fill"></i>} radius="full" isLoading={loading} size="sm">Finalizar</Button>
@@ -749,9 +749,9 @@ const Formulariomaniobra: React.FC<Props> = ({
                                                 <Button onPress={handleClickOpenPE} color="success" className='text-white' startContent={<i className="bi bi-send-fill"></i>} radius="full" isLoading={loading} size="sm">Enviar nuevo estatus</Button>
                                             )}
                                             {estado === "finalizada" && (
-                                                <Button color="primary" onPress={reactivar_maniobra} radius='full' isLoading={loading} size="sm">Reactivar</Button>
+                                                <Button color="primary" onPress={reactivar_maniobra} radius='md' isLoading={loading} size="sm">Reactivar</Button>
                                             )}
-                                            <Button color="primary" onPress={handleClickOpenCL} startContent={<i className="bi bi-envelope-at-fill"></i>} radius='full' isLoading={loading} size="sm">Correos electronicos</Button>
+                                            <Button color="primary" onPress={handleClickOpenCL} startContent={<i className="bi bi-envelope-at-fill"></i>} radius='md' isLoading={loading} size="sm">Correos electronicos</Button>
                                             {id_maniobra && (
                                                 <Button
                                                     radius="full"
@@ -767,8 +767,8 @@ const Formulariomaniobra: React.FC<Props> = ({
                                                 >
                                                     Formato de entrega
                                                 </Button>)}
-                                            <Button color='secondary' radius='full' size='sm' onPress={handleClickOpenPosturas}>Posturas</Button>
-                                            <Button color="warning" radius='full' size='sm' onPress={handleClickOpenNotas} className='text-white'>Notas</Button>
+                                            <Button color='secondary' radius='md' size='sm' onPress={handleClickOpenPosturas}>Posturas</Button>
+                                            <Button color="warning" radius='md' size='sm' onPress={handleClickOpenNotas} className='text-white'>Notas</Button>
                                         </Stack>
                                     </Grid>
 
