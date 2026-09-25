@@ -88,135 +88,306 @@ const ReporteOperador: React.FC<Props> = ({
     };
 
     return (
-        <>
-            <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="5xl">
-                <ModalContent>
-                    {() => (
-                        <>
-                            <ModalHeader className="flex flex-col gap-1">Operador tengo un problema</ModalHeader>
-                            {isLoading && <Progress isIndeterminate size="sm" color="danger" />}
-                            <ModalBody>
-                                <div className="page-header">
-                                    <div className="row align-items-center">
-                                        <div className="col-sm-auto">
-                                            <Button
-                                                isDisabled={data?.atendido == true ? true : false}
-                                                color="danger"
-                                                onPress={AtenderReporte}
-                                                radius="full"
-                                            >
-                                                Atender
-                                            </Button>
+        <Modal
+            isOpen={isOpen}
+            onOpenChange={onOpenChange}
+            size="5xl"
+            scrollBehavior="outside"
+            classNames={{
+                base: "bg-[#f8fafc]",
+                header: "border-b border-slate-200",
+                body: "py-6",
+            }}
+        >
+            <ModalContent>
+                {() => (
+                    <>
+                        {/* HEADER */}
+                        <ModalHeader className="px-6 py-5">
+                            <div className="w-full flex items-center justify-between gap-4">
+
+                                <div className="flex items-center gap-3">
+
+                                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#002887] text-white">
+                                        <i className="bi bi-exclamation-triangle-fill text-lg" />
+                                    </div>
+
+                                    <div>
+                                        <h2 className="text-xl font-semibold text-slate-800">
+                                            Reporte de operador
+                                        </h2>
+
+                                        <p className="mt-0.5 text-sm text-slate-500">
+                                            Consulta y atención de incidencia operacional
+                                        </p>
+                                    </div>
+
+                                </div>
+
+                                {data && (
+                                    <div
+                                        className={`
+                                            rounded-full px-3 py-1.5 text-xs font-semibold
+                                            ${data.atendido
+                                                ? "bg-emerald-50 text-emerald-700"
+                                                : "bg-amber-50 text-amber-700"
+                                            }
+                                        `}
+                                    >
+                                        {data.atendido
+                                            ? "ATENDIDO"
+                                            : "PENDIENTE"
+                                        }
+                                    </div>
+                                )}
+
+                            </div>
+                        </ModalHeader>
+
+                        {isLoading && (
+                            <Progress
+                                isIndeterminate
+                                size="sm"
+                                color="primary"
+                            />
+                        )}
+
+                        <ModalBody className="px-6">
+
+                            {/* ACCIONES */}
+                            <div className="rounded-2xl border border-slate-200 bg-white shadow-sm">
+
+                                <div className="flex flex-wrap items-center justify-between gap-3 px-5 py-4">
+
+                                    <div>
+                                        <p className="text-sm font-semibold text-slate-800">
+                                            Atención del reporte
+                                        </p>
+
+                                        <p className="mt-1 text-xs text-slate-500">
+                                            Registra la respuesta y seguimiento de la incidencia.
+                                        </p>
+                                    </div>
+
+                                    <Button
+                                        isDisabled={data?.atendido === true}
+                                        color="primary"
+                                        onPress={AtenderReporte}
+                                        radius="md"
+                                        className="font-semibold text-white"
+                                        isLoading={isLoading}
+                                        startContent={
+                                            <i className="bi bi-check-lg" />
+                                        }
+                                    >
+                                        Atender reporte
+                                    </Button>
+
+                                </div>
+
+                            </div>
+
+                            {/* INFORMACIÓN GENERAL */}
+                            <div className="mt-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
+
+                                <div className="border-b border-slate-200 px-5 py-4">
+                                    <h3 className="text-sm font-semibold text-slate-800">
+                                        Información del reporte
+                                    </h3>
+
+                                    <p className="mt-1 text-xs text-slate-500">
+                                        Datos generales relacionados con la incidencia.
+                                    </p>
+                                </div>
+
+                                <div className="grid grid-cols-1 gap-5 p-5 md:grid-cols-2">
+
+                                    <Input
+                                        id="fecha_creacion"
+                                        label="Fecha de creación"
+                                        value={data?.fecha_creacion ?? ""}
+                                        variant="bordered"
+                                        isReadOnly
+                                    />
+
+                                    <Input
+                                        id="referencia"
+                                        label="Viaje"
+                                        variant="bordered"
+                                        isReadOnly
+                                        value={data?.referencia ?? ""}
+                                    />
+
+                                    <Input
+                                        id="nombre_operador"
+                                        label="Operador"
+                                        variant="bordered"
+                                        isReadOnly
+                                        value={data?.nombre_operador ?? ""}
+                                    />
+
+                                    <Input
+                                        id="unidad"
+                                        label="Unidad"
+                                        variant="bordered"
+                                        isReadOnly
+                                        value={data?.unidad ?? ""}
+                                    />
+
+                                </div>
+
+                            </div>
+
+                            {/* DESCRIPCIÓN + ATENCIÓN */}
+                            <div className="mt-5 grid grid-cols-1 gap-5 lg:grid-cols-2">
+
+                                {/* OPERADOR */}
+                                <div className="rounded-2xl border border-slate-200 bg-white shadow-sm">
+
+                                    <div className="border-b border-slate-200 px-5 py-4">
+                                        <div className="flex items-center gap-2">
+
+                                            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 text-slate-600">
+                                                <i className="bi bi-person-fill" />
+                                            </div>
+
+                                            <div>
+                                                <h3 className="text-sm font-semibold text-slate-800">
+                                                    Descripción del operador
+                                                </h3>
+
+                                                <p className="text-xs text-slate-500">
+                                                    Información proporcionada al reportar la incidencia.
+                                                </p>
+                                            </div>
+
                                         </div>
                                     </div>
-                                </div>
-                                <Grid container spacing={2}>
-                                    <Grid item xs={12} lg={6}>
-                                        <Card>
-                                            <CardBody>
-                                                <Box mb={2}>
-                                                    <Input
-                                                        id="fecha_creacion"
-                                                        label="Fecha creacion"
-                                                        value={data?.fecha_creacion}
-                                                        variant="flat"
-                                                        readOnly
-                                                    />
-                                                </Box>
-                                                <Box mb={2}>
-                                                    <Input
-                                                        id="referencia"
-                                                        label="Viaje"
-                                                        variant="flat"
-                                                        readOnly
-                                                        value={data?.referencia}
-                                                    />
-                                                </Box>
-                                                <Box mb={2}>
-                                                    <Input
-                                                        id="nombre_operador"
-                                                        label="Operador"
-                                                        variant="flat"
-                                                        readOnly
-                                                        value={data?.nombre_operador}
-                                                    />
-                                                </Box>
-                                                <Box mb={2}>
-                                                    <Input
-                                                        id="unidad"
-                                                        label="Unidad"
-                                                        variant="flat"
-                                                        readOnly
-                                                        value={data?.unidad}
-                                                    />
-                                                </Box>
-                                            </CardBody>
-                                        </Card>
-                                    </Grid>
 
-                                    <Grid item xs={12} lg={6}>
-                                        <Card>
-                                            <CardBody>
-                                                <Box mb={3}>
-                                                    <Textarea
-                                                        id="comentarios_operador"
-                                                        label="Comentarios operador"
-                                                        variant="flat"
-                                                        rows={4}
-                                                        disabled
-                                                        value={data?.comentarios_operador}
-                                                    />
-                                                </Box>
-                                                <Box mb={3}>
-                                                    <Textarea
-                                                        isDisabled={data?.atendido == true ? true : false}
-                                                        id="comentarios_monitorista"
-                                                        label="Comentarios Monitorista / Ejecutivo"
-                                                        variant="bordered"
-                                                        rows={5}
-                                                        name="comentarios_monitorista"
-                                                        value={data?.comentarios_monitorista}
-                                                        onValueChange={(value) =>
-                                                            setData((prev) =>
-                                                                prev
-                                                                    ? { ...prev, comentarios_monitorista: value }
-                                                                    : prev
-                                                            )
+                                    <div className="p-5">
+
+                                        <Textarea
+                                            id="comentarios_operador"
+                                            label="Comentarios del operador"
+                                            variant="bordered"
+                                            minRows={7}
+                                            isDisabled
+                                            value={data?.comentarios_operador ?? ""}
+                                        />
+
+                                    </div>
+
+                                </div>
+
+                                {/* MONITORISTA */}
+                                <div className="rounded-2xl border border-slate-200 bg-white shadow-sm">
+
+                                    <div className="border-b border-slate-200 px-5 py-4">
+                                        <div className="flex items-center gap-2">
+
+                                            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-[#002887]">
+                                                <i className="bi bi-headset" />
+                                            </div>
+
+                                            <div>
+                                                <h3 className="text-sm font-semibold text-slate-800">
+                                                    Atención del monitorista
+                                                </h3>
+
+                                                <p className="text-xs text-slate-500">
+                                                    Registra las acciones o comentarios realizados.
+                                                </p>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div className="p-5">
+
+                                        <Textarea
+                                            isDisabled={data?.atendido === true}
+                                            id="comentarios_monitorista"
+                                            label="Comentarios del monitorista / ejecutivo"
+                                            variant="bordered"
+                                            minRows={7}
+                                            name="comentarios_monitorista"
+                                            value={data?.comentarios_monitorista ?? ""}
+                                            onValueChange={(value) =>
+                                                setData((prev) =>
+                                                    prev
+                                                        ? {
+                                                            ...prev,
+                                                            comentarios_monitorista: value,
                                                         }
-                                                    />
-                                                </Box>
-                                                {data?.atendido && (
-                                                    <>
-                                                        <Box mb={3}>
-                                                            <Input
-                                                                id="nombre_usuario_resolvio"
-                                                                label="Usuario resolvio"
-                                                                variant="flat"
-                                                                isReadOnly
-                                                                value={data?.nombre_usuario_resolvio}
-                                                            />
-                                                        </Box>
-                                                        <Box mb={3}>
-                                                            <Input
-                                                                id="fecha_atendido"
-                                                                label="Fecha atendido"
-                                                                variant="flat"
-                                                                isReadOnly
-                                                                value={data?.fecha_atendido}
-                                                            />
-                                                        </Box>
-                                                    </>
-                                                )}
-                                            </CardBody>
-                                        </Card>
-                                    </Grid>
-                                </Grid>
-                            </ModalBody>
-                        </>
-                    )}
-                </ModalContent>
-            </Modal>
-        </>
+                                                        : prev
+                                                )
+                                            }
+                                        />
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            {/* RESOLUCIÓN */}
+                            {data?.atendido && (
+                                <div className="mt-5 rounded-2xl border border-emerald-200 bg-white shadow-sm">
+
+                                    <div className="border-b border-emerald-100 bg-emerald-50/50 px-5 py-4">
+
+                                        <div className="flex items-center gap-2">
+
+                                            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-100 text-emerald-700">
+                                                <i className="bi bi-check-circle-fill" />
+                                            </div>
+
+                                            <div>
+                                                <h3 className="text-sm font-semibold text-emerald-800">
+                                                    Información de resolución
+                                                </h3>
+
+                                                <p className="text-xs text-emerald-700/70">
+                                                    Datos correspondientes al cierre de la incidencia.
+                                                </p>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div className="grid grid-cols-1 gap-5 p-5 md:grid-cols-2">
+
+                                        <Input
+                                            id="nombre_usuario_resolvio"
+                                            label="Usuario que resolvió"
+                                            variant="bordered"
+                                            isReadOnly
+                                            value={
+                                                data?.nombre_usuario_resolvio ?? ""
+                                            }
+                                        />
+
+                                        <Input
+                                            id="fecha_atendido"
+                                            label="Fecha de atención"
+                                            variant="bordered"
+                                            isReadOnly
+                                            value={
+                                                data?.fecha_atendido ?? ""
+                                            }
+                                        />
+
+                                    </div>
+
+                                </div>
+                            )}
+
+                        </ModalBody>
+                    </>
+                )}
+            </ModalContent>
+        </Modal>
     );
 }
 
