@@ -86,7 +86,7 @@ const SelectFlota: React.FC<Props> = ({
                 isReadOnly={disabled}
                 defaultItems={filteredOptions}
                 variant={disabled ? 'flat' : 'bordered'}
-                selectedKey={String(value)}
+                selectedKey={value ? String(value) : null}
                 isInvalid={fieldState?.invalid ?? false}
                 errorMessage={fieldState?.error?.message}
                 onSelectionChange={(key) => {
@@ -99,28 +99,90 @@ const SelectFlota: React.FC<Props> = ({
                     } else {
                         setIsMaintenance(false);
                     }
-                }
-                }
+                }}
             >
-                {(item) => <AutocompleteItem key={item.key}>{item.label}</AutocompleteItem>}
-            </Autocomplete >
+                {(item) => (
+                    <AutocompleteItem key={item.key}>
+                        {item.label}
+                    </AutocompleteItem>
+                )}
+            </Autocomplete>
+
             {isMaintenance && (
                 <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.3 }}
+                    initial={{
+                        opacity: 0,
+                        height: 0,
+                        y: -8,
+                    }}
+                    animate={{
+                        opacity: 1,
+                        height: 'auto',
+                        y: 0,
+                    }}
+                    exit={{
+                        opacity: 0,
+                        height: 0,
+                        y: -8,
+                    }}
+                    transition={{
+                        duration: 0.3,
+                        ease: 'easeOut',
+                    }}
+                    className="overflow-hidden"
                 >
-                    <Alert
-                        color="danger"
-                        variant="solid"
-                        className="mt-2"
-                        description="Equipo con reporte de mantenimiento pendiente de atención."
-                        title="Precaución"
-                    />
+                    <div
+                        className="mt-2 flex items-center gap-3 rounded-xl bg-[#C40C0C] px-4 py-3 text-white shadow-sm"
+                        style={{
+                            fontFamily: 'Inter, sans-serif',
+                        }}
+                    >
+                        {/* Icono animado */}
+                        <motion.div
+                            initial={{
+                                scale: 0.7,
+                                rotate: -10,
+                            }}
+                            animate={{
+                                scale: 1,
+                                rotate: 0,
+                            }}
+                            transition={{
+                                duration: 0.35,
+                                delay: 0.1,
+                                type: 'spring',
+                                stiffness: 300,
+                                damping: 15,
+                            }}
+                            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/15"
+                        >
+                            <motion.i
+                                animate={{
+                                    scale: [1, 1.5, 1],
+                                }}
+                                transition={{
+                                    duration: 1.5,
+                                    repeat: Infinity,
+                                    ease: 'easeInOut',
+                                }}
+                                className="bi bi-tools text-base text-white"
+                            />
+                        </motion.div>
+
+                        {/* Contenido */}
+                        <div className="min-w-0">
+                            <p className="text-xs font-bold">
+                                Precaución
+                            </p>
+
+                            <p className="mt-0.5 text-xs leading-5 text-red-50">
+                                Equipo con reporte de mantenimiento pendiente
+                                de atención.
+                            </p>
+                        </div>
+                    </div>
                 </motion.div>
-            )
-            }
+            )}
         </>
     );
 };
