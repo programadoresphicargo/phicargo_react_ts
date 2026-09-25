@@ -1,5 +1,5 @@
 import odooApi from "@/api/odoo-api";
-import { Alert, Autocomplete, AutocompleteItem } from "@heroui/react";
+import { Autocomplete, AutocompleteItem } from "@heroui/react";
 import { motion } from "framer-motion";
 import { useEffect, useState } from 'react';
 import { ControllerFieldState } from "react-hook-form";
