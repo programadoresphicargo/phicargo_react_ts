@@ -94,14 +94,16 @@ const Viaje: React.FC<ViajeProps> = ({
         <div style={{ display: 'flex', gap: '10px' }}>
           <PlantaViaje></PlantaViaje>
           <Button
-            radius="full"
+            radius="md"
             color='primary'
+            size="sm"
             onPress={handleClickOpenCorreos}>
             <i className="bi bi-envelope-at"></i>
             Correos electronicos
           </Button>
           <Button
-            radius="full"
+            radius="md"
+            size="sm"
             color="warning"
             className="text-white"
             onPress={() => copiarHTML(id_viaje)}>

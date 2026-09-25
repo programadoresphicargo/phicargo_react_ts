@@ -154,11 +154,7 @@ export default function PlantaViaje() {
             {/* BOTÓN DE ESTADO */}
             <Button
                 radius="md"
-                variant={
-                    cliente?.x_url_google_maps
-                        ? "flat"
-                        : "solid"
-                }
+                className="text-white"
                 color={
                     cliente?.x_url_google_maps
                         ? "success"
@@ -185,7 +181,7 @@ export default function PlantaViaje() {
             <Dialog
                 open={isOpen}
                 onClose={handleClose}
-                maxWidth="sm"
+                maxWidth="md"
                 fullWidth
                 PaperProps={{
                     sx: {
