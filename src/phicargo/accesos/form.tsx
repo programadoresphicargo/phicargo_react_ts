@@ -448,29 +448,30 @@ const AccesoForm = ({ id_acceso, onClose }: { id_acceso: number | null, onClose:
                     </Typography>
                 )}
                 {!id_acceso && (
-                    <Button radius="full" onPress={() => handleSubmit(registrarAcceso)()} style={{ marginTop: '20px' }} color='primary' isLoading={isLoading}><i className="bi bi-floppy"></i> Registrar</Button>
+                    <Button radius='md' onPress={() => handleSubmit(registrarAcceso)()} style={{ marginTop: '20px' }} color='primary' isLoading={isLoading} size="sm"><i className="bi bi-floppy"></i> Registrar</Button>
                 )}
                 {estado_acceso !== 'archivado' && disabledForm && id_acceso && (
-                    <Button radius="full" onPress={EditarForm} style={{ marginTop: '20px' }} color='primary' isDisabled={isLoading}><i className="bi bi-pen"></i> Editar</Button>
+                    <Button radius='md' onPress={EditarForm} style={{ marginTop: '20px' }} color='primary' isDisabled={isLoading} size="sm"><i className="bi bi-pen"></i> Editar</Button>
                 )}
                 {id_acceso && !disabledForm && (
-                    <Button radius="full" onPress={() => handleSubmit(actualizar_acceso)()} style={{ marginTop: '20px' }} isLoading={isLoading} color="success" className="text-white"><i className="bi bi-floppy2-fill"></i> Guardar</Button>
+                    <Button radius='md' onPress={() => handleSubmit(actualizar_acceso)()} style={{ marginTop: '20px' }} isLoading={isLoading} color="success" className="text-white" size="sm"><i className="bi bi-floppy2-fill"></i> Guardar</Button>
                 )}
                 {(estado_acceso === 'espera' || estado_acceso === 'autorizado') && (
                     <Button
-                        radius="full"
+                        radius='md'
                         onPress={handleClickOpenValidador}
                         style={{ marginTop: '20px' }}
                         color="primary"
+                        size="sm"
                     >
                         Validar {tipo_movimiento}
                     </Button>
                 )}
                 {session?.user?.permissions?.includes(510) && id_acceso && estado_acceso === 'espera' && (
-                    <Button radius="full" onPress={() => autorizarAcceso()} style={{ marginTop: '20px' }} color='danger' isDisabled={autorizado_por_id ? true : false}>Autorizar {tipo_movimiento}</Button>
+                    <Button radius='md' onPress={() => autorizarAcceso()} style={{ marginTop: '20px' }} color='danger' isDisabled={autorizado_por_id ? true : false} size="sm">Autorizar {tipo_movimiento}</Button>
                 )}
                 {(estado_acceso === 'validado' || estado_acceso === 'rechazado') && (
-                    < Button radius="full" onPress={handleClickOpenValidador} style={{ marginTop: '20px' }} color='primary'><i className="bi bi-folder-plus"></i> Archivar / Finalizar acceso</Button>
+                    < Button radius='md' onPress={handleClickOpenValidador} style={{ marginTop: '20px' }} color='primary' size="sm"><i className="bi bi-folder-plus"></i> Archivar / Finalizar acceso</Button>
                 )}
             </Stack >
             <Grid container spacing={2} style={{ padding: '20px' }}>

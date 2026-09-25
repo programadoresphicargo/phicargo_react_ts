@@ -197,8 +197,8 @@ const Descuentos = ({ }) => {
           Descuentos
         </h1>
         <DescuentoForm open={open} handleClose={handleClose} id_descuento={id_descuento}></DescuentoForm>
-        <Button color='primary' className='text-white' onPress={() => handleClickOpen()} radius='full'><i className="bi bi-plus-circle"></i> Nuevo</Button>
-        <Button color='success' className='text-white' onPress={() => fetchData()} radius='full'><i className="bi bi-arrow-clockwise"></i> Refrescar</Button>
+        <Button color='primary' className='text-white' onPress={() => handleClickOpen()} radius='md' size='sm'><i className="bi bi-plus-circle"></i> Nuevo</Button>
+        <Button color='success' className='text-white' onPress={() => fetchData()} radius='md' size='sm'><i className="bi bi-arrow-clockwise"></i> Refrescar</Button>
       </Box>
     ),
   });

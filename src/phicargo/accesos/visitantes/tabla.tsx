@@ -113,7 +113,7 @@ const ListadoVisitantes: React.FC<Props> = ({ open, handleClose, id_empresa }) =
           flexWrap: 'wrap',
         }}
       >
-        <Button color='primary' onPress={handleClickOpenForm} radius='full'>Nuevo visitante</Button>
+        <Button color='primary' onPress={handleClickOpenForm} radius='md' size='sm'>Nuevo visitante</Button>
       </Box >
     ),
     muiTableContainerProps: {
@@ -151,10 +151,10 @@ const ListadoVisitantes: React.FC<Props> = ({ open, handleClose, id_empresa }) =
         padding: '0 16px'
       }} elevation={0}>
         <Toolbar>
-          <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+          <Typography sx={{ ml: 2, flex: 1, fontFamily: 'inter' }} variant="h6" component="div">
             Registro de visitantes
           </Typography>
-          <Button autoFocus onPress={handleClose}>
+          <Button autoFocus onPress={handleClose} size='sm' radius='md' variant='bordered'>
             Cerrar
           </Button>
         </Toolbar>

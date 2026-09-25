@@ -73,7 +73,7 @@ const IncidentsPage = () => {
         <Tooltip content="Detalles">
           <Button
             size="sm"
-            radius='full'
+            radius='md'
             color="primary"
             onPress={() => setDetail(row.original)}
           >
@@ -81,7 +81,7 @@ const IncidentsPage = () => {
           </Button>
         </Tooltip>
         <Tooltip content="Editar">
-          <Button size="sm" onPress={() => table.setEditingRow(row)} radius='full'>
+          <Button size="sm" onPress={() => table.setEditingRow(row)} radius='md'>
             <EditIcon />
           </Button>
         </Tooltip>
@@ -94,7 +94,7 @@ const IncidentsPage = () => {
         </h1>
         <Button
           color='primary'
-          radius='full'
+          radius='md'
           onPress={() => table.setCreatingRow(true)}
           size='sm'
         >
@@ -102,7 +102,7 @@ const IncidentsPage = () => {
         </Button>
         <Button
           color='primary'
-          radius='full'
+          radius='md'
           onPress={() => EnviarCorreo()}
           size='sm'
         >

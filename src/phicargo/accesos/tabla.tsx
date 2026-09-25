@@ -301,7 +301,8 @@ const TablaAccesos: React.FC<TablaAccesosProps> = ({
           {title}
         </h2>
         <Button
-          radius="full"
+          radius="md"
+          size="sm"
           color='primary'
           onPress={() =>
             NuevoAcceso()
@@ -310,7 +311,8 @@ const TablaAccesos: React.FC<TablaAccesosProps> = ({
           <i className="bi bi-plus-lg"></i> Nuevo registro
         </Button>
         <Button
-          radius="full"
+          radius="md"
+          size="sm"
           color='success'
           className="text-white"
           onPress={() =>

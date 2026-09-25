@@ -138,7 +138,7 @@ const ListadoEmpresas: React.FC<Props> = ({
           flexWrap: 'wrap',
         }}
       >
-        <Button color='primary' onPress={handleClickOpenForm} radius='full'>Nueva</Button>
+        <Button color='primary' onPress={handleClickOpenForm} radius='md' size='sm'>Nueva</Button>
       </Box>
     ),
   });
@@ -159,10 +159,10 @@ const ListadoEmpresas: React.FC<Props> = ({
         }}
         elevation={0}>
         <Toolbar>
-          <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+          <Typography sx={{ ml: 2, flex: 1, fontFamily: 'Inter' }} variant="h6" component="div">
             Registro de empresas
           </Typography>
-          <Button autoFocus onClick={handleClose}>
+          <Button autoFocus onClick={handleClose} radius='md' size='sm' variant="faded">
             Cerrar
           </Button>
         </Toolbar>
