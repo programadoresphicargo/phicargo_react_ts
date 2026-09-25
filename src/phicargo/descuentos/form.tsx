@@ -1,9 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Divider,
-  Stack,
-} from "@mui/material";
-import { Button, Card, CardBody, CardHeader, Chip, Progress, DatePicker } from "@heroui/react";
+import { Button, Chip, Progress, DatePicker } from "@heroui/react";
 import Swal from "sweetalert2";
 import odooApi from "@/api/odoo-api";
 import { useDescuentos } from "./context";
