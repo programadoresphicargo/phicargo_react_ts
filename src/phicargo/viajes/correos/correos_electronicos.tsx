@@ -461,7 +461,7 @@ const CorreosElectronicosViaje: React.FC<
                             <Avatar
                               isBordered
                               radius="lg"
-                              size="md"
+                              size="sm"
                               color="primary"
                             />
 
