@@ -137,146 +137,303 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
   const estado = watch("estado");
 
   return (
-    <Modal isOpen={open} scrollBehavior="outside" onOpenChange={handleClose} size="5xl">
+    <Modal
+      isOpen={open}
+      scrollBehavior="outside"
+      onOpenChange={handleClose}
+      size="5xl"
+      classNames={{
+        base: "bg-[#f8fafc]",
+        header: "border-b border-slate-200",
+        body: "py-6",
+        footer: "border-t border-slate-200",
+      }}
+    >
       <ModalContent>
         {(onClose) => (
           <>
-            <ModalHeader className="flex flex-col gap-1">Descuento</ModalHeader>
-            <ModalBody>
+            {/* HEADER */}
+            <ModalHeader className="px-6 py-5">
+              <div className="w-full flex items-center justify-between gap-4">
 
-              {isLoading && <Progress isIndeterminate size="sm" />}
+                <div>
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#002887] text-white font-bold">
+                      $
+                    </div>
 
-              <Stack direction="row" spacing={2} alignItems="center">
+                    <div>
+                      <h2 className="text-xl font-semibold text-slate-800">
+                        Descuento
+                      </h2>
+
+                      <p className="text-sm text-slate-500 mt-0.5">
+                        Gestión y administración de descuentos al personal
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
                 {id_descuento && (
-                  <Chip color={estado == "borrador" ? "warning" : estado == "confirmado" ? "success" : estado == "cancelado" ? "danger" : "default"} className="uppercase text-sm font-semibold text-white">
+                  <Chip
+                    size="sm"
+                    variant="flat"
+                    color={
+                      estado === "borrador"
+                        ? "warning"
+                        : estado === "confirmado"
+                          ? "success"
+                          : estado === "cancelado"
+                            ? "danger"
+                            : "default"
+                    }
+                    className="font-semibold uppercase"
+                  >
                     {estado || "pendiente"}
                   </Chip>
                 )}
 
-                {!id_descuento && (
-                  <Button color="success" onPress={() => handleSubmit(Save)()} radius="full" className="text-white" isLoading={isLoading}>
-                    Registrar
-                  </Button>
-                )}
+              </div>
+            </ModalHeader>
 
-                {id_descuento && !isEditing && estado == "borrador" && (
-                  <Button color="primary" onPress={() => setIsEditing(true)} radius="full" className="text-white">
-                    Editar
-                  </Button>
-                )}
+            <ModalBody className="px-6">
 
-                {isEditing && id_descuento && (
-                  <Button color="success" onPress={() => handleSubmit(Save)()} radius="full" className="text-white" isLoading={isLoading}>
-                    Guardar cambios
-                  </Button>
-                )}
+              {isLoading && (
+                <Progress
+                  isIndeterminate
+                  size="sm"
+                  className="mb-4"
+                />
+              )}
 
-                {!isEditing && id_descuento && (
-                  <>
-                    {(estado == "confirmado" || estado == "aplicado") && (
-                      <Button color="success" onPress={ImprimirFormato} radius="full" className="text-white">
-                        Imprimir formato
-                      </Button>
-                    )}
-                    {estado == "borrador" && (
-                      <Button color="success" onPress={() => CambiarEstado('confirmado')} radius="full" className="text-white" isLoading={isLoading}>
-                        Confirmar
-                      </Button>
-                    )}
-                    {estado == "confirmado" && (
-                      <Button color="warning" onPress={() => CambiarEstado('aplicado')} radius="full" className="text-white" isLoading={isLoading}>
-                        Aplicar
-                      </Button>
-                    )}
-                    {session?.user?.permissions?.includes(690) && estado == "borrador" && (
-                      <Button color="danger" onPress={() => CambiarEstado('cancelado')} radius="full" className="text-white" isLoading={isLoading}>
-                        Cancelar
-                      </Button>
-                    )}
-                  </>
-                )}
-              </Stack>
+              {/* ACCIONES */}
+              <div className="flex flex-wrap items-center justify-between gap-3">
 
-              <Card shadow="sm" className="border border-gray-200 rounded-2xl h-full">
-                <CardHeader className="bg-gradient-to-r from-[#002887] to-[#0059b3] text-white font-semibold text-center rounded-t-2xl">
-                  <div className="flex flex-col items-start">
-                    <h4 className="text-large">¿Quién solicita el descuento?</h4>
-                    <p className="text-small text-white-100">
-                      Selecciona al encargado del departamento que realiza la solicitud.
-                    </p>
+                <div className="flex flex-wrap gap-2">
+
+                  {!id_descuento && (
+                    <Button
+                      color="success"
+                      onPress={() => handleSubmit(Save)()}
+                      radius="md"
+                      className="font-semibold text-white"
+                      isLoading={isLoading}
+                    >
+                      Registrar descuento
+                    </Button>
+                  )}
+
+                  {id_descuento && !isEditing && estado === "borrador" && (
+                    <Button
+                      color="primary"
+                      onPress={() => setIsEditing(true)}
+                      radius="md"
+                      className="font-semibold text-white"
+                    >
+                      Editar
+                    </Button>
+                  )}
+
+                  {isEditing && id_descuento && (
+                    <Button
+                      color="success"
+                      onPress={() => handleSubmit(Save)()}
+                      radius="md"
+                      className="font-semibold text-white"
+                      isLoading={isLoading}
+                    >
+                      Guardar cambios
+                    </Button>
+                  )}
+
+                  {!isEditing && id_descuento && (
+                    <>
+                      {(estado === "confirmado" || estado === "aplicado") && (
+                        <Button
+                          color="primary"
+                          variant="flat"
+                          onPress={ImprimirFormato}
+                          radius="md"
+                        >
+                          Imprimir formato
+                        </Button>
+                      )}
+
+                      {estado === "borrador" && (
+                        <Button
+                          color="success"
+                          variant="flat"
+                          onPress={() => CambiarEstado("confirmado")}
+                          radius="md"
+                          isLoading={isLoading}
+                        >
+                          Confirmar
+                        </Button>
+                      )}
+
+                      {estado === "confirmado" && (
+                        <Button
+                          color="warning"
+                          variant="flat"
+                          onPress={() => CambiarEstado("aplicado")}
+                          radius="md"
+                          isLoading={isLoading}
+                        >
+                          Aplicar
+                        </Button>
+                      )}
+
+                      {session?.user?.permissions?.includes(690) &&
+                        estado === "borrador" && (
+                          <Button
+                            color="danger"
+                            variant="flat"
+                            onPress={() => CambiarEstado("cancelado")}
+                            radius="md"
+                            isLoading={isLoading}
+                          >
+                            Cancelar
+                          </Button>
+                        )}
+                    </>
+                  )}
+
+                </div>
+              </div>
+
+              {/* SOLICITANTE / EMPLEADO */}
+              <div className="mt-6 rounded-2xl border border-slate-200 bg-white shadow-sm">
+
+                <div className="border-b border-slate-200 px-5 py-4">
+                  <h3 className="text-sm font-semibold text-slate-800">
+                    Participantes
+                  </h3>
+
+                  <p className="mt-1 text-xs text-slate-500">
+                    Define quién solicita y a quién se aplicará el descuento.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 gap-5 p-5 md:grid-cols-2">
+
+                  <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-4">
+
+                    <div className="mb-4">
+                      <p className="text-sm font-semibold text-slate-700">
+                        Solicitante
+                      </p>
+
+                      <p className="text-xs text-slate-500">
+                        Responsable que genera la solicitud.
+                      </p>
+                    </div>
+
+                    <SelectEmpleado
+                      control={control}
+                      rules={{
+                        required: "Solicitante requerido",
+                      }}
+                      name="id_solicitante"
+                      label="Solicitante"
+                      variant="bordered"
+                      isDisabled={!isEditing}
+                    />
+
                   </div>
-                </CardHeader>
-                <Divider />
-                <CardBody>
-                  <SelectEmpleado
-                    control={control}
-                    rules={{ required: 'Solicitante requerido' }}
-                    name={"id_solicitante"}
-                    label={"Solicitante"}
-                    variant="bordered"
-                    isDisabled={!isEditing}
-                  />
-                </CardBody>
-              </Card>
 
-              <Card shadow="sm" className="border border-gray-200 rounded-2xl h-full">
-                <CardHeader className="bg-gradient-to-r from-[#002887] to-[#0059b3] text-white font-semibold text-center rounded-t-2xl">
-                  <div className="flex flex-col items-start">
-                    <h4 className="text-large">¿A quién se aplicará el descuento?</h4>
-                    <p className="text-small text-white-100">
-                      Selecciona al empleado correspondiente.
-                    </p>
-                  </div>
-                </CardHeader>
-                <Divider />
-                <CardBody>
-                  <SelectEmpleado
-                    control={control}
-                    name={"id_empleado"}
-                    label={"Empleado"}
-                    rules={{ required: 'Empleado requerido' }}
-                    placeholder={"Empleado responsable del descuento"}
-                    variant="bordered"
-                    isDisabled={!isEditing}
-                  />
-                </CardBody>
-              </Card>
+                  <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-4">
 
-              <Card shadow="sm" className="border border-gray-200 rounded-2xl h-full">
-                <CardHeader className="bg-gradient-to-r from-[#002887] to-[#0059b3] text-white font-semibold text-center rounded-t-2xl">
-                  <div className="flex flex-col items-start">
-                    <h4 className="text-large">Detalles del descuento</h4>
-                    <p className="text-small text-white-500">
-                      Ingresa la información requerida para procesar el descuento.
-                    </p>
+                    <div className="mb-4">
+                      <p className="text-sm font-semibold text-slate-700">
+                        Empleado
+                      </p>
+
+                      <p className="text-xs text-slate-500">
+                        Persona a quien se aplicará el descuento.
+                      </p>
+                    </div>
+
+                    <SelectEmpleado
+                      control={control}
+                      name="id_empleado"
+                      label="Empleado"
+                      rules={{
+                        required: "Empleado requerido",
+                      }}
+                      placeholder="Empleado responsable del descuento"
+                      variant="bordered"
+                      isDisabled={!isEditing}
+                    />
+
                   </div>
-                </CardHeader>
-                <Divider />
-                <CardBody className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                </div>
+              </div>
+
+              {/* DETALLES */}
+              <div className="mt-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
+
+                <div className="border-b border-slate-200 px-5 py-4">
+                  <h3 className="text-sm font-semibold text-slate-800">
+                    Información del descuento
+                  </h3>
+
+                  <p className="mt-1 text-xs text-slate-500">
+                    Registra los datos financieros y administrativos asociados.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 gap-5 p-5 md:grid-cols-2">
 
                   <Controller
                     control={control}
                     name="fecha"
-                    rules={{ required: "Fecha de incidencia requerida" }}
+                    rules={{
+                      required: "Fecha de incidencia requerida",
+                    }}
                     render={({ field, fieldState }) => {
-                      const calendarValue =
-                        field.value
-                          ? parseDate(field.value.format("YYYY-MM-DD"))
-                          : null;
+                      const calendarValue = field.value
+                        ? parseDate(field.value.format("YYYY-MM-DD"))
+                        : null;
 
                       return (
                         <DatePicker
-                          label="Fecha de Incidencia"
+                          label="Fecha de incidencia"
                           variant="bordered"
                           isDisabled={!isEditing}
                           value={calendarValue}
                           onChange={(val) => {
-                            field.onChange(val ? dayjs(val.toString()) : null);
+                            field.onChange(
+                              val
+                                ? dayjs(val.toString())
+                                : null
+                            );
                           }}
                           isInvalid={!!fieldState.error}
                           errorMessage={fieldState.error?.message}
                         />
                       );
+                    }}
+                  />
+
+                  <SelectInput
+                    isDisabled={!isEditing}
+                    control={control}
+                    name="periodicidad"
+                    label="Periodicidad"
+                    variant="bordered"
+                    items={[
+                      {
+                        value: "Viaje",
+                        key: "viaje",
+                      },
+                      {
+                        value: "Quincenal",
+                        key: "quincenal",
+                      },
+                    ]}
+                    rules={{
+                      required: "Periodicidad obligatoria",
                     }}
                   />
 
@@ -286,21 +443,9 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
                     name="monto"
                     isDisabled={!isEditing}
                     variant="bordered"
-                    rules={{ required: 'Monto obligatorio' }}
-                  />
-
-                  <SelectInput
-                    isDisabled={!isEditing}
-                    control={control}
-                    name="periodicidad"
-                    label="Periodicidad"
-                    variant="bordered"
-                    items={
-                      [
-                        { value: 'Viaje', key: 'viaje' },
-                        { value: 'Quincenal', key: 'quincenal' },
-                      ]}
-                    rules={{ required: 'Periodicidad obligatoria' }}
+                    rules={{
+                      required: "Monto obligatorio",
+                    }}
                   />
 
                   <NumberInput
@@ -309,38 +454,57 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
                     label="Importe"
                     isDisabled={!isEditing}
                     variant="bordered"
-                    rules={{ required: 'Importe obligatorio' }}
+                    rules={{
+                      required: "Importe obligatorio",
+                    }}
                   />
 
-                  <TextareaInput
-                    control={control}
-                    name="motivo"
-                    label="Motivo"
-                    variant="bordered"
-                    isDisabled={!isEditing}
-                    rules={{ required: 'Motivo obligatorio' }}
-                  />
+                  <div className="md:col-span-2">
+                    <TextareaInput
+                      control={control}
+                      name="motivo"
+                      label="Motivo"
+                      variant="bordered"
+                      isDisabled={!isEditing}
+                      rules={{
+                        required: "Motivo obligatorio",
+                      }}
+                    />
+                  </div>
 
-                  <TextareaInput
-                    control={control}
-                    name="comentarios"
-                    label="Comentarios"
-                    variant="bordered"
-                    isDisabled={!isEditing}
-                    rules={{ required: 'Comentarios obligatorios' }}
-                  />
+                  <div className="md:col-span-2">
+                    <TextareaInput
+                      control={control}
+                      name="comentarios"
+                      label="Comentarios"
+                      variant="bordered"
+                      isDisabled={!isEditing}
+                      rules={{
+                        required: "Comentarios obligatorios",
+                      }}
+                    />
+                  </div>
 
-                </CardBody>
-              </Card>
+                </div>
+              </div>
+
             </ModalBody>
-            <ModalFooter>
-              <Button color="danger" variant="light" onPress={onClose}>
-                Cancelar
+
+            <ModalFooter className="px-6">
+
+              <Button
+                color="default"
+                variant="light"
+                onPress={onClose}
+                radius="md"
+              >
+                Cerrar
               </Button>
+
             </ModalFooter>
           </>
         )}
       </ModalContent>
-    </Modal >
+    </Modal>
   );
 }
