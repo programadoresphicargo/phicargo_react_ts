@@ -224,7 +224,7 @@ const EncuestaCalidad = () => {
               <SelectInput
                 control={control}
                 name="branch_id"
-                label="Sucursal"
+                label="Sucursal a calificar"
                 items={branches}
                 rules={{ required: "Campo obligatorio" }}
               />
