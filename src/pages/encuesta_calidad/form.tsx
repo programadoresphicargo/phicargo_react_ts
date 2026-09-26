@@ -170,34 +170,6 @@ const EncuestaCalidad = () => {
       {/* Contenido */}
       <main className="mx-auto max-w-5xl px-4 py-8 pb-32 sm:px-6">
 
-        {/* Barra de progreso */}
-        {!isLoadingQuestions && totalQuestions > 0 && (
-          <div className="mb-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-            <div className="mb-3 flex items-center justify-between">
-              <div>
-                <p className="text-sm font-semibold text-slate-700">
-                  Progreso de la encuesta
-                </p>
-
-                <p className="mt-1 text-xs text-slate-500">
-                  {answeredQuestions} de {totalQuestions} preguntas respondidas
-                </p>
-              </div>
-
-              <span className="text-sm font-semibold text-primary">
-                {progress}%
-              </span>
-            </div>
-
-            <div className="h-2 overflow-hidden rounded-full bg-slate-100">
-              <div
-                className="h-full rounded-full bg-primary transition-all duration-300"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
-          </div>
-        )}
-
         {/* Datos del cliente */}
         <Card
           shadow="none"
@@ -443,26 +415,45 @@ const EncuestaCalidad = () => {
       </main>
 
       {/* Barra inferior */}
+      {/* Barra inferior */}
       {!isLoadingQuestions && data.length > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200 bg-white/95 px-4 py-4 backdrop-blur-md">
-          <div className="mx-auto flex max-w-5xl items-center justify-between gap-4">
-            <div className="hidden sm:block">
-              <p className="text-sm font-medium text-slate-700">
-                {answeredQuestions} de {totalQuestions} preguntas respondidas
-              </p>
+        <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200 bg-white/95 px-4 py-3 backdrop-blur-md">
+          <div className="mx-auto flex max-w-5xl items-center gap-5">
 
-              <p className="text-xs text-slate-400">
-                Revise sus respuestas antes de enviar
-              </p>
+            {/* Progreso */}
+            <div className="min-w-0 flex-1">
+              <div className="mb-2 flex items-center justify-between gap-3">
+                <div>
+                  <p className="text-sm font-semibold text-slate-700">
+                    Progreso de la encuesta
+                  </p>
+
+                  <p className="text-xs text-slate-400">
+                    {answeredQuestions} de {totalQuestions} preguntas respondidas
+                  </p>
+                </div>
+
+                <span className="shrink-0 text-sm font-bold text-primary">
+                  {progress}%
+                </span>
+              </div>
+
+              <div className="h-2 overflow-hidden rounded-full bg-slate-100">
+                <div
+                  className="h-full rounded-full bg-primary transition-all duration-300"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
             </div>
 
+            {/* Botón */}
             <Button
               type="submit"
               color="primary"
               radius="lg"
               size="lg"
               isLoading={isSubmitting}
-              className="ml-auto min-w-[190px] font-semibold shadow-lg shadow-primary/20"
+              className="shrink-0 min-w-[190px] font-semibold shadow-lg shadow-primary/20"
             >
               {!isSubmitting && (
                 <i className="bi bi-send-check text-base" />
@@ -470,6 +461,7 @@ const EncuestaCalidad = () => {
 
               Enviar encuesta
             </Button>
+
           </div>
         </div>
       )}
