@@ -20,7 +20,6 @@ import {
   DatePickerInput,
   NumberInput,
   TextareaInput,
-  VehicleSearchInput,
 } from '@/components/inputs';
 
 import { useForm } from 'react-hook-form';
@@ -29,6 +28,7 @@ import { SelectItem } from '@/types';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import dayjs, { Dayjs } from 'dayjs';
+import { Vehicle } from '@/modules/vehicles/models';
 
 export type Maintenance = {
   id: number | null;
@@ -73,6 +73,7 @@ export default function MaintenanceForm({
   });
 
   const [task, setTask] = useState<SelectItem[]>([]);
+  const [vehicles, setVehicles] = useState<SelectItem[]>([]);
   const [isLoading, setLoading] = useState<boolean>(false);
 
   const vehicleId = watch('vehicle_id');
@@ -88,6 +89,28 @@ export default function MaintenanceForm({
       );
 
       setTask(
+        response.data.map((registro) => ({
+          key: registro.id,
+          value: registro.name,
+        }))
+      );
+    } catch (error: any) {
+      const detail =
+        error.response?.data?.detail ||
+        error.message ||
+        'No fue posible obtener los tipos de mantenimiento.';
+
+      toast.error(detail);
+    }
+  };
+
+  const getVehicles = async (): Promise<void> => {
+    try {
+      const response = await odooApi.get<Vehicle[]>(
+        '/vehicles/equipos/'
+      );
+
+      setVehicles(
         response.data.map((registro) => ({
           key: registro.id,
           value: registro.name,
@@ -207,6 +230,7 @@ export default function MaintenanceForm({
     if (!open) return;
 
     getTask();
+    getVehicles();
 
     if (id !== null) {
       getMantenance(id);
@@ -438,11 +462,12 @@ export default function MaintenanceForm({
             </div>
           </div>
 
-          <VehicleSearchInput
+          <AutocompleteInput
+            label="Vehiculo"
             control={control}
             name="vehicle_id"
-            vehicleId={vehicleId}
-            required
+            items={vehicles}
+            rules={{ required: "Campo obligatorio" }}
           />
         </div>
 

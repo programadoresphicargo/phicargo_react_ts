@@ -27,7 +27,7 @@ const Odometers = () => {
   const fetchData = async () => {
     try {
       setisLoading(true);
-      const response = await odooApi.get(`/vehicles/`);
+      const response = await odooApi.get(`/vehicles/equipos/`);
       setData(response.data);
     } catch (error) {
       toast.error('Error al enviar los datos: ' + error);
@@ -38,7 +38,7 @@ const Odometers = () => {
 
   const columns = useMemo<MRT_ColumnDef<Odometer>[]>(
     () => [
-      { accessorKey: 'name2', header: 'Vehiculo', },
+      { accessorKey: 'name', header: 'Vehiculo', },
       {
         accessorKey: 'odometer',
         header: 'Kilometraje',
