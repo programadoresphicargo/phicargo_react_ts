@@ -51,7 +51,7 @@ const SurveysPage = () => {
       header: 'Sucursal',
     },
     {
-      accessorKey: 'cliente',
+      accessorKey: 'partner',
       header: 'Cliente',
     },
     {
