@@ -139,16 +139,25 @@ const LineasTabla = ({ active }: { active: boolean }) => {
                 borderRadius: '0',
             },
         },
-        muiTableBodyCellProps: {
-            sx: {
-                fontFamily: 'Inter',
-                fontWeight: 'normal',
-                fontSize: '14px',
-            },
+        muiTableBodyCellProps: ({ row }) => {
+            return {
+                sx: {
+                    backgroundColor: row.subRows?.length
+                        ? '#0456cf'
+                        : row.index % 2 === 0
+                            ? '#FFFFFF'
+                            : '#F8F9FA',
+                    color: row.subRows?.length ? '#FFFFFF' : '#000000',
+                    fontFamily: 'Inter',
+                    fontWeight: 'normal',
+                    fontSize: '12px',
+                    padding: '4px 8px'
+                },
+            };
         },
         muiTableContainerProps: {
             sx: {
-                maxHeight: 'calc(100vh - 270px)',
+                maxHeight: 'calc(100vh - 250px)',
             },
         },
         renderTopToolbarCustomActions: () => (
@@ -166,7 +175,8 @@ const LineasTabla = ({ active }: { active: boolean }) => {
                     Lineas celulares
                 </h1>
                 <Button
-                    radius='full'
+                    radius='md'
+                    size='sm'
                     color="primary"
                     onPress={() => {
                         onOpen();
@@ -176,14 +186,16 @@ const LineasTabla = ({ active }: { active: boolean }) => {
                 </Button>
 
                 <Button
-                    radius='full'
+                    radius='md'
+                    size='sm'
                     color="danger"
                     onPress={() => {
                         fetchData();
                     }}>Refrescar
                 </Button>
                 <Button
-                    radius='full'
+                    radius='md'
+                    size='sm'
                     color='success'
                     className='text-white'
                     startContent={<i className="bi bi-file-earmark-excel"></i>}

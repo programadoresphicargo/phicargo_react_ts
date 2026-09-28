@@ -133,7 +133,7 @@ const Asignaciones = () => {
             href={`${apiUrl}/inventarioti/asignaciones/celulares/responsiva/${row.original.id_asignacion}`}
             variant="solid"
             size='sm'
-            radius="full"
+            radius="md"
           >
             Responsiva
           </Button>
@@ -152,7 +152,7 @@ const Asignaciones = () => {
             href={`${apiUrl}/inventarioti/asignaciones/boton_panico/${row.original.id_asignacion}`}
             variant="solid"
             size='sm'
-            radius="full"
+            radius="md"
           >
             Botón de panico
           </Button>
@@ -167,7 +167,7 @@ const Asignaciones = () => {
             onPress={() => Devolver(row.original)}
             variant="solid"
             size='sm'
-            radius='full'
+            radius='md'
           >
             Desasignar
           </Button>
@@ -209,16 +209,25 @@ const Asignaciones = () => {
         borderRadius: '0',
       },
     },
-    muiTableBodyCellProps: {
-      sx: {
-        fontFamily: 'Inter',
-        fontWeight: 'normal',
-        fontSize: '14px',
-      },
+    muiTableBodyCellProps: ({ row }) => {
+      return {
+        sx: {
+          backgroundColor: row.subRows?.length
+            ? '#0456cf'
+            : row.index % 2 === 0
+              ? '#FFFFFF'
+              : '#F8F9FA',
+          color: row.subRows?.length ? '#FFFFFF' : '#000000',
+          fontFamily: 'Inter',
+          fontWeight: 'normal',
+          fontSize: '12px',
+          padding: '4px 8px'
+        },
+      };
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 210px)',
+        maxHeight: 'calc(100vh - 200px)',
       },
     },
     renderTopToolbarCustomActions: () => (
@@ -235,11 +244,12 @@ const Asignaciones = () => {
         >
           Asignaciones celulares
         </h1>
-        <Button radius='full' color='primary' onPress={() => onOpen1()}>Nueva asignación</Button>
-        <Button radius='full' color='danger' onPress={() => fetchData()}>Refrescar</Button>
-        <Button radius='full' color='success' onPress={() => onOpenChange2()} className='text-white'>Empleados no asignados</Button>
+        <Button radius='md' color='primary' onPress={() => onOpen1()} size='sm'>Nueva asignación</Button>
+        <Button radius='md' color='danger' onPress={() => fetchData()} size='sm'>Refrescar</Button>
+        <Button radius='md' color='success' onPress={() => onOpenChange2()} className='text-white' size='sm'>Empleados no asignados</Button>
         <Button
-          radius='full'
+          radius='md'
+          size='sm'
           color='success'
           className='text-white'
           startContent={<i className="bi bi-file-earmark-excel"></i>}

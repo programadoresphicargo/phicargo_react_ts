@@ -111,6 +111,7 @@ const CelularesTabla: React.FC<Props> = ({
                 fontFamily: 'Inter',
                 fontWeight: 'Bold',
                 fontSize: '14px',
+                padding: '4px 8px'
             },
         },
         muiTablePaperProps: {
@@ -119,16 +120,25 @@ const CelularesTabla: React.FC<Props> = ({
                 borderRadius: '0',
             },
         },
-        muiTableBodyCellProps: {
-            sx: {
-                fontFamily: 'Inter',
-                fontWeight: 'normal',
-                fontSize: '14px',
-            },
+        muiTableBodyCellProps: ({ row }) => {
+            return {
+                sx: {
+                    backgroundColor: row.subRows?.length
+                        ? '#0456cf'
+                        : row.index % 2 === 0
+                            ? '#FFFFFF'
+                            : '#F8F9FA',
+                    color: row.subRows?.length ? '#FFFFFF' : '#000000',
+                    fontFamily: 'Inter',
+                    fontWeight: 'normal',
+                    fontSize: '12px',
+                    padding: '4px 8px'
+                },
+            };
         },
         muiTableContainerProps: {
             sx: {
-                maxHeight: 'calc(100vh - 260px)',
+                maxHeight: 'calc(100vh - 250px)',
             },
         },
         renderTopToolbarCustomActions: () => (
@@ -146,23 +156,26 @@ const CelularesTabla: React.FC<Props> = ({
                     Celulares
                 </h1>
                 <Button
-                    radius='full'
+                    radius='md'
                     color="primary"
+                    size='sm'
                     onPress={() => {
                         onOpen();
                         setCelular(null);
                     }}><i className="bi bi-plus-circle"></i>Nuevo</Button>
 
                 <Button
-                    radius='full'
+                    radius='md'
                     color="danger"
+                    size='sm'
                     onPress={() => {
                         fetchData();
                     }}><i className="bi bi-arrow-clockwise"></i>Refrescar
                 </Button>
 
                 <Button
-                    radius='full'
+                    radius='md'
+                    size='sm'
                     color='success'
                     className='text-white'
                     startContent={<i className="bi bi-file-earmark-excel"></i>}

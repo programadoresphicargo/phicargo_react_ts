@@ -175,16 +175,25 @@ const AsignacionesEquipoComputo = () => {
         borderRadius: '0',
       },
     },
-    muiTableBodyCellProps: {
-      sx: {
-        fontFamily: 'Inter',
-        fontWeight: 'normal',
-        fontSize: '14px',
-      },
+    muiTableBodyCellProps: ({ row }) => {
+      return {
+        sx: {
+          backgroundColor: row.subRows?.length
+            ? '#0456cf'
+            : row.index % 2 === 0
+              ? '#FFFFFF'
+              : '#F8F9FA',
+          color: row.subRows?.length ? '#FFFFFF' : '#000000',
+          fontFamily: 'Inter',
+          fontWeight: 'normal',
+          fontSize: '12px',
+          padding: '4px 8px'
+        },
+      };
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 210px)',
+        maxHeight: 'calc(100vh - 200px)',
       },
     },
     renderTopToolbarCustomActions: () => (
@@ -201,10 +210,11 @@ const AsignacionesEquipoComputo = () => {
         >
           Asignaciones computo
         </h1>
-        <Button radius='full' color='primary' onPress={() => onOpen()}>Nueva asignación</Button>
-        <Button radius='full' color='danger' onPress={() => fetchData()}>Refrescar</Button>
+        <Button radius='md' color='primary' onPress={() => onOpen()} size='sm'>Nueva asignación</Button>
+        <Button radius='md' color='danger' onPress={() => fetchData()} size='sm'>Refrescar</Button>
         <Button
-          radius='full'
+          radius='md'
+          size='sm'
           color='success'
           className='text-white'
           startContent={<i className="bi bi-file-earmark-excel"></i>}

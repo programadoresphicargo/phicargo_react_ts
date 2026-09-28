@@ -93,16 +93,25 @@ const EmpleadosTI: React.FC<Props> = ({
                 borderRadius: '0',
             },
         },
-        muiTableBodyCellProps: {
-            sx: {
-                fontFamily: 'Inter',
-                fontWeight: 'normal',
-                fontSize: '14px',
-            },
+        muiTableBodyCellProps: ({ row }) => {
+            return {
+                sx: {
+                    backgroundColor: row.subRows?.length
+                        ? '#0456cf'
+                        : row.index % 2 === 0
+                            ? '#FFFFFF'
+                            : '#F8F9FA',
+                    color: row.subRows?.length ? '#FFFFFF' : '#000000',
+                    fontFamily: 'Inter',
+                    fontWeight: 'normal',
+                    fontSize: '12px',
+                    padding: '4px 8px'
+                },
+            };
         },
         muiTableContainerProps: {
             sx: {
-                maxHeight: 'calc(100vh - 260px)',
+                maxHeight: 'calc(100vh - 250px)',
             },
         },
         renderTopToolbarCustomActions: () => (
@@ -120,7 +129,8 @@ const EmpleadosTI: React.FC<Props> = ({
                     Empleados
                 </h1>
                 <Button
-                    radius='full'
+                    radius='md'
+                    size='sm'
                     color="primary"
                     onPress={() => {
                         onOpen();
@@ -128,7 +138,8 @@ const EmpleadosTI: React.FC<Props> = ({
                     }}>Nuevo</Button>
 
                 <Button
-                    radius='full'
+                    radius='md'
+                    size='sm'
                     color="danger"
                     onPress={() => {
                         fetchData();
@@ -136,7 +147,8 @@ const EmpleadosTI: React.FC<Props> = ({
                 </Button>
 
                 <Button
-                    radius='full'
+                    radius='md'
+                    size='sm'
                     color='success'
                     className='text-white'
                     startContent={<i className="bi bi-file-earmark-excel"></i>}
