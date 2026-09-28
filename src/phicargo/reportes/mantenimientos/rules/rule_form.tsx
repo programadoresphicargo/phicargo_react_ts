@@ -107,7 +107,7 @@ export default function MaintenanceRuleForm({
   const getMantenanceRule = async (ruleId: number): Promise<void> => {
     try {
       const response = await odooApi.get<Configuraciones>(
-        `/ maintenances / rule / ${ruleId} `
+        `/maintenances/rule/${ruleId}`
       );
 
       reset(response.data);
