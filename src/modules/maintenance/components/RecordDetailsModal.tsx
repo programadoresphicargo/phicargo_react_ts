@@ -194,7 +194,7 @@ export const RecordDetailsModal = ({
               )}
 
               {record.vehicle.state_id !== 10 &&
-                  (
+                (
                   <Button
                     color="danger"
                     radius="md"
@@ -225,20 +225,19 @@ export const RecordDetailsModal = ({
                   </Button>
                 )}
 
-              {record.vehicle.state_id === 1 && (
-                <Button
-                  color="success"
-                  radius="md"
-                  className="font-medium text-white"
-                  size="sm"
-                  onPress={handleAptoParaUso}
-                  startContent={
-                    <i className="bi bi-check-lg" />
-                  }
-                >
-                  Apto para uso
-                </Button>
-              )}
+              <Button
+                color="success"
+                radius="md"
+                className="font-medium text-white"
+                size="sm"
+                onPress={handleAptoParaUso}
+                startContent={
+                  <i className="bi bi-check-lg" />
+                }
+              >
+                Apto para uso
+              </Button>
+              
             </div>
           </div>
 
