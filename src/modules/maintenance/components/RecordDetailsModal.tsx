@@ -194,7 +194,7 @@ export const RecordDetailsModal = ({
               )}
 
               {record.vehicle.state_id !== 10 &&
-                record.status === 'draft' && (
+                  (
                   <Button
                     color="danger"
                     radius="md"
@@ -210,7 +210,7 @@ export const RecordDetailsModal = ({
                 )}
 
               {record.vehicle.state_id === 10 &&
-                record.status === 'draft' && (
+                (
                   <Button
                     color="success"
                     radius="md"
