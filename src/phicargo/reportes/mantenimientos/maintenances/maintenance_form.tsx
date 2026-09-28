@@ -616,7 +616,7 @@ export default function MaintenanceForm({
               </div>
 
               <AutocompleteInput
-                label="Tipo de mantenimiento"
+                label="Tipo de servicio"
                 control={control}
                 name="task_id"
                 items={task}
