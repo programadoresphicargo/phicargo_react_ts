@@ -6,7 +6,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { NumberInput } from '@heroui/react';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
@@ -34,7 +34,8 @@ const EnganchesDialog: React.FC<Props> = ({
   control,
   handleSubmit,
   reset,
-  getValues
+  getValues,
+  watch
  } = useForm<ConfigForm>({
   defaultValues: {
    value: 0,
@@ -58,6 +59,8 @@ const EnganchesDialog: React.FC<Props> = ({
  useEffect(() => {
   obtenerConfiguracion();
  }, [reset, open]);
+
+ const enganches = watch("value");
 
  const onSubmit = async (data: ConfigForm) => {
   try {
@@ -84,57 +87,60 @@ const EnganchesDialog: React.FC<Props> = ({
  const mails = getValues("mails");
 
  return (
-  <React.Fragment>
-   <Dialog
-    onClose={handleClose}
-    open={open}
-    maxWidth="sm"
-    fullWidth
-   >
-    <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-     Número de Enganches
-    </DialogTitle>
-    <IconButton
-     aria-label="close"
-     onClick={handleClose}
-     sx={(theme) => ({
-      position: 'absolute',
-      right: 8,
-      top: 8,
-      color: theme.palette.grey[500],
-     })}
+  <>
+   <h1>Valor enganches: {enganches}</h1>
+   <React.Fragment>
+    <Dialog
+     onClose={handleClose}
+     open={open}
+     maxWidth="sm"
+     fullWidth
     >
-     <CloseIcon />
-    </IconButton>
-    <DialogContent dividers>
-     <form onSubmit={handleSubmit(onSubmit)}>
-      <Controller
-       name="value"
-       control={control}
-       render={({ field }) => (
-        <NumberInput
-         size="sm"
-         label="Número enganches"
-         value={field.value}
-         onValueChange={(value) => {
-          field.onChange(value);
-          handleSubmit(onSubmit)();
-         }}
-        />
-       )}
-      />
-     </form>
-     <div className='mt-4'>
-      <HistorialCambios data={mails ?? []}></HistorialCambios>
-     </div>
-    </DialogContent>
-    <DialogActions>
-     <Button autoFocus onClick={handleClose}>
-      Cerrar
-     </Button>
-    </DialogActions>
-   </Dialog>
-  </React.Fragment>
+     <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
+      Enganches
+     </DialogTitle>
+     <IconButton
+      aria-label="close"
+      onClick={handleClose}
+      sx={(theme) => ({
+       position: 'absolute',
+       right: 8,
+       top: 8,
+       color: theme.palette.grey[500],
+      })}
+     >
+      <CloseIcon />
+     </IconButton>
+     <DialogContent dividers>
+      <form onSubmit={handleSubmit(onSubmit)}>
+       <Controller
+        name="value"
+        control={control}
+        render={({ field }) => (
+         <NumberInput
+          size="sm"
+          label="Número enganches"
+          value={field.value}
+          onValueChange={(value) => {
+           field.onChange(value);
+           handleSubmit(onSubmit)();
+          }}
+         />
+        )}
+       />
+      </form>
+      <div className='mt-4'>
+       <HistorialCambios data={mails ?? []}></HistorialCambios>
+      </div>
+     </DialogContent>
+     <DialogActions>
+      <Button autoFocus onClick={handleClose}>
+       Cerrar
+      </Button>
+     </DialogActions>
+    </Dialog>
+   </React.Fragment>
+  </>
  );
 }
 

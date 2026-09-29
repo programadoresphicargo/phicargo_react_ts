@@ -134,11 +134,12 @@ const Header = () => {
             {(branchId == 1 && session?.user?.permissions?.includes(555)) && (
               <Button color='primary' size='sm' className='text-white' radius='full' onPress={handleClickOpen} isDisabled={isPending}>Enganches</Button>
             )}
-
+            {(branchId == 1) && (
+              <EnganchesDialog open={open} handleClose={handleClose}></EnganchesDialog>
+            )}
           </div>
         </div>
       </div>
-      <EnganchesDialog open={open} handleClose={handleClose}></EnganchesDialog>
     </>
   );
 };
