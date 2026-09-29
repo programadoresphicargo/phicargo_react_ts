@@ -330,7 +330,10 @@ export default function Seguimiento() {
                     <div className="flex w-full flex-col">
                         <Tabs aria-label="Options" color="primary" radius="full">
                             <Tab key="photos" title="Seguimiento completo">
-                                <Card>
+                                <Card
+                                    radius="lg"
+                                    shadow="none"
+                                    className="border border-slate-200 overflow-hidden mb-5">
                                     <CardHeader>
                                         Historial de estatus
                                     </CardHeader>
