@@ -394,11 +394,9 @@ function EstatusHistorial() {
                             left-[25px]
                             top-6
                             bottom-8
-                            w-[2px]
-                            bg-gradient-to-b
-                            from-primary-500
-                            via-primary-200
-                            to-default-200
+                            border-l-2
+                            border-dashed
+                            border-primary-200
                         "
                     />
 
