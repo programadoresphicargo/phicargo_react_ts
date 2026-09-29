@@ -104,7 +104,7 @@ const CostosExtrasContenedores = ({ id_folio }: { id_folio: number | null }) => 
                 >
                     Cartas porte
                 </h1>
-                <Button radius="full" color='primary' onPress={handleShow} isDisabled={DisabledForm} startContent={<i className="bi bi-plus-lg"></i>} size="sm">Añadir carta porte</Button>
+                <Button radius="md" color='primary' onPress={handleShow} isDisabled={DisabledForm} startContent={<i className="bi bi-plus-lg"></i>} size="sm">Añadir</Button>
             </Box>
         ),
     });

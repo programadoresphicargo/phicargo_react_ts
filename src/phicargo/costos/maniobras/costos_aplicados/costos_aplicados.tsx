@@ -67,12 +67,17 @@ const ServiciosAplicadosCE = ({ fields, append, remove, update }: Props) => {
                 accessorKey: 'id_tipo_costo',
                 header: 'Clave costo',
                 enableEditing: false,
+                size: 65,
+                minSize: 55,
+                maxSize: 80,
             },
             {
                 accessorKey: 'descripcion',
                 header: 'Descripción',
                 enableEditing: false,
-                size: 1,
+                size: 180,
+                minSize: 140,
+                maxSize: 220,
             },
             {
                 accessorKey: 'costo',
@@ -84,11 +89,17 @@ const ServiciosAplicadosCE = ({ fields, append, remove, update }: Props) => {
                 muiTableHeadCellProps: {
                     align: 'right',
                 },
+                size: 95,
+                minSize: 80,
+                maxSize: 110,
             },
             {
                 accessorKey: 'cantidad',
                 header: 'Cantidad',
                 enableEditing: true,
+                size: 65,
+                minSize: 55,
+                maxSize: 75,
                 muiTableBodyCellProps: {
                     align: 'right',
                 },
@@ -100,6 +111,9 @@ const ServiciosAplicadosCE = ({ fields, append, remove, update }: Props) => {
                 accessorKey: "iva",
                 header: "IVA",
                 enableEditing: true,
+                size: 65,
+                minSize: 55,
+                maxSize: 70,
                 muiTableBodyCellProps: {
                     align: 'right',
                 },
@@ -118,6 +132,9 @@ const ServiciosAplicadosCE = ({ fields, append, remove, update }: Props) => {
                 accessorKey: "retencion",
                 header: "Retención",
                 enableEditing: false,
+                size: 85,
+                minSize: 70,
+                maxSize: 95,
                 muiTableBodyCellProps: {
                     align: 'right',
                 },
@@ -139,6 +156,9 @@ const ServiciosAplicadosCE = ({ fields, append, remove, update }: Props) => {
             {
                 accessorKey: "subtotal",
                 header: "Subtotal",
+                size: 95,
+                minSize: 85,
+                maxSize: 110,
                 enableEditing: false,
                 muiTableBodyCellProps: {
                     align: 'right',
@@ -162,6 +182,9 @@ const ServiciosAplicadosCE = ({ fields, append, remove, update }: Props) => {
                 accessorKey: "total",
                 header: "Total",
                 enableEditing: false,
+                size: 100,
+                minSize: 90,
+                maxSize: 115,
                 muiTableBodyCellProps: {
                     align: 'right',
                 },
@@ -185,6 +208,9 @@ const ServiciosAplicadosCE = ({ fields, append, remove, update }: Props) => {
                 accessorKey: "ajuste_cobro",
                 header: "Ajuste",
                 enableEditing: true,
+                size: 100,
+                minSize: 90,
+                maxSize: 115,
                 muiTableBodyCellProps: {
                     align: 'right',
                 },
@@ -223,6 +249,9 @@ const ServiciosAplicadosCE = ({ fields, append, remove, update }: Props) => {
             {
                 accessorKey: 'comentarios',
                 header: 'Comentarios',
+                size: 150,
+                minSize: 100,
+                maxSize: 200,
                 enableEditing: true,
             },
         ],
@@ -306,31 +335,36 @@ const ServiciosAplicadosCE = ({ fields, append, remove, update }: Props) => {
                 >
                     Costos extras
                 </h1>
-                <Button radius="full" onPress={handleClickOpen} color="primary" size="sm" isDisabled={DisabledForm} startContent={<i className="bi bi-plus-lg"></i>}>
-                    Añadir costo extra
+                <Button radius="md" onPress={handleClickOpen} color="primary" size="sm" isDisabled={DisabledForm} startContent={<i className="bi bi-plus-lg"></i>}>
+                    Añadir
                 </Button>
             </Box>
         ),
         renderRowActions: ({ row, table }) => (
-            <Box sx={{ display: 'flex', gap: '8px' }}>
+            <Box
+                sx={{
+                    display: 'flex',
+                    gap: '4px',
+                    justifyContent: 'center',
+                }}>
                 <Button
                     color="primary"
                     size="sm"
                     className='text-white'
                     isDisabled={DisabledForm}
                     onPress={() => table.setEditingRow(row)}
-                    radius="full"
+                    radius="md"
                 >
-                    Editar
+                    <i className="bi bi-pencil-square" />
                 </Button>
                 <Button
                     color="danger"
                     size="sm"
-                    radius="full"
+                    radius="md"
                     isDisabled={DisabledForm}
                     onPress={() => removeRow(row.index)}
                 >
-                    Eliminar
+                    <i className="bi bi-trash3" />
                 </Button>
             </Box>
         ),
@@ -353,7 +387,7 @@ const ServiciosAplicadosCE = ({ fields, append, remove, update }: Props) => {
 
     return (
         <>
-            <Card>
+            <Card shadow="sm">
                 <CardBody>
                     <MaterialReactTable table={table} />
                 </CardBody>

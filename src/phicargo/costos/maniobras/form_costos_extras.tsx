@@ -288,7 +288,7 @@ const FormularioCostoExtra = ({ show, handleClose, id_folio }: { show: boolean, 
                         <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
                             CE-{id_folio}
                         </Typography>
-                        <Button autoFocus onPress={handleClose} radius="full" size="sm">
+                        <Button autoFocus onPress={handleClose} radius="md" size="sm">
                             Cerrar
                         </Button>
                     </Toolbar>
@@ -308,40 +308,40 @@ const FormularioCostoExtra = ({ show, handleClose, id_folio }: { show: boolean, 
                                     <Stack spacing={1} direction="row">
 
                                         {id_folio == null && (
-                                            <Button color="primary" onPress={() => handleSubmit(registrar_folio)()} isLoading={Loading} radius="full" size="sm">
+                                            <Button color="primary" onPress={() => handleSubmit(registrar_folio)()} isLoading={Loading} radius="md" size="sm">
                                                 Registrar
                                             </Button>
                                         )}
 
                                         {session?.user?.permissions?.includes(151) &&
                                             (status === "borrador" || status === "confirmado") && (
-                                                <Button color="danger" onPress={openCancelDialog} startContent={<i className="bi bi-x-circle"></i>} radius="full" size="sm">
+                                                <Button color="danger" onPress={openCancelDialog} startContent={<i className="bi bi-x-circle"></i>} radius="md" size="sm">
                                                     Cancelar
                                                 </Button>
                                             )
                                         }
 
                                         {status === 'borrador' && (
-                                            <Button color="success" onPress={confirmar_folio} className='text-white' startContent={<i className="bi bi-check-lg"></i>} radius="full" size="sm">
+                                            <Button color="success" onPress={confirmar_folio} className='text-white' startContent={<i className="bi bi-check-lg"></i>} radius="md" size="sm">
                                                 Confirmar
                                             </Button>
                                         )}
 
                                         {status === 'confirmado' && (
-                                            <Button color="success" onPress={facturar_folio} className='text-white' radius="full" size="sm">
+                                            <Button color="success" onPress={facturar_folio} className='text-white' radius="md" size="sm">
                                                 Facturar
                                             </Button>
                                         )}
 
                                         {(status === "borrador" || status === 'confirmado') && !isEditing && (
-                                            <Button color="primary" onPress={() => editar_registro()} startContent={<i className="bi bi-pen"></i>} radius="full" size="sm">
+                                            <Button color="primary" onPress={() => editar_registro()} startContent={<i className="bi bi-pen"></i>} radius="md" size="sm">
                                                 Editar
                                             </Button>
                                         )}
 
                                         {(status === "borrador" || status === 'confirmado') && isEditing && (
                                             <Button
-                                                radius="full"
+                                                radius="md"
                                                 color="success"
                                                 className='text-white'
                                                 startContent={<i className="bi bi-floppy"></i>}
@@ -354,18 +354,18 @@ const FormularioCostoExtra = ({ show, handleClose, id_folio }: { show: boolean, 
                                         )}
 
                                         {id_folio != null && (
-                                            <Button radius="full" color="danger" startContent={<i className="bi bi-filetype-pdf"></i>} showAnchorIcon href={`${apiUrl}/tms_travel/estadias/cortes/?id_folio=${id_folio}`} as={Link} isExternal={true} size="sm">
+                                            <Button radius="md" color="danger" startContent={<i className="bi bi-filetype-pdf"></i>} showAnchorIcon href={`${apiUrl}/tms_travel/estadias/cortes/?id_folio=${id_folio}`} as={Link} isExternal={true} size="sm">
                                                 Cortes estadías PDF
                                             </Button>
                                         )}
 
                                         {id_folio != null && (
-                                            <Button radius="full" color="success" startContent={<i className="bi bi-filetype-pdf"></i>} className="text-white" onPress={() => setOpen(true)} size="sm">
+                                            <Button radius="md" color="success" startContent={<i className="bi bi-filetype-pdf"></i>} className="text-white" onPress={() => setOpen(true)} size="sm">
                                                 Adjuntos
                                             </Button>
                                         )}
 
-                                        <Button className="text-white" color="warning" radius="full" size="sm" onPress={handleClickOpenNotas}>Notas</Button>
+                                        <Button className="text-white" color="warning" radius="md" size="sm" onPress={handleClickOpenNotas}>Notas</Button>
 
                                     </Stack>
                                 </CardBody>
