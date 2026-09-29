@@ -6,7 +6,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import { Controller, useForm, useWatch } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { NumberInput } from '@heroui/react';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
