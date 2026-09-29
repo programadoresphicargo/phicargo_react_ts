@@ -199,6 +199,7 @@ export const RecordDetailsModal = ({
                     color="danger"
                     radius="md"
                     size="sm"
+                    isDisabled={record.status != "draft" ? true : false}
                     className="font-medium text-white"
                     onPress={handleBlock}
                     startContent={
@@ -228,6 +229,7 @@ export const RecordDetailsModal = ({
               <Button
                 color="success"
                 radius="md"
+                isDisabled={record.status != "draft" ? true : false}
                 className="font-medium text-white"
                 size="sm"
                 onPress={handleAptoParaUso}
@@ -237,7 +239,7 @@ export const RecordDetailsModal = ({
               >
                 Apto para uso
               </Button>
-              
+
             </div>
           </div>
 

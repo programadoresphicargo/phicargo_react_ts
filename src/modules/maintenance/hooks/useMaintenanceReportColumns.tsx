@@ -24,6 +24,7 @@ export const useMaintenanceReportColumns = (type: 'tractocamion' | 'remolques', 
           return (
             <Chip
               color={type == "tractocamion" ? "primary" : "secondary"}
+              size='sm'
             >
               {cell.getValue<string>()}
             </Chip>
@@ -105,6 +106,7 @@ export const useMaintenanceReportColumns = (type: 'tractocamion' | 'remolques', 
           const status = cell.getValue<MaintenanceRecord['status']>();
           return (
             <Chip
+              size='sm'
               className="text-white"
               color={
                 status === 'pending' ? 'warning' :
