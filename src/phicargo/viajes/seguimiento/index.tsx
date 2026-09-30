@@ -189,115 +189,340 @@ export default function Seguimiento() {
                     <LlegadaTarde></LlegadaTarde>
 
                     <Grid size={12}>
+                        <Card
+                            shadow="sm"
+                            radius="lg"
+                            className="w-full border border-default-200 bg-white"
+                        >
+                            <CardHeader className="flex items-center justify-between border-b border-default-100 px-5 py-4">
+                                <div className="flex items-center gap-3">
+                                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary-50 text-primary">
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            className="h-5 w-5"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor"
+                                            strokeWidth={1.8}
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                d="M13 16h-1v-4h-1m1-4h.01M12 22a10 10 0 100-20 10 10 0 000 20z"
+                                            />
+                                        </svg>
+                                    </div>
 
-                        <Card>
-                            <CardHeader>
-                                <Chip color='primary' size='lg' radius='md'>Información del viaje</Chip>
+                                    <div>
+                                        <h2 className="text-sm font-semibold text-default-700">
+                                            Información del viaje
+                                        </h2>
+
+                                        <p className="text-xs text-default-400">
+                                            Datos operativos y generales
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <Chip
+                                    color="primary"
+                                    size="sm"
+                                    variant="flat"
+                                    radius="sm"
+                                    className="font-semibold"
+                                >
+                                    VIAJE
+                                </Chip>
                             </CardHeader>
-                            <CardBody className="bg-white rounded-xl shadow p-4">
 
-                                <div className="grid sm:grid-cols-2 gap-y-2 gap-x-4 text-gray-800 text-sm">
-                                    {/* Sección: Equipo de viaje */}
-                                    <div className="sm:col-span-2">
-                                        <h2 className="text-base font-semibold text-gray-700 border-b pb-1 mb-2">Equipo de viaje</h2>
-                                    </div>
-                                    <div>
-                                        <span className="font-semibold text-gray-600">Vehículo:</span>
-                                        <div>{viaje?.vehicle?.name || '—'}</div>
-                                    </div>
-                                    <div>
-                                        <span className="font-semibold text-gray-600">Remolque 1:</span>
-                                        <div>{viaje?.trailer1?.name || '—'}</div>
-                                    </div>
-                                    <div>
-                                        <span className="font-semibold text-gray-600">Remolque 2:</span>
-                                        <div>{viaje?.trailer2?.name || '—'}</div>
-                                    </div>
-                                    <div>
-                                        <span className="font-semibold text-gray-600">Dolly:</span>
-                                        <div>{viaje?.dolly?.name || '—'}</div>
-                                    </div>
-                                    <div>
-                                        <span className="font-semibold text-gray-600">Motogenerador 1:</span>
-                                        <div>{viaje?.x_motogenerador1?.name || '—'}</div>
-                                    </div>
-                                    <div>
-                                        <span className="font-semibold text-gray-600">Motogenerador 2:</span>
-                                        <div>{viaje?.x_motogenerador2?.name || '—'}</div>
-                                    </div>
+                            <CardBody className="p-5">
+                                <div className="space-y-6">
 
-                                    {/* Sección: Datos del viaje */}
-                                    <div className="sm:col-span-2 mt-4">
-                                        <h2 className="text-base font-semibold text-gray-700 border-b pb-1 mb-2">Datos del viaje</h2>
-                                    </div>
-                                    <div>
-                                        <span className="font-semibold text-gray-600">Operador:</span>
-                                        <div>{viaje?.employee?.name || '—'}</div>
-                                    </div>
-                                    <div>
-                                        <span className="font-semibold text-gray-600">Ejecutiv@:</span>
-                                        <div>{viaje?.x_ejecutivo_viaje_bel || '—'}</div>
-                                    </div>
-                                    <div>
-                                        <span className="font-semibold text-gray-600">Cliente:</span>
-                                        <div>{viaje?.partner?.name || '—'}</div>
-                                    </div>
-                                    <div>
-                                        <span className="font-semibold text-gray-600">Inicio programado:</span>
-                                        <div>{viaje?.inicio_programado || '—'}</div>
-                                    </div>
-                                    <div>
-                                        <span className="font-semibold text-gray-600">Llegada a planta programada:</span>
-                                        <div>{viaje?.llegada_planta_programada || '—'}</div>
-                                    </div>
-                                    <div>
-                                        <span className="font-semibold text-gray-600">Inicio real de viaje:</span>
-                                        <div>{viaje?.fecha_inicio || '—'}</div>
-                                    </div>
-                                    <div>
-                                        <span className="font-semibold text-gray-600">Finalización:</span>
-                                        <div>{viaje?.fecha_finalizado || '—'}</div>
-                                    </div>
-                                    <div>
-                                        <span className="font-semibold text-gray-600">Modo:</span>
-                                        <div>{viaje?.x_modo_bel || '—'}</div>
-                                    </div>
-                                    <div>
-                                        <span className="font-semibold text-gray-600">Armado:</span>
-                                        <div>{viaje?.x_tipo_bel || '—'}</div>
-                                    </div>
-                                    <div>
-                                        <span className="font-semibold text-gray-600">Origen:</span>
-                                        <div>{viaje?.origen || '—'}</div>
-                                    </div>
-                                    <div>
-                                        <span className="font-semibold text-gray-600">Dirección origen:</span>
-                                        <div>{viaje?.direccion_origen?.name || '—'}</div>
-                                    </div>
-                                    <div>
-                                        <span className="font-semibold text-gray-600">Dirección destino:</span>
-                                        <div>{viaje?.direccion_destino?.name || '—'}</div>
-                                    </div>
-                                    <div>
-                                        <span className="font-semibold text-gray-600">Ruta:</span>
-                                        <div>{viaje?.route?.name || '—'}</div>
-                                    </div>
-                                    <div>
-                                        <span className="font-semibold text-gray-600">Código postal:</span>
-                                        <div>{viaje?.x_codigo_postal || '—'}</div>
-                                    </div>
-                                    <div className="sm:col-span-2">
-                                        <span className="font-semibold text-gray-600 block mb-1">Contenedores:</span>
-                                        <Snippet color="primary" variant="solid" size="sm">
-                                            {viaje?.x_references || '—'}
-                                        </Snippet>
-                                    </div>
-                                    <div className="sm:col-span-2">
-                                        <span className="font-semibold text-gray-600 block mb-1">Referencia cliente:</span>
-                                        <Snippet color="success" variant="solid" size="sm" className="text-white">
-                                            {viaje?.client_order_ref || '—'}
-                                        </Snippet>
-                                    </div>
+                                    {/* =====================================================
+                EQUIPO DE VIAJE
+            ====================================================== */}
+                                    <section>
+                                        <div className="mb-3 flex items-center gap-2">
+                                            <div className="h-4 w-1 rounded-full bg-primary" />
+
+                                            <h3 className="text-xs font-bold uppercase tracking-wider text-default-500">
+                                                Equipo de viaje
+                                            </h3>
+                                        </div>
+
+                                        <div className="grid grid-cols-1 gap-x-4 gap-y-2 sm:grid-cols-2 lg:grid-cols-3">
+
+                                            {/* Vehículo */}
+                                            <div className="rounded-lg border border-default-100 bg-white p-3 transition-colors hover:bg-default-50">
+                                                <span className="block text-[10px] font-semibold uppercase tracking-wide text-default-400">
+                                                    Vehículo
+                                                </span>
+
+                                                <strong className="mt-1 block whitespace-normal break-words text-sm font-semibold text-default-700">
+                                                    {viaje?.vehicle?.name || "—"}
+                                                </strong>
+                                            </div>
+
+                                            {/* Remolque 1 */}
+                                            <div className="rounded-lg border border-default-100 bg-white p-3 transition-colors hover:bg-default-50">
+                                                <span className="block text-[10px] font-semibold uppercase tracking-wide text-default-400">
+                                                    Remolque 1
+                                                </span>
+
+                                                <strong className="mt-1 block whitespace-normal break-words text-sm font-semibold text-default-700">
+                                                    {viaje?.trailer1?.name || "—"}
+                                                </strong>
+                                            </div>
+
+                                            {/* Remolque 2 */}
+                                            <div className="rounded-lg border border-default-100 bg-white p-3 transition-colors hover:bg-default-50">
+                                                <span className="block text-[10px] font-semibold uppercase tracking-wide text-default-400">
+                                                    Remolque 2
+                                                </span>
+
+                                                <strong className="mt-1 block whitespace-normal break-words text-sm font-semibold text-default-700">
+                                                    {viaje?.trailer2?.name || "—"}
+                                                </strong>
+                                            </div>
+
+                                            {/* Dolly */}
+                                            <div className="rounded-lg border border-default-100 bg-white p-3 transition-colors hover:bg-default-50">
+                                                <span className="block text-[10px] font-semibold uppercase tracking-wide text-default-400">
+                                                    Dolly
+                                                </span>
+
+                                                <strong className="mt-1 block whitespace-normal break-words text-sm font-semibold text-default-700">
+                                                    {viaje?.dolly?.name || "—"}
+                                                </strong>
+                                            </div>
+
+                                            {/* Motogenerador 1 */}
+                                            <div className="rounded-lg border border-default-100 bg-white p-3 transition-colors hover:bg-default-50">
+                                                <span className="block text-[10px] font-semibold uppercase tracking-wide text-default-400">
+                                                    Motogenerador 1
+                                                </span>
+
+                                                <strong className="mt-1 block whitespace-normal break-words text-sm font-semibold text-default-700">
+                                                    {viaje?.x_motogenerador1?.name || "—"}
+                                                </strong>
+                                            </div>
+
+                                            {/* Motogenerador 2 */}
+                                            <div className="rounded-lg border border-default-100 bg-white p-3 transition-colors hover:bg-default-50">
+                                                <span className="block text-[10px] font-semibold uppercase tracking-wide text-default-400">
+                                                    Motogenerador 2
+                                                </span>
+
+                                                <strong className="mt-1 block whitespace-normal break-words text-sm font-semibold text-default-700">
+                                                    {viaje?.x_motogenerador2?.name || "—"}
+                                                </strong>
+                                            </div>
+                                        </div>
+                                    </section>
+
+                                    {/* =====================================================
+                DATOS DEL VIAJE
+            ====================================================== */}
+                                    <section>
+                                        <div className="mb-3 flex items-center gap-2">
+                                            <div className="h-4 w-1 rounded-full bg-primary" />
+
+                                            <h3 className="text-xs font-bold uppercase tracking-wider text-default-500">
+                                                Datos del viaje
+                                            </h3>
+                                        </div>
+
+                                        <div className="grid grid-cols-1 gap-x-4 gap-y-2 sm:grid-cols-2 lg:grid-cols-3">
+
+                                            {/* Operador */}
+                                            <div className="rounded-lg border border-default-100 bg-white p-3 transition-colors hover:bg-default-50">
+                                                <span className="block text-[10px] font-semibold uppercase tracking-wide text-default-400">
+                                                    Operador
+                                                </span>
+                                                <strong className="mt-1 block whitespace-normal break-words text-xs font-semibold text-default-700">
+                                                    {viaje?.employee?.name || "—"}
+                                                </strong>
+                                            </div>
+
+                                            {/* Ejecutivo */}
+                                            <div className="rounded-lg border border-default-100 bg-white p-3 transition-colors hover:bg-default-50">
+                                                <span className="block text-[10px] font-semibold uppercase tracking-wide text-default-400">
+                                                    Ejecutiv@
+                                                </span>
+                                                <strong className="mt-1 block whitespace-normal break-words text-xs font-semibold text-default-700">
+                                                    {viaje?.x_ejecutivo_viaje_bel || "—"}
+                                                </strong>
+                                            </div>
+
+                                            {/* Cliente */}
+                                            <div className="rounded-lg border border-default-100 bg-white p-3 transition-colors hover:bg-default-50">
+                                                <span className="block text-[10px] font-semibold uppercase tracking-wide text-default-400">
+                                                    Cliente
+                                                </span>
+                                                <strong className="mt-1 block whitespace-normal break-words text-xs font-semibold text-default-700">
+                                                    {viaje?.partner?.name || "—"}
+                                                </strong>
+                                            </div>
+
+                                            {/* Inicio programado */}
+                                            <div className="rounded-lg border border-default-100 bg-white p-3 transition-colors hover:bg-default-50">
+                                                <span className="block text-[10px] font-semibold uppercase tracking-wide text-default-400">
+                                                    Inicio programado
+                                                </span>
+                                                <strong className="mt-1 block whitespace-normal break-words text-xs font-semibold text-default-700">
+                                                    {viaje?.inicio_programado || "—"}
+                                                </strong>
+                                            </div>
+
+                                            {/* Llegada a planta */}
+                                            <div className="rounded-lg border border-default-100 bg-white p-3 transition-colors hover:bg-default-50">
+                                                <span className="block text-[10px] font-semibold uppercase tracking-wide text-default-400">
+                                                    Llegada a planta programada
+                                                </span>
+                                                <strong className="mt-1 block whitespace-normal break-words text-xs font-semibold text-default-700">
+                                                    {viaje?.llegada_planta_programada || "—"}
+                                                </strong>
+                                            </div>
+
+                                            {/* Inicio real */}
+                                            <div className="rounded-lg border border-default-100 bg-white p-3 transition-colors hover:bg-default-50">
+                                                <span className="block text-[10px] font-semibold uppercase tracking-wide text-default-400">
+                                                    Inicio real de viaje
+                                                </span>
+                                                <strong className="mt-1 block whitespace-normal break-words text-xs font-semibold text-default-700">
+                                                    {viaje?.fecha_inicio || "—"}
+                                                </strong>
+                                            </div>
+
+                                            {/* Finalización */}
+                                            <div className="rounded-lg border border-default-100 bg-white p-3 transition-colors hover:bg-default-50">
+                                                <span className="block text-[10px] font-semibold uppercase tracking-wide text-default-400">
+                                                    Finalización
+                                                </span>
+                                                <strong className="mt-1 block whitespace-normal break-words text-xs font-semibold text-default-700">
+                                                    {viaje?.fecha_finalizado || "—"}
+                                                </strong>
+                                            </div>
+
+                                            {/* Modo */}
+                                            <div className="rounded-lg border border-default-100 bg-white p-3 transition-colors hover:bg-default-50">
+                                                <span className="block text-[10px] font-semibold uppercase tracking-wide text-default-400">
+                                                    Modo
+                                                </span>
+                                                <strong className="mt-1 block whitespace-normal break-words text-xs font-semibold text-default-700">
+                                                    {viaje?.x_modo_bel || "—"}
+                                                </strong>
+                                            </div>
+
+                                            {/* Armado */}
+                                            <div className="rounded-lg border border-default-100 bg-white p-3 transition-colors hover:bg-default-50">
+                                                <span className="block text-[10px] font-semibold uppercase tracking-wide text-default-400">
+                                                    Armado
+                                                </span>
+                                                <strong className="mt-1 block whitespace-normal break-words text-xs font-semibold text-default-700">
+                                                    {viaje?.x_tipo_bel || "—"}
+                                                </strong>
+                                            </div>
+
+                                            {/* Origen */}
+                                            <div className="rounded-lg border border-default-100 bg-white p-3 transition-colors hover:bg-default-50">
+                                                <span className="block text-[10px] font-semibold uppercase tracking-wide text-default-400">
+                                                    Origen
+                                                </span>
+                                                <strong className="mt-1 block whitespace-normal break-words text-xs font-semibold text-default-700">
+                                                    {viaje?.origen || "—"}
+                                                </strong>
+                                            </div>
+
+                                            {/* Dirección origen */}
+                                            <div className="rounded-lg border border-default-100 bg-white p-3 transition-colors hover:bg-default-50">
+                                                <span className="block text-[10px] font-semibold uppercase tracking-wide text-default-400">
+                                                    Dirección origen
+                                                </span>
+                                                <strong className="mt-1 block whitespace-normal break-words text-xs font-semibold text-default-700">
+                                                    {viaje?.direccion_origen?.name || "—"}
+                                                </strong>
+                                            </div>
+
+                                            {/* Dirección destino */}
+                                            <div className="rounded-lg border border-default-100 bg-white p-3 transition-colors hover:bg-default-50">
+                                                <span className="block text-[10px] font-semibold uppercase tracking-wide text-default-400">
+                                                    Dirección destino
+                                                </span>
+                                                <strong className="mt-1 block whitespace-normal break-words text-xs font-semibold text-default-700">
+                                                    {viaje?.direccion_destino?.name || "—"}
+                                                </strong>
+                                            </div>
+
+                                            {/* Ruta */}
+                                            <div className="rounded-lg border border-default-100 bg-white p-3 transition-colors hover:bg-default-50">
+                                                <span className="block text-[10px] font-semibold uppercase tracking-wide text-default-400">
+                                                    Ruta
+                                                </span>
+                                                <strong className="mt-1 block whitespace-normal break-words text-xs font-semibold text-default-700">
+                                                    {viaje?.route?.name || "—"}
+                                                </strong>
+                                            </div>
+
+                                            {/* Código postal */}
+                                            <div className="rounded-lg border border-default-100 bg-white p-3 transition-colors hover:bg-default-50">
+                                                <span className="block text-[10px] font-semibold uppercase tracking-wide text-default-400">
+                                                    Código postal
+                                                </span>
+                                                <strong className="mt-1 block whitespace-normal break-words text-xs font-semibold text-default-700">
+                                                    {viaje?.x_codigo_postal || "—"}
+                                                </strong>
+                                            </div>
+                                        </div>
+                                    </section>
+
+                                    {/* =====================================================
+                REFERENCIAS
+            ====================================================== */}
+                                    <section>
+                                        <div className="mb-3 flex items-center gap-2">
+                                            <div className="h-4 w-1 rounded-full bg-primary" />
+
+                                            <h3 className="text-xs font-bold uppercase tracking-wider text-default-500">
+                                                Referencias
+                                            </h3>
+                                        </div>
+
+                                        <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+
+                                            {/* Contenedores */}
+                                            <div className="rounded-lg border border-default-200 bg-default-50/50 p-3">
+                                                <span className="mb-2 block text-[10px] font-semibold uppercase tracking-wide text-default-400">
+                                                    Contenedores
+                                                </span>
+
+                                                <Snippet
+                                                    color="primary"
+                                                    variant="flat"
+                                                    size="sm"
+                                                    className="max-w-full"
+                                                >
+                                                    {viaje?.x_references || "—"}
+                                                </Snippet>
+                                            </div>
+
+                                            {/* Referencia cliente */}
+                                            <div className="rounded-lg border border-default-200 bg-default-50/50 p-3">
+                                                <span className="mb-2 block text-[10px] font-semibold uppercase tracking-wide text-default-400">
+                                                    Referencia cliente
+                                                </span>
+
+                                                <Snippet
+                                                    color="success"
+                                                    variant="flat"
+                                                    size="sm"
+                                                    className="max-w-full"
+                                                >
+                                                    {viaje?.client_order_ref || "—"}
+                                                </Snippet>
+                                            </div>
+                                        </div>
+                                    </section>
                                 </div>
                             </CardBody>
                         </Card>
@@ -332,7 +557,7 @@ export default function Seguimiento() {
                             <Tab key="photos" title="Seguimiento completo">
                                 <Card
                                     radius="lg"
-                                    shadow="none"
+                                    shadow="sm"
                                     className="border border-slate-200 overflow-hidden mb-5">
                                     <CardHeader>
                                         Historial de estatus

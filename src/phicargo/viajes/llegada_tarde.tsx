@@ -274,7 +274,7 @@ function LlegadaTarde() {
     return (
         <Card
             radius="lg"
-            shadow="none"
+            shadow="sm"
             className="border border-slate-200 overflow-hidden mb-5"
         >
             {/* ==================================================
