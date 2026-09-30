@@ -1,8 +1,6 @@
 import { AddButton } from '@/components/ui';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Tab, Tabs, Button } from '@heroui/react';
-
-import CheckIcon from '@mui/icons-material/Check';
 import CompleteDialog from '../components/CompleteDialog';
 import type { MaintenanceRecord } from '../models';
 import { MuiModal } from '@/components';
@@ -172,7 +170,7 @@ export const RecordDetailsModal = ({
                     <i className="bi bi-check-circle-fill" />
                   }
                 >
-                  Confirmar
+                  Ingresar a taller
                 </Button>
               )}
 
@@ -240,6 +238,19 @@ export const RecordDetailsModal = ({
                 Apto para uso
               </Button>
 
+              <Button
+                color="primary"
+                radius="md"
+                size="sm"
+                className="font-medium text-white"
+                startContent={<i className="bi bi-check-lg" />}
+                onPress={() =>
+                  setCompleteModal(true)
+                }
+              >
+                Actualizar estado
+              </Button>
+
             </div>
           </div>
 
@@ -302,19 +313,6 @@ export const RecordDetailsModal = ({
                   loading={isPending}
                   onClick={handleSubmit(onSubmit)}
                 />
-
-                <Button
-                  color="primary"
-                  radius="md"
-                  size="sm"
-                  className="w-full font-medium text-white"
-                  startContent={<CheckIcon />}
-                  onPress={() =>
-                    setCompleteModal(true)
-                  }
-                >
-                  Actualizar estado
-                </Button>
               </div>
             </div>
           </div>
