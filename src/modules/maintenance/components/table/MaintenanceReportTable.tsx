@@ -139,7 +139,7 @@ const MaintenanceReportTable = (props: MaintenanceReportTableProps) => {
           }}
         >
           <SelectItem key="draft">Borrador</SelectItem>
-          <SelectItem key="pending">Pendiente</SelectItem>
+          <SelectItem key="pending">En taller</SelectItem>
           <SelectItem key="completed">Completado</SelectItem>
           <SelectItem key="programmed">Programado</SelectItem>
           <SelectItem key="cancelled">Cancelado</SelectItem>
