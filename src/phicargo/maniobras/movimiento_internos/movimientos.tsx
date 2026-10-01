@@ -73,7 +73,7 @@ const Descuentos = ({ }) => {
         header: 'Remolque 2',
       },
       {
-        accessorKey: 'doly_name',
+        accessorKey: 'dolly_name',
         header: 'Dolly',
       },
       {
