@@ -124,6 +124,7 @@ const OnedriveFiles = lazy(() => import('../phicargo/ajustes/onedrive_files.tsx'
 const TravelNotes = lazy(() => import('../phicargo/viajes/travel_notes/travel_notes.tsx'))
 const Refrigerados = lazy(() => import('../phicargo/maniobras/refrigerados/tabla.tsx'))
 const ChecklistRecepcionEntrega = lazy(() => import('../phicargo/checklist_recepcion_entrega/table.tsx'))
+const MovInternos = lazy(() => import('../phicargo/maniobras/movimiento_internos/movimientos.tsx'))
 
 export const PrivateRoutes = () => {
   const updateAvailable = useCheckVersion();
@@ -217,6 +218,14 @@ export const PrivateRoutes = () => {
           element={
             <Suspense fallback={<LoadingPage />}>
               <ControlManiobras />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/movimientos_internos"
+          element={
+            <Suspense fallback={<LoadingPage />}>
+              <MovInternos></MovInternos>
             </Suspense>
           }
         />
