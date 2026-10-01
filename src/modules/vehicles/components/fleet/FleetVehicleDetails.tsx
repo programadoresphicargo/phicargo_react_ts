@@ -36,9 +36,7 @@ export const FleetVehicleDetails = ({ vehicle }: Props) => {
           <Card>
             <CardBody>
               <MovimientosLocalesDialog
-                open={true}
                 vehicleId={vehicle.id}
-                onClose={() => console.log()}
               />
             </CardBody>
           </Card>
