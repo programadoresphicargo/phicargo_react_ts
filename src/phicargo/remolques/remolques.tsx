@@ -16,12 +16,15 @@ import { MaintenanceRecord } from "@/modules/maintenance/models";
 import Formulariomaniobra from "../maniobras/maniobras/form";
 import { ManiobraProvider } from "../maniobras/context/viajeContext";
 import { Link } from "@heroui/link";
+import MovimientosLocalesDialog from "./mov-internos-history";
+import HistoryIcon from "@mui/icons-material/History";
 
 /* =========================
    TIPOS
 ========================= */
 
 type Remolque = {
+    id: number;
     name2: string;
     license_plate: string;
     categoria: string;
@@ -63,6 +66,7 @@ const Remolques: React.FC = () => {
     const [reportDetail, setReportDetail] = useState<MaintenanceRecord | null>(null);
 
     const [openManiobra, setOpenManiobra] = useState(false);
+    const [openMovimientos, setOpenMovimientos] = useState(false);
 
     /* =========================
        HANDLERS
@@ -307,18 +311,32 @@ const Remolques: React.FC = () => {
             },
         },
         renderRowActions: ({ row }) => (
-            <Button
-                size="sm"
-                radius="full"
-                color="success"
-                className="text-white"
-                onPress={() => {
-                    setVehicle(row.original);
-                    setOpenDialog(true);
-                }}
-            >
-                Editar
-            </Button>
+            <>
+                <Button
+                    size="sm"
+                    radius="md"
+                    color="success"
+                    className="text-white"
+                    onPress={() => {
+                        setVehicle(row.original);
+                        setOpenDialog(true);
+                    }}
+                >
+                    <i className="bi bi-pen"></i>
+                </Button>
+                <Button
+                    size="sm"
+                    radius="md"
+                    color="primary"
+                    className="text-white"
+                    onPress={() => {
+                        setVehicle(row.original);
+                        setOpenMovimientos(true);
+                    }}
+                >
+                    <i className="bi bi-clock-history"></i>
+                </Button>
+            </>
         ),
         renderTopToolbarCustomActions: () => (
             <Box sx={{ display: 'flex', gap: 2, p: 1, flexWrap: 'wrap' }}>
@@ -379,6 +397,15 @@ const Remolques: React.FC = () => {
                     />
                 </ManiobraProvider>
             )}
+
+            <MovimientosLocalesDialog
+                open={openMovimientos}
+                vehicleId={vehicleData?.id ?? 0}
+                onClose={() => {
+                    setOpenMovimientos(false);
+                    setVehicle(null);
+                }}
+            />
         </>
     );
 };
