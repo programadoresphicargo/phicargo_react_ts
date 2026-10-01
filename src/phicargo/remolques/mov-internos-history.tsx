@@ -2,7 +2,6 @@ import {
  Box,
  Chip,
  CircularProgress,
- Dialog,
  DialogContent,
  IconButton,
  Stack,
@@ -43,8 +42,6 @@ interface MovimientoLocal {
 }
 
 interface MovimientosLocalesDialogProps {
- open: boolean;
- onClose: () => void;
  vehicleId: number | null;
 }
 
@@ -179,8 +176,6 @@ const EquipmentBadge = ({
 };
 
 export default function MovimientosLocalesDialog({
- open,
- onClose,
  vehicleId,
 }: MovimientosLocalesDialogProps) {
  const [movimientos, setMovimientos] = useState<
@@ -230,12 +225,7 @@ export default function MovimientosLocalesDialog({
    : null;
 
  return (
-  <Dialog
-   open={open}
-   onClose={onClose}
-   fullWidth
-   maxWidth="md"
-  >
+  <>
    {/* HEADER */}
    < Box
     sx={{
@@ -312,23 +302,6 @@ export default function MovimientosLocalesDialog({
        </Stack>
       </Box>
      </Stack>
-
-     <Tooltip title="Cerrar">
-      <IconButton
-       onClick={onClose}
-       size="small"
-       sx={{
-        color: "#64748B",
-        "&:hover": {
-         backgroundColor: "#F1F5F9",
-         color: "#0F172A",
-        },
-        fontFamily: "Inter, sans-serif",
-       }}
-      >
-       <CloseIcon fontSize="small" />
-      </IconButton>
-     </Tooltip>
     </Stack>
    </Box >
 
@@ -837,6 +810,6 @@ export default function MovimientosLocalesDialog({
       })}
     </Box>
    </DialogContent>
-  </Dialog >
+  </>
  );
 }

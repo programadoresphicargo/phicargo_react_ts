@@ -17,6 +17,7 @@ import Formulariomaniobra from "../maniobras/maniobras/form";
 import { ManiobraProvider } from "../maniobras/context/viajeContext";
 import { Link } from "@heroui/link";
 import MovimientosLocalesDialog from "./mov-internos-history";
+import Dialog from "@mui/material/Dialog";
 
 /* =========================
    TIPOS
@@ -397,14 +398,16 @@ const Remolques: React.FC = () => {
                 </ManiobraProvider>
             )}
 
-            <MovimientosLocalesDialog
+            <Dialog
                 open={openMovimientos}
-                vehicleId={vehicleData?.id ?? 0}
-                onClose={() => {
-                    setOpenMovimientos(false);
-                    setVehicle(null);
-                }}
-            />
+                onClose={() => setOpenMovimientos(false)}
+                fullWidth
+                maxWidth="md"
+            >
+                <MovimientosLocalesDialog
+                    vehicleId={vehicleData?.id ?? 0}
+                />
+            </Dialog>
         </>
     );
 };

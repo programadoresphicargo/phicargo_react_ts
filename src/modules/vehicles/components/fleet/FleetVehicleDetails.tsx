@@ -4,6 +4,7 @@ import { ManiobraProvider } from '@/phicargo/maniobras/context/viajeContext';
 import HistorialViajesVehiculo from '@/phicargo/disponiblidad/historial_viajes';
 import { Fleet } from '../../models';
 import HistorialManiobrasVehiculo from '@/phicargo/disponiblidad/historial_maniobras';
+import MovimientosLocalesDialog from '@/phicargo/remolques/mov-internos-history';
 
 interface Props {
   vehicle: Fleet;
@@ -28,6 +29,17 @@ export const FleetVehicleDetails = ({ vehicle }: Props) => {
               <ManiobraProvider>
                 <HistorialManiobrasVehiculo vehicle_id={vehicle.id} />
               </ManiobraProvider>
+            </CardBody>
+          </Card>
+        </Tab>
+        <Tab key="mov-internos" title="Movimientos Internos">
+          <Card>
+            <CardBody>
+              <MovimientosLocalesDialog
+                open={true}
+                vehicleId={vehicle.id}
+                onClose={() => console.log()}
+              />
             </CardBody>
           </Card>
         </Tab>
