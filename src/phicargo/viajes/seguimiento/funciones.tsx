@@ -225,9 +225,13 @@ export const useJourneyDialogs = () => {
                 });
                 return false;
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error:', error);
-            toast.error('Error activando el viaje');
+            const detail =
+                error?.response?.data?.detail ||
+                'Error ejecutando función';
+            console.error('Detail:', detail);
+            toast.error(detail);
             throw error;
         }
     };
