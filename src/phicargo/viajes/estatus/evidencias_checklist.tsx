@@ -64,6 +64,7 @@ function EvidenciasChecklistViaje({ id_viaje, tipo_checklist }: { id_viaje: numb
      color="success"
      size="sm"
      radius="md"
+     className="text-white"
     >
      Refrescar
     </Button>
