@@ -331,18 +331,16 @@ const SolicitudFormLlantas: React.FC<SolicitudFormProps> = ({
                                 </Button>
                             </>
                         )}
-                        {meta?.x_studio_status !== "borrador" && meta?.x_studio_status !== "cancelada" && (
-                            <Button
-                                radius="full"
-                                color="success"
-                                className="text-white"
-                                as={Link}
-                                isExternal={true}
-                                href={`${apiUrl}/solicitudes_llantas/formato/${id_solicitud}`}>
-                                <i className="bi bi-file-earmark-pdf-fill"></i>
-                                Formato de entrega
-                            </Button>
-                        )}
+                        <Button
+                            radius="full"
+                            color="success"
+                            className="text-white"
+                            as={Link}
+                            isExternal={true}
+                            href={`${apiUrl}/solicitudes_llantas/formato/${id_solicitud}`}>
+                            <i className="bi bi-file-earmark-pdf-fill"></i>
+                            Formato de entrega
+                        </Button>
                         {(!modoEdicion && meta?.x_studio_status == 'borrador') && (
                             <Button
                                 radius="full"
