@@ -91,7 +91,7 @@ const Documentacion = ({ }) => {
             color='primary'
             size="sm"
             onPress={() => obtenerUrlPublico(row.original.id_onedrive)}
-            radius="full"
+            radius="md"
           >
             Ver archivo
           </Button>
@@ -105,7 +105,7 @@ const Documentacion = ({ }) => {
             size="sm"
             color='danger'
             onPress={() => handleClickOpenV(row.original.id_onedrive)}
-            radius="full"
+            radius="md"
           >
             Visualizar
           </Button>
@@ -174,25 +174,27 @@ const Documentacion = ({ }) => {
 
         <Button
           color='primary'
-          radius="full"
+          radius="md"
+          size="sm"
           onPress={handleClickOpen}>
           Nuevo documento
         </Button>
 
         <Button
-          radius="full"
+          radius="md"
           showAnchorIcon
           as={Link}
           isExternal={true}
           color="danger"
           href={`${apiUrl}/tms_travel/checklist/pdf/` + id_viaje}
           variant="solid"
+          size="sm"
         >
           Checklist de viaje
         </Button>
 
         <Button
-          radius="full"
+          radius="md"
           showAnchorIcon
           as={Link}
           isExternal={true}
@@ -200,24 +202,26 @@ const Documentacion = ({ }) => {
           color="warning"
           href={`${apiUrl}/tms_travel/checklist/18puntos/pdf/` + id_viaje}
           variant="solid"
+          size="sm"
         >
           Inspección vigilancia
         </Button>
 
         <Button
-          radius="full"
+          radius="md"
           showAnchorIcon
           as={Link}
           isExternal={true}
           color="secondary"
           href={`${apiUrl}/tms_travel/revision_ocular/bitacoras/pdf/` + id_viaje}
           variant="solid"
+          size="sm"
         >
           Revision ocular
         </Button>
 
         <Button
-          radius="full"
+          radius="md"
           showAnchorIcon
           as={Link}
           isExternal={true}
@@ -225,16 +229,18 @@ const Documentacion = ({ }) => {
           className='text-white'
           href={`${apiUrl}/tms_travel/horas_servicio/pdf/` + id_viaje}
           variant="solid"
+          size="sm"
         >
           Horas de servicio
         </Button>
 
         <Button
-          radius="full"
+          radius="md"
           color="danger"
           className='text-white'
           variant="solid"
           onPress={() => setOpenCorte(true)}
+          size="sm"
         >
           Corte parcial estadías
         </Button>
@@ -294,7 +300,7 @@ const Documentacion = ({ }) => {
           <FormularioDocumentacion onClose={handleClose}></FormularioDocumentacion>
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onPress={handleClose} radius="full">
+          <Button autoFocus onPress={handleClose} radius="md" size="sm">
             Cerrar
           </Button>
         </DialogActions>
