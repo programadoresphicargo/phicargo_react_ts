@@ -82,13 +82,15 @@ function EvidenciasChecklistViaje({ id_viaje, tipo_checklist }: { id_viaje: numb
        rel="noopener noreferrer"
        className="group block"
       >
-       <div className="overflow-hidden rounded-lg border bg-gray-50">
-        <Image
-         src={item.url_download}
-         alt={`Evidencia ${item.id_onedrive}`}
-         className="w-full h-40 object-cover transition-transform duration-200 group-hover:scale-105"
-         radius="none"
-        />
+       <div className="flex justify-center">
+        <div className="w-fit overflow-hidden rounded-lg border bg-gray-50">
+         <Image
+          src={item.url_download}
+          alt={`Evidencia ${item.id_onedrive}`}
+          className="h-40 w-auto object-contain"
+          radius="none"
+         />
+        </div>
        </div>
       </a>
      ))}
