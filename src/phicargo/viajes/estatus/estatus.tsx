@@ -17,6 +17,7 @@ import EstatusHistorialAgrupado from "./estatus_agrupados";
 import { ViajeContext } from "../context/viajeContext";
 import odooApi from "@/api/odoo-api";
 import { tiempoTranscurrido } from "../../funciones/tiempo";
+import EvidenciasChecklistViaje from "./evidencias_checklist";
 
 const { VITE_ODOO_API_URL } = import.meta.env;
 
@@ -402,6 +403,8 @@ function EstatusHistorial() {
 
                     <div className="space-y-3">
 
+                        <EvidenciasChecklistViaje id_viaje={id_viaje} tipo_checklist="reingreso"></EvidenciasChecklistViaje>
+
                         {sortedHistorial.map((step, index) => {
 
                             const isFirst = index === 0;
@@ -635,6 +638,8 @@ function EstatusHistorial() {
                         })}
 
                     </div>
+
+                    <EvidenciasChecklistViaje id_viaje={id_viaje} tipo_checklist="salida"></EvidenciasChecklistViaje>
 
                 </div>
             )}
