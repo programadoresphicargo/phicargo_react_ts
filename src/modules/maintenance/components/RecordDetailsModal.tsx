@@ -80,7 +80,7 @@ export const RecordDetailsModal = ({
   ): Promise<void> => {
     if (!id_checklist) return;
 
-    const url = `${odooApi.defaults.baseURL}/tms_travel/checklist/export/${id_checklist}`;
+    const url = `${odooApi.defaults.baseURL}/checklist/export/${id_checklist}`;
 
     window.open(url, '_blank');
   };

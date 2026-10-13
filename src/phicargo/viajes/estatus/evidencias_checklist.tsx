@@ -28,7 +28,7 @@ function EvidenciasChecklistViaje({ id_viaje, tipo_checklist }: { id_viaje: numb
    setLoading(true);
 
    const response = await odooApi.get(
-    `/tms_travel/checklist/evidencias/?id_viaje=${id_viaje}&tipo_checklist=${tipo_checklist}`
+    `/checklist/evidencias/?id_viaje=${id_viaje}&tipo_checklist=${tipo_checklist}`
    );
 
    setData(response.data);

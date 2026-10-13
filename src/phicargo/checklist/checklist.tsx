@@ -37,7 +37,7 @@ const Checklist = () => {
   const fetchData = async () => {
     try {
       setisLoading(true);
-      const response = await odooApi.get(`/tms_travel/checklist/?tipo_checklist=diario`);
+      const response = await odooApi.get(`/checklist/?tipo_checklist=diario`);
       setData(response.data);
     } catch (error: any) {
       toast.error('Error al enviar los datos: ' + (error?.message || 'Error desconocido'));
@@ -47,7 +47,7 @@ const Checklist = () => {
   };
 
   const OpenChecklist = async (id_checklist: number) => {
-    const url = `${odooApi.defaults.baseURL}/tms_travel/checklist/export/${id_checklist}`;
+    const url = `${odooApi.defaults.baseURL}/checklist/export/${id_checklist}`;
     window.open(url, "_blank");
   };
 

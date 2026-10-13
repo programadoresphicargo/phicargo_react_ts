@@ -186,7 +186,7 @@ const Documentacion = ({ }) => {
           as={Link}
           isExternal={true}
           color="danger"
-          href={`${apiUrl}/tms_travel/checklist/pdf/` + id_viaje}
+          href={`${apiUrl}/checklist/pdf/` + id_viaje}
           variant="solid"
           size="sm"
         >
@@ -200,7 +200,7 @@ const Documentacion = ({ }) => {
           isExternal={true}
           className="text-white"
           color="warning"
-          href={`${apiUrl}/tms_travel/checklist/18puntos/pdf/` + id_viaje}
+          href={`${apiUrl}/checklist/18puntos/pdf/` + id_viaje}
           variant="solid"
           size="sm"
         >
