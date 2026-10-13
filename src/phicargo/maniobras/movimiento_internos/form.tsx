@@ -334,7 +334,6 @@ export default function MovimientosInternosForm({
                     />
 
                     {/* OPERADOR */}
-
                     <SelectEmpleado
                       control={control}
                       name="driver_id"
@@ -342,17 +341,6 @@ export default function MovimientosInternosForm({
                       rules={{ required: 'Requerido' }}
                       isDisabled={!isEditing}
                       variant="bordered"
-                    />
-
-                    <DriverAutocompleteInput
-                      control={control}
-                      label="Operador"
-                      name="driver_id"
-                      setValue={setValue}
-                      rules={{
-                        required: "Campo obligatorio",
-                      }}
-                      isDisabled={!isEditing}
                     />
 
                     {/* VEHÍCULO */}
