@@ -18,7 +18,6 @@ import { toast } from "react-toastify";
 import { MovInterno } from "./type";
 import { parseDate } from "@internationalized/date";
 import dayjs from "dayjs";
-import { DriverAutocompleteInput } from "@/modules/drivers/components/DriverAutocompleteInput";
 import SelectFlota from "../maniobras/selects_flota";
 import { Flota, OptionFlota } from "../maniobras/tipado";
 import { SelectEmpleado } from "@/phicargo/descuentos/select_empleados";
