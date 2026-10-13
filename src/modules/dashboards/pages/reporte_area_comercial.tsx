@@ -14,6 +14,7 @@ export const conceptos = [
  { key: "Facturacion", value: "Facturación" },
  { key: "Sucursal", value: "Sucursal" },
  { key: "Ejecutivo", value: "Ejecutivo" },
+ { key: "Ejecutivo1", value: "Ejecutivo (Antigua Version)" },
  { key: "Ruta", value: "Ruta" },
  { key: "TipoServicio", value: "Tipo de servicio" },
  { key: "Circuito", value: "Circuito" },
