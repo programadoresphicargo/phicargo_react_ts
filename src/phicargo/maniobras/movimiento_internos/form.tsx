@@ -54,7 +54,6 @@ export default function MovimientosInternosForm({
     handleSubmit,
     reset,
     watch,
-    setValue,
   } = useForm<MovInterno>({
     defaultValues: initialForm,
   });
