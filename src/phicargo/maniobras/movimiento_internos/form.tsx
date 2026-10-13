@@ -21,6 +21,7 @@ import dayjs from "dayjs";
 import { DriverAutocompleteInput } from "@/modules/drivers/components/DriverAutocompleteInput";
 import SelectFlota from "../maniobras/selects_flota";
 import { Flota, OptionFlota } from "../maniobras/tipado";
+import { SelectEmpleado } from "@/phicargo/descuentos/select_empleados";
 
 const initialForm: MovInterno = {
   id: null,
@@ -333,6 +334,15 @@ export default function MovimientosInternosForm({
                     />
 
                     {/* OPERADOR */}
+
+                    <SelectEmpleado
+                      control={control}
+                      name="driver_id"
+                      label="Operador"
+                      rules={{ required: 'Requerido' }}
+                      isDisabled={!isEditing}
+                      variant="bordered"
+                    />
 
                     <DriverAutocompleteInput
                       control={control}
