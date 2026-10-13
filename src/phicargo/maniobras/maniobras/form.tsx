@@ -754,7 +754,7 @@ const Formulariomaniobra: React.FC<Props> = ({
                                             <Button color="primary" onPress={handleClickOpenCL} startContent={<i className="bi bi-envelope-at-fill"></i>} radius='md' isLoading={loading} size="sm">Correos electronicos</Button>
                                             {id_maniobra && (
                                                 <Button
-                                                    radius="full"
+                                                    radius="md"
                                                     showAnchorIcon
                                                     as={Link}
                                                     isExternal={true}
@@ -769,6 +769,20 @@ const Formulariomaniobra: React.FC<Props> = ({
                                                 </Button>)}
                                             <Button color='secondary' radius='md' size='sm' onPress={handleClickOpenPosturas}>Posturas</Button>
                                             <Button color="warning" radius='md' size='sm' onPress={handleClickOpenNotas} className='text-white'>Notas</Button>
+                                            {id_maniobra && (
+                                                <Button
+                                                    radius="md"
+                                                    showAnchorIcon
+                                                    as={Link}
+                                                    isExternal={true}
+                                                    color="danger"
+                                                    href={`${apiUrl}/checklist/maniobra_pdf/` + id_maniobra}
+                                                    variant="solid"
+                                                    size="sm"
+                                                >
+                                                    Checklist
+                                                </Button>
+                                            )}
                                         </Stack>
                                     </Grid>
 
