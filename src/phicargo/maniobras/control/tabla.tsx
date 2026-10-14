@@ -385,9 +385,9 @@ const Maniobras: React.FC<ManiobrasProps> = ({
             </li>
           ))}
         </ul>
-        <Button color="primary" isLoading={isLoading} onPress={() => fetchData()} startContent={<i className="bi bi-arrow-clockwise"></i>} size="sm" radius="full">Refrescar</Button>
-        <Button color="secondary" isLoading={isLoading} onPress={() => handleClickOpen()} className='text-white' startContent={<i className="bi bi-send-plus"></i>} size="sm" radius="full">Envio masivo</Button>
-        <Button color='success' isLoading={isLoading} className='text-white' startContent={<i className="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(filteredData, columns, `maniobras ${estado_maniobra}.csv`)} size="sm" radius="full">Exportar</Button>
+        <Button color="primary" isLoading={isLoading} onPress={() => fetchData()} startContent={<i className="bi bi-arrow-clockwise"></i>} size="sm" radius="md">Refrescar</Button>
+        <Button color="secondary" isLoading={isLoading} onPress={() => handleClickOpen()} className='text-white' startContent={<i className="bi bi-send-plus"></i>} size="sm" radius="md">Envio masivo</Button>
+        <Button color='success' isLoading={isLoading} className='text-white' startContent={<i className="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(filteredData, columns, `maniobras ${estado_maniobra}.csv`)} size="sm" radius="md">Exportar</Button>
       </Box >
     ),
   });

@@ -117,16 +117,16 @@ const FoliosCostosExtras = () => {
         header: 'Folio',
       },
       {
-        accessorKey: 'empresa',
-        header: 'Empresa',
-      },
-      {
         accessorKey: 'sucursal',
         header: 'Sucursal',
       },
       {
         accessorKey: 'fecha_creacion',
         header: 'Fecha creación',
+      },
+      {
+        accessorKey: 'descripciones_costos',
+        header: 'Descripción',
       },
       {
         accessorKey: 'nombre',
@@ -266,7 +266,7 @@ const FoliosCostosExtras = () => {
         </h1>
         <Box sx={{ width: '160px' }}>
           <Button
-            radius="full"
+            radius="md"
             size="sm"
             startContent={<i className="bi bi-plus-lg"></i>}
             color="primary"
@@ -283,7 +283,7 @@ const FoliosCostosExtras = () => {
 
         <Box sx={{ width: '160px' }}>
           <Button
-            radius="full"
+            radius="md"
             size="sm"
             startContent={<i className="bi bi-arrow-clockwise"></i>}
             color="success"
@@ -299,7 +299,7 @@ const FoliosCostosExtras = () => {
 
         <Box sx={{ width: '160px' }}>
           <Button
-            radius="full"
+            radius="md"
             size="sm"
             color='success'
             fullWidth
