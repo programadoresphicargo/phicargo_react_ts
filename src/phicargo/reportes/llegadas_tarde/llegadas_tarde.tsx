@@ -239,15 +239,15 @@ const DetencionesTable = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 200px)',
+        maxHeight: 'calc(100vh - 190px)',
       },
     },
     muiTableBodyCellProps: ({ row }) => ({
       sx: {
-        backgroundColor: row.subRows?.length ? '#0456cf' : '#FFFFFF',
+        backgroundColor: row.index % 2 === 0 ? '#ffffff' : '#f7f7f7',
         fontFamily: 'Inter',
         fontWeight: 'normal',
-        fontSize: '14px',
+        fontSize: '12px',
         color: row.subRows?.length ? '#FFFFFF' : '#000000',
       },
     }),
@@ -281,21 +281,24 @@ const DetencionesTable = () => {
           className="text-white"
           onPress={handleExportData}
           startContent={<FileDownloadIcon />}
-          radius="full"
+          radius="md"
+          size="sm"
         >
           Exportar
         </Button>
 
         <Button
           color='secondary'
+          size="sm"
           onPress={() => fetchData()}
-          radius="full"
+          radius="md"
         >
           Refrescar
         </Button>
 
         <Button
-          radius="full"
+          radius="md"
+          size="sm"
           showAnchorIcon
           as={Link}
           isExternal={true}
