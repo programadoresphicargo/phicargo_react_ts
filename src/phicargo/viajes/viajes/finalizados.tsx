@@ -325,7 +325,7 @@ const ViajesFinalizados = ({ }) => {
           className='text-white'
           startContent={<i className="bi bi-file-earmark-excel"></i>}
           onPress={() => exportToCSV(data, columns, "viajes_finalizados.csv")}
-          radius='full'
+          radius='md'
           size='sm'>
           Exportar
         </Button>
@@ -335,7 +335,7 @@ const ViajesFinalizados = ({ }) => {
           className='text-white'
           startContent={<i className="bi bi-arrow-clockwise"></i>}
           onPress={() => fetchData()}
-          radius='full'
+          radius='md'
           size='sm'>
           Recargar
         </Button>

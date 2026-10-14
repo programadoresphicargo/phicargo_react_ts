@@ -457,7 +457,7 @@ const ViajesActivos = ({ }) => {
           Viajes activos
         </h1>
         <Button
-          radius='full'
+          radius='md'
           className='text-white'
           startContent={<i className="bi bi-send-plus-fill"></i>}
           color='success'
@@ -468,7 +468,7 @@ const ViajesActivos = ({ }) => {
         </Button>
 
         <Button
-          radius='full'
+          radius='md'
           className='text-white'
           startContent={<i className="bi bi-arrow-clockwise"></i>}
           color='primary'
@@ -483,7 +483,7 @@ const ViajesActivos = ({ }) => {
         </Button>
 
         <Button
-          radius='full'
+          radius='md'
           color='danger'
           className='text-white'
           startContent={<i className="bi bi-sign-stop"></i>}
@@ -492,7 +492,7 @@ const ViajesActivos = ({ }) => {
         </Button>
 
         <Button
-          radius='full'
+          radius='md'
           color='success'
           className='text-white'
           startContent={<i className="bi bi-file-earmark-excel"></i>}
