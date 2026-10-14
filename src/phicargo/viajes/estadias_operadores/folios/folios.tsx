@@ -73,6 +73,10 @@ const PagosEstadiasOperadores = ({ }) => {
                 header: 'Folio',
             },
             {
+                accessorKey: 'fecha',
+                header: 'Fecha',
+            },
+            {
                 accessorKey: 'travel_name',
                 header: 'Viaje',
             },
@@ -119,10 +123,6 @@ const PagosEstadiasOperadores = ({ }) => {
             {
                 accessorKey: 'usuario_creacion',
                 header: 'Usuario',
-            },
-            {
-                accessorKey: 'fecha_creacion',
-                header: 'Fecha creación',
             },
             {
                 accessorKey: 'estado',
@@ -192,7 +192,7 @@ const PagosEstadiasOperadores = ({ }) => {
         },
         muiTableContainerProps: {
             sx: {
-                maxHeight: 'calc(100vh - 200px)',
+                maxHeight: 'calc(100vh - 190px)',
             },
         },
 
@@ -202,11 +202,13 @@ const PagosEstadiasOperadores = ({ }) => {
                 setFolio(row.original);
             },
         }),
-        muiTableBodyCellProps: () => ({
+        muiTableBodyCellProps: ({ row }) => ({
             sx: {
+                backgroundColor: row.index % 2 === 0 ? '#ffffff' : '#f7f7f7',
                 fontFamily: 'Inter',
                 fontWeight: 'normal',
-                fontSize: '12px',
+                fontSize: '11px',
+                color: row.subRows?.length ? '#FFFFFF' : '#000000',
             },
         }),
         renderTopToolbarCustomActions: () => (
@@ -225,7 +227,7 @@ const PagosEstadiasOperadores = ({ }) => {
                 </h1>
                 <Button
                     className='text-white'
-                    radius="full"
+                    radius="md"
                     startContent={<i className="bi bi-plus-lg"></i>}
                     color='success'
                     isDisabled={false}
@@ -236,7 +238,7 @@ const PagosEstadiasOperadores = ({ }) => {
                 >Nuevo
                 </Button>
                 <Button
-                    radius="full"
+                    radius="md"
                     className='text-white'
                     startContent={<i className="bi bi-arrow-clockwise"></i>}
                     color='primary'
@@ -247,7 +249,7 @@ const PagosEstadiasOperadores = ({ }) => {
                 </Button>
                 <Button
                     color='warning'
-                    radius="full"
+                    radius="md"
                     className='text-white'
                     startContent={<i className="bi bi-file-earmark-excel"></i>}
                     onPress={() => exportToCSV(data, columns, "folios_estadias.csv")}
