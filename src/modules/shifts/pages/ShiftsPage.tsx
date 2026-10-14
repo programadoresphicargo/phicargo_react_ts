@@ -145,13 +145,13 @@ const ShiftsPage = () => {
         <Button
           color='primary'
           onPress={() => navigate('/turnos/crear')}
-          radius='full'
+          radius='md'
           size='sm'
           startContent={<i className="bi bi-plus-circle"></i>}>
           Ingresar turno
         </Button>
         <Button
-          radius="full"
+          radius='md'
           size='sm'
           color="secondary"
           startContent={<HiQueueList />}
@@ -160,7 +160,7 @@ const ShiftsPage = () => {
           Operadores en cola
         </Button>
         <Button
-          radius="full"
+          radius='md'
           size='sm'
           color="success"
           className='text-white'
@@ -170,7 +170,7 @@ const ShiftsPage = () => {
           Historial
         </Button>
         <Button
-          radius="full"
+          radius='md'
           size='sm'
           color="danger"
           className='text-white'
@@ -208,7 +208,7 @@ const ShiftsPage = () => {
         </div>
 
         <Button
-          radius="full"
+          radius='md'
           size='sm'
           color="danger"
           className='text-white'
