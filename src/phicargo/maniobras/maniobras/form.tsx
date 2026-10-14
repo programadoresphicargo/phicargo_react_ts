@@ -743,10 +743,10 @@ const Formulariomaniobra: React.FC<Props> = ({
                                                 <Button color="success" onPress={comprobar_equipo} className='text-white' startContent={<i className="bi bi-play-fill"></i>} radius='md' isLoading={loading} size="sm">Iniciar</Button>
                                             )}
                                             {estado === "activa" && (
-                                                <Button onPress={finalizar_maniobra} color="danger" startContent={<i className="bi bi-stop-fill"></i>} radius="full" isLoading={loading} size="sm">Finalizar</Button>
+                                                <Button onPress={finalizar_maniobra} color="danger" startContent={<i className="bi bi-stop-fill"></i>} radius="md" isLoading={loading} size="sm">Finalizar</Button>
                                             )}
                                             {estado === "activa" && (
-                                                <Button onPress={handleClickOpenPE} color="success" className='text-white' startContent={<i className="bi bi-send-fill"></i>} radius="full" isLoading={loading} size="sm">Enviar nuevo estatus</Button>
+                                                <Button onPress={handleClickOpenPE} color="success" className='text-white' startContent={<i className="bi bi-send-fill"></i>} radius="md" isLoading={loading} size="sm">Enviar nuevo estatus</Button>
                                             )}
                                             {estado === "finalizada" && (
                                                 <Button color="primary" onPress={reactivar_maniobra} radius='md' isLoading={loading} size="sm">Reactivar</Button>
