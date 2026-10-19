@@ -19,21 +19,13 @@ const MaintenanceVehicleReport = () => {
   const [isLoading, setisLoading] = useState(false);
   const [data, setData] = useState([]);
 
-  const PREFIXES_BY_TAB: Record<string, string[]> = {
-    '1': ['C-'], // Tractos
-    '2': ['PL-', 'CH-', 'DL-', 'PCE-', 'CB-', 'PT-', 'PLE-'],        // Remolques: sustituye por tus prefijos
-    '3': ['MG-'],               // Motogeneradores
-    '4': ['U-'],               // Utilitarios
-    '5': ['G-'],               // Utilitarios
-  };
-
-  const TAB_LABELS: Record<string, string> = {
-    '1': 'Tractos',
-    '2': 'Remolques',
-    '3': 'Motogeneradores',
-    '4': 'Utilitarios',
-    '5': 'Grua',
-  };
+  const TABS = [
+    { value: '1', label: 'Tractos', prefixes: ['C-'] },
+    { value: '2', label: 'Remolques', prefixes: ['PL-', 'CH-', 'DL-', 'PCE-', 'CB-', 'CS-'] },
+    { value: '3', label: 'Motogeneradores', prefixes: ['MG-'] },
+    { value: '4', label: 'Utilitarios', prefixes: ['U-'] },
+    { value: '5', label: 'Grúas', prefixes: ['G-'] },
+  ];
 
   const [value, setValue] = React.useState('1');
 
@@ -48,12 +40,20 @@ const MaintenanceVehicleReport = () => {
   const fetchData = async () => {
     try {
       setisLoading(true);
+
+      const selectedTab = TABS.find(
+        (tab) => tab.value === value
+      );
+
+      if (!selectedTab) return;
+
       const response = await odooApi.post('/maintenances/report/', {
-        prefixes: PREFIXES_BY_TAB[value],
+        prefixes: selectedTab.prefixes,
       });
+
       setData(response.data);
     } catch (error) {
-      toast.error('Error al enviar los datos: ' + error);
+      toast.error('Error al consultar el reporte: ' + error);
     } finally {
       setisLoading(false);
     }
@@ -186,7 +186,7 @@ const MaintenanceVehicleReport = () => {
         <h1
           className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
         >
-          {TAB_LABELS[value]}
+          {TABS.find((tab) => tab.value === value)?.label}
         </h1>
         <Button
           onPress={fetchData}
