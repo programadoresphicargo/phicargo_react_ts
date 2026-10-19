@@ -41,7 +41,7 @@ const Odometers = () => {
       { accessorKey: 'name', header: 'Vehiculo', },
       {
         accessorKey: 'odometer',
-        header: 'Kilometraje',
+        header: 'Kilometraje / Horometro',
         Cell: ({ cell }) => {
           const value = cell.getValue<number>();
           return value?.toLocaleString('en-US');
@@ -125,7 +125,7 @@ const Odometers = () => {
         <h1
           className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
         >
-          Odometros
+          Odometros / Horometros
         </h1>
         <Button onPress={() => fetchData()} className='text-white' color='primary' radius='full' size='sm'>Recargar</Button>
       </Box >

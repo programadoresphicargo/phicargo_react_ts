@@ -573,12 +573,12 @@ export default function MaintenanceForm({
                     text-slate-500
                   "
                 >
-                  Kilometraje
+                  Kilometraje / Horometro
                 </span>
               </div>
 
               <NumberInput
-                label="Kilometraje"
+                label="Kilometraje / Horometro"
                 control={control}
                 name="mileage"
                 rules={{

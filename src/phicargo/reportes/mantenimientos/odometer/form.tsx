@@ -165,7 +165,7 @@ export default function OdometerForm({
                 lineHeight: 1.2,
               }}
             >
-              Nuevo odómetro
+              Nuevo
             </Typography>
 
             <Typography
@@ -247,7 +247,7 @@ export default function OdometerForm({
                   color: '#172033',
                 }}
               >
-                Registro de kilometraje
+                Registro de kilometraje / horometro
               </Typography>
 
               <Typography
@@ -258,7 +258,7 @@ export default function OdometerForm({
                   mt: 0.2,
                 }}
               >
-                Captura el kilometraje actual del vehículo.
+                Captura el kilometraje / horometro actual del vehículo.
               </Typography>
             </div>
           </div>
@@ -300,7 +300,7 @@ export default function OdometerForm({
 
             <div>
               <p className="text-[13px] font-semibold text-slate-800">
-                Kilometraje actual
+                Kilometraje / horometro actual
               </p>
 
               <p className="text-[11px] text-slate-400">
@@ -310,7 +310,7 @@ export default function OdometerForm({
           </div>
 
           <NumberInput
-            label="Kilometraje"
+            label="Kilometraje / Horometro"
             control={control}
             name="value"
             rules={{

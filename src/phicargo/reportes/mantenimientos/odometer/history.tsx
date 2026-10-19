@@ -49,7 +49,7 @@ export default function OdometerHistory({ open, setOpen, id }: {
       { accessorKey: 'vehicle', header: 'Vehiculo', },
       {
         accessorKey: 'current_odometer',
-        header: 'Kilometraje',
+        header: 'Kilometraje / Horometro',
         Cell: ({ cell }) => {
           const value = cell.getValue<number>();
           return value?.toLocaleString('en-US');
