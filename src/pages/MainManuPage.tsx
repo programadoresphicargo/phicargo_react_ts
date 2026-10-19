@@ -106,7 +106,7 @@ const MainMenuPage = () => {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-white/10 bg-white/[0.06] p-1.5 shadow-lg backdrop-blur-xl">
+          <div>
             <AvatarProfile />
           </div>
         </header>
