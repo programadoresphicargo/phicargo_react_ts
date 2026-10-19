@@ -21,9 +21,10 @@ const MaintenanceVehicleReport = () => {
 
   const PREFIXES_BY_TAB: Record<string, string[]> = {
     '1': ['C-'], // Tractos
-    '2': ['PL-', 'CH-', 'DL-', 'PCE-', 'CB-', '´PT-', 'PLE-'],        // Remolques: sustituye por tus prefijos
+    '2': ['PL-', 'CH-', 'DL-', 'PCE-', 'CB-', 'PT-', 'PLE-'],        // Remolques: sustituye por tus prefijos
     '3': ['MG-'],               // Motogeneradores
     '4': ['U-'],               // Utilitarios
+    '5': ['G-'],               // Utilitarios
   };
 
   const TAB_LABELS: Record<string, string> = {
@@ -31,6 +32,7 @@ const MaintenanceVehicleReport = () => {
     '2': 'Remolques',
     '3': 'Motogeneradores',
     '4': 'Utilitarios',
+    '5': 'Grua',
   };
 
   const [value, setValue] = React.useState('1');
@@ -225,6 +227,7 @@ const MaintenanceVehicleReport = () => {
             <Tab label="Remolques" value="2" sx={{ fontFamily: 'Inter' }} />
             <Tab label="Motogeneradores" value="3" sx={{ fontFamily: 'Inter' }} />
             <Tab label="Utilitarios" value="4" sx={{ fontFamily: 'Inter' }} />
+            <Tab label="Gruas" value="5" sx={{ fontFamily: 'Inter' }} />
           </TabList>
         </Box>
 
