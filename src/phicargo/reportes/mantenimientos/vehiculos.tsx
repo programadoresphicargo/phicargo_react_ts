@@ -25,6 +25,7 @@ const MaintenanceVehicleReport = () => {
     { value: '3', label: 'Motogeneradores', prefixes: ['MG-'] },
     { value: '4', label: 'Utilitarios', prefixes: ['U-'] },
     { value: '5', label: 'Grúas', prefixes: ['G-'] },
+    { value: '6', label: 'Servi', prefixes: ['SERVI/'] },
   ];
 
   const [value, setValue] = React.useState('1');
@@ -223,11 +224,14 @@ const MaintenanceVehicleReport = () => {
               },
             }}
           >
-            <Tab label="Tractos" value="1" sx={{ fontFamily: 'Inter' }} />
-            <Tab label="Remolques" value="2" sx={{ fontFamily: 'Inter' }} />
-            <Tab label="Motogeneradores" value="3" sx={{ fontFamily: 'Inter' }} />
-            <Tab label="Utilitarios" value="4" sx={{ fontFamily: 'Inter' }} />
-            <Tab label="Gruas" value="5" sx={{ fontFamily: 'Inter' }} />
+            {TABS.map((tab) => (
+              <Tab
+                key={tab.value}
+                label={tab.label}
+                value={tab.value}
+                sx={{ fontFamily: 'Inter' }}
+              />
+            ))}
           </TabList>
         </Box>
 
