@@ -1,14 +1,14 @@
 import { MRT_ColumnDef, MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 import { useEffect, useMemo, useState } from 'react';
-import { Box } from '@mui/material';
+import { Box, Tab } from '@mui/material';
 import odooApi from '@/api/odoo-api';
 import { toast } from "react-toastify";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
+import TabContext from '@mui/lab/TabContext';
+import TabPanel from '@mui/lab/TabPanel';
+import TabList from '@mui/lab/TabList';
+import React from 'react';
 import { Button } from '@heroui/react';
-import { Task } from './maintenances/maintenance_form';
-import { SelectItem } from '@/types';
-import { AutocompleteInput } from '@/components/inputs';
-import { useForm } from 'react-hook-form';
 
 type Configuraciones = {
   task_id: number | null,
@@ -16,30 +16,39 @@ type Configuraciones = {
 
 const MaintenanceVehicleReport = () => {
 
-  const initialForm: Configuraciones = {
-    task_id: null,
-  }
-
-  const {
-    control,
-    watch
-  } = useForm<Configuraciones>({
-    defaultValues: initialForm,
-  });
-
   const [isLoading, setisLoading] = useState(false);
   const [data, setData] = useState([]);
-  const taskId = watch('task_id');
+
+  const PREFIXES_BY_TAB: Record<string, string[]> = {
+    '1': ['C-'], // Tractos
+    '2': ['PL-', 'CH-', 'DL-', 'PCE-', 'CB-', '´PT-', 'PLE-'],        // Remolques: sustituye por tus prefijos
+    '3': ['MG-'],               // Motogeneradores
+    '4': ['U-'],               // Utilitarios
+  };
+
+  const TAB_LABELS: Record<string, string> = {
+    '1': 'Tractos',
+    '2': 'Remolques',
+    '3': 'Motogeneradores',
+    '4': 'Utilitarios',
+  };
+
+  const [value, setValue] = React.useState('1');
+
+  const handleChange = (_: React.SyntheticEvent, newValue: string) => {
+    setValue(newValue);
+  };
 
   useEffect(() => {
     fetchData();
-  }, [taskId]);
+  }, [value]);
 
   const fetchData = async () => {
-    if (taskId == null) return;
     try {
       setisLoading(true);
-      const response = await odooApi.get(`/maintenances/report/${taskId}`);
+      const response = await odooApi.post('/maintenances/report/', {
+        prefixes: PREFIXES_BY_TAB[value],
+      });
       setData(response.data);
     } catch (error) {
       toast.error('Error al enviar los datos: ' + error);
@@ -64,6 +73,7 @@ const MaintenanceVehicleReport = () => {
           align: 'right',
         },
       },
+      { accessorKey: 'tipo_mantenimiento', header: 'Tipo mantenimiento', },
       { accessorKey: 'date', header: 'Ultimo mantenimineto', },
       {
         accessorKey: 'km_ultimo_mantenimiento',
@@ -111,25 +121,6 @@ const MaintenanceVehicleReport = () => {
       },
     ], []);
 
-  const [task, setTask] = useState<SelectItem[]>([]);
-
-  const getTask = async (): Promise<void> => {
-    const response = await odooApi.get<Task[]>(
-      `/maintenance-record/tasks/`
-    );
-
-    setTask(
-      response.data.map((registro) => ({
-        key: registro.id,
-        value: `${registro.name}`,
-      }))
-    );
-  };
-
-  useEffect(() => {
-    getTask();
-  }, [open]);
-
   const table = useMaterialReactTable({
     columns,
     data,
@@ -160,7 +151,7 @@ const MaintenanceVehicleReport = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 250px)',
+        maxHeight: 'calc(100vh - 290px)',
       },
     },
     muiTableBodyCellProps: ({ row }) => {
@@ -193,25 +184,55 @@ const MaintenanceVehicleReport = () => {
         <h1
           className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
         >
-          Vehiculos
+          {TAB_LABELS[value]}
         </h1>
-        <AutocompleteInput
-          label="Tipo de servicio"
-          control={control}
-          name='task_id'
-          items={task}
-          rules={{ required: "Campo obligatorio" }} />
-        <Button onPress={() => fetchData()} className='text-white' color='primary' radius='full' size='sm'>Recargar</Button>
+        <Button
+          onPress={fetchData}
+          isLoading={isLoading}
+          isDisabled={isLoading}
+          color="primary"
+          radius="md"
+          size="sm"
+        >
+          Recargar
+        </Button>
       </Box >
     ),
   })
 
   return (
-    <>
-      <MaterialReactTable
-        table={table}
-      />
-    </>
+    <Box sx={{ width: '100%', typography: 'body1' }}>
+      <TabContext value={value}>
+        <Box
+          sx={{
+            borderColor: 'divider',
+            backgroundColor: '#002887',
+            color: 'white',
+          }}
+        >
+          <TabList
+            onChange={handleChange}
+            aria-label="Tipos de vehículos"
+            textColor="inherit"
+            sx={{
+              '& .MuiTabs-indicator': {
+                backgroundColor: 'white',
+                height: '3px',
+              },
+            }}
+          >
+            <Tab label="Tractos" value="1" sx={{ fontFamily: 'Inter' }} />
+            <Tab label="Remolques" value="2" sx={{ fontFamily: 'Inter' }} />
+            <Tab label="Motogeneradores" value="3" sx={{ fontFamily: 'Inter' }} />
+            <Tab label="Utilitarios" value="4" sx={{ fontFamily: 'Inter' }} />
+          </TabList>
+        </Box>
+
+        <TabPanel value={value} sx={{ padding: 0, margin: 0 }}>
+          <MaterialReactTable table={table} />
+        </TabPanel>
+      </TabContext>
+    </Box>
   );
 };
 
