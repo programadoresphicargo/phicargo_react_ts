@@ -9,6 +9,7 @@ import fondo2 from '../assets/img/tract_scannia.jpg';
 import AvatarProfile from '@/components/ui/AvatarProfile';
 import { useAuthContext } from '@/modules/auth/hooks';
 import { menuItems } from '../pages/MenuItems';
+import './menu_style.css';
 
 const MainMenuPage = () => {
   const { session } = useAuthContext();
@@ -51,9 +52,9 @@ const MainMenuPage = () => {
         backgroundImage: `
           linear-gradient(
             120deg,
-            rgba(7, 24, 55, 0.96) 0%,
-            rgba(0, 40, 135, 0.80) 48%,
-            rgba(0, 40, 135, 0.76) 100%
+            rgba(7, 24, 55, 0.90) 0%,
+            rgba(0, 40, 135, 0.70) 48%,
+            rgba(0, 40, 135, 0.68) 100%
           ),
           url(${fondo2})
         `,
@@ -65,15 +66,29 @@ const MainMenuPage = () => {
       {/* Luces ambientales */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -right-40 -top-40 size-[500px] rounded-full bg-blue-500/10 blur-[120px]"
+        className="
+          pointer-events-none absolute -right-40 -top-40
+          size-[500px] rounded-full bg-blue-400/15
+          blur-[120px]
+        "
       />
 
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -bottom-48 -left-40 size-[450px] rounded-full bg-cyan-400/[0.07] blur-[120px]"
+        className="
+          pointer-events-none absolute -bottom-48 -left-40
+          size-[450px] rounded-full bg-cyan-300/10
+          blur-[120px]
+        "
       />
 
-      <div className="relative z-10 mx-auto w-full max-w-[1600px] px-5 pb-10 sm:px-8 lg:px-12">
+      {/* Contenido principal */}
+      <div
+        className="
+          relative z-10 mx-auto w-full max-w-[1600px]
+          px-5 pb-10 pt-3 sm:px-8 lg:px-12
+        "
+      >
         {/* Encabezado */}
         <header className="flex h-[84px] items-center justify-between border-b border-white/10">
           <div className="flex items-center gap-3">
@@ -116,20 +131,31 @@ const MainMenuPage = () => {
           <motion.img
             src={logo}
             alt="Phi Cargo"
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1.3 }}
-            transition={{ duration: 0.55 }}
-            className="mb-8 h-auto w-52 object-contain drop-shadow-2xl sm:w-60 md:w-64"
+            initial={{ opacity: 0, scale: 1 }}
+            animate={{ opacity: 1, scale: 1.6 }}
+            transition={{
+              duration: 0.65,
+              ease: 'easeOut',
+            }}
+            className="
+              mb-8 h-auto w-52 object-contain
+              drop-shadow-[0_8px_24px_rgba(0,0,0,0.25)]
+              sm:w-60 md:w-64
+            "
           />
         </section>
 
-        {/* Accesos */}
+        {/* Accesos a los módulos */}
         <motion.section
           aria-label="Módulos del sistema"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="mx-auto grid max-w-5xl grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 lg:grid-cols-4"
+          className="
+            mx-auto grid max-w-5xl
+            grid-cols-2 gap-3
+            sm:gap-5 md:grid-cols-3 lg:grid-cols-4
+          "
         >
           {filteredMenuItems.map((item) => (
             <motion.div
@@ -147,11 +173,22 @@ const MainMenuPage = () => {
         </motion.section>
 
         {/* Pie de página */}
-        <footer className="mt-12 flex flex-col items-center gap-2 border-t border-white/10 pt-6 text-center">
-          <p className="text-[10px] font-medium tracking-[0.2em] text-white/50">
+        <footer
+          className="
+            mt-12 flex flex-col items-center gap-2
+            border-t border-white/15 pt-6 text-center
+          "
+        >
+          <p
+            className="
+              text-[10px] font-medium
+              tracking-[0.2em] text-white/60
+            "
+          >
             PHI CARGO
           </p>
-          <p className="text-[10px] text-blue-100/40">
+
+          <p className="text-[10px] text-blue-100/50">
             2026
           </p>
         </footer>
@@ -173,33 +210,44 @@ const MenuItem = ({ icon, label, link }: MenuItemProps) => {
     <motion.button
       type="button"
       onClick={() => navigate(link)}
-      whileHover={{ y: -3 }}
-      whileTap={{ scale: 0.98 }}
-      transition={{ duration: 0.2 }}
+      whileHover={{ y: -2 }}
+      whileTap={{ scale: 0.985 }}
+      transition={{ duration: 0.22, ease: 'easeOut' }}
       aria-label={`Abrir módulo ${label}`}
       className="
-        group flex min-h-[140px] w-full flex-col
-        items-center justify-center gap-3 rounded-2xl
-        border border-white/15 bg-white/[0.12] p-4
-        shadow-[0_8px_32px_rgba(0,0,0,0.12)]
-        backdrop-blur-xl
-        transition-[background-color,border-color,box-shadow] duration-300
-        hover:border-white/30 hover:bg-white/20
-        hover:shadow-[0_12px_36px_rgba(0,0,0,0.18)]
+        liquid-glass liquid-glass-card
+        group relative flex min-h-[140px] w-full
+        flex-col items-center justify-center gap-3
+        rounded-2xl p-4
         focus-visible:outline-none
-        focus-visible:ring-2 focus-visible:ring-blue-300
+        focus-visible:ring-2 focus-visible:ring-white/70
         sm:min-h-[155px] sm:gap-4 sm:rounded-3xl
-      "
+    "
     >
+      {/* Icono */}
       <img
         src={icon}
         alt=""
         aria-hidden="true"
         loading="lazy"
-        className="size-14 object-contain transition-transform duration-200 group-hover:scale-105 sm:size-16"
+        className="
+          relative z-10 size-14 object-contain
+          drop-shadow-[0_3px_8px_rgba(0,0,0,0.20)]
+          transition-transform duration-300
+          group-hover:scale-110
+          sm:size-16
+        "
       />
 
-      <span className="text-center text-sm font-semibold leading-5 sm:text-[15px]">
+      {/* Nombre del módulo */}
+      <span
+        className="
+          relative z-10 text-center text-sm
+          font-semibold leading-5 text-white
+          drop-shadow-[0_1px_4px_rgba(0,0,0,0.25)]
+          sm:text-[15px]
+        "
+      >
         {label}
       </span>
     </motion.button>
