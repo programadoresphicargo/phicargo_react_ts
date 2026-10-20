@@ -105,7 +105,7 @@ export const menuItems: MenuItemType[] = [
   icon: maintenance_img,
   label: 'Mantenimiento',
   link: '/mantenimiento',
-  requiredPermissions: [126],
+  requiredPermissions: [],
   children: [
    {
     label: 'Mantenimiento',

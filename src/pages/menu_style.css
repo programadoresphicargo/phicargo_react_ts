@@ -19,7 +19,7 @@
     0 5px 18px rgba(0, 0, 0, 0.10);
 
   -webkit-backdrop-filter: blur(14px) saturate(115%);
-  backdrop-filter: blur(14px) saturate(115%);
+  backdrop-filter: blur(10px) saturate(115%);
 
   transition:
     background-color 250ms ease,
