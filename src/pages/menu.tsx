@@ -6,9 +6,14 @@ import { useNavigate } from 'react-router-dom';
 
 import IconButton from '@mui/material/IconButton';
 import AppsIcon from '@mui/icons-material/Apps';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import CloseIcon from '@mui/icons-material/Close';
+import FolderRoundedIcon from '@mui/icons-material/FolderRounded';
+import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
+
 import { Button } from '@heroui/react';
 
-import { menuItems } from './MenuItems';
+import { menuItems, type MenuItemType } from './MenuItems';
 import { useAuthContext } from '@/modules/auth/hooks';
 
 interface MenuPosition {
@@ -18,6 +23,7 @@ interface MenuPosition {
 
 export default function GoogleAppsMenu() {
   const [open, setOpen] = useState(false);
+  const [folderStack, setFolderStack] = useState<MenuItemType[]>([]);
 
   const [menuPosition, setMenuPosition] = useState<MenuPosition>({
     top: 12,
@@ -31,15 +37,49 @@ export default function GoogleAppsMenu() {
   const navigate = useNavigate();
   const { session } = useAuthContext();
 
-  const filteredMenuItems = useMemo(
-    () =>
-      menuItems.filter((item) =>
-        item.requiredPermissions.some((permission) =>
-          session?.user?.permissions?.includes(permission),
-        ),
-      ),
-    [session?.user?.permissions],
-  );
+  // Filtrar permisos de forma recursiva.
+  // Una carpeta solo se muestra si contiene elementos accesibles.
+  const filteredMenuItems = useMemo(() => {
+    const permissions = session?.user?.permissions ?? [];
+
+    const filterItems = (
+      items: MenuItemType[],
+    ): MenuItemType[] => {
+      return items.reduce<MenuItemType[]>((result, item) => {
+        if (item.children?.length) {
+          const visibleChildren = filterItems(item.children);
+
+          if (visibleChildren.length > 0) {
+            result.push({
+              ...item,
+              children: visibleChildren,
+            });
+          }
+
+          return result;
+        }
+
+        const hasPermission = item.requiredPermissions.some(
+          (permission) => permissions.includes(permission),
+        );
+
+        if (hasPermission) {
+          result.push(item);
+        }
+
+        return result;
+      }, []);
+    };
+
+    return filterItems(menuItems);
+  }, [session?.user?.permissions]);
+
+  // Carpeta actual.
+  const activeFolder = folderStack[folderStack.length - 1];
+
+  // Elementos que se muestran en el panel.
+  const visibleItems =
+    activeFolder?.children ?? filteredMenuItems;
 
   // Calcular una posición que mantenga el panel dentro de la pantalla.
   const updateMenuPosition = () => {
@@ -51,19 +91,15 @@ export default function GoogleAppsMenu() {
     const viewportHeight = window.innerHeight;
 
     const panelWidth = Math.min(360, viewportWidth - 24);
-
-    // Alinear inicialmente el panel con el botón.
     const desiredRight = viewportWidth - rect.right;
 
     const right = Math.min(
-      Math.max(20, desiredRight),
-      Math.max(20, window.innerWidth - panelWidth - 20),
+      Math.max(12, desiredRight),
+      Math.max(12, viewportWidth - panelWidth - 12),
     );
 
-    // Usar la altura real del panel cuando esté montado.
     const panelHeight = panelRef.current?.offsetHeight ?? 520;
 
-    // Evitar que el panel se salga por arriba o por abajo.
     const maxTop = Math.max(
       12,
       viewportHeight - panelHeight - 12,
@@ -80,10 +116,38 @@ export default function GoogleAppsMenu() {
   // Abrir y cerrar el menú.
   const toggleMenu = () => {
     if (!open) {
+      setFolderStack([]);
       updateMenuPosition();
+    } else {
+      setFolderStack([]);
     }
 
     setOpen((previous) => !previous);
+  };
+
+  // Abrir una carpeta o navegar a una aplicación.
+  const handleItemClick = (item: MenuItemType) => {
+    if (item.children?.length) {
+      setFolderStack((previous) => [...previous, item]);
+      return;
+    }
+
+    if (item.link) {
+      setOpen(false);
+      setFolderStack([]);
+      navigate(item.link);
+    }
+  };
+
+  // Regresar a la carpeta anterior.
+  const handleBackFolder = () => {
+    setFolderStack((previous) => previous.slice(0, -1));
+  };
+
+  // Cerrar y restablecer el menú.
+  const handleCloseMenu = () => {
+    setOpen(false);
+    setFolderStack([]);
   };
 
   // Cerrar al hacer clic fuera del botón y del panel.
@@ -97,7 +161,7 @@ export default function GoogleAppsMenu() {
         !menuRef.current?.contains(target) &&
         !panelRef.current?.contains(target)
       ) {
-        setOpen(false);
+        handleCloseMenu();
       }
     };
 
@@ -114,8 +178,12 @@ export default function GoogleAppsMenu() {
   // Cerrar con Escape.
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setOpen(false);
+      if (event.key === 'Escape' && open) {
+        if (folderStack.length > 0) {
+          handleBackFolder();
+        } else {
+          handleCloseMenu();
+        }
       }
     };
 
@@ -124,26 +192,25 @@ export default function GoogleAppsMenu() {
     return () => {
       document.removeEventListener('keydown', handleEscape);
     };
-  }, []);
+  }, [open, folderStack.length]);
 
-  // Actualizar la posición después de montar el panel
-  // y cuando cambie el viewport o haya desplazamiento.
+  // Actualizar posición cuando cambia el viewport o hay scroll.
   useEffect(() => {
     if (!open) return;
-
-    updateMenuPosition();
 
     const handleViewportChange = () => {
       if (
         buttonRef.current &&
         !buttonRef.current.getClientRects().length
       ) {
-        setOpen(false);
+        handleCloseMenu();
         return;
       }
 
       updateMenuPosition();
     };
+
+    handleViewportChange();
 
     window.addEventListener('resize', handleViewportChange);
     window.addEventListener(
@@ -166,11 +233,7 @@ export default function GoogleAppsMenu() {
     };
   }, [open]);
 
-  const handleClick = (link: string) => {
-    setOpen(false);
-    navigate(link);
-  };
-
+  // Animación del panel.
   const panelVariants = {
     hidden: {
       opacity: 0,
@@ -213,7 +276,7 @@ export default function GoogleAppsMenu() {
 
   return (
     <>
-      {/* Botón ubicado en el navbar */}
+      {/* Botón de aplicaciones del navbar */}
       <div ref={menuRef} className="relative">
         <IconButton
           ref={buttonRef}
@@ -244,7 +307,7 @@ export default function GoogleAppsMenu() {
         </IconButton>
       </div>
 
-      {/* Portal: el panel se renderiza fuera del AppBar */}
+      {/* Panel flotante */}
       {typeof document !== 'undefined' &&
         createPortal(
           <AnimatePresence>
@@ -264,7 +327,7 @@ export default function GoogleAppsMenu() {
                   maxHeight: 'calc(100dvh - 24px)',
                 }}
                 className="
-                  flex flex-col
+                  relative flex flex-col
                   w-[360px] max-w-[calc(100vw-24px)]
                   overflow-hidden rounded-[28px]
                   border border-white/20
@@ -279,7 +342,7 @@ export default function GoogleAppsMenu() {
                   aria-hidden="true"
                   className="
                     pointer-events-none absolute inset-x-8 top-0
-                    h-px bg-gradient-to-r
+                    z-10 h-px bg-gradient-to-r
                     from-transparent via-white/60 to-transparent
                   "
                 />
@@ -294,33 +357,66 @@ export default function GoogleAppsMenu() {
                   "
                 />
 
-                {/* Encabezado fijo */}
-                <div className="relative flex shrink-0 items-center justify-between px-5 pb-4 pt-5">
-                  <div>
-                    <h2 className="text-[15px] font-semibold tracking-tight text-white">
-                      Aplicaciones
+                {/* Encabezado: título o carpeta actual */}
+                <div className="relative flex shrink-0 items-center gap-3 px-5 pb-4 pt-5">
+                  {activeFolder && (
+                    <IconButton
+                      aria-label="Volver a la carpeta anterior"
+                      onClick={handleBackFolder}
+                      sx={{
+                        width: 36,
+                        height: 36,
+                        flexShrink: 0,
+                        color: 'white',
+                        border: '1px solid rgba(255,255,255,0.12)',
+                        backgroundColor: 'rgba(255,255,255,0.06)',
+                        '&:hover': {
+                          backgroundColor:
+                            'rgba(255,255,255,0.12)',
+                        },
+                      }}
+                    >
+                      <ArrowBackIosNewIcon
+                        sx={{ fontSize: 15 }}
+                      />
+                    </IconButton>
+                  )}
+
+                  <div className="min-w-0 flex-1">
+                    <h2 className="truncate text-[15px] font-semibold tracking-tight text-white">
+                      {activeFolder?.label ?? 'Aplicaciones'}
                     </h2>
 
                     <p className="mt-1 text-xs text-blue-100/55">
-                      Tus herramientas de trabajo
+                      {activeFolder
+                        ? 'Aplicaciones de esta carpeta'
+                        : 'Tus herramientas de trabajo'}
                     </p>
                   </div>
 
-                  <div
-                    className="
-                      flex size-9 items-center justify-center
-                      rounded-xl border border-white/15
-                      bg-white/[0.08] text-blue-100/90
-                    "
+                  <IconButton
+                    aria-label="Cerrar aplicaciones"
+                    onClick={handleCloseMenu}
+                    sx={{
+                      width: 36,
+                      height: 36,
+                      flexShrink: 0,
+                      color: 'rgba(255,255,255,0.8)',
+                      '&:hover': {
+                        backgroundColor:
+                          'rgba(255,255,255,0.08)',
+                      },
+                    }}
                   >
-                    <AppsIcon sx={{ fontSize: 19 }} />
-                  </div>
+                    <CloseIcon sx={{ fontSize: 19 }} />
+                  </IconButton>
                 </div>
 
                 <div className="mx-5 h-px shrink-0 bg-white/10" />
 
-                {/* Lista desplazable de aplicaciones */}
+                {/* Lista de aplicaciones y carpetas */}
                 <motion.div
+                  key={activeFolder?.label ?? 'root'}
                   variants={{
                     visible: {
                       transition: {
@@ -334,66 +430,119 @@ export default function GoogleAppsMenu() {
                     relative grid min-h-0 flex-1
                     grid-cols-3
                     gap-x-2 gap-y-3 px-4 py-4
-                    overflow-y-auto
-                    overscroll-contain
+                    overflow-y-auto overscroll-contain
                   "
                 >
-                  {filteredMenuItems.map((app) => (
-                    <motion.button
-                      key={app.link}
-                      type="button"
-                      variants={itemVariants}
-                      onClick={() => handleClick(app.link)}
-                      whileHover={{ y: -2 }}
-                      whileTap={{ scale: 0.96 }}
-                      aria-label={`Abrir ${app.label}`}
-                      className="
-                        group flex min-h-[100px] min-w-0
-                        flex-col items-center justify-center
-                        gap-2 rounded-2xl px-2 py-3
-                        text-center
-                        transition-colors duration-200
-                        hover:bg-white/[0.09]
-                        focus-visible:outline-none
-                        focus-visible:ring-2
-                        focus-visible:ring-blue-300
-                      "
-                    >
-                      {/* Icono de la aplicación */}
-                      <span
+                  {visibleItems.map((app) => {
+                    const isFolder = Boolean(
+                      app.children?.length,
+                    );
+
+                    return (
+                      <motion.button
+                        key={app.link ?? app.label}
+                        type="button"
+                        variants={itemVariants}
+                        onClick={() => handleItemClick(app)}
+                        whileHover={{ y: -2 }}
+                        whileTap={{ scale: 0.96 }}
+                        aria-label={
+                          isFolder
+                            ? `Abrir carpeta ${app.label}`
+                            : `Abrir ${app.label}`
+                        }
                         className="
-                          flex size-12 shrink-0
-                          items-center justify-center
-                          transition-transform duration-200
-                          group-hover:scale-110
+                          group flex min-h-[100px] min-w-0
+                          flex-col items-center justify-center
+                          gap-2 rounded-2xl px-2 py-3
+                          text-center transition-colors duration-200
+                          hover:bg-white/[0.09]
+                          focus-visible:outline-none
+                          focus-visible:ring-2
+                          focus-visible:ring-blue-300
                         "
                       >
-                        <img
-                          src={app.icon}
-                          alt=""
-                          aria-hidden="true"
-                          loading="lazy"
+                        {/* Icono de aplicación o carpeta */}
+                        <span
                           className="
-                            max-h-11 max-w-11 object-contain
-                            drop-shadow-[0_2px_5px_rgba(0,0,0,0.18)]
+                            relative flex size-12 shrink-0
+                            items-center justify-center
+                            transition-transform duration-200
+                            group-hover:scale-110
                           "
-                        />
-                      </span>
+                        >
+                          {isFolder ? (
+                            <>
+                              {app.icon ? (
+                                <img
+                                  src={app.icon}
+                                  alt=""
+                                  aria-hidden="true"
+                                  loading="lazy"
+                                  className="max-h-11 max-w-11 object-contain"
+                                />
+                              ) : (
+                                <FolderRoundedIcon
+                                  sx={{
+                                    fontSize: 43,
+                                    color: '#8dbbff',
+                                  }}
+                                />
+                              )}
 
-                      <span
-                        className="
-                          line-clamp-2 w-full break-words
-                          text-xs font-medium leading-4
-                          text-white/85 transition-colors
-                          group-hover:text-white
-                        "
-                      >
-                        {app.label}
-                      </span>
-                    </motion.button>
-                  ))}
+                              <span
+                                className="
+                                  absolute -bottom-1 -right-2
+                                  flex size-5 items-center justify-center
+                                  rounded-full border border-white/20
+                                  bg-[#244875] text-[10px] font-semibold
+                                  text-white
+                                "
+                              >
+                                {app.children!.length}
+                              </span>
+                            </>
+                          ) : (
+                            <img
+                              src={app.icon}
+                              alt=""
+                              aria-hidden="true"
+                              loading="lazy"
+                              className="
+                                max-h-11 max-w-11 object-contain
+                                drop-shadow-[0_2px_5px_rgba(0,0,0,0.18)]
+                              "
+                            />
+                          )}
+                        </span>
 
-                  {filteredMenuItems.length === 0 && (
+                        <span
+                          className="
+                            line-clamp-2 w-full break-words
+                            text-xs font-medium leading-4
+                            text-white/85 transition-colors
+                            group-hover:text-white
+                          "
+                        >
+                          {app.label}
+                        </span>
+
+                        {isFolder && (
+                          <ChevronRightRoundedIcon
+                            aria-hidden="true"
+                            sx={{
+                              position: 'absolute',
+                              width: 0,
+                              height: 0,
+                              overflow: 'hidden',
+                            }}
+                          />
+                        )}
+                      </motion.button>
+                    );
+                  })}
+
+                  {visibleItems.length === 0 && (
                     <p className="col-span-3 py-8 text-center text-sm text-white/60">
                       No tienes aplicaciones disponibles.
                     </p>
@@ -410,7 +559,10 @@ export default function GoogleAppsMenu() {
                 >
                   <Button
                     color="primary"
-                    onPress={() => handleClick('/menu')}
+                    onPress={() => {
+                      handleCloseMenu();
+                      navigate('/menu');
+                    }}
                     radius="full"
                     className="
                       h-11 w-full
