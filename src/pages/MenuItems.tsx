@@ -17,6 +17,7 @@ import almacen from '../assets/menu/almacen.png';
 import chatbot from '../assets/menu/chatbot.png';
 import ti from '../assets/menu/laptop.png';
 import ajustes from '../assets/menu/ajustes.png';
+import maintenance_img from '../assets/menu/maintenanceIcon.png';
 
 export type MenuItemType = {
  icon: string;
@@ -54,6 +55,12 @@ export const menuItems: MenuItemType[] = [
   icon: accesos_img,
   label: 'Accesos',
   link: '/accesos',
+  requiredPermissions: [126],
+ },
+ {
+  icon: maintenance_img,
+  label: 'Mantenimiento',
+  link: '/mantenimiento',
   requiredPermissions: [126],
  },
  {
