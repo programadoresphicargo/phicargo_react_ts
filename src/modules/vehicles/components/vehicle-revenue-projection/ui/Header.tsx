@@ -28,7 +28,7 @@ const Header = () => {
   );
 
   return (
-    <HeaderBase backRoute="/reportes" fixed>
+    <HeaderBase backRoute="/menu" fixed>
       <div className="mx-8">
         <h1 className="m-0 p-0 text-xl text-gray-100 font-bold">
           Proyección Mensual

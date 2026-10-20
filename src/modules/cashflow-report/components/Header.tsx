@@ -25,7 +25,7 @@ const Header = () => {
 
   return (
     <>
-      <HeaderBase backRoute="/reportes">
+      <HeaderBase backRoute="/menu">
         <div className="flex flex-col gap-1 bg-gray-200/20 backdrop-blur-sm mx-4 py-1.5 px-2 rounded-xl">
           <Checkbox
             isSelected={companySelected === 1}
