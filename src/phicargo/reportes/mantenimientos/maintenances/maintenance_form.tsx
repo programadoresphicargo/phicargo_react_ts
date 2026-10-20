@@ -12,17 +12,16 @@ import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined
 import SpeedOutlinedIcon from '@mui/icons-material/SpeedOutlined';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
-
-import { Button, Progress } from '@heroui/react';
+import { parseDate } from "@internationalized/date";
+import { Button, DatePicker, Progress } from '@heroui/react';
 
 import {
   AutocompleteInput,
-  DatePickerInput,
   NumberInput,
   TextareaInput,
 } from '@/components/inputs';
 
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import odooApi from '@/api/odoo-api';
 import { SelectItem } from '@/types';
 import { useEffect, useState } from 'react';
@@ -134,8 +133,9 @@ export default function MaintenanceForm({
   const getMantenance = async (
     maintenanceId: number
   ): Promise<void> => {
+    setLoading(true);
+
     try {
-      setLoading(true);
       const response = await odooApi.get<Maintenance>(
         `/maintenances/${maintenanceId}`
       );
@@ -146,15 +146,15 @@ export default function MaintenanceForm({
           ? dayjs(response.data.date)
           : null,
       });
-      setLoading(false);
     } catch (error: any) {
-      setLoading(false);
       const detail =
         error.response?.data?.detail ||
         error.message ||
         'No fue posible obtener el mantenimiento.';
 
       toast.error(detail);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -164,6 +164,12 @@ export default function MaintenanceForm({
 
   const onSubmit = async (data: Maintenance) => {
     try {
+
+      const payload = {
+        ...data,
+        date: data.date?.format('YYYY-MM-DD') ?? null,
+      };
+
       setLoading(true);
 
       let res;
@@ -171,12 +177,12 @@ export default function MaintenanceForm({
       if (id != null) {
         res = await odooApi.patch(
           `/maintenances/${id}`,
-          data
+          payload
         );
       } else {
         res = await odooApi.post(
           '/maintenances/',
-          data
+          payload
         );
       }
 
@@ -555,13 +561,25 @@ export default function MaintenanceForm({
                 </span>
               </div>
 
-              <DatePickerInput
+              <Controller
                 control={control}
                 name="date"
-                label="Fecha de ingreso"
-                initialValue={dayjs(date)}
-                rules={{
-                  required: 'Campo obligatorio',
+                rules={{ required: "Fecha requerida" }}
+                render={({ field, fieldState }) => {
+                  const calendarValue = field.value ? parseDate(field.value.format("YYYY-MM-DD")) : null;
+
+                  return (
+                    <DatePicker
+                      label="Fecha"
+                      size='sm'
+                      value={calendarValue}
+                      onChange={(val) => {
+                        field.onChange(val ? dayjs(val.toString()) : null);
+                      }}
+                      isInvalid={!!fieldState.error}
+                      errorMessage={fieldState.error?.message}
+                    />
+                  );
                 }}
               />
             </div>
