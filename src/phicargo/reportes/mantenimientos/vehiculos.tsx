@@ -62,9 +62,13 @@ const MaintenanceVehicleReport = () => {
 
   const columns = useMemo<MRT_ColumnDef<Configuraciones>[]>(
     () => [
+      { accessorKey: 'sucursal', header: 'Sucursal', },
       { accessorKey: 'vehicle', header: 'Vehiculo', },
+      { accessorKey: 'serial_number', header: 'Serie', },
+      { accessorKey: 'x_tipo_vehiculo', header: 'Tipo', },
       { accessorKey: 'marca', header: 'Marca', },
       { accessorKey: 'model', header: 'Modelo', },
+      { accessorKey: 'model_year', header: 'Año', },
       {
         accessorKey: 'kilometraje',
         header: 'Kilometraje actual',
