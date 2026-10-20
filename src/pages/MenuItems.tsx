@@ -22,34 +22,61 @@ import maintenance_img from '../assets/menu/maintenanceIcon.png';
 export type MenuItemType = {
  icon: string;
  label: string;
- link: string;
+ link?: string;
  requiredPermissions: number[];
+ children?: MenuItemType[];
 };
 
 export const menuItems: MenuItemType[] = [
  {
-  icon: turnos_img,
-  label: 'Turnos',
-  requiredPermissions: [202],
-  link: '/turnos',
- },
- {
   icon: viajes_img,
-  label: 'Viajes',
-  link: '/viajes',
+  label: 'Operaciones',
   requiredPermissions: [1],
- },
- {
-  icon: maniobras_img,
-  label: 'Maniobras',
-  link: '/control_maniobras',
-  requiredPermissions: [38],
- },
- {
-  icon: monitoreo_img,
-  label: 'Monitoreo',
-  link: '/EventosPendientes',
-  requiredPermissions: [40],
+  link: '/viajes',
+  children: [
+   {
+    icon: turnos_img,
+    label: 'Turnos',
+    requiredPermissions: [202],
+    link: '/turnos',
+   },
+   {
+    icon: viajes_img,
+    label: 'Viajes',
+    link: '/viajes',
+    requiredPermissions: [1],
+   },
+   {
+    icon: maniobras_img,
+    label: 'Maniobras',
+    link: '/control_maniobras',
+    requiredPermissions: [38],
+   },
+   {
+    icon: monitoreo_img,
+    label: 'Monitoreo',
+    link: '/EventosPendientes',
+    requiredPermissions: [40],
+   },
+   {
+    icon: ce_img,
+    label: 'Costos extras',
+    link: '/folios_costos_extras',
+    requiredPermissions: [130],
+   },
+   {
+    label: 'Disponibilidad',
+    link: '/operaciones-diarias',
+    icon: calendar,
+    requiredPermissions: [201],
+   },
+   {
+    icon: shipingcontainer,
+    label: 'Servicios',
+    link: '/servicios',
+    requiredPermissions: [204],
+   },
+  ]
  },
  {
   icon: accesos_img,
@@ -70,12 +97,6 @@ export const menuItems: MenuItemType[] = [
   link: '/bonos',
  },
  {
-  icon: usuarios_img,
-  label: 'Usuarios',
-  link: '/control-usuarios',
-  requiredPermissions: [5],
- },
- {
   icon: viajes_img,
   label: 'Operadores y Unidades',
   link: '/disponibilidad',
@@ -88,28 +109,10 @@ export const menuItems: MenuItemType[] = [
   requiredPermissions: [4],
  },
  {
-  icon: ce_img,
-  label: 'Costos extras',
-  link: '/folios_costos_extras',
-  requiredPermissions: [130],
- },
- {
   icon: dashboardIcon,
   label: 'Dashboard',
   link: '/dashboards',
   requiredPermissions: [203],
- },
- {
-  label: 'Disponibilidad',
-  link: '/operaciones-diarias',
-  icon: calendar,
-  requiredPermissions: [201],
- },
- {
-  icon: shipingcontainer,
-  label: 'Servicios',
-  link: '/servicios',
-  requiredPermissions: [204],
  },
  {
   icon: almacen,
@@ -150,7 +153,20 @@ export const menuItems: MenuItemType[] = [
  {
   icon: ajustes,
   label: 'Ajustes',
-  link: '/onedrive_ajutes',
   requiredPermissions: [701],
+  children: [
+   {
+    icon: ajustes,
+    label: 'Ajustes',
+    link: '/onedrive_ajutes',
+    requiredPermissions: [701],
+   },
+   {
+    icon: usuarios_img,
+    label: 'Usuarios',
+    link: '/control-usuarios',
+    requiredPermissions: [5],
+   },
+  ],
  },
 ];
