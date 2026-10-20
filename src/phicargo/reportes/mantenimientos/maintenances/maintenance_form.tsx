@@ -74,10 +74,7 @@ export default function MaintenanceForm({
   const [task, setTask] = useState<SelectItem[]>([]);
   const [vehicles, setVehicles] = useState<SelectItem[]>([]);
   const [isLoading, setLoading] = useState<boolean>(false);
-
   const vehicleId = watch('vehicle_id');
-  const date = watch('date');
-
   // ============================================================
   // OBTENER TIPOS DE MANTENIMIENTO
   // ============================================================
