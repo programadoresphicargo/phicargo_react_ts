@@ -69,7 +69,9 @@ const CustomNavbar = ({
 
             {/* Botón de regreso */}
             {showBackButton && (
-              <GoogleAppsMenu></GoogleAppsMenu>
+              <Box sx={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+                <GoogleAppsMenu />
+              </Box>
             )}
 
             <img
