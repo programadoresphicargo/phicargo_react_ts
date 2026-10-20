@@ -3,7 +3,6 @@ import CashflowReportRoutes from '@/modules/cashflow-report/routes/CashflowRepor
 import { LoadingPage } from '@/pages/LoadingPage';
 import MaintenanceReportRoutes from '@/modules/maintenance/routes/MaintenanceReportRoutes';
 import ProtectedRoute from './ProtectedRoute';
-import ReportsMenuPage from '@/pages/ReportsMenuPage';
 import { Route } from 'react-router-dom';
 import MaintenanceReportRoutesRemolques from '@/modules/maintenance/routes/MaintenanceReportRoutes copy';
 
@@ -26,22 +25,10 @@ const Flota = lazy(() => import('../phicargo/reportes/flota'));
 const VehiculosAgrupados = lazy(() => import('../phicargo/reportes/vehiculos_agrupados'));
 const Preventivos = lazy(() => import('../phicargo/reportes/mantenimientos'));
 
-const reportsPermission = 4;
-
 const PROJECTION_PERMISSION = 207;
 
 export const ReportsRoutes = () => (
   <Route path="/reportes">
-    <Route
-      index
-      element={
-        <ProtectedRoute
-          element={<ReportsMenuPage />}
-          requiredPermissionId={reportsPermission}
-        />
-      }
-    />
-
     {/* Reporte de Mantenimiento */}
     {MaintenanceReportRoutes()}
 
