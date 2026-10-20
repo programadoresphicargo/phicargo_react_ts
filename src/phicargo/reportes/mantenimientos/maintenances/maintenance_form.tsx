@@ -13,7 +13,7 @@ import SpeedOutlinedIcon from '@mui/icons-material/SpeedOutlined';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 
-import { Button } from '@heroui/react';
+import { Button, Progress } from '@heroui/react';
 
 import {
   AutocompleteInput,
@@ -77,6 +77,7 @@ export default function MaintenanceForm({
   const [isLoading, setLoading] = useState<boolean>(false);
 
   const vehicleId = watch('vehicle_id');
+  const date = watch('date');
 
   // ============================================================
   // OBTENER TIPOS DE MANTENIMIENTO
@@ -134,12 +135,20 @@ export default function MaintenanceForm({
     maintenanceId: number
   ): Promise<void> => {
     try {
+      setLoading(true);
       const response = await odooApi.get<Maintenance>(
         `/maintenances/${maintenanceId}`
       );
 
-      reset(response.data);
+      reset({
+        ...response.data,
+        date: response.data.date
+          ? dayjs(response.data.date)
+          : null,
+      });
+      setLoading(false);
     } catch (error: any) {
+      setLoading(false);
       const detail =
         error.response?.data?.detail ||
         error.message ||
@@ -161,7 +170,7 @@ export default function MaintenanceForm({
 
       if (id != null) {
         res = await odooApi.patch(
-          `/maintenances/${id} `,
+          `/maintenances/${id}`,
           data
         );
       } else {
@@ -203,7 +212,7 @@ export default function MaintenanceForm({
     const loadMileage = async () => {
       try {
         const response = await odooApi.get(
-          `/vehicles/${vehicleId} `
+          `/vehicles/${vehicleId}`
         );
 
         setValue(
@@ -354,6 +363,9 @@ export default function MaintenanceForm({
       {/* ======================================================
           CONTENT
       ======================================================= */}
+      {isLoading && (
+        <Progress isIndeterminate size='sm' color='danger'></Progress>
+      )}
 
       <DialogContent
         sx={{
@@ -364,6 +376,7 @@ export default function MaintenanceForm({
           backgroundColor: '#f8fafc',
         }}
       >
+
         {/* ====================================================
             DESCRIPCIÓN
         ===================================================== */}
@@ -546,7 +559,7 @@ export default function MaintenanceForm({
                 control={control}
                 name="date"
                 label="Fecha de ingreso"
-                initialValue={dayjs()}
+                initialValue={dayjs(date)}
                 rules={{
                   required: 'Campo obligatorio',
                 }}

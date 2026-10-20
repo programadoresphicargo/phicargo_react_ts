@@ -82,6 +82,7 @@ const MaintenanceVehicleReport = () => {
       },
       { accessorKey: 'tipo_mantenimiento', header: 'Tipo mantenimiento', },
       { accessorKey: 'date', header: 'Ultimo mantenimineto', },
+      { accessorKey: 'dias_transcurridos', header: 'Días transcurridos', },
       {
         accessorKey: 'km_ultimo_mantenimiento',
         header: 'Km ultimo mant',

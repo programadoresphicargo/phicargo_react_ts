@@ -15,7 +15,9 @@ const Maintenances = () => {
   const [idMaintenance, setMaintenance] = useState<number | null>(null);
 
   useEffect(() => {
-    fetchData();
+    if (open == false) {
+      fetchData();
+    }
   }, [open]);
 
   const fetchData = async () => {
