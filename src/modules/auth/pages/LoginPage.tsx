@@ -1,5 +1,4 @@
 
-import { useState } from 'react';
 import { Button, Image } from '@heroui/react';
 import { motion } from 'framer-motion';
 import { LockKeyhole, ShieldCheck } from 'lucide-react';
@@ -24,7 +23,6 @@ const initialForm: UserLogin = {
 const LoginPage = () => {
   const navigate = useNavigate();
   const { redirectTo } = useAuthContext();
-  const [showPassword, setShowPassword] = useState(false);
 
   const { control, handleSubmit } = useForm<UserLogin>({
     defaultValues: initialForm,
