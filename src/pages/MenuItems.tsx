@@ -268,15 +268,22 @@ export const menuItems: MenuItemType[] = [
  },
  {
   icon: complaints,
-  label: 'No conformidades',
-  link: '/quejas',
+  label: 'Calidad',
   requiredPermissions: [213],
- },
- {
-  icon: minutas,
-  label: 'Minutas',
-  link: '/minutas',
-  requiredPermissions: [782],
+  children: [
+   {
+    icon: complaints,
+    label: 'No conformidades',
+    link: '/quejas',
+    requiredPermissions: [213],
+   },
+   {
+    icon: minutas,
+    label: 'Minutas',
+    link: '/minutas',
+    requiredPermissions: [782],
+   },
+  ]
  },
  {
   icon: incidentsImg,
