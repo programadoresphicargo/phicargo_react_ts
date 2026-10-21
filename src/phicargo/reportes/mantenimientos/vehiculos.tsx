@@ -69,7 +69,7 @@ const MaintenanceVehicleReport = () => {
         accessorKey: 'x_tipo_vehiculo', header: 'Tipo',
         Cell: ({ cell }) => {
           const value = cell.getValue<string>();
-          return <Chip color={value == "carretera" ? "primary" : "success"} size='sm' className='text-white'>{value.toUpperCase() ?? ''}</Chip>;
+          return <Chip color={value == "carretera" ? "primary" : "success"} size='sm' className='text-white'>{value}</Chip>;
         },
       },
       { accessorKey: 'marca', header: 'Marca', },
@@ -150,6 +150,9 @@ const MaintenanceVehicleReport = () => {
       density: 'compact',
       pagination: { pageIndex: 0, pageSize: 80 },
       showColumnFilters: true,
+      columnVisibility: {
+        model_year: TABS.find((tab) => tab.value === value)?.label == 'Motogeneradores' ? true : false,
+      },
     },
     muiTablePaperProps: {
       elevation: 0,
