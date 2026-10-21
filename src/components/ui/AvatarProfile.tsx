@@ -7,17 +7,30 @@ import {
 import { User } from "@heroui/react";
 
 import { useAuthContext } from '@/modules/auth/hooks';
+import { useState } from 'react';
 
 const AvatarProfile = () => {
   const { session, onLogout } = useAuthContext();
+
+  const images = Object.values(
+    import.meta.glob("/src/assets/halloween/*.{png,jpg,jpeg,webp}", {
+      eager: true,
+      query: "?url",
+      import: "default",
+    })
+  ) as string[];
+
+  const [image] = useState(
+    () => images[Math.floor(Math.random() * images.length)]
+  );
 
   return (
     <Dropdown placement="bottom-end">
       <DropdownTrigger>
         <User
           avatarProps={{
-            size: "sm",
-            src: "https://cdn-icons-png.flaticon.com/512/3177/3177440.png",
+            size: "md",
+            src: image,
           }}
           description={session?.user.role || ''}
           name={session?.user.name || ''}
