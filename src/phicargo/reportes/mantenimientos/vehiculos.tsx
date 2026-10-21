@@ -18,6 +18,7 @@ import { Button, Chip } from '@heroui/react';
 type MaintenanceReport = {
   sucursal: string | null;
   vehicle: string | null;
+  vehicle_id: number | null;
   serial_number: string | null;
   x_tipo_vehiculo: string | null;
   marca: string | null;
@@ -160,22 +161,31 @@ const MaintenanceVehicleReport = () => {
         },
       },
       {
-        accessorKey: 'state',
+        accessorKey: 'x_status_mg',
         header: 'Estado',
         Cell: ({ cell, row }) => (
           <Select
             size="small"
             value={cell.getValue<string>() ?? ''}
-            onChange={(event) => {
+            onChange={async (event) => {
               const newState = event.target.value;
+              const vehicle = row.original.vehicle_id;
 
-              setData((prev) =>
-                prev.map((item) =>
-                  item.vehicle === row.original.vehicle
-                    ? { ...item, state: newState }
-                    : item,
-                ),
-              );
+              try {
+                await odooApi.patch(`/vehicles/${vehicle}`, {
+                  x_status_mg: newState,
+                });
+
+                setData((prev) =>
+                  prev.map((item) =>
+                    item.vehicle_id === vehicle
+                      ? { ...item, x_status_mg: newState }
+                      : item,
+                  ),
+                );
+              } catch (error) {
+                console.error('Error al actualizar el estado:', error);
+              }
             }}
             sx={{ minWidth: 140, fontSize: 12 }}
           >
@@ -185,7 +195,7 @@ const MaintenanceVehicleReport = () => {
             <MenuItem value="Desarmado">Desarmado</MenuItem>
           </Select>
         ),
-      },
+      }
     ], [value]);
 
   const [columnVisibility, setColumnVisibility] =
