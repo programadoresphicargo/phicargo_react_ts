@@ -69,7 +69,7 @@ const MaintenanceVehicleReport = () => {
         accessorKey: 'x_tipo_vehiculo', header: 'Tipo',
         Cell: ({ cell }) => {
           const value = cell.getValue<string>();
-          return <Chip color={value == "carretera" ? "primary" : "success"} size='sm' className='text-white'>{value.toUpperCase()}</Chip>;
+          return <Chip color={value == "carretera" ? "primary" : "success"} size='sm' className='text-white'>{value.toUpperCase() ?? ''}</Chip>;
         },
       },
       { accessorKey: 'marca', header: 'Marca', },
