@@ -1,45 +1,84 @@
-import { useEffect, useState } from "react";
+
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
  Button,
  Card,
  CardBody,
  CardHeader,
  Divider,
- Image,
+ Progress,
 } from "@heroui/react";
-import { Progress } from "@heroui/react";
+import PhotoAlbum from "react-photo-album";
+import Lightbox from "yet-another-react-lightbox";
+import Download from "yet-another-react-lightbox/plugins/download";
+import "yet-another-react-lightbox/styles.css";
+import "react-photo-album/styles.css";
+import "yet-another-react-lightbox/styles.css";
 import odooApi from "@/api/odoo-api";
+import { toast } from "react-toastify";
 
 type Images = {
  id_onedrive: string;
  url_download: string;
 };
 
-function EvidenciasChecklistViaje({ id_viaje, tipo_checklist }: { id_viaje: number, tipo_checklist: string }) {
+type Props = {
+ id_viaje: number;
+ tipo_checklist: string;
+};
+
+function EvidenciasChecklistViaje({
+ id_viaje,
+ tipo_checklist,
+}: Props) {
  const [isLoading, setLoading] = useState(false);
- const [images, setData] = useState<Images[]>([]);
+ const [images, setImages] = useState<Images[]>([]);
+ const [lightboxIndex, setLightboxIndex] = useState(-1);
 
- useEffect(() => {
-  fetchData();
- }, [id_viaje]);
-
- const fetchData = async () => {
+ const fetchData = useCallback(async () => {
   try {
    setLoading(true);
 
    const response = await odooApi.get(
-    `/checklist/evidencias/?id_viaje=${id_viaje}&tipo_checklist=${tipo_checklist}`
+    `/checklist/evidencias/?id_viaje=${id_viaje}&tipo_checklist=${encodeURIComponent(tipo_checklist)}`
    );
 
-   setData(response.data);
+   setImages(response.data ?? []);
   } catch (error) {
-   console.error("Error al obtener los datos:", error);
+   console.error("Error al obtener las evidencias:", error);
+   toast.error("No se pudieron cargar las evidencias.");
   } finally {
    setLoading(false);
   }
- };
+ }, [id_viaje, tipo_checklist]);
 
- if (isLoading) {
+ useEffect(() => {
+  void fetchData();
+ }, [fetchData]);
+
+ const photos = useMemo(
+  () =>
+   images.map((item) => ({
+    src: item.url_download,
+    key: item.id_onedrive,
+    alt: `Evidencia ${item.id_onedrive}`,
+    // Dimensiones de referencia para organizar la galería.
+    width: 4,
+    height: 3,
+   })),
+  [images]
+ );
+
+ const slides = useMemo(
+  () =>
+   images.map((item) => ({
+    src: item.url_download,
+    alt: `Evidencia ${item.id_onedrive}`,
+   })),
+  [images]
+ );
+
+ if (isLoading && images.length === 0) {
   return (
    <Progress
     size="sm"
@@ -50,53 +89,83 @@ function EvidenciasChecklistViaje({ id_viaje, tipo_checklist }: { id_viaje: numb
   );
  }
 
- if (images.length === 0) {
+ if (!isLoading && images.length === 0) {
   return null;
  }
 
  return (
-  <Card className="mt-5">
-   <CardHeader className="flex items-center justify-between">
-    <span className="font-semibold">Evidencias checklist {tipo_checklist}</span>
+  <>
+   <Card className="mt-5 border border-default-200 shadow-sm">
+    <CardHeader className="flex items-center justify-between gap-3 px-4 py-3">
+     <div className="min-w-0">
+      <h3 className="font-semibold text-foreground">
+       Evidencias del checklist
+      </h3>
 
-    <Button
-     onPress={fetchData}
-     color="success"
-     size="sm"
-     radius="md"
-     className="text-white"
-    >
-     Refrescar
-    </Button>
-   </CardHeader>
+      <p className="text-sm text-default-500">
+       {tipo_checklist} · {images.length}{" "}
+       {images.length === 1 ? "fotografía" : "fotografías"}
+      </p>
+     </div>
 
-   <Divider />
+     <Button
+      onPress={() => void fetchData()}
+      isLoading={isLoading}
+      isDisabled={isLoading}
+      color="success"
+      size="sm"
+      radius="md"
+      className="shrink-0 text-white"
+     >
+      Refrescar
+     </Button>
+    </CardHeader>
 
-   <CardBody>
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-     {images.map((item) => (
-      <a
-       key={item.id_onedrive}
-       href={item.url_download}
-       target="_blank"
-       rel="noopener noreferrer"
-       className="group block"
-      >
-       <div className="flex justify-center">
-        <div className="w-fit overflow-hidden rounded-lg border bg-gray-50">
-         <Image
-          src={item.url_download}
-          alt={`Evidencia ${item.id_onedrive}`}
-          className="h-40 w-auto object-contain"
-          radius="none"
-         />
-        </div>
-       </div>
-      </a>
-     ))}
-    </div>
-   </CardBody>
-  </Card>
+    <Divider />
+
+    <CardBody className="p-3 sm:p-4">
+     <PhotoAlbum
+      layout="rows"
+      photos={photos}
+      targetRowHeight={170}
+      spacing={12}
+      onClick={({ index }) => setLightboxIndex(index)}
+      componentsProps={{
+       image: {
+        loading: "lazy",
+        style: {
+         borderRadius: "10px",
+         objectFit: "contain",
+         backgroundColor: "#f4f4f5",
+         cursor: "zoom-in",
+        },
+       },
+      }}
+     />
+
+     {isLoading && (
+      <Progress
+       size="sm"
+       isIndeterminate
+       aria-label="Actualizando evidencias..."
+       className="mt-3"
+      />
+     )}
+    </CardBody>
+   </Card>
+
+   <Lightbox
+    open={lightboxIndex >= 0}
+    close={() => setLightboxIndex(-1)}
+    index={lightboxIndex}
+    slides={slides}
+    plugins={[Download]}
+    carousel={{
+     imageFit: "contain",
+     preload: 2,
+    }}
+   />
+  </>
  );
 }
 

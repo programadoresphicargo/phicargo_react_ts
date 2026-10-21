@@ -198,7 +198,7 @@ const CorreosElectronicosViaje: React.FC<
       <Dialog
         open={openCorreos}
         onClose={handleCloseCorreos}
-        maxWidth="md"
+        maxWidth="sm"
         fullWidth
         PaperProps={{
           sx: {
@@ -254,8 +254,8 @@ const CorreosElectronicosViaje: React.FC<
                   </h3>
 
                   <p className="mt-0.5 text-xs text-slate-500">
-                    Administra los correos relacionados con las maniobras
-                    del viaje.
+                    Correos relacionados 
+                    con las maniobras.
                   </p>
                 </div>
 
