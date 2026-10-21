@@ -83,7 +83,7 @@ const Odometers = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 240px)',
+        maxHeight: 'calc(100vh - 190px)',
       },
     },
     muiTableBodyRowProps: ({ row }) => ({

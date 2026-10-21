@@ -220,7 +220,7 @@ const MaintenanceVehicleReport = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 290px)',
+        maxHeight: 'calc(100vh - 235px)',
       },
     },
     muiTableBodyCellProps: ({ row }) => {
