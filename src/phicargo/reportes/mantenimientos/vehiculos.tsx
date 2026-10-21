@@ -204,7 +204,7 @@ const MaintenanceVehicleReport = () => {
       x_tipo_vehiculo: true,
       sucursal: true,
       serial_number: true,
-      state: true,
+      x_status_mg: true,
     });
 
   useEffect(() => {
@@ -214,7 +214,7 @@ const MaintenanceVehicleReport = () => {
         x_tipo_vehiculo: false,
         sucursal: false,
         serial_number: true,
-        state: true,
+        x_status_mg: true,
       });
     } else if (value === '5') {
       setColumnVisibility({
@@ -222,7 +222,7 @@ const MaintenanceVehicleReport = () => {
         x_tipo_vehiculo: false,
         sucursal: false,
         serial_number: false,
-        state: false,
+        x_status_mg: false,
       });
     } else {
       setColumnVisibility({
@@ -230,7 +230,7 @@ const MaintenanceVehicleReport = () => {
         x_tipo_vehiculo: true,
         sucursal: true,
         serial_number: true,
-        state: false,
+        x_status_mg: false,
       });
     }
   }, [value]);
