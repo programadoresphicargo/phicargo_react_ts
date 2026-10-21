@@ -45,8 +45,7 @@ const MaintenanceVehicleReport = () => {
     { value: '2', label: 'Remolques', prefixes: ['PL-', 'CH-', 'DL-', 'PCE-', 'CB-', 'CS-'] },
     { value: '3', label: 'Motogeneradores', prefixes: ['MG-'] },
     { value: '4', label: 'Utilitarios', prefixes: ['U-'] },
-    { value: '5', label: 'Grúas', prefixes: ['G-'] },
-    { value: '6', label: 'Servi', prefixes: ['SERVI/MC-', 'SERVI/T-'] },
+    { value: '5', label: 'Grúas y Servi', prefixes: ['G-', 'SERVI/MC-', 'SERVI/T-'] },
   ];
 
   const [value, setValue] = React.useState('1');
