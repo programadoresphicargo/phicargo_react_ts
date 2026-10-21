@@ -161,16 +161,32 @@ const MaintenanceVehicleReport = () => {
       model_year: true,
       x_tipo_vehiculo: true,
       sucursal: true,
+      serial_number: true,
     });
 
   useEffect(() => {
-    const hidden = value === '3';
-
-    setColumnVisibility({
-      model_year: !hidden,
-      x_tipo_vehiculo: !hidden,
-      sucursal: !hidden,
-    });
+    if (value === '3') {
+      setColumnVisibility({
+        model_year: false,
+        x_tipo_vehiculo: false,
+        sucursal: false,
+        serial_number: true,
+      });
+    } else if (value === '5') {
+      setColumnVisibility({
+        model_year: false,
+        x_tipo_vehiculo: false,
+        sucursal: false,
+        serial_number: false,
+      });
+    } else {
+      setColumnVisibility({
+        model_year: true,
+        x_tipo_vehiculo: true,
+        sucursal: true,
+        serial_number: true,
+      });
+    }
   }, [value]);
 
   const table = useMaterialReactTable({
