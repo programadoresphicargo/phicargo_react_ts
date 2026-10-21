@@ -5,7 +5,7 @@ import {
   type MRT_VisibilityState,
 } from 'material-react-table';
 import { useEffect, useMemo, useState } from 'react';
-import { Box, Tab } from '@mui/material';
+import { Box, MenuItem, Select, Tab } from '@mui/material';
 import odooApi from '@/api/odoo-api';
 import { toast } from "react-toastify";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
@@ -82,22 +82,23 @@ const MaintenanceVehicleReport = () => {
 
   const columns = useMemo<MRT_ColumnDef<MaintenanceReport>[]>(
     () => [
-      { accessorKey: 'sucursal', header: 'Sucursal', },
-      { accessorKey: 'vehicle', header: 'Vehiculo', },
-      { accessorKey: 'serial_number', header: 'Serie', },
+      { accessorKey: 'sucursal', header: 'Sucursal', enableEditing: false },
+      { accessorKey: 'vehicle', header: 'Vehiculo', enableEditing: false },
+      { accessorKey: 'serial_number', header: 'Serie', enableEditing: false },
       {
-        accessorKey: 'x_tipo_vehiculo', header: 'Tipo',
+        accessorKey: 'x_tipo_vehiculo', header: 'Tipo', enableEditing: false,
         Cell: ({ cell }) => {
           const value = cell.getValue<string>();
           return <Chip color={value == "carretera" ? "primary" : "success"} size='sm' className='text-white'>{value}</Chip>;
         },
       },
-      { accessorKey: 'marca', header: 'Marca', },
-      { accessorKey: 'model', header: 'Modelo', },
-      { accessorKey: 'model_year', header: 'Año', },
+      { accessorKey: 'marca', header: 'Marca', enableEditing: false },
+      { accessorKey: 'model', header: 'Modelo', enableEditing: false },
+      { accessorKey: 'model_year', header: 'Año', enableEditing: false },
       {
         accessorKey: 'kilometraje',
         header: 'Kilometraje actual',
+        enableEditing: false,
         Cell: ({ cell }) => {
           const value = cell.getValue<number>();
           return value?.toLocaleString('en-US');
@@ -106,13 +107,14 @@ const MaintenanceVehicleReport = () => {
           align: 'right',
         },
       },
-      { accessorKey: 'fecha_kilometraje', header: 'Fecha kilometraje', },
-      { accessorKey: 'tipo_mantenimiento', header: 'Tipo mantenimiento', },
-      { accessorKey: 'date', header: 'Ultimo mantenimineto', },
-      { accessorKey: 'dias_transcurridos', header: 'Días transcurridos', },
+      { accessorKey: 'fecha_kilometraje', header: 'Fecha kilometraje', enableEditing: false },
+      { accessorKey: 'tipo_mantenimiento', header: 'Tipo mantenimiento', enableEditing: false },
+      { accessorKey: 'date', header: 'Ultimo mantenimineto', enableEditing: false },
+      { accessorKey: 'dias_transcurridos', header: 'Días transcurridos', enableEditing: false },
       {
         accessorKey: 'km_ultimo_mantenimiento',
         header: 'Km ultimo mant',
+        enableEditing: false,
         Cell: ({ cell }) => {
           const value = cell.getValue<number>();
           return value?.toLocaleString('en-US');
@@ -124,6 +126,7 @@ const MaintenanceVehicleReport = () => {
       {
         accessorKey: 'intervalo_km',
         header: 'Intervalo',
+        enableEditing: false,
         Cell: ({ cell }) => {
           const value = cell.getValue<number>();
           return value?.toLocaleString('en-US');
@@ -135,6 +138,7 @@ const MaintenanceVehicleReport = () => {
       {
         accessorKey: 'proximo_servicio_km',
         header: 'Proximo servicio',
+        enableEditing: false,
         Cell: ({ cell }) => {
           const value = cell.getValue<number>();
           return value?.toLocaleString('en-US');
@@ -146,6 +150,7 @@ const MaintenanceVehicleReport = () => {
       {
         accessorKey: 'kilometros_restantes',
         header: 'Km restantes',
+        enableEditing: false,
         Cell: ({ cell }) => {
           const value = cell.getValue<number>();
           return value?.toLocaleString('en-US');
@@ -153,6 +158,33 @@ const MaintenanceVehicleReport = () => {
         muiTableBodyCellProps: {
           align: 'right',
         },
+      },
+      {
+        accessorKey: 'state',
+        header: 'Estado',
+        Cell: ({ cell, row }) => (
+          <Select
+            size="small"
+            value={cell.getValue<string>() ?? ''}
+            onChange={(event) => {
+              const newState = event.target.value;
+
+              setData((prev) =>
+                prev.map((item) =>
+                  item.vehicle === row.original.vehicle
+                    ? { ...item, state: newState }
+                    : item,
+                ),
+              );
+            }}
+            sx={{ minWidth: 140, fontSize: 12 }}
+          >
+            <MenuItem value="F. electronica">F. electronica</MenuItem>
+            <MenuItem value="Operativo">Operativo</MenuItem>
+            <MenuItem value="F. mecanica">F. mecanica</MenuItem>
+            <MenuItem value="Desarmado">Desarmado</MenuItem>
+          </Select>
+        ),
       },
     ], [value]);
 
@@ -162,6 +194,7 @@ const MaintenanceVehicleReport = () => {
       x_tipo_vehiculo: true,
       sucursal: true,
       serial_number: true,
+      state: true,
     });
 
   useEffect(() => {
@@ -171,6 +204,7 @@ const MaintenanceVehicleReport = () => {
         x_tipo_vehiculo: false,
         sucursal: false,
         serial_number: true,
+        state: true,
       });
     } else if (value === '5') {
       setColumnVisibility({
@@ -178,6 +212,7 @@ const MaintenanceVehicleReport = () => {
         x_tipo_vehiculo: false,
         sucursal: false,
         serial_number: false,
+        state: false,
       });
     } else {
       setColumnVisibility({
@@ -185,6 +220,7 @@ const MaintenanceVehicleReport = () => {
         x_tipo_vehiculo: true,
         sucursal: true,
         serial_number: true,
+        state: false,
       });
     }
   }, [value]);
@@ -194,6 +230,8 @@ const MaintenanceVehicleReport = () => {
     data,
     state: { showProgressBars: isLoading, columnVisibility },
     onColumnVisibilityChange: setColumnVisibility,
+    enableEditing: true,
+    editDisplayMode: "row",
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,

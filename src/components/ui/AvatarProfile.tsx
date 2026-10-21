@@ -1,44 +1,60 @@
+
 import {
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-} from '@heroui/react';
-import { User } from "@heroui/react";
+  User,
+} from "@heroui/react";
 
-import { useAuthContext } from '@/modules/auth/hooks';
-import { useState } from 'react';
+import { useAuthContext } from "@/modules/auth/hooks";
+import { useState } from "react";
+
+const images = Object.values(
+  import.meta.glob("/src/assets/halloween/*.{png,jpg,jpeg,webp}", {
+    eager: true,
+    query: "?url",
+    import: "default",
+  })
+) as string[];
 
 const AvatarProfile = () => {
   const { session, onLogout } = useAuthContext();
 
-  const images = Object.values(
-    import.meta.glob("/src/assets/halloween/*.{png,jpg,jpeg,webp}", {
-      eager: true,
-      query: "?url",
-      import: "default",
-    })
-  ) as string[];
-
-  const [image] = useState(
-    () => images[Math.floor(Math.random() * images.length)]
+  const [image] = useState(() =>
+    images.length
+      ? images[Math.floor(Math.random() * images.length)]
+      : ""
   );
 
   return (
     <Dropdown placement="bottom-end">
       <DropdownTrigger>
-        <User
-          avatarProps={{
-            size: "md",
-            src: image,
-          }}
-          description={session?.user.role || ''}
-          name={session?.user.name || ''}
-        />
+        <div className="relative cursor-pointer rounded-full">
+          <User
+            avatarProps={{
+              size: "md",
+              src: image,
+              className:
+                "ring-2 ring-orange-400 ring-offset-2 ring-offset-background",
+            }}
+            description={session?.user.role || ""}
+            name={`🪦 ${session?.user.name || ""}`}
+          />
+        </div>
       </DropdownTrigger>
-      <DropdownMenu aria-label="Profile Actions" variant="faded">
-        <DropdownItem key="logout" color="danger" onClick={onLogout}>
-          Cerrar Sesión
+
+      <DropdownMenu
+        aria-label="Profile Actions"
+        variant="faded"
+        className="min-w-56"
+      >
+        <DropdownItem
+          key="logout"
+          color="danger"
+          onPress={onLogout}
+        >
+          Cerrar sesión
         </DropdownItem>
       </DropdownMenu>
     </Dropdown>
@@ -46,4 +62,3 @@ const AvatarProfile = () => {
 };
 
 export default AvatarProfile;
-
