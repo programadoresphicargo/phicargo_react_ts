@@ -1,4 +1,9 @@
-import { MRT_ColumnDef, MaterialReactTable, useMaterialReactTable } from 'material-react-table';
+import {
+  MRT_ColumnDef,
+  MaterialReactTable,
+  useMaterialReactTable,
+  type MRT_VisibilityState,
+} from 'material-react-table';
 import { useEffect, useMemo, useState } from 'react';
 import { Box, Tab } from '@mui/material';
 import odooApi from '@/api/odoo-api';
@@ -10,14 +15,29 @@ import TabList from '@mui/lab/TabList';
 import React from 'react';
 import { Button, Chip } from '@heroui/react';
 
-type Configuraciones = {
-  task_id: number | null,
-}
+type MaintenanceReport = {
+  sucursal: string | null;
+  vehicle: string | null;
+  serial_number: string | null;
+  x_tipo_vehiculo: string | null;
+  marca: string | null;
+  model: string | null;
+  model_year: number | null;
+  kilometraje: number | null;
+  fecha_kilometraje: string | null;
+  tipo_mantenimiento: string | null;
+  date: string | null;
+  dias_transcurridos: number | null;
+  km_ultimo_mantenimiento: number | null;
+  intervalo_km: number | null;
+  proximo_servicio_km: number | null;
+  kilometros_restantes: number | null;
+};
 
 const MaintenanceVehicleReport = () => {
 
   const [isLoading, setisLoading] = useState(false);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<MaintenanceReport[]>([]);
 
   const TABS = [
     { value: '1', label: 'Tractos', prefixes: ['C-'] },
@@ -60,7 +80,7 @@ const MaintenanceVehicleReport = () => {
     }
   };
 
-  const columns = useMemo<MRT_ColumnDef<Configuraciones>[]>(
+  const columns = useMemo<MRT_ColumnDef<MaintenanceReport>[]>(
     () => [
       { accessorKey: 'sucursal', header: 'Sucursal', },
       { accessorKey: 'vehicle', header: 'Vehiculo', },
@@ -134,12 +154,30 @@ const MaintenanceVehicleReport = () => {
           align: 'right',
         },
       },
-    ], []);
+    ], [value]);
+
+  const [columnVisibility, setColumnVisibility] =
+    useState<MRT_VisibilityState>({
+      model_year: true,
+      x_tipo_vehiculo: true,
+      sucursal: true,
+    });
+
+  useEffect(() => {
+    const hidden = value === '3';
+
+    setColumnVisibility({
+      model_year: !hidden,
+      x_tipo_vehiculo: !hidden,
+      sucursal: !hidden,
+    });
+  }, [value]);
 
   const table = useMaterialReactTable({
     columns,
     data,
-    state: { showProgressBars: isLoading },
+    state: { showProgressBars: isLoading, columnVisibility },
+    onColumnVisibilityChange: setColumnVisibility,
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
@@ -150,9 +188,6 @@ const MaintenanceVehicleReport = () => {
       density: 'compact',
       pagination: { pageIndex: 0, pageSize: 80 },
       showColumnFilters: true,
-      columnVisibility: {
-        model_year: TABS.find((tab) => tab.value === value)?.label == 'Motogeneradores' ? true : false,
-      },
     },
     muiTablePaperProps: {
       elevation: 0,
