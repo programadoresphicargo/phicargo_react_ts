@@ -8,7 +8,7 @@ import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
 import TabList from '@mui/lab/TabList';
 import React from 'react';
-import { Button } from '@heroui/react';
+import { Button, Chip } from '@heroui/react';
 
 type Configuraciones = {
   task_id: number | null,
@@ -65,7 +65,13 @@ const MaintenanceVehicleReport = () => {
       { accessorKey: 'sucursal', header: 'Sucursal', },
       { accessorKey: 'vehicle', header: 'Vehiculo', },
       { accessorKey: 'serial_number', header: 'Serie', },
-      { accessorKey: 'x_tipo_vehiculo', header: 'Tipo', },
+      {
+        accessorKey: 'x_tipo_vehiculo', header: 'Tipo',
+        Cell: ({ cell }) => {
+          const value = cell.getValue<string>();
+          return <Chip color={value == "carretera" ? "primary" : "success"} size='sm' className='text-white'>{value.toUpperCase()}</Chip>;
+        },
+      },
       { accessorKey: 'marca', header: 'Marca', },
       { accessorKey: 'model', header: 'Modelo', },
       { accessorKey: 'model_year', header: 'Año', },
@@ -80,6 +86,7 @@ const MaintenanceVehicleReport = () => {
           align: 'right',
         },
       },
+      { accessorKey: 'fecha_kilometraje', header: 'Fecha kilometraje', },
       { accessorKey: 'tipo_mantenimiento', header: 'Tipo mantenimiento', },
       { accessorKey: 'date', header: 'Ultimo mantenimineto', },
       { accessorKey: 'dias_transcurridos', header: 'Días transcurridos', },
