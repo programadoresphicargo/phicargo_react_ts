@@ -11,19 +11,27 @@ import DirectionsCarOutlinedIcon from '@mui/icons-material/DirectionsCarOutlined
 import BuildOutlinedIcon from '@mui/icons-material/BuildOutlined';
 import SpeedOutlinedIcon from '@mui/icons-material/SpeedOutlined';
 
-import { Button } from '@heroui/react';
+import { Button, Select, SelectItem } from '@heroui/react';
+import {
+  AutocompleteInput,
+  NumberInput,
+  SelectInput,
+} from '@/components/inputs';
 
-import { AutocompleteInput, NumberInput } from '@/components/inputs';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import odooApi from '@/api/odoo-api';
-import { SelectItem } from '@/types';
+import { SelectItem as SelectItemType } from '@/types';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+
+type UnidadIntervalo = 'km' | 'dias' | 'horas';
 
 type Configuraciones = {
   model_id: number | null;
   task_id: number | null;
-  intervalo_km: number | null;
+  intervalo: number | null;
+  unidad_intervalo: UnidadIntervalo | '';
+  prefixes: string[];
 };
 
 type Modelos = {
@@ -48,32 +56,63 @@ export default function MaintenanceRuleForm({
 }) {
   const initialForm: Configuraciones = {
     model_id: null,
-    intervalo_km: null,
+    intervalo: null,
     task_id: null,
+    unidad_intervalo: '',
+    prefixes: [],
   };
 
   const {
     control,
     handleSubmit,
     reset,
+    setValue,
+    getValues,
+    clearErrors,
   } = useForm<Configuraciones>({
     defaultValues: initialForm,
   });
 
-  const [modelos, setModelos] = useState<SelectItem[]>([]);
-  const [task, setTask] = useState<SelectItem[]>([]);
-  const [isLoading, setLoading] = useState<boolean>(false);
+  const [modelos, setModelos] = useState<SelectItemType[]>([]);
+  const [task, setTask] = useState<SelectItemType[]>([]);
+  const [isLoading, setLoading] = useState(false);
+
+  const selectedPrefixes = useWatch({
+    control,
+    name: 'prefixes',
+  });
+
+  const selectedModel = useWatch({
+    control,
+    name: 'model_id',
+  });
+
+  const hasPrefixes = (selectedPrefixes ?? []).length > 0;
+  const hasModel =
+    selectedModel !== null &&
+    selectedModel !== undefined &&
+    selectedModel !== ('' as unknown);
+
+  // Si se selecciona un modelo, se eliminan los prefijos.
+  useEffect(() => {
+    if (hasModel && (selectedPrefixes ?? []).length > 0) {
+      setValue('prefixes', [], {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
+    }
+  }, [hasModel, selectedPrefixes, setValue]);
 
   const obtenerModelos = async (): Promise<void> => {
     try {
       const response = await odooApi.get<Modelos[]>(
-        `/vehicles/models/ `
+        '/vehicles/models/'
       );
 
       setModelos(
         response.data.map((registro) => ({
           key: registro.id,
-          value: `${registro.marca} ${registro.modelo} `,
+          value: `${registro.marca} ${registro.modelo}`,
         }))
       );
     } catch (error: any) {
@@ -87,7 +126,7 @@ export default function MaintenanceRuleForm({
   const getTask = async (): Promise<void> => {
     try {
       const response = await odooApi.get<Task[]>(
-        `/maintenance-record/tasks/ `
+        '/maintenance-record/tasks/'
       );
 
       setTask(
@@ -104,20 +143,33 @@ export default function MaintenanceRuleForm({
     }
   };
 
-  const getMantenanceRule = async (ruleId: number): Promise<void> => {
+  const getMantenanceRule = async (
+    ruleId: number
+  ): Promise<void> => {
     try {
       const response = await odooApi.get<Configuraciones>(
         `/maintenances/rule/${ruleId}`
       );
 
-      reset(response.data);
+      const data = response.data;
+
+      // Normalizar datos que puedan venir nulos desde la API.
+      const modelId = data.model_id ?? null;
+      const prefixes = data.prefixes ?? [];
+
+      reset({
+        ...initialForm,
+        ...data,
+        model_id: modelId,
+        prefixes: modelId !== null ? [] : prefixes,
+        unidad_intervalo: data.unidad_intervalo ?? '',
+      });
     } catch (error: any) {
-      const detail =
+      toast.error(
         error.response?.data?.detail ||
         error.message ||
-        'No fue posible obtener la regla.';
-
-      toast.error(detail);
+        'No fue posible obtener la regla.'
+      );
     }
   };
 
@@ -132,40 +184,96 @@ export default function MaintenanceRuleForm({
     } else {
       reset(initialForm);
     }
+    // Se ejecuta al abrir el formulario o cambiar la regla.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, id]);
 
   const onSubmit = async (data: Configuraciones) => {
+    // Validación de seguridad antes de enviar al backend.
+    const hasSelectedPrefixes = (data.prefixes ?? []).length > 0;
+    const hasSelectedModel =
+      data.model_id !== null &&
+      data.model_id !== undefined;
+
+    if (hasSelectedPrefixes && hasSelectedModel) {
+      toast.error(
+        'Selecciona un tipo de vehículo o un modelo, no ambos.'
+      );
+      return;
+    }
+
+    if (!hasSelectedPrefixes && !hasSelectedModel) {
+      toast.error(
+        'Selecciona un tipo de vehículo o un modelo para la regla.'
+      );
+      return;
+    }
+
+    const payload: Configuraciones = {
+      ...data,
+      model_id: hasSelectedModel ? data.model_id : null,
+      prefixes: hasSelectedPrefixes ? data.prefixes : [],
+    };
+
     try {
       setLoading(true);
 
       const res = await odooApi.post(
         '/maintenances/rule/',
-        data
+        payload
       );
 
       if (res.data.status === 'success') {
         toast.success(res.data.message);
         setOpen(false);
+        reset(initialForm);
       }
     } catch (error: any) {
-      const detail =
-        error.response?.data?.detail ||
-        error.message ||
-        'Ocurrió un error al guardar la regla.';
-
-      toast.error('Error: ' + detail);
+      toast.error(
+        'Error: ' +
+        (error.response?.data?.detail ||
+          error.message ||
+          'Ocurrió un error al guardar la regla.')
+      );
     } finally {
       setLoading(false);
     }
   };
 
   const Update = async (data: Configuraciones) => {
+    if (id === null) return;
+
+    const hasSelectedPrefixes = (data.prefixes ?? []).length > 0;
+    const hasSelectedModel =
+      data.model_id !== null &&
+      data.model_id !== undefined;
+
+    if (hasSelectedPrefixes && hasSelectedModel) {
+      toast.error(
+        'Selecciona un tipo de vehículo o un modelo, no ambos.'
+      );
+      return;
+    }
+
+    if (!hasSelectedPrefixes && !hasSelectedModel) {
+      toast.error(
+        'Selecciona un tipo de vehículo o un modelo para la regla.'
+      );
+      return;
+    }
+
+    const payload: Configuraciones = {
+      ...data,
+      model_id: hasSelectedModel ? data.model_id : null,
+      prefixes: hasSelectedPrefixes ? data.prefixes : [],
+    };
+
     try {
       setLoading(true);
 
       const res = await odooApi.patch(
-        `/maintenances/rule/${id} `,
-        data
+        `/maintenances/rule/${id}`,
+        payload
       );
 
       if (res.data.status === 'success') {
@@ -173,36 +281,37 @@ export default function MaintenanceRuleForm({
         setOpen(false);
       }
     } catch (error: any) {
-      const detail =
-        error.response?.data?.detail ||
-        error.message ||
-        'Ocurrió un error al actualizar la regla.';
-
-      toast.error('Error: ' + detail);
+      toast.error(
+        'Error: ' +
+        (error.response?.data?.detail ||
+          error.message ||
+          'Ocurrió un error al actualizar la regla.')
+      );
     } finally {
       setLoading(false);
     }
   };
 
+  const cerrarFormulario = () => {
+    if (isLoading) return;
+    setOpen(false);
+  };
+
   return (
     <Dialog
       open={open}
-      onClose={() => !isLoading && setOpen(false)}
+      onClose={cerrarFormulario}
       fullWidth
       maxWidth="md"
       PaperProps={{
         sx: {
           borderRadius: '18px',
           overflow: 'hidden',
-          boxShadow:
-            '0 24px 70px rgba(0, 0, 0, 0.20)',
+          boxShadow: '0 24px 70px rgba(0, 0, 0, 0.20)',
           backgroundColor: '#f8fafc',
         },
       }}
     >
-      {/* =====================================================
-          HEADER
-      ====================================================== */}
       <AppBar
         position="relative"
         elevation={0}
@@ -214,36 +323,15 @@ export default function MaintenanceRuleForm({
         <Toolbar
           sx={{
             minHeight: '76px !important',
-            px: {
-              xs: 2,
-              sm: 3,
-            },
+            px: { xs: 2, sm: 3 },
           }}
         >
-          {/* Icono */}
-          <div
-            className="
-              flex
-              h-11
-              w-11
-              shrink-0
-              items-center
-              justify-center
-              rounded-xl
-              bg-white/10
-              border
-              border-white/15
-            "
-          >
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-white/15 bg-white/10">
             <SettingsOutlinedIcon
-              sx={{
-                color: 'white',
-                fontSize: 24,
-              }}
+              sx={{ color: 'white', fontSize: 24 }}
             />
           </div>
 
-          {/* Título */}
           <div className="ml-3 flex-1">
             <Typography
               sx={{
@@ -271,9 +359,8 @@ export default function MaintenanceRuleForm({
             </Typography>
           </div>
 
-          {/* Cerrar */}
           <IconButton
-            onClick={() => setOpen(false)}
+            onClick={cerrarFormulario}
             disabled={isLoading}
             sx={{
               color: 'white',
@@ -290,37 +377,17 @@ export default function MaintenanceRuleForm({
         </Toolbar>
       </AppBar>
 
-      {/* =====================================================
-          CONTENT
-      ====================================================== */}
       <DialogContent
         sx={{
-          p: {
-            xs: 2,
-            sm: 3,
-          },
+          p: { xs: 2, sm: 3 },
           backgroundColor: '#f8fafc',
         }}
       >
-        {/* Descripción */}
         <div className="mb-5">
           <div className="flex items-center gap-2">
-            <div
-              className="
-                flex
-                h-8
-                w-8
-                items-center
-                justify-center
-                rounded-lg
-                bg-blue-50
-              "
-            >
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50">
               <BuildOutlinedIcon
-                sx={{
-                  fontSize: 18,
-                  color: '#0456cf',
-                }}
+                sx={{ fontSize: 18, color: '#0456cf' }}
               />
             </div>
 
@@ -344,47 +411,106 @@ export default function MaintenanceRuleForm({
                   mt: 0.2,
                 }}
               >
-                Define cuándo debe generarse el mantenimiento
-                preventivo.
+                Define a qué equipos aplica y cuándo debe realizarse
+                el mantenimiento.
               </Typography>
             </div>
           </div>
         </div>
 
-        {/* =====================================================
-            FORM CARD
-        ====================================================== */}
-        <div
-          className="
-            rounded-2xl
-            border
-            border-slate-200
-            bg-white
-            p-5
-            shadow-sm
-          "
-        >
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+
+            {/* Aviso de selección excluyente */}
+            <div className="md:col-span-2">
+              <div className="flex items-start gap-3 rounded-xl border border-blue-100 bg-blue-50/70 px-4 py-3">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-100">
+                  <SettingsOutlinedIcon
+                    sx={{ fontSize: 17, color: '#0456cf' }}
+                  />
+                </div>
+
+                <div>
+                  <p className="text-sm font-semibold text-blue-900">
+                    Selecciona una sola forma de aplicación
+                  </p>
+
+                  <p className="mt-1 text-xs leading-5 text-blue-800/90">
+                    <strong>Tipo de vehículo:</strong> elige uno o
+                    varios tipos de vehiculos para aplicar la regla a esos tipos
+                    de equipo.
+                  </p>
+
+                  <p className="mt-1 text-xs leading-5 text-blue-800/90">
+                    <strong>Modelo del vehículo:</strong> elige un
+                    modelo para aplicar la regla específicamente a él.
+                  </p>
+
+                  <p className="mt-2 text-xs font-semibold text-blue-900">
+                    No puedes usar ambas opciones al mismo tiempo.
+                    La opción contraria se limpiará automáticamente.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Tipo de vehículo / prefijos */}
+            <div className="md:col-span-2">
+              <div className="mb-2 flex items-center gap-2">
+                <DirectionsCarOutlinedIcon
+                  sx={{ fontSize: 18, color: '#64748b' }}
+                />
+                <span className="text-[12px] font-semibold uppercase tracking-wide text-slate-500">
+                  Tipo de vehículo
+                </span>
+              </div>
+
+              <Controller
+                control={control}
+                name="prefixes"
+                render={({ field, fieldState }) => (
+                  <Select
+                    size="sm"
+                    selectionMode="multiple"
+                    label="Tipo de vehículo"
+                    placeholder="Selecciona uno o varios tipos"
+                    selectedKeys={field.value ?? []}
+                    onSelectionChange={(keys) => {
+                      const prefixes = Array.from(keys).map(String);
+
+                      field.onChange(prefixes);
+
+                      // Al seleccionar prefijos, limpiar el modelo.
+                      if (prefixes.length > 0) {
+                        setValue('model_id', null, {
+                          shouldDirty: true,
+                          shouldValidate: true,
+                        });
+                        clearErrors('model_id');
+                      }
+                    }}
+                    isInvalid={!!fieldState.error}
+                    errorMessage={fieldState.error?.message}
+                    isDisabled={hasModel}
+                  >
+                    <SelectItem key="DL-">DOLLY</SelectItem>
+                    <SelectItem key="MG-">
+                      MOTOGENERADORES
+                    </SelectItem>
+                    <SelectItem key="SERVI/">SERVI</SelectItem>
+                  </Select>
+                )}
+              />
+            </div>
+
             {/* Modelo */}
             <div className="md:col-span-2">
               <div className="mb-2 flex items-center gap-2">
                 <DirectionsCarOutlinedIcon
-                  sx={{
-                    fontSize: 18,
-                    color: '#64748b',
-                  }}
+                  sx={{ fontSize: 18, color: '#64748b' }}
                 />
-
-                <span
-                  className="
-                    text-[12px]
-                    font-semibold
-                    uppercase
-                    tracking-wide
-                    text-slate-500
-                  "
-                >
-                  Vehículo
+                <span className="text-[12px] font-semibold uppercase tracking-wide text-slate-500">
+                  Modelo del vehículo
                 </span>
               </div>
 
@@ -393,7 +519,6 @@ export default function MaintenanceRuleForm({
                 control={control}
                 name="model_id"
                 items={modelos}
-                rules={{ required: 'Campo obligatorio' }}
               />
             </div>
 
@@ -401,56 +526,60 @@ export default function MaintenanceRuleForm({
             <div>
               <div className="mb-2 flex items-center gap-2">
                 <SpeedOutlinedIcon
-                  sx={{
-                    fontSize: 18,
-                    color: '#64748b',
-                  }}
+                  sx={{ fontSize: 18, color: '#64748b' }}
                 />
-
-                <span
-                  className="
-                    text-[12px]
-                    font-semibold
-                    uppercase
-                    tracking-wide
-                    text-slate-500
-                  "
-                >
+                <span className="text-[12px] font-semibold uppercase tracking-wide text-slate-500">
                   Frecuencia
                 </span>
               </div>
 
               <NumberInput
-                label="Intervalo KM"
+                label="Intervalo"
                 control={control}
-                name="intervalo_km"
+                name="intervalo"
                 rules={{ required: 'Campo obligatorio' }}
               />
 
               <p className="mt-1.5 text-[11px] text-slate-400">
-                Kilometraje requerido para activar el mantenimiento.
+                Cantidad requerida para activar el mantenimiento.
+              </p>
+            </div>
+
+            {/* Unidad */}
+            <div>
+              <div className="mb-2 flex items-center gap-2">
+                <SpeedOutlinedIcon
+                  sx={{ fontSize: 18, color: '#64748b' }}
+                />
+                <span className="text-[12px] font-semibold uppercase tracking-wide text-slate-500">
+                  Unidad
+                </span>
+              </div>
+
+              <SelectInput
+                control={control}
+                name="unidad_intervalo"
+                label="Unidad"
+                items={[
+                  { key: 'km', value: 'KM' },
+                  { key: 'dias', value: 'Días' },
+                  { key: 'horas', value: 'Horas' },
+                ]}
+                rules={{ required: 'Campo obligatorio' }}
+              />
+
+              <p className="mt-1.5 text-[11px] text-slate-400">
+                Unidad de frecuencia del intervalo.
               </p>
             </div>
 
             {/* Servicio */}
-            <div>
+            <div className="md:col-span-2">
               <div className="mb-2 flex items-center gap-2">
                 <BuildOutlinedIcon
-                  sx={{
-                    fontSize: 18,
-                    color: '#64748b',
-                  }}
+                  sx={{ fontSize: 18, color: '#64748b' }}
                 />
-
-                <span
-                  className="
-                    text-[12px]
-                    font-semibold
-                    uppercase
-                    tracking-wide
-                    text-slate-500
-                  "
-                >
+                <span className="text-[12px] font-semibold uppercase tracking-wide text-slate-500">
                   Mantenimiento
                 </span>
               </div>
@@ -469,74 +598,10 @@ export default function MaintenanceRuleForm({
             </div>
           </div>
         </div>
-
-        {/* =====================================================
-            INFO
-        ====================================================== */}
-        <div
-          className="
-            mt-4
-            rounded-xl
-            border
-            border-blue-100
-            bg-blue-50/70
-            px-4
-            py-3
-          "
-        >
-          <div className="flex gap-3">
-            <div
-              className="
-                mt-0.5
-                flex
-                h-7
-                w-7
-                shrink-0
-                items-center
-                justify-center
-                rounded-lg
-                bg-blue-100
-              "
-            >
-              <SettingsOutlinedIcon
-                sx={{
-                  fontSize: 15,
-                  color: '#0456cf',
-                }}
-              />
-            </div>
-
-            <div>
-              <p className="text-[12px] font-semibold text-blue-900">
-                ¿Cómo funciona esta configuración?
-              </p>
-
-              <p className="mt-0.5 text-[11px] leading-5 text-blue-700/80">
-                La regla relaciona un modelo de vehículo con un
-                tipo de servicio y establece cada cuántos
-                kilómetros debe considerarse su mantenimiento.
-              </p>
-            </div>
-          </div>
-        </div>
       </DialogContent>
 
-      {/* =====================================================
-          FOOTER
-      ====================================================== */}
-      <div
-        className="
-          flex
-          items-center
-          justify-between
-          gap-3
-          border-t
-          border-slate-200
-          bg-white
-          px-5
-          py-4
-        "
-      >
+      {/* Footer */}
+      <div className="flex items-center justify-between gap-3 border-t border-slate-200 bg-white px-5 py-4">
         <div className="hidden sm:block">
           <span className="text-[11px] text-slate-400">
             Configuración de mantenimiento
@@ -545,18 +610,11 @@ export default function MaintenanceRuleForm({
 
         <div className="ml-auto flex items-center gap-2">
           <Button
-            onPress={() => setOpen(false)}
+            onPress={cerrarFormulario}
             radius="full"
             size="sm"
             variant="flat"
-            className="
-              min-w-[90px]
-              border
-              border-slate-200
-              bg-white
-              text-slate-600
-              font-medium
-            "
+            className="min-w-[90px] border border-slate-200 bg-white font-medium text-slate-600"
             isDisabled={isLoading}
           >
             Cancelar
@@ -568,13 +626,7 @@ export default function MaintenanceRuleForm({
               color="primary"
               radius="full"
               size="sm"
-              className="
-                min-w-[105px]
-                bg-[#0456cf]
-                font-semibold
-                text-white
-                shadow-sm
-              "
+              className="min-w-[105px] bg-[#0456cf] font-semibold text-white shadow-sm"
               isLoading={isLoading}
             >
               Guardar
@@ -585,12 +637,7 @@ export default function MaintenanceRuleForm({
               color="warning"
               radius="full"
               size="sm"
-              className="
-                min-w-[110px]
-                font-semibold
-                text-white
-                shadow-sm
-              "
+              className="min-w-[110px] font-semibold text-white shadow-sm"
               isLoading={isLoading}
             >
               Actualizar
