@@ -78,7 +78,7 @@ const AvatarProfile = () => {
                 className:
                   "ring-2 ring-orange-400 ring-offset-2 ring-offset-background",
               }}
-              description={session?.user.role || ""}
+              description={` 👻 ${session?.user.role || ""}`}
               name={`🪦 ${session?.user.name || ""}`}
             />
           </div>
