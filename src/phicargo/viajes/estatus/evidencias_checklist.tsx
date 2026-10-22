@@ -161,8 +161,17 @@ function EvidenciasChecklistViaje({
     slides={slides}
     plugins={[Download]}
     carousel={{
-     imageFit: "contain",
+     imageFit: "cover",
      preload: 2,
+    }}
+    controller={{
+     closeOnBackdropClick: true,
+     closeOnEscape: true,
+    }}
+    styles={{
+     container: {
+      backgroundColor: "rgba(0, 0, 0, 0.8)",
+     },
     }}
    />
   </>
