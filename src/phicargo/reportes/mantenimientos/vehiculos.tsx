@@ -239,7 +239,6 @@ const MaintenanceVehicleReport = () => {
     data,
     state: { showProgressBars: isLoading, columnVisibility },
     onColumnVisibilityChange: setColumnVisibility,
-    enableEditing: true,
     editDisplayMode: "row",
     enableGrouping: true,
     enableGlobalFilter: true,
