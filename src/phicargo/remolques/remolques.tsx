@@ -265,6 +265,7 @@ const Remolques: React.FC = () => {
             },
         },
         { accessorKey: 'last_position_update', header: 'Última posición GPS' },
+        { accessorKey: 'location', header: 'Locación' },
     ], []);
 
     /* =========================
