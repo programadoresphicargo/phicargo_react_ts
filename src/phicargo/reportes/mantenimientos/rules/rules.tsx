@@ -35,9 +35,11 @@ const MaintenanceRules = () => {
   };
 
   const columns = [
+    { accessorKey: 'prefixes', header: 'Tipo de vehiculo' },
     { accessorKey: 'marca', header: 'Marca' },
     { accessorKey: 'modelo', header: 'Modelo', },
-    { accessorKey: 'intervalo_km', header: 'Intervalo KM' },
+    { accessorKey: 'intervalo', header: 'Intervalo/Frecuencia' },
+    { accessorKey: 'unidad_intervalo', header: 'Unidad' },
     { accessorKey: 'tipo_mantenimiento', header: 'Tipo de mantenimiento' },
     { accessorKey: 'created_at', header: 'Fecha creación' },
   ];

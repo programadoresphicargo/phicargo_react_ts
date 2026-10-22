@@ -124,7 +124,7 @@ const MaintenanceVehicleReport = () => {
         },
       },
       {
-        accessorKey: 'intervalo_km',
+        accessorKey: 'intervalo',
         header: 'Intervalo',
         enableEditing: false,
         Cell: ({ cell }) => {
