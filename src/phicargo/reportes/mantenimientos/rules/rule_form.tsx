@@ -67,7 +67,6 @@ export default function MaintenanceRuleForm({
     handleSubmit,
     reset,
     setValue,
-    getValues,
     clearErrors,
   } = useForm<Configuraciones>({
     defaultValues: initialForm,
@@ -87,7 +86,6 @@ export default function MaintenanceRuleForm({
     name: 'model_id',
   });
 
-  const hasPrefixes = (selectedPrefixes ?? []).length > 0;
   const hasModel =
     selectedModel !== null &&
     selectedModel !== undefined &&
