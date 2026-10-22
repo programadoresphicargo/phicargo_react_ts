@@ -1,3 +1,4 @@
+
 import {
   Link,
   NavbarBrand,
@@ -7,8 +8,15 @@ import {
   NavbarMenuItem,
   NavbarMenuToggle,
   Navbar as NextUiNavbar,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+  Button,
 } from '@heroui/react';
+
 import { useMemo, useState } from 'react';
+import { ChevronDown } from 'lucide-react';
 
 import AvatarProfile from '../AvatarProfile';
 import { BackButton } from '@/components/ui';
@@ -21,11 +29,11 @@ interface Props {
   pages: MenuItemType[];
 }
 
-export const Navbar = (props: Props) => {
+const MAX_VISIBLE_ITEMS = 7;
+
+export const Navbar = ({ pages }: Props) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { session } = useAuthContext();
-
-  const { pages } = props;
 
   const filteredMenuItems = useMemo(
     () =>
@@ -37,55 +45,61 @@ export const Navbar = (props: Props) => {
     [pages, session?.user?.permissions],
   );
 
+  const visibleItems = filteredMenuItems.slice(0, MAX_VISIBLE_ITEMS);
+  const extraItems = filteredMenuItems.slice(MAX_VISIBLE_ITEMS);
+
   return (
     <NextUiNavbar
       maxWidth="full"
-      height={'3.2rem'}
+      height="3.5rem"
       isMenuOpen={isMenuOpen}
       onMenuOpenChange={setIsMenuOpen}
-      style={{
-        // background: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 400"><rect width="1920" height="400" fill="%23D9DEEA" /><mask id="mask0" mask-type="alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="1920" height="400"><rect width="1920" height="400" fill="%23D9DEEA" /></mask><g mask="url(%23mask0)"><path d="M1059.48 308.024C1152.75 57.0319 927.003 -103.239 802.47 -152.001L1805.22 -495.637L2095.53 351.501L1321.23 616.846C1195.12 618.485 966.213 559.015 1059.48 308.024Z" fill="%23C0CBDD" /><path d="M1333.22 220.032C1468.66 -144.445 1140.84 -377.182 960 -447.991L2416.14 -947L2837.71 283.168L1713.32 668.487C1530.19 670.868 1197.78 584.509 1333.22 220.032Z" fill="%238192B0" /></g></svg>')`,
-        // backgroundSize: 'cover',
-        // backgroundPosition: 'center',
-        background: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
+      classNames={{
+        base: 'bg-gradient-to-r from-[#002887] to-[#0059b3]',
+        wrapper: 'px-3 sm:px-5 gap-2',
+        item: 'text-white',
+        menu: 'bg-[#002887]',
       }}
     >
+      {/* Navegación móvil */}
       <NavbarContent className="sm:hidden" justify="start">
         <BackButton route="/menu" />
         <NavbarMenuToggle
-          aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
-          className='text-white'
+          aria-label={isMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
+          className="text-white"
         />
       </NavbarContent>
 
-      <NavbarContent className="sm:hidden pr-3" justify="center">
-        <NavbarBrand>
+      {/* Logo móvil */}
+      <NavbarContent className="sm:hidden" justify="center">
+        <NavbarBrand className="justify-center">
           <img
             src={logo}
-            alt="logo phicargo"
-            // style={{
-            //   height: '50px',
-            //   filter: 'brightness(0) invert(1)'
-            // }}
-            className="ml-4 h-12 filter brightness-0 invert"
+            alt="PhiCargo"
+            className="h-9 w-auto brightness-0 invert"
           />
         </NavbarBrand>
       </NavbarContent>
 
-      <NavbarContent className="hidden sm:flex gap-4" justify="start">
+      {/* Logo escritorio */}
+      <NavbarContent className="hidden sm:flex flex-none" justify="start">
         <BackButton route="/menu" />
-        <NavbarBrand>
+        <NavbarBrand className="ml-1">
           <img
-            className="ml-4 h-12 filter brightness-0 invert"
             src={logo}
-            alt="logo phicargo"
+            alt="PhiCargo"
+            className="h-9 w-auto brightness-0 invert"
           />
         </NavbarBrand>
       </NavbarContent>
 
-      <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        {filteredMenuItems.map((page, i) => (
-          <NavbarItem key={i}>
+      {/* Enlaces principales: cantidad limitada */}
+      <NavbarContent
+        className="hidden sm:flex flex-1 min-w-0 justify-center gap-1"
+        justify="center"
+      >
+        {visibleItems.map((page) => (
+          <NavbarItem key={page.path} className="shrink-0">
             <NavbarLinkItem
               name={page.name}
               path={page.path}
@@ -93,19 +107,66 @@ export const Navbar = (props: Props) => {
             />
           </NavbarItem>
         ))}
+
+        {/* Resto de las opciones */}
+        {extraItems.length > 0 && (
+          <NavbarItem className="shrink-0">
+            <Dropdown placement="bottom-end">
+              <DropdownTrigger>
+                <Button
+                  variant="light"
+                  size="sm"
+                  className="text-white min-w-0 px-3 font-medium"
+                  endContent={<ChevronDown size={15} />}
+                >
+                  Más
+                </Button>
+              </DropdownTrigger>
+
+              <DropdownMenu
+                aria-label="Más opciones de navegación"
+                className="max-h-[70vh] overflow-y-auto"
+                onAction={(key) => {
+                  const selected = extraItems.find(
+                    (item) => item.path === String(key),
+                  );
+
+                  if (selected) {
+                    window.location.href = selected.path;
+                  }
+                }}
+              >
+                {extraItems.map((page) => (
+                  <DropdownItem
+                    key={page.path}
+                    textValue={page.name}
+                  >
+                    {page.name}
+                  </DropdownItem>
+                ))}
+              </DropdownMenu>
+            </Dropdown>
+          </NavbarItem>
+        )}
       </NavbarContent>
 
-      <NavbarContent justify="end">
+      {/* Perfil siempre separado */}
+      <NavbarContent
+        justify="end"
+        className="flex-none"
+      >
         <AvatarProfile />
       </NavbarContent>
 
-      <NavbarMenu>
-        {filteredMenuItems.map((page, i) => (
-          <NavbarMenuItem key={i}>
-            <Link 
-              className="w-full" 
+      {/* Menú móvil con todas las opciones */}
+      <NavbarMenu className="bg-[#002887] pt-4">
+        {filteredMenuItems.map((page) => (
+          <NavbarMenuItem key={page.path}>
+            <Link
+              className="w-full text-white py-2"
               href={page.path}
               size="lg"
+              onPress={() => setIsMenuOpen(false)}
             >
               {page.name}
             </Link>
@@ -115,4 +176,3 @@ export const Navbar = (props: Props) => {
     </NextUiNavbar>
   );
 };
-

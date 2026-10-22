@@ -285,6 +285,7 @@ const Remolques: React.FC = () => {
             pagination: { pageSize: 100, pageIndex: 0 },
         },
         state: { showProgressBars: isLoading },
+        positionToolbarAlertBanner: "bottom",
         muiTableHeadCellProps: {
             sx: {
                 fontFamily: 'Inter',
@@ -292,16 +293,25 @@ const Remolques: React.FC = () => {
                 fontSize: '14px',
             },
         },
-        muiTableBodyCellProps: {
-            sx: {
-                fontFamily: 'Inter',
-                fontWeight: 'normal',
-                fontSize: '14px',
-            },
+        muiTableBodyCellProps: ({ row }) => {
+            return {
+                sx: {
+                    backgroundColor: row.subRows?.length
+                        ? '#0456cf'
+                        : row.index % 2 === 0
+                            ? '#FFFFFF'
+                            : '#F8F9FA',
+                    color: row.subRows?.length ? '#FFFFFF' : '#000000',
+                    fontFamily: 'Inter',
+                    fontWeight: 'normal',
+                    fontSize: '12px',
+                    padding: '4px 8px'
+                },
+            };
         },
         muiTableContainerProps: {
             sx: {
-                maxHeight: 'calc(100vh - 180px)',
+                maxHeight: 'calc(100vh - 190px)',
             },
         },
         muiTablePaperProps: {
