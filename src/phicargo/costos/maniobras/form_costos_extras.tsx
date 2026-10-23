@@ -23,7 +23,6 @@ import { FolioCostoExtra } from "../folios/tabla";
 import { useFieldArray, useForm } from "react-hook-form";
 import FormCE from "./facturas/form";
 import TimeLineCE from "./linea_tiempo";
-import React from "react";
 import Notas from "@/phicargo/viajes/seguimiento/notas";
 import { SelectInput } from "@/components/inputs";
 const apiUrl = import.meta.env.VITE_ODOO_API_URL;
@@ -257,22 +256,8 @@ const FormularioCostoExtra = ({ show, handleClose, id_folio }: { show: boolean, 
         });
     }
 
-    const [openNotas, setOpenNotas] = React.useState(false);
-
-    const handleClickOpenNotas = () => {
-        setOpenNotas(true);
-    };
-
-    const handleCloseNotas = () => {
-        setOpenNotas(false);
-    };
-
     return (
         <>
-            {id_folio && (
-                <Notas open={openNotas} onClose={handleCloseNotas} origen_id={id_folio} model="folios_costos_extras"></Notas>
-            )}
-
             <Dialog
                 fullScreen
                 open={show}
@@ -365,7 +350,9 @@ const FormularioCostoExtra = ({ show, handleClose, id_folio }: { show: boolean, 
                                             </Button>
                                         )}
 
-                                        <Button className="text-white" color="warning" radius="md" size="sm" onPress={handleClickOpenNotas}>Notas</Button>
+                                        {id_folio && (
+                                            <Notas origen_id={id_folio} model="folios_costos_extras"></Notas>
+                                        )}
 
                                     </Stack>
                                 </CardBody>
