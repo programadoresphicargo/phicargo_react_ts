@@ -2,9 +2,11 @@ import { Drawer, Box, DialogContent, DialogTitle, IconButton, Divider } from "@m
 import CloseIcon from "@mui/icons-material/Close";
 import { TextareaInput } from "@/components/inputs";
 import {
+  Badge,
   Button,
   Card,
   CardHeader,
+  Chip,
   Progress,
   User,
 } from "@heroui/react";
@@ -12,6 +14,7 @@ import { useForm } from "react-hook-form";
 import odooApi from "@/api/odoo-api";
 import { toast } from "react-hot-toast";
 import { useEffect, useState } from "react";
+import React from "react";
 
 type NoteForm = {
   origen_id: number;
@@ -24,13 +27,9 @@ type NoteForm = {
 interface Props {
   origen_id: number;
   model: string;
-  open: boolean;
-  onClose: () => void;
 }
 
 export default function Notas({
-  open,
-  onClose,
   origen_id,
   model
 }: Props) {
@@ -47,6 +46,16 @@ export default function Notas({
   } = useForm<NoteForm>({
     defaultValues: initial,
   });
+
+  const [openNotas, setOpenNotas] = React.useState(false);
+
+  const handleClickOpenNotas = () => {
+    setOpenNotas(true);
+  };
+
+  const handleCloseNotas = () => {
+    setOpenNotas(false);
+  };
 
   const [isLoadingCreate, setLoadingCreate] = useState(false);
   const [isLoading, setLoading] = useState(false);
@@ -128,213 +137,228 @@ export default function Notas({
   };
 
   useEffect(() => {
-    if (open && origen_id) {
+    if (origen_id) {
       fetchData();
     }
-  }, [open, origen_id]);
+  }, [openNotas, origen_id]);
 
   return (
-    <Drawer
-      anchor="right"
-      open={open}
-      onClose={onClose}
-      ModalProps={{
-        keepMounted: true,
-      }}
-      sx={{
-        zIndex: (theme) => theme.zIndex.modal + 2,
-      }}
-    >
-      <Box
+    <>
+
+      <Button
+        color="warning"
+        onPress={handleClickOpenNotas}
+        radius="md"
+        size="sm"
+        className="min-w-[150px] text-white"
+      >
+        <i className="bi bi-journal-text" />
+        Notas <Chip size="sm" color="danger">{data.length}</Chip>
+      </Button>
+
+      <Drawer
+        anchor="right"
+        open={openNotas}
+        onClose={handleCloseNotas}
+        ModalProps={{
+          keepMounted: true,
+        }}
         sx={{
-          width: {
-            xs: "100vw",
-            sm: 600,
-          },
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
+          zIndex: (theme) => theme.zIndex.modal + 2,
         }}
       >
-        {/* HEADER */}
-        <DialogTitle
+        <Box
           sx={{
-            background:
-              "linear-gradient(90deg, #002887 0%, #0059b3 100%)",
-            color: "white",
-            fontFamily: "Inter",
-            fontWeight: 600,
+            width: {
+              xs: "100vw",
+              sm: 600,
+            },
+            height: "100%",
             display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: "14px 18px",
+            flexDirection: "column",
           }}
         >
-          <span>Notas internas</span>
-
-          <IconButton
-            onClick={onClose}
-            size="small"
+          {/* HEADER */}
+          <DialogTitle
             sx={{
+              background:
+                "linear-gradient(90deg, #002887 0%, #0059b3 100%)",
               color: "white",
-              "&:hover": {
-                backgroundColor: "rgba(255,255,255,0.15)",
-              },
+              fontFamily: "Inter",
+              fontWeight: 600,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: "14px 18px",
             }}
           >
-            <CloseIcon />
-          </IconButton>
-        </DialogTitle>
+            <span>Notas internas</span>
 
-        {/* CONTENIDO */}
-        <DialogContent
-          sx={{
-            padding: "20px !important",
-            overflowY: "auto",
-          }}
-        >
-          {/* ========================= */}
-          {/* AGREGAR NOTA */}
-          {/* ========================= */}
-
-          <div className="mb-5">
-            <h3 className="text-base font-semibold text-gray-800">
-              Agregar nota
-            </h3>
-
-            <p className="text-sm text-gray-500 mt-1 mb-4">
-              Registra información importante relacionada con este
-              viaje.
-            </p>
-
-            <form
-              onSubmit={handleSubmit(SaveForm)}
-              className="space-y-3"
+            <IconButton
+              onClick={handleCloseNotas}
+              size="small"
+              sx={{
+                color: "white",
+                "&:hover": {
+                  backgroundColor: "rgba(255,255,255,0.15)",
+                },
+              }}
             >
-              <TextareaInput
-                control={control}
-                label="Nota"
-                name="note"
-                rules={{
-                  required: "Escribe una nota",
-                }}
-              />
+              <CloseIcon />
+            </IconButton>
+          </DialogTitle>
 
-              <div className="flex justify-end">
-                <Button
-                  type="submit"
-                  color="primary"
-                  radius="md"
-                  size="sm"
-                  isLoading={isLoadingCreate}
-                >
-                  Guardar nota
-                </Button>
-              </div>
-            </form>
-          </div>
+          {/* CONTENIDO */}
+          <DialogContent
+            sx={{
+              padding: "20px !important",
+              overflowY: "auto",
+            }}
+          >
+            {/* ========================= */}
+            {/* AGREGAR NOTA */}
+            {/* ========================= */}
 
-          {/* SEPARADOR */}
+            <div className="mb-5">
+              <h3 className="text-base font-semibold text-gray-800">
+                Agregar nota
+              </h3>
 
-          <Divider />
+              <p className="text-sm text-gray-500 mt-1 mb-4">
+                Registra información importante relacionada con este
+                viaje.
+              </p>
 
-          {/* ========================= */}
-          {/* HISTORIAL */}
-          {/* ========================= */}
+              <form
+                onSubmit={handleSubmit(SaveForm)}
+                className="space-y-3"
+              >
+                <TextareaInput
+                  control={control}
+                  label="Nota"
+                  name="note"
+                  rules={{
+                    required: "Escribe una nota",
+                  }}
+                />
 
-          <div className="mt-5">
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <h3 className="text-base font-semibold text-gray-800">
-                  Historial de notas
-                </h3>
-
-                <p className="text-sm text-gray-500 mt-1">
-                  {data.length === 0
-                    ? "No hay notas registradas"
-                    : `${data.length} ${data.length === 1
-                      ? "nota registrada"
-                      : "notas registradas"
-                    }`}
-                </p>
-              </div>
+                <div className="flex justify-end">
+                  <Button
+                    type="submit"
+                    color="primary"
+                    radius="md"
+                    size="sm"
+                    isLoading={isLoadingCreate}
+                  >
+                    Guardar nota
+                  </Button>
+                </div>
+              </form>
             </div>
 
-            {/* LOADING */}
+            {/* SEPARADOR */}
 
-            {isLoading && (
-              <div className="mb-4">
-                <Progress
-                  size="sm"
-                  isIndeterminate
-                  color="primary"
-                />
-              </div>
-            )}
+            <Divider />
 
-            {/* SIN NOTAS */}
+            {/* ========================= */}
+            {/* HISTORIAL */}
+            {/* ========================= */}
 
-            {!isLoading && data.length === 0 && (
-              <div className="flex flex-col items-center justify-center py-10 text-center">
-                <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mb-3">
-                  <span className="text-xl">📝</span>
+            <div className="mt-5">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h3 className="text-base font-semibold text-gray-800">
+                    Historial de notas
+                  </h3>
+
+                  <p className="text-sm text-gray-500 mt-1">
+                    {data.length === 0
+                      ? "No hay notas registradas"
+                      : `${data.length} ${data.length === 1
+                        ? "nota registrada"
+                        : "notas registradas"
+                      }`}
+                  </p>
                 </div>
-
-                <p className="text-sm font-medium text-gray-700">
-                  No hay notas todavía
-                </p>
-
-                <p className="text-xs text-gray-400 mt-1">
-                  La primera nota aparecerá aquí.
-                </p>
               </div>
-            )}
 
-            {/* NOTAS */}
+              {/* LOADING */}
 
-            {!isLoading && data.length > 0 && (
-              <div className="space-y-3">
-                {data.map((item, index) => (
-                  <Card
-                    key={`${item.origen_id}-${item.created_date}-${index}`}
-                    className="border border-gray-100 shadow-sm"
-                  >
-                    <CardHeader className="px-4 py-4 flex-col items-start">
-                      {/* USUARIO */}
+              {isLoading && (
+                <div className="mb-4">
+                  <Progress
+                    size="sm"
+                    isIndeterminate
+                    color="primary"
+                  />
+                </div>
+              )}
 
-                      <User
-                        avatarProps={{
-                          size: "md",
-                          color: "primary"
-                        }}
-                        name={
-                          <span className="text-sm font-semibold text-gray-800">
-                            {item.usuario_creacion ||
-                              "Usuario"}
-                          </span>
-                        }
-                        description={
-                          <span className="text-xs text-gray-400">
-                            {formatDate(item.created_date)}
-                          </span>
-                        }
-                      />
+              {/* SIN NOTAS */}
 
-                      {/* NOTA */}
+              {!isLoading && data.length === 0 && (
+                <div className="flex flex-col items-center justify-center py-10 text-center">
+                  <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mb-3">
+                    <span className="text-xl">📝</span>
+                  </div>
 
-                      <div className="w-full mt-4">
-                        <p className="text-sm text-gray-700 leading-6 whitespace-pre-wrap">
-                          {item.note}
-                        </p>
-                      </div>
-                    </CardHeader>
-                  </Card>
-                ))}
-              </div>
-            )}
-          </div>
-        </DialogContent>
-      </Box>
-    </Drawer>
+                  <p className="text-sm font-medium text-gray-700">
+                    No hay notas todavía
+                  </p>
+
+                  <p className="text-xs text-gray-400 mt-1">
+                    La primera nota aparecerá aquí.
+                  </p>
+                </div>
+              )}
+
+              {/* NOTAS */}
+
+              {!isLoading && data.length > 0 && (
+                <div className="space-y-3">
+                  {data.map((item, index) => (
+                    <Card
+                      key={`${item.origen_id}-${item.created_date}-${index}`}
+                      className="border border-gray-100 shadow-sm"
+                    >
+                      <CardHeader className="px-4 py-4 flex-col items-start">
+                        {/* USUARIO */}
+
+                        <User
+                          avatarProps={{
+                            size: "md",
+                            color: "primary"
+                          }}
+                          name={
+                            <span className="text-sm font-semibold text-gray-800">
+                              {item.usuario_creacion ||
+                                "Usuario"}
+                            </span>
+                          }
+                          description={
+                            <span className="text-xs text-gray-400">
+                              {formatDate(item.created_date)}
+                            </span>
+                          }
+                        />
+
+                        {/* NOTA */}
+
+                        <div className="w-full mt-4">
+                          <p className="text-sm text-gray-700 leading-6 whitespace-pre-wrap">
+                            {item.note}
+                          </p>
+                        </div>
+                      </CardHeader>
+                    </Card>
+                  ))}
+                </div>
+              )}
+            </div>
+          </DialogContent>
+        </Box>
+      </Drawer>
+
+    </>
   );
 }

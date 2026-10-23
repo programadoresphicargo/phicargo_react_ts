@@ -606,16 +606,6 @@ const Formulariomaniobra: React.FC<Props> = ({
         setPosturas(false);
     };
 
-    const [openNotas, setOpenNotas] = React.useState(false);
-
-    const handleClickOpenNotas = () => {
-        setOpenNotas(true);
-    };
-
-    const handleCloseNotas = () => {
-        setOpenNotas(false);
-    };
-
     const [valoresValidos, setValoresValidos] = useState<number[]>([]);
 
     const valores = useWatch({
@@ -647,10 +637,6 @@ const Formulariomaniobra: React.FC<Props> = ({
             <CorreosLigadosManiobra open={openCL} handleClose={handleCloseCL} id_cliente={dataCP?.id_cliente}></CorreosLigadosManiobra>
 
             <PosturasForm open={openPosturas} handleClose={handleClosePosturas}></PosturasForm>
-
-            {id_maniobra && (
-                <Notas open={openNotas} onClose={handleCloseNotas} origen_id={id_maniobra} model="maniobras"></Notas>
-            )}
 
             {id_maniobra && (
                 <CancelarManiobraDialog
@@ -768,7 +754,9 @@ const Formulariomaniobra: React.FC<Props> = ({
                                                     Formato de entrega
                                                 </Button>)}
                                             <Button color='secondary' radius='md' size='sm' onPress={handleClickOpenPosturas}>Posturas</Button>
-                                            <Button color="warning" radius='md' size='sm' onPress={handleClickOpenNotas} className='text-white'>Notas</Button>
+                                            {id_maniobra && (
+                                                <Notas origen_id={id_maniobra} model="maniobras"></Notas>
+                                            )}
                                             {id_maniobra && (
                                                 <Button
                                                     radius="md"

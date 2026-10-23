@@ -41,16 +41,6 @@ export default function Seguimiento() {
         setOpenFormViaje(false);
     };
 
-    const [openNotas, setOpenNotas] = React.useState(false);
-
-    const handleClickOpenNotas = () => {
-        setOpenNotas(true);
-    };
-
-    const handleCloseNotas = () => {
-        setOpenNotas(false);
-    };
-
     return (
         <>
             <Grid container spacing={2}>
@@ -158,16 +148,7 @@ export default function Seguimiento() {
                                             Equipo
                                         </Button>
 
-                                        <Button
-                                            color="warning"
-                                            onPress={handleClickOpenNotas}
-                                            radius="md"
-                                            size="sm"
-                                            className="min-w-[150px] text-white"
-                                        >
-                                            <i className="bi bi-journal-text" />
-                                            Notas
-                                        </Button>
+                                        <Notas origen_id={id_viaje} model="tms_travel"></Notas>
                                     </div>
                                 </div>
 
@@ -582,7 +563,6 @@ export default function Seguimiento() {
 
             <PanelEnvio open={open} cerrar={handleClose} id_reporte={null}></PanelEnvio>
             <FormEquipoViaje open={openFormViaje} handleClose={handleCloseFormViaje}></FormEquipoViaje>
-            <Notas open={openNotas} onClose={handleCloseNotas} origen_id={id_viaje} model="tms_travel"></Notas>
         </>
 
     );
