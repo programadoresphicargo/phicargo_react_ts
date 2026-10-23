@@ -288,7 +288,7 @@ export const menuItems: MenuItemType[] = [
     icon: survey,
     label: 'Encuestas Comercial',
     link: '/quejas/surveys',
-    requiredPermissions: [201],
+    requiredPermissions: [782],
    }
   ]
  },
