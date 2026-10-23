@@ -35,6 +35,7 @@ import reportIcon from '../assets/menu/reportes.png';
 import revenueIcon from '../assets/menu/revenue.png';
 import licenciaIcon from '../assets/menu/licencia.png';
 import aptoIcon from '../assets/menu/apto.png';
+import survey from '../assets/menu/survey.png';
 
 export type MenuItemType = {
  icon: string;
@@ -283,6 +284,12 @@ export const menuItems: MenuItemType[] = [
     link: '/minutas',
     requiredPermissions: [782],
    },
+   {
+    icon: survey,
+    label: 'Encuestas Comercial',
+    link: '/quejas/surveys',
+    requiredPermissions: [201],
+   }
   ]
  },
  {
