@@ -90,17 +90,26 @@ const ContactosCelularesEmpleados = () => {
         borderRadius: '0',
       },
     },
-    muiTableBodyCellProps: {
-      sx: {
-        fontFamily: 'Inter',
-        fontWeight: 'normal',
-        fontSize: '14px',
-      },
-    },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 170px)',
+        maxHeight: 'calc(100vh - 180px)',
       },
+    },
+    muiTableBodyCellProps: ({ row }) => {
+      return {
+        sx: {
+          backgroundColor: row.subRows?.length
+            ? '#0456cf'
+            : row.index % 2 === 0
+              ? '#FFFFFF'
+              : '#F8F9FA',
+          color: row.subRows?.length ? '#FFFFFF' : '#000000',
+          fontFamily: 'Inter',
+          fontWeight: 'normal',
+          fontSize: '12px',
+          padding: '4px 8px'
+        },
+      };
     },
     renderTopToolbarCustomActions: () => (
       <Box
@@ -121,7 +130,8 @@ const ContactosCelularesEmpleados = () => {
           className='text-white'
           startContent={<i className="bi bi-file-earmark-excel"></i>}
           onPress={() => exportToCSV(data, columns, "lineas.csv")}
-          radius="full"
+          radius='md'
+          size='sm'
         >Exportar
         </Button>
       </Box>

@@ -170,7 +170,8 @@ const ControlPosturas = () => {
           onPress={() => fetchData()}
           color="warning"
           className="text-white"
-          radius="full"
+          radius="md"
+          size="sm"
           fullWidth>
           Recargar
         </Button>
