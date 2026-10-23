@@ -8,6 +8,7 @@ import { Button } from '@heroui/react';
 import React from 'react';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import EncuestaCalidadAnswers from './FormAnswers';
+import { exportToCSV } from '@/phicargo/utils/export';
 
 const SurveysPage = () => {
 
@@ -41,31 +42,50 @@ const SurveysPage = () => {
     fetchData();
   }, []);
 
-  const columns: MRT_ColumnDef<any>[] = [
-    {
-      accessorKey: 'id',
-      header: 'ID',
-    },
+  const fixedColumns: MRT_ColumnDef<any>[] = [
     {
       accessorKey: 'sucursal',
       header: 'Sucursal',
     },
     {
-      accessorKey: 'partner',
+      accessorKey: 'cliente',
       header: 'Cliente',
     },
     {
-      accessorKey: 'name',
+      accessorKey: 'nombre',
       header: 'Nombre',
     },
     {
-      accessorKey: 'position',
+      accessorKey: 'puesto',
       header: 'Puesto',
     },
     {
-      accessorKey: 'created_at',
+      accessorKey: 'fecha',
       header: 'Fecha',
     },
+  ];
+
+  const excludedColumns = [
+    'id',
+    'sucursal',
+    'cliente',
+    'nombre',
+    'puesto',
+    'fecha',
+  ];
+
+  const columns: MRT_ColumnDef<any>[] = [
+    ...fixedColumns,
+    ...Array.from(
+      new Set(data.flatMap((row: any) => Object.keys(row)))
+    )
+      .filter((key) => !excludedColumns.includes(key))
+      .map((key) => ({
+        accessorKey: key,
+        header: key,
+        size: 220,
+        minSize: 160,
+      })),
   ];
 
   const table = useMaterialReactTable({
@@ -166,7 +186,16 @@ const SurveysPage = () => {
         >
           Encuestas
         </h1>
-        <Button color='primary' startContent={<i className="bi bi-arrow-clockwise"></i>} onPress={() => fetchData()} radius='full' size='sm'>Actualizar</Button>
+        <Button color='primary' startContent={<i className="bi bi-arrow-clockwise"></i>} onPress={() => fetchData()} radius='md' size='sm'>Actualizar</Button>
+        <Button
+          color='success'
+          className='text-white'
+          startContent={<i className="bi bi-file-earmark-excel"></i>}
+          onPress={() => exportToCSV(data, columns, "encuestas.csv")}
+          radius='md'
+          size='sm'
+        >Exportar
+        </Button>
       </Box >
     ),
   });
