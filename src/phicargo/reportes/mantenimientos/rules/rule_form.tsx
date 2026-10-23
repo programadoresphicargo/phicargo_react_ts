@@ -491,11 +491,16 @@ export default function MaintenanceRuleForm({
                     errorMessage={fieldState.error?.message}
                     isDisabled={hasModel}
                   >
-                    <SelectItem key="DL-">DOLLY</SelectItem>
-                    <SelectItem key="MG-">
-                      MOTOGENERADORES
-                    </SelectItem>
-                    <SelectItem key="SERVI/">SERVI</SelectItem>
+                    <SelectItem key="CB-">CB</SelectItem>
+                    <SelectItem key="CH-">Chasis (CH)</SelectItem>
+                    <SelectItem key="CS-">CS</SelectItem>
+                    <SelectItem key="DL-">Dolly (DL)</SelectItem>
+                    <SelectItem key="MG-">Motogeneradores (MG)</SelectItem>
+                    <SelectItem key="PCE-">PCE</SelectItem>
+                    <SelectItem key="PL-">Planas (PL)</SelectItem>
+                    <SelectItem key="PT-">PT</SelectItem>
+                    <SelectItem key="SERVI/">Servi</SelectItem>
+                    <SelectItem key="U-">Utilitarios (U)</SelectItem>
                   </Select>
                 )}
               />
