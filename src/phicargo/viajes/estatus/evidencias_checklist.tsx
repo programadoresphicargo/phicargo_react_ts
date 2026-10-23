@@ -23,12 +23,14 @@ type Images = {
 };
 
 type Props = {
- id_viaje: number;
+ id: number;
+ table: string;
  tipo_checklist: string;
 };
 
 function EvidenciasChecklistViaje({
- id_viaje,
+ id,
+ table,
  tipo_checklist,
 }: Props) {
  const [isLoading, setLoading] = useState(false);
@@ -40,7 +42,7 @@ function EvidenciasChecklistViaje({
    setLoading(true);
 
    const response = await odooApi.get(
-    `/checklist/evidencias/?id_viaje=${id_viaje}&tipo_checklist=${encodeURIComponent(tipo_checklist)}`
+    `/checklist/evidencias/?id=${id}&table=${table}&tipo_checklist=${encodeURIComponent(tipo_checklist)}`
    );
 
    setImages(response.data ?? []);
@@ -50,7 +52,7 @@ function EvidenciasChecklistViaje({
   } finally {
    setLoading(false);
   }
- }, [id_viaje, tipo_checklist]);
+ }, [id, tipo_checklist]);
 
  useEffect(() => {
   void fetchData();

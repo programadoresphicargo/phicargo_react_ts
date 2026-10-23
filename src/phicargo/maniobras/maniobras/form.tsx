@@ -786,7 +786,7 @@ const Formulariomaniobra: React.FC<Props> = ({
                                         </Stack>
                                     </Grid>
 
-                                    <Grid size={{ xs: 12, md: 9, lg: estado == null ? 12 : 6 }}>
+                                    <Grid size={{ xs: 12, md: 9, lg: estado == null ? 12 : 12 }}>
                                         <Card>
                                             <CardHeader
                                                 style={{
@@ -808,6 +808,7 @@ const Formulariomaniobra: React.FC<Props> = ({
                                                                 <>
                                                                     <Autocomplete
                                                                         label="Terminal"
+                                                                        size='sm'
                                                                         isRequired
                                                                         variant={formDisabled ? 'flat' : 'bordered'}
                                                                         isLoading={isLoadingTerminales}
@@ -834,6 +835,7 @@ const Formulariomaniobra: React.FC<Props> = ({
                                                             render={({ field, fieldState }) => (
                                                                 <Autocomplete
                                                                     isRequired
+                                                                    size='sm'
                                                                     label="Tipo de maniobra"
                                                                     variant={formDisabled ? 'flat' : 'bordered'}
                                                                     onSelectionChange={(val) => field.onChange(val)}
@@ -856,6 +858,7 @@ const Formulariomaniobra: React.FC<Props> = ({
                                                             rules={{ required: "Fecha requerida" }}
                                                             render={({ field, fieldState }) => (
                                                                 <DatePicker
+                                                                    size='sm'
                                                                     label="Inicio programado"
                                                                     variant={formDisabled ? 'flat' : 'bordered'}
                                                                     value={
@@ -1046,14 +1049,14 @@ const Formulariomaniobra: React.FC<Props> = ({
                                     </Grid>
 
                                     {estado != null && (
-                                        <Grid size={{ xs: 12, md: 3 }}>
+                                        <Grid size={{ xs: 12, md: 3, lg: 6 }}>
                                             <Card>
                                                 <CardHeader style={{
                                                     background: 'linear-gradient(90deg, #0b2149, #002887)',
                                                     color: 'white',
                                                     fontWeight: 'bold'
                                                 }}>
-                                                    Estatus
+                                                    Estatus Operativos
                                                 </CardHeader>
                                                 <CardBody>
                                                     {estado !== "borrador" && (
@@ -1079,7 +1082,7 @@ const Formulariomaniobra: React.FC<Props> = ({
                                         </Grid>
                                     )}
 
-                                    <Grid size={{ xs: 12, md: 3 }}>
+                                    <Grid size={{ xs: 12, md: 3, lg: 6 }}>
                                         {id_maniobra && (
                                             <Card>
                                                 <CardHeader

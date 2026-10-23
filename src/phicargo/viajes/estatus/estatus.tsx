@@ -403,7 +403,7 @@ function EstatusHistorial() {
 
                     <div className="space-y-3">
 
-                        <EvidenciasChecklistViaje id_viaje={id_viaje} tipo_checklist="reingreso"></EvidenciasChecklistViaje>
+                        <EvidenciasChecklistViaje id={id_viaje} tipo_checklist="reingreso" table="checklist_viajes_equipos"></EvidenciasChecklistViaje>
 
                         {sortedHistorial.map((step, index) => {
 
@@ -639,7 +639,7 @@ function EstatusHistorial() {
 
                     </div>
 
-                    <EvidenciasChecklistViaje id_viaje={id_viaje} tipo_checklist="salida"></EvidenciasChecklistViaje>
+                    <EvidenciasChecklistViaje id={id_viaje} tipo_checklist="salida" table="checklist_viajes_equipos"></EvidenciasChecklistViaje>
 
                 </div>
             )}

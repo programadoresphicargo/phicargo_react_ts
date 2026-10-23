@@ -84,6 +84,7 @@ const SelectFlota: React.FC<Props> = ({
                 id={id}
                 name={name}
                 isReadOnly={disabled}
+                size="sm"
                 defaultItems={filteredOptions}
                 variant={disabled ? 'flat' : 'bordered'}
                 selectedKey={value ? String(value) : null}

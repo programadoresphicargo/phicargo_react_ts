@@ -36,6 +36,7 @@ const SelectOperador: React.FC<Props> = ({
             label={label}
             isLoading={isLoading}
             name={name}
+            size="sm"
             isReadOnly={disabled}
             defaultItems={options}
             selectedKey={value ? String(value) : null}
