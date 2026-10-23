@@ -14,6 +14,8 @@ import {
 
 import { useAuthContext } from "@/modules/auth/hooks";
 import { useState } from "react";
+import zombieAnimation from '@/assets/halloween_2/Death Dance.json';
+import { Lottie } from "lottie-react";
 
 // Cargar las imágenes disponibles
 const images = Object.entries(
@@ -66,11 +68,13 @@ const AvatarProfile = () => {
     setImage(src);
   };
 
+  const pathname = window.location.pathname;
+
   return (
     <>
       <Dropdown placement="bottom-end">
         <DropdownTrigger>
-          <div className="cursor-pointer rounded-full">
+          <div className="flex cursor-pointer items-center gap-2 rounded-full">
             <User
               avatarProps={{
                 size: "md",
@@ -78,9 +82,17 @@ const AvatarProfile = () => {
                 className:
                   "ring-2 ring-orange-400 ring-offset-2 ring-offset-background",
               }}
-              description={`${session?.user.role || ""}`}
+              description={session?.user.role || ""}
               name={`🪦 ${session?.user.name || ""}`}
             />
+            {pathname == "/menu" && (
+              <Lottie
+                src={zombieAnimation}
+                loop
+                autoplay
+                style={{ height: 50, width: 50 }}
+              />
+            )}
           </div>
         </DropdownTrigger>
 

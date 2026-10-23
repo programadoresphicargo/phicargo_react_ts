@@ -1,15 +1,14 @@
 
 import { Button, Image } from '@heroui/react';
 import { motion } from 'framer-motion';
-import { LockKeyhole, ShieldCheck } from 'lucide-react';
+import { ShieldCheck } from 'lucide-react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-
 import { TextInput, PasswordInput2 } from '@/components/inputs';
 import { useAuthContext, useLoginMutation } from '../hooks';
 import { UserLogin } from '../models';
-
+import { Lottie } from "lottie-react";
 import logo from '@/assets/img/phicargo_logo_white.png';
 import fondo from '@/assets/img/tract_scannia.jpg';
 
@@ -21,6 +20,22 @@ const initialForm: UserLogin = {
 };
 
 const LoginPage = () => {
+
+  const animations = import.meta.glob(
+    '/src/assets/halloween_2/*.json',
+    {
+      eager: true,
+      import: 'default',
+    },
+  );
+
+  const files = Object.values(animations);
+
+  const randomAnimation =
+    files.length > 0
+      ? files[Math.floor(Math.random() * files.length)]
+      : null;
+
   const navigate = useNavigate();
   const { redirectTo } = useAuthContext();
 
@@ -123,9 +138,12 @@ const LoginPage = () => {
                 className="mb-7 max-h-24 object-contain"
               />
 
-              <div className="mb-3 flex size-12 items-center justify-center rounded-2xl border border-white/15 bg-white/[0.08] text-blue-100">
-                <LockKeyhole size={22} strokeWidth={1.7} />
-              </div>
+              <Lottie
+                src={randomAnimation ?? ''}
+                loop
+                autoplay
+                style={{ height: 120, width: 120 }}
+              />
 
               <h2 className="text-2xl font-semibold tracking-tight text-white">
                 Bienvenido
