@@ -74,23 +74,54 @@ const SurveysPage = () => {
     'fecha',
   ];
 
+  const questionColumns = Array.from(
+    new Set(data.flatMap((row: any) => Object.keys(row)))
+  ).filter((key) => !excludedColumns.includes(key));
+
   const columns: MRT_ColumnDef<any>[] = [
     ...fixedColumns,
-    ...Array.from(
-      new Set(data.flatMap((row: any) => Object.keys(row)))
-    )
-      .filter((key) => !excludedColumns.includes(key))
-      .map((key) => ({
-        accessorKey: key,
-        header: key,
-        size: 220,
-        minSize: 160,
-      })),
+    ...questionColumns.map((key) => ({
+      accessorKey: key,
+      header: key,
+      size: 220,
+      minSize: 160,
+    })),
   ];
+
+  // Calcular promedio por cada columna numérica
+  const averageRow: Record<string, any> = {
+    nombre: 'PROMEDIO',
+  };
+
+  questionColumns.forEach((key) => {
+    const values = data
+      .map((row: any) => row[key])
+      .filter(
+        (value: any) =>
+          value !== null &&
+          value !== undefined &&
+          value !== '' &&
+          Number.isFinite(Number(value))
+      )
+      .map((value: any) => Number(value));
+
+    averageRow[key] =
+      values.length > 0
+        ? Number(
+          (
+            values.reduce((sum, value) => sum + value, 0) /
+            values.length
+          ).toFixed(2)
+        )
+        : null;
+  });
+
+  // Agregar la fila al final
+  const tableData = [...data, averageRow];
 
   const table = useMaterialReactTable({
     columns,
-    data,
+    data: tableData,
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
@@ -116,10 +147,11 @@ const SurveysPage = () => {
     },
     muiTableBodyRowProps: ({ row }) => {
       const isGrouped = row.getIsGrouped();
+      const isAverage = row.original.nombre === 'PROMEDIO';
 
       return {
         onClick: () => {
-          if (isGrouped) return;
+          if (isGrouped || isAverage) return;
 
           const selection = window.getSelection()?.toString();
           if (selection) return;
@@ -127,9 +159,14 @@ const SurveysPage = () => {
           handleClickOpen();
           setSurveyID(row.original.id);
         },
-        style: {
-          color: '#ffcccc',
-          cursor: 'pointer',
+        sx: {
+          cursor: isAverage ? 'default' : 'pointer',
+          backgroundColor: isAverage ? '#E8F0FE' : undefined,
+          fontWeight: isAverage ? 700 : 400,
+          '& td': {
+            fontWeight: isAverage ? 700 : 400,
+            borderTop: isAverage ? '2px solid #0456cf' : undefined,
+          },
         },
       };
     },
