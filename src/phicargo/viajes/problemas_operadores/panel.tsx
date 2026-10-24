@@ -1,4 +1,4 @@
-import { Avatar, Card, CardFooter, CardHeader, Progress } from "@heroui/react";
+import { Avatar, Card, CardBody, CardFooter, CardHeader, Progress } from "@heroui/react";
 import {
     Button,
     Drawer,
@@ -99,37 +99,101 @@ const ProblemasOperadores: React.FC<ProblemasOperadoresProps> = ({
 
                                     {estatus.map((step) => (
                                         <>
-                                            <Card className='m-2' onPress={() => handleClickOpen(step.id_reporte)} isPressable fullWidth>
-                                                <CardHeader className="justify-between">
-                                                    <div className="flex gap-5">
-                                                        <Avatar
-                                                            color='danger'
-                                                            isBordered
-                                                            radius="full"
-                                                            size="md"
-                                                        />
-                                                        <div className="flex flex-col gap-1 items-start justify-center">
-                                                            <h4 className="text-small font-semibold leading-none text-default-600">{step.referencia}</h4>
-                                                            <h5 className="text-small tracking-tight text-default-400">{step.nombre_operador}</h5>
+
+                                            <Card
+                                                isPressable
+                                                fullWidth
+                                                onPress={() => handleClickOpen(step.id_reporte)}
+                                                className="
+    group m-2 w-[calc(100%-1rem)]
+    rounded-2xl border border-default-200
+    bg-content1 shadow-sm
+    transition-all duration-200
+    hover:-translate-y-0.5 hover:border-primary-300
+    hover:shadow-md
+  "
+                                            >
+                                                <CardBody className="gap-3 p-4">
+                                                    {/* Encabezado */}
+                                                    <div className="flex items-center gap-3">
+                                                        <div
+                                                            className="
+          flex h-12 w-12 shrink-0 items-center justify-center
+          rounded-xl bg-primary-50 text-primary
+          dark:bg-primary-900/5
+        "
+                                                        >
+                                                            <i className="bi bi-clipboard2-check text-xl" />
                                                         </div>
-                                                    </div>
-                                                </CardHeader>
-                                                <CardFooter className="gap-3">
-                                                    <div className="flex gap-1">
-                                                        <p className="font-semibold text-default-400 text-small">{step.fecha_creacion}</p>
+
+                                                        <div className="min-w-0 flex-1">
+                                                            <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-default-400">
+                                                                Reporte de operación
+                                                            </p>
+
+                                                            <h4 className="truncate text-sm font-bold text-foreground">
+                                                                {step.referencia}
+                                                            </h4>
+
+                                                            <p className="mt-1 truncate text-xs text-default-500">
+                                                                {step.nombre_operador || 'Operador no asignado'}
+                                                            </p>
+                                                        </div>
+
+                                                        {step.atendido ? (
+                                                            <Chip
+                                                                color="success"
+                                                                variant="flat"
+                                                                size="sm"
+                                                                startContent={<i className="bi bi-check-circle-fill text-xs" />}
+                                                                classNames={{
+                                                                    content: 'font-semibold',
+                                                                }}
+                                                            >
+                                                                Atendido
+                                                            </Chip>
+                                                        ) : (
+                                                            <Chip
+                                                                color="warning"
+                                                                variant="flat"
+                                                                size="sm"
+                                                                startContent={<i className="bi bi-clock-fill text-xs" />}
+                                                                classNames={{
+                                                                    content: 'font-semibold',
+                                                                }}
+                                                            >
+                                                                Pendiente
+                                                            </Chip>
+                                                        )}
                                                     </div>
 
-                                                    {step.atendido && (
-                                                        <Chip color="success" className="text-white">Atendido</Chip>
-                                                    )}
-                                                </CardFooter>
+                                                    {/* Separador */}
+                                                    <div className="h-px w-full bg-default-100" />
+
+                                                    {/* Pie */}
+                                                    <div className="flex items-center justify-between gap-3">
+                                                        <div className="flex min-w-0 items-center gap-2 text-default-500">
+                                                            <i className="bi bi-calendar3 text-sm" />
+
+                                                            <span className="truncate text-xs font-medium">
+                                                                {step.fecha_creacion}
+                                                            </span>
+                                                        </div>
+
+                                                        <div className="flex shrink-0 items-center gap-1 text-xs font-semibold text-primary transition-transform group-hover:translate-x-0.5">
+                                                            Ver detalle
+                                                            <i className="bi bi-arrow-up-right" />
+                                                        </div>
+                                                    </div>
+                                                </CardBody>
                                             </Card>
+
                                         </>
                                     ))}
                                 </ul>
                             </DrawerBody>
                             <DrawerFooter>
-                                <Button color="primary" onPress={onClose} radius="full">
+                                <Button color="primary" onPress={onClose} radius="md" size="sm">
                                     Cerrar
                                 </Button>
                             </DrawerFooter>
