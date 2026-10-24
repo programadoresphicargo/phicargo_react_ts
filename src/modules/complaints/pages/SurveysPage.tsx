@@ -228,7 +228,7 @@ const SurveysPage = () => {
           color='success'
           className='text-white'
           startContent={<i className="bi bi-file-earmark-excel"></i>}
-          onPress={() => exportToCSV(data, columns, "encuestas.csv")}
+          onPress={() => exportToCSV(tableData, columns, "encuestas.csv")}
           radius='md'
           size='sm'
         >Exportar
