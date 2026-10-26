@@ -1,251 +1,359 @@
+import { Box } from '@mui/material';
 import {
-  Box,
-} from '@mui/material';
-import { MRT_ColumnDef, MaterialReactTable, useMaterialReactTable } from 'material-react-table';
-import { useEffect, useState } from 'react';
-import odooApi from '@/api/odoo-api';
-import { Button } from '@heroui/react';
-import React from 'react';
+  MRT_ColumnDef,
+  MaterialReactTable,
+  useMaterialReactTable,
+} from 'material-react-table';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import EncuestaCalidadAnswers from './FormAnswers';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Button } from '@heroui/react';
+
+import odooApi from '@/api/odoo-api';
 import { exportToCSV } from '@/phicargo/utils/export';
+import EncuestaCalidadAnswers from './FormAnswers';
+
+type SurveyRow = Record<string, any> & {
+  id?: number;
+  sucursal?: string;
+  cliente?: string;
+  nombre?: string;
+  puesto?: string;
+  fecha?: string;
+  __isAverage?: boolean;
+};
+
+const EXCLUDED_COLUMNS = new Set([
+  'id',
+  'sucursal',
+  'cliente',
+  'nombre',
+  'puesto',
+  'fecha',
+  '__isAverage',
+]);
 
 const SurveysPage = () => {
-
-  const [open, setOpen] = React.useState(false);
-  const [surveyId, setSurveyID] = React.useState<number | null>(null);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-    fetchData();
-  };
-
-  const [data, setData] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [surveyId, setSurveyID] = useState<number | null>(null);
+  const [data, setData] = useState<SurveyRow[]>([]);
   const [isLoading, setLoading] = useState(false);
 
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      const response = await odooApi.get('/surveys/responses/');
-      setData(response.data);
-      setLoading(false);
-    } catch (error) {
-      console.error('Error al obtener los datos:', error);
-    }
-  };
+  const fetchData = useCallback(async () => {
+    setLoading(true);
 
-  useEffect(() => {
-    fetchData();
+    try {
+      const response = await odooApi.get('/surveys/responses/');
+
+      setData(
+        Array.isArray(response.data)
+          ? response.data
+          : []
+      );
+    } catch (error) {
+      console.error('Error al obtener las encuestas:', error);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  const fixedColumns: MRT_ColumnDef<any>[] = [
-    {
-      accessorKey: 'sucursal',
-      header: 'Sucursal',
-    },
-    {
-      accessorKey: 'cliente',
-      header: 'Cliente',
-    },
-    {
-      accessorKey: 'nombre',
-      header: 'Nombre',
-    },
-    {
-      accessorKey: 'puesto',
-      header: 'Puesto',
-    },
-    {
-      accessorKey: 'fecha',
-      header: 'Fecha',
-    },
-  ];
+  useEffect(() => {
+    void fetchData();
+  }, [fetchData]);
 
-  const excludedColumns = [
-    'id',
-    'sucursal',
-    'cliente',
-    'nombre',
-    'puesto',
-    'fecha',
-  ];
+  const handleClickOpen = useCallback(() => {
+    setOpen(true);
+  }, []);
 
-  const questionColumns = Array.from(
-    new Set(data.flatMap((row: any) => Object.keys(row)))
-  ).filter((key) => !excludedColumns.includes(key));
+  const handleClose = useCallback(() => {
+    setOpen(false);
+    setSurveyID(null);
+    void fetchData();
+  }, [fetchData]);
 
-  const columns: MRT_ColumnDef<any>[] = [
-    ...fixedColumns,
-    ...questionColumns.map((key) => ({
-      accessorKey: key,
-      header: key,
-      size: 220,
-      minSize: 160,
-    })),
-  ];
+  // Obtener las preguntas una sola vez por cada actualización de datos.
+  const questionColumns = useMemo(() => {
+    const keys = new Set<string>();
 
-  // Calcular promedio por cada columna numérica
-  const averageRow: Record<string, any> = {
-    nombre: 'PROMEDIO',
-  };
+    for (const row of data) {
+      for (const key of Object.keys(row)) {
+        if (!EXCLUDED_COLUMNS.has(key)) {
+          keys.add(key);
+        }
+      }
+    }
 
-  questionColumns.forEach((key) => {
-    const values = data
-      .map((row: any) => row[key])
-      .filter(
-        (value: any) =>
+    return Array.from(keys);
+  }, [data]);
+
+  // Columnas fijas y dinámicas memorizadas.
+  const columns = useMemo<MRT_ColumnDef<SurveyRow>[]>(() => {
+    const fixedColumns: MRT_ColumnDef<SurveyRow>[] = [
+      {
+        accessorKey: 'sucursal',
+        header: 'Sucursal',
+        enableGrouping: true,
+      },
+      {
+        accessorKey: 'cliente',
+        header: 'Cliente',
+        enableGrouping: true,
+      },
+      {
+        accessorKey: 'nombre',
+        header: 'Nombre',
+        enableGrouping: false,
+      },
+      {
+        accessorKey: 'puesto',
+        header: 'Puesto',
+        enableGrouping: true,
+      },
+      {
+        accessorKey: 'fecha',
+        header: 'Fecha',
+        enableGrouping: false,
+      },
+    ];
+
+    const dynamicColumns: MRT_ColumnDef<SurveyRow>[] =
+      questionColumns.map((key) => ({
+        accessorKey: key,
+        header: key,
+        size: 220,
+        minSize: 160,
+
+        // Evita agrupar accidentalmente por cada pregunta.
+        enableGrouping: false,
+      }));
+
+    return [...fixedColumns, ...dynamicColumns];
+  }, [questionColumns]);
+
+  // Calcular el promedio solo cuando cambien los datos o las preguntas.
+  const averageRow = useMemo<SurveyRow>(() => {
+    const row: SurveyRow = {
+      __isAverage: true,
+      nombre: 'PROMEDIO',
+    };
+
+    for (const key of questionColumns) {
+      let sum = 0;
+      let count = 0;
+
+      for (const survey of data) {
+        const value = survey[key];
+
+        if (
           value !== null &&
           value !== undefined &&
           value !== '' &&
+          String(value).trim() !== '' &&
           Number.isFinite(Number(value))
-      )
-      .map((value: any) => Number(value));
+        ) {
+          sum += Number(value);
+          count++;
+        }
+      }
 
-    averageRow[key] =
-      values.length > 0
-        ? Number(
-          (
-            values.reduce((sum, value) => sum + value, 0) /
-            values.length
-          ).toFixed(2)
-        )
-        : null;
-  });
+      row[key] =
+        count > 0
+          ? Number((sum / count).toFixed(2))
+          : null;
+    }
 
-  // Agregar la fila al final
-  const tableData = [...data, averageRow];
+    return row;
+  }, [data, questionColumns]);
+
+  const tableData = useMemo(
+    () => [...data, averageRow],
+    [data, averageRow]
+  );
 
   const table = useMaterialReactTable({
     columns,
     data: tableData,
+
+    // Virtualización: renderizar solo las filas y columnas visibles.
+    enableRowVirtualization: true,
+    enableColumnVirtualization: true,
+
+    rowVirtualizerOptions: {
+      overscan: 8,
+    },
+    columnVirtualizerOptions: {
+      overscan: 4,
+    },
+
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
+    enableColumnPinning: true,
+    enableStickyHeader: true,
+
+    groupedColumnMode: 'remove',
+    positionToolbarAlertBanner: 'bottom',
+    localization: MRT_Localization_ES,
+    columnResizeMode: 'onEnd',
+
     state: {
       showProgressBars: isLoading,
     },
-    groupedColumnMode: "remove",
-    enableColumnPinning: true,
-    enableStickyHeader: true,
-    positionToolbarAlertBanner: "bottom",
-    localization: MRT_Localization_ES,
-    columnResizeMode: "onEnd",
+
     initialState: {
       density: 'compact',
       showColumnFilters: true,
-      pagination: { pageIndex: 0, pageSize: 80 },
+      pagination: {
+        pageIndex: 0,
+        pageSize: 80,
+      },
     },
+
     muiTablePaperProps: {
       elevation: 0,
       sx: {
-        borderRadius: '0',
+        borderRadius: 0,
       },
     },
+
     muiTableBodyRowProps: ({ row }) => {
       const isGrouped = row.getIsGrouped();
-      const isAverage = row.original.nombre === 'PROMEDIO';
+      const isAverage = row.original.__isAverage === true;
 
       return {
         onClick: () => {
-          if (isGrouped || isAverage) return;
+          if (isGrouped || isAverage || !row.original.id) {
+            return;
+          }
 
-          const selection = window.getSelection()?.toString();
-          if (selection) return;
+          // No abrir el modal cuando el usuario selecciona texto.
+          if (window.getSelection()?.toString()) {
+            return;
+          }
 
+          setSurveyID(row.original.id!);
           handleClickOpen();
-          setSurveyID(row.original.id);
         },
+
         sx: {
           cursor: isAverage ? 'default' : 'pointer',
           backgroundColor: isAverage ? '#E8F0FE' : undefined,
-          fontWeight: isAverage ? 700 : 400,
+
           '& td': {
             fontWeight: isAverage ? 700 : 400,
-            borderTop: isAverage ? '2px solid #0456cf' : undefined,
+            borderTop: isAverage
+              ? '2px solid #0456cf'
+              : undefined,
           },
         },
       };
     },
+
     muiTableContainerProps: {
       sx: {
         maxHeight: 'calc(100vh - 200px)',
+        overflow: 'auto',
       },
     },
+
     muiTableHeadCellProps: {
       sx: {
         fontFamily: 'Inter',
-        fontWeight: 'Bold',
+        fontWeight: 700,
         fontSize: '14px',
       },
     },
+
+    muiTableBodyCellProps: {
+      sx: {
+        fontFamily: 'Inter',
+        fontWeight: 'normal',
+        fontSize: '12px',
+      },
+    },
+
     muiTopToolbarProps: {
       sx: {
-        background: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
+        background:
+          'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
         color: 'white',
+
         '& .MuiSvgIcon-root': {
-          color: 'white',   // 🎨 iconos en blanco
+          color: 'white',
         },
+
         '& .MuiButton-root': {
-          color: 'white',   // texto de botones en blanco
+          color: 'white',
         },
+
         '& .MuiInputBase-root': {
-          color: 'white',   // texto del buscador
+          color: 'white',
         },
+
         '& .MuiInputBase-root .MuiSvgIcon-root': {
-          color: 'white',   // icono de lupa en blanco
+          color: 'white',
         },
       },
     },
-    muiTableBodyCellProps: () => {
-      return {
-        sx: {
-          fontFamily: 'Inter',
-          fontWeight: 'normal',
-          fontSize: '12px',
-        },
-      }
-    },
+
     renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
+          flexWrap: 'wrap',
           gap: '16px',
           padding: '8px',
           alignItems: 'center',
         }}
       >
-        <h1
-          className="font-semibold lg:text-2xl"
-        >
+        <h1 className="font-semibold lg:text-2xl">
           Encuestas
         </h1>
-        <Button color='primary' startContent={<i className="bi bi-arrow-clockwise"></i>} onPress={() => fetchData()} radius='md' size='sm'>Actualizar</Button>
+
         <Button
-          color='success'
-          className='text-white'
-          startContent={<i className="bi bi-file-earmark-excel"></i>}
-          onPress={() => exportToCSV(tableData, columns, "encuestas.csv")}
-          radius='md'
-          size='sm'
-        >Exportar
+          color="primary"
+          startContent={
+            <i className="bi bi-arrow-clockwise" />
+          }
+          onPress={() => void fetchData()}
+          isDisabled={isLoading}
+          radius="md"
+          size="sm"
+        >
+          Actualizar
         </Button>
-      </Box >
+
+        <Button
+          color="success"
+          className="text-white"
+          startContent={
+            <i className="bi bi-file-earmark-excel" />
+          }
+          onPress={() =>
+            exportToCSV(tableData, columns, 'encuestas.csv')
+          }
+          isDisabled={isLoading}
+          radius="md"
+          size="sm"
+        >
+          Exportar
+        </Button>
+      </Box>
     ),
   });
 
   return (
     <>
       <MaterialReactTable table={table} />
-      {surveyId && (
-        <EncuestaCalidadAnswers survey_id={surveyId} open={open} handleClose={handleClose}></EncuestaCalidadAnswers>
+
+      {surveyId !== null && (
+        <EncuestaCalidadAnswers
+          survey_id={surveyId}
+          open={open}
+          handleClose={handleClose}
+        />
       )}
     </>
   );
 };
 
 export default SurveysPage;
-
