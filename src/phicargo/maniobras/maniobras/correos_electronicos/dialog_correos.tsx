@@ -114,7 +114,7 @@ const CorreosLigadosManiobra = ({ open, handleClose, id_cliente }: { open: boole
 
                 <DialogContent>
                     <div className='mb-3'>
-                        <Button color='primary' onPress={() => setOpenF(true)} radius="full">
+                        <Button color='primary' onPress={() => setOpenF(true)} radius="md" size="sm">
                             Nuevo correo
                         </Button>
                     </div>

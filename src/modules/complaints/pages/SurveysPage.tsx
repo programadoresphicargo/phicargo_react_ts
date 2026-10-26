@@ -236,7 +236,11 @@ const SurveysPage = () => {
 
         sx: {
           cursor: isAverage ? 'default' : 'pointer',
-          backgroundColor: isAverage ? '#E8F0FE' : undefined,
+          backgroundColor: row.subRows?.length
+            ? '#0456cf'
+            : row.index % 2 === 0
+              ? '#FFFFFF'
+              : '#F8F9FA',
 
           '& td': {
             fontWeight: isAverage ? 700 : 400,
