@@ -10,9 +10,9 @@ import { TextareaInput } from '@/components/inputs';
 import { useMaintenanceRecord } from '../hooks';
 import { useState } from 'react';
 import ConfirmDialog from './ConfirmDialog';
-import odooApi from '@/api/odoo-api';
 import { VehicleHistory } from './history/history';
 import BlockVehicleDialog from './block-vehicle';
+import { OpenArchive } from '@/phicargo/utils/open_archive';
 
 interface RegisterDetailForm {
   comment: string;
@@ -73,16 +73,6 @@ export const RecordDetailsModal = ({
         },
       },
     );
-  };
-
-  const OpenChecklist = async (
-    id_checklist: number | null,
-  ): Promise<void> => {
-    if (!id_checklist) return;
-
-    const url = `${odooApi.defaults.baseURL}/checklist/export/${id_checklist}`;
-
-    window.open(url, '_blank');
   };
 
   const handleBlock = () => {
@@ -181,7 +171,7 @@ export const RecordDetailsModal = ({
                   size="sm"
                   className="font-medium text-white"
                   onPress={() =>
-                    OpenChecklist(record.id_checklist)
+                    OpenArchive(`/checklist/export/${record.id_checklist}`)
                   }
                   startContent={
                     <i className="bi bi-file-pdf" />
