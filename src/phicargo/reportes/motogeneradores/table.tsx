@@ -49,8 +49,21 @@ const ChecklistMotogeneradores = () => {
   };
 
   const OpenChecklist = async (id_checklist: number) => {
-    const url = `${odooApi.defaults.baseURL}/checklist/export_mg/${id_checklist}`;
-    window.open(url, "_blank");
+    try {
+      const response = await odooApi.get(`/checklist/export_mg/${id_checklist}`,
+        { responseType: "blob" }
+      );
+
+      const pdfBlob = new Blob([response.data], {
+        type: "application/pdf",
+      });
+
+      const pdfUrl = URL.createObjectURL(pdfBlob);
+      window.open(pdfUrl, "_blank", "noopener,noreferrer");
+      setTimeout(() => URL.revokeObjectURL(pdfUrl), 60_000);
+    } catch (error) {
+      console.error("Error al abrir el PDF:", error);
+    }
   };
 
   const columns: MRT_ColumnDef<ChecklistItem>[] = [
