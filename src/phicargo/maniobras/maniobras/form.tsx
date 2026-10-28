@@ -40,8 +40,7 @@ import { Flota, OptionFlota } from './tipado';
 import { PosturasForm } from '@/modules/vehicles/components/PosturasForm';
 import Notas from '@/phicargo/viajes/seguimiento/notas';
 import MaintenanceRecordsVehicles from './maintenance-record';
-
-const apiUrl = import.meta.env.VITE_ODOO_API_URL;
+import { OpenArchive } from '@/phicargo/utils/open_archive';
 
 type Terminal = {
     id_terminal: number;
@@ -745,7 +744,7 @@ const Formulariomaniobra: React.FC<Props> = ({
                                                     as={Link}
                                                     isExternal={true}
                                                     color="success"
-                                                    href={`${apiUrl}/maniobras/formato_entrega/` + id_maniobra}
+                                                    onPress={() => OpenArchive(`/maniobras/formato_entrega/${id_maniobra}`)}
                                                     variant="solid"
                                                     className='text-white'
                                                     isLoading={loading}
@@ -764,7 +763,7 @@ const Formulariomaniobra: React.FC<Props> = ({
                                                     as={Link}
                                                     isExternal={true}
                                                     color="danger"
-                                                    href={`${apiUrl}/checklist/maniobra_pdf/` + id_maniobra}
+                                                    onPress={() => OpenArchive(`/checklist/maniobra_pdf/${id_maniobra}`)}
                                                     variant="solid"
                                                     size="sm"
                                                 >

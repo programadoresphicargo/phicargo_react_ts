@@ -16,7 +16,7 @@ import { toast } from 'react-toastify';
 import FormularioCorte from "./corte_estadias";
 import OneDriveViewer from "./viewer";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import axios from "axios";
+import { OpenArchive } from "@/phicargo/utils/open_archive";
 
 type Documentacion = {
   id_onedrive: string;
@@ -39,34 +39,6 @@ const Documentacion = ({ }) => {
       setLoading(false);
     } catch (error) {
       console.error('Error al obtener los datos:', error);
-    }
-  };
-
-  const OpenArchive = async (url: string) => {
-    try {
-      toast.info("Generando archivo, espere...");
-
-      const response = await odooApi.get(url,
-        { responseType: "blob" }
-      );
-
-      const pdfBlob = new Blob([response.data], {
-        type: "application/pdf",
-      });
-
-      const pdfUrl = URL.createObjectURL(pdfBlob);
-      window.open(pdfUrl, "_blank", "noopener,noreferrer");
-      setTimeout(() => URL.revokeObjectURL(pdfUrl), 60_000);
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const data = error.response?.data;
-        const detail = data instanceof Blob
-          ? JSON.parse(await data.text()).detail
-          : data?.detail;
-
-        console.error(detail ?? error.message);
-        toast.error(detail ?? "Error al abrir el archivo");
-      }
     }
   };
 
