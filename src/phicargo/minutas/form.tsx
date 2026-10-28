@@ -22,6 +22,7 @@ import dayjs from 'dayjs';
 import { SelectItem } from '@/types';
 import { Empleado } from '../accesos/types/types';
 import TareasMinutas from './tareas';
+import { OpenArchive } from '../utils/open_archive';
 
 const initialForm: Minuta = {
   id_solicitante: null,
@@ -135,16 +136,6 @@ export default function MinutaForm({ open, handleClose, id_minuta }: { open: boo
       toast.error("Error al enviar datos: " + error);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const ImprimirFormato = async () => {
-    try {
-      const url = `/minutas/formato/${id_minuta}`;
-      const fullUrl = odooApi.defaults.baseURL + url;
-      window.open(fullUrl, "_blank");
-    } catch (error) {
-      toast.error("Error al abrir formato: " + error);
     }
   };
 
@@ -262,7 +253,8 @@ export default function MinutaForm({ open, handleClose, id_minuta }: { open: boo
                 onPress={() => setIsEditing(true)}
                 className="text-white"
                 isLoading={isLoading}
-                radius="full"
+                radius="md"
+                size="sm"
               >
                 <i className="bi bi-pencil-square"></i> Editar
               </Button>
@@ -273,8 +265,9 @@ export default function MinutaForm({ open, handleClose, id_minuta }: { open: boo
                 color="success"
                 onPress={() => handleSubmit(handleSave)()}
                 className="text-white"
-                radius='full'
+                radius="md"
                 isLoading={isLoading}
+                size="sm"
               >
                 <i className="bi bi-floppy-fill"></i> Actualizar
               </Button>
@@ -284,15 +277,16 @@ export default function MinutaForm({ open, handleClose, id_minuta }: { open: boo
               <>
                 <Button
                   color="success"
-                  onPress={ImprimirFormato}
+                  onPress={() => OpenArchive(`/minutas/formato/${id_minuta}`)}
                   className="text-white"
-                  radius='full'
+                  radius="md"
                   isLoading={isLoading}
+                  size="sm"
                 >
                   <i className="bi bi-printer"></i> Imprimir formato
                 </Button>
                 {estado != 'confirmado' && (
-                  <Button color='success' className='text-white' radius='full' onPress={() => Confirmar()} isLoading={isLoading}
+                  <Button color='success' className='text-white' radius='md' onPress={() => Confirmar()} isLoading={isLoading} size="sm"
                   >Confirmar</Button>
                 )}
               </>
