@@ -17,6 +17,7 @@ import { toast } from 'react-toastify';
 import ModalAsignacion from './form';
 import EmpleadosSinAsignarCelular from '../empleados/no_asignados/empleados_no_celulares';
 import { exportToCSV } from '@/phicargo/utils/export';
+import { OpenArchive } from '@/phicargo/utils/open_archive';
 
 type AsignacionCelular = {
   id_asignacion: number;
@@ -24,8 +25,6 @@ type AsignacionCelular = {
   fecha_asignacion: string;
   puesto: string;
 }
-
-const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
 const Asignaciones = () => {
 
@@ -130,7 +129,7 @@ const Asignaciones = () => {
             as={Link}
             isExternal={true}
             color="primary"
-            href={`${apiUrl}/inventarioti/asignaciones/celulares/responsiva/${row.original.id_asignacion}`}
+            onPress={() => OpenArchive(`/inventarioti/asignaciones/celulares/responsiva/${row.original.id_asignacion}`)}
             variant="solid"
             size='sm'
             radius="md"
@@ -149,7 +148,7 @@ const Asignaciones = () => {
             as={Link}
             isExternal={true}
             color="warning"
-            href={`${apiUrl}/inventarioti/asignaciones/boton_panico/${row.original.id_asignacion}`}
+            onPress={() => OpenArchive(`/inventarioti/asignaciones/boton_panico/${row.original.id_asignacion}`)}
             variant="solid"
             size='sm'
             radius="md"
