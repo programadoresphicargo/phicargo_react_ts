@@ -392,8 +392,8 @@ const PDV = ({ }) => {
           format="yyyy-MM-dd"
           loading={isLoading}
         />
-        <Button color='primary' startContent={<i className="bi bi-arrow-clockwise"></i>} onPress={() => fetchData()} radius='full'>Actualizar</Button>
-        <Button color='success' className='text-white' startContent={<i className="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "programacion_viajes.csv")} radius='full'>Exportar</Button>
+        <Button color='primary' startContent={<i className="bi bi-arrow-clockwise"></i>} onPress={() => fetchData()} radius='md' size='sm'>Actualizar</Button>
+        <Button color='success' size='sm' className='text-white' startContent={<i className="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "programacion_viajes.csv")} radius='md'>Exportar</Button>
       </Box >
     ),
   });

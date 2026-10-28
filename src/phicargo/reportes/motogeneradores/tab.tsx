@@ -1,0 +1,52 @@
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
+import PDVMaintenance from '.';
+import CustomNavbar from '@/pages/CustomNavbar';
+import ChecklistMotogeneradores from './table';
+
+export default function IndexChecklistMotogeneradores() {
+ const [value, setValue] = React.useState('1');
+
+ const handleChange = (newValue: string) => {
+  setValue(newValue);
+ };
+
+ return (
+  <Box sx={{
+   borderColor: 'divider',
+   backgroundColor: '#002887',
+   color: 'white',
+  }}>
+   <CustomNavbar></CustomNavbar>
+   <TabContext value={value}>
+    <TabList
+     onChange={(_, newValue) => handleChange(newValue)}
+     aria-label="lab tabs"
+     textColor="inherit"
+     sx={{
+      '& .MuiTabs-indicator': {
+       backgroundColor: 'white',
+       height: '3px',
+      },
+      '& .MuiTab-root': {
+       fontFamily: 'Inter',
+      },
+     }}
+    >
+     <Tab label="PDV" value="1" />
+     <Tab label="Checklist" value="2" />
+    </TabList>
+    <TabPanel value="1" tabIndex={0} sx={{ p: 0, m: 0 }}>
+     <PDVMaintenance></PDVMaintenance>
+    </TabPanel>
+    <TabPanel value="2" tabIndex={0} sx={{ p: 0, m: 0 }}>
+     <ChecklistMotogeneradores></ChecklistMotogeneradores>
+    </TabPanel>
+   </TabContext>
+  </Box>
+ );
+}

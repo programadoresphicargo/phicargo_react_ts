@@ -120,6 +120,12 @@ export const menuItems: MenuItemType[] = [
     icon: preventivosIcon,
     requiredPermissions: [198],
    },
+   {
+    label: 'Motogeneradores',
+    link: '/reportes/mg',
+    icon: preventivosIcon,
+    requiredPermissions: [198],
+   },
   ],
  },
  {
