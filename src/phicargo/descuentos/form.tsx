@@ -18,6 +18,7 @@ import { parseDate } from "@internationalized/date";
 import dayjs from "dayjs";
 import { SelectEmpleado } from "./select_empleados";
 import { useAuthContext } from "@/modules/auth/hooks";
+import { OpenArchive } from "../utils/open_archive";
 
 const initialForm: Descuento = {
   id_descuento: null,
@@ -123,11 +124,6 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
         toast.error("Error al confirmar.");
       }
     }
-  };
-
-  const ImprimirFormato = () => {
-    const url = odooApi.defaults.baseURL + `/descuentos/formato/${id_descuento}`;
-    window.open(url, "_blank");
   };
 
   const estado = watch("estado");
@@ -248,7 +244,7 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
                         <Button
                           color="primary"
                           variant="flat"
-                          onPress={ImprimirFormato}
+                          onPress={() => OpenArchive(`/descuentos/formato/${id_descuento}`)}
                           radius="md"
                         >
                           Imprimir formato
