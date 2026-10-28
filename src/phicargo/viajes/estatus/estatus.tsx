@@ -18,6 +18,7 @@ import { ViajeContext } from "../context/viajeContext";
 import odooApi from "@/api/odoo-api";
 import { tiempoTranscurrido } from "../../funciones/tiempo";
 import EvidenciasChecklistViaje from "./evidencias_checklist";
+import { OpenArchive } from "@/phicargo/utils/open_archive";
 
 const { VITE_ODOO_API_URL } = import.meta.env;
 
@@ -122,13 +123,6 @@ function EstatusHistorial() {
             alert("Error al generar el reporte");
             console.error(error);
         }
-    };
-
-    const exportPDF = () => {
-        window.open(
-            `${odooApi.defaults.baseURL}/tms_travel/reportes_estatus_viajes/pdf/${id_viaje}`,
-            "_blank"
-        );
     };
 
     const getTipoConfig = (tipo: string) => {
@@ -327,7 +321,7 @@ function EstatusHistorial() {
                             size="sm"
                             variant="flat"
                             color="danger"
-                            onPress={exportPDF}
+                            onPress={() => OpenArchive(`/tms_travel/reportes_estatus_viajes/pdf/${id_viaje}`)}
                             startContent={
                                 <i className="bi bi-file-earmark-pdf" />
                             }

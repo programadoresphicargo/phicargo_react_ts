@@ -11,12 +11,14 @@ export const OpenArchive = async (url: string) => {
    responseType: "blob",
   });
 
-  const pdfUrl = URL.createObjectURL(
-   new Blob([response.data], { type: "application/pdf" })
-  );
+  const blob = new Blob([response.data], {
+   type: response.headers["content-type"] || "application/octet-stream",
+  });
 
-  window.open(pdfUrl, "_blank", "noopener,noreferrer");
-  setTimeout(() => URL.revokeObjectURL(pdfUrl), 60_000);
+  const fileUrl = URL.createObjectURL(blob);
+  window.open(fileUrl, "_blank", "noopener,noreferrer");
+
+  setTimeout(() => URL.revokeObjectURL(fileUrl), 60_000);
 
   toast.dismiss("open-archive");
  } catch (error) {
