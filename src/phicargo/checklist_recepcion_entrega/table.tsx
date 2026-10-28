@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { exportToCSV } from '../utils/export';
 import CustomNavbar from "@/pages/CustomNavbar";
+import { OpenArchive } from "../utils/open_archive";
 
 type ChecklistItem = {
   id_checklist: number;
@@ -31,11 +32,6 @@ const Checklist = () => {
     } finally {
       setisLoading(false);
     }
-  };
-
-  const OpenChecklist = async (id_checklist: number) => {
-    const url = `${odooApi.defaults.baseURL}/checklist_recepcion_entrega/${id_checklist}`;
-    window.open(url, "_blank");
   };
 
   const OpenOndrive = async (url: string) => {
@@ -91,7 +87,7 @@ const Checklist = () => {
       Cell: ({ cell }: { cell: MRT_Cell<ChecklistItem> }) => {
         const id = cell.getValue<number>();
         return (
-          <Button className="text-white" size="sm" color="primary" radius="full" onPress={() => OpenChecklist(id)}>
+          <Button className="text-white" size="sm" color="primary" radius="full" onPress={() => OpenArchive(`/checklist_recepcion_entrega/${id}`)}>
             <i className="bi bi-file-pdf"></i>
             Descargar
           </Button>
