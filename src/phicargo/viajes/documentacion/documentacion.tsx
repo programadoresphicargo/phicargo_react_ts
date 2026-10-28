@@ -16,13 +16,12 @@ import { toast } from 'react-toastify';
 import FormularioCorte from "./corte_estadias";
 import OneDriveViewer from "./viewer";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
+import axios from "axios";
 
 type Documentacion = {
   id_onedrive: string;
   filename: string;
 };
-
-const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
 const Documentacion = ({ }) => {
 
@@ -40,6 +39,34 @@ const Documentacion = ({ }) => {
       setLoading(false);
     } catch (error) {
       console.error('Error al obtener los datos:', error);
+    }
+  };
+
+  const OpenArchive = async (url: string) => {
+    try {
+      toast.info("Generando archivo, espere...");
+
+      const response = await odooApi.get(url,
+        { responseType: "blob" }
+      );
+
+      const pdfBlob = new Blob([response.data], {
+        type: "application/pdf",
+      });
+
+      const pdfUrl = URL.createObjectURL(pdfBlob);
+      window.open(pdfUrl, "_blank", "noopener,noreferrer");
+      setTimeout(() => URL.revokeObjectURL(pdfUrl), 60_000);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const data = error.response?.data;
+        const detail = data instanceof Blob
+          ? JSON.parse(await data.text()).detail
+          : data?.detail;
+
+        console.error(detail ?? error.message);
+        toast.error(detail ?? "Error al abrir el archivo");
+      }
     }
   };
 
@@ -184,9 +211,8 @@ const Documentacion = ({ }) => {
           radius="md"
           showAnchorIcon
           as={Link}
-          isExternal={true}
           color="danger"
-          href={`${apiUrl}/checklist/pdf/` + id_viaje}
+          onPress={() => OpenArchive(`/checklist/pdf/${id_viaje}`)}
           variant="solid"
           size="sm"
         >
@@ -200,7 +226,7 @@ const Documentacion = ({ }) => {
           isExternal={true}
           className="text-white"
           color="warning"
-          href={`${apiUrl}/checklist/18puntos/pdf/` + id_viaje}
+          onPress={() => OpenArchive(`/checklist/18puntos/pdf/${id_viaje}`)}
           variant="solid"
           size="sm"
         >
@@ -213,7 +239,7 @@ const Documentacion = ({ }) => {
           as={Link}
           isExternal={true}
           color="secondary"
-          href={`${apiUrl}/tms_travel/revision_ocular/bitacoras/pdf/` + id_viaje}
+          onPress={() => OpenArchive(`/tms_travel/revision_ocular/bitacoras/pdf/${id_viaje}`)}
           variant="solid"
           size="sm"
         >
@@ -227,7 +253,7 @@ const Documentacion = ({ }) => {
           isExternal={true}
           color="success"
           className='text-white'
-          href={`${apiUrl}/tms_travel/horas_servicio/pdf/` + id_viaje}
+          onPress={() => OpenArchive(`/tms_travel/horas_servicio/pdf/${id_viaje}`)}
           variant="solid"
           size="sm"
         >
