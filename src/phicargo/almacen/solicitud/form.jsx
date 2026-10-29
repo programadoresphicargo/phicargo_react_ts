@@ -27,6 +27,7 @@ import CancelarSolicitudDialog from "./cancelar";
 import { Select, SelectItem, Link } from "@heroui/react";
 import UploadFiles from "@/phicargo/onedrive/UploadFiles";
 import SelectEmpleado2 from "@/phicargo/descuentos/select_empleado_2";
+import { OpenArchive } from "@/phicargo/utils/open_archive";
 
 const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
@@ -337,7 +338,8 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, setID, vista, travel_i
 
                         {(!modoEdicion && (data?.x_studio_estado === 'borrador' || data?.x_studio_estado === 'entregado')) && (
                             <Button
-                                radius="full"
+                                radius="md"
+                                size="sm"
                                 color="primary"
                                 onPress={handleEdit}>
                                 <i class="bi bi-pen"></i>
@@ -347,7 +349,8 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, setID, vista, travel_i
 
                         {modoEdicion && (
                             <Button
-                                radius="full"
+                                radius="md"
+                                size="sm"
                                 onPress={handleSave}
                                 color={id_solicitud ? 'success' : 'primary'}
                                 isDisabled={isSaving}
@@ -359,7 +362,8 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, setID, vista, travel_i
                         )}
                         {data?.x_studio_estado === "borrador" && modoEdicion != true && (
                             <Button
-                                radius="full"
+                                radius="md"
+                                size="sm"
                                 color="success"
                                 className="text-white"
                                 onPress={() => confirmar()}
@@ -369,13 +373,13 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, setID, vista, travel_i
                             </Button>
                         )}
                         {data?.x_studio_estado == "confirmado" && (
-                            <Button color='warning' className='text-white' onPress={() => cambiar_borrador()} isLoading={isLoading} radius="full">
+                            <Button color='warning' className='text-white' onPress={() => cambiar_borrador()} isLoading={isLoading} radius="md" size="sm">
                                 <i class="bi bi-backspace-fill"></i>
                                 Regresar a borrador
                             </Button>
                         )}
                         {data?.x_studio_estado == "confirmado" && (
-                            <Button color='success' className='text-white' onPress={() => entregar()} isLoading={isLoading} radius="full">
+                            <Button color='success' className='text-white' onPress={() => entregar()} isLoading={isLoading} radius="md" size="sm">
                                 <i class="bi bi-arrow-right-circle-fill"></i>
                                 Entregar
                             </Button>
@@ -393,19 +397,21 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, setID, vista, travel_i
                         )}
                         {data?.x_studio_estado !== "cancelada" && (
                             <Button
-                                radius="full"
+                                radius="md"
+                                size="sm"
                                 color="success"
                                 as={Link}
                                 isExternal={true}
                                 color="primary"
-                                href={`${apiUrl}/tms_travel/solicitudes_equipo/pdf/${id_solicitud}`}>
+                                onPress={() => OpenArchive(`/tms_travel/solicitudes_equipo/pdf/${id_solicitud}`)}>
                                 <i class="bi bi-file-earmark-pdf-fill"></i>
                                 Formato de entrega
                             </Button>
                         )}
                         {(!modoEdicion && data?.x_studio_estado == 'borrador') && (
                             <Button
-                                radius="full"
+                                radius="md"
+                                size="sm"
                                 color="danger"
                                 className="text-white"
                                 onPress={() => setOpenCancelar(true)}

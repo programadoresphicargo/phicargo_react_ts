@@ -21,7 +21,7 @@ import LlantasAsignadas from "./lineas";
 import HistorialCambios from "../almacen/solicitud/cambios/epps";
 import { Controller, useForm } from "react-hook-form";
 import axios from "axios";
-const apiUrl = import.meta.env.VITE_ODOO_API_URL;
+import { OpenArchive } from "../utils/open_archive";
 
 type Meta = {
     x_studio_status?: string;
@@ -343,7 +343,7 @@ const SolicitudFormLlantas: React.FC<SolicitudFormProps> = ({
                             className="text-white"
                             as={Link}
                             isExternal={true}
-                            href={`${apiUrl}/solicitudes_llantas/formato/${id_solicitud}`}>
+                            onPress={() => OpenArchive(`/solicitudes_llantas/formato/${id_solicitud}`)}>
                             <i className="bi bi-file-earmark-pdf-fill"></i>
                             Formato de entrega
                         </Button>

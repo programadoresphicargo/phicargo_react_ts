@@ -16,6 +16,7 @@ import {
 import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
 import { exportToCSV } from '@/phicargo/utils/export';
+import { OpenArchive } from '@/phicargo/utils/open_archive';
 
 type AsignacionComputo = {
   id_asignacion: number;
@@ -23,8 +24,6 @@ type AsignacionComputo = {
   fecha_asignacion: string;
   puesto: string;
 }
-
-const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
 const AsignacionesEquipoComputo = () => {
   const [isLoading, setLoading] = useState(false);
@@ -117,7 +116,7 @@ const AsignacionesEquipoComputo = () => {
             as={Link}
             isExternal={true}
             color="secondary"
-            href={`${apiUrl}/inventarioti/asignaciones/equipo_computo/responsiva/${row.original.id_asignacion}`}
+            onPress={() => OpenArchive(`/inventarioti/asignaciones/equipo_computo/responsiva/${row.original.id_asignacion}`)}
             variant="solid"
             size='sm'
           >
