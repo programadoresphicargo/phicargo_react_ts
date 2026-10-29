@@ -82,14 +82,14 @@ const Checklist = () => {
     },
     {
       accessorKey: 'id',
-      id: 'descargar',
-      header: 'Descargar',
+      id: 'visualizar',
+      header: 'Visualizar',
       Cell: ({ cell }: { cell: MRT_Cell<ChecklistItem> }) => {
         const id = cell.getValue<number>();
         return (
           <Button className="text-white" size="sm" color="primary" radius="full" onPress={() => OpenArchive(`/checklist_recepcion_entrega/${id}`)}>
             <i className="bi bi-file-pdf"></i>
-            Descargar
+            Visualizar
           </Button>
         );
       },
@@ -128,7 +128,7 @@ const Checklist = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 200px)',
+        maxHeight: 'calc(100vh - 190px)',
       },
     },
     muiTableBodyCellProps: ({ row }) => ({
@@ -165,7 +165,8 @@ const Checklist = () => {
           onPress={() => exportToCSV(data, columns, "checklist.csv")}
           color="success"
           className="text-white"
-          radius="full"
+          radius="md"
+          size="sm"
         >
           Exportar
         </Button>
@@ -175,7 +176,8 @@ const Checklist = () => {
           isDisabled={isLoading}
           color="warning"
           className="text-white"
-          radius="full"
+          radius="md"
+          size="sm"
         >
           Recargar
         </Button>
