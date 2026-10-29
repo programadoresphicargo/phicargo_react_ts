@@ -70,6 +70,9 @@ const SolicitudesLlantas: React.FC<SolicitudesLlantasProps> = ({
       {
         accessorKey: 'id',
         header: 'Solicitud',
+        size: 65,
+        minSize: 55,
+        maxSize: 80,
         Cell: ({ cell }: { cell: MRT_Cell<Solicitudes> }) => {
           const ID = cell.getValue() as number;
           return (
@@ -81,11 +84,17 @@ const SolicitudesLlantas: React.FC<SolicitudesLlantasProps> = ({
       },
       {
         accessorKey: 'create_date',
-        header: 'Fecha de solicitud',
+        header: 'Fecha',
+        size: 65,
+        minSize: 55,
+        maxSize: 80,
       },
       {
         accessorKey: 'carta_porte',
         header: 'Carta porte',
+        size: 65,
+        minSize: 55,
+        maxSize: 80,
       },
       {
         accessorKey: 'operador',
@@ -109,6 +118,9 @@ const SolicitudesLlantas: React.FC<SolicitudesLlantasProps> = ({
       {
         accessorKey: 'vehiculo',
         header: 'Vehiculo',
+        size: 65,
+        minSize: 55,
+        maxSize: 80,
       },
       {
         accessorKey: 'ruta',
@@ -161,6 +173,9 @@ const SolicitudesLlantas: React.FC<SolicitudesLlantasProps> = ({
       {
         accessorKey: 'referencia_viaje',
         header: 'Viaje',
+        size: 65,
+        minSize: 55,
+        maxSize: 80,
       },
     ],
     [],

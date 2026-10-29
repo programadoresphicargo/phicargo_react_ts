@@ -71,30 +71,51 @@ const TablaProductos = ({ }) => {
       {
         accessorKey: 'id',
         header: 'ID',
+        size: 65,
+        minSize: 55,
+        maxSize: 80,
       },
       {
         accessorKey: 'x_name',
         header: 'Nombre',
+        size: 65,
+        minSize: 55,
+        maxSize: 80,
       },
       {
         accessorKey: 'create_date',
         header: 'Fecha creación',
+        size: 65,
+        minSize: 55,
+        maxSize: 80,
       },
       {
         accessorKey: 'x_tipo',
         header: 'Tipo',
+        size: 65,
+        minSize: 55,
+        maxSize: 80,
       },
       {
         accessorKey: 'disponible',
         header: 'Disponible',
+        size: 65,
+        minSize: 55,
+        maxSize: 80,
       },
       {
         accessorKey: 'reservado',
         header: 'Reservado',
+        size: 65,
+        minSize: 55,
+        maxSize: 80,
       },
       {
         accessorKey: 'total_unidades',
         header: 'Total',
+        size: 65,
+        minSize: 55,
+        maxSize: 80,
       },
     ],
     [],
@@ -139,7 +160,7 @@ const TablaProductos = ({ }) => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 260px)',
+        maxHeight: 'calc(100vh - 240px)',
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
@@ -148,12 +169,23 @@ const TablaProductos = ({ }) => {
         setID(row.original.id);
       },
     }),
-    muiTableBodyCellProps: () => ({
+    muiTableBodyCellProps: ({ row }) => ({
       sx: {
+        backgroundColor: row.subRows?.length
+          ? '#0456cf'
+          : row.index % 2 === 0
+            ? '#FFFFFF'
+            : '#F8F9FA',
+
         fontFamily: 'Inter',
         fontWeight: 'normal',
         fontSize: '12px',
-      },
+        padding: '4px 8px',
+
+        color: row.subRows?.length
+          ? '#FFFFFF'
+          : '#000000',
+      }
     }),
     renderTopToolbarCustomActions: () => (
       <Box
@@ -175,7 +207,8 @@ const TablaProductos = ({ }) => {
             className='text-white'
             startContent={<i className="bi bi-plus-lg"></i>}
             color='primary'
-            radius='full'
+            radius='md'
+            size='sm'
             isDisabled={false}
             onPress={async () => {
               setID(null);
@@ -189,7 +222,8 @@ const TablaProductos = ({ }) => {
           className='text-white'
           startContent={<i className="bi bi-arrow-clockwise"></i>}
           color='success'
-          radius='full'
+          radius='md'
+          size='sm'
           isDisabled={false}
           onPress={() => fetchData()}
         >Actualizar

@@ -220,7 +220,7 @@ const Solicitudes: React.FC<Props> = ({
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 245px)',
+        maxHeight: 'calc(100vh - 240px)',
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
@@ -264,7 +264,8 @@ const Solicitudes: React.FC<Props> = ({
         </h2>
 
         <Button
-          radius="full"
+          radius='md'
+          size='sm'
           className='text-white'
           startContent={<i className="bi bi-plus-lg"></i>}
           color='primary'
@@ -280,7 +281,8 @@ const Solicitudes: React.FC<Props> = ({
         </Button>
 
         <Button
-          radius="full"
+          radius='md'
+          size='sm'
           className='text-white'
           startContent={<i className="bi bi-arrow-clockwise"></i>}
           color='secondary'
@@ -289,7 +291,8 @@ const Solicitudes: React.FC<Props> = ({
         </Button>
 
         <Button
-          radius="full"
+          radius='md'
+          size='sm'
           color='success'
           className='text-white'
           startContent={<i className="bi bi-file-earmark-excel"></i>}
