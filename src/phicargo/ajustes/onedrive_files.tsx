@@ -213,20 +213,23 @@ const OnedriveFiles = ({ }) => {
         },
       },
     },
-    muiTableBodyCellProps: ({ row }) => {
-      return {
-        sx: {
-          backgroundColor: row.subRows?.length ? '#0456cf' : '#FFFFFF',
-          color: row.subRows?.length ? '#FFFFFF' : '#000000',
-          fontFamily: 'Inter',
-          fontWeight: 'normal',
-          fontSize: '12px',
-        },
-      };
-    },
+    muiTableBodyCellProps: ({ row }) => ({
+      sx: {
+        backgroundColor: row.subRows?.length
+          ? '#0456cf'
+          : row.index % 2 === 0
+            ? '#FFFFFF'
+            : '#F8F9FA',
+        fontFamily: 'Inter',
+        fontWeight: 'normal',
+        fontSize: '12px',
+        padding: '2px 4px',
+        color: row.subRows?.length ? '#FFFFFF' : '#000000',
+      },
+    }),
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 200px)',
+        maxHeight: 'calc(100vh - 190px)',
       },
     },
     renderTopToolbarCustomActions: () => (
@@ -257,9 +260,21 @@ const OnedriveFiles = ({ }) => {
           className='text-white'
           startContent={<i className="bi bi-file-earmark-excel"></i>}
           onPress={() => exportToCSV(data, columns, "onedrive_files.csv")}
-          radius='full'>
+          radius='md'
+          size='sm'>
           Exportar
         </Button>
+
+        <Button
+          color='warning'
+          className='text-white'
+          startContent={<i className="bi bi-file-earmark-excel"></i>}
+          onPress={() => fetchData()}
+          radius='md'
+          size='sm'>
+          Refrescar
+        </Button>
+
       </Box>
     ),
   });
