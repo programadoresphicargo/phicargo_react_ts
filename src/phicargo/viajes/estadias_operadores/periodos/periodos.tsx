@@ -13,7 +13,7 @@ import AbrirPeriodo from './modal_periodo';
 import PagosPeriodo from './folios_pago';
 import { Link } from '@heroui/react';
 import NavbarTravel from '../../navbar_viajes';
-const apiUrl = import.meta.env.VITE_ODOO_API_URL;
+import { OpenArchive } from '@/phicargo/utils/functions';
 
 const PagosEstadiasOperadores = ({ }) => {
 
@@ -92,8 +92,9 @@ const PagosEstadiasOperadores = ({ }) => {
                             isExternal={true}
                             className="text-white"
                             color="warning"
-                            href={`${apiUrl}/tms_travel/periodos_pagos_estadias_operadores/comprobante/` + id}
+                            onPress={() => OpenArchive(`/tms_travel/periodos_pagos_estadias_operadores/comprobante/${id}`)}
                             variant="solid"
+                            size='sm'
                         >
                             PDF
                         </Button>
@@ -184,7 +185,7 @@ const PagosEstadiasOperadores = ({ }) => {
                     startContent={<i className="bi bi-plus-lg"></i>}
                     color='success'
                     isDisabled={false}
-                    radius='full'
+                    radius='md'
                     onPress={() => {
                         handleClickOpenEO();
                     }}
@@ -198,7 +199,7 @@ const PagosEstadiasOperadores = ({ }) => {
                     isDisabled={false}
                     onPress={() => fetchData()}
                     size='sm'
-                    radius='full'
+                    radius='md'
                 >Actualizar
                 </Button>
                 <Button
@@ -207,7 +208,7 @@ const PagosEstadiasOperadores = ({ }) => {
                     startContent={<i className="bi bi-file-earmark-excel"></i>}
                     onPress={() => exportToCSV(data, columns, "viajes_activos.csv")}
                     size='sm'
-                    radius='full'>
+                    radius='md'>
                     Exportar
                 </Button>
             </Box >

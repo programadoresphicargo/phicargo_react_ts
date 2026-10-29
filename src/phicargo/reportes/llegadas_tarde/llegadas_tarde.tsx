@@ -11,8 +11,7 @@ import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import CustomNavbar from "@/pages/CustomNavbar";
 import { pages } from './pages';
 import dayjs from "dayjs";
-
-const apiUrl = import.meta.env.VITE_ODOO_API_URL;
+import { OpenArchive } from "@/phicargo/utils/functions";
 
 interface DepartureArrival {
   referencia: string;
@@ -303,7 +302,7 @@ const DetencionesTable = () => {
           as={Link}
           isExternal={true}
           color="danger"
-          href={`${apiUrl}/tms_travel/reporte_llegadas_tarde/?fecha_inicio=${range[0].toISOString().slice(0, 10)}&fecha_fin=${range[1].toISOString().slice(0, 10)}`}
+          onPress={() => OpenArchive(`/tms_travel/reporte_llegadas_tarde/?fecha_inicio=${range[0].toISOString().slice(0, 10)}&fecha_fin=${range[1].toISOString().slice(0, 10)}`)}
           variant="solid"
         >
           Reporte descuentos
