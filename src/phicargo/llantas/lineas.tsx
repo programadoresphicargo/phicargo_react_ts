@@ -228,7 +228,8 @@ const LlantasAsignadas: React.FC<SolicitudLlantaLineProps> = ({
         </h2>
 
         <Button
-          radius='full'
+          radius='md'
+          size='sm'
           className='text-white'
           startContent={<i className="bi bi-plus-lg"></i>}
           color='secondary'

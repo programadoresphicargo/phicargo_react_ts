@@ -208,7 +208,7 @@ const SolicitudesLlantas: React.FC<SolicitudesLlantasProps> = ({
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 240px)',
+        maxHeight: 'calc(100vh - 235px)',
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
@@ -218,11 +218,18 @@ const SolicitudesLlantas: React.FC<SolicitudesLlantasProps> = ({
         handleClickOpen();
       },
     }),
-    muiTableBodyCellProps: () => ({
+    muiTableBodyCellProps: ({ row }) => ({
       sx: {
+        backgroundColor: row.subRows?.length
+          ? '#0456cf'
+          : row.index % 2 === 0
+            ? '#FFFFFF'
+            : '#F8F9FA',
         fontFamily: 'Inter',
         fontWeight: 'normal',
         fontSize: '12px',
+        padding: '2px 4px',
+        color: row.subRows?.length ? '#FFFFFF' : '#000000',
       },
     }),
     renderTopToolbarCustomActions: () => (
@@ -258,7 +265,7 @@ const SolicitudesLlantas: React.FC<SolicitudesLlantasProps> = ({
         )}
 
         <Button
-          radius="full"
+          radius="md"
           className='text-white'
           startContent={<i className="bi bi-arrow-clockwise"></i>}
           color='secondary'
@@ -268,7 +275,7 @@ const SolicitudesLlantas: React.FC<SolicitudesLlantasProps> = ({
         </Button>
 
         <Button
-          radius="full"
+          radius="md"
           color='success'
           className='text-white'
           startContent={<i className="bi bi-file-earmark-excel"></i>}

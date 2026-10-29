@@ -275,7 +275,8 @@ const SolicitudFormLlantas: React.FC<SolicitudFormProps> = ({
 
                         {(!modoEdicion && (meta?.x_studio_status === 'borrador')) && (
                             <Button
-                                radius="full"
+                                radius="md"
+                                size="sm"
                                 color="primary"
                                 onPress={handleEdit}>
                                 Editar
@@ -284,7 +285,8 @@ const SolicitudFormLlantas: React.FC<SolicitudFormProps> = ({
 
                         {modoEdicion && (
                             <Button
-                                radius="full"
+                                radius="md"
+                                size="sm"
                                 onPress={() => handleSubmit(onSubmit)()}
                                 color={id_solicitud ? 'success' : 'primary'}
                                 isDisabled={isSaving}
@@ -295,7 +297,8 @@ const SolicitudFormLlantas: React.FC<SolicitudFormProps> = ({
                         )}
                         {meta?.x_studio_status === "borrador" && modoEdicion != true && (
                             <Button
-                                radius="full"
+                                radius="md"
+                                size="sm"
                                 color="success"
                                 className="text-white"
                                 onPress={() => changeState('confirmado')}
@@ -312,7 +315,8 @@ const SolicitudFormLlantas: React.FC<SolicitudFormProps> = ({
                         {((meta?.x_studio_status == "entregado" || meta?.x_studio_status == "recepcionado_operador")) && (
                             <>
                                 <Button
-                                    radius="full"
+                                    radius="md"
+                                    size="sm"
                                     color='warning'
                                     className='text-white'
                                     onPress={() => handleSubmit(DevolverLlantas)()}
@@ -321,7 +325,8 @@ const SolicitudFormLlantas: React.FC<SolicitudFormProps> = ({
                                     Devolver llantas
                                 </Button>
                                 <Button
-                                    radius="full"
+                                    radius="md"
+                                    size="sm"
                                     color='danger'
                                     className='text-white'
                                     onPress={() => changeState('cerrado')}
@@ -332,7 +337,8 @@ const SolicitudFormLlantas: React.FC<SolicitudFormProps> = ({
                             </>
                         )}
                         <Button
-                            radius="full"
+                            radius="md"
+                            size="sm"
                             color="success"
                             className="text-white"
                             as={Link}
@@ -343,7 +349,8 @@ const SolicitudFormLlantas: React.FC<SolicitudFormProps> = ({
                         </Button>
                         {(!modoEdicion && meta?.x_studio_status == 'borrador') && (
                             <Button
-                                radius="full"
+                                radius="md"
+                                size="sm"
                                 color="danger"
                                 className="text-white"
                                 onPress={() => setOpenCancelar(true)}

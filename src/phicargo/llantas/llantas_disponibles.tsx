@@ -113,7 +113,8 @@ const LlantasDisponibles: React.FC<LlantasDisponiblesProps> = ({
         </h1>
 
         <Button
-          radius='full'
+          radius='md'
+          size='sm'
           className="text-white"
           startContent={<i className="bi bi-arrow-clockwise"></i>}
           color="primary"
@@ -123,7 +124,8 @@ const LlantasDisponibles: React.FC<LlantasDisponiblesProps> = ({
         </Button>
 
         <Button
-          radius='full'
+          radius='md'
+          size='sm'
           className="text-white"
           color="secondary"
           isDisabled={Object.keys(rowSelection).length === 0} // deshabilitado si no hay selección
