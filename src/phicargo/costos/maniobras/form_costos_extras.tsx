@@ -25,7 +25,7 @@ import FormCE from "./facturas/form";
 import TimeLineCE from "./linea_tiempo";
 import Notas from "@/phicargo/viajes/seguimiento/notas";
 import { SelectInput } from "@/components/inputs";
-const apiUrl = import.meta.env.VITE_ODOO_API_URL;
+import { OpenArchive } from "@/phicargo/utils/open_archive";
 
 const initialForm: FolioCostoExtra = {
     id_folio: null,
@@ -339,7 +339,7 @@ const FormularioCostoExtra = ({ show, handleClose, id_folio }: { show: boolean, 
                                         )}
 
                                         {id_folio != null && (
-                                            <Button radius="md" color="danger" startContent={<i className="bi bi-filetype-pdf"></i>} showAnchorIcon href={`${apiUrl}/tms_travel/estadias/cortes/?id_folio=${id_folio}`} as={Link} isExternal={true} size="sm">
+                                            <Button radius="md" color="danger" startContent={<i className="bi bi-filetype-pdf"></i>} showAnchorIcon onPress={() => OpenArchive(`/tms_travel/estadias/cortes/?id_folio=${id_folio}`)} as={Link} isExternal={true} size="sm">
                                                 Cortes estadías PDF
                                             </Button>
                                         )}

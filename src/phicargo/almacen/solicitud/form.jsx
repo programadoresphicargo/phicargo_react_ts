@@ -29,8 +29,6 @@ import UploadFiles from "@/phicargo/onedrive/UploadFiles";
 import SelectEmpleado2 from "@/phicargo/descuentos/select_empleado_2";
 import { OpenArchive } from "@/phicargo/utils/open_archive";
 
-const apiUrl = import.meta.env.VITE_ODOO_API_URL;
-
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -386,7 +384,8 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, setID, vista, travel_i
                         )}
                         {((data?.x_studio_estado == "entregado" || data?.x_studio_estado == "recepcionado_operador") && data?.es_asignacion) && (
                             <Button
-                                radius="full"
+                                radius="md"
+                                size="sm"
                                 color='secondary'
                                 className='text-white'
                                 onPress={() => devolver()}
