@@ -307,10 +307,10 @@ const SolicitudFormLlantas: React.FC<SolicitudFormProps> = ({
                             </Button>
                         )}
                         {meta?.x_studio_status == "confirmado" && (
-                            <Button color='warning' className='text-white' onPress={() => changeState('borrador')} isLoading={isLoading} radius="full">Regresar a borrador</Button>
+                            <Button color='warning' className='text-white' onPress={() => changeState('borrador')} isLoading={isLoading} radius="md" size="sm">Regresar a borrador</Button>
                         )}
                         {meta?.x_studio_status == "confirmado" && (
-                            <Button color='success' className='text-white' onPress={() => changeState('entregado')} isLoading={isLoading} radius="full">Entregar</Button>
+                            <Button color='success' className='text-white' onPress={() => changeState('entregado')} isLoading={isLoading} radius="md" size="sm">Entregar</Button>
                         )}
                         {((meta?.x_studio_status == "entregado" || meta?.x_studio_status == "recepcionado_operador")) && (
                             <>
