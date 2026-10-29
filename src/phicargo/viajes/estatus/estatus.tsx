@@ -18,7 +18,7 @@ import { ViajeContext } from "../context/viajeContext";
 import odooApi from "@/api/odoo-api";
 import { tiempoTranscurrido } from "../../funciones/tiempo";
 import EvidenciasChecklistViaje from "./evidencias_checklist";
-import { OpenArchive } from "@/phicargo/utils/open_archive";
+import { OpenArchive } from "@/phicargo/utils/functions";
 
 const { VITE_ODOO_API_URL } = import.meta.env;
 

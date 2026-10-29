@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { exportToCSV } from '../utils/export';
 import CustomNavbar from "@/pages/CustomNavbar";
-import { OpenArchive } from "../utils/open_archive";
+import { OpenArchive } from "../utils/functions";
 
 type Resultado = 'correcto' | 'danoMenor' | 'danoMayor';
 

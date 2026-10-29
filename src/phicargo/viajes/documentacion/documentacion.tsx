@@ -16,7 +16,7 @@ import { toast } from 'react-toastify';
 import FormularioCorte from "./corte_estadias";
 import OneDriveViewer from "./viewer";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import { OpenArchive } from "@/phicargo/utils/open_archive";
+import { OpenArchive } from "@/phicargo/utils/functions";
 
 type Documentacion = {
   id_onedrive: string;

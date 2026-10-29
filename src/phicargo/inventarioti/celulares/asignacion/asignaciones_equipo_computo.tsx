@@ -16,7 +16,7 @@ import {
 import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
 import { exportToCSV } from '@/phicargo/utils/export';
-import { OpenArchive } from '@/phicargo/utils/open_archive';
+import { OpenArchive } from '@/phicargo/utils/functions';
 
 type AsignacionComputo = {
   id_asignacion: number;

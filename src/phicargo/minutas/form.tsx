@@ -22,7 +22,7 @@ import dayjs from 'dayjs';
 import { SelectItem } from '@/types';
 import { Empleado } from '../accesos/types/types';
 import TareasMinutas from './tareas';
-import { OpenArchive } from '../utils/open_archive';
+import { OpenArchive } from '../utils/functions';
 
 const initialForm: Minuta = {
   id_solicitante: null,

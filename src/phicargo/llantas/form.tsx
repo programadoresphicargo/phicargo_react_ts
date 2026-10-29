@@ -21,7 +21,7 @@ import LlantasAsignadas from "./lineas";
 import HistorialCambios from "../almacen/solicitud/cambios/epps";
 import { Controller, useForm } from "react-hook-form";
 import axios from "axios";
-import { OpenArchive } from "../utils/open_archive";
+import { OpenArchive } from "../utils/functions";
 
 type Meta = {
     x_studio_status?: string;

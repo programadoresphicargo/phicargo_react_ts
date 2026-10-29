@@ -40,7 +40,7 @@ import { Flota, OptionFlota } from './tipado';
 import { PosturasForm } from '@/modules/vehicles/components/PosturasForm';
 import Notas from '@/phicargo/viajes/seguimiento/notas';
 import MaintenanceRecordsVehicles from './maintenance-record';
-import { OpenArchive } from '@/phicargo/utils/open_archive';
+import { OpenArchive } from '@/phicargo/utils/functions';
 
 type Terminal = {
     id_terminal: number;

@@ -25,7 +25,7 @@ import FormCE from "./facturas/form";
 import TimeLineCE from "./linea_tiempo";
 import Notas from "@/phicargo/viajes/seguimiento/notas";
 import { SelectInput } from "@/components/inputs";
-import { OpenArchive } from "@/phicargo/utils/open_archive";
+import { OpenArchive } from "@/phicargo/utils/functions";
 
 const initialForm: FolioCostoExtra = {
     id_folio: null,

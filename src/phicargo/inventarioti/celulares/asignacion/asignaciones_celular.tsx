@@ -17,7 +17,7 @@ import { toast } from 'react-toastify';
 import ModalAsignacion from './form';
 import EmpleadosSinAsignarCelular from '../empleados/no_asignados/empleados_no_celulares';
 import { exportToCSV } from '@/phicargo/utils/export';
-import { OpenArchive } from '@/phicargo/utils/open_archive';
+import { OpenArchive } from '@/phicargo/utils/functions';
 
 type AsignacionCelular = {
   id_asignacion: number;

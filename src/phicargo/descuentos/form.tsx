@@ -18,7 +18,7 @@ import { parseDate } from "@internationalized/date";
 import dayjs from "dayjs";
 import { SelectEmpleado } from "./select_empleados";
 import { useAuthContext } from "@/modules/auth/hooks";
-import { OpenArchive } from "../utils/open_archive";
+import { OpenArchive } from "../utils/functions";
 
 const initialForm: Descuento = {
   id_descuento: null,

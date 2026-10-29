@@ -12,7 +12,7 @@ import { useState } from 'react';
 import ConfirmDialog from './ConfirmDialog';
 import { VehicleHistory } from './history/history';
 import BlockVehicleDialog from './block-vehicle';
-import { OpenArchive } from '@/phicargo/utils/open_archive';
+import { OpenArchive } from '@/phicargo/utils/functions';
 
 interface RegisterDetailForm {
   comment: string;

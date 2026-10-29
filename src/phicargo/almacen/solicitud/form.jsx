@@ -27,7 +27,7 @@ import CancelarSolicitudDialog from "./cancelar";
 import { Select, SelectItem, Link } from "@heroui/react";
 import UploadFiles from "@/phicargo/onedrive/UploadFiles";
 import SelectEmpleado2 from "@/phicargo/descuentos/select_empleado_2";
-import { OpenArchive } from "@/phicargo/utils/open_archive";
+import { OpenArchive } from "@/phicargo/utils/functions";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;

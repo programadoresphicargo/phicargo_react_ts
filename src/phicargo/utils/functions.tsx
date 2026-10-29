@@ -42,3 +42,14 @@ export const OpenArchive = async (url: string) => {
   }
  }
 };
+
+export const getAsset = async (ruta: string): Promise<Blob> => {
+ const response = await odooApi.get(
+  `/assets/${ruta}`,
+  {
+   responseType: "blob",
+  }
+ );
+
+ return response.data;
+};
