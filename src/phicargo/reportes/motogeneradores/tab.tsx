@@ -37,13 +37,17 @@ export default function IndexChecklistMotogeneradores() {
       },
      }}
     >
-     <Tab label="PDV" value="1" />
-     <Tab label="Checklist" value="2" />
+     <Tab label="Viaje" value="1" />
+     <Tab label="Maniobra" value="2" disabled />
+     <Tab label="Checklist" value="3" />
     </TabList>
     <TabPanel value="1" tabIndex={0} sx={{ p: 0, m: 0 }}>
      <PDVMaintenance></PDVMaintenance>
     </TabPanel>
     <TabPanel value="2" tabIndex={0} sx={{ p: 0, m: 0 }}>
+     <PDVMaintenance></PDVMaintenance>
+    </TabPanel>
+    <TabPanel value="3" tabIndex={0} sx={{ p: 0, m: 0 }}>
      <ChecklistMotogeneradores></ChecklistMotogeneradores>
     </TabPanel>
    </TabContext>

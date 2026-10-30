@@ -1,5 +1,4 @@
 import {
-  MRT_Cell,
   MRT_ColumnDef,
   MRT_ExpandAllButton,
   MaterialReactTable,
@@ -7,7 +6,7 @@ import {
 } from 'material-react-table';
 import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
-import { Button, Tooltip } from '@heroui/react';
+import { Button } from '@heroui/react';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { exportToCSV } from '../../utils/export';
 import odooApi from '@/api/odoo-api';
@@ -28,6 +27,7 @@ const PDVMaintenance = ({ }) => {
   const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
   const [range, setRange] = useState<[Date, Date] | null>([firstDay, lastDay]);
   const [grouping, setGrouping] = useState(['sucursal', 'date_order']);
+  const [selectedTravel, setSelectedTravel] = useState<any>(null);
 
   const [open, setOpen] = React.useState(false);
 
@@ -85,29 +85,6 @@ const PDVMaintenance = ({ }) => {
       header: 'Operador programado',
     },
     {
-      accessorKey: 'x_comentarios_maniobra',
-      header: 'Comentarios maniobra',
-      Cell: ({ cell }: { cell: MRT_Cell<PDV> }) => {
-
-        const value = cell.getValue<string>();
-
-        return (
-          <Tooltip
-            color="foreground"
-            content={
-              <div className="px-1 py-2">
-                <div className="text-small font-bold">Comentarios</div>
-                <div className="text-tiny">{value}</div>
-              </div>
-            }>
-            <span className="truncate block max-w-xs cursor-pointer">
-              {value}
-            </span>
-          </Tooltip>
-        );
-      },
-    },
-    {
       accessorKey: 'date_order',
       header: 'Fecha',
     },
@@ -116,16 +93,12 @@ const PDVMaintenance = ({ }) => {
       header: 'Sucursal',
     },
     {
-      accessorKey: 'terminal',
-      header: 'Terminal',
+      accessorKey: 'mg1',
+      header: 'Motogenerador 1',
     },
     {
-      accessorKey: 'operador_maniobra',
-      header: 'Operador maniobra',
-    },
-    {
-      accessorKey: 'vehiculo_maniobra',
-      header: 'Vehiculo maniobra',
+      accessorKey: 'mg2',
+      header: 'Motogenerador 2',
     },
     {
       accessorKey: 'referencias',
@@ -138,10 +111,6 @@ const PDVMaintenance = ({ }) => {
     {
       accessorKey: 'cliente',
       header: 'Cliente',
-    },
-    {
-      accessorKey: 'client_order_ref',
-      header: 'Referencia cliente',
     },
     {
       accessorKey: 'x_ruta_bel',
@@ -235,7 +204,7 @@ const PDVMaintenance = ({ }) => {
 
           const selection = window.getSelection()?.toString();
           if (selection) return;
-
+          setSelectedTravel(row.original);
           handleClickOpen();
         },
         style: {
@@ -332,7 +301,16 @@ const PDVMaintenance = ({ }) => {
   return (
     <>
       <MaterialReactTable table={table} />
-      <AsignacionMG open={open} handleClose={handleClose}></AsignacionMG>
+      {selectedTravel && (
+        <AsignacionMG
+          open={open}
+          handleClose={handleClose}
+          travelId={selectedTravel.id_viaje}
+          initialData={{
+            x_motogenerador_1: selectedTravel.x_motogenerador_1,
+            x_motogenerador_2: selectedTravel.x_motogenerador_2,
+          }}></AsignacionMG>
+      )}
     </>
   );
 };

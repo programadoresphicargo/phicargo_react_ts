@@ -34,7 +34,7 @@ import odooApi from "@/api/odoo-api";
 import { ChecklistPatioData, ChecklistPayload, ElementoChecklist, ResultadoChecklist, Vehiculo } from "./model";
 import Grid from "@mui/system/Grid";
 import toast from "react-hot-toast";
-import { Button } from "@heroui/react";
+import { Button, Progress } from "@heroui/react";
 
 // Importar los tipos del archivo correspondiente
 // import { Vehiculo, ElementoChecklist, ChecklistPatioData } from "./types";
@@ -363,19 +363,6 @@ export default function ChecklistPatio({
  // --------------------------------------------------
  // INTERFAZ
  // --------------------------------------------------
-
- if (loading) {
-  return (
-   <Box
-    display="flex"
-    justifyContent="center"
-    p={5}
-   >
-    <CircularProgress />
-   </Box>
-  );
- }
-
  return (
   <>
    <Button onPress={() => setOpen(true)} size="sm" color="primary" radius="md">Nuevo checklist</Button>
