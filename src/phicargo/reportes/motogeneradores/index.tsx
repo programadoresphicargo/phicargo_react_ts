@@ -192,6 +192,7 @@ const PDVMaintenance = ({ }) => {
     columnResizeMode: "onEnd",
     initialState: {
       grouping: ['sucursal', 'date_order'],
+      expanded: true,
       density: 'compact',
       showColumnFilters: true,
       pagination: { pageIndex: 0, pageSize: 80 },
