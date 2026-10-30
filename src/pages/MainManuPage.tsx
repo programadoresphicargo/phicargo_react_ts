@@ -130,9 +130,9 @@ const MainMenuPage = () => {
         backgroundImage: `
           linear-gradient(
             120deg,
-            rgba(7, 24, 55, 0.90) 0%,
-            rgba(0, 40, 135, 0.70) 48%,
-            rgba(0, 40, 135, 0.68) 100%
+            rgba(242, 140, 0, 0.90) 0%,
+            rgba(255, 107, 0, 0.80) 48%,
+            rgba(255, 107, 0, 0.90) 100%
           ),
           url(${fondo2})
         `,
