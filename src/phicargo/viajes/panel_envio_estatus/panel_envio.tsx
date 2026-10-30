@@ -15,7 +15,6 @@ import {
   Button,
   Card,
   CardBody,
-  Image,
   Input,
   Switch,
   Textarea,
