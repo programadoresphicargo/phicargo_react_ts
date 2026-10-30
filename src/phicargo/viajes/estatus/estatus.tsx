@@ -21,8 +21,6 @@ import EvidenciasChecklistViaje from "./evidencias_checklist";
 import { OpenArchive } from "@/phicargo/utils/functions";
 import { StepAvatar } from "@/phicargo/utils/stepAvatar";
 
-const { VITE_ODOO_API_URL } = import.meta.env;
-
 type EstatusHistorial = {
     nombre_estatus: string;
     tipo_registrante: string;
