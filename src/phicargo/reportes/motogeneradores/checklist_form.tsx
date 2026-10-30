@@ -31,7 +31,7 @@ import {
 } from "@mui/icons-material";
 
 import odooApi from "@/api/odoo-api";
-import { ChecklistPatioData, ChecklistPayload, ElementoChecklist, ResultadoChecklist, Vehiculo } from "./model";
+import { ChecklistPatioData, ChecklistPayload, ElementoChecklist, ResultadoChecklist, Vehiculo } from "./models";
 import Grid from "@mui/system/Grid";
 import toast from "react-hot-toast";
 import { Button, Progress } from "@heroui/react";

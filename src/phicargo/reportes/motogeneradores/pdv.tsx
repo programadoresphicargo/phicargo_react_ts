@@ -12,7 +12,7 @@ import { exportToCSV } from '../../utils/export';
 import odooApi from '@/api/odoo-api';
 import { DateRangePicker } from 'rsuite';
 import { Stack } from '@mui/material';
-import AsignacionMG from './asignacion_mg';
+import AsignacionMG from './asignacion_mg_form';
 
 type PDV = {
   id_viaje: number;

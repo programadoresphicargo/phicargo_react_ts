@@ -24,7 +24,7 @@ const DisponibilidadDiariaOperador = lazy(() => import('../phicargo/reportes/dis
 const Flota = lazy(() => import('../phicargo/reportes/flota'));
 const VehiculosAgrupados = lazy(() => import('../phicargo/reportes/vehiculos_agrupados'));
 const Preventivos = lazy(() => import('../phicargo/reportes/mantenimientos'));
-const Motogeneradores = lazy(() => import('../phicargo/reportes/motogeneradores/tab.tsx'));
+const Motogeneradores = lazy(() => import('../phicargo/reportes/motogeneradores/indexTab.tsx'));
 
 const PROJECTION_PERMISSION = 207;
 

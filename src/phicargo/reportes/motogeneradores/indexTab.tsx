@@ -4,9 +4,9 @@ import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import PDVMaintenance from '.';
+import PDVMaintenance from './pdv';
 import CustomNavbar from '@/pages/CustomNavbar';
-import ChecklistMotogeneradores from './table';
+import ChecklistMotogeneradores from './checklist_equipos';
 
 export default function IndexChecklistMotogeneradores() {
  const [value, setValue] = React.useState('1');
