@@ -42,6 +42,7 @@ import { ViajeContext } from '../context/viajeContext';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import { useJourneyDialogs } from '../seguimiento/funciones';
+import { AssetImage } from '@/phicargo/utils/asset';
 
 const { VITE_ODOO_API_URL } = import.meta.env;
 
@@ -598,9 +599,10 @@ function PanelEnvio({
 
                           <CardBody className="flex min-h-[125px] items-center justify-center gap-2 p-3">
 
-                            <Image
-                              src={`${VITE_ODOO_API_URL}/assets/trafico/estatus_operativos/${item.imagen}`}
+                            <AssetImage
+                              ruta={`trafico/estatus_operativos/${item.imagen}`}
                               className="h-[65px] w-[65px] object-contain"
+                              alt={item.imagen}
                             />
 
                             <span
@@ -640,9 +642,10 @@ function PanelEnvio({
 
                 <div className="mb-4 flex items-center gap-3 rounded-xl border border-[#002887]/20 bg-[#002887]/5 px-4 py-3">
 
-                  <Image
-                    src={`${VITE_ODOO_API_URL}/assets/trafico/estatus_operativos/${estatusSeleccionado?.imagen}`}
+                  <AssetImage
+                    ruta={`trafico/estatus_operativos/${estatusSeleccionado?.imagen}`}
                     className="h-12 w-12 object-contain"
+                    alt={estatusSeleccionado?.imagen}
                   />
 
                   <div>

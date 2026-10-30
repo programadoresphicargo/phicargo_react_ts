@@ -8,7 +8,7 @@ import { Box } from '@mui/material';
 import { Checkbox } from '@mui/material';
 import odooApi from '@/api/odoo-api';
 import toast from 'react-hot-toast';
-const { VITE_ODOO_API_URL } = import.meta.env;
+import { AssetImage } from '../utils/asset';
 
 type Estatus = {
   id_estatus: number;
@@ -68,10 +68,10 @@ const EstatusOperativos = ({ }) => {
           const imagen = row.original.imagen;
 
           return (
-            <img
-              height={50}
-              width={50}
-              src={VITE_ODOO_API_URL + `/assets/trafico/estatus_operativos/${imagen}`} />
+            <AssetImage
+              ruta={`trafico/estatus_operativos/${imagen}`}
+              className="h-[45px] w-[45px] object-contain"
+            />
           );
         },
       },
