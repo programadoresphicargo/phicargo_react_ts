@@ -19,6 +19,7 @@ import odooApi from "@/api/odoo-api";
 import { tiempoTranscurrido } from "../../funciones/tiempo";
 import EvidenciasChecklistViaje from "./evidencias_checklist";
 import { OpenArchive } from "@/phicargo/utils/functions";
+import { StepAvatar } from "@/phicargo/utils/stepAvatar";
 
 const { VITE_ODOO_API_URL } = import.meta.env;
 
@@ -452,15 +453,10 @@ function EstatusHistorial() {
                                                 `}
                                             >
 
-                                                <Avatar
-                                                    src={
-                                                        VITE_ODOO_API_URL +
-                                                        `/assets/trafico/estatus_operativos/${step.imagen}`
-                                                    }
-                                                    size="sm"
-                                                    radius="full"
+                                                <StepAvatar
+                                                    key={index}
+                                                    imagen={`trafico/estatus_operativos/${step.imagen}`}
                                                     color={config.color}
-                                                    className="h-8 w-8"
                                                 />
 
                                             </div>
