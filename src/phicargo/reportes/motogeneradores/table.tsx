@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import odooApi from '@/api/odoo-api';
 import { exportToCSV } from "@/phicargo/utils/export";
+import ChecklistPatio from "./checklist";
 
 type Resultado = 'correcto' | 'danoMenor' | 'danoMayor';
 
@@ -191,6 +192,7 @@ const ChecklistMotogeneradores = () => {
         >
           Recargar
         </Button>
+        <ChecklistPatio onSuccess={fetchData}></ChecklistPatio>
       </Box>
     ),
   })
