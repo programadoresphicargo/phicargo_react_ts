@@ -1,14 +1,7 @@
 import { useEffect, useState } from "react";
-import { Button, Chip, Progress, DatePicker } from "@heroui/react";
+import { Button, Chip, Progress, DatePicker, Alert, } from "@heroui/react";
 import Swal from "sweetalert2";
 import odooApi from "@/api/odoo-api";
-import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter
-} from "@heroui/modal";
 import { Controller, useForm } from "react-hook-form";
 import { NumberInput, SelectInput, TextareaInput } from "@/components/inputs";
 import { toast } from "react-toastify";
@@ -18,6 +11,8 @@ import dayjs from "dayjs";
 import { SelectEmpleado } from "./select_empleados";
 import { useAuthContext } from "@/modules/auth/hooks";
 import { OpenArchive } from "../utils/functions";
+import CancelDescuento from "./cancelar";
+import { Dialog, DialogActions, DialogContent } from "@mui/material";
 
 const initialForm: Descuento = {
   id_descuento: null,
@@ -29,7 +24,8 @@ const initialForm: Descuento = {
   comentarios: '',
   monto: 0,
   estado: "borrador",
-  fecha: dayjs()
+  fecha: dayjs(),
+  comentarios_cancelacion: null
 };
 
 export default function DescuentoForm({ open, handleClose, id_descuento }: { open: boolean, handleClose: () => void, id_descuento: number | null }) {
@@ -41,6 +37,7 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
   });
   const [isLoading, setLoading] = useState(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [openCancelForm, setOpenCancelForm] = useState<boolean>(false);
 
   const fetchData = async () => {
     setIsEditing(false);
@@ -67,7 +64,7 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
       reset(initialForm);
       setIsEditing(true);
     }
-  }, [open, id_descuento]);
+  }, [open, id_descuento, openCancelForm]);
 
   const Save = async (data: Descuento) => {
     try {
@@ -103,11 +100,24 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
       title: `¿Marcar como ${estado} el descuento?`,
       text: "Esta acción no se puede deshacer.",
       icon: "warning",
+      input: "textarea",
+      inputLabel: "Motivo del cambio de estado",
+      inputPlaceholder: "Escribe el motivo...",
       showCancelButton: true,
       confirmButtonText: "Sí, confirmar",
       cancelButtonText: "Cancelar",
       confirmButtonColor: "#2563eb",
       cancelButtonColor: "#d33",
+
+      // Evitar cierre accidental
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+
+      inputValidator: (value) => {
+        if (!value?.trim()) {
+          return "Debes ingresar un motivo para continuar.";
+        }
+      },
     });
     if (result.isConfirmed) {
       try {
@@ -123,28 +133,28 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
   };
 
   const estado = watch("estado");
+  const comentarios_cancelacion = watch("comentarios_cancelacion");
 
   return (
-    <Modal
-      isOpen={open}
-      scrollBehavior="outside"
-      onOpenChange={handleClose}
-      backdrop="transparent"
-      size="5xl"
-      classNames={{
-        base: "bg-[#f8fafc]",
-        header: "border-b border-slate-200",
-        body: "py-6",
-        footer: "border-t border-slate-200",
-        wrapper: "z-[2000]",
-      }}
-    >
-      <ModalContent>
-        {(onClose) => (
+    <>
+
+      {id_descuento && (
+        <CancelDescuento open={openCancelForm} onClose={() => setOpenCancelForm(false)} id={id_descuento}></CancelDescuento>
+      )}
+
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        maxWidth="lg"
+        fullWidth
+        scroll="body"
+      >
+        <DialogContent>
           <>
             {/* HEADER */}
-            <ModalHeader className="px-6 py-5">
-              <div className="w-full flex items-center justify-between gap-4">
+            <DialogContent className="px-6">
+
+              <div className="w-full flex items-center justify-between gap-4 mb-3">
 
                 <div>
                   <div className="flex items-center gap-3">
@@ -184,9 +194,6 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
                 )}
 
               </div>
-            </ModalHeader>
-
-            <ModalBody className="px-6">
 
               {isLoading && (
                 <Progress
@@ -198,6 +205,10 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
 
               {/* ACCIONES */}
               <div className="flex flex-wrap items-center justify-between gap-3">
+
+                {comentarios_cancelacion && (
+                  <Alert color="danger" variant="solid" description={comentarios_cancelacion} title={"Comentarios cancelación"}></Alert>
+                )}
 
                 <div className="flex flex-wrap gap-2">
 
@@ -284,7 +295,7 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
                           <Button
                             color="danger"
                             variant="flat"
-                            onPress={() => CambiarEstado("cancelado")}
+                            onPress={() => setOpenCancelForm(true)}
                             radius="md"
                             isLoading={isLoading}
                             size="sm"
@@ -485,23 +496,23 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
                 </div>
               </div>
 
-            </ModalBody>
+            </DialogContent>
 
-            <ModalFooter className="px-6">
+            <DialogActions className="px-6">
 
               <Button
                 color="default"
                 variant="light"
-                onPress={onClose}
+                onPress={handleClose}
                 radius="md"
               >
                 Cerrar
               </Button>
 
-            </ModalFooter>
+            </DialogActions>
           </>
-        )}
-      </ModalContent>
-    </Modal>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }

@@ -11,4 +11,5 @@ export type Descuento = {
  monto: number | null;
  fecha: Dayjs | null;
  estado: string;
+ comentarios_cancelacion: string | null;
 }
