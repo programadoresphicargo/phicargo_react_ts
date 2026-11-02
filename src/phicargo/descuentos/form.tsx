@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Button, Chip, Progress, DatePicker } from "@heroui/react";
 import Swal from "sweetalert2";
 import odooApi from "@/api/odoo-api";
-import { useDescuentos } from "./context";
 import {
   Modal,
   ModalContent,
@@ -41,10 +40,7 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
     defaultValues: initialForm,
   });
   const [isLoading, setLoading] = useState(false);
-  const {
-    isEditing,
-    setIsEditing,
-  } = useDescuentos();
+  const [isEditing, setIsEditing] = useState<boolean>(false);
 
   const fetchData = async () => {
     setIsEditing(false);
@@ -133,12 +129,14 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
       isOpen={open}
       scrollBehavior="outside"
       onOpenChange={handleClose}
+      backdrop="transparent"
       size="5xl"
       classNames={{
         base: "bg-[#f8fafc]",
         header: "border-b border-slate-200",
         body: "py-6",
         footer: "border-t border-slate-200",
+        wrapper: "z-[2000]",
       }}
     >
       <ModalContent>
@@ -208,6 +206,7 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
                       color="success"
                       onPress={() => handleSubmit(Save)()}
                       radius="md"
+                      size="sm"
                       className="font-semibold text-white"
                       isLoading={isLoading}
                     >
@@ -221,6 +220,7 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
                       onPress={() => setIsEditing(true)}
                       radius="md"
                       className="font-semibold text-white"
+                      size="sm"
                     >
                       Editar
                     </Button>
@@ -233,6 +233,7 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
                       radius="md"
                       className="font-semibold text-white"
                       isLoading={isLoading}
+                      size="sm"
                     >
                       Guardar cambios
                     </Button>
@@ -246,6 +247,7 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
                           variant="flat"
                           onPress={() => OpenArchive(`/descuentos/formato/${id_descuento}`)}
                           radius="md"
+                          size="sm"
                         >
                           Imprimir formato
                         </Button>
@@ -258,6 +260,7 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
                           onPress={() => CambiarEstado("confirmado")}
                           radius="md"
                           isLoading={isLoading}
+                          size="sm"
                         >
                           Confirmar
                         </Button>
@@ -270,6 +273,7 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
                           onPress={() => CambiarEstado("aplicado")}
                           radius="md"
                           isLoading={isLoading}
+                          size="sm"
                         >
                           Aplicar
                         </Button>
@@ -283,6 +287,7 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
                             onPress={() => CambiarEstado("cancelado")}
                             radius="md"
                             isLoading={isLoading}
+                            size="sm"
                           >
                             Cancelar
                           </Button>

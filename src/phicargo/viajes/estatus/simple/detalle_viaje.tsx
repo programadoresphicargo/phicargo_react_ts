@@ -1,11 +1,11 @@
 import odooApi from "@/api/odoo-api";
-import { Accordion, AccordionItem, Avatar, Chip, Progress } from "@heroui/react";
+import { Accordion, AccordionItem, Chip, Progress } from "@heroui/react";
 import { AppBar, Button, Dialog, DialogContent, Toolbar, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import EstatusDetalle, { Step } from "./estado";
 import { tiempoTranscurrido } from "@/phicargo/funciones/tiempo";
 import { getBadgeClass } from "../badgeClass";
-const { VITE_ODOO_API_URL } = import.meta.env;
+import { StepAvatar } from "@/phicargo/utils/stepAvatar";
 
 export default function DetalleEstatusViaje({
  id_viaje,
@@ -98,10 +98,10 @@ export default function DetalleEstatusViaje({
           </>
          }
          startContent={
-          <Avatar
-           isBordered
+          <StepAvatar
+           bordered
            color={`${getBadgeClass(step.tipo_registrante)}`}
-           src={VITE_ODOO_API_URL + `/assets/trafico/estatus_operativos/${step.imagen}`}
+           imagen={`trafico/estatus_operativos/${step.imagen}`}
           />
          }
          subtitle={step.fecha_envio ? tiempoTranscurrido(step.fecha_envio) : "Pendiente"}

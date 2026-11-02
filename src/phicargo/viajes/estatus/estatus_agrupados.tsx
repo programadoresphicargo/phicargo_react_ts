@@ -13,6 +13,7 @@ import { parseZonedDateTime } from "@internationalized/date";
 import { toast } from 'react-toastify';
 import { useAuthContext } from "@/modules/auth/hooks";
 import HistorialCambios from "@/phicargo/almacen/solicitud/cambios/epps";
+import { StepAvatar } from "@/phicargo/utils/stepAvatar";
 
 export type EstatusAgrupados = {
     nombre_estatus: string;
@@ -50,7 +51,6 @@ type PickerValue = {
     second: number;
 };
 
-const { VITE_ODOO_API_URL } = import.meta.env;
 
 function EstatusHistorialAgrupado({ id_reportes_agrupados, id_viaje }: { id_reportes_agrupados: number[], id_viaje: number }) {
 
@@ -160,10 +160,11 @@ function EstatusHistorialAgrupado({ id_reportes_agrupados, id_viaje }: { id_repo
                                 subtitle={tiempoTranscurrido(step.fecha_envio)}
                                 isCompact
                                 startContent={
-                                    <Avatar
-                                        isBordered
+                                    <StepAvatar
                                         color={`${getBadgeClass(step.tipo_registrante)}`}
-                                        src={VITE_ODOO_API_URL + `/assets/trafico/estatus_operativos/${step.imagen}`}
+                                        imagen={`trafico/estatus_operativos/${step.imagen}`}
+                                        bordered={true}
+                                        size="lg"
                                     />
                                 }
                             >

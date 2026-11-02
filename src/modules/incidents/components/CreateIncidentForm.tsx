@@ -25,6 +25,8 @@ import IncidentChip from './IncidentChip';
 import Swal from 'sweetalert2';
 import { useState } from 'react';
 import { SelectEmpleado } from '@/phicargo/descuentos/select_empleados';
+import DescuentoForm from '@/phicargo/descuentos/form';
+import React from 'react';
 
 interface Props {
   mode: "create" | "edit";
@@ -79,6 +81,7 @@ export const CreateIncidentForm = ({
   const isEditing = mode === "edit";
   const isConfirmedOrCanceled = isEditing && (incident?.state === "confirmed" || incident?.state === "canceled");
   const criticalDisabled = isConfirmedOrCanceled;
+  const [open, setOpen] = React.useState(false);
 
   const handleConfirm = () => {
     Swal.fire({
@@ -116,7 +119,8 @@ export const CreateIncidentForm = ({
           <Button
             color='success'
             className='text-white'
-            radius='full'
+            radius='md'
+            size='sm'
             onPress={Create}
             isLoading={isPending}
             isDisabled={criticalDisabled}
@@ -131,7 +135,8 @@ export const CreateIncidentForm = ({
               <Button
                 color="warning"
                 className="text-white"
-                radius="full"
+                radius='md'
+                size='sm'
                 onPress={() => setIsEditingEnabled(true)}
                 isDisabled={criticalDisabled}
               >
@@ -142,7 +147,8 @@ export const CreateIncidentForm = ({
             {isEditingEnabled && (
               <Button
                 color='primary'
-                radius='full'
+                radius='md'
+                size='sm'
                 onPress={Update}
                 isLoading={isPending}
                 isDisabled={criticalDisabled}
@@ -157,7 +163,8 @@ export const CreateIncidentForm = ({
                   isDisabled={incident?.state === "confirmed" || incident?.state === "canceled"}
                   onPress={() => handleConfirm()}
                   className='text-white'
-                  radius='full'
+                  radius='md'
+                  size='sm'
                 >
                   Confirmar incidencia
                 </Button>
@@ -166,7 +173,8 @@ export const CreateIncidentForm = ({
                   color="danger"
                   isDisabled={incident?.state === "confirmed" || incident?.state === "canceled"}
                   onPress={() => handleCancelIncident()}
-                  radius='full'
+                  radius='md'
+                  size='sm'
                 >
                   Cancelar incidencia
                 </Button>
@@ -505,7 +513,12 @@ export const CreateIncidentForm = ({
                 control={control}
                 name="id_descuento"
                 render={({ field }) => (
-                  <h1>Descuento: {field.value}</h1>
+                  <>
+                    <Button onPress={() => setOpen(true)} color='primary' size='sm'>Ver descuento</Button>
+                    {field.value && (
+                      <DescuentoForm open={open} handleClose={() => setOpen(false)} id_descuento={field.value}></DescuentoForm>
+                    )}
+                  </>
                 )}
               />
 
