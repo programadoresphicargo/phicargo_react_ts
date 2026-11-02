@@ -108,7 +108,6 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
       title: `¿Marcar como ${estado} el descuento?`,
       text: "Esta acción no se puede deshacer.",
       icon: "warning",
-      input: "textarea",
       inputLabel: "Motivo del cambio de estado",
       inputPlaceholder: "Escribe el motivo...",
       showCancelButton: true,
@@ -116,16 +115,8 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
       cancelButtonText: "Cancelar",
       confirmButtonColor: "#2563eb",
       cancelButtonColor: "#d33",
-
-      // Evitar cierre accidental
       allowOutsideClick: false,
       allowEscapeKey: false,
-
-      inputValidator: (value) => {
-        if (!value?.trim()) {
-          return "Debes ingresar un motivo para continuar.";
-        }
-      },
     });
     if (result.isConfirmed) {
       try {
