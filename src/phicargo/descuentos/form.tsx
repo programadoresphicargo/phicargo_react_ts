@@ -39,6 +39,14 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [openCancelForm, setOpenCancelForm] = useState<boolean>(false);
 
+  const handleCloseCancel = () => {
+    setOpenCancelForm(false);
+
+    if (id_descuento) {
+      fetchData();
+    }
+  };
+
   const fetchData = async () => {
     setIsEditing(false);
     try {
@@ -64,7 +72,7 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
       reset(initialForm);
       setIsEditing(true);
     }
-  }, [open, id_descuento, openCancelForm]);
+  }, [open, id_descuento]);
 
   const Save = async (data: Descuento) => {
     try {
@@ -139,7 +147,7 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
     <>
 
       {id_descuento && (
-        <CancelDescuento open={openCancelForm} onClose={() => setOpenCancelForm(false)} id={id_descuento}></CancelDescuento>
+        <CancelDescuento open={openCancelForm} onClose={handleCloseCancel} id={id_descuento}></CancelDescuento>
       )}
 
       <Dialog
