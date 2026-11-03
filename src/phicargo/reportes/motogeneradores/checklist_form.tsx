@@ -109,7 +109,11 @@ export default function ChecklistPatio({
       const checklistData: ElementoChecklist[] =
         checklistResponse.data.data ?? checklistResponse.data;
 
-      setVehicles(vehiclesData);
+      setVehicles(
+        vehiclesData.filter((vehicle) =>
+          vehicle.name2?.toLowerCase().startsWith("mg-")
+        )
+      );
 
       if (data) {
         const vehicle = vehiclesData.find(
@@ -291,22 +295,22 @@ export default function ChecklistPatio({
     setError("");
 
     if (!selectedVehicle) {
-      setError("Selecciona un vehículo.");
+      toast.error("Selecciona un vehículo.");
       return;
     }
 
     if (!userPin || userPin.length !== 4) {
-      setError("El PIN debe contener 4 dígitos.");
+      toast.error("El PIN debe contener 4 dígitos.");
       return;
     }
 
     if (!elements.length || pending > 0) {
-      setError("Debes completar todas las revisiones.");
+      toast.error("Debes completar todas las revisiones.");
       return;
     }
 
     if (!resultado) {
-      setError("Selecciona el estado de revisión.");
+      toast.error("Selecciona el estado de revisión.");
       return;
     }
 
@@ -375,11 +379,22 @@ export default function ChecklistPatio({
           }}
         >
           <Toolbar>
-            <Typography sx={{ fontSize: '20px', textTransform: 'uppercase', flex: 1 }} variant='h3'>
-              Registro de inspección de equipos
+            <Typography sx={{ fontSize: '20px', textTransform: 'uppercase', flex: 1, fontFamily: 'Inter' }} variant='h3'>
+              Inspección de equipos
             </Typography>
-            <Button autoFocus onPress={() => setOpen(false)} size="sm" radius="full">
+            <Button autoFocus onPress={() => setOpen(false)} size="sm" radius="md" variant="ghost" className="text-white">
               Cerrar
+            </Button>
+            <Button
+              size="sm"
+              color="success"
+              radius="md"
+              className="text-white"
+              startContent={<Save />}
+              disabled={saving || loading}
+              onPress={handleSubmit}
+            >
+              {saving ? "Guardando..." : "Guardar checklist"}
             </Button>
           </Toolbar>
         </AppBar>
@@ -662,19 +677,6 @@ export default function ChecklistPatio({
                   </TextField>
                 </CardContent>
               </Card>
-
-              {/* GUARDAR */}
-
-              <Button
-                color="success"
-                className="text-white"
-                fullWidth
-                startContent={<Save />}
-                disabled={saving || loading}
-                onPress={handleSubmit}
-              >
-                {saving ? "Guardando..." : "Guardar checklist"}
-              </Button>
 
             </Stack>
 

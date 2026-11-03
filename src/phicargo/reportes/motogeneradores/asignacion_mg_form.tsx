@@ -196,7 +196,7 @@ const AsignacionMG = ({
       open={open}
       onClose={isLoading ? undefined : handleClose}
       fullWidth
-      maxWidth="sm"
+      maxWidth="lg"
       PaperProps={{
         sx: {
           borderRadius: 3,
