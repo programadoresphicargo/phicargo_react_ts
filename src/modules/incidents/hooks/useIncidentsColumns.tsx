@@ -10,6 +10,14 @@ export const useIncidentsColumns = () => {
   const columns = useMemo<MRT_ColumnDef<Incident>[]>(
     () => [
       {
+        accessorFn: (row) => row.state,
+        header: 'Estado',
+        id: 'state',
+        Cell: ({ row }) => {
+          return <IncidentChip incident={row.original}></IncidentChip>
+        },
+      },
+      {
         accessorFn: (row) => row.incident,
         header: 'Incidencia',
         id: 'incident',
@@ -101,14 +109,6 @@ export const useIncidentsColumns = () => {
         Cell: ({ row }) => {
           const value = row.original.createdAt.format('DD/MM/YYYY hh:mm A');
           return <p>{value}</p>;
-        },
-      },
-      {
-        accessorFn: (row) => row.state,
-        header: 'Estado',
-        id: 'state',
-        Cell: ({ row }) => {
-          return <IncidentChip incident={row.original}></IncidentChip>
         },
       },
       {

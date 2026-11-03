@@ -1,6 +1,7 @@
 import type { UserBasicApi } from '@/modules/auth/models';
 import { IncidentType } from '../incident-models';
 import { OneDriveFileApi } from '@/modules/core/models/api';
+import { Mail } from '@/phicargo/almacen/solicitud/cambios/epps';
 
 export interface DriverInfoApi {
   id: number;
@@ -27,6 +28,7 @@ interface IncidentBaseApi {
   is_driver_responsible: boolean;
   state: string | null;
   comentarios_cancelacion: string | null;
+  mails: Mail[]
 }
 
 export interface DescuentoApi {

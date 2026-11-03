@@ -76,7 +76,8 @@ export class IncidentAdapter {
       evidences: incident.evidences?.map(FilesAdapter.toOneDriveFile) ?? [],
       state: incident.state,
       descuento: incident.descuento ? IncidentAdapter.descuentoInfoToLocal(incident.descuento) : null,
-      comentarios_cancelacion: incident.comentarios_cancelacion
+      comentarios_cancelacion: incident.comentarios_cancelacion,
+      mails: incident.mails
     };
   }
 
@@ -104,7 +105,8 @@ export class IncidentAdapter {
       discountComments: incident.discountComments,
       periodicidad: incident.periodicidad,
       id_solicitante: incident.id_solicitante,
-      comentarios_cancelacion: incident.comentarios_cancelacion
+      comentarios_cancelacion: incident.comentarios_cancelacion,
+      mails: incident.mails
     };
   }
 

@@ -1,6 +1,7 @@
 import type { Dayjs } from 'dayjs';
 import type { UserBasic } from '../../auth/models';
 import { OneDriveFile } from '@/modules/core/models';
+import { Mail } from '@/phicargo/almacen/solicitud/cambios/epps';
 
 export type IncidentType = 'operative' | 'legal' | 'cleaning' | 'maintenance';
 
@@ -29,6 +30,7 @@ interface IncidentBase {
   isDriverResponsible: boolean;
   state: string | null;
   comentarios_cancelacion: string | null;
+  mails: Mail[];
 }
 
 export interface Descuento {

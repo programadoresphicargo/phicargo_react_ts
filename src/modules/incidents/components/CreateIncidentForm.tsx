@@ -28,6 +28,7 @@ import DescuentoForm from '@/phicargo/descuentos/form';
 import React from 'react';
 import CancelarIncidenciaForm from './cancelar';
 import { Incident } from '../models';
+import HistorialCambios from '@/phicargo/almacen/solicitud/cambios/epps';
 
 interface Props {
   mode: "create" | "edit";
@@ -48,7 +49,7 @@ export const CreateIncidentForm = ({
   inspection_id2,
 }: Props) => {
   const {
-    form: { control, setValue },
+    form: { control, setValue, getValues },
 
     files,
     setFiles,
@@ -100,6 +101,9 @@ export const CreateIncidentForm = ({
     setOpenCancelForm(false);
     onCancel?.();
   };
+
+  const mails = getValues("mails");
+  console.log(incident?.mails);
 
   return (
     <>
@@ -673,10 +677,9 @@ export const CreateIncidentForm = ({
               Historial de cambios
             </h3>
             <p className="text-xs text-muted-foreground mt-1">
-              
             </p>
 
-            {/* TODO: Insertar aquí el componente de historial de cambios */}
+            <HistorialCambios data={incident?.mails ?? []}></HistorialCambios>
           </aside>
         </div>
 
