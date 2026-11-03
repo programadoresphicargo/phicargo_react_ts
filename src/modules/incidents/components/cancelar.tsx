@@ -1,7 +1,8 @@
 import { Button, Textarea } from "@heroui/react";
-import { Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import { AppBar, Dialog, DialogActions, DialogContent, IconButton, Toolbar, Typography } from "@mui/material";
 import { useCreateIncidentForm } from "../hooks/useCreateIncidentForm";
 import { useState } from "react";
+import { CloseIcon } from "yet-another-react-lightbox";
 
 const CancelarIncidenciaForm = ({ open, onClose, id }: { open: boolean, onClose: () => void, id: number }) => {
 
@@ -25,9 +26,30 @@ const CancelarIncidenciaForm = ({ open, onClose, id }: { open: boolean, onClose:
                     zIndex: 2000,
                 },
             }}>
-            <DialogTitle>
-                ¿Deseas cancelar este descuento?
-            </DialogTitle>
+            <AppBar position="static" elevation={0} color="transparent">
+                <Toolbar>
+                    <Typography
+                        variant="h6"
+                        sx={{
+                            fontWeight: 700,
+                            fontSize: "1rem",
+                            flexGrow: 1,
+                            fontFamily: "Inter"
+                        }}
+                    >
+                        ¿Deseas cancelar este descuento?
+                    </Typography>
+
+                    <IconButton
+                        edge="end"
+                        onClick={onClose}
+                        color="inherit"
+                        aria-label="Cerrar"
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                </Toolbar>
+            </AppBar>
             <DialogContent>
                 <Textarea
                     isRequired
