@@ -30,7 +30,6 @@ interface IncidentBase {
   isDriverResponsible: boolean;
   state: string | null;
   comentarios_cancelacion: string | null;
-  mails?: Mail[];
 }
 
 export interface Descuento {
@@ -53,6 +52,7 @@ export interface Incident extends IncidentBase {
   attendedAt: Dayjs | null;
   evidences: OneDriveFile[];
   descuento: Descuento | null;
+  mails?: Mail[];
 }
 
 export interface IncidentCreate extends IncidentBase {

@@ -28,7 +28,6 @@ interface IncidentBaseApi {
   is_driver_responsible: boolean;
   state: string | null;
   comentarios_cancelacion: string | null;
-  mails: Mail[]
 }
 
 export interface DescuentoApi {
@@ -51,6 +50,7 @@ export interface IncidentApi extends IncidentBaseApi {
   attended_at: string | null;
   evidences: OneDriveFileApi[];
   descuento: DescuentoApi | null;
+  mails: Mail[]
 }
 
 export interface IncidentCreateApi extends IncidentBaseApi {
