@@ -30,7 +30,7 @@ interface IncidentBase {
   isDriverResponsible: boolean;
   state: string | null;
   comentarios_cancelacion: string | null;
-  mails: Mail[];
+  mails?: Mail[];
 }
 
 export interface Descuento {

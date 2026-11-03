@@ -106,7 +106,7 @@ export class IncidentAdapter {
       periodicidad: incident.periodicidad,
       id_solicitante: incident.id_solicitante,
       comentarios_cancelacion: incident.comentarios_cancelacion,
-      mails: incident.mails
+      mails: incident.mails ?? []
     };
   }
 
