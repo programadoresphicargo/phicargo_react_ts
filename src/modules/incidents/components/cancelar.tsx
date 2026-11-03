@@ -37,7 +37,7 @@ const CancelarIncidenciaForm = ({ open, onClose, id }: { open: boolean, onClose:
                             fontFamily: "Inter"
                         }}
                     >
-                        ¿Deseas cancelar este descuento?
+                        ¿Deseas cancelar este registro?
                     </Typography>
 
                     <IconButton

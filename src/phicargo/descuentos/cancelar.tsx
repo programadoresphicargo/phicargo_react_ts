@@ -55,7 +55,7 @@ const CancelDescuento = ({ open, onClose, id }: { open: boolean, onClose: () => 
                 },
             }}>
             <DialogTitle>
-                ¿Deseas cancelar este descuento?
+                ¿Deseas cancelar este registro?
             </DialogTitle>
             <DialogContent>
                 <TextareaInput
