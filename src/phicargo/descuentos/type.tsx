@@ -1,4 +1,5 @@
 import { Dayjs } from "dayjs";
+import { Mail } from "../almacen/solicitud/cambios/epps";
 
 export type Descuento = {
  id_descuento: number | null;
@@ -12,4 +13,5 @@ export type Descuento = {
  fecha: Dayjs | null;
  estado: string;
  comentarios_cancelacion: string | null;
+ mails?: Mail[];
 }

@@ -13,6 +13,7 @@ import { useAuthContext } from "@/modules/auth/hooks";
 import { OpenArchive } from "../utils/functions";
 import CancelDescuento from "./cancelar";
 import { Dialog, DialogActions, DialogContent } from "@mui/material";
+import HistorialCambios from "../almacen/solicitud/cambios/epps";
 
 const initialForm: Descuento = {
   id_descuento: null,
@@ -138,6 +139,7 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
 
   const estado = watch("estado");
   const comentarios_cancelacion = watch("comentarios_cancelacion");
+  const mails = watch("mails");
 
   return (
     <>
@@ -149,7 +151,7 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
       <Dialog
         open={open}
         onClose={handleClose}
-        maxWidth="lg"
+        maxWidth="xl"
         fullWidth
         scroll="body"
       >
@@ -208,7 +210,7 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
               )}
 
               {/* ACCIONES */}
-              <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
 
                 {comentarios_cancelacion && (
                   <Alert color="danger" variant="solid" description={comentarios_cancelacion} title={"Comentarios cancelación"}></Alert>
@@ -313,191 +315,208 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
                 </div>
               </div>
 
-              {/* SOLICITANTE / EMPLEADO */}
-              <div className="mt-6 rounded-2xl border border-slate-200 bg-white shadow-sm">
+              <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,2fr)_minmax(280px,1fr)] gap-6 items-start">
+                {/* Área principal */}
+                <div className="flex flex-col gap-6 min-w-0">
 
-                <div className="border-b border-slate-200 px-5 py-4">
-                  <h3 className="text-sm font-semibold text-slate-800">
-                    Participantes
-                  </h3>
+                  {/* SOLICITANTE / EMPLEADO */}
+                  <div className="rounded-2xl border border-slate-200 bg-white shadow-sm">
 
-                  <p className="mt-1 text-xs text-slate-500">
-                    Define quién solicita y a quién se aplicará el descuento.
-                  </p>
-                </div>
+                    <div className="border-b border-slate-200 px-5 py-4">
+                      <h3 className="text-sm font-semibold text-slate-800">
+                        Participantes
+                      </h3>
 
-                <div className="grid grid-cols-1 gap-5 p-5 md:grid-cols-2">
-
-                  <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-4">
-
-                    <div className="mb-4">
-                      <p className="text-sm font-semibold text-slate-700">
-                        Solicitante
-                      </p>
-
-                      <p className="text-xs text-slate-500">
-                        Responsable que genera la solicitud.
+                      <p className="mt-1 text-xs text-slate-500">
+                        Define quién solicita y a quién se aplicará el descuento.
                       </p>
                     </div>
 
-                    <SelectEmpleado
-                      control={control}
-                      rules={{
-                        required: "Solicitante requerido",
-                      }}
-                      name="id_solicitante"
-                      label="Solicitante"
-                      variant="bordered"
-                      isDisabled={!isEditing}
-                    />
+                    <div className="grid grid-cols-1 gap-5 p-5 md:grid-cols-2">
 
-                  </div>
+                      <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-4">
 
-                  <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-4">
+                        <div className="mb-4">
+                          <p className="text-sm font-semibold text-slate-700">
+                            Solicitante
+                          </p>
 
-                    <div className="mb-4">
-                      <p className="text-sm font-semibold text-slate-700">
-                        Empleado
-                      </p>
+                          <p className="text-xs text-slate-500">
+                            Responsable que genera la solicitud.
+                          </p>
+                        </div>
 
-                      <p className="text-xs text-slate-500">
-                        Persona a quien se aplicará el descuento.
-                      </p>
-                    </div>
-
-                    <SelectEmpleado
-                      control={control}
-                      name="id_empleado"
-                      label="Empleado"
-                      rules={{
-                        required: "Empleado requerido",
-                      }}
-                      placeholder="Empleado responsable del descuento"
-                      variant="bordered"
-                      isDisabled={!isEditing}
-                    />
-
-                  </div>
-
-                </div>
-              </div>
-
-              {/* DETALLES */}
-              <div className="mt-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
-
-                <div className="border-b border-slate-200 px-5 py-4">
-                  <h3 className="text-sm font-semibold text-slate-800">
-                    Información del descuento
-                  </h3>
-
-                  <p className="mt-1 text-xs text-slate-500">
-                    Registra los datos financieros y administrativos asociados.
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-1 gap-5 p-5 md:grid-cols-2">
-
-                  <Controller
-                    control={control}
-                    name="fecha"
-                    rules={{
-                      required: "Fecha de incidencia requerida",
-                    }}
-                    render={({ field, fieldState }) => {
-                      const calendarValue = field.value
-                        ? parseDate(field.value.format("YYYY-MM-DD"))
-                        : null;
-
-                      return (
-                        <DatePicker
-                          label="Fecha de incidencia"
+                        <SelectEmpleado
+                          control={control}
+                          rules={{
+                            required: "Solicitante requerido",
+                          }}
+                          name="id_solicitante"
+                          label="Solicitante"
                           variant="bordered"
                           isDisabled={!isEditing}
-                          value={calendarValue}
-                          onChange={(val) => {
-                            field.onChange(
-                              val
-                                ? dayjs(val.toString())
-                                : null
-                            );
-                          }}
-                          isInvalid={!!fieldState.error}
-                          errorMessage={fieldState.error?.message}
                         />
-                      );
-                    }}
-                  />
 
-                  <SelectInput
-                    isDisabled={!isEditing}
-                    control={control}
-                    name="periodicidad"
-                    label="Periodicidad"
-                    variant="bordered"
-                    items={[
-                      {
-                        value: "Viaje",
-                        key: "viaje",
-                      },
-                      {
-                        value: "Quincenal",
-                        key: "quincenal",
-                      },
-                    ]}
-                    rules={{
-                      required: "Periodicidad obligatoria",
-                    }}
-                  />
+                      </div>
 
-                  <NumberInput
-                    control={control}
-                    label="Monto"
-                    name="monto"
-                    isDisabled={!isEditing}
-                    variant="bordered"
-                    rules={{
-                      required: "Monto obligatorio",
-                    }}
-                  />
+                      <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-4">
 
-                  <NumberInput
-                    control={control}
-                    name="importe"
-                    label="Importe"
-                    isDisabled={!isEditing}
-                    variant="bordered"
-                    rules={{
-                      required: "Importe obligatorio",
-                    }}
-                  />
+                        <div className="mb-4">
+                          <p className="text-sm font-semibold text-slate-700">
+                            Empleado
+                          </p>
 
-                  <div className="md:col-span-2">
-                    <TextareaInput
-                      control={control}
-                      name="motivo"
-                      label="Motivo"
-                      variant="bordered"
-                      isDisabled={!isEditing}
-                      rules={{
-                        required: "Motivo obligatorio",
-                      }}
-                    />
+                          <p className="text-xs text-slate-500">
+                            Persona a quien se aplicará el descuento.
+                          </p>
+                        </div>
+
+                        <SelectEmpleado
+                          control={control}
+                          name="id_empleado"
+                          label="Empleado"
+                          rules={{
+                            required: "Empleado requerido",
+                          }}
+                          placeholder="Empleado responsable del descuento"
+                          variant="bordered"
+                          isDisabled={!isEditing}
+                        />
+
+                      </div>
+
+                    </div>
                   </div>
 
-                  <div className="md:col-span-2">
-                    <TextareaInput
-                      control={control}
-                      name="comentarios"
-                      label="Comentarios"
-                      variant="bordered"
-                      isDisabled={!isEditing}
-                      rules={{
-                        required: "Comentarios obligatorios",
-                      }}
-                    />
-                  </div>
+                  {/* DETALLES */}
+                  <div className="mt-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
 
+                    <div className="border-b border-slate-200 px-5 py-4">
+                      <h3 className="text-sm font-semibold text-slate-800">
+                        Información del descuento
+                      </h3>
+
+                      <p className="mt-1 text-xs text-slate-500">
+                        Registra los datos financieros y administrativos asociados.
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 gap-5 p-5 md:grid-cols-2">
+
+                      <Controller
+                        control={control}
+                        name="fecha"
+                        rules={{
+                          required: "Fecha de incidencia requerida",
+                        }}
+                        render={({ field, fieldState }) => {
+                          const calendarValue = field.value
+                            ? parseDate(field.value.format("YYYY-MM-DD"))
+                            : null;
+
+                          return (
+                            <DatePicker
+                              label="Fecha de incidencia"
+                              variant="bordered"
+                              isDisabled={!isEditing}
+                              value={calendarValue}
+                              onChange={(val) => {
+                                field.onChange(
+                                  val
+                                    ? dayjs(val.toString())
+                                    : null
+                                );
+                              }}
+                              isInvalid={!!fieldState.error}
+                              errorMessage={fieldState.error?.message}
+                            />
+                          );
+                        }}
+                      />
+
+                      <SelectInput
+                        isDisabled={!isEditing}
+                        control={control}
+                        name="periodicidad"
+                        label="Periodicidad"
+                        variant="bordered"
+                        items={[
+                          {
+                            value: "Viaje",
+                            key: "viaje",
+                          },
+                          {
+                            value: "Quincenal",
+                            key: "quincenal",
+                          },
+                        ]}
+                        rules={{
+                          required: "Periodicidad obligatoria",
+                        }}
+                      />
+
+                      <NumberInput
+                        control={control}
+                        label="Monto"
+                        name="monto"
+                        isDisabled={!isEditing}
+                        variant="bordered"
+                        rules={{
+                          required: "Monto obligatorio",
+                        }}
+                      />
+
+                      <NumberInput
+                        control={control}
+                        name="importe"
+                        label="Importe"
+                        isDisabled={!isEditing}
+                        variant="bordered"
+                        rules={{
+                          required: "Importe obligatorio",
+                        }}
+                      />
+
+                      <div className="md:col-span-2">
+                        <TextareaInput
+                          control={control}
+                          name="motivo"
+                          label="Motivo"
+                          variant="bordered"
+                          isDisabled={!isEditing}
+                          rules={{
+                            required: "Motivo obligatorio",
+                          }}
+                        />
+                      </div>
+
+                      <div className="md:col-span-2">
+                        <TextareaInput
+                          control={control}
+                          name="comentarios"
+                          label="Comentarios"
+                          variant="bordered"
+                          isDisabled={!isEditing}
+                          rules={{
+                            required: "Comentarios obligatorios",
+                          }}
+                        />
+                      </div>
+
+                    </div>
+                  </div>
                 </div>
+
+                <aside className="min-w-0 rounded-lg border border-default-200 p-4">
+                  <h3 className="text-medium font-bold text-muted-foreground">
+                    Historial de cambios
+                  </h3>
+                  <p className="text-xs text-muted-foreground mt-1">
+                  </p>
+
+                  <HistorialCambios data={mails ?? []}></HistorialCambios>
+                </aside>
+
               </div>
 
             </DialogContent>
@@ -516,7 +535,7 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
             </DialogActions>
           </>
         </DialogContent>
-      </Dialog>
+      </Dialog >
     </>
   );
 }
