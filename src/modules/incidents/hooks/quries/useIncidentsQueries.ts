@@ -63,9 +63,17 @@ export const useIncidentsQueries = ({ driverId, startDate, endDate }: Config) =>
   });
 
   const confirmIncidentMutation = useMutation({
-    mutationFn: async ({ id, state }: { id: number; state: "confirmed" | "canceled" }) => {
+    mutationFn: async ({ id, state, comentarios }: { id: number; state: "confirmed" | "canceled", comentarios?: string }) => {
       const response = await odooApi.put(
-        `/drivers/incidents/state/${id}?state=${state}` // 👈 pasamos el estado en query
+        `/drivers/incidents/state/${id}?state=${state}`, // 👈 pasamos el estado en query
+        null,
+        {
+          params: {
+            ...(state === "canceled" && comentarios
+              ? { comentarios }
+              : {}),
+          },
+        }
       );
       return response.data;
     },
@@ -74,11 +82,13 @@ export const useIncidentsQueries = ({ driverId, startDate, endDate }: Config) =>
         queryKey: [DRIVER_INCIDENTS_KEY],
         exact: false,
       });
-      toast.success(data.message || "Incidencia confirmada");
+      toast.success(data.message || "Incidencia actualizada");
     },
     onError: (err: any) => {
       console.error("Error completo:", err);
-      const detail = err.response?.data?.detail || "Error al confirmar incidencia";
+      const detail =
+        err.response?.data?.detail ||
+        "Error al actualizar incidencia";
       toast.error(detail);
     },
   });

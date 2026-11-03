@@ -1,6 +1,6 @@
 import { Divider } from '@mui/material';
 import { FileUploadInput } from '@/components/inputs';
-import { Button } from '@heroui/react';
+import { Alert, Button } from '@heroui/react';
 import {
   useCreateIncidentForm,
   INCIDENT_TYPES,
@@ -27,10 +27,12 @@ import { useState } from 'react';
 import { SelectEmpleado } from '@/phicargo/descuentos/select_empleados';
 import DescuentoForm from '@/phicargo/descuentos/form';
 import React from 'react';
+import CancelarIncidenciaForm from './cancelar';
+import { Incident } from '../models';
 
 interface Props {
   mode: "create" | "edit";
-  incident?: any;
+  incident?: Incident;
   onCancel?: () => void;
   onSuccess?: () => void;
   onError?: (error: Error) => void;
@@ -68,7 +70,6 @@ export const CreateIncidentForm = ({
     isPending,
     isDirectionReport,
     confirmIncident,
-    cancelIncident,
   } = useCreateIncidentForm({
     mode,
     incident,
@@ -94,592 +95,602 @@ export const CreateIncidentForm = ({
     });
   };
 
-  const handleCancelIncident = () => {
-    Swal.fire({
-      title: "¿Cancelar incidencia?",
-      icon: "warning",
-      showCancelButton: true,
-    }).then((r) => {
-      if (r.isConfirmed) cancelIncident();
-    });
+  const [openCancelForm, setOpenCancelForm] = useState<boolean>(false);
+
+  const handleCloseCancel = () => {
+    setOpenCancelForm(false);
+    onCancel?.();
   };
 
   return (
-    <form className="mt-6 transition-all duration-300 ease-in-out">
+    <>
+      {(incident &&
+        <CancelarIncidenciaForm open={openCancelForm} onClose={handleCloseCancel} id={incident.id}></CancelarIncidenciaForm>
+      )}
 
-      <div className="flex items-center justify-start pb-5 gap-4">
-        {incident && (
-          <div className='pb-5'>
-            <h2>Incidencia: {incident.id}</h2>
-            <IncidentChip incident={incident} />
-          </div>
-        )}
+      <form className="mt-6 transition-all duration-300 ease-in-out">
 
-        {!isEditing && (
-          <Button
-            color='success'
-            className='text-white'
-            radius='md'
-            size='sm'
-            onPress={Create}
-            isLoading={isPending}
-            isDisabled={criticalDisabled}
-          >Registrar
-          </Button>
-        )}
+        <div className="flex items-center justify-start pb-5 gap-4">
+          {incident && (
+            <div className='pb-5'>
+              <h2>Incidencia: {incident.id}</h2>
+              <IncidentChip incident={incident} />
+            </div>
+          )}
 
-        {isEditing && (
-          <>
+          {!isEditing && (
+            <Button
+              color='success'
+              className='text-white'
+              radius='md'
+              size='sm'
+              onPress={Create}
+              isLoading={isPending}
+              isDisabled={criticalDisabled}
+            >Registrar
+            </Button>
+          )}
 
-            {!isEditingEnabled && (
-              <Button
-                color="warning"
-                className="text-white"
-                radius='md'
-                size='sm'
-                onPress={() => setIsEditingEnabled(true)}
-                isDisabled={criticalDisabled}
-              >
-                Editar
-              </Button>
-            )}
+          {isEditing && (
+            <>
 
-            {isEditingEnabled && (
-              <Button
-                color='primary'
-                radius='md'
-                size='sm'
-                onPress={Update}
-                isLoading={isPending}
-                isDisabled={criticalDisabled}
-              >Guardar
-              </Button>
-            )}
-
-            {!isEditingEnabled && (
-              <>
+              {!isEditingEnabled && (
                 <Button
-                  color="success"
-                  isDisabled={incident?.state === "confirmed" || incident?.state === "canceled"}
-                  onPress={() => handleConfirm()}
-                  className='text-white'
+                  color="warning"
+                  className="text-white"
                   radius='md'
                   size='sm'
+                  onPress={() => setIsEditingEnabled(true)}
+                  isDisabled={criticalDisabled}
                 >
-                  Confirmar incidencia
+                  Editar
                 </Button>
-
-                <Button
-                  color="danger"
-                  isDisabled={incident?.state === "confirmed" || incident?.state === "canceled"}
-                  onPress={() => handleCancelIncident()}
-                  radius='md'
-                  size='sm'
-                >
-                  Cancelar incidencia
-                </Button>
-              </>
-            )}
-          </>
-        )}
-      </div>
-      <div
-        className={`grid gap-6 transition-all duration-300 ease-in-out grid-cols-[1fr_auto_1fr_auto_1fr]`}
-      >
-
-        <div className="flex flex-col gap-4">
-          <Controller
-            control={control}
-            name="type"
-            rules={{ required: "Tipo de incidencia requerido" }}
-            render={({ field, fieldState }) => (
-              <RadioGroup
-                label="Tipo de Incidencia"
-                orientation="horizontal"
-                value={field.value}
-                onValueChange={field.onChange}
-                isInvalid={!!fieldState.error}
-                errorMessage={fieldState.error?.message}
-                isDisabled={criticalDisabled || (isEditing && !isEditingEnabled)}
-              >
-                <Radio value={INCIDENT_TYPES.OPERATIVE}>Operativa</Radio>
-                <Radio value={INCIDENT_TYPES.LEGAL}>Legal</Radio>
-                <Radio value={INCIDENT_TYPES.CLEANING}>Limpieza</Radio>
-                <Radio value={INCIDENT_TYPES.MAINTENANCE}>Mantenimiento</Radio>
-              </RadioGroup>
-            )}
-          />
-
-          <Controller
-            control={control}
-            name="incident"
-            rules={{ required: "Tipo de incidencia requerida" }}
-            render={({ field, fieldState }) => (
-              <Select
-                label="Incidencia"
-                isDisabled={criticalDisabled || (isEditing && !isEditingEnabled)}
-                selectedKeys={field.value ? [field.value] : []}
-                onSelectionChange={(keys) => {
-                  const value = Array.from(keys)[0];
-                  field.onChange(value);
-                }}
-                isInvalid={!!fieldState.error}
-                errorMessage={fieldState.error?.message}
-              >
-                {incidenceOptions.map((option) => (
-                  <SelectItem key={option.id}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </Select>
-            )}
-          />
-
-          <Controller
-            control={control}
-            name="driverId"
-            rules={{ required: "Operador requerido" }}
-            render={({ field }) => (
-              <DriverAutocompleteInput
-                variant="flat"
-                control={control}   // sigue siendo necesario
-                name={field.name}
-                label="Operador"
-                setValue={setValue}
-                isDisabled={criticalDisabled || (isEditing && !isEditingEnabled)}
-              />
-            )}
-          />
-
-          <Controller
-            control={control}
-            name="incidentDate"
-            rules={{ required: "Fecha de incidencia requerida" }}
-            render={({ field, fieldState }) => {
-              const calendarValue = field.value ? parseDate(field.value.format("YYYY-MM-DD")) : null;
-
-              return (
-                <DatePicker
-                  label="Fecha de Incidencia"
-                  isDisabled={criticalDisabled || (isEditing && !isEditingEnabled)}
-                  value={calendarValue} // ✅ CalendarDate compatible con HeroUI
-                  onChange={(val) => {
-                    // Convertimos CalendarDate de vuelta a Dayjs
-                    field.onChange(val ? dayjs(val.toString()) : null);
-                  }}
-                  isInvalid={!!fieldState.error}
-                  errorMessage={fieldState.error?.message}
-                />
-              );
-            }}
-          />
-
-          <Controller
-            control={control}
-            name="comments"
-            rules={{ required: "Comentario requerido" }}
-            render={({ field, fieldState }) => (
-              <Textarea
-                label="Comentarios"
-                placeholder="Escribe tus comentarios..."
-                minRows={6}
-                value={field.value || ""}
-                onChange={field.onChange}
-                isDisabled={criticalDisabled || (isEditing && !isEditingEnabled)}
-                isInvalid={!!fieldState.error}
-                errorMessage={fieldState.error?.message}
-              />
-            )}
-          />
-
-          <div className="flex flex-row items-center justify-between">
-            <Controller
-              control={control}
-              name="isDriverResponsible"
-              render={({ field }) => (
-                <Checkbox
-                  isSelected={field.value || false}
-                  onValueChange={field.onChange}
-                  isDisabled={isDirectionReport || criticalDisabled || (isEditing && !isEditingEnabled)}
-                >
-                  ¿El operador es responsable?
-                </Checkbox>
               )}
-            />
-            <Checkbox
-              checked={createUnavailability}
-              onValueChange={setCreateUnavailability}
-              isDisabled={isDirectionReport || isEditing}
-            >
-              Crear Indisponibilidad
-            </Checkbox>
-          </div>
+
+              {isEditingEnabled && (
+                <Button
+                  color='primary'
+                  radius='md'
+                  size='sm'
+                  onPress={Update}
+                  isLoading={isPending}
+                  isDisabled={criticalDisabled}
+                >Guardar
+                </Button>
+              )}
+
+              {!isEditingEnabled && (
+                <>
+                  <Button
+                    color="success"
+                    isDisabled={incident?.state === "confirmed" || incident?.state === "canceled"}
+                    onPress={() => handleConfirm()}
+                    className='text-white'
+                    radius='md'
+                    size='sm'
+                  >
+                    Confirmar incidencia
+                  </Button>
+
+                  <Button
+                    color="danger"
+                    isDisabled={incident?.state === "confirmed" || incident?.state === "canceled"}
+                    onPress={() => setOpenCancelForm(true)}
+                    radius='md'
+                    size='sm'
+                  >
+                    Cancelar incidencia
+                  </Button>
+                </>
+              )}
+            </>
+          )}
+
         </div>
 
-        <Divider
-          orientation="vertical"
-          flexItem
-          sx={{
-            mx: 2,
-            transition: 'opacity 0.3s',
-          }}
-        />
-
-        {/* Columna derecha: campos condicionales */}
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-4">
-            <div>
-              <h3 className="text-medium font-bold text-muted-foreground">
-                Crear Indisponibilidad
-              </h3>
-              <p className="text-xs text-muted-foreground">
-                Rellene los siguientes campos para registrar una
-                indisponibilidad.
-              </p>
-            </div>
-
-            <Controller
-              control={control}
-              name="startDate"
-              rules={{
-                validate: (value) => {
-                  if (createUnavailability && !value) {
-                    return "Fecha de fin requerida";
-                  }
-                  return true; // pasa la validación si !createUnavailability o hay valor
-                },
-              }}
-              render={({ field, fieldState }) => {
-                const calendarValue = field.value ? parseDate(field.value.format("YYYY-MM-DD")) : null;
-
-                return (
-                  <DatePicker
-                    label="Fecha Inicio"
-                    isDisabled={!createUnavailability}
-                    value={calendarValue} // ✅ CalendarDate compatible con HeroUI
-                    onChange={(val) => {
-                      // Convertimos CalendarDate de vuelta a Dayjs
-                      field.onChange(val ? dayjs(val.toString()) : null);
-                    }}
-                    isInvalid={!!fieldState.error}
-                    errorMessage={fieldState.error?.message}
-                  />
-                )
-              }
-              }
-            />
-
-            <Controller
-              control={control}
-              name="endDate"
-              rules={{
-                validate: (value) => {
-                  if (createUnavailability && !value) {
-                    return "Fecha de fin requerida";
-                  }
-                  return true; // pasa la validación si !createUnavailability o hay valor
-                },
-              }}
-              render={({ field, fieldState }) => {
-                const calendarValue = field.value ? parseDate(field.value.format("YYYY-MM-DD")) : null;
-
-                return (
-                  <DatePicker
-                    label="Fecha Fin"
-                    isDisabled={!createUnavailability}
-                    value={calendarValue} // ✅ CalendarDate compatible con HeroUI
-                    onChange={(val) => {
-                      // Convertimos CalendarDate de vuelta a Dayjs
-                      field.onChange(val ? dayjs(val.toString()) : null);
-                    }}
-                    isInvalid={!!fieldState.error}
-                    errorMessage={fieldState.error?.message}
-                  />
-                )
-              }
-              }
-            />
+        {incident && incident.state == "canceled" && (
+          <div className='mb-4'>
+            <Alert color="danger" title="Incidencia cancelada" description={incident.comentarios_cancelacion} variant="solid"></Alert>
           </div>
+        )}
 
+        <div
+          className={`grid gap-6 transition-all duration-300 ease-in-out grid-cols-[1fr_auto_1fr_auto_1fr]`}
+        >
           <div className="flex flex-col gap-4">
-            <div>
-              <h3 className="text-medium font-bold text-muted-foreground">
-                Detalles Legales
-              </h3>
-              <p className="text-xs text-muted-foreground">
-                Ingrese la información relacionada con el incidente legal.
-              </p>
-            </div>
-
-            <LegalDetailsSection
+            <Controller
               control={control}
-              damageCostDisabled={damageCostDisabled}
-              disabled={isDirectionReport || criticalDisabled || (isEditing && !isEditingEnabled)}
-            />
-
-            <VehicleAutocompleteInput
-              control={control}
-              name="vehicleId"
-              label="Unidad Afectada"
-              setValue={setValue}
-              disabled={isDirectionReport || criticalDisabled || (isEditing && !isEditingEnabled)}
-              helperText="Seleccionar unidad afectada, si aplica"
+              name="type"
+              rules={{ required: "Tipo de incidencia requerido" }}
+              render={({ field, fieldState }) => (
+                <RadioGroup
+                  label="Tipo de Incidencia"
+                  orientation="horizontal"
+                  value={field.value}
+                  onValueChange={field.onChange}
+                  isInvalid={!!fieldState.error}
+                  errorMessage={fieldState.error?.message}
+                  isDisabled={criticalDisabled || (isEditing && !isEditingEnabled)}
+                >
+                  <Radio value={INCIDENT_TYPES.OPERATIVE}>Operativa</Radio>
+                  <Radio value={INCIDENT_TYPES.LEGAL}>Legal</Radio>
+                  <Radio value={INCIDENT_TYPES.CLEANING}>Limpieza</Radio>
+                  <Radio value={INCIDENT_TYPES.MAINTENANCE}>Mantenimiento</Radio>
+                </RadioGroup>
+              )}
             />
 
             <Controller
               control={control}
-              name="newVehicleStateId"
+              name="incident"
+              rules={{ required: "Tipo de incidencia requerida" }}
               render={({ field, fieldState }) => (
                 <Select
-                  label="Nuevo Estado de la Unidad"
-                  placeholder="Seleccionar el nuevo estado de la unidad, si aplica"
-                  selectedKeys={field.value ? [String(field.value)] : []}
+                  label="Incidencia"
+                  isDisabled={criticalDisabled || (isEditing && !isEditingEnabled)}
+                  selectedKeys={field.value ? [field.value] : []}
                   onSelectionChange={(keys) => {
                     const value = Array.from(keys)[0];
-                    field.onChange(value ? Number(value) : null);
+                    field.onChange(value);
                   }}
-                  isDisabled={isDirectionReport || criticalDisabled || isEditing}
                   isInvalid={!!fieldState.error}
                   errorMessage={fieldState.error?.message}
                 >
-                  {[
-                    { id: null, label: "" },
-                    { id: 8, label: "TERMINACIÓN DE ARRENDAMIENTO" },
-                    { id: 7, label: "ESTATUS OCRA" },
-                    { id: 5, label: "EN REPARACIÓN POR FALLAS MECÁNICAS" },
-                    { id: 4, label: "EN REPARACION POR SINIESTRO" },
-                    { id: 3, label: "BAJA POR PERDIDA TOTAL" },
-                  ].map((option) => (
-                    <SelectItem key={String(option.id)}>
+                  {incidenceOptions.map((option) => (
+                    <SelectItem key={option.id}>
                       {option.label}
                     </SelectItem>
                   ))}
                 </Select>
               )}
             />
+
+            <Controller
+              control={control}
+              name="driverId"
+              rules={{ required: "Operador requerido" }}
+              render={({ field }) => (
+                <DriverAutocompleteInput
+                  variant="flat"
+                  control={control}   // sigue siendo necesario
+                  name={field.name}
+                  label="Operador"
+                  setValue={setValue}
+                  isDisabled={criticalDisabled || (isEditing && !isEditingEnabled)}
+                />
+              )}
+            />
+
+            <Controller
+              control={control}
+              name="incidentDate"
+              rules={{ required: "Fecha de incidencia requerida" }}
+              render={({ field, fieldState }) => {
+                const calendarValue = field.value ? parseDate(field.value.format("YYYY-MM-DD")) : null;
+
+                return (
+                  <DatePicker
+                    label="Fecha de Incidencia"
+                    isDisabled={criticalDisabled || (isEditing && !isEditingEnabled)}
+                    value={calendarValue} // ✅ CalendarDate compatible con HeroUI
+                    onChange={(val) => {
+                      // Convertimos CalendarDate de vuelta a Dayjs
+                      field.onChange(val ? dayjs(val.toString()) : null);
+                    }}
+                    isInvalid={!!fieldState.error}
+                    errorMessage={fieldState.error?.message}
+                  />
+                );
+              }}
+            />
+
+            <Controller
+              control={control}
+              name="comments"
+              rules={{ required: "Comentario requerido" }}
+              render={({ field, fieldState }) => (
+                <Textarea
+                  label="Comentarios"
+                  placeholder="Escribe tus comentarios..."
+                  minRows={6}
+                  value={field.value || ""}
+                  onChange={field.onChange}
+                  isDisabled={criticalDisabled || (isEditing && !isEditingEnabled)}
+                  isInvalid={!!fieldState.error}
+                  errorMessage={fieldState.error?.message}
+                />
+              )}
+            />
+
+            <div className="flex flex-row items-center justify-between">
+              <Controller
+                control={control}
+                name="isDriverResponsible"
+                render={({ field }) => (
+                  <Checkbox
+                    isSelected={field.value || false}
+                    onValueChange={field.onChange}
+                    isDisabled={isDirectionReport || criticalDisabled || (isEditing && !isEditingEnabled)}
+                  >
+                    ¿El operador es responsable?
+                  </Checkbox>
+                )}
+              />
+              <Checkbox
+                checked={createUnavailability}
+                onValueChange={setCreateUnavailability}
+                isDisabled={isDirectionReport || isEditing}
+              >
+                Crear Indisponibilidad
+              </Checkbox>
+            </div>
           </div>
+
+          <Divider
+            orientation="vertical"
+            flexItem
+            sx={{
+              mx: 2,
+              transition: 'opacity 0.3s',
+            }}
+          />
+
+          {/* Columna derecha: campos condicionales */}
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4">
+              <div>
+                <h3 className="text-medium font-bold text-muted-foreground">
+                  Crear Indisponibilidad
+                </h3>
+                <p className="text-xs text-muted-foreground">
+                  Rellene los siguientes campos para registrar una
+                  indisponibilidad.
+                </p>
+              </div>
+
+              <Controller
+                control={control}
+                name="startDate"
+                rules={{
+                  validate: (value) => {
+                    if (createUnavailability && !value) {
+                      return "Fecha de fin requerida";
+                    }
+                    return true; // pasa la validación si !createUnavailability o hay valor
+                  },
+                }}
+                render={({ field, fieldState }) => {
+                  const calendarValue = field.value ? parseDate(field.value.format("YYYY-MM-DD")) : null;
+
+                  return (
+                    <DatePicker
+                      label="Fecha Inicio"
+                      isDisabled={!createUnavailability}
+                      value={calendarValue} // ✅ CalendarDate compatible con HeroUI
+                      onChange={(val) => {
+                        // Convertimos CalendarDate de vuelta a Dayjs
+                        field.onChange(val ? dayjs(val.toString()) : null);
+                      }}
+                      isInvalid={!!fieldState.error}
+                      errorMessage={fieldState.error?.message}
+                    />
+                  )
+                }
+                }
+              />
+
+              <Controller
+                control={control}
+                name="endDate"
+                rules={{
+                  validate: (value) => {
+                    if (createUnavailability && !value) {
+                      return "Fecha de fin requerida";
+                    }
+                    return true; // pasa la validación si !createUnavailability o hay valor
+                  },
+                }}
+                render={({ field, fieldState }) => {
+                  const calendarValue = field.value ? parseDate(field.value.format("YYYY-MM-DD")) : null;
+
+                  return (
+                    <DatePicker
+                      label="Fecha Fin"
+                      isDisabled={!createUnavailability}
+                      value={calendarValue} // ✅ CalendarDate compatible con HeroUI
+                      onChange={(val) => {
+                        // Convertimos CalendarDate de vuelta a Dayjs
+                        field.onChange(val ? dayjs(val.toString()) : null);
+                      }}
+                      isInvalid={!!fieldState.error}
+                      errorMessage={fieldState.error?.message}
+                    />
+                  )
+                }
+                }
+              />
+            </div>
+
+            <div className="flex flex-col gap-4">
+              <div>
+                <h3 className="text-medium font-bold text-muted-foreground">
+                  Detalles Legales
+                </h3>
+                <p className="text-xs text-muted-foreground">
+                  Ingrese la información relacionada con el incidente legal.
+                </p>
+              </div>
+
+              <LegalDetailsSection
+                control={control}
+                damageCostDisabled={damageCostDisabled}
+                disabled={isDirectionReport || criticalDisabled || (isEditing && !isEditingEnabled)}
+              />
+
+              <VehicleAutocompleteInput
+                control={control}
+                name="vehicleId"
+                label="Unidad Afectada"
+                setValue={setValue}
+                disabled={isDirectionReport || criticalDisabled || (isEditing && !isEditingEnabled)}
+                helperText="Seleccionar unidad afectada, si aplica"
+              />
+
+              <Controller
+                control={control}
+                name="newVehicleStateId"
+                render={({ field, fieldState }) => (
+                  <Select
+                    label="Nuevo Estado de la Unidad"
+                    placeholder="Seleccionar el nuevo estado de la unidad, si aplica"
+                    selectedKeys={field.value ? [String(field.value)] : []}
+                    onSelectionChange={(keys) => {
+                      const value = Array.from(keys)[0];
+                      field.onChange(value ? Number(value) : null);
+                    }}
+                    isDisabled={isDirectionReport || criticalDisabled || isEditing}
+                    isInvalid={!!fieldState.error}
+                    errorMessage={fieldState.error?.message}
+                  >
+                    {[
+                      { id: null, label: "" },
+                      { id: 8, label: "TERMINACIÓN DE ARRENDAMIENTO" },
+                      { id: 7, label: "ESTATUS OCRA" },
+                      { id: 5, label: "EN REPARACIÓN POR FALLAS MECÁNICAS" },
+                      { id: 4, label: "EN REPARACION POR SINIESTRO" },
+                      { id: 3, label: "BAJA POR PERDIDA TOTAL" },
+                    ].map((option) => (
+                      <SelectItem key={String(option.id)}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </Select>
+                )}
+              />
+            </div>
+
+            <div className="flex flex-col gap-4">
+              <div>
+                <h3 className="text-medium font-bold text-muted-foreground">
+                  Adjuntar evidencias
+                </h3>
+                <p className="text-xs text-muted-foreground">
+                  Arrastra y suelta imágenes o haz clic para seleccionar.
+                </p>
+              </div>
+
+              <FileUploadInput
+                files={files}
+                setFiles={setFiles}
+                acceptedFileTypes="image/jpeg, image/png"
+                disabled={criticalDisabled || (isEditing && !isEditingEnabled)}
+              />
+            </div>
+          </div>
+
+          <Divider
+            orientation="vertical"
+            flexItem
+            sx={{
+              mx: 2,
+              transition: 'opacity 0.3s',
+            }}
+          />
 
           <div className="flex flex-col gap-4">
             <div>
               <h3 className="text-medium font-bold text-muted-foreground">
-                Adjuntar evidencias
+                Descuento al Operador
               </h3>
               <p className="text-xs text-muted-foreground">
-                Arrastra y suelta imágenes o haz clic para seleccionar.
+                Rellene estos campos para registrar un descuento. Opcional.
               </p>
             </div>
 
-            <FileUploadInput
-              files={files}
-              setFiles={setFiles}
-              acceptedFileTypes="image/jpeg, image/png"
-              disabled={criticalDisabled || (isEditing && !isEditingEnabled)}
-            />
+            <Checkbox
+              isSelected={createDiscount}
+              checked={createDiscount}
+              onValueChange={setCreateDiscount}
+              isDisabled={isDirectionReport || criticalDisabled || (isEditing && createDiscount) || (isEditing && !isEditingEnabled)}
+            >
+              Registrar Descuento
+            </Checkbox>
+
+            {createDiscount && (
+              <>
+
+                <Controller
+                  control={control}
+                  name="id_descuento"
+                  render={({ field }) => (
+                    <>
+                      <Button onPress={() => setOpen(true)} color='primary' size='sm'>Ver descuento</Button>
+                      {field.value && (
+                        <DescuentoForm open={open} handleClose={() => setOpen(false)} id_descuento={field.value}></DescuentoForm>
+                      )}
+                    </>
+                  )}
+                />
+
+                <SelectEmpleado
+                  control={control}
+                  name="id_solicitante"
+                  label="Solicitante"
+                  rules={{ required: 'Requerido' }}
+                  isDisabled={isDirectionReport || criticalDisabled || (isEditing && !isEditingEnabled)}
+                />
+
+                {/* Monto */}
+                <Controller
+                  control={control}
+                  name="discountAmount"
+                  rules={{
+                    validate: (v) => {
+                      if (createDiscount && !v) return "Monto requerido";
+                      return true;
+                    }
+                  }}
+                  render={({ field, fieldState }) => (
+                    <NumberInput
+                      label="Monto"
+                      formatOptions={{ useGrouping: false }}
+                      value={field.value || 0}
+                      onChange={field.onChange}
+                      isInvalid={!!fieldState.error}
+                      errorMessage={fieldState.error?.message}
+                      isDisabled={isDirectionReport || criticalDisabled || (isEditing && !isEditingEnabled)}
+                      startContent={
+                        <div className="pointer-events-none flex items-center">
+                          <span className="text-default-400 text-small">$</span>
+                        </div>
+                      }
+                    />
+                  )}
+                />
+
+                {/* Importe */}
+                <Controller
+                  control={control}
+                  name="discountTotal"
+                  rules={{
+                    validate: (v) => {
+                      if (createDiscount && !v) return "Importe requerido";
+                      return true;
+                    }
+                  }}
+                  render={({ field, fieldState }) => (
+                    <NumberInput
+                      formatOptions={{ useGrouping: false }}
+                      label="Importe"
+                      value={field.value || 0}
+                      onChange={field.onChange}
+                      isInvalid={!!fieldState.error}
+                      isDisabled={isDirectionReport || criticalDisabled || (isEditing && !isEditingEnabled)}
+                      errorMessage={fieldState.error?.message}
+                      startContent={
+                        <div className="pointer-events-none flex items-center">
+                          <span className="text-default-400 text-small">$</span>
+                        </div>
+                      }
+                    />
+                  )}
+                />
+
+                {/* Importe */}
+                <Controller
+                  control={control}
+                  name="periodicidad"
+                  rules={{
+                    validate: (v) => {
+                      if (createDiscount && !v) return "Periodicidad requerido";
+                      return true;
+                    }
+                  }}
+                  render={({ field, fieldState }) => (
+                    <Select
+                      label="Periodicidad"
+                      variant="flat"
+                      placeholder="Seleccionar..."
+                      selectedKeys={[String(field.value)]}
+                      onSelectionChange={(keys) => {
+                        const value = Array.from(keys)[0];
+                        field.onChange(value);
+                      }}
+                      isDisabled={isDirectionReport || criticalDisabled || (isEditing && !isEditingEnabled)}
+                      isInvalid={!!fieldState.error}
+                      errorMessage={fieldState.error?.message}
+                    >
+                      <SelectItem key="viaje">Por viaje</SelectItem>
+                      <SelectItem key="quincenal">Quincenal</SelectItem>
+                    </Select>
+                  )}
+                />
+
+                {/* Motivo */}
+                <Controller
+                  control={control}
+                  name="discountReason"
+                  rules={{
+                    validate: (v) => {
+                      if (createDiscount && !v) return "Motivo requerido";
+                      return true;
+                    }
+                  }}
+                  render={({ field, fieldState }) => (
+                    <Textarea
+                      label="Motivo"
+                      minRows={4}
+                      value={field.value || ""}
+                      onChange={field.onChange}
+                      isInvalid={!!fieldState.error}
+                      isDisabled={isDirectionReport || criticalDisabled || (isEditing && !isEditingEnabled)}
+                      errorMessage={fieldState.error?.message}
+                    />
+                  )}
+                />
+
+                {/* Comentarios */}
+                <Controller
+                  control={control}
+                  name="discountComments"
+                  rules={{
+                    validate: (v) => {
+                      if (createDiscount && !v) return "Comentario requerido";
+                      return true;
+                    }
+                  }}
+                  render={({ field, fieldState }) => (
+                    <Textarea
+                      label="Comentarios del Descuento"
+                      minRows={4}
+                      value={field.value || ""}
+                      onChange={field.onChange}
+                      isDisabled={isDirectionReport || criticalDisabled || (isEditing && !isEditingEnabled)}
+                      isInvalid={!!fieldState.error}
+                      errorMessage={fieldState.error?.message}
+                    />
+                  )}
+                />
+              </>
+            )}
           </div>
+
         </div>
 
-        <Divider
-          orientation="vertical"
-          flexItem
-          sx={{
-            mx: 2,
-            transition: 'opacity 0.3s',
-          }}
-        />
-
-        <div className="flex flex-col gap-4">
-          <div>
-            <h3 className="text-medium font-bold text-muted-foreground">
-              Descuento al Operador
-            </h3>
-            <p className="text-xs text-muted-foreground">
-              Rellene estos campos para registrar un descuento. Opcional.
-            </p>
-          </div>
-
-          <Checkbox
-            isSelected={createDiscount}
-            checked={createDiscount}
-            onValueChange={setCreateDiscount}
-            isDisabled={isDirectionReport || criticalDisabled || (isEditing && createDiscount) || (isEditing && !isEditingEnabled)}
-          >
-            Registrar Descuento
-          </Checkbox>
-
-          {createDiscount && (
-            <>
-
-              <Controller
-                control={control}
-                name="id_descuento"
-                render={({ field }) => (
-                  <>
-                    <Button onPress={() => setOpen(true)} color='primary' size='sm'>Ver descuento</Button>
-                    {field.value && (
-                      <DescuentoForm open={open} handleClose={() => setOpen(false)} id_descuento={field.value}></DescuentoForm>
-                    )}
-                  </>
-                )}
-              />
-
-              <SelectEmpleado
-                control={control}
-                name="id_solicitante"
-                label="Solicitante"
-                rules={{ required: 'Requerido' }}
-                isDisabled={isDirectionReport || criticalDisabled || (isEditing && !isEditingEnabled)}
-              />
-
-              {/* Monto */}
-              <Controller
-                control={control}
-                name="discountAmount"
-                rules={{
-                  validate: (v) => {
-                    if (createDiscount && !v) return "Monto requerido";
-                    return true;
-                  }
-                }}
-                render={({ field, fieldState }) => (
-                  <NumberInput
-                    label="Monto"
-                    formatOptions={{ useGrouping: false }}
-                    value={field.value || 0}
-                    onChange={field.onChange}
-                    isInvalid={!!fieldState.error}
-                    errorMessage={fieldState.error?.message}
-                    isDisabled={isDirectionReport || criticalDisabled || (isEditing && !isEditingEnabled)}
-                    startContent={
-                      <div className="pointer-events-none flex items-center">
-                        <span className="text-default-400 text-small">$</span>
-                      </div>
-                    }
-                  />
-                )}
-              />
-
-              {/* Importe */}
-              <Controller
-                control={control}
-                name="discountTotal"
-                rules={{
-                  validate: (v) => {
-                    if (createDiscount && !v) return "Importe requerido";
-                    return true;
-                  }
-                }}
-                render={({ field, fieldState }) => (
-                  <NumberInput
-                    formatOptions={{ useGrouping: false }}
-                    label="Importe"
-                    value={field.value || 0}
-                    onChange={field.onChange}
-                    isInvalid={!!fieldState.error}
-                    isDisabled={isDirectionReport || criticalDisabled || (isEditing && !isEditingEnabled)}
-                    errorMessage={fieldState.error?.message}
-                    startContent={
-                      <div className="pointer-events-none flex items-center">
-                        <span className="text-default-400 text-small">$</span>
-                      </div>
-                    }
-                  />
-                )}
-              />
-
-              {/* Importe */}
-              <Controller
-                control={control}
-                name="periodicidad"
-                rules={{
-                  validate: (v) => {
-                    if (createDiscount && !v) return "Periodicidad requerido";
-                    return true;
-                  }
-                }}
-                render={({ field, fieldState }) => (
-                  <Select
-                    label="Periodicidad"
-                    variant="flat"
-                    placeholder="Seleccionar..."
-                    selectedKeys={[String(field.value)]}
-                    onSelectionChange={(keys) => {
-                      const value = Array.from(keys)[0];
-                      field.onChange(value);
-                    }}
-                    isDisabled={isDirectionReport || criticalDisabled || (isEditing && !isEditingEnabled)}
-                    isInvalid={!!fieldState.error}
-                    errorMessage={fieldState.error?.message}
-                  >
-                    <SelectItem key="viaje">Por viaje</SelectItem>
-                    <SelectItem key="quincenal">Quincenal</SelectItem>
-                  </Select>
-                )}
-              />
-
-              {/* Motivo */}
-              <Controller
-                control={control}
-                name="discountReason"
-                rules={{
-                  validate: (v) => {
-                    if (createDiscount && !v) return "Motivo requerido";
-                    return true;
-                  }
-                }}
-                render={({ field, fieldState }) => (
-                  <Textarea
-                    label="Motivo"
-                    minRows={4}
-                    value={field.value || ""}
-                    onChange={field.onChange}
-                    isInvalid={!!fieldState.error}
-                    isDisabled={isDirectionReport || criticalDisabled || (isEditing && !isEditingEnabled)}
-                    errorMessage={fieldState.error?.message}
-                  />
-                )}
-              />
-
-              {/* Comentarios */}
-              <Controller
-                control={control}
-                name="discountComments"
-                rules={{
-                  validate: (v) => {
-                    if (createDiscount && !v) return "Comentario requerido";
-                    return true;
-                  }
-                }}
-                render={({ field, fieldState }) => (
-                  <Textarea
-                    label="Comentarios del Descuento"
-                    minRows={4}
-                    value={field.value || ""}
-                    onChange={field.onChange}
-                    isDisabled={isDirectionReport || criticalDisabled || (isEditing && !isEditingEnabled)}
-                    isInvalid={!!fieldState.error}
-                    errorMessage={fieldState.error?.message}
-                  />
-                )}
-              />
-            </>
+        <div className="flex justify-between items-center mt-6">
+          {onCancel && (
+            <Button
+              color="danger"
+              size="sm"
+              onPress={onCancel}
+              radius='full'
+            >
+              Cancelar
+            </Button>
           )}
         </div>
-
-      </div>
-
-      <div className="flex justify-between items-center mt-6">
-        {onCancel && (
-          <Button
-            color="danger"
-            size="sm"
-            onPress={onCancel}
-            radius='full'
-          >
-            Cancelar
-          </Button>
-        )}
-      </div>
-    </form>
+      </form>
+    </>
   );
 };
 

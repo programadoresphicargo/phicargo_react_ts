@@ -28,6 +28,7 @@ interface IncidentBase {
   damageCost: number | null;
   isDriverResponsible: boolean;
   state: string | null;
+  comentarios_cancelacion: string | null;
 }
 
 export interface Descuento {

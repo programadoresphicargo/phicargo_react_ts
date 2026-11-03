@@ -26,6 +26,7 @@ interface IncidentBaseApi {
   damage_cost: number | null;
   is_driver_responsible: boolean;
   state: string | null;
+  comentarios_cancelacion: string | null;
 }
 
 export interface DescuentoApi {

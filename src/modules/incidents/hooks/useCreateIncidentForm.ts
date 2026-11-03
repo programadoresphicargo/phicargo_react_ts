@@ -31,6 +31,7 @@ const initialFormState: IncidentCreate = {
   discountComments: null,
   periodicidad: '',
   id_solicitante: null,
+  comentarios_cancelacion: null,
 };
 
 type Mode = "create" | "edit";
@@ -46,6 +47,7 @@ export function transformIncidentToCreate(incident: Incident): IncidentCreate {
     state: incident.state,
     vehicleId: incident.vehicle?.id ?? null,
     driverId: incident.driver?.id ?? null,
+    comentarios_cancelacion: null,
 
     // campos extra válidos solo al crear
     startDate: null,
@@ -225,12 +227,12 @@ export function useCreateIncidentForm({
   const Create = () => form.handleSubmit(submitCreate)()
   const Update = () => form.handleSubmit(submitUpdate)();
 
-  const cancelIncidentFn = (id?: number) => {
+  const cancelIncidentFn = (id: number, comentarios: string) => {
     const toId = id ?? incident?.id;
     if (!toId) return;
 
     confirmIncidentMutation.mutate(
-      { id: toId, state: "canceled" },
+      { id: toId, state: "canceled", comentarios: comentarios.trim(), },
       {
         onSuccess: () => onSuccess?.(),
       }
