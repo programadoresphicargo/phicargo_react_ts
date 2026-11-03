@@ -20,9 +20,10 @@ const CancelDescuento = ({ open, onClose, id }: { open: boolean, onClose: () => 
     });
 
     const handleCancel = (data: CancelarFolio) => {
-        odooApi.patch(`/descuentos/estado/${id}/cancelado`, null,
+        odooApi.patch(`/descuentos/state/${id}`, null,
             {
                 params: {
+                    state: "cancelado",
                     comentarios: data.comentarios
                 }
             })

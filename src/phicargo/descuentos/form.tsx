@@ -120,7 +120,12 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
     });
     if (result.isConfirmed) {
       try {
-        const response = await odooApi.patch(`/descuentos/estado/${id_descuento}/${estado}`);
+        const response = await odooApi.patch(`/descuentos/state/${id_descuento}`, null,
+          {
+            params: {
+              state: estado,
+            }
+          });
         if (response.data.status === "success") {
           toast.success(response.data.message);
           handleClose();
