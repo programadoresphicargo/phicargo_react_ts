@@ -49,7 +49,7 @@ export const CreateIncidentForm = ({
   inspection_id2,
 }: Props) => {
   const {
-    form: { control, setValue, getValues },
+    form: { control, setValue },
 
     files,
     setFiles,
@@ -101,9 +101,6 @@ export const CreateIncidentForm = ({
     setOpenCancelForm(false);
     onCancel?.();
   };
-
-  const mails = getValues("mails");
-  console.log(incident?.mails);
 
   return (
     <>
