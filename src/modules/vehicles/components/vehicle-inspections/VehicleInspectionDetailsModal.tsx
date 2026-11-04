@@ -180,7 +180,8 @@ export const VehicleInspectionDetailModal = ({
               <Button
                 color="primary"
                 className="text-white"
-                radius="full"
+                radius="md"
+                size="sm"
                 onPress={() => handleSave()}
                 isLoading={updarting}
               >
