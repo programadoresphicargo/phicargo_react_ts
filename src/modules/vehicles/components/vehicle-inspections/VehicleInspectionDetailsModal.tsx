@@ -120,7 +120,8 @@ export const VehicleInspectionDetailModal = ({
     <MuiModal
       open={open}
       onClose={onClose}
-      maxWidth="md"
+      maxWidth="lg"
+      fullWidth
       header={
         <div className="flex justify-between items-center w-full">
           <h2 className="uppercase font-thin text-lg">
