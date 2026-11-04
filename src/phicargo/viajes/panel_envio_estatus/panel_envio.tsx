@@ -42,8 +42,8 @@ import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
 import { useJourneyDialogs } from '../seguimiento/funciones';
 import { AssetImage } from '@/phicargo/utils/asset';
+import { useAsset } from '@/phicargo/utils/useAsset';
 
-const { VITE_ODOO_API_URL } = import.meta.env;
 
 type Estatus = {
   id_estatus: number;
@@ -67,6 +67,8 @@ function PanelEnvio({
   cerrar: () => void;
   id_reporte: number | null;
 }) {
+
+  const srcEnvio = useAsset("trafico/estatus_operativos/start.png");
   const { enviar_estatus, reenviar_estatus } = useJourneyDialogs();
   const { id_viaje, viaje } = useContext(ViajeContext);
 
@@ -302,11 +304,7 @@ function PanelEnvio({
       cancelButtonColor: '#dc3545',
       confirmButtonText: 'Sí, enviar',
       cancelButtonText: 'Cancelar',
-
-      imageUrl:
-        VITE_ODOO_API_URL +
-        '/assets/trafico/estatus_operativos/start.png',
-
+      imageUrl: srcEnvio,
       imageWidth: 150,
       imageHeight: 150,
       imageAlt: 'Imagen de confirmación',
@@ -369,11 +367,7 @@ function PanelEnvio({
       cancelButtonColor: '#dc3545',
       confirmButtonText: 'Sí, enviar',
       cancelButtonText: 'Cancelar',
-
-      imageUrl:
-        VITE_ODOO_API_URL +
-        '/assets/trafico/estatus_operativos/start.png',
-
+      imageUrl: srcEnvio,
       imageWidth: 150,
       imageHeight: 150,
       imageAlt: 'Imagen de confirmación',

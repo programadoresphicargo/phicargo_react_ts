@@ -1,7 +1,7 @@
 import odooApi from '@/api/odoo-api';
 import SelectFlota from '@/phicargo/maniobras/maniobras/selects_flota';
 import { Flota, OptionFlota } from '@/phicargo/maniobras/maniobras/tipado';
-import { Button } from '@heroui/react';
+import { Accordion, AccordionItem, Button } from '@heroui/react';
 
 import {
   Dialog,
@@ -237,21 +237,43 @@ const AsignacionMG = ({
       <Divider />
 
       <DialogContent sx={{ py: 3 }}>
-        <Box display="flex" gap={2}>
-          {renderSelector(
-            'x_motogenerador_1',
-            'Motogenerador 1',
-            'Primer equipo',
-            mg2
-          )}
 
-          {renderSelector(
-            'x_motogenerador_2',
-            'Motogenerador 2',
-            'Segundo equipo',
-            mg1
-          )}
-        </Box>
+        <Accordion variant="shadow">
+          <AccordionItem key="1" aria-label="Accordion 1" title="Maniobra retiro">
+            <Box display="flex" gap={2}>
+              {renderSelector(
+                'x_motogenerador_1',
+                'Motogenerador 1',
+                'Primer equipo',
+                mg2
+              )}
+
+              {renderSelector(
+                'x_motogenerador_2',
+                'Motogenerador 2',
+                'Segundo equipo',
+                mg1
+              )}
+            </Box>
+          </AccordionItem>
+          <AccordionItem key="2" aria-label="Accordion 1" title="Viaje">
+            <Box display="flex" gap={2}>
+              {renderSelector(
+                'x_motogenerador_1',
+                'Motogenerador 1',
+                'Primer equipo',
+                mg2
+              )}
+
+              {renderSelector(
+                'x_motogenerador_2',
+                'Motogenerador 2',
+                'Segundo equipo',
+                mg1
+              )}
+            </Box>
+          </AccordionItem>
+        </Accordion>
       </DialogContent>
 
       <Divider />
