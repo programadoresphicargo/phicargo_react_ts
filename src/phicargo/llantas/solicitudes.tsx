@@ -12,6 +12,7 @@ import { exportToCSV } from '../utils/export';
 import odooApi from '@/api/odoo-api';
 import { useSolicitudesLlantas } from './contexto';
 import SolicitudFormLlantas from './form';
+import { Select, SelectItem } from "@heroui/react";
 
 type Solicitudes = {
   id: number;
@@ -24,6 +25,15 @@ type SolicitudesLlantasProps = {
   travel_id?: number;
 };
 
+export const states = [
+  { key: "borrador", label: "Borrador" },
+  { key: "confirmado", label: "Confirmado" },
+  { key: "cancelado", label: "Cancelado" },
+  { key: "cerrado", label: "Cerrado" },
+  { key: "recepcionado_operador", label: "Recepcionado operador" },
+  { key: "entregado", label: "Entregado" },
+];
+
 const SolicitudesLlantas: React.FC<SolicitudesLlantasProps> = ({
   vista,
   travel_id
@@ -32,6 +42,7 @@ const SolicitudesLlantas: React.FC<SolicitudesLlantasProps> = ({
   const [id_solicitud, setIDSolicitud] = React.useState<number | null>(null);
   const [open, setOpen] = React.useState(false);
   const { setModoEdicion } = useSolicitudesLlantas();
+  const [value, setValue] = React.useState<Set<string>>(new Set(["borrador"]));
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -42,7 +53,14 @@ const SolicitudesLlantas: React.FC<SolicitudesLlantasProps> = ({
     fetchData();
   };
 
-  const [dataSolicitudes, setDataSolicitudes] = useState([]);
+  const [dataSolicitudes, setDataSolicitudes] = useState<Solicitudes[]>([]);
+
+  const solicitudesFiltradas = useMemo(() => {
+    return dataSolicitudes.filter((solicitud) =>
+      value.has(solicitud.x_studio_status)
+    );
+  }, [dataSolicitudes, value]);
+
   const [isLoading, setLoading] = useState(false);
 
   const fetchData = async () => {
@@ -186,7 +204,7 @@ const SolicitudesLlantas: React.FC<SolicitudesLlantasProps> = ({
 
   const table = useMaterialReactTable({
     columns,
-    data: dataSolicitudes,
+    data: solicitudesFiltradas,
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
@@ -223,7 +241,7 @@ const SolicitudesLlantas: React.FC<SolicitudesLlantasProps> = ({
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 235px)',
+        maxHeight: 'calc(100vh - 250px)',
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
@@ -251,24 +269,24 @@ const SolicitudesLlantas: React.FC<SolicitudesLlantasProps> = ({
       <Box
         sx={{
           display: 'flex',
+          alignItems: 'center',
           gap: '16px',
           padding: '8px',
-          flexWrap: 'wrap',
+          flexWrap: 'nowrap',
+          overflowX: 'auto',
         }}
       >
-        <h2
-          className="tracking-tight font-semibold lg:text-2xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
-        >
+        <h2 className="tracking-tight font-semibold lg:text-2xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text whitespace-nowrap">
           {vista ? capitalize(vista) : ""}
         </h2>
 
         {travel_id && (
           <Button
             radius="full"
-            className='text-white'
+            className="text-white whitespace-nowrap"
             startContent={<i className="bi bi-plus-lg"></i>}
-            color='primary'
-            size='sm'
+            color="primary"
+            size="sm"
             onPress={() => {
               setIDSolicitud(null);
               setModoEdicion(true);
@@ -281,25 +299,50 @@ const SolicitudesLlantas: React.FC<SolicitudesLlantasProps> = ({
 
         <Button
           radius="md"
-          className='text-white'
+          className="text-white whitespace-nowrap"
           startContent={<i className="bi bi-arrow-clockwise"></i>}
-          color='secondary'
+          color="secondary"
+          size="sm"
           onPress={() => fetchData()}
-          size='sm'
-        >Actualizar
+        >
+          Actualizar
         </Button>
 
         <Button
           radius="md"
-          color='success'
-          className='text-white'
+          color="success"
+          className="text-white whitespace-nowrap"
           startContent={<i className="bi bi-file-earmark-excel"></i>}
-          size='sm'
-          onPress={() => exportToCSV(dataSolicitudes, columns, "solicitudes.csv")}>
+          size="sm"
+          onPress={() =>
+            exportToCSV(dataSolicitudes, columns, "solicitudes.csv")
+          }
+        >
           Exportar
         </Button>
 
-      </Box >
+        <Box sx={{ minWidth: 180, flexShrink: 0 }}>
+          <Select
+            label="Seleccionar estado"
+            size="sm"
+            placeholder="Seleccionar estado"
+            selectedKeys={value}
+            variant="bordered"
+            selectionMode="multiple"
+            onSelectionChange={(keys) => {
+              setValue(
+                keys === "all"
+                  ? new Set(states.map((state) => state.key))
+                  : new Set(keys as Set<string>)
+              );
+            }}
+          >
+            {states.map((state) => (
+              <SelectItem key={state.key}>{state.label}</SelectItem>
+            ))}
+          </Select>
+        </Box>
+      </Box>
     ),
   });
 
