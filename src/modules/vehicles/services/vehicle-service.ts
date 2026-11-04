@@ -24,6 +24,19 @@ import { IncidentCreateApi } from '@/modules/incidents/models/api';
 export class VehicleServiceApi {
   static async getVehicles(): Promise<Vehicle[]> {
     try {
+      const response = await odooApi.get<VehicleApi[]>('/vehicles/');
+      return response.data.map(VehicleAdapter.vehicleToLocal);
+    } catch (error) {
+      console.error(error);
+      if (error instanceof AxiosError) {
+        throw new Error(error.response?.data?.detail || 'An error occurred');
+      }
+      throw new Error('An error occurred');
+    }
+  }
+
+  static async getFlota(): Promise<Vehicle[]> {
+    try {
       const response = await odooApi.get<VehicleApi[]>('/vehicles/flota/');
       return response.data.map(VehicleAdapter.vehicleToLocal);
     } catch (error) {

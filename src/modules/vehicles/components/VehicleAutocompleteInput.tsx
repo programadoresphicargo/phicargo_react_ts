@@ -18,7 +18,7 @@ export const VehicleAutocompleteInput = <T extends FieldValues>(
   props: Props<T>,
 ) => {
 
-  const { vehicleQuery } = useVehicleQueries();
+  const { flotaQuery } = useVehicleQueries();
   const { control, name, label, setValue, disabled, helperText } = props;
 
   return (
@@ -27,9 +27,9 @@ export const VehicleAutocompleteInput = <T extends FieldValues>(
       name={name}
       label={label}
       rules={props.rules}
-      loading={vehicleQuery.isLoading}
+      loading={flotaQuery.isLoading}
       options={
-        vehicleQuery.data?.map((v) => ({
+        flotaQuery.data?.map((v) => ({
           label: v.name,
           id: v.id,
         })) || []

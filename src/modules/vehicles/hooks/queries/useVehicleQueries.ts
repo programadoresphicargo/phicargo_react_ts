@@ -12,9 +12,18 @@ const mainKey = 'vehicles';
 
 export const useVehicleQueries = () => {
   const queryClient = useQueryClient();
+
   const vehicleQuery = useQuery<Vehicle[]>({
     queryKey: [mainKey],
     queryFn: VehicleServiceApi.getVehicles,
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 10,
+    placeholderData: keepPreviousData<Vehicle[]>,
+  });
+
+  const flotaQuery = useQuery<Vehicle[]>({
+    queryKey: [mainKey],
+    queryFn: VehicleServiceApi.getFlota,
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 10,
     placeholderData: keepPreviousData<Vehicle[]>,
@@ -37,6 +46,8 @@ export const useVehicleQueries = () => {
     vehicles: vehicleQuery.data || [],
     vehicleQuery,
     vehicleUpdateMutation,
+    flota: flotaQuery.data || [],
+    flotaQuery,
   };
 };
 
