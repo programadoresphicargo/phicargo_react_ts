@@ -10,7 +10,6 @@ import { CheckCircleOutline, ErrorOutline } from '@mui/icons-material';
 import { Alert, LoadingSpinner } from '@/components/ui';
 import { FilesList } from '@/components/utils/FilesList';
 import { Button, Select, SelectItem, Textarea } from '@heroui/react';
-import { EditIncidentModal } from '@/modules/incidents/components/EditIncidentModal';
 import Swal from 'sweetalert2';
 import { useState, useEffect } from 'react';
 import { useUpdateVehicleInspectionMutation } from '../../hooks/queries/inspections/useUpdateVehicleInspectionMutation';
@@ -141,7 +140,8 @@ export const VehicleInspectionDetailModal = ({
                   <Button
                     color="success"
                     className="text-white"
-                    radius="full"
+                    radius="md"
+                    size="sm"
                     onPress={() => cambiar_estado_inspeccion("confirmed")}
                     isLoading={isLoadingConfirm}
                   >
@@ -153,7 +153,7 @@ export const VehicleInspectionDetailModal = ({
           ) : (
             <>
 
-              <Button color='warning' onPress={() => cambiar_estado_inspeccion("draft")} radius='full' className='text-white'>Regresar a Borrador</Button>
+              <Button color='warning' onPress={() => cambiar_estado_inspeccion("draft")} radius='md' className='text-white' size="sm">Regresar a Borrador</Button>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <p className="text-sm text-gray-500">Estado</p>
                 <p>{vehicleInspection.inspection?.inspectionState}</p>
@@ -190,7 +190,8 @@ export const VehicleInspectionDetailModal = ({
               color={isEditing ? "secondary" : "danger"}
               className="text-white"
               isDisabled={vehicleInspection.inspection?.inspectionState == 'confirmed' ? true : false}
-              radius="full"
+              radius="md"
+              size="sm"
               onPress={() => setIsEditing(!isEditing)}
             >
               {isEditing ? "Cancelar edición" : "Editar"}
@@ -268,7 +269,8 @@ export const VehicleInspectionDetailModal = ({
                 <Button
                   color="primary"
                   onPress={handleOpen}
-                  radius="full"
+                  radius="md"
+                  size="sm"
                   isDisabled={
                     vehicleInspection.inspection?.inspectionState === 'confirmed' || isEditing
                   }
@@ -276,7 +278,7 @@ export const VehicleInspectionDetailModal = ({
                   Editar incidencia
                 </Button>
                 <Dialog open={openEditIncident} onClose={handleClose} maxWidth="lg">
-                  <EditIncidentModal onClose={handleClose} incident={incident} />
+                  <CreateIncidentModal onClose={handleClose} incident={incident} label={'Editar incidencia'} mode={'edit'} />
                 </Dialog>
 
                 <div>
