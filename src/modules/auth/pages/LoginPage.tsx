@@ -8,7 +8,6 @@ import { Toaster } from 'react-hot-toast';
 import { TextInput, PasswordInput2 } from '@/components/inputs';
 import { useAuthContext, useLoginMutation } from '../hooks';
 import { UserLogin } from '../models';
-import { Lottie } from "lottie-react";
 import logo from '@/assets/img/phicargo_logo_white.png';
 import fondo from '@/assets/img/tract_scannia.jpg';
 
@@ -20,21 +19,6 @@ const initialForm: UserLogin = {
 };
 
 const LoginPage = () => {
-
-  const animations = import.meta.glob(
-    '/src/assets/halloween_2/*.json',
-    {
-      eager: true,
-      import: 'default',
-    },
-  );
-
-  const files = Object.values(animations);
-
-  const randomAnimation =
-    files.length > 0
-      ? files[Math.floor(Math.random() * files.length)]
-      : null;
 
   const navigate = useNavigate();
   const { redirectTo } = useAuthContext();
