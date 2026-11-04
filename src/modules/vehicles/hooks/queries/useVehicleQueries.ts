@@ -22,7 +22,7 @@ export const useVehicleQueries = () => {
   });
 
   const flotaQuery = useQuery<Vehicle[]>({
-    queryKey: [mainKey],
+    queryKey: [mainKey, 'flota'],
     queryFn: VehicleServiceApi.getFlota,
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 10,
