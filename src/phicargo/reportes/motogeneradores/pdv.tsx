@@ -28,7 +28,6 @@ const PDVMaintenance = ({ }) => {
   const [range, setRange] = useState<[Date, Date] | null>([firstDay, lastDay]);
   const [grouping, setGrouping] = useState(['sucursal', 'date_order']);
   const [selectedTravel, setSelectedTravel] = useState<any>(null);
-  const [selectedWaybill, setSelectedWaybill] = useState<any>(null);
 
   const [open, setOpen] = React.useState(false);
 
