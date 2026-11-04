@@ -28,6 +28,7 @@ const PDVMaintenance = ({ }) => {
   const [range, setRange] = useState<[Date, Date] | null>([firstDay, lastDay]);
   const [grouping, setGrouping] = useState(['sucursal', 'date_order']);
   const [selectedTravel, setSelectedTravel] = useState<any>(null);
+  const [selectedWaybill, setSelectedWaybill] = useState<any>(null);
 
   const [open, setOpen] = React.useState(false);
 
@@ -205,6 +206,7 @@ const PDVMaintenance = ({ }) => {
           const selection = window.getSelection()?.toString();
           if (selection) return;
           setSelectedTravel(row.original);
+          console.log(row.original);
           handleClickOpen();
         },
         style: {
@@ -309,7 +311,7 @@ const PDVMaintenance = ({ }) => {
           initialData={{
             x_motogenerador_1: selectedTravel.x_motogenerador_1,
             x_motogenerador_2: selectedTravel.x_motogenerador_2,
-          }}></AsignacionMG>
+          }} waybillId={0}></AsignacionMG>
       )}
     </>
   );

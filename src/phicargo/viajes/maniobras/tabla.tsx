@@ -354,9 +354,9 @@ const Maniobras: React.FC<ManiobrasProps> = ({
             </li>
           ))}
         </ul>
-        <Button color="primary" isLoading={isLoading} onPress={() => fetchData()} startContent={<i className="bi bi-arrow-clockwise"></i>} size="sm" radius="full">Refrescar</Button>
-        <Button color="primary" isLoading={isLoading} onPress={() => crearAuto()} size="sm" radius="full">Crear maniobras</Button>
-        <Button color='success' isLoading={isLoading} className='text-white' startContent={<i className="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(filteredData, columns, `maniobras.csv`)} size="sm" radius="full">Exportar</Button>
+        <Button color="primary" isLoading={isLoading} onPress={() => fetchData()} startContent={<i className="bi bi-arrow-clockwise"></i>} size="sm" radius="md">Refrescar</Button>
+        <Button color="primary" isLoading={isLoading} onPress={() => crearAuto()} size="sm" radius="md">Crear maniobras</Button>
+        <Button color='success' isLoading={isLoading} className='text-white' startContent={<i className="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(filteredData, columns, `maniobras.csv`)} size="sm" radius="md">Exportar</Button>
       </Box >
     ),
   });

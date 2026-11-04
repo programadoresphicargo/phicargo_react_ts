@@ -1,6 +1,8 @@
+
 import odooApi from '@/api/odoo-api';
 import SelectFlota from '@/phicargo/maniobras/maniobras/selects_flota';
 import { Flota, OptionFlota } from '@/phicargo/maniobras/maniobras/tipado';
+
 import { Accordion, AccordionItem, Button } from '@heroui/react';
 
 import {
@@ -17,25 +19,51 @@ import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-interface SimpleDialogProps {
+interface Props {
   open: boolean;
   handleClose: () => void;
   travelId: number;
+  waybillId: number;
   initialData?: Partial<MGForm> | null;
 }
 
 type MGForm = {
   id: number;
-  x_motogenerador_1?: number | null;
-  x_motogenerador_2?: number | null;
+
+  // Asignación al viaje
+  x_motogenerador_1: number | null;
+  x_motogenerador_2: number | null;
+
+  // Asignación a la maniobra
+  motogenerador_1: number | null;
+  motogenerador_2: number | null;
+};
+
+type SelectorName =
+  | 'x_motogenerador_1'
+  | 'x_motogenerador_2'
+  | 'motogenerador_1'
+  | 'motogenerador_2';
+
+const DEFAULT_VALUES: MGForm = {
+  id: 0,
+  x_motogenerador_1: null,
+  x_motogenerador_2: null,
+  motogenerador_1: null,
+  motogenerador_2: null,
 };
 
 const AsignacionMG = ({
   open,
   handleClose,
   travelId,
+  waybillId,
   initialData,
-}: SimpleDialogProps) => {
+}: Props) => {
+
+  // =====================================================
+  // FORMULARIO
+  // =====================================================
 
   const {
     control,
@@ -43,44 +71,60 @@ const AsignacionMG = ({
     reset,
     watch,
   } = useForm<MGForm>({
-    defaultValues: {
-      id: travelId,
-      x_motogenerador_1: null,
-      x_motogenerador_2: null,
-    },
+    defaultValues: DEFAULT_VALUES,
   });
 
-  useEffect(() => {
-    if (open) {
-      console.log(initialData);
-      reset({
-        id: travelId,
-        x_motogenerador_1: initialData?.x_motogenerador_1 ?? null,
-        x_motogenerador_2: initialData?.x_motogenerador_2 ?? null,
-      });
-    }
-  }, [open, travelId, initialData, reset]);
+  // =====================================================
+  // ESTADOS
+  // =====================================================
 
-  const [isLoading, setLoading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isLoadingFlota, setIsLoadingFlota] = useState(false);
+  const [isCreatingManiobra, setIsCreatingManiobra] = useState(false);
+
   const [motogeneradores, setMotogeneradores] = useState<OptionFlota[]>([]);
-  const [isLoadingFlota, setLoadingFlota] = useState(false);
+  const [maniobraId, setManiobraId] = useState<number | null>(null);
 
-  const mg1 = watch('x_motogenerador_1');
-  const mg2 = watch('x_motogenerador_2');
+  // Valores seleccionados para el viaje
+  const viajeMG1 = watch('x_motogenerador_1');
+  const viajeMG2 = watch('x_motogenerador_2');
 
-  // Consultar motogeneradores
+  // Valores seleccionados para la maniobra
+  const maniobraMG1 = watch('motogenerador_1');
+  const maniobraMG2 = watch('motogenerador_2');
+
+  // =====================================================
+  // CARGAR INFORMACIÓN INICIAL
+  // =====================================================
+
   useEffect(() => {
     if (!open) return;
 
-    const cargarDatos = async () => {
-      setLoadingFlota(true);
+    let active = true;
+
+    reset({
+      ...DEFAULT_VALUES,
+      id: travelId,
+      x_motogenerador_1: initialData?.x_motogenerador_1 ?? null,
+      x_motogenerador_2: initialData?.x_motogenerador_2 ?? null,
+      motogenerador_1: null,
+      motogenerador_2: null,
+    });
+
+    setManiobraId(null);
+
+    // Consultar flota
+    const cargarFlota = async () => {
+      setIsLoadingFlota(true);
 
       try {
         const response = await odooApi.get<Flota[]>(
           '/vehicles/fleet_type/other'
         );
 
-        const options = response.data
+        if (!active) return;
+
+        const options: OptionFlota[] = response.data
           .filter(item => item.name?.startsWith('MG-'))
           .map(item => ({
             key: item.id,
@@ -93,53 +137,156 @@ const AsignacionMG = ({
 
       } catch (error) {
         console.error(error);
-        toast.error('No fue posible cargar los motogeneradores.');
+        if (active) {
+          toast.error('No fue posible cargar los motogeneradores.');
+        }
       } finally {
-        setLoadingFlota(false);
+        if (active) setIsLoadingFlota(false);
       }
     };
 
-    cargarDatos();
-  }, [open]);
+    // Crear maniobra de retiro
+    const crearManiobra = async () => {
+      if (!travelId) return;
 
-  const asignar_viaje = async (data: MGForm) => {
+      setIsCreatingManiobra(true);
+
+      try {
+        const response = await odooApi.post(
+          `/maniobras/create_refrigerados/${travelId}`
+        );
+
+        const id = response.data?.data?.id_maniobra;
+
+        if (!id) {
+          throw new Error('No se recibió el ID de la maniobra.');
+        }
+
+        if (active) {
+          setManiobraId(Number(id));
+          reset({
+            ...DEFAULT_VALUES,
+            id: travelId,
+            x_motogenerador_1: initialData?.x_motogenerador_1 ?? null,
+            x_motogenerador_2: initialData?.x_motogenerador_2 ?? null,
+            motogenerador_1: response.data?.data?.motogenerador_1 ?? null,
+            motogenerador_2: response.data?.data?.motogenerador_2 ?? null,
+          });
+        }
+
+      } catch (error) {
+        console.error(error);
+
+        if (active) {
+          toast.error('No fue posible crear la maniobra de retiro.');
+        }
+      } finally {
+        if (active) setIsCreatingManiobra(false);
+      }
+    };
+
+    cargarFlota();
+    crearManiobra();
+
+    return () => {
+      active = false;
+    };
+
+  }, [open, travelId, waybillId, initialData, reset]);
+
+  // =====================================================
+  // ASIGNAR MOTOGENERADORES AL VIAJE
+  // =====================================================
+
+  const asignarViaje = async (data: MGForm) => {
     try {
-      setLoading(true);
+      setIsSaving(true);
 
-      const res = await odooApi.post(
+      const response = await odooApi.post(
         '/tms_waybill/TravelGeneratorAssignment/',
-        data
+        {
+          id: travelId,
+          x_motogenerador_1: data.x_motogenerador_1,
+          x_motogenerador_2: data.x_motogenerador_2,
+        }
       );
 
-      if (res.data.status === 'success') {
-        toast.success(res.data.message);
+      if (response.data.status === 'success') {
+        toast.success(response.data.message);
         handleClose();
       } else {
-        toast.error(res.data.message || 'No fue posible realizar la asignación.');
+        toast.error(
+          response.data.message || 'No fue posible asignar los motogeneradores.'
+        );
       }
 
     } catch (error: any) {
+      console.error(error);
+
       toast.error(
-        'Error: ' +
-        (error.response?.data?.detail || error.message)
+        error.response?.data?.detail || error.message || 'Error al asignar el viaje.'
       );
     } finally {
-      setLoading(false);
+      setIsSaving(false);
     }
   };
 
+  // =====================================================
+  // ASIGNAR MOTOGENERADORES A LA MANIOBRA
+  // =====================================================
+
+  const asignarManiobra = async (data: MGForm) => {
+    if (!maniobraId) {
+      toast.error('No se ha generado la maniobra de retiro.');
+      return;
+    }
+
+    try {
+      setIsSaving(true);
+
+      const response = await odooApi.put(
+        `/maniobras/equipo/${maniobraId}`,
+        {
+          motogenerador_1: data.motogenerador_1,
+          motogenerador_2: data.motogenerador_2,
+        }
+      );
+
+      if (response.data.status === 'success') {
+        toast.success(response.data.message);
+        handleClose();
+      } else {
+        toast.error(
+          response.data.message || 'No fue posible asignar los motogeneradores.'
+        );
+      }
+
+    } catch (error: any) {
+      console.error(error);
+
+      toast.error(
+        error.response?.data?.detail || error.message || 'Error al asignar la maniobra.'
+      );
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  // =====================================================
+  // SELECTOR REUTILIZABLE
+  // =====================================================
+
   const renderSelector = (
-    name: 'x_motogenerador_1' | 'x_motogenerador_2',
+    name: SelectorName,
     label: string,
     description: string,
-    excludedId: number | null | undefined,
+    excludedId: number | null
   ) => (
     <Box
       sx={{
         flex: 1,
         minWidth: 0,
-        border: '1px solid',
-        borderColor: '#E2E8F0',
+        border: '1px solid #E2E8F0',
         borderRadius: 2,
         p: 2,
         bgcolor: '#FFFFFF',
@@ -165,6 +312,7 @@ const AsignacionMG = ({
           <Typography fontWeight={700} fontSize={13}>
             {label}
           </Typography>
+
           <Typography color="text.secondary" fontSize={11}>
             {description}
           </Typography>
@@ -179,7 +327,7 @@ const AsignacionMG = ({
             id={name}
             label="Seleccionar motogenerador"
             name={name}
-            onChange={(val: number | null) => field.onChange(val)}
+            onChange={(value: number | null) => field.onChange(value)}
             value={field.value ?? undefined}
             isLoading={isLoadingFlota}
             options={motogeneradores.filter(
@@ -191,10 +339,14 @@ const AsignacionMG = ({
     </Box>
   );
 
+  // =====================================================
+  // RENDER
+  // =====================================================
+
   return (
     <Dialog
       open={open}
-      onClose={isLoading ? undefined : handleClose}
+      onClose={isSaving ? undefined : handleClose}
       fullWidth
       maxWidth="lg"
       PaperProps={{
@@ -204,7 +356,6 @@ const AsignacionMG = ({
         },
       }}
     >
-      {/* Encabezado */}
       <DialogTitle sx={{ pb: 2 }}>
         <Box display="flex" alignItems="center" gap={1.5}>
           <Box
@@ -228,7 +379,7 @@ const AsignacionMG = ({
             </Typography>
 
             <Typography color="text.secondary" fontSize={12}>
-              Configura los equipos asociados al viaje.
+              Configura los equipos asociados al viaje y a la maniobra.
             </Typography>
           </Box>
         </Box>
@@ -237,42 +388,89 @@ const AsignacionMG = ({
       <Divider />
 
       <DialogContent sx={{ py: 3 }}>
-
         <Accordion variant="shadow">
-          <AccordionItem key="1" aria-label="Accordion 1" title="Maniobra retiro">
-            <Box display="flex" gap={2}>
+
+          {/* MANIOBRA */}
+
+          <AccordionItem
+            key="maniobra"
+            aria-label="Maniobra de retiro"
+            title="Maniobra retiro"
+          >
+            <Box display="flex" gap={2} alignItems="center" flexWrap="wrap">
+
+              {renderSelector(
+                'motogenerador_1',
+                'Motogenerador 1',
+                'Primer equipo',
+                maniobraMG2
+              )}
+
+              {renderSelector(
+                'motogenerador_2',
+                'Motogenerador 2',
+                'Segundo equipo',
+                maniobraMG1
+              )}
+
+              <Button
+                color="warning"
+                size="sm"
+                className="text-white"
+                onPress={() => handleSubmit(asignarManiobra)()}
+                isLoading={isSaving}
+                isDisabled={
+                  isLoadingFlota ||
+                  isCreatingManiobra ||
+                  !maniobraId ||
+                  isSaving
+                }
+              >
+                Guardar asignación
+              </Button>
+
+            </Box>
+          </AccordionItem>
+
+          {/* VIAJE */}
+
+          <AccordionItem
+            key="viaje"
+            aria-label="Asignación al viaje"
+            title="Viaje"
+          >
+            <Box display="flex" gap={2} flexWrap="wrap">
+
               {renderSelector(
                 'x_motogenerador_1',
                 'Motogenerador 1',
                 'Primer equipo',
-                mg2
+                viajeMG2
               )}
 
               {renderSelector(
                 'x_motogenerador_2',
                 'Motogenerador 2',
                 'Segundo equipo',
-                mg1
-              )}
-            </Box>
-          </AccordionItem>
-          <AccordionItem key="2" aria-label="Accordion 1" title="Viaje">
-            <Box display="flex" gap={2}>
-              {renderSelector(
-                'x_motogenerador_1',
-                'Motogenerador 1',
-                'Primer equipo',
-                mg2
+                viajeMG1
               )}
 
-              {renderSelector(
-                'x_motogenerador_2',
-                'Motogenerador 2',
-                'Segundo equipo',
-                mg1
-              )}
+            </Box>
+
+            <Box display="flex" justifyContent="flex-end" pt={2}>
+              <Button
+                color="success"
+                size="sm"
+                className="text-white"
+                onPress={() => handleSubmit(asignarViaje)()}
+                isLoading={isSaving}
+                isDisabled={isLoadingFlota || isSaving}
+              >
+                Guardar asignación
+              </Button>
             </Box>
           </AccordionItem>
+
         </Accordion>
       </DialogContent>
 
@@ -284,22 +482,12 @@ const AsignacionMG = ({
           color="default"
           size="sm"
           onPress={handleClose}
-          isDisabled={isLoading}
+          isDisabled={isSaving}
         >
           Cancelar
         </Button>
-
-        <Button
-          color="success"
-          size="sm"
-          className="text-white"
-          onPress={() => handleSubmit(asignar_viaje)()}
-          isLoading={isLoading}
-          isDisabled={isLoadingFlota}
-        >
-          Guardar asignación
-        </Button>
       </DialogActions>
+
     </Dialog>
   );
 };
