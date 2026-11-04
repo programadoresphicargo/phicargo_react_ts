@@ -77,15 +77,15 @@ const AvatarProfile = () => {
           <div className="flex cursor-pointer items-center gap-2 rounded-full">
             <User
               avatarProps={{
-                size: "md",
-                src: image,
+                size: "sm",
+                src: "https://cdn-icons-png.flaticon.com/512/3177/3177440.png",
                 className:
-                  "ring-2 ring-orange-400 ring-offset-2 ring-offset-background",
+                  "ring-2 ring-primary-400 ring-offset-2 ring-offset-background",
               }}
               description={session?.user.role || ""}
-              name={`🪦 ${session?.user.name || ""}`}
+              name={`${session?.user.name || ""}`}
             />
-            {pathname == "/menu" && (
+            {pathname == "/" && (
               <Lottie
                 src={zombieAnimation}
                 loop
@@ -96,7 +96,7 @@ const AvatarProfile = () => {
           </div>
         </DropdownTrigger>
 
-        <DropdownMenu
+        <DropdownMenu disabledKeys={["change-avatar"]}
           aria-label="Profile Actions"
           variant="faded"
           className="min-w-56"
@@ -106,7 +106,7 @@ const AvatarProfile = () => {
             onPress={onOpen}
             textValue="Cambiar avatar"
           >
-            🎃 Cambiar avatar
+            Cambiar avatar
           </DropdownItem>
 
           <DropdownItem

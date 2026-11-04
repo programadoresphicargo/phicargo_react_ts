@@ -138,13 +138,6 @@ const LoginPage = () => {
                 className="mb-7 max-h-24 object-contain"
               />
 
-              <Lottie
-                src={randomAnimation ?? ''}
-                loop
-                autoplay
-                style={{ height: 120, width: 120 }}
-              />
-
               <h2 className="text-2xl font-semibold tracking-tight text-white">
                 Bienvenido
               </h2>
