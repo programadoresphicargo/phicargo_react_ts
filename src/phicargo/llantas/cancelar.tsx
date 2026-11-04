@@ -114,12 +114,17 @@ const CancelarSolicitudDialog: React.FC<CancelarSolicitudDialogProps> = ({
             </DialogContent>
 
             <DialogActions>
-                <Button onPress={onClose} isDisabled={loading} radius="full">
+                <Button
+                    onPress={onClose}
+                    isDisabled={loading}
+                    radius='md'
+                    size='sm'>
                     Cancelar
                 </Button>
 
                 <Button
-                    radius="full"
+                    radius='md'
+                    size='sm'
                     onPress={handleCancel}
                     color="danger"
                     isDisabled={loading}

@@ -112,11 +112,13 @@ const CancelarSolicitudDialog: React.FC<Props> = ({
                 <Button
                     onPress={onClose}
                     disabled={loading}
-                    radius='full'>
+                    radius='md'
+                    size='sm'>
                     Cancelar
                 </Button>
                 <Button
-                    radius='full'
+                    radius='md'
+                    size='sm'
                     onPress={() => handleSubmit(handleCancel)()}
                     color="danger"
                     isDisabled={loading}
