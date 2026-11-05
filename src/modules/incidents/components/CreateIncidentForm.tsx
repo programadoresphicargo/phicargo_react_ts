@@ -1,4 +1,4 @@
-import { FileUploadInput } from '@/components/inputs';
+import { FileUploadInput, SelectInput } from '@/components/inputs';
 import { Alert, Button } from '@heroui/react';
 import {
   useCreateIncidentForm,
@@ -528,6 +528,27 @@ export const CreateIncidentForm = ({
                         label="Solicitante"
                         rules={{ required: 'Requerido' }}
                         isDisabled={isDirectionReport || criticalDisabled || (isEditing && !isEditingEnabled)}
+                      />
+
+                      <SelectInput
+                        isDisabled={isDirectionReport || criticalDisabled || (isEditing && !isEditingEnabled)}
+                        control={control}
+                        name="discountType"
+                        label="Motivo principal"
+                        variant="flat"
+                        items={[
+                          { value: "Perdida de maniobra", key: "Perdida de maniobra" },
+                          { value: "Daño de unidad/remolque", key: "Daño de unidad/remolque" },
+                          { value: "Violaciones de trafico", key: "Violaciones de trafico" },
+                          { value: "Problemas de cliente", key: "Problemas de cliente" },
+                          { value: "Colisión", key: "Colisión" },
+                          { value: "Descuentos de casetas", key: "Descuentos de casetas" },
+                          { value: "Perdida de EPP/Equipo de amarre", key: "Perdida de EPP/Equipo de amarre" },
+                          { value: "Prestamo personal", key: "Prestamo personal" },
+                        ]}
+                        rules={{
+                          required: "Campo obligatorio",
+                        }}
                       />
 
                       {/* Monto */}

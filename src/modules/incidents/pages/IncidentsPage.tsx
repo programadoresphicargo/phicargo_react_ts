@@ -101,7 +101,8 @@ const IncidentsPage = () => {
           Crear incidencia
         </Button>
         <Button
-          color='primary'
+          color='success'
+          className='text-white'
           radius='md'
           onPress={() => EnviarCorreo()}
           size='sm'

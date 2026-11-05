@@ -13,5 +13,6 @@ export type Descuento = {
  fecha: Dayjs | null;
  estado: string;
  comentarios_cancelacion: string | null;
+ type: string;
  mails?: Mail[];
 }

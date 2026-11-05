@@ -40,6 +40,7 @@ export class IncidentAdapter {
       periodicidad: descuento.periodicidad,
       comentarios: descuento.comentarios,
       motivo: descuento.motivo,
+      type: descuento.type
     };
   }
 
@@ -103,6 +104,7 @@ export class IncidentAdapter {
       discountTotal: incident.discountTotal,
       discountReason: incident.discountReason,
       discountComments: incident.discountComments,
+      discountType: incident.discountType,
       periodicidad: incident.periodicidad,
       id_solicitante: incident.id_solicitante,
       comentarios_cancelacion: incident.comentarios_cancelacion,
@@ -161,6 +163,9 @@ export class IncidentAdapter {
     }
     if (incident.periodicidad) {
       data.periodicidad = incident.periodicidad
+    }
+    if (incident.discountType) {
+      data.discountType = incident.discountType
     }
     return data;
   }

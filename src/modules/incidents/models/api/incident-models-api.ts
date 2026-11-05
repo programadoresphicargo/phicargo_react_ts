@@ -39,6 +39,7 @@ export interface DescuentoApi {
   comentarios: string | null;
   motivo: string | null;
   periodicidad: string | null;
+  type: string;
 }
 
 export interface IncidentApi extends IncidentBaseApi {
@@ -65,6 +66,7 @@ export interface IncidentCreateApi extends IncidentBaseApi {
   discountTotal?: number | null;
   discountReason?: string | null;
   discountComments?: string | null;
+  discountType?: string | null;
 }
 
 export type IncidentUpdateApi = Partial<IncidentBaseApi> & {
@@ -78,4 +80,5 @@ export type IncidentUpdateApi = Partial<IncidentBaseApi> & {
   discountComments?: string | null;
   periodicidad?: string | null;
   id_solicitante?: number | null;
+  discountType?: string | null;
 };

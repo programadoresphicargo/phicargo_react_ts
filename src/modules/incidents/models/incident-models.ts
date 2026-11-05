@@ -41,6 +41,7 @@ export interface Descuento {
   comentarios: string | null;
   motivo: string | null;
   periodicidad: string | null;
+  type: string;
 }
 
 export interface Incident extends IncidentBase {
@@ -68,6 +69,7 @@ export interface IncidentCreate extends IncidentBase {
   discountTotal?: number | null;
   discountReason?: string | null;
   discountComments?: string | null;
+  discountType?: string | null;
 }
 
 export type IncidentUpdate = Partial<IncidentBase> & {
@@ -81,5 +83,6 @@ export type IncidentUpdate = Partial<IncidentBase> & {
   discountTotal?: number | null;
   discountReason?: string | null;
   discountComments?: string | null;
+  discountType?: string | null;
 };
 

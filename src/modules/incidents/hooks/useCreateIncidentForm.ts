@@ -29,6 +29,7 @@ const initialFormState: IncidentCreate = {
   discountTotal: null,
   discountReason: null,
   discountComments: null,
+  discountType: null,
   periodicidad: '',
   id_solicitante: null,
   comentarios_cancelacion: null,
@@ -76,6 +77,7 @@ export function useCreateIncidentForm({
   useEffect(() => {
     if (mode === "edit" && incident) {
       // si el incidente tiene descuento, activar createDiscount
+      console.log(incident.descuento);
       if (incident.descuento?.importe != null) {
         setCreateDiscount(true);
 
@@ -84,6 +86,8 @@ export function useCreateIncidentForm({
         form.setValue("discountAmount", incident.descuento.monto ?? 0);
         form.setValue("discountReason", incident.descuento.motivo ?? "");
         form.setValue("discountComments", incident.descuento.comentarios ?? "");
+        form.setValue("discountType", incident.descuento.type ?? "");
+
         form.setValue("periodicidad", incident.descuento.periodicidad ?? "");
         form.setValue("id_solicitante", incident.descuento.id_solicitante ?? null);
         form.setValue("id_descuento", incident.descuento.id_descuento ?? null);
@@ -177,6 +181,7 @@ export function useCreateIncidentForm({
       form.setValue('discountComments', null);
       form.setValue("periodicidad", "");
       form.setValue("id_descuento", 0);
+      form.setValue("discountType", null);
     }
   }, [createDiscount]);
 
@@ -211,10 +216,9 @@ export function useCreateIncidentForm({
       discountComments: data.discountComments,
       periodicidad: data.periodicidad,
       id_solicitante: data.id_solicitante,
-      id_descuento: data.id_descuento
+      id_descuento: data.id_descuento,
+      discountType: data.discountType
     };
-
-    console.log(allowed);
 
     updateIncident.mutate(
       { id: incident.id, updatedItem: allowed, files: files },

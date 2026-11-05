@@ -26,7 +26,8 @@ const initialForm: Descuento = {
   monto: 0,
   estado: "borrador",
   fecha: dayjs(),
-  comentarios_cancelacion: null
+  comentarios_cancelacion: null,
+  type: "",
 };
 
 export default function DescuentoForm({ open, handleClose, id_descuento }: { open: boolean, handleClose: () => void, id_descuento: number | null }) {
@@ -449,6 +450,27 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
                             value: "Quincenal",
                             key: "quincenal",
                           },
+                        ]}
+                        rules={{
+                          required: "Periodicidad obligatoria",
+                        }}
+                      />
+
+                      <SelectInput
+                        isDisabled={!isEditing}
+                        control={control}
+                        name="type"
+                        label="Motivo principal"
+                        variant="bordered"
+                        items={[
+                          { value: "Perdida de maniobra", key: "Perdida de maniobra" },
+                          { value: "Daño de unidad/remolque", key: "Daño de unidad/remolque" },
+                          { value: "Violaciones de trafico", key: "Violaciones de trafico" },
+                          { value: "Problemas de cliente", key: "Problemas de cliente" },
+                          { value: "Colisión", key: "Colisión" },
+                          { value: "Descuentos de casetas", key: "Descuentos de casetas" },
+                          { value: "Perdida de EPP/Equipo de amarre", key: "Perdida de EPP/Equipo de amarre" },
+                          { value: "Prestamo personal", key: "Prestamo personal" },
                         ]}
                         rules={{
                           required: "Periodicidad obligatoria",
