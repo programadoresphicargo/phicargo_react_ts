@@ -9,8 +9,8 @@ import { Button } from "@heroui/react";
 import odooApi from '@/api/odoo-api';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { Chip } from '@heroui/react';
-import DescuentoForm from './form';
-import { Descuento } from './type';
+import DescuentoForm from './components/descuentoForm';
+import { Descuento } from './type/descuento.types';
 
 const Descuentos = ({ }) => {
 

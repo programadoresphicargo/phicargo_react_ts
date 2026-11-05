@@ -12,7 +12,7 @@ import dayjs from 'dayjs';
 import { ContactsSearchInputMatch } from '@/modules/contacts/components/inputs/ContactsSearchInputMatch';
 import { UpdateComplaintStatus } from './UpdateComplaintStatus';
 import { useEffect, useState } from 'react';
-import { SelectEmpleado } from '@/phicargo/descuentos/select_empleados';
+import { SelectEmpleado } from '@/phicargo/descuentos/components/select_empleados';
 const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
 interface Props {

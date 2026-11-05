@@ -1,19 +1,17 @@
 import { useEffect, useState } from "react";
-import { Button, Chip, Progress, DatePicker, Alert, } from "@heroui/react";
+import { Button, Chip, Progress, Alert, } from "@heroui/react";
 import Swal from "sweetalert2";
 import odooApi from "@/api/odoo-api";
-import { Controller, useForm } from "react-hook-form";
-import { NumberInput, SelectInput, TextareaInput } from "@/components/inputs";
+import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { Descuento } from "./type";
-import { parseDate } from "@internationalized/date";
+import { Descuento } from "../type/descuento.types";
 import dayjs from "dayjs";
-import { SelectEmpleado } from "./select_empleados";
 import { useAuthContext } from "@/modules/auth/hooks";
-import { OpenArchive } from "../utils/functions";
-import CancelDescuento from "./cancelar";
+import { OpenArchive } from "../../utils/functions";
+import CancelDescuento from "./cancelarDescuento";
 import { Dialog, DialogActions, DialogContent } from "@mui/material";
-import HistorialCambios from "../almacen/solicitud/cambios/epps";
+import HistorialCambios from "../../almacen/solicitud/cambios/epps";
+import DescuentoFields from "./descuentoFields";
 
 const initialForm: Descuento = {
   id_descuento: null,
@@ -146,7 +144,11 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
     <>
 
       {id_descuento && (
-        <CancelDescuento open={openCancelForm} onClose={handleCloseCancel} id={id_descuento}></CancelDescuento>
+        <CancelDescuento
+          open={openCancelForm}
+          onClose={handleCloseCancel}
+          id={id_descuento}
+        />
       )}
 
       <Dialog
@@ -317,227 +319,19 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
               </div>
 
               <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,2fr)_minmax(280px,1fr)] gap-6 items-start">
-                {/* Área principal */}
-                <div className="flex flex-col gap-6 min-w-0">
 
-                  {/* SOLICITANTE / EMPLEADO */}
-                  <div className="rounded-2xl border border-slate-200 bg-white shadow-sm">
+                <DescuentoFields control={control} disabled={!isEditing}></DescuentoFields>
 
-                    <div className="border-b border-slate-200 px-5 py-4">
-                      <h3 className="text-sm font-semibold text-slate-800">
-                        Participantes
-                      </h3>
-
-                      <p className="mt-1 text-xs text-slate-500">
-                        Define quién solicita y a quién se aplicará el descuento.
-                      </p>
-                    </div>
-
-                    <div className="grid grid-cols-1 gap-5 p-5 md:grid-cols-2">
-
-                      <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-4">
-
-                        <div className="mb-4">
-                          <p className="text-sm font-semibold text-slate-700">
-                            Solicitante
-                          </p>
-
-                          <p className="text-xs text-slate-500">
-                            Responsable que genera la solicitud.
-                          </p>
-                        </div>
-
-                        <SelectEmpleado
-                          control={control}
-                          rules={{
-                            required: "Solicitante requerido",
-                          }}
-                          name="id_solicitante"
-                          label="Solicitante"
-                          variant="bordered"
-                          isDisabled={!isEditing}
-                        />
-
-                      </div>
-
-                      <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-4">
-
-                        <div className="mb-4">
-                          <p className="text-sm font-semibold text-slate-700">
-                            Empleado
-                          </p>
-
-                          <p className="text-xs text-slate-500">
-                            Persona a quien se aplicará el descuento.
-                          </p>
-                        </div>
-
-                        <SelectEmpleado
-                          control={control}
-                          name="id_empleado"
-                          label="Empleado"
-                          rules={{
-                            required: "Empleado requerido",
-                          }}
-                          placeholder="Empleado responsable del descuento"
-                          variant="bordered"
-                          isDisabled={!isEditing}
-                        />
-
-                      </div>
-
-                    </div>
-                  </div>
-
-                  {/* DETALLES */}
-                  <div className="mt-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
-
-                    <div className="border-b border-slate-200 px-5 py-4">
-                      <h3 className="text-sm font-semibold text-slate-800">
-                        Información del descuento
-                      </h3>
-
-                      <p className="mt-1 text-xs text-slate-500">
-                        Registra los datos financieros y administrativos asociados.
-                      </p>
-                    </div>
-
-                    <div className="grid grid-cols-1 gap-5 p-5 md:grid-cols-2">
-
-                      <Controller
-                        control={control}
-                        name="fecha"
-                        rules={{
-                          required: "Fecha de incidencia requerida",
-                        }}
-                        render={({ field, fieldState }) => {
-                          const calendarValue = field.value
-                            ? parseDate(field.value.format("YYYY-MM-DD"))
-                            : null;
-
-                          return (
-                            <DatePicker
-                              label="Fecha de incidencia"
-                              variant="bordered"
-                              isDisabled={!isEditing}
-                              value={calendarValue}
-                              onChange={(val) => {
-                                field.onChange(
-                                  val
-                                    ? dayjs(val.toString())
-                                    : null
-                                );
-                              }}
-                              isInvalid={!!fieldState.error}
-                              errorMessage={fieldState.error?.message}
-                            />
-                          );
-                        }}
-                      />
-
-                      <SelectInput
-                        isDisabled={!isEditing}
-                        control={control}
-                        name="periodicidad"
-                        label="Periodicidad"
-                        variant="bordered"
-                        items={[
-                          {
-                            value: "Viaje",
-                            key: "viaje",
-                          },
-                          {
-                            value: "Quincenal",
-                            key: "quincenal",
-                          },
-                        ]}
-                        rules={{
-                          required: "Periodicidad obligatoria",
-                        }}
-                      />
-
-                      <SelectInput
-                        isDisabled={!isEditing}
-                        control={control}
-                        name="type"
-                        label="Motivo principal"
-                        variant="bordered"
-                        items={[
-                          { value: "Perdida de maniobra", key: "Perdida de maniobra" },
-                          { value: "Daño de unidad/remolque", key: "Daño de unidad/remolque" },
-                          { value: "Violaciones de trafico", key: "Violaciones de trafico" },
-                          { value: "Problemas de cliente", key: "Problemas de cliente" },
-                          { value: "Colisión", key: "Colisión" },
-                          { value: "Descuentos de casetas", key: "Descuentos de casetas" },
-                          { value: "Perdida de EPP/Equipo de amarre", key: "Perdida de EPP/Equipo de amarre" },
-                          { value: "Prestamo personal", key: "Prestamo personal" },
-                        ]}
-                        rules={{
-                          required: "Periodicidad obligatoria",
-                        }}
-                      />
-
-                      <NumberInput
-                        control={control}
-                        label="Monto"
-                        name="monto"
-                        isDisabled={!isEditing}
-                        variant="bordered"
-                        rules={{
-                          required: "Monto obligatorio",
-                        }}
-                      />
-
-                      <NumberInput
-                        control={control}
-                        name="importe"
-                        label="Importe"
-                        isDisabled={!isEditing}
-                        variant="bordered"
-                        rules={{
-                          required: "Importe obligatorio",
-                        }}
-                      />
-
-                      <div className="md:col-span-2">
-                        <TextareaInput
-                          control={control}
-                          name="motivo"
-                          label="Motivo"
-                          variant="bordered"
-                          isDisabled={!isEditing}
-                          rules={{
-                            required: "Motivo obligatorio",
-                          }}
-                        />
-                      </div>
-
-                      <div className="md:col-span-2">
-                        <TextareaInput
-                          control={control}
-                          name="comentarios"
-                          label="Comentarios"
-                          variant="bordered"
-                          isDisabled={!isEditing}
-                          rules={{
-                            required: "Comentarios obligatorios",
-                          }}
-                        />
-                      </div>
-
-                    </div>
-                  </div>
-                </div>
-
-                <aside className="min-w-0 rounded-lg border border-default-200 p-4">
-                  <h3 className="text-medium font-bold text-muted-foreground">
-                    Historial de cambios
-                  </h3>
-                  <p className="text-xs text-muted-foreground mt-1">
-                  </p>
-
-                  <HistorialCambios data={mails ?? []}></HistorialCambios>
-                </aside>
+                {id_descuento && (
+                  <aside className="min-w-0 rounded-lg border border-default-200 p-4">
+                    <h3 className="text-medium font-bold text-muted-foreground">
+                      Historial de cambios
+                    </h3>
+                    <p className="text-xs text-muted-foreground mt-1">
+                    </p>
+                    <HistorialCambios data={mails ?? []}></HistorialCambios>
+                  </aside>
+                )}
 
               </div>
 

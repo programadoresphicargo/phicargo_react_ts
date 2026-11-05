@@ -20,7 +20,7 @@ import { parseDate } from "@internationalized/date";
 import dayjs from "dayjs";
 import SelectFlota from "../maniobras/selects_flota";
 import { Flota, OptionFlota } from "../maniobras/tipado";
-import { SelectEmpleado } from "@/phicargo/descuentos/select_empleados";
+import { SelectEmpleado } from "@/phicargo/descuentos/components/select_empleados";
 
 const initialForm: MovInterno = {
   id: null,

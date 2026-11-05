@@ -1,5 +1,5 @@
 import { Dayjs } from "dayjs";
-import { Mail } from "../almacen/solicitud/cambios/epps";
+import { Mail } from "../../almacen/solicitud/cambios/epps";
 
 export type Descuento = {
  id_descuento: number | null;
