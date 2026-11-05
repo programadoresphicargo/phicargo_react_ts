@@ -1,5 +1,4 @@
 import type {
-  Descuento,
   DriverInfo,
   Incident,
   IncidentCreate,
@@ -18,6 +17,7 @@ import type {
 import dayjs from '@/utilities/dayjs-config';
 import { userBasicToLocal } from '../../auth/adapters';
 import { FilesAdapter } from '@/modules/core/adapters';
+import { Descuento } from '@/phicargo/descuentos/type/descuento.types';
 
 export class IncidentAdapter {
   static driverInfoToLocal(driver: DriverInfoApi): DriverInfo {
@@ -40,7 +40,10 @@ export class IncidentAdapter {
       periodicidad: descuento.periodicidad,
       comentarios: descuento.comentarios,
       motivo: descuento.motivo,
-      type: descuento.type
+      type: descuento.type,
+      fecha: dayjs(descuento.fecha),
+      estado: descuento.estado,
+      comentarios_cancelacion: descuento.comentarios_cancelacion
     };
   }
 
@@ -99,15 +102,15 @@ export class IncidentAdapter {
       damage_cost: incident.damageCost ?? null,
       is_driver_responsible: incident.isDriverResponsible,
       state: incident.state,
-      id_descuento: incident.id_descuento,
-      discountAmount: incident.discountAmount,
-      discountTotal: incident.discountTotal,
-      discountReason: incident.discountReason,
-      discountComments: incident.discountComments,
-      discountType: incident.discountType,
-      periodicidad: incident.periodicidad,
-      id_solicitante: incident.id_solicitante,
       comentarios_cancelacion: incident.comentarios_cancelacion,
+      descuento: incident.descuento
+        ? {
+          ...incident.descuento,
+          fecha: incident.descuento.fecha
+            ? incident.descuento.fecha.format('YYYY-MM-DD')
+            : null,
+        }
+        : null,
     };
   }
 
@@ -143,29 +146,13 @@ export class IncidentAdapter {
     if (incident.attendedAt) {
       data.attended_at = incident.attendedAt.format('YYYY-MM-DD');
     }
-    if (incident.id_descuento) {
-      data.id_descuento = incident.id_descuento
-    }
-    if (incident.discountTotal) {
-      data.discountTotal = incident.discountTotal
-    }
-    if (incident.discountAmount) {
-      data.discountAmount = incident.discountAmount
-    }
-    if (incident.discountComments) {
-      data.discountComments = incident.discountComments
-    }
-    if (incident.discountReason) {
-      data.discountReason = incident.discountReason
-    }
-    if (incident.id_solicitante) {
-      data.id_solicitante = incident.id_solicitante
-    }
-    if (incident.periodicidad) {
-      data.periodicidad = incident.periodicidad
-    }
-    if (incident.discountType) {
-      data.discountType = incident.discountType
+    if (incident.descuento) {
+      data.descuento = {
+        ...incident.descuento,
+        fecha: incident.descuento.fecha
+          ? incident.descuento.fecha.format("YYYY-MM-DD")
+          : null,
+      };
     }
     return data;
   }

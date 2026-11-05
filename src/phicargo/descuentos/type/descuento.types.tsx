@@ -7,9 +7,9 @@ export type Descuento = {
  id_empleado: number | null;
  periodicidad: string;
  motivo: string;
- importe: number | null;
+ importe: number;
  comentarios: string;
- monto: number | null;
+ monto: number;
  fecha: Dayjs | null;
  estado: string;
  comentarios_cancelacion: string | null;

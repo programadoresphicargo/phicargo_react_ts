@@ -25,14 +25,8 @@ const initialFormState: IncidentCreate = {
   newVehicleStateId: null,
   driverId: null,
   state: 'pending_validation',
-  discountAmount: null,
-  discountTotal: null,
-  discountReason: null,
-  discountComments: null,
-  discountType: null,
-  periodicidad: '',
-  id_solicitante: null,
   comentarios_cancelacion: null,
+  descuento: null
 };
 
 type Mode = "create" | "edit";
@@ -54,6 +48,7 @@ export function transformIncidentToCreate(incident: Incident): IncidentCreate {
     startDate: null,
     endDate: null,
     newVehicleStateId: null,
+    descuento: incident.descuento
   };
 }
 
@@ -80,17 +75,6 @@ export function useCreateIncidentForm({
       console.log(incident.descuento);
       if (incident.descuento?.importe != null) {
         setCreateDiscount(true);
-
-        // setear los valores al formulario también:
-        form.setValue("discountTotal", incident.descuento.importe);
-        form.setValue("discountAmount", incident.descuento.monto ?? 0);
-        form.setValue("discountReason", incident.descuento.motivo ?? "");
-        form.setValue("discountComments", incident.descuento.comentarios ?? "");
-        form.setValue("discountType", incident.descuento.type ?? "");
-
-        form.setValue("periodicidad", incident.descuento.periodicidad ?? "");
-        form.setValue("id_solicitante", incident.descuento.id_solicitante ?? null);
-        form.setValue("id_descuento", incident.descuento.id_descuento ?? null);
       }
     }
   }, [mode, incident]);
@@ -173,18 +157,6 @@ export function useCreateIncidentForm({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [incidentSelected]);
 
-  useEffect(() => {
-    if (createDiscount === null) {
-      form.setValue('discountAmount', null);
-      form.setValue('discountTotal', null);
-      form.setValue('discountReason', null);
-      form.setValue('discountComments', null);
-      form.setValue("periodicidad", "");
-      form.setValue("id_descuento", 0);
-      form.setValue("discountType", null);
-    }
-  }, [createDiscount]);
-
   const confirmIncidentFn = (id?: number) => {
     const toId = id ?? incident?.id;
     if (!toId) return;
@@ -210,14 +182,7 @@ export function useCreateIncidentForm({
       vehicleId: data.vehicleId,
       driverId: data.driverId,
       state: data.state,
-      discountTotal: data.discountTotal,
-      discountAmount: data.discountAmount,
-      discountReason: data.discountReason,
-      discountComments: data.discountComments,
-      periodicidad: data.periodicidad,
-      id_solicitante: data.id_solicitante,
-      id_descuento: data.id_descuento,
-      discountType: data.discountType
+      descuento: data.descuento
     };
 
     updateIncident.mutate(

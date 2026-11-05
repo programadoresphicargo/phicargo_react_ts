@@ -2,6 +2,7 @@ import type { Dayjs } from 'dayjs';
 import type { UserBasic } from '../../auth/models';
 import { OneDriveFile } from '@/modules/core/models';
 import { Mail } from '@/phicargo/almacen/solicitud/cambios/epps';
+import { Descuento } from '@/phicargo/descuentos/type/descuento.types';
 
 export type IncidentType = 'operative' | 'legal' | 'cleaning' | 'maintenance';
 
@@ -32,18 +33,6 @@ interface IncidentBase {
   comentarios_cancelacion: string | null;
 }
 
-export interface Descuento {
-  id_descuento: number | null;
-  id_solicitante: number | null;
-  id_empleado: number | null;
-  importe: number | null;
-  monto: number | null;
-  comentarios: string | null;
-  motivo: string | null;
-  periodicidad: string | null;
-  type: string;
-}
-
 export interface Incident extends IncidentBase {
   id: number;
   createdAt: Dayjs;
@@ -62,27 +51,13 @@ export interface IncidentCreate extends IncidentBase {
   newVehicleStateId?: number | null;
   vehicleId?: number | null;
   driverId?: number | null;
-  id_descuento?: number | null;
-  id_solicitante?: number | null;
-  periodicidad?: string | null;
-  discountAmount?: number | null;
-  discountTotal?: number | null;
-  discountReason?: string | null;
-  discountComments?: string | null;
-  discountType?: string | null;
+  descuento?: Descuento | null;
 }
 
 export type IncidentUpdate = Partial<IncidentBase> & {
   vehicleId?: number | null;
   driverId?: number | null;
   attendedAt?: Dayjs | null;
-  id_descuento?: number | null;
-  id_solicitante?: number | null;
-  periodicidad?: string | null;
-  discountAmount?: number | null;
-  discountTotal?: number | null;
-  discountReason?: string | null;
-  discountComments?: string | null;
-  discountType?: string | null;
+  descuento?: Descuento | null;
 };
 
