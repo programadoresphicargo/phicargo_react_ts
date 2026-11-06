@@ -106,6 +106,7 @@ export class IncidentAdapter {
       descuento: incident.descuento
         ? {
           ...incident.descuento,
+          estado: "borrador",
           fecha: incident.descuento.fecha
             ? incident.descuento.fecha.format('YYYY-MM-DD')
             : null,
