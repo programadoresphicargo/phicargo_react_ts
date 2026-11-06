@@ -12,6 +12,7 @@ import CancelDescuento from "./cancelarDescuento";
 import { Dialog, DialogActions, DialogContent } from "@mui/material";
 import HistorialCambios from "../../almacen/solicitud/cambios/epps";
 import DescuentoFields from "./descuentoFields";
+import { EstadoDescuento, useDescuento } from "./service";
 
 const initialForm: Descuento = {
   id_descuento: null,
@@ -32,12 +33,13 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
 
   const { session } = useAuthContext();
 
-  const { control, handleSubmit, reset, watch } = useForm<Descuento>({
+  const { control, handleSubmit, reset, watch, setValue } = useForm<Descuento>({
     defaultValues: initialForm,
   });
   const [isLoading, setLoading] = useState(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [openCancelForm, setOpenCancelForm] = useState<boolean>(false);
+  const { cambiarEstado } = useDescuento();
 
   const handleCloseCancel = () => {
     setOpenCancelForm(false);
@@ -103,7 +105,7 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
     }
   };
 
-  const CambiarEstado = async (estado: string) => {
+  const CambiarEstado = async (estado: EstadoDescuento) => {
     const result = await Swal.fire({
       title: `¿Marcar como ${estado} el descuento?`,
       text: "Esta acción no se puede deshacer.",
@@ -120,16 +122,13 @@ export default function DescuentoForm({ open, handleClose, id_descuento }: { ope
     });
     if (result.isConfirmed) {
       try {
-        const response = await odooApi.patch(`/descuentos/state/${id_descuento}`, null,
-          {
-            params: {
-              state: estado,
-            }
-          });
-        if (response.data.status === "success") {
-          toast.success(response.data.message);
-          handleClose();
-        } else toast.error(response.data.message);
+        const success = await cambiarEstado(
+          id_descuento!,
+          estado
+        );
+        if (success) {
+          setValue("estado", estado);
+        }
       } catch {
         toast.error("Error al confirmar.");
       }

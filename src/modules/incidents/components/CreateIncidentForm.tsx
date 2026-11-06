@@ -28,6 +28,8 @@ import { Incident } from '../models';
 import HistorialCambios from '@/phicargo/almacen/solicitud/cambios/epps';
 import DescuentoFields from '@/phicargo/descuentos/components/descuentoFields';
 import { Descuento } from '@/phicargo/descuentos/type/descuento.types';
+import { EstadoDescuento, useDescuento } from '@/phicargo/descuentos/components/service';
+import { OpenArchive } from '@/phicargo/utils/functions';
 
 interface Props {
   mode: "create" | "edit";
@@ -48,7 +50,7 @@ export const CreateIncidentForm = ({
   inspection_id2,
 }: Props) => {
   const {
-    form: { control, setValue },
+    form: { control, setValue, watch },
 
     files,
     setFiles,
@@ -82,6 +84,18 @@ export const CreateIncidentForm = ({
   const isConfirmedOrCanceled = isEditing && (incident?.state === "confirmed" || incident?.state === "canceled");
   const criticalDisabled = isConfirmedOrCanceled;
   const [selected, setSelected] = React.useState<string>("incidencia");
+
+  const id_descuento = watch("descuento.id_descuento");
+  const estado = watch("descuento.estado");
+  const { cambiarEstado, isLoading } = useDescuento();
+
+  const confirmarEstado = async (nuevoEstado: EstadoDescuento) => {
+    if (!id_descuento) return;
+    const success = await cambiarEstado(id_descuento, nuevoEstado);
+    if (success) {
+      setValue("descuento.estado", nuevoEstado);
+    }
+  };
 
   const handleConfirm = () => {
     Swal.fire({
@@ -559,15 +573,48 @@ export const CreateIncidentForm = ({
                   </Checkbox>
 
                   {createDiscount && (
-                    <DescuentoFields
-                      prefix="descuento"
-                      control={control}
-                      disabled={
-                        isDirectionReport ||
-                        criticalDisabled ||
-                        (isEditing && !isEditingEnabled)
-                      }
-                    />
+                    <>
+                      {isEditing && id_descuento && (
+                        <>
+                          <div className="flex flex-wrap gap-2">
+                            {(estado === "confirmado" || estado === "aplicado") && (
+                              <Button
+                                color="primary"
+                                variant="flat"
+                                onPress={() => OpenArchive(`/descuentos/formato/${id_descuento}`)}
+                                radius="md"
+                                size="sm"
+                              >
+                                Imprimir formato
+                              </Button>
+                            )}
+
+                            {estado === "borrador" && (
+                              <Button
+                                color="success"
+                                variant="flat"
+                                onPress={() => confirmarEstado("confirmado")}
+                                radius="md"
+                                isLoading={isLoading}
+                                size="sm"
+                              >
+                                Confirmar
+                              </Button>
+                            )}
+                          </div>
+                        </>
+                      )}
+
+                      <DescuentoFields
+                        prefix="descuento"
+                        control={control}
+                        disabled={
+                          isDirectionReport ||
+                          criticalDisabled ||
+                          (isEditing && !isEditingEnabled)
+                        }
+                      />
+                    </>
                   )}
 
                 </div>
