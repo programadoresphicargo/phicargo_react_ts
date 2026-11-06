@@ -45,7 +45,9 @@ export default function Seguimiento() {
         <>
             <Grid container spacing={2}>
 
-                <Custodia></Custodia>
+                {viaje?.custodia == "yes" && (
+                    <Custodia></Custodia>
+                )}
 
                 <Grid size={12}>
                     <Card className="border border-slate-200 bg-white shadow-sm">
@@ -559,7 +561,7 @@ export default function Seguimiento() {
                         </Tabs>
                     </div>
                 </Grid>
-            </Grid>
+            </Grid >
 
             <PanelEnvio open={open} cerrar={handleClose} id_reporte={null}></PanelEnvio>
             <FormEquipoViaje open={openFormViaje} handleClose={handleCloseFormViaje}></FormEquipoViaje>
