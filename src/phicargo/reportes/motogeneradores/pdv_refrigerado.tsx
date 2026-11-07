@@ -26,7 +26,6 @@ const PDVMaintenance = ({ }) => {
   const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
   const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
   const [range, setRange] = useState<[Date, Date] | null>([firstDay, lastDay]);
-  const [grouping, setGrouping] = useState(['sucursal', 'date_order']);
   const [selectedTravel, setSelectedTravel] = useState<any>(null);
 
   const [open, setOpen] = React.useState(false);
@@ -149,10 +148,8 @@ const PDVMaintenance = ({ }) => {
     enableGlobalFilter: true,
     enableFilters: true,
     state: {
-      grouping,
       showProgressBars: isLoading,
     },
-    onGroupingChange: setGrouping,
     groupedColumnMode: "remove",
     enableColumnPinning: true,
     enableStickyHeader: true,
@@ -160,7 +157,6 @@ const PDVMaintenance = ({ }) => {
     localization: MRT_Localization_ES,
     columnResizeMode: "onEnd",
     initialState: {
-      grouping: ['sucursal', 'date_order'],
       expanded: true,
       density: 'compact',
       showColumnFilters: true,
@@ -263,12 +259,16 @@ const PDVMaintenance = ({ }) => {
 
       return {
         sx: {
-          backgroundColor: row.subRows?.length ? backgroundColor : '#FFFFFF',
-          color: row.subRows?.length ? ColorText : '#000000',
+          backgroundColor: row.subRows?.length
+            ? '#0456cf'
+            : row.index % 2 === 0
+              ? '#FFFFFF'
+              : '#F8F9FA',
           fontFamily: 'Inter',
           fontWeight: 'normal',
           fontSize: '12px',
-          padding: '2px 8px'
+          padding: '2px 8px',
+          color: row.subRows?.length ? '#FFFFFF' : '#000000',
         },
       }
     },

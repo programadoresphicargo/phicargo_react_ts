@@ -449,47 +449,51 @@ export default function TravelMotogeneratorForm({
         >
           {/* Encabezado */}
           <Box sx={{ mb: 0.5 }}>
+            <Box>
+              <Stack spacing={1.5}>
+                {/* Encabezado */}
+                <Box>
+                  <Typography
+                    variant="subtitle1"
+                    fontWeight={700}
+                    color="#172B4D"
+                  >
+                    Equipos asignados al viaje
+                  </Typography>
 
-            <DialogActions sx={{ p: 2 }}>
+                  <Typography variant="body2" color="text.secondary">
+                    Selecciona los motogeneradores correspondientes.
+                  </Typography>
+                </Box>
 
-              <Button
-                size="sm"
-                color="success"
-                className="text-white"
-                isLoading={isSaving}
-                isDisabled={isLoadingAssignment || isLoadingFlota}
-                onPress={() => handleSubmit(guardar)()}
-              >
-                {isEditing ? "Actualizar asignación" : "Guardar asignación"}
-              </Button>
+                {/* Botones */}
+                <Stack direction="row" spacing={1.5}>
+                  <Button
+                    size="sm"
+                    color="success"
+                    radius="md"
+                    className="text-white"
+                    isLoading={isSaving}
+                    isDisabled={isLoadingAssignment || isLoadingFlota}
+                    onPress={() => handleSubmit(guardar)()}
+                  >
+                    {isEditing ? "Actualizar asignación" : "Guardar asignación"}
+                  </Button>
 
-              <Button
-                size="sm"
-                color="danger"
-                className="text-white"
-                isLoading={isSaving}
-                isDisabled={isLoadingAssignment || isLoadingFlota}
-                onPress={() => handleSubmit(validate)()}
-              >
-                Validar y enviar a viaje
-              </Button>
-
-            </DialogActions>
-
-            <Typography
-              variant="subtitle1"
-              fontWeight={700}
-              color="#172B4D"
-            >
-              Equipos asignados al viaje
-            </Typography>
-
-            <Typography
-              variant="body2"
-              color="text.secondary"
-            >
-              Selecciona los motogeneradores correspondientes.
-            </Typography>
+                  <Button
+                    size="sm"
+                    radius="md"
+                    color="danger"
+                    className="text-white"
+                    isLoading={isSaving}
+                    isDisabled={isLoadingAssignment || isLoadingFlota}
+                    onPress={() => handleSubmit(validate)()}
+                  >
+                    Validar y enviar a viaje
+                  </Button>
+                </Stack>
+              </Stack>
+            </Box>
           </Box>
 
           {/* Motogenerador 1 */}
