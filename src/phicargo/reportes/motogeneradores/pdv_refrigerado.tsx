@@ -241,22 +241,6 @@ const PDVMaintenance = ({ }) => {
       },
     },
     muiTableBodyCellProps: ({ row }) => {
-
-      const date_order = row.original.date_order;
-      const hoy = new Date();
-      const fecha = hoy.toISOString().split('T')[0];
-
-      let backgroundColor = '';
-      let ColorText = '';
-
-      if (date_order === fecha) {
-        backgroundColor = '#FFDE21';
-        ColorText = '#000000';
-      } else {
-        backgroundColor = '#0456cf';
-        ColorText = '#FFFFFF';
-      }
-
       return {
         sx: {
           backgroundColor: row.subRows?.length
