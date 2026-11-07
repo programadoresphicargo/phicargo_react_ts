@@ -1,7 +1,6 @@
 
 import {
   AppBar,
-  Chip,
   Dialog,
   DialogActions,
   DialogContent,
@@ -12,7 +11,7 @@ import {
   Divider
 } from "@mui/material";
 
-import { Button } from "@heroui/react";
+import { Button, Chip } from "@heroui/react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -56,11 +55,11 @@ interface AssignmentStatus {
 
 const STATE_CONFIG: Record<
   string,
-  { label: string; color: "default" | "warning" | "info" | "success" | "error" }
+  { label: string; color: "default" | "warning" | "secondary" | "success" | "danger" }
 > = {
   pending: { label: "Pendiente de checklist", color: "warning" },
   completed: { label: "Checklist completado", color: "success" },
-  rejected: { label: "Rechazado", color: "error" },
+  rejected: { label: "Rechazado", color: "danger" },
   released: { label: "Liberado", color: "default" },
   replaced: { label: "Reemplazado", color: "default" },
 };
@@ -242,11 +241,11 @@ export default function TravelMotogeneratorForm({
     if (!assignment || assignment.vehicle_id !== vehicleId) {
       return (
         <Chip
-          size="small"
+          size="sm"
           color="default"
-          variant="outlined"
-          label="Pendiente de guardar asignación"
-        />
+          variant="solid">
+          Pendiente de guardar asignación
+        </Chip>
       );
     }
 
@@ -257,11 +256,12 @@ export default function TravelMotogeneratorForm({
 
     return (
       <Chip
-        size="small"
+        size="sm"
+        className="text-white"
         color={config.color}
-        variant="filled"
-        label={config.label}
-      />
+        variant="solid">
+        {config.label}
+      </Chip>
     );
   };
 
@@ -315,7 +315,7 @@ export default function TravelMotogeneratorForm({
 
       if (response.data.status === "success") {
         toast.success(response.data.message);
-        onClose();
+        cargarAsignaciones();
         onSuccess?.();
       } else {
         toast.error(response.data.message);
@@ -449,6 +449,33 @@ export default function TravelMotogeneratorForm({
         >
           {/* Encabezado */}
           <Box sx={{ mb: 0.5 }}>
+
+            <DialogActions sx={{ p: 2 }}>
+
+              <Button
+                size="sm"
+                color="success"
+                className="text-white"
+                isLoading={isSaving}
+                isDisabled={isLoadingAssignment || isLoadingFlota}
+                onPress={() => handleSubmit(guardar)()}
+              >
+                {isEditing ? "Actualizar asignación" : "Guardar asignación"}
+              </Button>
+
+              <Button
+                size="sm"
+                color="danger"
+                className="text-white"
+                isLoading={isSaving}
+                isDisabled={isLoadingAssignment || isLoadingFlota}
+                onPress={() => handleSubmit(validate)()}
+              >
+                Validar y enviar a viaje
+              </Button>
+
+            </DialogActions>
+
             <Typography
               variant="subtitle1"
               fontWeight={700}
@@ -524,16 +551,7 @@ export default function TravelMotogeneratorForm({
                       </Typography>
                     </Box>
 
-                    <Chip
-                      label="Equipo 01"
-                      size="small"
-                      sx={{
-                        bgcolor: "#F1F5F9",
-                        color: "#475569",
-                        fontWeight: 600,
-                        fontSize: 11,
-                      }}
-                    />
+                    {renderAssignmentStatus(1, mg1)}
                   </Stack>
 
                   <Divider sx={{ borderColor: "#F1F5F9" }} />
@@ -552,11 +570,11 @@ export default function TravelMotogeneratorForm({
                     onPress={() => abrirChecklist(1)}
                     color="primary"
                     size="sm"
+                    fullWidth
                     isDisabled={!mg1 || isLoadingAssignment}
                   >
                     Checklist
                   </Button>
-                  {renderAssignmentStatus(1, field.value)}
 
                 </Stack>
               )}
@@ -622,16 +640,7 @@ export default function TravelMotogeneratorForm({
                       </Typography>
                     </Box>
 
-                    <Chip
-                      label="Equipo 02"
-                      size="small"
-                      sx={{
-                        bgcolor: "#F1F5F9",
-                        color: "#475569",
-                        fontWeight: 600,
-                        fontSize: 11,
-                      }}
-                    />
+                    {renderAssignmentStatus(2, mg2)}
                   </Stack>
 
                   <Divider sx={{ borderColor: "#F1F5F9" }} />
@@ -646,15 +655,16 @@ export default function TravelMotogeneratorForm({
                     options={opcionesMG2}
                   />
 
-                  {renderAssignmentStatus(2, field.value)}
                   <Button
                     onPress={() => abrirChecklist(2)}
                     color="primary"
                     size="sm"
+                    fullWidth
                     isDisabled={!mg2 || isLoadingAssignment}
                   >
                     Checklist
                   </Button>
+
                 </Stack>
               )}
             />
@@ -670,29 +680,6 @@ export default function TravelMotogeneratorForm({
           >
             Cancelar
           </Button>
-
-          <Button
-            size="sm"
-            color="success"
-            className="text-white"
-            isLoading={isSaving}
-            isDisabled={isLoadingAssignment || isLoadingFlota}
-            onPress={() => handleSubmit(guardar)()}
-          >
-            {isEditing ? "Actualizar asignación" : "Guardar asignación"}
-          </Button>
-
-          <Button
-            size="sm"
-            color="danger"
-            className="text-white"
-            isLoading={isSaving}
-            isDisabled={isLoadingAssignment || isLoadingFlota}
-            onPress={() => handleSubmit(validate)()}
-          >
-            Validar y enviar a viaje
-          </Button>
-
         </DialogActions>
       </Dialog>
     </>
