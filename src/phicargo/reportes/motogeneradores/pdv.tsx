@@ -59,10 +59,10 @@ const PDVMaintenance = ({ }) => {
       yesterday.setDate(yesterday.getDate() - 1);
       yesterday.setHours(0, 0, 0, 0);
 
-      const filteredData = response.data.filter((item: any) => {
-        const dateOrder = new Date(item.date_order);
-        return dateOrder >= yesterday;
-      });
+      //const filteredData = response.data.filter((item: any) => {
+      //  const dateOrder = new Date(item.date_order);
+      //  return dateOrder >= yesterday;
+      // });
 
       setData(response.data);
       setLoading(false);
