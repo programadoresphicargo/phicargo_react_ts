@@ -12,7 +12,7 @@ import { exportToCSV } from '../../utils/export';
 import odooApi from '@/api/odoo-api';
 import { DateRangePicker } from 'rsuite';
 import { Stack } from '@mui/material';
-import AsignacionMG from './asignacion_mg_form';
+import TravelMotogeneratorForm from './travel_motogenerators_form';
 
 type PDV = {
   id_viaje: number;
@@ -64,7 +64,7 @@ const PDVMaintenance = ({ }) => {
         return dateOrder >= yesterday;
       });
 
-      setData(filteredData);
+      setData(response.data);
       setLoading(false);
     } catch (error) {
       console.error('Error al obtener los datos:', error);
@@ -303,14 +303,11 @@ const PDVMaintenance = ({ }) => {
     <>
       <MaterialReactTable table={table} />
       {selectedTravel && (
-        <AsignacionMG
+        <TravelMotogeneratorForm
           open={open}
-          handleClose={handleClose}
           travelId={selectedTravel.id_viaje}
-          initialData={{
-            x_motogenerador_1: selectedTravel.x_motogenerador_1,
-            x_motogenerador_2: selectedTravel.x_motogenerador_2,
-          }} waybillId={0}></AsignacionMG>
+          onClose={handleClose}
+        ></TravelMotogeneratorForm>
       )}
     </>
   );

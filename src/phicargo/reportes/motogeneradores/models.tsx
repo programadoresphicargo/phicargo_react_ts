@@ -43,4 +43,5 @@ export interface ChecklistPayload {
  resultado: ResultadoChecklist;
  comments: string;
  checklist: ChecklistRespuesta[];
+ solicitud_id?: number
 }

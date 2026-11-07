@@ -6,7 +6,7 @@ import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import PDVMaintenance from './pdv';
 import CustomNavbar from '@/pages/CustomNavbar';
-import ChecklistMotogeneradores from './checklist_equipos';
+import ChecklistTableMG from './checklist';
 
 export default function IndexChecklistMotogeneradores() {
  const [value, setValue] = React.useState('1');
@@ -38,13 +38,13 @@ export default function IndexChecklistMotogeneradores() {
      }}
     >
      <Tab label="Viaje" value="1" />
-     <Tab label="Checklist" value="2" />
+     <Tab label="Solicitudes de checklist" value="2" />
     </TabList>
     <TabPanel value="1" tabIndex={0} sx={{ p: 0, m: 0 }}>
      <PDVMaintenance></PDVMaintenance>
     </TabPanel>
     <TabPanel value="2" tabIndex={0} sx={{ p: 0, m: 0 }}>
-     <ChecklistMotogeneradores></ChecklistMotogeneradores>
+     <ChecklistTableMG></ChecklistTableMG>
     </TabPanel>
    </TabContext>
   </Box>

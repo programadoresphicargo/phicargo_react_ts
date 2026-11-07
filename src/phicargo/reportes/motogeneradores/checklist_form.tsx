@@ -39,8 +39,13 @@ import { Button } from "@heroui/react";
 // import { Vehiculo, ElementoChecklist, ChecklistPatioData } from "./types";
 
 interface Props {
+  open: boolean;
+  onClose: () => void;
   data?: ChecklistPatioData | null;
   onSuccess?: () => void;
+  solicitud_id: number;
+  // ID del vehículo que se seleccionará automáticamente al crear un checklist.
+  vehicle_id?: number | null;
 }
 
 interface ElementoLocal {
@@ -57,8 +62,12 @@ const ENDPOINTS = {
 };
 
 export default function ChecklistPatio({
+  open,
+  onClose,
   data = null,
   onSuccess,
+  solicitud_id,
+  vehicle_id
 }: Props) {
   const [vehicles, setVehicles] = useState<Vehiculo[]>([]);
   const [selectedVehicle, setSelectedVehicle] =
@@ -78,8 +87,6 @@ export default function ChecklistPatio({
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
-
-  const [open, setOpen] = useState(false);
   const [openChecklist, setOpenChecklist] = useState(false);
   const [openComments, setOpenComments] = useState(false);
 
@@ -89,12 +96,9 @@ export default function ChecklistPatio({
   // CARGA DE CATÁLOGOS HTTP
   // --------------------------------------------------
 
-  useEffect(() => {
-    loadCatalogs();
-  }, []);
-
   const loadCatalogs = async () => {
     setLoading(true);
+    setError("");
 
     try {
       const [vehiclesResponse, checklistResponse] =
@@ -109,21 +113,30 @@ export default function ChecklistPatio({
       const checklistData: ElementoChecklist[] =
         checklistResponse.data.data ?? checklistResponse.data;
 
+      const filteredVehicles = vehiclesData.filter((vehicle) =>
+        vehicle.name2?.toLowerCase().startsWith("mg-")
+      );
+
+      // Mantener disponible el vehículo seleccionado aunque no cumpla el filtro MG-.
+      // Así Autocomplete puede mostrar correctamente el valor recibido.
+      // En el listado se conservan los demás vehículos MG-.
+
+      // En edición tiene prioridad el vehículo guardado en data.
+      // En un registro nuevo se utiliza el vehicle_id recibido por props.
+      const selectedId = data?.vehicle_id ?? vehicle_id;
+      const vehicle = selectedId != null
+        ? vehiclesData.find((item) => item.id === Number(selectedId)) ?? null
+        : null;
+
+      setSelectedVehicle(vehicle);
       setVehicles(
-        vehiclesData.filter((vehicle) =>
-          vehicle.name2?.toLowerCase().startsWith("mg-")
-        )
+        vehicle && !filteredVehicles.some((item) => item.id === vehicle.id)
+          ? [...filteredVehicles, vehicle]
+          : filteredVehicles
       );
 
       if (data) {
-        const vehicle = vehiclesData.find(
-          (item) => item.id === Number(data.vehicle_id)
-        );
-
-        if (vehicle) {
-          setSelectedVehicle(vehicle);
-        }
-
+        // Cargar los datos existentes sin reiniciar las respuestas del checklist.
         setMileage(String(data.mileage ?? ""));
         setUserPin(data.user_pin ?? "");
         setComments(data.comments ?? "");
@@ -150,6 +163,35 @@ export default function ChecklistPatio({
               };
             })
         );
+      } else {
+        // Para un registro nuevo, cargar automáticamente el checklist
+        // correspondiente al vehículo recibido.
+        setMileage("");
+        setUserPin("");
+        setComments("");
+        setResultado("");
+
+        if (vehicle) {
+          const tipo = {
+            tractor: "tractor",
+            trailer: "remolque",
+            dolly: "remolque",
+            other: "motogenerador",
+          }[vehicle.fleet_type];
+
+          setElements(
+            checklistData
+              .filter((item) => item.tipo_equipo === tipo)
+              .map((item) => ({
+                id_elemento: item.id_elemento,
+                nombre_elemento: item.nombre_elemento,
+                estado: null,
+                observaciones: "",
+              }))
+          );
+        } else {
+          setElements([]);
+        }
       }
     } catch (err) {
       console.error(err);
@@ -158,6 +200,13 @@ export default function ChecklistPatio({
       setLoading(false);
     }
   };
+
+  // Recargar los catálogos al abrir el modal o cuando cambie el ID recibido.
+  useEffect(() => {
+    if (open) {
+      void loadCatalogs();
+    }
+  }, [open, vehicle_id, data]);
 
   // --------------------------------------------------
   // FILTRAR CHECKLIST SEGÚN VEHÍCULO
@@ -323,6 +372,7 @@ export default function ChecklistPatio({
       inspection_date: new Date().toISOString(),
       resultado,
       comments,
+      solicitud_id: solicitud_id,
       checklist: elements.map((item) => ({
         id_elemento: item.id_elemento,
         estado: item.estado,
@@ -352,7 +402,7 @@ export default function ChecklistPatio({
       if (response.data.status == "success") {
         toast.success(response.data.message);
         onSuccess?.();
-        setOpen(false);
+        onClose();
         resetForm();
       }
     } catch (err) {
@@ -368,8 +418,7 @@ export default function ChecklistPatio({
   // --------------------------------------------------
   return (
     <>
-      <Button onPress={() => setOpen(true)} size="sm" color="primary" radius="md">Nuevo checklist</Button>
-      <Dialog open={open} maxWidth="lg" onClose={() => setOpen(false)}>
+      <Dialog open={open} maxWidth="lg" onClose={onClose}>
         <AppBar
           elevation={0}
           sx={{
@@ -382,7 +431,7 @@ export default function ChecklistPatio({
             <Typography sx={{ fontSize: '20px', textTransform: 'uppercase', flex: 1, fontFamily: 'Inter' }} variant='h3'>
               Inspección de equipos
             </Typography>
-            <Button autoFocus onPress={() => setOpen(false)} size="sm" radius="md" variant="ghost" className="text-white">
+            <Button autoFocus onPress={onClose} size="sm" radius="md" variant="ghost" className="text-white">
               Cerrar
             </Button>
             <Button
@@ -425,6 +474,7 @@ export default function ChecklistPatio({
                       <Autocomplete
                         options={vehicles}
                         value={selectedVehicle}
+                        readOnly={Boolean(vehicle_id)}
                         getOptionLabel={(option) =>
                           option.name2 ?? ""
                         }
