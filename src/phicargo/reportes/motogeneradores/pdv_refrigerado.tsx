@@ -77,28 +77,28 @@ const PDVMaintenance = ({ }) => {
 
   const columns: MRT_ColumnDef<PDV>[] = [
     {
+      accessorKey: 'sucursal',
+      header: 'Sucursal',
+    },
+    {
       accessorKey: 'vehiculo',
-      header: 'Vehiculo programado',
+      header: 'Vehiculo',
     },
     {
       accessorKey: 'operador',
-      header: 'Operador programado',
+      header: 'Operador',
     },
     {
       accessorKey: 'date_order',
       header: 'Fecha',
     },
     {
-      accessorKey: 'sucursal',
-      header: 'Sucursal',
+      accessorKey: 'motogenerators',
+      header: 'Motogeneradores',
     },
     {
-      accessorKey: 'mg1',
-      header: 'Motogenerador 1',
-    },
-    {
-      accessorKey: 'mg2',
-      header: 'Motogenerador 2',
+      accessorKey: 'x_tipo_bel',
+      header: 'Tipo armado',
     },
     {
       accessorKey: 'referencias',
@@ -115,10 +115,6 @@ const PDVMaintenance = ({ }) => {
     {
       accessorKey: 'x_ruta_bel',
       header: 'Ruta',
-    },
-    {
-      accessorKey: 'x_tipo_bel',
-      header: 'Tipo armado',
     },
     {
       accessorKey: 'x_modo_bel',
