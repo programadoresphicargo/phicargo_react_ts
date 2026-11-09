@@ -72,12 +72,12 @@ const ChecklistTableMG = ({ }) => {
 
   const columns: MRT_ColumnDef<TravelMotogenerator>[] = [
     {
-      accessorKey: 'vehicle',
-      header: 'Motogenerador',
+      accessorKey: 'id',
+      header: 'Solicitud',
     },
     {
-      accessorKey: 'position',
-      header: 'Position',
+      accessorKey: 'vehicle',
+      header: 'Motogenerador',
     },
     {
       accessorKey: 'state',

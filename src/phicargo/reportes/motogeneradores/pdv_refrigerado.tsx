@@ -18,6 +18,7 @@ type PDV = {
   id_viaje: number;
   x_comentarios_maniobra?: string;
   date_order: string;
+  motogenerators: any[];
 };
 
 const PDVMaintenance = ({ }) => {
@@ -241,20 +242,23 @@ const PDVMaintenance = ({ }) => {
       },
     },
     muiTableBodyCellProps: ({ row }) => {
+      const isGroup = (row.subRows?.length ?? 0) > 0;
+      const solicitud = (row.original.motogenerators);
+
       return {
         sx: {
-          backgroundColor: row.subRows?.length
+          backgroundColor: isGroup
             ? '#0456cf'
-            : row.index % 2 === 0
-              ? '#FFFFFF'
+            : solicitud
+              ? '#d8ffd6'
               : '#F8F9FA',
           fontFamily: 'Inter',
           fontWeight: 'normal',
           fontSize: '12px',
           padding: '2px 8px',
-          color: row.subRows?.length ? '#FFFFFF' : '#000000',
+          color: isGroup ? '#FFFFFF' : '#000000',
         },
-      }
+      };
     },
     renderTopToolbarCustomActions: () => (
       <Box
