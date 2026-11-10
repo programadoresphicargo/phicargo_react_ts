@@ -205,13 +205,13 @@ const SolicitudForm = ({ id_solicitud, open, handleClose, setID, vista, travel_i
                 }
             } catch (error) {
                 if (axios.isAxiosError(error)) {
-                    const message = error.response?.data?.detail;
+                    const detail = error.response?.data?.detail;
 
-                    if (message) {
-                        toast.error(message);
-                    } else {
-                        toast.error("Error al guardar");
-                    }
+                    toast.error(
+                        typeof detail === 'string'
+                            ? detail
+                            : "Error al guardar"
+                    );
                 } else {
                     toast.error("Error inesperado");
                 }
