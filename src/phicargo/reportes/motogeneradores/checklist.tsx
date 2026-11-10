@@ -80,6 +80,10 @@ const ChecklistTableMG = ({ }) => {
       header: 'Motogenerador',
     },
     {
+      accessorKey: 'assigned_at',
+      header: 'Solicitado',
+    },
+    {
       accessorKey: 'state',
       header: 'Estado',
       Cell: ({ cell }) => {
