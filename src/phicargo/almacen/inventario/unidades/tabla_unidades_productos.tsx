@@ -184,9 +184,7 @@ const UnidadesProductos = ({ dataProducto, fetchData }: { dataProducto: Producto
 
         <Popover placement="right">
           <PopoverTrigger>
-            {session?.user.permissions.includes(218) && (
-              <Button color="primary" isLoading={isLoading} radius='full'>Crear unidades</Button>
-            )}
+            <Button color="primary" isLoading={isLoading} radius='md' size='sm' isDisabled={session?.user.permissions.includes(218) ? false : true}>Crear unidades</Button>
           </PopoverTrigger>
           <PopoverContent>
             <div className="px-1 py-2 w-full">
