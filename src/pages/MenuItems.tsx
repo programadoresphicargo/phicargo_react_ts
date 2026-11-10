@@ -36,6 +36,7 @@ import revenueIcon from '../assets/menu/revenue.png';
 import licenciaIcon from '../assets/menu/licencia.png';
 import aptoIcon from '../assets/menu/apto.png';
 import survey from '../assets/menu/survey.png';
+import energyIcon from '../assets/menu/energy.png';
 
 export type MenuItemType = {
  icon: string;
@@ -123,7 +124,7 @@ export const menuItems: MenuItemType[] = [
    {
     label: 'Motogeneradores',
     link: '/reportes/mg',
-    icon: preventivosIcon,
+    icon: energyIcon,
     requiredPermissions: [198],
    },
   ],
