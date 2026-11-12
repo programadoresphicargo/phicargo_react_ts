@@ -34,6 +34,7 @@ type MaintenanceReport = {
   intervalo_km: number | null;
   proximo_servicio_km: number | null;
   kilometros_restantes: number | null;
+  alerta: string;
 };
 
 const MaintenanceVehicleReport = () => {
@@ -290,17 +291,21 @@ const MaintenanceVehicleReport = () => {
       },
     },
     muiTableBodyCellProps: ({ row }) => {
+
+      const alerta = row.original.alerta;
+
       return {
         sx: {
           backgroundColor: row.subRows?.length
             ? '#0456cf'
-            : row.index % 2 === 0
-              ? '#FFFFFF'
-              : '#F8F9FA',
-          color: row.subRows?.length ? '#FFFFFF' : '#000000',
+            : alerta == "warning"
+              ? '#f5a524' :
+              alerta == "danger" ? "#DC2626"
+                : '#F8F9FA',
+          color: row.subRows?.length ? '#FFFFFF' : alerta ? '#FFFFFF' : '#000000',
           fontFamily: 'Inter',
           fontWeight: 'normal',
-          fontSize: '10px',
+          fontSize: '11px',
           padding: '4px 8px'
         },
       };
