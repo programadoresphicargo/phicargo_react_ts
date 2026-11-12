@@ -71,7 +71,7 @@ const Maintenances = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 270px)',
+        maxHeight: 'calc(100vh - 190px)',
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
@@ -108,6 +108,7 @@ const Maintenances = () => {
           flexWrap: 'nowrap',
           flexDirection: 'row',
           alignItems: 'center',
+          fontFamily: 'Inter',
         }}
       >
         <h1
@@ -120,11 +121,11 @@ const Maintenances = () => {
           setOpen(true)
         }} className='text-white'
           color='success'
-          radius='full'
+          radius='md'
           size='sm'>
           Nuevo
         </Button>
-        <Button onPress={() => fetchData()} className='text-white' color='primary' radius='full' size='sm'>Recargar</Button>
+        <Button onPress={() => fetchData()} className='text-white' color='primary' radius='md' size='sm'>Recargar</Button>
       </Box >
     ),
   })
