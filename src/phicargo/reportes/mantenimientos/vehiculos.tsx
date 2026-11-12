@@ -108,7 +108,6 @@ const MaintenanceVehicleReport = () => {
         },
       },
       { accessorKey: 'fecha_kilometraje', header: 'Fecha kilometraje', enableEditing: false },
-      { accessorKey: 'tipo_mantenimiento', header: 'Tipo mantenimiento', enableEditing: false },
       { accessorKey: 'date', header: 'Ultimo mantenimineto', enableEditing: false },
       { accessorKey: 'dias_transcurridos', header: 'Días transcurridos', enableEditing: false },
       {
@@ -163,6 +162,7 @@ const MaintenanceVehicleReport = () => {
           align: 'right',
         },
       },
+      { accessorKey: 'tipo_mantenimiento', header: 'Tipo mantenimiento', enableEditing: false },
       {
         accessorKey: 'x_status_mg',
         header: 'Estado',
