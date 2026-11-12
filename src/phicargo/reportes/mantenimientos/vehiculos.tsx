@@ -42,7 +42,7 @@ const MaintenanceVehicleReport = () => {
 
   const TABS = [
     { value: '1', label: 'Tractos', prefixes: ['C-'] },
-    { value: '2', label: 'Remolques', prefixes: ['PL-', 'CH-', 'DL-', 'PCE-', 'CB-', 'CS-'] },
+    { value: '2', label: 'Remolques', prefixes: ['PL-', 'CH-', 'DL-', 'PCE-', 'CB-', 'CS-', 'PT-'] },
     { value: '3', label: 'Motogeneradores', prefixes: ['MG-'] },
     { value: '4', label: 'Utilitarios', prefixes: ['U-'] },
     { value: '5', label: 'Grúas y Servi', prefixes: ['G-', 'SERVI/MC-', 'SERVI/T-'] },
@@ -146,6 +146,10 @@ const MaintenanceVehicleReport = () => {
         muiTableBodyCellProps: {
           align: 'right',
         },
+      },
+      {
+        accessorKey: 'proximo_servicio_fecha',
+        header: 'Proximo servicio',
       },
       {
         accessorKey: 'kilometros_restantes',
@@ -280,7 +284,7 @@ const MaintenanceVehicleReport = () => {
           color: row.subRows?.length ? '#FFFFFF' : '#000000',
           fontFamily: 'Inter',
           fontWeight: 'normal',
-          fontSize: '12px',
+          fontSize: '10px',
           padding: '4px 8px'
         },
       };
