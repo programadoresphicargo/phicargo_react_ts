@@ -6,8 +6,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { ViajeContext } from "../context/viajeContext";
 import toast from 'react-hot-toast';
 import { parseDateTime, getLocalTimeZone, DateValue } from "@internationalized/date";
+import { OpenArchive } from "@/phicargo/utils/functions";
 
-const { VITE_ODOO_API_URL } = import.meta.env;
 
 const FormularioCorte = ({ opened, onClose }: { opened: boolean, onClose: () => void }) => {
 
@@ -30,7 +30,6 @@ const FormularioCorte = ({ opened, onClose }: { opened: boolean, onClose: () => 
     };
 
     const obtenerCorteEstadias = () => {
-
         if (costo <= 0) {
             toast.error("Ingrese un costo válido");
             return;
@@ -40,12 +39,7 @@ const FormularioCorte = ({ opened, onClose }: { opened: boolean, onClose: () => 
         params.append('id_viaje', id_viaje);
         params.append('fecha_corte', fechaCorte);
         params.append('costo', String(costo));
-
-        const url = VITE_ODOO_API_URL + `/tms_travel/estadias/cortes/?${params.toString()}`;
-
-        window.open(url, '_blank');
-        toast.success("Se abrió la pestaña con el corte de estadías");
-        
+        OpenArchive(`/tms_travel/estadias/cortes/?${params.toString()}`);
     };
 
     return (
@@ -75,7 +69,8 @@ const FormularioCorte = ({ opened, onClose }: { opened: boolean, onClose: () => 
                     />
                     <Button
                         color="success"
-                        radius="full"
+                        radius="md"
+                        size="sm"
                         className="text-white mt-6"
                         onPress={() => obtenerCorteEstadias()}
                     >
