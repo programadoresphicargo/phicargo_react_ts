@@ -5,7 +5,8 @@ import { useEffect, useState } from "react";
 import DetalleEstatusViaje from "./detalle_viaje";
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import EstatusHistorialAgrupado from "../estatus_agrupados";
-const { VITE_ODOO_API_URL } = import.meta.env;
+import { StepAvatar } from "@/phicargo/utils/stepAvatar";
+
 
 type Step = {
  id_estatus: number;
@@ -109,13 +110,7 @@ export default function SeguimientoSimpleViaje({
          <Card isDisabled={step.fecha_envio ? false : true} isPressable fullWidth onPress={() => handleClickOpen(step.id_estatus)}>
           <CardBody>
            <div className="flex gap-5">
-            <Avatar
-             color={step.fecha_envio ? "success" : "default"}
-             isBordered
-             radius="full"
-             size="md"
-             src={VITE_ODOO_API_URL + `/assets/trafico/estatus_operativos/${step.imagen}`}
-            />
+            <StepAvatar imagen={`trafico/estatus_operativos/${step.imagen}`} bordered color={step.fecha_envio ? "success" : "default"} size="lg"></StepAvatar>
             <div className="flex flex-col gap-1 items-start justify-center">
              <h4 className="text-small font-semibold leading-none text-default-600">{step.nombre_estatus}</h4>
              <h5 className="text-small tracking-tight text-default-400">
