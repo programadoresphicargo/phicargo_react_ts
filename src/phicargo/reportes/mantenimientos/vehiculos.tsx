@@ -227,12 +227,26 @@ const MaintenanceVehicleReport = () => {
         serial_number: false,
         x_status_mg: false,
       });
+    } else if (value === '2') {
+      setColumnVisibility({
+        sucursal: false,
+        proximo_servicio_km: false,
+        serial_number: false,
+        model: false,
+        marca: false,
+        model_year: true,
+        x_tipo_vehiculo: false,
+        x_status_mg: false,
+      });
     } else {
       setColumnVisibility({
+        sucursal: true,
+        proximo_servicio_km: true,
+        serial_number: true,
+        model: true,
+        marca: true,
         model_year: true,
         x_tipo_vehiculo: true,
-        sucursal: true,
-        serial_number: true,
         x_status_mg: false,
       });
     }
