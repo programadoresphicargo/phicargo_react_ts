@@ -110,6 +110,7 @@ const MaintenanceRules = () => {
           flexWrap: 'nowrap',
           flexDirection: 'row',
           alignItems: 'center',
+          fontFamily: 'Inter'
         }}
       >
         <h1
@@ -122,8 +123,8 @@ const MaintenanceRules = () => {
             setOpen(true);
             setRule(null)
           }}
-          className="text-white" radius="full" size="sm">Nueva</Button>
-        <Button color="primary" onPress={() => fetchData()} className="text-white" radius="full" size="sm">Recargar</Button>
+          className="text-white" radius="md" size="sm">Nueva</Button>
+        <Button color="primary" onPress={() => fetchData()} className="text-white" radius="md" size="sm">Recargar</Button>
       </Box >
     ),
   })

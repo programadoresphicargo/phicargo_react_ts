@@ -43,6 +43,7 @@ type Modelos = {
 type Task = {
   id: number;
   name: string;
+  code: string;
 };
 
 export default function MaintenanceRuleForm({
@@ -130,7 +131,7 @@ export default function MaintenanceRuleForm({
       setTask(
         response.data.map((registro) => ({
           key: registro.id,
-          value: registro.name,
+          value: `[${registro.code}] ${registro.name}`,
         }))
       );
     } catch (error: any) {

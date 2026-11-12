@@ -229,6 +229,14 @@ const MaintenanceVehicleReport = () => {
         sucursal: false,
         serial_number: false,
         x_status_mg: false,
+      })
+    } else if (value === '4') {
+      setColumnVisibility({
+        model_year: false,
+        x_tipo_vehiculo: false,
+        sucursal: false,
+        serial_number: false,
+        x_status_mg: false,
       });
     } else if (value === '2') {
       setColumnVisibility({
