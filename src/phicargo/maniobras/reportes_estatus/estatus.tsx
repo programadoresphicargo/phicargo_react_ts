@@ -1,7 +1,6 @@
 import { Chip } from "@heroui/react";
 import { Card, CardHeader } from "@heroui/react";
 import React, { useEffect } from 'react';
-import { Avatar } from "@heroui/react";
 import { Button } from "@heroui/react";
 import EstatusHistorialAgrupado from './estatus_agrupados';
 import { Stack } from 'rsuite';
@@ -9,8 +8,7 @@ import odooApi from '@/api/odoo-api';
 import { tiempoTranscurrido } from '../../funciones/tiempo';
 import { Estatus } from "./type";
 import EvidenciasChecklistViaje from "@/phicargo/viajes/estatus/evidencias_checklist";
-
-const { VITE_ODOO_API_URL } = import.meta.env;
+import { StepAvatar } from "@/phicargo/utils/stepAvatar";
 
 function EstatusHistorialManiobras({ id_maniobra }: { id_maniobra: number }) {
 
@@ -84,10 +82,10 @@ function EstatusHistorialManiobras({ id_maniobra }: { id_maniobra: number }) {
                             {/* Punto de la línea del tiempo */}
                             <span
                                 className={`absolute left-0 top-4 z-10 flex h-6 w-6 items-center justify-center rounded-full border-2 border-background ${color === "primary"
-                                        ? "bg-primary"
-                                        : color === "success"
-                                            ? "bg-success"
-                                            : "bg-default-300"
+                                    ? "bg-primary"
+                                    : color === "success"
+                                        ? "bg-success"
+                                        : "bg-default-300"
                                     }`}
                             >
                                 <span className="h-2 w-2 rounded-full bg-white" />
@@ -102,18 +100,11 @@ function EstatusHistorialManiobras({ id_maniobra }: { id_maniobra: number }) {
                             >
                                 <CardHeader className="flex items-start justify-between gap-3 p-3">
                                     <div className="flex min-w-0 items-start gap-3">
-                                        <Avatar
+                                        <StepAvatar
                                             color={color}
-                                            isBordered
-                                            radius="full"
-                                            size="sm"
-                                            src={
-                                                step.imagen
-                                                    ? `${VITE_ODOO_API_URL}/assets/trafico/estatus_operativos/${step.imagen}`
-                                                    : undefined
-                                            }
-                                            name={step.nombre_estatus?.charAt(0)}
-                                            className="shrink-0"
+                                            imagen={`trafico/estatus_operativos/${step.imagen}`}
+                                            bordered
+                                            size="lg"
                                         />
 
                                         <div className="flex min-w-0 flex-col items-start gap-1.5">

@@ -11,7 +11,6 @@ import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import CustomNavbar from "@/pages/CustomNavbar";
 import { pages } from './pages';
 
-const apiUrl = import.meta.env.VITE_ODOO_API_URL;
 
 interface DepartureArrival {
   referencia: string;
@@ -259,7 +258,7 @@ const DetencionesTableRespaldo = () => {
           as={Link}
           isExternal={true}
           color="danger"
-          href={`${apiUrl}/tms_travel/reporte_llegadas_tarde/?fecha_inicio=${range[0].toISOString().slice(0, 10)}&fecha_fin=${range[1].toISOString().slice(0, 10)}`}
+          href={`/tms_travel/reporte_llegadas_tarde/?fecha_inicio=${range[0].toISOString().slice(0, 10)}&fecha_fin=${range[1].toISOString().slice(0, 10)}`}
           variant="solid"
         >
           Reporte descuentos
