@@ -47,10 +47,12 @@ export default function MaintenanceForm({
   open,
   setOpen,
   id,
+  onSuccess
 }: {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   id: number | null;
+  onSuccess?: () => void;
 }) {
   const initialForm: Maintenance = {
     id: null,
@@ -187,7 +189,7 @@ export default function MaintenanceForm({
         toast.success(res.data.message);
 
         reset(initialForm);
-
+        onSuccess?.();
         setOpen(false);
       }
     } catch (error: any) {

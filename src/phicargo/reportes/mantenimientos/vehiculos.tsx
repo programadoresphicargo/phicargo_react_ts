@@ -14,6 +14,7 @@ import TabPanel from '@mui/lab/TabPanel';
 import TabList from '@mui/lab/TabList';
 import React from 'react';
 import { Button, Chip } from '@heroui/react';
+import MaintenanceForm from './maintenances/maintenance_form';
 
 type MaintenanceReport = {
   sucursal: string | null;
@@ -39,6 +40,7 @@ const MaintenanceVehicleReport = () => {
 
   const [isLoading, setisLoading] = useState(false);
   const [data, setData] = useState<MaintenanceReport[]>([]);
+  const [open, setOpen] = useState<boolean>(false);
 
   const TABS = [
     { value: '1', label: 'Tractos', prefixes: ['C-'] },
@@ -320,6 +322,15 @@ const MaintenanceVehicleReport = () => {
           {TABS.find((tab) => tab.value === value)?.label}
         </h1>
         <Button
+          onPress={() => setOpen(true)}
+          color="warning"
+          className='text-white'
+          radius="md"
+          size="sm"
+        >
+          Registrar mantenimiento
+        </Button>
+        <Button
           onPress={fetchData}
           isLoading={isLoading}
           isDisabled={isLoading}
@@ -334,42 +345,46 @@ const MaintenanceVehicleReport = () => {
   })
 
   return (
-    <Box sx={{ width: '100%', typography: 'body1' }}>
-      <TabContext value={value}>
-        <Box
-          sx={{
-            borderColor: 'divider',
-            backgroundColor: '#002887',
-            color: 'white',
-          }}
-        >
-          <TabList
-            onChange={handleChange}
-            aria-label="Tipos de vehículos"
-            textColor="inherit"
+    <>
+      <MaintenanceForm open={open} setOpen={() => setOpen(false)} id={null} onSuccess={fetchData}></MaintenanceForm>
+      <Box sx={{ width: '100%', fontFamily: 'Inter' }}>
+        <TabContext value={value}>
+          <Box
             sx={{
-              '& .MuiTabs-indicator': {
-                backgroundColor: 'white',
-                height: '3px',
-              },
+              borderColor: 'divider',
+              backgroundColor: '#002887',
+              color: 'white',
+              fontFamily: 'Inter'
             }}
           >
-            {TABS.map((tab) => (
-              <Tab
-                key={tab.value}
-                label={tab.label}
-                value={tab.value}
-                sx={{ fontFamily: 'Inter' }}
-              />
-            ))}
-          </TabList>
-        </Box>
+            <TabList
+              onChange={handleChange}
+              aria-label="Tipos de vehículos"
+              textColor="inherit"
+              sx={{
+                '& .MuiTabs-indicator': {
+                  backgroundColor: 'white',
+                  height: '3px',
+                },
+              }}
+            >
+              {TABS.map((tab) => (
+                <Tab
+                  key={tab.value}
+                  label={tab.label}
+                  value={tab.value}
+                  sx={{ fontFamily: 'Inter' }}
+                />
+              ))}
+            </TabList>
+          </Box>
 
-        <TabPanel value={value} sx={{ padding: 0, margin: 0 }}>
-          <MaterialReactTable table={table} />
-        </TabPanel>
-      </TabContext>
-    </Box>
+          <TabPanel value={value} sx={{ padding: 0, margin: 0 }}>
+            <MaterialReactTable table={table} />
+          </TabPanel>
+        </TabContext>
+      </Box>
+    </>
   );
 };
 
