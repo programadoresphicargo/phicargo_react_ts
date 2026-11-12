@@ -111,7 +111,7 @@ const MaintenanceVehicleReport = () => {
         },
       },
       { accessorKey: 'fecha_kilometraje', header: 'Fecha kilometraje', enableEditing: false },
-      { accessorKey: 'date', header: 'Ultimo mantenimineto', enableEditing: false },
+      { accessorKey: 'fecha_ultimo_mantenimiento', header: 'Ultimo mantenimineto', enableEditing: false },
       { accessorKey: 'dias_transcurridos', header: 'Días transcurridos', enableEditing: false },
       {
         accessorKey: 'km_ultimo_mantenimiento',
