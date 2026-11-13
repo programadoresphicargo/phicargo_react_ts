@@ -124,7 +124,8 @@ const Formulariomaniobra: React.FC<Props> = ({
             key: item.id,
             label: item.name,
             x_tipo_carga: item.x_tipo_carga,
-            x_modalidad: item.x_modalidad
+            x_modalidad: item.x_modalidad,
+            x_tipo_vehiculo: item.x_tipo_vehiculo
         }));
     };
 
