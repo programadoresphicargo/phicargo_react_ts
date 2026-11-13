@@ -275,9 +275,9 @@ const MaintenanceVehicleReport = () => {
     localization: MRT_Localization_ES,
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
+    enablePagination: false,
     initialState: {
       density: 'compact',
-      pagination: { pageIndex: 0, pageSize: 80 },
       showColumnFilters: true,
     },
     muiTablePaperProps: {
