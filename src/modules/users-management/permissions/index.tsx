@@ -4,12 +4,28 @@ import { Button } from '@heroui/react';
 import odooApi from '@/api/odoo-api';
 import Box from '@mui/material/Box';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
+import React from 'react';
+import UsersDetailControlPage from './detail';
 
+export type Permission = {
+  id: number;
+  name: string;
+}
 
 const UsersControlPage = () => {
 
   const [isLoading, setLoading] = useState(false);
-  const [data, setData] = useState<any[]>([]);
+  const [data, setData] = useState<Permission[]>([]);
+  const [open, setOpen] = React.useState(false);
+  const [permission, setPermission] = React.useState<Permission | null>(null);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const columns = useMemo<MRT_ColumnDef<any>[]>(
     () => [
@@ -81,6 +97,8 @@ const UsersControlPage = () => {
     },
     muiTableBodyRowProps: ({ row }) => ({
       onClick: () => {
+        setPermission(row.original);
+        handleClickOpen();
       },
     }),
     muiTableBodyCellProps: ({ row }) => ({
@@ -129,8 +147,12 @@ const UsersControlPage = () => {
   });
 
 
-  return (
+  return (<>
     <MaterialReactTable table={table} />
+    {permission && (
+      <UsersDetailControlPage open={open} handleClose={handleClose} permission={permission}></UsersDetailControlPage>
+    )}
+  </>
   );
 };
 
