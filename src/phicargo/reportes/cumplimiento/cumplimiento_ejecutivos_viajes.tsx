@@ -219,7 +219,7 @@ const ReporteCumplimientoEjecutivo = () => {
             >
 
                 <h1
-                    className="flex-1 min-w-[300px] tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
+                    className="flex-1 min-w-[300px] tracking-tight font-semibold lg:text-2xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
                 >
                     Cumplimiento de estatus en viajes
                 </h1>
@@ -251,8 +251,8 @@ const ReporteCumplimientoEjecutivo = () => {
                     step={1}
                 />
 
-                <Button color='success' className='text-white' startContent={<i className="bi bi-file-earmark-excel"></i>} radius='full' onPress={() => exportToCSV(data, columns, "reporte_estatus.csv")} fullWidth>Exportar</Button>
-                <Button color='primary' className='text-white' startContent={<i className="bi bi-arrow-clockwise"></i>} radius='full' onPress={() => fetchData()} fullWidth>Recargar</Button>
+                <Button color='success' className='text-white' startContent={<i className="bi bi-file-earmark-excel"></i>} radius='md' onPress={() => exportToCSV(data, columns, "reporte_estatus.csv")} fullWidth size='sm'>Exportar</Button>
+                <Button color='primary' className='text-white' startContent={<i className="bi bi-arrow-clockwise"></i>} radius='md' onPress={() => fetchData()} fullWidth size='sm'>Recargar</Button>
 
             </Box>
 
