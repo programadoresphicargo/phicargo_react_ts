@@ -42,3 +42,22 @@ export const OpenArchive = async (url: string) => {
   }
  }
 };
+
+export const OpenHttpResponse = async (url: string) => {
+ try {
+  const response = await odooApi.get(url, {
+   responseType: "blob",
+  });
+
+  const blob = new Blob([response.data], {
+   type: response.headers["content-type"] || "application/pdf",
+  });
+
+  const fileUrl = URL.createObjectURL(blob);
+
+  window.open(fileUrl, "_blank");
+  setTimeout(() => URL.revokeObjectURL(fileUrl), 60000);
+ } catch (error) {
+  console.error("Error al abrir archivo:", error);
+ }
+};
