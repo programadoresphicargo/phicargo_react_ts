@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { HeaderBase } from "@/components/ui";
 import { IndicatorCard } from "@/components/utils/IndicatorCard";
 import { Checkbox } from "@heroui/react";
+import { ContenedorPendiente } from "./pendientes";
 
 const branches = [
   { id: 1, label: "Veracruz" },
@@ -9,11 +10,19 @@ const branches = [
   { id: 9, label: "Manzanillo" },
 ];
 
+interface CountContenedorProps {
+  filteredData: ContenedorPendiente[];
+  selectedBranches: number[];
+  setSelectedBranches: React.Dispatch<
+    React.SetStateAction<number[]>
+  >;
+}
+
 const CountContenedor = ({
-  filteredData = [],
+  filteredData,
   selectedBranches,
   setSelectedBranches,
-}) => {
+}: CountContenedorProps) => {
 
   /* =======================
      CONTADORES (SOLO FILTRADO)
