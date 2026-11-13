@@ -50,7 +50,8 @@ const UsersManagementPage = () => {
       <Button
         onPress={() => setCreateModal(true)}
         color='primary'
-        radius='full'>Crear Usuario</Button>
+        radius='md'
+        size='sm'>Crear Usuario</Button>
     ),
     onDoubleClickFn: (row) => {
       setInformationModal(row.original);
