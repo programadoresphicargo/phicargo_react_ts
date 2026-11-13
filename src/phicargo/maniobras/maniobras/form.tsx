@@ -170,7 +170,11 @@ const Formulariomaniobra: React.FC<Props> = ({
                 setTractores(tractoresData);
                 setTrailers(trailersData);
                 setDollies(dolliesData);
-                setMotogeneradores(motogeneradoresData);
+                setMotogeneradores(
+                    motogeneradoresData.filter(
+                        item => item.x_tipo_vehiculo === 'local'
+                    )
+                );
                 setDrivers(driversData);
                 setTerminales(terminalesData)
 

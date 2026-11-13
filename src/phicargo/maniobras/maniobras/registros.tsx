@@ -169,7 +169,7 @@ const Registromaniobras = ({ dataCP }: { dataCP: Contenedor }) => {
                     flexWrap: 'wrap',
                 }}
             >
-                <Button onPress={abrir_nueva} color="success" radius="full" className="text-white">
+                <Button onPress={abrir_nueva} color="success" radius="md" className="text-white" size="sm">
                     Nueva maniobra
                 </Button>
             </Box>)

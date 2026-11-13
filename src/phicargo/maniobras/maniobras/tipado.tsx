@@ -3,6 +3,7 @@ export type OptionFlota = {
  label: string;
  x_tipo_carga: string;
  x_modalidad: string;
+ x_tipo_vehiculo?: string;
 };
 
 export type Flota = {

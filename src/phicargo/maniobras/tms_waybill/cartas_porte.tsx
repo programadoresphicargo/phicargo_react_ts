@@ -293,7 +293,8 @@ const CartasPorte = () => {
           className='text-white'
           startContent={<i className="bi bi-file-earmark-excel"></i>}
           onPress={() => exportToCSV(data, columns, "contenedores.csv")}
-          radius="full"
+          radius="md"
+          size="sm"
         >Exportar
         </Button>
         <Button
@@ -302,7 +303,8 @@ const CartasPorte = () => {
           className='text-white'
           startContent={<i className="bi bi-arrow-clockwise"></i>}
           onPress={() => fetchData()}
-          radius="full"
+          radius="md"
+          size="sm"
         >Recargar
         </Button>
       </Box>
