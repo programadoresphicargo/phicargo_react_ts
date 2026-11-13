@@ -10,6 +10,11 @@ const pages: MenuItemType[] = [
     requiredPermissions: [],
   },
   {
+    name: 'Control de permisos',
+    path: '/control-usuarios/control-permisos',
+    requiredPermissions: [],
+  },
+  {
     name: 'Cuentas Operadores',
     path: '/control-usuarios/cuentas-operadores',
     requiredPermissions: [],

@@ -6,7 +6,7 @@ import { Route } from 'react-router-dom';
 import UsersManagementLayout from '../layouts/UsersManagementLayout';
 
 const UsersManagementPage = lazy(() => import('../pages/UsersManagementPage'));
-
+const UsersControlPage = lazy(() => import('../permissions'));
 const DriversAccountsPage = lazy(() => import('../pages/DriversAccountsPage'));
 
 const userManagementPermission = 5;
@@ -34,6 +34,14 @@ const UsersManagementRoutes = () => (
       element={
         <Suspense fallback={<LoadingPage />}>
           <DriversAccountsPage />
+        </Suspense>
+      }
+    ></Route>
+    <Route
+      path="control-permisos"
+      element={
+        <Suspense fallback={<LoadingPage />}>
+          <UsersControlPage></UsersControlPage>
         </Suspense>
       }
     ></Route>

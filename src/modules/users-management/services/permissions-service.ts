@@ -22,7 +22,7 @@ class PermissionsServiceApi {
   static async getAllPermissions(): Promise<Permission[]> {
     try {
       const response = await odooApi.get<PermissionApi[]>(
-        '/users-management/permissions',
+        '/users-management/permissions/',
       );
       return response.data.map(permissionToLocal);
     } catch (error) {
