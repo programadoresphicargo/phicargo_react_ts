@@ -107,7 +107,11 @@ const UsersDetailControlPage = ({ open, handleClose, permission }: { open: boole
           flexWrap: 'wrap',
         }}
       >
-        <h1>{permission.name}</h1>
+        <h2
+          className="tracking-tight font-semibold lg:text-2xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
+        >
+          {permission.name}
+        </h2>
         <Button
           radius='md'
           size='sm'
@@ -128,6 +132,7 @@ const UsersDetailControlPage = ({ open, handleClose, permission }: { open: boole
       onClose={handleClose}
       maxWidth="xl"
       fullWidth
+      scroll="body"
     >
       <DialogContent>
         <MaterialReactTable table={table} />

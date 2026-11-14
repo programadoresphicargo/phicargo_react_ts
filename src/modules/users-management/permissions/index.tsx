@@ -31,6 +31,7 @@ const UsersControlPage = () => {
     () => [
       { accessorKey: 'id', header: 'ID' },
       { accessorKey: 'name', header: 'Permiso' },
+      { accessorKey: 'usuarios', header: 'Usuarios' },
       { accessorKey: 'created_at', header: 'Fecha creación' },
     ],
     [],
