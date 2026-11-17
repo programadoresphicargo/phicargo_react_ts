@@ -16,7 +16,7 @@ const UsersDetailControlPage = ({ open, handleClose, permission }: { open: boole
   const columns = useMemo<MRT_ColumnDef<any>[]>(
     () => [
       { accessorKey: 'nombre', header: 'Usuario' },
-      { accessorKey: 'granted_at', header: 'Fecha creación' },
+      { accessorKey: 'granted_at', header: 'Fecha de asignación' },
     ],
     [],
   );
@@ -27,6 +27,15 @@ const UsersDetailControlPage = ({ open, handleClose, permission }: { open: boole
       const response = await odooApi.get(`/users-management/permissions/${permission.id}/users`);
       setData(response.data);
       setLoading(false);
+    } catch (error) {
+      console.error('Error al obtener los datos:', error);
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    try {
+      await odooApi.delete(`/users-management/delete/user/permission/${id}`);
+      fetchData();
     } catch (error) {
       console.error('Error al obtener los datos:', error);
     }
@@ -46,7 +55,7 @@ const UsersDetailControlPage = ({ open, handleClose, permission }: { open: boole
     state: {
       showProgressBars: isLoading
     },
-    enablePagination: true,
+    enablePagination: false,
     enableColumnPinning: true,
     enableStickyHeader: true,
     positionGlobalFilter: "right",
@@ -60,7 +69,6 @@ const UsersDetailControlPage = ({ open, handleClose, permission }: { open: boole
       showGlobalFilter: true,
       density: 'compact',
       showColumnFilters: true,
-      pagination: { pageIndex: 0, pageSize: 100 }
     },
     muiTablePaperProps: {
       elevation: 0,
@@ -75,6 +83,20 @@ const UsersDetailControlPage = ({ open, handleClose, permission }: { open: boole
         fontSize: '14px',
       },
     },
+    enableRowActions: true,
+    positionActionsColumn: "last",
+    renderRowActions: ({ row }) => (
+      <Box display="flex" gap={1}>
+        <Button
+          size="sm"
+          color='danger'
+          radius='md'
+          onPress={() => handleDelete(row.original.id)}
+        >
+          Eliminar
+        </Button>
+      </Box>
+    ),
     muiTableContainerProps: {
       sx: {
         maxHeight: 'calc(100vh - 180px)',
@@ -91,7 +113,7 @@ const UsersDetailControlPage = ({ open, handleClose, permission }: { open: boole
         fontFamily: 'Inter',
         fontWeight: 'normal',
         fontSize: '12px',
-        padding: '4px 8px',
+        padding: '2px 8px',
 
         color: row.subRows?.length
           ? '#FFFFFF'
@@ -138,7 +160,7 @@ const UsersDetailControlPage = ({ open, handleClose, permission }: { open: boole
         <MaterialReactTable table={table} />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} autoFocus size='sm'>
+        <Button onPress={handleClose} autoFocus size='sm'>
           Cancelar
         </Button>
       </DialogActions>
