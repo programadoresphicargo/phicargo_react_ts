@@ -286,6 +286,13 @@ const Documentacion = ({ }) => {
         onClose={handleClose}
         fullWidth
         maxWidth="md"
+        slotProps={{
+          paper: {
+            sx: {
+              borderRadius: "12px",
+            },
+          },
+        }}
       >
         <DialogTitle sx={{
           background: "linear-gradient(90deg, #002887 0%, #0059b3 100%)",
