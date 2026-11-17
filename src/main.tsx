@@ -1,3 +1,4 @@
+
 import './index.css';
 
 import { App } from './App';
@@ -5,18 +6,33 @@ import { BrowserRouter } from 'react-router-dom';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import '@fontsource/inter';
+import toast from 'react-hot-toast';
 
-// import { getEnvVariables } from './phicargo/modules/cashflow-report/utils';
-// import { init as sentryInit } from '@sentry/react';
+// ==========================================
+// DETECTAR ERRORES DE CARGA DE VITE
+// ==========================================
 
-// const { VITE_SENTRY_DNS, VITE_ENVIRONMENT } = getEnvVariables();
+window.addEventListener('vite:preloadError', (event) => {
+  event.preventDefault();
 
-// if (VITE_ENVIRONMENT === 'production') {
-//   sentryInit({
-//     dsn: VITE_SENTRY_DNS,
-//     defaultIntegrations: false,
-//   });
-// }
+  const reloadKey = 'vite-preload-reload';
+
+  // Evitar recargas infinitas
+  if (!sessionStorage.getItem(reloadKey)) {
+    toast.success("Recargando")
+    sessionStorage.setItem(reloadKey, 'true');
+
+    window.location.reload();
+  } else {
+    console.error(
+      'No fue posible cargar el módulo después de actualizar la aplicación.'
+    );
+  }
+});
+
+// ==========================================
+// INICIALIZAR REACT
+// ==========================================
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -29,4 +45,3 @@ createRoot(document.getElementById('root')!).render(
     </BrowserRouter>
   </StrictMode>,
 );
-

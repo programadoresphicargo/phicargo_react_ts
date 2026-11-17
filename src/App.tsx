@@ -10,9 +10,15 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { queryClient } from './utilities';
+import { useEffect } from 'react';
 
 export const App = () => {
+
   const navigate = useNavigate();
+
+  useEffect(() => {
+    sessionStorage.removeItem('vite-preload-reload');
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
