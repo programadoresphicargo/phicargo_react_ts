@@ -2,10 +2,15 @@ import { useEffect, useState } from "react";
 import { Progress } from "@heroui/react";
 import odooApi from "@/api/odoo-api";
 
-const ViewerFiles = ({ id, tabla }) => {
-    const [blobUrls, setBlobUrls] = useState([]);
-    const [isLoading, setLoading] = useState(false);
-    const [previewUrl, setPreviewUrl] = useState(null);
+type Archive = {
+    id_onedrive: string
+}
+
+const ViewerFiles = ({ id, table }: { id: number, table: string }) => {
+    
+    const [blobUrls, setBlobUrls] = useState<string[]>([]);
+    const [isLoading, setLoading] = useState<boolean>(false);
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
     useEffect(() => {
         if (!id) {
@@ -19,11 +24,11 @@ const ViewerFiles = ({ id, tabla }) => {
         const fetchAllBlobs = async () => {
             try {
                 setLoading(true);
-                const { data: archivos } = await odooApi.get(`/archivos/${tabla}/${id}`);
+                const { data: archivos } = await odooApi.get<Archive[]>(`/archivos/${table}/${id}`);
                 const listaIds = archivos.map(item => item.id_onedrive).filter(Boolean);
 
-                const urls = await Promise.all(listaIds.map(async (id_onedrive) => {
-                    const { data: downloadUrl } = await odooApi.get(`/onedrive/download_link/${id_onedrive}`);
+                const urls = await Promise.all(listaIds.map(async (id_onedrive: string) => {
+                    const { data: downloadUrl } = await odooApi.get<string>(`/onedrive/download_link/${id_onedrive}`);
                     const response = await fetch(downloadUrl);
                     const blob = await response.blob();
                     return URL.createObjectURL(blob);
@@ -39,7 +44,7 @@ const ViewerFiles = ({ id, tabla }) => {
 
         fetchAllBlobs();
         return () => { isCancelled = true; };
-    }, [id, tabla]);
+    }, [id, table]);
 
     useEffect(() => {
         return () => {

@@ -1,43 +1,74 @@
-import React, { useCallback, useState, useContext } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import ViewerFiles from './ViewerFiles';
+import type { FileWithPath } from "react-dropzone";
 
-const UploadFiles = ({ fileList = [], setFileList, disabledFom, id, tabla }) => {
+export interface ArchivoUpload {
+    uid: string;
+    name: string;
+    status: "done";
+    originFileObj: FileWithPath;
+    url: string;
+}
 
-    const [previewImage, setPreviewImage] = useState(null);
-    const [previewOpen, setPreviewOpen] = useState(false);
+interface UploadFilesProps {
+    fileList?: ArchivoUpload[];
+    setFileList: React.Dispatch<React.SetStateAction<ArchivoUpload[]>>;
+    disabledFom: boolean;
+    id: number;
+    tabla: string;
+}
 
-    const onDrop = useCallback((acceptedFiles) => {
-        if (disabledFom) return;
+const UploadFiles = ({
+    fileList = [],
+    setFileList,
+    disabledFom,
+    id,
+    tabla,
+}: UploadFilesProps) => {
 
-        const newFiles = acceptedFiles.map(file => {
-            const url = URL.createObjectURL(file);
-            return {
-                uid: String(Date.now()),
+    const [previewImage, setPreviewImage] = useState<string | null>(null);
+    const [previewOpen, setPreviewOpen] = useState<boolean>(false);
+
+    const onDrop = useCallback(
+        (acceptedFiles: FileWithPath[]): void => {
+
+            if (disabledFom) return;
+
+            const newFiles: ArchivoUpload[] = acceptedFiles.map((file) => ({
+                uid: crypto.randomUUID(),
                 name: file.name,
-                status: 'done',
+                status: "done",
                 originFileObj: file,
-                url,
-            };
-        });
-        setFileList(prev => [...prev, ...newFiles]);
-    }, [disabledFom, setFileList]);
+                url: URL.createObjectURL(file),
+            }));
+            
+            setFileList(prev => [...prev, ...newFiles]);
+        }, [disabledFom, setFileList]);
 
     const { getRootProps, getInputProps } = useDropzone({
-        accept: { 'image/*': [] },
-        capture: 'environment',
+        accept: { "image/*": [] },
         multiple: false,
         onDrop,
-        disabled: disabledFom
+        disabled: disabledFom,
     });
 
-    const handlePreview = (file) => {
+
+    const handlePreview = (file: ArchivoUpload): void => {
         setPreviewImage(file.url);
         setPreviewOpen(true);
     };
 
-    const handleRemove = (uid) => {
-        setFileList(prev => prev.filter(file => file.uid !== uid));
+    const handleRemove = (uid: string): void => {
+        setFileList((prev) => {
+            const archivo = prev.find((file) => file.uid === uid);
+
+            if (archivo) {
+                URL.revokeObjectURL(archivo.url);
+            }
+
+            return prev.filter((file) => file.uid !== uid);
+        });
     };
 
     return (
@@ -120,7 +151,7 @@ const UploadFiles = ({ fileList = [], setFileList, disabledFom, id, tabla }) => 
                 </div>
             )}
 
-            <ViewerFiles id={id} tabla={tabla}></ViewerFiles>
+            <ViewerFiles id={id} table={tabla}></ViewerFiles>
         </div>
     );
 };
