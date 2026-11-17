@@ -355,7 +355,7 @@ const Remolques: React.FC = () => {
                     Remolques
                 </h1>
                 <Button size="sm" radius="md" color="success" className="text-white"
-                    onPress={() => exportToCSV(data, columns, 'unidades.csv')}
+                    onPress={() => exportToCSV(data, columns, 'remolques.csv')}
                 >
                     Exportar
                 </Button>
