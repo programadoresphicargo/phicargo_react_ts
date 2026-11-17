@@ -229,7 +229,7 @@ const OnedriveFiles = ({ }) => {
     }),
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 190px)',
+        maxHeight: 'calc(100vh - 185px)',
       },
     },
     renderTopToolbarCustomActions: () => (
@@ -253,6 +253,7 @@ const OnedriveFiles = ({ }) => {
           placeholder="Selecciona un rango de fechas"
           format="yyyy-MM-dd"
           loading={isLoading}
+          size="sm"
         />
 
         <Button

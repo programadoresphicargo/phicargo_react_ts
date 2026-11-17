@@ -142,7 +142,7 @@ const ViajesFinalizados = ({ }) => {
           var valor = cell.getValue<string>();
 
           return (
-            <Chip color={valor === 'enviado' ? 'success' : 'primary'} className='text-white'>
+            <Chip color={valor === 'enviado' ? 'success' : 'primary'} className='text-white' size='sm'>
               {valor.toUpperCase()}
             </Chip>
           );
@@ -180,7 +180,7 @@ const ViajesFinalizados = ({ }) => {
           }
 
           return (
-            <Chip className={badgeClass} style={{ width: '60px' }}>
+            <Chip className={badgeClass} style={{ width: '60px' }} size='sm'>
               {tipoMovimiento}
             </Chip>
           );
@@ -202,7 +202,7 @@ const ViajesFinalizados = ({ }) => {
           }
 
           return (
-            <Chip className={badgeClass} style={{ width: '60px' }}>
+            <Chip className={badgeClass} style={{ width: '60px' }} size='sm'>
               {tipoMovimiento}
             </Chip>
           );
@@ -294,7 +294,7 @@ const ViajesFinalizados = ({ }) => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 190px)',
+        maxHeight: 'calc(100vh - 185px)',
       },
     },
     renderTopToolbarCustomActions: () => (
@@ -318,6 +318,7 @@ const ViajesFinalizados = ({ }) => {
           placeholder="Selecciona un rango de fechas"
           format="yyyy-MM-dd"
           loading={isLoading}
+          size='sm'
         />
 
         <Button
