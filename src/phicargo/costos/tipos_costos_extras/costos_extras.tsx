@@ -133,11 +133,11 @@ const TiposCostosExtras = ({ }) => {
           flexWrap: 'wrap',
         }}
       >
-        <h2
-          className="font-semibold lg:text-2xl text-primary"
+        <h1
+          className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
         >
-          Tipos Costos Extras
-        </h2>
+          Tipos Costos extras
+        </h1>
         <Button color='primary' onPress={handleClickOpen} radius='md' size='sm'>
           Nuevo
         </Button>

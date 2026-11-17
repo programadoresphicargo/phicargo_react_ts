@@ -118,7 +118,7 @@ const TravelNotes = () => {
     }),
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 200px)',
+        maxHeight: 'calc(100vh - 195px)',
       },
     },
     renderTopToolbarCustomActions: () => (
@@ -130,11 +130,11 @@ const TravelNotes = () => {
           flexWrap: 'wrap',
         }}
       >
-        <h2
-          className="font-semibold lg:text-2xl text-primary"
+        <h1
+          className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
         >
-          Notas Costos Extras
-        </h2>
+          Notas Costos extras
+        </h1>
         <Button
           radius="md"
           size="sm"
