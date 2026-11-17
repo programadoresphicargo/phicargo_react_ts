@@ -14,12 +14,11 @@ import { DateRangePicker } from "@heroui/react";
 import { parseDate } from "@internationalized/date";
 import { exportToCSV } from '../../utils/export';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import { User } from "@heroui/react";
 import Formulariomaniobra from '@/phicargo/maniobras/maniobras/form';
 import CustomNavbar from '@/pages/CustomNavbar';
 import { pages } from '../../maniobras/pages';
+import { StepUser } from '@/phicargo/utils/stepAvatar';
 
-const { VITE_ODOO_API_URL } = import.meta.env;
 
 interface ReporteRow {
     id_viaje: number | null;
@@ -141,16 +140,9 @@ const ReporteCumplimientoEjecutivoManiobra = () => {
 
                         if (isHora && value != null) {
                             return (
-                                <User
-                                    avatarProps={{
-                                        color: min20 == null ? 'danger' : 'primary',
-                                        isBordered: true,
-                                        size: 'sm',
-                                        src: VITE_ODOO_API_URL + `/assets/trafico/estatus_operativos/${imagen}`,
-                                    }}
-                                    description={fechaEnvio}
-                                    name={value}
-                                />
+                                <>
+                                    <StepUser size='sm' imagen={`trafico/estatus_operativos/${imagen}`} color={min20 == null ? 'danger' : 'primary'} bordered name={value} description={fechaEnvio}></StepUser>
+                                </>
                             );
                         }
 
@@ -196,11 +188,12 @@ const ReporteCumplimientoEjecutivoManiobra = () => {
                 fontFamily: 'Inter',
                 fontWeight: 'normal',
                 fontSize: '12px',
+                padding: '2px 8px'
             },
         },
         muiTableContainerProps: {
             sx: {
-                maxHeight: 'calc(100vh - 235px)',
+                maxHeight: 'calc(100vh - 205px)',
             },
         },
         muiTablePaperProps: {
@@ -217,11 +210,10 @@ const ReporteCumplimientoEjecutivoManiobra = () => {
                     padding: '8px',
                     alignItems: 'center',
                     flexWrap: 'nowrap',
-                    overflowX: 'auto',
                 }}
             >
                 <h1
-                    className="flex-1 min-w-[300px] tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
+                    className="flex-1 min-w-[300px] tracking-tight font-semibold lg:text-1xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
                 >
                     Cumplimiento de estatus en maniobra
                 </h1>
@@ -229,6 +221,7 @@ const ReporteCumplimientoEjecutivoManiobra = () => {
                     label="Fecha"
                     value={dates}
                     variant='bordered'
+                    size='sm'
                     onChange={(value) => {
                         if (value) {
                             setDates(value);
@@ -236,6 +229,7 @@ const ReporteCumplimientoEjecutivoManiobra = () => {
                     }} />
                 <Slider
                     className="flex-1 min-w-[300px]"
+                    size='sm'
                     value={value}
                     onChange={(val) => {
                         if (
@@ -250,8 +244,8 @@ const ReporteCumplimientoEjecutivoManiobra = () => {
                     minValue={0}
                     step={1}
                 />
-                <Button color='success' className='text-white' startContent={<i className="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "reporte_estatus.csv")} fullWidth>Exportar</Button>
-                <Button color='primary' className='text-white' startContent={<i className="bi bi-arrow-clockwise"></i>} onPress={() => fetchData()} fullWidth>Recargar</Button>
+                <Button color='success' className='text-white' startContent={<i className="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "reporte_estatus.csv")} fullWidth size='sm'>Exportar</Button>
+                <Button color='primary' className='text-white' startContent={<i className="bi bi-arrow-clockwise"></i>} onPress={() => fetchData()} fullWidth size='sm'>Recargar</Button>
             </Box>
         ),
     });
