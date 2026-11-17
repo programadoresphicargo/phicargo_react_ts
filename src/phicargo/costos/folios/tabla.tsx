@@ -216,7 +216,7 @@ const FoliosCostosExtras = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 210px)',
+        maxHeight: 'calc(100vh - 205px)',
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
