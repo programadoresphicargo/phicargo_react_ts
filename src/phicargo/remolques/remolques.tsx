@@ -354,12 +354,12 @@ const Remolques: React.FC = () => {
                 <h1 className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text">
                     Remolques
                 </h1>
-                <Button size="sm" radius="full" color="success" className="text-white"
+                <Button size="sm" radius="md" color="success" className="text-white"
                     onPress={() => exportToCSV(data, columns, 'unidades.csv')}
                 >
                     Exportar
                 </Button>
-                <Button size="sm" radius="full" color="danger" className="text-white"
+                <Button size="sm" radius="md" color="danger" className="text-white"
                     onPress={fetchData}
                 >
                     Recargar
