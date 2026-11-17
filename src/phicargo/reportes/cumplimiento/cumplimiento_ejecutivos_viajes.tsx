@@ -14,11 +14,9 @@ import { DateRangePicker } from "@heroui/react";
 import { parseDate } from "@internationalized/date";
 import { exportToCSV } from '../../utils/export';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
-import { User } from "@heroui/react";
 import Travel from '@/phicargo/viajes/control/viaje';
 import NavbarTravel from '@/phicargo/viajes/navbar_viajes';
 import { StepUser } from '@/phicargo/utils/stepAvatar';
-const { VITE_ODOO_API_URL } = import.meta.env;
 
 interface ReporteRow {
     id_viaje: number | null;
