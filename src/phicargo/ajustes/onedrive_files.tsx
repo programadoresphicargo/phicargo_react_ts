@@ -167,10 +167,10 @@ const OnedriveFiles = ({ }) => {
     },
     renderRowActions: ({ row }) => (
       <>
-        <IconButton onClick={() => confirmApproved(row.original.id_archivo)}>
+        <IconButton onClick={() => confirmApproved(row.original.id_archivo)} size='small' color="error">
           <DeleteIcon />
         </IconButton>
-        <IconButton onClick={() => obtenerUrlPublico(row.original.id_onedrive)}>
+        <IconButton onClick={() => obtenerUrlPublico(row.original.id_onedrive)} size='small' color="primary">
           <VisibilityIcon />
         </IconButton>
       </>
