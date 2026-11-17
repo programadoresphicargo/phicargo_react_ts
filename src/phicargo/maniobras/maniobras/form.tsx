@@ -1096,7 +1096,9 @@ const Formulariomaniobra: React.FC<Props> = ({
                             <TabPanel value="2">
                                 <Card>
                                     <CardBody>
-                                        <DocumentacionManiobra id_maniobra={id_maniobra} />
+                                        {id_maniobra && (
+                                            <DocumentacionManiobra id_maniobra={id_maniobra} />
+                                        )}
                                     </CardBody>
                                 </Card>
                             </TabPanel>
