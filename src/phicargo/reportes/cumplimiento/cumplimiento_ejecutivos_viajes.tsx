@@ -17,6 +17,7 @@ import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { User } from "@heroui/react";
 import Travel from '@/phicargo/viajes/control/viaje';
 import NavbarTravel from '@/phicargo/viajes/navbar_viajes';
+import { StepUser } from '@/phicargo/utils/stepAvatar';
 const { VITE_ODOO_API_URL } = import.meta.env;
 
 interface ReporteRow {
@@ -120,6 +121,7 @@ const ReporteCumplimientoEjecutivo = () => {
                         if (key === 'estatus') {
                             return (
                                 <Chip
+                                    size='sm'
                                     className='text-white'
                                     color={
                                         value === 'ruta' ? 'primary'
@@ -137,13 +139,10 @@ const ReporteCumplimientoEjecutivo = () => {
 
                         if (isHora && value != null) {
                             return (
-                                <User
-                                    avatarProps={{
-                                        color: min20 == null ? 'danger' : 'primary',
-                                        isBordered: true,
-                                        size: 'sm',
-                                        src: VITE_ODOO_API_URL + `/assets/trafico/estatus_operativos/${imagen}`,
-                                    }}
+                                <StepUser
+                                    imagen={`trafico/estatus_operativos/${imagen}`}
+                                    color={min20 == null ? 'danger' : 'primary'}
+                                    bordered
                                     description={fechaEnvio}
                                     name={value}
                                 />
@@ -192,12 +191,13 @@ const ReporteCumplimientoEjecutivo = () => {
             sx: {
                 fontFamily: 'Inter',
                 fontWeight: 'normal',
-                fontSize: '14px',
+                fontSize: '12px',
+                padding: '4px 8px'
             },
         },
         muiTableContainerProps: {
             sx: {
-                maxHeight: 'calc(100vh - 235px)',
+                maxHeight: 'calc(100vh - 205px)',
             },
         },
         muiTablePaperProps: {
@@ -214,18 +214,18 @@ const ReporteCumplimientoEjecutivo = () => {
                     padding: '8px',
                     alignItems: 'center',
                     flexWrap: 'nowrap',
-                    overflowX: 'auto',
                 }}
             >
 
                 <h1
-                    className="flex-1 min-w-[300px] tracking-tight font-semibold lg:text-2xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
+                    className="flex-1 min-w-[300px] tracking-tight font-semibold lg:text-1xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
                 >
                     Cumplimiento de estatus en viajes
                 </h1>
 
                 <DateRangePicker
                     label="Fecha"
+                    size='sm'
                     value={dates}
                     variant='bordered'
                     onChange={(value) => {
@@ -245,6 +245,7 @@ const ReporteCumplimientoEjecutivo = () => {
                             setValue([val[0], val[1]]);
                         }
                     }}
+                    size='sm'
                     label="Hora"
                     maxValue={24}
                     minValue={0}
