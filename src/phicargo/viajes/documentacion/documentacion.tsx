@@ -18,7 +18,7 @@ import OneDriveViewer from "./viewer";
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { OpenArchive } from "@/phicargo/utils/functions";
 
-type Documentacion = {
+export type Documentacion = {
   id_onedrive: string;
   filename: string;
 };
@@ -26,9 +26,8 @@ type Documentacion = {
 const Documentacion = ({ }) => {
 
   const { id_viaje } = useContext(ViajeContext);
-
   const [data, setData] = useState([]);
-  const [isLoading2, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState(false);
   const [idOnedrive, setOnedrive] = useState('');
 
   const fetchData = async () => {
@@ -120,7 +119,7 @@ const Documentacion = ({ }) => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
-    state: { showProgressBars: isLoading2 },
+    state: { showProgressBars: isLoading },
     enableColumnPinning: true,
     enableStickyHeader: true,
     columnResizeMode: "onEnd",

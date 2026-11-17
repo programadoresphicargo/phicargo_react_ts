@@ -1,25 +1,20 @@
-import { Button, select } from "@heroui/react";
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { Button } from "@heroui/react";
+import { useState } from 'react';
 import { Select, SelectItem } from "@heroui/react";
-// import { InboxOutlined } from '@ant-design/icons';
-import { Upload, message } from 'antd';
-
-import { Box } from '@mui/material';
-import Slide from '@mui/material/Slide';
+import { Upload, UploadFile, UploadProps, message } from 'antd';
 import { useAuthContext } from "@/modules/auth/hooks";
 
 const { Dragger } = Upload;
 const { VITE_PHIDES_API_URL } = import.meta.env;
 
-const FormularioDocumentacionManiobra = ({ onClose, id_maniobra }) => {
+const FormularioDocumentacionManiobra = ({ onClose, id_maniobra }: { onClose: () => void, id_maniobra: number }) => {
 
   const { session } = useAuthContext();
-  const [tipo_doc, setSelectedValue] = useState('');
-  const [fileList, setFileList] = useState([]);
-
+  const [tipo_doc, setSelectedValue] = useState<string>('');
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [Loading, setLoading] = useState(false);
 
-  const props = {
+  const props: UploadProps = {
     name: 'file',
     multiple: true,
     beforeUpload: (file) => {
@@ -35,11 +30,17 @@ const FormularioDocumentacionManiobra = ({ onClose, id_maniobra }) => {
   const handleUpload = async () => {
     setLoading(true);
     const formData = new FormData();
-    formData.append('id_maniobra', id_maniobra);
+    formData.append('id_maniobra', String(id_maniobra));
     formData.append('tipo_doc', tipo_doc);
-    formData.append('id_usuario', session.user.id);
+    formData.append('id_usuario', String(session?.user.id));
     fileList.forEach((file) => {
-      formData.append('files[]', file);
+      if (file.originFileObj) {
+        formData.append(
+          'files[]',
+          file.originFileObj,
+          file.name
+        );
+      }
     });
 
     try {
@@ -69,7 +70,7 @@ const FormularioDocumentacionManiobra = ({ onClose, id_maniobra }) => {
       <Button
         isLoading={Loading}
         color="primary"
-        onClick={handleUpload}
+        onPress={handleUpload}
         style={{ marginTop: 16 }}
         isDisabled={fileList.length === 0 || tipo_doc === ''}
       >
@@ -84,7 +85,7 @@ const FormularioDocumentacionManiobra = ({ onClose, id_maniobra }) => {
         fullWidth={true}
         onChange={(e) => setSelectedValue(e.target.value)} // Actualiza directamente
       >
-        <SelectItem key="eir" value="EIR">EIR</SelectItem>
+        <SelectItem key="eir">EIR</SelectItem>
       </Select>
 
       <Dragger {...props} style={{ fontFamily: 'Inter' }}>

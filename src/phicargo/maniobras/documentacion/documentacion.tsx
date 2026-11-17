@@ -1,29 +1,24 @@
 import {
+  MRT_Row,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-
+import React, { useEffect, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
 import { Button } from "@heroui/react";
 import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import FormularioDocumentacionManiobra from './formulario';
-import Slide from '@mui/material/Slide';
 import odooApi from '@/api/odoo-api';
 import { toast } from 'react-toastify';
+import { Documentacion } from '@/phicargo/viajes/documentacion/documentacion';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+const DocumentacionManiobra = ({ id_maniobra }: { id_maniobra: number }) => {
 
-const DocumentacionManiobra = ({ id_maniobra }) => {
-
-  const [data, setData] = useState([]);
-  const [isLoading2, setLoading] = useState();
+  const [data, setData] = useState<Documentacion[]>([]);
+  const [isLoading, setLoading] = useState<boolean>();
 
   const fetchData = async () => {
     try {
@@ -40,7 +35,7 @@ const DocumentacionManiobra = ({ id_maniobra }) => {
     fetchData();
   }, []);
 
-  const obtenerUrlPublico = async (idOnedrive) => {
+  const obtenerUrlPublico = async (idOnedrive: string) => {
     try {
       const response = await odooApi.get('/onedrive/generate_link/' + idOnedrive);
       if (response.data.url) {
@@ -79,10 +74,10 @@ const DocumentacionManiobra = ({ id_maniobra }) => {
       {
         accessorKey: 'ver',
         header: 'Ver',
-        Cell: ({ row }) => (
+        Cell: ({ row }: { row: MRT_Row<Documentacion> }) => (
           <Button
             color='primary'
-            onClick={() => obtenerUrlPublico(row.original.id_onedrive)}
+            onPress={() => obtenerUrlPublico(row.original.id_onedrive)}
           >
             Ver archivo
           </Button>
@@ -98,13 +93,14 @@ const DocumentacionManiobra = ({ id_maniobra }) => {
     enableGrouping: true,
     enableGlobalFilter: true,
     enableFilters: true,
-    state: { isLoading: isLoading2 },
+    state: { showProgressBars: isLoading },
     enableColumnPinning: true,
     enableStickyHeader: true,
     columnResizeMode: "onEnd",
+    localization: MRT_Localization_ES,
     initialState: {
       density: 'compact',
-      pagination: { pageSize: 80 },
+      pagination: { pageIndex: 0, pageSize: 80 },
     },
     muiTablePaperProps: {
       elevation: 0,
@@ -132,7 +128,7 @@ const DocumentacionManiobra = ({ id_maniobra }) => {
         overflow: 'hidden',
       },
     },
-    renderTopToolbarCustomActions: ({ table }) => (
+    renderTopToolbarCustomActions: () => (
       <Box
         sx={{
           display: 'flex',
@@ -141,7 +137,7 @@ const DocumentacionManiobra = ({ id_maniobra }) => {
           flexWrap: 'wrap',
         }}
       >
-        <Button color='primary' onClick={handleClickOpen}>
+        <Button color='primary' onPress={handleClickOpen} size='sm' radius='md'>
           Nuevo documento
         </Button>
       </Box>
@@ -167,11 +163,10 @@ const DocumentacionManiobra = ({ id_maniobra }) => {
 
       <Dialog
         open={open}
-        TransitionComponent={Transition}
         keepMounted
         onClose={handleClose}
         aria-describedby="alert-dialog-slide-description"
-        fullWidth="sm"
+        fullWidth
         maxWidth="sm"
       >
         <DialogTitle>{"Envio de documentos"}</DialogTitle>
