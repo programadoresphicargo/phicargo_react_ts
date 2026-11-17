@@ -138,7 +138,7 @@ const DocumentacionManiobra = ({ id_maniobra }: { id_maniobra: number }) => {
         }}
       >
         <Button color='primary' onPress={handleClickOpen} size='sm' radius='md'>
-          Nuevo
+          Nuevo documento
         </Button>
       </Box>
     )
