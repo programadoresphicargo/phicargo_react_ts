@@ -62,6 +62,7 @@ export const MonthSelect = ({ defaultMonth, inspectionType, onMonthChange }: Pro
   return (
     <Select
       variant="bordered"
+      size="sm"
       label="Mes"
       selectedKeys={[String(month)]}
       className="w-[250px]"

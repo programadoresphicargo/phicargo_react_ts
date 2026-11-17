@@ -39,7 +39,7 @@ const VehicleInspectionPage = () => {
     refetchFn: () => query.refetch(),
     showColumnFilters: true,
     showGlobalFilter: true,
-    containerHeight: 'calc(100vh - 260px)',
+    containerHeight: 'calc(100vh - 245px)',
     enableRowActions: true,
     positionActionsColumn: 'first',
     renderRowActions: ({ row }) => {
@@ -58,7 +58,7 @@ const VehicleInspectionPage = () => {
       <div className="flex items-center gap-4">
         <MonthSelect onMonthChange={setMonth} inspectionType='cleaning' />
         <YearSelect onYearChange={setYear} />
-        <Button color='success' className='text-white' onClick={() => exportTo.exportData(query.data ?? [])} radius='full'>Exportar</Button>
+        <Button color='success' className='text-white' onPress={() => exportTo.exportData(query.data ?? [])} radius='md' size='sm'>Exportar</Button>
       </div>
     ),
   });

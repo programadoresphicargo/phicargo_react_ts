@@ -21,6 +21,7 @@ export const YearSelect = ({ defaultYear, onYearChange }: Props) => {
       className="w-[250px]"
       variant="bordered"
       label="Año"
+      size="sm"
       selectedKeys={[String(year)]}
       onSelectionChange={(keys) => {
         const selected = Array.from(keys)[0]; // obtiene el valor elegido
