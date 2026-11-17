@@ -13,7 +13,8 @@ import { ContactsSearchInputMatch } from '@/modules/contacts/components/inputs/C
 import { UpdateComplaintStatus } from './UpdateComplaintStatus';
 import { useEffect, useState } from 'react';
 import { SelectEmpleado } from '@/phicargo/descuentos/components/select_empleados';
-const apiUrl = import.meta.env.VITE_ODOO_API_URL;
+import { OpenArchive } from '@/phicargo/utils/functions';
+
 
 interface Props {
   complaint: Complaint | null;
@@ -131,7 +132,7 @@ export const EditComplaintForm = ({ complaint, onClose }: Props) => {
               as={Link}
               isExternal={true}
               color="success"
-              href={`${apiUrl}/complaints/format/${complaint.id}`}
+              onPress={() => OpenArchive(`/complaints/format/${complaint.id}`)}
               variant="solid"
               radius="full"
             >
