@@ -57,10 +57,6 @@ const TiposCostosExtras = ({ }) => {
         header: 'Observaciones',
       },
       {
-        accessorKey: 'usuario_creacion',
-        header: 'Usuario creación',
-      },
-      {
         accessorKey: 'fecha_creacion',
         header: 'Fecha creación',
       },
@@ -97,16 +93,23 @@ const TiposCostosExtras = ({ }) => {
         fontSize: '14px',
       },
     },
-    muiTableBodyCellProps: {
+    muiTableBodyCellProps: ({ row }) => ({
       sx: {
+        backgroundColor: row.subRows?.length
+          ? '#0456cf'
+          : row.index % 2 === 0
+            ? '#FFFFFF'
+            : '#F8F9FA',
         fontFamily: 'Inter',
         fontWeight: 'normal',
-        fontSize: '14px',
+        fontSize: '12px',
+        padding: '2px 8px',
+        color: row.subRows?.length ? '#FFFFFF' : '#000000',
       },
-    },
+    }),
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 210px)',
+        maxHeight: 'calc(100vh - 195px)',
       },
     },
     muiTableBodyRowProps: ({ row }) => ({
@@ -130,8 +133,12 @@ const TiposCostosExtras = ({ }) => {
           flexWrap: 'wrap',
         }}
       >
-        <h1>Control de costos</h1>
-        <Button color='primary' onPress={handleClickOpen} radius='full'>
+        <h2
+          className="font-semibold lg:text-2xl text-primary"
+        >
+          Tipos Costos Extras
+        </h2>
+        <Button color='primary' onPress={handleClickOpen} radius='md' size='sm'>
           Nuevo
         </Button>
       </Box>

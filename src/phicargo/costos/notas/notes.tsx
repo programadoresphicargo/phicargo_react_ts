@@ -102,13 +102,20 @@ const TravelNotes = () => {
         fontSize: '14px',
       },
     },
-    muiTableBodyCellProps: {
+    muiTableBodyCellProps: ({ row }) => ({
       sx: {
+        backgroundColor: row.subRows?.length
+          ? '#0456cf'
+          : row.index % 2 === 0
+            ? '#FFFFFF'
+            : '#F8F9FA',
         fontFamily: 'Inter',
         fontWeight: 'normal',
-        fontSize: '14px',
+        fontSize: '12px',
+        padding: '2px 8px',
+        color: row.subRows?.length ? '#FFFFFF' : '#000000',
       },
-    },
+    }),
     muiTableContainerProps: {
       sx: {
         maxHeight: 'calc(100vh - 200px)',
@@ -129,7 +136,8 @@ const TravelNotes = () => {
           Notas Costos Extras
         </h2>
         <Button
-          radius="full"
+          radius="md"
+          size="sm"
           color='success'
           className="text-white"
           onPress={() =>
