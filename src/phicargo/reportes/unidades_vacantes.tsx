@@ -59,6 +59,7 @@ const VehiculosSinOperadorAsignado = () => {
     enableBottomToolbar: true,
     localization: MRT_Localization_ES,
     columnResizeMode: "onEnd",
+    positionToolbarAlertBanner: "bottom",
     initialState: {
       grouping: ["res_store.name"],
       density: 'compact',
@@ -111,7 +112,8 @@ const VehiculosSinOperadorAsignado = () => {
         <Button
           onPress={() => EnviarCorreo()}
           color="primary"
-          radius="full"
+          radius="md"
+          size="sm"
         >
           Enviar correo
         </Button>
@@ -120,7 +122,8 @@ const VehiculosSinOperadorAsignado = () => {
           onPress={() => exportToCSV(data, columns, "unidades_vacantes.csv")}
           color="success"
           className="text-white"
-          radius="full"
+          radius="md"
+          size="sm"
         >
           Exportar
         </Button>
@@ -129,7 +132,8 @@ const VehiculosSinOperadorAsignado = () => {
           onPress={() => fetchData()}
           color="warning"
           className="text-white"
-          radius="full"
+          radius="md"
+          size="sm"
         >
           Recargar
         </Button>

@@ -81,7 +81,7 @@ const AptosMedicos = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 200px)',
+        maxHeight: 'calc(100vh - 185px)',
       },
     },
     muiTableBodyCellProps: ({ row }) => ({
@@ -94,7 +94,7 @@ const AptosMedicos = () => {
 
         fontFamily: 'Inter',
         fontWeight: 'normal',
-        fontSize: '14px',
+        fontSize: '12px',
 
         color: row.original?.dias_restantes <= 0
           ? '#FFFFFF'
@@ -122,7 +122,8 @@ const AptosMedicos = () => {
         <Button
           onPress={() => EnviarCorreo()}
           color="primary"
-          radius="full"
+          radius="md"
+          size="sm"
         >
           Enviar correo
         </Button>
@@ -131,7 +132,8 @@ const AptosMedicos = () => {
           onPress={() => exportToCSV(data, columns, "aptos_medicos.csv")}
           color="success"
           className="text-white"
-          radius="full"
+          radius="md"
+          size="sm"
         >
           Exportar
         </Button>
@@ -140,7 +142,8 @@ const AptosMedicos = () => {
           onPress={() => fetchData()}
           color="warning"
           className="text-white"
-          radius="full"
+          radius="md"
+          size="sm"
         >
           Recargar
         </Button>

@@ -32,8 +32,7 @@ const UnidadesTaller = () => {
   const EnviarCorreo = async () => {
     try {
       setisLoading(true);
-      const response = await odooApi.get(`/maintenance-record/email_unidades_taller/`);
-      console.log(response.data);
+      await odooApi.get(`/maintenance-record/email_unidades_taller/`);
     } catch (error) {
       toast.error('Error al enviar los datos: ' + error);
     } finally {
@@ -84,7 +83,7 @@ const UnidadesTaller = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 200px)',
+        maxHeight: 'calc(100vh - 195px)',
       },
     },
     muiTableBodyCellProps: ({ row }) => ({
@@ -115,16 +114,18 @@ const UnidadesTaller = () => {
         <Button
           onPress={() => EnviarCorreo()}
           color="primary"
-          radius="full"
+          radius="md"
+          size="sm"
         >
           Enviar correo
         </Button>
 
         <Button
-          onPress={() => exportToCSV(data, columns, "tipo_armado.csv")}
+          onPress={() => exportToCSV(data, columns, "unidades_idealease.csv")}
           color="success"
           className="text-white"
-          radius="full"
+          radius="md"
+          size="sm"
         >
           Exportar
         </Button>
@@ -133,7 +134,8 @@ const UnidadesTaller = () => {
           onPress={() => fetchData()}
           color="warning"
           className="text-white"
-          radius="full"
+          radius="md"
+          size="sm"
         >
           Recargar
         </Button>
