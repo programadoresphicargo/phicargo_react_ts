@@ -186,7 +186,7 @@ const ViajesProgramados = ({ }) => {
           }
 
           return (
-            <Chip className={badgeClass} style={{ width: '100px' }}>
+            <Chip className={badgeClass} style={{ width: '100px' }} size='sm'>
               {value}
             </Chip>
           );
@@ -211,7 +211,7 @@ const ViajesProgramados = ({ }) => {
           const tipoMovimiento = cell.getValue<string>();
 
           return (
-            <Chip color={tipoMovimiento === "single" ? "success" : "danger"} style={{ width: '60px' }} className={'text-white'}>
+            <Chip color={tipoMovimiento === "single" ? "success" : "danger"} style={{ width: '60px' }} className={'text-white'} size='sm'>
               {tipoMovimiento}
             </Chip>
           );
@@ -224,7 +224,7 @@ const ViajesProgramados = ({ }) => {
           const tipoMovimiento = cell.getValue<string>();
 
           return (
-            <Chip color={tipoMovimiento == "imp" ? "warning" : "danger"} style={{ width: '60px' }} className={"text-white"}>
+            <Chip color={tipoMovimiento == "imp" ? "warning" : "danger"} style={{ width: '60px' }} className={"text-white"} size='sm'>
               {tipoMovimiento}
             </Chip>
           );
@@ -278,7 +278,7 @@ const ViajesProgramados = ({ }) => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 200px)',
+        maxHeight: 'calc(100vh - 190px)',
       },
     },
     muiTableHeadCellProps: {
@@ -354,15 +354,16 @@ const ViajesProgramados = ({ }) => {
           placeholder="Selecciona un rango de fechas"
           format="yyyy-MM-dd"
           loading={isLoading}
+          size='sm'
         />
-        <Chip color="danger" className="text-white" size='lg'>
+        <Chip color="danger" className="text-white" size='sm'>
           Retrasados: {cantidadRojo}
         </Chip>
-        <Chip color="warning" className="text-white" size='lg'>
+        <Chip color="warning" className="text-white" size='sm'>
           Proximos a salir: {cantidadAmarillo}
         </Chip>
-        <Button color='primary' startContent={<i className="bi bi-arrow-clockwise"></i>} onPress={() => fetchData()} radius='full' size='sm'>Actualizar</Button>
-        <Button color='success' className='text-white' startContent={<i className="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "programacion_viajes.csv")} radius='full' size='sm'>Exportar</Button>
+        <Button color='primary' startContent={<i className="bi bi-arrow-clockwise"></i>} onPress={() => fetchData()} radius='md' size='sm'>Actualizar</Button>
+        <Button color='success' className='text-white' startContent={<i className="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "programacion_viajes.csv")} radius='md' size='sm'>Exportar</Button>
       </Box >
     ),
   });

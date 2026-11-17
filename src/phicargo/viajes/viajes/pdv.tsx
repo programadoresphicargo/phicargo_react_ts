@@ -315,7 +315,7 @@ const PDV = ({ }) => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 200px)',
+        maxHeight: 'calc(100vh - 195px)',
       },
     },
     muiTableHeadCellProps: {
@@ -391,6 +391,7 @@ const PDV = ({ }) => {
           placeholder="Selecciona un rango de fechas"
           format="yyyy-MM-dd"
           loading={isLoading}
+          size='sm'
         />
         <Button color='primary' startContent={<i className="bi bi-arrow-clockwise"></i>} onPress={() => fetchData()} radius='md' size='sm'>Actualizar</Button>
         <Button color='success' size='sm' className='text-white' startContent={<i className="bi bi-file-earmark-excel"></i>} onPress={() => exportToCSV(data, columns, "programacion_viajes.csv")} radius='md'>Exportar</Button>
