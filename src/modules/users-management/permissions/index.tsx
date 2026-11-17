@@ -139,7 +139,7 @@ const UsersControlPage = () => {
           size='sm'
           className='text-white'
           startContent={<i className="bi bi-arrow-clockwise"></i>}
-          color='secondary'
+          color='primary'
           onPress={() => fetchData()}
         >Actualizar
         </Button>
