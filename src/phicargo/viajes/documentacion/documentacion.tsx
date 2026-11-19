@@ -53,9 +53,11 @@ const Documentacion = ({ }) => {
       } else {
         toast.error('No se pudo obtener el enlace del archivo.' + response.data);
       }
-    } catch (error) {
-      console.error('Error al obtener el enlace público:', error);
-      toast.error('Hubo un error al intentar obtener el enlace.');
+    } catch (error: any) {
+      console.log(error.response?.data?.detail);
+      toast.error(
+        error.response?.data?.detail ?? "Ocurrió un error"
+      );
     }
   };
 
