@@ -36,8 +36,11 @@ const Documentacion = ({ }) => {
       const response = await odooApi.get('/archivos/tms_travel/' + id_viaje);
       setData(response.data);
       setLoading(false);
-    } catch (error) {
-      console.error('Error al obtener los datos:', error);
+    } catch (error: any) {
+      console.log(error.response?.data?.detail);
+      toast.error(
+        error.response?.data?.detail ?? "Ocurrió un error"
+      );
     }
   };
 
