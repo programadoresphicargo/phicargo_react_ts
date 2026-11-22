@@ -46,31 +46,6 @@ export default function DescuentoFields<
 
               <div className="mb-4">
                 <p className="text-sm font-semibold text-slate-700">
-                  Solicitante
-                </p>
-
-                <p className="text-xs text-slate-500">
-                  Responsable que genera la solicitud.
-                </p>
-              </div>
-
-              <SelectEmpleado
-                control={control}
-                rules={{
-                  required: "Solicitante requerido",
-                }}
-                name={name("id_solicitante")}
-                label="Solicitante"
-                variant="bordered"
-                isDisabled={disabled}
-              />
-
-            </div>
-
-            <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-4">
-
-              <div className="mb-4">
-                <p className="text-sm font-semibold text-slate-700">
                   Empleado
                 </p>
 

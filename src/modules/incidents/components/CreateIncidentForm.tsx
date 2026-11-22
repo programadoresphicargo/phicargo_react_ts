@@ -21,7 +21,7 @@ import dayjs from 'dayjs';
 import { parseDate } from "@internationalized/date";
 import IncidentChip from './IncidentChip';
 import Swal from 'sweetalert2';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import React from 'react';
 import CancelarIncidenciaForm from './cancelar';
 import { Incident } from '../models';
@@ -87,6 +87,8 @@ export const CreateIncidentForm = ({
 
   const id_descuento = watch("descuento.id_descuento");
   const estado = watch("descuento.estado");
+  const employeeId = watch("driverId");
+
   const { cambiarEstado, isLoading } = useDescuento();
 
   const confirmarEstado = async (nuevoEstado: EstadoDescuento) => {
@@ -135,10 +137,23 @@ export const CreateIncidentForm = ({
 
     setValue(
       "descuento",
-      checked ? initialDescuento : null,
+      checked
+        ? {
+          ...initialDescuento,
+          ...(employeeId ? { id_empleado: employeeId } : {}),
+        }
+        : null,
       { shouldValidate: true }
     );
   };
+
+  useEffect(() => {
+    if (employeeId && createDiscount) {
+      setValue("descuento.id_empleado", employeeId, {
+        shouldValidate: true,
+      });
+    }
+  }, [employeeId, createDiscount, setValue]);
 
   return (
     <>
