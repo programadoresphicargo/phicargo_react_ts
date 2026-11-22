@@ -14,6 +14,7 @@ import { Link } from "@heroui/react";
 import TiemposViajes from './tiempos_viaje';
 import { ViajeContext } from '../context/viajeContext';
 import odooApi from '@/api/odoo-api';
+import DetencionesMotum from "./detenciones-motum";
 
 interface Detencion {
   id?: number;
@@ -237,6 +238,16 @@ const Detenciones = ({ }) => {
             </Card>
           </Grid>
           <Grid size={12}>
+
+            <Card>
+              <CardHeader className='bg-danger'>
+                <h1 className='text-white'>Tiempos de Detención Motum Alerts</h1>
+              </CardHeader>
+              <CardBody>
+                <DetencionesMotum></DetencionesMotum>
+              </CardBody>
+            </Card>
+
             <Card>
               <CardHeader className='bg-primary'>
                 <h1 className='text-white'>Tiempos de Detención</h1>
@@ -245,6 +256,7 @@ const Detenciones = ({ }) => {
                 <MaterialReactTable table={table} />
               </CardBody>
             </Card>
+
           </Grid>
         </Grid>
       </Box>
