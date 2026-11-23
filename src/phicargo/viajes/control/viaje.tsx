@@ -39,7 +39,7 @@ const Travel: React.FC<TravelProps> = ({
                         </IconButton>
                         <Typography sx={{ ml: 2, flex: 1, color: 'black' }} variant="h6" component="div">
                         </Typography>
-                        <Button autoFocus color="primary" onPress={handleClose} radius="full">
+                        <Button autoFocus color="primary" onPress={handleClose} radius="md" size="sm">
                             Salir
                         </Button>
                     </Toolbar>
