@@ -153,7 +153,12 @@ function PanelEnvio({
         );
 
         const response2 = await odooApi.get(
-          '/estatus_operativos/tipo/viaje/monitoreo'
+          '/estatus_operativos/tipo', {
+          params: {
+            "tipo": "viaje",
+            "campo": "monitoreo"
+          }
+        }
         );
 
         let estatus = response2.data;

@@ -21,7 +21,7 @@ function Contenedores() {
 
         try {
             const response = await odooApi.get(
-                "/tms_waybill/get_by_travel_id/" + id_viaje
+                "/tms_waybill/travel_id/" + id_viaje
             );
 
             setData(response.data);

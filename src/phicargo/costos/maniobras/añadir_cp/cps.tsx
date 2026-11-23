@@ -46,7 +46,7 @@ const CostosExtrasContenedores = ({ id_folio }: { id_folio: number | null }) => 
         try {
             setLoading(true);
             toast.success('Obteniendo cartas porte de viaje');
-            const response = await odooApi.get('/tms_waybill/get_by_travel_id/' + id_viaje);
+            const response = await odooApi.get('/tms_waybill/travel_id/' + id_viaje);
             setCPS(response.data);
             setLoading(false);
         } catch (error) {

@@ -63,7 +63,13 @@ const ViajesActivosMasivo = ({ }) => {
 
   const fetchEstatus = async () => {
     try {
-      const response = await odooApi.get('/estatus_operativos/tipo/viaje/monitoreo');
+      const response = await odooApi.get('/estatus_operativos/tipo',
+        {
+          params: {
+            "tipo": "maniobra",
+            "campo": "monitoreo"
+          }
+        });
       const data = response.data.map((item) => ({
         key: item.id_estatus,
         label: item.nombre_estatus,
