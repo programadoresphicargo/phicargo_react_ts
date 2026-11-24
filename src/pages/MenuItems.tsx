@@ -150,7 +150,7 @@ export const menuItems: MenuItemType[] = [
     label: 'Flota',
     link: '/reportes/flota/',
     icon: viajesIcon,
-    requiredPermissions: [],
+    requiredPermissions: [288],
    },
    {
     label: 'Reporte gerencial',
