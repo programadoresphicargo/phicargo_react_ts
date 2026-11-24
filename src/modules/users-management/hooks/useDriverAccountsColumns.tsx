@@ -10,10 +10,6 @@ export const useDriverAccountsColumns = () => {
         header: 'ID Usuario',
       },
       {
-        accessorFn: (row) => row.company?.name,
-        header: 'Empresa',
-      },
-      {
         accessorKey: 'name',
         header: 'Operador',
       },

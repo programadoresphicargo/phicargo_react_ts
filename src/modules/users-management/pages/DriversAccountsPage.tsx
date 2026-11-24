@@ -49,7 +49,7 @@ const DriversAccountsPage = () => {
           onRefresh={() => driversQuery.refetch()}
           isLoading={driversQuery.isFetching}
         />
-      </div>
+      </div >
     ),
     renderEditRowDialogContent: ({ table, row }) => (
       <DriverAccountForm
@@ -85,17 +85,25 @@ const DriversAccountsPage = () => {
       sx: {
         fontFamily: 'Inter',
         fontWeight: 'Bold',
-        fontSize: '14px',
+        fontSize: '12px',
+        padding: '2px 4px'
       },
     },
-    muiTableBodyCellProps: {
-      sx: {
-        fontFamily: 'Inter',
-        fontWeight: 'normal',
-        fontSize: '14px',
-
-        padding: '3px 10px',
-      },
+    muiTableBodyCellProps: ({ row }) => {
+      return {
+        sx: {
+          backgroundColor: row.subRows?.length
+            ? '#0456cf'
+            : row.index % 2 === 0
+              ? '#FFFFFF'
+              : '#F8F9FA',
+          color: row.subRows?.length ? '#FFFFFF' : '#000000',
+          fontFamily: 'Inter',
+          fontWeight: 'normal',
+          fontSize: '12px',
+          padding: '2px 4px'
+        },
+      };
     },
     muiTableContainerProps: {
       sx: {
