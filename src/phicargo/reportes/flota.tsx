@@ -91,15 +91,20 @@ const Flota = () => {
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: 'calc(100vh - 200px)',
+        maxHeight: 'calc(100vh - 190px)',
       },
     },
     muiTableBodyCellProps: ({ row }) => ({
       sx: {
-        backgroundColor: row.subRows?.length ? '#0456cf' : '#FFFFFF',
+        backgroundColor: row.subRows?.length
+          ? '#0456cf'
+          : row.index % 2 === 0
+            ? '#FFFFFF'
+            : '#F8F9FA',
         fontFamily: 'Inter',
         fontWeight: 'normal',
-        fontSize: '14px',
+        fontSize: '12px',
+        padding: '4px 8px',
         color: row.subRows?.length ? '#FFFFFF' : '#000000',
       },
     }),
@@ -121,7 +126,8 @@ const Flota = () => {
         <Button
           onPress={() => EnviarCorreo()}
           color="primary"
-          radius="full"
+          radius="md"
+          size="sm"
         >
           Enviar correo
         </Button>
@@ -130,7 +136,8 @@ const Flota = () => {
           onPress={() => exportToCSV(data, columns, "flota.csv")}
           color="success"
           className="text-white"
-          radius="full"
+          radius="md"
+          size="sm"
         >
           Exportar
         </Button>
@@ -139,7 +146,8 @@ const Flota = () => {
           onPress={() => fetchData()}
           color="warning"
           className="text-white"
-          radius="full"
+          radius="md"
+          size="sm"
         >
           Recargar
         </Button>
