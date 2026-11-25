@@ -139,7 +139,7 @@ const RegistroVehiculos: React.FC<Props> = ({
         <Button
           color="primary"
           size='sm'
-          radius='full'
+          radius='md'
           onPress={() => {
             AñadirVehiculo(row.original.id_vehiculo);
             onClose();
@@ -149,7 +149,7 @@ const RegistroVehiculos: React.FC<Props> = ({
         <Button
           color="secondary"
           size='sm'
-          radius='full'
+          radius='md'
           onPress={() => {
             NuevoVehiculo();
             setVehicleID(row.original.id_vehiculo);
@@ -175,12 +175,21 @@ const RegistroVehiculos: React.FC<Props> = ({
         fontSize: '14px',
       },
     },
-    muiTableBodyCellProps: {
-      sx: {
-        fontFamily: 'Inter',
-        fontWeight: 'normal',
-        fontSize: '14px',
-      },
+    muiTableBodyCellProps: ({ row }) => {
+      return {
+        sx: {
+          backgroundColor: row.subRows?.length
+            ? '#0456cf'
+            : row.index % 2 === 0
+              ? '#FFFFFF'
+              : '#F8F9FA',
+          color: row.subRows?.length ? '#FFFFFF' : '#000000',
+          fontFamily: 'Inter',
+          fontWeight: 'normal',
+          fontSize: '12px',
+          padding: '2px 4px'
+        },
+      };
     },
     muiTableContainerProps: {
       sx: {
@@ -197,11 +206,11 @@ const RegistroVehiculos: React.FC<Props> = ({
         }}
       >
         <h2
-          className="tracking-tight font-semibold lg:text-3xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
+          className="tracking-tight font-semibold lg:text-2xl bg-gradient-to-r from-[#0b2149] to-[#002887] text-transparent bg-clip-text"
         >
           Registro de vehículos
         </h2>
-        <Button color='primary' onPress={NuevoVehiculo} radius='full'>Nuevo</Button>
+        <Button color='primary' onPress={NuevoVehiculo} radius='md' size='sm'>Nuevo</Button>
       </Box>
     ),
   });

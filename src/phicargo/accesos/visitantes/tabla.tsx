@@ -128,12 +128,21 @@ const ListadoVisitantes: React.FC<Props> = ({ open, handleClose, id_empresa }) =
         fontSize: '14px',
       },
     },
-    muiTableBodyCellProps: {
-      sx: {
-        fontFamily: 'Inter',
-        fontWeight: 'normal',
-        fontSize: '14px',
-      },
+    muiTableBodyCellProps: ({ row }) => {
+      return {
+        sx: {
+          backgroundColor: row.subRows?.length
+            ? '#0456cf'
+            : row.index % 2 === 0
+              ? '#FFFFFF'
+              : '#F8F9FA',
+          color: row.subRows?.length ? '#FFFFFF' : '#000000',
+          fontFamily: 'Inter',
+          fontWeight: 'normal',
+          fontSize: '14px',
+          padding: '4px 8px'
+        },
+      };
     },
   });
 
