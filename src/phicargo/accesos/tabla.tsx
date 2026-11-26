@@ -91,6 +91,7 @@ const TablaAccesos: React.FC<TablaAccesosProps> = ({
       {
         accessorKey: 'id_acceso',
         header: 'ID Acceso',
+        size: 1,
       },
       {
         accessorKey: 'empresa',
