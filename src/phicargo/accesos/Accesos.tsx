@@ -27,12 +27,12 @@ const accessTheme: Record<
         indicator: '#4fc3f7',
     },
     '2': {
-        gradient: 'linear-gradient(90deg, #7f00b1 0%, #7f00b1 100%)',
-        indicator: '#81c784',
+        gradient: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
+        indicator: '#4fc3f7',
     },
     '3': {
         gradient: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
-        indicator: '#ce93d8',
+        indicator: '#4fc3f7',
     },
     '4': {
         gradient: 'linear-gradient(90deg, #a9000b 0%, #b81f00 100%)',
@@ -43,8 +43,8 @@ const accessTheme: Record<
         indicator: '#b0bec5',
     },
     '6': {
-        gradient: 'linear-gradient(90deg, #263238 0%, #37474f 100%)',
-        indicator: '#90a4ae',
+        gradient: 'linear-gradient(90deg, #002887 0%, #0059b3 100%)',
+        indicator: '#4fc3f7',
     },
 };
 
