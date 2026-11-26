@@ -467,7 +467,7 @@ const AccesoForm = ({ id_acceso, onClose }: { id_acceso: number | null, onClose:
                         Validar {tipo_movimiento}
                     </Button>
                 )}
-                {session?.user?.permissions?.includes(510) && id_acceso && estado_acceso === 'espera' && (
+                {session?.user?.permissions?.includes(510) && id_acceso && (estado_acceso === 'espera' || estado_acceso === 'espera_validacion') && (
                     <Button radius='md' onPress={() => autorizarAcceso()} style={{ marginTop: '20px' }} color='danger' isDisabled={autorizado_por_id ? true : false} size="sm">Autorizar {tipo_movimiento}</Button>
                 )}
                 {(estado_acceso === 'validado' || estado_acceso === 'rechazado') && (
