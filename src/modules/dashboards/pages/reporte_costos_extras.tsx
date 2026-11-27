@@ -9,8 +9,6 @@ import { ContactsSearchInputMatch } from "@/modules/contacts/components/inputs/C
 import { SelectInput } from "@/components/inputs";
 
 export const conceptos = [
- { key: "Contenedor", value: "Contenedor" },
- { key: "Viaje", value: "Viaje" },
  { key: "Facturacion", value: "Facturación" },
  { key: "Sucursal", value: "Sucursal" },
  { key: "Ejecutivo", value: "Ejecutivo" },
