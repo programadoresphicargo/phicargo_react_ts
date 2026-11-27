@@ -170,7 +170,8 @@ function ReporteAreaComercial() {
      <Button
       type="submit"
       color="success"
-      radius="full"
+      radius="md"
+      size="sm"
       className="text-white"
       isLoading={loading}
      >

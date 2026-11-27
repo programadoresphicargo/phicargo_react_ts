@@ -7,6 +7,7 @@ import { YearlyRevenueChart } from '../components/finance/YearlyRevenueChart';
 import { useWaybillStatsQueries } from '../hooks/useWaybillStatsQueries';
 import ReporteIngresosClientes from './IngresosClientesReport';
 import ReporteAreaComercial from './reporte_area_comercial';
+import ReporteCostosExtras from './reporte_costos_extras';
 
 const FinanceDashbordPage = () => {
   const { waybillStatsQuery } = useWaybillStatsQueries();
@@ -16,6 +17,7 @@ const FinanceDashbordPage = () => {
       <div className="flex gap-6">
         <ReporteIngresosClientes />
         <ReporteAreaComercial />
+        <ReporteCostosExtras />
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <RevenueByBranchChart
